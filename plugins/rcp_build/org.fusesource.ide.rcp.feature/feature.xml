@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.fusesource.ide.rcp.feature"
+      label="Fuse IDE RCP"
+      version="3.0.0.qualifier"
+      provider-name="FuseSource.com">
+
+   <description url="http://fusesource.com/products/fuse-ide-camel/">
+      Fuse IDE for Camel
+Provides the ability to view, edit and create 
+Enterprise Integration Patterns using Apache Camel
+   </description>
+
+   <copyright url="http://fusesource.com/">
+      Copyright (C) 2011 FuseSource, Corp.
+   </copyright>
+
+   <license url="http://fusesource.com/products/fuse-ide-camel/">
+      Fuse IDE for Camel End User License Agreement
+
+PLEASE READ THE TERMS OF THIS END USER LICENSE AGREEMENT (AGREEMENT) CAREFULLY BEFORE INSTALLING FUSE TOOL FROM THIS WEBSITE. BY
+INSTALLING FUSE TOOL OR USING THE DOCUMENTATION PROVIDED WITH FUSE TOOL, YOU ARE ACCEPTING AND AGREEING TO THE TERMS OF THIS
+AGREEMENT. IF YOU ARE INSTALLING OR USING THIS ON BEHALF OF AN ENTITY, THEN YOU REPRESENT THAT YOU HAVE THE AUTHORITY TO ENTER
+INTO THIS AGREEMENT ON BEHALF OF THAT ENTITY AND, ACCORDINGLY, THE ENTITY IS BOUND BY THER TERMS OF THIS AGREEMENT.
+
+THIS AGREEMENT is made by and between Fuse (as defined herein) and You and/or Customer (as defined herein). The license grants in
+this Agreement are expressly contingent upon Customer&apos;s actual purchase of, and payment for, a Fuse Subscription (as defined
+herein) for the Fuse Product, Fuse Tools and Documentation (as defined herein).
+
+1. CERTAIN DEFINITIONS.
+
+1.1 Customer or You means the purchaser or user of the Fuse Subscription.
+
+1.2 Documentation means all documentation which accompanies, or is included in, the Fuse Products and/or Fuse Tool(s).
+
+1.3 Evaluation License means a limited license as further detailed in Section 2 below granted to those organizations upon
+completion of the online registration process.
+
+1.4 Evaluation Licensee means the entity using the Fuse Product, Fuse Developer Tooling and any and all Documentation as set
+forth in Section 2.
+
+1.5 Fuse means FuseSource Corporation.
+
+1.6 Fuse Product means the Fuse open source software product(s) obtained directly from Fuse.
+
+1.7 Fuse Subscription means the agreement pursuant to which Customer has purchased support and subscription services from Fuse
+for the Fuse Product, Fuse Tool and Documentation for the period stated within such subscription agreement.
+
+2. Fuse Tool means the Fuse IDE for Camel v. 1.0 tooling for use with certain Fuse Products.
+
+3. EVALUATION LICENSES
+
+3.1 General. In the event this is an Evaluation License (as defined above) the special license terms contained in this Section
+2.1 shall apply to Customer&apos;s use of the Fuse Product, Fuse Tool and any and all Documentation. In the case of conflicts or
+supplemental provisions between the other Sections of this Agreement the terms of this Section 2 shall prevail.
+
+3.2 Evaluation License. If you register and download/activate the Fuse Product, Fuse Tool and any Documentation without [a
+Subscription Agreement] (&quot;Evaluation Fuse Tool&quot;) you may use the Evaluation Fuse Tool until the Expiration Date only to evaluate
+the suitability of the Evaluation Fuse Tool for the purpose of entering a Fuse Subscription. In such case, the Fuse Product, Fuse
+Tools, Documentation, Fuse Tools are licensed to you subject to the terms of this &quot;EVALUATION LICENSES&quot; section.
+
+3.2.1 In leiu of the license granted in Section 3 below, Fuse grants Evaluation Licensee, a nonexclusive, nontransferable,
+limited term license to use, copy and deploy the Fuse Product, Fuse Tool and the Documentation (i) solely in connection with
+evaluation, (ii) within Customer&apos;s internal business operations, (iii) at Customer&apos;s premises, (iv) for evaluation,
+demonstration, prototyping, testing, and/or proof of concept purposes only, and (v) for a period of note more than sixty (60)
+days.
+
+3.2.2 Notwithstanding anything to the contrary set forth in this Agreement, Fuse Products, Fuse Tools and Documentation being
+licensed on an evaluation basis are not eligible for Fuse Subscription except by special written arrangement between Fuse and
+Customer.
+
+3.3 Evaluation Fuse Product, Fuse Tool and Documentation Warranty Disclaimer. The Fuse Product, Fuse Tool and any and all
+Documentation are provided to you &quot;as is&quot; without warranty of any kind, whether express, implied, statutory, or otherwise. Fuse
+AND ITS LICENSORS BEAR NO LIABILITY FOR ANY DAMAGES RESULTING FROM USE (OR ATTEMPTED USE) OF THE Fuse Product, Tools and
+Documentation for EVALUATION THROUGH AND AFTER THE EXPIRATION DATE.
+
+3.4 No Subscription or Support Services. Fuse has no duty to provide support to you during your use of the Evaluation Fuse
+Product, Fuse Tool and Documentation.
+
+4. LICENSE. Subject to this Agreement, and payment of any appropriate fees for the Fuse Subscription, Fuse grants Customer the
+nonexclusive, nontransferable, worldwide, limited term license to use, copy and deploy the Fuse Tool and the Documentation (i)
+solely in connection with the Fuse Product, (ii) within Customer&apos;s internal business operations, and (iii) for the remainder of
+the Subscription Period.
+
+4.1 Customer may not: (a) display, disclose, sublicense or distribute the Fuse Tool to third parties; (b) modify, adapt, alter,
+recast, transform, translate or create derivative works from the Fuse Tool; (c) distribute, sublicense, lease, rent, sell, loan
+or otherwise transfer the Fuse Tool to any third party; (d) reverse engineer, decompile, or disassemble the Fuse Tool; (e) copy
+or distribute the Documentation or any portion thereof; or (f) use the Fuse Tool other than in accordance with the foregoing
+usage rights. Customer may not remove, alter or obscure in any way any proprietary rights notices (including copyright notices)
+of Fuse or its licensors on or within the copies of the Software and the Documentation furnished by Fuse to Customer. Customer
+shall promptly report to Fuse any actual or suspected violation of this section and shall take all further steps that may
+reasonably be requested by Fuse to prevent or remedy any such violation.
+
+4.2 Customer shall ensure that all applicable fees are properly paid. Use of Fuse Tool in violation of Section 3.1 and failure to
+pay fees when due are each a material breach of this Agreement. If Customer has a valid license to a previous version of the Fuse
+Tool and a Fuse Tool update is provided, the Fuse Tool update shall not correct or excuse violations of previous licenses. If an
+earlier license is terminable or terminated by Fuse for breach by Customer, this Agreement and the license granted herein may
+also be terminated simultaneously at Fuse&apos;s sole discretion. Fuse Tool updates shall be subject to the terms and conditions of
+the license agreement accompanying such Fuse Tool update.
+
+3. OWNERSHIP. Customer acquires no right, title, or interest in the Fuse Tool other than the license granted by Fuse hereunder.
+
+4. PROPRIETARY NOTICES. Customer shall not remove any trademark, tradename, copyright, or other proprietary notice from the Fuse
+Tool, including on any notice or boot up screen, and shall not delete such notices from any copies or back-up copies of the Fuse
+Tool. Customer may not delete any embedded proprietary notices on any portion of the Fuse Tool.
+
+5. TERMINATION.
+
+5.1 In addition to any remedies it may have, Fuse may terminate this Agreement and the license granted hereunder in the event of
+a breach by Customer of any of the provisions of this Agreement which breach has not been remedied within thirty (30) days (or in
+the case of monetary amounts past due, within ten (10) business days) or in the event Customer becomes insolvent or is the
+subject of any bankruptcy or insolvency proceeding.
+
+5.2 Upon termination of this Agreement in the event of a breach by Customer, Customer shall no longer have any right to use the
+Fuse Tool and Customer shall return to Fuse all tangible copies, and destroy all intangible copies of Fuse Tool in Customer&apos;s
+possession or control.
+
+5.3 The provisions of Sections 3 through 9 and the definitions of this Agreement shall survive the termination of this Agreement
+(for any reason).
+
+6. EXPORT ADMINISTRATION. Customer shall not import, export or re-export the Fuse Tool to or from any country in contravention of
+any applicable import or export laws. Upon written request, Fuse shall provide reasonable Fuse Tool information to assist
+Customer in discharging its obligations under this section.
+
+7. GOVERNMENT END-USERS. With respect to any Fuse Tool that is acquired by or for the U.S. federal government (the Government) or
+by any prime or subcontractor (at any tier) under any contract, grant, cooperative agreement or other arrangement with the
+Government, by accepting delivery of Fuse Tools the Government agrees that such Fuse Tool qualifies as commercial computer
+software or commercial computer software documentation within the meaning of the Government acquisition regulation(s) and that
+the terms and conditions of this Agreement shall govern the Government&apos;s use and disclosure of Fuse Tool(s) and supersedes all
+other terms and conditions. With respect to acquisitions of Fuse Tool governed by DFARS Subpart 227.4 (October 1988): Restricted
+Rights, use, duplication and disclosure by the Government is subject to restrictions as set forth in subparagraph (c)(1)(ii) of
+the Rights in Technical Data and Computer Software clause at DFARS 252.227-7013 (October 1988). For the purposes of this
+Agreement all references to specific DFARS shall be deemed to be references to successor clauses howsoever numbered or named.
+
+8. DISCLAIMER OF WARRANTY. UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING, FUSE PROVIDES THE FUSE TOOL ON AN &quot;AS IS&quot;
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR
+CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. CUSTOMER IS SOLELY RESPONSIBLE FOR
+DETERMINING THE APPROPRIATENESS OF USING THE FUSE TOOL AND ASSUMES ANY AND ALL RISKS ASSOCIATED WITH CUSTOMER&apos;S EXERCISE OF
+PERMISSIONS UNDER THIS AGREEMENT. Fuse does not warrant that Fuse Subscription provided to Customer will operate in an
+uninterrupted, error-free or secure manner.
+
+9. LIMITATION OF LIABILITY. IN NO EVENT AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING NEGLIGENCE), CONTRACT, OR
+OTHERWISE, UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING, SHALL FUSE BE LIABLE TO CUSTOMER FOR DAMAGES, INCLUDING ANY
+DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER ARISING OUT OF THIS AGREEMENT OR OUT OF THE USE
+OR INABILITY TO USE THE FUSE TOOL (INCLUDING BUT NOT LIMITED TO DAMAGES FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR
+MALFUNCTION, OR ANY AND ALL OTHER COMMERCIAL DAMAGES OR LOSSES), EVEN IF FUSE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES.
+
+10. GENERAL.
+
+10.1 AMENDMENT; WAIVER. No modification or waiver of any provision of this Agreement shall be binding unless specifically agreed
+in a writing signed by both parties. Any failure or delay in exercising or enforcing any of the rights or remedies granted
+hereunder shall not operate as a waiver thereof. No waiver by a party of any breach of this Agreement shall operate as a waiver
+of any other or subsequent breach.
+
+10.2 ASSIGNMENT. This Agreement and rights granted hereunder may not be assigned, sub-licensed or transferred by Customer without
+the prior written consent of Fuse.
+
+10.3 FORCE MAJEURE. Neither party shall be liable for any delay in meeting or for failure to meet any of its obligations under
+this Agreement due to any cause outside its reasonable control, including strikes, lock-outs, acts of God, war, riot, terrorist
+or threat of terrorist attack, malicious acts of damage, fire, acts of any government authority, failure of the public
+electricity supply, failure or delay on the part of any subcontractor beyond the subcontractor&apos;s reasonable control. This Section
+10.3 shall not excuse Customer from the payment of money when due.
+
+10.4 NOTICES. All notices and requests in connection with this Agreement to be sent to Fuse shall be given in writing and shall
+be sent by facsimile, hand delivery, overnight courier or mail which provides proof of delivery to the parties Attention: Legal
+Department, at the addresses for the applicable Fuse Licensor set forth below, or to such other address as may be specified in
+writing, and shall be deemed given on the day of receipt or the date evidenced on the proof of delivery, whichever is earlier.
+
+10.5 HEADINGS. Section headings are inserted for convenience of reference only and shall not affect the interpretation of this
+Agreement.
+
+10.6 SEVERABILITY. If any provision of this Agreement is found invalid or unenforceable, that provision shall be reformed,
+construed and enforced to the maximum extent permissible, and the other provisions of this Agreement shall remain in full force
+and effect.
+
+10.7 Intentionally Omitted.
+
+10.8 MARKETING. Fuse may identify Customer as a Fuse customer in public statements and publications.
+
+10.9 LAW AND JURISDICTION. Regardless of which is the Fuse Licensor, or where the Fuse Tool is used, this Agreement shall be
+governed by and construed in accordance with the laws of the Commonwealth of Massachusetts and the exclusive venue and
+jurisdiction shall be the federal and state courts located in the Commonwealth of Massachusetts. In all instances, the United
+Nations Convention for the International Purchase and Sale of Goods shall not apply.
+
+10.10 AUDIT. Upon request, Customer shall certify in writing its uses of Fuse Tool and that it has paid all appropriate Fuse
+Subscription fees. Fuse shall have the right to audit Customer&apos;s compliance with its obligations under this Agreement. Any audit
+shall be conducted during normal business hours, with as little disruption of Customer&apos;s business as is reasonably possible.
+Audits shall be at Fuse&apos;s sole expense, unless an audit shows that Customer is using the Fuse Tool in violation of this Agreement
+or Fuse Subscription fees are owed to Fuse by Customer, in which case the Customer shall reimburse Fuse for all costs incurred in
+connection with the audit and collection of amounts due. Customer shall pay all fees the audit shows to be due not later than
+thirty (30) days after the auditors&apos; report is made available to Customer. Fuse may use the audit report solely to enforce its
+rights under this Agreement and shall otherwise treat the audit report as Confidential Information (defined below).
+
+10.11 DISPUTE RESOLUTION. The parties shall attempt to resolve any dispute arising under this Agreement through the informal
+means described in this paragraph. Each party shall appoint a senior management representative who does not devote substantially
+all of his or her time to performance under this Agreement. The representatives shall provide to each other all non-privileged
+information with respect to the dispute that the parties believe to be appropriate and relevant. The representatives shall
+negotiate in good faith to resolve the dispute without the need for any formal proceeding. Formal proceedings for the resolution
+of the dispute may not be commenced until the earlier of (i) the designated representatives mutually conclude that resolution
+through negotiation does not appear likely; or (ii) thirty (30) calendar days have passed since the initial request to negotiate
+the dispute was made; provided, however, that a party may file for formal proceedings earlier solely to avoid the expiration of
+any applicable limitations period, to preserve a superior position with respect to other creditors, or to apply for interim or
+equitable relief.
+
+10.12 ADDITIONAL INFORMATION. The Fuse Tool may contain or be accompanied by certain non-proprietary components created and
+separately licensed to Customer by third parties. These components, if any, are identified in, and subject to, special license
+terms and conditions set forth in the notices.txt file
+(http://fusesource.com/downloads/license-agreements/notices/FUSEDEVCAMEL1.0) accompanying the Fuse Tool (Special Notices). The
+Special Notices include important licensing and warranty information and disclaimers. In the event of conflict between the
+Special Notices and the other portions of this Agreement, the Special Notices will take precedence (but solely with respect to
+the non-proprietary third party component(s) to which the Special Notice relates).
+
+10.14 ENTIRE AGREEMENT. Both parties agree to be bound by the terms of this Agreement and that this Agreement constitutes the
+entire agreement of the parties and supersedes all previous licenses relating to the Fuse Tool, and all communications, oral or
+written, relating to the subject matter hereof. No representations or statements made by either party, which are not expressly
+stated herein, shall be binding on such party. Notwithstanding any language on any other document to the contrary, the terms of
+this Agreement shall take precedence over any purchase order or other document issued by Customer. All terms and conditions on
+any other document that are not expressly accepted by Fuse in writing with reference to modification of this Agreement shall be
+null, void and of no legal effect.
+   </license>
+
+   <plugin
+         id="org.fusesource.ide.rcp.branding"
+         download-size="0"
+         install-size="0"
+         version="3.0.0.qualifier"
+         unpack="false"/>
+
+</feature>

@@ -1,0 +1,22 @@
+<!--
+    Copyright (c) 2004, 2010 BREDEX GmbH.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+ -->
+<configuration>
+    <project>${product.name}</project>
+    <version>${product.version}</version>
+    <autconfig>${test.aut.config}</autconfig>
+    <dbscheme>${test.db.scheme}</dbscheme>
+    <dbuser>${test.db.user}</dbuser>
+    <dbpw>${test.db.pwd}</dbpw>
+    <dburl>${test.db.url}</dburl>
+    <server>${test.aut.host}</server>
+    <port>${test.aut.port}</port>
+    <language>en_US</language>
+    <testsuite><entry>${test.suite}</entry></testsuite>
+    <datadir>${testdata.dir}</datadir>
+    <resultdir>${report.dir}</resultdir>
+</configuration>

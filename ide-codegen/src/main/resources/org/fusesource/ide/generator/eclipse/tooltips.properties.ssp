@@ -1,0 +1,22 @@
+<%@ import val generator: org.fusesource.ide.generator.Generator %>
+#
+# NOTE - this file is auto-generated using Scalate. 
+#
+# DO NOT EDIT!
+#
+
+tooltipAbstractNode = AbstractNode
+tooltipAbstractNodeId = The unique ID of this pattern
+tooltipAbstractNodeDescription = Your description of this pattern
+
+tooltipEndpoint = A Camel Endpoint you can send messages to or consume messages from
+tooltipEndpointUrl = The URL used to define the Camel Endpoint
+
+tooltipRoute = A collection of Enterprise Integration Patterns
+
+#for (n <- nodeDefinitions)
+tooltip${n.definitionName.capitalize} = ${n.tooltip}
+#for (p <- n.beanProperties)
+tooltip${n.definitionName.capitalize}${p.name.capitalize}=${n.propertyTooltip(p.name)}
+#end
+#end

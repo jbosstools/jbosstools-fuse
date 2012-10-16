@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+    <route>
+        <from uri="seda:choiceInput"/>
+        <choice>
+          <when>
+	        <xpath>/foo/bar</xpath>
+	        <to uri="seda:choiceWhen"/>
+          </when>
+          <otherwise>
+	        <to uri="seda:choiceOtherwise"/>
+          </otherwise>
+        </choice>
+    </route>
+</camelContext>
+
+</beans>

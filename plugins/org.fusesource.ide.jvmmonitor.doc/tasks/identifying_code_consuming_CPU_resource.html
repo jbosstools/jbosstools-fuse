@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Identifying the code consuming CPU resource</title>
+    <link rel="stylesheet" href="../book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    Identifying the code consuming CPU resource
+</h1>
+<p>
+    When you notice that CPU is unexpectedly overloaded (e.g. when monitoring CPU usage at Timeline page), 
+    you may want to identify which part of code is actually consuming CPU resource.
+</p>
+<p>
+    To identify the code consuming CPU resource:
+</p>
+<ol>
+    <li>
+    Click the header of <b>CPU</b> column at threads table to sort.
+    </li>
+    <li>
+    Select the thread that has high load of CPU so that its stack traces are shown on right hand side,
+    and find out which methods are being invoked.
+    </li>
+    <li>
+    Double-click the method in stack traces to check the code on Java editor.
+    </li>
+</ol>
+<img src="./img/threads.png"/>
+<p>
+    <b>Note:</b> If the refresh is too fast to see the content, unselect <b>Refresh</b> toggle button 
+    [<img src="./img/refresh.gif" style="vertical-align: middle"/>] at the local toolbar to disable refresh. 
+    Alternatively, you can change the period to update on preference page 
+    <b>Window > Preferences > Java > Monitor > Period to update</b>.
+</p>
+
+</body>
+</html>

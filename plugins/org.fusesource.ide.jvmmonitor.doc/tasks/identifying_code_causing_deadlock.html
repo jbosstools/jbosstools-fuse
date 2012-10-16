@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Identifying the code causing deadlock</title>
+    <link rel="stylesheet" href="../book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    Identifying the code causing deadlock
+</h1>
+<p>
+    When monitoring a JVM, deadlock is automatically detected and you can find out which threads are involved in deadlock.
+</p>
+<p>
+    To identify the code causing deadlock:
+</p>
+<ol>
+    <li>
+    Search the threads that has the state <b>DEADLOCKED</b> at <b>State</b> column. 
+    If there are many threads, you may click the header of State column to sort threads,
+    or type the filter text "DEADLOCKED" at filter.
+    </li>
+    <li>
+    Look at <b>Lock</b> column and <b>Lock Owner</b> column to find out the lock object 
+    and its owner thread for each locked thread.
+    </li>
+    <li>
+    Select the deadlocked thread so that its stack traces are shown on right hand side, 
+    and find out which methods are being invoked.
+    </li>
+    <li>
+    Double-click the method in stack traces to check the code on Java editor.
+    </li>
+</ol>
+<img src="./img/deadlock.png"/>
+</body>
+</html>

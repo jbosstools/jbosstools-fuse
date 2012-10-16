@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<!-- =========================================================================== -->
+<!-- Copyright (c) 2010 JVM Monitor project. All rights reserved.                -->
+<!--                                                                             -->
+<!-- This code is distributed under the terms of the Eclipse Public License v1.0 -->
+<!-- which is available at http://www.eclipse.org/legal/epl-v10.html             -->
+<!-- =========================================================================== -->
+<plugin>
+   <extension
+         point="org.fusesource.ide.jvmmonitor.core.jvmAttachHandler">
+      <handler
+            class="org.fusesource.ide.jvmmonitor.internal.tools.JvmAttachHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.fusesource.ide.jvmmonitor.core.heapDumpHandler">
+      <handler
+            class="org.fusesource.ide.jvmmonitor.internal.tools.HeapDumpHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.fusesource.ide.jvmmonitor.core.agentLoadHandler">
+      <handler
+            class="org.fusesource.ide.jvmmonitor.internal.tools.AgentLoadHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.fusesource.ide.jvmmonitor.internal.tools.ToolsPreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.fusesource.ide.jvmmonitor.ui.JavaMonitorPreferencePage"
+            class="org.fusesource.ide.jvmmonitor.internal.tools.ToolsPreferencePage"
+            id="org.fusesource.ide.jvmmonitor.tools.ToolsPreferencePage"
+            name="%toolsPreferencePage.label">
+      </page>
+   </extension>
+</plugin>

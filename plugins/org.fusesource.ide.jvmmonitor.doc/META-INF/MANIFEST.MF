@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.fusesource.ide.jvmmonitor.doc;singleton:=true
+Bundle-Version: 3.7.0.qualifier
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin

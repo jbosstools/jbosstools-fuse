@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.fusesource.ide.camel.editor.RiderEditor"
+            contributorClass="org.fusesource.ide.camel.editor.RiderEditorActionBarContributor"
+            default="false"
+            extensions="xml"
+            icon="icons/route_editor_icon.png"
+            id="org.fusesource.ide.plugin.editor"
+            name="%rider.editor.label">
+         <contentTypeBinding
+               contentTypeId="org.fusesource.ide.camel.editor.camelContentType">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.fusesource.ide.camel.editor.commands.category"
+            name="Rider Category">
+      </category>
+      <command
+            categoryId="org.fusesource.ide.camel.editor.commands.category"
+            id="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
+            name="Auto Layout Diagram">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.fusesource.ide.camel.editor.handlers.AutoLayoutHandler"
+            commandId="org.fusesource.ide.camel.editor.commands.autoLayoutCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+6">
+      </key>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+         
+      <propertyContributor contributorId="org.fusesource.ide.plugin.editor" typeMapper="org.fusesource.ide.camel.editor.propertysheet.RiderTypeMapper">
+         <propertyCategory category="sample"/>
+      </propertyContributor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs contributorId="org.fusesource.ide.plugin.editor">
+         <propertyTab
+               category="sample"
+               id="DetailsTab"
+               label="Details"/>
+         <propertyTab
+               afterTab="DocumentationTab"
+               category="sample"
+               id="DocumentationTab"
+               label="Documentation"/>
+         <propertyTab
+               afterTab="DetailsTab"
+               category="sample"
+               id="AdvancedTab"
+               label="Advanced"/>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections contributorId="org.fusesource.ide.plugin.editor">
+         <propertySection
+               class="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
+               id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
+               tab="DetailsTab">
+            <input type="org.fusesource.ide.camel.model.AbstractNode"/>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
+            </input>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
+            </input>
+         </propertySection>
+
+         <propertySection
+               class="org.fusesource.ide.camel.editor.propertysheet.DocumentationSection"
+               id="org.fusesource.ide.camel.editor.propertysheet.DocumentationSection"
+               tab="DocumentationTab">
+            <input type="org.fusesource.ide.camel.model.AbstractNode"/>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
+            </input>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
+            </input>
+         </propertySection>
+
+         <propertySection
+               class="org.eclipse.ui.views.properties.tabbed.AdvancedPropertySection"
+               id="AdvancedSection"
+               tab="AdvancedTab">
+            <input type="org.fusesource.ide.camel.model.AbstractNode"/>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
+            </input>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
+            </input>
+         </propertySection>
+      </propertySections>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.fusesource.ide.camel.editor.PreferredPerspectivePartListener">
+      </startup>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.fusesource.ide.branding.preferences.root"
+            class="org.fusesource.ide.camel.editor.preferences.RiderEditorPreferencePage"
+            id="org.fusesource.ide.camel.editor.preferences.FusePreferencePage"
+            name="%rider.preferences.editor">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.fusesource.ide.camel.editor.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   
+      <extension point="org.eclipse.core.contenttype.contentTypes"> 
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            describer="org.fusesource.ide.camel.editor.content.CamelNamespaceXmlContentDescriber"
+            file-extensions="xml"
+            id="org.fusesource.ide.camel.editor.camelContentType"
+            name="Camel XML">
+      </content-type> 
+   </extension> 
+</plugin>

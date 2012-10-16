@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.fusesource.ide</groupId>
+		<artifactId>rcp-build</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>org.fusesource.ide.rcp.product</artifactId>
+	<packaging>eclipse-repository</packaging>
+	<name>Fuse IDE :: RCP :: Product</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<includeAllDependencies>true</includeAllDependencies>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-director-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<executions>
+					<execution>
+						<id>materialize-products</id>
+						<goals>
+							<goal>materialize-products</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>archive-products</id>
+						<goals>
+							<goal>archive-products</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration> 
+					<products> 
+						<product> 
+							<id>FuseIDE</id> 
+							<rootFolder>FuseIDE</rootFolder> 
+						</product> 
+					</products> 
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<tasks>
+								<copy todir="${basedir}/target/zips">
+									<fileset dir="${basedir}/target/products" includes="**/*.zip" />
+								</copy>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.fusesource.mvnplugins</groupId>
+				<artifactId>maven-updatesite-plugin</artifactId>
+				<version>1.15</version>
+				<configuration>
+					<remoteServerId>website.fusesource.org</remoteServerId>
+					<remoteServerUrl>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/rcp</remoteServerUrl>
+					<mvOptions></mvOptions>
+					<inputDirectory>${project.build.directory}/zips</inputDirectory>
+				</configuration>
+
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ssh-external</artifactId>
+						<version>1.0-beta-7</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<profiles>
+		<profile>
+			<id>sign</id>
+			<!-- To sign plug-ins and features, run: mvn -Psign -Dkeystore=<path> 
+				-Dstorepass=*** -Dalias=<keyalias> clean install -->
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-jar-plugin</artifactId>
+							<version>2.3.1</version>
+							<executions>
+								<execution>
+									<goals>
+										<goal>sign</goal>
+									</goals>
+								</execution>
+							</executions>
+							<configuration>
+								<skip>true</skip>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+</project>

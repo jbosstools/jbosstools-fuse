@@ -1,0 +1,441 @@
+/*******************************************************************************
+ * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+package org.fusesource.ide.branding.wizards;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.jdt.internal.junit.Messages;
+import org.eclipse.jdt.internal.junit.util.LayoutUtil;
+import org.eclipse.jdt.ui.JavaElementLabelProvider;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ITreePathLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreeNode;
+import org.eclipse.jface.viewers.TreeNodeContentProvider;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.ViewerLabel;
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
+import org.fusesource.ide.branding.RiderHelpContextIds;
+import org.fusesource.ide.camel.model.CamelModelHelper;
+import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.EndpointSummary;
+import org.fusesource.ide.camel.model.RouteContainer;
+import org.fusesource.ide.camel.model.io.ContainerMarshaler;
+import org.fusesource.ide.camel.model.io.XmlContainerMarshaller;
+
+
+/**
+ * The class <code>NewCamelTestWizardPageTwo</code> contains controls and
+ * validation routines for the second page of the 'New JUnit TestCase Wizard'.
+ * <p>
+ * Clients can use the page as-is and add it to their own wizard, or extend it
+ * to modify validation or add and remove controls.
+ * </p>
+ * 
+ * @since 3.1
+ */
+@SuppressWarnings("restriction")
+public class NewCamelTestWizardPageTwo extends WizardPage {
+
+	public static class EndpointMaps {
+		private String inputEndpoint;
+		private final Map<String, String> inputEndpoints;
+		private final Map<String, String> outputEndpoints;
+
+		public EndpointMaps(Map<String, String> inputEndpoints, Map<String, String> outputEndpoints) {
+			this.inputEndpoints = inputEndpoints;
+			this.outputEndpoints = outputEndpoints;
+
+			for (String name : inputEndpoints.keySet()) {
+				if (inputEndpoint == null) {
+					inputEndpoint = getInputEndpointVariableName(name);
+					break;
+				}
+			}
+		}
+
+		public String getInputEndpoint() {
+			return inputEndpoint;
+		}
+
+		public Map<String, String> getInputEndpoints() {
+			return inputEndpoints;
+		}
+
+		public String getInputEndpointVariableName(String name) {
+			return name + "Endpoint";
+		}
+
+		public Map<String, String> getOutputEndpoints() {
+			return outputEndpoints;
+		}
+	}
+
+	protected static class EndpointsLabelProvider extends LabelProvider implements ITreePathLabelProvider {
+
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ITreePathLabelProvider#updateLabel(org.eclipse.jface.viewers.ViewerLabel, org.eclipse.jface.viewers.TreePath)
+		 */
+		@Override
+		public void updateLabel(ViewerLabel label, TreePath elementPath) {
+			Object last = elementPath.getLastSegment();
+			String text = null;
+			if (last instanceof TreeNode) {
+				TreeNode node = (TreeNode) last;
+				text = node.getValue().toString();
+			} else {
+				text = last.toString();
+			}
+			label.setText(text);
+		}
+	}
+
+	protected static class EndpointTreeNode extends TreeNode {
+		private final boolean input;
+
+		public EndpointTreeNode(Object value, boolean input) {
+			super(value);
+			this.input = input;
+		}
+
+		public String getUri() {
+			return getValue().toString();
+		}
+
+		public boolean isInput() {
+			return input;
+		}
+	}
+
+	private final static String PAGE_NAME = "NewCamelTestWizardPage2"; //$NON-NLS-1$
+
+	private final static String STORE_CREATE_FINAL_METHOD_STUBS = PAGE_NAME + ".CREATE_FINAL_METHOD_STUBS"; //$NON-NLS-1$
+	private final static String STORE_USE_TASKMARKER = PAGE_NAME + ".USE_TASKMARKER"; //$NON-NLS-1$
+	private Object[] fCheckedObjects;
+	private Button fCreateFinalMethodStubsButton;
+	private boolean fCreateFinalStubs;
+	private boolean fCreateTasks;
+	private Button fCreateTasksButton;
+	private Button fDeselectAllButton;
+	private ContainerCheckedTreeViewer fInputEndpointsTree;
+
+	private Button fSelectAllButton;
+
+	private Label fSelectedEndpointsLabel;
+
+	private IFile xmlFileUnderTest;
+
+	/**
+	 * Creates a new <code>NewCamelTestWizardPageTwo</code>.
+	 */
+	public NewCamelTestWizardPageTwo() {
+		super(PAGE_NAME);
+		setTitle(WizardMessages.NewCamelTestWizardPageTwo_title);
+		setDescription(WizardMessages.NewCamelTestWizardPageTwo_description);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
+	 */
+	@Override
+	public void createControl(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		container.setLayout(layout);
+
+		createEndpointsTreeControls(container);
+		/*
+		 * createSpacer(container); createButtonChoices(container);
+		 */
+		setControl(container);
+		restoreWidgetValues();
+		Dialog.applyDialogFont(container);
+		PlatformUI.getWorkbench().getHelpSystem()
+		.setHelp(container, RiderHelpContextIds.NEW_CAMEL_TESTCASE_WIZARD_PAGE2);
+	}
+
+	private void createEndpointsTreeControls(Composite container) {
+		Label label = new Label(container, SWT.LEFT | SWT.WRAP);
+		label.setFont(container.getFont());
+		label.setText(WizardMessages.NewCamelTestWizardPageTwo_methods_tree_label);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		label.setLayoutData(gd);
+
+		fInputEndpointsTree = new ContainerCheckedTreeViewer(container, SWT.BORDER);
+		gd = new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL);
+		gd.heightHint = 180;
+		fInputEndpointsTree.getTree().setLayoutData(gd);
+
+		fInputEndpointsTree.setLabelProvider(new JavaElementLabelProvider());
+		fInputEndpointsTree.setAutoExpandLevel(2);
+		fInputEndpointsTree.addCheckStateListener(new ICheckStateListener() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.jface.viewers.ICheckStateListener#checkStateChanged(org.eclipse.jface.viewers.CheckStateChangedEvent)
+			 */
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				doCheckedStateChanged();
+			}
+		});
+
+		Composite buttonContainer = new Composite(container, SWT.NONE);
+		gd = new GridData(GridData.FILL_VERTICAL);
+		buttonContainer.setLayoutData(gd);
+		GridLayout buttonLayout = new GridLayout();
+		buttonLayout.marginWidth = 0;
+		buttonLayout.marginHeight = 0;
+		buttonContainer.setLayout(buttonLayout);
+
+		fSelectAllButton = new Button(buttonContainer, SWT.PUSH);
+		fSelectAllButton.setText(WizardMessages.NewCamelTestWizardPageTwo_selectAll);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		fSelectAllButton.setLayoutData(gd);
+		fSelectAllButton.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectAllEndpoints();
+				doCheckedStateChanged();
+			}
+		});
+		LayoutUtil.setButtonDimensionHint(fSelectAllButton);
+
+		fDeselectAllButton = new Button(buttonContainer, SWT.PUSH);
+		fDeselectAllButton.setText(WizardMessages.NewCamelTestWizardPageTwo_deselectAll);
+		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
+		fDeselectAllButton.setLayoutData(gd);
+		fDeselectAllButton.addSelectionListener(new SelectionAdapter() {
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				fInputEndpointsTree.setCheckedElements(new Object[0]);
+				doCheckedStateChanged();
+			}
+		});
+		LayoutUtil.setButtonDimensionHint(fDeselectAllButton);
+
+		/* No of selected methods label */
+		fSelectedEndpointsLabel = new Label(container, SWT.LEFT);
+		fSelectedEndpointsLabel.setFont(container.getFont());
+		doCheckedStateChanged();
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 1;
+		fSelectedEndpointsLabel.setLayoutData(gd);
+
+		Label emptyLabel = new Label(container, SWT.LEFT);
+		gd = new GridData();
+		gd.horizontalSpan = 1;
+		emptyLabel.setLayoutData(gd);
+
+		onXmlFileUnderTestChanged();
+	}
+
+	private void doCheckedStateChanged() {
+		Object[] checked = fInputEndpointsTree.getCheckedElements();
+		fCheckedObjects = checked;
+
+		int checkedEndpointCount = 0;
+		for (Object element : checked) {
+			if (element instanceof EndpointTreeNode) {
+				checkedEndpointCount++;
+			}
+		}
+		String label = ""; //$NON-NLS-1$
+		if (checkedEndpointCount == 1) {
+			label = Messages.format(WizardMessages.NewCamelTestWizardPageTwo_selected_endpoints_label_one, new Integer(
+					checkedEndpointCount));
+		} else {
+			label = Messages.format(WizardMessages.NewCamelTestWizardPageTwo_selected_endpoints_label_many,
+					new Integer(checkedEndpointCount));
+		}
+		fSelectedEndpointsLabel.setText(label);
+	}
+
+	/**
+	 * Returns a map of local name -> URI for input and output endpoints to be
+	 * used in testing. Local names should be unique
+	 */
+	public EndpointMaps getCheckedEndpointMaps() {
+		List<EndpointTreeNode> endpoints = getCheckedEndpoints();
+		Map<String, String> inputEndpoints = new LinkedHashMap<String, String>();
+		Map<String, String> outputEndpoints = new LinkedHashMap<String, String>();
+
+		int inputCounter = 0;
+		int outputCounter = 0;
+
+		for (EndpointTreeNode node : endpoints) {
+			String key;
+			String value = node.getUri();
+			if (node.isInput()) {
+				key = "input";
+				if (!CamelModelHelper.isTimerEndpointURI(value)) {
+					if (inputCounter++ > 0) {
+						key += inputCounter;
+					}
+					inputEndpoints.put(key, value);
+				}
+			} else {
+				key = "output";
+				if (outputCounter++ > 0) {
+					key += outputCounter;
+				}
+				outputEndpoints.put(key, value);
+			}
+		}
+		return new EndpointMaps(inputEndpoints, outputEndpoints);
+	}
+
+	/**
+	 * Returns all checked endpoints in the tree
+	 */
+	public List<EndpointTreeNode> getCheckedEndpoints() {
+		List<EndpointTreeNode> list = new ArrayList<EndpointTreeNode>();
+		if (fCheckedObjects != null) {
+			for (Object object : fCheckedObjects) {
+				if (object instanceof EndpointTreeNode) {
+					list.add((EndpointTreeNode) object);
+				}
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * Returns true if the checkbox for final method stubs is checked.
+	 * 
+	 * @return <code>true</code> is returned if methods should be created final
+	 */
+	public boolean getCreateFinalMethodStubsButtonSelection() {
+		return fCreateFinalStubs;
+	}
+
+	/**
+	 * Returns true if the checkbox for creating tasks is checked.
+	 * 
+	 * @return <code>true</code> is returned if tasks should be created
+	 */
+	public boolean isCreateTasks() {
+		return fCreateTasks;
+	}
+
+	protected TreeNode loadEndpointSummary() {
+		ContainerMarshaler marshaller = new XmlContainerMarshaller();
+		RouteContainer routeContainer = marshaller.loadRoutes(xmlFileUnderTest);
+		EndpointSummary summary = new EndpointSummary(routeContainer);
+
+		TreeNode root = new TreeNode("Endpoints");
+		TreeNode inputs = new TreeNode("Inputs");
+		TreeNode outputs = new TreeNode("Outputs");
+		inputs.setParent(root);
+		outputs.setParent(root);
+		root.setChildren(new TreeNode[] { inputs, outputs });
+
+		setChildren(inputs, summary.getInputEndpoints(), true);
+		setChildren(outputs, summary.getOutputEndpoints(), false);
+
+		return root;
+	}
+
+	protected void onXmlFileUnderTestChanged() {
+		// lets eagerly update the widgets in case we don't view this page
+		if (xmlFileUnderTest == null || fInputEndpointsTree == null) {
+			return;
+		}
+
+		TreeNode root = loadEndpointSummary();
+		fInputEndpointsTree.setContentProvider(new TreeNodeContentProvider());
+		fInputEndpointsTree.setInput(new TreeNode[] { root });
+		fInputEndpointsTree.setLabelProvider(new EndpointsLabelProvider());
+		selectAllEndpoints();
+		fInputEndpointsTree.expandAll();
+		doCheckedStateChanged();
+	}
+
+	/**
+	 * Use the dialog store to restore widget values to the values that they
+	 * held last time this wizard was used to completion
+	 */
+	private void restoreWidgetValues() {
+		IDialogSettings settings = getDialogSettings();
+		if (settings != null) {
+			fCreateTasks = settings.getBoolean(STORE_USE_TASKMARKER);
+			if (fCreateTasksButton != null) {
+				fCreateTasksButton.setSelection(fCreateTasks);
+			}
+			fCreateFinalStubs = settings.getBoolean(STORE_CREATE_FINAL_METHOD_STUBS);
+			if (fCreateFinalMethodStubsButton != null) {
+				fCreateFinalMethodStubsButton.setSelection(fCreateFinalStubs);
+			}
+		}
+	}
+
+	protected void selectAllEndpoints() {
+		fInputEndpointsTree.setCheckedElements((Object[]) fInputEndpointsTree.getInput());
+	}
+
+	private void setChildren(TreeNode node, Map<String, Endpoint> endpointMap, boolean input) {
+		Set<String> uris = endpointMap.keySet();
+		TreeNode[] children = new TreeNode[uris.size()];
+		int idx = 0;
+		for (String uri : uris) {
+			TreeNode child = new EndpointTreeNode(uri, input);
+			child.setParent(node);
+			children[idx++] = child;
+		}
+		node.setChildren(children);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.DialogPage#setVisible(boolean)
+	 */
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible) {
+			fInputEndpointsTree.getControl().setFocus();
+		}
+	}
+
+	public void setXmlFileUnderTest(IFile xmlFileUnderTest) {
+		this.xmlFileUnderTest = xmlFileUnderTest;
+		onXmlFileUnderTestChanged();
+	}
+}

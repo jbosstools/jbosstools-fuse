@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<!-- =========================================================================== -->
+<!-- Copyright (c) 2010 JVM Monitor project. All rights reserved.                -->
+<!--                                                                             -->
+<!-- This code is distributed under the terms of the Eclipse Public License v1.0 -->
+<!-- which is available at http://www.eclipse.org/legal/epl-v10.html             -->
+<!-- =========================================================================== -->
+<contexts>
+   <context id="java_monitor_tools_preference_page_context">
+      <description>This page allows you to configure JVM Monitor settings for the features that are supported only if tools.jar is available in local host.</description>
+   </context>
+
+</contexts>

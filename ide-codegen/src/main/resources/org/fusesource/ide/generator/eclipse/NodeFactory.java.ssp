@@ -1,0 +1,34 @@
+<%@ import val generator: org.fusesource.ide.generator.Generator %>
+/**
+ * NOTE - this file is auto-generated using Scalate. 
+ * 
+ * DO NOT EDIT!
+ */
+package org.fusesource.ide.camel.model.generated;
+
+import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.RouteContainer;
+
+import org.apache.camel.model.*;
+
+/**
+ * Provides a factory method to create the Eclipse model for a given Camel node
+ */
+public class NodeFactory {
+	
+    public static AbstractNode createNode(ProcessorDefinition processor, RouteContainer parent) {
+      if (processor instanceof ToDefinition) {
+        return Endpoint.newInstance((ToDefinition) processor, parent);
+      }
+#for (n <- nodeDefinitions)
+      else if (processor instanceof ${n.name}) {
+        return new ${n.definitionName}((${n.name}) processor, parent);
+      }
+#end
+      else {
+        throw new IllegalArgumentException("Camel node not supported: " + processor);
+      }
+    }
+    
+}

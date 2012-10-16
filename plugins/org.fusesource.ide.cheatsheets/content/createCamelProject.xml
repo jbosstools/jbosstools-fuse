@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Create Camel Project">
+
+   <intro>
+      <description>
+         This cheat sheet walks you through creating a new <b>Camel</b> project using Spring and ActiveMQ
+	</description>
+   </intro>
+
+<item title="Open the Java Perspective">
+  <action pluginId="org.eclipse.ui.cheatsheets" 
+class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
+param1="org.eclipse.jdt.ui.JavaPerspective"/>
+  <description>Select Window > Open Perspective > Java in the menubar at the top 
+of the workbench. This step changes the perspective to set up the Eclipse 
+workbench for Java development.
+  </description> 
+</item>
+
+   <item
+         title="Open the New Fuse IDE Project wizard">
+      <description>
+         To start creating a new project you need to open the wizard to be able to create a new project
+      </description>
+      <command
+            required="true"
+            serialization="org.eclipse.ui.newWizard(newWizardId=org.fusesource.ide.branding.wizards.FuseProjectWizard)"/>
+   </item> 
+</cheatsheet>

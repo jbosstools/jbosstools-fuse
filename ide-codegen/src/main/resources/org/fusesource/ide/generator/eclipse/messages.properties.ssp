@@ -1,0 +1,19 @@
+<%@ import val generator: org.fusesource.ide.generator.Generator %>
+#
+# NOTE - this file is auto-generated using Scalate. 
+#
+# DO NOT EDIT!
+#
+invalidValidatorValueLabel=A value has to be provided!
+invalidValidatorUniqueValueLabel=A unique value has to be provided!
+propertyLabelId=Id
+propertyLabelDescription=Description
+propertyLabelEndpointUri=Uri
+propertyLabelInheritErrorHandler=Inherit error handler
+
+#for (n <- nodeDefinitions)
+#for (p <- n.beanProperties)
+propertyLabel${n.definitionName.capitalize}${p.name.capitalize}=${n.propertyLabel(p.name)}
+#end
+
+#end   

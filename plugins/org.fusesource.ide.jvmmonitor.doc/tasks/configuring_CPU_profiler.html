@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Configuring CPU profiler</title>
+    <link rel="stylesheet" href="../book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    Configuring CPU profiler
+</h1>
+
+<p>
+    To configure CPU profiler:
+</p>
+<ol>
+    <li>
+    Open Configure CPU profiler dialog by clicking the link <b>select profiled Java packages</b> on CPU page.
+    <p><b>Node:</b> Once you specify Java packages to profile, 
+    you can open the dialog with the context menu <b>Configure CPU Profiler...</b>.</p>
+    <p><img src="./img/configure_cpu_profiler_dialog.png"/></p>
+    This dialog enables you to specify Java packages. 
+    CPU profiler profiles the methods of classes belonging to the specified Java packages.
+    </li>
+    <li>
+    Open Package Selection dialog by clicking <b>Add...</b> button on Configure CPU Profiler dialog.
+    Select Java packages from the existing Java packages contained in currently opened projects in workspace,
+    and press <b>OK</b>.
+    </li>
+    <li>
+    There are two types of CPU profiler: <b>Sampling</b> and <b>BCI (Bytecode Instrumentation)</b>.
+    Typically, you may first use the sampling profiler for quick analysis. 
+    After you identify the area of code that has a bottleneck of performance, 
+    you may narrow down the Java packages to profile, and use BCI profiler to get
+    more precise profiling data. Select profiler type, and press <b>OK</b>. 
+    </li>
+</ol>
+<p>
+    <b>Note:</b> The configuration will persist in workspace so that you don't have to configure CPU profiler
+    when restarting Eclipse.
+</p>
+<p>
+    <b>Note:</b> The configuration can be dynamically applied to JVM even while running CPU profiler.
+</p>
+</body>
+</html>

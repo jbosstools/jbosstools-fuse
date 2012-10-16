@@ -1,0 +1,5 @@
+package org.fusesource.ide.commons.tree;
+
+public interface HasName {
+	public String getName();
+}

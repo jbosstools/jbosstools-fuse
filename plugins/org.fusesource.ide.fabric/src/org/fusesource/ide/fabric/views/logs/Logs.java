@@ -1,0 +1,88 @@
+package org.fusesource.ide.fabric.views.logs;
+
+import javax.management.ObjectName;
+
+import org.eclipse.jface.viewers.ISelection;
+import org.fusesource.ide.commons.tree.Node;
+import org.fusesource.ide.commons.ui.Selections;
+import org.fusesource.ide.jmx.core.IConnectionWrapper;
+import org.fusesource.ide.jmx.core.tree.DomainNode;
+import org.fusesource.ide.jmx.core.tree.ObjectNameNode;
+import org.fusesource.ide.jmx.core.tree.Root;
+
+
+public class Logs {
+
+	public static LogEventBean toLogEvent(Object value) {
+		if (value instanceof LogEventBean) {
+			return (LogEventBean) value;
+		}
+		return null;
+	}
+
+	public static ILogBrowser toLogBrowser(Object value) {
+		ILogBrowser answer = null;
+		if (value instanceof ILogBrowser) {
+			return (ILogBrowser) value;
+		}
+		if (value instanceof HasLogBrowser) {
+			HasLogBrowser lb = (HasLogBrowser) value;
+			answer = lb.getLogBrowser();
+			if (answer != null) {
+				return answer;
+			}
+		}
+		if (value instanceof Root) {
+			Root root = (Root) value;
+			if (root != null) {
+				DomainNode domainNode = root.getDomainNode("org.fusesource.insight");
+				if (domainNode != null) {
+					Node[] children = domainNode.getChildren();
+					if (children != null) {
+						for (Node node : children) {
+							if (node instanceof ObjectNameNode) {
+								ObjectNameNode nameNode = (ObjectNameNode) node;
+								ObjectName objectName = nameNode.getObjectName();
+								if (objectName != null) {
+									String typeName = objectName.getKeyProperty("type");
+									if (typeName != null && typeName.equals("LogQuery")) {
+										System.out.println("================ found objectName: " + objectName);
+										return new JmxFabricLogBrowser(root.getConnection(), objectName);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+		}
+		if (value instanceof IConnectionWrapper) {
+			IConnectionWrapper connection = (IConnectionWrapper) value;
+			return toLogBrowser(connection.getRoot());
+		}
+		if (value instanceof Node) {
+			Node node = (Node) value;
+			answer = toLogBrowser(node.getParent());
+			if (answer != null) {
+				return answer;
+			}
+		}
+		return null;
+	}
+
+	public static ILogBrowser getSelectionLogBrowser(ISelection selection) {
+		Object value = Selections.getFirstSelection(selection);
+		return toLogBrowser(value);
+	}
+
+	public static boolean hasThrowableInformation(LogEventBean event) {
+		String[] exception = event.getException();
+		return exception != null && exception.length > 0;
+	}
+
+	public static String[] getThrowableRep(LogEventBean event) {
+		return event.getException();
+	}
+
+}

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<!-- =========================================================================== -->
+<!-- Copyright (c) 2010 JVM Monitor project. All rights reserved.                -->
+<!--                                                                             -->
+<!-- This code is distributed under the terms of the Eclipse Public License v1.0 -->
+<!-- which is available at http://www.eclipse.org/legal/epl-v10.html             -->
+<!-- =========================================================================== -->
+<contexts>
+   <context id="attribute_selection_dialog_content">
+      <description>This dialog allows you to select attributes.</description>
+      <topic href="tasks/adding_other_attributes_on_existing_chart.html" label="Adding other attributes on existing chart"/>
+   </context>
+   <context id="new_chart_dialog_content">
+      <description>This dialog allows you to create a new chart.</description>
+      <topic href="tasks/creating_new_chart.html" label="Creating a new chart"/>
+   </context>
+   <context id="configure_chart_dialog_content">
+      <description>This dialog allows you to configure a chart.</description>
+      <topic href="tasks/adding_other_attributes_on_existing_chart.html" label="Adding other attributes on existing chart"/>
+   </context>
+   <context id="save_chart_set_as_dialog_content">
+      <description>This dialog allows you to save chart set.</description>
+      <topic href="tasks/creating_new_chart.html" label="Creating a new chart"/>
+   </context>
+   <context id="load_chart_set_dialog_content">
+      <description>This dialog allows you to load chart set.</description>
+      <topic href="tasks/creating_new_chart.html" label="Creating a new chart"/>
+   </context>
+   <context id="find_dialog_content">
+      <description>This dialog allows you to find the specified text.</description>
+   </context>
+   <context id="show_in_timeline_dialog_content">
+      <description>This dialog allows you to show attributes in timeline.</description>
+   </context>
+   <context id="invoke_dialog_content">
+      <description>This dialog allows you to invoke MBean operations.</description>
+      <topic href="tasks/invoking_MBean_operations.html" label="Invoking MBean operations"/>
+   </context>
+   <context id="notification_details_dialog_content">
+      <description>This dialog allows you to view the notification details.</description>
+      <topic href="tasks/subscribing_MBean_notifications.html" label="Subscribing MBean notifications"/>
+   </context>
+   <context id="new_jvm_connection_wizard_page_context">
+      <description>This page allows you to connect to JVM on remote host.</description>
+      <topic href="tasks/monitoring_JVM_on_remote_host.html" label="Monitoring JVM on remote host"/>
+   </context>
+   <context id="jvm_explorer_view_conent">
+      <description>This view displays the JVMs and snapshots, and allows you to start and stop monitoring JVMs.</description>
+      <topic href="gettingStarted/viewing_JVMs.html" label="Viewing JVMs"/>
+      <topic href="gettingStarted/starting_Monitoring_JVM.html" label="Starting monitoring JVM"/>
+      <topic href="gettingStarted/stopping_Monitoring_JVM.html" label="Stopping monitoring JVM"/>
+   </context>
+   <context id="timeline_page_content">
+      <description>This page allows you to monitor attributes in timeline.</description>
+      <topic href="tasks/monitoring_attributes_in_timeline.html" label="Monitoring attributes in timeline"/>
+      <topic href="tasks/adding_other_attributes_on_existing_chart.html" label="Adding other attributes on existing chart"/>
+      <topic href="tasks/creating_new_chart.html" label="Creating a new chart"/>
+   </context>
+   <context id="threads_page_content">
+      <description>This page allows you to monitor threads.</description>
+      <topic href="tasks/monitoring_threads.html" label="Monitoring threads"/>
+      <topic href="tasks/identifying_code_causing_deadlock.html" label="Identifying the code causing deadlock"/>
+      <topic href="tasks/identifying_code_consuming_CPU_resource.html" label="Identifying the code consuming CPU resource"/>
+   </context>
+   <context id="memory_page_content">
+      <description>This page allows you to monitor memory usage.</description>
+      <topic href="tasks/monitoring_memory_usage.html" label="Monitoring memory usage"/>
+      <topic href="tasks/identifying_objects_consuming_heap_memory.html" label="Identifying the objects consuming heap memory"/>
+      <topic href="tasks/analyzing_object_references.html" label="Analyzing object references"/>
+   </context>
+   <context id="cpu_page_content">
+      <description>This page allows you to monitor CPU usage.</description>
+      <topic href="tasks/monitoring_CPU_usage.html" label="Monitoring CPU usage"/>
+      <topic href="tasks/configuring_CPU_profiler.html" label="Configuring CPU profiler"/>
+      <topic href="tasks/running_CPU_profiler.html" label="Running CPU profiler"/>
+      <topic href="tasks/analyzing_call_tree.html" label="Analyzing call tree"/>
+      <topic href="tasks/analyzing_hot_spots.html" label="Analyzing hot spots"/>
+      <topic href="tasks/analyzing_callers_callees.html" label="Analyzing callers/callees"/>
+   </context>
+   <context id="mbeans_page_content">
+      <description>This page allows you to monitor MBeans attributes.</description>
+      <topic href="tasks/monitoring_MBeans_attributes.html" label="Monitoring MBeans attributes"/>
+      <topic href="tasks/viewing_and_editing_MBean_attributes.html" label="Viewing and editing MBean attributes"/>
+      <topic href="tasks/invoking_MBean_operations.html" label="Invoking MBean operations"/>
+      <topic href="tasks/subscribing_MBean_notifications.html" label="Subscribing MBean notifications"/>
+   </context>
+   <context id="overview_page_content">
+      <description>This page allows you to monitor overview.</description>
+   </context>
+   <context id="threads_dump_editor_content">
+      <description>This page allows you to view thread dump and edit the comments.</description>
+   </context>
+   <context id="heap_dump_editor_content">
+      <description>This page allows you to view heap dump and edit the comments.</description>
+   </context>
+   <context id="cpu_dump_editor_content">
+      <description>This page allows you to view CPU dump and edit the comments.</description>
+   </context>
+   <context id="java_monitor_preference_page_context">
+      <description>This page allows you to configure JVM Monitor settings.</description>
+   </context>
+
+</contexts>

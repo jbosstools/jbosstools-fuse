@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Fuse Cheat Sheets Plugin
+Bundle-SymbolicName: org.fusesource.ide.cheatsheets;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Bundle-Vendor: FuseSource.com
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.ui.cheatsheets,
+ org.fusesource.ide.branding
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .

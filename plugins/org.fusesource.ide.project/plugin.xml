@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension id="RiderProjectNature" name="Fuse IDE Nature" point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="org.fusesource.ide.project.RiderProjectNature">
+         </run>
+      </runtime>
+      <content-type
+            id="org.fusesource.ide.project.camelNatureContentType">
+      </content-type>
+      <builder
+            id="org.fusesource.ide.project.RiderProjectBuilder">
+      </builder>
+	</extension>
+	<extension point="org.eclipse.ui.ide.projectNatureImages">
+      <image icon="icons/fuse_icon_16c.png" id="org.fusesource.ide.project.RiderProjectNature.icon" natureId="org.fusesource.ide.project.RiderProjectNature"/>
+	</extension>
+ <extension
+       id="org.fusesource.ide.project.RiderProjectBuilder"
+       point="org.eclipse.core.resources.builders">
+    <builder
+          callOnEmptyDelta="false"
+          hasNature="true"
+          isConfigurable="false"
+          supportsConfigurations="false">
+       <run
+             class="org.fusesource.ide.project.RiderProjectBuilder">
+       </run>
+    </builder>
+ </extension>
+ 
+ <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+	   <navigatorContent
+	         id="org.fusesource.ide.camelContent"
+	         activeByDefault="true"
+	         contentProvider="org.fusesource.ide.project.providers.CamelFilesContentProvider"
+	         icon="icons/fuse_icon_16c.png"
+	         labelProvider="org.fusesource.ide.project.providers.CamelFilesLabelProvider"
+	         name="Camel Contexts"
+	         priority="highest">
+	      <triggerPoints>
+          <or>
+               <instanceof value="org.eclipse.jdt.core.IJavaProject" />
+               <instanceof
+                     value="org.eclipse.core.resources.IProject">
+               </instanceof>
+            </or>
+	      </triggerPoints>
+	      <possibleChildren>
+             <and>
+                <adapt type="org.eclipse.core.resources.IFile">
+                    <test
+                          property="org.eclipse.core.resources.contentTypeId"
+                          value="org.fusesource.ide.project.camelNatureContentType">
+                    </test>
+                 </adapt>
+             </and>
+          </possibleChildren>
+	   </navigatorContent>
+	</extension>
+	
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	         viewerId="org.eclipse.jdt.ui.PackageExplorer">
+	      <includes>
+	         <contentExtension
+	               isRoot="false"
+	               pattern="org.fusesource.ide.camelContent">
+	         </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+	   <viewerContentBinding
+	         viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+	      <includes>
+	         <contentExtension
+	               isRoot="false"
+	               pattern="org.fusesource.ide.camelContent">
+	         </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+	</extension>
+</plugin>

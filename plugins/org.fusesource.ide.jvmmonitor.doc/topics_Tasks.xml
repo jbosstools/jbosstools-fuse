@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+<!-- =========================================================================== -->
+<!-- Copyright (c) 2010 JVM Monitor project. All rights reserved.                -->
+<!--                                                                             -->
+<!-- This code is distributed under the terms of the Eclipse Public License v1.0 -->
+<!-- which is available at http://www.eclipse.org/legal/epl-v10.html             -->
+<!-- =========================================================================== -->
+<toc label="Tasks">
+   <topic href="tasks/monitoring_attributes_in_timeline.html" label="Monitoring attributes in timeline">
+      <topic href="tasks/adding_other_attributes_on_existing_chart.html" label="Adding other attributes on existing chart">
+      </topic>
+      <topic href="tasks/creating_new_chart.html" label="Creating a new chart">
+      </topic>
+   </topic>
+   <topic href="tasks/monitoring_threads.html" label="Monitoring threads">
+      <topic href="tasks/identifying_code_causing_deadlock.html" label="Identifying the code causing deadlock">
+      </topic>
+      <topic href="tasks/identifying_code_consuming_CPU_resource.html" label="Identifying the code consuming CPU resource">
+      </topic>
+   </topic>
+   <topic href="tasks/monitoring_memory_usage.html" label="Monitoring memory usage">
+      <topic href="tasks/identifying_objects_consuming_heap_memory.html" label="Identifying the objects consuming heap memory">
+      </topic>
+      <topic href="tasks/analyzing_object_references.html" label="Analyzing object references">
+      </topic>
+      <topic href="tasks/identifying_SWT_resource_leak.html" label="Identifying SWT resource leak">
+      </topic>
+   </topic>
+   <topic href="tasks/monitoring_CPU_usage.html" label="Monitoring CPU usage">
+      <topic href="tasks/configuring_CPU_profiler.html" label="Configuring CPU profiler">
+      </topic>
+      <topic href="tasks/running_CPU_profiler.html" label="Running CPU profiler">
+      </topic>
+      <topic href="tasks/analyzing_call_tree.html" label="Analyzing call tree">
+      </topic>
+      <topic href="tasks/analyzing_hot_spots.html" label="Analyzing hot spots">
+      </topic>
+      <topic href="tasks/analyzing_callers_callees.html" label="Analyzing callers/callees">
+      </topic>
+   </topic>
+   <topic href="tasks/monitoring_MBeans_attributes.html" label="Monitoring MBeans attributes">
+      <topic href="tasks/viewing_and_editing_MBean_attributes.html" label="Viewing and editing MBean attributes">
+      </topic>
+      <topic href="tasks/invoking_MBean_operations.html" label="Invoking MBean operations">
+      </topic>
+      <topic href="tasks/subscribing_MBean_notifications.html" label="Subscribing MBean notifications">
+      </topic>
+   </topic>
+   <topic href="tasks/monitoring_JVM_on_remote_host.html" label="Monitoring JVM on remote host">
+   </topic>
+</toc>

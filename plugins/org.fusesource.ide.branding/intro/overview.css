@@ -1,0 +1,8 @@
+
+a#fdfc-overview img {
+	background-image: url(../icons/fuse_rs.jpg);
+}
+
+a#fdfc-overview:hover img {
+	background-image: url(../icons/fuse_rs.jpg);
+}

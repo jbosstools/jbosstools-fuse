@@ -1,0 +1,170 @@
+<!--
+
+    Copyright (C) 2010 FuseSource, Corp. All rights reserved.
+    http://fusesource.com
+
+    The software in this package is published under the terms of the AGPL license
+    a copy of which has been included with this distribution in the license.txt file.
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.fusesource</groupId>
+    <artifactId>fuse-project</artifactId>
+    <!-- 
+    <version>99-master-SNAPSHOT</version>
+    -->
+    <version>7.1.0.fuse-017</version>
+  </parent>
+
+  <groupId>org.fusesource.ide</groupId>
+  <artifactId>project</artifactId>
+  <packaging>pom</packaging>
+  <version>3.0.0-SNAPSHOT</version>
+  <name>Fuse IDE</name>
+  <url>http://fuse.fusesource.org/</url>
+
+  <organization>
+    <name>FuseSource</name>
+    <url>http://fusesource.com</url>
+  </organization>
+
+
+  <prerequisites>
+    <maven>3.0.2</maven>
+  </prerequisites>
+
+  <properties>
+    <forge-project-id>ide</forge-project-id>
+
+		<!--
+    <fabric-version>7.1.0.fuse-SNAPSHOT</fabric-version>
+    <fabric-version>99-master-SNAPSHOT</fabric-version>
+		-->
+    <fabric-version>7.1.0.fuse-017</fabric-version>
+    <fmc-version>${fabric-version}</fmc-version>
+  </properties>
+
+  <repositories>
+      <repository>
+        <id>release-proxy.fusesource.org</id>
+        <name>FuseSource Release Proxy Repository</name>
+        <url>http://repo.fusesource.com/nexus/content/groups/m2-release-proxy</url>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+      </repository>
+    <repository>
+      <id>fusesource-nexus-snapshots</id>
+      <name>Fusesource Nexus Snapshots</name>
+      <url>http://repo.fusesource.com/nexus/content/repositories/subscriber-snapshot</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>    
+    <repository>
+      <id>release.fusesource.org</id>
+      <name>FuseSource Release Repository</name>
+      <url>http://repo.fusesource.com/nexus/content/repositories/releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>ea.fusesource.org</id>
+      <name>FuseSource Early Access Repository</name>
+      <url>http://repo.fusesource.com/nexus/content/groups/ea</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>release-proxy.fusesource.org</id>
+      <name>FuseSource Release Proxy Repository</name>
+      <url>http://repo.fusesource.com/nexus/content/groups/m2-release-proxy</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+    <pluginRepository>
+      <id>release.fusesource.org</id>
+      <name>FuseSource Release Repository</name>
+      <url>http://repo.fusesource.com/nexus/content/repositories/releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+    <pluginRepository>
+      <id>ea.fusesource.org</id>
+      <name>FuseSource Early Access Repository</name>
+      <url>http://repo.fusesource.com/nexus/content/groups/ea</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <modules>
+    <module>ide-buildtools</module>
+    <module>ide-codegen</module>
+  </modules>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.scala-tools</groupId>
+          <artifactId>maven-scala-plugin</artifactId>
+          <version>${scala-plugin-version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <jvmArgs>
+              <jvmArg>-Xmx1024m</jvmArg>
+            </jvmArgs>
+            <args>
+              <!-- arg>-unchecked</arg -->
+              <arg>-deprecation</arg>
+            </args>
+            <scalaVersion>${scala-version}</scalaVersion>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

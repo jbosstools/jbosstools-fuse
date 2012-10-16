@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Identifying the objects consuming heap memory</title>
+    <link rel="stylesheet" href="../book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    Identifying the objects consuming heap memory
+</h1>
+<p>
+    When you notice that the heap memory is unexpectedly consumed 
+    (e.g. when monitoring used heap memory at Timeline page),
+    you may want to identify which objects are actually consuming heap memory.
+</p>
+<p>
+    To identify the objects consuming heap memory:
+</p>
+<ol>
+    <li>
+    Make sure that the heap histogram is sorted by <b>Size</b> column, 
+    and see the consumed heap memory size for each class.
+    </li>
+    <li>
+    If you are interested in which objects are being increased during a certain duration, 
+    press <b>Clear Delta</b> button
+    [<img src="./img/clear_co.gif" style="vertical-align: middle"/>] at the local toolbar to clear delta size, 
+    and sort with <b>Delta</b> column.
+    </li>
+    <li>
+    Double-click the class to check the code on Java editor as needed.
+    </li>
+</ol>
+<img src="./img/memory.png"/>
+<p>
+    <b>Note:</b> If the refresh is too fast to see the content, unselect <b>Refresh</b> toggle button 
+    [<img src="./img/refresh.gif" style="vertical-align: middle"/>] at the local toolbar to disable refresh. 
+    Alternatively, you can change the period to update on preference page 
+    <b>Window > Preferences > Java > Monitor > Period to update</b>.
+</p>
+</body>
+</html>

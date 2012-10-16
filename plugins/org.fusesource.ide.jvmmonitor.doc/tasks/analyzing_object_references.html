@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Analyzing object references</title>
+    <link rel="stylesheet" href="../book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    Analyzing object references
+</h1>
+<p>
+    When you find out which objects are actually consuming heap memory, 
+    you may want to see which objects are keeping the reference to those objects.
+    JVM Monitor doesn't provide an ability to analyze the references, 
+    but instead provide an ability to generate <b>hprof file</b>, so that you can further analyze 
+    the references with other tools like <b>Memory Analyzer</b>.
+</p>
+<p>
+    To analyze object references:
+</p>
+<ol>
+    <li>
+    Press <b>Dump heap as hprof file</b> button
+    [<img src="./img/take_hprof_dump.gif" style="vertical-align: middle"/>] at the local toolbar to generate hprof file.
+    </li>
+    <li>
+    Analyze object references with hprof file. 
+    In case Memory Analyzer plug-ins are installed in your Eclipse, 
+    Memory Analyzer is automatically opened after generating hprof file.
+    </li>
+</ol>
+</body>
+</html>

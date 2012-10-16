@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+<!-- =========================================================================== -->
+<!-- Copyright (c) 2010 JVM Monitor project. All rights reserved.                -->
+<!--                                                                             -->
+<!-- This code is distributed under the terms of the Eclipse Public License v1.0 -->
+<!-- which is available at http://www.eclipse.org/legal/epl-v10.html             -->
+<!-- =========================================================================== -->
+<toc label="Getting Started">
+   <topic href="gettingStarted/viewing_JVMs.html" label="Viewing JVMs">
+   </topic>
+   <topic href="gettingStarted/starting_Monitoring_JVM.html" label="Starting monitoring JVM">
+   </topic>
+   <topic href="gettingStarted/stopping_Monitoring_JVM.html" label="Stopping monitoring JVM">
+   </topic>
+</toc>

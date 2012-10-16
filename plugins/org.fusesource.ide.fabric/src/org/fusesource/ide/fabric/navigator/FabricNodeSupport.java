@@ -1,0 +1,40 @@
+package org.fusesource.ide.fabric.navigator;
+
+import java.util.List;
+
+import org.eclipse.jface.action.IMenuManager;
+import org.fusesource.ide.commons.tree.GraphableNode;
+import org.fusesource.ide.commons.tree.Node;
+import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
+import org.fusesource.ide.fabric.actions.CreateChildContainerAction;
+import org.fusesource.ide.fabric.actions.CreateSshContainerAction;
+import org.fusesource.ide.fabric.actions.jclouds.CreateJCloudsContainerAction;
+import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+
+
+public abstract class FabricNodeSupport extends RefreshableCollectionNode implements GraphableNode, ContextMenuProvider {
+
+	private final Fabric fabric;
+
+	public FabricNodeSupport(Node parent, Fabric fabric) {
+		super(parent);
+		this.fabric = fabric;
+	}
+
+	public Fabric getFabric() {
+		return fabric;
+	}
+
+	@Override
+	public List<Node> getChildrenGraph() {
+		return getFabric().getChildrenGraph();
+	}
+
+
+	@Override
+	public void provideContextMenu(IMenuManager menu) {
+		CreateChildContainerAction.addIfSingleRootContainer(menu, getFabric());
+		menu.add(new CreateJCloudsContainerAction(getFabric()));
+		menu.add(new CreateSshContainerAction(getFabric()));
+	}
+}

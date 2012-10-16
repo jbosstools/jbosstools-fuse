@@ -1,0 +1,48 @@
+<%@ import val generator: org.fusesource.ide.generator.Generator %>
+/**
+ * NOTE - this file is auto-generated using Scalate. 
+ * 
+ * DO NOT EDIT!
+ */
+package org.fusesource.ide.camel.editor;
+
+import org.eclipse.osgi.util.NLS;
+
+/**
+ * @author lhein
+ */
+public class Messages extends NLS {
+	
+	private static final String BUNDLE_NAME = "org.fusesource.ide.camel.editor.l10n.messages";
+
+    public static String editorSourcePageTitle;
+    public static String editorDesignPageTitle;
+    public static String endpointsDrawerTitle;
+    public static String routingDrawerTitle;
+    public static String controlFlowDrawerTitle;
+    public static String transformationDrawerTitle;
+    public static String miscellaneousDrawerTitle;
+
+    public static String addNodeCommandLabel;
+    public static String reOrderNodeCommandLabel;
+    public static String createNodeCommandLabel;
+    public static String deleteFlowCommandLabel;
+    public static String moveConnectionStartpointCommandLabel;
+    public static String moveConnectionEndpointCommandLabel;
+    public static String createFlowCommandLabel;
+
+    public static String paletteEndpointTitle;
+    public static String paletteEndpointDescription;
+
+
+#for (n <- nodeDefinitions)
+    public static String palette${n.definitionName.capitalize}Title;
+    public static String palette${n.definitionName.capitalize}Description;
+
+#end   
+
+    static {
+        // initialize resource bundle
+        NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+    }
+}

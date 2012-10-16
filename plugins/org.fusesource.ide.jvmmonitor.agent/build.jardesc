@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
+<jardesc>
+    <jar path="org.fusesource.ide.jvmmonitor.core/lib/jvmmonitor-agent.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/org.fusesource.ide.jvmmonitor.agent/build.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="false" manifestLocation="/org.fusesource.ide.jvmmonitor.agent/META-INF/MANIFEST.MF" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <javaElement handleIdentifier="=org.fusesource.ide.jvmmonitor.agent/src"/>
+        <folder path="/org.fusesource.ide.jvmmonitor.agent/META-INF"/>
+    </selectedElements>
+</jardesc>

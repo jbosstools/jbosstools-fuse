@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Fuse IDE Local Update Site">
+      Fuse IDE Update Site for local development purposes
+   </description>
+   <feature url="features/org.fusesource.ide.feature_0.0.0.jar" id="org.fusesource.ide.feature" version="0.0.0">
+      <category name="org.fusesource.ide"/>
+   </feature>
+   <category-def name="org.fusesource.ide" label="Fuse IDE"/>
+</site>

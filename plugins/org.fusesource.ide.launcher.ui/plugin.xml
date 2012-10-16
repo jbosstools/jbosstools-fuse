@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.fusesource.ide.launcher.camelContext"
+            icon="icons/run_camel_context.png"
+            id="org.fusesource.ide.launcher.ui.launchConfigurationTypeImage.camelContext">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.launcher.ui.tabs.CamelContextLaunchConfigurationTabGroup"
+            description="%tabgroup.camelContext.description"
+            id="org.fusesource.ide.launcher.ui.launchConfigurationTabGroup.camelContext"
+            type="org.fusesource.ide.launcher.camelContext">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <tab
+            class="org.fusesource.ide.launcher.ui.tabs.CamelContextFileTab"
+            group="org.fusesource.ide.launcher.ui.launchConfigurationTabGroup.camelContext"
+            id="org.fusesource.ide.launcher.ui.tab.CamelContext"
+            name="%launcher.tab.camelcontext.name">
+      </tab>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.fusesource.ide.launcher.ui.ExecutePomAction:clean package org.apache.camel:camel-maven-plugin:run"
+            icon="icons/run_camel_context.png"
+            id="org.fusesource.ide.launcher.ui.shortcut.camelContext"
+            label="%launchShortCut.camelContext.label"
+            modes="run">
+            
+            <contextualLaunch>
+               <enablement>
+                 <with variable="selection">
+                     <count value="1"/>
+                     <iterate>
+                         <adapt
+                               type="org.eclipse.core.resources.IFile">
+                            <test
+                                  property="org.eclipse.core.resources.contentTypeId"
+                                  value="org.fusesource.ide.camel.editor.camelContentType">
+                            </test>
+                         </adapt>
+                     </iterate>
+                 </with>
+             </enablement>
+            </contextualLaunch>
+            <configurationType
+                  id="org.fusesource.ide.launcher.camelContext">
+            </configurationType>
+      </shortcut>
+      <shortcut
+            class="org.fusesource.ide.launcher.ui.ExecutePomAction:clean package org.apache.camel:camel-maven-plugin:run -Dmaven.test.skip=true"
+            icon="icons/run_camel_context.png"
+            id="org.fusesource.ide.launcher.ui.shortcut.camelContextNoTests"
+            label="%launchShortCut.camelContext.notests.label"
+            modes="run">
+            
+            <contextualLaunch>
+               <enablement>
+                 <with variable="selection">
+                     <count value="1"/>
+                     <iterate>
+                         <adapt
+                               type="org.eclipse.core.resources.IFile">
+                            <test
+                                  property="org.eclipse.core.resources.contentTypeId"
+                                  value="org.fusesource.ide.camel.editor.camelContentType">
+                            </test>
+                         </adapt>
+                     </iterate>
+                 </with>
+             </enablement>
+            </contextualLaunch>
+            <configurationType
+                  id="org.fusesource.ide.launcher.camelContextNoTests">
+            </configurationType>
+      </shortcut>
+   </extension>
+</plugin>

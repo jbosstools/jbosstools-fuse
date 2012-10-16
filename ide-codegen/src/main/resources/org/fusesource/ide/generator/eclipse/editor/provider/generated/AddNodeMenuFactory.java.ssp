@@ -1,0 +1,97 @@
+<%@ import val generator: org.fusesource.ide.generator.Generator %>
+#{
+  def fillPalette(group: String, params: String) = {
+    for (n <- nodeDefinitions if n.group == group) {
+      val smallIcon = findIconFileOrElse(eclipseIconDir, n.id + "16", n.defaultImageName + "16.png")
+      val bigIcon = findIconFileOrElse(eclipseIconDir, n.id + "24", n.defaultImageName + "24.png")
+}#
+#if (n.definitionName.capitalize != "Route")
+      addMenuItem(menu, Messages.palette${n.definitionName.capitalize}Title, Messages.palette${n.definitionName.capitalize}Description, ${n.definitionName.capitalize}.class${params}); 
+#end      
+#{
+    }
+  }
+}#
+
+/**
+ * NOTE - this file is auto-generated using Scalate. 
+ * 
+ * DO NOT EDIT!
+ */
+package org.fusesource.ide.camel.editor.provider.generated;
+
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.ICustomContext;
+import org.eclipse.graphiti.tb.ContextMenuEntry;
+
+import org.fusesource.ide.camel.editor.Messages;
+import org.fusesource.ide.camel.editor.provider.AbstractAddNodeMenuFactory;
+import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.generated.*;
+import org.fusesource.ide.camel.model.generated.Process;
+
+/**
+ * A helper class for creating a popup menu to allow the addition of new nodes in a context menu.
+ */
+public class AddNodeMenuFactory extends AbstractAddNodeMenuFactory {
+
+  // Fill Graphiti context menus
+
+	@Override
+	protected void fillEndpointsContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+		addMenuItem(menu, Messages.paletteEndpointTitle, Messages.paletteEndpointDescription, Endpoint.class, context, fp);
+
+    ${fillPalette("Endpoints", ", context, fp")}
+	}
+
+	@Override
+	protected void fillRoutingContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+    ${fillPalette("Routing", ", context, fp")}
+	}
+
+	@Override
+	protected void fillControlFlowContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+    ${fillPalette("Control Flow", ", context, fp")}
+	}
+
+	@Override
+	protected void fillTransformationContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+    ${fillPalette("Transformation", ", context, fp")}
+	}
+
+	@Override
+	protected void fillMiscellaneousContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+    ${fillPalette("Miscellaneous", ", context, fp")}
+	}
+
+  
+  // Fill IMenuManager
+
+	@Override
+	protected void fillEndpointsMenu(IMenuManager menu) {
+		addMenuItem(menu, Messages.paletteEndpointTitle, Messages.paletteEndpointDescription, Endpoint.class);
+
+    ${fillPalette("Endpoints", "")}
+	}
+
+	@Override
+	protected void fillRoutingMenu(IMenuManager menu) {
+    ${fillPalette("Routing", "")}
+	}
+
+	@Override
+	protected void fillControlFlowMenu(IMenuManager menu) {
+    ${fillPalette("Control Flow", "")}
+	}
+
+	@Override
+	protected void fillTransformationMenu(IMenuManager menu) {
+    ${fillPalette("Transformation", "")}
+	}
+
+	@Override
+	protected void fillMiscellaneousMenu(IMenuManager menu) {
+    ${fillPalette("Miscellaneous", "")}
+	}
+}

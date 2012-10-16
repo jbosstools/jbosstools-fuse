@@ -1,0 +1,93 @@
+package org.fusesource.ide.camel.model;
+
+import org.apache.camel.model.DescriptionDefinition;
+import org.apache.camel.model.FromDefinition;
+import org.apache.camel.model.ToDefinition;
+import org.fusesource.ide.camel.model.generated.WireTap;
+import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.preferences.PreferencesConstants;
+
+
+public class CamelModelHelper {
+
+	public static String getDefaultLanguageName() {
+		String answer = Activator.getDefault().getPreferenceStore()
+				.getString(PreferencesConstants.EDITOR_DEFAULT_LANGUAGE);
+		if (Strings.isBlank(answer)) {
+			return "simple";
+		} else {
+			return answer;
+		}
+	}
+
+	public static boolean isPropertyListOFSetHeaders(final Object id) {
+		return Objects.equal(WireTap.PROPERTY_HEADERS, id);
+	}
+
+	public static String getUri(FromDefinition input) {
+		String key = input.getUri();
+		if (Strings.isBlank(key)) {
+			String ref = input.getRef();
+			if (!Strings.isBlank(ref)) {
+				return "ref:" + ref;
+			}
+		}
+		return key;
+	}
+
+	public static String getUri(ToDefinition input) {
+		String key = input.getUri();
+		if (Strings.isBlank(key)) {
+			String ref = input.getRef();
+			if (!Strings.isBlank(ref)) {
+				return "ref:" + ref;
+			}
+		}
+		return key;
+	}
+
+	public static void setUri(FromDefinition node, Endpoint endpoint) {
+		String value = endpoint.getUri();
+		if (value != null && value.startsWith("ref:")) {
+			node.setRef(value.substring(4));
+		} else {
+			node.setUri(value);
+		}
+	}
+
+	public static void setUri(ToDefinition node, Endpoint endpoint) {
+		String value = endpoint.getUri();
+		if (value != null && value.startsWith("ref:")) {
+			node.setRef(value.substring(4));
+		} else {
+			node.setUri(value);
+		}
+	}
+
+	public static void setId(FromDefinition node, Endpoint endpoint) {
+		String value = endpoint.getId();
+		if (value != null && value.trim().length()>0) {
+			node.setId(value);
+		}
+	}
+
+	public static void setDescription(FromDefinition node, Endpoint endpoint) {
+		String value = endpoint.getId();
+		if (value != null && value.trim().length()>0) {
+			DescriptionDefinition dd = new DescriptionDefinition();
+			dd.setText(endpoint.getDescription());
+			node.setDescription(dd);
+		}
+	}
+
+	public static boolean isMockEndpointURI(String value) {
+		return value.startsWith("mock:");
+	}
+
+	public static boolean isTimerEndpointURI(String value) {
+		return value.startsWith("timer:") || value.startsWith("quartz:");
+	}
+
+
+}

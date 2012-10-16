@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+<head>
+    <title>Identifying SWT resource leak</title>
+    <link rel="stylesheet" href="../book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    Identifying SWT resource leak
+</h1>
+
+<p>
+    When your Java application is based on SWT, you may want to check if there are any operating system
+    resource leak that can be caused by missing invocation of <code>org.eclipse.swt.graphics.Resource.dispose()</code>. 
+</p>
+<p>
+    To identify SWT resource leak:
+</p>
+<ol>
+    <li>
+    Open <b>SWT Resources page</b> that is available in case of monitoring SWT-based Java application.
+    On the left hand side, you can see SWT resources that have been allocated after connecting to JVM.
+    When you select one of SWT resources, you can see its stack trace on the right hand side,
+    so that you can identify the source code in which the SWT resource was allocated.
+    
+    <p><img src="./img/monitor_swt_resource_leak.png"/></p>
+    </li>
+    <li>
+    Press <b>Clear</b> button
+    [<img src="./img/clear_co.gif" style="vertical-align: middle"/>] at the local toolbar to clear the 
+    currently shown resources. 
+    <p><b>Node:</b> Clear button doesn't dispose SWT resources in JVM, but just makes the
+    currently shown resources invisible.</p>
+    </li>
+    <li>
+    Do some operations in which you suspect resource leak. Typically, it would be a set of operations
+    that finally go back to the initial state of operations (e.g. opening a view and closing a view).
+    You will see the resources that are newly allocated but not displosed.
+    </li>
+</ol>
+</body>
+</html>

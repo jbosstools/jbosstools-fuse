@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>FAQ</title>
+    <link rel="stylesheet" href="./book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    FAQ
+</h1>
+
+<p>
+    <a href="#Cannot_Find_JVMs">I cannot find any JVMs on JVM Explorer. What is wrong?</a>
+</p>
+<p>
+<a href="#How_to_enable_BCI_CPU_profiler">How can I enable the BCI mode of CPU profiler on remote host?</a>
+</p>
+
+<a name="Cannot_Find_JVMs"></a>
+<h2>
+    I cannot find any JVMs on JVM Explorer. What is wrong?
+</h2>
+<p>
+    At least one JVM (Eclipse itself) should be shown on JVM Explorer. 
+    If no JVM is shown, it is likely that Eclipse is not started with supported JDK.
+    For example, Sun JRE might be used instead of Sun JDK 6 or OpenJDK 6.
+</p>
+<ol>
+    <li>
+    Check the value of system property <b>java.home</b> with <b>Help > About Eclipse > Installation Details > Configuration</b>.
+    You may see that the supported JDK is not specified to java.home.
+    </li>
+    <li>
+    Close Eclipse. 
+    </li>
+    <li>
+    To enforce using a desired JDK on Eclipse, specify the option <b>-vm</b> to the eclipse executable, 
+    or specify it in <b>eclipse.ini</b>.
+    See the <img src="./img/hyper_link.gif"/><a href="http://help.eclipse.org/helios/topic/org.eclipse.platform.doc.user/tasks/running_eclipse.htm">
+    Workbench User Guide</a> to learn how to specify that option.
+    </li>
+    <li>
+    Start Eclipse.
+    </li>
+</ol>
+<p>
+    <b>Note:</b> If failed to specify -vm option or if you don't want to change the eclipse launch settings, 
+    you may try specifying the JDK on preference page
+    <b>Window > Preferences > Java > Monitor > Tools > JDK Root Directory</b>.
+</p>
+
+<a name="How_to_enable_BCI_CPU_profiler"></a>
+<h2>
+    How can I enable the BCI mode of CPU profiler on remote host?
+</h2>
+
+<p>
+    To enable BCI mode of CPU profiler on remote host:
+</p>
+<ol>
+    <li>
+    Find the agent file <b>jvmmonitor-agent.jar</b> at plug-ins instalation directory.
+    <pre>
+    <i>&lt;plug-ins instalation directory&gt;</i>/org.fusesource.ide.jvmmonitor.core/lib/jvmmonitor-agent.jar</pre>
+    </li>
+    <li>
+    Copy the agent file to arbitrary directory on remote host.
+    </li>
+    <li>
+    Start JVM on remote host with the following options.
+    <pre>
+    -javaagent:<i>&lt;path&gt;</i>/jvmmonitor-agent.jar</pre>
+    </li>
+</ol>
+<p>
+    <b>Note:</b> When you upgrade the version of JVM Monitor, jvmmonitor-agent.jar has to be copied again.
+</p>
+</body>
+</html>

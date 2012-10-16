@@ -1,0 +1,21 @@
+<%@ import val generator: org.fusesource.ide.generator.Generator %>
+<%
+import org.apache.camel.model.{OtherwiseDefinition, WhenDefinition}
+%>
+#
+# NOTE - this file is auto-generated using Scalate. 
+#
+# DO NOT EDIT!
+#
+
+
+#for (n <- nodeDefinitions)
+#for (p <- n.complexProperties)
+  <% 
+    val valid = !classOf[WhenDefinition].isAssignableFrom(p.propertyType) && !classOf[OtherwiseDefinition].isAssignableFrom(p.propertyType) && !n.isBeanProperty(p)
+  %>
+  #if(valid)
+${n.definitionName.capitalize} ${p.name}
+  #end
+#end
+#end   

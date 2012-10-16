@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.fusesource.ide.fabric.navigator.FabricNavigator"
+            icon="icons/fabric_explorer.png"
+            id="org.fusesource.ide.fabric.navigator"
+            name="Fabric Navigator"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewer
+            viewerId="org.fusesource.ide.fabric.navigator">
+      </viewer>
+      <viewerContentBinding
+            viewerId="org.fusesource.ide.fabric.navigator">
+         <includes>
+            <contentExtension
+                  isRoot="true"
+                  pattern="org.fusesource.ide.fabric.navigator.root">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.root">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.queryFilter">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.JMXLinkHelper">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+      <viewerActionBinding
+            viewerId="org.fusesource.ide.fabric.navigator">
+         <includes>
+            <actionExtension
+                  pattern="org.fusesource.ide.fabric.navigator.actionProvider">
+            </actionExtension>
+            <actionExtension
+                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.actionProvider">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
+      
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.fusesource.ide.fabric.servicemix.Startup">
+      </startup>
+   </extension>
+</plugin>

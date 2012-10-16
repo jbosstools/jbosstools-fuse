@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Monitoring JVM on remote host</title>
+    <link rel="stylesheet" href="../book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    Monitoring JVM on remote host
+</h1>
+
+<p>
+    To monitor JVM on remote host:
+</p>
+<ol>
+    <li>
+    Start JVM on remote host with system properties for 
+    <img src="../img/hyper_link.gif"/>
+    <a href="http://download.oracle.com/javase/6/docs/technotes/guides/management/agent.html#gdevf">JMX remote management</a>.
+    The following example is the case of connecting with port 9876, 
+    without using SSL and without setting password.
+    <pre>
+    -Dcom.sun.management.jmxremote.port=9876
+    -Dcom.sun.management.jmxremote.ssl=false
+    -Dcom.sun.management.jmxremote.authenticate=false</pre>
+    </li>
+    <li>
+    Press the button <b>Add JVM Connection on Remote Host</b> 
+    [<img src="./img/add_jvm.png" style="vertical-align: middle"/>] on JVM Explorer to open New JVM Cpnnection dialog.
+    <p><img src="./img/new_jvm_connection_dialog.png"/></p>
+    </li>
+    <li>
+    Enter the remote hostname (or IP address) and port number. 
+    <p><b>Note:</b> Alternatively, you can enter 
+    <img src="../img/hyper_link.gif"/>
+    <a href="http://download.oracle.com/javase/6/docs/api/javax/management/remote/rmi/package-summary.html">
+    JMX URL.</a></p>
+    </li>
+    <li>
+    If you set password when starting JVM, enter also the user name and password.
+    </li>
+</ol>
+<p>
+    <b>Note:</b> When monitoring JVM on remote host, there are following constraints.
+</p>
+<ul>
+    <li>
+    Heap histogram are not shown on Memory page, while you can dump heap as hprof file.
+    </li>
+    <li>
+    BCI mode of CPU profiler is disabled by default.
+    To enable it, see <a href="../faq.html#How_to_enable_BCI_CPU_profiler">FAQ</a>.
+    </li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Fuse Fabric Plugin Tests
+Bundle-SymbolicName: org.fusesource.ide.fabric.tests;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Bundle-Vendor: FuseSource.com
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Fragment-Host: org.fusesource.ide.fabric
+Require-Bundle: org.junit
+Import-Package: org.eclipse.core.filesystem
+

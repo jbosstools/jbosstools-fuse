@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Analyzing call tree</title>
+    <link rel="stylesheet" href="../book.css" type="text/css">
+</head>
+
+<body>
+<h1>
+    Analyzing call tree
+</h1>
+
+<p>
+    To analyze call tree:
+</p>
+<ol>
+    <li>
+    Make sure that <b>Call Tree</b> page is opened showing a list of threads. 
+    The total time of method invocation is shown at <b>Time (ms)</b> column for each thread.
+    </li>
+    <li>
+    Expand a thread node to see the methods call tree.
+    </li>
+    <li>
+    Search the method node that has relatively large value of self invocation time shown
+    at <b>Self Time (ms)</b> or <b>Self Time (%)</b> column.
+    The self invocation time means the invocation time without taking the invocation time 
+    of callees into account.
+    To find such method that is likely bottleneck of perfornamce, 
+    you may repeat expanding the method node that has relatively large value of 
+    total invocation time shown at <b>Time (ms)</b> column.
+    </li>
+    <li>
+    Double-click the method node to check the code on Java editor. To improve the performance,
+    one direction is to reduce the self invocation time per invocation, and the other direction
+    is to reduce the invocation count. The invocation count is shown at <b>Count</b> column.
+    </li>
+</ol>
+<img src="./img/call_tree.png"/>
+<p>
+    <b>Note:</b> If you select the method node and select the context menu <b>Focus On '&lt;method name&gt;'</b>, 
+    the selected method node becomes the root node and 
+    Time (%) and Self Time (%) are re-calulated with only the focused method and its callees,
+    so that you can focus on the area of interest.
+</p>
+<p>
+    <b>Note:</b> When selecting multiple method nodes, 
+    the sum of self invocation time of selected methods are shown at status line at bottom of Eclipse window.
+</p>
+</body>
+</html>

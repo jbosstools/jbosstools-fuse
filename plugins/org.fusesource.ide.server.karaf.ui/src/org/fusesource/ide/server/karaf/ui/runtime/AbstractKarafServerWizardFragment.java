@@ -1,0 +1,165 @@
+package org.fusesource.ide.server.karaf.ui.runtime;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
+import org.eclipse.wst.server.core.TaskModel;
+import org.eclipse.wst.server.ui.wizard.IWizardHandle;
+import org.eclipse.wst.server.ui.wizard.WizardFragment;
+import org.fusesource.ide.server.karaf.core.internal.KarafUtils;
+import org.fusesource.ide.server.karaf.core.internal.runtime.IKarafRuntime;
+import org.fusesource.ide.server.karaf.core.internal.server.IServerConfiguration;
+import org.fusesource.ide.server.karaf.core.internal.server.IServerConfigurationWorkingCopy;
+
+
+public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
+
+	private KarafServerPorpertiesComposite composite = null;
+	protected KarafWizardDataModel model = null;
+
+	public AbstractKarafServerWizardFragment() {
+	}
+ 
+	@Override
+	public Composite createComposite(Composite parent, IWizardHandle handle) {
+		getWizardModel();
+		composite = new KarafServerPorpertiesComposite(parent, handle,
+				model);
+		composite.createContents();
+		return composite;
+	}
+
+	@Override
+	public boolean hasComposite() {
+		return true;
+	}
+
+	@Override
+	public void performFinish(IProgressMonitor monitor) throws CoreException {
+		super.performFinish(monitor);
+		composite.performFinish();
+		updateServer();
+	}
+
+	private IRuntime getRuntimeWorkingCopy() {
+		return (IRuntime) getTaskModel().getObject(TaskModel.TASK_RUNTIME);	}
+	
+	private IServerWorkingCopy getServerWorkingCopy() {
+		return (IServerWorkingCopy) getTaskModel().getObject(TaskModel.TASK_SERVER);
+	}
+
+	private void getWizardModel() {
+		Object objModel = getTaskModel().getObject(KarafWizardDataModel.KARAF_MODEL);
+		if (objModel instanceof KarafWizardDataModel){
+			model = (KarafWizardDataModel)objModel;
+		} else{
+			model = new KarafWizardDataModel();
+		}
+		populateModel();
+	}
+	
+	/**
+	 * updates the model from runtime.
+	 */
+	private void populateModel() {
+		IServerWorkingCopy workingCopy = getServerWorkingCopy();
+		if (model != null && workingCopy != null) {
+			// workCopy will be instance of ServerDelegate classs.
+			// We need to get the params, so IFuseESBRuntime will be enough.
+			IServerConfiguration karafServerWorkingCopy = (IServerConfiguration) workingCopy.loadAdapter(IServerConfiguration.class, new NullProgressMonitor());
+			if (karafServerWorkingCopy != null) {
+				model.setUserName(karafServerWorkingCopy.getUserName());
+				model.setPassword(karafServerWorkingCopy.getPassword());
+			}
+			boolean readFromConfFile = false;
+			IRuntime runtime = getRuntimeWorkingCopy();
+			if (runtime != null){
+				IKarafRuntime karafRuntime = (IKarafRuntime)runtime.loadAdapter(IKarafRuntime.class, null);
+				if (karafRuntime != null ) {
+					if("".equals(model.getKarafInstallDir()) || model.getKarafInstallDir() == null){
+						model.setKarafInstallDir(karafRuntime.getKarafInstallDir());
+						model.setKarafPropertiesFileLocation(karafRuntime.getKarafPropertiesFileLocation());
+						model.setKarafVersion(determineVersion(karafRuntime));
+					}
+					File confFile = new File(model.getKarafPropertiesFileLocation());
+					if (confFile != null && confFile.exists()) {
+						try {
+							readFromPropertiesFile(confFile);
+							readFromConfFile = true;
+						} catch (FileNotFoundException e) {
+							//ignore.
+						} catch (IOException e) {
+							//ignore
+						} catch(NumberFormatException e){
+							//ignore.
+						}
+					}
+				}
+			}
+			if (!readFromConfFile && karafServerWorkingCopy != null) {
+				model.setHostName(karafServerWorkingCopy.getHostName());
+				model.setPortNumber(karafServerWorkingCopy.getPortNumber());
+			}
+		}
+	}
+
+	/**
+	 * This updates the runtime.
+	 */
+	private void updateServer() {
+		IServerWorkingCopy workingCopy = getServerWorkingCopy();
+		if (workingCopy != null) {
+			// workCopy will be instance of ServerDelegate classs.
+			// We need to get the params, so IFuseESBRuntime will be enough.
+			IServerConfigurationWorkingCopy karafServerWorkingCopy = (IServerConfigurationWorkingCopy) workingCopy
+					.loadAdapter(IServerConfigurationWorkingCopy.class,
+							new NullProgressMonitor());
+			if (karafServerWorkingCopy != null) {
+				karafServerWorkingCopy.setHostName(model.getHostName());
+				karafServerWorkingCopy.setPortNumber(model.getPortNumber());
+				karafServerWorkingCopy.setUserName(model.getUserName());
+				karafServerWorkingCopy.setPassword(model.getPassword());
+				workingCopy.setName(new File(model.getKarafInstallDir()).getName());
+				try {
+					workingCopy.save(true, new NullProgressMonitor());
+				} catch (CoreException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+	}
+	
+
+	protected abstract void readFromPropertiesFile(File confFile) throws FileNotFoundException, IOException,NumberFormatException ;
+
+	/**
+	 * determines the version of the karaf installation from the manifest of the main bundle
+	 * 
+	 * @param runtime	the runtime to use for grabbing the install location
+	 * @return	the version as string or null on errors
+	 */
+	protected String determineVersion(IKarafRuntime runtime) {
+		String version = null;
+		
+		if (runtime != null && runtime.getKarafInstallDir() != null) {
+			File folder = new File(runtime.getKarafInstallDir());
+			if (folder.exists() && folder.isDirectory()) {
+				version = KarafUtils.getVersion(folder);
+			}
+		}
+		
+		return version;
+	}
+	
+	@Override
+	public boolean isComplete() {
+		return composite.isValid();
+	}
+}

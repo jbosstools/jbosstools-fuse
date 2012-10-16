@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.fusesource.ide.zk.jmx.editors.MBeanAttributeModelFormEditor"
+            contributorClass="org.eclipse.ui.part.EditorActionBarContributor"
+            default="false"
+            icon="resources/images/png/objects/mbean-attribute.png"
+            id="org.fusesource.ide.zk.jmx.editors.MBeanAttributeModelFormEditor"
+            name="MBean Attribute Editor">
+      </editor>
+      <editor
+            class="org.fusesource.ide.zk.jmx.editors.JmxConnectionModelFormEditor"
+            contributorClass="org.eclipse.ui.part.EditorActionBarContributor"
+            default="false"
+            icon="resources/images/png/objects/jmx-connection.png"
+            id="org.fusesource.ide.zk.jmx.editors.JmxConnectionModelFormEditor"
+            name="JMX Connection Editor">
+      </editor>
+      <editor
+            class="org.fusesource.ide.zk.jmx.editors.MBeanOperationModelFormEditor"
+            contributorClass="org.eclipse.ui.part.EditorActionBarContributor"
+            default="false"
+            icon="resources/images/png/objects/mbean-operation.png"
+            id="org.fusesource.ide.zk.jmx.editors.MBeanOperationModelFormEditor"
+            name="MBean Operation Editor">
+      </editor>
+      <editor
+            class="org.fusesource.ide.zk.jmx.editors.MBeanModelFormEditor"
+            contributorClass="org.eclipse.ui.part.EditorActionBarContributor"
+            default="false"
+            icon="resources/images/png/objects/mbean.png"
+            id="org.fusesource.ide.zk.jmx.editors.MBeanModelFormEditor"
+            name="MBean Editor">
+      </editor>
+      <editor
+            class="org.fusesource.ide.zk.jmx.editors.DomainMBeanModelTableEditor"
+            contributorClass="org.eclipse.ui.part.EditorActionBarContributor"
+            default="false"
+            icon="resources/images/png/objects/mbean-domain.png"
+            id="org.fusesource.ide.zk.jmx.editors.DomainMBeanModelTableEditor"
+            name="MBean Domain Editor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.fusesource.ide.zk.jmx"
+            name="JMX">
+      </category>
+      <view
+            allowMultiple="false"
+            category="org.fusesource.ide.zk.jmx"
+            class="org.fusesource.ide.zk.jmx.views.explorer.JmxExplorerView"
+            icon="resources/images/png/views/explorer.png"
+            id="org.fusesource.ide.zk.jmx.views.explorer.JmxExplorerView"
+            name="JMX Explorer">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.fusesource.ide.zk.jmx"
+            name="JMX">
+      </category>
+      <wizard
+            category="org.fusesource.ide.zk.jmx"
+            class="org.fusesource.ide.zk.jmx.wizards.newjmxconnection.JmxConnectionNewWizard"
+            icon="resources/images/png/wizards/new-jmx-connection.png"
+            id="org.fusesource.ide.zk.jmx.wizards.newjmxconnection.JmxConnectionNewWizard"
+            name="New JMX Connection">
+      </wizard>
+   </extension>
+
+</plugin>

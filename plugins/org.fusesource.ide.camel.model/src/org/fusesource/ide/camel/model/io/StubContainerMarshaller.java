@@ -1,0 +1,113 @@
+package org.fusesource.ide.camel.model.io;
+
+import java.io.File;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.fusesource.ide.camel.model.Activator;
+import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.RouteContainer;
+import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.camel.model.generated.Route;
+
+
+public class StubContainerMarshaller extends ContainerMarshallerSupport {
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.io.ContainerMarshaler#loadRoutes(java.io.File)
+	 */
+	@Override
+	public RouteContainer loadRoutes(File file) {
+		Activator.getLogger().debug("Stub marshaller about to open: " + file);
+		return createDummyModel();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.io.ContainerMarshaler#loadRoutesFromText(java.lang.String)
+	 */
+	@Override
+	public RouteContainer loadRoutesFromText(String text) {
+		return createDummyModel();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.io.ContainerMarshaler#save(org.eclipse.core.resources.IFile, org.fusesource.ide.camel.model.RouteContainer, org.eclipse.core.runtime.IProgressMonitor)
+	 */
+	@Override
+	public void save(IFile file, RouteContainer model, IProgressMonitor monitor) {
+		Activator.getLogger().debug("TODO: should be saving route " + model + " to "
+				+ file + "...");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.io.ContainerMarshaler#save(java.io.File, org.fusesource.ide.camel.model.RouteContainer)
+	 */
+	@Override
+	public void save(File file, RouteContainer model) {
+		Activator.getLogger().debug("TODO: should be saving route " + model + " to "
+				+ file + "...");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.io.ContainerMarshaler#updateText(java.lang.String, org.fusesource.ide.camel.model.RouteContainer)
+	 */
+	@Override
+	public String updateText(String xmlText, RouteContainer model) {
+		return xmlText;
+	}
+
+	protected RouteContainer createDummyModel() {
+		RouteContainer c = new RouteContainer();
+
+		RouteSupport route1 = new Route();
+
+		Endpoint ep1 = new Endpoint();
+		Bean bean1 = new Bean();
+		Bean bean2 = new Bean();
+
+		ep1.setId("fileIn1");
+		ep1.setDescription("Polls files from input folder...");
+		ep1.setUri("file:///home/lhein/test/input/");
+		ep1.setLayout(new Rectangle(10, 10, 100, 40));
+
+		bean1.setId("procBean1");
+		bean1.setDescription("Examines the file...");
+		bean1.setMethod("examineFile");
+		bean1.setRef("proc1");
+		bean1.setLayout(new Rectangle(150, 10, 100, 40));
+
+		bean2.setId("procBean2");
+		bean2.setDescription("Examines the file...");
+		bean2.setMethod("examineFile");
+		bean2.setRef("proc2");
+		bean2.setLayout(new Rectangle(300, 10, 100, 40));
+
+		ep1.addTargetNode(bean1);
+		bean1.addTargetNode(bean2);
+
+		route1.addChild(bean2);
+		route1.addChild(ep1);
+		route1.addChild(bean1);
+
+		c.addChild(route1);
+
+		Activator.getLogger().debug("Stub marshaller has loaded model: "
+				+ c.getDebugInfo());
+		return c;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.io.ContainerMarshaler#isNoRoutesOnLoad()
+	 */
+	@Override
+	public boolean isNoRoutesOnLoad() {
+		return false;
+	}
+}

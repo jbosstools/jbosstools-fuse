@@ -1,0 +1,960 @@
+<nodeset>
+  <node id="endpoint">
+    <tooltip>A Camel Endpoint</tooltip>
+    <contextId>endpoint</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the endpoint</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID for the endpoint</tooltip>
+      </property>
+      <property id="uri">
+        <tooltip>URI of the endpoint</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="flow">
+    <tooltip>Flow messages from node to node</tooltip>
+  </node>
+  <node id="aggregate">
+    <tooltip>Aggregates messages into a single message</tooltip>
+    <contextId>aggregateEIP</contextId>
+    <properties>
+      <property id="aggregationrepositoryref">
+        <tooltip>Reference to lookup an aggregationRepository in the Registry</tooltip>
+      </property>
+      <property id="aggregationstrategyref">
+        <tooltip>Reference to lookup an AggregationStrategy in the Registry</tooltip>
+      </property>
+      <property id="description">
+        <tooltip>Text describing the aggregator</tooltip>
+      </property>
+      <property id="executorserviceref">
+        <tooltip>Reference to lookup a executorService in the Registry</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression which evaluates the correlation key to use for aggregation</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID for the aggregator</tooltip>
+      </property>
+      <property id="strategyref">
+        <tooltip>A reference to lookup the AggregationStrategy in the registry</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="AOP">
+    <tooltip>Does processing before and after the route is completed</tooltip>
+    <contextId>AOPEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="bean">
+    <tooltip>Binds beans to Camel message exchanges</tooltip>
+    <contextId>beanComp</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the bean</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the bean</tooltip>
+      </property>
+      <property id="method">
+        <tooltip>Name of the method that will be invoked on the bean</tooltip>
+      </property>
+      <property id="ref">
+        <tooltip>Reference used to lookup the bean in the Registry</tooltip>
+        <label>Bean Name</label>
+      </property>
+    </properties>
+  </node>
+  <node id="catch">
+    <tooltip>Catches exceptions as part of a doTry, doCatch, doFinally block</tooltip>
+    <contextId>catchEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="choice">
+    <tooltip>Routes messages based on a series of predicates</tooltip>
+    <contextId>choiceEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the route</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the route</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="convertBody">
+    <tooltip>Converts the message body to a form usable by the next endpoint</tooltip>
+    <contextId>convertEIP</contextId>
+    <properties>
+      <property id="charset">
+        <tooltip>Character set of the message body specified using IANA names</tooltip>
+      </property>
+      <property id="description">
+        <tooltip>Text describing the converter</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the converter</tooltip>
+      </property>
+      <property id="type">
+        <tooltip>The target data type for the message</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="delay">
+    <tooltip>Delays processing for a set length of time</tooltip>
+    <contextId>delayEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the delay</tooltip>
+      </property>
+      <property id="executorserviceref">
+        <tooltip>Reference to a bean that calculates the delay time</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression defining the length of the delay</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="dynamicRouter">
+    <tooltip>Routes messages based on rules specified by the recipients at start up</tooltip>
+    <contextId>dynamicEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the route</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression used to determine the message recipient(s)</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the route</tooltip>
+      </property>
+      <property id="uridelimiter">
+        <tooltip>Character used to delimit multiple destination URIs</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="enrich">
+    <tooltip>Enriches a message with data from a secondary resource</tooltip>
+    <contextId>enrichEIP</contextId>
+    <properties>
+      <property id="aggregationstrategyref">
+        <tooltip>Reference to the AggregationStrategy used to merge the message and the enrichment data</tooltip>
+      </property>
+      <property id="description">
+        <tooltip>Text describing the enricher</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the enricher</tooltip>
+      </property>
+      <property id="resourceref">
+        <tooltip>Reference to the enrichment data resource</tooltip>
+      </property>
+      <property id="resourceuri">
+        <tooltip>URI of the enrichment data resource</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="filter">
+    <tooltip>Filters messages before passing them to a resource</tooltip>
+    <contextId>filterEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the filter</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression used to determine which messages are passed to the resource</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the filter</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="finally">
+    <tooltip>Node traversed when a doTry, doCatch, doFinally block exits</tooltip>
+    <contextId>finallyEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="idempotentConsumer">
+    <tooltip>Filters out duplicate messages</tooltip>
+    <contextId>idempotentConsumer</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text describing the filter</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression used to filter duplicates</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the filter</tooltip>
+      </property>
+      <property id="messageidrepositoryref">
+        <tooltip>Reference to the MessageIDRepository that stores a record of previous messages</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="inOnly">
+    <tooltip>One way exchange pattern where no response is produced (Event Message pattern)</tooltip>
+    <contextId>inOnlyEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+      <property id="ref">
+        <tooltip>Reference to the destination endpoint(s)</tooltip>
+      </property>
+      <property id="uri">
+        <tooltip>URI of the message destination(s)</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="inOut">
+    <tooltip>Exchange pattern where a response is produced</tooltip>
+    <contextId>inOutEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+      <property id="ref">
+        <tooltip>Reference to the destination endpoint</tooltip>
+      </property>
+      <property id="uri">
+        <tooltip>URI of the message destination</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="intercept">
+    <tooltip>Intercepts messages at each step in the message flow</tooltip>
+    <contextId>interceptEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the interceptor</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the interceptor</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="interceptFrom">
+    <tooltip>Intercepts incoming messages</tooltip>
+    <contextId>interceptFromEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the interceptor</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the interceptor</tooltip>
+      </property>
+      <property id="uri">
+        <tooltip>URI of the endpoint whose incoming messages are intercepted</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="interceptSendToEndpoint">
+    <tooltip>Intercepts messages sent to an endpoint</tooltip>
+    <contextId>interceptSendToEndpointEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the interceptor</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the interceptor</tooltip>
+      </property>
+      <property id="uri">
+        <tooltip>URI of the intercepted endpoint</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="loadBalance">
+    <tooltip>Balances message processing among a number of nodes</tooltip>
+    <contextId>loadBalanceEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the load balancer</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the load balancer</tooltip>
+      </property>
+      <property id="ref">
+        <tooltip>(deprecated) Reference to a bean configuring the load balancer</tooltip>
+      </property>
+      <property id="loadBalancerType">
+        <tooltip>Specifies and configures the load balancing strategy</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="log">
+    <tooltip>Creates log messages using the Simple language</tooltip>
+    <contextId>logEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the logger</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the logger</tooltip>
+      </property>
+      <property id="logname">
+        <tooltip>Name used to identify the logger</tooltip>
+      </property>
+      <property id="message">
+        <tooltip>Simple language expression defining the log message</tooltip>
+      </property>
+      <property id="loggingLevel">
+        <tooltip>Level at which messages will be written to the log</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="loop">
+    <tooltip>Processes a message multiple times</tooltip>
+    <contextId>loopEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the loop</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression used to determine the number of times to execute the loop</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the loop</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="marshal">
+    <tooltip>Marshals data into a format for transmission over a transport or component</tooltip>
+    <contextId>marshalEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the marshaller</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the marshaller</tooltip>
+      </property>
+      <property id="ref">
+        <tooltip>Reference to a bean configuring the marshaller</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="multicast">
+    <tooltip>Routes a message to a number of endpoints</tooltip>
+    <contextId>multicastEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the router</tooltip>
+      </property>
+      <property id="executorserviceref">
+        <tooltip>Reference to a ThreadPoolExecutor</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the router</tooltip>
+      </property>
+      <property id="strategyref">
+        <tooltip>Reference to an AggregationStrategy for assembling the results from the endpoints</tooltip>
+      </property>
+      <property id="streaming">
+        <tooltip>Specifies if the multicast works in streaming mode</tooltip>
+      </property>
+      <property id="parallelProcessing">
+        <tooltip>Specifies if the multicast messages are forwarded to multiple destinations concurrently</tooltip>
+      </property>
+      <property id="stopOnException">
+        <tooltip>Specifies if the node will stop all processing if one of the endpoints receiving a message throws an exception</tooltip>
+      </property>
+      <property id="shareUnitOfWork">
+        <tooltip>Specifies whether all of the resulting exchanges are considered a single shared unit of work</tooltip>
+      </property>
+      <property id="inheritErrorHandler">
+        <tooltip>Specifies if the node should use the error handler configured for the route</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="onCompletion">
+    <tooltip>Route to be executed when normal route processing completes</tooltip>
+    <contextId>onCompleteEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the node</tooltip>
+      </property>
+      <property id="executorserviceref">
+        <tooltip>Reference to an ExecutorService</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="onException">
+    <tooltip>Route to be executed when an exception is thrown</tooltip>
+    <contextId>onExceptionEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the exception handler</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the exception handler</tooltip>
+      </property>
+      <property id="onredeliveryref">
+        <tooltip>Reference to a bean defining the processor used before a message is redelivered to the original recipient</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="otherwise">
+    <tooltip>Route to be executed when other choices evaluate to false</tooltip>
+    <contextId>otherwiseEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the route</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the route</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="pipeline">
+    <tooltip>Executes a sequence of processors in order</tooltip>
+    <contextId>pipelineEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the route</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the route</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="policy">
+    <tooltip>Defines a policy the route will use</tooltip>
+    <contextId>policyNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the policy</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the policy</tooltip>
+      </property>
+      <property id="ref">
+        <tooltip>Reference to the bean defining the policy</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="pollEnrich">
+    <tooltip>Enriches messages with data retrieved from a polling consumer</tooltip>
+    <contextId>pollEnrichEIP</contextId>
+    <properties>
+      <property id="aggregationstrategyref">
+        <tooltip>Reference to the AggregationStrategy used to merge the message and the enrichment data</tooltip>
+      </property>
+      <property id="description">
+        <tooltip>Text description of the enricher</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the enricher</tooltip>
+      </property>
+      <property id="resourceref">
+        <tooltip>Reference to the bean configuring the polling consumer</tooltip>
+      </property>
+      <property id="resourceuri">
+        <tooltip>URI of the polling consumer</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="process">
+    <tooltip>Process the message using a custom processor</tooltip>
+    <contextId>processor</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the processor</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the processor</tooltip>
+      </property>
+      <property id="ref">
+        <tooltip>Reference to the bean implementing the processor's logic</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="recipientList">
+    <tooltip>Routes messages to a number of dynamically specified recipients</tooltip>
+    <contextId>recipientListEIP</contextId>
+    <properties>
+      <property id="delimiter">
+        <tooltip>Character used to delimit the recipients in a list</tooltip>
+      </property>
+      <property id="description">
+        <tooltip>Text description of the router</tooltip>
+      </property>
+      <property id="executorserviceref">
+        <tooltip>Reference to the ExecuterService used when parallel processing the recipients</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression used to determine the list of recipients</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the router</tooltip>
+      </property>
+      <property id="strategyref">
+        <tooltip>Reference to the AggregrationStrategy used when combining the responses</tooltip>
+      </property>
+      <property id="inheritErrorHandler">
+        <tooltip>Specifies if the node should use the error handler configured for the route</tooltip>
+      </property>
+      <property id="parallelProcessing">
+        <tooltip>Specifies if the messages are forwarded to multiple destinations concurrently</tooltip>
+      </property>
+      <property id="stopOnException">
+        <tooltip>Specifies if the node will stop all processing if one of the endpoints receiving a message throws an exception</tooltip>
+      </property>
+      <property id="shareUnitOfWork">
+        <tooltip>Specifies whether all of the resulting exchanges are considered a single shared unit of work</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="removeHeader">
+    <tooltip>Removes a named header from the message</tooltip>
+    <contextId>removeHeaderNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="headername">
+        <tooltip>Name of the header to remove</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="removeHeaders">
+    <tooltip>Removes message headers whose name matches a specified pattern</tooltip>
+    <contextId>removeHeadersNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+      <property id="pattern">
+        <tooltip>Pattern used to determine the header names</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="removeProperty">
+    <tooltip>Removes a named property from the message exchange</tooltip>
+    <contextId>removePropertyNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+      <property id="propertyname">
+        <tooltip>Name of the property being removed</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="resequence">
+    <tooltip>Resequences messages based on an expression</tooltip>
+    <contextId>resequenceEIP</contextId>
+    <properties>
+      <property id="expression">
+        <tooltip>Expression used to determine how messages are reordered</tooltip>
+      </property>
+      <property id="resequncerConfig">
+        <tooltip>Specifies the configuration for how the resequencer determines a message sequence.</tooltip>
+      </property>
+      <property id="description">
+        <tooltip>Text description of the resequncer</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the resequencer</tooltip>
+      </property>
+      <property id="inheritErrorHandler">
+        <tooltip>Specifies if the node should use the error handler configured for the route</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="rollback">
+    <tooltip>Forces a rollback of a transacted route by throwing RollbackExchangeException</tooltip>
+    <contextId>rolbackNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="routingSlip">
+    <tooltip>Route a message through a series of processing steps where the sequence of steps is determined at runtime"</tooltip>
+    <contextId>routingSlipEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the router</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression used to determine the processing steps for the message</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the router</tooltip>
+      </property>
+      <property id="uridelimiter">
+        <tooltip>Character used to delimit the URIs in the list of endpoints</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="sampling">
+    <tooltip>Extract a sample of the exchanges passing through a route</tooltip>
+    <contextId>samplingNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the sampler</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the sampler</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="setBody">
+    <tooltip>Sets the contents of the message body</tooltip>
+    <contextId>setBodyNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Exression defining the new body contents</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="setExchangePattern">
+    <tooltip>Sets the exchange pattern for the route</tooltip>
+    <contextId>setExchangePatternNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="setHeader">
+    <tooltip>Sets the value of a message header</tooltip>
+    <contextId>setHeaderNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression defining the value of the header</tooltip>
+      </property>
+      <property id="headername">
+        <tooltip>Name of the header</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="setOutHeader">
+    <tooltip>Sets the value of a header on the outbound message</tooltip>
+    <contextId>setOutHeaderNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression defining the value of the header</tooltip>
+      </property>
+      <property id="headername">
+        <tooltip>Name of the header</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="setProperty">
+    <tooltip>Sets a named property on the message exchange</tooltip>
+    <contextId>setPropertyNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression defining the value of the property</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+      <property id="propertyname">
+        <tooltip>Name of the property</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="sort">
+    <tooltip>Sorts the contents of the message</tooltip>
+    <contextId>sortEIP</contextId>
+    <properties>
+      <property id="comparatorref">
+        <tooltip>Reference to a bean defining how to sort the contents</tooltip>
+      </property>
+      <property id="description">
+        <tooltip>Text description of the sorter</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the sorter</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="split">
+    <tooltip>Splits a message into pieces that can processed separately</tooltip>
+    <contextId>splitEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the splitter</tooltip>
+      </property>
+      <property id="executorserviceref">
+        <tooltip>Reference to a custom ThreadPoolExecutor used for parallel processing of the split messages</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression defining how the original message is split</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the splitter</tooltip>
+      </property>
+      <property id="strategyref">
+        <tooltip>Reference to a custom AggregationStrategy used to aggregate the responses into a single response</tooltip>
+      </property>
+      <property id="inheritErrorHandler">
+        <tooltip>Specifies if the node should use the error handler configured for the route</tooltip>
+      </property>
+      <property id="timeout">
+        <tooltip>The amount of time, in milliseconds, the node will attempt to deliver a message</tooltip>
+      </property>
+      <property id="shareUnitOfWork">
+        <tooltip>Specifies whether all of the resulting exchanges are considered a single shared unit of work</tooltip>
+      </property>
+      <property id="parallelProcessing">
+        <tooltip>Specifies if the splitter can send messages to multiple destinations concurrently</tooltip>
+      </property>
+      <property id="stopOnException">
+        <tooltip>Specifies if the node will stop all processing if one of the target endpoints throws an exception</tooltip>
+      </property>
+      <property id="streaming">
+        <tooltip>Specifies if the splitter works in streaming mode</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="stop">
+    <tooltip>Stops message processing and gracefully shuts the route down</tooltip>
+    <contextId>stopNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="threads">
+    <tooltip>Specifies that all steps after this node are processed asynchronously</tooltip>
+    <contextId>threadNode</contextId>
+      <properties>
+        <property id="description">
+          <tooltip>Text description of the node</tooltip>
+        </property>
+        <property id="executorserviceref">
+          <tooltip>Reference to the ExecutorService that handles the asynchronous processing</tooltip>
+        </property>
+        <property id="id">
+          <tooltip>Unique ID of the node</tooltip>
+        </property>
+        <property id="threadname">
+          <tooltip>String used to build a name for each thread used in asynchronous processing</tooltip>
+        </property>
+      </properties>
+  </node>
+  <node id="throttle">
+    <tooltip>Controls the number of messages passed to the next node in a given time period</tooltip>
+    <contextId>throttleNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the throttler</tooltip>
+      </property>
+      <property id="executorserviceref">
+        <tooltip>Reference to an ExecutorService used for asyncronus throttling</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the throttler</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="throwException">
+    <tooltip>Throws an exception</tooltip>
+    <contextId>throwExceptionNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the exception</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the exception</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="transacted">
+    <tooltip>Marks route as a transaction</tooltip>
+    <contextId>transactedNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transaction</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+      <property id="ref">
+        <tooltip>Reference of the bean defining the transaction policy to use</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="transform">
+    <tooltip>Transforms the message based on an expression</tooltip>
+    <contextId>transformEIP</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Expression defining how the message will be transformed</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="try">
+    <tooltip>Marks the beginning of a doTry, doCatch, doFinally block</tooltip>
+    <contextId>tryNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the node</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the node</tooltip>
+      </property>
+    </properties>
+  </node>
+  <node id="unmarshal">
+    <tooltip>Converts the message data from the wire into a bean that Camel processors can consume</tooltip>
+    <contextId>unmarshalNode</contextId>
+      <properties>
+        <property id="description">
+          <tooltip>Text description of the unmarshaller</tooltip>
+        </property>
+        <property id="id">
+          <tooltip>Unique ID of the unmarshaller</tooltip>
+        </property>
+        <property id="ref">
+          <tooltip>Reference to the bean implementing the unmarshaller</tooltip>
+        </property>
+      </properties>
+  </node>
+  <node id="validate">
+    <tooltip>Validates a message based on an expression</tooltip>
+    <contextId>validateNode</contextId>
+    <properties>
+        <property id="description">
+          <tooltip>Text description of the validator</tooltip>
+        </property>
+        <property id="expression">
+          <tooltip>Expression used to validate the message</tooltip>
+        </property>
+        <property id="id">
+          <tooltip>Unique ID of the validator</tooltip>
+        </property>
+      </properties>
+    </node>
+    <node id="when">
+      <tooltip>Triggers a route when an expression evaluates to true</tooltip>
+    <contextId>whenNode</contextId>
+      <properties>
+        <property id="description">
+          <tooltip>Text description of the choice</tooltip>
+        </property>
+        <property id="expression">
+          <tooltip>Expression to determine if the route is followed</tooltip>
+        </property>
+        <property id="id">
+          <tooltip>Unique ID of the choice</tooltip>
+        </property>
+      </properties>
+    </node>
+  <node id="wireTap">
+    <tooltip>Routes a copy of a message to a secondary destination while passing the original message to the actual recipient</tooltip>
+    <contextId>wireTapEIP</contextId>
+      <properties>
+        <property id="description">
+          <tooltip>Text description of the tap</tooltip>
+        </property>
+        <property id="executorserviceref">
+          <tooltip>Reference to the ExecutorService used to process the tapped message in parallel with the original message</tooltip>
+        </property>
+        <property id="id">
+          <tooltip>Unique ID of the tap</tooltip>
+        </property>
+        <property id="newexchangeprocessorref">
+          <tooltip>Reference to a processor that creates a new exchange for sending to the tap destination</tooltip>
+        </property>
+        <property id="ref">
+          <tooltip>Reference to a bean configuring the taps endpoint</tooltip>
+        </property>
+        <property id="uri">
+          <tooltip>URI of the secondary destination</tooltip>
+        </property>
+        <property id="copy">
+          <tooltip>Specifies if the original message is copied into the new message</tooltip>
+        </property>
+        <property id="newExchangeExpression">
+          <tooltip>The expression used to determine the contents of the new message exchange</tooltip>
+        </property>
+      </properties>
+  </node>
+</nodeset>

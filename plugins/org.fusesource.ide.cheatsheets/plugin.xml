@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <cheatsheet
+            category="org.fusesource.ide"
+            composite="false"
+            contentFile="content/createCamelProject.xml"
+            id="org.fusesource.ide.cheatsheets.createCamelProject"
+            name="Create Camel Project">
+         <description>
+            Creates a new Camel project
+         </description>
+      </cheatsheet>
+      <category
+            id="org.fusesource.ide"
+            name="Fuse IDE">
+      </category>
+   </extension>
+
+</plugin>
