@@ -1,0 +1,432 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Hazelcast Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="freemarker.html" title="Freemarker"><link rel="next" href="hibernate.html" title="Hibernate"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Hazelcast Component"><div class="titlepage"><div><div><h2 class="title"><a name="hazelcast"></a>Hazelcast Component</h2></div></div></div><div class="simplesect" title="Hazelcast Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e36978"></a>Hazelcast Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.7</strong></span>
+    </p><p>The <span class="bold"><strong>hazelcast:</strong></span> component allows you to work with the <a class="link" href="http://www.hazelcast.com" target="_top">Hazelcast</a> distributed data grid / cache. Hazelcast is a in memory data grid, entirely written in Java (single jar). It offers a great palette of different data stores like map, multi map (same key, n values), queue, list and atomic number. The main reason to use Hazelcast is its simple cluster support. If you have enabled multicast on your network you can run a cluster with hundred nodes with no extra configuration. Hazelcast can simply configured to add additional features like n copies between nodes (default is 1), cache persistence, network configuration (if needed), near cache, enviction and so on. For more information consult the Hazelcast documentation on <a class="link" href="http://www.hazelcast.com/documentation.jsp" target="_top">
+        </a><a class="link" href="http://www.hazelcast.com/documentation.jsp" target="_top">http://www.hazelcast.com/documentation.jsp</a><a class="link" href="http://www.hazelcast.com/documentation.jsp" target="_top">
+      </a>.   </p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-hazelcast&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;!-- use the same version as your Camel core version --&gt;
+&lt;/dependency&gt;
+
+</pre></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37007"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">
+hazelcast:[ map | multimap | queue | seda | set | atomicvalue | instance]:cachename[?options]
+
+</pre><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.gif"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>You have to use the second prefix to define which type of data store you want to use.  </p></td></tr></table></div></div><div class="simplesect" title="map cache producer - to(&#34;hazelcast:map:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37016"></a>map cache producer - to("hazelcast:map:foo")</h2></div></div></div><p></p><p>If you want to store a value in a map you can use the map cache producer. The map cache producer provides 5 operations (put, get, update, delete, query). For the first 4 you have to provide the operation inside the "hazelcast.operation.type" header variable. In Java DSL you can use the constants from <code class="literal">org.apache.camel.component.hazelcast.HazelcastConstants</code>.</p><p>Header Variables for the request message:</p><table id="d0e37027"><tr>
+        <th> Name </th>
+        <th> Type </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">hazelcast.operation.type</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> valid values are: put, delete, get, update, query </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.objectId</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the object id to store / find your object inside the cache (not needed for the query operation) </td>
+      </tr></table><p>You can call the samples with:</p><pre class="programlisting">
+template.sendBodyAndHeader("direct:[put|get|update|delete|query]", "my-foo", HazelcastConstants.OBJECT_ID, "4711");
+
+</pre></div><div class="simplesect" title="Sample for put:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37073"></a>Sample for put:</h2></div></div></div><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"direct:put"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;setHeader</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">headerName</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast.operation.type"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;constant&gt;</strong>put<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/constant&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/setHeader&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast:map:foo"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong></pre></div><div class="simplesect" title="Sample for get:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37078"></a>Sample for <span class="bold"><strong>get</strong></span>:</h2></div></div></div><pre class="programlisting">
+&lt;route&gt;
+	&lt;from uri="direct:get" /&gt;
+	&lt;setHeader headerName="hazelcast.operation.type"&gt;
+		&lt;constant&gt;get&lt;/constant&gt;
+	&lt;/setHeader&gt;
+	&lt;to uri="hazelcast:map:foo" /&gt;
+	&lt;to uri="seda:out" /&gt;
+&lt;/route&gt;
+
+</pre></div><div class="simplesect" title="Sample for update:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37086"></a>Sample for <span class="bold"><strong>update</strong></span>:</h2></div></div></div><pre class="programlisting">
+&lt;route&gt;
+	&lt;from uri="direct:update" /&gt;
+	&lt;setHeader headerName="hazelcast.operation.type"&gt;
+		&lt;constant&gt;update&lt;/constant&gt;
+	&lt;/setHeader&gt;
+	&lt;to uri="hazelcast:map:foo" /&gt;
+&lt;/route&gt;</pre></div><div class="simplesect" title="Sample for delete:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37094"></a>Sample for <span class="bold"><strong>delete</strong></span>:</h2></div></div></div><pre class="programlisting">
+&lt;route&gt;
+	&lt;from uri="direct:delete" /&gt;
+	&lt;setHeader headerName="hazelcast.operation.type"&gt;
+		&lt;constant&gt;delete&lt;/constant&gt;
+	&lt;/setHeader&gt;
+	&lt;to uri="hazelcast:map:foo" /&gt;
+&lt;/route&gt;
+
+</pre></div><div class="simplesect" title="Sample for query"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37102"></a>Sample for <span class="bold"><strong>query</strong></span>
+    </h2></div></div></div><pre class="programlisting">
+&lt;route&gt;
+	&lt;from uri="direct:query" /&gt;
+	&lt;setHeader headerName="hazelcast.operation.type"&gt;
+		&lt;constant&gt;query&lt;/constant&gt;
+	&lt;/setHeader&gt;
+	&lt;to uri="hazelcast:map:foo" /&gt;
+	&lt;to uri="seda:out" /&gt;
+&lt;/route&gt;
+
+</pre><p>For the query operation Hazelcast offers a SQL like syntax to query your distributed map.</p><pre class="programlisting">
+String q1 = "bar &gt; 1000";
+template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);
+
+</pre></div><div class="simplesect" title="map cache consumer - from(&#34;hazelcast:map:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37114"></a>map cache consumer - from("hazelcast:map:foo")</h2></div></div></div><p></p><p>Hazelcast provides event listeners on their data grid. If you want to be notified if a cache will be manipulated, you can use the map consumer. There're 4 events: <span class="bold"><strong>put</strong></span>, <span class="bold"><strong>update</strong></span>, <span class="bold"><strong>delete</strong></span> and <span class="bold"><strong>envict</strong></span>. The event type will be stored in the "<span class="bold"><strong>hazelcast.listener.action</strong></span>" header variable. The map consumer provides some additional information inside these variables:</p><p>Header Variables inside the response message:</p><table id="d0e37137"><tr>
+        <th> Name </th>
+        <th> Type </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.time</code>
+        </td>
+        <td><code class="literal">Long</code>
+        </td>
+        <td> time of the event in millis</td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.type</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the map consumer sets here "cachelistener" </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.action</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> type of event - here <span class="bold"><strong>added</strong></span>, <span class="bold"><strong>updated</strong></span>, <span class="bold"><strong>envicted</strong></span> and <span class="bold"><strong>removed</strong></span>
+        </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.objectId</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the oid of the object </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.cache.name</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the name of the cache - e.g. "foo" </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.cache.type</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the type of the cache - here map </td>
+      </tr></table><p>The object value will be stored within <span class="bold"><strong>put</strong></span> and <span class="bold"><strong>update</strong></span> actions inside the message body.</p><p>Here's a sample:</p><pre class="programlisting">
+fromF("hazelcast:%sfoo", HazelcastConstants.MAP_PREFIX)
+.log("object...")
+.choice()
+    .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
+         .log("...added")
+         .to("mock:added")
+    .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ENVICTED))
+         .log("...envicted")
+         .to("mock:envicted")
+    .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.UPDATED))
+         .log("...updated")
+         .to("mock:updated")
+    .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.REMOVED))
+         .log("...removed")
+         .to("mock:removed")
+    .otherwise()
+         .log("fail!");
+
+</pre></div><div class="simplesect" title="multimap cache producer - to(&#34;hazelcast:multimap:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37263"></a>multimap cache producer - to("hazelcast:multimap:foo")</h2></div></div></div><p></p><p>A multimap is a cache where you can store n values to one key. The multimap producer provides 4 operations (put, get, removevalue, delete). </p><p>Header Variables for the request message:</p><table id="d0e37271"><tr>
+        <th> Name </th>
+        <th> Type </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">hazelcast.operation.type</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> valid values are: put, get, removevalue, delete </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.objectId</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the object id to store / find your object inside the cache </td>
+      </tr></table></div><div class="simplesect" title="Sample for put:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37313"></a>Sample for put:</h2></div></div></div><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"direct:put"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;log</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">message</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"put.."</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;setHeader</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">headerName</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast.operation.type"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;constant&gt;</strong>put<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/constant&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/setHeader&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast:multimap:foo"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong></pre></div><div class="simplesect" title="Sample for removevalue:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37318"></a>Sample for removevalue:</h2></div></div></div><pre class="programlisting">
+&lt;route&gt;
+	&lt;from uri="direct:removevalue" /&gt;
+	&lt;log message="removevalue..."/&gt;
+	&lt;setHeader headerName="hazelcast.operation.type"&gt;
+		&lt;constant&gt;removevalue&lt;/constant&gt;
+	&lt;/setHeader&gt;
+	&lt;to uri="hazelcast:multimap:foo" /&gt;
+&lt;/route&gt;
+
+</pre><p>To remove a value you have to provide the value you want to remove inside the message body. If you have a multimap object <code class="literal">
+</code>} you have to put "my-foo" inside the message body to remove the "my-foo" value.</p></div><div class="simplesect" title="Sample for get:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37329"></a>Sample for get:</h2></div></div></div><pre class="programlisting">
+&lt;route&gt;
+	&lt;from uri="direct:get" /&gt;
+	&lt;log message="get.."/&gt;
+	&lt;setHeader headerName="hazelcast.operation.type"&gt;
+		&lt;constant&gt;get&lt;/constant&gt;
+	&lt;/setHeader&gt;
+	&lt;to uri="hazelcast:multimap:foo" /&gt;
+	&lt;to uri="seda:out" /&gt;
+&lt;/route&gt;
+
+</pre></div><div class="simplesect" title="Sample for delete:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37334"></a>Sample for delete:</h2></div></div></div><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"direct:delete"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;log</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">message</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"delete.."</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;setHeader</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">headerName</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast.operation.type"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;constant&gt;</strong>delete<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/constant&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/setHeader&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast:multimap:foo"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong></pre><p>you can call them in your test class with:</p><pre class="programlisting">
+template.sendBodyAndHeader("direct:[put|get|removevalue|delete]", "my-foo", HazelcastConstants.OBJECT_ID, "4711");
+
+</pre></div><div class="simplesect" title="multimap cache consumer - from(&#34;hazelcast:multimap:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37343"></a>multimap cache consumer - from("hazelcast:multimap:foo")</h2></div></div></div><p></p><p>For the multimap cache this component provides the same listeners / variables as for the map cache consumer (except the update and enviction listener). The only difference is the <span class="bold"><strong>multimap</strong></span> prefix inside the URI. Here is a sample: </p><pre class="programlisting">
+fromF("hazelcast:%sbar", HazelcastConstants.MULTIMAP_PREFIX)
+.log("object...")
+.choice()
+	.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
+		.log("...added")
+                .to("mock:added")
+        //.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ENVICTED))
+        //        .log("...envicted")
+        //        .to("mock:envicted")
+        .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.REMOVED))
+                .log("...removed")
+                .to("mock:removed")
+        .otherwise()
+                .log("fail!");
+
+</pre><p>Header Variables inside the response message:</p><table id="d0e37356"><tr>
+        <th> Name </th>
+        <th> Type </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.time</code>
+        </td>
+        <td><code class="literal">Long</code>
+        </td>
+        <td> time of the event in millis</td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.type</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the map consumer sets here "cachelistener" </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.action</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> type of event - here <span class="bold"><strong>added</strong></span> and <span class="bold"><strong>removed</strong></span> (and soon <span class="bold"><strong>envicted</strong></span>) </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.objectId</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the oid of the object </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.cache.name</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the name of the cache - e.g. "foo" </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.cache.type</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the type of the cache - here multimap </td>
+      </tr></table><p>Enviction will be added as feature, soon (this is a Hazelcast issue).</p></div><div class="simplesect" title="Queue producer - to(&#34;hazelcast:queue:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37469"></a>Queue producer - to("hazelcast:queue:foo")</h2></div></div></div><p></p><p>The queue producer provides 6 operations (add, put, poll, peek, offer, removevalue).</p></div><div class="simplesect" title="Sample for add:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37475"></a>Sample for add:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:add")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.ADD_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.QUEUE_PREFIX);
+
+</pre></div><div class="simplesect" title="Sample for put:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37481"></a>Sample for put:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:put")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.PUT_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.QUEUE_PREFIX);
+
+</pre></div><div class="simplesect" title="Sample for poll:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37487"></a>Sample for poll:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:poll")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.POLL_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.QUEUE_PREFIX);
+
+</pre></div><div class="simplesect" title="Sample for peek:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37493"></a>Sample for peek:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:peek")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.PEEK_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.QUEUE_PREFIX);
+
+</pre></div><div class="simplesect" title="Sample for offer:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37499"></a>Sample for offer:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:offer")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.OFFER_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.QUEUE_PREFIX);
+
+</pre></div><div class="simplesect" title="Sample for removevalue:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37505"></a>Sample for removevalue:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:removevalue")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.REMOVEVALUE_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.QUEUE_PREFIX);
+
+</pre></div><div class="simplesect" title="Queue consumer - from(&#34;hazelcast:queue:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37511"></a>Queue consumer - from("hazelcast:queue:foo")</h2></div></div></div><p></p><p>The queue consumer provides 2 operations (add, remove).</p><pre class="programlisting">
+fromF("hazelcast:%smm", HazelcastConstants.QUEUE_PREFIX)
+   .log("object...")
+   .choice()
+	.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
+        	.log("...added")
+		.to("mock:added")
+	.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.REMOVED))
+		.log("...removed")
+		.to("mock:removed")
+	.otherwise()
+		.log("fail!");
+
+</pre></div><div class="simplesect" title="List producer - to(&#34;hazelcast:list:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37519"></a>List producer - to("hazelcast:list:foo")</h2></div></div></div><p></p><p>The list producer provides 4 operations (add, set, get, removevalue).</p></div><div class="simplesect" title="Sample for add:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37525"></a>Sample for add:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:add")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.ADD_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.LIST_PREFIX);
+
+</pre></div><div class="simplesect" title="Sample for get:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37531"></a>Sample for get:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:get")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.GET_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.LIST_PREFIX)
+.to("seda:out");
+
+</pre></div><div class="simplesect" title="Sample for setvalue:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37537"></a>Sample for setvalue:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:set")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.SETVALUE_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.LIST_PREFIX);
+
+</pre></div><div class="simplesect" title="Sample for removevalue:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37543"></a>Sample for removevalue:</h2></div></div></div><p></p><pre class="programlisting">
+from("direct:removevalue")
+.setHeader(HazelcastConstants.OPERATION, constant(HazelcastConstants.REMOVEVALUE_OPERATION))
+.toF("hazelcast:%sbar", HazelcastConstants.LIST_PREFIX);
+
+</pre><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.gif"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Please note that set,get and removevalue and not yet supported by hazelcast, will be added in the future..</p></td></tr></table></div></div><div class="simplesect" title="List consumer - from(&#34;hazelcast:list:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37552"></a>List consumer - from("hazelcast:list:foo")</h2></div></div></div><p></p><p>The list consumer provides 2 operations (add, remove).</p><pre class="programlisting">
+fromF("hazelcast:%smm", HazelcastConstants.LIST_PREFIX)
+	.log("object...")
+	.choice()
+		.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
+			.log("...added")
+                        .to("mock:added")
+		.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.REMOVED))
+			.log("...removed")
+                        .to("mock:removed")
+                .otherwise()
+                        .log("fail!");
+
+</pre></div><div class="simplesect" title="Usage of SEDA"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37560"></a>Usage of SEDA</h2></div></div></div><p>SEDA component differs from the rest components provided. It implements a work-queue in order to  support asynchronous SEDA architectures, similar to the core "SEDA" component.</p></div><div class="simplesect" title="SEDA producer - to(&#34;hazelcast:seda:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37565"></a>SEDA producer - to("hazelcast:seda:foo")</h2></div></div></div><p></p><p>The SEDA producer provides no operations. You only send data to the specified queue.</p><p>Spring DSL :</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"direct:start"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+   <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast:seda:foo"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong>
+
+</pre></div><div class="simplesect" title="SEDA consumer - from(&#34;hazelcast:seda:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37575"></a>SEDA consumer - from("hazelcast:seda:foo")</h2></div></div></div><p></p><p>The SEDA consumer provides no operations. You only retrieve data from the specified queue.</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast:seda:foo"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"mock:result"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong></pre></div><div class="simplesect" title="atomic number producer - to(&#34;hazelcast:atomicnumber:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37583"></a>atomic number producer - to("hazelcast:atomicnumber:foo")</h2></div></div></div><p></p><p>An atomic number is an object that simply provides a grid wide number (long). The operations for this producer are setvalue (set the number with a given value), get, increase (+1), decrease (-1) and destroy.</p><p>Header Variables for the request message:</p><table id="d0e37591"><tr>
+        <th> Name </th>
+        <th> Type </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">hazelcast.operation.type</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> valid values are: setvalue, get, increase, decrease, destroy </td>
+      </tr></table></div><div class="simplesect" title="Sample for set:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37618"></a>Sample for set:</h2></div></div></div><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"direct:set"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;setHeader</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">headerName</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast.operation.type"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;constant&gt;</strong>setvalue<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/constant&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/setHeader&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast:atomicvalue:foo"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong></pre><p>Provide the value to set inside the message body (here the value is 10): <code class="literal">template.sendBody("direct:set", 10);</code>
+    </p></div><div class="simplesect" title="Sample for get:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37628"></a>Sample for get:</h2></div></div></div><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"direct:get"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;setHeader</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">headerName</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast.operation.type"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;constant&gt;</strong>get<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/constant&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/setHeader&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast:atomicvalue:foo"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong></pre><p>You can get the number with <code class="literal">long body = template.requestBody("direct:get", null, Long.class);</code>.</p></div><div class="simplesect" title="Sample for increment:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37638"></a>Sample for increment:</h2></div></div></div><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"direct:increment"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;setHeader</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">headerName</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast.operation.type"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&gt;</strong>
+		<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;constant&gt;</strong>increment<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/constant&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/setHeader&gt;</strong>
+	<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"hazelcast:atomicvalue:foo"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096"> /&gt;</strong>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong></pre><p>The actual value (after increment) will be provided inside the message body.</p></div><div class="simplesect" title="Sample for decrement:"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37645"></a>Sample for <span class="bold"><strong>decrement</strong></span>:</h2></div></div></div><pre class="programlisting">
+&lt;route&gt;
+	&lt;from uri="direct:decrement" /&gt;
+	&lt;setHeader headerName="hazelcast.operation.type"&gt;
+		&lt;constant&gt;decrement&lt;/constant&gt;
+	&lt;/setHeader&gt;
+	&lt;to uri="hazelcast:atomicvalue:foo" /&gt;
+&lt;/route&gt;
+
+</pre><p>The actual value (after decrement) will be provided inside the message body.</p></div><div class="simplesect" title="Sample for destroy"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37655"></a>Sample for <span class="bold"><strong>destroy</strong></span></h2></div></div></div><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.gif"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>There's a bug inside Hazelcast. So this feature may not work properly. Will be fixed in 1.9.3.</p></td></tr></table></div><pre class="programlisting">
+&lt;route&gt;
+	&lt;from uri="direct:destroy" /&gt;
+	&lt;setHeader headerName="hazelcast.operation.type"&gt;
+		&lt;constant&gt;destroy&lt;/constant&gt;
+	&lt;/setHeader&gt;
+	&lt;to uri="hazelcast:atomicvalue:foo" /&gt;
+&lt;/route&gt;
+
+</pre></div><div class="simplesect" title="instance consumer - from(&#34;hazelcast:instance:foo&#34;)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e37665"></a>instance consumer - from("hazelcast:instance:foo")</h2></div></div></div><p></p><p>Hazelcast makes sense in one single "server node", but it's extremly powerful in a clustered environment. The instance consumer fires if a new cache instance will join or leave the cluster. </p><p>Here's a sample:</p><pre class="programlisting">
+fromF("hazelcast:%sfoo", HazelcastConstants.INSTANCE_PREFIX)
+.log("instance...")
+.choice()
+	.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
+		.log("...added")
+		.to("mock:added")
+	.otherwise()
+		.log("...removed")
+		.to("mock:removed");
+
+</pre><p>Each event provides the following information inside the message header:</p><p>Header Variables inside the response message:</p><table id="d0e37679"><tr>
+        <th> Name </th>
+        <th> Type </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.time</code>
+        </td>
+        <td><code class="literal">Long</code>
+        </td>
+        <td> time of the event in millis </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.type</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> the map consumer sets here "instancelistener" </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.listener.action</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> type of event - here <span class="bold"><strong>added</strong></span> or <span class="bold"><strong>removed</strong></span>
+        </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.instance.host</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td> host name of the instance </td>
+      </tr><tr>
+        <td><code class="literal">hazelcast.instance.port</code>
+        </td>
+        <td><code class="literal">Integer</code>
+        </td>
+        <td> port number of the instance </td>
+      </tr></table></div></div></body></html>

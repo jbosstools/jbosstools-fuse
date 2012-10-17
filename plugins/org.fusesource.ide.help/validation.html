@@ -1,0 +1,54 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Validation</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="stringTemplate.html" title="StringTemplate"><link rel="next" href="velocity.html" title="Velocity"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Validation"><div class="titlepage"><div><div><h2 class="title"><a name="validation"></a>Validation</h2></div></div></div><div class="simplesect" title="Validation Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Validation_HSH_ValidationComponent"></a>Validation Component</h2></div></div></div><p>The Validation component performs XML validation of the message body using the JAXP
+            Validation API and based on any of the supported XML schema languages, which defaults to
+                <a class="link" href="http://www.w3.org/XML/Schema" target="_top">XML Schema</a>
+    </p><p>Note that the <a href="PLUGINS_ROOT/org.fusesource.ide.help/jing.html" class="olink">Jing</a> component also supports the
+            following useful schema languages:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a class="link" href="http://relaxng.org/compact-tutorial-20030326.html" target="_top">RelaxNG
+                        Compact Syntax</a>
+        </p></li><li class="listitem"><p>
+          <a class="link" href="http://relaxng.org/" target="_top">RelaxNG XML Syntax</a>
+        </p></li></ul></div><p>The <a href="PLUGINS_ROOT/org.fusesource.ide.help/msv.html" class="olink">MSV</a> component also supports <a class="link" href="http://relaxng.org/" target="_top">RelaxNG XML Syntax</a>.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Validation_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">validator:someLocalOrRemoteResource</pre><p>Where <span class="bold"><strong>someLocalOrRemoteResource</strong></span> is some URL to a
+            local resource on the classpath or a full URL to a remote resource or resource on the
+            file system which contains the XSD to validate against. For example:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">msv:org/foo/bar.xsd</code>
+        </p></li><li class="listitem"><p><code class="literal">msv:file:../foo/bar.xsd</code>
+        </p></li><li class="listitem"><p><code class="literal">msv:<a class="link" href="http://acme.com/cheese.xsd" target="_top">http://acme.com/cheese.xsd</a></code>
+        </p></li><li class="listitem"><p><code class="literal">validator:com/mypackage/myschema.xsd</code>
+        </p></li></ul></div></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Validation_HSH_Options"></a>Options</h2></div></div></div><table id="d0e48056"><tr>
+        <th> Option </th>
+        <th> Default </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">useDom</code>
+        </td>
+        <td><code class="literal">false</code>
+        </td>
+        <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Whether
+                        <code class="literal">DOMSource</code>/{{DOMResult}} or
+                    <code class="literal">SaxSource</code>/{{SaxResult}} should be used by the validator.
+                </td>
+      </tr><tr>
+        <td><code class="literal">useSharedSchema</code>
+        </td>
+        <td><code class="literal">true</code>
+        </td>
+        <td><span class="bold"><strong>Camel 2.3:</strong></span> Whether the <code class="literal">Schema</code> instance should be shared or not. This option is introduced to work around a <a class="link" href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6773084" target="_top">JDK 1.6.x bug</a>. Xerces should not have this issue. </td>
+      </tr></table></div><div class="simplesect" title="Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Validation_HSH_Example"></a>Example</h2></div></div></div><p>The following <a class="link" href="http://svn.apache.org/repos/asf/camel/trunk/components/camel-spring/src/test/resources/org/apache/camel/component/validator/camelContext.xml" target="_top">example</a> shows how to configure a route from endpoint <span class="bold"><strong>direct:start</strong></span> which then goes to one of two endpoints, either <span class="bold"><strong>mock:valid</strong></span> or <span class="bold"><strong>mock:invalid</strong></span>
+            based on whether or not the XML matches the given schema (which is supplied on the
+            classpath).</p><pre class="programlisting">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+    &lt;route&gt;
+        &lt;from uri="direct:start"/&gt;
+        &lt;doTry&gt;
+            &lt;to uri="validator:org/apache/camel/component/validator/schema.xsd"/&gt;
+            &lt;to uri="mock:valid"/&gt;
+            &lt;doCatch&gt;
+                &lt;exception&gt;org.apache.camel.ValidationException&lt;/exception&gt;
+                &lt;to uri="mock:invalid"/&gt;
+            &lt;/doCatch&gt;
+            &lt;doFinally&gt;
+                &lt;to uri="mock:finally"/&gt;
+            &lt;/doFinally&gt;
+        &lt;/doTry&gt;
+    &lt;/route&gt;
+&lt;/camelContext&gt;</pre></div></div></body></html>

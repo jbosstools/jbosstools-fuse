@@ -1,0 +1,46 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>NMR</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="netty.html" title="Netty"><link rel="next" href="printer.html" title="Printer"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="NMR"><div class="titlepage"><div><div><h2 class="title"><a name="nmr"></a>NMR</h2></div></div></div><div class="simplesect" title="NMR Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_NMRComponent"></a>NMR Component</h2></div></div></div><p>The <span class="bold"><strong>nmr</strong></span> component is an adapter to the Normalized
+            Message Router (NMR) in <a class="link" href="http://servicemix.apache.org/home.html" target="_top">ServiceMix</a>, which is intended for use by Apache Camel applications deployed
+            directly into the OSGi container. By contrast, the <a href="PLUGINS_ROOT/org.fusesource.ide.help/jbi.html" class="olink">JBI</a> component is intended for use by Apache Camel applications deployed into
+            the ServiceMix JBI container.</p></div><div class="simplesect" title="Installing"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_Installing"></a>Installing</h2></div></div></div><p>The NMR component is provided with Apache ServiceMix. It is <span class="bold"><strong>not</strong></span> distributed with Apache Camel. To install the NMR component in
+            ServiceMix, enter the following command in the ServiceMix console window:</p><pre class="programlisting">features install nmr</pre><p>You also need to instantiate the NMR component. You can do this by editing your Spring
+            configuration file, <code class="literal">META-INF/spring/*.xml</code>, and adding the following
+                <code class="literal">bean</code> instance:</p><pre class="programlisting">&lt;beans xmlns:osgi="http://www.springframework.org/schema/osgi" ... &gt;
+    ...
+    &lt;bean id="nmr" class="org.apache.servicemix.camel.nmr.ServiceMixComponent"&gt;
+        &lt;property name="nmr"&gt;
+            &lt;osgi:reference interface="org.apache.servicemix.nmr.api.NMR" /&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+    ...
+&lt;/beans&gt;</pre></div><div class="simplesect" title="NMR consumer and producer endpoints"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_NMRconsumerandproducerendpoints"></a>NMR consumer and producer endpoints</h2></div></div></div><p></p><p>The following code:</p><pre class="programlisting">from("nmr:MyServiceEndpoint")</pre><p>Automatically exposes a new endpoint to the bus with endpoint name
+                <code class="literal">MyServiceEndpoint</code> (see <a class="xref" href="nmr.html#nmrURIFormat" title="URI format">URI format</a>).</p><p>When an NMR endpoint appears at the end of a route, for example:</p><pre class="programlisting">to("nmr:MyServiceEndpoint")</pre><p>The messages sent by this producer endpoint are sent to the already deployed JBI
+            endpoint.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nmrURIFormat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">nmr:endpointName</pre></div><div class="simplesect" title="URI Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e43609"><tr>
+                <th> Option </th>
+                <th> Default Value </th>
+                <th> Description </th>
+            </tr><tr>
+                <td><code class="literal">synchronous</code>
+                </td>
+                <td><code class="literal">false</code>
+                </td>
+                <td> When this is set to <span class="bold"><strong><code class="literal">true</code></strong></span> on
+                    a consumer endpoint, an incoming, synchronous NMR Exchange will be handled on
+                    the sender's thread instead of being handled on a new thread of the NMR
+                    endpoint's thread pool </td>
+            </tr></table></div><div class="simplesect" title="Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_Examples"></a>Examples</h2></div></div></div><p></p><pre class="programlisting">from("nmr:MyServiceEndpoint")
+from("nmr:MyServiceEndpoint?synchronous=true").to("nmr:AnotherEndpoint")</pre></div><div class="simplesect" title="Using Stream bodies"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_UsingStreambodies"></a>Using Stream bodies</h2></div></div></div><p>If you are using a stream type as the message body, you should be aware that a stream
+            is only capable of being read once. So if you enable <code class="literal">DEBUG</code> logging,
+            the body is usually logged and thus read. To deal with this, Camel has a
+                <code class="literal">streamCaching</code> option that can cache the stream, enabling you to
+            read it multiple times.</p><pre class="programlisting">
+from("nmr:MyEndpoint").streamCaching().to("xslt:transform.xsl", "bean:doSomething");
+
+</pre><p>From <span class="bold"><strong>Camel 1.5</strong></span> onwards, the stream caching is default
+            enabled, so it is not necessary to set the <code class="literal">streamCaching()</code> option. In
+                <span class="bold"><strong>Camel 2.0</strong></span> we store big input streams (by default,
+            over 64K) in a <code class="literal">temp</code> file using <code class="literal">CachedOutputStream</code>.
+            When you close the input stream, the temp file will be deleted.</p><p>
+            
+        </p></div></div></body></html>

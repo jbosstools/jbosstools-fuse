@@ -1,0 +1,177 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>JMS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderMsgEptRef.html" title="Messaging Endpoints"><link rel="prev" href="irc.html" title="IRC"><link rel="next" href="mail.html" title="Mail"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="JMS"><a name="jms"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>JMS &#8212; allows message to be sent to or consumed from JMS destinations</p></div><div class="refsection" title="Overview"><a name="d0e28092"></a><h2>Overview</h2><p>The JMS component allows messages to be sent to (or consumed from) a 
+      <a class="link" href="http://java.sun.com/products/jms/" target="_top">JMS</a> destination. The implementation 
+      of the JMS Component uses Spring's JMS support for declarative transactions, using Spring's 
+      <code class="literal">JmsTemplate</code> for sending and a <code class="literal">MessageListenerContainer</code>
+      for consuming.</p><div class="tip" title="Using ActiveMQ" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Using ActiveMQ"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.gif"></td><th align="left">Using ActiveMQ</th></tr><tr><td align="left" valign="top"><p>If you are using Fuse MQ Enterprise, you should use the 
+        <a href="PLUGINS_ROOT/org.fusesource.ide.help/ActiveMQ.html" class="olink">ActiveMQ</a> endpoint. It has been optimized for 
+        Fuse MQ Enterprise.</p></td></tr></table></div></div><div class="refsection" title="URI format"><a name="d0e28114"></a><h2>URI format</h2><p>The URI format for a JMS endpoint is:</p><pre class="programlisting">jms:[temp:][queue:|topic:]<em class="replaceable"><code>destinationName</code></em>[?<em class="replaceable"><code>options]</code></em></pre></div><div class="refsection" title="Options"><a name="JMSOptions"></a><h2>Options</h2><p><a class="xref" href="jms.html#JMSOptsTbl" title="Table&nbsp;31.&nbsp;JMS options">Table&nbsp;31, &#8220;JMS options&#8221;</a> lists the options for a JMS endpoint.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Many of these properties map to properties on Spring JMS, which Apache Camel uses for 
+        sending and receiving messages. You can get more information about these properties 
+        by consulting the relevant Spring documentation.</p></td></tr></table></div><div class="table"><a name="JMSOptsTbl"></a><p class="title"><b>Table&nbsp;31.&nbsp;JMS options</b></p><div class="table-contents"><table summary="JMS options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Option</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">acceptMessagesWhileStopping</code></td><td><code class="literal">false</code></td><td>Specifies whether the consumer accept messages while it is stopping.</td></tr><tr><td><code class="literal">acknowledgementModeName</code></td><td><code class="literal">AUTO_ACKNOWLEDGE</code></td><td>
+              <p>Specifies the JMS acknowledgement mode. Valid values are:</p>
+              <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">TRANSACTED</code></p></li><li class="listitem"><p><code class="literal">CLIENT_ACKNOWLEDGE</code></p></li><li class="listitem"><p><code class="literal">AUTO_ACKNOWLEDGE</code></p></li><li class="listitem"><p><code class="literal">DUPS_OK_ACKNOWLEDGE</code></p></li></ul></div>
+            </td></tr><tr><td><code class="literal">acknowledgementMode</code></td><td><code class="literal">-1</code></td><td>Specifies the JMS acknowledgement mode defined as an integer. Allows you to set 
+              vendor-specific extensions to the acknowledgment mode. For the regular modes, it is 
+              preferable to use the <code class="literal">acknowledgementModeName</code> instead.</td></tr><tr><td><code class="literal">alwaysCopyMessage</code></td><td><code class="literal">false</code></td><td>Specifies if Apache Camel will make a JMS message copy of the message when it is passed 
+            to the producer for sending.</td></tr><tr><td><code class="literal">autoStartup</code></td><td><code class="literal">true</code></td><td>Specifies whether the consumer container should auto-startup.</td></tr><tr><td><code class="literal">cacheLevelName</code></td><td><code class="literal">CACHE_CONSUMER</code></td><td><p>Specifies the cache level by name for the underlying JMS resources. Possible 
+            values are:</p>
+              <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">CACHE_AUTO</code></p></li><li class="listitem"><p><code class="literal">CACHE_CONNECTION</code></p></li><li class="listitem"><p><code class="literal">CACHE_CONSUMER</code></p></li><li class="listitem"><p><code class="literal">CACHE_NONE</code></p></li><li class="listitem"><p><code class="literal">CACHE_SESSION</code></p></li></ul></div>
+            </td></tr><tr><td><code class="literal">cacheLevel</code></td><td><code class="literal">-1</code></td><td>Specifies the cache level by ID for the underlying JMS resources. </td></tr><tr><td><code class="literal">clientId</code></td><td><code class="literal">null</code></td><td>Specifies the JMS client ID to use. This value, if specified, must be unique and
+          can only be used by a single JMS connection instance. It is typically only required for
+          durable topic subscriptions.</td></tr><tr><td><code class="literal">consumerType</code></td><td><code class="literal">Default</code></td><td>
+          <p>Specifies the consumer type to use. Valid values are one of:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">Simple</code></p></li><li class="listitem"><p><code class="literal">Default</code></p></li><li class="listitem"><p><code class="literal">ServerSessionPool</code></p></li></ul></div>
+          <p>The consumer type determines which Spring JMS listener to use.</p>
+        </td></tr><tr><td><code class="literal">concurrentConsumers</code>
+        </td><td><code class="literal">1</code>
+        </td><td> Specifies the default number of concurrent consumers. </td></tr><tr><td><code class="literal">connectionFactory</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the default JMS connection factory to use for the 
+          <code class="literal">listenerConnectionFactory</code> and 
+          <code class="literal">templateConnectionFactory</code>, if neither is specified.</td></tr><tr><td><code class="literal">deliveryMode</code>
+        </td><td><code class="literal">2</code>
+        </td><td> Specifies the delivery mode when sending messages. <code class="literal">1</code> = 
+          non-persistent; <code class="literal">2</code> = persistent.</td></tr><tr><td><code class="literal">deliveryPersistent</code>
+        </td><td><code class="literal">true</code>
+        </td><td> Specifies whether persistent delivery is used by default. </td></tr><tr><td><code class="literal">destination</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the JMS Destination object to use on this endpoint. </td></tr><tr><td><code class="literal">destinationName</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the JMS destination name to use
+          on this endpoint. </td></tr><tr><td><code class="literal">destinationResolver</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies an implementation of the Spring framework's 
+          <code class="interfacename">DestinationResolver</code> to use.</td></tr><tr><td><code class="literal">disableReplyTo</code>
+        </td><td><code class="literal">false</code>
+        </td><td>Specifies whether to ignore the <code class="literal">JMSReplyTo</code> header and  treat 
+          messages as <span class="emphasis"><em>InOnly</em></span> by default.</td></tr><tr><td><code class="literal">durableSubscriptionName</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the durable subscriber name for specifying durable topic subscriptions. The
+            <code class="literal">clientId</code> option <span class="bold"><strong>must</strong></span> be configured
+          as well. </td></tr><tr><td><code class="literal">eagerLoadingOfProperties</code>
+        </td><td><code class="literal">false</code>
+        </td><td> Enables eager loading of JMS properties as soon as a message is received.</td></tr><tr><td><code class="literal">exceptionListener</code>
+        </td><td><code class="literal">null</code>
+        </td><td> Specifies the JMS Exception Listener that is to be notified of any underlying JMS
+          exceptions. </td></tr><tr><td><code class="literal">explicitQosEnabled</code></td><td><code class="literal">false</code></td><td>Specifies whether the <code class="literal">deliveryMode</code>, <code class="literal">priority</code> or
+            <code class="literal">timeToLive</code> qualities of service should be used when sending 
+            messages.</td></tr><tr><td><code class="literal">exposeListenerSession</code>
+        </td><td><code class="literal">true</code>
+        </td><td> Specifies whether the listener session should be exposed when consuming messages. </td></tr><tr><td><code class="literal">idleTaskExecutionLimit</code>
+        </td><td><code class="literal">1</code>
+        </td><td> Specifies the limit for idle executions of a receive task, not having received any
+          message within its execution. If this limit is reached, the task will shut down and leave
+          receiving to other executing tasks.</td></tr><tr><td><code class="literal">jmsMessageType</code>
+        </td><td><code class="literal">null</code>
+        </td><td>
+          <p>Forces the use of a specific 
+          <code class="literal">javax.jms.Message</code> implementation for sending JMS messages. Possible
+          values are:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">Bytes</code></p></li><li class="listitem"><p><code class="literal">Map</code></p></li><li class="listitem"><p><code class="literal">Object</code></p></li><li class="listitem"><p><code class="literal">Stream</code></p></li><li class="listitem"><p><code class="literal">Text</code></p></li></ul></div>
+        </td></tr><tr><td><code class="literal">jmsKeyFormatStrategy</code>
+        </td><td><code class="literal">default</code>
+        </td><td>
+          <p>Specifies a pluggable strategy for encoding and
+          decoding JMS keys so they can be compliant with the JMS specification. Apache Camel provides
+          two implementations out of the box:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">default</code></p></li><li class="listitem"><p><code class="literal">passthrough</code></p></li></ul></div>
+        </td></tr><tr><td><code class="literal">jmsOperations</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies an implementation of the Spring Framework's 
+          <code class="interfacename">JmsOperations</code> interface to use in place 
+          of <code class="literal">JmsTemplate</code>.</td></tr><tr><td><code class="literal">lazyCreateTransactionManager</code>
+        </td><td><code class="literal">true</code>
+        </td><td>Specifies if Apache Camel will
+          create a <code class="literal">JmsTransactionManager</code> when no
+            <code class="literal">transactionManager</code> injected when 
+          <code class="literal">transacted=true</code>.</td></tr><tr><td><code class="literal">listenerConnectionFactory</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the JMS connection factory used for consuming messages. </td></tr><tr><td><code class="literal">mapJmsMessage</code></td><td><code class="literal">true</code></td><td>Specifies whether Apache Camel should
+          auto map the received JMS message to an appropriate payload type, such as
+            <code class="literal">javax.jms.TextMessage</code> to a <code class="literal">String</code> etc.</td></tr><tr><td><code class="literal">maxConcurrentConsumers</code></td><td><code class="literal">1</code></td><td> Specifies the maximum number of concurrent consumers. </td></tr><tr><td><code class="literal">maxMessagesPerTask</code></td><td><code class="literal">-1</code> (unlimited)</td><td>Specifies the maximum number of messages per task.</td></tr><tr><td><code class="literal">messageConverter</code></td><td><code class="literal">null</code></td><td>Specifies a custom implementation of the Spring
+            <code class="interfacename">MessageConverter</code> so you can control how to map 
+          to/from a <code class="literal">javax.jms.Message</code>.</td></tr><tr><td><code class="literal">messageIdEnabled</code>
+        </td><td><code class="literal">true</code>
+        </td><td>Specifies whether message IDs should be added to outgoing messages.</td></tr><tr><td><code class="literal">messageTimestampEnabled</code></td><td><code class="literal">true</code></td><td> Specifies whether timestamps should be enabled by default on sending messages. </td></tr><tr><td><code class="literal">password</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the password for the connector factory. </td></tr><tr><td><code class="literal">priority</code>
+        </td><td><code class="literal">4</code>
+        </td><td>Specifies the priority of outgoing messages. The 
+          <code class="literal">explicitQosEnabled</code> option 
+          <span class="bold"><strong>must</strong></span> also be enabled in order 
+          for this option to have any effect.</td></tr><tr><td><code class="literal">pubSubNoLocal</code>
+        </td><td><code class="literal">false</code>
+        </td><td> Specifies whether to inhibit the delivery of messages published by its own connection.
+        </td></tr><tr><td><code class="literal">receiveTimeout</code></td><td>&nbsp;</td><td>Specifies the timeout for receiving messages (in milliseconds). </td></tr><tr><td><code class="literal">recoveryInterval</code>
+        </td><td><code class="literal">5000</code>
+        </td><td> Specifies the interval between recovery attempts, in milliseconds.</td></tr><tr><td><code class="literal">preserveMessageQos</code>
+        </td><td><code class="literal">false</code>
+        </td><td>Specifies if you want to send message using the QoS settings specified on the 
+          message instead of the QoS settings on the JMS endpoint. The following three headers 
+          are considered: <code class="literal">JMSPriority</code>, <code class="literal">JMSDeliveryMode</code>, and
+            <code class="literal">JMSExpiration</code>.</td></tr><tr><td><code class="literal">replyTo</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies an explicit ReployTo destination, which overrides any incoming value of
+            <code class="literal">Message.getJMSReplyTo()</code>. </td></tr><tr><td><code class="literal">replyToDestinationSelectorName</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the JMS Selector using the fixed name to be used so you can filter out your own
+          replies from the others when using a shared queue (that is, if you are not using a
+          temporary reply queue). </td></tr><tr><td><code class="literal">replyToDeliveryPersistent</code>
+        </td><td><code class="literal">true</code>
+        </td><td> Specifies whether to use persistent delivery by default for replies. </td></tr><tr><td><code class="literal">requestTimeout</code>
+        </td><td><code class="literal">20000</code>
+        </td><td>Specifies the timeout for waiting for a reply when using the InOut Exchange Pattern in
+          milliseconds.</td></tr><tr><td><code class="literal">selector</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the JMS Selector, which is an SQL 92 predicate that is used to filter messages
+          within the broker.</td></tr><tr><td><code class="literal">taskExecutor</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies a custom task executor for consuming messages.</td></tr><tr><td><code class="literal">taskExecutorSpring2</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies a custom task executor
+          for consuming messages when using Spring 2.x.</td></tr><tr><td><code class="literal">templateConnectionFactory</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the JMS connection factory used for sending messages. </td></tr><tr><td><code class="literal">timeToLive</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the time-to-live of the message in milliseconds. The
+            <code class="literal">explicitQosEnabled</code> option <span class="bold"><strong>must</strong></span> also
+          be enabled in order for this option to have any effect. </td></tr><tr><td><code class="literal">transacted</code>
+        </td><td><code class="literal">false</code>
+        </td><td>Specifies whether to use transacted mode for sending/receiving messages using the
+          InOnly Exchange Pattern.</td></tr><tr><td><code class="literal">transactionManager</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the Spring transaction manager to use. </td></tr><tr><td><code class="literal">transactionName</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the name of the transaction to use. </td></tr><tr><td><code class="literal">transactionTimeout</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the timeout value of the transaction.</td></tr><tr><td><code class="literal">transferException</code>
+        </td><td><code class="literal">false</code>
+        </td><td>Specifies if enabled an exception thrown by a client during processing is 
+          returned as the response message.</td></tr><tr><td><code class="literal">transferExchange</code>
+        </td><td><code class="literal">false</code>
+        </td><td>Specifies if the exchange is transmitted over the wire instead of just the body and 
+          headers. The following fields are transferred: In body,
+          Out body, Fault body, In headers, Out headers, Fault headers, exchange properties,
+          exchange exception.</td></tr><tr><td><code class="literal">username</code>
+        </td><td><code class="literal">null</code>
+        </td><td>Specifies the username for the connector factory. </td></tr><tr><td><code class="literal">useMessageIDAsCorrelationID</code>
+        </td><td><code class="literal">false</code>
+        </td><td> Specifies whether <code class="literal">JMSMessageID</code> should always be used as
+            <code class="literal">JMSCorrelationID</code> for InOut messages.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Message mapping"><a name="d0e28944"></a><h2>Message mapping</h2><p>Apache Camel automatically maps messages between <code class="literal">javax.jms.Message</code> and 
+      <code class="literal">org.apache.camel.Message</code>.</p><p>When sending a JMS message, Apache Camel converts the message body to the JMS 
+      message types shown in <a class="xref" href="jms.html#RiderJMSRefMsgTbl1" title="Table&nbsp;32.&nbsp;Mapping from Apache Camel to JMS">Table&nbsp;32, &#8220;Mapping from Apache Camel to JMS&#8221;</a> .</p><div class="table"><a name="RiderJMSRefMsgTbl1"></a><p class="title"><b>Table&nbsp;32.&nbsp;Mapping from Apache Camel to JMS</b></p><div class="table-contents"><table summary="Mapping from Apache Camel to JMS" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Body Type</th><th>JMS Message</th></tr></thead><tbody><tr><td><code class="literal">String</code></td><td><code class="literal">javax.jms.TextMessage</code></td></tr><tr><td><code class="literal">org.w3c.dom.Node</code>
+        </td><td><code class="literal">javax.jms.TextMessage</code></td></tr><tr><td><code class="literal">Map</code>
+        </td><td><code class="literal">javax.jms.MapMessage</code>
+        </td></tr><tr><td><code class="literal">java.io.Serializable</code>
+        </td><td><code class="literal">javax.jms.ObjectMessage</code>
+        </td></tr><tr><td><code class="literal">byte[]</code></td><td><code class="literal">javax.jms.BytesMessage</code></td></tr><tr><td><code class="literal">java.io.File</code>
+        </td><td><code class="literal">javax.jms.BytesMessage</code>
+        </td></tr><tr><td><code class="literal">java.io.Reader</code>
+        </td><td><code class="literal">javax.jms.BytesMessage</code>
+        </td></tr><tr><td><code class="literal">java.io.InputStream</code>
+        </td><td><code class="literal">javax.jms.BytesMessage</code>
+        </td></tr><tr><td><code class="literal">java.nio.ByteBuffer</code>
+        </td><td><code class="literal">javax.jms.BytesMessage</code>
+        </td></tr></tbody></table></div></div><br class="table-break"><p>When receiving a JMS message, Apache Camel converts the JMS message to body 
+    type listed in <a class="xref" href="jms.html#RiderJMSRefMsgTbl2" title="Table&nbsp;33.&nbsp;Mapping from JMS to Apache Camel">Table&nbsp;33, &#8220;Mapping from JMS to Apache Camel&#8221;</a>.</p><div class="table"><a name="RiderJMSRefMsgTbl2"></a><p class="title"><b>Table&nbsp;33.&nbsp;Mapping from JMS to Apache Camel</b></p><div class="table-contents"><table summary="Mapping from JMS to Apache Camel" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>JMS Message</th><th>Body Type</th></tr></thead><tbody><tr><td><code class="literal">javax.jms.TextMessage</code></td><td><code class="literal">String</code></td></tr><tr><td><code class="literal">javax.jms.BytesMessage</code></td><td><code class="literal">byte[]</code></td></tr><tr><td><code class="literal">javax.jms.MapMessage</code></td><td><code class="literal">Map&lt;String, Object&gt;</code></td></tr><tr><td><code class="literal">javax.jms.ObjectMessage</code></td><td><code class="literal">Object</code></td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Related topics"><a name="d0e29089"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/ActiveMQ.html" class="olink">ActiveMQ</a></td></tr><tr><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/amqp.html" class="olink">AMQP</a></td></tr></table></div></div></body></html>

@@ -1,0 +1,69 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>HDFS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderFileEptRef.html" title="File Endpoints"><link rel="prev" href="ftp.html" title="FTP/SFTP"><link rel="next" href="gae.html" title="Google App Engine Endpoints"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="HDFS"><a name="hdfs"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>HDFS &#8212; enables you to read and write messages
+      from/to an HDFS file system</p></div><div class="refsection" title="Overview"><a name="d0e23926"></a><h2>Overview</h2><p>HDFS is the distributed file system at the heart of <a class="link" href="http://hadoop.apache.org" target="_top">Hadoop</a>. It can only be built using JDK1.6 or later
+      because this is a strict requirement for Hadoop itself. This component is hosted at <a class="link" href="http://github.com/dgreco/camel-hdfs" target="_top">http://github.com/dgreco/camel-hdfs</a>. We
+      decided to put it temporarily on this <a class="link" href="http://www.github.com" target="_top">github</a>
+      because currently Apache Camel is being built and tested using JDK1.5 and for this reason we couldn't
+      put that component into the Apache Camel official distribution.</p></div><div class="refsection" title="URI format"><a name="d0e23940"></a><h2>URI format</h2><p>The URI format for an HDFS endpoint is:</p><pre class="programlisting">hdfs://<em class="replaceable"><code>hostname</code></em>[:<em class="replaceable"><code>port</code></em>][/<em class="replaceable"><code>path</code></em>][?<em class="replaceable"><code>options</code></em>]</pre><p>The path is treated in the following way:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>as a consumer, if it's a file, it just reads the file, otherwise if it represents a
+          directory it scans all the file under the path satisfying the configured pattern. All the
+          files under that directory must be of the same type.</p></li><li class="listitem"><p>as a producer, if at least one split strategy is defined, the path is considered a
+          directory and under that directory the producer creates a different file per split named
+          <code class="filename">seg0</code>, <code class="filename">seg1</code>, <code class="filename">seg2</code>, etc.</p></li></ol></div></div><div class="refsection" title="Options"><a name="d0e23977"></a><h2>Options</h2><p><a class="xref" href="hdfs.html#HDFSRefOptsTbl" title="Table&nbsp;15.&nbsp;HDFS options">Table&nbsp;15, &#8220;HDFS options&#8221;</a> lists the options for HDFS endpoint.</p><div class="table"><a name="HDFSRefOptsTbl"></a><p class="title"><b>Table&nbsp;15.&nbsp;HDFS options</b></p><div class="table-contents"><table summary="HDFS options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default Value</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">overwrite</code>
+        </td><td><code class="literal">true</code>
+        </td><td>Specifies if the file can be overwritten.</td></tr><tr><td><code class="literal">bufferSize</code>
+        </td><td><code class="literal">4096</code>
+        </td><td>Specifies the buffer size used by HDFS.</td></tr><tr><td><code class="literal">replication</code>
+        </td><td><code class="literal">3</code>
+        </td><td>Specifies the HDFS replication factor.</td></tr><tr><td><code class="literal">blockSize</code>
+        </td><td><code class="literal">67108864</code>
+        </td><td>Specifies the size of the HDFS blocks in bytes.</td></tr><tr><td><code class="literal">fileType</code>
+        </td><td><code class="literal">NORMAL_FILE</code>
+        </td><td>
+          <p>Specifies the type of file to use. Valid values are:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">SEQUENCE_FILE</code></p></li><li class="listitem"><p><code class="code">MAP_FILE</code></p></li><li class="listitem"><p><code class="code">ARRAY_FILE</code></p></li><li class="listitem"><p><code class="code">BLOOMMAP_FILE</code></p></li></ul></div>
+          <p>See the <a class="link" href="http://hadoop.apache.org" target="_top">Hadoop documentation</a> 
+            for more information.</p>
+        </td></tr><tr><td><code class="literal">fileSystemType</code>
+        </td><td><code class="literal">HDFS</code>
+        </td><td>It can be <code class="code">LOCAL</code> for local filesystem </td></tr><tr><td><code class="literal">keyType</code>
+        </td><td><code class="literal">NULL</code>
+        </td><td>
+          <p>Specifies the type for the key in case of sequence or map files.</p>
+        </td></tr><tr><td><code class="literal">valueType</code>
+        </td><td><code class="literal">TEXT</code>
+        </td><td>
+          <p>Specifies the type for the key in case of sequence or map files.</p>
+        </td></tr><tr><td><code class="literal">splitStrategy</code>
+        </td><td>&nbsp;</td><td>
+          <p> A string describing the strategy on how to split the file based on different
+            criteria.</p>
+        </td></tr><tr><td><code class="literal">openedSuffix</code>
+        </td><td><code class="literal">opened</code>
+        </td><td>
+          <p> When a file is opened for reading/ writing the file is renamed with this suffix to
+            avoid to read it during the writing phase. </p>
+        </td></tr><tr><td><code class="literal">readSuffix</code>
+        </td><td><code class="literal">read</code>
+        </td><td>
+          <p> Once the file has been read is renamed with this suffix to avoid to read it again.
+          </p>
+        </td></tr><tr><td><code class="literal">initialDelay</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p>Specifies how long a consumer will wait, in milliseconds, before starting to scanning the
+            directory.</p>
+        </td></tr><tr><td><code class="literal">delay</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p>Specifies the interval, in milliseconds, between the directory scans.</p>
+        </td></tr><tr><td><code class="literal">pattern</code>
+        </td><td><code class="literal">*</code>
+        </td><td>
+          <p> The pattern used for scanning the directory </p>
+        </td></tr><tr><td><code class="literal">chunkSize</code>
+        </td><td><code class="literal">4096</code>
+        </td><td>
+          <p>When reading a normal file, this is split into chunks producing a message per chunk
+          </p>
+        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Related topics"><a name="d0e24215"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td><a class="link" href="http://hadoop.apache.org" target="_top">Hadoop</a></td></tr></table></div></div></body></html>

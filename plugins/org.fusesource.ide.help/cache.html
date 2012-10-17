@@ -1,0 +1,232 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Cache</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="browse.html" title="Browse"><link rel="next" href="class.html" title="Class"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Cache"><div class="titlepage"><div><div><h2 class="title"><a name="cache"></a>Cache</h2></div></div></div><div class="simplesect" title="Cache Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e33477"></a>Cache Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.1</strong></span>
+    </p><p>The <span class="bold"><strong>cache</strong></span> component enables you to perform caching
+      operations using EHCache as the Cache Implementation. The cache itself is created on demand or
+      if a cache of that name already exists then it is simply utilized with its original
+      settings.</p><p>This component supports producer and event based consumer endpoints.</p><p>The Cache consumer is an event based consumer and can be used to listen and respond to
+      specific cache activities. If you need to perform selections from a pre-existing cache, used
+      the processors defined for the cache component.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">cache://cacheName[?options]</pre><p>You can append query options to the URI in the following format,
+        <code class="literal">?option=value&amp;option=value&amp;...</code>
+    </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Options"></a>Options</h2></div></div></div><table id="d0e33506"><tr>
+        <th> Name </th>
+        <th> Default Value </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">maxElementsInMemory</code>
+        </td>
+        <td><code class="literal">1000</code>
+        </td>
+        <td> The numer of elements that may be stored in the defined cache </td>
+      </tr><tr>
+        <td><code class="literal">memoryStoreEvictionPolicy</code>
+        </td>
+        <td><code class="literal">MemoryStoreEvictionPolicy.LFU</code>
+        </td>
+        <td>
+          <p>The number of elements that may be stored in the defined cache. The policy options
+            include:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">MemoryStoreEvictionPolicy.LFU</code>&#8212;Least frequently used.</p></li><li class="listitem"><p><code class="code">MemoryStoreEvictionPolicy.LRU</code>&#8212;Least recently used.</p></li><li class="listitem"><p><code class="code">MemoryStoreEvictionPolicy.FIFO</code>&#8212;First in first out, ordered by
+                creation time.</p></li></ul></div>
+        </td>
+      </tr><tr>
+        <td><code class="literal">overflowToDisk</code>
+        </td>
+        <td><code class="literal">true</code>
+        </td>
+        <td> Specifies whether cache may overflow to disk.</td>
+      </tr><tr>
+        <td><code class="literal">eternal</code>
+        </td>
+        <td><code class="literal">false</code>
+        </td>
+        <td> Sets whether elements are eternal. If eternal, timeouts are ignored and the element is
+          never expired. </td>
+      </tr><tr>
+        <td><code class="literal">timeToLiveSeconds</code>
+        </td>
+        <td><code class="literal">300</code>
+        </td>
+        <td> The maximum time between creation time and when an element expires. Is only used if the
+          element is not eternal.</td>
+      </tr><tr>
+        <td><code class="literal">timeToIdleSeconds</code>
+        </td>
+        <td><code class="literal">300</code>
+        </td>
+        <td> The maximum amount of time between accesses before an element expires.</td>
+      </tr><tr>
+        <td><code class="literal">diskPersistent</code>
+        </td>
+        <td><code class="literal">true</code>
+        </td>
+        <td> Whether the disk store persists between restarts of the Virtual Machine. The default
+          value is <code class="code">false</code>.</td>
+      </tr><tr>
+        <td><code class="literal">diskExpiryThreadIntervalSeconds</code>
+        </td>
+        <td><code class="literal">120</code>
+        </td>
+        <td> The number of seconds between runs of the disk expiry thread. The default value is 120
+          seconds.</td>
+      </tr><tr>
+        <td><code class="literal">cacheManagerFactory</code>
+        </td>
+        <td><code class="literal">null</code>
+        </td>
+        <td><span class="bold"><strong>Camel 2.3:</strong></span> If you want to use a custom factory which
+          instantiates and creates the EHCache <code class="literal">net.sf.ehcache.CacheManager</code>. </td>
+      </tr></table></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e33684"><tr>
+        <th> Header </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">CACHE_OPERATION</code>
+        </td>
+        <td>
+          <p>The operation to be performed on the cache. The valid options are:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="code">ADD</code>
+              </p></li><li class="listitem"><p><code class="code">UPDATE</code>
+              </p></li><li class="listitem"><p><code class="code">DELETE</code>
+              </p></li><li class="listitem"><p><code class="code">DELETEALL</code>
+              </p></li></ul></div>
+        </td>
+      </tr><tr>
+        <td><code class="literal">CACHE_KEY</code>
+        </td>
+        <td> The cache key used to store the message in the cache. The cache key is optional, if the
+            <code class="code">CACHE_OPERATION</code> is <code class="code">DELETEALL</code>.</td>
+      </tr></table></div><div class="simplesect" title="Cache Producer"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_CacheProducer"></a>Cache Producer </h2></div></div></div><p>Sending data to the cache involves the ability to direct payloads in exchanges to be
+      stored in a pre-existing or created-on- demand cache. The mechanics of doing this involve -
+      setting the Message Exchange Headers shown above. - ensuring that the Message Exchange Body
+      contains the message directed to the cache</p></div><div class="simplesect" title="Cache Consumer"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_CacheConsumer"></a>Cache Consumer </h2></div></div></div><p>Receiving data from the cache involves the ability of the <code class="code">CacheConsumer</code> to
+      listen on a pre-existing or created-on-demand Cache using an event Listener and receive
+      automatic notifications when any cache activity take place (i.e
+        <code class="code">ADD</code>/<code class="code">UPDATE</code>/<code class="code">DELETE</code>/<code class="code">DELETEALL</code>). Upon such
+      an activity taking place - an exchange containing Message Exchange Headers and a Message
+      Exchange Body containing the just added/updated payload is placed and sent. - in case of a
+        <code class="code">DELETEALL</code> operation, the Message Exchange Header <code class="code">CACHE_KEY</code> and the
+      Message Exchange Body are not populated.</p></div><div class="simplesect" title="Cache Processors"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_CacheProcessors"></a>Cache Processors </h2></div></div></div><p>There are a set of nice processors with the ability to perform cache lookups and
+      selectively replace payload content at the - body - token - xpath level</p></div><div class="simplesect" title="Example 1: Configuring the cache"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example1Configuringthecache"></a>Example 1: Configuring the cache</h2></div></div></div><pre class="programlisting">
+from("cache://MyApplicationCache" +
+          "?maxElementsInMemory=1000" + 
+          "&amp;memoryStoreEvictionPolicy=" +
+              "MemoryStoreEvictionPolicy.LFU" +
+          "&amp;overflowToDisk=true" +
+          "&amp;eternal=true" +
+          "&amp;timeToLiveSeconds=300" + 
+          "&amp;timeToIdleSeconds=true" +
+          "&amp;diskPersistent=true" +
+          "&amp;diskExpiryThreadIntervalSeconds=300")</pre></div><div class="simplesect" title="Example 2: Adding keys to the cache"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example2Addingkeystothecache"></a>Example 2: Adding keys to the cache </h2></div></div></div><pre class="programlisting">
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+     from("direct:start")
+     .setHeader("CACHE_OPERATION", constant("ADD"))
+     .setHeader("CACHE_KEY", constant("Ralph_Waldo_Emerson"))
+     .to("cache://TestCache1")
+   }
+};</pre></div><div class="simplesect" title="Example 2: Updating existing keys in a cache"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example2Updatingexistingkeysinacache"></a>Example 2: Updating existing keys in a cache </h2></div></div></div><pre class="programlisting">
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+     from("direct:start")
+     .setHeader("CACHE_OPERATION", constant("UPDATE"))
+     .setHeader("CACHE_KEY", constant("Ralph_Waldo_Emerson"))
+     .to("cache://TestCache1")
+   }
+};</pre></div><div class="simplesect" title="Example 3: Deleting existing keys in a cache"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example3Deletingexistingkeysinacache"></a>Example 3: Deleting existing keys in a cache </h2></div></div></div><pre class="programlisting">
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+     from("direct:start")
+     .setHeader("CACHE_OPERATION", constant("DELETE"))
+     .setHeader("CACHE_KEY", constant("Ralph_Waldo_Emerson"))
+     .to("cache://TestCache1")
+   }
+};</pre></div><div class="simplesect" title="Example 4: Deleting all existing keys in a cache"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example4Deletingallexistingkeysinacache"></a>Example 4: Deleting all existing keys in a cache </h2></div></div></div><pre class="programlisting">
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+     from("direct:start")
+     .setHeader("CACHE_OPERATION", constant("DELETEALL"))
+     .to("cache://TestCache1");
+    }
+};</pre></div><div class="simplesect" title="Example 5: Notifying any changes registering in a Cache to Processors and other Producers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example5NotifyinganychangesregisteringinaCachetoProcessorsandotherProducers"></a>Example 5: Notifying any changes registering in a Cache to Processors and other
+      Producers</h2></div></div></div><pre class="programlisting">
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+     from("cache://TestCache1")
+     .process(new Processor() {
+        public void process(Exchange exchange) 
+               throws Exception {
+           String operation = (String) exchange.getIn().getHeader("CACHE_OPERATION");
+           String key = (String) exchange.getIn().getHeader("CACHE_KEY");
+           Object body = exchange.getIn().getBody();
+           // Do something
+        } 
+     })
+   } 
+};</pre></div><div class="simplesect" title="Example 6: Using Processors to selectively replace payload with cache values"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example6UsingProcessorstoselectivelyreplacepayloadwithcachevalues"></a>Example 6: Using Processors to selectively replace payload with cache values</h2></div></div></div><pre class="programlisting">
+RouteBuilder builder = new RouteBuilder() {
+   public void configure() {
+     //Message Body Replacer
+     from("cache://TestCache1")
+     .filter(header("CACHE_KEY").isEqualTo("greeting"))
+     .process(new CacheBasedMessageBodyReplacer("cache://TestCache1","farewell"))
+     .to("direct:next");  
+
+    //Message Token replacer
+    from("cache://TestCache1")
+    .filter(header("CACHE_KEY").isEqualTo("quote"))
+    .process(new CacheBasedTokenReplacer("cache://TestCache1","novel","#novel#"))
+    .process(new CacheBasedTokenReplacer("cache://TestCache1","author","#author#"))
+    .process(new CacheBasedTokenReplacer("cache://TestCache1","number","#number#"))
+    .to("direct:next");
+
+    //Message XPath replacer
+    from("cache://TestCache1").
+    .filter(header("CACHE_KEY").isEqualTo("XML_FRAGMENT"))
+    .process(new CacheBasedXPathReplacer("cache://TestCache1","book1","/books/book1"))
+    .process (new CacheBasedXPathReplacer("cache://TestCache1","book2","/books/book2"))
+    .to("direct:next");
+   }
+};</pre></div><div class="simplesect" title="Example 7: Getting an entry from the Cache"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example7GettinganentryfromtheCache"></a>Example 7: Getting an entry from the Cache</h2></div></div></div><p></p><pre class="programlisting">from("direct:start")
+    // Prepare headers
+    .setHeader(CacheConstants.CACHE_OPERATION, constant(CacheConstants.CACHE_OPERATION_GET))
+    .setHeader(CacheConstants.CACHE_KEY, constant("Ralph_Waldo_Emerson")).
+    .to("cache://TestCache1").
+    // Check if entry was not found
+    .choice().when(header(CacheConstants.CACHE_ELEMENT_WAS_FOUND).isNull()).
+        // If not found, get the payload and put it to cache
+        .to("cxf:bean:someHeavyweightOperation").
+        .setHeader(CacheConstants.CACHE_OPERATION, constant(CacheConstants.CACHE_OPERATION_ADD))
+        .setHeader(CacheConstants.CACHE_KEY, constant("Ralph_Waldo_Emerson"))
+        .to("cache://TestCache1")
+    .end()
+    .to("direct:nextPhase");</pre></div><div class="simplesect" title="Example 8: Checking for an entry in the Cache"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_Example8CheckingforanentryintheCache"></a>Example 8: Checking for an entry in the Cache</h2></div></div></div><p></p><p>Note: CHECK command tests existence of the entry in the cache but doesn't place message to
+      the body.</p><pre class="programlisting">from("direct:start")
+    // Prepare headers
+    .setHeader(CacheConstants.CACHE_OPERATION, constant(CacheConstants.CACHE_OPERATION_CHECK))
+    .setHeader(CacheConstants.CACHE_KEY, constant("Ralph_Waldo_Emerson")).
+    .to("cache://TestCache1").
+    // Check if entry was not found
+    .choice().when(header(CacheConstants.CACHE_ELEMENT_WAS_FOUND).isNull()).
+        // If not found, get the payload and put it to cache
+        .to("cxf:bean:someHeavyweightOperation").
+        .setHeader(CacheConstants.CACHE_OPERATION, constant(CacheConstants.CACHE_OPERATION_ADD))
+        .setHeader(CacheConstants.CACHE_KEY, constant("Ralph_Waldo_Emerson"))
+        .to("cache://TestCache1")
+    .end();</pre></div><div class="simplesect" title="Management of EHCache"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Cache_HSH_ManagementofEHCache"></a>Management of EHCache</h2></div></div></div><p></p><p>EHCache has its own statistics and management from <a class="link" href="Camel JMX" target="_top">JMX</a>.</p><p>Here's a snippet on how to expose them via JMX in a Spring application context:</p><pre class="programlisting">
+      &lt;bean id="ehCacheManagementService" class="net.sf.ehcache.management.ManagementService" init-method="init" lazy-init="false"&gt;
+      &lt;constructor-arg&gt;
+      &lt;bean class="net.sf.ehcache.CacheManager" factory-method="getInstance"/&gt;
+      &lt;/constructor-arg&gt;
+      &lt;constructor-arg&gt;
+      &lt;bean class="org.springframework.jmx.support.JmxUtils" factory-method="locateMBeanServer"/&gt;
+      &lt;/constructor-arg&gt;
+      &lt;constructor-arg value="true"/&gt;
+      &lt;constructor-arg value="true"/&gt;
+      &lt;constructor-arg value="true"/&gt;
+      &lt;constructor-arg value="true"/&gt;
+      &lt;/bean&gt;
+      
+    </pre><p>Of course you can do the same thing in straight Java:</p><pre class="programlisting">
+      ManagementService.registerMBeans(CacheManager.getInstance(), mbeanServer, true, true, true, true);
+      
+    </pre><p>You can get cache hits, misses, in-memory hits, disk hits, size stats this way. You can also change CacheConfiguration parameters on the fly.</p></div></div></body></html>

@@ -1,0 +1,22 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>JCR</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="jbi.html" title="JBI"><link rel="next" href="jdbc.html" title="JDBC"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="JCR"><div class="titlepage"><div><div><h2 class="title"><a name="jcr"></a>JCR</h2></div></div></div><div class="simplesect" title="JCR Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JCR_HSH_JCRComponent"></a>JCR Component</h2></div></div></div><p>The <span class="bold"><strong><code class="literal">jcr</code></strong></span> component allows you to
+            add nodes to a JCR (JSR-170) compliant content repository (for example, <a class="link" href="http://jackrabbit.apache.org/" target="_top">Apache Jackrabbit</a>).</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-jcr&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;!-- use the same version as your Camel core version --&gt;
+&lt;/dependency&gt;
+
+</pre></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JCR_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">jcr://user:password@repository/path/to/node</pre></div><div class="simplesect" title="Usage"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JCR_HSH_Usage"></a>Usage</h2></div></div></div><p>The <code class="literal">repository</code> element of the URI is used to look up the JCR
+                <code class="literal">Repository</code> object in the Camel context registry.</p><p>If a message is sent to a JCR producer endpoint:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>A new node is created in the content repository,</p></li><li class="listitem"><p>All the message properties of the IN message are transformed to JCR
+                        <code class="literal">Value</code> instances and added to the new node,</p></li><li class="listitem"><p>The node's UUID is returned in the OUT message.</p></li></ul></div></div><div class="simplesect" title="Message properties"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JCR_HSH_Messageproperties"></a>Message properties</h2></div></div></div><p>All message properties are converted to node properties, except for the
+                <code class="literal">CamelJcrNodeName</code> property (you can refer to
+                <code class="literal">JcrConstants.NODE_NAME</code> in your code), which is used to determine
+            the node name.</p></div><div class="simplesect" title="Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JCR_HSH_Example"></a>Example</h2></div></div></div><p>The snippet below creates a node named <code class="literal">node</code> under the
+                <code class="literal">/home/test</code> node in the content repository. One additional
+            attribute is added to the node as well: <code class="literal">my.contents.property</code> which
+            will contain the body of the message being sent.</p><pre class="programlisting">from("direct:a").setProperty(JcrConstants.JCR_NODE_NAME, constant("node"))
+    .setProperty("my.contents.property", body()).to("jcr://user:pass@repository/home/test");
+</pre></div></div></body></html>
