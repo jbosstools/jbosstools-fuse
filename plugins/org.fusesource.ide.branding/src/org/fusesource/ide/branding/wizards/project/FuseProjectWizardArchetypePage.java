@@ -324,7 +324,7 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 					descriptionText.setText(text);
 
 					if (artifactIdCombo != null && (Strings.isBlank(getArtifactId()) || !userChangedArtifactId)) {
-						String value = archetype.getArtifactId().replace("archetype-", "");
+						String value = archetype.getArtifactId().replace("archetype-", "").replace("-archetype", "");
 						artifactIdCombo.setText(value);
 						userChangedArtifactId = false;
 					}
@@ -514,7 +514,7 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 			public void modifyText(ModifyEvent e) {
 				String current = packageCombo.getText();
 				String defaultPackage = getDefaultJavaPackage();
-				
+
 				if (!packageCustomized && !current.equals("")
 						&& !packageCombo.getText().equals(defaultPackage)) {
 					packageCustomized = true;
