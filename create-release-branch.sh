@@ -50,13 +50,13 @@ find plugins -name 'fuse*.product' | xargs perl -pi -e "s/3.0.0.qualifier/${VERS
 # replace IDE version
 perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>${VERSION}<\/ide-version>/g" plugins/pom.xml
 
-echo "Zapping P2 cache of fusesource and snapshot stuff"
-rm -rf /mnt/hudson/.m2/repository/p2/osgi/bundle/org.fusesource*
-rm -rf /mnt/hudson/.m2/repository/p2/osgi/bundle/com.fusesource*
+#echo "Zapping P2 cache of fusesource and snapshot stuff"
+#rm -rf /mnt/hudson/.m2/repository/p2/osgi/bundle/org.fusesource*
+#rm -rf /mnt/hudson/.m2/repository/p2/osgi/bundle/com.fusesource*
 rm -rf /mnt/hudson/.m2/repository/p2/osgi/bundle/*/*SNAPSHOT
 
-rm -rf /mnt/hudson/.m2/repository/org/fusesource/
-rm -rf /mnt/hudson/.m2/repository/com/fusesource/
+#rm -rf /mnt/hudson/.m2/repository/org/fusesource/
+#rm -rf /mnt/hudson/.m2/repository/com/fusesource/
 
 echo "Building the update site..."
 cd plugins
