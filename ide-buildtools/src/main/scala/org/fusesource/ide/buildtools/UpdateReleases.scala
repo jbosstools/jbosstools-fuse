@@ -28,11 +28,11 @@ object UpdateReleases {
     Authenticator.setDefault(fuseAuthenticator)
 
     // lets find the eclipse plugins directory
-    var rs = new File("../eclipse-tooling")
+    var rs = new File("../plugins")
     if (args.length > 1) {
       rs = new File(args(0))
     } else if (!rs.exists()) {
-      rs = new File("../../eclipse-tooling")
+      rs = new File("../../plugins")
     }
 
     println("Using IDE directory: " + rs.getAbsolutePath)
