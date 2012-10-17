@@ -94,9 +94,9 @@ object Main {
     }
     println("Generate eclipse model " + eclipseModel + " eclipse editor " + eclipseEditor)
 
-    val editorProjectDir = basedir + "/../eclipse-tooling/org.fusesource.ide.camel.editor"
+    val editorProjectDir = basedir + "/../plugins/org.fusesource.ide.camel.editor"
     val editorDir = editorProjectDir + "/src/org/fusesource/ide/camel/editor"
-    val modelDir = basedir + "/../eclipse-tooling/org.fusesource.ide.camel.model/src/org/fusesource/ide/camel/model/generated"
+    val modelDir = basedir + "/../plugins/org.fusesource.ide.camel.model/src/org/fusesource/ide/camel/model/generated"
     val imageDir = new File(editorProjectDir + "/icons")
 
     val camelDescriptionElementsFile = new File(basedir + "/../../fuse/tooling/camel-tooling-util/src/main/resources/camelDescriptionElements.txt")
