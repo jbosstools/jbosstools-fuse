@@ -1,0 +1,159 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Atom Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="test.html" title="Test"><link rel="next" href="bean.html" title="Bean"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Atom Component"><div class="titlepage"><div><div><h2 class="title"><a name="atom"></a>Atom Component</h2></div></div></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e32664"></a>Overview</h2></div></div></div><p>The Atom component is used for polling atom feeds.</p><p>Apache Camel will poll the feed every 60 seconds by default.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The component currently only supports polling (consuming) feeds.</p></td></tr></table></div></div><div class="simplesect" title="Set-up"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e32674"></a>Set-up</h2></div></div></div><p>Maven users will need to add the dependency shown in <a class="xref" href="atom.html#atomPOM" title="Example&nbsp;20.&nbsp;Atom dependency">Example&nbsp;20, &#8220;Atom dependency&#8221;</a> to their 
+      <code class="filename">pom.xml</code> to use this component.</p><div class="example"><a name="atomPOM"></a><p class="title"><b>Example&nbsp;20.&nbsp;Atom dependency</b></p><div class="example-contents"><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-atom<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- use the same version as your Camel core version --&gt;</em>
+<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre></div></div><br class="example-break"></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e32689"></a>URI format</h2></div></div></div><p>The URI format for an Atom endpoint is:</p><pre class="programlisting">atom://<em class="replaceable"><code>atomUri</code></em>[?options]</pre><p><em class="replaceable"><code>atomUri</code></em> specifies the URI to the Atom feed to poll.</p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e32703"></a>Options</h2></div></div></div><p><a class="xref" href="atom.html#atomOptsTble" title="Table&nbsp;50.&nbsp;Atom Component Options">Table&nbsp;50, &#8220;Atom Component Options&#8221;</a> list the options for the Atom endpoint.</p><div class="table"><a name="atomOptsTble"></a><p class="title"><b>Table&nbsp;50.&nbsp;Atom Component Options</b></p><div class="table-contents"><table summary="Atom Component Options" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Property </th><th>Default </th><th>Description </th></tr></thead><tbody><tr><td><code class="literal">splitEntries</code></td><td><code class="literal">true</code></td><td> If <code class="literal">true</code> Apache Camel will poll the feed and for the subsequent polls
+          return each entry poll by poll. If the feed contains 7 entries then Apache Camel will return
+          the first entry on the first poll, the 2nd entry on the next poll, until no more entries
+          where as Apache Camel will do a new update on the feed. If <code class="literal">false</code> then
+          Apache Camel will poll a fresh feed on every invocation. </td></tr><tr><td><code class="literal">filter</code>
+        </td><td><code class="literal">true</code>
+        </td><td> Is only used by the split entries to filter the entries to return. Apache Camel will
+          default use the <code class="literal">UpdateDateFilter</code> that only return new entries from the
+          feed. So the client consuming from the feed never receives the same entry more than once.
+          The filter will return the entries ordered by the newest last. </td></tr><tr><td><code class="literal">lastUpdate</code>
+        </td><td><code class="literal">null</code>
+        </td><td> Is only used by the filter, as the starting timestamp for selection never entries (uses
+          the <code class="literal">entry.updated</code> timestamp). Syntax format is:
+            <code class="literal">yyyy-MM-ddTHH:MM:ss</code>. Example: <code class="literal">2007-12-24T17:45:59</code>.
+        </td></tr><tr><td><code class="literal">throttleEntries</code>
+        </td><td><code class="literal">true</code>
+        </td><td>Sets whether all entries identified in a single feed poll should be delivered immediately. If <code class="literal">true</code>, 
+          only one entry is processed per <code class="literal">consumer.delay</code>. Only applicable when <code class="literal">splitEntries</code> is set 
+          to <code class="literal">true</code>. </td></tr><tr><td><code class="literal">feedHeader</code>
+        </td><td><code class="literal">true</code>
+        </td><td>Sets whether to add the Abdera Feed object as a header.</td></tr><tr><td><code class="literal">sortEntries</code>
+        </td><td><code class="literal">false</code>
+        </td><td>If <code class="literal">splitEntries</code> is <code class="literal">true</code>, this sets whether to
+          sort those entries by updated date. </td></tr><tr><td><code class="literal">consumer.delay</code>
+        </td><td><code class="literal">60000</code></td><td> Delay in milliseconds between each poll. </td></tr><tr><td><code class="literal">consumer.initialDelay</code>
+        </td><td><code class="literal">1000</code></td><td>Specifies the number of milliseconds before polling starts. </td></tr><tr><td><code class="literal">consumer.userFixedDelay</code>
+        </td><td><code class="literal">false</code>
+        </td><td> If <code class="literal">true</code>, use fixed delay between pools, otherwise fixed rate is
+          used. See <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/ScheduledExecutorService.html" target="_top">ScheduledExecutorService</a> in JDK for details. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Exchange data format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Atom_HSH_Exchangedataformat"></a>Exchange data format</h2></div></div></div><p>Apache Camel will set the In body on the returned <code class="literal">Exchange</code> with the
+      entries. Depending on the <code class="literal">splitEntries</code> flag Apache Camel will either return one
+        <code class="literal">Entry</code> or a <code class="literal">List&lt;Entry&gt;</code>.</p><table id="d0e32876"><tr>
+        <th> Option </th>
+        <th> Value </th>
+        <th> Behavior </th>
+      </tr><tr>
+        <td><code class="literal">splitEntries</code>
+        </td>
+        <td><code class="literal">true</code>
+        </td>
+        <td> Only a single entry from the currently being processed feed is set:
+            <code class="literal">exchange.in.body(Entry)</code>
+        </td>
+      </tr><tr>
+        <td><code class="literal">splitEntries</code>
+        </td>
+        <td><code class="literal">false</code>
+        </td>
+        <td> The entire list of entries from the feed is set:
+            <code class="literal">exchange.in.body(List&lt;Entry&gt;)</code>
+        </td>
+      </tr></table><p>Apache Camel can set the <code class="literal">Feed</code> object on the in header (see
+        <code class="literal">feedHeader</code> option to disable this):</p></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Atom_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel atom uses these headers.</p><table id="d0e32937"><tr>
+        <th> Header </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">org.apache.camel.component.atom.feed</code>
+        </td>
+        <td> Apache Camel 1.x: When consuming the <code class="literal">org.apache.abdera.model.Feed</code> object
+          is set to this header. </td>
+      </tr><tr>
+        <td><code class="literal">CamelAtomFeed</code>
+        </td>
+        <td>Apache Camel 2.0: When consuming the <code class="literal">org.apache.abdera.model.Feed</code> object
+          is set to this header. </td>
+      </tr></table></div><div class="simplesect" title="Samples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Atom_HSH_Samples"></a>Samples</h2></div></div></div><p>In the following sample we poll James Strachan's blog:</p><pre class="programlisting">from("atom://http://macstrac.blogspot.com/feeds/posts/default").to("seda:feeds");</pre><p>In this sample we want to filter only good blogs we like to a SEDA queue. The sample also
+      shows how to set up Apache Camel standalone, not running in any container or using Spring.</p><pre class="programlisting">@Override
+protected CamelContext createCamelContext() throws Exception {
+    // We initialize Camel
+
+    SimpleRegistry registry = new SimpleRegistry();
+    // First we register a blog service in our bean registry
+    registry.put("blogService", new BlogService());
+
+    // Then we create the camel context with our bean registry
+    context = new DefaultCamelContext(registry);
+
+    // Then we add all the routes we need using the route builder DSL syntax
+    context.addRoutes(createRouteBuilder());
+
+    // And finally we must start Camel to let the magic routing begins
+    context.start();
+
+    return context;
+}
+
+/**
+ * This is the route builder where we create our routes in the advanced Camel DSL syntax
+ */
+protected RouteBuilder createRouteBuilder() throws Exception {
+    return new RouteBuilder() {
+        public void configure() throws Exception {
+            // We pool the atom feeds from the source for further processing in the seda queue
+            // we set the delay to 1 second for each pool as this is a unit test also and we can
+            // not wait the default poll interval of 60 seconds.
+            // Using splitEntries=true will during polling only fetch one Atom Entry at any given time.
+            // As the feed.atom file contains 7 entries, using this will require 7 polls to fetch the entire
+            // content. When Camel have reach the end of entries it will refresh the atom feed from URI source
+            // and restart - but as Camel by default uses the UpdatedDateFilter it will only deliver new
+            // blog entries to "seda:feeds". So only when James Straham updates his blog with a new entry
+            // Camel will create an exchange for the seda:feeds.
+            from("atom:file:src/test/data/feed.atom?splitEntries=true&amp;consumer.delay=1000").to("seda:feeds");
+
+            // From the feeds we filter each blot entry by using our blog service class
+            from("seda:feeds").filter().method("blogService", "isGoodBlog").to("seda:goodBlogs");
+
+            // And the good blogs is moved to a mock queue as this sample is also used for unit testing
+            // this is one of the strengths in Camel that you can also use the mock endpoint for your
+            // unit tests
+            from("seda:goodBlogs").to("mock:result");
+        }
+    };
+}
+
+/**
+ * This is the actual junit test method that does the assertion that our routes is working
+ * as expected
+ */
+@Test
+public void testFiltering() throws Exception {
+    // Get the mock endpoint
+    MockEndpoint mock = context.getEndpoint("mock:result", MockEndpoint.class);
+
+    // There should be two good blog entries from the feed
+    mock.expectedMinimumMessageCount(2);
+
+    // Asserts that the above expectations is true, will throw assertions exception if it failed
+    // Camel will default wait max 20 seconds for the assertions to be true, if the conditions
+    // is true sooner Camel will continue
+    mock.assertIsSatisfied();
+}
+
+/**
+ * Services for blogs
+ */
+public class BlogService {
+
+    /**
+     * Tests the blogs if its a good blog entry or not
+     */
+    public boolean isGoodBlog(Exchange exchange) {
+        Entry entry = exchange.getIn().getBody(Entry.class);
+        String title = entry.getTitle();            
+
+        // We like blogs about Camel
+        boolean good = title.toLowerCase().contains("camel");
+        return good;
+    }
+
+}</pre><p>
+      
+    </p></div></div></body></html>

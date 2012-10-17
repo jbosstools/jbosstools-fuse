@@ -1,0 +1,177 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Route Editor Patterns</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="prev" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="next" href="RiderEndptRef.html" title="Endpoints"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Route Editor Patterns"><div class="titlepage"><div><div><h2 class="title"><a name="RefIntroToEIP"></a>Route Editor Patterns</h2></div></div></div><div class="simplesect" title="Endpoints"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e11729"></a>Endpoints</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEndptsTbl" title="Table&nbsp;1.&nbsp;Endpoints">Table&nbsp;1</a> lists the endpoint patterns available from 
+        the route editor's palette.</p><div class="table"><a name="RefEndptsTbl"></a><p class="title"><b>Table&nbsp;1.&nbsp;Endpoints</b></p><div class="table-contents"><table summary="Endpoints" width="100%" border="1"><colgroup><col width="20%" class="c1"><col width="20%" class="c2"><col width="60%" class="c3"></colgroup><thead><tr><th>Icon</th><th>Name</th><th>Use</th></tr></thead><tbody><tr><td>
+                <span class="inlinemediaobject"><img src="images/endpoint.png" width="50.4"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/endpoint.html" class="olink">Endpoint</a>
+              </td><td>Acts as either a message source or message sink</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/bean.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/beanEndpt.html" class="olink">Bean</a>
+              </td><td>Binds beans to Camel message exchanges</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/endpoint.png" width="50.4"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/logEIP.html" class="olink">Log</a>
+              </td><td>Creates log messages using the Simple language</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/bean.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/process.html" class="olink">Process</a>
+              </td><td>Process the message using a custom processor</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Routing"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e11807"></a>Routing</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEIPMsgRouteTbl" title="Table&nbsp;2.&nbsp;Message Routing">Table&nbsp;2</a> describe the routing patterns 
+        available from the route editor palette.</p><div class="table"><a name="RefEIPMsgRouteTbl"></a><p class="title"><b>Table&nbsp;2.&nbsp;Message Routing</b></p><div class="table-contents"><table summary="Message Routing" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Icon</th><th>Name</th><th>Use</th></tr></thead><tbody><tr><td>
+                <span class="inlinemediaobject"><img src="images/aggregate.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/aggregate.html" class="olink">Aggregate</a>
+              </td><td>Aggregates many messages into a single message</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/choice.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/choice.html" class="olink">Choice</a>
+              </td><td>Routes messages based on a series of predicates. (This is one of three
+              components that make up a content-based router.)</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/dynamicRouter.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/dynamicRouter.html" class="olink">Dynamic Router</a>
+              </td><td>Routes messages based on rules specified by the recipients at start up</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/filter.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/filter.html" class="olink">Filter</a>
+              </td><td>Filters messages before passing them to a resource</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/idempotentConsumer.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/idempotentConsumer.html" class="olink">Idempotent 
+                Consumer</a>
+              </td><td>Filters out duplicate messages</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/loadBalance.png" width="50.4"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/loadBalance.html" class="olink">Load Balance</a>
+              </td><td>Balances message processing among a number of nodes</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/multicast.png" width="51.6"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/multicast.html" class="olink">Multicast</a>
+              </td><td>Routes a message to a number of endpoints</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/otherwise.html" class="olink">Otherwise</a>
+              </td><td>Route to be executed when all other choices evaluate to false. (This is one of
+              three components that make up a content-based router.)</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/pipeline.png" width="55.9"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/pipeline.html" class="olink">Pipeline</a>
+              </td><td>Executes a sequence of processors in order</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/recipientList.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/recipientList.html" class="olink">Recipient List</a>
+              </td><td>Routes messages to a number of dynamically specified recipients</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/resequence.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/resequence.html" class="olink">Resequence</a>
+              </td><td>Resequences messages based on an expression</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/routingSlip.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/routingSlip.html" class="olink">Routing Slip</a>
+              </td><td>Routes a message through a series of steps that are determined at runtime</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/sort.html" class="olink">Sort</a></td><td>Sorts the contents of the message</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/split.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/split.html" class="olink">Split</a>
+              </td><td>Splits a message into pieces that can processed separately</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/when.html" class="olink">When</a>
+              </td><td>Triggers a route when an expression evaluates to true. (This is one of three
+              components that make up a content-based router.)</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/wireTap.png"></span>
+              </td><td>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/wiretap.html" class="olink">Wire Tap</a>
+              </td><td>Routes a copy of a message to a secondary destination while passing the 
+                original message to the actual recipient</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Control flow"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e12049"></a>Control flow</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefCtrlFlowTbl" title="Table&nbsp;3.&nbsp;Control flow">Table&nbsp;3</a> describes the control flow patterns 
+        available from the route editor palette.</p><div class="table"><a name="RefCtrlFlowTbl"></a><p class="title"><b>Table&nbsp;3.&nbsp;Control flow</b></p><div class="table-contents"><table summary="Control flow" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Icon</th><th>Name</th><th>Use</th></tr></thead><tbody><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/catch.html" class="olink">Catch</a></td><td>Catches exceptions as part of a <code class="methodname">try</code>, 
+                <code class="methodname">catch</code>, <code class="methodname">finally</code> block</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/delay.html" class="olink">Delay</a></td><td>Delays processing for a set length of time</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/finally.html" class="olink">Finally</a></td><td>Node traversed when a <code class="methodname">try</code>, 
+                <code class="methodname">catch</code>, <code class="methodname">finally</code> block 
+                exits</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/intercept.html" class="olink">Intercept</a></td><td>Intercepts messages at each step in the message flow</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/interceptFrom.html" class="olink">Intercept From</a></td><td>Intercepts incoming messages</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/interceptSendToEndpoint.html" class="olink">Intercept Send to Endpoint</a></td><td>Intercepts messages sent to a specified endpoint</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/loop.html" class="olink">Loop</a></td><td>Processes a message multiple times</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/onCompletion.html" class="olink">On Completion</a></td><td>Route to be executed when normal route processing completes</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/onException.html" class="olink">On Exception</a></td><td>Route to be executed when an exception is thrown</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/rollback.html" class="olink">Rollback</a></td><td>Forces a rollback of a transacted route by throwing 
+                <code class="exceptionname">RollbackExchangeException</code></td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/throttle.html" class="olink">Throttle</a></td><td>Controls the number of messages passed to the next node in a given time period</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/throwException.html" class="olink">Throw Exception</a></td><td>Throws an exception</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/transacted.html" class="olink">Transacted</a></td><td>Marks route as a transaction</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/try.html" class="olink">Try</a></td><td>Marks the beginning of a <code class="methodname">try</code>, 
+                <code class="methodname">catch</code>, <code class="methodname">finally</code> block</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Transformation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e12265"></a>Transformation</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefEIPMessTransTbl" title="Table&nbsp;4.&nbsp;Transformation">Table&nbsp;4</a> describes the transformation patterns 
+        available from the route editor palette.</p><div class="table"><a name="RefEIPMessTransTbl"></a><p class="title"><b>Table&nbsp;4.&nbsp;Transformation</b></p><div class="table-contents"><table summary="Transformation" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Icon</th><th>Name</th><th>Use Case</th></tr></thead><tbody><tr><td>
+                <span class="inlinemediaobject"><img src="images/convertBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/convertBody.html" class="olink">Convert 
+                Body</a></td><td>Converts the message body to a form usable by the next endpoint</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/enrich.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/enrich.html" class="olink">Enrich</a></td><td>Enriches a message with data retrieved by a producer from a secondary
+              resource</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/convertBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/inOnly.html" class="olink">InOnly</a></td><td>One way exchange pattern where no response is produced (Event Message pattern)</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/convertBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/inOut.html" class="olink">InOut</a></td><td>Exchange pattern where a response is produced</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/marshal.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/marshal.html" class="olink">Marshal</a></td><td>Marshals data into a format for transmission over a transport or component</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/enrich.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/pollEnrich.html" class="olink">Poll Enrich</a></td><td>Enriches messages with data retrieved from a polling consumer</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/convertBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/removeHeader.html" class="olink">Remove Header</a></td><td>Removes a named header from the message</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/convertBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/removeHeaders.html" class="olink">Remove 
+                Headers</a></td><td>Removes message headers whose name matches a specified pattern</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/convertBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/removeProperty.html" class="olink">Remove 
+                Property</a></td><td>Removes a named property from the message exchange</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/convertBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/setBody.html" class="olink">Set Body</a></td><td>Sets the contents of the message body</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/setBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/setExchangePattern.html" class="olink">Set 
+                Exchange Pattern</a></td><td>Sets the exchange pattern for the route</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/setBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/setHeader.html" class="olink">Set Header</a></td><td>Sets the value of a message header</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/setBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/setOutHeader.html" class="olink">Set Out 
+              Header</a></td><td>Sets the value of a header on the outbound message</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/setBody.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/setProperty.html" class="olink">Set 
+              Property</a></td><td>Sets a named property on the message exchange</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/transform.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/transform.html" class="olink">Transform</a></td><td>Transforms the message based on an expression</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/unmarshal.png"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/unmarshal.html" class="olink">Unmarshal</a></td><td>Converts the message data from the wire into a bean that Apache Camel processors can consume</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Miscellaneous"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e12476"></a>Miscellaneous</h2></div></div></div><p><a class="xref" href="RefIntroToEIP.html#RefMiscTbl" title="Table&nbsp;5.&nbsp;Miscellaneous">Table&nbsp;5</a> describes the patterns on the 
+        <span class="guilabel">Miscellaneous</span> section of the palette.</p><div class="table"><a name="RefMiscTbl"></a><p class="title"><b>Table&nbsp;5.&nbsp;Miscellaneous</b></p><div class="table-contents"><table summary="Miscellaneous" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Icon</th><th>Name</th><th>Use</th></tr></thead><tbody><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/aop.html" class="olink">AOP</a></td><td>Does processing before and after the route is completed. (This pattern is
+              deprecated in Apache Camel.)</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/policy.html" class="olink">Policy</a></td><td>Defines a policy the route will use</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/sampling.html" class="olink">Sampling</a></td><td>Extract a sample of the exchanges passing through a route</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/stop.html" class="olink">Stop</a></td><td>Stops processing of the current message</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/threads.html" class="olink">Threads</a></td><td>Specifies that all steps after this node are processed asynchronously</td></tr><tr><td>
+                <span class="inlinemediaobject"><img src="images/generic.png" width="35.1"></span>
+              </td><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/validate.html" class="olink">Validate</a></td><td>Validates a message based on an expression</td></tr></tbody></table></div></div><br class="table-break"></div></div></body></html>

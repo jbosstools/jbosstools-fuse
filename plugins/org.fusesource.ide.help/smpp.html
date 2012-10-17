@@ -1,0 +1,281 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>SMPP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderMsgEptRef.html" title="Messaging Endpoints"><link rel="prev" href="sip.html" title="SIP"><link rel="next" href="xmpp.html" title="XMPP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="SMPP"><a name="smpp"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>SMPP &#8212; provides access to an SMSC (Short Message Service Center) over the SMPP 
+      protocol</p></div><div class="refsection" title="Overview"><a name="d0e30206"></a><h2>Overview</h2><p>This component provides access to an SMSC (Short Message Service Center) over the <a class="link" href="http://smsforum.net/SMPP_v3_4_Issue1_2.zip" target="_top">SMPP</a> protocol to send and
+      receive SMS. The <a class="link" href="http://code.google.com/p/jsmpp/" target="_top">JSMPP</a> library is used to 
+      implement the connections.</p></div><div class="refsection" title="URI format"><a name="d0e30217"></a><h2>URI format</h2><p>The URI scheme for an SMPP endpoint is as follows:</p><pre class="programlisting">smpp://[<em class="replaceable"><code>username</code></em>@]<em class="replaceable"><code>hostname</code></em>[:<em class="replaceable"><code>port</code></em>][?<em class="replaceable"><code>options</code></em>]
+smpps://[<em class="replaceable"><code>username</code></em>@]<em class="replaceable"><code>hostname</code></em>[:<em class="replaceable"><code>port</code></em>][?<em class="replaceable"><code>options</code></em>]</pre><p>If no <code class="code">username</code> is provided, Apache Camel will provide the default value 
+      <code class="literal">smppclient</code>.</p><p>If no <code class="code">port</code> number is provided, Apache Camel will 
+      provide the default value <code class="literal">2775</code>.</p><p>If the protocol name is <code class="code">smpps</code>, Apache Camel will try to use SSLSocket to 
+      initialize a connection to the server.</p></div><div class="refsection" title="Options"><a name="d0e30269"></a><h2>Options</h2><p><a class="xref" href="smpp.html#SMPPOptsTbl" title="Table&nbsp;40.&nbsp;SMPP Options">Table&nbsp;40, &#8220;SMPP Options&#8221;</a> lists the options for a SMPP endpoint.</p><div class="table"><a name="SMPPOptsTbl"></a><p class="title"><b>Table&nbsp;40.&nbsp;SMPP Options</b></p><div class="table-contents"><table summary="SMPP Options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default Value</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">password</code>
+        </td><td><code class="literal">password</code>
+        </td><td> Specifies the password to use to log in to the SMSC. </td></tr><tr><td><code class="literal">systemType</code>
+        </td><td><code class="literal">cp</code>
+        </td><td> This parameter is used to categorize the type of ESME (External Short Message Entity)
+          that is binding to the SMSC (max. 13 characters). </td></tr><tr><td><code class="literal">dataCoding</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p>Defines encoding of data according the SMPP 3.4 specification, section 5.2.19. Example data encodings are:
+            <code class="literal">0</code>: SMSC Default Alphabet
+            <code class="literal">4</code>: 8 bit Alphabet
+            <code class="literal">8</code>: UCS2 Alphabet</p>
+        </td></tr><tr><td><code class="literal">encoding</code>
+        </td><td><code class="literal">ISO-8859-1</code>
+        </td><td> Defines the encoding scheme of the short message user data. </td></tr><tr><td><code class="literal">enquireLinkTimer</code>
+        </td><td><code class="literal">5000</code>
+        </td><td> Defines the interval in milliseconds between the confidence checks. The confidence
+          check is used to test the communication path between an ESME and an SMSC. </td></tr><tr><td><code class="literal">transactionTimer</code>
+        </td><td><code class="literal">10000</code>
+        </td><td> Defines the maximum period of inactivity allowed after a transaction, after which an
+          SMPP entity may assume that the session is no longer active. This timer may be active on
+          either communicating SMPP entity (i.e. SMSC or ESME). </td></tr><tr><td><code class="literal">initialReconnectDelay</code>
+        </td><td><code class="literal">5000</code>
+        </td><td> Defines the initial delay in milliseconds after the consumer/producer tries to
+          reconnect to the SMSC, after the connection was lost. </td></tr><tr><td><code class="literal">reconnectDelay</code>
+        </td><td><code class="literal">5000</code>
+        </td><td> Defines the interval in milliseconds between the reconnect attempts, if the connection
+          to the SMSC was lost and the previous was not succeed. </td></tr><tr><td><code class="literal">registeredDelivery</code>
+        </td><td><code class="literal">1</code>
+        </td><td>
+          <p> Is used to request an SMSC delivery receipt and/or SME originated acknowledgements.
+            The following values are defined: <code class="literal">0</code>: No SMSC delivery receipt
+            requested. <code class="literal">1</code>: SMSC delivery receipt requested where final delivery
+            outcome is success or failure. <code class="literal">2</code>: SMSC delivery receipt requested
+            where the final delivery outcome is delivery failure. </p>
+        </td></tr><tr><td><code class="literal">serviceType</code>
+        </td><td><code class="literal">CMT</code>
+        </td><td>
+          <p> The service type parameter can be used to indicate the SMS Application service
+            associated with the message. The following generic service_types are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">CMT</code>: Cellular Messaging</p></li><li class="listitem"><p><code class="literal">CPT</code>: Cellular Paging</p></li><li class="listitem"><p><code class="literal">VMN</code>: Voice Mail Notification</p></li><li class="listitem"><p><code class="literal">VMA</code>: Voice Mail Alerting</p></li><li class="listitem"><p><code class="literal">WAP</code>: Wireless Application Protocol</p></li><li class="listitem"><p><code class="literal">USSD</code>: Unstructured Supplementary Services Data</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">sourceAddr</code>
+        </td><td><code class="literal">1616</code>
+        </td><td> Defines the address of SME (Short Message Entity) which originated this message. </td></tr><tr><td><code class="literal">destAddr</code>
+        </td><td><code class="literal">1717</code>
+        </td><td> Defines the destination SME address. For mobile terminated messages, this is the
+          directory number of the recipient MS. </td></tr><tr><td><code class="literal">sourceAddrTon</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p> Defines the type of number (TON) to be used in the SME originator address
+            parameters. The following TON values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: International</p></li><li class="listitem"><p><code class="literal">2</code>: National</p></li><li class="listitem"><p><code class="literal">3</code>: Network Specific</p></li><li class="listitem"><p><code class="literal">4</code>: Subscriber Number</p></li><li class="listitem"><p><code class="literal">5</code>: Alphanumeric</p></li><li class="listitem"><p><code class="literal">6</code>: Abbreviated</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">destAddrTon</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p> Defines the type of number (TON) to be used in the SME destination address
+            parameters. The following TON values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: International</p></li><li class="listitem"><p><code class="literal">2</code>: National</p></li><li class="listitem"><p><code class="literal">3</code>: Network Specific</p></li><li class="listitem"><p><code class="literal">4</code>: Subscriber Number</p></li><li class="listitem"><p><code class="literal">5</code>: Alphanumeric</p></li><li class="listitem"><p><code class="literal">6</code>: Abbreviated</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">sourceAddrNpi</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p> Defines the numeric plan indicator (NPI) to be used in the SME originator address
+            parameters. The following NPI values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: ISDN (E163/E164)</p></li><li class="listitem"><p><code class="literal">2</code>: Data (X.121)</p></li><li class="listitem"><p><code class="literal">3</code>: Telex (F.69)</p></li><li class="listitem"><p><code class="literal">6</code>: Land Mobile (E.212)</p></li><li class="listitem"><p><code class="literal">8</code>: National</p></li><li class="listitem"><p><code class="literal">9</code>: Private</p></li><li class="listitem"><p><code class="literal">10</code>: ERMES</p></li><li class="listitem"><p><code class="literal">13</code>: Internet (IP)</p></li><li class="listitem"><p><code class="literal">18</code>: WAP Client Id (to be defined by WAP Forum)</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">destAddrNpi</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p> Defines the numeric plan indicator (NPI) to be used in the SME destination address
+            parameters. The following NPI values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: ISDN (E163/E164)</p></li><li class="listitem"><p><code class="literal">2</code>: Data (X.121)</p></li><li class="listitem"><p><code class="literal">3</code>: Telex (F.69)</p></li><li class="listitem"><p><code class="literal">6</code>: Land Mobile (E.212)</p></li><li class="listitem"><p><code class="literal">8</code>: National</p></li><li class="listitem"><p><code class="literal">9</code>: Private</p></li><li class="listitem"><p><code class="literal">10</code>: ERMES</p></li><li class="listitem"><p><code class="literal">13</code>: Internet (IP)</p></li><li class="listitem"><p><code class="literal">18</code>: WAP Client Id (to be defined by WAP Forum)</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">priorityFlag</code>
+        </td><td><code class="literal">1</code>
+        </td><td>
+          <p> Allows the originating SME to assign a priority level to the short message. Four
+            Priority Levels are supported:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Level 0 (lowest) priority</p></li><li class="listitem"><p><code class="literal">1</code>: Level 1 priority</p></li><li class="listitem"><p><code class="literal">2</code>: Level 2 priority</p></li><li class="listitem"><p><code class="literal">3</code>: Level 3 (highest) priority</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">replaceIfPresentFlag</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p> Used to request the SMSC to replace a previously submitted message, that is still
+            pending delivery. The SMSC will replace an existing message provided that the source
+            address, destination address and service type match the same fields in the new message.
+            The following replace if present flag values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Don't replace</p></li><li class="listitem"><p><code class="literal">1</code>: Replace</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">dataCoding</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p>Defines encoding of data according the SMPP 3.4 specification, section 5.2.19. Example data encodings are:
+            <code class="literal">0</code>: SMSC Default Alphabet
+            <code class="literal">4</code>: 8 bit Alphabet
+            <code class="literal">8</code>: UCS2 Alphabet</p>
+        </td></tr><tr><td><code class="literal">typeOfNumber</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p> Defines the type of number (TON) to be used in the SME. The following TON values
+            are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: International</p></li><li class="listitem"><p><code class="literal">2</code>: National</p></li><li class="listitem"><p><code class="literal">3</code>: Network Specific</p></li><li class="listitem"><p><code class="literal">4</code>: Subscriber Number</p></li><li class="listitem"><p><code class="literal">5</code>: Alphanumeric</p></li><li class="listitem"><p><code class="literal">6</code>: Abbreviated </p></li></ul></div>
+        </td></tr><tr><td><code class="literal">numberingPlanIndicator</code>
+        </td><td><code class="literal">0</code>
+        </td><td>
+          <p> Defines the numeric plan indicator (NPI) to be used in the SME. The following NPI
+            values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: ISDN (E163/E164)</p></li><li class="listitem"><p><code class="literal">2</code>: Data (X.121)</p></li><li class="listitem"><p><code class="literal">3</code>: Telex (F.69)</p></li><li class="listitem"><p><code class="literal">6</code>: Land Mobile (E.212)</p></li><li class="listitem"><p><code class="literal">8</code>: National</p></li><li class="listitem"><p><code class="literal">9</code>: Private</p></li><li class="listitem"><p><code class="literal">10</code>: ERMES</p></li><li class="listitem"><p><code class="literal">13</code>: Internet (IP)</p></li><li class="listitem"><p><code class="literal">18</code>: WAP Client Id (to be defined by WAP Forum)</p></li></ul></div>
+        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Message headers"><a name="d0e30915"></a><h2>Message headers</h2><p><a class="xref" href="smpp.html#SMPPHeaderTbl1" title="Table&nbsp;41.&nbsp;SMPP producer headers">Table&nbsp;41, &#8220;SMPP producer headers&#8221;</a> describes the message headers that affect the behavior 
+    of the SMPP producer.</p><div class="table"><a name="SMPPHeaderTbl1"></a><p class="title"><b>Table&nbsp;41.&nbsp;SMPP producer headers</b></p><div class="table-contents"><table summary="SMPP producer headers" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td><code class="literal">CamelSmppDestAddr</code>
+        </td><td> Defines the destination SME address. For mobile terminated messages, this is the
+          directory number of the recipient MS. </td></tr><tr><td><code class="literal">CamelSmppDestAddrTon</code>
+        </td><td>
+          <p> Defines the type of number (TON) to be used in the SME destination address
+            parameters. The following TON values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: International</p></li><li class="listitem"><p><code class="literal">2</code>: National</p></li><li class="listitem"><p><code class="literal">3</code>: Network Specific</p></li><li class="listitem"><p><code class="literal">4</code>: Subscriber Number</p></li><li class="listitem"><p><code class="literal">5</code>: Alphanumeric</p></li><li class="listitem"><p><code class="literal">6</code>: Abbreviated </p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppDestAddrNpi</code>
+        </td><td>
+          <p> Defines the numeric plan indicator (NPI) to be used in the SME destination address
+            parameters. The following NPI values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: ISDN (E163/E164)</p></li><li class="listitem"><p><code class="literal">2</code>: Data (X.121)</p></li><li class="listitem"><p><code class="literal">3</code>: Telex (F.69)</p></li><li class="listitem"><p><code class="literal">6</code>: Land Mobile (E.212)</p></li><li class="listitem"><p><code class="literal">8</code>: National</p></li><li class="listitem"><p><code class="literal">9</code>: Private</p></li><li class="listitem"><p><code class="literal">10</code>: ERMES</p></li><li class="listitem"><p><code class="literal">13</code>: Internet (IP)</p></li><li class="listitem"><p><code class="literal">18</code>: WAP Client Id (to be defined by WAP Forum)</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppSourceAddr</code>
+        </td><td> Defines the address of SME (Short Message Entity) which originated this message. </td></tr><tr><td><code class="literal">CamelSmppSourceAddrTon</code>
+        </td><td>
+          <p> Defines the type of number (TON) to be used in the SME originator address
+            parameters. The following TON values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: International</p></li><li class="listitem"><p><code class="literal">2</code>: National</p></li><li class="listitem"><p><code class="literal">3</code>: Network Specific</p></li><li class="listitem"><p><code class="literal">4</code>: Subscriber Number</p></li><li class="listitem"><p><code class="literal">5</code>: Alphanumeric</p></li><li class="listitem"><p><code class="literal">6</code>: Abbreviated </p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppSourceAddrNpi</code>
+        </td><td>
+          <p> Defines the numeric plan indicator (NPI) to be used in the SME originator address
+            parameters. The following NPI values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: ISDN (E163/E164)</p></li><li class="listitem"><p><code class="literal">2</code>: Data (X.121)</p></li><li class="listitem"><p><code class="literal">3</code>: Telex (F.69)</p></li><li class="listitem"><p><code class="literal">6</code>: Land Mobile (E.212)</p></li><li class="listitem"><p><code class="literal">8</code>: National</p></li><li class="listitem"><p><code class="literal">9</code>: Private</p></li><li class="listitem"><p><code class="literal">10</code>: ERMES</p></li><li class="listitem"><p><code class="literal">13</code>: Internet (IP)</p></li><li class="listitem"><p><code class="literal">18</code>: WAP Client Id (to be defined by WAP Forum)</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppServiceType</code>
+        </td><td>
+          <p> The service type parameter can be used to indicate the SMS Application service
+            associated with the message. The following generic service_types are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">CMT</code>: Cellular Messaging</p></li><li class="listitem"><p><code class="literal">CPT</code>: Cellular Paging</p></li><li class="listitem"><p><code class="literal">VMN</code>: Voice Mail Notification</p></li><li class="listitem"><p><code class="literal">VMA</code>: Voice Mail Alerting</p></li><li class="listitem"><p><code class="literal">WAP</code>: Wireless Application Protocol</p></li><li class="listitem"><p><code class="literal">USSD</code>: Unstructured Supplementary Services Data</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppRegisteredDelivery</code>
+        </td><td>
+          <p> Is used to request an SMSC delivery receipt and/or SME originated acknowledgements.
+            The following values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: No SMSC delivery receipt requested.</p></li><li class="listitem"><p><code class="literal">1</code>: SMSC delivery receipt requested where final delivery
+                outcome is success or failure.</p></li><li class="listitem"><p><code class="literal">2</code>: SMSC delivery receipt requested where the final delivery
+                outcome is delivery failure.</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppPriorityFlag</code>
+        </td><td>
+          <p> Allows the originating SME to assign a priority level to the short message. Four
+            Priority Levels are supported:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Level 0 (lowest) priority</p></li><li class="listitem"><p><code class="literal">1</code>: Level 1 priority</p></li><li class="listitem"><p><code class="literal">2</code>: Level 2 priority</p></li><li class="listitem"><p><code class="literal">3</code>: Level 3 (highest) priority</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppScheduleDeliveryTime</code>
+        </td><td> This parameter specifies the scheduled time at which the message delivery should be
+          first attempted. It defines either the absolute date and time or relative time from the
+          current SMSC time at which delivery of this message will be attempted by the SMSC. It can
+          be specified in either absolute time format or relative time format. The encoding of a
+          time format is specified in chapter 7.1.1. in the smpp specification v3.4. </td></tr><tr><td><code class="literal">CamelSmppValidityPeriod</code>
+        </td><td> The validity period parameter indicates the SMSC expiration time, after which the
+          message should be discarded if not delivered to the destination. It can be defined in
+          absolute time format or relative time format. The encoding of absolute and relative time
+          format is specified in chapter 7.1.1 in the smpp specification v3.4. </td></tr><tr><td><code class="literal">CamelSmppReplaceIfPresentFlag</code>
+        </td><td>
+          <p> The replace if present flag parameter is used to request the SMSC to replace a
+            previously submitted message, that is still pending delivery. The SMSC will replace an
+            existing message provided that the source address, destination address and service type
+            match the same fields in the new message. The following values are defined: </p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Don't replace</p></li><li class="listitem"><p><code class="literal">1</code>: Replace</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppDataCoding</code>
+        </td><td>
+          <p> The data coding according to the SMPP 3.4 specification, section 5.2.19: 
+            <code class="literal">0</code>: SMSC Default Alphabet
+            <code class="literal">4</code>: 8 bit Alphabet
+            <code class="literal">8</code>: UCS2 Alphabet</p>
+        </td></tr></tbody></table></div></div><br class="table-break"><p>The following message headers are used by the SMPP producer to set the response from the
+      SMSC in the message header</p><div class="table"><a name="d0e31322"></a><p class="title"><b>Table&nbsp;42.&nbsp;SMPP headers for the SMSC</b></p><div class="table-contents"><table summary="SMPP headers for the SMSC" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Header </th><th> Description </th></tr></thead><tbody><tr><td><code class="literal">CamelSmppId</code>
+        </td><td> the id to identify the submitted short message for later use (delivery receipt, query
+          sm, cancel sm, replace sm). </td></tr></tbody></table></div></div><br class="table-break"><p>The following message headers are used by the SMPP consumer to set the request data from
+      the SMSC in the message header.</p><div class="table"><a name="d0e31342"></a><p class="title"><b>Table&nbsp;43.&nbsp;SMMP consumer headers</b></p><div class="table-contents"><table summary="SMMP consumer headers" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td><code class="literal">CamelSmppSequenceNumber</code>
+        </td><td><span class="bold"><strong>only for alert notification, deliver sm and data sm</strong></span>: A
+          sequence number allows a response PDU to be correlated with a request PDU. The associated
+          SMPP response PDU must preserve this field. </td></tr><tr><td><code class="literal">CamelSmppCommandId</code>
+        </td><td><span class="bold"><strong>only for alert notification, deliver sm and data sm</strong></span>:
+          The command id field identifies the particular SMPP PDU. For the complete list of defined
+          values see chapter 5.1.2.1 in the smpp specification v3.4. </td></tr><tr><td><code class="literal">CamelSmppSourceAddr</code>
+        </td><td><span class="bold"><strong>only for alert notification, deliver sm and data sm</strong></span>:
+          Defines the address of SME (Short Message Entity) which originated this message. </td></tr><tr><td><code class="literal">CamelSmppSourceAddrNpi</code>
+        </td><td>
+          <p><span class="bold"><strong>only for alert notification and data sm</strong></span>: Defines
+            the numeric plan indicator (NPI) to be used in the SME originator address parameters.
+            The following NPI values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: ISDN (E163/E164)</p></li><li class="listitem"><p><code class="literal">2</code>: Data (X.121)</p></li><li class="listitem"><p><code class="literal">3</code>: Telex (F.69)</p></li><li class="listitem"><p><code class="literal">6</code>: Land Mobile (E.212)</p></li><li class="listitem"><p><code class="literal">8</code>: National</p></li><li class="listitem"><p><code class="literal">9</code>: Private</p></li><li class="listitem"><p><code class="literal">10</code>: ERMES</p></li><li class="listitem"><p><code class="literal">13</code>: Internet (IP)</p></li><li class="listitem"><p><code class="literal">18</code>: WAP Client Id (to be defined by WAP Forum)</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppSourceAddrTon</code>
+        </td><td>
+          <p><span class="bold"><strong>only for alert notification and data sm</strong></span>: Defines
+            the type of number (TON) to be used in the SME originator address parameters. The
+            following TON values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: International</p></li><li class="listitem"><p><code class="literal">2</code>: National</p></li><li class="listitem"><p><code class="literal">3</code>: Network Specific</p></li><li class="listitem"><p><code class="literal">4</code>: Subscriber Number</p></li><li class="listitem"><p><code class="literal">5</code>: Alphanumeric</p></li><li class="listitem"><p><code class="literal">6</code>: Abbreviated </p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppEsmeAddr</code>
+        </td><td><span class="bold"><strong>only for alert notification</strong></span>: Defines the destination
+          ESME address. For mobile terminated messages, this is the directory number of the
+          recipient MS. </td></tr><tr><td><code class="literal">CamelSmppEsmeAddrNpi</code>
+        </td><td>
+          <p><span class="bold"><strong>only for alert notification</strong></span>: Defines the numeric
+            plan indicator (NPI) to be used in the ESME originator address parameters. The following
+            NPI values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: ISDN (E163/E164)</p></li><li class="listitem"><p><code class="literal">2</code>: Data (X.121)</p></li><li class="listitem"><p><code class="literal">3</code>: Telex (F.69)</p></li><li class="listitem"><p><code class="literal">6</code>: Land Mobile (E.212)</p></li><li class="listitem"><p><code class="literal">8</code>: National</p></li><li class="listitem"><p><code class="literal">9</code>: Private</p></li><li class="listitem"><p><code class="literal">10</code>: ERMES</p></li><li class="listitem"><p><code class="literal">13</code>: Internet (IP)</p></li><li class="listitem"><p><code class="literal">18</code>: WAP Client Id (to be defined by WAP Forum)</p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppEsmeAddrTon</code>
+        </td><td>
+          <p><span class="bold"><strong>only for alert notification</strong></span>: Defines the type of
+            number (TON) to be used in the ESME originator address parameters. The following TON
+            values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">0</code>: Unknown</p></li><li class="listitem"><p><code class="literal">1</code>: International</p></li><li class="listitem"><p><code class="literal">2</code>: National</p></li><li class="listitem"><p><code class="literal">3</code>: Network Specific</p></li><li class="listitem"><p><code class="literal">4</code>: Subscriber Number</p></li><li class="listitem"><p><code class="literal">5</code>: Alphanumeric</p></li><li class="listitem"><p><code class="literal">6</code>: Abbreviated </p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppId</code>
+        </td><td><span class="bold"><strong>only for smsc delivery receipt and data sm</strong></span>: The message
+          ID allocated to the message by the SMSC when originally submitted. </td></tr><tr><td><code class="literal">CamelSmppDelivered</code>
+        </td><td><span class="bold"><strong>only for smsc delivery receipt</strong></span>: Number of short
+          messages delivered. This is only relevant where the original message was submitted to a
+          distribution list.The value is padded with leading zeros if necessary. </td></tr><tr><td><code class="literal">CamelSmppDoneDate</code>
+        </td><td><span class="bold"><strong>only for smsc delivery receipt</strong></span>: The time and date at
+          which the short message reached it's final state. The format is as follows: YYMMDDhhmm.
+        </td></tr><tr><td><code class="literal">CamelSmppStatus</code>
+        </td><td>
+          <p><span class="bold"><strong>only for smsc delivery receipt and data sm</strong></span>: The
+            final status of the message. The following values are defined:</p>
+          <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">DELIVRD</code>: Message is delivered to destination</p></li><li class="listitem"><p><code class="literal">EXPIRED</code>: Message validity period has expired.</p></li><li class="listitem"><p><code class="literal">DELETED</code>: Message has been deleted.</p></li><li class="listitem"><p><code class="literal">UNDELIV</code>: Message is undeliverable</p></li><li class="listitem"><p><code class="literal">ACCEPTD</code>: Message is in accepted state (i.e. has been manually
+                read on behalf of the subscriber by customer service)</p></li><li class="listitem"><p><code class="literal">UNKNOWN</code>: Message is in invalid state</p></li><li class="listitem"><p><code class="literal">REJECTD</code>: Message is in a rejected state </p></li></ul></div>
+        </td></tr><tr><td><code class="literal">CamelSmppError</code>
+        </td><td><span class="bold"><strong>only for smsc delivery receipt</strong></span>: Where appropriate this
+          may hold a Network specific error code or an SMSC error code for the attempted delivery of
+          the message. These errors are Network or SMSC specific and are not included here. </td></tr><tr><td><code class="literal">CamelSmppSubmitDate</code>
+        </td><td><span class="bold"><strong>only for smsc delivery receipt</strong></span>: The time and date at
+          which the short message was submitted. In the case of a message which has been replaced,
+          this is the date that the original message was replaced. The format is as follows:
+          YYMMDDhhmm. </td></tr><tr><td><code class="literal">CamelSmppSubmitted</code>
+        </td><td><span class="bold"><strong>only for smsc delivery receipt</strong></span>: Number of short
+          messages originally submitted. This is only relevant when the original message was
+          submitted to a distribution list.The value is padded with leading zeros if necessary.
+        </td></tr><tr><td><code class="literal">CamelSmppDestAddr</code>
+        </td><td><span class="bold"><strong>only for deliver sm and data sm</strong></span>: Defines the
+          destination SME address. For mobile terminated messages, this is the directory number of
+          the recipient MS. </td></tr><tr><td><code class="literal">CamelSmppScheduleDeliveryTime</code>
+        </td><td><span class="bold"><strong>only for deliver sm and data sm</strong></span>: This parameter
+          specifies the scheduled time at which the message delivery should be first attempted. It
+          defines either the absolute date and time or relative time from the current SMSC time at
+          which delivery of this message will be attempted by the SMSC. It can be specified in
+          either absolute time format or relative time format. The encoding of a time format is
+          specified in Section 7.1.1. in the smpp specification v3.4. </td></tr><tr><td><code class="literal">CamelSmppValidityPeriod</code>
+        </td><td><span class="bold"><strong>only for deliver sm</strong></span>: The validity period parameter
+          indicates the SMSC expiration time, after which the message should be discarded if not
+          delivered to the destination. It can be defined in absolute time format or relative time
+          format. The encoding of absolute and relative time format is specified in Section 7.1.1 in
+          the smpp specification v3.4. </td></tr><tr><td><code class="literal">CamelSmppServiceType</code>
+        </td><td><span class="bold"><strong>only for deliver sm and data sm</strong></span>: The service type
+          parameter indicates the SMS Application service associated with the message. </td></tr><tr><td><code class="literal">CamelSmppRegisteredDelivery</code>
+        </td><td>
+          <p><span class="bold"><strong>only for data sm</strong></span>: Is used to request an delivery
+            receipt and/or SME originated acknowledgements. The following values are defined:
+              <code class="literal">0</code>: No SMSC delivery receipt requested. <code class="literal">1</code>: SMSC
+            delivery receipt requested where final delivery outcome is success or failure.
+              <code class="literal">2</code>: SMSC delivery receipt requested where the final delivery outcome
+            is delivery failure. </p>
+        </td></tr><tr><td><code class="literal">CamelSmppDestAddrNpi</code>
+        </td><td>
+          <p><span class="bold"><strong>only for data sm</strong></span>: Defines the numeric plan
+            indicator (NPI) in the destination address parameters. The following NPI values are
+            defined: <code class="literal">0</code>: Unknown <code class="literal">1</code>: ISDN (E163/E164)
+              <code class="literal">2</code>: Data (X.121) <code class="literal">3</code>: Telex (F.69)
+              <code class="literal">6</code>: Land Mobile (E.212) <code class="literal">8</code>: National
+              <code class="literal">9</code>: Private <code class="literal">10</code>: ERMES <code class="literal">13</code>:
+            Internet (IP) <code class="literal">18</code>: WAP Client Id (to be defined by WAP Forum) </p>
+        </td></tr><tr><td><code class="literal">CamelSmppDestAddrTon</code>
+        </td><td>
+          <p><span class="bold"><strong>only for data sm</strong></span>: Defines the type of number (TON)
+            in the destination address parameters. The following TON values are defined:
+              <code class="literal">0</code>: Unknown <code class="literal">1</code>: International
+            <code class="literal">2</code>: National <code class="literal">3</code>: Network Specific
+              <code class="literal">4</code>: Subscriber Number <code class="literal">5</code>: Alphanumeric
+              <code class="literal">6</code>: Abbreviated </p>
+        </td></tr></tbody></table></div></div><br class="table-break"></div></div></body></html>

@@ -1,0 +1,15 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>JMS browsing</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="IDEIntroDebug.html" title="Debugging tools"><link rel="prev" href="IDEIntroDebugTrace.html" title="Route debugging"><link rel="next" href="RiderFusePerspective.html" title="Opening the Fuse Integration Perspective"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section" title="JMS browsing"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDEIntroDebugBrowse"></a>JMS browsing</h2></div></div></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h3 class="title"><a name="d0e3780"></a>Overview</h3></div></div></div><p>A browser that inspects the messages on a JMS destination without consuming them is key
+        to troubleshooting a distributed message system. Inspecting the messages can help you
+        understand why messages are backing up or why they are being discarded too soon.</p><p>In addition to inspecting JMS destinations, Fuse IDE allows you to add messages to them.
+        This feature enables you to add controlled test cases into the system for detailed
+        analysis.</p></div><div class="simplesect" title="Viewing messages"><div class="titlepage"><div><div><h3 class="title"><a name="d0e3787"></a>Viewing messages</h3></div></div></div><p><span class="guilabel">JMX Explorer</span> shows all of the JMS destinations deployed in your
+        infrastructure. When you select a destination from the tree, a list of the messages sitting
+        in it are listed in <span class="guilabel">Messages View</span>. <span class="guilabel">Messages View</span>
+        displays the basic properties of the message.</p><p>Selecting one of the messages in <span class="guilabel">Messages View</span> displays all of that
+        message's details, including the full message body, in the <span class="guilabel">Properties</span>
+        viewer.</p></div><div class="simplesect" title="Adding messages"><div class="titlepage"><div><div><h3 class="title"><a name="d0e3808"></a>Adding messages</h3></div></div></div><p>You can simply drag messages from <span class="guilabel">Project Explorer</span>,
+          <span class="guilabel">Navigator</span>, <span class="guilabel">Package Explorer</span>, or
+          <span class="guilabel">Messages View</span> and drop them on any JMS destination displayed in
+          <span class="guilabel">JMX Explorer</span>.</p></div></div></body></html>

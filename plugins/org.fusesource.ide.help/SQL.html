@@ -1,0 +1,232 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>SQL Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="springWS.html" title="Spring Web Services"><link rel="next" href="stream.html" title="Stream"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="SQL Component"><div class="titlepage"><div><div><h2 class="title"><a name="sql"></a>SQL Component</h2></div></div></div><div class="simplesect" title="SQL Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_SQLComponent"></a>SQL Component</h2></div></div></div><p>The <span class="bold"><strong>sql:</strong></span> component allows you to work with databases
+      using JDBC queries. The difference between this component and <a href="PLUGINS_ROOT/org.fusesource.ide.help/jdbc.html" class="olink">JDBC</a> component is that in case of SQL the query is a property of the endpoint and
+      it uses message payload as parameters passed to the query.</p><p>This component uses <code class="literal">spring-jdbc</code> behind the scenes for the actual SQL
+      handling.</p><p>The SQL component also supports:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>a JDBC based repository for the Idempotent Consumer EIP pattern. See further below.</p></li><li class="listitem"><p>a JDBC based repository for the Aggregator EIP pattern. See further below.</p></li></ul></div></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_URIformat"></a>URI format</h2></div></div></div><div class="warning" title="Warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.gif"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>The SQL component can only be used to define producer endpoints. In other words, you
+        cannot define an SQL endpoint in a <code class="literal">from()</code> statement.</p></td></tr></table></div><p>The SQL component uses the following endpoint URI notation:</p><pre class="programlisting">sql:select * from table where id=# order by name[?options]</pre><p>Notice that the standard <code class="literal">?</code> symbol that denotes the parameters to an SQL
+      query is substituted with the <code class="literal">#</code> symbol, because the <code class="literal">?</code>
+      symbol is used to specify options for the endpoint. The <code class="literal">?</code> symbol replacement can be configured on endpoint basis.</p><p>You can append query options to the URI in the following format,
+        <code class="literal">?option=value&amp;option=value&amp;...</code>
+    </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Options"></a>Options</h2></div></div></div><table id="d0e46706"><tr>
+        <th> Option </th>
+        <th> Type </th>
+        <th> Default </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">dataSourceRef</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td><code class="literal">null</code>
+        </td>
+        <td><span class="bold"><strong>Apache Camel 1.5.1/2.0:</strong></span> Reference to a
+            <code class="literal">DataSource</code> to look up in the registry. </td>
+      </tr><tr>
+        <td><code class="literal">placeholder</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td><code class="literal">#</code>
+        </td>
+        <td><span class="bold"><strong>Camel 2.4:</strong></span> Specifies a character that will be replaced to <code class="literal">?</code> in SQL query. Notice, that it is simple <code class="literal">String.replaceAll()</code> operation and no SQL parsing is involved (quoted strings will also change) </td>
+      </tr><tr>
+        <td><code class="literal">template.&lt;xxx&gt;</code>
+        </td>
+        <td></td>
+        <td><code class="literal">null</code>
+        </td>
+        <td> Sets additional options on the Spring <code class="literal">JdbcTemplate</code> that is used
+          behind the scenes to execute the queries. For instance,
+            <code class="literal">template.maxRows=10</code>. For detailed documentation, see the <a class="link" href="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/jdbc/core/JdbcTemplate.html" target="_top">JdbcTemplate javadoc</a> documentation. </td>
+      </tr></table></div><div class="simplesect" title="Treatment of the message body"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Treatmentofthemessagebody"></a>Treatment of the message body</h2></div></div></div><p>The SQL component tries to convert the message body to an object of
+        <code class="literal">java.util.Iterator</code> type and then uses this iterator to fill the query
+      parameters (where each query parameter is represented by a <code class="literal">#</code> symbol, or other configured placeholder, in the
+      endpoint URI). If the message body is not an array or collection, the conversion results in an
+      iterator that iterates over only one object, which is the body itself.</p><p>For example, if the message body is an instance of <code class="literal">java.util.List</code>, the
+      first item in the list is substituted into the first occurrence of <code class="literal">#</code> in the
+      SQL query, the second item in the list is substituted into the second occurrence of
+        <code class="literal">#</code>, and so on.</p></div><div class="simplesect" title="Result of the query"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Resultofthequery"></a>Result of the query</h2></div></div></div><p>For <code class="literal">select</code> operations, the result is an instance of
+        <code class="literal">List&lt;Map&lt;String, Object&gt;&gt;</code> type, as returned by the <a class="link" href="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/jdbc/core/JdbcTemplate.html#queryForList(java.lang.String,%20java.lang.Object%91%93)" target="_top">JdbcTemplate.queryForList()</a> method. For <code class="literal">update</code> operations, the
+      result is the number of updated rows, returned as an <code class="literal">Integer</code>.</p></div><div class="simplesect" title="Header values"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Headervalues"></a>Header values</h2></div></div></div><p>When performing <code class="literal">update</code> operations, the SQL Component stores the update
+      count in the following message headers:</p><table id="d0e46850"><tr>
+        <th> Header </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">SqlProducer.UPDATE_COUNT</code>
+        </td>
+        <td> Apache Camel 1.x: The number of rows updated for <code class="literal">update</code> operations,
+          returned as an <code class="literal">Integer</code> object. </td>
+      </tr><tr>
+        <td><code class="literal">CamelSqlUpdateCount</code>
+        </td>
+        <td> Apache Camel 2.0: The number of rows updated for <code class="literal">update</code> operations,
+          returned as an <code class="literal">Integer</code> object. </td>
+      </tr><tr>
+        <td><code class="literal">CamelSqlRowCount</code>
+        </td>
+        <td> Apache Camel 2.0: The number of rows returned for <code class="literal">select</code> operations,
+          returned as an <code class="literal">Integer</code> object. </td>
+      </tr></table></div><div class="simplesect" title="Configuration in Apache Camel 1.5.0 or lower"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_ConfigurationinCamel150orlower"></a>Configuration in Apache Camel 1.5.0 or lower</h2></div></div></div><p>The SQL component must be configured before it can be used. In Spring, you can configure
+      it as follows:</p><pre class="programlisting">&lt;bean id="sql" class="org.apache.camel.component.sql.SqlComponent"&gt;
+    &lt;property name="dataSource" ref="myDS"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="myDS" class="org.springframework.jdbc.datasource.DriverManagerDataSource"&gt;
+    &lt;property name="driverClassName" value="com.mysql.jdbc.Driver" /&gt;
+    &lt;property name="url" value="jdbc:mysql://localhost:3306/ds" /&gt;
+    &lt;property name="username" value="username" /&gt;
+    &lt;property name="password" value="password" /&gt;
+&lt;/bean&gt;</pre></div><div class="simplesect" title="Configuration in Apache Camel 1.5.1 or higher"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_ConfigurationinCamel151orhigher"></a>Configuration in Apache Camel 1.5.1 or higher</h2></div></div></div><p>You can now set a reference to a <code class="literal">DataSource</code> in the URI directly:</p><pre class="programlisting">sql:select * from table where id=# order by name?dataSourceRef=myDS</pre></div><div class="simplesect" title="Sample"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Sample"></a>Sample</h2></div></div></div><p>In the sample below we execute a query and retrieve the result as a
+        <code class="literal">List</code> of rows, where each row is a <code class="literal">Map&lt;String,
+        Object</code> and the key is the column name. </p><p>First, we set up a table to use for our sample. As this is based on an unit test, we do it
+      java code:</p><pre class="programlisting">// this is the database we create with some initial data for our unit test
+jdbcTemplate.execute("create table projects (id integer primary key,"
+                     + "project varchar(10), license varchar(5))");
+jdbcTemplate.execute("insert into projects values (1, 'Camel', 'ASF')");
+jdbcTemplate.execute("insert into projects values (2, 'AMQ', 'ASF')");
+jdbcTemplate.execute("insert into projects values (3, 'Linux', 'XXX')");</pre><p>Then we configure our route and our <code class="literal">sql</code> component. Notice that we use a
+        <code class="literal">direct</code> endpoint in front of the <code class="literal">sql</code> endpoint. This
+      allows us to send an exchange to the <code class="literal">direct</code> endpoint with the URI,
+        <code class="literal">direct:simple</code>, which is much easier for the client to use than the long
+        <code class="literal">sql:</code> URI. Note that the <code class="literal">DataSource</code> is looked up up in
+      the registry, so we can use standard Spring XML to configure our
+      <code class="literal">DataSource</code>.</p><pre class="programlisting">from("direct:simple")
+    .to("sql:select * from projects where license = # order by id?dataSourceRef=jdbc/myDataSource")
+    .to("mock:result");</pre><p>And then we fire the message into the <code class="literal">direct</code> endpoint that will route
+      it to our <code class="literal">sql</code> component that queries the database.</p><pre class="programlisting">MockEndpoint mock = getMockEndpoint("mock:result");
+mock.expectedMessageCount(1);
+
+// send the query to direct that will route it to the sql where we will execute the query
+// and bind the parameters with the data from the body. The body only contains one value
+// in this case (XXX) but if we should use multi values then the body will be iterated
+// so we could supply a List&lt;String&gt; instead containing each binding value.
+template.sendBody("direct:simple", "XXX");
+
+mock.assertIsSatisfied();
+
+// the result is a List
+List received = assertIsInstanceOf(List.class, mock.getReceivedExchanges().get(0).getIn().getBody());
+
+// and each row in the list is a Map
+Map row = assertIsInstanceOf(Map.class, received.get(0));
+
+// and we should be able the get the project from the map that should be Linux
+assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code class="literal">DataSource</code> in Spring XML as follows:</p><pre class="programlisting"> &lt;jee:jndi-lookup id="myDS" jndi-name="jdbc/myDataSource"/&gt; </pre></div><div class="simplesect" title="Using the JDBC based idempotent repository"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_UsingtheJDBCbasedidempotentrepository"></a>Using the JDBC based idempotent repository</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.7</strong></span>: In this section we will use the JDBC based idempotent repository. </p><p>First we need to setup a <code class="literal">javax.sql.DataSource</code> in the Spring XML file:</p><pre class="programlisting">&lt;bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource"&gt;
+    &lt;property name="driverClassName" value="org.hsqldb.jdbcDriver"/&gt;
+    &lt;property name="url" value="jdbc:hsqldb:mem:camel_jdbc"/&gt;
+    &lt;property name="username" value="sa"/&gt;
+    &lt;property name="password" value=""/&gt;
+&lt;/bean&gt;</pre><p>And finally we can create our JDBC idempotent repository in the Spring XML file as well:</p><pre class="programlisting">&lt;bean id="messageIdRepository" class="org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository"&gt;
+	&lt;constructor-arg ref="dataSource" /&gt;
+	&lt;constructor-arg value="myProcessorName" /&gt;
+&lt;/bean&gt;
+
+&lt;camel:camelContext&gt;
+	&lt;camel:errorHandler id="deadLetterChannel" type="DeadLetterChannel" deadLetterUri="mock:error"&gt;
+		&lt;camel:redeliveryPolicy maximumRedeliveries="0" maximumRedeliveryDelay="0" logStackTrace="false" /&gt;
+	&lt;/camel:errorHandler&gt;
+	
+	&lt;camel:route id="JdbcMessageIdRepositoryTest" errorHandlerRef="deadLetterChannel"&gt;
+		&lt;camel:from uri="direct:start" /&gt;
+		&lt;camel:idempotentConsumer messageIdRepositoryRef="messageIdRepository"&gt;
+			&lt;camel:header&gt;messageId&lt;/camel:header&gt;
+			&lt;camel:to uri="mock:result" /&gt;
+		&lt;/camel:idempotentConsumer&gt;
+	&lt;/camel:route&gt;
+&lt;/camel:camelContext&gt;</pre></div><div class="simplesect" title="Using the JDBC based aggregation repository"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_UsingtheJDBCbasedaggregationrepository"></a>Using the JDBC based aggregation repository</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.6</strong></span>
+    </p><div class="important" title="Using JdbcAggregationRepository in Camel 2.6" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Using JdbcAggregationRepository in Camel 2.6"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.gif"></td><th align="left">Using JdbcAggregationRepository in Camel 2.6</th></tr><tr><td align="left" valign="top"><p>In Camel 2.6, the JdbcAggregationRepository is provided in the <code class="literal">camel-jdbc-aggregator</code> component. From Camel 2.7 onwards, the <code class="literal">JdbcAggregationRepository</code> is provided in the <code class="literal">camel-sql</code> component.</p></td></tr></table></div><p><code class="literal">JdbcAggregationRepository</code> is an <code class="literal">AggregationRepository</code> which on the fly persists the aggregated messages. This ensures that you will not loose messages, as the default aggregator will use an in memory only <code class="literal">AggregationRepository</code>.
+      The <code class="literal">JdbcAggregationRepository</code> allows together with Camel to provide persistent support for the Aggregator.</p><p>It has the following options:</p><table id="d0e47039"><tr>
+        <th> Option </th>
+        <th> Type </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">dataSource</code>
+        </td>
+        <td><code class="literal">DataSource</code>
+        </td>
+        <td><span class="bold"><strong>Mandatory:</strong></span> The <code class="literal">javax.sql.DataSource</code> to use for accessing the database. </td>
+      </tr><tr>
+        <td><code class="literal">repositoryName</code>
+        </td>
+        <td><code class="literal">String</code>
+        </td>
+        <td><span class="bold"><strong>Mandatory:</strong></span> The name of the repository. </td>
+      </tr><tr>
+        <td><code class="literal">transactionManager</code>
+        </td>
+        <td><code class="literal">TransactionManager</code>
+        </td>
+        <td><span class="bold"><strong>Mandatory:</strong></span> The <code class="literal">org.springframework.transaction.PlatformTransactionManager</code> to mange transactions for the database. The TransactionManager must be able to support databases. </td>
+      </tr><tr>
+        <td><code class="literal">lobHandler</code>
+        </td>
+        <td><code class="literal">LobHandler</code>
+        </td>
+        <td> A <code class="literal">org.springframework.jdbc.support.lob.LobHandler</code> to handle Lob types in the database. Use this option to use a vendor specific LobHandler, for example when using Oracle. </td>
+      </tr><tr>
+        <td><code class="literal">returnOldExchange</code>
+        </td>
+        <td> boolean </td>
+        <td> Whether the get operation should return the old existing Exchange if any existed. By default this option is <code class="literal">false</code> to optimize as we do not need the old exchange when aggregating. </td>
+      </tr><tr>
+        <td><code class="literal">useRecovery</code>
+        </td>
+        <td> boolean </td>
+        <td> Whether or not recovery is enabled. This option is by default <code class="literal">true</code>. When enabled the Aggregator automatic recover failed aggregated exchange and have them resubmitted. </td>
+      </tr><tr>
+        <td><code class="literal">recoveryInterval</code>
+        </td>
+        <td> long </td>
+        <td> If recovery is enabled then a background task is run every x'th time to scan for failed exchanges to recover and resubmit. By default this interval is 5000 millis. </td>
+      </tr><tr>
+        <td><code class="literal">maximumRedeliveries</code>
+        </td>
+        <td> int </td>
+        <td> Allows you to limit the maximum number of redelivery attempts for a recovered exchange. If enabled then the Exchange will be moved to the dead letter channel if all redelivery attempts failed. By default this option is disabled. If this option is used then the <code class="literal">deadLetterUri</code> option must also be provided. </td>
+      </tr><tr>
+        <td><code class="literal">deadLetterUri</code>
+        </td>
+        <td> String </td>
+        <td> An endpoint uri for a Dead Letter Channel where exhausted recovered Exchanges will be moved. If this option is used then the <code class="literal">maximumRedeliveries</code> option must also be provided. </td>
+      </tr></table></div><div class="simplesect" title="What is preserved when persisting"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Whatispreservedwhenpersisting"></a>What is preserved when persisting</h2></div></div></div><p><code class="literal">JdbcAggregationRepository</code> will only preserve any <code class="literal">Serializable</code> compatible data types. If a data type is not such a type its dropped and a <code class="literal">WARN</code> is logged. And it only persists the <code class="literal">Message</code> body and the <code class="literal">Message</code> headers. The <code class="literal">Exchange</code> properties are <span class="bold"><strong>not</strong></span> persisted. </p></div><div class="simplesect" title="Recovery"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Recovery"></a>Recovery</h2></div></div></div><p>The <code class="literal">JdbcAggregationRepository</code> will by default recover any failed exchange. It does this by having a background tasks that scans for failed <a class="link" href="Exchange" target="_top">Exchange</a>s in the persistent store. You can use the <code class="literal">checkInterval</code> option to set how often this task runs. The recovery works as transactional which ensures that Camel will try to recover and redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an exchange is being recovered/redelivered:</p><table id="d0e47250"><tr>
+        <th> Header </th>
+        <th> Type </th>
+        <th> Description </th>
+      </tr><tr>
+        <td><code class="literal">Exchange.REDELIVERED</code>
+        </td>
+        <td> Boolean </td>
+        <td> Is set to true to indicate the <a class="link" href="Exchange" target="_top">Exchange</a> is being redelivered. </td>
+      </tr><tr>
+        <td><code class="literal">Exchange.REDELIVERY_COUNTER</code>
+        </td>
+        <td> Integer </td>
+        <td> The redelivery attempt, starting from 1. </td>
+      </tr></table><p>Only when an <a class="link" href="Exchange" target="_top">Exchange</a> has been successfully processed it will be marked as complete which happens when the <code class="literal">confirm</code> method is invoked on the <code class="literal">AggregationRepository</code>. This means if the same <a class="link" href="Exchange" target="_top">Exchange</a> fails again it will be kept retried until it success.</p><p>You can use option <code class="literal">maximumRedeliveries</code> to limit the maximum number of redelivery attempts for a given recovered <a class="link" href="Exchange" target="_top">Exchange</a>. You must also set the <code class="literal">deadLetterUri</code> option so Camel knows where to send the <a class="link" href="Exchange" target="_top">Exchange</a> when the <code class="literal">maximumRedeliveries</code> was hit. </p><p>You can see some examples in the unit tests of camel-sql, for example <a class="link" href="https://svn.apache.org/repos/asf/camel/trunk/components/camel-sql/src/test/java/org/apache/camel/processor/aggregate/jdbc/JdbcAggregateRecoverDeadLetterChannelTest.java" target="_top">this test</a>.</p></div><div class="simplesect" title="Database"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Database"></a>Database</h2></div></div></div><p>To be operational, each aggregator uses two table: the aggregation and completed one. By convention the completed has the same name as the aggregation one suffixed with <code class="literal">"_COMPLETED"</code>. The name must be configured in the Spring bean with the <code class="literal">RepositoryName</code> property. In the following example aggregation will be used.</p><p>The table structure definition of both table are identical: in both case a String value is used as key (<span class="bold"><strong>id</strong></span>) whereas a Blob contains the exchange serialized in byte array.
+      However one difference should be remembered: the <span class="bold"><strong>id</strong></span> field does not have the same content depending on the table.
+      In the aggregation table <span class="bold"><strong>id</strong></span> holds the correlation Id used by the component to aggregate the messages. In the completed table, <span class="bold"><strong>id</strong></span> holds the id of the exchange stored in corresponding the blob field.</p><p>Here is the SQL query used to create the tables, just replace <code class="literal">"aggregation"</code> with your aggregator repository name.</p><pre class="programlisting">CREATE TABLE aggregation (
+    id varchar(255) NOT NULL,
+    exchange blob NOT NULL,
+    constraint aggregation_pk PRIMARY KEY (id)
+);
+CREATE TABLE aggregation_completed (
+    id varchar(255) NOT NULL,
+    exchange blob NOT NULL,
+    constraint aggregation_completed_pk PRIMARY KEY (id)
+);</pre></div><div class="simplesect" title="Codec (Serialization)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_CodecSerialization"></a>Codec (Serialization)</h2></div></div></div><p>Since they can contain any type of payload, Exchanges are not serializable by design. It is converted into a byte array to be stored in a database BLOB field. All those conversions are handled by the <code class="literal">JdbcCodec</code> class. One detail of the code requires your attention: the <code class="literal">ClassLoadingAwareObjectInputStream</code>.</p><p>The <code class="literal">ClassLoadingAwareObjectInputStream</code> has been reused from the <a class="link" href="http://activemq.apache.org/" target="_top">Apache ActiveMQ</a> project. It wraps an <code class="literal">ObjectInputStream</code> and use it with the <code class="literal">ContextClassLoader</code> rather than the <code class="literal">currentThread</code> one. The benefit is to be able to load classes exposed by other bundles. This allows the exchange body and headers to have custom types object references.</p></div><div class="simplesect" title="Transaction"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Transaction"></a>Transaction</h2></div></div></div><p>A Spring <code class="literal">PlatformTransactionManager</code> is required to orchestrate transaction.</p></div><div class="simplesect" title="Service (Start/Stop)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_ServiceStartStop"></a>Service (Start/Stop)</h2></div></div></div><p>The <code class="literal">start</code> method verify the connection of the database and the presence of the required tables. If anything is wrong it will fail during starting.</p></div><div class="simplesect" title="Aggregator configuration"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Aggregatorconfiguration"></a>Aggregator configuration</h2></div></div></div><p>Depending on the targeted environment, the aggregator might need some configuration. As you already know, each aggregator should have its own repository (with the corresponding pair of table created in the database) and a data source. If the default lobHandler is not adapted to your database system, it can be injected with the <code class="literal">lobHandler</code> property.</p><p>Here is the declaration for Oracle:</p><pre class="programlisting">    &lt;bean id="lobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler"&gt;
+        &lt;property name="nativeJdbcExtractor" ref="nativeJdbcExtractor"/&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"/&gt;
+
+    &lt;bean id="repo" class="org.apache.camel.processor.aggregate.jdbc.JdbcAggregationRepository"&gt;
+        &lt;property name="transactionManager" ref="transactionManager"/&gt;
+        &lt;property name="repositoryName" value="aggregation"/&gt;
+        &lt;property name="dataSource" ref="dataSource"/&gt;
+        &lt;!-- Only with Oracle, else use default --&gt;
+        &lt;property name="lobHandler" ref="lobHandler"/&gt;
+    &lt;/bean&gt;</pre><p>
+      See also:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a href="PLUGINS_ROOT/org.fusesource.ide.help/jdbc.html" class="olink">JDBC</a>
+        </p></li></ul></div></div></div></body></html>

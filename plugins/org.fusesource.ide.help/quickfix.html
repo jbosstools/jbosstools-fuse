@@ -1,0 +1,201 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Quickfix</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="properties.html" title="Properties"><link rel="next" href="registry.html" title="Ref"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Quickfix"><div class="titlepage"><div><div><h2 class="title"><a name="quickfix"></a>Quickfix</h2></div></div></div><div class="simplesect" title="QuickFIX/J Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_QuickFIXJComponent"></a>QuickFIX/J Component</h2></div></div></div><p>The <span class="bold"><strong>quickfix</strong></span> component adapts the <a class="link" href="http://www.quickfixj.org/" target="_top">QuickFIX/J</a> FIX engine for using in Camel . This
+      component uses the standard <a class="link" href="http://www.fixprotocol.org/" target="_top">Financial Interchange
+        (FIX) protocol</a> for message transport.</p><div class="important" title="Previous Versions" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Previous Versions"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.gif"></td><th align="left">Previous Versions</th></tr><tr><td align="left" valign="top"><p>The <span class="bold"><strong>quickfix</strong></span> component was rewritten for Camel 2.5. For
+        information about using the <span class="bold"><strong>quickfix</strong></span> component prior to 2.5
+        see the documentation section below.</p></td></tr></table></div><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code>
+      for this component:</p><pre class="programlisting">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-quickfix&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;!-- use the same version as your Camel core version --&gt;
+&lt;/dependency&gt;</pre></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">quickfix:configFile[?sessionID=sessionID]</pre><p>The <span class="bold"><strong>configFile</strong></span> is the name of the QuickFIX/J
+      configuration to use for the FIX engine (located as a resource found in your classpath). The
+      optional sessionID identifies a specific FIX session. The format of the sessionID is:</p><pre class="programlisting">(BeginString):(SenderCompID)[/(SenderSubID)[/(SenderLocationID)]]-&gt;(TargetCompID)[/(TargetSubID)[/(TargetLocationID)]]</pre><p>Example URIs:</p><pre class="programlisting">quickfix:config.cfg
+
+quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></div><div class="simplesect" title="Endpoints"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_Endpoints"></a>Endpoints</h2></div></div></div><p>FIX sessions are endpoints for the <span class="bold"><strong>quickfix</strong></span> component. An
+      endpoint URI may specify a single session or all sessions managed by a specific QuickFIX/J
+      engine. Typical applications will use only one FIX engine but advanced users may create
+      multiple FIX engines by referencing different configuration files in <span class="bold"><strong>quickfix</strong></span> component endpoint URIs.</p><p>When a consumer does not include a session ID in the endpoint URI, it will receive
+      exchanges for all sessions managed by the FIX engine associated with the configuration file
+      specified in the URI. If a producer does not specify a session in the endpoint URI then it
+      must include the session-related fields in the FIX message being sent. If a session is
+      specified in the URI then the component will automatically inject the session-related fields
+      into the FIX message.</p></div><div class="simplesect" title="Exchange Format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_ExchangeFormat"></a>Exchange Format</h2></div></div></div><p>The exchange headers include information to help with exchange filtering, routing and
+      other processing. The following headers are available:</p><table id="d0e43985"><tr>
+        <th> Header Name </th>
+        <th> Description </th>
+      </tr><tr>
+        <td>
+          <code class="code">EventCategory</code>
+        </td>
+        <td> One of <code class="literal">AppMessageReceived</code>, <code class="literal">AppMessageSent</code>,
+            <code class="literal">AdminMessageReceived</code>, <code class="literal">AdminMessageSent</code>,
+            <code class="literal">SessionCreated</code>, <code class="literal">SessionLogon</code>,
+            <code class="literal">SessionLogoff</code>. See the <code class="literal">QuickfixjEventCategory</code>
+          enum. </td>
+      </tr><tr>
+        <td>
+          <code class="code">SessionID</code>
+        </td>
+        <td> The FIX message SessionID </td>
+      </tr><tr>
+        <td>
+          <code class="code">MessageType</code>
+        </td>
+        <td> The FIX MsgType tag value </td>
+      </tr><tr>
+        <td>
+          <code class="code">DataDictionary</code>
+        </td>
+        <td> Specifies a data dictionary to used for parsing an incoming message. Can be an instance
+          of a data dictionary or a resource path for a QuickFIX/J data dictionary file </td>
+      </tr></table><p>The DataDictionary header is useful if string messages are being received and need to be
+      parsed in a route. QuickFIX/J requires a data dictionary to parse certain types of messages
+      (with repeating groups, for example). By injecting a DataDictionary header in the route after
+      receiving a message string, the FIX engine can properly parse the data.</p></div><div class="simplesect" title="QuickFIX/J Configuration Extensions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_QuickFIXJConfigurationExtensions"></a>QuickFIX/J Configuration Extensions</h2></div></div></div><p>When using QuickFIX/J directly, one typically writes code to create instances of logging
+      adapters, message stores and communication connectors. The <span class="bold"><strong>quickfix</strong></span> component will automatically create instances of these classes based on
+      information in the configuration file. It also provides defaults for many of the common
+      required settings and adds additional capabilities (like the ability to activate JMX
+      support).</p><p>The following sections describe how the <span class="bold"><strong>quickfix</strong></span>
+      component processes the QuickFIX/J configuration. For comprehensive information about
+      QuickFIX/J configuration, see the <a class="link" href="http://www.quickfixj.org/quickfixj/usermanual/usage/configuration.html" target="_top">QFJ user
+        manual</a>.</p></div><div class="simplesect" title="Communication Connectors"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_CommunicationConnectors"></a>Communication Connectors</h2></div></div></div><p>When the component detects an initiator or acceptor session setting in the QuickFIX/J
+      configuration file it will automatically create the corresponding initiator and/or acceptor
+      connector. These settings can be in the default or in a specific session section of the
+      configuration file.</p><table id="d0e44085"><tr>
+        <th> Session Setting </th>
+        <th> Component Action </th>
+      </tr><tr>
+        <td><code class="literal">ConnectionType=initiator</code>
+        </td>
+        <td> Create an initiator connector </td>
+      </tr><tr>
+        <td><code class="literal">ConnectionType=acceptor</code>
+        </td>
+        <td> Create an acceptor connector </td>
+      </tr></table><p>The threading model for the QuickFIX/J session connectors can also be specified. These
+      settings affect all sessions in the configuration file and must be placed in the settings
+      default section.</p><table id="d0e44116"><tr>
+        <th> Default/Global Setting </th>
+        <th> Component Action </th>
+      </tr><tr>
+        <td><code class="literal">ThreadModel=ThreadPerConnector</code>
+        </td>
+        <td> Use <code class="literal">SocketInitiator</code> or <code class="literal">SocketAcceptor</code> (default)
+        </td>
+      </tr><tr>
+        <td><code class="literal">ThreadModel=ThreadPerSession</code>
+        </td>
+        <td> Use <code class="literal">ThreadedSocketInitiator</code> or
+            <code class="literal">ThreadedSocketAcceptor</code>
+        </td>
+      </tr></table></div><div class="simplesect" title="Logging"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_Logging"></a>Logging</h2></div></div></div><p>The QuickFIX/J logger implementation can be specified by including the following settings
+      in the default section of the configuration file. The <code class="literal">ScreenLog</code> is the
+      default if none of the following settings are present in the configuration. It's an error to
+      include settings that imply more than one log implementation.</p><table id="d0e44165"><tr>
+        <th> Default/Global Setting </th>
+        <th> Component Action </th>
+      </tr><tr>
+        <td><code class="literal">ScreenLogShowEvents</code>
+        </td>
+        <td> Use a <code class="literal">ScreenLog</code>
+        </td>
+      </tr><tr>
+        <td><code class="literal">ScreenLogShowIncoming</code>
+        </td>
+        <td> Use a <code class="literal">ScreenLog</code>
+        </td>
+      </tr><tr>
+        <td><code class="literal">ScreenLogShowOutgoing</code>
+        </td>
+        <td> Use a <code class="literal">ScreenLog</code>
+        </td>
+      </tr><tr>
+        <td><code class="literal">SLF4J*</code>
+        </td>
+        <td><span class="bold"><strong>Camel 2.6+</strong></span>. Use a <code class="literal">SLF4JLog</code>. Any of
+          the SLF4J settings will cause this log to be used. </td>
+      </tr><tr>
+        <td><code class="literal">FileLogPath</code>
+        </td>
+        <td> Use a <code class="literal">FileLog</code>
+        </td>
+      </tr><tr>
+        <td><code class="literal">JdbcDriver</code>
+        </td>
+        <td> Use a <code class="literal">JdbcLog</code>
+        </td>
+      </tr></table></div><div class="simplesect" title="Message Store"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_MessageStore"></a>Message Store</h2></div></div></div><p>The QuickFIX/J message store implementation can be specified by including the following
+      settings in the default section of the configuration file. The <code class="literal">MemoryStore</code>
+      is the default if none of the following settings are present in the configuration. It's an
+      error to include settings that imply more than one message store implementation.</p><table id="d0e44262"><tr>
+        <th> Default/Global Setting </th>
+        <th> Component Action </th>
+      </tr><tr>
+        <td><code class="literal">JdbcDriver</code>
+        </td>
+        <td> Use a <code class="literal">JdbcStore</code>
+        </td>
+      </tr><tr>
+        <td><code class="literal">FileStorePath</code>
+        </td>
+        <td> Use a <code class="literal">FileStore</code>
+        </td>
+      </tr><tr>
+        <td><code class="literal">SleepycatDatabaseDir</code>
+        </td>
+        <td> Use a <code class="literal">SleepcatStore</code>
+        </td>
+      </tr></table></div><div class="simplesect" title="Message Factory"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_MessageFactory"></a>Message Factory</h2></div></div></div><p>A message factory is used to construct domain objects from raw FIX messages. The default
+      message factory is <code class="literal">DefaultMessageFactory</code>. However, advanced applications
+      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect" title="JMX"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e44321"><tr>
+        <th> Default/Global Setting </th>
+        <th> Component Action </th>
+      </tr><tr>
+        <td><code class="literal">UseJmx</code>
+        </td>
+        <td> if <code class="literal">Y</code>, then enable QuickFIX/J JMX </td>
+      </tr></table></div><div class="simplesect" title="Other Defaults"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_OtherDefaults"></a>Other Defaults</h2></div></div></div><p>The component provides some default settings for what are normally required settings in
+      QuickFIX/J configuration files. <code class="literal">SessionStartTime</code> and
+        <code class="literal">SessionEndTime</code> default to "00:00:00", meaning the session will not be
+      automatically started and stopped. The <code class="literal">HeartBtInt</code> (heartbeat interval)
+      defaults to 30 seconds.</p></div><div class="simplesect" title="Minimal Initiator Configuration Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_MinimalInitiatorConfigurationExample"></a>Minimal Initiator Configuration Example</h2></div></div></div><pre class="programlisting">[SESSION]
+ConnectionType=initiator
+BeginString=FIX.4.4
+SenderCompID=YOUR_SENDER
+TargetCompID=YOUR_TARGET</pre></div><div class="simplesect" title="Exception handling"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_Exceptionhandling"></a>Exception handling</h2></div></div></div><p>QuickFIX/J behavior can be modified if certain exceptions are thrown during processing of
+      a message. If a <code class="literal">RejectLogon</code> exception is thrown while processing an
+      incoming logon administrative message, then the logon will be rejected.</p><p>Normally, QuickFIX/J handles the logon process automatically. However, sometimes an
+      outgoing logon message must be modified to include credentials required by a FIX counterparty.
+      If the FIX logon message body is modified when sending a logon message
+      (EventCategory={{AdminMessageSent}} the modified message will be sent to the counterparty. It
+      is important that the outgoing logon message is being processed
+        <span class="emphasis"><em>synchronously</em></span>. If it is processed asynchronously (on another thread),
+      the FIX engine will immediately send the unmodified outgoing message when it's callback method
+      returns.</p></div><div class="simplesect" title="FIX Sequence Number Management"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_FIXSequenceNumberManagement"></a>FIX Sequence Number Management</h2></div></div></div><p>If an application exception is thrown during <span class="emphasis"><em>synchronous</em></span> exchange
+      processing, this will cause QuickFIX/J to not increment incoming FIX message sequence numbers
+      and will cause a resend of the counterparty message. This FIX protocol behavior is primarily
+      intended to handle <span class="emphasis"><em>transport</em></span> errors rather than application errors. There
+      are risks associated with using this mechanism to handle application errors. The primary risk
+      is that the message will repeatedly cause application errors each time it's re-received. A
+      better solution is to persist the incoming message (database, JMS queue) immediately before
+      processing it. This also allows the application to process messages asynchronously without
+      losing messages when errors occur.</p><p>Although it's possible to send messages to a FIX session before it's logged on (the
+      messages will be sent at logon time), it is usually a better practice to wait until the
+      session is logged on. This eliminates the required sequence number resynchronization steps at
+      logon. Waiting for session logon can be done by setting up a route that processes the
+        <code class="literal">SessionLogon</code> event category and signals the application to start sending
+      messages.</p><p>See the FIX protocol specifications and the QuickFIX/J documentation for more details
+      about FIX sequence number management.</p></div><div class="simplesect" title="Route Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_RouteExamples"></a>Route Examples</h2></div></div></div><p>Several examples are included in the QuickFIX/J component source code (test
+      subdirectories). One of these examples implements a trival trade excecution simulation. The
+      example defines an application component that uses the URI scheme "trade-executor".</p><p>The following route receives messages for the trade executor session and passes
+      application messages to the trade executor component.</p><pre class="programlisting">from("quickfix:examples/inprocess.cfg?sessionID=FIX.4.2:MARKET-&gt;TRADER").
+    filter(header(QuickfixjEndpoint.EVENT_CATEGORY_KEY).isEqualTo(QuickfixjEventCategory.AppMessageReceived)).
+    to("trade-executor:market");</pre><p>The trade executor component generates messages that are routed back to the trade session.
+      The session ID must be set in the FIX message itself since no session ID is specified in the
+      endpoint URI.</p><pre class="programlisting">from("trade-executor:market").to("quickfix:examples/inprocess.cfg");</pre><p>The trader session consumes execution report messages from the market and processes
+      them.</p><pre class="programlisting">from("quickfix:examples/inprocess.cfg?sessionID=FIX.4.2:TRADER-&gt;MARKET").
+    filter(header(QuickfixjEndpoint.MESSAGE_TYPE_KEY).isEqualTo(MsgType.EXECUTION_REPORT)).
+    bean(new MyTradeExecutionProcessor());</pre></div></div></body></html>

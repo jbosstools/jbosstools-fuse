@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<toc label="Fuse IDE" topic="index.html">
+   <topic label="Release Notes" href="RiderReleaseBook.html">
+      <topic label="Release Notes" href="IDEReleaseNotes.html"/>
+   </topic>
+   <topic label="Using the Fuse IDE Tools" href="RiderUG.html">
+      <topic label="Application Development" href="RiderDevPart.html">
+         <topic label="Design Time Tools" href="IDEIntroDesign.html">
+            <topic label="The Fuse IDE route editor" href="RiderGSEclipseEditor.html"/>
+            <topic label="Creating projects, routes, and test cases" href="IDEIntroEclipseCreate.html"/>
+            <topic label="Exercising routes" href="IDEIntroEclipseRun.html"/>
+         </topic>
+         <topic label="Creating a New Fuse IDE Project" href="RiderNewProject.html"/>
+         <topic label="Creating a New Camel XML file" href="FIDENewRouteFile.html"/>
+         <topic label="Editing a routing context in the route editor" href="RiderEditRoute.html">
+            <topic label="Adding routes to the routing context" href="RiderNewRoute.html"/>
+            <topic label="Adding patterns to a route" href="RiderAddPattern.html">
+               <topic label="Drag and drop a pattern" href="RiderAddPatternDD.html"/>
+               <topic label="Using the context menu" href="RiderAddPatternAdd.html"/>
+            </topic>
+            <topic label="Connecting patterns to make a route" href="RiderPatternConnect.html"/>
+            <topic label="Configuring a pattern" href="RiderPatternConfig.html"/>
+            <topic label="Rearranging patterns on the canvas" href="RiderPatternRearange.html">
+               <topic label="Rearranging patterns by dragging them" href="RiderPatternRearangeDD.html"/>
+               <topic label="Automatically aligning patterns" href="RiderPatternRearangeLayout.html"/>
+            </topic>
+            <topic label="Removing patterns from a route" href="RiderRemovePattern.html"/>
+            <topic label="Disconnecting two patterns" href="RiderRemoveConnect.html"/>
+            <topic label="Deleting a route" href="RiderRemoveRoute.html"/>
+            <topic label="Adding beans and configuration" href="RiderAddBeans.html"/>
+            <topic label="Configuring the Fuse IDE route editor" href="RiderEditPrefs.html"/>
+         </topic>
+         <topic label="Creating a new Apache Camel JUnit test case" href="newCamelTestCase.html"/>
+         <topic label="The Source View" href="RiderEditSource.html"/>
+         <topic label="Running routes inside Fuse IDE" href="RiderRunning.html">
+            <topic label="Running routes using Maven" href="RiderRunningMaven.html"/>
+            <topic label="Running routes as a local Camel context" href="RiderRunningProfile.html"/>
+            <topic label="Working with runtime profiles" href="RiderEditRunProfile.html">
+               <topic label="Editing a Local Camel Context runtime profile" href="RiderNewRunProfile.html"/>
+               <topic label="Editing a Maven runtime profile" href="RiderMvnRunProfile.html"/>
+            </topic>
+         </topic>
+         <topic label="Deploying Projects to a Container" href="FIDEDeployingContainer.html">
+            <topic label="Using a Container's Deploy Folder" href="FIDEDeployHot.html">
+               <topic label="Configuring a Container's Deploy Folder" href="FIDEDeployPrefs.html"/>
+               <topic label="Deploying a Project to a Container's Deploy Folder" href="RiderDeployProject.html"/>
+            </topic>
+            <topic label="Deploying a Project to a JMX Connected Container" href="RiderDeployESB.html"/>
+            <topic label="Deploying a Project to a Fabric Container" href="RiderDeployProfile.html"/>
+         </topic>
+      </topic>
+      <topic label="Debugging" href="RiderDebugPart.html">
+         <topic label="Debugging tools" href="IDEIntroDebug.html">
+            <topic label="The Fuse Integration perspective" href="IDEIntroDebugView.html"/>
+            <topic label="Infrastructure monitoring" href="IDEIntroDebugMonitor.html"/>
+            <topic label="Route debugging" href="IDEIntroDebugTrace.html"/>
+            <topic label="JMS browsing" href="IDEIntroDebugBrowse.html"/>
+         </topic>
+         <topic label="Opening the Fuse Integration Perspective" href="RiderFusePerspective.html"/>
+         <topic label="The JMX Explorer" href="FIDEJMXExplore.html">
+            <topic label="Viewing Processes in JMX" href="FIDEJMXViewProcesses.html"/>
+            <topic label="Adding a JMX server" href="FIDEJMXAddServer.html"/>
+         </topic>
+         <topic label="Viewing a component's properties" href="FIDEJMXProps.html"/>
+         <topic label="Browsing messages" href="RiderMessageView.html"/>
+         <topic label="Tracing messages through routes" href="RiderTracing.html">
+            <topic label="Creating test messages for route tracing" href="RiderMessageCreate.html"/>
+            <topic label="Activating route tracing" href="RiderStartTrace.html"/>
+            <topic label="Tracing messages through a route" href="RiderRouteTrace.html"/>
+            <topic label="Deactivating route tracing" href="RiderStopTrace.html"/>
+         </topic>
+         <topic label="Managing JMS destinations" href="RiderManageDestination.html">
+            <topic label="Adding a JMS destination" href="RiderAddDestination.html"/>
+            <topic label="Deleting a JMS destination" href="RiderDeleteDestination.html"/>
+         </topic>
+         <topic label="Managing routing endpoints" href="RiderManageEndpoints.html">
+            <topic label="Adding a routing endpoint" href="RiderAddEndpoint.html"/>
+            <topic label="Deleting a routing endpoint" href="RiderDeleteEndpoint.html"/>
+         </topic>
+         <topic label="Editing running routes" href="RiderEditRunRoute.html"/>
+         <topic label="Managing routing contexts" href="RiderManageRouteContexts.html">
+            <topic label="Suspending a routing context" href="RiderContextSuspend.html"/>
+            <topic label="Resuming a routing context" href="RiderContextResume.html"/>
+            <topic label="Shutting down a routing context" href="RiderContextClose.html"/>
+         </topic>
+         <topic label="Managing servers" href="RiderManageServers.html">
+            <topic label="Adding a Server" href="FIDEAddServer.html"/>
+            <topic label="Starting a Server" href="FIDEStartServer.html"/>
+            <topic label="Stopping a Server" href="FIDEStopServer.html"/>
+            <topic label="Deleting a Server" href="FIDEDeleteServer.html"/>
+         </topic>
+      </topic>
+      <topic label="Working with Fabrics" href="RiderFabricPart.html">
+         <topic label="The Fuse Fabric perspective" href="IDEIntroFuseFabric.html"/>
+         <topic label="Setting up a Fabric Environment" href="RiderFabricTestEnvironment.html"/>
+         <topic label="Specifying and Connecting to a Fabric" href="FabricFabrics.html">
+            <topic label="Adding fabric details" href="FabricAddDetails.html"/>
+            <topic label="Connecting to a fabric" href="FabricConnect.html"/>
+            <topic label="Disconnecting from a fabric" href="FabricDisconnect.html"/>
+            <topic label="Editing a fabric's details" href="FabricEdit.html"/>
+            <topic label="Deleting a fabric's details" href="FabricDelete.html"/>
+         </topic>
+         <topic label="Working with Fabric Containers" href="FIDEFabricContainers.html">
+            <topic label="Creating a new child container" href="FabContainerCreateChild.html"/>
+            <topic label="Creating a container on a remote host" href="FabContainerCreateSSH.html"/>
+            <topic label="Creating a new container on a cloud" href="FabContainerCreateCloud.html"/>
+            <topic label="Starting a container" href="FabContainerStart.html"/>
+            <topic label="Changing a Container's Profiles" href="FabContainerEdit.html"/>
+            <topic label="Stopping a container" href="FabContainerStop.html"/>
+            <topic label="Deleting a container" href="FabContainerDelete.html"/>
+         </topic>
+         <topic label="Working with Fabric Profiles" href="RiderFabricProfiles.html">
+            <topic label="Creating a new profile" href="FabProfileCreate.html"/>
+            <topic label="Deleting a profile" href="FabProfileDelete.html"/>
+         </topic>
+         <topic label="Working with Versions" href="RiderFabricVersions.html">
+            <topic label="Creating a new version of a profile" href="FabVersionCreate.html"/>
+            <topic label="Setting a container's version" href="FabVersionSet.html"/>
+         </topic>
+         <topic label="Creating a Fabric in the Cloud" href="FabricCreateOnCloud.html">
+            <topic label="Adding cloud details" href="RiderCloudAdd.html"/>
+            <topic label="Specifying fabric details" href="RiderFabricDetails.html"/>
+         </topic>
+      </topic>
+      <topic label="Wizard field references" href="RiderWizard.html">
+         <topic label="New Camel XML File" href="FIDENewContextRef.html"/>
+         <topic label="New Fuse Project" href="RiderNewProjectRef.html"/>
+         <topic label="New Fuse Project" href="RiderNewProjectRef2.html"/>
+         <topic label="New Fuse Message" href="RiderNewFuseMessage.html"/>
+         <topic label="Camel JUnit Test Case" href="RiderCamelJUnitRef.html"/>
+         <topic label="Test Endpoints" href="RiderCamelTestEndptRef.html"/>
+         <topic label="Define a New Server" href="RiderCamelDefServeRef.html"/>
+         <topic label="New Server Configuration" href="RiderCamelNewServerRuntimeRef.html"/>
+         <topic label="Add and Remove" href="RiderAddRemoveResourceRef.html"/>
+         <topic label="Fabric Details" href="RiderFabDetailsWiz.html"/>
+         <topic label="Create Child Container" href="RiderFabChldContWiz.html"/>
+         <topic label="Create Container via SSH" href="RiderFabSSHContWiz.html"/>
+         <topic label="Create Container in a Cloud" href="RiderFabCldContWiz.html"/>
+         <topic label="Create Version" href="RiderFabVersionWiz.html"/>
+         <topic label="Cloud Details" href="RiderFabCldDetailsWiz.html"/>
+         <topic label="Create Fabric in the Cloud" href="RiderFabCldFabricWiz.html"/>
+      </topic>
+      <topic label="Fuse IDE preferences" href="RiderPrefRef.html">
+         <topic label="Deploy Folders" href="RiderDeployPrefRef.html"/>
+         <topic label="Editor" href="RiderEditorPrefRef.html"/>
+         <topic label="JMX Explorer" href="RiderMonitorPrefRef.html"/>
+         <topic label="Tools" href="RiderToolsPrefRef.html"/>
+         <topic label="Subscription" href="RiderRegisterPrefRef.html"/>
+      </topic>
+   </topic>
+   <topic label="Expression and Predicates Languages" href="RiderExLang.html">
+      <topic label="Introduction" href="ExpPredIntro.html"/>
+      <topic label="BeanShell" href="BeanShell.html"/>
+      <topic label="Constant" href="Constant.html"/>
+      <topic label="The Unified Expression Language(EL)" href="EL.html"/>
+      <topic label="Groovy" href="Groovy.html"/>
+      <topic label="Header" href="Header.html"/>
+      <topic label="JavaScript" href="JavaScript.html"/>
+      <topic label="MVEL" href="MVEL.html"/>
+      <topic label="The Object-Graph Navigation Language(OGNL)" href="OGNL.html"/>
+      <topic label="PHP" href="PHP.html"/>
+      <topic label="Property" href="Property.html"/>
+      <topic label="Python" href="Python.html"/>
+      <topic label="Ruby" href="Ruby.html"/>
+      <topic label="The Simple Language" href="simpleLang.html">
+         <topic label="Basic syntax" href="simpleBasic.html"/>
+         <topic label="OGNL expressions" href="simpleOGNL.html"/>
+         <topic label="Predicates" href="SimplePredicates.html"/>
+      </topic>
+      <topic label="SQL" href="SQL.html"/>
+      <topic label="XPath" href="XPath.html"/>
+      <topic label="XQuery" href="XQuery.html"/>
+   </topic>
+   <topic label="Enterprise Integration Pattern Reference" href="RiderEIPRef.html">
+      <topic label="Route Editor Patterns" href="RefIntroToEIP.html"/>
+      <topic label="Endpoints" href="RiderEndptRef.html">
+         <topic label="Endpoint" href="endpoint.html"/>
+         <topic label="Bean" href="beanEndpt.html"/>
+         <topic label="Log" href="logEIP.html"/>
+         <topic label="Process" href="process.html"/>
+      </topic>
+      <topic label="Routing" href="RiderRouteRef.html">
+         <topic label="Aggregate" href="aggregate.html"/>
+         <topic label="Choice" href="choice.html"/>
+         <topic label="Dynamic Router" href="dynamicRouter.html"/>
+         <topic label="Filter" href="filter.html"/>
+         <topic label="Idempotent Consumer" href="idempotentConsumer.html"/>
+         <topic label="Load Balance" href="loadBalance.html"/>
+         <topic label="Multicast" href="multicast.html"/>
+         <topic label="Otherwise" href="otherwise.html"/>
+         <topic label="Pipeline" href="pipeline.html"/>
+         <topic label="Recipient List" href="recipientList.html"/>
+         <topic label="Resequence" href="resequence.html"/>
+         <topic label="Routing Slip" href="routingSlip.html"/>
+         <topic label="Sort" href="sort.html"/>
+         <topic label="Split" href="split.html"/>
+         <topic label="When" href="when.html"/>
+         <topic label="Wire Tap" href="wiretap.html"/>
+      </topic>
+      <topic label="Control Flow" href="RiderControlFlowRef.html">
+         <topic label="Catch" href="catch.html"/>
+         <topic label="Delay" href="delay.html"/>
+         <topic label="Finally" href="finally.html"/>
+         <topic label="Intercept" href="intercept.html"/>
+         <topic label="Intercept From" href="interceptFrom.html"/>
+         <topic label="Intercept Send To Endpoint" href="interceptSendToEndpoint.html"/>
+         <topic label="Loop" href="loop.html"/>
+         <topic label="On Completion" href="onCompletion.html"/>
+         <topic label="On Exception" href="onException.html"/>
+         <topic label="Rollback" href="rollback.html"/>
+         <topic label="Throttle" href="throttle.html"/>
+         <topic label="Throw Exception" href="throwException.html"/>
+         <topic label="Transacted" href="transacted.html"/>
+         <topic label="Try" href="try.html"/>
+      </topic>
+      <topic label="Transformation" href="RiderTransformRef.html">
+         <topic label="Convert Body" href="convertBody.html"/>
+         <topic label="Enrich" href="enrich.html"/>
+         <topic label="In Only" href="inOnly.html"/>
+         <topic label="In Out" href="inOut.html"/>
+         <topic label="Marshal" href="marshal.html"/>
+         <topic label="Poll Enrich" href="pollEnrich.html"/>
+         <topic label="Remove Header" href="removeHeader.html"/>
+         <topic label="Remove Headers" href="removeHeaders.html"/>
+         <topic label="Remove Property" href="removeProperty.html"/>
+         <topic label="Set Body" href="setBody.html"/>
+         <topic label="Set Exchange Pattern" href="setExchangePattern.html"/>
+         <topic label="Set Fault Body" href="setFaultBody.html"/>
+         <topic label="Set Header" href="setHeader.html"/>
+         <topic label="Set Out Header" href="setOutHeader.html"/>
+         <topic label="Set Property" href="setProperty.html"/>
+         <topic label="Transform" href="transform.html"/>
+         <topic label="Unmarshal" href="unmarshal.html"/>
+      </topic>
+      <topic label="Miscellaneous" href="RiderMiscRef.html">
+         <topic label="AOP" href="aop.html"/>
+         <topic label="Policy" href="policy.html"/>
+         <topic label="Sampling" href="sampling.html"/>
+         <topic label="Stop" href="stop.html"/>
+         <topic label="Threads" href="threads.html"/>
+         <topic label="Validate" href="validate.html"/>
+      </topic>
+      <topic label="Route Icon" href="routeIcon.html"/>
+   </topic>
+   <topic label="Component Reference" href="RiderCompRef.html">
+      <topic label="Table of Components" href="RiderCompTble.html"/>
+      <topic label="Apache CXF Endpoints" href="cxf.html">
+         <topic label="CXF" href="cxfComp.html"/>
+         <topic label="CXF Bean" href="cxfBeanComp.html"/>
+         <topic label="CXF REST" href="cxfrs.html"/>
+      </topic>
+      <topic label="File Endpoints" href="RiderFileEptRef.html">
+         <topic label="ActiveMQ Journal" href="ActiveMQJournal.html"/>
+         <topic label="File" href="file.html"/>
+         <topic label="FTP/SFTP" href="ftp.html"/>
+         <topic label="HDFS" href="hdfs.html"/>
+      </topic>
+      <topic label="Google App Engine Endpoints" href="gae.html">
+         <topic label="GAuth" href="gauth.html"/>
+         <topic label="GHTTP" href="ghttp.html"/>
+         <topic label="GLogin" href="glogin.html"/>
+         <topic label="GMail" href="gmail.html"/>
+         <topic label="GTask" href="gtask.html"/>
+      </topic>
+      <topic label="HTTP Endpoints" href="RiderHTTPEptRef.html">
+         <topic label="HTTP" href="http.html"/>
+         <topic label="HTTP4" href="http4.html"/>
+         <topic label="Jetty" href="jetty.html"/>
+         <topic label="Restlet" href="restlet.html"/>
+         <topic label="Servlet" href="servlet.html"/>
+      </topic>
+      <topic label="Internal Endpoints" href="RiderIntEptRef.html">
+         <topic label="Direct" href="direct.html"/>
+         <topic label="Seda" href="seda.html"/>
+         <topic label="VM" href="vm.html"/>
+      </topic>
+      <topic label="Messaging Endpoints" href="RiderMsgEptRef.html">
+         <topic label="ActiveMQ" href="ActiveMQ.html"/>
+         <topic label="AMQP" href="amqp.html"/>
+         <topic label="IRC" href="irc.html"/>
+         <topic label="JMS" href="jms.html"/>
+         <topic label="Mail" href="mail.html"/>
+         <topic label="MSMQ" href="msmq.html"/>
+         <topic label="SIP" href="sip.html"/>
+         <topic label="SMPP" href="smpp.html"/>
+         <topic label="XMPP" href="xmpp.html"/>
+      </topic>
+      <topic label="Scheduling Endpoints" href="scheduling.html">
+         <topic label="Quartz" href="quartz.html"/>
+         <topic label="Timer" href="timer.html"/>
+      </topic>
+      <topic label="Testing Endpoints" href="RiderTestEptRef.html">
+         <topic label="Mock" href="mock.html"/>
+         <topic label="Test" href="test.html"/>
+      </topic>
+      <topic label="Atom Component" href="atom.html"/>
+      <topic label="Bean" href="bean.html"/>
+      <topic label="Bean Validation" href="beanValidation.html"/>
+      <topic label="Browse" href="browse.html"/>
+      <topic label="Cache" href="cache.html"/>
+      <topic label="Class" href="class.html"/>
+      <topic label="Cometd" href="cometd.html"/>
+      <topic label="Context" href="_IDU_Context.html"/>
+      <topic label="Crypto (Digital Signatures)" href="cryptoDS.html"/>
+      <topic label="DataSet" href="dataSet.html"/>
+      <topic label="Db4o" href="db4o.html"/>
+      <topic label="DNS" href="_IDU_DNS.html"/>
+      <topic label="EJB" href="ejb.html"/>
+      <topic label="Esper" href="esper.html"/>
+      <topic label="Event" href="event.html"/>
+      <topic label="Exec" href="exec.html"/>
+      <topic label="FIX" href="fix.html"/>
+      <topic label="Flatpack" href="flatpack.html"/>
+      <topic label="Freemarker" href="freemarker.html"/>
+      <topic label="Hazelcast Component" href="hazelcast.html"/>
+      <topic label="Hibernate" href="hibernate.html"/>
+      <topic label="iBATIS" href="ibatis.html"/>
+      <topic label="JavaSpace" href="javaSpace.html"/>
+      <topic label="JBI" href="jbi.html"/>
+      <topic label="JCR" href="jcr.html"/>
+      <topic label="JDBC" href="jdbc.html"/>
+      <topic label="Jing" href="jing.html"/>
+      <topic label="JMX" href="jmx.html"/>
+      <topic label="JPA" href="jpa.html"/>
+      <topic label="JT400" href="jt400.html"/>
+      <topic label="Language" href="language.html"/>
+      <topic label="LDAP" href="ldap.html"/>
+      <topic label="List" href="list.html"/>
+      <topic label="Log" href="log.html"/>
+      <topic label="Lucene" href="lucene.html"/>
+      <topic label="MINA Component" href="mina.html"/>
+      <topic label="MSV" href="msv.html"/>
+      <topic label="MyBatis" href="_IDU_MyBatis.html"/>
+      <topic label="Nagios" href="nagios.html"/>
+      <topic label="Netty" href="netty.html"/>
+      <topic label="NMR" href="nmr.html"/>
+      <topic label="Printer" href="printer.html"/>
+      <topic label="Properties" href="properties.html"/>
+      <topic label="Quickfix" href="quickfix.html"/>
+      <topic label="Ref" href="registry.html"/>
+      <topic label="Routebox" href="_IDU_Routebox.html"/>
+      <topic label="RMI" href="rmi.html"/>
+      <topic label="RSS" href="rss.html"/>
+      <topic label="Scalate" href="scalate.html"/>
+      <topic label="SNMP" href="snmp.html"/>
+      <topic label="Spring Integration" href="springIntegration.html"/>
+      <topic label="Spring Web Services" href="springWS.html"/>
+      <topic label="SQL Component" href="sql.html"/>
+      <topic label="Stream" href="stream.html"/>
+      <topic label="StringTemplate" href="stringTemplate.html"/>
+      <topic label="Validation" href="validation.html"/>
+      <topic label="Velocity" href="velocity.html"/>
+      <topic label="XQuery Endpoint" href="xquery.html"/>
+      <topic label="XSLT" href="xslt.html"/>
+   </topic>
+</toc>
