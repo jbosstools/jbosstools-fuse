@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Vendor: FuseSource.com
-Bundle-ClassPath: .
-Bundle-Version: 3.0.0.v20121016-2226-LOCAL
-Bundle-Name: Fuse IDE Help Plugin
-Bundle-ManifestVersion: 2
-Bundle-SymbolicName: org.fusesource.ide.help;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-

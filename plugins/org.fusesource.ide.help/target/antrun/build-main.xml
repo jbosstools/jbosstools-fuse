@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<project name="maven-antrun-" default="main"  >
-<target name="main">
-  <copy todir="/workspace/java/fuseide/plugins/org.fusesource.ide.help" overwrite="true" failonerror="false">
-    <fileset dir="/workspace/java/fuseide/plugins/org.fusesource.ide.help/../../rider-docs/output/eclipsehelp" excludes="META-INF/**"/>
-  </copy>
-</target>
-</project>
