@@ -140,7 +140,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 
 		// selection tool
 		ToolEntry tool = new GFPanningSelectionToolEntry();
-//		entries.add(tool);
+		entries.add(tool);
 		setDefaultEntry(tool);
 
 //		// marquee tool
