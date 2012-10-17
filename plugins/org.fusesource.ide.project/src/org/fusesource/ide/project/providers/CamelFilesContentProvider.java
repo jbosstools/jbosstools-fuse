@@ -170,7 +170,7 @@ public class CamelFilesContentProvider implements ITreeContentProvider {
 						findFiles(f);
 					} else {
 						IFile ifile = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(f.toURI())[0];
-						if (ifile.getContentDescription().getContentType().getId().equals("org.fusesource.ide.camel.editor.camelContentType")) {
+						if (ifile.getContentDescription() != null && ifile.getContentDescription().getContentType().getId().equals("org.fusesource.ide.camel.editor.camelContentType")) {
 							addCamelFile(new CamelVirtualFile((org.eclipse.core.internal.resources.File)ifile));
 						}
 					}
