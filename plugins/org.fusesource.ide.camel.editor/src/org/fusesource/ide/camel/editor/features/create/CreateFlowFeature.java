@@ -1,8 +1,6 @@
 package org.fusesource.ide.camel.editor.features.create;
 
 
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateConnectionContext;
 import org.eclipse.graphiti.features.context.impl.AddConnectionContext;
@@ -85,7 +83,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 				}
 			} else {
 				// create new business object
-				EReference eReference = createEReference(source, target);
+				Flow eReference = createFlow(source, target);
 
 				// add connection for business object
 				AddConnectionContext addContext = new AddConnectionContext(
@@ -93,9 +91,6 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 				addContext.setNewObject(eReference);
 				newConnection = (Connection) getFeatureProvider().addIfPossible(
 						addContext);
-
-				// link the business objects
-				linkBOs(source, target);
 			}
 		}
 
@@ -119,18 +114,11 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	/**
 	 * Creates a EReference between two EClasses.
 	 */
-	private EReference createEReference(AbstractNode source, AbstractNode target) {
-		EReference eReference = EcoreFactory.eINSTANCE.createEReference();
-		eReference.setName("new EReference"); //$NON-NLS-1$
-		eReference.setEType(target);
-		eReference.setLowerBound(0);
-		eReference.setUpperBound(1);
-		source.getEStructuralFeatures().add(eReference);
-		return eReference;
-	}
+	private Flow createFlow(AbstractNode source, AbstractNode target) {
+		Flow flow = new Flow(source, target);
+		flow.setName("new Flow"); //$NON-NLS-1$
 
-	private Flow linkBOs(AbstractNode source, AbstractNode target) {
-		return new Flow(source, target);
+		return flow;
 	}
 
 	@Override

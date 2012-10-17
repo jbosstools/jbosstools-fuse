@@ -39,8 +39,6 @@ import org.apache.camel.model.loadbalancer.WeightedLoadBalancerDefinition;
 import org.apache.camel.spi.NodeIdFactory;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.emf.ecore.impl.EClassImpl;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.graphics.Image;
@@ -88,7 +86,7 @@ import org.fusesource.ide.preferences.PreferencesConstants;
 /**
  * @author lhein
  */
-public abstract class AbstractNode extends EClassImpl implements IPropertySource, IAdaptable {
+public abstract class AbstractNode implements IPropertySource, IAdaptable {
 
 	protected static final boolean lazyCreateIds = false;
 	protected static final boolean useCamelIds = true;
@@ -120,6 +118,7 @@ public abstract class AbstractNode extends EClassImpl implements IPropertySource
 
 	private static transient NodeIdFactory nodeIdFactory;
 
+	private String name;
 	private String id;
 	private String description;
 	private Rectangle layout;
@@ -192,13 +191,13 @@ public abstract class AbstractNode extends EClassImpl implements IPropertySource
 	 * Clears any EMF / diagram related resources
 	 */
 	public void clearResources() {
-		this.eSetDirectResource(null);
-		//this.eSetResource(null, null);
-
-		Resource resource = this.eResource();
-		if (resource != null) {
-			throw new IllegalStateException("Should have cleared the resources!!!");
-		}
+//		this.eSetDirectResource(null);
+//		//this.eSetResource(null, null);
+//
+//		Resource resource = this.eResource();
+//		if (resource != null) {
+//			throw new IllegalStateException("Should have cleared the resources!!!");
+//		}
 
 
 		List<AbstractNode> children = getOutputs();
@@ -1535,6 +1534,12 @@ public abstract class AbstractNode extends EClassImpl implements IPropertySource
 	}
 
 
-
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }

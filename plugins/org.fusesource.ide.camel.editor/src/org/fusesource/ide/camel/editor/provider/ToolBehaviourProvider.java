@@ -36,6 +36,7 @@ import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationResult;
 import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.commons.util.Objects;
 
 
@@ -313,7 +314,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	public GraphicsAlgorithm[] getClickArea(PictogramElement pe) {
 		IFeatureProvider featureProvider = getFeatureProvider();
 		Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
-		if (bo instanceof AbstractNode) {
+		if (bo instanceof AbstractNode && !(bo instanceof Flow)) {
 			GraphicsAlgorithm invisible = pe.getGraphicsAlgorithm();
 			GraphicsAlgorithm rectangle = invisible.getGraphicsAlgorithmChildren().get(0);
 			return new GraphicsAlgorithm[] { rectangle };

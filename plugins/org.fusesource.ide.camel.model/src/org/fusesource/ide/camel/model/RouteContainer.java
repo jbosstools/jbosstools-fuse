@@ -25,7 +25,7 @@ import org.fusesource.ide.commons.util.Objects;
  */
 public class RouteContainer extends AbstractNode {
 
-	protected static final transient Log LOG = LogFactory.getLog(Container.class);
+	protected static final transient Log LOG = LogFactory.getLog(RouteContainer.class);
 
 	/** Property ID to use when a child is added to this diagram. */
 	public static final String CHILD_ADDED_PROP = "Route.ChildAdded";

@@ -99,12 +99,9 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 		if (addFeature.canAdd(addContext)) {
 			newNode = addFeature.add(addContext);
 			if (newNode != null) {
-				RouteSupport selectedRoute = Activator.getDefault().getDiagramEditor().getSelectedRoute();
+				RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
 				if (selectedRoute != null) {
 					selectedRoute.addChild(node);
-				}
-				if (getDiagram() != null) {
-					getDiagram().eResource().getContents().add(node);					
 				}
 			}
 		}

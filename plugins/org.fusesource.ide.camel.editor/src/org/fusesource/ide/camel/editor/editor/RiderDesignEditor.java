@@ -68,10 +68,12 @@ import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.camel.tooling.util.ValidationHandler;
 import org.fusesource.ide.camel.editor.AbstractNodes;
 import org.fusesource.ide.camel.editor.Activator;
+import org.fusesource.ide.camel.editor.CamelModelChangeListener;
 import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
@@ -90,7 +92,6 @@ import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 import org.fusesource.scalate.util.IOUtil;
-
 
 /**
  * @author lhein
@@ -126,10 +127,11 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	private RouteContainer model;
 	private RouteSupport activeRoute;
 	private CamelContextSelectionSynchronizer synchronizer;
-
+	private CamelModelChangeListener camelModelListener;
+	
 	private static final boolean selectFirstRouteOnLayout = true;
 	private boolean graphitiDoesNotMarkAsDirty = true;
-
+	
 	private DesignerCache activeConfig;
 	private Map<RouteSupport, DesignerCache> cache = new HashMap<RouteSupport, DesignerCache>();
 
@@ -203,6 +205,17 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		this.data = parent.getDesignEditorData();
 		this.activeConfig = new DesignerCache();
 		this.editor = parent;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.internal.editor.DiagramEditorInternal#registerBOListener()
+	 */
+	@Override
+	protected void registerBOListener() {
+		camelModelListener = new CamelModelChangeListener(this);
+		
+		TransactionalEditingDomain eDomain = getEditingDomain();
+		eDomain.addResourceSetListener(camelModelListener);
 	}
 
 	@Override
@@ -1462,7 +1475,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		} else {
 			try {
 				if (this.activeConfig.diagram != null) this.activeConfig.diagram.eResource().delete(null);
-				if (this.getModel() != null && this.getModel().eResource() != null) this.getModel().eResource().delete(null);
+//				if (this.getModel() != null && this.getModel().eResource() != null) this.getModel().eResource().delete(null);
 			} catch (Exception ex) {
 				Activator.getLogger().error("Unable to clear the diagram editor cache.", ex);
 			}
