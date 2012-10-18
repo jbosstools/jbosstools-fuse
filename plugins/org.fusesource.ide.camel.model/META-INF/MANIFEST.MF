@@ -36,7 +36,6 @@ Require-Bundle: org.fusesource.ide.preferences,
  org.apache.aries.blueprint;resolution:=optional,
  org.apache.aries.util;resolution:=optional,
  org.apache.aries.proxy.api;resolution:=optional,
- scala-library;bundle-version="2.9.0",
- org.eclipse.emf.ecore;bundle-version="2.7.0"
+ scala-library;bundle-version="2.9.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.camel.model.Activator

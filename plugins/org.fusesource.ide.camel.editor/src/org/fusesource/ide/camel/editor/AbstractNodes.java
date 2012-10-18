@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
+import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.PictogramLink;
 import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
@@ -53,17 +54,14 @@ public class AbstractNodes {
 		} else if (input instanceof ContainerShapeEditPart) {
 			ContainerShapeEditPart editPart = (ContainerShapeEditPart) input;
 			PictogramElement element = editPart.getPictogramElement();
-			if (element != null) {
-				PictogramLink link = element.getLink();
-				if (link != null) {
-					EList<EObject> businessObjects = link.getBusinessObjects();
-					if (businessObjects != null && businessObjects.size() > 0) {
-						answer = toAbstractNode(businessObjects.get(0));
-					}
-				} else {
+			if (Activator.getDiagramEditor() != null) {
+				if (element != null && element instanceof Diagram) {
 					// route selected - this makes properties view work when route is
 					// selected in the diagram view
-					answer = Activator.getDiagramEditor() != null ? Activator.getDiagramEditor().getSelectedRoute() : null;
+					answer = Activator.getDiagramEditor().getSelectedRoute() != null ? Activator.getDiagramEditor().getSelectedRoute() : Activator.getDiagramEditor().getModel();				
+				} else {
+					// select the node
+					answer = (AbstractNode)Activator.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(element);
 				}
 			}
 		} else if (input instanceof AbstractEditPart) {
@@ -72,8 +70,7 @@ public class AbstractNodes {
 			answer = toAbstractNode(model);
 		} else if (input instanceof ContainerShape) {
 			ContainerShape shape = (ContainerShape) input;
-			EObject container = shape.eContainer();
-			answer = toAbstractNode(container);
+			answer = (AbstractNode)Activator.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(shape);
 		}
 		if (input != null && answer == null) {
 			answer = (AbstractNode) Platform.getAdapterManager().getAdapter(input, AbstractNode.class);

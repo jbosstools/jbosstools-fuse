@@ -4,6 +4,7 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateFeature;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.PaletteCategoryItemProvider;
@@ -125,7 +126,7 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 		// We add the model element to the resource of the diagram for
 		// simplicity's sake. Normally, a customer would use its own
 		// model persistence layer for storing the business model separately.
-		diagram.eResource().getContents().add(node);
+//		diagram.eResource().getContents().add(node);
 
 		//		Use the following instead of the above line to store the model
 		//		data in a seperate file parallel to the diagram file
@@ -140,10 +141,13 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 		//		}
 
 		// do the add
-		addGraphicalRepresentation(context, node);
+		PictogramElement pe = addGraphicalRepresentation(context, node);
 
+		getFeatureProvider().link(pe, node);
+		
 		// activate direct editing after object creation
 		getFeatureProvider().getDirectEditingInfo().setActive(true);
+		
 		// return newly created business object(s)
 		return new Object[] { node };
 	}

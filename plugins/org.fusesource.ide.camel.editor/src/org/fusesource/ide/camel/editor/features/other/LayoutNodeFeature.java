@@ -1,8 +1,5 @@
 package org.fusesource.ide.camel.editor.features.other;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.graphiti.datatypes.IDimension;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ILayoutContext;
@@ -14,6 +11,7 @@ import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.fusesource.ide.camel.editor.features.add.AddNodeFeature;
+import org.fusesource.ide.camel.model.AbstractNode;
 
 
 public class LayoutNodeFeature extends AbstractLayoutFeature {
@@ -31,8 +29,11 @@ public class LayoutNodeFeature extends AbstractLayoutFeature {
 		PictogramElement pe = context.getPictogramElement();
 		if (!(pe instanceof ContainerShape))
 			return false;
-		EList<EObject> businessObjects = pe.getLink().getBusinessObjects();
-		return businessObjects.size() == 1 && businessObjects.get(0) instanceof EClass;
+		
+		Object[] bos = getAllBusinessObjectsForPictogramElement(pe);
+		
+		return bos != null && bos.length == 1
+	              && bos[0] instanceof AbstractNode;
 	}
 
 	public boolean layout(ILayoutContext context) {

@@ -1,13 +1,17 @@
 package org.fusesource.ide.camel.editor.provider;
 
 import org.eclipse.graphiti.dt.AbstractDiagramTypeProvider;
+import org.eclipse.graphiti.notification.INotificationService;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
+import org.fusesource.ide.camel.editor.CamelModelNotificationService;
 
 /**
  * @author lhein
  */
 public class DiagramTypeProvider extends AbstractDiagramTypeProvider {
 
+	private CamelModelNotificationService camelModelNotificationService;
+	
 	private IToolBehaviorProvider[] toolBehaviorProviders;
 
 	/**
@@ -25,6 +29,18 @@ public class DiagramTypeProvider extends AbstractDiagramTypeProvider {
 					new IToolBehaviorProvider[] { new ToolBehaviourProvider(this) };
 		}
 		return toolBehaviorProviders;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.dt.AbstractDiagramTypeProvider#getNotificationService()
+	 */
+	@Override
+	public INotificationService getNotificationService() {
+		if (this.camelModelNotificationService == null) {
+			this.camelModelNotificationService = new CamelModelNotificationService(this);
+		}
+		return this.camelModelNotificationService;
 	}
 
 	/* (non-Javadoc)

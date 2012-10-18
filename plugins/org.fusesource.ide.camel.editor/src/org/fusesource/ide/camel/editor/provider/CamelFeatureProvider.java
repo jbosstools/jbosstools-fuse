@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IAddFeature;
 import org.eclipse.graphiti.features.ICopyFeature;
@@ -41,6 +40,7 @@ import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.platform.IDiagramEditor;
 import org.eclipse.graphiti.ui.features.DefaultFeatureProvider;
 import org.fusesource.ide.camel.editor.AbstractNodes;
+import org.fusesource.ide.camel.editor.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
 import org.fusesource.ide.camel.editor.features.add.AddNodeFeature;
@@ -60,6 +60,7 @@ import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
 import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.camel.model.generated.Bean;
 import org.fusesource.ide.commons.util.Strings;
 
@@ -70,15 +71,20 @@ import org.fusesource.ide.commons.util.Strings;
 public class CamelFeatureProvider extends DefaultFeatureProvider {
 
 	private AddNodeMenuFactory menuFactory = new AddNodeMenuFactory();
-
+	private CamelModelIndependenceSolver modelIndependenceSolver;
+	
 	public CamelFeatureProvider(IDiagramTypeProvider dtp) {
 		super(dtp);
+		if(modelIndependenceSolver == null)
+			modelIndependenceSolver = new CamelModelIndependenceSolver();
+		
+		setIndependenceSolver(modelIndependenceSolver);
 	}
 
 	@Override
 	public IAddFeature getAddFeature(IAddContext context) {
 		// is object for add request a EClass or EReference?
-		if (context.getNewObject() instanceof EReference) {
+		if (context.getNewObject() instanceof Flow) {
 			return new AddFlowFeature(this);
 		} else if (context.getNewObject() instanceof AbstractNode) {
 			return new AddNodeFeature(this);
@@ -257,5 +263,14 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	@Override
 	public IPasteFeature getPasteFeature(IPasteContext context) {
 		return new PasteNodeFeature(this);
+	}
+	
+	public CamelModelIndependenceSolver getModelIndependenceSolver() {
+		return modelIndependenceSolver;
+	}
+
+	public void setModelIndependenceSolver(CamelModelIndependenceSolver modelIndependenceSolver) {
+		this.modelIndependenceSolver = modelIndependenceSolver;
+		this.setIndependenceSolver(this.modelIndependenceSolver);
 	}
 }

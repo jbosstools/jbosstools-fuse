@@ -1,7 +1,5 @@
 package org.fusesource.ide.camel.editor.features.add;
 
-
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IAddConnectionContext;
 import org.eclipse.graphiti.features.context.IAddContext;
@@ -17,6 +15,7 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.graphiti.services.IPeCreateService;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
+import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -38,7 +37,7 @@ public class AddFlowFeature extends AbstractAddFeature {
 	public boolean canAdd(IAddContext context) {
 		// return true if given business object is an EReference
 		// note, that the context must be an instance of IAddConnectionContext
-		if (context instanceof IAddConnectionContext && context.getNewObject() instanceof EReference) {
+		if (context instanceof IAddConnectionContext && context.getNewObject() instanceof Flow) {
 			return true;
 		}
 		return false;
@@ -50,7 +49,7 @@ public class AddFlowFeature extends AbstractAddFeature {
 	@Override
 	public PictogramElement add(IAddContext context) {
 		IAddConnectionContext addConContext = (IAddConnectionContext) context;
-		EReference addedEReference = (EReference) context.getNewObject();
+		Flow addedEReference = (Flow) context.getNewObject();
 
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
 		// CONNECTION WITH POLYLINE
@@ -73,7 +72,7 @@ public class AddFlowFeature extends AbstractAddFeature {
 		text.setStyle(StyleUtil.getStyleForCamelText((getDiagram())));
 		gaService.setLocation(text, 10, 0);
 		// set reference name in the text decorator
-		EReference flow = (EReference) context.getNewObject();
+		Flow flow = (Flow) context.getNewObject();
 		text.setValue(flow.getName());
 		
 		// add static graphical decorators (composition and navigable)

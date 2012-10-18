@@ -9,6 +9,7 @@ import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteContainer;
@@ -93,10 +94,12 @@ public class CamelContextSelectionSynchronizer extends SelectionSynchronizer {
             return getEditPart(viewer, route);
         } else if (o instanceof ContainerShape) {
             // someone selected a diagram figure in the diagram editor
-            AbstractNode node = (AbstractNode) ((ContainerShape)o).getLink().getBusinessObjects().get(0);
-            return getEditPart(viewer, node);
-        }
-         
+        	AbstractNode node = null;
+        	node = (AbstractNode)Activator.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(((ContainerShape)o));
+        	if (node != null) {
+        		return getEditPart(viewer, node);
+        	}
+        }         
         return super.convert(viewer, part);
     }
      
