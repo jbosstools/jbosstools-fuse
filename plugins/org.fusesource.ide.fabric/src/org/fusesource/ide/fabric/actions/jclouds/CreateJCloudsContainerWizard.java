@@ -22,7 +22,7 @@ import org.fusesource.ide.fabric.navigator.ContainerNode;
 import org.fusesource.ide.fabric.navigator.Fabric;
 import org.fusesource.ide.fabric.navigator.ProfileNode;
 import org.fusesource.ide.fabric.navigator.VersionNode;
-import org.linkedin.zookeeper.client.IZKClient;
+import org.fusesource.fabric.zookeeper.IZKClient;
 
 
 /**

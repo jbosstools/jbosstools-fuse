@@ -507,6 +507,7 @@ null, void and of no legal effect.
          version="0.0.0"
          unpack="false"/>
 
+<!--
    <plugin
          id="org.fusesource.fabric.fabric-zookeeper"
          download-size="0"
@@ -520,6 +521,7 @@ null, void and of no legal effect.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+-->
 
    <plugin
          id="org.fusesource.fabric.fabric-linkedin-zookeeper"

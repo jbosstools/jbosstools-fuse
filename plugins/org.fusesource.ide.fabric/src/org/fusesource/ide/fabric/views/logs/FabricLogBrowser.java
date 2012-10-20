@@ -16,7 +16,7 @@ import org.fusesource.insight.log.rest.LogResponse;
 import org.fusesource.insight.log.rest.LogResponseHit;
 import org.fusesource.insight.log.rest.LogResponseHits;
 import org.fusesource.fabric.groups.ZooKeeperGroupFactory;
-import org.linkedin.zookeeper.client.IZKClient;
+import org.fusesource.fabric.zookeeper.IZKClient;
 
 import scala.actors.threadpool.Arrays;
 

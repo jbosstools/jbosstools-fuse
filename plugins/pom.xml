@@ -407,6 +407,7 @@
       <artifactId>insight-log</artifactId>
       <version>${fabric-version}</version>
     </dependency>
+		<!--
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-core</artifactId>
@@ -442,6 +443,7 @@
       <artifactId>fabric-groups</artifactId>
       <version>${fabric-version}</version>
     </dependency>
+		-->
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-core-asl</artifactId>
@@ -458,21 +460,23 @@
       <version>${jackson-version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.fusesource.fabric</groupId>
-      <artifactId>fabric-linkedin-zookeeper</artifactId>
-      <version>${fabric-version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.fusesource.fabric</groupId>
+        <artifactId>fabric-linkedin-zookeeper</artifactId>
+        <version>${fabric-version}</version>
+      </dependency>
+      <!--
+      <dependency>
+        <groupId>org.fusesource.fabric</groupId>
+        <artifactId>fabric-zookeeper-spring</artifactId>
+        <version>${fabric-version}</version>
+      </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-zookeeper</artifactId>
       <version>${fabric-version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.fusesource.fabric</groupId>
-      <artifactId>fabric-zookeeper-spring</artifactId>
-      <version>${fabric-version}</version>
-    </dependency>
+		-->
 
     <dependency>
       <groupId>org.apache.xerces</groupId>

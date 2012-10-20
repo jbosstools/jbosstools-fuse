@@ -16,9 +16,9 @@
     <groupId>org.fusesource</groupId>
     <artifactId>fuse-project</artifactId>
     <!-- 
-    <version>99-master-SNAPSHOT</version>
+    <version>7.1.0.fuse-020</version>
     -->
-    <version>7.1.0.fuse-017</version>
+      <version>99-master-SNAPSHOT</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
@@ -43,12 +43,14 @@
 
 		<!--
     <fabric-version>7.1.0.fuse-SNAPSHOT</fabric-version>
-    <fabric-version>99-master-SNAPSHOT</fabric-version>
 		-->
 <!--
     <fabric-version>7.1.0.fuse-019</fabric-version>
 -->
-    <fabric-version>7.1.0.fuse-017</fabric-version>
+<!--
+    <fabric-version>7.1.0.fuse-20</fabric-version>
+-->
+      <fabric-version>99-master-SNAPSHOT</fabric-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
 

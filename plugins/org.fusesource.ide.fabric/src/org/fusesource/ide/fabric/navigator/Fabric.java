@@ -52,7 +52,7 @@ import org.fusesource.ide.fabric.views.logs.FabricLogBrowser;
 import org.fusesource.ide.fabric.views.logs.HasLogBrowser;
 import org.fusesource.ide.fabric.views.logs.ILogBrowser;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
-import org.linkedin.zookeeper.client.IZKClient;
+import org.fusesource.fabric.zookeeper.IZKClient;
 
 import com.google.common.base.Objects;
 

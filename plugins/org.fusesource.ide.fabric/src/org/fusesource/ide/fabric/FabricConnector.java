@@ -27,9 +27,9 @@ import org.fusesource.ide.commons.Bundles;
 import org.fusesource.ide.fabric.actions.FabricDetails;
 import org.fusesource.ide.fabric.actions.jclouds.JClouds;
 import org.fusesource.ide.fabric.navigator.Fabric;
-import org.linkedin.zookeeper.client.IZKClient;
+import org.fusesource.fabric.zookeeper.IZKClient;
+import org.fusesource.fabric.zookeeper.internal.ZKClient;
 import org.linkedin.zookeeper.client.LifecycleListener;
-import org.linkedin.zookeeper.client.ZKClient;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -264,7 +264,7 @@ public class FabricConnector {
 				this.fabricService.getFabricStatus();
 			} catch (Exception ex) {
 				throw new FabricNotConnectedException(this, ex);
-			}	
+			}
 		}
 	}
 
@@ -283,7 +283,7 @@ public class FabricConnector {
 					if (zkClient != null) {
 						// Note we cannot use zkClient.close()
 						// since you cannot currently close a client which is not connected
-						zkClient.destroy();
+						zkClient.close();
 						zkClient = null;
 					}
 				}
@@ -325,11 +325,11 @@ public class FabricConnector {
 			try {
 				factory.destroy();
 				factory = null;
-				
+
 				// destroy() works better if its not connected
 				if (zooKeeper instanceof ZKClient) {
 					ZKClient zkclient = (ZKClient) zooKeeper;
-					zkclient.destroy();
+					zooKeeper.close();
 				} else {
 					zooKeeper.close();
 				}
