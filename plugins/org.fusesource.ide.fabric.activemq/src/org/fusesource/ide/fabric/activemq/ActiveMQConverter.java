@@ -27,35 +27,39 @@ public class ActiveMQConverter {
 	private Set<String> ignoredKeys = new HashSet<String>(Arrays.asList("PropertiesText"));
 
 	public IExchange toExchange(Object object) {
-		Message message = new Message();
-		Map<String, Object> headers = message.getHeaders();
 		if (object instanceof CompositeData) {
 			CompositeData data = (CompositeData) object;
-			Set<String> keySet = data.getCompositeType().keySet();
-			for (String key : keySet) {
-				Object value = data.get(key);
-				// System.out.println("Key: " + key + " value " + value);
-				if (ignoredKeys.contains(key)) {
-					continue;
-				}
-				boolean nestedProperty = nestedProperties.contains(key);
-				if (nestedProperty && value instanceof TabularData) {
-					TabularData td = (TabularData) value;
-					Map<String, Object> map = toMap(td);
-					putAllNonNull(headers, map);
-				} else if (nestedProperty && value instanceof Map) {
-					Map<String, Object> map = (Map<String, Object>) value;
-					putAllNonNull(headers, map);
-				} else if (bodyKeys.contains(key)) {
-					message.setBody(value);
-				} else if (value != null) {
-					headers.put(key, value);
-				}
-			}
-			Set<Entry<String, Object>> entrySet = headers.entrySet();
-			return new Exchange(message);
+			return toExchange(data);
 		}
 		return null;
+	}
+
+	public IExchange toExchange(CompositeData data) {
+		Message message = new Message();
+		Map<String, Object> headers = message.getHeaders();
+		Set<String> keySet = data.getCompositeType().keySet();
+		for (String key : keySet) {
+			Object value = data.get(key);
+			// System.out.println("Key: " + key + " value " + value);
+			if (ignoredKeys.contains(key)) {
+				continue;
+			}
+			boolean nestedProperty = nestedProperties.contains(key);
+			if (nestedProperty && value instanceof TabularData) {
+				TabularData td = (TabularData) value;
+				Map<String, Object> map = toMap(td);
+				putAllNonNull(headers, map);
+			} else if (nestedProperty && value instanceof Map) {
+				Map<String, Object> map = (Map<String, Object>) value;
+				putAllNonNull(headers, map);
+			} else if (bodyKeys.contains(key)) {
+				message.setBody(value);
+			} else if (value != null) {
+				headers.put(key, value);
+			}
+		}
+		Set<Entry<String, Object>> entrySet = headers.entrySet();
+		return new Exchange(message);
 	}
 
 	protected void putAllNonNull(Map<String, Object> headers,

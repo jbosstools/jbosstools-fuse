@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.jms.InvalidSelectorException;
+import javax.management.openmbean.CompositeData;
 
 import org.apache.activemq.broker.jmx.QueueViewMBean;
 import org.eclipse.jface.action.Action;
@@ -22,6 +22,7 @@ import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.fabric.FabricPlugin;
+import org.fusesource.ide.fabric.activemq.ActiveMQConverter;
 import org.fusesource.ide.fabric.activemq.FabricActiveMQPlugin;
 import org.fusesource.ide.fabric.activemq.Messages;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
@@ -33,6 +34,8 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 	private final QueueViewMBean queue;
 	private final QueueConsumersNode consumersNode;
 	private final QueueProducersNode producersNode;
+	private ActiveMQConverter converter = new ActiveMQConverter();
+
 	public QueueNode(QueuesNode queuesNode, QueueViewMBean queue) {
 		super(queuesNode, queuesNode.getBrokerNode(), queue);
 		this.queuesNode = queuesNode;
@@ -51,14 +54,16 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 	public QueueViewMBean getQueue() {
 		return queue;
 	}
-	
+
+	@Override
 	public List<Node> getChildrenGraph() {
 		List<Node> answer = new ArrayList<Node>();
 		answer.addAll(Arrays.asList(consumersNode.getChildren()));
 		answer.addAll(Arrays.asList(producersNode.getChildren()));
 		return answer;
 	}
-	
+
+	@Override
 	public List<?> getConnectedTo() {
 		return getConsumersNode().getChildrenList();
 	}
@@ -71,17 +76,20 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 		return producersNode;
 	}
 
+	@Override
 	public List<IExchange> browseExchanges() {
 		List<IExchange> answer = new ArrayList<IExchange>();
 		try {
-			List<?> messages = queue.browseMessages();
-			for (Object object : messages) {
-				IExchange exchange = createExchange(object);
-				if (exchange != null) {
-					answer.add(exchange);
+			CompositeData[] cds = queue.browse();
+			if (cds != null) {
+				for (CompositeData cd : cds) {
+					IExchange exchange = converter.toExchange(cd);
+					if (exchange != null) {
+						answer.add(exchange);
+					}
 				}
 			}
-		} catch (InvalidSelectorException e) {
+		} catch (Exception e) {
 			FabricActiveMQPlugin.getLogger().warning("Failed to browse queue " + e, e);
 		}
 		return answer;
@@ -95,6 +103,7 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
 		Action deleteQueueAction = new Action(Messages.DeleteQueueAction, SWT.CHECK) {
+			@Override
 			public void run() {
 				showDeleteQueueDialog();
 			}
