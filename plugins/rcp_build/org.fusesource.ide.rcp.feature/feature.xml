@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.rcp.feature"
       label="Fuse IDE RCP"
-      version="3.0.0.qualifier"
+      version="3.0.61"
       provider-name="FuseSource.com">
 
    <description url="http://fusesource.com/products/fuse-ide-camel/">
@@ -224,7 +224,7 @@ null, void and of no legal effect.
          id="org.fusesource.ide.rcp.branding"
          download-size="0"
          install-size="0"
-         version="3.0.0.qualifier"
+         version="3.0.61"
          unpack="false"/>
 
 </feature>
