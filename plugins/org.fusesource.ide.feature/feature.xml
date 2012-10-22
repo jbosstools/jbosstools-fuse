@@ -272,6 +272,13 @@ null, void and of no legal effect.
          unpack="false"/>
 
    <plugin
+         id="org.eclipse.osgi.services"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.eclipse.equinox.cm"
          download-size="0"
          install-size="0"
@@ -630,6 +637,13 @@ null, void and of no legal effect.
 
    <plugin
          id="osgi.enterprise"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="osgi.cmpn"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -6,8 +6,8 @@ Bundle-Version: 3.0.0.qualifier
 Bundle-Vendor: FuseSource.com
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.osgi,
- org.eclipse.osgi.services,
  osgi.enterprise;bundle-version="4.2.0",
+ osgi.cmpn;bundle-version="4.3.0",
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.deployment,

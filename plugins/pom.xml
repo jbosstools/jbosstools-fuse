@@ -401,8 +401,13 @@
       <artifactId>org.osgi.enterprise</artifactId>
       <version>4.2.0</version>
     </dependency>
-
     <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <version>4.3.0</version>
+    </dependency>
+
+      <dependency>
       <groupId>org.fusesource.insight</groupId>
       <artifactId>insight-log</artifactId>
       <version>${fabric-version}</version>
