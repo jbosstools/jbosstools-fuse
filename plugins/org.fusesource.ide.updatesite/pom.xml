@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>org.fusesource.ide.updatesite</artifactId>
-	<packaging>eclipse-update-site</packaging>
+	<packaging>eclipse-repository</packaging>
 	<name>Fuse IDE :: Plugins :: Update Site</name>
 
 	<build>
@@ -27,6 +27,7 @@
 				<artifactId>maven-updatesite-plugin</artifactId>
 				<version>1.15</version>
 				<configuration>
+				    <inputDirectory>${project.build.directory}/repository</inputDirectory>
 					<remoteServerId>website.fusesource.org</remoteServerId>
 					<remoteServerUrl>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/3.0.x</remoteServerUrl>
 					<!-- <remoteServerUrl>dav:http://fusesource.com/forge/dav/rider/eclipse</remoteServerUrl> -->

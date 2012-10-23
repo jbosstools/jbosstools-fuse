@@ -19,8 +19,8 @@
   <url>http://fusesource.com/products/fuse-ide/</url>
 
   <organization>
-    <name>FuseSource</name>
-    <url>http://fusesource.org/</url>
+    <name>Red Hat</name>
+    <url>http://www.redhat.com</url>
   </organization>
 
   <properties>
@@ -32,7 +32,7 @@
     <scala.library.version>${scala-version}</scala.library.version>
     <aries-version>${aries-blueprint-version}</aries-version>
     <aries-quiesce-version>1.0.0</aries-quiesce-version>
-		<aries-proxy-version>1.0.0</aries-proxy-version>
+    <aries-proxy-version>1.0.0</aries-proxy-version>
     <commons-management-version>1.0</commons-management-version>
     <aopalliance-bundle-version>1.0_3</aopalliance-bundle-version>
     <jaxb-bundle-version>2.1.13_1</jaxb-bundle-version>
@@ -47,7 +47,7 @@
     not sure this dependency works for camel-spring?
     <spring-osgi-version>2.0.0.M2-SNAPSHOT</spring-osgi-version>
 -->
-    <tycho-version>0.15.0</tycho-version>
+    <tycho-version>0.16.0</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
   </properties>
 
