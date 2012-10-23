@@ -41,7 +41,7 @@ public class VisitSubscriptionCenterCommand extends AbstractHandler {
 		IWebBrowser browser = null;
 		IWorkbenchBrowserSupport support = PlatformUI.getWorkbench().getBrowserSupport();
 		try {
-			browser = support.createBrowser("FuseSource.com");
+			browser = support.createBrowser("RedHat.com");
 		} catch (PartInitException e) {
 			Activator.getLogger().warning("Could not create browser: " + e, e);
 		}

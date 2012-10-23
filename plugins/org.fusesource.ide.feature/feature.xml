@@ -3,7 +3,7 @@
       id="org.fusesource.ide.feature"
       label="Fuse IDE"
       version="3.0.0.qualifier"
-      provider-name="FuseSource.com">
+      provider-name="Red Hat Inc.">
 
    <description url="http://fusesource.com/products/fuse-ide/">
       Fuse IDE lets you work with Fuse and Apache ActiveMQ, Camel, CXF, Karaf &amp; ServiceMix.
@@ -13,8 +13,8 @@ flows, deploy your code to Fuse ESB and
 browse and visualise runtime processes over JMX and Fuse Fabric.
    </description>
 
-   <copyright url="http://fusesource.com/">
-      Copyright (C) 2011 FuseSource, Corp.
+   <copyright url="http://redhat.com/">
+      Copyright (C) 2011 Red Hat Inc.
    </copyright>
 
    <license url="http://fusesource.com/products/fuse-ide/">

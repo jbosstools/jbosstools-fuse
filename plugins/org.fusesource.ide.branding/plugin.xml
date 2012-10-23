@@ -57,82 +57,6 @@
                id="org.fusesource.ide.branding.perspective">
          </perspectiveShortcut>
       </perspectiveExtension>
-      
-      <!--
-      <perspectiveExtension
-            targetID="*">
-         <view
-               id="org.eclipse.ui.navigator.ProjectExplorer"
-               minimized="false"
-               relationship="left"
-               relative="org.fusesource.ide.camel.editor.views.RouteView"
-               visible="true">
-         </view>
-         <view
-               closeable="true"
-               id="org.fusesource.ide.camel.editor.views.RouteView"
-               minimized="false"
-               moveable="true"
-               ratio="0.70"
-               relationship="top"
-               relative="org.eclipse.ui.views.PropertySheet"
-               showTitle="true"
-               standalone="false"
-               visible="true">
-         </view>
-         <view
-               closeable="true"
-               id="org.fusesource.ide.fabric.navigator"
-               minimized="false"
-               moveable="true"
-               relationship="stack"
-               relative="org.eclipse.ui.views.ContentOutline"
-               showTitle="true"
-               standalone="false"
-               visible="true">
-         </view>
-         <view
-               closeable="true"
-               id="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer"
-               minimized="false"
-               moveable="true"
-               relationship="stack"
-               relative="org.eclipse.ui.views.ContentOutline"
-               showTitle="true"
-               standalone="false"
-               visible="true">
-         </view>
-         <view
-               id="org.eclipse.ui.views.ContentOutline"
-               minimized="true"
-               relationship="stack"
-               relative="org.fusesource.ide.fabric.navigator"
-               standalone="false"
-               visible="true">
-         </view>
-         <view
-               closeable="false"
-               id="org.fusesource.ide.fabric.views.MessageView"
-               minimized="false"
-               moveable="true"
-               relationship="right"
-               relative="org.eclipse.ui.views.PropertySheet"
-               showTitle="true"
-               standalone="false"
-               visible="true">
-         </view>
-         <view
-               closeable="false"
-               id="org.eclipse.ui.views.PropertySheet"
-               minimized="false"
-               moveable="true"
-               relationship="left"
-               relative="org.fusesource.ide.fabric.views.MessageView"
-               showTitle="true"
-               visible="true">
-         </view>
-      </perspectiveExtension>
-      -->
    </extension>
 
 
@@ -335,39 +259,8 @@
                </iterate>
             </with>
          </enablement>
-            <!--
-         <enablement>
-            <with
-                  variable="selection">
-               <iterate
-                     ifEmpty="false"
-                     operator="or">
-                  <or>
-                     <instanceof
-                           value="org.eclipse.jdt.core.IPackageFragmentRoot">
-                     </instanceof>
-                     <instanceof
-                           value="org.eclipse.jdt.core.IPackageFragment">
-                     </instanceof>
-                     <instanceof
-                           value="org.eclipse.jdt.core.ICompilationUnit">
-                     </instanceof>
-                     <instanceof
-                           value="org.eclipse.jdt.core.IJavaElement">
-                     </instanceof>
-                     <instanceof
-                           value="org.eclipse.core.resources.IResource">
-                     </instanceof>
-                  </or>
-               </iterate>
-            </with>
-         </enablement>
-         -->
       </commonWizard>
    </extension>
-  
-  
-
       
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -384,12 +277,6 @@
             description="%remote.description"
             url="http://repo.fusesource.com/nexus/content/groups/public/archetype-catalog.xml">
       </remote>
-      <!--
-      <local
-            description="FuseSource Internal Archetype Catalog"
-            name="archetype-catalog.xml">
-      </local>
-      -->
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -435,16 +322,6 @@
             content="intro/overview.xml">
       </configExtension>
    </extension>
-
-<!--
-   <extension
-         point="org.maven.ide.eclipse.archetypeCatalogs">
-      <remote
-            description="%remote.description"
-            url="http://repo.fusesource.com/nexus/content/groups/public/archetype-catalog.xml">
-      </remote>
-   </extension>
--->
 
       <!--   
       TODO these don't work until m2eclipse 0.13 fixes catalogs due to missing Wagon
