@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.fusesource.ide.feature"
-      label="Fuse IDE"
+      id="org.fusesource.ide.feature.source"
+      label="Fuse IDE Sources"
       version="3.0.0.qualifier"
       provider-name="Red Hat Inc.">
 
@@ -224,618 +224,204 @@ null, void and of no legal effect.
 
    <url>
       <update label="Fuse IDE Update Site" url="http://repo.fusesource.com/ide/"/>
-      <discovery label="Eclipse Helios" url="http://download.eclipse.org/releases/helios"/>
-      <discovery label="Eclipse Galileo" url="http://download.eclipse.org/releases/galileo"/>
-      <discovery label="m2eclipse" url="http://m2eclipse.sonatype.org/sites/m2e/"/>
    </url>
 
-   <requires>
-      <import plugin="org.eclipse.jst.server.tomcat.core"/>
-      <import plugin="org.eclipse.jst.server.tomcat.ui"/>
-   </requires>
-
    <plugin
-         id="org.eclipse.graphiti.ui.capabilities"
+         id="org.fusesource.ide.cheatsheets.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.mina.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.m2e.logback.configuration"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.osgi.services"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.cm"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.cheatsheets"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.jvmmonitor.core"
+         id="org.fusesource.ide.jvmmonitor.core.source"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
    <plugin
-         id="org.fusesource.ide.jvmmonitor.tools"
+         id="org.fusesource.ide.jvmmonitor.tools.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.jvmmonitor.ui"
+         id="org.fusesource.ide.jvmmonitor.ui.source"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
    <plugin
-         id="com.sun.jersey.jersey-core"
+         id="org.fusesource.ide.jmx.core.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.sun.jersey.jersey-client"
+         id="org.fusesource.ide.jmx.ui.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="commons-management"
+         id="org.fusesource.ide.jmx.local.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.camel.camel-core"
+         id="org.fusesource.ide.fabric.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.asm"
+         id="org.fusesource.ide.fabric.activemq.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.context"
+         id="org.fusesource.ide.fabric.camel.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.expression"
+         id="org.fusesource.ide.fabric.servicemix.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.beans"
+         id="org.fusesource.ide.zk.core.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.google.guava"
+         id="org.fusesource.ide.zk.jmx.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.context.support"
+         id="org.fusesource.ide.zk.zookeeper.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.core"
+         id="org.fusesource.ide.graph.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.commons.logging"
+         id="org.fusesource.ide.branding.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.servicemix.bundles.aopalliance"
+         id="org.fusesource.ide.catalogs.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.aop"
+         id="org.fusesource.ide.commons.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.aspects"
+         id="org.fusesource.ide.deployment.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.osgi.core"
+         id="org.fusesource.ide.camel.editor.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.osgi.extender"
+         id="org.fusesource.ide.launcher.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.osgi.extensions.annotations"
+         id="org.fusesource.ide.launcher.ui.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.osgi.io"
+         id="org.fusesource.ide.maven.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.springframework.transaction"
+         id="org.fusesource.ide.camel.model.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.camel.camel-spring"
+         id="org.fusesource.ide.preferences.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.camel.camel-blueprint"
+         id="org.fusesource.ide.project.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.camel.camel-core-osgi"
+         id="org.fusesource.ide.server.karaf.core.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="scala-library"
+         id="org.fusesource.ide.server.karaf.ui.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.scalate.scalate-util"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.insight.insight-log"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="jackson-core-asl"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="jackson-mapper-asl"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="jackson-jaxrs"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-linkedin-zookeeper"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.activemq.kahadb"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.geronimo.specs.geronimo-jms_1.1_spec"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.geronimo.specs.geronimo-j2ee-management_1.1_spec"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.geronimo.specs.geronimo-annotation_1.0_spec"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-activemq-facade"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-camel-facade"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-servicemix-facade"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.servicemix.nmr.api"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.servicemix.nmr.management"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.aries.util"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.aries.blueprint"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.aries.proxy.api"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.aries.proxy.impl"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.aries.jmx.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="osgi.enterprise"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="osgi.cmpn"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.camel-tooling-util"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.tooling-jclouds-all"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.tooling-fabric-all"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.servicemix.bundles.commons-io"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.jmx.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.jmx.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.jmx.local"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.fabric"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.fabric.activemq"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.fabric.camel"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.fabric.servicemix"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.zk.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.zk.jmx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.zk.zookeeper"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.graph"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.activemq.activemq-core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.servicemix.bundles.xmlpull"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.branding"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.catalogs"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.commons"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.deployment"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.help"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.launcher"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.launcher.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.maven"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.model"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.preferences"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.project"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.server.karaf.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.server.karaf.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.server.karaf.view"
+         id="org.fusesource.ide.server.karaf.view.source"
          download-size="0"
          install-size="0"
          version="0.0.0"

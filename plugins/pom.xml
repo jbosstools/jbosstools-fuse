@@ -78,7 +78,7 @@
     <plugins>
       <plugin>
 	      <groupId>${m2e.group.id}</groupId>
-              <artifactId>tycho-versions-plugin</artifactId>
+        <artifactId>tycho-versions-plugin</artifactId>
 	      <version>${tycho-version}</version>
       </plugin>
       <plugin>
@@ -170,6 +170,19 @@
               </archive>
               <strictVersions>true</strictVersions>
           </configuration>
+      </plugin>
+      <plugin>
+        <groupId>${m2e.group.id}</groupId>
+        <artifactId>tycho-source-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <executions>
+          <execution>
+            <id>plugin-source</id>
+            <goals>
+              <goal>plugin-source</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -998,6 +1011,7 @@
 
     <!-- stuff once we've built all the modules.. -->
     <module>org.fusesource.ide.feature</module>
+    <module>org.fusesource.ide.feature.source</module>
     <module>org.fusesource.ide.updatesite</module>
     <module>org.fusesource.ide.targetplatform</module>
 
