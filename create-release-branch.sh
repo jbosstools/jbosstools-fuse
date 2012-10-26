@@ -2,6 +2,7 @@
 
 export PERFECUT_ARTIFACT=ide
 
+
 MVN_SETTINGS="--settings ${HOME}/.m2/m3-settings.xml"
 
 . `dirname $0 2> /dev/null`/common.sh
