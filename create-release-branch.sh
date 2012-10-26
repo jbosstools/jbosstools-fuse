@@ -104,7 +104,7 @@ echo ===========================================================================
 
 cd plugins/rcp_build
 #mvn ${MVN_SETTINGS} -Psign -Dkeystore=$PWD/fusesource.ks -Dstorepass=sp33d0 -Dalias=fusesource.com clean install
-mvn ${MVN_SETTINGS} clean install
+mvn ${MVN_SETTINGS} clean install -X
 
 if [ $? -eq 0 ]         # Test exit status of "mvn" command.
 then
