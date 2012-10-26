@@ -17,7 +17,7 @@ git pull
 
 BUILDNO=`cat ${PERFECUT_ARTIFACT}-buildno.txt`
 
-BUILDNO=$((${BUILDNO}+1))
+#BUILDNO=$((${BUILDNO}+1))
 BUILD=`printf "%02d" "$((${BUILDNO}))"` 
 
 echo ============================================================================
@@ -29,7 +29,7 @@ echo ${BUILDNO} > ${PERFECUT_ARTIFACT}-buildno.txt
 VERSION=3.0.${BUILDNO}
 git stash clear
 
-echo "Creating release branch for ${VERSION}"
+#echo "Creating release branch for ${VERSION}"
 
 # root project uses regular maven versions
 find * -name 'pom.xml' | xargs perl -pi -e "s/<version>3.0.0-SNAPSHOT<\/version>/<version>${VERSION}<\/version>/g"
