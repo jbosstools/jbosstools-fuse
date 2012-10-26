@@ -1,6 +1,6 @@
 #!/bin/bash
-export PERFECUT_ARTIFACT=ide
 
+export PERFECUT_ARTIFACT=ide
 
 MVN_SETTINGS="--settings ${HOME}/.m2/m3-settings.xml"
 
