@@ -368,7 +368,6 @@ null, void and of no legal effect.
 
    <features>
       <feature id="org.fusesource.ide.feature"/>
-      <feature id="org.fusesource.ide.feature.source"/>
       <feature id="org.fusesource.ide.rcp.feature"/>
       <feature id="org.eclipse.jst.enterprise_userdoc.feature" version="3.3.100.v201105122000-62FUGBgJ9EA9aEeHRHc"/>
       <feature id="org.eclipse.jst.server_core.feature" version="3.3.0.v201102200555-31FD58s7354495L"/>
