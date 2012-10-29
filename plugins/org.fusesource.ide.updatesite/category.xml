@@ -6,21 +6,5 @@
    <feature url="features/org.fusesource.ide.feature_0.0.0.jar" id="org.fusesource.ide.feature" version="0.0.0">
       <category name="org.fusesource.ide"/>
    </feature>
-   <feature url="features/org.fusesource.ide.feature.source_0.0.0.jar" id="org.fusesource.ide.feature.source" version="0.0.0">
-      <category name="org.fusesource.ide"/>
-   </feature>
-   <feature url="features/org.drools.eclipse.feature_5.5.0.Beta1.jar" id="org.drools.eclipse.feature" version="5.5.0.Beta1">
-      <category name="ide_dependencies"/>
-   </feature>
-   <feature url="features/org.guvnor.tools.feature_5.5.0.Beta1.jar" id="org.guvnor.tools.feature" version="5.5.0.Beta1">
-      <category name="ide_dependencies"/>
-   </feature>
-   <feature url="features/org.jbpm.eclipse.feature_5.5.0.Beta1.jar" id="org.jbpm.eclipse.feature" version="5.5.0.Beta1">
-      <category name="ide_dependencies"/>
-   </feature>
-   <feature url="features/org.jbpm.eclipse.task.feature_5.5.0.Beta1.jar" id="org.jbpm.eclipse.task.feature" version="5.5.0.Beta1">
-      <category name="ide_dependencies"/>
-   </feature>
    <category-def name="org.fusesource.ide" label="Fuse IDE"/>
-   <category-def name="ide_dependencies" label="Dependencies"/>
 </site>
