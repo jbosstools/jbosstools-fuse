@@ -229,22 +229,6 @@ null, void and of no legal effect.
       <discovery label="m2eclipse" url="http://m2eclipse.sonatype.org/sites/m2e/"/>
    </url>
 
-   <includes
-         id="org.drools.eclipse.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.guvnor.tools.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.jbpm.eclipse.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.jbpm.eclipse.task.feature"
-         version="0.0.0"/>
-
    <requires>
       <import plugin="org.eclipse.jst.server.tomcat.core"/>
       <import plugin="org.eclipse.jst.server.tomcat.ui"/>
@@ -513,22 +497,6 @@ null, void and of no legal effect.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-<!--
-   <plugin
-         id="org.fusesource.fabric.fabric-zookeeper"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-zookeeper-spring"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
--->
 
    <plugin
          id="org.fusesource.fabric.fabric-linkedin-zookeeper"
