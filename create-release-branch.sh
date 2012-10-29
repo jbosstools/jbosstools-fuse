@@ -10,7 +10,7 @@ ACTION=$1
 cd "${basedir}"
 
 git stash
-git checkout lastWorking
+git checkout master
 git stash
 git pull
 
@@ -27,7 +27,7 @@ echo ===========================================================================
 echo ${BUILDNO} > ${PERFECUT_ARTIFACT}-buildno.txt
 VERSION=3.0.${BUILDNO}
 git commit -a -m "getting ready for version ${VERSION}"
-git push origin lastWorking:lastWorking
+git push origin master:master
 git stash clear
 
 echo "Creating release branch for ${VERSION}"
@@ -151,7 +151,7 @@ echo "Now committing branch"
 git commit -a -m "Release ${VERSION}"
 git push origin release-${VERSION}
 
-git checkout lastWorking
+git checkout master
 
 echo "One it has been tested, move it to the production repo area"
 
