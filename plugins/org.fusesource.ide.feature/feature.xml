@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.feature"
       label="Fuse IDE"
-      version="3.0.0.qualifier"
+      version="3.0.79"
       provider-name="FuseSource.com">
 
    <description url="http://fusesource.com/products/fuse-ide/">
