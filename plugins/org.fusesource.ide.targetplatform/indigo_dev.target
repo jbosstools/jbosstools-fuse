@@ -3,7 +3,7 @@
 
 <target name="Eclipse Core Target" sequenceNumber="5">
 <locations>
-<location path="${workspace_loc:/org.fusesource.ide.updatesite/target/site/}" type="Directory"/>
+<location path="${workspace_loc:/org.fusesource.ide.updatesite/target/repository/}" type="Directory"/>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.birt.feature.group" version="3.7.2.v20120213-BDF9E9bGTzuHh03p2c0AWvmC3Ltk"/>
 <unit id="org.eclipse.birt.chart.cshelp.feature.group" version="3.7.2.v20120213-4617w31231324"/>
