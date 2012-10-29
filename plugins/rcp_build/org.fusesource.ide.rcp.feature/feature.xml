@@ -3,7 +3,7 @@
       id="org.fusesource.ide.rcp.feature"
       label="Fuse IDE RCP"
       version="3.0.0.qualifier"
-      provider-name="FuseSource.com">
+      provider-name="Red Hat, Inc.">
 
    <description url="http://fusesource.com/products/fuse-ide-camel/">
       Fuse IDE for Camel
@@ -11,8 +11,8 @@ Provides the ability to view, edit and create
 Enterprise Integration Patterns using Apache Camel
    </description>
 
-   <copyright url="http://fusesource.com/">
-      Copyright (C) 2011 FuseSource, Corp.
+   <copyright url="http://redhat.com/">
+      Copyright (C) 2011 Red Hat, Inc.
    </copyright>
 
    <license url="http://fusesource.com/products/fuse-ide-camel/">
