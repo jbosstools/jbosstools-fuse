@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse IDE Model Plugin
 Bundle-SymbolicName: org.fusesource.ide.camel.model;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.82
 Bundle-Vendor: FuseSource.com
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.fusesource.ide.camel.model;
