@@ -1,7 +1,7 @@
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.fusesource.ide.jmx.core;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.83
 Bundle-Activator: org.fusesource.ide.jmx.core.JMXActivator
 Bundle-Vendor: FuseSource.com
 Require-Bundle: org.fusesource.ide.commons,
