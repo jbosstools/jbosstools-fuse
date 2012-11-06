@@ -383,12 +383,6 @@ null, void and of no legal effect.
       <feature id="org.eclipse.wst.xml_userdoc.feature" version="3.3.0.v201102071641-50FYwAkF7B77UBZFDBL"/>
       <feature id="org.eclipse.epp.usagedata.feature" version="1.4.0.R201106061540"/>
       <feature id="org.eclipse.tm.terminal.sdk" version="3.2.1.R33x_v201106281309-7N7B1BbVJv-SaPEOkhsVVd_C3752"/>
-      <feature id="org.eclipse.cvs" version="1.3.100.v20110520-0800-7B78FHl9VF7BD7KBM4GP9C"/>
-      <feature id="org.eclipse.birt" version="3.7.2.v20120213-BDF9E9bGTzuHh03p2c0AWvmC3Ltk"/>
-      <feature id="org.eclipse.birt.chart.cshelp" version="3.7.2.v20120213-4617w31231324"/>
-      <feature id="org.eclipse.birt.cshelp" version="3.7.2.v20120213-4617w31231324"/>
-      <feature id="org.eclipse.birt.doc" version="3.7.2.v20120213-4617w31231324"/>
-      <feature id="org.eclipse.birt.report.designer.editor.xml.wtp" version="3.7.2.v20120213-809u7bFT0z0-TlB2KsjN7w"/>
       <feature id="org.eclipse.draw2d" version="3.7.2.v20110927-2020-4617w3122212803131"/>
       <feature id="org.eclipse.gef" version="3.7.2.v20110927-2020-777D381B4Bz0755B465D34242"/>
       <feature id="org.eclipse.graphiti.feature" version="0.8.2.v20120215-0845"/>
@@ -396,11 +390,7 @@ null, void and of no legal effect.
       <feature id="org.eclipse.jst.enterprise_core.feature" version="3.3.2.v201111030500-52FPfAkF7BA8L8K7S98"/>
       <feature id="org.eclipse.jst.enterprise_ui.feature" version="3.3.2.v201111030500-7b7II1YFSK2WIuPRDEnExPV-RvTn"/>
       <feature id="org.eclipse.jst.server_adapters.ext.feature" version="3.3.2.v20111010_1242-777HFHzCcNBDjCbIUfEEE3"/>
-      <feature id="org.eclipse.jst.web_core.feature" version="3.3.2.v201112072049-7Q7DGLAFE9LeAHGQwz0Yz0Nmuitz01z01sRxi387"/>
-      <feature id="org.eclipse.jst.web_ui.feature" version="3.3.2.v201112072049-7F7AFO7C25ToiIbpoiuW12GT78Mciy6W7iwuxaco"/>
-      <feature id="org.eclipse.jst.web_userdoc.feature" version="3.3.1.v201108102009-2107w31211938"/>
       <feature id="org.eclipse.m2e.feature" version="1.0.200.20111228-1245"/>
-      <feature id="org.eclipse.m2e.logback.feature" version="1.0.200.20111228-1245"/>
       <feature id="org.eclipse.wst.common_core.feature" version="3.3.2.v201111030500-7B7DFO9F7RZHOhIjR6Mz-NJ"/>
       <feature id="org.eclipse.wst.common_ui.feature" version="3.3.2.v201111030500-7C79FVsEdhO_sfog9oNekiJkS7Nz00OK"/>
       <feature id="org.eclipse.wst.jsdt.feature" version="1.3.2.v201201112313-7G78FZvFC7sRekSz-g-nAlz"/>
@@ -426,6 +416,23 @@ null, void and of no legal effect.
       <feature id="org.guvnor.tools.feature" version="5.5.0.Beta1"/>
       <feature id="org.jbpm.eclipse.feature" version="5.5.0.Beta1"/>
       <feature id="org.jbpm.eclipse.task.feature" version="5.5.0.Beta1"/>
+      <feature id="org.eclipse.emf" version="2.7.2.v20120130-0943"/>
+      <feature id="org.eclipse.jst.common.fproj.enablement.jdt" version="3.3.0.v201102200555-377DF8s73543E5I5768"/>
+      <feature id="org.eclipse.wst.common.fproj" version="3.3.2.v201201121600-377DH8s735735535DD9"/>
+      <feature id="org.eclipse.m2e.logback.feature" version="1.0.200.20111228-1245"/>
+      <feature id="org.eclipse.jst.server_adapters.feature" version="3.2.100.v20110303-208Z7w31211419"/>
+      <feature id="org.eclipse.jst.web_core.feature" version="3.3.2.v201112072049-7Q7DGLAFE9LeAHGQwz0Yz0Nmuitz01z01sRxi387"/>
+      <feature id="org.eclipse.jst.web_ui.feature" version="3.3.2.v201112072049-7F7AFO7C25ToiIbpoiuW12GT78Mciy6W7iwuxaco"/>
+      <feature id="org.eclipse.jst.web_userdoc.feature" version="3.3.1.v201108102009-2107w31211938"/>
+      <feature id="org.eclipse.emf.common" version="2.7.0.v20120127-1122"/>
+      <feature id="org.eclipse.cvs" version="1.3.100.v20110520-0800-7B78FHl9VF7BD7KBM4GP9C"/>
+      <feature id="org.eclipse.equinox.core.feature" version="1.0.1.R37x_v20110907-7K7VFB_ETaXFZ3mP_8CeJQ02722"/>
+      <feature id="org.eclipse.equinox.executable" version="3.5.1.v20111216-1653-7P7NFUIFIbaUcU77s0KQWHw5HZTZ"/>
+      <feature id="org.eclipse.equinox.p2.core.feature" version="1.0.1.v20110906-1605-8290FZ9FVKHVRKtmx3fpNuo02129"/>
+      <feature id="org.eclipse.equinox.p2.discovery.feature" version="1.0.101.R37x_v20110909-4-8_9oB5885K5B28WKK"/>
+      <feature id="org.eclipse.equinox.p2.extras.feature" version="1.0.1.v20110906-1605-7A4FD4DiVOMap8cHSc6vPuny4gqO"/>
+      <feature id="org.eclipse.equinox.p2.rcp.feature" version="1.0.1.v20110906-1605-782EqBqNKGVkiV-PUsgz-uny4gqO"/>
+      <feature id="org.eclipse.core.runtime.feature" version="1.0.1.R37x_v20110907-7H7KFD6BpeIkWN-XxegWjHnQa9Df"/>
    </features>
 
    <configurations>
