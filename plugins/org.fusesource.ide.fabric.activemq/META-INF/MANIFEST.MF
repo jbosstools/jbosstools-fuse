@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Fabric ActiveMQ Plugin
 Bundle-SymbolicName: org.fusesource.ide.fabric.activemq;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.90
 Bundle-Vendor: FuseSource.com
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.fabric,
