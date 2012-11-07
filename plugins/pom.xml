@@ -24,7 +24,7 @@
   </organization>
 
   <properties>
-
+    <slf4j-version>1.7.0</slf4j-version>
     <google-guava-version>13.0</google-guava-version>		
     <drools.updatesite.version>5.5.0.Beta1</drools.updatesite.version>		
 		
