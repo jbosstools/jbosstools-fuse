@@ -132,7 +132,6 @@
   <modules>
     <module>ide-buildtools</module>
     <module>ide-codegen</module>
-    <module>web</module>
   </modules>
 
   <build>
@@ -166,4 +165,13 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>web</id>
+      <modules>
+        <module>web</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>
