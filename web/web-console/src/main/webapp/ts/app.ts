@@ -7,9 +7,26 @@ angular.module('FuseIDE', ['ngResource']).
                     otherwise({redirectTo:'/about'});
         }).
         factory('workspace', function ($rootScope) {
+            var jolokia = new Jolokia("/jolokia");
+            jolokia.start(2000);
+
             var sharedService = {
-                selection:[]
+                selection:[],
+                jolokia:jolokia,
+
+                /**
+                 * Closes the given handle object if its defined
+                 */
+                closeHandle:function (scope:any, key:string = 'jolokiaHandle'):void {
+                    var handle = scope[key];
+                    if (handle) {
+                        console.log('Closing the handle ' + handle);
+                        jolokia.unregister(handle);
+                        handle[key] = null;
+                    }
+                }
             };
+
             return sharedService;
         });
 //when('/phones/:phoneId', {templateUrl: 'partials/phone-detail.html', controller: PhoneDetailCtrl}).
@@ -25,7 +42,6 @@ function LogController($scope, $resource, $location) {
     var value = results.value;
     $scope.logs = value;
 }
-
 
 function getOrElse(value:any, key:string, defaultValue:any = {}):any {
     var answer = value[key];
@@ -55,9 +71,9 @@ function MBeansController($scope, $resource, $location, workspace) {
         var domains = results.value;
         for (var domain in domains) {
             var mbeans = domains[domain];
-            for (var objectName in mbeans) {
+            for (var path in mbeans) {
                 var entries = {};
-                var items = objectName.split(',');
+                var items = path.split(',');
                 items.forEach(item => {
                     var kv = item.split('=');
                     entries[kv[0]] = kv[1] || kv[0];
@@ -69,7 +85,10 @@ function MBeansController($scope, $resource, $location, workspace) {
 
                 var mbeanInfo = {
                     domain:domain,
-                    objectName:objectName,
+                    name:name,
+                    typeName:typeName,
+                    path:path,
+                    objectName:domain + ":" + path,
                     entries:entries
                 };
                 if (typeName) {
@@ -82,7 +101,7 @@ function MBeansController($scope, $resource, $location, workspace) {
                         domainTree[typeName] = mbeanInfo;
                     }
                 } else {
-                    console.log("WARNING: domain " + domain + " has mbean " + objectName + " with no type "
+                    console.log("WARNING: domain " + domain + " has mbean " + path + " with no type "
                             + JSON.stringify(entries));
                 }
             }
@@ -99,7 +118,39 @@ function MBeansController($scope, $resource, $location, workspace) {
     }
 }
 
-function DetailController($scope, $routeParams, workspace) {
+function DetailController($scope, $routeParams, workspace, $rootScope) {
     $scope.routeParams = $routeParams;
     $scope.workspace = workspace;
+
+    $scope.$watch('workspace.selection', function () {
+        var node = $scope.workspace.selection;
+        workspace.closeHandle($scope);
+        var mbean = node.objectName;
+        if (mbean) {
+            var jolokia = workspace.jolokia;
+            // lets get the values immediately
+            var query = { type:"READ", mbean:mbean};
+            jolokia.request(
+                    query,
+                    { success:function (response) {
+                        $scope.attributes = response.value;
+                        $scope.$apply();
+                    },
+                        error:function (response) {
+                            alert("Jolokia request failed: " + response.error);
+                        }
+                    }
+            );
+            // listen for updates
+            $scope.jolokiaHandle = jolokia.register(function (response) {
+                        $scope.attributes = response.value;
+                        $scope.$apply();
+                    },
+                    query);
+        }
+    });
+
+    $scope.$on('$destroy', function () {
+        workspace.closeHandle($scope);
+    });
 }
