@@ -42,6 +42,16 @@ function LogController($scope, $resource, $location) {
   $scope.logs = value;
 }
 
+function onSuccess(fn, options = {}) {
+  options['error'] = function (response) {
+    alert("Jolokia request failed: " + response.error);
+  };
+  options['success'] = function (response) {
+    fn(response);
+  };
+  return options;
+}
+
 function getOrElse(value:any, key:string, defaultValue:any = {}):any {
   var answer = value[key];
   if (!answer) {
@@ -56,19 +66,20 @@ class Folder {
     return this;
   }
 }
-function MBeansController($scope, $resource, $location, workspace) {
-  $scope.tree = {};
-  //var resourceUrl = $location.protocol() + '://' + $location.host() + ":" + $location.port() + '/jolokia/list?maxDepth=2';
-  var resourceUrl = "/jolokia/list?canonicalProperties=false&amp;maxDepth=2";
-  //var resourceUrl = "/jolokia/list";
-  console.log("Using url: " + resourceUrl);
-  var Model = $resource(resourceUrl);
-  //var Model = $resource(resourceUrl, {canonicalProperties:false, maxDepth:2});
-  console.log("About to load results from model");
-  var results = Model.get(function () {
-    console.log("Loaded results!");
+
+function MBeansController($scope, $location, workspace) {
+  $scope.tree = new Folder();
+
+  $scope.select = (node) => {
+    workspace.selection = node;
+
+    // TODO we may want to choose different views based on the kind of selection
+    $location.path('/detail');
+  }
+
+  function populateTree(response) {
     var tree = new Folder();
-    var domains = results.value;
+    var domains = response.value;
     for (var domain in domains) {
       var mbeans = domains[domain];
       for (var path in mbeans) {
@@ -98,16 +109,18 @@ function MBeansController($scope, $resource, $location, workspace) {
         folder[lastPath] = mbeanInfo;
       }
     }
-    $scope.results = results;
+    // TODO we should do a merge across...
+    // so we only insert or delete things!
     $scope.tree = tree;
-  });
-
-  $scope.select = (node) => {
-    workspace.selection = node;
-
-    // TODO we may want to choose different views based on the kind of selection
-    $location.path('/detail');
+    $scope.$apply();
   }
+
+  var jolokia = workspace.jolokia;
+  jolokia.request(
+          {type:'list'},
+          onSuccess(populateTree, {canonicalProperties:false, maxDepth:2}));
+
+  // TODO auto-refresh the tree...
 }
 
 function DetailController($scope, $routeParams, workspace, $rootScope) {
@@ -124,15 +137,12 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
       var query = { type:"READ", mbean:mbean};
       jolokia.request(
               query,
-              { success:function (response) {
+              onSuccess(function (response) {
                 $scope.attributes = response.value;
                 $scope.$apply();
-              },
-                error:function (response) {
-                  alert("Jolokia request failed: " + response.error);
-                }
-              }
+              })
       );
+
       // listen for updates
       $scope.jolokiaHandle = jolokia.register(function (response) {
                 $scope.attributes = response.value;

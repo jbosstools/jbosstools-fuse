@@ -79,16 +79,15 @@ fun main(args: Array<String>): Unit {
         val server = Server(port)
         server.setHandler(context)
 
-        // now lets startup a spring application context
-        println("========= starting spring application context!!!")
-        val appContext = ClassPathXmlApplicationContext("applicationContext.xml")
-        println("========= looking up activemq...")
-        val activemq = appContext.getBean("activemq")
-        println("========= created activemq: " + activemq)
-        appContext.start()
-        println("========= started spring application context!!!")
-
-        println("========= starting jetty")
+        if (args.size == 0 || args[0] != "nospring") {
+            // now lets startup a spring application context
+            LOG.info("starting spring application context")
+            val appContext = ClassPathXmlApplicationContext("applicationContext.xml")
+            val activemq = appContext.getBean("activemq")
+            LOG.info("created activemq: " + activemq)
+            appContext.start()
+        }
+        LOG.info("starting jetty")
         server.start()
 
         server.join()

@@ -36,6 +36,17 @@ function LogController($scope, $resource, $location) {
     var value = results.value;
     $scope.logs = value;
 }
+function onSuccess(fn, options) {
+    if (typeof options === "undefined") { options = {
+    }; }
+    options['error'] = function (response) {
+        alert("Jolokia request failed: " + response.error);
+    };
+    options['success'] = function (response) {
+        fn(response);
+    };
+    return options;
+}
 function getOrElse(value, key, defaultValue) {
     if (typeof defaultValue === "undefined") { defaultValue = {
     }; }
@@ -53,17 +64,15 @@ var Folder = (function () {
     };
     return Folder;
 })();
-function MBeansController($scope, $resource, $location, workspace) {
-    $scope.tree = {
+function MBeansController($scope, $location, workspace) {
+    $scope.tree = new Folder();
+    $scope.select = function (node) {
+        workspace.selection = node;
+        $location.path('/detail');
     };
-    var resourceUrl = "/jolokia/list?canonicalProperties=false&amp;maxDepth=2";
-    console.log("Using url: " + resourceUrl);
-    var Model = $resource(resourceUrl);
-    console.log("About to load results from model");
-    var results = Model.get(function () {
-        console.log("Loaded results!");
+    function populateTree(response) {
         var tree = new Folder();
-        var domains = results.value;
+        var domains = response.value;
         for(var domain in domains) {
             var mbeans = domains[domain];
             for(var path in mbeans) {
@@ -93,13 +102,16 @@ function MBeansController($scope, $resource, $location, workspace) {
                 folder[lastPath] = mbeanInfo;
             }
         }
-        $scope.results = results;
         $scope.tree = tree;
-    });
-    $scope.select = function (node) {
-        workspace.selection = node;
-        $location.path('/detail');
-    };
+        $scope.$apply();
+    }
+    var jolokia = workspace.jolokia;
+    jolokia.request({
+        type: 'list'
+    }, onSuccess(populateTree, {
+        canonicalProperties: false,
+        maxDepth: 2
+    }));
 }
 function DetailController($scope, $routeParams, workspace, $rootScope) {
     $scope.routeParams = $routeParams;
@@ -114,15 +126,10 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
                 type: "READ",
                 mbean: mbean
             };
-            jolokia.request(query, {
-                success: function (response) {
-                    $scope.attributes = response.value;
-                    $scope.$apply();
-                },
-                error: function (response) {
-                    alert("Jolokia request failed: " + response.error);
-                }
-            });
+            jolokia.request(query, onSuccess(function (response) {
+                $scope.attributes = response.value;
+                $scope.$apply();
+            }));
             $scope.jolokiaHandle = jolokia.register(function (response) {
                 $scope.attributes = response.value;
                 $scope.$apply();
