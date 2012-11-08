@@ -41,9 +41,9 @@
   <properties>
     <forge-project-id>ide</forge-project-id>
 <!--
-      <fabric-version>99-master-SNAPSHOT</fabric-version>
--->
       <fabric-version>7.1.0.fuse-020</fabric-version>
+-->
+      <fabric-version>99-master-SNAPSHOT</fabric-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
 
