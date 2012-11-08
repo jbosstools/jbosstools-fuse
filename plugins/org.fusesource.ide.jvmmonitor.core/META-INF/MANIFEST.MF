@@ -17,3 +17,4 @@ Export-Package: org.fusesource.ide.jvmmonitor.core,
 Bundle-Vendor: %providerName
 Bundle-Name: %pluginName
 Bundle-ClassPath: jvmmonitor-core.jar
+Eclipse-BundleShape: dir
