@@ -588,14 +588,14 @@ null, void and of no legal effect.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+<!--
    <plugin
          id="osgi.cmpn"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+-->
    <plugin
          id="org.fusesource.fabric.camel-tooling-util"
          download-size="0"
