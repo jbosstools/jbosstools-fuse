@@ -1840,7 +1840,8 @@ interface Array {
 	***/
 	findIndex(f: number, startIndex?: number, loop?: bool): number;
 	findIndex(f: string, startIndex?: number, loop?: bool): number;
-	findIndex(f: RegExp, startIndex?: number, loop?: bool): number;
+  // TODO duplicate
+	//findIndex(f: RegExp, startIndex?: number, loop?: bool): number;
 	findIndex(f: Object, startIndex?: number, loop?: bool): number;
 	findIndex(f: RegExp, startIndex?: number, loop?: bool): number;
 	findIndex(f: (el: any, i?: number, array?: any[]) => bool, startIndex?: number, loop?: bool): number;

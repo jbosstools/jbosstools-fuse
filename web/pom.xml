@@ -14,15 +14,16 @@
   <artifactId>web-parent</artifactId>
 
   <packaging>pom</packaging>
-  <name>Fuse Web IDE</name>
+  <name>${project.artifactId}</name>
+  <description>Fuse Web IDE :: Project</description>
 
   <properties>
-
   </properties>
 
 
 
   <modules>
+    <module>web-console</module>
     <module>zest</module>
   </modules>
 

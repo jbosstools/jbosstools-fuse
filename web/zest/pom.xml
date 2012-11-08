@@ -22,7 +22,8 @@
   <artifactId>zest</artifactId>
 
   <packaging>jar</packaging>
-  <name>Fuse Web IDE :: Zest</name>
+  <name>${project.artifactId}</name>
+  <description>Fuse Web IDE :: Zest</description>
 
   <properties>
     <gwt.version>2.5.0</gwt.version>
