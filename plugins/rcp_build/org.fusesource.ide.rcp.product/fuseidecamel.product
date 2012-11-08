@@ -415,6 +415,7 @@ null, void and of no legal effect.
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
       <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="3" />
+      <plugin id="org.fusesource.ide.branding" autoStart="true" startLevel="4" />
    </configurations>
 
 </product>
