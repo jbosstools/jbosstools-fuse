@@ -35,7 +35,7 @@ class DownloadFuseArchetypes(outputDir: File = new File("fuse-ide-archetypes"), 
   override def toString = "Download latest archetypes to: " + outputDir
 
   def run(): Unit = {
-    aether.authorized = true
+    Aether.authorised = true
     if (!outputDir.exists()) {
       throw new IllegalArgumentException("No outputDir exists! " + outputDir)
     }
