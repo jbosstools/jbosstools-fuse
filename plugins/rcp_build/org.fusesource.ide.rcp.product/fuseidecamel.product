@@ -374,9 +374,8 @@ null, void and of no legal effect.
       <feature id="org.eclipse.zest" version="1.3.0.v20110425-2050-67A18yF6F18CBD5A7N54242"/>
       <feature id="org.eclipse.xsd.edit" version="2.7.0.v20120130-0943"/>
       <feature id="org.eclipse.m2e.feature" version="1.2.0.20120903-1050"/>
-      <feature id="org.eclipse.jdt" version="3.8.1.v20120814-104540-8-8nFqpFNOfwKDRVz-tXOcL5d_83"/>
+      <feature id="org.eclipse.jdt"/>
       <feature id="org.eclipse.gef" version="3.7.2.v20110927-2020-777D381B4Bz0755B465D34242"/>
-      <feature id="org.eclipse.tm.terminal" version="3.1.1.R33x_v201106281309-4007S44yaw312218292641"/>
       <feature id="org.eclipse.tm.terminal.ssh" version="2.1.0.v201103142315-30-7w312212153266"/>
       <feature id="org.eclipse.tm.terminal.view" version="2.3.0.201209191030-32-31231A2A2141"/>
       <feature id="org.eclipse.help" version="1.3.0.v20110530-0844-7i7uFFmFFl8nvqbDpEqTvx"/>
@@ -406,6 +405,7 @@ null, void and of no legal effect.
       <feature id="org.eclipse.wst.xml_ui.feature" version="3.4.1.v201208170345-7H7GFeFDxumUpsw5rgjWnKDrsz0p4ymwjQz00T2S"/>
       <feature id="org.eclipse.xsd" version="2.7.1.v20120130-0943"/>
       <feature id="org.eclipse.graphiti.feature"/>
+      <feature id="org.eclipse.tm.terminal" version="3.1.1.R33x_v201106281309-4007S44yaw312218292641"/>
    </features>
 
    <configurations>
