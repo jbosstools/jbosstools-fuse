@@ -157,6 +157,10 @@
     <description>Set Exchange Pattern</description>
     <topic href="setExchangePattern.html" label="Set Exchange Pattern" />
   </context>
+  <context id="setFaultBodyNode">
+    <description>Set Fault Body Pattern</description>
+    <topic href="setFaultBody.html" label="Set Fault Body" />
+  </context>
   <context id="setHeaderNode">
     <description>Set Header Patterns</description>
     <topic href="setHeader.html" label="Set Header" />
