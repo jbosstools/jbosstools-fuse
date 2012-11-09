@@ -3,8 +3,9 @@ angular.module('FuseIDE', ['ngResource']).
           $routeProvider.
                   when('/about', {templateUrl:'partials/about.html'}).
                   when('/detail', {templateUrl:'partials/detail.html', controller:DetailController}).
+                  when('/debug', {templateUrl:'partials/debug.html', controller:DetailController}).
                   when('/logs', {templateUrl:'partials/logs.html', controller:LogController}).
-                  otherwise({redirectTo:'/about'});
+                  otherwise({redirectTo:'/detail'});
         }).
         factory('workspace', function ($rootScope) {
           var jolokia = new Jolokia("/jolokia");
@@ -130,7 +131,7 @@ function MBeansController($scope, $location, workspace) {
                   console.log("You activated " + data.title + " : " + JSON.stringify(data));
                   $scope.select(data);
                 },
-                persist: true,
+                persist: false,
                 debugLevel: 0,
                 children: tree.children
             });
@@ -156,8 +157,10 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     if (mbean) {
       var jolokia = workspace.jolokia;
       var updateValues = function (response) {
-        if (response.value) {
-          $scope.attributes = response.value;
+        var attributes = response.value;
+        if (attributes) {
+          delete attributes['ObjectName'];
+          $scope.attributes = attributes;
           $scope.$apply();
         } else {
           console.log("Failed to get a response! " + response);
