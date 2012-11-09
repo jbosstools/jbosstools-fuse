@@ -133,7 +133,6 @@ public class Messages extends NLS {
     public static String propertyLabelPollEnrichResourceUri;
     public static String propertyLabelPollEnrichAggregationStrategyRef;
     public static String propertyLabelPollEnrichTimeout;
-    public static String propertyLabelPollEnrichPollMultiple;
 
     public static String propertyLabelProcessRef;
 
@@ -343,7 +342,6 @@ public class Messages extends NLS {
     map.put("propertyLabelPollEnrich.ResourceUri", propertyLabelPollEnrichResourceUri);
     map.put("propertyLabelPollEnrich.AggregationStrategyRef", propertyLabelPollEnrichAggregationStrategyRef);
     map.put("propertyLabelPollEnrich.Timeout", propertyLabelPollEnrichTimeout);
-    map.put("propertyLabelPollEnrich.PollMultiple", propertyLabelPollEnrichPollMultiple);
     map.put("propertyLabelProcess.Ref", propertyLabelProcessRef);
     map.put("propertyLabelRecipientList.Expression", propertyLabelRecipientListExpression);
     map.put("propertyLabelRecipientList.Delimiter", propertyLabelRecipientListDelimiter);
