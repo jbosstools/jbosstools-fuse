@@ -57,39 +57,43 @@ function onSuccess(fn, options = {}) {
   return options;
 }
 
-function getOrElse(value:any, key:string, defaultValue:any = {}):any {
-  var answer = value[key];
-  if (!answer) {
-    answer = defaultValue;
-    value[key] = answer;
-  }
-  return answer;
-}
-
 class Folder {
-  children() {
-    return this;
+  constructor(public title: string) {
+  }
+  isFolder = true;
+  children = [];
+  map = {};
+
+  getOrElse(key: string, defaultValue: any = new Folder(key)): Folder {
+    var answer = this.map[key];
+    if (!answer) {
+      answer = defaultValue;
+      this.map[key] = answer;
+      this.children.push(answer)
+    }
+    return answer;
   }
 }
 
 function MBeansController($scope, $location, workspace) {
-  $scope.tree = new Folder();
+  $scope.tree = new Folder('MBeans');
 
   $scope.select = (node) => {
     workspace.selection = node;
 
     // TODO we may want to choose different views based on the kind of selection
     $location.path('/detail');
-  }
+    $scope.$apply();
+  };
 
   function populateTree(response) {
-    var tree = new Folder();
+    var tree = new Folder('MBeans');
     var domains = response.value;
     for (var domain in domains) {
       var mbeans = domains[domain];
       for (var path in mbeans) {
         var entries = {};
-        var folder = getOrElse(tree, domain, new Folder());
+        var folder = tree.getOrElse(domain);
         var items = path.split(',');
         var paths = [];
         items.forEach(item => {
@@ -102,22 +106,34 @@ function MBeansController($scope, $location, workspace) {
 
         var lastPath = paths.pop();
         paths.forEach(value => {
-          folder = getOrElse(folder, value, new Folder());
+          folder = folder.getOrElse(value);
         });
         var mbeanInfo = {
+          title:lastPath,
           domain:domain,
           path:path,
           paths:paths,
           objectName:domain + ":" + path,
           entries:entries
         };
-        folder[lastPath] = mbeanInfo;
+        folder.getOrElse(lastPath, mbeanInfo);
       }
     }
     // TODO we should do a merge across...
     // so we only insert or delete things!
     $scope.tree = tree;
     $scope.$apply();
+
+    $("#jmxtree").dynatree({
+                onActivate: function(node) {
+                  var data = node.data;
+                  console.log("You activated " + data.title + " : " + JSON.stringify(data));
+                  $scope.select(data);
+                },
+                persist: true,
+                debugLevel: 0,
+                children: tree.children
+            });
   }
 
   var jolokia = workspace.jolokia;
@@ -126,6 +142,7 @@ function MBeansController($scope, $location, workspace) {
           onSuccess(populateTree, {canonicalProperties:false, maxDepth:2}));
 
   // TODO auto-refresh the tree...
+
 }
 
 function DetailController($scope, $routeParams, workspace, $rootScope) {

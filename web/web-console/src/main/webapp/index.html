@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Fuse Console</title>
     <link rel="stylesheet" href="css/bootstrap.css" type="text/css"/>
+    <link rel='stylesheet' href='css/ui.dynatree.css' type='text/css'>
 </head>
 <body>
 
@@ -39,10 +40,8 @@
 
 <div class="container-fluid">
   <div class="row-fluid">
-    <div class="span4">
-        <ul ng-controller="MBeansController">
-            <li ng-repeat="(name, child) in tree.children()" ng-include="'render_tree.html'"></li>
-        </ul>
+    <div class="span4" ng-controller="MBeansController">
+        <div id="jmxtree"></div>
     </div>
     <div class="span8">
         <div id="properties" ng-view></div>
@@ -55,11 +54,13 @@
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="lib/sugar-1.3.6.min.js"></script>
 <script type="text/javascript" src="lib/json2-min.js"></script>
-<!--
-<script type="text/javascript" src="lib/jolokia.js"></script>
--->
 <script type="text/javascript" src="lib/jolokia-min.js"></script>
 <script type="text/javascript" src="lib/jolokia-simple-min.js"></script>
+
+<!-- dyna tree -->
+<script type="text/javascript" src="lib/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="lib/jquery.cookie.js"></script>
+<script type="text/javascript" src="lib/jquery.dynatree.min.js"></script>
 
 <!--
 <script type="text/javascript" src="jquery/jquery.atmosphere.js"></script>

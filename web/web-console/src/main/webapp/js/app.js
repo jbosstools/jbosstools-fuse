@@ -51,38 +51,42 @@ function onSuccess(fn, options) {
     };
     return options;
 }
-function getOrElse(value, key, defaultValue) {
-    if (typeof defaultValue === "undefined") { defaultValue = {
-    }; }
-    var answer = value[key];
-    if(!answer) {
-        answer = defaultValue;
-        value[key] = answer;
-    }
-    return answer;
-}
 var Folder = (function () {
-    function Folder() { }
-    Folder.prototype.children = function () {
-        return this;
+    function Folder(title) {
+        this.title = title;
+        this.isFolder = true;
+        this.children = [];
+        this.map = {
+        };
+    }
+    Folder.prototype.getOrElse = function (key, defaultValue) {
+        if (typeof defaultValue === "undefined") { defaultValue = new Folder(key); }
+        var answer = this.map[key];
+        if(!answer) {
+            answer = defaultValue;
+            this.map[key] = answer;
+            this.children.push(answer);
+        }
+        return answer;
     };
     return Folder;
 })();
 function MBeansController($scope, $location, workspace) {
-    $scope.tree = new Folder();
+    $scope.tree = new Folder('MBeans');
     $scope.select = function (node) {
         workspace.selection = node;
         $location.path('/detail');
+        $scope.$apply();
     };
     function populateTree(response) {
-        var tree = new Folder();
+        var tree = new Folder('MBeans');
         var domains = response.value;
         for(var domain in domains) {
             var mbeans = domains[domain];
             for(var path in mbeans) {
                 var entries = {
                 };
-                var folder = getOrElse(tree, domain, new Folder());
+                var folder = tree.getOrElse(domain);
                 var items = path.split(',');
                 var paths = [];
                 items.forEach(function (item) {
@@ -94,20 +98,31 @@ function MBeansController($scope, $location, workspace) {
                 });
                 var lastPath = paths.pop();
                 paths.forEach(function (value) {
-                    folder = getOrElse(folder, value, new Folder());
+                    folder = folder.getOrElse(value);
                 });
                 var mbeanInfo = {
+                    title: lastPath,
                     domain: domain,
                     path: path,
                     paths: paths,
                     objectName: domain + ":" + path,
                     entries: entries
                 };
-                folder[lastPath] = mbeanInfo;
+                folder.getOrElse(lastPath, mbeanInfo);
             }
         }
         $scope.tree = tree;
         $scope.$apply();
+        $("#jmxtree").dynatree({
+            onActivate: function (node) {
+                var data = node.data;
+                console.log("You activated " + data.title + " : " + JSON.stringify(data));
+                $scope.select(data);
+            },
+            persist: true,
+            debugLevel: 0,
+            children: tree.children
+        });
     }
     var jolokia = workspace.jolokia;
     jolokia.request({
