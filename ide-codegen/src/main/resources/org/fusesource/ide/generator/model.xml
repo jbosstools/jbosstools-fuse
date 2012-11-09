@@ -663,6 +663,21 @@
       </property>
     </properties>
   </node>
+  <node id="setFaultBody">
+    <tooltip>Sets the contents of the fault message body</tooltip>
+    <contextId>setFaultBodyNode</contextId>
+    <properties>
+      <property id="description">
+        <tooltip>Text description of the transformer</tooltip>
+      </property>
+      <property id="expression">
+        <tooltip>Exression defining the new body contents</tooltip>
+      </property>
+      <property id="id">
+        <tooltip>Unique ID of the transformer</tooltip>
+      </property>
+    </properties>
+  </node>
   <node id="setExchangePattern">
     <tooltip>Sets the exchange pattern for the route</tooltip>
     <contextId>setExchangePatternNode</contextId>
