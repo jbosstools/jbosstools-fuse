@@ -14,7 +14,7 @@ angular.module('FuseIDE', [
     });
 }).factory('workspace', function ($rootScope) {
     var jolokia = new Jolokia("/jolokia");
-    jolokia.start(2000);
+    jolokia.start(5000);
     var sharedService = {
         selection: [],
         jolokia: jolokia,
@@ -39,9 +39,13 @@ function LogController($scope, $resource, $location) {
 function onSuccess(fn, options) {
     if (typeof options === "undefined") { options = {
     }; }
-    options['error'] = function (response) {
-        alert("Jolokia request failed: " + response.error);
-    };
+    options['ignoreErrors'] = true;
+    options['mimeType'] = 'application/json';
+    if(!options['error']) {
+        options['error'] = function (response) {
+            console.log("Jolokia request failed: " + response.error);
+        };
+    }
     options['success'] = function (response) {
         fn(response);
     };
@@ -122,18 +126,25 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
         var mbean = node.objectName;
         if(mbean) {
             var jolokia = workspace.jolokia;
+            var updateValues = function (response) {
+                if(response.value) {
+                    $scope.attributes = response.value;
+                    $scope.$apply();
+                } else {
+                    console.log("Failed to get a response! " + response);
+                }
+            };
             var query = {
                 type: "READ",
-                mbean: mbean
+                mbean: mbean,
+                ignoreErrors: true
             };
-            jolokia.request(query, onSuccess(function (response) {
-                $scope.attributes = response.value;
-                $scope.$apply();
-            }));
-            $scope.jolokiaHandle = jolokia.register(function (response) {
-                $scope.attributes = response.value;
-                $scope.$apply();
-            }, query);
+            jolokia.request(query, onSuccess(updateValues));
+            $scope.jolokiaHandle = jolokia.register(onSuccess(updateValues, {
+                error: function (response) {
+                    updateValues(response);
+                }
+            }), query);
         }
     });
     $scope.$on('$destroy', function () {

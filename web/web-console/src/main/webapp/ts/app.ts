@@ -8,7 +8,7 @@ angular.module('FuseIDE', ['ngResource']).
         }).
         factory('workspace', function ($rootScope) {
           var jolokia = new Jolokia("/jolokia");
-          jolokia.start(2000);
+          jolokia.start(5000);
 
           var sharedService = {
             selection:[],
@@ -43,9 +43,14 @@ function LogController($scope, $resource, $location) {
 }
 
 function onSuccess(fn, options = {}) {
-  options['error'] = function (response) {
-    alert("Jolokia request failed: " + response.error);
-  };
+  options['ignoreErrors'] = true;
+  options['mimeType'] = 'application/json';
+  if (!options['error']) {
+    options['error'] = function (response) {
+      //alert("Jolokia request failed: " + response.error);
+      console.log("Jolokia request failed: " + response.error);
+    };
+  }
   options['success'] = function (response) {
     fn(response);
   };
@@ -133,21 +138,27 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     var mbean = node.objectName;
     if (mbean) {
       var jolokia = workspace.jolokia;
+      var updateValues = function (response) {
+        if (response.value) {
+          $scope.attributes = response.value;
+          $scope.$apply();
+        } else {
+          console.log("Failed to get a response! " + response);
+        }
+      };
+
       // lets get the values immediately
-      var query = { type:"READ", mbean:mbean};
-      jolokia.request(
-              query,
-              onSuccess(function (response) {
-                $scope.attributes = response.value;
-                $scope.$apply();
-              })
-      );
+      var query = { type:"READ", mbean:mbean, ignoreErrors:true};
+      jolokia.request(query, onSuccess(updateValues));
 
       // listen for updates
-      $scope.jolokiaHandle = jolokia.register(function (response) {
-                $scope.attributes = response.value;
-                $scope.$apply();
-              },
+      $scope.jolokiaHandle = jolokia.register(onSuccess(updateValues,
+              {
+                error: function(response) {
+                  //console.log("Custom error handling on response " + JSON.stringify(response));
+                  updateValues(response);
+                }
+              }),
               query);
     }
   });
