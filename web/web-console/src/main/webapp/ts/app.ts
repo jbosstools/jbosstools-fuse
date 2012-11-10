@@ -1,33 +1,25 @@
 angular.module('FuseIDE', ['ngResource']).
         config(($routeProvider) => {
           $routeProvider.
-                  when('/about', {templateUrl:'partials/about.html'}).
-                  when('/detail', {templateUrl:'partials/detail.html', controller:DetailController}).
-                  when('/debug', {templateUrl:'partials/debug.html', controller:DetailController}).
-                  when('/logs', {templateUrl:'partials/logs.html', controller:LogController}).
-                  otherwise({redirectTo:'/detail'});
+                  when('/preferences', {templateUrl: 'partials/preferences.html'}).
+                  when('/detail', {templateUrl: 'partials/detail.html', controller: DetailController}).
+                  when('/debug', {templateUrl: 'partials/debug.html', controller: DetailController}).
+                  when('/logs', {templateUrl: 'partials/logs.html', controller: LogController}).
+                  otherwise({redirectTo: '/detail'});
         }).
-        factory('workspace', function ($rootScope) {
-          var jolokia = new Jolokia("/jolokia");
-          jolokia.start(5000);
-
-          var sharedService = {
-            selection:[],
-            jolokia:jolokia,
-
-            /**
-             * Closes the given handle object if its defined
-             */
-            closeHandle:function (scope:any, key:string = 'jolokiaHandle'):void {
-              var handle = scope[key];
-              if (handle) {
-                //console.log('Closing the handle ' + handle);
-                jolokia.unregister(handle);
-                handle[key] = null;
-              }
+        factory('workspace',function ($rootScope) {
+          var workspace = new Workspace();
+          workspace.setUpdateRate(5000);
+          return workspace;
+        }).
+        filter('humanize', function () {
+          return function (value) {
+            if (value) {
+              var text = value.toString();
+              return text.underscore().humanize();
             }
+            return value;
           };
-          return sharedService;
         });
 //when('/phones/:phoneId', {templateUrl: 'partials/phone-detail.html', controller: PhoneDetailCtrl}).
 
@@ -58,14 +50,45 @@ function onSuccess(fn, options = {}) {
   return options;
 }
 
-class Folder {
-  constructor(public title: string) {
+class Workspace {
+  public jolokia = new Jolokia("/jolokia");
+  public updateRate = 0;
+  public selection = [];
+
+  /**
+   * Closes the given handle object if its defined
+   */
+          closeHandle(scope:any, key:string = 'jolokiaHandle') {
+    var handle = scope[key];
+    if (handle) {
+      //console.log('Closing the handle ' + handle);
+      this.jolokia.unregister(handle);
+      handle[key] = null;
+    }
   }
+
+  /**
+   * sets the update rate
+   */
+          setUpdateRate(value) {
+    this.jolokia.stop();
+    this.updateRate = value
+    if (value > 0) {
+      this.jolokia.start(value);
+    }
+    console.log("Set update rate to: " + value);
+  }
+}
+
+class Folder {
+  constructor(public title:string) {
+  }
+
   isFolder = true;
   children = [];
   map = {};
 
-  getOrElse(key: string, defaultValue: any = new Folder(key)): Folder {
+  getOrElse(key:string, defaultValue:any = new Folder(key)):Folder {
     var answer = this.map[key];
     if (!answer) {
       answer = defaultValue;
@@ -74,6 +97,18 @@ class Folder {
     }
     return answer;
   }
+}
+
+function NavBarController($scope, workspace) {
+}
+
+function PreferencesController($scope, workspace) {
+  $scope.workspace = workspace;
+  $scope.updateRate = workspace.updateRate;
+
+  $scope.$watch('updateRate', () => {
+    $scope.workspace.setUpdateRate($scope.updateRate);
+  });
 }
 
 function MBeansController($scope, $location, workspace) {
@@ -110,12 +145,12 @@ function MBeansController($scope, $location, workspace) {
           folder = folder.getOrElse(value);
         });
         var mbeanInfo = {
-          title:lastPath,
-          domain:domain,
-          path:path,
-          paths:paths,
-          objectName:domain + ":" + path,
-          entries:entries
+          title: lastPath,
+          domain: domain,
+          path: path,
+          paths: paths,
+          objectName: domain + ":" + path,
+          entries: entries
         };
         folder.getOrElse(lastPath, mbeanInfo);
       }
@@ -126,21 +161,21 @@ function MBeansController($scope, $location, workspace) {
     $scope.$apply();
 
     $("#jmxtree").dynatree({
-                onActivate: function(node) {
-                  var data = node.data;
-                  console.log("You activated " + data.title + " : " + JSON.stringify(data));
-                  $scope.select(data);
-                },
-                persist: false,
-                debugLevel: 0,
-                children: tree.children
-            });
+      onActivate: function (node) {
+        var data = node.data;
+        console.log("You activated " + data.title + " : " + JSON.stringify(data));
+        $scope.select(data);
+      },
+      persist: false,
+      debugLevel: 0,
+      children: tree.children
+    });
   }
 
   var jolokia = workspace.jolokia;
   jolokia.request(
-          {type:'list'},
-          onSuccess(populateTree, {canonicalProperties:false, maxDepth:2}));
+          {type: 'list'},
+          onSuccess(populateTree, {canonicalProperties: false, maxDepth: 2}));
 
   // TODO auto-refresh the tree...
 
@@ -168,13 +203,13 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
       };
 
       // lets get the values immediately
-      var query = { type:"READ", mbean:mbean, ignoreErrors:true};
+      var query = { type: "READ", mbean: mbean, ignoreErrors: true};
       jolokia.request(query, onSuccess(updateValues));
 
       // listen for updates
       $scope.jolokiaHandle = jolokia.register(onSuccess(updateValues,
               {
-                error: function(response) {
+                error: function (response) {
                   //console.log("Custom error handling on response " + JSON.stringify(response));
                   updateValues(response);
                 }

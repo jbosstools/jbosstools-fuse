@@ -7,8 +7,8 @@
     </thead>
     <tbody>
     <tr ng-repeat="(name, value) in attributes">
-        <td>{{name}}</td>
-        <td>{{value}}</td>
+        <td class="property-name">{{name | humanize}}</td>
+        <td class="property-value">{{value}}</td>
     </tr>
     </tbody>
 </table>

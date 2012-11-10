@@ -1,8 +1,8 @@
 angular.module('FuseIDE', [
     'ngResource'
 ]).config(function ($routeProvider) {
-    $routeProvider.when('/about', {
-        templateUrl: 'partials/about.html'
+    $routeProvider.when('/preferences', {
+        templateUrl: 'partials/preferences.html'
     }).when('/detail', {
         templateUrl: 'partials/detail.html',
         controller: DetailController
@@ -16,21 +16,17 @@ angular.module('FuseIDE', [
         redirectTo: '/detail'
     });
 }).factory('workspace', function ($rootScope) {
-    var jolokia = new Jolokia("/jolokia");
-    jolokia.start(5000);
-    var sharedService = {
-        selection: [],
-        jolokia: jolokia,
-        closeHandle: function (scope, key) {
-            if (typeof key === "undefined") { key = 'jolokiaHandle'; }
-            var handle = scope[key];
-            if(handle) {
-                jolokia.unregister(handle);
-                handle[key] = null;
-            }
+    var workspace = new Workspace();
+    workspace.setUpdateRate(5000);
+    return workspace;
+}).filter('humanize', function () {
+    return function (value) {
+        if(value) {
+            var text = value.toString();
+            return text.underscore().humanize();
         }
-    };
-    return sharedService;
+        return value;
+    }
 });
 function LogController($scope, $resource, $location) {
     var resourceUrl = $location.path() + 'jolokia/exec/org.fusesource.insight:type=LogQuery/getLogEvents/0?mimeType=application/json';
@@ -54,6 +50,30 @@ function onSuccess(fn, options) {
     };
     return options;
 }
+var Workspace = (function () {
+    function Workspace() {
+        this.jolokia = new Jolokia("/jolokia");
+        this.updateRate = 0;
+        this.selection = [];
+    }
+    Workspace.prototype.closeHandle = function (scope, key) {
+        if (typeof key === "undefined") { key = 'jolokiaHandle'; }
+        var handle = scope[key];
+        if(handle) {
+            this.jolokia.unregister(handle);
+            handle[key] = null;
+        }
+    };
+    Workspace.prototype.setUpdateRate = function (value) {
+        this.jolokia.stop();
+        this.updateRate = value;
+        if(value > 0) {
+            this.jolokia.start(value);
+        }
+        console.log("Set update rate to: " + value);
+    };
+    return Workspace;
+})();
 var Folder = (function () {
     function Folder(title) {
         this.title = title;
@@ -74,6 +94,15 @@ var Folder = (function () {
     };
     return Folder;
 })();
+function NavBarController($scope, workspace) {
+}
+function PreferencesController($scope, workspace) {
+    $scope.workspace = workspace;
+    $scope.updateRate = workspace.updateRate;
+    $scope.$watch('updateRate', function () {
+        $scope.workspace.setUpdateRate($scope.updateRate);
+    });
+}
 function MBeansController($scope, $location, workspace) {
     $scope.tree = new Folder('MBeans');
     $scope.select = function (node) {
