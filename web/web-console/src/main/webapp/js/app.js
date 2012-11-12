@@ -3,17 +3,20 @@ angular.module('FuseIDE', [
 ]).config(function ($routeProvider) {
     $routeProvider.when('/preferences', {
         templateUrl: 'partials/preferences.html'
-    }).when('/detail', {
-        templateUrl: 'partials/detail.html',
+    }).when('/attributes', {
+        templateUrl: 'partials/attributes.html',
         controller: DetailController
     }).when('/debug', {
         templateUrl: 'partials/debug.html',
+        controller: DetailController
+    }).when('/about', {
+        templateUrl: 'partials/about.html',
         controller: DetailController
     }).when('/logs', {
         templateUrl: 'partials/logs.html',
         controller: LogController
     }).otherwise({
-        redirectTo: '/detail'
+        redirectTo: '/attributes'
     });
 }).factory('workspace', function ($rootScope) {
     return new Workspace();
@@ -117,7 +120,11 @@ var Folder = (function () {
     };
     return Folder;
 })();
-function NavBarController($scope, workspace) {
+function NavBarController($scope, $location, workspace) {
+    $scope.navClass = function (page) {
+        var currentRoute = $location.path().substring(1) || 'home';
+        return page === currentRoute ? 'active' : '';
+    };
 }
 function PreferencesController($scope, workspace) {
     $scope.workspace = workspace;
@@ -130,7 +137,7 @@ function MBeansController($scope, $location, workspace) {
     $scope.tree = new Folder('MBeans');
     $scope.select = function (node) {
         workspace.selection = node;
-        $location.path('/detail');
+        $location.path('/attributes');
         $scope.$apply();
     };
     function populateTree(response) {

@@ -2,10 +2,11 @@ angular.module('FuseIDE', ['ngResource']).
         config(($routeProvider) => {
           $routeProvider.
                   when('/preferences', {templateUrl: 'partials/preferences.html'}).
-                  when('/detail', {templateUrl: 'partials/detail.html', controller: DetailController}).
+                  when('/attributes', {templateUrl: 'partials/attributes.html', controller: DetailController}).
                   when('/debug', {templateUrl: 'partials/debug.html', controller: DetailController}).
+                  when('/about', {templateUrl: 'partials/about.html', controller: DetailController}).
                   when('/logs', {templateUrl: 'partials/logs.html', controller: LogController}).
-                  otherwise({redirectTo: '/detail'});
+                  otherwise({redirectTo: '/attributes'});
         }).
         factory('workspace',function ($rootScope) {
           return new Workspace();
@@ -19,7 +20,7 @@ angular.module('FuseIDE', ['ngResource']).
             return value;
           };
         });
-//when('/phones/:phoneId', {templateUrl: 'partials/phone-detail.html', controller: PhoneDetailCtrl}).
+//when('/phones/:phoneId', {templateUrl: 'partials/phone-attributes.html', controller: PhoneDetailCtrl}).
 
 
 function LogController($scope, $resource, $location) {
@@ -130,7 +131,11 @@ class Folder {
   }
 }
 
-function NavBarController($scope, workspace) {
+function NavBarController($scope, $location, workspace) {
+  $scope.navClass = (page) => {
+      var currentRoute = $location.path().substring(1) || 'home';
+      return page === currentRoute ? 'active' : '';
+  };
 }
 
 function PreferencesController($scope, workspace) {
@@ -149,7 +154,7 @@ function MBeansController($scope, $location, workspace) {
     workspace.selection = node;
 
     // TODO we may want to choose different views based on the kind of selection
-    $location.path('/detail');
+    $location.path('/attributes');
     $scope.$apply();
   };
 
