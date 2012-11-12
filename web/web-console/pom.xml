@@ -213,6 +213,19 @@
       <name>jetbrains-snapshots</name>
       <url>http://repository.jetbrains.com/snapshots</url>
     </repository>
+
+    <!-- for jolokia snapshots until 1.0.6 is released -->
+    <repository>
+      <id>labs-consol-snapshot</id>
+      <name>ConSol* Labs Repository (Snapshots)</name>
+      <url>http://labs.consol.de/maven/snapshots-repository</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>

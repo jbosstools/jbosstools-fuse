@@ -184,7 +184,7 @@ function MBeansController($scope, $location, workspace) {
     jolokia.request({
         type: 'list'
     }, onSuccess(populateTree, {
-        canonicalProperties: false,
+        canonicalNaming: false,
         maxDepth: 2
     }));
 }
@@ -192,6 +192,9 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     $scope.routeParams = $routeParams;
     $scope.workspace = workspace;
     $scope.getAttributes = function (value) {
+        if(angular.isArray(value) && angular.isObject(value[0])) {
+            return value;
+        }
         if(angular.isObject(value) && !angular.isArray(value)) {
             return [
                 value

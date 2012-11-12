@@ -45,7 +45,7 @@
 
         // Processing parameters which are added to the
         // URL as query parameters if given as options
-        var PROCESSING_PARAMS = ["maxDepth", "maxCollectionSize", "maxObjects", "ignoreErrors", "canonicalProperties"];
+        var PROCESSING_PARAMS = ["maxDepth", "maxCollectionSize", "maxObjects", "ignoreErrors", "canonicalNaming"];
 
         /**
          * Constructor for creating a client to the Jolokia agent.
@@ -64,7 +64,7 @@
             }
 
             // Jolokia Javascript Client version
-            this.CLIENT_VERSION = "1.0.5";
+            this.CLIENT_VERSION = "1.0.6-SNAPSHOT";
 
             // Registered requests for fetching periodically
             var jobs = [];
