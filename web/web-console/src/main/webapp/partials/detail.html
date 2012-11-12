@@ -1,14 +1,7 @@
 <script type="text/ng-template" id="render-table.html">
     <tr ng-repeat="(name, value) in attributes">
         <td class="property-name">{{name | humanize}}</td>
-        <td class="property-value">
-            <!-- include here... -->
-            <table class="table table-hover" ng-repeat="attributes in getAttributes(value)">
-                <tbody ng-include="'render-table.html'">
-                </tbody>
-            </table>
-            <span ng-bind="value" ng-show="getAttributes(value) == null"></span>
-        </td>
+        <td class="property-value" ng-include="'render-cell.html'"></td>
     </tr>
 </script>
 
@@ -39,7 +32,10 @@
     </thead>
     <tbody>
     <tr class="property-value" ng-repeat="row in attributes.rows">
-        <td ng-repeat="value in attributes.values(row)" ng-include="'render-cell.html'"></td>
+        <!-- TODO is there a cleaner way to do this? -->
+        <td ng-repeat="col in attributes.columns">
+            <span ng-repeat="value in rowValues(row, col.name)" ng-include="'render-cell.html'"></span>
+        </td>
     </tr>
     </tbody>
 </table>

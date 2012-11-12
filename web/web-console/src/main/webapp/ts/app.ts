@@ -216,13 +216,18 @@ class Table {
   public columns = {};
   public rows = {};
 
-  public values(row) {
+  public values(row, columns) {
     var answer = [];
-    var columns = this.columns;
     if (columns) {
+      for (name in columns) {
+        console.log("Looking up: " + name + " on row ");
+        answer.push(row[name]);
+      }
+/*
       Object.keys(columns).forEach((name) => {
         answer.push(row[name]);
       });
+*/
     }
     return answer;
   }
@@ -251,6 +256,10 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     if (angular.isArray(value) && angular.isObject(value[0])) return value;
     if (angular.isObject(value) && !angular.isArray(value)) return [value];
     return null;
+  };
+
+  $scope.rowValues = (row, col) => {
+    return [row[col]];
   };
 
   var asQuery = function (mbeanName) {
@@ -312,8 +321,8 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
                 if (mbean) {
                   var table = $scope.attributes;
                   if (!(table instanceof Table)) {
-                    console.log("table is not a Table() but was " + JSON.stringify(table));
-                    $scope.attributes = new Table();
+                    table = new Table();
+                    $scope.attributes = table;
                   }
                   table.setRow(mbean, attributes);
                   $scope.$apply();

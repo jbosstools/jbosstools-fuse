@@ -193,13 +193,13 @@ var Table = (function () {
         this.rows = {
         };
     }
-    Table.prototype.values = function (row) {
+    Table.prototype.values = function (row, columns) {
         var answer = [];
-        var columns = this.columns;
         if(columns) {
-            Object.keys(columns).forEach(function (name) {
+            for(name in columns) {
+                console.log("Looking up: " + name + " on row ");
                 answer.push(row[name]);
-            });
+            }
         }
         return answer;
     };
@@ -233,6 +233,11 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
             ];
         }
         return null;
+    };
+    $scope.rowValues = function (row, col) {
+        return [
+            row[col]
+        ];
     };
     var asQuery = function (mbeanName) {
         return {
@@ -299,8 +304,8 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
                                     if(mbean) {
                                         var table = $scope.attributes;
                                         if(!(table instanceof Table)) {
-                                            console.log("table is not a Table() but was " + JSON.stringify(table));
-                                            $scope.attributes = new Table();
+                                            table = new Table();
+                                            $scope.attributes = table;
                                         }
                                         table.setRow(mbean, attributes);
                                         $scope.$apply();
