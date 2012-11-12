@@ -16,9 +16,9 @@
     <groupId>org.fusesource</groupId>
     <artifactId>fuse-project</artifactId>
     <!-- 
-      <version>99-master-SNAPSHOT</version>
-    -->
       <version>7.1.0.fuse-020</version>
+    -->
+    <version>99-master-SNAPSHOT</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
@@ -165,4 +165,13 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>web</id>
+      <modules>
+        <module>web</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>
