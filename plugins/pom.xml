@@ -76,7 +76,7 @@
 
   <build>
     <plugins>
-  	<plugin>
+  	   <plugin>
                 <artifactId>maven-remote-resources-plugin</artifactId>
                 <version>1.0</version>
                 <dependencies>
@@ -105,6 +105,24 @@
                     </execution>
                 </executions>
 	</plugin>
+  <plugin>
+     <artifactId>maven-antrun-plugin</artifactId>
+     <version>1.4</version>
+     <executions>
+      <execution>
+       <phase>package</phase>
+       <configuration>
+        <tasks>
+         <copy tofile="${basedir}/rcp_build/org.fusesource.ide.rcp.feature/rootFiles/unix/notices.txt" file="${baseDir}/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" />
+         <copy tofile="${basedir}/rcp_build/org.fusesource.ide.rcp.feature/rootFiles/win/notices.txt" file="${baseDir}/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" />
+        </tasks>
+       </configuration>
+       <goals>
+        <goal>run</goal>
+       </goals>
+      </execution>
+     </executions>
+    </plugin>
 <!--
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
