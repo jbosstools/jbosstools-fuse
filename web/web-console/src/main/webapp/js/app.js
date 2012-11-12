@@ -16,9 +16,7 @@ angular.module('FuseIDE', [
         redirectTo: '/detail'
     });
 }).factory('workspace', function ($rootScope) {
-    var workspace = new Workspace();
-    workspace.setUpdateRate(5000);
-    return workspace;
+    return new Workspace();
 }).filter('humanize', function () {
     return function (value) {
         if(value) {
@@ -50,12 +48,36 @@ function onSuccess(fn, options) {
     };
     return options;
 }
+function supportsLocalStorage() {
+    try  {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
 var Workspace = (function () {
     function Workspace() {
         this.jolokia = new Jolokia("/jolokia");
         this.updateRate = 0;
         this.selection = [];
+        this.dummyStorage = {
+        };
+        var rate = this.getUpdateRate();
+        this.setUpdateRate(rate);
     }
+    Workspace.prototype.getLocalStorage = function (key) {
+        if(supportsLocalStorage()) {
+            return localStorage[key];
+        }
+        return this.dummyStorage[key];
+    };
+    Workspace.prototype.setLocalStorage = function (key, value) {
+        if(supportsLocalStorage()) {
+            localStorage[key] = value;
+        } else {
+            this.dummyStorage[key] = value;
+        }
+    };
     Workspace.prototype.closeHandle = function (scope, key) {
         if (typeof key === "undefined") { key = 'jolokiaHandle'; }
         var handle = scope[key];
@@ -64,9 +86,12 @@ var Workspace = (function () {
             handle[key] = null;
         }
     };
+    Workspace.prototype.getUpdateRate = function () {
+        return this.getLocalStorage('updateRate') || 5000;
+    };
     Workspace.prototype.setUpdateRate = function (value) {
         this.jolokia.stop();
-        this.updateRate = value;
+        this.setLocalStorage('updateRate', value);
         if(value > 0) {
             this.jolokia.start(value);
         }
@@ -98,7 +123,7 @@ function NavBarController($scope, workspace) {
 }
 function PreferencesController($scope, workspace) {
     $scope.workspace = workspace;
-    $scope.updateRate = workspace.updateRate;
+    $scope.updateRate = workspace.getUpdateRate();
     $scope.$watch('updateRate', function () {
         $scope.workspace.setUpdateRate($scope.updateRate);
     });
@@ -148,7 +173,6 @@ function MBeansController($scope, $location, workspace) {
         $("#jmxtree").dynatree({
             onActivate: function (node) {
                 var data = node.data;
-                console.log("You activated " + data.title + " : " + JSON.stringify(data));
                 $scope.select(data);
             },
             persist: false,
@@ -167,6 +191,14 @@ function MBeansController($scope, $location, workspace) {
 function DetailController($scope, $routeParams, workspace, $rootScope) {
     $scope.routeParams = $routeParams;
     $scope.workspace = workspace;
+    $scope.getAttributes = function (value) {
+        if(angular.isObject(value) && !angular.isArray(value)) {
+            return [
+                value
+            ];
+        }
+        return null;
+    };
     $scope.$watch('workspace.selection', function () {
         var node = $scope.workspace.selection;
         workspace.closeHandle($scope);
@@ -176,7 +208,13 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
             var updateValues = function (response) {
                 var attributes = response.value;
                 if(attributes) {
-                    delete attributes['ObjectName'];
+                    var objectName = attributes['ObjectName'];
+                    if(objectName) {
+                        var name = objectName['objectName'];
+                        if(name) {
+                            attributes['ObjectName'] = name;
+                        }
+                    }
                     $scope.attributes = attributes;
                     $scope.$apply();
                 } else {

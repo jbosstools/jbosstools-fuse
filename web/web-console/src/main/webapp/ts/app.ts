@@ -8,9 +8,7 @@ angular.module('FuseIDE', ['ngResource']).
                   otherwise({redirectTo: '/detail'});
         }).
         factory('workspace',function ($rootScope) {
-          var workspace = new Workspace();
-          workspace.setUpdateRate(5000);
-          return workspace;
+          return new Workspace();
         }).
         filter('humanize', function () {
           return function (value) {
@@ -50,10 +48,41 @@ function onSuccess(fn, options = {}) {
   return options;
 }
 
+
+function supportsLocalStorage() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
+}
+
 class Workspace {
   public jolokia = new Jolokia("/jolokia");
   public updateRate = 0;
   public selection = [];
+  dummyStorage = {};
+
+  constructor() {
+    var rate = this.getUpdateRate();
+    this.setUpdateRate(rate);
+  }
+
+
+  getLocalStorage(key: string) {
+    if (supportsLocalStorage()) {
+      return localStorage[key];
+    }
+    return this.dummyStorage[key];
+  }
+
+  setLocalStorage(key: string, value: any) {
+    if (supportsLocalStorage()) {
+      localStorage[key] = value;
+    } else {
+      this.dummyStorage[key] = value;
+    }
+  }
 
   /**
    * Closes the given handle object if its defined
@@ -67,12 +96,16 @@ class Workspace {
     }
   }
 
+  getUpdateRate() {
+    return this.getLocalStorage('updateRate') || 5000;
+  }
+
   /**
    * sets the update rate
    */
           setUpdateRate(value) {
     this.jolokia.stop();
-    this.updateRate = value
+    this.setLocalStorage('updateRate', value)
     if (value > 0) {
       this.jolokia.start(value);
     }
@@ -104,7 +137,7 @@ function NavBarController($scope, workspace) {
 
 function PreferencesController($scope, workspace) {
   $scope.workspace = workspace;
-  $scope.updateRate = workspace.updateRate;
+  $scope.updateRate = workspace.getUpdateRate();
 
   $scope.$watch('updateRate', () => {
     $scope.workspace.setUpdateRate($scope.updateRate);
@@ -163,7 +196,7 @@ function MBeansController($scope, $location, workspace) {
     $("#jmxtree").dynatree({
       onActivate: function (node) {
         var data = node.data;
-        console.log("You activated " + data.title + " : " + JSON.stringify(data));
+        //console.log("You activated " + data.title + " : " + JSON.stringify(data));
         $scope.select(data);
       },
       persist: false,
@@ -185,6 +218,11 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
   $scope.routeParams = $routeParams;
   $scope.workspace = workspace;
 
+  $scope.getAttributes = (value) => {
+    if (angular.isObject(value) && !angular.isArray(value)) return [value];
+    return null;
+  };
+
   $scope.$watch('workspace.selection', function () {
     var node = $scope.workspace.selection;
     workspace.closeHandle($scope);
@@ -194,7 +232,13 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
       var updateValues = function (response) {
         var attributes = response.value;
         if (attributes) {
-          delete attributes['ObjectName'];
+          var objectName = attributes['ObjectName'];
+          if (objectName) {
+            var name = objectName['objectName'];
+            if (name) {
+              attributes['ObjectName'] = name;
+            }
+          }
           $scope.attributes = attributes;
           $scope.$apply();
         } else {
