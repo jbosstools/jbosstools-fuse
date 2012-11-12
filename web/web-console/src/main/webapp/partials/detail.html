@@ -1,11 +1,4 @@
 <script type="text/ng-template" id="render-table.html">
-    <!--
-        <span ng-click="select(child)">{{name}}</span>
-        <ul>
-            <li ng-repeat="(name, child) in child.children()" ng-include="'render-table.html'"></li>
-        </ul>
-    -->
-
     <tr ng-repeat="(name, value) in attributes">
         <td class="property-name">{{name | humanize}}</td>
         <td class="property-value">
@@ -14,9 +7,6 @@
                 </tbody>
             </table>
             <span ng-bind="value" ng-show="getAttributes(value) == null"></span>
-            <!--
-                            <span ng-bind="value" ng-show="attributes(value) == null"/>
-            -->
         </td>
     </tr>
 </script>
