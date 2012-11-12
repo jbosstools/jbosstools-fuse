@@ -4,3 +4,11 @@
 
 .property-value {
 }
+
+.scrollable {
+    height: 100%;
+/*
+  max-height: 340px;
+*/
+  overflow-y: scroll;
+}
