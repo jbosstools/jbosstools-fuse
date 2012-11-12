@@ -3,7 +3,7 @@ Bundle-Name: %BundleName
 Bundle-SymbolicName: org.fusesource.ide.jmx.core;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: org.fusesource.ide.jmx.core.JMXActivator
-Bundle-Vendor: FuseSource.com
+Bundle-Vendor: Red Hat, Inc.
 Require-Bundle: org.fusesource.ide.commons,
  org.eclipse.core.runtime,
  org.eclipse.ui,

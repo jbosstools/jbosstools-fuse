@@ -4,7 +4,7 @@ Bundle-Name: Fuse IDE Camel Editor Plugin
 Bundle-SymbolicName: org.fusesource.ide.camel.editor;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: org.fusesource.ide.camel.editor.Activator
-Bundle-Vendor: FuseSource.com
+Bundle-Vendor: Red Hat, Inc.
 Require-Bundle: commons-management,
  org.fusesource.ide.graph,
  org.fusesource.ide.camel.model,

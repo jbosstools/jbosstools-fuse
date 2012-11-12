@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Cheat Sheets Plugin
 Bundle-SymbolicName: org.fusesource.ide.cheatsheets;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Bundle-Vendor: FuseSource.com
+Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.ui.cheatsheets,
  org.fusesource.ide.branding

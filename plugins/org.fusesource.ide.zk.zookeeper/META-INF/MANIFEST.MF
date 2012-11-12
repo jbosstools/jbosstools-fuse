@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fuse ZooKeeper Plugin
 Bundle-SymbolicName: org.fusesource.ide.zk.zookeeper;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Bundle-Vendor: FuseSource.com
+Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.zk.core,
  org.fusesource.ide.zk.jmx,

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fuse IDE Camel Editor Plugin Tests
 Bundle-SymbolicName: org.fusesource.ide.camel.editor.tests;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Bundle-Vendor: FuseSource.com
+Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: org.fusesource.ide.camel.model
 Require-Bundle: org.junit

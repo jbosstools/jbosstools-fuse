@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Fabric Camel Plugin
 Bundle-SymbolicName: org.fusesource.ide.fabric.camel;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Bundle-Vendor: FuseSource.com
+Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.fabric,
  org.fusesource.fabric.fabric-camel-facade,
