@@ -38,14 +38,12 @@ function onSuccess(fn, options) {
     }; }
     options['ignoreErrors'] = true;
     options['mimeType'] = 'application/json';
+    options['success'] = fn;
     if(!options['error']) {
         options['error'] = function (response) {
             console.log("Jolokia request failed: " + response.error);
         };
     }
-    options['success'] = function (response) {
-        fn(response);
-    };
     return options;
 }
 function supportsLocalStorage() {
@@ -202,33 +200,75 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
         }
         return null;
     };
+    var asQuery = function (mbeanName) {
+        return {
+            type: "READ",
+            mbean: mbeanName,
+            ignoreErrors: true
+        };
+    };
+    var tidyAttributes = function (attributes) {
+        var objectName = attributes['ObjectName'];
+        if(objectName) {
+            var name = objectName['objectName'];
+            if(name) {
+                attributes['ObjectName'] = name;
+            }
+        }
+    };
     $scope.$watch('workspace.selection', function () {
         var node = $scope.workspace.selection;
         workspace.closeHandle($scope);
         var mbean = node.objectName;
+        var query = null;
+        var jolokia = workspace.jolokia;
+        var updateValues = function (response) {
+            var attributes = response.value;
+            if(attributes) {
+                tidyAttributes(attributes);
+                $scope.attributes = attributes;
+                $scope.$apply();
+            } else {
+                console.log("Failed to get a response! " + response);
+            }
+        };
         if(mbean) {
-            var jolokia = workspace.jolokia;
-            var updateValues = function (response) {
-                var attributes = response.value;
-                if(attributes) {
-                    var objectName = attributes['ObjectName'];
-                    if(objectName) {
-                        var name = objectName['objectName'];
-                        if(name) {
-                            attributes['ObjectName'] = name;
-                        }
+            query = asQuery(mbean);
+        } else {
+            var children = node.children;
+            if(children) {
+                var mbeans = children.map(function (child) {
+                    return child.objectName;
+                }).filter(function (mbean) {
+                    return mbean;
+                });
+                console.log("Found mbeans: " + mbeans);
+                if(mbeans) {
+                    query = mbeans.map(function (mbean) {
+                        return asQuery(mbean);
+                    });
+                    if(query.length === 1) {
+                        query = query[0];
+                    } else {
+                        updateValues = [];
+                        $scope.attributes = [];
+                        mbeans.each(function (mbean, index) {
+                            updateValues[index] = function (response) {
+                                var attributes = response.value;
+                                if(attributes) {
+                                    tidyAttributes(attributes);
+                                    $scope.attributes[index] = attributes;
+                                    $scope.$apply();
+                                } else {
+                                    console.log("Failed to get a response! " + response);
+                                }
+                            };
+                        });
                     }
-                    $scope.attributes = attributes;
-                    $scope.$apply();
-                } else {
-                    console.log("Failed to get a response! " + response);
                 }
-            };
-            var query = {
-                type: "READ",
-                mbean: mbean,
-                ignoreErrors: true
-            };
+            }
+        }
+        if(query) {
             jolokia.request(query, onSuccess(updateValues));
             $scope.jolokiaHandle = jolokia.register(onSuccess(updateValues, {
                 error: function (response) {

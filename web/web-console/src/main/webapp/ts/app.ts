@@ -36,15 +36,13 @@ function LogController($scope, $resource, $location) {
 function onSuccess(fn, options = {}) {
   options['ignoreErrors'] = true;
   options['mimeType'] = 'application/json';
+  options['success'] = fn;
   if (!options['error']) {
     options['error'] = function (response) {
       //alert("Jolokia request failed: " + response.error);
       console.log("Jolokia request failed: " + response.error);
     };
   }
-  options['success'] = function (response) {
-    fn(response);
-  };
   return options;
 }
 
@@ -224,31 +222,72 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     return null;
   };
 
+  var asQuery = function(mbeanName) {
+    return { type: "READ", mbean: mbeanName, ignoreErrors: true};
+  };
+
+  var tidyAttributes = function(attributes) {
+    var objectName = attributes['ObjectName'];
+    if (objectName) {
+      var name = objectName['objectName'];
+      if (name) {
+        attributes['ObjectName'] = name;
+      }
+    }
+  };
+
   $scope.$watch('workspace.selection', function () {
     var node = $scope.workspace.selection;
     workspace.closeHandle($scope);
     var mbean = node.objectName;
-    if (mbean) {
-      var jolokia = workspace.jolokia;
-      var updateValues = function (response) {
-        var attributes = response.value;
-        if (attributes) {
-          var objectName = attributes['ObjectName'];
-          if (objectName) {
-            var name = objectName['objectName'];
-            if (name) {
-              attributes['ObjectName'] = name;
-            }
-          }
-          $scope.attributes = attributes;
-          $scope.$apply();
-        } else {
-          console.log("Failed to get a response! " + response);
-        }
-      };
+    var query = null;
+    var jolokia = workspace.jolokia;
+    var updateValues: any = function (response) {
+      var attributes = response.value;
+      if (attributes) {
+        tidyAttributes(attributes);
+        $scope.attributes = attributes;
+        $scope.$apply();
+      } else {
+        console.log("Failed to get a response! " + response);
+      }
+    };
 
+    if (mbean) {
+      query = asQuery(mbean)
+    } else {
+      // lets query each child's details
+      var children = node.children;
+      if (children) {
+        var mbeans = children.map((child) => child.objectName).filter((mbean) => mbean);
+        console.log("Found mbeans: " + mbeans);
+        if (mbeans) {
+          query = mbeans.map((mbean) => asQuery(mbean));
+          if (query.length === 1) {
+            query = query[0];
+          } else {
+            updateValues = [];
+            $scope.attributes = [];
+
+            // now lets create an update function for each row which are all invoked async
+            mbeans.each((mbean, index) => {
+              updateValues[index] = function (response) {
+                    var attributes = response.value;
+                    if (attributes) {
+                      tidyAttributes(attributes);
+                      $scope.attributes[index] = attributes;
+                      $scope.$apply();
+                    } else {
+                      console.log("Failed to get a response! " + response);
+                    }
+              };
+            });
+          }
+        }
+      }
+    }
+    if (query) {
       // lets get the values immediately
-      var query = { type: "READ", mbean: mbean, ignoreErrors: true};
       jolokia.request(query, onSuccess(updateValues));
 
       // listen for updates
