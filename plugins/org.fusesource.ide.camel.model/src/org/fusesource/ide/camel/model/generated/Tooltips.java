@@ -158,7 +158,6 @@ public class Tooltips extends NLS {
     public static String tooltipPollEnrichResourceUri;
     public static String tooltipPollEnrichAggregationStrategyRef;
     public static String tooltipPollEnrichTimeout;
-    public static String tooltipPollEnrichPollMultiple;
 
     public static String tooltipProcess;
     public static String tooltipProcessRef;
@@ -430,7 +429,6 @@ public class Tooltips extends NLS {
     map.put("tooltipPollEnrich.ResourceUri", tooltipPollEnrichResourceUri);
     map.put("tooltipPollEnrich.AggregationStrategyRef", tooltipPollEnrichAggregationStrategyRef);
     map.put("tooltipPollEnrich.Timeout", tooltipPollEnrichTimeout);
-    map.put("tooltipPollEnrich.PollMultiple", tooltipPollEnrichPollMultiple);
     map.put("tooltipProcess", tooltipProcess);
     map.put("tooltipProcess.Ref", tooltipProcessRef);
     map.put("tooltipRecipientList", tooltipRecipientList);
