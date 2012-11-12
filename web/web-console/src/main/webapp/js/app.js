@@ -186,9 +186,43 @@ function MBeansController($scope, $location, workspace) {
         maxDepth: 2
     }));
 }
+var Table = (function () {
+    function Table() {
+        this.columns = {
+        };
+        this.rows = {
+        };
+    }
+    Table.prototype.values = function (row) {
+        var answer = [];
+        var columns = this.columns;
+        if(columns) {
+            Object.keys(columns).forEach(function (name) {
+                answer.push(row[name]);
+            });
+        }
+        return answer;
+    };
+    Table.prototype.setRow = function (key, data) {
+        var _this = this;
+        this.rows[key] = data;
+        Object.keys(data).forEach(function (key) {
+            var columns = _this.columns;
+            if(!columns[key]) {
+                columns[key] = {
+                    name: key
+                };
+            }
+        });
+    };
+    return Table;
+})();
 function DetailController($scope, $routeParams, workspace, $rootScope) {
     $scope.routeParams = $routeParams;
     $scope.workspace = workspace;
+    $scope.isTable = function (value) {
+        return value instanceof Table;
+    };
     $scope.getAttributes = function (value) {
         if(angular.isArray(value) && angular.isObject(value[0])) {
             return value;
@@ -242,7 +276,6 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
                 }).filter(function (mbean) {
                     return mbean;
                 });
-                console.log("Found mbeans: " + mbeans);
                 if(mbeans) {
                     query = mbeans.map(function (mbean) {
                         return asQuery(mbean);
@@ -250,31 +283,57 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
                     if(query.length === 1) {
                         query = query[0];
                     } else {
-                        updateValues = [];
-                        $scope.attributes = [];
-                        mbeans.each(function (mbean, index) {
-                            updateValues[index] = function (response) {
+                        if(query.length === 0) {
+                            query = null;
+                        } else {
+                            $scope.attributes = new Table();
+                            updateValues = function (response) {
                                 var attributes = response.value;
                                 if(attributes) {
                                     tidyAttributes(attributes);
-                                    $scope.attributes[index] = attributes;
-                                    $scope.$apply();
+                                    var mbean = attributes['ObjectName'];
+                                    var request = response.request;
+                                    if(!mbean && request) {
+                                        mbean = request['mbean'];
+                                    }
+                                    if(mbean) {
+                                        var table = $scope.attributes;
+                                        if(!(table instanceof Table)) {
+                                            console.log("table is not a Table() but was " + JSON.stringify(table));
+                                            $scope.attributes = new Table();
+                                        }
+                                        table.setRow(mbean, attributes);
+                                        $scope.$apply();
+                                    } else {
+                                        console.log("no ObjectName in attributes " + Object.keys(attributes));
+                                    }
                                 } else {
-                                    console.log("Failed to get a response! " + response);
+                                    console.log("Failed to get a response! " + JSON.stringify(response));
                                 }
                             };
-                        });
+                        }
                     }
                 }
             }
         }
         if(query) {
             jolokia.request(query, onSuccess(updateValues));
-            $scope.jolokiaHandle = jolokia.register(onSuccess(updateValues, {
+            var callback = onSuccess(updateValues, {
                 error: function (response) {
                     updateValues(response);
                 }
-            }), query);
+            });
+            if(angular.isArray(query)) {
+                if(query.length >= 1) {
+                    var args = [
+                        callback
+                    ].concat(query);
+                    var fn = jolokia.register;
+                    $scope.jolokiaHandle = fn.apply(jolokia, args);
+                }
+            } else {
+                $scope.jolokiaHandle = jolokia.register(callback, query);
+            }
         }
     });
     $scope.$on('$destroy', function () {

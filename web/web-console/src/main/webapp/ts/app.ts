@@ -67,14 +67,14 @@ class Workspace {
   }
 
 
-  getLocalStorage(key: string) {
+  getLocalStorage(key:string) {
     if (supportsLocalStorage()) {
       return localStorage[key];
     }
     return this.dummyStorage[key];
   }
 
-  setLocalStorage(key: string, value: any) {
+  setLocalStorage(key:string, value:any) {
     if (supportsLocalStorage()) {
       localStorage[key] = value;
     } else {
@@ -212,9 +212,40 @@ function MBeansController($scope, $location, workspace) {
 
 }
 
+class Table {
+  public columns = {};
+  public rows = {};
+
+  public values(row) {
+    var answer = [];
+    var columns = this.columns;
+    if (columns) {
+      Object.keys(columns).forEach((name) => {
+        answer.push(row[name]);
+      });
+    }
+    return answer;
+  }
+
+  public setRow(key, data) {
+    this.rows[key] = data;
+    Object.keys(data).forEach((key) => {
+      // could store type info...
+      var columns = this.columns;
+      if (!columns[key]) {
+        columns[key] = {name: key};
+      }
+    });
+  }
+}
+
 function DetailController($scope, $routeParams, workspace, $rootScope) {
   $scope.routeParams = $routeParams;
   $scope.workspace = workspace;
+
+  $scope.isTable = (value) => {
+    return value instanceof Table;
+  };
 
   $scope.getAttributes = (value) => {
     if (angular.isArray(value) && angular.isObject(value[0])) return value;
@@ -222,11 +253,11 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     return null;
   };
 
-  var asQuery = function(mbeanName) {
+  var asQuery = function (mbeanName) {
     return { type: "READ", mbean: mbeanName, ignoreErrors: true};
   };
 
-  var tidyAttributes = function(attributes) {
+  var tidyAttributes = function (attributes) {
     var objectName = attributes['ObjectName'];
     if (objectName) {
       var name = objectName['objectName'];
@@ -242,7 +273,7 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     var mbean = node.objectName;
     var query = null;
     var jolokia = workspace.jolokia;
-    var updateValues: any = function (response) {
+    var updateValues:any = function (response) {
       var attributes = response.value;
       if (attributes) {
         tidyAttributes(attributes);
@@ -252,7 +283,6 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
         console.log("Failed to get a response! " + response);
       }
     };
-
     if (mbean) {
       query = asQuery(mbean)
     } else {
@@ -260,28 +290,40 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
       var children = node.children;
       if (children) {
         var mbeans = children.map((child) => child.objectName).filter((mbean) => mbean);
-        console.log("Found mbeans: " + mbeans);
+        //console.log("Found mbeans: " + mbeans);
         if (mbeans) {
           query = mbeans.map((mbean) => asQuery(mbean));
           if (query.length === 1) {
             query = query[0];
+          } else if (query.length === 0) {
+            query = null;
           } else {
-            updateValues = [];
-            $scope.attributes = [];
-
             // now lets create an update function for each row which are all invoked async
-            mbeans.each((mbean, index) => {
-              updateValues[index] = function (response) {
-                    var attributes = response.value;
-                    if (attributes) {
-                      tidyAttributes(attributes);
-                      $scope.attributes[index] = attributes;
-                      $scope.$apply();
-                    } else {
-                      console.log("Failed to get a response! " + response);
-                    }
-              };
-            });
+            $scope.attributes = new Table();
+            updateValues = function (response) {
+              var attributes = response.value;
+              if (attributes) {
+                tidyAttributes(attributes);
+                var mbean = attributes['ObjectName'];
+                var request = response.request;
+                if (!mbean && request) {
+                  mbean = request['mbean'];
+                }
+                if (mbean) {
+                  var table = $scope.attributes;
+                  if (!(table instanceof Table)) {
+                    console.log("table is not a Table() but was " + JSON.stringify(table));
+                    $scope.attributes = new Table();
+                  }
+                  table.setRow(mbean, attributes);
+                  $scope.$apply();
+                } else {
+                  console.log("no ObjectName in attributes " + Object.keys(attributes));
+                }
+              } else {
+                console.log("Failed to get a response! " + JSON.stringify(response));
+              }
+            };
           }
         }
       }
@@ -289,16 +331,23 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     if (query) {
       // lets get the values immediately
       jolokia.request(query, onSuccess(updateValues));
-
-      // listen for updates
-      $scope.jolokiaHandle = jolokia.register(onSuccess(updateValues,
+      var callback = onSuccess(updateValues,
               {
-                error: function (response) {
-                  //console.log("Custom error handling on response " + JSON.stringify(response));
+                error: (response) => {
                   updateValues(response);
                 }
-              }),
-              query);
+              });
+
+      // listen for updates
+      if (angular.isArray(query)) {
+        if (query.length >= 1) {
+          var args = [callback].concat(query);
+          var fn = jolokia.register;
+          $scope.jolokiaHandle = fn.apply(jolokia, args);
+        }
+      } else {
+        $scope.jolokiaHandle = jolokia.register(callback, query);
+      }
     }
   });
 
