@@ -23,6 +23,37 @@ angular.module('FuseIDE', ['ngResource']).
 
 var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
 
+// the paths into the mbean tree which we should ignore doing a folder view
+// due to the huge size involved!
+var ignoreDetailsOnBigFolders = [
+  [
+    ['java.lang'],
+    ['MemoryPool', 'GarbageCollector']
+  ]
+];
+
+function ignoreFolderDetails(node) {
+  if (node) {
+    var folderNames = node.folderNames;
+    if (folderNames) {
+      return ignoreDetailsOnBigFolders.any((ignorePaths) => {
+        for (var i = 0; i < ignorePaths.length; i++) {
+          var folderName = folderNames[i];
+          var ignorePath = ignorePaths[i];
+          if (!folderName) return false;
+          var idx = ignorePath.indexOf(folderName);
+          if (idx < 0) {
+            return false;
+          }
+        }
+        console.log("Ignoring detail view on folder paths: " + node.folderNames);
+        return true;
+      });
+    }
+  }
+  return false;
+}
+
 function scopeStoreJolokiaHandle($scope, jolokia, jolokiaHandle) {
   // TODO do we even need to store the jolokiaHandle in the scope?
   if (jolokiaHandle) {
@@ -113,7 +144,12 @@ class Folder {
 
   isFolder = true;
   children = [];
+  folderNames = [];
   map = {};
+
+  get(key:string):Folder {
+    return this.map[key];
+  }
 
   getOrElse(key:string, defaultValue:any = new Folder(key)):Folder {
     var answer = this.map[key];
@@ -139,9 +175,17 @@ function NavBarController($scope, $location, workspace) {
     if (workspace) {
       var tree = workspace.tree;
       if (tree) {
-        var folder = tree[objectName];
-        if (folder) return true;
+        var folder = tree.get(objectName);
+        if (folder) {
+          return true
+        } else {
+          console.log("no hasMBean for " + objectName + " in tree " + tree);
+        }
+      } else {
+        console.log("workspace has no tree! returning false for hasMBean " + objectName);
       }
+    } else {
+      console.log("no workspace for hasMBean " + objectName);
     }
     return false
   }
@@ -180,6 +224,9 @@ function MBeansController($scope, $location, workspace) {
       for (var path in mbeans) {
         var entries = {};
         var folder = tree.getOrElse(domain);
+        var folderNames = [domain];
+        folder.folderNames = folderNames;
+        folderNames = folderNames.clone();
         var items = path.split(',');
         var paths = [];
         items.forEach(item => {
@@ -193,6 +240,9 @@ function MBeansController($scope, $location, workspace) {
         var lastPath = paths.pop();
         paths.forEach(value => {
           folder = folder.getOrElse(value);
+          folderNames.push(value);
+          folder.folderNames = folderNames;
+          folderNames = folderNames.clone();
         });
         var mbeanInfo = {
           title: lastPath,
@@ -208,9 +258,8 @@ function MBeansController($scope, $location, workspace) {
     // TODO we should do a merge across...
     // so we only insert or delete things!
     $scope.tree = tree;
-    var workspace2 = $scope.workspace;
-    if (workspace2) {
-      workspace2.tree = tree;
+    if ($scope.workspace) {
+      $scope.workspace.tree = tree;
     }
     $scope.$apply();
 
@@ -314,9 +363,12 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
       // lets query each child's details
       var children = node.children;
       if (children) {
-        var mbeans = children.map((child) => child.objectName).filter((mbean) => mbean);
-        //console.log("Found mbeans: " + mbeans);
-        if (mbeans) {
+        var childNodes = children.map((child) => child.objectName);
+        var mbeans = childNodes.filter((mbean) => mbean);
+        console.log("Found mbeans: " + mbeans + " child nodes " + childNodes.length + " child mbeans " + mbeans.length);
+
+        // lets filter out the collections of collections; so only have collections of mbeans
+        if (mbeans && childNodes.length === mbeans.length && !ignoreFolderDetails(node)) {
           query = mbeans.map((mbean) => asQuery(mbean));
           if (query.length === 1) {
             query = query[0];
@@ -429,11 +481,11 @@ function LogController($scope, $location, workspace) {
           if (!$scope.logs.any((item) => item.message === log.message && item.seq === log.message && item.timestamp === log.timestamp)) {
             $scope.logs.push(log);
           }
-/*
-          seq = log['seq'] || idx;
-          //console.log("Found log: " + JSON.stringify(log));
-          $scope.logs[seq] = log;
-*/
+          /*
+           seq = log['seq'] || idx;
+           //console.log("Found log: " + JSON.stringify(log));
+           $scope.logs[seq] = log;
+           */
         }
       }
       //console.log("Got results " + logs.length + " last seq: " + seq);

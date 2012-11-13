@@ -30,6 +30,40 @@ angular.module('FuseIDE', [
     }
 });
 var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
+var ignoreDetailsOnBigFolders = [
+    [
+        [
+            'java.lang'
+        ], 
+        [
+            'MemoryPool', 
+            'GarbageCollector'
+        ]
+    ]
+];
+function ignoreFolderDetails(node) {
+    if(node) {
+        var folderNames = node.folderNames;
+        if(folderNames) {
+            return ignoreDetailsOnBigFolders.any(function (ignorePaths) {
+                for(var i = 0; i < ignorePaths.length; i++) {
+                    var folderName = folderNames[i];
+                    var ignorePath = ignorePaths[i];
+                    if(!folderName) {
+                        return false;
+                    }
+                    var idx = ignorePath.indexOf(folderName);
+                    if(idx < 0) {
+                        return false;
+                    }
+                }
+                console.log("Ignoring detail view on folder paths: " + node.folderNames);
+                return true;
+            });
+        }
+    }
+    return false;
+}
 function scopeStoreJolokiaHandle($scope, jolokia, jolokiaHandle) {
     if(jolokiaHandle) {
         $scope.$on('$destroy', function () {
@@ -107,9 +141,13 @@ var Folder = (function () {
         this.title = title;
         this.isFolder = true;
         this.children = [];
+        this.folderNames = [];
         this.map = {
         };
     }
+    Folder.prototype.get = function (key) {
+        return this.map[key];
+    };
     Folder.prototype.getOrElse = function (key, defaultValue) {
         if (typeof defaultValue === "undefined") { defaultValue = new Folder(key); }
         var answer = this.map[key];
@@ -133,11 +171,17 @@ function NavBarController($scope, $location, workspace) {
         if(workspace) {
             var tree = workspace.tree;
             if(tree) {
-                var folder = tree[objectName];
+                var folder = tree.get(objectName);
                 if(folder) {
                     return true;
+                } else {
+                    console.log("no hasMBean for " + objectName + " in tree " + tree);
                 }
+            } else {
+                console.log("workspace has no tree! returning false for hasMBean " + objectName);
             }
+        } else {
+            console.log("no workspace for hasMBean " + objectName);
         }
         return false;
     };
@@ -171,6 +215,11 @@ function MBeansController($scope, $location, workspace) {
                 var entries = {
                 };
                 var folder = tree.getOrElse(domain);
+                var folderNames = [
+                    domain
+                ];
+                folder.folderNames = folderNames;
+                folderNames = folderNames.clone();
                 var items = path.split(',');
                 var paths = [];
                 items.forEach(function (item) {
@@ -183,6 +232,9 @@ function MBeansController($scope, $location, workspace) {
                 var lastPath = paths.pop();
                 paths.forEach(function (value) {
                     folder = folder.getOrElse(value);
+                    folderNames.push(value);
+                    folder.folderNames = folderNames;
+                    folderNames = folderNames.clone();
                 });
                 var mbeanInfo = {
                     title: lastPath,
@@ -196,9 +248,8 @@ function MBeansController($scope, $location, workspace) {
             }
         }
         $scope.tree = tree;
-        var workspace2 = $scope.workspace;
-        if(workspace2) {
-            workspace2.tree = tree;
+        if($scope.workspace) {
+            $scope.workspace.tree = tree;
         }
         $scope.$apply();
         $("#jmxtree").dynatree({
@@ -309,12 +360,14 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
         } else {
             var children = node.children;
             if(children) {
-                var mbeans = children.map(function (child) {
+                var childNodes = children.map(function (child) {
                     return child.objectName;
-                }).filter(function (mbean) {
+                });
+                var mbeans = childNodes.filter(function (mbean) {
                     return mbean;
                 });
-                if(mbeans) {
+                console.log("Found mbeans: " + mbeans + " child nodes " + childNodes.length + " child mbeans " + mbeans.length);
+                if(mbeans && childNodes.length === mbeans.length && !ignoreFolderDetails(node)) {
                     query = mbeans.map(function (mbean) {
                         return asQuery(mbean);
                     });
