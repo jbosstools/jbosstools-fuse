@@ -20,7 +20,6 @@ angular.module('FuseIDE', ['ngResource']).
             return value;
           };
         });
-//when('/phones/:phoneId', {templateUrl: 'partials/phone-attributes.html', controller: PhoneDetailCtrl}).
 
 var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
 
@@ -37,9 +36,9 @@ function scopeStoreJolokiaHandle($scope, jolokia, jolokiaHandle) {
 function closeHandle($scope, jolokia) {
   var jolokiaHandle = $scope.jolokiaHandle
   if (jolokiaHandle) {
-        console.log('Closing the handle ' + jolokiaHandle);
-        jolokia.unregister(jolokiaHandle);
-        $scope.jolokiaHandle = null;
+    console.log('Closing the handle ' + jolokiaHandle);
+    jolokia.unregister(jolokiaHandle);
+    $scope.jolokiaHandle = null;
   }
 }
 
@@ -55,7 +54,6 @@ function onSuccess(fn, options = {}) {
   }
   return options;
 }
-
 
 function supportsLocalStorage() {
   try {
@@ -164,8 +162,7 @@ function MBeansController($scope, $location, workspace) {
 
   $scope.select = (node) => {
     $scope.workspace.selection = node;
-
-    // TODO we may want to choose different views based on the kind of selection
+    // we may want to choose different views based on the kind of selection
     var mbean = node['objectName']
     if (mbean && mbean === logQueryMBean) {
       $location.path('/logs');
@@ -220,7 +217,6 @@ function MBeansController($scope, $location, workspace) {
     $("#jmxtree").dynatree({
       onActivate: function (node) {
         var data = node.data;
-        //console.log("You activated " + data.title + " : " + JSON.stringify(data));
         $scope.select(data);
       },
       persist: false,
@@ -235,7 +231,6 @@ function MBeansController($scope, $location, workspace) {
           onSuccess(populateTree, {canonicalNaming: false, maxDepth: 2}));
 
   // TODO auto-refresh the tree...
-
 }
 
 class Table {
@@ -249,11 +244,6 @@ class Table {
         console.log("Looking up: " + name + " on row ");
         answer.push(row[name]);
       }
-      /*
-       Object.keys(columns).forEach((name) => {
-       answer.push(row[name]);
-       });
-       */
     }
     return answer;
   }
@@ -394,14 +384,14 @@ function LogController($scope, $location, workspace) {
   $scope.toTime = 0;
   $scope.queryJSON = { type: "EXEC", mbean: logQueryMBean, operation: "logResultsSince", arguments: [$scope.toTime], ignoreErrors: true};
 
-  $scope.filterLogs = function(logs, query) {
+  $scope.filterLogs = function (logs, query) {
     var filtered = [];
     var queryRegExp = null;
     if (query) {
       queryRegExp = RegExp(query.escapeRegExp(), 'i'); //'i' -> case insensitive
     }
-    angular.forEach(logs, function(log) {
-      if (!query || Object.values(log).any( (value) => value && value.toString().has(queryRegExp))) {
+    angular.forEach(logs, function (log) {
+      if (!query || Object.values(log).any((value) => value && value.toString().has(queryRegExp))) {
         filtered.push(log);
       }
     });

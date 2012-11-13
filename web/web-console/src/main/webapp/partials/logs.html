@@ -13,7 +13,6 @@
     </thead>
     <tbody>
     <tr ng-repeat="log in filterLogs(logs, query)" ng-class="logClass(log)">
-    <!--<tr ng-repeat="(logid, log) in logs|filter:query" ng-class="logClass(log)"> -->
         <td>{{log.timestamp | date:'yyyy-MM-dd HH:mm:ss'}}</td>
         <td>{{log.level}}</td>
         <td>{{log.logger}}</td>
