@@ -97,6 +97,8 @@ fun main(args: Array<String>): Unit {
         LOG.info("starting jetty")
         server.start()
 
+        LOG.warn("Don't run with scissors!")
+        LOG.error("Someone somewhere is not using Fuse! :)")
         val contextLogger = context.getLogger()
         LOG.info("Jetty context has logger ${contextLogger} with class ${contextLogger.javaClass}")
         server.join()

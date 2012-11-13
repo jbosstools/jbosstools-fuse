@@ -6,15 +6,15 @@ angular.module('FuseIDE', [
     }).when('/attributes', {
         templateUrl: 'partials/attributes.html',
         controller: DetailController
+    }).when('/logs', {
+        templateUrl: 'partials/logs.html',
+        controller: LogController
     }).when('/debug', {
         templateUrl: 'partials/debug.html',
         controller: DetailController
     }).when('/about', {
         templateUrl: 'partials/about.html',
         controller: DetailController
-    }).when('/logs', {
-        templateUrl: 'partials/logs.html',
-        controller: LogController
     }).otherwise({
         redirectTo: '/attributes'
     });
@@ -29,13 +29,7 @@ angular.module('FuseIDE', [
         return value;
     }
 });
-function LogController($scope, $resource, $location) {
-    var resourceUrl = $location.path() + 'jolokia/exec/org.fusesource.insight:type=LogQuery/getLogEvents/0?mimeType=application/json';
-    var Model = $resource(resourceUrl);
-    var results = Model.get();
-    var value = results.value;
-    $scope.logs = value;
-}
+var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
 function onSuccess(fn, options) {
     if (typeof options === "undefined") { options = {
     }; }
@@ -48,6 +42,13 @@ function onSuccess(fn, options) {
         };
     }
     return options;
+}
+function asQuery(mbeanName) {
+    return {
+        type: "READ",
+        mbean: mbeanName,
+        ignoreErrors: true
+    };
 }
 function supportsLocalStorage() {
     try  {
@@ -121,9 +122,23 @@ var Folder = (function () {
     return Folder;
 })();
 function NavBarController($scope, $location, workspace) {
+    $scope.workspace = workspace;
     $scope.navClass = function (page) {
         var currentRoute = $location.path().substring(1) || 'home';
         return page === currentRoute ? 'active' : '';
+    };
+    $scope.hasMBean = function (objectName) {
+        var workspace = $scope.workspace;
+        if(workspace) {
+            var tree = workspace.tree;
+            if(tree) {
+                var folder = tree[objectName];
+                if(folder) {
+                    return true;
+                }
+            }
+        }
+        return false;
     };
 }
 function PreferencesController($scope, workspace) {
@@ -134,10 +149,16 @@ function PreferencesController($scope, workspace) {
     });
 }
 function MBeansController($scope, $location, workspace) {
+    $scope.workspace = workspace;
     $scope.tree = new Folder('MBeans');
     $scope.select = function (node) {
-        workspace.selection = node;
-        $location.path('/attributes');
+        $scope.workspace.selection = node;
+        var mbean = node['objectName'];
+        if(mbean && mbean === logQueryMBean) {
+            $location.path('/logs');
+        } else {
+            $location.path('/attributes');
+        }
         $scope.$apply();
     };
     function populateTree(response) {
@@ -174,6 +195,10 @@ function MBeansController($scope, $location, workspace) {
             }
         }
         $scope.tree = tree;
+        var workspace2 = $scope.workspace;
+        if(workspace2) {
+            workspace2.tree = tree;
+        }
         $scope.$apply();
         $("#jmxtree").dynatree({
             onActivate: function (node) {
@@ -245,13 +270,6 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
         return [
             row[col]
         ];
-    };
-    var asQuery = function (mbeanName) {
-        return {
-            type: "READ",
-            mbean: mbeanName,
-            ignoreErrors: true
-        };
     };
     var tidyAttributes = function (attributes) {
         var objectName = attributes['ObjectName'];
@@ -351,4 +369,52 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     $scope.$on('$destroy', function () {
         workspace.closeHandle($scope);
     });
+}
+function LogController($scope, $location, workspace) {
+    $scope.workspace = workspace;
+    $scope.logs = [];
+    $scope.logClass = function (log) {
+        var level = log['level'];
+        if(level) {
+            var lower = level.toLowerCase();
+            if(lower.startsWith("warn")) {
+                return "warning";
+            } else {
+                if(lower.startsWith("err")) {
+                    return "error";
+                } else {
+                    if(lower.startsWith("debug")) {
+                        return "info";
+                    }
+                }
+            }
+        }
+        return "";
+    };
+    var updateValues = function (response) {
+        var logs = response.events;
+        var toTime = response.toTimestamp;
+        if(toTime) {
+            $scope.toTime = toTime;
+        }
+        if(logs) {
+            for(var idx in logs) {
+                var log = logs[idx];
+                if(log) {
+                    var seq = logs['seq'] || idx;
+                    $scope.logs[seq] = log;
+                }
+            }
+            $scope.$apply();
+        } else {
+            console.log("Failed to get a response! " + response);
+        }
+    };
+    var query = {
+        type: "READ",
+        mbean: logQueryMBean,
+        ignoreErrors: true
+    };
+    var jolokia = workspace.jolokia;
+    jolokia.execute(logQueryMBean, "allLogResults", onSuccess(updateValues));
 }

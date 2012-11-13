@@ -3,9 +3,9 @@ angular.module('FuseIDE', ['ngResource']).
           $routeProvider.
                   when('/preferences', {templateUrl: 'partials/preferences.html'}).
                   when('/attributes', {templateUrl: 'partials/attributes.html', controller: DetailController}).
+                  when('/logs', {templateUrl: 'partials/logs.html', controller: LogController}).
                   when('/debug', {templateUrl: 'partials/debug.html', controller: DetailController}).
                   when('/about', {templateUrl: 'partials/about.html', controller: DetailController}).
-                  when('/logs', {templateUrl: 'partials/logs.html', controller: LogController}).
                   otherwise({redirectTo: '/attributes'});
         }).
         factory('workspace',function ($rootScope) {
@@ -22,17 +22,7 @@ angular.module('FuseIDE', ['ngResource']).
         });
 //when('/phones/:phoneId', {templateUrl: 'partials/phone-attributes.html', controller: PhoneDetailCtrl}).
 
-
-function LogController($scope, $resource, $location) {
-  // 		http://localhost:8181/jolokia/exec/org.fusesource.insight:type=LogQuery/getLogEvents/0?mimeType=application/json
-
-  var resourceUrl = $location.path()
-          + 'jolokia/exec/org.fusesource.insight:type=LogQuery/getLogEvents/0?mimeType=application/json';
-  var Model = $resource(resourceUrl);
-  var results = Model.get();
-  var value = results.value;
-  $scope.logs = value;
-}
+var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
 
 function onSuccess(fn, options = {}) {
   options['ignoreErrors'] = true;
@@ -45,6 +35,10 @@ function onSuccess(fn, options = {}) {
     };
   }
   return options;
+}
+
+function asQuery(mbeanName) {
+  return { type: "READ", mbean: mbeanName, ignoreErrors: true};
 }
 
 
@@ -132,10 +126,24 @@ class Folder {
 }
 
 function NavBarController($scope, $location, workspace) {
+  $scope.workspace = workspace;
+
   $scope.navClass = (page) => {
       var currentRoute = $location.path().substring(1) || 'home';
       return page === currentRoute ? 'active' : '';
   };
+
+  $scope.hasMBean = (objectName) => {
+    var workspace = $scope.workspace;
+    if (workspace) {
+      var tree = workspace.tree;
+      if (tree) {
+        var folder = tree[objectName];
+        if (folder) return true;
+      }
+    }
+    return false
+  }
 }
 
 function PreferencesController($scope, workspace) {
@@ -148,13 +156,19 @@ function PreferencesController($scope, workspace) {
 }
 
 function MBeansController($scope, $location, workspace) {
+  $scope.workspace = workspace;
   $scope.tree = new Folder('MBeans');
 
   $scope.select = (node) => {
-    workspace.selection = node;
+    $scope.workspace.selection = node;
 
     // TODO we may want to choose different views based on the kind of selection
-    $location.path('/attributes');
+    var mbean = node['objectName']
+    if (mbean && mbean === logQueryMBean) {
+      $location.path('/logs');
+    } else {
+      $location.path('/attributes');
+    }
     $scope.$apply();
   };
 
@@ -194,6 +208,10 @@ function MBeansController($scope, $location, workspace) {
     // TODO we should do a merge across...
     // so we only insert or delete things!
     $scope.tree = tree;
+    var workspace2 = $scope.workspace;
+    if (workspace2) {
+      workspace2.tree = tree;
+    }
     $scope.$apply();
 
     $("#jmxtree").dynatree({
@@ -265,10 +283,6 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
 
   $scope.rowValues = (row, col) => {
     return [row[col]];
-  };
-
-  var asQuery = function (mbeanName) {
-    return { type: "READ", mbean: mbeanName, ignoreErrors: true};
   };
 
   var tidyAttributes = function (attributes) {
@@ -369,3 +383,53 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     workspace.closeHandle($scope);
   });
 }
+
+function LogController($scope, $location, workspace) {
+  $scope.workspace = workspace;
+  $scope.logs = [];
+
+  $scope.logClass = (log) => {
+    var level = log['level'];
+    if (level) {
+      var lower = level.toLowerCase();
+      if (lower.startsWith("warn")) {
+        return "warning"
+      } else if (lower.startsWith("err")) {
+        return "error";
+      } else if (lower.startsWith("debug")) {
+        return "info";
+      }
+    }
+    return "";
+  };
+
+  var updateValues = function (response) {
+    var logs = response.events;
+    var toTime = response.toTimestamp;
+    if (toTime) {
+      $scope.toTime = toTime;
+    }
+    if (logs) {
+      for (var idx in logs) {
+        var log = logs[idx];
+        if (log) {
+          var seq = logs['seq'] || idx;
+          //console.log("Found log: " + JSON.stringify(log));
+          $scope.logs[seq] = log;
+        }
+      }
+      $scope.$apply();
+    } else {
+      console.log("Failed to get a response! " + response);
+    }
+  };
+
+  var query = { type: "READ", mbean: logQueryMBean, ignoreErrors: true};
+
+  var jolokia = workspace.jolokia;
+  jolokia.execute(logQueryMBean, "allLogResults", onSuccess(updateValues));
+
+  // TODO IMPLEMENT!!!
+  // listen for updates adding the since
+}
+

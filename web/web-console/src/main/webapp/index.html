@@ -24,6 +24,7 @@
             <div class="nav-collapse">
                 <ul class="nav">
                     <li ng-class="navClass('attributes')"><a href="#/attributes"><i class="icon-home icon-white"></i> Attributes</a></li>
+                    <li ng-class="navClass('logs')" ng-show="hasMBean('org.fusesource.insight')"><a href="#/logs">Logs</a></li>
                     <li ng-class="navClass('debug')"><a href="#/debug">JSON</a></li>
                     <li ng-class="navClass('about')"><a href="#/about">About</a></li>
                 </ul>
