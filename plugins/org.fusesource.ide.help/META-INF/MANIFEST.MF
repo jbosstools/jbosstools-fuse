@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.111
 Bundle-Name: Fuse IDE Help Plugin
 Bundle-SymbolicName: org.fusesource.ide.help;singleton:=true
 Bundle-Vendor: Red Hat, Inc.
