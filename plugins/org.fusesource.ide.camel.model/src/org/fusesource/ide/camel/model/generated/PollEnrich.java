@@ -31,12 +31,10 @@ public class PollEnrich extends AbstractNode {
 	public static final String PROPERTY_RESOURCEURI = "PollEnrich.ResourceUri";
 	public static final String PROPERTY_AGGREGATIONSTRATEGYREF = "PollEnrich.AggregationStrategyRef";
 	public static final String PROPERTY_TIMEOUT = "PollEnrich.Timeout";
-	public static final String PROPERTY_POLLMULTIPLE = "PollEnrich.PollMultiple";
 	
 	private String resourceUri;
 	private String aggregationStrategyRef;
 	private Long timeout;
-	private Boolean pollMultiple;
 	
     public PollEnrich() {
     }		
@@ -118,22 +116,6 @@ public class PollEnrich extends AbstractNode {
 		firePropertyChange(PROPERTY_TIMEOUT, oldValue, timeout);
 	}
 
-	/**
-	 * @return the pollMultiple
-	 */
-	public Boolean getPollMultiple() {
-		return this.pollMultiple;
-	}
-	
-	/**
-	 * @param pollMultiple the pollMultiple to set
-	 */
-	public void setPollMultiple(Boolean pollMultiple) {
-		Boolean oldValue = this.pollMultiple;
-		this.pollMultiple = pollMultiple;
-		firePropertyChange(PROPERTY_POLLMULTIPLE, oldValue, pollMultiple);
-	}
-
 
 	
 	/*
@@ -147,11 +129,9 @@ public class PollEnrich extends AbstractNode {
   		PropertyDescriptor descResourceUri = new TextPropertyDescriptor(PROPERTY_RESOURCEURI, Messages.propertyLabelPollEnrichResourceUri);
     		PropertyDescriptor descAggregationStrategyRef = new TextPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYREF, Messages.propertyLabelPollEnrichAggregationStrategyRef);
     		PropertyDescriptor descTimeout = new TextPropertyDescriptor(PROPERTY_TIMEOUT, Messages.propertyLabelPollEnrichTimeout);
-      	PropertyDescriptor descPollMultiple = new BooleanPropertyDescriptor(PROPERTY_POLLMULTIPLE, Messages.propertyLabelPollEnrichPollMultiple);
   		descriptors.put(PROPERTY_RESOURCEURI, descResourceUri);
 		descriptors.put(PROPERTY_AGGREGATIONSTRATEGYREF, descAggregationStrategyRef);
 		descriptors.put(PROPERTY_TIMEOUT, descTimeout);
-		descriptors.put(PROPERTY_POLLMULTIPLE, descPollMultiple);
 	}
 	
 	/* (non-Javadoc)
@@ -165,8 +145,6 @@ public class PollEnrich extends AbstractNode {
 			setAggregationStrategyRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_TIMEOUT.equals(id)) {
 			setTimeout(Objects.convertTo(value, Long.class));
-		}		else if (PROPERTY_POLLMULTIPLE.equals(id)) {
-			setPollMultiple(Objects.convertTo(value, Boolean.class));
 		}    else {
 			super.setPropertyValue(id, value);
 		}
@@ -183,8 +161,6 @@ public class PollEnrich extends AbstractNode {
 			return this.getAggregationStrategyRef();
 		}		else if (PROPERTY_TIMEOUT.equals(id)) {
 			return this.getTimeout();
-		}		else if (PROPERTY_POLLMULTIPLE.equals(id)) {
-			return Objects.<Boolean>getField(this, "pollMultiple");
 		}    else {
 			return super.getPropertyValue(id);
 		}
@@ -197,7 +173,6 @@ public class PollEnrich extends AbstractNode {
     answer.setResourceUri(toXmlPropertyValue(PROPERTY_RESOURCEURI, this.getResourceUri()));
     answer.setAggregationStrategyRef(toXmlPropertyValue(PROPERTY_AGGREGATIONSTRATEGYREF, this.getAggregationStrategyRef()));
     answer.setTimeout(toXmlPropertyValue(PROPERTY_TIMEOUT, this.getTimeout()));
-    answer.setPollMultiple(toXmlPropertyValue(PROPERTY_POLLMULTIPLE, Objects.<Boolean>getField(this, "pollMultiple")));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -218,7 +193,6 @@ public class PollEnrich extends AbstractNode {
       this.setResourceUri(node.getResourceUri());
       this.setAggregationStrategyRef(node.getAggregationStrategyRef());
       this.setTimeout(node.getTimeout());
-      this.setPollMultiple(Objects.<Boolean>getField(node, "pollMultiple"));
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof PollEnrichDefinition. Was " + processor.getClass().getName());
     }

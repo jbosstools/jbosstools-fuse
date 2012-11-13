@@ -4,7 +4,7 @@ Bundle-Name: %BundleName
 Bundle-SymbolicName: org.fusesource.ide.jmx.ui;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: org.fusesource.ide.jmx.ui.JMXUIActivator
-Bundle-Vendor: FuseSource.com
+Bundle-Vendor: Red Hat, Inc.
 Require-Bundle:  org.fusesource.ide.deployment,
  org.fusesource.ide.commons,
  org.fusesource.ide.jmx.core,
