@@ -377,8 +377,7 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
 }
 function LogController($scope, $location, workspace) {
     $scope.workspace = workspace;
-    $scope.logs = {
-    };
+    $scope.logs = [];
     $scope.toTime = 0;
     $scope.queryJSON = {
         type: "EXEC",
@@ -436,11 +435,13 @@ function LogController($scope, $location, workspace) {
             for(var idx in logs) {
                 var log = logs[idx];
                 if(log) {
-                    seq = log['seq'] || idx;
-                    $scope.logs[seq] = log;
+                    if(!$scope.logs.any(function (item) {
+                        return item.message === log.message && item.seq === log.message && item.timestamp === log.timestamp;
+                    })) {
+                        $scope.logs.push(log);
+                    }
                 }
             }
-            console.log("Got results " + logs.length + " last seq: " + seq);
             $scope.$apply();
         } else {
             console.log("Failed to get a response! " + response);

@@ -380,7 +380,8 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
 
 function LogController($scope, $location, workspace) {
   $scope.workspace = workspace;
-  $scope.logs = {};
+  //$scope.logs = {};
+  $scope.logs = [];
   $scope.toTime = 0;
   $scope.queryJSON = { type: "EXEC", mbean: logQueryMBean, operation: "logResultsSince", arguments: [$scope.toTime], ignoreErrors: true};
 
@@ -425,12 +426,17 @@ function LogController($scope, $location, workspace) {
       for (var idx in logs) {
         var log = logs[idx];
         if (log) {
+          if (!$scope.logs.any((item) => item.message === log.message && item.seq === log.message && item.timestamp === log.timestamp)) {
+            $scope.logs.push(log);
+          }
+/*
           seq = log['seq'] || idx;
           //console.log("Found log: " + JSON.stringify(log));
           $scope.logs[seq] = log;
+*/
         }
       }
-      console.log("Got results " + logs.length + " last seq: " + seq);
+      //console.log("Got results " + logs.length + " last seq: " + seq);
       $scope.$apply();
     } else {
       console.log("Failed to get a response! " + response);
