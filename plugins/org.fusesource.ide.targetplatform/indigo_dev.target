@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="Eclipse Core Target" sequenceNumber="14">
+<target name="Eclipse Core Target" sequenceNumber="20">
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.drools.eclipse.feature.feature.group" version="5.5.0.Beta1"/>
@@ -10,7 +10,6 @@
 <unit id="org.jbpm.eclipse.task.feature.feature.group" version="5.5.0.Beta1"/>
 <repository location="http://download.jboss.org/drools/release/5.5.0.Beta1/org.drools.updatesite/"/>
 </location>
-<location path="org.fusesource.ide.updatesite/target/repository" type="Directory"/>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.graphiti.feature.feature.group" version="0.8.2.v20120215-0845"/>
 <unit id="org.eclipse.graphiti.feature.examples.feature.group" version="0.8.2.v20120215-0845"/>
@@ -88,9 +87,16 @@
 <repository location="http://download.eclipse.org/webtools/repository/indigo/"/>
 </location>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="javax.xml.bind" version="2.2.0.v201105210648"/>
+<unit id="javax.xml.bind" version="2.1.9.v201005080401"/>
+<repository location="http://download.jboss.org/jbosstools/updates/requirements/orbit/R20120526062928/"/>
+</location>
+<location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.core.runtime.feature.feature.group" version="1.0.1.R37x_v20110907-7H7KFD6BpeIkWN-XxegWjHnQa9Df"/>
 <unit id="org.eclipse.wst.common.fproj.feature.group" version="3.3.2.v201201121600-377DH8s735735535DD9"/>
 <unit id="org.eclipse.jst.common.fproj.enablement.jdt.feature.group" version="3.3.0.v201102200555-377DF8s73543E5I5768"/>
+<unit id="epp.package.rcp" version="1.4.2.20120213-0814"/>
+<unit id="epp.package.java" version="1.4.2.20120213-0813"/>
 <unit id="org.eclipse.jdt.feature.group" version="3.7.2.v20120120-1414-7z8gFcuFMP7BW5XTz0jLTnz0l9B1"/>
 <unit id="org.eclipse.jst.web_ui.feature.feature.group" version="3.3.2.v201112072049-7F7AFO7C25ToiIbpoiuW12GT78Mciy6W7iwuxaco"/>
 <unit id="org.eclipse.jst.web_userdoc.feature.feature.group" version="3.3.1.v201108102009-2107w31211938"/>
@@ -212,74 +218,6 @@
 <unit id="org.eclipse.xsd.editor.feature.group" version="2.7.0.v20120130-0943"/>
 <repository location="http://download.eclipse.org/releases/indigo"/>
 </location>
-<location includeAllPlatforms="false" includeMode="planner" type="InstallableUnit" includeSource="true">
-    <!-- don't forget to increment these files when moving up a version:
-        build.xml, *.target*, publish.sh, target2p2mirror.xml -->
-    <repository location="http://download.jboss.org/jbosstools/updates/requirements/orbit/R20120526062928/"/>
-
-    <!-- for these IUs we need multiple versions -->
-    <unit id="javax.xml.bind" version="2.2.0.v201105210648"/>
-    <unit id="javax.xml.bind" version="2.1.9.v201005080401"/>
-
-<!--
-    <unit id="javax.wsdl" version="1.6.2.v201012040545"/>
-    <unit id="javax.wsdl" version="1.5.1.v201012040544"/>
-    <unit id="org.jdom" version="1.1.1.v201101151400"/>
-    <unit id="org.jdom" version="1.0.0.v201005080400"/>
-    <unit id="org.apache.commons.lang" version="2.6.0.v201205030909"/>
-    <unit id="org.apache.commons.lang" version="2.4.0.v201005080502"/>
-    <unit id="org.apache.commons.lang" version="2.1.0.v201005080500"/>
-    <unit id="javax.servlet" version="3.0.0.v201112011016"/>
-    <unit id="javax.servlet" version="2.5.0.v201103041518"/>
-    <unit id="javax.servlet.jsp" version="2.2.0.v201112011158"/>
-    <unit id="javax.servlet.jsp" version="2.0.0.v201101211617"/>
-    <unit id="javax.wsdl" version="1.6.2.v201012040545"/>
-    <unit id="javax.wsdl" version="1.5.1.v201012040544"/>
-    <unit id="javax.xml.soap" version="1.3.0.v201105210645"/>
-    <unit id="javax.xml.soap" version="1.2.0.v201005080501"/>
-    <unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
-    <unit id="org.apache.commons.logging" version="1.0.4.v201101211617"/>
-    <unit id="org.apache.lucene" version="2.9.1.v201101211721"/>
-    <unit id="org.apache.lucene" version="1.9.1.v201101211617"/>
-    <unit id="org.apache.lucene.core" version="3.5.0.v20120319-2345"/>
-    <unit id="org.apache.lucene.core" version="2.9.1.v201101211721"/>
-    <unit id="org.junit" version="4.10.0.v4_10_0_v20120426-0900"/>
-    <unit id="org.junit" version="3.8.2.v3_8_2_v20100427-1100"/>
--->
-    <!-- Orbit bundles -->
-<!--
-    <unit id="javax.activation" version="1.1.0.v201108011116"/>
-    <unit id="org.apache.oro" version="2.0.8.v201005080400"/>
-    <unit id="org.apache.commons.io" version="2.0.1.v201105210651"/>
-    <unit id="org.apache.commons.codec" version="1.3.0.v201101211617"/>
-    <unit id="org.apache.commons.httpclient" version="3.1.0.v201012070820"/>
-    <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
-    <unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
-    <unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-    <unit id="org.hamcrest.library" version="1.1.0.v20090501071000"/>
-    <unit id="org.hamcrest.integration" version="1.1.0.v20090501071000"/>
--->
-    <!-- Orbit bundles needed for Eclipse Checkstyle (eclipse-cs) -->
-<!--
-    <unit id="org.apache.lucene.highlighter" version="3.5.0.v20120319-2345"/>
-    <unit id="org.apache.lucene.memory" version="3.5.0.v20120319-2345"/>
-    <unit id="org.apache.lucene.misc" version="3.5.0.v20120319-2345"/>
-    <unit id="org.apache.lucene.queries" version="3.5.0.v20120319-2345"/>
-    <unit id="org.apache.lucene.snowball" version="2.9.1.v20100421-0704"/>
-    <unit id="org.apache.lucene.spellchecker" version="3.5.0.v20120319-2345"/>
--->
-    <!-- <unit id="org.apache.axis" version="1.4.0.v201005080400"/> -->
-<!--
-    <unit id="org.apache.commons.io" version="2.0.1.v201105210651"/>
-    <unit id="org.apache.commons.httpclient" version="3.1.0.v201012070820"/>
-    <unit id="org.apache.commons.codec" version="1.3.0.v201101211617"/>
-    <unit id="org.apache.jasper" version="7.0.26.v201205030742"/>
-    <unit id="org.apache.catalina" version="7.0.26.v201205021508"/>
-    <unit id="javax.ejb" version="3.1.1.v201204261316"/>
-    <unit id="javax.transaction" version="1.1.1.v201105210645"/>
-    <unit id="javax.el" version="2.2.0.v201108011116"/>
-    <unit id="javax.xml.rpc" version="1.1.0.v201005080400"/>
--->
-</location>
+<location path="${project_loc}/../org.fusesource.ide.updatesite/target/repository" type="Directory"/>
 </locations>
 </target>

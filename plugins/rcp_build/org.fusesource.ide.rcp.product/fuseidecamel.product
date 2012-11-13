@@ -406,6 +406,11 @@ null, void and of no legal effect.
       <feature id="org.eclipse.xsd"/>
       <feature id="org.eclipse.graphiti.feature"/>
       <feature id="org.eclipse.tm.terminal"/>
+      <feature id="org.drools.eclipse.feature"/>
+      <feature id="org.guvnor.tools.feature"/>
+      <feature id="org.jbpm.eclipse.feature"/>
+      <feature id="org.jbpm.eclipse.task.feature"/>
+      <feature id="org.eclipse.pde"/>
    </features>
 
    <configurations>
