@@ -2,12 +2,12 @@ package org.fusesource.webide.sample
 
 import java.io.File
 import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.util.log.Log
+import org.eclipse.jetty.util.log.Slf4jLog
 import org.eclipse.jetty.webapp.*
 import org.mortbay.jetty.plugin.JettyWebAppContext
 import org.slf4j.LoggerFactory
 import org.springframework.context.support.ClassPathXmlApplicationContext
-import org.eclipse.jetty.util.log.Slf4jLog
-import org.eclipse.jetty.util.log.Log
 
 /**
 * Returns true if the file exists
@@ -93,12 +93,13 @@ fun main(args: Array<String>): Unit {
 
             val logQuery = appContext.getBean("logQuery")
             LOG.info("created logQuery: " + logQuery)
+
+            LOG.warn("Don't run with scissors!")
+            LOG.error("Someone somewhere is not using Fuse! :)")
         }
         LOG.info("starting jetty")
         server.start()
 
-        LOG.warn("Don't run with scissors!")
-        LOG.error("Someone somewhere is not using Fuse! :)")
         val contextLogger = context.getLogger()
         LOG.info("Jetty context has logger ${contextLogger} with class ${contextLogger.javaClass}")
         server.join()

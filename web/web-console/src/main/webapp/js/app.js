@@ -30,6 +30,22 @@ angular.module('FuseIDE', [
     }
 });
 var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
+function scopeStoreJolokiaHandle($scope, jolokia, jolokiaHandle) {
+    if(jolokiaHandle) {
+        $scope.$on('$destroy', function () {
+            closeHandle($scope, jolokia);
+        });
+        $scope.jolokiaHandle = jolokiaHandle;
+    }
+}
+function closeHandle($scope, jolokia) {
+    var jolokiaHandle = $scope.jolokiaHandle;
+    if(jolokiaHandle) {
+        console.log('Closing the handle ' + jolokiaHandle);
+        jolokia.unregister(jolokiaHandle);
+        $scope.jolokiaHandle = null;
+    }
+}
 function onSuccess(fn, options) {
     if (typeof options === "undefined") { options = {
     }; }
@@ -42,13 +58,6 @@ function onSuccess(fn, options) {
         };
     }
     return options;
-}
-function asQuery(mbeanName) {
-    return {
-        type: "READ",
-        mbean: mbeanName,
-        ignoreErrors: true
-    };
 }
 function supportsLocalStorage() {
     try  {
@@ -78,14 +87,6 @@ var Workspace = (function () {
             localStorage[key] = value;
         } else {
             this.dummyStorage[key] = value;
-        }
-    };
-    Workspace.prototype.closeHandle = function (scope, key) {
-        if (typeof key === "undefined") { key = 'jolokiaHandle'; }
-        var handle = scope[key];
-        if(handle) {
-            this.jolokia.unregister(handle);
-            handle[key] = null;
         }
     };
     Workspace.prototype.getUpdateRate = function () {
@@ -271,6 +272,13 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
             row[col]
         ];
     };
+    var asQuery = function (mbeanName) {
+        return {
+            type: "READ",
+            mbean: mbeanName,
+            ignoreErrors: true
+        };
+    };
     var tidyAttributes = function (attributes) {
         var objectName = attributes['ObjectName'];
         if(objectName) {
@@ -282,7 +290,7 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     };
     $scope.$watch('workspace.selection', function () {
         var node = $scope.workspace.selection;
-        workspace.closeHandle($scope);
+        closeHandle($scope, $scope.workspace.jolokia);
         var mbean = node.objectName;
         var query = null;
         var jolokia = workspace.jolokia;
@@ -359,20 +367,43 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
                         callback
                     ].concat(query);
                     var fn = jolokia.register;
-                    $scope.jolokiaHandle = fn.apply(jolokia, args);
+                    scopeStoreJolokiaHandle($scope, jolokia, fn.apply(jolokia, args));
                 }
             } else {
-                $scope.jolokiaHandle = jolokia.register(callback, query);
+                scopeStoreJolokiaHandle($scope, jolokia, jolokia.register(callback, query));
             }
         }
-    });
-    $scope.$on('$destroy', function () {
-        workspace.closeHandle($scope);
     });
 }
 function LogController($scope, $location, workspace) {
     $scope.workspace = workspace;
-    $scope.logs = [];
+    $scope.logs = {
+    };
+    $scope.toTime = 0;
+    $scope.queryJSON = {
+        type: "EXEC",
+        mbean: logQueryMBean,
+        operation: "logResultsSince",
+        arguments: [
+            $scope.toTime
+        ],
+        ignoreErrors: true
+    };
+    $scope.filterLogs = function (logs, query) {
+        var filtered = [];
+        var queryRegExp = null;
+        if(query) {
+            queryRegExp = RegExp(query.escapeRegExp(), 'i');
+        }
+        angular.forEach(logs, function (log) {
+            if(!query || Object.values(log).any(function (value) {
+                return value && value.toString().has(queryRegExp);
+            })) {
+                filtered.push(log);
+            }
+        });
+        return filtered;
+    };
     $scope.logClass = function (log) {
         var level = log['level'];
         if(level) {
@@ -396,25 +427,39 @@ function LogController($scope, $location, workspace) {
         var toTime = response.toTimestamp;
         if(toTime) {
             $scope.toTime = toTime;
+            $scope.queryJSON.arguments = [
+                toTime
+            ];
         }
         if(logs) {
+            var seq = 0;
             for(var idx in logs) {
                 var log = logs[idx];
                 if(log) {
-                    var seq = logs['seq'] || idx;
+                    seq = log['seq'] || idx;
                     $scope.logs[seq] = log;
                 }
             }
+            console.log("Got results " + logs.length + " last seq: " + seq);
             $scope.$apply();
         } else {
             console.log("Failed to get a response! " + response);
         }
     };
-    var query = {
-        type: "READ",
-        mbean: logQueryMBean,
-        ignoreErrors: true
-    };
     var jolokia = workspace.jolokia;
     jolokia.execute(logQueryMBean, "allLogResults", onSuccess(updateValues));
+    var asyncUpdateValues = function (response) {
+        var value = response.value;
+        if(value) {
+            updateValues(value);
+        } else {
+            console.log("Failed to get a response! " + response);
+        }
+    };
+    var callback = onSuccess(asyncUpdateValues, {
+        error: function (response) {
+            asyncUpdateValues(response);
+        }
+    });
+    scopeStoreJolokiaHandle($scope, jolokia, jolokia.register(callback, $scope.queryJSON));
 }

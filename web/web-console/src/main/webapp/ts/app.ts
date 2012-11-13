@@ -24,6 +24,25 @@ angular.module('FuseIDE', ['ngResource']).
 
 var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
 
+function scopeStoreJolokiaHandle($scope, jolokia, jolokiaHandle) {
+  // TODO do we even need to store the jolokiaHandle in the scope?
+  if (jolokiaHandle) {
+    $scope.$on('$destroy', function () {
+      closeHandle($scope, jolokia)
+    });
+    $scope.jolokiaHandle = jolokiaHandle;
+  }
+}
+
+function closeHandle($scope, jolokia) {
+  var jolokiaHandle = $scope.jolokiaHandle
+  if (jolokiaHandle) {
+        console.log('Closing the handle ' + jolokiaHandle);
+        jolokia.unregister(jolokiaHandle);
+        $scope.jolokiaHandle = null;
+  }
+}
+
 function onSuccess(fn, options = {}) {
   options['ignoreErrors'] = true;
   options['mimeType'] = 'application/json';
@@ -35,10 +54,6 @@ function onSuccess(fn, options = {}) {
     };
   }
   return options;
-}
-
-function asQuery(mbeanName) {
-  return { type: "READ", mbean: mbeanName, ignoreErrors: true};
 }
 
 
@@ -74,18 +89,6 @@ class Workspace {
       localStorage[key] = value;
     } else {
       this.dummyStorage[key] = value;
-    }
-  }
-
-  /**
-   * Closes the given handle object if its defined
-   */
-          closeHandle(scope:any, key:string = 'jolokiaHandle') {
-    var handle = scope[key];
-    if (handle) {
-      //console.log('Closing the handle ' + handle);
-      this.jolokia.unregister(handle);
-      handle[key] = null;
     }
   }
 
@@ -129,8 +132,8 @@ function NavBarController($scope, $location, workspace) {
   $scope.workspace = workspace;
 
   $scope.navClass = (page) => {
-      var currentRoute = $location.path().substring(1) || 'home';
-      return page === currentRoute ? 'active' : '';
+    var currentRoute = $location.path().substring(1) || 'home';
+    return page === currentRoute ? 'active' : '';
   };
 
   $scope.hasMBean = (objectName) => {
@@ -246,11 +249,11 @@ class Table {
         console.log("Looking up: " + name + " on row ");
         answer.push(row[name]);
       }
-/*
-      Object.keys(columns).forEach((name) => {
-        answer.push(row[name]);
-      });
-*/
+      /*
+       Object.keys(columns).forEach((name) => {
+       answer.push(row[name]);
+       });
+       */
     }
     return answer;
   }
@@ -285,7 +288,11 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
     return [row[col]];
   };
 
-  var tidyAttributes = function (attributes) {
+  var asQuery = (mbeanName) => {
+    return { type: "READ", mbean: mbeanName, ignoreErrors: true};
+  };
+
+  var tidyAttributes = (attributes) => {
     var objectName = attributes['ObjectName'];
     if (objectName) {
       var name = objectName['objectName'];
@@ -297,7 +304,7 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
 
   $scope.$watch('workspace.selection', function () {
     var node = $scope.workspace.selection;
-    workspace.closeHandle($scope);
+    closeHandle($scope, $scope.workspace.jolokia);
     var mbean = node.objectName;
     var query = null;
     var jolokia = workspace.jolokia;
@@ -371,22 +378,35 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
         if (query.length >= 1) {
           var args = [callback].concat(query);
           var fn = jolokia.register;
-          $scope.jolokiaHandle = fn.apply(jolokia, args);
+          scopeStoreJolokiaHandle($scope, jolokia, fn.apply(jolokia, args));
         }
       } else {
-        $scope.jolokiaHandle = jolokia.register(callback, query);
+        scopeStoreJolokiaHandle($scope, jolokia, jolokia.register(callback, query));
       }
     }
   });
 
-  $scope.$on('$destroy', function () {
-    workspace.closeHandle($scope);
-  });
 }
 
 function LogController($scope, $location, workspace) {
   $scope.workspace = workspace;
-  $scope.logs = [];
+  $scope.logs = {};
+  $scope.toTime = 0;
+  $scope.queryJSON = { type: "EXEC", mbean: logQueryMBean, operation: "logResultsSince", arguments: [$scope.toTime], ignoreErrors: true};
+
+  $scope.filterLogs = function(logs, query) {
+    var filtered = [];
+    var queryRegExp = null;
+    if (query) {
+      queryRegExp = RegExp(query.escapeRegExp(), 'i'); //'i' -> case insensitive
+    }
+    angular.forEach(logs, function(log) {
+      if (!query || Object.values(log).any( (value) => value && value.toString().has(queryRegExp))) {
+        filtered.push(log);
+      }
+    });
+    return filtered;
+  };
 
   $scope.logClass = (log) => {
     var level = log['level'];
@@ -408,28 +428,45 @@ function LogController($scope, $location, workspace) {
     var toTime = response.toTimestamp;
     if (toTime) {
       $scope.toTime = toTime;
+      $scope.queryJSON.arguments = [toTime];
     }
     if (logs) {
+      var seq = 0;
       for (var idx in logs) {
         var log = logs[idx];
         if (log) {
-          var seq = logs['seq'] || idx;
+          seq = log['seq'] || idx;
           //console.log("Found log: " + JSON.stringify(log));
           $scope.logs[seq] = log;
         }
       }
+      console.log("Got results " + logs.length + " last seq: " + seq);
       $scope.$apply();
     } else {
       console.log("Failed to get a response! " + response);
     }
   };
 
-  var query = { type: "READ", mbean: logQueryMBean, ignoreErrors: true};
-
   var jolokia = workspace.jolokia;
   jolokia.execute(logQueryMBean, "allLogResults", onSuccess(updateValues));
 
-  // TODO IMPLEMENT!!!
   // listen for updates adding the since
+  var asyncUpdateValues = function (response) {
+    var value = response.value;
+    if (value) {
+      updateValues(value);
+    } else {
+      console.log("Failed to get a response! " + response);
+    }
+  };
+
+  var callback = onSuccess(asyncUpdateValues,
+          {
+            error: (response) => {
+              asyncUpdateValues(response);
+            }
+          });
+
+  scopeStoreJolokiaHandle($scope, jolokia, jolokia.register(callback, $scope.queryJSON));
 }
 

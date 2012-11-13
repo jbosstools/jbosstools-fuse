@@ -12,7 +12,7 @@
   <!-- This creates an embedded ActiveMQ Broker -->
   <broker xmlns="http://activemq.apache.org/schema/core" useJmx="true" persistent="false">
     <transportConnectors>
-      <transportConnector uri="tcp://localhost:61616" />
+      <transportConnector uri="tcp://localhost:61616"/>
     </transportConnectors>
   </broker>
 
@@ -23,7 +23,8 @@
     <property name="brokerURL" value="failover:tcp://localhost:61616"/>
   </bean>
 
-  <bean id="logQuery" class="org.fusesource.insight.log.log4j.Log4jLogQuery" lazy-init="false" scope="singleton" init-method="start" destroy-method="stop"/>
+  <bean id="logQuery" class="org.fusesource.insight.log.log4j.Log4jLogQuery" lazy-init="false" scope="singleton"
+        init-method="start" destroy-method="stop"/>
 
   <!-- Here is a sample which processes the input files
          (leaving them in place - see the 'noop' flag), and
@@ -33,22 +34,30 @@
   -->
   <camelContext xmlns="http://camel.apache.org/schema/spring">
     <route>
-        <from uri="file:src/test/data?noop=true"/>
-        <to uri="activemq:personnel.records"/>
-        <to uri="activemq:browse.me"/>
+      <from uri="file:src/test/data?noop=true"/>
+      <to uri="activemq:personnel.records"/>
+      <to uri="activemq:browse.me"/>
     </route>
     <route>
-        <from uri="activemq:personnel.records"/>
-        <choice>
-            <when>
-                <xpath>/person/city = 'London'</xpath>
-                <to uri="file:target/messages/uk"/>
-            </when>
-            <otherwise>
-                <to uri="file:target/messages/others"/>
-            </otherwise>
-        </choice>
+      <from uri="activemq:personnel.records"/>
+      <choice>
+        <when>
+          <xpath>/person/city = 'London'</xpath>
+          <to uri="file:target/messages/uk"/>
+        </when>
+        <otherwise>
+          <to uri="file:target/messages/others"/>
+        </otherwise>
+      </choice>
     </route>
-</camelContext>
+    <route id="timerToLog">
+      <from uri="timer:foo?period=5000"/>
+      <marshal>
+        <json library="Jackson"/>
+      </marshal>
+      <log message="The message contains ${body}"/>
+      <to uri="activemq:timer.events"/>
+    </route>
+  </camelContext>
 
 </beans>
