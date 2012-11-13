@@ -113,8 +113,8 @@
        <phase>package</phase>
        <configuration>
         <tasks>
-         <copy tofile="${basedir}/rcp_build/org.fusesource.ide.rcp.feature/rootFiles/unix/notices.txt" file="${baseDir}/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" />
-         <copy tofile="${basedir}/rcp_build/org.fusesource.ide.rcp.feature/rootFiles/win/notices.txt" file="${baseDir}/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" />
+         <copy tofile="${basedir}/rcp_build/org.fusesource.ide.rcp.feature/rootFiles/unix/notices.txt" file="${basedir}/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" />
+         <copy tofile="${basedir}/rcp_build/org.fusesource.ide.rcp.feature/rootFiles/win/notices.txt" file="${basedir}/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" />
         </tasks>
        </configuration>
        <goals>
