@@ -109,6 +109,11 @@ from a single ActiveMQDestination POJO
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name='optimizeDurableTopicPrefetch' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='queueBrowserPrefetch' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
@@ -156,6 +161,7 @@ from a single ActiveMQDestination POJO
       <xs:attribute name='logWriter' type='xs:string'/>
       <xs:attribute name='maximumRedeliveries' type='xs:string'/>
       <xs:attribute name='maximumRedeliveryDelay' type='xs:long'/>
+      <xs:attribute name='optimizeDurableTopicPrefetch' type='xs:string'/>
       <xs:attribute name='password' type='xs:string'/>
       <xs:attribute name='queueBrowserPrefetch' type='xs:string'/>
       <xs:attribute name='queuePrefetch' type='xs:string'/>
@@ -216,6 +222,11 @@ from a single ActiveMQDestination POJO
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name='optimizeDurableTopicPrefetch' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='queueBrowserPrefetch' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
@@ -267,6 +278,7 @@ if using embedded mode.
       <xs:attribute name='inputStreamPrefetch' type='xs:string'/>
       <xs:attribute name='maximumRedeliveries' type='xs:string'/>
       <xs:attribute name='maximumRedeliveryDelay' type='xs:long'/>
+      <xs:attribute name='optimizeDurableTopicPrefetch' type='xs:string'/>
       <xs:attribute name='password' type='xs:string'/>
       <xs:attribute name='queueBrowserPrefetch' type='xs:string'/>
       <xs:attribute name='queuePrefetch' type='xs:string'/>

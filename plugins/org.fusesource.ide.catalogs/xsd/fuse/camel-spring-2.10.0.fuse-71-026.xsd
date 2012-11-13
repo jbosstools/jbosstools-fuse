@@ -1949,7 +1949,6 @@
         <xs:attribute name="ref" type="xs:string"/>
         <xs:attribute name="timeout" type="xs:long"/>
         <xs:attribute name="strategyRef" type="xs:string"/>
-        <xs:attribute name="pollMultiple" type="xs:boolean"/>
         <xs:anyAttribute namespace="##other" processContents="skip"/>
       </xs:extension>
     </xs:complexContent>

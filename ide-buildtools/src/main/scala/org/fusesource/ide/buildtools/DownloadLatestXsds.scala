@@ -39,6 +39,7 @@ class DownloadLatestXsds(rootDir: File, delete: Boolean) extends Runnable {
     """)
 
     for (Schema(n, postfix, group) <- xsdArchetypes) {
+      try {
       println("Finding " + n + " group: " + group + " postfix '" + postfix + "'")
       val u = "http://repo.fusesource.com/" + UpdateReleases.releaseRepo + "/org/apache/" + group + "/" + n + "/"
       val text = IOUtil.loadText(new URL(u).openStream())
@@ -64,6 +65,10 @@ class DownloadLatestXsds(rootDir: File, delete: Boolean) extends Runnable {
       pluginXmlBuffer.append("               <uri\n                      id=\"org.fusesource.xml.catalog.uri." + n
         + "\"\n                      name=\"http://" + group + ".apache.org/schema/" + n.substring(n.indexOf('-') + 1) + "/" + n + ".xsd\"\n"
         + "                      uri=\"xsd/fuse/" + fileName + "\"/>\n")
+      } catch {
+        case e =>
+          println("WARNING: not found: " + e)
+      }
     }
 
     pluginXmlBuffer.append("""

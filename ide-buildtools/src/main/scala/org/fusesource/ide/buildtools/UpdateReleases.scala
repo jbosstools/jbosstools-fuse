@@ -47,8 +47,8 @@ object UpdateReleases {
     val xsdsDir = new File(rs, "org.fusesource.ide.catalogs")
 
     val tasks = List(
-      new DownloadFuseArchetypes(archetypesDir, true),
-      new DownloadLatestXsds(xsdsDir, true)
+      new DownloadLatestXsds(xsdsDir, true),
+      new DownloadFuseArchetypes(archetypesDir, true)
     )
 
     for (task <- tasks) {
