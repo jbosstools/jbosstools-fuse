@@ -6,6 +6,8 @@ import org.eclipse.jetty.webapp.*
 import org.mortbay.jetty.plugin.JettyWebAppContext
 import org.slf4j.LoggerFactory
 import org.springframework.context.support.ClassPathXmlApplicationContext
+import org.eclipse.jetty.util.log.Slf4jLog
+import org.eclipse.jetty.util.log.Log
 
 /**
 * Returns true if the file exists
@@ -30,6 +32,8 @@ fun main(args: Array<String>): Unit {
     val LOG = LoggerFactory.getLogger(javaClass());
 
     try {
+        System.setProperty("org.eclipse.jetty.util.log.class", javaClass<Slf4jLog>().getName());
+        Log.setLog(Slf4jLog("jetty"));
         val port = 8080
         val contextPath = "/"
         var path = "src/main/webapp"
@@ -86,10 +90,15 @@ fun main(args: Array<String>): Unit {
             val activemq = appContext.getBean("activemq")
             LOG.info("created activemq: " + activemq)
             appContext.start()
+
+            val logQuery = appContext.getBean("logQuery")
+            LOG.info("created logQuery: " + logQuery)
         }
         LOG.info("starting jetty")
         server.start()
 
+        val contextLogger = context.getLogger()
+        LOG.info("Jetty context has logger ${contextLogger} with class ${contextLogger.javaClass}")
         server.join()
     } catch (e: Throwable) {
         LOG.error(e.getMessage(), e)

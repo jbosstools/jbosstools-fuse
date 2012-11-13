@@ -52,16 +52,6 @@
       <version>${jackson-2-version}</version>
     </dependency>
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
-      <version>${logback-version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.atmosphere</groupId>
       <artifactId>atmosphere-jaxrs2</artifactId>
       <version>${atmosphere-version}</version>
@@ -196,6 +186,12 @@
       <version>${spring-version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.fusesource.insight</groupId>
+      <artifactId>insight-log4j</artifactId>
+      <version>${fabric-version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <repositories>
@@ -259,34 +255,34 @@
           <sourceDirectory>src/main/webapp/ts</sourceDirectory>
           <targetDirectory>src/main/webapp/js</targetDirectory>
         </configuration>
-<!--
-        <executions>
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>tsc</goal>
-            </goals>
-          </execution>
-        </executions>
--->
+        <!--
+                <executions>
+                  <execution>
+                    <id>compile</id>
+                    <phase>compile</phase>
+                    <goals>
+                      <goal>tsc</goal>
+                    </goals>
+                  </execution>
+                </executions>
+        -->
       </plugin>
-<!--
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>2.5</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>src/main/webapp/js</directory>
-              <includes>
-                <include>app.js</include>
-              </includes>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
--->
+      <!--
+            <plugin>
+              <artifactId>maven-clean-plugin</artifactId>
+              <version>2.5</version>
+              <configuration>
+                <filesets>
+                  <fileset>
+                    <directory>src/main/webapp/js</directory>
+                    <includes>
+                      <include>app.js</include>
+                    </includes>
+                  </fileset>
+                </filesets>
+              </configuration>
+            </plugin>
+      -->
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
