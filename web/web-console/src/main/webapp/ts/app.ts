@@ -1,9 +1,16 @@
 function humanizeValue(value) {
   if (value) {
     var text = value.toString();
-    return text.underscore().humanize();
+    return trimQuotes(text.underscore().humanize());
   }
   return value;
+}
+
+function trimQuotes(text: string) {
+  if ((text.startsWith('"') || text.startsWith("'")) && (text.endsWith('"') || text.endsWith("'"))) {
+    return text.substring(1, text.length - 1);
+  }
+  return text;
 }
 
 angular.module('FuseIDE', ['ngResource']).
@@ -181,7 +188,7 @@ function NavBarController($scope, $location, workspace) {
           console.log("no hasMBean for " + objectName + " in tree " + tree);
         }
       } else {
-        console.log("workspace has no tree! returning false for hasMBean " + objectName);
+        // console.log("workspace has no tree! returning false for hasMBean " + objectName);
       }
     } else {
       console.log("no workspace for hasMBean " + objectName);
@@ -246,7 +253,7 @@ function MBeansController($scope, $location, workspace) {
           folderNames = folderNames.clone();
         });
         var mbeanInfo = {
-          title: lastPath,
+          title: trimQuotes(lastPath),
           domain: domain,
           path: path,
           paths: paths,
@@ -603,10 +610,13 @@ function ChartController($scope, $location, workspace) {
       $scope.context = context;
       $scope.jolokiaContext = context.jolokia($scope.workspace.jolokia);
 
-      // lets get the attributes for this mbean
       // TODO make generic as we can cache them; they rarely ever change
-      var key = mbean.replace(':', '/');
-      var meta = jolokia.list(key);
+      // lets get the attributes for this mbean
+
+      // we need to escape the mbean path for list
+      var listKey = mbean.replace(/\//g, '!/').replace(':', '/').escapeURL();
+      console.log("Looking up mbeankey: " + listKey);
+      var meta = jolokia.list(listKey);
       if (meta) {
         var attributes = meta.attr;
         if (attributes) {
