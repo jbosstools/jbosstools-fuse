@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse ZooKeeper Core Plugin
 Bundle-SymbolicName: org.fusesource.ide.zk.core;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 7.1.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.fabric.fabric-linkedin-zookeeper,
