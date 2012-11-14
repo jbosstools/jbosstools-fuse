@@ -6,7 +6,7 @@ function humanizeValue(value) {
   return value;
 }
 
-function trimQuotes(text: string) {
+function trimQuotes(text:string) {
   if ((text.startsWith('"') || text.startsWith("'")) && (text.endsWith('"') || text.endsWith("'"))) {
     return text.substring(1, text.length - 1);
   }
@@ -18,13 +18,14 @@ angular.module('FuseIDE', ['ngResource']).
           $routeProvider.
                   when('/preferences', {templateUrl: 'partials/preferences.html'}).
                   when('/attributes', {templateUrl: 'partials/attributes.html', controller: DetailController}).
-                  when('/logs', {templateUrl: 'partials/logs.html', controller: LogController}).
                   when('/charts', {templateUrl: 'partials/charts.html', controller: ChartController}).
+                  when('/logs', {templateUrl: 'partials/logs.html', controller: LogController}).
+                  when('/browseQueue', {templateUrl: 'partials/browseQueue.html', controller: QueueController}).
                   when('/debug', {templateUrl: 'partials/debug.html', controller: DetailController}).
                   when('/about', {templateUrl: 'partials/about.html', controller: DetailController}).
                   otherwise({redirectTo: '/attributes'});
         }).
-        factory('workspace', ($rootScope) => new Workspace()).
+        factory('workspace',($rootScope) => new Workspace()).
         filter('humanize', () => humanizeValue);
 
 var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
@@ -39,10 +40,14 @@ var ignoreDetailsOnBigFolders = [
 ];
 
 function ignoreFolderDetails(node) {
+  return folderMatchesPatterns(node, ignoreDetailsOnBigFolders);
+}
+
+function folderMatchesPatterns(node, patterns) {
   if (node) {
     var folderNames = node.folderNames;
     if (folderNames) {
-      return ignoreDetailsOnBigFolders.any((ignorePaths) => {
+      return patterns.any((ignorePaths) => {
         for (var i = 0; i < ignorePaths.length; i++) {
           var folderName = folderNames[i];
           var ignorePath = ignorePaths[i];
@@ -52,7 +57,6 @@ function ignoreFolderDetails(node) {
             return false;
           }
         }
-        console.log("Ignoring detail view on folder paths: " + node.folderNames);
         return true;
       });
     }
@@ -176,22 +180,30 @@ function NavBarController($scope, $location, workspace) {
     return page === currentRoute ? 'active' : '';
   };
 
-  $scope.hasMBean = (objectName) => {
+  $scope.hasDomainAndProperties = (objectName, properties) => {
     var workspace = $scope.workspace;
     if (workspace) {
       var tree = workspace.tree;
-      if (tree) {
+      var node = workspace.selection;
+      if (tree && node) {
         var folder = tree.get(objectName);
-        if (folder) {
+        if (folder && node.entries) {
+          var entries = node.entries;
+          for (var key in properties) {
+            var value = properties[key];
+            if (!value || entries[key] !== value) {
+              return false;
+            }
+          }
           return true
         } else {
-          console.log("no hasMBean for " + objectName + " in tree " + tree);
+          // console.log("no hasMBean for " + objectName + " in tree " + tree);
         }
       } else {
         // console.log("workspace has no tree! returning false for hasMBean " + objectName);
       }
     } else {
-      console.log("no workspace for hasMBean " + objectName);
+      // console.log("no workspace for hasMBean " + objectName);
     }
     return false
   }
@@ -594,7 +606,7 @@ function ChartController($scope, $location, workspace) {
      {type: "read", mbean: "java.lang:name=PS Scavenge,type=GarbageCollector", attribute: "CollectionCount"},
      {delta: 1000, name: "GC Young"}
      );
-*/
+     */
 
     var node = $scope.workspace.selection;
     var mbean = node.objectName;
@@ -673,3 +685,26 @@ function ChartController($scope, $location, workspace) {
 }
 
 
+function QueueController($scope, workspace) {
+  $scope.workspace = workspace;
+  $scope.messages = [];
+
+  var populateTable = function (response) {
+    $scope.messages = response.value;
+    $scope.$apply();
+  };
+
+  $scope.$watch('workspace.selection', function () {
+    var selection = workspace.selection;
+    if (selection) {
+      var mbean = selection.objectName;
+      if (mbean) {
+        var jolokia = workspace.jolokia;
+
+        jolokia.request(
+                {type: 'exec', mbean: mbean, operation: 'browse()'},
+                onSuccess(populateTable));
+      }
+    }
+  });
+}

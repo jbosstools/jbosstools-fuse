@@ -19,12 +19,15 @@ angular.module('FuseIDE', [
     }).when('/attributes', {
         templateUrl: 'partials/attributes.html',
         controller: DetailController
-    }).when('/logs', {
-        templateUrl: 'partials/logs.html',
-        controller: LogController
     }).when('/charts', {
         templateUrl: 'partials/charts.html',
         controller: ChartController
+    }).when('/logs', {
+        templateUrl: 'partials/logs.html',
+        controller: LogController
+    }).when('/browseQueue', {
+        templateUrl: 'partials/browseQueue.html',
+        controller: QueueController
     }).when('/debug', {
         templateUrl: 'partials/debug.html',
         controller: DetailController
@@ -52,10 +55,13 @@ var ignoreDetailsOnBigFolders = [
     ]
 ];
 function ignoreFolderDetails(node) {
+    return folderMatchesPatterns(node, ignoreDetailsOnBigFolders);
+}
+function folderMatchesPatterns(node, patterns) {
     if(node) {
         var folderNames = node.folderNames;
         if(folderNames) {
-            return ignoreDetailsOnBigFolders.any(function (ignorePaths) {
+            return patterns.any(function (ignorePaths) {
                 for(var i = 0; i < ignorePaths.length; i++) {
                     var folderName = folderNames[i];
                     var ignorePath = ignorePaths[i];
@@ -67,7 +73,6 @@ function ignoreFolderDetails(node) {
                         return false;
                     }
                 }
-                console.log("Ignoring detail view on folder paths: " + node.folderNames);
                 return true;
             });
         }
@@ -176,21 +181,27 @@ function NavBarController($scope, $location, workspace) {
         var currentRoute = $location.path().substring(1) || 'home';
         return page === currentRoute ? 'active' : '';
     };
-    $scope.hasMBean = function (objectName) {
+    $scope.hasDomainAndProperties = function (objectName, properties) {
         var workspace = $scope.workspace;
         if(workspace) {
             var tree = workspace.tree;
-            if(tree) {
+            var node = workspace.selection;
+            if(tree && node) {
                 var folder = tree.get(objectName);
-                if(folder) {
+                if(folder && node.entries) {
+                    var entries = node.entries;
+                    for(var key in properties) {
+                        var value = properties[key];
+                        if(!value || entries[key] !== value) {
+                            return false;
+                        }
+                    }
                     return true;
                 } else {
-                    console.log("no hasMBean for " + objectName + " in tree " + tree);
                 }
             } else {
             }
         } else {
-            console.log("no workspace for hasMBean " + objectName);
         }
         return false;
     };
@@ -609,6 +620,28 @@ function ChartController($scope, $location, workspace) {
                     ]).attr("class", "horizon").call(context.horizon());
                 });
             });
+        }
+    });
+}
+function QueueController($scope, workspace) {
+    $scope.workspace = workspace;
+    $scope.messages = [];
+    var populateTable = function (response) {
+        $scope.messages = response.value;
+        $scope.$apply();
+    };
+    $scope.$watch('workspace.selection', function () {
+        var selection = workspace.selection;
+        if(selection) {
+            var mbean = selection.objectName;
+            if(mbean) {
+                var jolokia = workspace.jolokia;
+                jolokia.request({
+                    type: 'exec',
+                    mbean: mbean,
+                    operation: 'browse()'
+                }, onSuccess(populateTable));
+            }
         }
     });
 }

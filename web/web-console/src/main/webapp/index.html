@@ -25,7 +25,12 @@
                 <ul class="nav">
                     <li ng-class="navClass('attributes')"><a href="#/attributes"><i class="icon-home icon-white"></i> Attributes</a></li>
                     <li ng-class="navClass('charts')"><a href="#/charts">Charts</a></li>
-                    <li ng-class="navClass('logs')" ng-show="hasMBean('org.fusesource.insight')"><a href="#/logs">Logs</a></li>
+                    <li ng-class="navClass('browseQueue')" ng-show="hasDomainAndProperties('org.apache.activemq', {Type: 'Queue'})"><a href="#/browseQueue">Browse</a></li>
+
+                    <li ng-class="navClass('logs')"><a href="#/logs">Logs</a></li>
+<!--
+                    <li ng-class="navClass('logs')" ng-show="hasDomainAndProperties('org.fusesource.insight', {type: 'LogQuery'})"><a href="#/logs">Logs</a></li>
+-->
 <!--
                     <li ng-class="navClass('debug')"><a href="#/debug">JSON</a></li>
 -->
