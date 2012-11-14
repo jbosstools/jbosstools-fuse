@@ -74,6 +74,14 @@ else
 #  exit $?
 fi
 
+# now copy the aggregated dependencies list to the rcp rootFiles folders 
+echo "From: 'Eclipse Foundation' (http://www.eclipse.org/)" >> ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES
+echo "  - Eclipse Foundation :: Indigo Platform Bundles " >> ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES
+echo "    License: Eclipse Public License, Version 1.0  (http://www.eclipse.org/legal/epl-v10.html)" >> ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES
+cp ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES ./rcp_build/org.fusesource.ide.rcp.feature/rootFiles/unix/notices.txt
+cp ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES ./rcp_build/org.fusesource.ide.rcp.feature/rootFiles/win/notices.txt
+
+# now deploy the update site
 cd org.fusesource.ide.updatesite
 mvn ${MVN_SETTINGS} updatesite:deploy
 
