@@ -1,3 +1,10 @@
+function humanizeValue(value) {
+    if(value) {
+        var text = value.toString();
+        return text.underscore().humanize();
+    }
+    return value;
+}
 angular.module('FuseIDE', [
     'ngResource'
 ]).config(function ($routeProvider) {
@@ -9,6 +16,9 @@ angular.module('FuseIDE', [
     }).when('/logs', {
         templateUrl: 'partials/logs.html',
         controller: LogController
+    }).when('/charts', {
+        templateUrl: 'partials/charts.html',
+        controller: ChartController
     }).when('/debug', {
         templateUrl: 'partials/debug.html',
         controller: DetailController
@@ -21,13 +31,7 @@ angular.module('FuseIDE', [
 }).factory('workspace', function ($rootScope) {
     return new Workspace();
 }).filter('humanize', function () {
-    return function (value) {
-        if(value) {
-            var text = value.toString();
-            return text.underscore().humanize();
-        }
-        return value;
-    }
+    return humanizeValue;
 });
 var logQueryMBean = 'org.fusesource.insight:type=LogQuery';
 var ignoreDetailsOnBigFolders = [
@@ -198,12 +202,6 @@ function MBeansController($scope, $location, workspace) {
     $scope.tree = new Folder('MBeans');
     $scope.select = function (node) {
         $scope.workspace.selection = node;
-        var mbean = node['objectName'];
-        if(mbean && mbean === logQueryMBean) {
-            $location.path('/logs');
-        } else {
-            $location.path('/attributes');
-        }
         $scope.$apply();
     };
     function populateTree(response) {
@@ -516,4 +514,95 @@ function LogController($scope, $location, workspace) {
         }
     });
     scopeStoreJolokiaHandle($scope, jolokia, jolokia.register(callback, $scope.queryJSON));
+}
+var numberTypeNames = {
+    'byte': true,
+    'short': true,
+    'integer': true,
+    'long': true,
+    'float': true,
+    'double': true,
+    'java.lang.Byte': true,
+    'java.lang.Short': true,
+    'java.lang.Integer': true,
+    'java.lang.Long': true,
+    'java.lang.Float': true,
+    'java.lang.Double': true
+};
+function isNumberTypeName(typeName) {
+    if(typeName) {
+        var text = typeName.toString().toLowerCase();
+        var flag = numberTypeNames[text];
+        return flag;
+    }
+    return false;
+}
+function ChartController($scope, $location, workspace) {
+    $scope.workspace = workspace;
+    $scope.metrics = [];
+    $scope.$watch('workspace.selection', function () {
+        var width = 594;
+        var charts = $("#charts");
+        if(charts) {
+            width = charts.width();
+        }
+        if($scope.context) {
+            $scope.context.stop();
+            $scope.context = null;
+        }
+        charts.children().remove();
+        var node = $scope.workspace.selection;
+        var mbean = node.objectName;
+        $scope.metrics = [];
+        if(mbean) {
+            var jolokia = $scope.workspace.jolokia;
+            var context = cubism.context().serverDelay(0).clientDelay(0).step(1000).size(width);
+            $scope.context = context;
+            $scope.jolokiaContext = context.jolokia($scope.workspace.jolokia);
+            var key = mbean.replace(':', '/');
+            var meta = jolokia.list(key);
+            if(meta) {
+                var attributes = meta.attr;
+                if(attributes) {
+                    for(var key in attributes) {
+                        var value = attributes[key];
+                        if(value) {
+                            var typeName = value['type'];
+                            if(isNumberTypeName(typeName)) {
+                                var metric = $scope.jolokiaContext.metric({
+                                    type: 'read',
+                                    mbean: mbean,
+                                    attribute: key
+                                }, humanizeValue(key));
+                                if(metric) {
+                                    $scope.metrics.push(metric);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if($scope.metrics.length > 0) {
+            d3.select("#charts").selectAll(".axis").data([
+                "top", 
+                "bottom"
+            ]).enter().append("div").attr("class", function (d) {
+                return d + " axis";
+            }).each(function (d) {
+                d3.select(this).call(context.axis().ticks(12).orient(d));
+            });
+            d3.select("#charts").append("div").attr("class", "rule").call(context.rule());
+            context.on("focus", function (i) {
+                d3.selectAll(".value").style("right", i === null ? null : context.size() - i + "px");
+            });
+            $scope.metrics.forEach(function (metric) {
+                d3.select("#charts").call(function (div) {
+                    div.append("div").data([
+                        metric
+                    ]).attr("class", "horizon").call(context.horizon());
+                });
+            });
+        }
+    });
 }

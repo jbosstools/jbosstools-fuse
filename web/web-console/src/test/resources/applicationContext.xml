@@ -50,6 +50,7 @@
         </otherwise>
       </choice>
     </route>
+    <!--
     <route id="timerToLog">
       <from uri="timer:foo?period=5000"/>
       <marshal>
@@ -58,6 +59,7 @@
       <log message="The message contains ${body}"/>
       <to uri="activemq:timer.events"/>
     </route>
+-->
   </camelContext>
 
 </beans>
