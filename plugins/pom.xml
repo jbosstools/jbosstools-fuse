@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.fusesource.ide</groupId>
     <artifactId>project</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>7.1.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -105,41 +105,6 @@
                     </execution>
                 </executions>
 	</plugin>
-  <plugin>
-     <artifactId>maven-antrun-plugin</artifactId>
-     <version>1.4</version>
-     <executions>
-      <execution>
-       <phase>package</phase>
-       <configuration>
-        <tasks>
-<!--
-         <copy tofile="${basedir}/rcp_build/org.fusesource.ide.rcp.feature/rootFiles/unix/notices.txt" file="${basedir}/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" />
-         <copy tofile="${basedir}/rcp_build/org.fusesource.ide.rcp.feature/rootFiles/win/notices.txt" file="${basedir}/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" />
--->
-        </tasks>
-       </configuration>
-       <goals>
-        <goal>run</goal>
-       </goals>
-      </execution>
-     </executions>
-    </plugin>
-<!--
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>license-maven-plugin</artifactId>
-        <version>1.3</version>
-       <executions>
-          <execution>
-            <id>collect-3rd-party</id>
-            <goals>
-              <goal>aggregate-add-third-party</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
--->
       <plugin>
 	      <groupId>${m2e.group.id}</groupId>
               <artifactId>tycho-versions-plugin</artifactId>

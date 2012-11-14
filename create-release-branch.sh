@@ -25,7 +25,7 @@ echo "Using MVN_SETTINGS: ${MVN_SETTINGS}"
 echo ============================================================================
 
 echo ${BUILDNO} > ${PERFECUT_ARTIFACT}-buildno.txt
-VERSION=3.0.${BUILDNO}
+VERSION=7.1.${BUILDNO}
 git commit -a -m "getting ready for version ${VERSION}"
 git push origin master:master
 git stash clear
@@ -36,16 +36,16 @@ git branch release-${VERSION}
 git checkout release-${VERSION}
 
 # root project uses regular maven versions
-find * -name 'pom.xml' | xargs perl -pi -e "s/<version>3.0.0-SNAPSHOT<\/version>/<version>${VERSION}<\/version>/g"
+find * -name 'pom.xml' | xargs perl -pi -e "s/<version>7.1.0-SNAPSHOT<\/version>/<version>${VERSION}<\/version>/g"
 
 # replace the OSGi version names in poms
-find plugins -name 'pom.xml' | xargs perl -pi -e "s/<version>3.0.0.qualifier<\/version>/<version>${VERSION}<\/version>/g"
+find plugins -name 'pom.xml' | xargs perl -pi -e "s/<version>7.1.0.qualifier<\/version>/<version>${VERSION}<\/version>/g"
 
 # replace manifest versions
-find plugins -name '*.xml' | xargs perl -pi -e "s/3.0.0.qualifier/${VERSION}/g"
-find plugins -name 'bundle.properties' | xargs perl -pi -e "s/3.0.0.qualifier/${VERSION}/g"
-find plugins -name 'MANIFEST.MF' | xargs perl -pi -e "s/3.0.0.qualifier/${VERSION}/g"
-find plugins -name 'fuse*.product' | xargs perl -pi -e "s/3.0.0.qualifier/${VERSION}/g"
+find plugins -name '*.xml' | xargs perl -pi -e "s/7.1.0.qualifier/${VERSION}/g"
+find plugins -name 'bundle.properties' | xargs perl -pi -e "s/7.1.0.qualifier/${VERSION}/g"
+find plugins -name 'MANIFEST.MF' | xargs perl -pi -e "s/7.1.0.qualifier/${VERSION}/g"
+find plugins -name 'fuse*.product' | xargs perl -pi -e "s/7.1.0.qualifier/${VERSION}/g"
 
 # replace IDE version
 perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>${VERSION}<\/ide-version>/g" plugins/pom.xml
@@ -74,6 +74,14 @@ else
 #  exit $?
 fi
 
+# now copy the aggregated dependencies list to the rcp rootFiles folders 
+echo "From: 'Eclipse Foundation' (http://www.eclipse.org/)" >> ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES
+echo "  - Eclipse Platform Bundles, 3.7 (Indigo) " >> ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES
+echo "    License: Eclipse Public License, Version 1.0  (http://www.eclipse.org/legal/epl-v10.html)" >> ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES
+cp ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES ./rcp_build/org.fusesource.ide.rcp.feature/rootFiles/unix/notices.txt
+cp ./target/maven-shared-archive-resources/META-INF/DEPENDENCIES ./rcp_build/org.fusesource.ide.rcp.feature/rootFiles/win/notices.txt
+
+# now deploy the update site
 cd org.fusesource.ide.updatesite
 mvn ${MVN_SETTINGS} updatesite:deploy
 

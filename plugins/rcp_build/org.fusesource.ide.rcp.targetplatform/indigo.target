@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="Eclipse Core Target" sequenceNumber="2">
+<target name="Eclipse Core Target" sequenceNumber="3">
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.fusesource.ide.feature.feature.group" version="0.0.0"/>
@@ -69,6 +69,7 @@
 <unit id="org.eclipse.core.runtime.feature.feature.group" version="1.0.1.R37x_v20110907-7H7KFD6BpeIkWN-XxegWjHnQa9Df"/>
 <unit id="org.eclipse.wst.common.fproj.feature.group" version="3.3.2.v201201121600-377DH8s735735535DD9"/>
 <unit id="org.eclipse.jst.common.fproj.enablement.jdt.feature.group" version="3.3.0.v201102200555-377DF8s73543E5I5768"/>
+<unit id="epp.package.rcp" version="1.4.2.20120213-0814"/>
 <unit id="epp.package.java" version="1.4.2.20120213-0813"/>
 <unit id="org.eclipse.jdt.feature.group" version="3.7.2.v20120120-1414-7z8gFcuFMP7BW5XTz0jLTnz0l9B1"/>
 <unit id="org.eclipse.jst.web_ui.feature.feature.group" version="3.3.2.v201112072049-7F7AFO7C25ToiIbpoiuW12GT78Mciy6W7iwuxaco"/>
