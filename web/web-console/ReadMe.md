@@ -15,6 +15,7 @@ From a git clone you should be able to run the sample web console as follows:
 
 That should run a little sample web application with some ActiveMQ and Camel to interact with
 
+A good MBean for real time values and charts is java.lang/OperatingSystem or tyr looking at queues or camle routes etc
 
 ## Building with GruntJS
 
