@@ -685,40 +685,42 @@ function QueueController($scope, workspace) {
             aaData: data,
             aoColumns: [
                 {
-                    mDataProp: "JMSMessageID"
+                    "mDataProp": "JMSMessageID"
                 }, 
                 {
-                    mDataProp: "Text"
+                    "sDefaultContent": "",
+                    "mData": null,
+                    "mDataProp": "Text"
                 }, 
                 {
-                    mDataProp: "JMSCorrelationID"
+                    "mDataProp": "JMSCorrelationID"
                 }, 
                 {
-                    mDataProp: "JMSTimestamp"
+                    "mDataProp": "JMSTimestamp"
                 }, 
                 {
-                    mDataProp: "JMSDeliveryMode"
+                    "mDataProp": "JMSDeliveryMode"
                 }, 
                 {
-                    mDataProp: "JMSReplyTo"
+                    "mDataProp": "JMSReplyTo"
                 }, 
                 {
-                    mDataProp: "JMSRedelivered"
+                    "mDataProp": "JMSRedelivered"
                 }, 
                 {
-                    mDataProp: "JMSPriority"
+                    "mDataProp": "JMSPriority"
                 }, 
                 {
-                    mDataProp: "JMSXGroupSeq"
+                    "mDataProp": "JMSXGroupSeq"
                 }, 
                 {
-                    mDataProp: "JMSExpiration"
+                    "mDataProp": "JMSExpiration"
                 }, 
                 {
-                    mDataProp: "JMSType"
+                    "mDataProp": "JMSType"
                 }, 
                 {
-                    mDataProp: "JMSDestination"
+                    "mDataProp": "JMSDestination"
                 }
             ]
         });
