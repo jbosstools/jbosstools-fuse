@@ -40,8 +40,9 @@ angular.module('FuseIDE', [
     }).otherwise({
         redirectTo: '/attributes'
     });
-}).factory('workspace', function ($rootScope) {
-    return new Workspace();
+}).factory('workspace', function ($rootScope, $location) {
+    var url = $location.search()['url'] || "/jolokia";
+    return new Workspace(url);
 }).filter('humanize', function () {
     return humanizeValue;
 });
@@ -119,13 +120,15 @@ function supportsLocalStorage() {
     }
 }
 var Workspace = (function () {
-    function Workspace() {
-        this.jolokia = new Jolokia("/jolokia");
+    function Workspace(url) {
+        this.jolokia = null;
         this.updateRate = 0;
         this.selection = [];
         this.dummyStorage = {
         };
         var rate = this.getUpdateRate();
+        this.jolokia = new Jolokia(url);
+        console.log("Jolokia URL is " + url);
         this.setUpdateRate(rate);
     }
     Workspace.prototype.getLocalStorage = function (key) {
@@ -158,6 +161,7 @@ var Folder = (function () {
     function Folder(title) {
         this.title = title;
         this.isFolder = true;
+        this.key = null;
         this.children = [];
         this.folderNames = [];
         this.map = {
@@ -221,10 +225,24 @@ function MBeansController($scope, $location, workspace) {
     $scope.tree = new Folder('MBeans');
     $scope.select = function (node) {
         $scope.workspace.selection = node;
+        var key = null;
+        if(node) {
+            key = node['key'];
+            console.log("selected node with key " + key);
+        }
+        var q = {
+        };
+        if(key) {
+            q['nid'] = key;
+        }
+        $location.search(q);
         $scope.$apply();
     };
     function populateTree(response) {
+        var rootId = 'root';
+        var separator = '_';
         var tree = new Folder('MBeans');
+        tree.key = rootId;
         var domains = response.value;
         for(var domain in domains) {
             var mbeans = domains[domain];
@@ -232,6 +250,9 @@ function MBeansController($scope, $location, workspace) {
                 var entries = {
                 };
                 var folder = tree.getOrElse(domain);
+                if(!folder.key) {
+                    folder.key = rootId + separator + domain;
+                }
                 var folderNames = [
                     domain
                 ];
@@ -251,9 +272,11 @@ function MBeansController($scope, $location, workspace) {
                     folder = folder.getOrElse(value);
                     folderNames.push(value);
                     folder.folderNames = folderNames;
+                    folder.key = rootId + separator + folderNames.join(separator);
                     folderNames = folderNames.clone();
                 });
                 var mbeanInfo = {
+                    key: rootId + separator + folderNames.join(separator) + separator + lastPath,
                     title: trimQuotes(lastPath),
                     domain: domain,
                     path: path,
@@ -278,6 +301,10 @@ function MBeansController($scope, $location, workspace) {
             debugLevel: 0,
             children: tree.children
         });
+        var key = $location.search()['nid'];
+        if(key) {
+            $("#jmxtree").dynatree("getTree").activateKey(key);
+        }
     }
     var jolokia = workspace.jolokia;
     jolokia.request({
