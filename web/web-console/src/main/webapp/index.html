@@ -26,32 +26,32 @@
             <div class="nav-collapse">
                 <ul class="nav">
                     <li ng-class="navClass('attributes')">
-                        <a href="#/attributes"><i class="icon-home"></i>
+                        <a ng-href="#/attributes{{hash}}"><i class="icon-home"></i>
                             Attributes</a></li>
                     <li ng-class="navClass('charts')">
-                        <a href="#/charts"><i class="icon-signal"></i> Charts</a></li>
+                        <a ng-href="#/charts{{hash}}"><i class="icon-signal"></i> Charts</a></li>
                     <li ng-class="navClass('browseQueue')"
                         ng-show="hasDomainAndProperties('org.apache.activemq', {Type: 'Queue'})">
-                        <a href="#/browseQueue"><i class="icon-envelope"></i> Browse</a></li>
+                        <a ng-href="#/browseQueue{{hash}}"><i class="icon-envelope"></i> Browse</a></li>
                     <li ng-class="navClass('sendMessage')"
                         ng-show="hasDomainAndProperties('org.apache.activemq', {Type: 'Queue'})">
-                        <a href="#/sendMessage"><i class="icon-pencil"></i> Send</a></li>
+                        <a ng-href="#/sendMessage{{hash}}"><i class="icon-pencil"></i> Send</a></li>
                     <li ng-class="navClass('logs')">
-                        <a href="#/logs"><i class="icon-list-alt"></i> Logs</a></li>
+                        <a ng-href="#/logs{{hash}}"><i class="icon-list-alt"></i> Logs</a></li>
                 </ul>
                 <div class="pull-right">
                     <ul class="nav pull-right">
                         <li ng-class="navClass('preferences')">
-                            <a href="#/preferences"><i class="icon-cog"></i> Preferences</a></li>
+                            <a ng-href="#/preferences{{hash}}"><i class="icon-cog"></i> Preferences</a></li>
 <!--
-                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b
+                        <li class="dropdown"><a ng-href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b
                                 class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-submenu">
-                                <li><a href="#/preferences"><i class="icon-cog"></i> Preferences</a></li>
-                                <li><a href="/help/support"><i class="icon-envelope"></i> Contact Support</a></li>
+                                <li><a ng-href="#/preferences{{hash}}"><i class="icon-cog"></i> Preferences</a></li>
+                                <li><a ng-href="/help/support{{hash}}"><i class="icon-envelope"></i> Contact Support</a></li>
                                 <li class="divider"></li>
-                                <li><a href="/auth/logout"><i class="icon-off"></i> Logout</a></li>
+                                <li><a ng-href="/auth/logout{{hash}}"><i class="icon-off"></i> Logout</a></li>
                             </ul>
                         </li>
 -->

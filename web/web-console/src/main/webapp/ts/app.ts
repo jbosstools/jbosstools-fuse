@@ -182,11 +182,34 @@ class Folder {
 function NavBarController($scope, $location, workspace) {
   $scope.workspace = workspace;
 
+  // when we change the view/selection lets update the hash so links have the latest stuff
+  $scope.$on('$routeChangeSuccess', function(){
+    var hash = $location.search();
+    // TODO there must be a nice function somewhere to do this in a nicer way!
+    // NOTE we are not encoding anything
+    var text = "";
+    if (hash) {
+      for (var key in hash) {
+        var value = hash[key];
+        if (key && value) {
+          if (text.length === 0) {
+            text = "?";
+          } else {
+            text += "&"
+          }
+          text += key + "=" + value;
+        }
+      }
+    }
+    $scope.hash = encodeURI(text);
+  });
+
   $scope.navClass = (page) => {
     var currentRoute = $location.path().substring(1) || 'home';
     return page === currentRoute ? 'active' : '';
   };
 
+  // only display stuff if we have an mbean with the given properties
   $scope.hasDomainAndProperties = (objectName, properties) => {
     var workspace = $scope.workspace;
     if (workspace) {

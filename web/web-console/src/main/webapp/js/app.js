@@ -184,6 +184,24 @@ var Folder = (function () {
 })();
 function NavBarController($scope, $location, workspace) {
     $scope.workspace = workspace;
+    $scope.$on('$routeChangeSuccess', function () {
+        var hash = $location.search();
+        var text = "";
+        if(hash) {
+            for(var key in hash) {
+                var value = hash[key];
+                if(key && value) {
+                    if(text.length === 0) {
+                        text = "?";
+                    } else {
+                        text += "&";
+                    }
+                    text += key + "=" + value;
+                }
+            }
+        }
+        $scope.hash = encodeURI(text);
+    });
     $scope.navClass = function (page) {
         var currentRoute = $location.path().substring(1) || 'home';
         return page === currentRoute ? 'active' : '';
