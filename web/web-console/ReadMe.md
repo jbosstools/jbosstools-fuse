@@ -7,9 +7,7 @@ The Fuse Web Console provides a web based console for working with Fuse
 From a git clone you should be able to run the sample web console as follows:
 
     cd fuseide
-    cd web/zest
-    mvn install
-    cd ../web-console
+    cd web/web-console
     mvn test-compile exec:java
     open http://localhost:8080/
 
