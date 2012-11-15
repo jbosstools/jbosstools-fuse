@@ -631,6 +631,7 @@ function QueueController($scope, workspace) {
         $scope.messages = data;
         $scope.$apply();
         $('#grid').dataTable({
+            bPaginate: false,
             sDom: 'Rlfrtip',
             bDestroy: true,
             aaData: data,
@@ -648,10 +649,22 @@ function QueueController($scope, workspace) {
                     mDataProp: "JMSDeliveryMode"
                 }, 
                 {
+                    mDataProp: "JMSReplyTo"
+                }, 
+                {
+                    mDataProp: "JMSRedelivered"
+                }, 
+                {
+                    mDataProp: "JMSPriority"
+                }, 
+                {
                     mDataProp: "JMSXGroupSeq"
                 }, 
                 {
                     mDataProp: "JMSExpiration"
+                }, 
+                {
+                    mDataProp: "JMSType"
                 }, 
                 {
                     mDataProp: "JMSDestination"
