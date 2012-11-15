@@ -500,11 +500,6 @@ function LogController($scope, $location, workspace) {
           if (!$scope.logs.any((item) => item.message === log.message && item.seq === log.message && item.timestamp === log.timestamp)) {
             $scope.logs.push(log);
           }
-          /*
-           seq = log['seq'] || idx;
-           //console.log("Found log: " + JSON.stringify(log));
-           $scope.logs[seq] = log;
-           */
         }
       }
       //console.log("Got results " + logs.length + " last seq: " + seq);
@@ -690,8 +685,51 @@ function QueueController($scope, workspace) {
   $scope.messages = [];
 
   var populateTable = function (response) {
-    $scope.messages = response.value;
+    var data = response.value;
+    $scope.messages = data;
     $scope.$apply();
+/*
+    var options = {
+      enableCellNavigation: true,
+      enableColumnReorder: true
+    };
+
+    var columns = [
+      {id: "JMSMessageID", name: "JMSMessageID", field: "JMSMessageID"},
+      {id: "Text", name: "Text", field: "Text"}
+    ];
+
+    $(function () {
+      $scope.grid = new Slick.Grid("#grid", data, columns, options);
+    });
+
+*/
+    $('#grid').dataTable({
+      //bPaginate: false,
+      //bProcessing: true,
+      sDom: 'Rlfrtip',
+      bDestroy: true,
+      aaData: data,
+      aoColumns: [
+        { mDataProp: "JMSMessageID" },
+        { mDataProp: "JMSCorrelationID" },
+/*
+        { mDataProp: "OriginalDestination" },
+*/
+        { mDataProp: "JMSTimestamp" },
+        { mDataProp: "JMSDeliveryMode" },
+        { mDataProp: "JMSXGroupSeq" },
+        { mDataProp: "JMSExpiration" },
+        { mDataProp: "JMSDestination" }
+/*
+        { mDataProp: "Text" }
+*/
+/*
+        { "JMSMessageID": null },
+        { "Text": null }
+*/
+      ]
+    });
   };
 
   $scope.$watch('workspace.selection', function () {

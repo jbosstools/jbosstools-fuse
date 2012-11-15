@@ -627,8 +627,37 @@ function QueueController($scope, workspace) {
     $scope.workspace = workspace;
     $scope.messages = [];
     var populateTable = function (response) {
-        $scope.messages = response.value;
+        var data = response.value;
+        $scope.messages = data;
         $scope.$apply();
+        $('#grid').dataTable({
+            sDom: 'Rlfrtip',
+            bDestroy: true,
+            aaData: data,
+            aoColumns: [
+                {
+                    mDataProp: "JMSMessageID"
+                }, 
+                {
+                    mDataProp: "JMSCorrelationID"
+                }, 
+                {
+                    mDataProp: "JMSTimestamp"
+                }, 
+                {
+                    mDataProp: "JMSDeliveryMode"
+                }, 
+                {
+                    mDataProp: "JMSXGroupSeq"
+                }, 
+                {
+                    mDataProp: "JMSExpiration"
+                }, 
+                {
+                    mDataProp: "JMSDestination"
+                }
+            ]
+        });
     };
     $scope.$watch('workspace.selection', function () {
         var selection = workspace.selection;
