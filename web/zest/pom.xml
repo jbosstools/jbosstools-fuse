@@ -17,6 +17,7 @@
     <groupId>org.fusesource.ide</groupId>
     <artifactId>project</artifactId>
     <version>7.1.0-SNAPSHOT</version>
+    <relativePath>../..</relativePath>
   </parent>
 
   <artifactId>zest</artifactId>
