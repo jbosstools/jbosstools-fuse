@@ -28,6 +28,9 @@ angular.module('FuseIDE', [
     }).when('/browseQueue', {
         templateUrl: 'partials/browseQueue.html',
         controller: QueueController
+    }).when('/sendMessage', {
+        templateUrl: 'partials/sendMessage.html',
+        controller: QueueController
     }).when('/debug', {
         templateUrl: 'partials/debug.html',
         controller: DetailController

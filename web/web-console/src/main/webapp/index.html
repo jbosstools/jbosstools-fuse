@@ -8,10 +8,7 @@
     <link rel='stylesheet' href='css/ui.dynatree.css' type='text/css'>
     <link rel='stylesheet' href='css/datatable.bootstrap.css' type='text/css'>
     <link rel='stylesheet' href='css/ColReorder.css' type='text/css'>
-<!--
-    <link rel='stylesheet' href='css/slick.grid.css' type='text/css'>
     <link rel='stylesheet' href='css/site.css' type='text/css'>
--->
 </head>
 <body>
 
@@ -28,11 +25,12 @@
 
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li ng-class="navClass('attributes')"><a href="#/attributes"><i class="icon-home icon-white"></i> Attributes</a></li>
-                    <li ng-class="navClass('charts')"><a href="#/charts">Charts</a></li>
-                    <li ng-class="navClass('browseQueue')" ng-show="hasDomainAndProperties('org.apache.activemq', {Type: 'Queue'})"><a href="#/browseQueue">Browse</a></li>
+                    <li ng-class="navClass('attributes')"><a href="#/attributes"><i class="icon-home"></i> Attributes</a></li>
+                    <li ng-class="navClass('charts')"><a href="#/charts"><i class="icon-signal"></i> Charts</a></li>
+                    <li ng-class="navClass('browseQueue')" ng-show="hasDomainAndProperties('org.apache.activemq', {Type: 'Queue'})"><a href="#/browseQueue"><i class="icon-envelope"></i> Browse</a></li>
+                    <li ng-class="navClass('sendMessage')" ng-show="hasDomainAndProperties('org.apache.activemq', {Type: 'Queue'})"><a href="#/sendMessage"><i class="icon-pencil"></i> Send</a></li>
 
-                    <li ng-class="navClass('logs')"><a href="#/logs">Logs</a></li>
+                    <li ng-class="navClass('logs')"><a href="#/logs"><i class="icon-list-alt"></i> Logs</a></li>
 <!--
                     <li ng-class="navClass('logs')" ng-show="hasDomainAndProperties('org.fusesource.insight', {type: 'LogQuery'})"><a href="#/logs">Logs</a></li>
 -->
