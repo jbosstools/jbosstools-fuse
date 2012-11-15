@@ -740,22 +740,7 @@ function QueueController($scope, workspace) {
     var data = response.value;
     $scope.messages = data;
     $scope.$apply();
-/*
-    var options = {
-      enableCellNavigation: true,
-      enableColumnReorder: true
-    };
 
-    var columns = [
-      {id: "JMSMessageID", name: "JMSMessageID", field: "JMSMessageID"},
-      {id: "Text", name: "Text", field: "Text"}
-    ];
-
-    $(function () {
-      $scope.grid = new Slick.Grid("#grid", data, columns, options);
-    });
-
-*/
     $('#grid').dataTable({
       bPaginate: false,
       sDom: 'Rlfrtip',
@@ -763,6 +748,7 @@ function QueueController($scope, workspace) {
       aaData: data,
       aoColumns: [
         { mDataProp: "JMSMessageID" },
+        { mDataProp: "Text" },
         { mDataProp: "JMSCorrelationID" },
 /*
         { mDataProp: "OriginalDestination" },
@@ -776,18 +762,12 @@ function QueueController($scope, workspace) {
         { mDataProp: "JMSExpiration" },
         { mDataProp: "JMSType" },
         { mDataProp: "JMSDestination" }
-/*
-        { mDataProp: "Text" }
-*/
-/*
-        { "JMSMessageID": null },
-        { "Text": null }
-*/
       ]
     });
   };
 
   $scope.$watch('workspace.selection', function () {
+    // TODO could we refactor the get mbean thingy??
     var selection = workspace.selection;
     if (selection) {
       var mbean = selection.objectName;
@@ -800,4 +780,20 @@ function QueueController($scope, workspace) {
       }
     }
   });
+
+  var sendWorked = () => {
+    console.log("Sent message!");
+  };
+
+  $scope.sendMessage = (body) => {
+    var selection = workspace.selection;
+    if (selection) {
+      var mbean = selection.objectName;
+      if (mbean) {
+        var jolokia = workspace.jolokia;
+        console.log("Sending message to destination " + mbean);
+        jolokia.execute(mbean, "sendTextMessage(java.lang.String)", body, onSuccess(sendWorked));
+      }
+    }
+  };
 }

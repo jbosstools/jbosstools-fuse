@@ -688,6 +688,9 @@ function QueueController($scope, workspace) {
                     mDataProp: "JMSMessageID"
                 }, 
                 {
+                    mDataProp: "Text"
+                }, 
+                {
                     mDataProp: "JMSCorrelationID"
                 }, 
                 {
@@ -734,4 +737,18 @@ function QueueController($scope, workspace) {
             }
         }
     });
+    var sendWorked = function () {
+        console.log("Sent message!");
+    };
+    $scope.sendMessage = function (body) {
+        var selection = workspace.selection;
+        if(selection) {
+            var mbean = selection.objectName;
+            if(mbean) {
+                var jolokia = workspace.jolokia;
+                console.log("Sending message to destination " + mbean);
+                jolokia.execute(mbean, "sendTextMessage(java.lang.String)", body, onSuccess(sendWorked));
+            }
+        }
+    };
 }
