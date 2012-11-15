@@ -81,7 +81,7 @@ function scopeStoreJolokiaHandle($scope, jolokia, jolokiaHandle) {
 function closeHandle($scope, jolokia) {
   var jolokiaHandle = $scope.jolokiaHandle
   if (jolokiaHandle) {
-    console.log('Closing the handle ' + jolokiaHandle);
+    //console.log('Closing the handle ' + jolokiaHandle);
     jolokia.unregister(jolokiaHandle);
     $scope.jolokiaHandle = null;
   }
@@ -257,7 +257,6 @@ function MBeansController($scope, $location, workspace) {
     var key = null;
     if (node) {
       key = node['key'];
-      console.log("selected node with key " + key);
     }
     var q = {};
     if (key) {
@@ -362,7 +361,7 @@ class Table {
     var answer = [];
     if (columns) {
       for (name in columns) {
-        console.log("Looking up: " + name + " on row ");
+        //console.log("Looking up: " + name + " on row ");
         answer.push(row[name]);
       }
     }
@@ -437,7 +436,7 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
       if (children) {
         var childNodes = children.map((child) => child.objectName);
         var mbeans = childNodes.filter((mbean) => mbean);
-        console.log("Found mbeans: " + mbeans + " child nodes " + childNodes.length + " child mbeans " + mbeans.length);
+        //console.log("Found mbeans: " + mbeans + " child nodes " + childNodes.length + " child mbeans " + mbeans.length);
 
         // lets filter out the collections of collections; so only have collections of mbeans
         if (mbeans && childNodes.length === mbeans.length && !ignoreFolderDetails(node)) {
@@ -674,7 +673,7 @@ function ChartController($scope, $location, workspace) {
 
       // we need to escape the mbean path for list
       var listKey = mbean.replace(/\//g, '!/').replace(':', '/').escapeURL();
-      console.log("Looking up mbeankey: " + listKey);
+      //console.log("Looking up mbeankey: " + listKey);
       var meta = jolokia.list(listKey);
       if (meta) {
         var attributes = meta.attr;

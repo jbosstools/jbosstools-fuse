@@ -94,7 +94,6 @@ function scopeStoreJolokiaHandle($scope, jolokia, jolokiaHandle) {
 function closeHandle($scope, jolokia) {
     var jolokiaHandle = $scope.jolokiaHandle;
     if(jolokiaHandle) {
-        console.log('Closing the handle ' + jolokiaHandle);
         jolokia.unregister(jolokiaHandle);
         $scope.jolokiaHandle = null;
     }
@@ -246,7 +245,6 @@ function MBeansController($scope, $location, workspace) {
         var key = null;
         if(node) {
             key = node['key'];
-            console.log("selected node with key " + key);
         }
         var q = {
         };
@@ -343,7 +341,6 @@ var Table = (function () {
         var answer = [];
         if(columns) {
             for(name in columns) {
-                console.log("Looking up: " + name + " on row ");
                 answer.push(row[name]);
             }
         }
@@ -428,7 +425,6 @@ function DetailController($scope, $routeParams, workspace, $rootScope) {
                 var mbeans = childNodes.filter(function (mbean) {
                     return mbean;
                 });
-                console.log("Found mbeans: " + mbeans + " child nodes " + childNodes.length + " child mbeans " + mbeans.length);
                 if(mbeans && childNodes.length === mbeans.length && !ignoreFolderDetails(node)) {
                     query = mbeans.map(function (mbean) {
                         return asQuery(mbean);
@@ -624,7 +620,6 @@ function ChartController($scope, $location, workspace) {
             $scope.context = context;
             $scope.jolokiaContext = context.jolokia($scope.workspace.jolokia);
             var listKey = mbean.replace(/\//g, '!/').replace(':', '/').escapeURL();
-            console.log("Looking up mbeankey: " + listKey);
             var meta = jolokia.list(listKey);
             if(meta) {
                 var attributes = meta.attr;
