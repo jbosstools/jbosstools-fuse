@@ -769,6 +769,168 @@ function CamelController($scope, workspace) {
             }
         }
     });
+    function d3ForceGraph(nodes, links, width, height) {
+        var svg = d3.select("#canvas").append("svg").attr("width", width).attr("height", height);
+        var force = d3.layout.force().distance(100).charge(-120 * 10).linkDistance(50).size([
+            width, 
+            height
+        ]);
+        svg.append("svg:defs").selectAll("marker").data([
+            "from"
+        ]).enter().append("svg:marker").attr("id", String).attr("viewBox", "0 -5 10 10").attr("refX", 25).attr("refY", -1.5).attr("markerWidth", 6).attr("markerHeight", 6).attr("orient", "auto").append("svg:path").attr("d", "M0,-5L10,0L0,5");
+        force.nodes(nodes).links(links).start();
+        var link = svg.selectAll(".link").data(links).enter().append("line").attr("class", "link");
+        link.attr("class", "link from");
+        link.attr("marker-end", "url(#from)");
+        var node = svg.selectAll(".node").data(nodes).enter().append("g").attr("class", "node").call(force.drag);
+        node.append("image").attr("xlink:href", function (d) {
+            return d.imageUrl;
+        }).attr("x", -15).attr("y", -15).attr("width", 30).attr("height", 30);
+        node.append("text").attr("dx", 20).attr("dy", ".35em").text(function (d) {
+            return d.name;
+        });
+        force.on("tick", function () {
+            link.attr("x1", function (d) {
+                return d.source.x;
+            }).attr("y1", function (d) {
+                return d.source.y;
+            }).attr("x2", function (d) {
+                return d.target.x;
+            }).attr("y2", function (d) {
+                return d.target.y;
+            });
+            node.attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+        });
+    }
+    function dagreLayoutGraph(nodes, links, width, height) {
+        var nodePadding = 10;
+        var stateKeys = {
+        };
+        var transitions = [];
+        nodes.forEach(function (node) {
+            var idx = node.id;
+            if(idx === undefined) {
+                console.log("No node found for node " + JSON.stringify(node));
+            } else {
+                if(node.edges === undefined) {
+                    node.edges = [];
+                }
+                if(!node.label) {
+                    node.label = "node " + idx;
+                }
+                stateKeys[idx] = node;
+            }
+        });
+        var states = d3.values(stateKeys);
+        links.forEach(function (d) {
+            var source = stateKeys[d.source];
+            var target = stateKeys[d.target];
+            if(source === undefined || target === undefined) {
+                console.log("Bad link!  " + source + " target " + target + " for " + d);
+            } else {
+                var edge = {
+                    source: source,
+                    target: target
+                };
+                transitions.push(edge);
+                source.edges.push(edge);
+                target.edges.push(edge);
+            }
+        });
+        function spline(e) {
+            var points = e.dagre.points.slice(0);
+            var source = dagre.util.intersectRect(e.source.dagre, points.length > 0 ? points[0] : e.source.dagre);
+            var target = dagre.util.intersectRect(e.target.dagre, points.length > 0 ? points[points.length - 1] : e.source.dagre);
+            points.unshift(source);
+            points.push(target);
+            return d3.svg.line().x(function (d) {
+                return d.x;
+            }).y(function (d) {
+                return d.y;
+            }).interpolate("linear")(points);
+        }
+        function translateEdge(e, dx, dy) {
+            e.dagre.points.forEach(function (p) {
+                p.x = Math.max(0, Math.min(svgBBox.width, p.x + dx));
+                p.y = Math.max(0, Math.min(svgBBox.height, p.y + dy));
+            });
+        }
+        var svg = d3.select("svg");
+        var svgGroup = svg.append("g").attr("transform", "translate(5, 5)");
+        var nodes = svgGroup.selectAll("g .node").data(states).enter().append("g").attr("class", "node").attr("id", function (d) {
+            return "node-" + d.label;
+        });
+        var edges = svgGroup.selectAll("path .edge").data(transitions).enter().append("path").attr("class", "edge").attr("marker-end", "url(#arrowhead)");
+        var rects = nodes.append("rect");
+        var labels = nodes.append("text").attr("text-anchor", "middle").attr("x", 0);
+        labels.append("tspan").attr("x", 0).attr("dy", "1em").text(function (d) {
+            return d.label;
+        });
+        var labelPadding = 0;
+        labels.each(function (d) {
+            var bbox = this.getBBox();
+            d.bbox = bbox;
+            d.width = bbox.width + 2 * nodePadding;
+            d.height = bbox.height + 2 * nodePadding + labelPadding;
+        });
+        rects.attr("x", function (d) {
+            return -(d.bbox.width / 2 + nodePadding);
+        }).attr("y", function (d) {
+            return -(d.bbox.height / 2 + nodePadding);
+        }).attr("width", function (d) {
+            return d.width;
+        }).attr("height", function (d) {
+            return d.height;
+        });
+        labels.attr("x", function (d) {
+            return -d.bbox.width / 2;
+        }).attr("y", function (d) {
+            return -d.bbox.height / 2;
+        });
+        dagre.layout().nodeSep(50).edgeSep(10).rankSep(50).nodes(states).edges(transitions).debugLevel(1).run();
+        nodes.attr("transform", function (d) {
+            return 'translate(' + d.dagre.x + ',' + d.dagre.y + ')';
+        });
+        edges.attr('id', function (e) {
+            return e.dagre.id;
+        }).attr("d", function (e) {
+            return spline(e);
+        });
+        var svgBBox = svg.node().getBBox();
+        svg.attr("width", svgBBox.width + 10);
+        svg.attr("height", svgBBox.height + 10);
+        var nodeDrag = d3.behavior.drag().origin(function (d) {
+            return d.pos ? {
+                x: d.pos.x,
+                y: d.pos.y
+            } : {
+                x: d.dagre.x,
+                y: d.dagre.y
+            };
+        }).on('drag', function (d, i) {
+            var prevX = d.dagre.x;
+            var prevY = d.dagre.y;
+
+            d.dagre.x = Math.max(d.width / 2, Math.min(svgBBox.width - d.width / 2, d3.event.x));
+            d.dagre.y = Math.max(d.height / 2, Math.min(svgBBox.height - d.height / 2, d3.event.y));
+            d3.select(this).attr('transform', 'translate(' + d.dagre.x + ',' + d.dagre.y + ')');
+            var dx = d.dagre.x - prevX;
+            var dy = d.dagre.y - prevY;
+
+            d.edges.forEach(function (e) {
+                translateEdge(e, dx, dy);
+                d3.select('#' + e.dagre.id).attr('d', spline(e));
+            });
+        });
+        var edgeDrag = d3.behavior.drag().on('drag', function (d, i) {
+            translateEdge(d, d3.event.dx, d3.event.dy);
+            d3.select(this).attr('d', spline(d));
+        });
+        nodes.call(nodeDrag);
+        edges.call(edgeDrag);
+    }
     var populateTable = function (response) {
         var data = response.value;
         $scope.routes = data;
@@ -818,15 +980,16 @@ function CamelController($scope, workspace) {
                         }
                     }
                     var imageUrl = "/img/camel/" + imageName + "24.png";
-                    console.log("Image URL is " + imageUrl);
                     nodes.push({
                         "name": name,
+                        "label": name,
                         "group": 1,
+                        "id": id,
                         "x": x,
                         "y:": y,
                         "imageUrl": imageUrl
                     });
-                    if(parentId !== null) {
+                    if(parentId !== null && parentId !== id) {
                         console.log(parent.nodeName + "(" + parentId + " @" + parentX + "," + parentY + ")" + " -> " + route.nodeName + "(" + id + " @" + x + "," + y + ")");
                         links.push({
                             "source": parentId,
@@ -844,39 +1007,7 @@ function CamelController($scope, workspace) {
                 addChildren(route, null, rowX, 0);
                 rowX += routeDelta;
             });
-            var svg = d3.select("#canvas").append("svg").attr("width", width).attr("height", height);
-            var force = d3.layout.force().distance(100).charge(-120 * 10).linkDistance(50).size([
-                width, 
-                height
-            ]);
-            svg.append("svg:defs").selectAll("marker").data([
-                "from"
-            ]).enter().append("svg:marker").attr("id", String).attr("viewBox", "0 -5 10 10").attr("refX", 25).attr("refY", -1.5).attr("markerWidth", 6).attr("markerHeight", 6).attr("orient", "auto").append("svg:path").attr("d", "M0,-5L10,0L0,5");
-            force.nodes(nodes).links(links).start();
-            var link = svg.selectAll(".link").data(links).enter().append("line").attr("class", "link");
-            link.attr("class", "link from");
-            link.attr("marker-end", "url(#from)");
-            var node = svg.selectAll(".node").data(nodes).enter().append("g").attr("class", "node").call(force.drag);
-            node.append("image").attr("xlink:href", function (d) {
-                return d.imageUrl;
-            }).attr("x", -15).attr("y", -15).attr("width", 30).attr("height", 30);
-            node.append("text").attr("dx", 20).attr("dy", ".35em").text(function (d) {
-                return d.name;
-            });
-            force.on("tick", function () {
-                link.attr("x1", function (d) {
-                    return d.source.x;
-                }).attr("y1", function (d) {
-                    return d.source.y;
-                }).attr("x2", function (d) {
-                    return d.target.x;
-                }).attr("y2", function (d) {
-                    return d.target.y;
-                });
-                node.attr("transform", function (d) {
-                    return "translate(" + d.x + "," + d.y + ")";
-                });
-            });
+            dagreLayoutGraph(nodes, links, width, height);
         }
         $scope.$apply();
     };
