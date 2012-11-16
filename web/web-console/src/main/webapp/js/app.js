@@ -864,11 +864,14 @@ function CamelController($scope, workspace) {
         });
         var edges = svgGroup.selectAll("path .edge").data(transitions).enter().append("path").attr("class", "edge").attr("marker-end", "url(#arrowhead)");
         var rects = nodes.append("rect");
+        nodes.append("image").attr("xlink:href", function (d) {
+            return d.imageUrl;
+        }).attr("x", -12).attr("y", -20).attr("height", 24).attr("width", 24);
         var labels = nodes.append("text").attr("text-anchor", "middle").attr("x", 0);
-        labels.append("tspan").attr("x", 0).attr("dy", "1em").text(function (d) {
+        labels.append("tspan").attr("x", 0).attr("dy", 30).text(function (d) {
             return d.label;
         });
-        var labelPadding = 0;
+        var labelPadding = 12;
         labels.each(function (d) {
             var bbox = this.getBBox();
             d.bbox = bbox;
@@ -878,7 +881,7 @@ function CamelController($scope, workspace) {
         rects.attr("x", function (d) {
             return -(d.bbox.width / 2 + nodePadding);
         }).attr("y", function (d) {
-            return -(d.bbox.height / 2 + nodePadding);
+            return -(d.bbox.height / 2 + nodePadding + (labelPadding / 2));
         }).attr("width", function (d) {
             return d.width;
         }).attr("height", function (d) {

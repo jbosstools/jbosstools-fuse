@@ -192,15 +192,15 @@ function CamelController($scope, workspace) {
     // because we want the text above the rectangle.
     var rects = nodes.append("rect");
 
-/*
     nodes.append("image")
-            .attr("xlink:href", function (d) {
-              return d.imageUrl;
-            })
-            .attr("x", -15)
-            .attr("y", -15)
-            .attr("width", 30);
-*/
+              .attr("xlink:href", function (d) {
+                return d.imageUrl;
+              })
+              .attr("x", -12)
+              .attr("y", -20)
+              .attr("height", 24)
+              .attr("width", 24);
+
     // Append text
     var labels = nodes
             .append("text")
@@ -210,13 +210,12 @@ function CamelController($scope, workspace) {
     labels
             .append("tspan")
             .attr("x", 0)
-            .attr("dy", "1em")
-            //.attr("dy", "35px")
+            .attr("dy", 30)
             .text(function (d) {
               return d.label;
             });
 
-    var labelPadding = 0;
+    var labelPadding = 12;
 
     // We need width and height for layout.
     labels.each(function (d) {
@@ -231,7 +230,7 @@ function CamelController($scope, workspace) {
               return -(d.bbox.width / 2 + nodePadding);
             })
             .attr("y", function (d) {
-              return -(d.bbox.height / 2 + nodePadding);
+              return -(d.bbox.height / 2 + nodePadding + (labelPadding / 2));
             })
             .attr("width", function (d) {
               return d.width;
