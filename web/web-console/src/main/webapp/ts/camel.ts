@@ -112,7 +112,6 @@ function CamelController($scope, workspace) {
 
   function dagreLayoutGraph(nodes, links, width, height) {
     var nodePadding = 10;
-
     var stateKeys = {};
     var transitions = [];
     nodes.forEach((node) => {
@@ -214,7 +213,7 @@ function CamelController($scope, workspace) {
     labels
             .append("tspan")
             .attr("x", 0)
-            .attr("dy", 30)
+            .attr("dy", 28)
             .text(function (d) {
               return d.label;
             });
