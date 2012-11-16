@@ -36,6 +36,9 @@
                     <li ng-class="navClass('sendMessage')"
                         ng-show="hasDomainAndProperties('org.apache.activemq', {Type: 'Queue'})">
                         <a ng-href="#/sendMessage{{hash}}"><i class="icon-pencil"></i> Send</a></li>
+                    <li ng-class="navClass('routes')"
+                        ng-show="hasDomainAndProperties('org.apache.camel', {type: 'context'})">
+                        <a ng-href="#/routes{{hash}}"><i class="icon-picture"></i> Routes</a></li>
                     <li ng-class="navClass('logs')">
                         <a ng-href="#/logs{{hash}}"><i class="icon-list-alt"></i> Logs</a></li>
                 </ul>
@@ -67,14 +70,20 @@
         <div class="span4 scrollable" ng-controller="MBeansController">
             <div id="jmxtree"></div>
         </div>
+        <div id="properties" class="span8 scrollable fill" ng-view></div>
+<!--
         <div class="span8 scrollable">
-            <div id="properties" ng-view></div>
+            <div id="properties" class="scrollable" ng-view></div>
         </div>
+-->
     </div>
 </div>
 
-<!-- charts and jolokia for jmx -->
+ charts and jolokia for jmx
+<script type="text/javascript" src="lib/d3.v3.js"></script>
+<!--
 <script type="text/javascript" src="lib/d3.v2.min.js"></script>
+-->
 <script type="text/javascript" src="lib/jquery-1.8.2.min.js"></script>
 <script type="text/javascript" src="lib/jolokia-min.js"></script>
 <script type="text/javascript" src="lib/cubism.v1.min.js"></script>

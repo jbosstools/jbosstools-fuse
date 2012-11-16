@@ -269,6 +269,30 @@
 
     <plugins>
       <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <configuration>
+              <target>
+                <!-- copy the images from the eclipse plugin -->
+                <copy todir="${basedir}/src/main/webapp/img/camel" overwrite="true">
+                  <fileset dir="${basedir}/../../plugins/org.fusesource.ide.camel.model/icons">
+                    <include name="*24.png"/>
+                    <include name="*15.png"/>
+                  </fileset>
+                </copy>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>com.ppedregal.typescript</groupId>
         <artifactId>typescript-maven-plugin</artifactId>
         <version>0.0.1-SNAPSHOT</version>
