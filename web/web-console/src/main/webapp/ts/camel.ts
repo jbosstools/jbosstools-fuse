@@ -192,7 +192,7 @@ function CamelController($scope, workspace) {
     // because we want the text above the rectangle.
     var rects = nodes.append("rect").
             // rounded corners
-            attr("rx", "10").attr("ry", "10").
+            attr("rx", "5").attr("ry", "5").
             // lets add shadow
             attr("filter", "url(#drop-shadow)");
 
