@@ -190,7 +190,11 @@ function CamelController($scope, workspace) {
 
     // Append rectangles to the nodes. We do this before laying out the text
     // because we want the text above the rectangle.
-    var rects = nodes.append("rect").attr("rx", "10").attr("ry", "10");
+    var rects = nodes.append("rect").
+            // rounded corners
+            attr("rx", "10").attr("ry", "10").
+            // lets add shadow
+            attr("filter", "url(#drop-shadow)");
 
     nodes.append("image")
               .attr("xlink:href", function (d) {
