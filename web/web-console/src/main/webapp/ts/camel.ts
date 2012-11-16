@@ -166,6 +166,9 @@ function CamelController($scope, workspace) {
 
     // Now start laying things out
     var svg = d3.select("svg");
+    // lets remove all the old g elements
+    $("svg").children("g").remove();
+
     var svgGroup = svg.append("g").attr("transform", "translate(5, 5)");
 
     // `nodes` is center positioned for easy layout later

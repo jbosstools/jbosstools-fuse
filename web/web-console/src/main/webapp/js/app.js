@@ -858,6 +858,7 @@ function CamelController($scope, workspace) {
             });
         }
         var svg = d3.select("svg");
+        $("svg").children("g").remove();
         var svgGroup = svg.append("g").attr("transform", "translate(5, 5)");
         var nodes = svgGroup.selectAll("g .node").data(states).enter().append("g").attr("class", "node").attr("id", function (d) {
             return "node-" + d.label;
@@ -868,7 +869,7 @@ function CamelController($scope, workspace) {
             return d.imageUrl;
         }).attr("x", -12).attr("y", -20).attr("height", 24).attr("width", 24);
         var labels = nodes.append("text").attr("text-anchor", "middle").attr("x", 0);
-        labels.append("tspan").attr("x", 0).attr("dy", 30).text(function (d) {
+        labels.append("tspan").attr("x", 0).attr("dy", 28).text(function (d) {
             return d.label;
         });
         var labelPadding = 12;
