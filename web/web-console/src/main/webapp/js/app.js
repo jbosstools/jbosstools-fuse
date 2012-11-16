@@ -863,7 +863,7 @@ function CamelController($scope, workspace) {
             return "node-" + d.label;
         });
         var edges = svgGroup.selectAll("path .edge").data(transitions).enter().append("path").attr("class", "edge").attr("marker-end", "url(#arrowhead)");
-        var rects = nodes.append("rect");
+        var rects = nodes.append("rect").attr("rx", "10").attr("ry", "10");
         nodes.append("image").attr("xlink:href", function (d) {
             return d.imageUrl;
         }).attr("x", -12).attr("y", -20).attr("height", 24).attr("width", 24);
