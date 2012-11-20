@@ -950,31 +950,30 @@ function CamelController($scope, workspace) {
 }
 function d3ForceGraph(scope, nodes, links, canvasSelector) {
     if (typeof canvasSelector === "undefined") { canvasSelector = "#canvas"; }
+    if(scope.graphForce) {
+        scope.graphForce.stop();
+    }
     var canvasDiv = $(canvasSelector);
-    d3.layout.force().stop();
     canvasDiv.children("svg").remove();
     var width = canvasDiv.width();
     var height = canvasDiv.height();
     if(height < 300) {
-        console.log("browse thinks the height is only " + height + " so calculating offset from doc height");
         height = $(document).height() - canvasDiv.offset()['top'] - 5;
     }
-    console.log("Using width " + width + " and height " + height);
     var svg = d3.select(canvasSelector).append("svg").attr("width", width).attr("height", height);
     var force = d3.layout.force().distance(100).charge(-120 * 10).linkDistance(50).size([
         width, 
         height
     ]);
+    scope.graphForce = force;
     svg.append("svg:defs").selectAll("marker").data([
         "from"
     ]).enter().append("svg:marker").attr("id", String).attr("viewBox", "0 -5 10 10").attr("refX", 25).attr("refY", -1.5).attr("markerWidth", 6).attr("markerHeight", 6).attr("orient", "auto").append("svg:path").attr("d", "M0,-5L10,0L0,5");
     force.nodes(nodes).links(links).start();
     var link = svg.selectAll(".link").data(links).enter().append("line").attr("class", "link");
-    scope.linkElements = link;
     link.attr("class", "link from");
     link.attr("marker-end", "url(#from)");
     var node = svg.selectAll(".node").data(nodes).enter().append("g").attr("class", "node").call(force.drag);
-    scope.nodeElements = node;
     node.append("image").attr("xlink:href", function (d) {
         return d.imageUrl;
     }).attr("x", -15).attr("y", -15).attr("width", 30).attr("height", 30);

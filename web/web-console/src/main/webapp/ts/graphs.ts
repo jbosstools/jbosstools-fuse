@@ -1,43 +1,18 @@
 function d3ForceGraph(scope, nodes, links, canvasSelector = "#canvas") {
+  // lets remove the old graph first
+  if (scope.graphForce) {
+    scope.graphForce.stop();
+  }
   var canvasDiv = $(canvasSelector);
-
-  // lets remove the old diagram
-  //d3.select(canvasSelector).selectAll(".link").exit().remove();
-  //d3.select(canvasSelector).selectAll(".node").stop();
-  d3.layout.force().stop();
-  //oldNodes.exit().remove();
-
-/*
-  if (scope.linkElements) {
-    try {
-      scope.linkElements.exit().remove();
-    } catch (e) {
-      console.log("Could not remove the linkElements " + e);
-    }
-    scope.linkElements = null;
-  }
-  if (scope.nodeElements) {
-    try {
-    scope.nodeElements.exit().remove();
-    } catch (e) {
-      console.log("Could not remove the node nodeElements " + e);
-    }
-    scope.nodeElements = null;
-  }
-*/
-/*
-  d3.select(canvasSelector).selectAll(".link").exit().remove();
-  d3.select(canvasSelector).selectAll(".node").exit().remove();
-*/
   canvasDiv.children("svg").remove();
 
   var width = canvasDiv.width();
   var height = canvasDiv.height();
   if (height < 300) {
-    console.log("browse thinks the height is only " + height + " so calculating offset from doc height");
+    //console.log("browse thinks the height is only " + height + " so calculating offset from doc height");
     height = $(document).height() - canvasDiv.offset()['top'] - 5;
   }
-  console.log("Using width " + width + " and height " + height);
+  //console.log("Using width " + width + " and height " + height);
 
   var svg = d3.select(canvasSelector).append("svg")
           .attr("width", width)
@@ -49,6 +24,8 @@ function d3ForceGraph(scope, nodes, links, canvasSelector = "#canvas") {
           .charge(-120 * 10)
           .linkDistance(50)
           .size([width, height]);
+
+  scope.graphForce = force;
 
   /*
    var force = d3.layout.force()
@@ -81,8 +58,6 @@ function d3ForceGraph(scope, nodes, links, canvasSelector = "#canvas") {
           .enter().append("line")
           .attr("class", "link");
 
-  scope.linkElements = link;
-
   // draw the arrow
   link.attr("class", "link from");
 
@@ -94,8 +69,6 @@ function d3ForceGraph(scope, nodes, links, canvasSelector = "#canvas") {
           .enter().append("g")
           .attr("class", "node")
           .call(force.drag);
-
-  scope.nodeElements = node;
 
   node.append("image")
           .attr("xlink:href", function (d) {
