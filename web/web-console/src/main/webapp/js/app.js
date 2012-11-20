@@ -91,6 +91,8 @@ function SubscriberGraphController($scope, workspace) {
     };
     $scope.subscriptions = {
     };
+    $scope.producers = {
+    };
     function getOrCreate(container, key, defaultObject) {
         var value = container[key];
         var id;
@@ -104,34 +106,78 @@ function SubscriberGraphController($scope, workspace) {
         }
         return id;
     }
-    var populateGraph = function (response) {
+    var populateSubscribers = function (response) {
         var data = response.value;
         for(var key in data) {
             var subscription = data[key];
             var destinationNameText = subscription["DestinationName"];
             if(destinationNameText) {
-                var subscriptionKey = subscription["SubcriptionId"];
-                subscription["label"] = subscriptionKey;
-                subscription["imageUrl"] = "/img/activemq/listener.gif";
-                var subscriptionId = getOrCreate($scope.subscriptions, subscriptionKey, subscription);
+                var subscriptionId = null;
                 var destinationNames = destinationNameText.split(",");
                 destinationNames.forEach(function (destinationName) {
                     var id = null;
-                    if(subscription["DestinationTopic"]) {
-                        id = getOrCreate($scope.topics, destinationName, {
-                            label: destinationName,
-                            imageUrl: "/img/activemq/topic.png"
-                        });
-                    } else {
-                        id = getOrCreate($scope.queues, destinationName, {
-                            label: destinationName,
-                            imageUrl: "/img/activemq/queue.png"
+                    var isQueue = !subscription["DestinationTopic"];
+                    if(isQueue === $scope.isQueue) {
+                        if(isQueue) {
+                            id = getOrCreate($scope.queues, destinationName, {
+                                label: destinationName,
+                                imageUrl: "/img/activemq/queue.png"
+                            });
+                        } else {
+                            id = getOrCreate($scope.topics, destinationName, {
+                                label: destinationName,
+                                imageUrl: "/img/activemq/topic.png"
+                            });
+                        }
+                        if(!subscriptionId) {
+                            var subscriptionKey = subscription["ConnectionId"] + ":" + subscription["SubcriptionId"];
+                            subscription["label"] = subscriptionKey;
+                            subscription["imageUrl"] = "/img/activemq/listener.gif";
+                            subscriptionId = getOrCreate($scope.subscriptions, subscriptionKey, subscription);
+                        }
+                        $scope.links.push({
+                            source: id,
+                            target: subscriptionId
                         });
                     }
-                    $scope.links.push({
-                        source: id,
-                        target: subscriptionId
-                    });
+                });
+            }
+        }
+    };
+    var populateProducers = function (response) {
+        var data = response.value;
+        for(var key in data) {
+            var producer = data[key];
+            var destinationNameText = producer["DestinationName"];
+            if(destinationNameText) {
+                var producerId = null;
+                var destinationNames = destinationNameText.split(",");
+                destinationNames.forEach(function (destinationName) {
+                    var id = null;
+                    var isQueue = producer["DestinationQueue"];
+                    if(isQueue === $scope.isQueue) {
+                        if(isQueue) {
+                            id = getOrCreate($scope.queues, destinationName, {
+                                label: destinationName,
+                                imageUrl: "/img/activemq/queue.png"
+                            });
+                        } else {
+                            id = getOrCreate($scope.topics, destinationName, {
+                                label: destinationName,
+                                imageUrl: "/img/activemq/topic.png"
+                            });
+                        }
+                        if(!producerId) {
+                            var producerKey = producer["ProducerId"];
+                            producer["label"] = producerKey;
+                            producer["imageUrl"] = "/img/activemq/sender.gif";
+                            producerId = getOrCreate($scope.producers, producerKey, producer);
+                        }
+                        $scope.links.push({
+                            source: producerId,
+                            target: id
+                        });
+                    }
                 });
             }
         }
@@ -152,16 +198,26 @@ function SubscriberGraphController($scope, workspace) {
                     }
                 }
             }
+            $scope.isQueue = isQueue;
             var typeName;
             if(isQueue) {
                 typeName = "Queue";
             } else {
                 typeName = "Topic";
             }
-            jolokia.request({
-                type: 'read',
-                mbean: "org.apache.activemq:Type=Subscription,destinationType=" + typeName + ",*"
-            }, onSuccess(populateGraph));
+            jolokia.request([
+                {
+                    type: 'read',
+                    mbean: "org.apache.activemq:Type=Subscription,destinationType=" + typeName + ",*"
+                }, 
+                {
+                    type: 'read',
+                    mbean: "org.apache.activemq:Type=Producer,*"
+                }
+            ], onSuccess([
+                populateSubscribers, 
+                populateProducers
+            ]));
         }
     });
 }
