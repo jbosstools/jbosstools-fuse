@@ -23,6 +23,7 @@ angular.module('FuseIDE', ['ngResource']).
                   when('/browseQueue', {templateUrl: 'partials/browseQueue.html', controller: QueueController}).
                   when('/sendMessage', {templateUrl: 'partials/sendMessage.html', controller: QueueController}).
                   when('/routes', {templateUrl: 'partials/routes.html', controller: CamelController}).
+                  when('/subscribers', {templateUrl: 'partials/subscribers.html', controller: SubscriberGraphController}).
                   when('/debug', {templateUrl: 'partials/debug.html', controller: DetailController}).
                   when('/about', {templateUrl: 'partials/about.html', controller: DetailController}).
                   otherwise({redirectTo: '/attributes'});
@@ -163,6 +164,7 @@ class Folder {
   key: string = null;
   children = [];
   folderNames = [];
+  domain: string = null;
   map = {};
 
   get(key:string):Folder {
@@ -218,12 +220,16 @@ function NavBarController($scope, $location, workspace) {
       var node = workspace.selection;
       if (tree && node) {
         var folder = tree.get(objectName);
-        if (folder && node.entries) {
-          var entries = node.entries;
-          for (var key in properties) {
-            var value = properties[key];
-            if (!value || entries[key] !== value) {
-              return false;
+        if (folder) {
+          if (objectName !== node.domain) return false;
+          if (properties) {
+            var entries = node.entries;
+            if (!entries) return false;
+            for (var key in properties) {
+              var value = properties[key];
+              if (!value || entries[key] !== value) {
+                return false;
+              }
             }
           }
           return true
@@ -287,6 +293,7 @@ function MBeansController($scope, $location, workspace) {
       for (var path in mbeans) {
         var entries = {};
         var folder = tree.getOrElse(domain);
+        folder.domain = domain;
         if (!folder.key) {
           folder.key = rootId + separator + domain;
         }
@@ -306,6 +313,7 @@ function MBeansController($scope, $location, workspace) {
         var lastPath = paths.pop();
         paths.forEach(value => {
           folder = folder.getOrElse(value);
+          folder.domain = domain;
           folderNames.push(value);
           folder.folderNames = folderNames;
           folder.key = rootId + separator + folderNames.join(separator);
@@ -729,72 +737,4 @@ function ChartController($scope, $location, workspace) {
       });
     }
   });
-}
-
-
-function QueueController($scope, workspace) {
-  $scope.workspace = workspace;
-  $scope.messages = [];
-
-  var populateTable = function (response) {
-    var data = response.value;
-    $scope.messages = data;
-    $scope.$apply();
-
-    $('#grid').dataTable({
-      bPaginate: false,
-      sDom: 'Rlfrtip',
-      bDestroy: true,
-      aaData: data,
-      aoColumns: [
-        { "mDataProp": "JMSMessageID" },
-        {
-          "sDefaultContent": "",
-          "mData": null,
-          "mDataProp": "Text"
-        },
-        { "mDataProp": "JMSCorrelationID" },
-        { "mDataProp": "JMSTimestamp" },
-        { "mDataProp": "JMSDeliveryMode" },
-        { "mDataProp": "JMSReplyTo" },
-        { "mDataProp": "JMSRedelivered" },
-        { "mDataProp": "JMSPriority" },
-        { "mDataProp": "JMSXGroupSeq" },
-        { "mDataProp": "JMSExpiration" },
-        { "mDataProp": "JMSType" },
-        { "mDataProp": "JMSDestination" }
-      ]
-    });
-  };
-
-  $scope.$watch('workspace.selection', function () {
-    // TODO could we refactor the get mbean thingy??
-    var selection = workspace.selection;
-    if (selection) {
-      var mbean = selection.objectName;
-      if (mbean) {
-        var jolokia = workspace.jolokia;
-
-        jolokia.request(
-                {type: 'exec', mbean: mbean, operation: 'browse()'},
-                onSuccess(populateTable));
-      }
-    }
-  });
-
-  var sendWorked = () => {
-    console.log("Sent message!");
-  };
-
-  $scope.sendMessage = (body) => {
-    var selection = workspace.selection;
-    if (selection) {
-      var mbean = selection.objectName;
-      if (mbean) {
-        var jolokia = workspace.jolokia;
-        console.log("Sending message to destination " + mbean);
-        jolokia.execute(mbean, "sendTextMessage(java.lang.String)", body, onSuccess(sendWorked));
-      }
-    }
-  };
 }

@@ -36,6 +36,9 @@
                     <li ng-class="navClass('sendMessage')"
                         ng-show="hasDomainAndProperties('org.apache.activemq', {Type: 'Queue'})">
                         <a ng-href="#/sendMessage{{hash}}"><i class="icon-pencil"></i> Send</a></li>
+                    <li ng-class="navClass('subscribers')"
+                        ng-show="hasDomainAndProperties('org.apache.activemq')">
+                        <a ng-href="#/subscribers{{hash}}"><i class="icon-picture"></i> Diagram</a></li>
                     <li ng-class="navClass('routes')"
                         ng-show="hasDomainAndProperties('org.apache.camel', {type: 'context'})">
                         <a ng-href="#/routes{{hash}}"><i class="icon-picture"></i> Routes</a></li>
