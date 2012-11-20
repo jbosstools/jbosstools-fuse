@@ -136,6 +136,7 @@ public class Unmarshal extends AbstractNode {
 		        new UnionTypeValue("syslog", org.apache.camel.model.dataformat.SyslogDataFormat.class),
 		        new UnionTypeValue("tidyMarkup", org.apache.camel.model.dataformat.TidyMarkupDataFormat.class),
 		        new UnionTypeValue("xmlBeans", org.apache.camel.model.dataformat.XMLBeansDataFormat.class),
+		        new UnionTypeValue("xmljson", org.apache.camel.model.dataformat.XmlJsonDataFormat.class),
 		        new UnionTypeValue("xstream", org.apache.camel.model.dataformat.XStreamDataFormat.class),
 		        new UnionTypeValue("pgp", org.apache.camel.model.dataformat.PGPDataFormat.class),
 		        new UnionTypeValue("zip", org.apache.camel.model.dataformat.ZipDataFormat.class),

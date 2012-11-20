@@ -2195,6 +2195,7 @@
             <xs:element ref="tns:syslog"/>
             <xs:element ref="tns:tidyMarkup"/>
             <xs:element ref="tns:xmlBeans"/>
+            <xs:element ref="tns:xmljson"/>
             <xs:element ref="tns:xstream"/>
             <xs:element ref="tns:pgp"/>
             <xs:element ref="tns:zip"/>
@@ -2703,6 +2704,7 @@
             <xs:element ref="tns:syslog"/>
             <xs:element ref="tns:tidyMarkup"/>
             <xs:element ref="tns:xmlBeans"/>
+            <xs:element ref="tns:xmljson"/>
             <xs:element ref="tns:xstream"/>
             <xs:element ref="tns:pgp"/>
             <xs:element ref="tns:zip"/>
