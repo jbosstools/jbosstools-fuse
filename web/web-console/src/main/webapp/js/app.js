@@ -93,6 +93,10 @@ function SubscriberGraphController($scope, workspace) {
     };
     $scope.producers = {
     };
+    function matchesSelection(destinationName) {
+        var selectionDetinationName = $scope.selectionDetinationName;
+        return !selectionDetinationName || destinationName === selectionDetinationName;
+    }
     function getOrCreate(container, key, defaultObject) {
         var value = container[key];
         var id;
@@ -117,7 +121,7 @@ function SubscriberGraphController($scope, workspace) {
                 destinationNames.forEach(function (destinationName) {
                     var id = null;
                     var isQueue = !subscription["DestinationTopic"];
-                    if(isQueue === $scope.isQueue) {
+                    if(isQueue === $scope.isQueue && matchesSelection(destinationName)) {
                         if(isQueue) {
                             id = getOrCreate($scope.queues, destinationName, {
                                 label: destinationName,
@@ -155,7 +159,7 @@ function SubscriberGraphController($scope, workspace) {
                 destinationNames.forEach(function (destinationName) {
                     var id = null;
                     var isQueue = producer["DestinationQueue"];
-                    if(isQueue === $scope.isQueue) {
+                    if(isQueue === $scope.isQueue && matchesSelection(destinationName)) {
                         if(isQueue) {
                             id = getOrCreate($scope.queues, destinationName, {
                                 label: destinationName,
@@ -189,8 +193,10 @@ function SubscriberGraphController($scope, workspace) {
         var jolokia = $scope.workspace.jolokia;
         if(jolokia) {
             var selection = $scope.workspace.selection;
+            $scope.selectionDetinationName = null;
             if(selection) {
                 if(selection.entries) {
+                    $scope.selectionDetinationName = selection.entries["Destination"];
                     isQueue = selection.entries["Type"] !== "Topic";
                 } else {
                     if(selection.folderNames) {
