@@ -232,8 +232,8 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 	public ContainerTemplate getContainerTemplate() {
 		if (containerTemplate == null) {
-			containerTemplate = Containers.newContainerTemplate(container);
 			Fabric fabric = getFabric();
+			containerTemplate = Containers.newContainerTemplate(container, fabric.getUserName(), fabric.getPassword());
 			containerTemplate.setLogin(fabric.getUserName());
 			containerTemplate.setPassword(fabric.getPassword());
 		}
