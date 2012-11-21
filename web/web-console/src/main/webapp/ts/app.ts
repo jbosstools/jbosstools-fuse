@@ -259,6 +259,11 @@ function MBeansController($scope, $location, workspace) {
   $scope.workspace = workspace;
   $scope.tree = new Folder('MBeans');
 
+  $scope.$on("$routeChangeSuccess", function (event, current, previous) {
+    // lets do this asynchronously to avoid Error: $digest already in progress
+    setTimeout(updateSelectionFromURL, 50);
+  });
+
   $scope.select = (node) => {
     $scope.workspace.selection = node;
     var key = null;
@@ -270,17 +275,15 @@ function MBeansController($scope, $location, workspace) {
       q['nid'] = key
     }
     $location.search(q);
-    // we may want to choose different views based on the kind of selection
-    /*
-     var mbean = node['objectName']
-     if (mbean && mbean === logQueryMBean) {
-     $location.path('/logs');
-     } else {
-     $location.path('/attributes');
-     }
-     */
     $scope.$apply();
   };
+
+  function updateSelectionFromURL() {
+    var key = $location.search()['nid'];
+    if (key) {
+      $("#jmxtree").dynatree("getTree").activateKey(key);
+    }
+  }
 
   function populateTree(response) {
     var rootId = 'root';
@@ -348,10 +351,7 @@ function MBeansController($scope, $location, workspace) {
       debugLevel: 0,
       children: tree.children
     });
-    var key = $location.search()['nid'];
-    if (key) {
-      $("#jmxtree").dynatree("getTree").activateKey(key);
-    }
+    updateSelectionFromURL();
   }
 
   var jolokia = workspace.jolokia;

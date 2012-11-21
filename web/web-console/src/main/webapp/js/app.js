@@ -484,6 +484,9 @@ function PreferencesController($scope, workspace) {
 function MBeansController($scope, $location, workspace) {
     $scope.workspace = workspace;
     $scope.tree = new Folder('MBeans');
+    $scope.$on("$routeChangeSuccess", function (event, current, previous) {
+        setTimeout(updateSelectionFromURL, 50);
+    });
     $scope.select = function (node) {
         $scope.workspace.selection = node;
         var key = null;
@@ -498,6 +501,12 @@ function MBeansController($scope, $location, workspace) {
         $location.search(q);
         $scope.$apply();
     };
+    function updateSelectionFromURL() {
+        var key = $location.search()['nid'];
+        if(key) {
+            $("#jmxtree").dynatree("getTree").activateKey(key);
+        }
+    }
     function populateTree(response) {
         var rootId = 'root';
         var separator = '_';
@@ -563,10 +572,7 @@ function MBeansController($scope, $location, workspace) {
             debugLevel: 0,
             children: tree.children
         });
-        var key = $location.search()['nid'];
-        if(key) {
-            $("#jmxtree").dynatree("getTree").activateKey(key);
-        }
+        updateSelectionFromURL();
     }
     var jolokia = workspace.jolokia;
     jolokia.request({
