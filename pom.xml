@@ -165,13 +165,4 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <profiles>
-    <profile>
-      <id>web</id>
-      <modules>
-        <module>web</module>
-      </modules>
-    </profile>
-  </profiles>
 </project>
