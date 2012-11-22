@@ -289,6 +289,7 @@ public class FabricConnector {
 				}
 			};
 			FabricPlugin.getLogger().info("Trying to connect to fabric on: " + url);
+			factory.setPassword(details.getZkPassword());
 			factory.setConnectString(url);
 			try {
 				answer = factory.getObject();

@@ -20,6 +20,7 @@ public class FabricDetails extends ConfigurationDetails {
 	private String urls;
 	private String userName = "admin";
 	private String password = "admin";
+	private String zkPassword;
 
 	public static void reloadDetailList() {
 		fabricDetailList.clear();
@@ -72,6 +73,7 @@ public class FabricDetails extends ConfigurationDetails {
 		this.urls = node.get("urls", "");
 		this.userName = node.get("userName", "admin");
 		this.password = node.get("password", "admin");
+		this.zkPassword = node.get("zkPassword", "");
 	}
 
 	public static FabricDetails copy(FabricDetails copy) {
@@ -86,6 +88,7 @@ public class FabricDetails extends ConfigurationDetails {
 		node.put("urls", urls);
 		node.put("userName", userName);
 		node.put("password", password);
+		node.put("zkPassword", zkPassword);
 	}
 
 	@Override
@@ -125,5 +128,17 @@ public class FabricDetails extends ConfigurationDetails {
 		this.password = password;
 	}
 
-
+	/**
+	 * @param zkPassword the zkPassword to set
+	 */
+	public void setZkPassword(String zkPassword) {
+		this.zkPassword = zkPassword;
+	}
+	
+	/**
+	 * @return the zkPassword
+	 */
+	public String getZkPassword() {
+		return this.zkPassword;
+	}
 }

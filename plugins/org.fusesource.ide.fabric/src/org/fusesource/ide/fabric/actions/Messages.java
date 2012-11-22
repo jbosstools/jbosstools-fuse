@@ -208,6 +208,8 @@ public final class Messages extends NLS {
 	public static String fabricUserNameTooltip;
 	public static String fabricPasswordLabel;
 	public static String fabricPasswordTooltip;
+	public static String zkPasswordLabel;
+	public static String zkPasswordTooltip;
 
 	public static String createVersionMenuLabel;
 	public static String createVersionDescription;
