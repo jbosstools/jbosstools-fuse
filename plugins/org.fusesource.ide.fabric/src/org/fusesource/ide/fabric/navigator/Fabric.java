@@ -28,6 +28,7 @@ import org.fusesource.fabric.api.FabricService;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.fabric.api.ProfileStatus;
 import org.fusesource.fabric.api.Version;
+import org.fusesource.fabric.zookeeper.IZKClient;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.commons.tree.GraphableNode;
@@ -52,7 +53,6 @@ import org.fusesource.ide.fabric.views.logs.FabricLogBrowser;
 import org.fusesource.ide.fabric.views.logs.HasLogBrowser;
 import org.fusesource.ide.fabric.views.logs.ILogBrowser;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
-import org.fusesource.fabric.zookeeper.IZKClient;
 
 import com.google.common.base.Objects;
 
@@ -320,7 +320,7 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 	}
 
 	public void setConnector(FabricConnector conn) {
-		if (conn == null) {
+		if (conn == null && this.connector != null) {
 			this.connector.dispose();
 		}
 		this.connector = conn;
@@ -520,7 +520,10 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 
 	public void onDisconnect() {
 		// nothing to do
-		getConnector().dispose();
+		FabricConnector conn = getConnector();
+		if (conn != null) {
+			conn.dispose();
+		}
 		setConnector(null);
 		refresh();
 	}

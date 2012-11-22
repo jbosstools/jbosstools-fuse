@@ -22,13 +22,12 @@ import org.fusesource.fabric.service.jclouds.firewall.internal.Ec2FirewallSuppor
 import org.fusesource.fabric.service.jclouds.firewall.internal.FirewallManagerFactoryImpl;
 import org.fusesource.fabric.service.jclouds.modules.ZookeeperCredentialStore;
 import org.fusesource.fabric.service.ssh.SshContainerProvider;
+import org.fusesource.fabric.zookeeper.IZKClient;
 import org.fusesource.fabric.zookeeper.spring.ZKClientFactoryBean;
 import org.fusesource.ide.commons.Bundles;
 import org.fusesource.ide.fabric.actions.FabricDetails;
 import org.fusesource.ide.fabric.actions.jclouds.JClouds;
 import org.fusesource.ide.fabric.navigator.Fabric;
-import org.fusesource.fabric.zookeeper.IZKClient;
-import org.fusesource.fabric.zookeeper.internal.ZKClient;
 import org.linkedin.zookeeper.client.LifecycleListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
@@ -324,16 +323,23 @@ public class FabricConnector {
 			FabricServiceImpl impl = (FabricServiceImpl) fabricService;
 			IZKClient zooKeeper = impl.getZooKeeper();
 			try {
-				factory.destroy();
-				factory = null;
+				if (factory != null) {
+					factory.destroy();
+					factory = null;
+				}
 
+				// TODO destroy() has now gone I think
+				zooKeeper.close();
+
+				/*
 				// destroy() works better if its not connected
 				if (zooKeeper instanceof ZKClient) {
 					ZKClient zkclient = (ZKClient) zooKeeper;
-					zooKeeper.close();
+					zooKeeper.destroy();
 				} else {
 					zooKeeper.close();
 				}
+				 */
 			} catch (Exception e) {
 				FabricPlugin.getLogger().warning("Failed to disconnect from ZooKeeper for " + details + ". " + e, e);
 			}
