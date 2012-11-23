@@ -447,6 +447,9 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 					.name(name)
 					.parent(getId())
 					.zookeeperUrl(fabricService.getZookeeperUrl())
+					.zookeeperPassword(getFabric().getDetails().getZkPassword())
+					.jmxUser(getFabric().getDetails().getUserName())
+					.jmxPassword(getFabric().getDetails().getPassword())
 					.proxyUri(fabricService.getMavenRepoURI());
 
 			CreateContainerMetadata[] newContainers = fabricService.createContainers(options);
