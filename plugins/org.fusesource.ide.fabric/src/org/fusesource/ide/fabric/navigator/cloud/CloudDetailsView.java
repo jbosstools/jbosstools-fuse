@@ -16,7 +16,13 @@ public class CloudDetailsView {
 	}
 
 	public URI getApiDocumentation() {
-		return getProvider().getApiMetadata().getDocumentation();
+		if (getProvider() != null) {
+			return getProvider().getApiMetadata().getDocumentation();
+		} else if (getApi() != null) {
+			return getApi().getDocumentation();
+		} else {
+			return null;
+		}
 	}
 
 	public URI getHomepage() {
@@ -61,6 +67,14 @@ public class CloudDetailsView {
 
 	public String getProviderId() {
 		return details.getProviderId();
+	}
+	
+	public String getApiName() {
+		return details.getApiName();
+	}
+
+	public String getApiId() {
+		return details.getApiId();
 	}
 
 

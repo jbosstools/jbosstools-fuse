@@ -84,11 +84,37 @@ public class CloudDetailsTable extends TableViewSupport {
 			public Object apply(Object element) {
 				CloudDetails exchange = CloudDetails.asCloudDetails(element);
 				if (exchange != null) {
+					return exchange.getApiName();
+				}
+				return null;
+			}
+		};
+		column = addColumnFunction(bounds, column, function, "Api");
+		
+		function = new Function1() {
+			@Override
+			public Object apply(Object element) {
+				CloudDetails exchange = CloudDetails.asCloudDetails(element);
+				if (exchange != null) {
+					return exchange.getEndpoint();
+				}
+				return null;
+			}
+		};
+		column = addColumnFunction(bounds, column, function, "Endpoint");
+		
+		function = new Function1() {
+			@Override
+			public Object apply(Object element) {
+				CloudDetails exchange = CloudDetails.asCloudDetails(element);
+				if (exchange != null) {
 					return exchange.getIdentity();
 				}
 				return null;
 			}
 		};
+		
+		
 		column = addColumnFunction(bounds, column, function, "Identity");
 	}
 

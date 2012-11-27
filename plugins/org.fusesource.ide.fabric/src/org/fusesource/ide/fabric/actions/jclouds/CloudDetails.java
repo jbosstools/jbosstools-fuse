@@ -108,6 +108,7 @@ public class CloudDetails extends ConfigurationDetails {
         this.ownerId = node.get(PROPERTY_OWNER_ID, "");
         setProvider(JClouds.getProvider(node.get(PROPERTY_PROVIDER_ID, null)));
         setApi(JClouds.getApi(node.get(PROPERTY_API_ID, null)));
+        setEndpoint(node.get(PROPERTY_ENDPOINT, null));
         this.settings.clear();
         try {
             for (String keyName : node.keys()) {
@@ -125,7 +126,7 @@ public class CloudDetails extends ConfigurationDetails {
      */
     public CloudDetailsKey getCacheKey() {
         if (key == null) {
-            key = new CloudDetailsKey(identity, credential, ownerId, providerId);
+            key = new CloudDetailsKey(identity, credential, ownerId, providerId, apiId, endpoint);
         }
         return key;
     }
@@ -139,12 +140,27 @@ public class CloudDetails extends ConfigurationDetails {
     protected void store(Preferences node) {
         node.put(PROPERTY_NAME, name);
         node.put(PROPERTY_IDENTITY, identity);
-        node.put(PROPERTY_PROVIDER_ID, providerId);
         if (storeCredential) {
             node.put(PROPERTY_CREDENTIAL, credential);
         } else {
             node.remove(PROPERTY_CREDENTIAL);
         }
+
+		if (Strings.isBlank(providerId)) {
+			node.remove(PROPERTY_PROVIDER_ID);
+		} else {
+			node.put(PROPERTY_PROVIDER_ID, providerId);
+		}
+		if (Strings.isBlank(apiId)) {
+			node.remove(PROPERTY_API_ID);
+		} else {
+			node.put(PROPERTY_API_ID, apiId);
+		}
+		if (Strings.isBlank(endpoint)) {
+          node.remove(PROPERTY_ENDPOINT);
+		} else {
+			node.put(PROPERTY_ENDPOINT, endpoint);
+		}
         if (Strings.isBlank(ownerId)) {
             node.remove(PROPERTY_OWNER_ID);
         } else {
@@ -202,11 +218,23 @@ public class CloudDetails extends ConfigurationDetails {
     }
 
     public String getEndpoint() {
+    	if (endpoint != null) {
         return endpoint;
+    	} else if (getProvider() != null) {
+    		return getProvider().getEndpoint();
+    	} else if (getApi() != null && getApi().getDefaultEndpoint().isPresent()) {
+    		return getApi().getDefaultEndpoint().get();
+    	} else {
+    		return null;
+    	}
     }
 
     public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+        if (!endpoint.equals(this.endpoint)) {
+            Object oldValue = this.endpoint;
+            this.endpoint = endpoint;
+            firePropertyChange(PROPERTY_ENDPOINT, oldValue, endpoint);
+        }
     }
 
     public void addSetting(String key, String value) {
@@ -277,7 +305,27 @@ public class CloudDetails extends ConfigurationDetails {
     public String getProviderId() {
         return providerId;
     }
+    
+	public String getApiName() {
+		if (getApi() != null) {
+			return JClouds.text(getApi());
+		} else if (getProvider() != null) {
+			return JClouds.text(getProvider().getApiMetadata());
+		} else {
+			return null;
+		}
+	}
 
+    public String getApiId() {
+    	if (apiId != null) {
+			return apiId;
+		} else if (getProvider() != null) {
+			return getProvider().getApiMetadata().getId();
+		} else {
+			return null;
+		}
+    }    
+    
     public static ComputeService createComputeService(CloudDetails details) {
         ProviderMetadata selectedProvider = details.getProvider();
         ApiMetadata selectedApi = details.getApi();
