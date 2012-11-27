@@ -92,6 +92,7 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					CreateJCloudsContainerOptions args = form.getCreateCloudArguments();
 					args.setName(agentName);
 					args.setEnsembleServer(true);
+					args.adminAccess(true);
 					//args.setResolver(ZkDefs.PUBLIC_IP);
 					String proxyUri = Fabrics.DEFAULT_MAVEN_PROXY_URI;
 					if (form instanceof CloudFabricDetailsForm) {

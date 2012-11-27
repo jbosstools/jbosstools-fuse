@@ -8,6 +8,7 @@ package org.fusesource.ide.fabric.actions.jclouds;
 
 
 
+import com.google.common.collect.Lists;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -42,7 +43,10 @@ public class CloudDetailsForm extends FormSupport {
 
     @Override
     protected boolean isMandatory(Object bean, String propertyName) {
-        return !Objects.equal(propertyName, "ownerId");
+        return !Objects.equal(propertyName, "ownerId") &&
+        	   !Objects.equal(propertyName, "provider") &&
+        	   !Objects.equal(propertyName, "api") &&
+        	   !Objects.equal(propertyName, "endpoint");
     }
 
     public CloudDetails getDetails() {
@@ -88,6 +92,7 @@ public class CloudDetailsForm extends FormSupport {
         createBeanPropertyTextField(inner, details, "credential", Messages.jclouds_credentialLabel, Messages.jclouds_credentialTooltip, SWT.PASSWORD);
         createBeanPropertyTextField(inner, details, "ownerId", Messages.jclouds_ownerLabel, Messages.jclouds_ownerTooltip, SWT.PASSWORD);
 
+        endpointField.setEnabled(false);
         apiNameField.addPostSelectionChangedListener(new ISelectionChangedListener() {
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
@@ -100,7 +105,7 @@ public class CloudDetailsForm extends FormSupport {
 
     protected ComboViewer createBeanPropertyCombo(Composite parent, Object bean, String propertyName, String labelText, String tooltip, Iterable<?> input) {
         ComboViewer answer = createBeanPropertyCombo(parent, bean, propertyName, labelText, tooltip, SWT.READ_ONLY);
-        answer.setInput(input);
+        answer.setInput(Lists.newArrayList(input));
         answer.setLabelProvider(JCloudsLabelProvider.getInstance());
         return answer;
     }

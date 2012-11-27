@@ -3,6 +3,7 @@ package org.fusesource.ide.fabric.navigator.cloud;
 import java.net.URI;
 
 import org.fusesource.ide.fabric.actions.jclouds.CloudDetails;
+import org.jclouds.apis.ApiMetadata;
 import org.jclouds.providers.ProviderMetadata;
 
 
@@ -19,12 +20,15 @@ public class CloudDetailsView {
 	}
 
 	public URI getHomepage() {
+		if (getProvider() != null) {
 		return getProvider().getHomepage().orNull();
+		} else {
+			return null;
+		}
 	}
 
 	public String getIdentityName() {
-		//return getProvider().getIdentityName();
-		return getProvider().getName();
+		return getIdentityName();
 	}
 
 	public String getType() {
@@ -33,6 +37,10 @@ public class CloudDetailsView {
 
 	public ProviderMetadata getProvider() {
 		return details.getProvider();
+	}
+	
+	public ApiMetadata getApi() {
+		return details.getApi();
 	}
 
 	public String getName() {

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import com.google.common.reflect.TypeToken;
 import org.fusesource.fabric.service.jclouds.JcloudsContainerProvider;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.Strings;
@@ -30,19 +31,21 @@ import org.jclouds.providers.Providers;
 public class JClouds {
 
     public static Iterable<ProviderMetadata> getComputeProviders() {
-        return Providers.viewableAs(ComputeServiceContext.class);
+        return Providers.viewableAs(TypeToken.of(ComputeServiceContext.class));
     }
 
-    public static Iterable<ApiMetadata> getComputeApis() {
-        return Apis.viewableAs(ComputeServiceContext.class);
+    public static Iterable<ApiMetadata> getComputeApis() {        
+        return Apis.viewableAs(TypeToken.of(ComputeServiceContext.class));
     }
 
     public static ClassLoader getJCloudsClassLoader() {
         return ProviderMetadata.class.getClassLoader();
     }
 
-
     public static String text(ComputeMetadata md) {
+        return Strings.getOrElse(md.getName(), md.getId());
+    }
+    public static String text(ApiMetadata md) {
         return Strings.getOrElse(md.getName(), md.getId());
     }
 

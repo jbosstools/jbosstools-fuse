@@ -3,6 +3,7 @@ package org.fusesource.ide.fabric.actions.jclouds;
 import static org.fusesource.ide.fabric.actions.jclouds.JClouds.text;
 
 import org.eclipse.jface.viewers.LabelProvider;
+import org.jclouds.apis.ApiMetadata;
 import org.jclouds.compute.domain.ComputeMetadata;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.ResourceMetadata;
@@ -19,6 +20,8 @@ public class JCloudsLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element instanceof ProviderMetadata) {
 			return JClouds.text((ProviderMetadata) element);
+		} else if (element instanceof ApiMetadata) {
+			return JClouds.text((ApiMetadata) element);
 		} else if (element instanceof Location) {
 			return text((Location) element);
 		} else if (element instanceof ComputeMetadata) {
