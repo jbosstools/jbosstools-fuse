@@ -161,8 +161,6 @@ public class FabricConnector {
 						FirewallManagerFactoryImpl firewallManagerFactory = new FirewallManagerFactoryImpl();
 						firewallManagerFactory.bind(new Ec2FirewallSupport());
 						jclouds.setFirewallManagerFactory(firewallManagerFactory);
-
-						JClouds.bindProviders(jclouds);
 						impl.registerProvider("jclouds", jclouds);
 					}
 				}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2010 JVM Monitor project. All rights reserved.
- * 
+ *
  * This code is distributed under the terms of the Eclipse Public License v1.0
  * which is available at http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
@@ -87,6 +87,12 @@ public final class Messages extends NLS {
 
 	public static String jclouds_providerNameLabel;
 	public static String jclouds_providerNameTooltip;
+
+    public static String jclouds_apiNameLabel;
+    public static String jclouds_apiNameTooltip;
+
+    public static String jclouds_endpointLabel;
+    public static String jclouds_endpointTooltip;
 
 	public static String jclouds_imageIdLabel;
 	public static String jclouds_imageIdTooltip;
@@ -239,7 +245,7 @@ public final class Messages extends NLS {
 
 	public static String defaultsLabel;
 	public static String defaultsTooltip;
-	
+
 	public static String clearLabel;
 	public static String clearTooltip;
 }
