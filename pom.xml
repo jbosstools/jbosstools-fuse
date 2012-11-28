@@ -44,6 +44,7 @@
       <fabric-version>99-master-SNAPSHOT</fabric-version>
 -->
     <fabric-version>7.1.0.fuse-041</fabric-version>
+    <fabric-jclouds-version>99-master-SNAPSHOT</fabric-jclouds-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
 
