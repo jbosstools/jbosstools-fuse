@@ -1,122 +1,122 @@
-#
-# NOTE - this file is auto-generated using Scalate. 
-#
-# DO NOT EDIT!
-#
-
-
-    
-Aggregate otherAttributes
-      
-AOP otherAttributes
-      
-Bean otherAttributes
-      
-Catch otherAttributes
-          
-Choice otherAttributes
-          
-ConvertBody otherAttributes
-      
-Delay otherAttributes
-      
-DynamicRouter otherAttributes
-      
-Enrich otherAttributes
-      
-Filter otherAttributes
-      
-Finally otherAttributes
-      
-IdempotentConsumer otherAttributes
-      
-InOnly otherAttributes
-      
-InOut otherAttributes
-      
-Intercept otherAttributes
-      
-InterceptFrom otherAttributes
-      
-InterceptSendToEndpoint otherAttributes
-      
-LoadBalance otherAttributes
-          
-Log otherAttributes
-      
-Loop otherAttributes
-      
-Marshal otherAttributes
-          
-Multicast otherAttributes
-      
-OnCompletion otherAttributes
-          
-OnException otherAttributes
-              
-Otherwise otherAttributes
-      
-Pipeline otherAttributes
-      
-Policy otherAttributes
-      
-PollEnrich otherAttributes
-      
-Process otherAttributes
-      
-RecipientList otherAttributes
-      
-RemoveHeader otherAttributes
-      
-RemoveHeaders otherAttributes
-      
-RemoveProperty otherAttributes
-      
-Resequence otherAttributes
-          
-Rollback otherAttributes
-      
-Route otherAttributes
-      
-RoutingSlip otherAttributes
-      
-Sampling otherAttributes
-      
-SetBody otherAttributes
-      
-SetExchangePattern otherAttributes
-      
-SetFaultBody otherAttributes
-      
-SetHeader otherAttributes
-      
-SetOutHeader otherAttributes
-      
-SetProperty otherAttributes
-      
-Sort otherAttributes
-      
-Split otherAttributes
-      
-Stop otherAttributes
-      
-Threads otherAttributes
-      
-Throttle otherAttributes
-      
-ThrowException otherAttributes
-      
-Transacted otherAttributes
-      
-Transform otherAttributes
-      
-Try otherAttributes
-      
-Unmarshal otherAttributes
-          
-Validate otherAttributes
-      
-When otherAttributes
-      
-WireTap otherAttributes
+#
+# NOTE - this file is auto-generated using Scalate. 
+#
+# DO NOT EDIT!
+#
+
+
+    
+Aggregate otherAttributes
+      
+AOP otherAttributes
+      
+Bean otherAttributes
+      
+Catch otherAttributes
+          
+Choice otherAttributes
+          
+ConvertBody otherAttributes
+      
+Delay otherAttributes
+      
+DynamicRouter otherAttributes
+      
+Enrich otherAttributes
+      
+Filter otherAttributes
+      
+Finally otherAttributes
+      
+IdempotentConsumer otherAttributes
+      
+InOnly otherAttributes
+      
+InOut otherAttributes
+      
+Intercept otherAttributes
+      
+InterceptFrom otherAttributes
+      
+InterceptSendToEndpoint otherAttributes
+      
+LoadBalance otherAttributes
+          
+Log otherAttributes
+      
+Loop otherAttributes
+      
+Marshal otherAttributes
+          
+Multicast otherAttributes
+      
+OnCompletion otherAttributes
+          
+OnException otherAttributes
+              
+Otherwise otherAttributes
+      
+Pipeline otherAttributes
+      
+Policy otherAttributes
+      
+PollEnrich otherAttributes
+      
+Process otherAttributes
+      
+RecipientList otherAttributes
+      
+RemoveHeader otherAttributes
+      
+RemoveHeaders otherAttributes
+      
+RemoveProperty otherAttributes
+      
+Resequence otherAttributes
+          
+Rollback otherAttributes
+      
+Route otherAttributes
+      
+RoutingSlip otherAttributes
+      
+Sampling otherAttributes
+      
+SetBody otherAttributes
+      
+SetExchangePattern otherAttributes
+      
+SetFaultBody otherAttributes
+      
+SetHeader otherAttributes
+      
+SetOutHeader otherAttributes
+      
+SetProperty otherAttributes
+      
+Sort otherAttributes
+      
+Split otherAttributes
+      
+Stop otherAttributes
+      
+Threads otherAttributes
+      
+Throttle otherAttributes
+      
+ThrowException otherAttributes
+      
+Transacted otherAttributes
+      
+Transform otherAttributes
+      
+Try otherAttributes
+      
+Unmarshal otherAttributes
+          
+Validate otherAttributes
+      
+When otherAttributes
+      
+WireTap otherAttributes
   
