@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.rcp.feature"
       label="Fuse IDE RCP"
-      version="7.1.0.qualifier"
+      version="7.1.29"
       provider-name="Red Hat, Inc.">
 
    <description url="http://fusesource.com/products/fuse-ide-camel/">
@@ -95,7 +95,7 @@ trademark of Linus Torvalds. All other trademarks are the property of their resp
          id="org.fusesource.ide.rcp.branding"
          download-size="0"
          install-size="0"
-         version="7.1.0.qualifier"
+         version="7.1.29"
          unpack="false"/>
 
 </feature>
