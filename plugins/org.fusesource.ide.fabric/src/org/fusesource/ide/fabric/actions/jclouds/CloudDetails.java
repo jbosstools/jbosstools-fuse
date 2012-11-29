@@ -331,6 +331,9 @@ public class CloudDetails extends ConfigurationDetails {
         ProviderMetadata selectedProvider = details.getProvider();
         ApiMetadata selectedApi = details.getApi();
 
+        if (selectedProvider == JClouds.EMPTY_PROVIDER && 
+        	selectedApi == JClouds.EMPTY_API) return null;
+        
         String identity = details.getIdentity();
         String credential = details.getCredential();
         String endpoint = details.getEndpoint();
@@ -360,10 +363,12 @@ public class CloudDetails extends ConfigurationDetails {
 
 
             ContextBuilder builder = null;
-            if (selectedProvider != null) {
+            if (selectedProvider != null && selectedProvider != JClouds.EMPTY_PROVIDER) {
                 builder = ContextBuilder.newBuilder(selectedProvider);
-            } else if (selectedApi != null) {
+            } else if (selectedApi != null && selectedApi != JClouds.EMPTY_API) {
                 builder = ContextBuilder.newBuilder(selectedApi);
+            } else {
+            	return null;
             }
 
             if (endpoint != null && !endpoint.isEmpty()) {

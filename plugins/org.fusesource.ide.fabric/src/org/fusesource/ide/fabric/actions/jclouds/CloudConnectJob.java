@@ -40,6 +40,7 @@ public class CloudConnectJob extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
+		if (details.getApi() == JClouds.EMPTY_API && details.getProvider() == JClouds.EMPTY_PROVIDER) return Status.OK_STATUS;
 		try {
 			ComputeService computeClient = cacheData.getComputeClient();
 			if (computeClient == null) {

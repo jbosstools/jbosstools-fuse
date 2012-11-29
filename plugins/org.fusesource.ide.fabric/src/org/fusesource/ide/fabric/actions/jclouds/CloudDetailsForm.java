@@ -19,6 +19,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.commons.ui.ICanValidate;
+import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.ui.form.FormSupport;
 import org.fusesource.ide.fabric.actions.Messages;
 import org.jclouds.apis.ApiMetadata;
@@ -45,7 +46,7 @@ public class CloudDetailsForm extends FormSupport {
     protected boolean isMandatory(Object bean, String propertyName) {
         return !Objects.equal(propertyName, "ownerId") &&
         	   !Objects.equal(propertyName, "provider") &&
-        	   !Objects.equal(propertyName, "api") &&
+	           !Objects.equal(propertyName, "api") &&
         	   !Objects.equal(propertyName, "endpoint");
     }
 
@@ -76,6 +77,25 @@ public class CloudDetailsForm extends FormSupport {
         providerNameField = createBeanPropertyCombo(inner, details, "provider", Messages.jclouds_providerNameLabel, Messages.jclouds_providerNameTooltip, JClouds.getComputeProviders());
         apiNameField = createBeanPropertyCombo(inner, details, "api", Messages.jclouds_apiNameLabel, Messages.jclouds_apiNameTooltip, JClouds.getComputeApis());
 
+        providerNameField.getCombo().select(0);
+        apiNameField.getCombo().select(0);
+        
+        providerNameField.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				ProviderMetadata item = (ProviderMetadata)Selections.getFirstSelection(event.getSelection());
+				apiNameField.getCombo().setEnabled(item == JClouds.EMPTY_PROVIDER);
+				validate();
+			}
+		});
+        apiNameField.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				ApiMetadata item = (ApiMetadata)Selections.getFirstSelection(event.getSelection());
+				providerNameField.getCombo().setEnabled(item == JClouds.EMPTY_API);
+				validate();
+			}
+		});
 
         // TODO not sure why we need this :)
         ProviderMetadata provider = details.getProvider();
@@ -116,5 +136,13 @@ public class CloudDetailsForm extends FormSupport {
         CloudDetailsCachedData.getInstance(details).startLoadingDataJobs();
     }
 
-
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.commons.ui.form.FormSupport#isValid()
+     */
+    @Override
+    public boolean isValid() {
+    	ApiMetadata api = (ApiMetadata)Selections.getFirstSelection(apiNameField.getSelection());
+    	ProviderMetadata provider = (ProviderMetadata)Selections.getFirstSelection(providerNameField.getSelection());
+    	return super.isValid() && (api != JClouds.EMPTY_API || provider != JClouds.EMPTY_PROVIDER);
+    }
 }
