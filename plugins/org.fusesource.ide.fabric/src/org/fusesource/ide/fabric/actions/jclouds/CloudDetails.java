@@ -209,6 +209,7 @@ public class CloudDetails extends ConfigurationDetails {
     }
 
     public void setApi(ApiMetadata api) {
+    	if (api == null) return;
         this.apiId = JClouds.getId(api);
         if (api != this.api) {
             Object oldValue = this.api;
@@ -230,7 +231,7 @@ public class CloudDetails extends ConfigurationDetails {
     }
 
     public void setEndpoint(String endpoint) {
-        if (!endpoint.equals(this.endpoint)) {
+        if (endpoint != null && !endpoint.equals(this.endpoint)) {
             Object oldValue = this.endpoint;
             this.endpoint = endpoint;
             firePropertyChange(PROPERTY_ENDPOINT, oldValue, endpoint);

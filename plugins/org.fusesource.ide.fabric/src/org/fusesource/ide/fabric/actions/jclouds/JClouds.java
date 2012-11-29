@@ -70,11 +70,17 @@ public class JClouds {
     }
 
     public static ProviderMetadata getProvider(String providerId) {
-        return Providers.withId(providerId);
+    	if (providerId != null) {
+    		return Providers.withId(providerId);
+    	}
+    	return null;
     }
 
     public static ApiMetadata getApi(String apiId) {
-        return Apis.withId(apiId);
+        if (apiId != null) {
+        	return Apis.withId(apiId);
+        }
+        return null;
     }
 
     public static String getId(ProviderMetadata provider) {

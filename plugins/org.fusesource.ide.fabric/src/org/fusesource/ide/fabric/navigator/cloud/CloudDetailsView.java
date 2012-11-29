@@ -34,7 +34,7 @@ public class CloudDetailsView {
 	}
 
 	public String getIdentityName() {
-		return getIdentityName();
+		return getIdentity();
 	}
 
 	public String getType() {
