@@ -18,8 +18,8 @@ public class FabricDetails extends ConfigurationDetails {
 
 	private String name;
 	private String urls;
-	private String userName = "admin";
-	private String password = "admin";
+	private String userName = "";
+	private String password = "";
 	private String zkPassword;
 
 	public static void reloadDetailList() {
