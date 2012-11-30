@@ -345,7 +345,6 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		}
 		if (MarshalDefinition.class.isAssignableFrom(aClass) ||
 				UnmarshalDefinition.class.isAssignableFrom(aClass) ||
-				PolicyDefinition.class.isAssignableFrom(aClass) ||
 				TransactedDefinition.class.isAssignableFrom(aClass)) {
 			return false;
 		}
@@ -370,8 +369,9 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 * However sometimes we don't want to do that for certain nodes as they can already accept input
 	 */
 	public boolean isNextSiblingStepAddedAsNodeChild() {
+		Class<?> aClass = getCamelDefinitionClass();
 		boolean acceptOutput = canAcceptOutput();
-		return !acceptOutput;
+		return !acceptOutput || PolicyDefinition.class.isAssignableFrom(aClass);
 	}
 
 	/**
