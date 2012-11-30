@@ -22,10 +22,12 @@ import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.LoadBalanceDefinition;
 import org.apache.camel.model.MarshalDefinition;
 import org.apache.camel.model.OtherwiseDefinition;
+import org.apache.camel.model.PolicyDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.SetHeaderDefinition;
 import org.apache.camel.model.ToDefinition;
+import org.apache.camel.model.TransactedDefinition;
 import org.apache.camel.model.UnmarshalDefinition;
 import org.apache.camel.model.WhenDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
@@ -191,13 +193,13 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 * Clears any EMF / diagram related resources
 	 */
 	public void clearResources() {
-//		this.eSetDirectResource(null);
-//		//this.eSetResource(null, null);
-//
-//		Resource resource = this.eResource();
-//		if (resource != null) {
-//			throw new IllegalStateException("Should have cleared the resources!!!");
-//		}
+		//		this.eSetDirectResource(null);
+		//		//this.eSetResource(null, null);
+		//
+		//		Resource resource = this.eResource();
+		//		if (resource != null) {
+		//			throw new IllegalStateException("Should have cleared the resources!!!");
+		//		}
 
 
 		List<AbstractNode> children = getOutputs();
@@ -341,7 +343,10 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		if (BeanDefinition.class.isAssignableFrom(aClass)) {
 			return false;
 		}
-		if (MarshalDefinition.class.isAssignableFrom(aClass) || UnmarshalDefinition.class.isAssignableFrom(aClass)) {
+		if (MarshalDefinition.class.isAssignableFrom(aClass) ||
+				UnmarshalDefinition.class.isAssignableFrom(aClass) ||
+				PolicyDefinition.class.isAssignableFrom(aClass) ||
+				TransactedDefinition.class.isAssignableFrom(aClass)) {
 			return false;
 		}
 
@@ -1537,7 +1542,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
