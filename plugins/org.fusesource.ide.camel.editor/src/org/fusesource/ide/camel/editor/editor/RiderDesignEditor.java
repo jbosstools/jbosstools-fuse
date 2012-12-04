@@ -47,9 +47,9 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.platform.IDiagramEditor;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
-import org.eclipse.graphiti.ui.editor.DiagramEditorFactory;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.graphiti.ui.internal.util.gef.ScalableRootEditPartAnimated;
+import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
@@ -68,7 +68,6 @@ import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.camel.tooling.util.ValidationHandler;
 import org.fusesource.ide.camel.editor.AbstractNodes;
@@ -385,7 +384,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
 		this.editingDomain = TransactionUtil.getEditingDomain(resourceSet);
 		if (this.editingDomain == null) {
-			this.editingDomain = DiagramEditorFactory.createResourceSetAndEditingDomain();
+			this.editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain();
 
 			// TODO we need to associate the editngDomain / resourceSet now with the diagram
 			resourceSet = this.editingDomain.getResourceSet();
@@ -398,13 +397,17 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		// modification flag on the resource which will be used by the
 		// save
 		// operation to determine which resources need to be saved)
+		DiagramEditorInput input = null;
 		if (recreateModel) {
 			this.editingDomain.getCommandStack().execute(new ImportCamelContextElementsCommand(this, this.editingDomain, diagram));
-			return DiagramEditorInput.createEditorInput(diagram, this.editingDomain, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId(), false);
+			input = DiagramEditorInput.createEditorInput(diagram, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId());
+					//DiagramEditorInput.createEditorInput(diagram, this.editingDomain, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId(), false);
 		} else {
 			this.editingDomain.getCommandStack().execute(new ImportCamelContextElementsCommand(this, this.editingDomain, activeConfig.diagram));
-			return DiagramEditorInput.createEditorInput(activeConfig.diagram, this.editingDomain, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId(), false);
+			input = DiagramEditorInput.createEditorInput(activeConfig.diagram, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId());
+					//DiagramEditorInput.createEditorInput(activeConfig.diagram, this.editingDomain, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId(), false);
 		}
+		return input;
 	}
 
 	/**
@@ -1157,8 +1160,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
 
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.internal.editor.DiagramEditorInternal#getSelectionSynchronizerInternal()
+	/*
+	 * 
 	 */
 	@Override
 	public SelectionSynchronizer getSelectionSynchronizerInternal() {
@@ -1482,7 +1485,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			this.cache.clear();
 			this.model = null;
 			this.activeRoute = null;
-			this.activeConfig.input.dispose();
+//			this.activeConfig.input.dispose();
 			this.activeConfig = new DesignerCache();
 			refresh();
 		}
