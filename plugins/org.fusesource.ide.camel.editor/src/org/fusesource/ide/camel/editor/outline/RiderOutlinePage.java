@@ -102,7 +102,7 @@ public class RiderOutlinePage extends ContentOutlinePage implements INodeViewer,
 		getViewer().setEditDomain(editor.getEditDomain());
 		getViewer().setEditPartFactory(editPartFactory);
 		onModelChange();
-		editor.getSelectionSynchronizerInternal().addViewer(getViewer());
+		editor.getSelectionSyncer().addViewer(getViewer());
 
 		// Creation de la miniature.
 		Canvas canvas = new Canvas(sash, SWT.BORDER);
@@ -247,7 +247,7 @@ public class RiderOutlinePage extends ContentOutlinePage implements INodeViewer,
 	@Override
 	public void dispose() {
 		this.editor.removeModelChangeListener(this);
-		editor.getSelectionSynchronizerInternal().removeViewer(getViewer());
+		editor.getSelectionSyncer().removeViewer(getViewer());
 		if (editor.getGraphicalViewer().getControl() != null && !editor.getGraphicalViewer().getControl().isDisposed()) {
 			editor.getGraphicalViewer().getControl().removeDisposeListener(disposeListener);
 		}
