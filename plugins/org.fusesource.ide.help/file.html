@@ -1,9 +1,9 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>File</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderFileEptRef.html" title="File Endpoints"><link rel="prev" href="ActiveMQJournal.html" title="ActiveMQ Journal"><link rel="next" href="ftp.html" title="FTP/SFTP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="File"><a name="file"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>File &#8212; provides access to file systems</p></div><div class="refsection" title="Overview"><a name="d0e22311"></a><h2>Overview</h2><p>The File component provides access to file systems, allowing files to be processed by any
+   <title>File</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderFileEptRef.html" title="File Endpoints"><link rel="prev" href="ActiveMQJournal.html" title="ActiveMQ Journal"><link rel="next" href="ftp.html" title="FTP/SFTP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="File"><a name="file"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>File &#8212; provides access to file systems</p></div><div class="refsection" title="Overview"><a name="d0e23530"></a><h2>Overview</h2><p>The File component provides access to file systems, allowing files to be processed by any
       other Apache Camel components or messages from other components to be
-      saved to disk.</p></div><div class="refsection" title="URI format"><a name="d0e22316"></a><h2>URI format</h2><p>The URI format for a file endpoint is one of:</p><pre class="programlisting">file:<em class="replaceable"><code>directoryName</code></em>[?<em class="replaceable"><code>options</code></em>]
-file://<em class="replaceable"><code>directoryName</code></em>[?<em class="replaceable"><code>options</code></em>]</pre></div><div class="refsection" title="Common options"><a name="d0e22335"></a><h2>Common options</h2><p><a class="xref" href="file.html#FileRefComOptsTbl" title="Table&nbsp;7.&nbsp;Common file options">Table&nbsp;7, &#8220;Common file options&#8221;</a> list the options that can be set on any file 
+      saved to disk.</p></div><div class="refsection" title="URI format"><a name="d0e23535"></a><h2>URI format</h2><p>The URI format for a file endpoint is one of:</p><pre class="programlisting">file:<em class="replaceable"><code>directoryName</code></em>[?<em class="replaceable"><code>options</code></em>]
+file://<em class="replaceable"><code>directoryName</code></em>[?<em class="replaceable"><code>options</code></em>]</pre></div><div class="refsection" title="Common options"><a name="d0e23554"></a><h2>Common options</h2><p><a class="xref" href="file.html#FileRefComOptsTbl" title="Table&nbsp;7.&nbsp;Common file options">Table&nbsp;7, &#8220;Common file options&#8221;</a> list the options that can be set on any file 
     endpoint.</p><div class="table"><a name="FileRefComOptsTbl"></a><p class="title"><b>Table&nbsp;7.&nbsp;Common file options</b></p><div class="table-contents"><table summary="Common file options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default Value</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">autoCreate</code>
         </td><td><code class="literal">true</code>
         </td><td> Automatically create missing directories in the file's pathname. For the file consumer,
@@ -26,15 +26,16 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
           today's file using the file language syntax: 
           <code class="code">mydata-${date:now:yyyyMMdd}.txt</code>.</td></tr><tr><td><code class="literal">flatten</code>
         </td><td><code class="literal">false</code>
-        </td><td> Flatten is used to flatten the file name path to strip any leading paths, so it's just
-          the file name. This allows you to consume recursively into sub-directories, but when you
-          eg write the files to another directory they will be written in a single directory.
-          Setting this to <code class="literal">true</code> on the producer enforces that any file name
-          recived in <code class="literal">CamelFileName</code> header will be stripped for any leading paths.
-        </td></tr><tr><td><code class="literal">charset</code>
+        </td><td> Flatten is used to flatten the file name path to strip any leading paths, so it's
+                            just the file name. This allows you to consume recursively into
+                            sub-directories, but when you eg write the files to another directory
+                            they will be written in a single directory. Setting this to
+                                <code class="literal">true</code> on the producer enforces that any file name
+                            received in <code class="literal">CamelFileName</code> header will be stripped for
+                            any leading paths. </td></tr><tr><td><code class="literal">charset</code>
         </td><td><code class="literal">null</code>
         </td><td>Specifies the encoding of the file, and camel will set the <code class="code">Exchange.CHARSET_NAME</code> 
-          property with the value.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Consumer options"><a name="d0e22443"></a><h2>Consumer options</h2><p><a class="xref" href="file.html#FileRefConOptsTbl" title="Table&nbsp;8.&nbsp;File consumer options">Table&nbsp;8, &#8220;File consumer options&#8221;</a> list the options that can be set on a file consuming 
+          property with the value.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Consumer options"><a name="d0e23662"></a><h2>Consumer options</h2><p><a class="xref" href="file.html#FileRefConOptsTbl" title="Table&nbsp;8.&nbsp;File consumer options">Table&nbsp;8, &#8220;File consumer options&#8221;</a> list the options that can be set on a file consuming 
     endpoint.</p><div class="table"><a name="FileRefConOptsTbl"></a><p class="title"><b>Table&nbsp;8.&nbsp;File consumer options</b></p><div class="table-contents"><table summary="File consumer options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default Value</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">initialDelay</code>
         </td><td><code class="literal">1000</code>
         </td><td> Milliseconds before polling the file/directory starts. </td></tr><tr><td><code class="literal">delay</code>
@@ -68,7 +69,16 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
         </td><td><code class="literal">null</code>
         </td><td> Is used to include files, if filename matches the regex pattern. </td></tr><tr><td><code class="literal">exclude</code>
         </td><td><code class="literal">null</code>
-        </td><td> Is used to exclude files, if filename matches the regex pattern. </td></tr><tr><td><code class="literal">idempotent</code>
+        </td><td> Is used to exclude files, if filename matches the regex pattern.</td></tr><tr><td><code class="literal">antInclude</code>
+              </td><td><code class="literal">null</code>
+              </td><td>Ant-style filter inclusion. For example, <code class="code">antInclude=*/.txt</code>. You
+                            can use comma-delimited format to specify multiple inclusion. This
+                            option is also available in the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</td></tr><tr><td><code class="literal">antExclude</code>
+              </td><td><code class="literal">null</code>
+              </td><td>Ant-style filter exclusion. For example, <code class="code">antExclude=*/.txt</code>.
+                  <code class="literal">antExclude</code> takes precedence over <code class="literal">antInclude</code> when both are used. You can
+                            use comma-delimited format to specify multiple exclusions. This option
+                            is also available in the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</td></tr><tr><td><code class="literal">idempotent</code>
         </td><td><code class="literal">false</code>
         </td><td> Option to use the Idempotent Consumer EIP pattern
           to let Apache Camel skip already processed files. Will by default use a memory based LRUCache
@@ -85,12 +95,15 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
           repository is used to account the current in progress files being consumed. By default a
           memory based repository is used. </td></tr><tr><td><code class="literal">filter</code>
         </td><td><code class="literal">null</code>
-        </td><td> Pluggable filter as a
-            <code class="interfacename">GenericFileFilter</code> class. Will skip
-          files if filter returns <code class="literal">false</code> in its <code class="methodname">accept()</code>
-          method. Apache Camel also ships with an ANT path matcher
-          filter in the <code class="literal">camel-spring</code> component. More details in section below.
-        </td></tr><tr><td><code class="literal">sorter</code>
+        </td><td><p>Pluggable filter as a <code class="interfacename">GenericFileFilter</code> class. Will
+                            skip files if filter returns <code class="literal">false</code> in its
+                                <code class="methodname">accept()</code> method. Apache Camel also ships with
+                            an ANT path matcher filter in the <code class="literal">camel-spring</code>
+                            component.</p>
+            <p>As of Apache Camel 2.10, you can also filter directories using
+                the <code class="interfacename">GenericFileFilter</code>'s
+                <code class="methodname">isDirectory</code> method.</p>
+            <p>This option is also available in the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</p> </td></tr><tr><td><code class="literal">sorter</code>
         </td><td><code class="literal">null</code>
         </td><td> Pluggable sorter as a <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Comparator.html" target="_top">java.util.Comparator&lt;org.apache.camel.component.file.GenericFile&gt;</a> class.
         </td></tr><tr><td><code class="literal">sortBy</code>
@@ -100,20 +113,27 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
           date. See sorting section below for details. </td></tr><tr><td><code class="literal">readLock</code>
         </td><td><code class="literal">markerFile</code>
         </td><td>
-          <p> Used by consumer, to only poll the files if it has exclusive read-lock on the file
-            (i.e. the file is not in-progress or being written). Apache Camel will wait until the file
-            lock is granted.</p>
-          <p>The <code class="code">readLock</code> option supports the following built-in strategies: </p>
+          <p> Used by consumer, to poll only files if it has exclusive read-lock on the file
+                                (i.e. the file is not in-progress or being written). Apache Camel will
+                                wait until the file lock is granted.</p>
+          <p>The <code class="code">readLock</code> option supports these built-in strategies: </p>
           <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">markerFile</code> forces Apache Camel
                 will create a marker file and hold a lock on the marker file. This option is
-                  <span class="bold"><strong>not</strong></span> available for the <a href="PLUGINS_ROOT/org.fusesource.ide.help/ftp.html" class="olink">FTP</a> component.</p></li><li class="listitem"><p><code class="literal">changed</code> uses a length/modification timestamp to detect
+                  <span class="bold"><strong>not</strong></span> available for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</p></li><li class="listitem"><p><code class="literal">changed</code> uses a length/modification timestamp to detect
                 whether the file is currently being copied or not. Will wait at least 1 second to
                 determine this, so this option cannot consume files as fast as the others, but can
                 be more reliable as the JDK IO API cannot always determine whether a file is
-                currently being used by another process. This option is <span class="bold"><strong>not</strong></span> available for the <a href="PLUGINS_ROOT/org.fusesource.ide.help/ftp.html" class="olink">FTP</a>
+                currently being used by another process.</p><p>As of Apache Camel 2.10, a consumer with <code class="literal">readLock=changed</code>,
+                                        considers any file of zero-length as a file
+                                        in-progress.</p><p>This option is <span class="bold"><strong>not</strong></span> available for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a>
                 component. </p></li><li class="listitem"><p><code class="literal">fileLock</code> uses <code class="literal">java.nio.channels.FileLock</code>.
-                This option is <span class="bold"><strong>not</strong></span> available for the <a href="PLUGINS_ROOT/org.fusesource.ide.help/ftp.html" class="olink">FTP</a> component.</p></li><li class="listitem"><p><code class="literal">rename</code> attempts to rename the file, in order to test whether
-                we can get an exclusive read-lock.</p></li><li class="listitem"><p><code class="literal">none</code> is for no read locks at all.</p></li></ul></div>
+                This option is <span class="bold"><strong>not</strong></span> available for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</p></li><li class="listitem"><p><code class="literal">rename</code> attempts to rename the file to test whether we can get
+                                        an exclusive read-lock.</p></li><li class="listitem"><p><code class="literal">none</code> is for no read locks at all.</p></li></ul></div>
+            <p>As of Apache Camel 2.10, the <code class="literal">changed</code>, <code class="literal">filelock</code>, and
+                <code class="literal">rename</code> options also use a <code class="literal">markerFile</code> to
+                prevent files being processed by another Camel consumer running on another node (for
+                example, in a cluster) from being picked up. This option is
+                <span class="bold"><strong>not</strong></span> available for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</p>
         </td></tr><tr><td><code class="literal">readLockTimeout</code>
         </td><td><code class="literal">0</code>
         </td><td>Optional timeout in milliseconds for the read-lock, if supported by the read-lock. If
@@ -123,27 +143,48 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
             <code class="literal">rename</code> support the timeout.</td></tr><tr><td><code class="literal">exclusiveReadLockStrategy</code>
         </td><td><code class="literal">null</code>
         </td><td>Pluggable read-lock as an implementation of the 
-          <code class="interfacename">GenericFileExclusiveReadLockStrategy</code> interface.</td></tr><tr><td><code class="literal">processStrategy</code>
-        </td><td><code class="literal">null</code>
-        </td><td>A pluggable
-            <code class="interfacename">GenericFileProcessStrategy</code> allowing
-          you to implement your own <code class="literal">readLock</code> option or similar. Can also be used
-          when special conditions must be met before a file can be consumed, such as a special
-            <span class="emphasis"><em>ready</em></span> file exists. If this option is set then the
-            <code class="literal">readLock</code> option does not apply.</td></tr><tr><td><code class="literal">maxMessagesPerPoll</code>
-        </td><td><code class="literal">0</code>
-        </td><td>An integer that defines the maximum number of messages to gather per poll. By default,
-          no maximum is set. Can be used to set a limit of e.g. 1000 to avoid having the server read
-          thousands of files as it starts up. Set a value of 0 or negative to disabled it.</td></tr><tr><td><code class="option">startingDirectoryMustExist</code>
+          <code class="interfacename">GenericFileExclusiveReadLockStrategy</code> interface.</td></tr><tr><td><code class="literal">maxMessagesPerPoll</code>
+              </td><td><code class="literal">0</code>
+              </td><td>An integer that defines the maximum number of messages to gather per poll. By
+                  default (<code class="literal">0</code>), no maximum is set. Can be used to set a limit of,
+                  for example, 1000 to avoid having the server read thousands of files  as it starts
+                  up. To disable this option, set it to <code class="literal">0</code> or a negative integer.</td></tr><tr><td><code class="literal">eagerMaxMessagesPerPoll</code>
+        </td><td><code class="literal">true</code>
+        </td><td><p>Specifies whether the limit defined by <code class="literal">maxMessagesPerPoll</code> is
+                            eager. When set to <code class="literal">true</code> (default), the limit is
+                            eagerly applied during file scanning. When set to
+                                <code class="literal">false</code>, the limit is applied after all files have
+                            been scanned and sorted, which increases memory consumption since
+                            sorting is performed on file details in memory.</p><p>This option is also available in the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</p></td></tr><tr><td><code class="literal">processStrategy</code>
+              </td><td><code class="literal">null</code>
+              </td><td>A pluggable
+                  <code class="interfacename">GenericFileProcessStrategy</code> allowing
+                  you to implement your own <code class="literal">readLock</code> option or similar. Can also be used
+                  when special conditions must be met before a file can be consumed, such as a special
+                  <span class="emphasis"><em>ready</em></span> file exists. If this option is set then the
+                  <code class="literal">readLock</code> option does not apply.</td></tr><tr><td><code class="literal">consumer.bridgeErrorHandler</code>
+              </td><td><code class="literal">false</code>
+              </td><td><p>Enables the consumer to bridge over to the Camel error handler, so exceptions that occur while
+                                the consumer attempts to picked up files are processed as messages
+                                and handled by the route's error handler.</p>
+                 <p>By default (<code class="literal">false</code>), the consumer uses
+                                    <code class="literal">org.apache.camel.spi.ExceptionHandler</code> to deal
+                                with exceptions, which logs them at the WARN/ERROR level, then
+                                ignores them.</p>
+                  <p>This option is also available in the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</p>              </td></tr><tr><td><code class="literal">scheduledExecutorService</code>
+              </td><td><code class="literal">null</code>
+              </td><td><p>Enables you to configure a custom thread pool that multiple file consumers can
+                            share, reducing the overall number of threads in a JVM. By default, each
+                            consumer has its own single-threaded thread pool.</p><p>This option is also available in the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> component.</p> </td></tr><tr><td><code class="literal">startingDirectoryMustExist</code>
         </td><td><code class="literal">false</code>
         </td><td>Whether the starting directory must exist. Mind that the <code class="code">autoCreate</code> option
           is default enabled, which means the starting directory is normally auto-created if it
           doesn't exist. You can disable <code class="code">autoCreate</code> and enable this to ensure the
           starting directory must exist. Will throw an exception, if the directory doesn't exist.
-        </td></tr><tr><td><code class="option">directoryMustExist</code>
+        </td></tr><tr><td><code class="literal">directoryMustExist</code>
         </td><td><code class="literal">false</code>
         </td><td>Similar to <code class="code">startingDirectoryMustExist</code> but this applies during polling
-          recursive sub-directories.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Producer options"><a name="d0e22906"></a><h2>Producer options</h2><p><a class="xref" href="file.html#FileRefProdOptsTbl" title="Table&nbsp;9.&nbsp;File producer options">Table&nbsp;9, &#8220;File producer options&#8221;</a> list the options that can be set on a file producing 
+          recursive sub-directories.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Producer options"><a name="d0e24288"></a><h2>Producer options</h2><p><a class="xref" href="file.html#FileRefProdOptsTbl" title="Table&nbsp;9.&nbsp;File producer options">Table&nbsp;9, &#8220;File producer options&#8221;</a> list the options that can be set on a file producing 
     endpoint.</p><div class="table"><a name="FileRefProdOptsTbl"></a><p class="title"><b>Table&nbsp;9.&nbsp;File producer options</b></p><div class="table-contents"><table summary="File producer options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default Value</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">fileExist</code>
         </td><td><code class="literal">Override</code>
         </td><td>
@@ -158,7 +199,7 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
         </td><td> This option is used to write the file using a temporary name and then, after the write
           is complete, rename it to the real name. Can be used to identify files being written and
           also avoid consumers (not using exclusive read locks) reading in progress files. Is often
-          used by <a href="PLUGINS_ROOT/org.fusesource.ide.help/ftp.html" class="olink">FTP</a> when uploading big files. </td></tr><tr><td><code class="literal">tempFileName</code>
+          used by <a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP</a> when uploading big files. </td></tr><tr><td><code class="literal">tempFileName</code>
         </td><td><code class="literal">null</code>
         </td><td>The <span class="bold"><strong>same</strong></span> as
             <code class="literal">tempPrefix</code> option but offering a more fine grained control on the
@@ -170,13 +211,13 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
         </td><td><code class="literal">true</code>
         </td><td>Specifies whether or not to eagerly delete any existing target file. 
           This option only applies when you use <code class="literal">fileExists=Override</code> and 
-          the <code class="literal">tempFileName</code> option.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Message Headers"><a name="d0e23030"></a><h2>Message Headers</h2><p>The following headers are supported by this component:</p><div class="table"><a name="d0e23035"></a><p class="title"><b>Table&nbsp;10.&nbsp;File producer headers</b></p><div class="table-contents"><table summary="File producer headers" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Header</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">CamelFileName</code>
+          the <code class="literal">tempFileName</code> option.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Message Headers"><a name="d0e24412"></a><h2>Message Headers</h2><p>The following headers are supported by this component:</p><div class="table"><a name="d0e24417"></a><p class="title"><b>Table&nbsp;10.&nbsp;File producer headers</b></p><div class="table-contents"><table summary="File producer headers" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Header</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">CamelFileName</code>
         </td><td> Specifies the name of the file to write (relative to the endpoint directory). The name
           can be a <code class="literal">String</code>; a <code class="literal">String</code> with a <a class="link" href="File Language" target="_top">File Language</a> or <a class="link" href="Simple" target="_top">Simple</a>
           expression; or an <a class="link" href="Expression" target="_top">Expression</a> object. If it's
             <code class="literal">null</code> then Apache Camel will auto-generate a filename based on the message
           unique ID. </td></tr><tr><td><code class="literal">CamelFileNameProduced</code>
-        </td><td> The actual absolute filepath (path + name) for the output file that was written. This header is set by Camel and its purpose is providing end-users with the name of the file that was written. </td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="d0e23078"></a><p class="title"><b>Table&nbsp;11.&nbsp;File consumer headers</b></p><div class="table-contents"><table summary="File consumer headers" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td><code class="literal">CamelFileName</code>
+        </td><td> The actual absolute filepath (path + name) for the output file that was written. This header is set by Camel and its purpose is providing end-users with the name of the file that was written. </td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="d0e24460"></a><p class="title"><b>Table&nbsp;11.&nbsp;File consumer headers</b></p><div class="table-contents"><table summary="File consumer headers" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td><code class="literal">CamelFileName</code>
         </td><td> Name of the consumed file as a relative file path with offset from the starting
           directory configured on the endpoint. </td></tr><tr><td><code class="literal">CamelFileNameOnly</code>
         </td><td> Only the file name (the name with no leading paths). </td></tr><tr><td><code class="literal">CamelFileAbsolute</code>
@@ -192,12 +233,12 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
         </td><td> The parent path. </td></tr><tr><td><code class="literal">CamelFileLength</code>
         </td><td> A <code class="literal">long</code> value containing the file size. </td></tr><tr><td><code class="literal">CamelFileLastModified</code>
         </td><td> A <code class="literal">Date</code> value containing the last modified timestamp of the file.
-        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Exchange properties"><a name="d0e23164"></a><h2>Exchange properties</h2><p>As the file consumer is <code class="literal">BatchConsumer</code> it supports batching the files it
+        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Exchange properties"><a name="d0e24546"></a><h2>Exchange properties</h2><p>As the file consumer is <code class="literal">BatchConsumer</code> it supports batching the files it
       polls. By batching it means that Apache Camel will add some properties to the exchange 
-      so you know the number of files polled the current index in that order.</p><div class="table"><a name="d0e23172"></a><p class="title"><b>Table&nbsp;12.&nbsp;Exchange properties used by a file consumer</b></p><div class="table-contents"><table summary="Exchange properties used by a file consumer" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Property </th><th> Description </th></tr></thead><tbody><tr><td><code class="literal">CamelBatchSize</code>
+      so you know the number of files polled the current index in that order.</p><div class="table"><a name="d0e24554"></a><p class="title"><b>Table&nbsp;12.&nbsp;Exchange properties used by a file consumer</b></p><div class="table-contents"><table summary="Exchange properties used by a file consumer" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Property </th><th> Description </th></tr></thead><tbody><tr><td><code class="literal">CamelBatchSize</code>
         </td><td> The total number of files that was polled in this batch. </td></tr><tr><td><code class="literal">CamelBatchIndex</code>
         </td><td> The current index of the batch. Starts from 0. </td></tr><tr><td><code class="literal">CamelBatchComplete</code>
         </td><td>A <code class="literal">boolean</code> value indicating the last exchange 
           in the batch. Is only <code class="literal">true</code> for the last entry. </td></tr></tbody></table></div></div><br class="table-break"><p>This allows you for instance to know how many files exists in this batch and for instance
       let the Aggregator aggregate 
-      this number of files.</p></div><div class="refsection" title="Related topics"><a name="d0e23212"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/RiderExLang.html" class="olink">Expression and Predicates Languages</a></td></tr><tr><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/ftp.html" class="olink">FTP/SFTP</a></td></tr></table></div></div></body></html>
+      this number of files.</p></div><div class="refsection" title="Related topics"><a name="d0e24594"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td><a href="PLUGINS_ROOT/com.fusesource.rider.help/RiderExLang.html" class="olink">Expression and Predicates Languages</a></td></tr><tr><td><a href="PLUGINS_ROOT/com.fusesource.rider.help/ftp.html" class="olink">FTP/SFTP</a></td></tr></table></div></div></body></html>

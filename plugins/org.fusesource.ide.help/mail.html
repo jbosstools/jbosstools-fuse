@@ -1,95 +1,160 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Mail</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderMsgEptRef.html" title="Messaging Endpoints"><link rel="prev" href="jms.html" title="JMS"><link rel="next" href="msmq.html" title="MSMQ"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="Mail"><a name="mail"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Mail &#8212; provides access to e-mail systems</p></div><div class="refsection" title="Overview"><a name="d0e29103"></a><h2>Overview</h2><p>The Mail component provides access to Email via Spring's Mail support and the underlying
-      JavaMail system.</p><div class="warning" title="Geronimo mail JAR" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Geronimo mail JAR"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.gif"></td><th align="left">Geronimo mail JAR</th></tr><tr><td align="left" valign="top"><p>The Geronimo mail JAR (v1.6) has a bug when polling e-mails with attachments. It 
-        cannot correctly identify the <code class="literal">Content-Type</code>. So, if you attach a JPEG 
-        file to a mail and you poll it, the <code class="literal">Content-Type</code> is resolved as 
-        <code class="code">text/plain</code> and not as <code class="code">image/jpeg</code>. For that reason, we have added 
-        an <code class="interfacename">org.apache.camel.component.ContentTypeResolver</code> SPI 
-        interface which enables you to provide your own implementation and fix this bug by 
-        returning the correct Mime type based on the file name. So if the file name ends with 
-        <code class="code">jpeg/jpg</code>, you can return <code class="code">image/jpeg</code>.</p><p>You can set your custom resolver on the <code class="classname">MailComponent</code> instance 
-        or on the <code class="classname">MailEndpoint</code> instance.</p></td></tr></table></div><div class="tip" title="POP3 or IMAP" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: POP3 or IMAP"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.gif"></td><th align="left">POP3 or IMAP</th></tr><tr><td align="left" valign="top"><p>POP3 has some limitations and end users are encouraged to use IMAP if possible.</p></td></tr></table></div><div class="important" title="Using mock-mail for testing" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Using mock-mail for testing"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.gif"></td><th align="left">Using mock-mail for testing</th></tr><tr><td align="left" valign="top"><p>You can use a mock framework for unit testing, which allows you to test without the need
-        for a real mail server. However you should remember to not include mock-mail when you go
-        into production or other environments where you need to send mails to a real mail server.
-        Just the presence of the <code class="filename">mock-javamail.jar</code> on the classpath will 
-        trigger the mock-mail functionality.</p></td></tr></table></div></div><div class="refsection" title="URI format"><a name="d0e29155"></a><h2>URI format</h2><p>Mail endpoints can have one of the URI formats listed in 
-      <a class="xref" href="mail.html#MailURIRefTbl" title="Table&nbsp;34.&nbsp;Mail URI Formats">Table&nbsp;34, &#8220;Mail URI Formats&#8221;</a>.</p><div class="table"><a name="MailURIRefTbl"></a><p class="title"><b>Table&nbsp;34.&nbsp;Mail URI Formats</b></p><div class="table-contents"><table summary="Mail URI Formats" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Mail Protocol</th><th>URI Format</th></tr></thead><tbody><tr><td>SMTP</td><td><code class="uri">smtp(s)://[<em class="replaceable"><code>username</code></em>@]<em class="replaceable"><code>host</code></em>[:<em class="replaceable"><code>port</code></em>][?<em class="replaceable"><code>options</code></em>]</code></td></tr><tr><td>POP3</td><td><code class="uri">pop3(s)://[<em class="replaceable"><code>username</code></em>@]<em class="replaceable"><code>host</code></em>[:<em class="replaceable"><code>port</code></em>][?<em class="replaceable"><code>options</code></em>]</code></td></tr><tr><td>IMAP</td><td><code class="uri">imap(s)://[<em class="replaceable"><code>username</code></em>@]<em class="replaceable"><code>host</code></em>[:<em class="replaceable"><code>port</code></em>][?<em class="replaceable"><code>options</code></em>]</code></td></tr></tbody></table></div></div><br class="table-break"><p>Mail endpoints also supports secure variants of these protocols that are layered over 
-      SSL. You can enable the secure protocols by adding <code class="literal">s</code> to the scheme.</p></div><div class="refsection" title="Default ports"><a name="d0e29232"></a><h2>Default ports</h2><p><a class="xref" href="mail.html#MailDefaultPortsRefTbl" title="Table&nbsp;35.&nbsp;Default mail port numbers">Table&nbsp;35, &#8220;Default mail port numbers&#8221;</a> lists the default port numbers that are used if the 
-    port number is omitted.</p><div class="table"><a name="MailDefaultPortsRefTbl"></a><p class="title"><b>Table&nbsp;35.&nbsp;Default mail port numbers</b></p><div class="table-contents"><table summary="Default mail port numbers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Protocol</th><th>Default Port Number</th></tr></thead><tbody><tr><td>SMTP</td><td>25</td></tr><tr><td>SMTPS</td><td>465</td></tr><tr><td>POP3</td><td>110</td></tr><tr><td>POP3S</td><td>995</td></tr><tr><td>IMAP</td><td>143</td></tr><tr><td>IMAPS</td><td>993</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Options"><a name="d0e29279"></a><h2>Options</h2><p><a class="xref" href="mail.html#MailOptsRefTbl" title="Table&nbsp;36.&nbsp;Mail endpoint options">Table&nbsp;36, &#8220;Mail endpoint options&#8221;</a> describes the options for Mail endpoints.</p><div class="table"><a name="MailOptsRefTbl"></a><p class="title"><b>Table&nbsp;36.&nbsp;Mail endpoint options</b></p><div class="table-contents"><table summary="Mail endpoint options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Property</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">host</code>
-        </td><td>&nbsp;</td><td> The host name or IP address to connect to. </td></tr><tr><td><code class="literal">port</code>
-        </td><td> See <a class="xref" href="mail.html#MailDefaultPortsRefTbl" title="Table&nbsp;35.&nbsp;Default mail port numbers">Table&nbsp;35, &#8220;Default mail port numbers&#8221;</a>
-        </td><td> The TCP port number to connect on. </td></tr><tr><td><code class="literal">username</code></td><td>&nbsp;</td><td> The user name on the email server. </td></tr><tr><td><code class="literal">password</code>
-        </td><td>&nbsp;</td><td>The password on the email server.</td></tr><tr><td><code class="literal">ignoreUriScheme</code>
-        </td><td><code class="literal">false</code>
-        </td><td> If <code class="literal">false</code>, Apache Camel uses the scheme to determine the transport
-          protocol (POP, IMAP, SMTP etc.) </td></tr><tr><td><code class="literal">defaultEncoding</code>
-        </td><td>&nbsp;</td><td> The default encoding to use for Mime Messages. </td></tr><tr><td><code class="literal">contentType</code>
-        </td><td><code class="literal">text/plain</code>
-        </td><td>The mail message content type. Use <code class="literal">text/html</code> for HTML mails. </td></tr><tr><td><code class="literal">folderName</code>
-        </td><td><code class="literal">INBOX</code>
-        </td><td> The folder to poll. </td></tr><tr><td><code class="literal">to</code>
-        </td><td><code class="literal"><em class="replaceable"><code>username</code></em>@<em class="replaceable"><code>host</code></em></code>
-        </td><td>The recipients. Separate multiple email addresses with a comma. </td></tr><tr><td><code class="literal">CC</code>
-        </td><td>&nbsp;</td><td>The CC recipients. Separate multiple email addresses with a comma.</td></tr><tr><td><code class="literal">BCC</code></td><td>&nbsp;</td><td>The BCC recipients. Separate multiple email addresses with a comma.</td></tr><tr><td><code class="literal">from</code>
-        </td><td><code class="literal">camel@localhost</code>
-        </td><td> The FROM email address. </td></tr><tr><td><code class="literal">subject</code>
-        </td><td>&nbsp;</td><td>The Subject of the message being
-          sent. Note: Setting the subject in the header takes precedence over this option. </td></tr><tr><td><code class="literal">delete</code>
-        </td><td><code class="literal">false</code>
-        </td><td>Deletes the messages after they have been
-          processed. This is done by setting the <code class="literal">DELETED</code> flag on the mail
-          message. If <code class="literal">false</code>, the <code class="literal">SEEN</code> flag is set instead.
-        </td></tr><tr><td><code class="literal">unseen</code>
-        </td><td><code class="literal">true</code>
-        </td><td>Is used to only fetch unseen(new) messages. POP3 does not support the 
-          <code class="literal">SEEN</code> flag.</td></tr><tr><td><code class="literal">fetchSize</code>
-        </td><td><code class="literal">-1</code>
-        </td><td>Specifies the maximum number of messages to consume during a poll.The default value 
-          of <code class="code">-1</code> means all available messages will be consumed. Setting the
-          value to <code class="code">0</code> means Apache Camel will not consume any messages.</td></tr><tr><td><code class="literal">alternativeBodyHeader</code>
-        </td><td><code class="literal">CamelMailAlternativeBody</code>
-        </td><td>Specifies the key to an IN message header
-          that contains an alternative email body. For example, if you send emails in
-            <code class="literal">text/html</code> format and want to provide an alternative mail body for
-          non-HTML email clients, set the alternative mail body with this key as a header. </td></tr><tr><td><code class="literal">debugMode</code>
-        </td><td><code class="literal">false</code>
-        </td><td>Specifies if debug mode is enabled on the underlying mail framework. The SUN Mail 
-          framework logs the debug messages to <code class="filename">System.out</code> by default.</td></tr><tr><td><code class="literal">connectionTimeout</code>
-        </td><td><code class="literal">30000</code>
-        </td><td>The connection timeout can be
-          configured in milliseconds.</td></tr><tr><td><code class="literal">consumer.initialDelay</code>
-        </td><td><code class="literal">1000</code>
-        </td><td> Milliseconds before the polling starts. </td></tr><tr><td><code class="literal">consumer.delay</code>
-        </td><td><code class="literal">60000</code>
-        </td><td>Specifies the consumer delay in milliseconds.</td></tr><tr><td><code class="literal">consumer.useFixedDelay</code>
-        </td><td><code class="literal">false</code>
-        </td><td> Set to <code class="literal">true</code> to use a fixed delay between polls, otherwise fixed rate
-          is used. See <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/ScheduledExecutorService.html" target="_top">ScheduledExecutorService</a> in JDK for details. </td></tr><tr><td><code class="literal">mail.<em class="replaceable"><code>XXX</code></em></code>
-        </td><td>&nbsp;</td><td>You can set any <a class="link" href="http://java.sun.com/products/javamail/javadocs/index.html" target="_top">additional java mail
-            properties</a>.</td></tr><tr><td><code class="literal">maxMessagesPerPoll</code>
-        </td><td><code class="literal">0</code>
-        </td><td>Specifies the maximum number of messages to gather per poll. The default value of 
-          <code class="code">0</code> (or a negative value) disables this option.</td></tr><tr><td><code class="literal">javaMailSender</code>
-        </td><td>&nbsp;</td><td>Specifies a custom implementation of the Spring 
-          <code class="interfacename">JavaMailSender</code> interface in order to use a custom email 
-          implementation. If none provided, Apache Camel uses the default Spring 
-          <code class="classname">JavaMailSenderImpl</code> implementation.</td></tr><tr><td><code class="literal">ignoreUnsupportedCharset</code>
-        </td><td><code class="literal">false</code>
-        </td><td>Option to let Apache Camel ignore unsupported
-          charsets in the local JVM when sending mails. If the charset is unsupported then
-            <em class="replaceable"><code>charset=XXX</code></em> is removed from the 
-          <code class="literal">content-type</code> and it relies on the platform default instead.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="SSL support"><a name="d0e29615"></a><h2>SSL support</h2><p>The underlying mail framework is responsible for providing SSL support. Apache Camel uses SUN
-      JavaMail, which only trusts certificates issued by well known Certificate Authorities. So if
-      you issue your own certificate, you have to import it into the local Java keystore file (see
-        <code class="literal">SSLNOTES.txt</code> in JavaMail for details).</p></div><div class="refsection" title="SUN JavaMail"><a name="d0e29623"></a><h2>SUN JavaMail</h2><p>
-      <a class="link" href="http://java.sun.com/products/javamail/" target="_top">SUN JavaMail</a> is used under the
-      hood for consuming and producing mails. We encourage end-users to consult these references
-      when using either POP3 or IMAP protocol. Note particularly that POP3 has a much more limited
-      set of features than IMAP.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
-          <a class="link" href="http://java.sun.com/products/javamail/javadocs/com/sun/mail/pop3/package-summary.html" target="_top">SUN POP3 API</a>
-        </p></li><li class="listitem"><p>
-          <a class="link" href="http://java.sun.com/products/javamail/javadocs/com/sun/mail/imap/package-summary.html" target="_top">SUN IMAP API</a>
-        </p></li><li class="listitem"><p>And generally about the <a class="link" href="http://java.sun.com/products/javamail/javadocs/javax/mail/Flags.html" target="_top">MAIL
-            Flags</a>
-        </p></li></ul></div></div></div></body></html>
+   <title>Mail</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderMsgEptRef.html" title="Messaging Endpoints"><link rel="prev" href="jms.html" title="JMS"><link rel="next" href="msmq.html" title="MSMQ"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="Mail"><a name="mail"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Mail &#8212; provides access to e-mail systems</p></div><div class="refsection" title="Overview"><a name="d0e30841"></a><h2>Overview</h2><p>The Mail component provides access to Email via Spring's Mail support and the
+            underlying JavaMail system.</p><div class="warning" title="Geronimo mail JAR" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Geronimo mail JAR"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.gif"></td><th align="left">Geronimo mail JAR</th></tr><tr><td align="left" valign="top"><p>The Geronimo mail JAR (v1.6) has a bug when polling e-mails with attachments. It
+                cannot correctly identify the <code class="literal">Content-Type</code>. So, if you attach a
+                JPEG file to a mail and you poll it, the <code class="literal">Content-Type</code> is resolved
+                as <code class="code">text/plain</code> and not as <code class="code">image/jpeg</code>. For that reason, we
+                have added an
+                    <code class="interfacename">org.apache.camel.component.ContentTypeResolver</code>
+                SPI interface which enables you to provide your own implementation and fix this bug
+                by returning the correct Mime type based on the file name. So if the file name ends
+                with <code class="code">jpeg/jpg</code>, you can return <code class="code">image/jpeg</code>.</p><p>You can set your custom resolver on the <code class="classname">MailComponent</code>
+                instance or on the <code class="classname">MailEndpoint</code> instance.</p></td></tr></table></div><div class="tip" title="POP3 or IMAP" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: POP3 or IMAP"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.gif"></td><th align="left">POP3 or IMAP</th></tr><tr><td align="left" valign="top"><p>POP3 has some limitations and end users are encouraged to use IMAP if
+                possible.</p></td></tr></table></div><div class="important" title="Using mock-mail for testing" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Using mock-mail for testing"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.gif"></td><th align="left">Using mock-mail for testing</th></tr><tr><td align="left" valign="top"><p>You can use a mock framework for unit testing, which allows you to test without
+                the need for a real mail server. However you should remember to not include
+                mock-mail when you go into production or other environments where you need to send
+                mails to a real mail server. Just the presence of the
+                    <code class="filename">mock-javamail.jar</code> on the classpath will trigger the
+                mock-mail functionality.</p></td></tr></table></div></div><div class="refsection" title="URI format"><a name="d0e30893"></a><h2>URI format</h2><p>Mail endpoints can have one of the URI formats listed in <a class="xref" href="mail.html#MailURIRefTbl" title="Table&nbsp;34.&nbsp;Mail URI Formats">Table&nbsp;34, &#8220;Mail URI Formats&#8221;</a>.</p><div class="table"><a name="MailURIRefTbl"></a><p class="title"><b>Table&nbsp;34.&nbsp;Mail URI Formats</b></p><div class="table-contents"><table summary="Mail URI Formats" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Mail Protocol</th><th>URI Format</th></tr></thead><tbody><tr><td>SMTP</td><td>
+                            <code class="uri">smtp(s)://[<em class="replaceable"><code>username</code></em>@]<em class="replaceable"><code>host</code></em>[:<em class="replaceable"><code>port</code></em>][?<em class="replaceable"><code>options</code></em>]</code>
+                        </td></tr><tr><td>POP3</td><td>
+                            <code class="uri">pop3(s)://[<em class="replaceable"><code>username</code></em>@]<em class="replaceable"><code>host</code></em>[:<em class="replaceable"><code>port</code></em>][?<em class="replaceable"><code>options</code></em>]</code>
+                        </td></tr><tr><td>IMAP</td><td>
+                            <code class="uri">imap(s)://[<em class="replaceable"><code>username</code></em>@]<em class="replaceable"><code>host</code></em>[:<em class="replaceable"><code>port</code></em>][?<em class="replaceable"><code>options</code></em>]</code>
+                        </td></tr></tbody></table></div></div><br class="table-break"><p>Mail endpoints also supports secure variants of these protocols that are layered over
+            SSL. You can enable the secure protocols by adding <code class="literal">s</code> to the
+            scheme.</p></div><div class="refsection" title="Default ports"><a name="d0e30976"></a><h2>Default ports</h2><p><a class="xref" href="mail.html#MailDefaultPortsRefTbl" title="Table&nbsp;35.&nbsp;Default mail port numbers">Table&nbsp;35, &#8220;Default mail port numbers&#8221;</a> lists the default port numbers that are used
+            if the port number is omitted.</p><div class="table"><a name="MailDefaultPortsRefTbl"></a><p class="title"><b>Table&nbsp;35.&nbsp;Default mail port numbers</b></p><div class="table-contents"><table summary="Default mail port numbers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Protocol</th><th>Default Port Number</th></tr></thead><tbody><tr><td>SMTP</td><td>25</td></tr><tr><td>SMTPS</td><td>465</td></tr><tr><td>POP3</td><td>110</td></tr><tr><td>POP3S</td><td>995</td></tr><tr><td>IMAP</td><td>143</td></tr><tr><td>IMAPS</td><td>993</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="Options"><a name="d0e31023"></a><h2>Options</h2><p><a class="xref" href="mail.html#MailOptsRefTbl" title="Table&nbsp;36.&nbsp;Mail endpoint options">Table&nbsp;36, &#8220;Mail endpoint options&#8221;</a> describes the options for Mail endpoints.</p><div class="table"><a name="MailOptsRefTbl"></a><p class="title"><b>Table&nbsp;36.&nbsp;Mail endpoint options</b></p><div class="table-contents"><table summary="Mail endpoint options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Property</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+                            <code class="literal">host</code>
+                        </td><td>&nbsp;</td><td> The host name or IP address to connect to. </td></tr><tr><td>
+                            <code class="literal">port</code>
+                        </td><td> See <a class="xref" href="mail.html#MailDefaultPortsRefTbl" title="Table&nbsp;35.&nbsp;Default mail port numbers">Table&nbsp;35, &#8220;Default mail port numbers&#8221;</a>
+                        </td><td> The TCP port number to connect on. </td></tr><tr><td>
+                            <code class="literal">username</code>
+                        </td><td>&nbsp;</td><td> The user name on the email server. </td></tr><tr><td>
+                            <code class="literal">password</code>
+                        </td><td>&nbsp;</td><td>The password on the email server.</td></tr><tr><td>
+                            <code class="literal">ignoreUriScheme</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td> If <code class="literal">false</code>, Apache Camel uses the scheme to determine
+                            the transport protocol (POP, IMAP, SMTP etc.) </td></tr><tr><td>
+                            <code class="literal">defaultEncoding</code>
+                        </td><td>&nbsp;</td><td> The default encoding to use for Mime Messages. </td></tr><tr><td>
+                            <code class="literal">contentType</code>
+                        </td><td>
+                            <code class="literal">text/plain</code>
+                        </td><td>The mail message content type. Use <code class="literal">text/html</code> for
+                            HTML mails. </td></tr><tr><td>
+                            <code class="literal">folderName</code>
+                        </td><td>
+                            <code class="literal">INBOX</code>
+                        </td><td> The folder to poll. </td></tr><tr><td>
+                            <code class="literal">to</code>
+                        </td><td>
+                            <code class="literal"><em class="replaceable"><code>username</code></em>@<em class="replaceable"><code>host</code></em></code>
+                        </td><td>The recipients. Separate multiple email addresses with a comma.
+                        </td></tr><tr><td>
+                            <code class="literal">replyTo</code>
+                        </td><td>
+                            <code class="literal"><em class="replaceable"><code>alias</code></em>@<em class="replaceable"><code>host</code></em></code>
+                        </td><td>The Reply-To recipients (receivers of the response mail). Separate
+                            multiple email addresses with a comma. </td></tr><tr><td>
+                            <code class="literal">CC</code>
+                        </td><td>&nbsp;</td><td>The CC recipients. Separate multiple email addresses with a
+                            comma.</td></tr><tr><td>
+                            <code class="literal">BCC</code>
+                        </td><td>&nbsp;</td><td>The BCC recipients. Separate multiple email addresses with a
+                            comma.</td></tr><tr><td>
+                            <code class="literal">from</code>
+                        </td><td>
+                            <code class="literal">camel@localhost</code>
+                        </td><td> The FROM email address. </td></tr><tr><td>
+                            <code class="literal">subject</code>
+                        </td><td>&nbsp;</td><td>The Subject of the message being sent. Note: Setting the subject in
+                            the header takes precedence over this option. </td></tr><tr><td>
+                            <code class="literal">delete</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td>Deletes the messages after they have been processed. This is done by
+                            setting the <code class="literal">DELETED</code> flag on the mail message. If
+                                <code class="literal">false</code>, the <code class="literal">SEEN</code> flag is set
+                            instead. </td></tr><tr><td>
+                            <code class="literal">unseen</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td>Is used to only fetch unseen(new) messages. POP3 does not support the
+                                <code class="literal">SEEN</code> flag.</td></tr><tr><td>
+                            <code class="literal">fetchSize</code>
+                        </td><td>
+                            <code class="literal">-1</code>
+                        </td><td>Specifies the maximum number of messages to consume during a poll.The
+                            default value of <code class="code">-1</code> means all available messages will be
+                            consumed. Setting the value to <code class="code">0</code> means Apache Camel will not
+                            consume any messages.</td></tr><tr><td>
+                            <code class="literal">alternativeBodyHeader</code>
+                        </td><td>
+                            <code class="literal">CamelMailAlternativeBody</code>
+                        </td><td>Specifies the key to an IN message header that contains an
+                            alternative email body. For example, if you send emails in
+                                <code class="literal">text/html</code> format and want to provide an
+                            alternative mail body for non-HTML email clients, set the alternative
+                            mail body with this key as a header. </td></tr><tr><td>
+                            <code class="literal">debugMode</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td>Specifies if debug mode is enabled on the underlying mail framework.
+                            The SUN Mail framework logs the debug messages to
+                                <code class="filename">System.out</code> by default.</td></tr><tr><td>
+                            <code class="literal">connectionTimeout</code>
+                        </td><td>
+                            <code class="literal">30000</code>
+                        </td><td>The connection timeout can be configured in milliseconds.</td></tr><tr><td>
+                            <code class="literal">consumer.initialDelay</code>
+                        </td><td>
+                            <code class="literal">1000</code>
+                        </td><td> Milliseconds before the polling starts. </td></tr><tr><td>
+                            <code class="literal">consumer.delay</code>
+                        </td><td>
+                            <code class="literal">60000</code>
+                        </td><td>Specifies the consumer delay in milliseconds.</td></tr><tr><td>
+                            <code class="literal">consumer.useFixedDelay</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td> Set to <code class="literal">true</code> to use a fixed delay between polls,
+                            otherwise fixed rate is used. See <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/ScheduledExecutorService.html" target="_top">ScheduledExecutorService</a> in JDK for details. </td></tr><tr><td>
+                            <code class="literal">mail.<em class="replaceable"><code>XXX</code></em></code>
+                        </td><td>&nbsp;</td><td>You can set any <a class="link" href="http://java.sun.com/products/javamail/javadocs/index.html" target="_top">additional java mail properties</a>.</td></tr><tr><td>
+                            <code class="literal">maxMessagesPerPoll</code>
+                        </td><td>
+                            <code class="literal">0</code>
+                        </td><td>Specifies the maximum number of messages to gather per poll. The
+                            default value of <code class="code">0</code> (or a negative value) disables this
+                            option.</td></tr><tr><td>
+                            <code class="literal">javaMailSender</code>
+                        </td><td>&nbsp;</td><td>Specifies a custom implementation of the Spring
+                                <code class="interfacename">JavaMailSender</code> interface in order to
+                            use a custom email implementation. If none provided, Apache Camel uses the
+                            default Spring <code class="classname">JavaMailSenderImpl</code>
+                            implementation.</td></tr><tr><td>
+                            <code class="literal">ignoreUnsupportedCharset</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td>Option to let Apache Camel ignore unsupported charsets in the local JVM
+                            when sending mails. If the charset is unsupported then
+                                <em class="replaceable"><code>charset=XXX</code></em> is removed from the
+                                <code class="literal">content-type</code> and it relies on the platform
+                            default instead.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection" title="SSL support"><a name="d0e31420"></a><h2>SSL support</h2><p>The underlying mail framework is responsible for providing SSL support. Apache Camel uses
+            SUN JavaMail, which only trusts certificates issued by well known Certificate
+            Authorities. So if you issue your own certificate, you have to import it into the local
+            Java keystore file (see <code class="literal">SSLNOTES.txt</code> in JavaMail for details).</p></div><div class="refsection" title="SUN JavaMail"><a name="d0e31428"></a><h2>SUN JavaMail</h2><p>
+            <a class="link" href="http://java.sun.com/products/javamail/" target="_top">SUN JavaMail</a> is used under
+            the hood for consuming and producing mails. We encourage end-users to consult these
+            references when using either POP3 or IMAP protocol. Note particularly that POP3 has a
+            much more limited set of features than IMAP.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+                    <a class="link" href="http://java.sun.com/products/javamail/javadocs/com/sun/mail/pop3/package-summary.html" target="_top">SUN POP3 API</a>
+                </p></li><li class="listitem"><p>
+                    <a class="link" href="http://java.sun.com/products/javamail/javadocs/com/sun/mail/imap/package-summary.html" target="_top">SUN IMAP API</a>
+                </p></li><li class="listitem"><p>And generally about the <a class="link" href="http://java.sun.com/products/javamail/javadocs/javax/mail/Flags.html" target="_top">MAIL Flags</a>
+                </p></li></ul></div></div></div></body></html>

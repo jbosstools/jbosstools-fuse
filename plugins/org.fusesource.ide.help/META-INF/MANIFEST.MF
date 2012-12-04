@@ -1,8 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 7.1.32
 Bundle-Name: Fuse IDE Help Plugin
-Bundle-SymbolicName: org.fusesource.ide.help;singleton:=true
-Bundle-Vendor: FuseSource.com
-Bundle-ManifestVersion: 2
-Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-SymbolicName: org.fusesource.ide.help
+Bundle-Vendor: FuseSource
