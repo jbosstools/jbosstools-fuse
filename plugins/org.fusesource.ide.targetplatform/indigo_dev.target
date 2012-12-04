@@ -11,17 +11,12 @@
 <repository location="http://download.jboss.org/drools/release/5.5.0.Beta1/org.drools.updatesite/"/>
 </location>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.graphiti.feature.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.feature.examples.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.export.feature.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.sdk.feature.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.sdk.plus.feature.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.source.feature.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.feature.examples.source.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.export.source.feature.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.sdk.source.feature.feature.group" version="0.8.2.v20120215-0845"/>
-<unit id="org.eclipse.graphiti.sdk.plus.source.feature.feature.group" version="0.8.2.v20120215-0845"/>
-<repository location="http://download.eclipse.org/graphiti/updates/0.8.2"/>
+<unit id="org.eclipse.graphiti.feature.feature.group" version="0.9.1.v20120919-0732"/>
+<unit id="org.eclipse.graphiti.export.feature.feature.group" version="0.9.1.v20120919-0732"/>
+<unit id="org.eclipse.graphiti.sdk.feature.feature.group" version="0.9.1.v20120919-0732"/>
+<unit id="org.eclipse.graphiti.sdk.plus.feature.feature.group" version="0.9.1.v20120919-0732"/>
+<unit id="org.eclipse.graphiti.feature.tools.feature.group" version="0.9.1.v20120919-0732"/>
+<repository location="http://download.eclipse.org/graphiti/updates/0.9.1"/>
 </location>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.m2e.sdk.feature.feature.group" version="1.2.0.20120903-1050"/>
