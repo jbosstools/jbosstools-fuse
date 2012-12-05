@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Lucene</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="log.html" title="Log"><link rel="next" href="mina.html" title="MINA Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Lucene"><div class="titlepage"><div><div><h2 class="title"><a name="lucene"></a>Lucene</h2></div></div></div><div class="simplesect" title="Lucene (Indexer and Search) Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_LuceneIndexerandSearchComponent"></a>Lucene (Indexer and Search) Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.2</strong></span>
+   <title>Lucene</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="log.html" title="Log"><link rel="next" href="mina.html" title="MINA Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Lucene"><div class="titlepage"><div><div><h2 class="title"><a name="lucene"></a>Lucene</h2></div></div></div><div class="simplesect" title="Lucene (Indexer and Search) Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_LuceneIndexerandSearchComponent"></a>Lucene (Indexer and Search) Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.2</strong></span>
     </p><p>The <span class="bold"><strong>lucene</strong></span> component is based on the Apache Lucene
       project. Apache Lucene is a powerful high-performance, full-featured text search engine
       library written entirely in Java. For more details about Lucene, please see the following
@@ -15,7 +15,7 @@
           Endpoint</p></li><li class="listitem"><p>facilitates performing of indexed searches in Apache Camel</p></li></ul></div><p>This component only supports producer endpoints. </p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">lucene:searcherName:insert[?options]
 lucene:searcherName:query[?options]</pre><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect" title="Insert Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_InsertOptions"></a>Insert Options</h2></div></div></div><table id="d0e41277"><tr>
+    </p></div><div class="simplesect" title="Insert Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_InsertOptions"></a>Insert Options</h2></div></div></div><table id="d0e44083"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -42,7 +42,7 @@ lucene:searcherName:query[?options]</pre><p>You can append query options to the 
         </td>
         <td> An optional directory containing files to be used to be analyzed and added to the index
           at producer startup. </td>
-      </tr></table></div><div class="simplesect" title="Query Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_QueryOptions"></a>Query Options</h2></div></div></div><table id="d0e41337"><tr>
+      </tr></table></div><div class="simplesect" title="Query Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_QueryOptions"></a>Query Options</h2></div></div></div><table id="d0e44143"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -68,7 +68,7 @@ lucene:searcherName:query[?options]</pre><p>You can append query options to the 
         <td><code class="literal">10</code>
         </td>
         <td> An integer value that limits the result set of the search operation </td>
-      </tr></table></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e41397"><tr>
+      </tr></table></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e44203"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>

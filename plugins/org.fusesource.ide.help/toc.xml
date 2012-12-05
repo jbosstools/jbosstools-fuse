@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <toc label="Fuse IDE" topic="index.html">
-   <topic label="Release Notes" href="RiderReleaseBook.html">
-      <topic label="Release Notes" href="IDEReleaseNotes.html"/>
-   </topic>
    <topic label="Using the Fuse IDE Tools" href="RiderUG.html">
       <topic label="Application Development" href="RiderDevPart.html">
          <topic label="Design Time Tools" href="IDEIntroDesign.html">
@@ -127,7 +124,7 @@
          <topic label="New Fuse Project" href="RiderNewProjectRef.html"/>
          <topic label="New Fuse Project" href="RiderNewProjectRef2.html"/>
          <topic label="New Fuse Message" href="RiderNewFuseMessage.html"/>
-         <topic label="Camel JUnit Test Case" href="RiderCamelJUnitRef.html"/>
+         <topic label="New Camel JUnit Test Case" href="RiderCamelJUnitRef.html"/>
          <topic label="Test Endpoints" href="RiderCamelTestEndptRef.html"/>
          <topic label="Define a New Server" href="RiderCamelDefServeRef.html"/>
          <topic label="New Server Configuration" href="RiderCamelNewServerRuntimeRef.html"/>
@@ -145,12 +142,10 @@
          <topic label="Editor" href="RiderEditorPrefRef.html"/>
          <topic label="JMX Explorer" href="RiderMonitorPrefRef.html"/>
          <topic label="Tools" href="RiderToolsPrefRef.html"/>
-         <topic label="Subscription" href="RiderRegisterPrefRef.html"/>
       </topic>
    </topic>
    <topic label="Expression and Predicates Languages" href="RiderExLang.html">
       <topic label="Introduction" href="ExpPredIntro.html"/>
-      <topic label="BeanShell" href="BeanShell.html"/>
       <topic label="Constant" href="Constant.html"/>
       <topic label="The Unified Expression Language(EL)" href="EL.html"/>
       <topic label="Groovy" href="Groovy.html"/>
@@ -294,6 +289,7 @@
          <topic label="Test" href="test.html"/>
       </topic>
       <topic label="Atom Component" href="atom.html"/>
+      <topic label="AVRO" href="avro.html"/>
       <topic label="Bean" href="bean.html"/>
       <topic label="Bean Validation" href="beanValidation.html"/>
       <topic label="Browse" href="browse.html"/>
@@ -322,6 +318,7 @@
       <topic label="Jing" href="jing.html"/>
       <topic label="JMX" href="jmx.html"/>
       <topic label="JPA" href="jpa.html"/>
+      <topic label="Jsch" href="jsch.html"/>
       <topic label="JT400" href="jt400.html"/>
       <topic label="Language" href="language.html"/>
       <topic label="LDAP" href="ldap.html"/>
@@ -343,6 +340,7 @@
       <topic label="RSS" href="rss.html"/>
       <topic label="Scalate" href="scalate.html"/>
       <topic label="SNMP" href="snmp.html"/>
+      <topic label="Solr" href="solr.html"/>
       <topic label="Spring Integration" href="springIntegration.html"/>
       <topic label="Spring Web Services" href="springWS.html"/>
       <topic label="SQL Component" href="sql.html"/>
