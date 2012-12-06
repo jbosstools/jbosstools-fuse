@@ -1,33 +1,61 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Route Icon</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="prev" href="validate.html" title="Validate"><link rel="next" href="RiderCompRef.html" title="Component Reference"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Route Icon"><div class="titlepage"><div><div><h2 class="title"><a name="routeIcon"></a>Route Icon</h2></div></div></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e19519"></a>Overview</h2></div></div></div><p>The Route icon (<a class="xref" href="routeIcon.html#RoutePatternIcon" title="Figure&nbsp;1.&nbsp;Route pattern">Figure&nbsp;1</a>)
-      appears in Outline view. It represents an individual route in a routing context file. In
-      projects consisting of multiple routes, the route icons appear in Outline view in the order
-      they appear within the <code class="sgmltag-element">camelContext</code> element of the routing context
-      file. </p><div class="figure"><a name="RoutePatternIcon"></a><p class="title"><b>Figure&nbsp;1.&nbsp;Route pattern</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/route.png" alt="Route pattern"></div></div></div><br class="figure-break"></div><div class="simplesect" title="Usage"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e19535"></a>Usage</h2></div></div></div><p>In Outline view, select a route's icon to display the route on the canvas and open its
-        <span class="guilabel">Properties</span> editor. This is the easiest way to switch between routes
-      when developing a multiroute project.</p></div><div class="simplesect" title="Properties"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e19543"></a>Properties</h2></div></div></div><p><a class="xref" href="routeIcon.html#RiderRouteRefTbl1" title="Table&nbsp;99.&nbsp;Route Properties">Table&nbsp;99</a> describes the properties you can specify for a route
-      using the <span class="guilabel">Properties</span> editor.</p><div class="table"><a name="RiderRouteRefTbl1"></a><p class="title"><b>Table&nbsp;99.&nbsp;Route Properties</b></p><div class="table-contents"><table summary="Route Properties" width="100%" border="1"><colgroup><col width="22%" class="c1"><col width="78%" class="c2"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td><span class="property">Auto Startup</span></td><td><p>Specifies whether to start the route automatically when Camel starts up. The default is
-                  <em class="replaceable"><code>true</code></em>.</p>
-</td></tr><tr><td><span class="property">Shutdown Route</span></td><td><p>Specifies when to stop the route. Options are:</p>
-              <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Default&#8212;stop immediately</p></li><li class="listitem"><p>Defer&#8212;wait until Camel shuts down</p></li></ul></div>
-            </td></tr><tr><td><span class="property">Startup Order</span></td><td>Specifies the order in which to start this route in relation to other routes in
-              the routing context when Camel starts up. Valid values are integers corresponding to
-              the number of routes in the routing context.</td></tr><tr><td><span class="property">Trace</span></td><td>Specifies whether to trace the path of an exchange through a particular route.
-              The default is <em class="replaceable"><code>false</code></em>.</td></tr><tr><td><span class="property">Stream Cache</span></td><td>Specifies whether to cache streams that otherwise could not be accessed multiple
-              times. This is necessary for implementing redelivery during error handling, which
-              requires reading the stream multiple times. The default is
-                <em class="replaceable"><code>false</code></em>.</td></tr><tr><td><span class="property">Error Handler Ref</span></td><td>Specifies a reference to a bean that defines and applies an error
-              handler.</td></tr><tr><td><span class="property">Route Policy Ref</span></td><td>Specifies a reference to a bean that defines and applies a policy that controls
-              routes at runtime. The bean can implement any logic that you want Apache Camel to invoke at
-              route start or at route end. </td></tr><tr><td><span class="property">Delayer</span></td><td>Specifies a delay, in milliseconds, that slows down message processing. This is
-              useful during debugging, making it easier to inspect the logs while tracking messages.
-              The default is <em class="replaceable"><code>0</code></em>.</td></tr><tr><td><span class="property">Handle Fault</span></td><td>Specifies whether to convert fault messages into exceptions. Intended for
-              applications deployed into a JBI container, so the Camel error handler can react to
-              faults. The default is <em class="replaceable"><code>false</code></em>.</td></tr><tr><td><span class="property">Shutdown Running Task</span></td><td><p>Specifies how the routing context shuts down. Options are:</p>
-              <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>CompleteCurrentTaskOnly&#8212;[Default] shutdown immediately after the
-                    current task has finished</p></li><li class="listitem"><p>CompleteAllTasks&#8212;shutdown after all pending tasks have finished</p></li></ul></div></td></tr><tr><td><span class="property">Group</span></td><td>Specifies the name of a group of which the route is a member. This property is
-              informational only. It is not used by Apache Camel.</td></tr><tr><td><span class="property">Id</span></td><td>Specifies a unique id for the route. This id appears in the generated XML (Source
-              view) and with the Route icon in Outline view. It also appears in log entries. If left
-              blank, Fuse IDE assigns the route a default Id.</td></tr><tr><td><span class="property">Description</span></td><td>Specifies a textual description for the route. This description is included in
-              the generated XML file, but it is informational only. It is not used by Apache Camel.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Related topics"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e19679"></a>Related topics</h2></div></div></div><table border="0" summary="Simple list" class="simplelist"><tr><td><a href="PLUGINS_ROOT/org.fusesource.ide.help/RiderNewRoute.html" class="olink">Adding routes to the routing context</a></td></tr></table></div></div></body></html>
+   <title>Route Icon</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="prev" href="validate.html" title="Validate"><link rel="next" href="RiderCompRef.html" title="Component Reference"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Route Icon"><div class="titlepage"><div><div><h2 class="title"><a name="routeIcon"></a>Route Icon</h2></div></div></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e20727"></a>Overview</h2></div></div></div><p>The Route icon (<a class="xref" href="routeIcon.html#RoutePatternIcon" title="Figure&nbsp;1.&nbsp;Route pattern">Figure&nbsp;1</a>)
+            appears in Outline view. It represents an individual route in a routing context file. In
+            projects consisting of multiple routes, the route icons appear in Outline view in the
+            order they appear within the <code class="sgmltag-element">camelContext</code> element of the
+            routing context file. </p><div class="figure"><a name="RoutePatternIcon"></a><p class="title"><b>Figure&nbsp;1.&nbsp;Route pattern</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/route.png" alt="Route pattern"></div></div></div><br class="figure-break"></div><div class="simplesect" title="Usage"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e20743"></a>Usage</h2></div></div></div><p>In Outline view, select a route's icon to display the route on the canvas and open its
+                <span class="guilabel">Properties</span> editor. This is the easiest way to switch between
+            routes when developing a multiroute project.</p></div><div class="simplesect" title="Properties"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e20751"></a>Properties</h2></div></div></div><p><a class="xref" href="routeIcon.html#RiderRouteRefTbl1" title="Table&nbsp;105.&nbsp;Route Properties">Table&nbsp;105</a> describes the
+            properties you can specify for a route using the <span class="guilabel">Properties</span>
+            editor.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Though the <span class="property">Inherit Error Handler</span> property appears in the Properties
+            editor for the route pattern, its use is appropriate with the <a href="PLUGINS_ROOT/com.fusesource.rider.help/loadBalance.html" class="olink">Load Balance</a> pattern only.</p></td></tr></table></div><div class="table"><a name="RiderRouteRefTbl1"></a><p class="title"><b>Table&nbsp;105.&nbsp;Route Properties</b></p><div class="table-contents"><table summary="Route Properties" width="100%" border="1"><colgroup><col width="22%" class="c1"><col width="78%" class="c2"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
+                            <span class="property">Route Policy Ref</span>
+                        </td><td>Specifies a reference to a bean that defines and applies a policy
+                            that controls routes at runtime. The bean can implement any logic that
+                            you want Apache Camel to invoke at route start or at route end. </td></tr><tr><td>
+                            <span class="property">Inherit Error Handler</span>
+                        </td><td>Specifies whether the node should use the error handler configured
+                            for the route. The default is <em class="replaceable"><code>Disabled</code></em>. Use
+                            this option only with the Load Balance EIP.</td></tr><tr><td>
+                            <span class="property">Delayer</span>
+                        </td><td>Specifies a delay, in milliseconds, that slows down message
+                            processing. This is useful during debugging, making it easier to inspect
+                            the logs while tracking messages. The default is
+                                <em class="replaceable"><code>0</code></em>.</td></tr><tr><td>
+                            <span class="property">Handle Fault</span>
+                        </td><td>Specifies whether to convert fault messages into exceptions. Intended
+                            for applications deployed into a JBI container, so the Camel error
+                            handler can react to faults. The default is
+                                <em class="replaceable"><code>false</code></em>.</td></tr><tr><td>
+                            <span class="property">Auto Startup</span>
+                        </td><td>
+                            <p>Specifies whether to start the route automatically when Camel
+                                starts up. The default is <em class="replaceable"><code>true</code></em>.</p>
+                        </td></tr><tr><td>
+                            <span class="property">Trace</span>
+                        </td><td>Specifies whether to trace the path of an exchange through a
+                            particular route. The default is
+                            <em class="replaceable"><code>false</code></em>.</td></tr><tr><td>
+                            <span class="property">Stream Cache</span>
+                        </td><td>Specifies whether to cache streams that otherwise could not be
+                            accessed multiple times. This is necessary for implementing redelivery
+                            during error handling, which requires reading the stream multiple times.
+                            The default is <em class="replaceable"><code>false</code></em>.</td></tr><tr><td>
+                            <span class="property">Group</span>
+                        </td><td>Specifies the name of a group of which the route is a member. This
+                            property is informational only. It is not used by Apache Camel.</td></tr><tr><td>
+                            <span class="property">Error Handler Ref</span>
+                        </td><td>Specifies a reference to a bean that defines and applies an error
+                            handler.</td></tr><tr><td>
+                            <span class="property">Id</span>
+                        </td><td>Specifies a unique id for the route. This id appears in the generated
+                            XML (Source view) and with the Route icon in Outline view. It also
+                            appears in log entries. If left blank, Fuse IDE assigns the route a
+                            default Id.</td></tr><tr><td>
+                            <span class="property">Description</span>
+                        </td><td>Specifies a textual description for the route. This description is
+                            included in the generated XML file, but it is informational only. It is
+                            not used by Apache Camel.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Related topics"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e20891"></a>Related topics</h2></div></div></div><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                <a href="PLUGINS_ROOT/com.fusesource.rider.help/RiderNewRoute.html" class="olink">Adding routes to the routing context</a>
+            </td></tr></table></div></div></body></html>

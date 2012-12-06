@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Exec</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="event.html" title="Event"><link rel="next" href="fix.html" title="FIX"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Exec"><div class="titlepage"><div><div><h2 class="title"><a name="exec"></a>Exec</h2></div></div></div><div class="simplesect" title="Exec component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Execcomponent"></a>Exec component</h2></div></div></div><p><span class="bold"><strong>Available in Apache Camel 2.3</strong></span>
+   <title>Exec</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="event.html" title="Event"><link rel="next" href="fix.html" title="FIX"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Exec"><div class="titlepage"><div><div><h2 class="title"><a name="exec"></a>Exec</h2></div></div></div><div class="simplesect" title="Exec component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Execcomponent"></a>Exec component</h2></div></div></div><p><span class="bold"><strong>Available in Apache Camel 2.3</strong></span>
     </p><p>The <code class="literal">exec</code> component can be used to execute a system command. </p></div><div class="simplesect" title="Dependencies"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Dependencies"></a>Dependencies</h2></div></div></div><p>Maven users need to add the following dependency to their <code class="literal">pom.xml</code>
     </p><pre class="programlisting">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -11,7 +11,7 @@
       will be executed. If executable name is used (e.g. <code class="literal">exec:java</code>), the
       executable must in the system path.</p></div><div class="simplesect" title="URI options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_URIoptions"></a>URI options</h2></div></div></div><p></p><p>
       
-    </p><table id="d0e35784"><tr>
+    </p><table id="d0e38037"><tr>
         <th> Name </th>
         <th> Default value </th>
         <th> Description </th>
@@ -77,7 +77,7 @@
     </p></div><div class="simplesect" title="Message headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Messageheaders"></a>Message headers</h2></div></div></div><p></p><p>The supported headers are defined in
         <code class="literal">org.apache.camel.component.exec.ExecBinding</code>.
       
-    </p><table id="d0e35975"><tr>
+    </p><table id="d0e38228"><tr>
         <th>Name</th>
         <th>Type</th>
         <th>Message </th>
@@ -175,7 +175,7 @@
       <a class="link" href="http://camel.apache.org/type-converter.html" target="_top">type converters</a> for
       convenience:</p><p>
       
-    </p><table id="d0e36242"><tr>
+    </p><table id="d0e38495"><tr>
         <th>From</th>
         <th>To</th>
       </tr><tr>
@@ -201,7 +201,7 @@
       </tr></table><p>If out file is used (the endpoint is configured with <code class="literal">outFile</code>, or there
       is <code class="literal">ExecBinding.EXEC_COMMAND_OUT_FILE</code> header) the converters return the
       content of the out file. If no out file is used, then the converters will use the stdout of
-      the process for conversion to the target type. For example refer to <a class="xref" href="exec.html#ExecExamples" title="Usage Examples">Usage Examples</a>.</p></div><div class="simplesect" title="Usage Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ExecExamples"></a>Usage Examples</h2></div></div></div><h3><a name="d0e36312"></a>Executing word count (Linux)</h3><p>The example below executes <code class="literal">wc</code> (word count, Linux) to count the words in
+      the process for conversion to the target type. For example refer to <a class="xref" href="exec.html#ExecExamples" title="Usage Examples">Usage Examples</a>.</p></div><div class="simplesect" title="Usage Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ExecExamples"></a>Usage Examples</h2></div></div></div><h3><a name="d0e38565"></a>Executing word count (Linux)</h3><p>The example below executes <code class="literal">wc</code> (word count, Linux) to count the words in
       file <code class="literal">/usr/share/dict/words</code>. The word count (output) is written in the
       standart output stream of <code class="literal">wc</code>.</p><pre class="programlisting">from("direct:exec")
 .to("exec:wc?args=--words /usr/share/dict/words")
@@ -214,13 +214,13 @@
        String wordCountOutput = exchange.getIn().getBody(String.class);
        // do something with the word count
      }
-});</pre><h3><a name="d0e36327"></a>Executing java</h3><p>The example below executes <code class="literal">java</code> with 2 arguments:
+});</pre><h3><a name="d0e38580"></a>Executing java</h3><p>The example below executes <code class="literal">java</code> with 2 arguments:
         <code class="literal">-server</code> and <code class="literal">-version</code>, provided that
         <code class="literal">java</code> is in the system path. </p><pre class="programlisting">from("direct:exec")
 .to("exec:java?args=-server -version")</pre><p>The example below executes <code class="literal">java</code> in <code class="literal">c:/temp</code> with 3
       arguments: <code class="literal">-server</code>, <code class="literal">-version</code> and the sytem property
         <code class="literal">user.name</code>.</p><pre class="programlisting">from("direct:exec")
-.to("exec:c:/program files/jdk/bin/java?args=-server -version -Duser.name=Camel&amp;workingDir=c:/temp")</pre><h3><a name="d0e36364"></a>Executing Ant scripts</h3><p>The following example executes <a class="link" href="http://ant.apache.org/" target="_top">Apache Ant</a>
+.to("exec:c:/program files/jdk/bin/java?args=-server -version -Duser.name=Camel&amp;workingDir=c:/temp")</pre><h3><a name="d0e38617"></a>Executing Ant scripts</h3><p>The following example executes <a class="link" href="http://ant.apache.org/" target="_top">Apache Ant</a>
       (Windows only) with the build file <code class="literal">CamelExecBuildFile.xml</code>, provided that
         <code class="literal">ant.bat</code> is in the system path, and that
         <code class="literal">CamelExecBuildFile.xml</code> is in the current directory.</p><pre class="programlisting">from("direct:exec")

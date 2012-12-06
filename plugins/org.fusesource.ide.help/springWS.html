@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Spring Web Services</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, FuseSource, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="springIntegration.html" title="Spring Integration"><link rel="next" href="sql.html" title="SQL Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Spring Web Services"><div class="titlepage"><div><div><h2 class="title"><a name="springWS"></a>Spring Web Services</h2></div></div></div><div class="simplesect" title="Spring Web Services Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringWebServices_HSH_SpringWebServicesComponent"></a>Spring Web Services Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.6</strong></span>
+   <title>Spring Web Services</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="springIntegration.html" title="Spring Integration"><link rel="next" href="sql.html" title="SQL Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Spring Web Services"><div class="titlepage"><div><div><h2 class="title"><a name="springWS"></a>Spring Web Services</h2></div></div></div><div class="simplesect" title="Spring Web Services Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringWebServices_HSH_SpringWebServicesComponent"></a>Spring Web Services Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.6</strong></span>
     </p><p>The <span class="bold"><strong>spring-ws:</strong></span> component allows you to integrate with <a class="link" href="http://static.springsource.org/spring-ws/sites/1.5/" target="_top">Spring Web Services</a>. It offers both <span class="emphasis"><em>client</em></span><span class="del">side support, for accessing web services, and <span class="emphasis"><em>server</em></span></span>side support for creating your own contract-first web services.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
 	&lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -15,7 +15,7 @@ spring-ws:[mapping-type:]address[?options]
 
 </pre><p>To expose a web service <span class="bold"><strong>mapping-type</strong></span> needs to be set to any of the following:</p><p>
 
-    </p><table id="d0e46091"><tr>
+    </p><table id="d0e49792"><tr>
         <th> Mapping type </th>
         <th> Description </th>
       </tr><tr>
@@ -43,7 +43,7 @@ spring-ws:[mapping-type:]address[?options]
     </p><p>As a consumer the <span class="bold"><strong>address</strong></span> should contain a value relevant to the specified mapping-type (e.g. a SOAP action, XPath expression). As a producer the address should be set to the URI of the web service your calling upon.</p><p>You can append query <span class="bold"><strong>options</strong></span> to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringWebServices_HSH_Options"></a>Options</h2></div></div></div><p></p><p>
 
-    </p><table id="d0e46190"><tr>
+    </p><table id="d0e49891"><tr>
         <th> Name </th>
         <th> Required? </th>
         <th> Description </th>
@@ -68,7 +68,7 @@ spring-ws:[mapping-type:]address[?options]
 
     </p></div><div class="simplesect" title="Registry based options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringWebServices_HSH_Registrybasedoptions"></a>Registry based options</h2></div></div></div><p></p><p>The following options can be specified in the registry (most likely a Spring ApplicationContext) and referenced from the endpoint URI using the # notation.</p><p>
 
-    </p><table id="d0e46270"><tr>
+    </p><table id="d0e49971"><tr>
         <th> Name </th>
         <th> Required? </th>
         <th> Description </th>
@@ -103,7 +103,7 @@ spring-ws:[mapping-type:]address[?options]
 
     </p></div><div class="simplesect" title="Message headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringWebServices_HSH_Messageheaders"></a>Message headers</h2></div></div></div><p></p><p>
 
-    </p><table id="d0e46392"><tr>
+    </p><table id="d0e50093"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
