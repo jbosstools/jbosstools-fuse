@@ -150,6 +150,9 @@
 <unit id="org.eclipse.xsd.mapping.feature.group" version="2.7.0.v20120130-0943"/>
 <unit id="org.eclipse.xsd.mapping.editor.feature.group" version="2.7.0.v20120130-0943"/>
 <unit id="org.eclipse.xsd.editor.feature.group" version="2.7.0.v20120130-0943"/>
+<unit id="org.eclipse.egit.feature.group" version="1.3.0.201202151440-r"/>
+<unit id="org.eclipse.egit.psf.feature.group" version="1.3.0.201202151440-r"/>
+<unit id="org.eclipse.jgit.feature.group" version="1.3.0.201202151440-r"/>
 <repository location="http://download.eclipse.org/releases/indigo"/>
 </location>
 </locations>

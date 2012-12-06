@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="Eclipse Core Target" sequenceNumber="20">
+<target name="Eclipse Core Target" sequenceNumber="22">
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.drools.eclipse.feature.feature.group" version="5.5.0.Beta1"/>
@@ -91,8 +91,10 @@
 <unit id="javax.xml.bind" version="2.1.9.v201005080401"/>
 <repository location="http://download.jboss.org/jbosstools/updates/requirements/orbit/R20120526062928/"/>
 </location>
+<location path="${project_loc}/../org.fusesource.ide.updatesite/target/repository" type="Directory"/>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.core.runtime.feature.feature.group" version="1.0.1.R37x_v20110907-7H7KFD6BpeIkWN-XxegWjHnQa9Df"/>
+<unit id="org.eclipse.egit.feature.group" version="1.3.0.201202151440-r"/>
 <unit id="org.eclipse.wst.common.fproj.feature.group" version="3.3.2.v201201121600-377DH8s735735535DD9"/>
 <unit id="org.eclipse.jst.common.fproj.enablement.jdt.feature.group" version="3.3.0.v201102200555-377DF8s73543E5I5768"/>
 <unit id="epp.package.rcp" version="1.4.2.20120213-0814"/>
@@ -102,6 +104,7 @@
 <unit id="org.eclipse.jst.web_userdoc.feature.feature.group" version="3.3.1.v201108102009-2107w31211938"/>
 <unit id="org.eclipse.jst.web_core.feature.feature.group" version="3.3.2.v201112072049-7Q7DGLAFE9LeAHGQwz0Yz0Nmuitz01z01sRxi387"/>
 <unit id="org.eclipse.jdt.source.feature.group" version="3.7.2.v20120120-1414-7z8gFcuFMP7BW5XTz0jLTnz0l9B1"/>
+<unit id="org.eclipse.jgit.feature.group" version="1.3.0.201202151440-r"/>
 <unit id="org.eclipse.equinox.p2.user.ui.source.feature.group" version="2.1.2.R37x_v20110815-1155-6-Bk8pYWZz0qUTX5I15GZWwbXkrl"/>
 <unit id="org.eclipse.platform.ide" version="3.7.2.M20120208-0800"/>
 <unit id="org.eclipse.platform.source.feature.group" version="3.7.2.v20120207-1839-9gF7UHPDFxGjd-PqDr2jX_4yKaumkoHTz04_q-q"/>
@@ -114,6 +117,7 @@
 <unit id="org.eclipse.wst.web_ui.feature.feature.group" version="3.3.2.v201111030500-7O7IFj6EMjB7yO1Xs_G1kMtQeOye6HTXFWve95_R"/>
 <unit id="org.eclipse.wst.xml_ui.feature.feature.group" version="3.3.2.v201112072049-7H7EFZ7DxumTmce4khcSkIiqoD8eDMKlT8Oz011P"/>
 <unit id="org.eclipse.wst.xsl.feature.feature.group" version="1.3.1.v201109012200-7T7YFRTFIqUoIrvbEtBlSIJXGZNg"/>
+<unit id="org.eclipse.egit.psf.feature.group" version="1.3.0.201202151440-r"/>
 <unit id="org.eclipse.emf.ecore.feature.group" version="2.7.1.v20120127-1122"/>
 <unit id="org.eclipse.emf.feature.group" version="2.7.2.v20120130-0943"/>
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.7.2.v20120130-0943"/>
@@ -218,6 +222,5 @@
 <unit id="org.eclipse.xsd.editor.feature.group" version="2.7.0.v20120130-0943"/>
 <repository location="http://download.eclipse.org/releases/indigo"/>
 </location>
-<location path="${project_loc}/../org.fusesource.ide.updatesite/target/repository" type="Directory"/>
 </locations>
 </target>
