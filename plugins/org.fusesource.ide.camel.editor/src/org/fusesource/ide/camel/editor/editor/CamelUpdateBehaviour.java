@@ -17,6 +17,7 @@ public class CamelUpdateBehaviour extends DefaultUpdateBehavior {
 	 */
 	public CamelUpdateBehaviour(DiagramEditor diagramEditor) {
 		super(diagramEditor);
+		createEditingDomain();
 	}
 
 	/* (non-Javadoc)
