@@ -40,6 +40,7 @@
       </win>
    </launcher>
 
+
    <vm>
    </vm>
 
@@ -170,6 +171,9 @@ trademark of Linus Torvalds. All other trademarks are the property of their resp
       <feature id="org.jbpm.eclipse.feature"/>
       <feature id="org.jbpm.eclipse.task.feature"/>
       <feature id="org.eclipse.pde"/>
+      <feature id="org.eclipse.egit"/>
+      <feature id="org.eclipse.egit.psf"/>
+      <feature id="org.eclipse.jgit"/>
    </features>
 
    <configurations>
