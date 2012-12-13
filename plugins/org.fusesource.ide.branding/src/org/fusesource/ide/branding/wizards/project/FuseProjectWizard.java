@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -290,7 +291,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	}
 	
 	/**
-	 * adds the Camel nature to the project
+	 * adds the Camel nature to the project and also a maybe missing java nature
 	 * 
 	 * @param project
 	 * @param monitor
@@ -299,9 +300,20 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	private void addCamelNature(IProject project, IProgressMonitor monitor) throws CoreException {
 		IProjectDescription projectDescription = project.getDescription();
 		String[] ids = projectDescription.getNatureIds();
-		String[] newIds = new String[ids.length + 1];
-		System.arraycopy(ids,0,newIds,0,ids.length);
+		boolean javaNatureFound = false;
+		for (String id : ids) {
+			if (id.equals(JavaCore.NATURE_ID)) {
+				javaNatureFound = true;
+				break;
+			}
+		}
+		int toAdd = javaNatureFound ? 1 : 2;
+		String[] newIds = new String[ids.length + toAdd];
+		System.arraycopy(ids, 0, newIds, 0, ids.length);
 		newIds[ids.length] = Activator.CAMEL_NATURE_ID;
+		if (!javaNatureFound) {
+			newIds[newIds.length - 1] = JavaCore.NATURE_ID;
+		}
 		projectDescription.setNatureIds(newIds);
 		project.setDescription(projectDescription, monitor);
 	}
