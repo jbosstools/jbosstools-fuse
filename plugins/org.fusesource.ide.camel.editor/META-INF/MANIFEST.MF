@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse IDE Camel Editor Plugin
 Bundle-SymbolicName: org.fusesource.ide.camel.editor;singleton:=true
-Bundle-Version: 7.1.0.qualifier
+Bundle-Version: 7.1.51
 Bundle-Activator: org.fusesource.ide.camel.editor.Activator
 Bundle-Vendor: Red Hat, Inc.
 Require-Bundle: commons-management,
