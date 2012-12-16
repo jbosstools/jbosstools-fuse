@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse ZK JMX Plugin
 Bundle-SymbolicName: org.fusesource.ide.zk.jmx;singleton:=true
-Bundle-Version: 7.1.0.qualifier
+Bundle-Version: 7.1.54
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.zk.core,
