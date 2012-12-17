@@ -17,7 +17,6 @@ public class CamelUpdateBehaviour extends DefaultUpdateBehavior {
 	 */
 	public CamelUpdateBehaviour(DiagramEditor diagramEditor) {
 		super(diagramEditor);
-		createEditingDomain();
 	}
 
 	/* (non-Javadoc)
@@ -26,13 +25,25 @@ public class CamelUpdateBehaviour extends DefaultUpdateBehavior {
 	@Override
 	protected void createEditingDomain() {
 		this.editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain(); 
+		initializeEditingDomain(this.editingDomain);
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior#getEditingDomain()
 	 */
 	@Override
-	public TransactionalEditingDomain getEditingDomain() {
+	public synchronized TransactionalEditingDomain getEditingDomain() {
+		if (this.editingDomain == null) {
+			createEditingDomain();
+		}
 		return this.editingDomain;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior#disposeEditingDomain()
+	 */
+	@Override
+	protected void disposeEditingDomain() {
+		this.editingDomain.dispose();
 	}
 }
