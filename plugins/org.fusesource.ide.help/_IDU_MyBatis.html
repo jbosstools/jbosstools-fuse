@@ -1,7 +1,11 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>MyBatis</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="msv.html" title="MSV"><link rel="next" href="nagios.html" title="Nagios"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="MyBatis"><div class="titlepage"><div><div><h2 class="title"><a name="_IDU_MyBatis"></a>MyBatis</h2></div></div></div><div class="simplesect" title="MyBatis"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_MyBatis"></a>MyBatis</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.7</strong></span>
-    </p><p>The <span class="bold"><strong>mybatis:</strong></span> component allows you to query, poll, insert, update and delete data in a relational database using <a class="link" href="http://mybatis.org/" target="_top">MyBatis</a>.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
+   <title>MyBatis</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="msv.html" title="MSV"><link rel="next" href="nagios.html" title="Nagios"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="MyBatis"><div class="titlepage"><div><div><h2 class="title"><a name="_IDU_MyBatis"></a>MyBatis</h2></div></div></div><div class="simplesect" title="MyBatis"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_MyBatis"></a>MyBatis</h2></div></div></div><p></p><p>
+            <span class="bold"><strong>Available as of Camel 2.7</strong></span>
+        </p><p>The <span class="bold"><strong>mybatis:</strong></span> component allows you
+            to query, poll, insert, update and delete data in a relational
+            database using <a class="link" href="http://mybatis.org/" target="_top">MyBatis</a>.</p><p>Maven users will need to add the following dependency to their
+                <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-mybatis&lt;/artifactId&gt;
@@ -12,74 +16,88 @@
 </pre></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">
 mybatis:statementName[?options]
 
-</pre><p>Where <span class="bold"><strong>statementName</strong></span> is the statement name in the MyBatis XML mapping file which maps to the query, insert, update or delete operation you wish to evaluate.</p><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p><p>This component will by default load the MyBatis SqlMapConfig file from the root of the classpath and expected named as <code class="literal">SqlMapConfig.xml</code>.
-If the file is located in another location, you would have to configure the <code class="literal">configurationUri</code> option on the <code class="literal">MyBatisComponent</code> component.</p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e45116"><tr>
-        <th> Option </th>
-        <th> Type </th>
-        <th> Default </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">consumer.onConsume</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> Statements to run after consuming. Can be used, for example, to update rows after they have been consumed and processed in Camel. See sample later. Multiple statements can be separated with comma. </td>
-      </tr><tr>
-        <td><code class="literal">consumer.useIterator</code>
-        </td>
-        <td><code class="literal">boolean</code>
-        </td>
-        <td><code class="literal">true</code>
-        </td>
-        <td> If <code class="literal">true</code> each row returned when polling will be processed individually. If <code class="literal">false</code> the entire <code class="literal">List</code> of data is set as the IN body. </td>
-      </tr><tr>
-        <td><code class="literal">consumer.routeEmptyResultSet</code>
-        </td>
-        <td><code class="literal">boolean</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> Sets whether empty result set should be routed or not. By default, empty result sets are not routed. </td>
-      </tr><tr>
-        <td><code class="literal">statementType</code>
-        </td>
-        <td><code class="literal">StatementType</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> Mandatory to specify for producer to control which kind of operation to invoke. The enum values are: <code class="literal">SelectOne</code>, <code class="literal">SelectList</code>, <code class="literal">Insert</code>, <code class="literal">Update</code>, <code class="literal">Delete</code>. </td>
-      </tr><tr>
-        <td><code class="literal">maxMessagesPerPoll</code>
-        </td>
-        <td><code class="literal">int</code>
-        </td>
-        <td><code class="literal">0</code>
-        </td>
-        <td> An integer to define a maximum messages to gather per poll. By default, no maximum is set. Can be used to set a limit of e.g. 1000 to avoid when starting up the server that there are thousands of files. Set a value of 0 or negative to disabled it. </td>
-      </tr></table></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><p>Camel will populate the result message, either IN or OUT with a header with the statement used:</p><table id="d0e45261"><tr>
-        <th> Header </th>
-        <th> Type </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">CamelMyBatisStatementName</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td> The <span class="bold"><strong>statementName</strong></span> used (for example: insertAccount). </td>
-      </tr><tr>
-        <td><code class="literal">CamelMyBatisResult</code>
-        </td>
-        <td><code class="literal">Object</code>
-        </td>
-        <td> The <span class="bold"><strong>response</strong></span> returned from MtBatis in any of the operations. For instance an <code class="literal">INSERT</code> could return the auto-generated key, or number of rows etc. </td>
-      </tr></table></div><div class="simplesect" title="Message Body"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_MessageBody"></a>Message Body</h2></div></div></div><p></p><p>The response from MyBatis will only be set as body if it's a <code class="literal">SELECT</code> statement. That means, for example, for <code class="literal">INSERT</code> statements Camel will not replace the body. This allows you to continue routing and keep the original body. The response from MyBatis is always stored in the header with the key <code class="literal">CamelMyBatisResult</code>.</p></div><div class="simplesect" title="Samples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_Samples"></a>Samples</h2></div></div></div><p></p><p>For example if you wish to consume beans from a JMS queue and insert them into a database you could do the following:</p><pre class="programlisting">
+</pre><p>Where <span class="bold"><strong>statementName</strong></span> is the
+            statement name in the MyBatis XML mapping file which maps to the
+            query, insert, update or delete operation you wish to
+            evaluate.</p><p>You can append query options to the URI in the following format,
+                <code class="literal">?option=value&amp;option=value&amp;...</code>
+        </p><p>This component will by default load the MyBatis SqlMapConfig file
+            from the root of the classpath and expected named as
+                <code class="literal">SqlMapConfig.xml</code>. If the file is located in
+            another location, you would have to configure the
+                <code class="literal">configurationUri</code> option on the
+                <code class="literal">MyBatisComponent</code> component.</p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_Options"></a>Options</h2></div></div></div><p>The MyBatis uri options are listed here:</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="25%"><col width="25%"><col width="25%"><col width="25%"></colgroup><thead><tr><th> Option </th><th> Type </th><th> Default </th><th> Description </th></tr></thead><tbody><tr><td>
+                    <code class="literal">consumer.onConsume</code>
+                </td><td>
+                    <code class="literal">String</code>
+                </td><td>
+                    <code class="literal">null</code>
+                </td><td> Statements to run after consuming. Can be used, for
+                    example, to update rows after they have been consumed and
+                    processed in Camel. See sample later. Multiple statements
+                    can be separated with comma. </td></tr><tr><td>
+                    <code class="literal">consumer.useIterator</code>
+                </td><td>
+                    <code class="literal">boolean</code>
+                </td><td>
+                    <code class="literal">true</code>
+                </td><td> If <code class="literal">true</code> each row returned when polling
+                    will be processed individually. If <code class="literal">false</code>
+                    the entire <code class="literal">List</code> of data is set as the IN
+                    body. </td></tr><tr><td>
+                    <code class="literal">consumer.routeEmptyResultSet</code>
+                </td><td>
+                    <code class="literal">boolean</code>
+                </td><td>
+                    <code class="literal">false</code>
+                </td><td> Sets whether empty result set should be routed or not. By
+                    default, empty result sets are not routed. </td></tr><tr><td>
+                    <code class="literal">statementType</code>
+                </td><td>
+                    <code class="literal">StatementType</code>
+                </td><td>
+                    <code class="literal">null</code>
+                </td><td> Mandatory to specify for producer to control which kind of
+                    operation to invoke. The enum values are:
+                        <code class="literal">SelectOne</code>,
+                        <code class="literal">SelectList</code>,
+                    <code class="literal">Insert</code>, <code class="literal">Update</code>,
+                        <code class="literal">Delete</code>. </td></tr><tr><td>
+                    <code class="literal">maxMessagesPerPoll</code>
+                </td><td>
+                    <code class="literal">int</code>
+                </td><td>
+                    <code class="literal">0</code>
+                </td><td> An integer to define a maximum messages to gather per poll.
+                    By default, no maximum is set. Can be used to set a limit of
+                    e.g. 1000 to avoid when starting up the server that there
+                    are thousands of files. Set a value of 0 or negative to
+                    disabled it. </td></tr></tbody></table></div></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Camel populates the result message, either IN or OUT, with a
+            header using the specified statement:</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th> Header </th><th> Type </th><th> Description </th></tr></thead><tbody><tr><td>
+                    <code class="literal">CamelMyBatisStatementName</code>
+                </td><td>
+                    <code class="literal">String</code>
+                </td><td> The <span class="bold"><strong>statementName</strong></span> used
+                    (for example: insertAccount). </td></tr><tr><td>
+                    <code class="literal">CamelMyBatisResult</code>
+                </td><td>
+                    <code class="literal">Object</code>
+                </td><td> The <span class="bold"><strong>response</strong></span> returned
+                            from MtBatis in any of the operations. For example,
+                            an <code class="literal">INSERT</code> could return the
+                            auto-generated key, or number of rows etc. </td></tr></tbody></table></div></div><div class="simplesect" title="Message Body"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_MessageBody"></a>Message Body</h2></div></div></div><p></p><p>The response from MyBatis will only be set as body if it's a
+                <code class="literal">SELECT</code> statement. That means, for example,
+            for <code class="literal">INSERT</code> statements Camel will not replace the
+            body. This allows you to continue routing and keep the original
+            body. The response from MyBatis is always stored in the header with
+            the key <code class="literal">CamelMyBatisResult</code>.</p></div><div class="simplesect" title="Samples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_Samples"></a>Samples</h2></div></div></div><p></p><p>For example if you wish to consume beans from a JMS queue and
+            insert them into a database you could do the following:</p><pre class="programlisting">
 from("activemq:queue:newAccount").
   to("mybatis:insertAccount?statementType=Insert");
 
-</pre><p>Notice we have to specify the <code class="literal">statementType</code>, as we need to instruct Camel which kind of operation to invoke.</p><p>Where <span class="bold"><strong>insertAccount</strong></span> is the MyBatis ID in the SQL mapping file:</p><pre class="programlisting">
+</pre><p>Notice we have to specify the <code class="literal">statementType</code>, as
+            we need to instruct Camel which kind of operation to invoke.</p><p>Where <span class="bold"><strong>insertAccount</strong></span> is the
+            MyBatis ID in the SQL mapping file:</p><pre class="programlisting">
   &lt;!-- Insert example, using the Account parameter class --&gt;
   &lt;insert id="insertAccount" parameterType="Account"&gt;
     insert into ACCOUNT (
@@ -93,16 +111,31 @@ from("activemq:queue:newAccount").
     )
   &lt;/insert&gt;
 
-</pre></div><div class="simplesect" title="Using StatementType for better control of MyBatis"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_UsingStatementTypeforbettercontrolofMyBatis"></a>Using StatementType for better control of MyBatis</h2></div></div></div><p></p><p>When routing to an MyBatis endpoint you want more fine grained control so you can control whether the SQL statement to be executed is a <code class="literal">SELEECT</code>, <code class="literal">UPDATE</code>, <code class="literal">DELETE</code> or <code class="literal">INSERT</code> etc. So for instance if we want to route to an MyBatis endpoint in which the IN body contains parameters to a <code class="literal">SELECT</code> statement we can do:</p><pre class="programlisting">from("direct:start")
+</pre></div><div class="simplesect" title="Using StatementType for better control of MyBatis"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_UsingStatementTypeforbettercontrolofMyBatis"></a>Using StatementType for better control of MyBatis</h2></div></div></div><p></p><p>When routing to an MyBatis endpoint you want more fine grained
+            control so you can control whether the SQL statement to be executed
+            is a <code class="literal">SELEECT</code>, <code class="literal">UPDATE</code>,
+                <code class="literal">DELETE</code> or <code class="literal">INSERT</code> etc. So
+            for instance if we want to route to an MyBatis endpoint in which the
+            IN body contains parameters to a <code class="literal">SELECT</code> statement
+            we can do:</p><pre class="programlisting">from("direct:start")
     .to("mybatis:selectAccountById?statementType=SelectOne")
     .to("mock:result");
-</pre><p>In the code above we can invoke the MyBatis statement <code class="literal">selectAccountById</code> and the IN body should contain the account id we want to retrieve, such as an <code class="literal">Integer</code> type.</p><p>We can do the same for some of the other operations, such as <code class="literal">SelectList</code>:</p><pre class="programlisting">from("direct:start")
+</pre><p>In the code above we can invoke the MyBatis statement
+                <code class="literal">selectAccountById</code> and the IN body should
+            contain the account id we want to retrieve, such as an
+                <code class="literal">Integer</code> type.</p><p>We can do the same for some of the other operations, such as
+                <code class="literal">SelectList</code>:</p><pre class="programlisting">from("direct:start")
     .to("mybatis:selectAllAccounts?statementType=SelectList")
     .to("mock:result");
-</pre><p>And the same for <code class="literal">UPDATE</code>, where we can send an <code class="literal">Account</code> object as IN body to MyBatis:</p><pre class="programlisting">from("direct:start")
+</pre><p>And the same for <code class="literal">UPDATE</code>, where we can send an
+                <code class="literal">Account</code> object as IN body to MyBatis:</p><pre class="programlisting">from("direct:start")
     .to("mybatis:updateAccount?statementType=Update")
     .to("mock:result");
-</pre></div><div class="simplesect" title="Scheduled polling example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_Scheduledpollingexample"></a>Scheduled polling example</h2></div></div></div><p></p><p>Since this component does not support scheduled polling, you need to use another mechanism for triggering the scheduled polls, such as the <a href="PLUGINS_ROOT/com.fusesource.rider.help/timer.html" class="olink">Timer</a> or <a href="PLUGINS_ROOT/com.fusesource.rider.help/quartz.html" class="olink">Quartz</a> components.</p><p>In the sample below we poll the database, every 30 seconds using the <a href="PLUGINS_ROOT/com.fusesource.rider.help/timer.html" class="olink">Timer</a> component and send the data to the JMS queue:</p><pre class="programlisting">
+</pre></div><div class="simplesect" title="Scheduled polling example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_Scheduledpollingexample"></a>Scheduled polling example</h2></div></div></div><p></p><p>Since this component does not support scheduled polling, you need
+            to use another mechanism for triggering the scheduled polls, such as
+            the <a href="PLUGINS_ROOT/com.fusesource.rider.help/timer.html" class="olink">Timer</a> or <a href="PLUGINS_ROOT/com.fusesource.rider.help/quartz.html" class="olink">Quartz</a> components.</p><p>In the sample below we poll the database, every 30 seconds using
+            the <a href="PLUGINS_ROOT/com.fusesource.rider.help/timer.html" class="olink">Timer</a> component and send the
+            data to the JMS queue:</p><pre class="programlisting">
 from("timer://pollTheDatabase?delay=30000").to("mbatis:selectAllAccounts").to("activemq:queue:allAccounts");
 
 </pre><p>And the MyBatis SQL mapping file used:</p><pre class="programlisting">
@@ -111,7 +144,13 @@ from("timer://pollTheDatabase?delay=30000").to("mbatis:selectAllAccounts").to("a
     select * from ACCOUNT
   &lt;/select&gt;
 
-</pre></div><div class="simplesect" title="Using onConsume"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_UsingonConsume"></a>Using onConsume</h2></div></div></div><p></p><p>This component supports executing statements <span class="bold"><strong>after</strong></span> data have been consumed and processed by Camel. This allows you to do post updates in the database. Notice all statements must be <code class="literal">UPDATE</code> statements. Camel supports executing multiple statements whose name should be separated by comma.</p><p>The route below illustrates we execute the <span class="bold"><strong>consumeAccount</strong></span> statement data is processed. This allows us to change the status of the row in the database to processed, so we avoid consuming it twice or more.</p><pre class="programlisting">from("mybatis:selectUnprocessedAccounts?consumer.onConsume=consumeAccount").to("mock:results");
+</pre></div><div class="simplesect" title="Using onConsume"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_MyBatis_HSH_UsingonConsume"></a>Using onConsume</h2></div></div></div><p></p><p>This component supports executing statements <span class="bold"><strong>after</strong></span> data have been consumed and processed by
+            Camel. This allows you to do post updates in the database. Notice
+            all statements must be <code class="literal">UPDATE</code> statements. Camel
+            supports executing multiple statements whose name should be
+            separated by comma.</p><p>The route below illustrates we execute the <span class="bold"><strong>consumeAccount</strong></span> statement data is processed. This
+            allows us to change the status of the row in the database to
+            processed, so we avoid consuming it twice or more.</p><pre class="programlisting">from("mybatis:selectUnprocessedAccounts?consumer.onConsume=consumeAccount").to("mock:results");
 </pre><p>And the statements in the sqlmap file:</p><pre class="programlisting">&lt;select id="selectUnprocessedAccounts" resultMap="AccountResult"&gt;
     select * from ACCOUNT where PROCESSED = false
 &lt;/select&gt;
@@ -119,5 +158,5 @@ from("timer://pollTheDatabase?delay=30000").to("mbatis:selectAllAccounts").to("a
     update ACCOUNT set PROCESSED = true where ACC_ID = #{id}
 &lt;/update&gt;
 </pre><p>
-
-    </p></div></div></body></html>
+            
+        </p></div></div></body></html>

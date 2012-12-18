@@ -1,175 +1,124 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>JPA</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="jmx.html" title="JMX"><link rel="next" href="jsch.html" title="Jsch"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="JPA"><div class="titlepage"><div><div><h2 class="title"><a name="jpa"></a>JPA</h2></div></div></div><div class="simplesect" title="JPA Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_JPAComponent"></a>JPA Component</h2></div></div></div><p>The <span class="bold"><strong>jpa</strong></span> component enables you to store and retrieve Java
-      objects from persistent storage using EJB 3's Java Persistence Architecture (JPA), which is a
-      standard interface layer that wraps Object/Relational Mapping (ORM) products such as OpenJPA,
-      Hibernate, TopLink, and so on.</p></div><div class="simplesect" title="Sending to the endpoint"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Sendingtotheendpoint"></a>Sending to the endpoint</h2></div></div></div><p>You can store a Java entity bean in a database by sending it to a JPA producer endpoint.
-      The body of the <span class="emphasis"><em>In</em></span> message is assumed to be an entity bean
-      (that is, a POJO with an
-      <a class="link" href="http://java.sun.com/javaee/5/docs/api/javax/persistence/Entity.html" target="_top">@Entity</a>
-      annotation on it) or a collection or an array of entity beans. </p><p>If the body does not contain one of the preceding types, put a
-      <span>Message TranslatorMessage Translator</span> in front of the endpoint to perform the necessary
-      conversion first.</p></div><div class="simplesect" title="Consuming from the endpoint"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Consumingfromtheendpoint"></a>Consuming from the endpoint</h2></div></div></div><p>Consuming messages from a JPA consumer endpoint removes (or updates) entity beans in the
-      database. This allows you to use a database table as a logical queue: consumers take messages
-      from the queue and then delete/update them to logically remove them from the queue.</p><p>If you do not wish to delete the entity bean when it has been processed, you can specify
-        <code class="literal">consumeDelete=false</code> on the URI. This will result in the entity being
-      processed each poll.</p><p>If you would rather perform some update on the entity to mark it as processed (such as to
-      exclude it from a future query) then you can annotate a method with <a class="link" href="http://activemq.apache.org/camel/maven/camel-jpa/apidocs/org/apache/camel/component/jpa/Consumed.html" target="_top">@Consumed</a> which will be invoked on your entity bean when the entity bean is
-      consumed.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">jpa:[entityClassName][?options]</pre><p>For sending to the endpoint, the <span class="emphasis"><em>entityClassName</em></span> is optional. If
-      specified, it helps the <a class="link" href="Type Converter" target="_top">Type Converter</a> to ensure the
-      body is of the correct type.</p><p>For consuming, the <span class="emphasis"><em>entityClassName</em></span> is mandatory.</p><p>You can append query options to the URI in the following format,
-        <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Options"></a>Options</h2></div></div></div><table id="d0e42152"><tr>
-        <th> Name </th>
-        <th> Default Value </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">entityType</code>
-        </td>
-        <td><span class="emphasis"><em>entityClassName</em></span>
-        </td>
-        <td> Overrides the <span class="emphasis"><em>entityClassName</em></span> from the URI. </td>
-      </tr><tr>
-        <td><code class="literal">persistenceUnit</code>
-        </td>
-        <td><code class="literal">camel</code>
-        </td>
-        <td> The JPA persistence unit used by default. </td>
-      </tr><tr>
-        <td><code class="literal">consumeDelete</code>
-        </td>
-        <td><code class="literal">true</code>
-        </td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> If <code class="literal">true</code>, the
-          entity is deleted after it is consumed; if <code class="literal">false</code>, the entity is not
-          deleted. </td>
-      </tr><tr>
-        <td><code class="literal">consumeLockEntity</code>
-        </td>
-        <td><code class="literal">true</code>
-        </td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> Specifies whether or not to set an
-          exclusive lock on each entity bean while processing the results from polling. </td>
-      </tr><tr>
-        <td><code class="literal">flushOnSend</code>
-        </td>
-        <td><code class="literal">true</code>
-        </td>
-        <td><span class="bold"><strong>JPA producer only:</strong></span> Flushes the <a class="link" href="http://java.sun.com/javaee/5/docs/api/javax/persistence/EntityManager.html" target="_top">EntityManager</a> after the entity bean has been persisted. </td>
-      </tr><tr>
-        <td><code class="literal">maximumResults</code>
-        </td>
-        <td><code class="literal">-1</code>
-        </td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> Set the maximum number of results to
-          retrieve on the <a class="link" href="http://java.sun.com/javaee/5/docs/api/javax/persistence/Query.html" target="_top">Query</a>. </td>
-      </tr><tr>
-        <td><code class="literal">transactionManager</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td><span class="bold"><strong>Apache Camel 1.6.1/2.0:</strong></span> Specifies the transaction manager
-          to use. If none provided, Apache Camel will use a <code class="literal">JpaTransactionManager</code> by
-          default. Can be used to set a JTA transaction manager (for integration with an EJB
-          container). </td>
-      </tr><tr>
-        <td><code class="literal">consumer.delay</code>
-        </td>
-        <td><code class="literal">500</code>
-        </td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> Delay in milliseconds between each
-          poll. </td>
-      </tr><tr>
-        <td><code class="literal">consumer.initialDelay</code>
-        </td>
-        <td><code class="literal">1000</code>
-        </td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> Milliseconds before polling starts.
-        </td>
-      </tr><tr>
-        <td><code class="literal">consumer.useFixedDelay</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> Set to <code class="literal">true</code> to
-          use fixed delay between polls, otherwise fixed rate is used. See <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/ScheduledExecutorService.html" target="_top">ScheduledExecutorService</a> in JDK for details. </td>
-      </tr><tr>
-        <td><code class="literal">maxMessagesPerPoll</code>
-        </td>
-        <td><code class="literal">0</code>
-        </td>
-        <td><span class="bold"><strong>Apache Camel 2.0:</strong></span><span class="bold"><strong>JPA consumer
-            only:</strong></span> An integer value to define the maximum number of messages to gather per
-          poll. By default, no maximum is set. Can be used to avoid polling many thousands of
-          messages when starting up the server. Set a value of 0 or negative to disable. </td>
-      </tr><tr>
-        <td><code class="literal">consumer.query</code>
-        </td>
-        <td></td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> To use a custom query when consuming
-          data. </td>
-      </tr><tr>
-      <td><code class="literal">consumer.resultClass</code>
-        </td>
-        <td></td>
-        <td><span class="bold"><strong>Camel 2.7: JPA consumer only:</strong></span> Defines the type of the returned payload (we will call <code class="literal">entityManager.createNativeQuery(nativeQuery, resultClass)</code> instead of <code class="literal">entityManager.createNativeQuery(nativeQuery)</code>). Without this option, we will return an object array. Only has an affect when using in conjunction with native query when consuming data. </td>
-      </tr><tr>
-        <td><code class="literal">consumer.namedQuery</code>
-        </td>
-        <td></td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> To use a named query when consuming
-          data. </td>
-      </tr><tr>
-        <td><code class="literal">consumer.nativeQuery</code>
-        </td>
-        <td></td>
-        <td><span class="bold"><strong>JPA consumer only:</strong></span> To use a custom native query when
-          consuming data. </td>
-      </tr><tr>
-        <td><code class="literal">usePersist</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td><span class="bold"><strong>Camel 2.5: JPA producer only:</strong></span> Indicates to use
-          <code class="literal">entityManager.persist(entity)</code> instead of <code class="literal">entityManager.merge(entity)</code>.
-          Note: <code class="literal">entityManager.persist(entity)</code> doesn't work for detached entities
-          (where the EntityManager has to execute an UPDATE instead of an INSERT query)! </td>
-      </tr></table></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel adds the following message headers to the exchange:</p><table id="d0e42466"><tr>
-        <th> Header </th>
-        <th> Type </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">CamelJpaTemplate</code>
-        </td>
-        <td><code class="literal">JpaTemplate</code>
-        </td>
-        <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> The <code class="literal">JpaTemplate</code> object
-          that is used to access the entity bean. You need this object in some situations, for
-          instance in a type converter or when you are doing some custom processing. </td>
-      </tr></table></div><div class="simplesect" title="Configuring EntityManagerFactory"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_ConfiguringEntityManagerFactory"></a>Configuring EntityManagerFactory</h2></div></div></div><p>You are strongly advised to configure the JPA component to use a specific
-        <code class="literal">EntityManagerFactory</code> instance. If you do not do so, each
-        <code class="code">JpaEndpoint</code> will auto-create its own <code class="literal">EntityManagerFactory</code>
-      instance.For example, you can instantiate a JPA component that references the
-        <code class="literal">myEMFactory</code> entity manager factory, as follows:</p><pre class="programlisting">&lt;bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent"&gt;
+   <title>JPA</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="jmx.html" title="JMX"><link rel="next" href="jsch.html" title="Jsch"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="JPA"><div class="titlepage"><div><div><h2 class="title"><a name="jpa"></a>JPA</h2></div></div></div><div class="simplesect" title="JPA Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_JPAComponent"></a>JPA Component</h2></div></div></div><p>The <span class="bold"><strong>jpa</strong></span> component enables you to store and retrieve Java objects from
+            persistent storage using EJB 3's Java Persistence Architecture (JPA), which is a standard interface layer
+            that wraps Object/Relational Mapping (ORM) products such as OpenJPA, Hibernate, TopLink, and so on.</p></div><div class="simplesect" title="Sending to the endpoint"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Sendingtotheendpoint"></a>Sending to the endpoint</h2></div></div></div><p>You can store a Java entity bean in a database by sending it to a JPA producer endpoint. The body of the
+                <span class="emphasis"><em>In</em></span> message is assumed to be an entity bean (that is, a POJO with an <a class="link" href="http://java.sun.com/javaee/5/docs/api/javax/persistence/Entity.html" target="_top">@Entity</a> annotation
+            on it) or a collection or an array of entity beans. </p><p>If the body does not contain one of the preceding types, put a <span>Message TranslatorMessage
+                Translator</span> in front of the endpoint to perform the necessary conversion first.</p></div><div class="simplesect" title="Consuming from the endpoint"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Consumingfromtheendpoint"></a>Consuming from the endpoint</h2></div></div></div><p>Consuming messages from a JPA consumer endpoint removes (or updates) entity beans in the database. This
+            allows you to use a database table as a logical queue: consumers take messages from the queue and then
+            delete/update them to logically remove them from the queue.</p><p>If you do not wish to delete the entity bean when it has been processed, you can specify
+                <code class="literal">consumeDelete=false</code> on the URI. This will result in the entity being processed each
+            poll.</p><p>If you would rather perform some update on the entity to mark it as processed (such as to exclude it from
+            a future query) then you can annotate a method with <a class="link" href="http://activemq.apache.org/camel/maven/camel-jpa/apidocs/org/apache/camel/component/jpa/Consumed.html" target="_top">@Consumed</a> which will be invoked on your entity bean when the entity bean is consumed.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">jpa:[entityClassName][?options]</pre><p>For sending to the endpoint, the <span class="emphasis"><em>entityClassName</em></span> is optional. If specified, it helps
+            the <a class="link" href="Type Converter" target="_top">Type Converter</a> to ensure the body is of the correct type.</p><p>For consuming, the <span class="emphasis"><em>entityClassName</em></span> is mandatory.</p><p>You can append query options to the URI in the following format,
+                <code class="literal">?option=value&amp;option=value&amp;...</code>
+        </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Options"></a>Options</h2></div></div></div><p><a class="xref" href="jpa.html#_IDU_JPA_UriOpts" title="Table&nbsp;55.&nbsp;URI options">Table&nbsp;55, &#8220;URI options&#8221;</a> lists the JPA uri options:</p><div class="table"><a name="_IDU_JPA_UriOpts"></a><p class="title"><b>Table&nbsp;55.&nbsp;URI options</b></p><div class="table-contents"><table summary="URI options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th> Name </th><th> Default Value </th><th> Description </th></tr></thead><tbody><tr><td>
+                            <code class="literal">entityType</code>
+                        </td><td>
+                            <span class="emphasis"><em>entityClassName</em></span>
+                        </td><td> Overrides the <span class="emphasis"><em>entityClassName</em></span> from the URI. </td></tr><tr><td>
+                            <code class="literal">persistenceUnit</code>
+                        </td><td>
+                            <code class="literal">camel</code>
+                        </td><td> The JPA persistence unit used by default. </td></tr><tr><td>
+                            <code class="literal">consumeDelete</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td><span class="bold"><strong>JPA consumer only:</strong></span> If <code class="literal">true</code>, the
+                            entity is deleted after it is consumed; if <code class="literal">false</code>, the entity is not
+                            deleted. </td></tr><tr><td>
+                            <code class="literal">consumeLockEntity</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td><span class="bold"><strong>JPA consumer only:</strong></span> Specifies whether or not to set an
+                            exclusive lock on each entity bean while processing the results from polling. </td></tr><tr><td>
+                            <code class="literal">flushOnSend</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td><span class="bold"><strong>JPA producer only:</strong></span> Flushes the <a class="link" href="http://java.sun.com/javaee/5/docs/api/javax/persistence/EntityManager.html" target="_top">EntityManager</a> after the entity bean has been persisted. </td></tr><tr><td>
+                            <code class="literal">maximumResults</code>
+                        </td><td>
+                            <code class="literal">-1</code>
+                        </td><td><span class="bold"><strong>JPA consumer only:</strong></span> Set the maximum number of results to
+                            retrieve on the <a class="link" href="http://java.sun.com/javaee/5/docs/api/javax/persistence/Query.html" target="_top">Query</a>. </td></tr><tr><td>
+                            <code class="literal">transactionManager</code>
+                        </td><td>
+                            <code class="literal">null</code>
+                        </td><td><span class="bold"><strong>Apache Camel 1.6.1/2.0:</strong></span> Specifies the transaction manager to
+                            use. If none provided, Apache Camel will use a <code class="literal">JpaTransactionManager</code> by
+                            default. Can be used to set a JTA transaction manager (for integration with an EJB
+                            container). </td></tr><tr><td>
+                            <code class="literal">consumer.delay</code>
+                        </td><td>
+                            <code class="literal">500</code>
+                        </td><td><span class="bold"><strong>JPA consumer only:</strong></span> Delay in milliseconds between each
+                            poll. </td></tr><tr><td>
+                            <code class="literal">consumer.initialDelay</code>
+                        </td><td>
+                            <code class="literal">1000</code>
+                        </td><td><span class="bold"><strong>JPA consumer only:</strong></span> Milliseconds before polling starts.
+                        </td></tr><tr><td>
+                            <code class="literal">consumer.useFixedDelay</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td><span class="bold"><strong>JPA consumer only:</strong></span> Set to <code class="literal">true</code> to use
+                            fixed delay between polls, otherwise fixed rate is used. See <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/ScheduledExecutorService.html" target="_top">ScheduledExecutorService</a> in JDK for details. </td></tr><tr><td>
+                            <code class="literal">maxMessagesPerPoll</code>
+                        </td><td>
+                            <code class="literal">0</code>
+                        </td><td><span class="bold"><strong>Apache Camel 2.0:</strong></span><span class="bold"><strong>JPA consumer
+                                only:</strong></span> An integer value to define the maximum number of messages to gather per
+                            poll. By default, no maximum is set. Can be used to avoid polling many thousands of messages
+                            when starting up the server. Set a value of 0 or negative to disable. </td></tr><tr><td>
+                            <code class="literal">consumer.query</code>
+                        </td><td>&nbsp;</td><td><span class="bold"><strong>JPA consumer only:</strong></span> To use a custom query when consuming
+                            data. </td></tr><tr><td>
+                            <code class="literal">consumer.resultClass</code>
+                        </td><td>&nbsp;</td><td><span class="bold"><strong>Camel 2.7: JPA consumer only:</strong></span> Defines the type of the
+                            returned payload (we will call <code class="literal">entityManager.createNativeQuery(nativeQuery,
+                                resultClass)</code> instead of
+                                <code class="literal">entityManager.createNativeQuery(nativeQuery)</code>). Without this option,
+                            we will return an object array. Only has an affect when using in conjunction with native
+                            query when consuming data. </td></tr><tr><td>
+                            <code class="literal">consumer.namedQuery</code>
+                        </td><td>&nbsp;</td><td><span class="bold"><strong>JPA consumer only:</strong></span> To use a named query when consuming
+                            data. </td></tr><tr><td>
+                            <code class="literal">consumer.nativeQuery</code>
+                        </td><td>&nbsp;</td><td><span class="bold"><strong>JPA consumer only:</strong></span> To use a custom native query when
+                            consuming data. </td></tr><tr><td>
+                            <code class="literal">usePersist</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td><span class="bold"><strong>Camel 2.5: JPA producer only:</strong></span> Indicates
+                            to use <code class="literal">entityManager.persist(entity)</code> instead of
+                                <code class="literal">entityManager.merge(entity)</code>. Note:
+                                <code class="literal">entityManager.persist(entity)</code> doesn't work for detached entities
+                            (where the EntityManager has to execute an UPDATE instead of an INSERT query)! </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel adds the following message header to the exchange:</p><div class="table"><a name="_IDU_JPA_MsgHead"></a><p class="title"><b>Table&nbsp;56.&nbsp;Message header options</b></p><div class="table-contents"><table summary="Message header options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th> Header </th><th> Type </th><th> Description </th></tr></thead><tbody><tr><td>
+                            <code class="literal">CamelJpaTemplate</code>
+                        </td><td>
+                            <code class="literal">JpaTemplate</code>
+                        </td><td><span class="bold"><strong>Apache Camel 2.0:</strong></span> The <code class="literal">JpaTemplate</code> object
+                            that is used to access the entity bean. You need this object in some situations, for
+                            instance in a type converter or when you are doing some custom processing. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Configuring EntityManagerFactory"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_ConfiguringEntityManagerFactory"></a>Configuring EntityManagerFactory</h2></div></div></div><p>You are strongly advised to configure the JPA component to use a specific
+                <code class="literal">EntityManagerFactory</code> instance. If you do not do so, each <code class="code">JpaEndpoint</code>
+            will auto-create its own <code class="literal">EntityManagerFactory</code> instance.For example, you can instantiate a
+            JPA component that references the <code class="literal">myEMFactory</code> entity manager factory, as follows:</p><pre class="programlisting">&lt;bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent"&gt;
    &lt;property name="entityManagerFactory" ref="myEMFactory"/&gt;
-&lt;/bean&gt;</pre><p>In <span class="bold"><strong>Camel 2.3</strong></span> the
-        <code class="literal">JpaComponent</code> will auto lookup the <code class="literal">EntityManagerFactory</code>
-      from the <a class="link" href="Registry" target="_top">Registry</a> which means you do not need to configure
-      this on the <code class="literal">JpaComponent</code> as shown above. You only need to do so if there is
-      ambiguity, in which case Camel will log a WARN.</p></div><div class="simplesect" title="Configuring TransactionManager"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_ConfiguringTransactionManager"></a>Configuring TransactionManager</h2></div></div></div><p>You are strongly advised to specify the <code class="literal">TransactionManager</code> instance
-      used by the JPA component. If you do not do so, each <code class="code">JpaEndpoint</code> will auto-create
-      its own instance of <code class="literal">TransactionManager</code>. For example, you can instantiate a
-      JPA component that references the <code class="literal">myTransactionManager</code> transaction manager,
-      as follows:</p><pre class="programlisting">&lt;bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent"&gt;
+&lt;/bean&gt;</pre><p>In <span class="bold"><strong>Camel 2.3</strong></span> the <code class="literal">JpaComponent</code> will
+            auto lookup the <code class="literal">EntityManagerFactory</code> from the <a class="link" href="Registry" target="_top">Registry</a>
+            which means you do not need to configure this on the <code class="literal">JpaComponent</code> as shown above. You
+            only need to do so if there is ambiguity, in which case Camel will log a WARN.</p></div><div class="simplesect" title="Configuring TransactionManager"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_ConfiguringTransactionManager"></a>Configuring TransactionManager</h2></div></div></div><p>You are strongly advised to specify the <code class="literal">TransactionManager</code> instance used by the JPA
+            component. If you do not do so, each <code class="code">JpaEndpoint</code> will auto-create its own instance of
+                <code class="literal">TransactionManager</code>. For example, you can instantiate a JPA component that references
+            the <code class="literal">myTransactionManager</code> transaction manager, as follows:</p><pre class="programlisting">&lt;bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent"&gt;
    &lt;property name="entityManagerFactory" ref="myEMFactory"/&gt;
    &lt;property name="transactionManager" ref="myTransactionManager"/&gt;
-&lt;/bean&gt;</pre><p>In <span class="bold"><strong>Camel 2.3</strong></span> the
-        <code class="literal">JpaComponent</code> will auto lookup the <code class="literal">TransactionManager</code>
-      from the <a class="link" href="Registry" target="_top">Registry</a> which means you do not need to configure
-      this on the <code class="literal">JpaComponent</code> as shown above. You only need to do so if there is
-      ambiguity, in which case Camel will log a WARN.</p></div><div class="simplesect" title="Using a consumer with a named query"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Usingaconsumerwithanamedquery"></a>Using a consumer with a named query</h2></div></div></div><p></p><p>For consuming only selected entities, you can use the
-        <code class="literal">consumer.namedQuery</code> URI query option. First, you have to define the named
-      query in the JPA Entity class:</p><pre class="programlisting">
+&lt;/bean&gt;</pre><p>In <span class="bold"><strong>Camel 2.3</strong></span> the <code class="literal">JpaComponent</code> will
+            auto lookup the <code class="literal">TransactionManager</code> from the <a class="link" href="Registry" target="_top">Registry</a>
+            which means you do not need to configure this on the <code class="literal">JpaComponent</code> as shown above. You
+            only need to do so if there is ambiguity, in which case Camel will log a WARN.</p></div><div class="simplesect" title="Using a consumer with a named query"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Usingaconsumerwithanamedquery"></a>Using a consumer with a named query</h2></div></div></div><p></p><p>For consuming only selected entities, you can use the <code class="literal">consumer.namedQuery</code> URI query
+            option. First, you have to define the named query in the JPA Entity class:</p><pre class="programlisting">
 @Entity
 @NamedQuery(name = "step1", query = "select x from MultiSteps x where x.step = 1")
 public class MultiSteps {
@@ -180,17 +129,14 @@ public class MultiSteps {
 from("jpa://org.apache.camel.examples.MultiSteps?consumer.namedQuery=step1")
 .to("bean:myBusinessLogic");
 
-</pre></div><div class="simplesect" title="Using a consumer with a query"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Usingaconsumerwithaquery"></a>Using a consumer with a query</h2></div></div></div><p></p><p>For consuming only selected entities, you can use the <code class="literal">consumer.query</code>
-      URI query option. You only have to define the query option:</p><pre class="programlisting">
+</pre></div><div class="simplesect" title="Using a consumer with a query"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Usingaconsumerwithaquery"></a>Using a consumer with a query</h2></div></div></div><p></p><p>For consuming only selected entities, you can use the <code class="literal">consumer.query</code> URI query option.
+            You only have to define the query option:</p><pre class="programlisting">
 from("jpa://org.apache.camel.examples.MultiSteps?consumer.query=select o from org.apache.camel.examples.MultiSteps o where o.step = 1")
 .to("bean:myBusinessLogic");
 
-</pre></div><div class="simplesect" title="Using a consumer with a native query"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Usingaconsumerwithanativequery"></a>Using a consumer with a native query</h2></div></div></div><p></p><p>For consuming only selected entities, you can use the
-        <code class="literal">consumer.nativeQuery</code> URI query option. You only have to define the native
-      query option:</p><pre class="programlisting">
+</pre></div><div class="simplesect" title="Using a consumer with a native query"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Usingaconsumerwithanativequery"></a>Using a consumer with a native query</h2></div></div></div><p></p><p>For consuming only selected entities, you can use the <code class="literal">consumer.nativeQuery</code> URI query
+            option. You only have to define the native query option:</p><pre class="programlisting">
 from("jpa://org.apache.camel.examples.MultiSteps?consumer.nativeQuery=select * from MultiSteps where step = 1")
 .to("bean:myBusinessLogic");
 
-</pre><p>If you use the native query option, you will receive an object array in the message
-      body.</p></div><div class="simplesect" title="Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Example"></a>Example</h2></div></div></div><p>See the Tracer Example for an example using JPA to store traced messages into a
-      database.</p></div></div></body></html>
+</pre><p>If you use the native query option, you will receive an object array in the message body.</p></div><div class="simplesect" title="Example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JPA_HSH_Example"></a>Example</h2></div></div></div><p>See the Tracer Example for an example using JPA to store traced messages into a database.</p></div></div></body></html>

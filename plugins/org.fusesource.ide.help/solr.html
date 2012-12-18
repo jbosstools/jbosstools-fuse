@@ -1,0 +1,144 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Solr</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="snmp.html" title="SNMP"><link rel="next" href="springIntegration.html" title="Spring Integration"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Solr"><div class="titlepage"><div><div><h2 class="title"><a name="solr"></a>Solr</h2></div></div></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48697"></a>Overview</h2></div></div></div><p>The solr component enables you to interface with an Apache Lucene
+            Solr server (based on SolrJ 3.5.0).</p></div><div class="simplesect" title="Dependencies"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48702"></a>Dependencies</h2></div></div></div><p>Maven users need to add the following dependency to their
+                <code class="filename">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-solr&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;!-- use the same version as your Camel core version --&gt;
+&lt;/dependency&gt;</pre></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48712"></a>URI format</h2></div></div></div><p>The URI format for a solr endpoint is:</p><pre class="programlisting">solr://<em class="replaceable"><code>host[:port]</code></em>/solr?[<em class="replaceable"><code>options</code></em>]</pre></div><div class="simplesect" title="Endpoint options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48725"></a>Endpoint options</h2></div></div></div><p><a class="xref" href="solr.html#solrRefTbl010">SolrServer options</a> describes the SolrServer options
+            that can be configured for a Solr endpoint.</p><div class="informaltable"><a name="solrRefTbl010"></a><table width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+                            <code class="code">maxRetries</code>
+                        </td><td>
+                            <code class="code">0</code>
+                        </td><td>Specifies the maximum number of retries to
+                            attempt when transient errors occur.</td></tr><tr><td>
+                            <code class="code">soTimeout</code>
+                        </td><td>
+                            <code class="literal">1000</code>
+                        </td><td>Specifies the read timeout, in milliseconds, on
+                            the underlying
+                                <code class="literal">HttpConnectionManager</code>. The
+                            use of this option is desirable for queries, but not
+                            for indexing.</td></tr><tr><td>
+                            <code class="code">connectionTimeout</code>
+                        </td><td>
+                            <code class="code">100</code>
+                        </td><td>Specifies the connection timeout, in
+                            milliseconds, on the underlying
+                                <code class="literal">HttpConnectionManager</code>.</td></tr><tr><td>
+                            <code class="code">defaultMaxConnectionsPerHost</code>
+                        </td><td>
+                            <code class="code">2</code>
+                        </td><td>Specifies the maximum total connections per host
+                            on the underlying
+                                <code class="literal">HttpConnectionManager</code>.</td></tr><tr><td>
+                            <code class="code">maxTotalConnections</code>
+                        </td><td>
+                            <code class="code">20</code>
+                        </td><td>Specifies the maximum total connections on the
+                            underlying
+                            <code class="literal">HttpConnectionManager</code>.</td></tr><tr><td>
+                            <code class="code">followRedirects</code>
+                        </td><td>
+                            <code class="code">false</code>
+                        </td><td>Indicates whether redirects are used to get to
+                            the Solr server.</td></tr><tr><td>
+                            <code class="code">allowCompression</code>
+                        </td><td>
+                            <code class="code">false</code>
+                        </td><td>Specifies whether to allow compression. For this
+                            option to effect compression, the server side must
+                            support gzip or deflate.</td></tr><tr><td>
+                            <code class="code">requestHandler</code>
+                        </td><td>
+                            <code class="code">/update (xml)</code>
+                        </td><td>Specifies the request handler to use.</td></tr><tr><td>
+                            <code class="code">streamingThreadCount</code>
+                        </td><td>
+                            <code class="code">2</code>
+                        </td><td><span class="bold"><strong>Apache Camel 2.9.2:</strong></span>
+                            Sets the number of threads for the
+                                <code class="filename">StreamingUpdateSolrServer</code>.</td></tr><tr><td>
+                            <code class="code">streamingQueueSize</code>
+                        </td><td>
+                            <code class="code">10</code>
+                        </td><td><span class="bold"><strong>Apache Camel 2.9.2:</strong></span>
+                            Sets the queue size for the
+                                <code class="filename">StreamingUpdateSolrServer</code>.</td></tr></tbody></table></div></div><div class="simplesect" title="Message operations"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="solrMsgOps"></a>Message operations</h2></div></div></div><p>the following Solr operations are supported. To use them, set an
+            Exchange header with the key <code class="literal">SolrOperation</code> and a
+            value set to one of those listed in <a class="xref" href="solr.html#solrRefTb2">Solr message operations</a>.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Some operations also require you to set the message body</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><code class="literal">INSERT</code> operations use the
+                                <code class="filename">CommonHttpSolrServer</code></p></li><li class="listitem"><p><code class="literal">INSERT_STREAMING</code>
+                            operations use the
+                                <code class="filename">StreamingUpdateHttpSolrServer</code>
+                                (<span class="bold"><strong>Apache Camel
+                            2.9.2</strong></span>)</p></li></ul></div><p>
+            </p></td></tr></table></div><p><a class="xref" href="solr.html#solrRefTb2">Solr message operations</a> describes the supported Solr message
+            operations.</p><div class="informaltable"><a name="solrRefTb2"></a><table width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Operation</th><th>Message body</th><th>Description</th></tr></thead><tbody><tr><td>
+                            <code class="code">INSERT/INSERT_STREAMING</code>
+                        </td><td> NA </td><td>Adds an index using message headers (must be
+                            prefixed with <code class="literal">SolrField</code>.</td></tr><tr><td>
+                            <code class="code">INSERT/INSERT_STREAMING</code>
+                        </td><td>File</td><td>Adds an index using the specified file (using
+                                <code class="literal">ContentStreamUpdateRequest</code>.</td></tr><tr><td>
+                            <code class="code">INSERT/INSERT_STREAMING</code>
+                        </td><td> SolrInputDocument </td><td><span class="bold"><strong>Apache Camel 2.9.2:</strong></span>
+                            Updates an index based on the specified
+                            SolrInputDocument.</td></tr><tr><td>
+                            <code class="code">INSERT/INSERT_STREAMING</code>
+                        </td><td> String XML </td><td><span class="bold"><strong>Apache Camel 2.9.2:</strong></span>
+                            Updates an index based on the specified XML (must
+                            follow SolrInputDocument format).</td></tr><tr><td>
+                            <code class="code">ADD_BEAN</code>
+                        </td><td> bean instance </td><td>Adds an index based on values in an annotated
+                            bean.</td></tr><tr><td>
+                            <code class="code">DELETE_BY_ID</code>
+                        </td><td> index id to delete </td><td>Deletes a record based on an ID.</td></tr><tr><td>
+                            <code class="code">DELETE_BY_QUERY</code>
+                        </td><td> query string </td><td>Deletes a record based on a query string.</td></tr><tr><td>
+                            <code class="code">COMMIT</code>
+                        </td><td> NA </td><td>Performs a commit on pending index
+                            changes.</td></tr><tr><td>
+                            <code class="code">ROLLBACK</code>
+                        </td><td> NA </td><td>Performs a rollback on pending index
+                            changes.</td></tr><tr><td>
+                            <code class="code">OPTIMIZE</code>
+                        </td><td> NA </td><td>First performs a commit on pending index changes
+                            and then runs the optimize command.</td></tr></tbody></table></div></div><div class="simplesect" title="Simple INSERT and COMMIT example"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e49053"></a>Simple INSERT and COMMIT example</h2></div></div></div><p></p><pre class="programlisting">from("direct:insert")
+    .setHeader(SolrConstants.OPERATION, constant(SolrConstants.OPERATION_INSERT))
+    .setHeader(SolrConstants.FIELD + "id", body())
+    .to("solr://localhost:8983/solr");
+
+from("direct:commit")
+    .setHeader(SolrConstants.OPERATION, constant(SolrConstants.OPERATION_COMMIT))
+    .to("solr://localhost:8983/solr");
+            </pre><pre class="programlisting">&lt;route&gt;
+    &lt;from uri="direct:insert"/&gt;
+    &lt;setHeader headerName="SolrOperation"&gt;
+        &lt;constant&gt;INSERT&lt;/constant&gt;
+    &lt;/setHeader&gt;
+    &lt;setHeader headerName="SolrField.id"&gt;
+        &lt;simple&gt;${body}&lt;/simple&gt;
+    &lt;/setHeader&gt;
+    &lt;to uri="solr://localhost:8983/solr"/&gt;
+&lt;/route&gt;
+&lt;route&gt;
+    &lt;from uri="direct:commit"/&gt;
+    &lt;setHeader headerName="SolrOperation"&gt;
+        &lt;constant&gt;COMMIT&lt;/constant&gt;
+    &lt;/setHeader&gt;
+    &lt;to uri="solr://localhost:8983/solr"/&gt;
+&lt;/route&gt;
+            </pre><p>A client would just need to pass a body message to the insert
+            route and then call the commit route.</p><pre class="programlisting"> template.sendBody("direct:insert", "1234");
+ template.sendBody("direct:commit", null);
+            </pre></div><div class="simplesect" title="Querying Solr"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e49068"></a>Querying Solr</h2></div></div></div><p>Currently, the Solr component does not support querying data
+            natively, but you can query Solr using HTTP this way:</p><pre class="programlisting">//define the route to perform a basic query
+from("direct:query")
+    .recipientList(simple("http://localhost:8983/solr/select/?q=${body}"))
+    .convertBodyTo(String.class);
+...
+//query for an id of '1234' (url encoded)
+String responseXml = (String) template.requestBody("direct:query", "id%3A1234");
+            </pre></div></div></body></html>

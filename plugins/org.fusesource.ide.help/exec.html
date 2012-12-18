@@ -1,209 +1,163 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Exec</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="event.html" title="Event"><link rel="next" href="fix.html" title="FIX"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Exec"><div class="titlepage"><div><div><h2 class="title"><a name="exec"></a>Exec</h2></div></div></div><div class="simplesect" title="Exec component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Execcomponent"></a>Exec component</h2></div></div></div><p><span class="bold"><strong>Available in Apache Camel 2.3</strong></span>
-    </p><p>The <code class="literal">exec</code> component can be used to execute a system command. </p></div><div class="simplesect" title="Dependencies"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Dependencies"></a>Dependencies</h2></div></div></div><p>Maven users need to add the following dependency to their <code class="literal">pom.xml</code>
-    </p><pre class="programlisting">&lt;dependency&gt;
+   <title>Exec</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="event.html" title="Event"><link rel="next" href="fix.html" title="FIX"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Exec"><div class="titlepage"><div><div><h2 class="title"><a name="exec"></a>Exec</h2></div></div></div><div class="simplesect" title="Exec component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Execcomponent"></a>Exec component</h2></div></div></div><p>
+            <span class="bold"><strong>Available in Apache Camel 2.3</strong></span>
+        </p><p>The <code class="literal">exec</code> component can be used to execute a
+            system command. </p></div><div class="simplesect" title="Dependencies"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Dependencies"></a>Dependencies</h2></div></div></div><p>Maven users need to add the following dependency to their
+                <code class="literal">pom.xml</code>
+        </p><pre class="programlisting">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
   &lt;artifactId&gt;camel-exec&lt;/artifactId&gt;
   &lt;version&gt;${camel-version}&lt;/version&gt;
-&lt;/dependency&gt;</pre><p>where <code class="literal">${camel-version}</code> must be replaced by the actual version of Apache Camel
-      (2.3.0 or higher). </p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">exec://executable[?options]</pre><p>where <code class="literal">executable</code> is the name, or file path, of the system command that
-      will be executed. If executable name is used (e.g. <code class="literal">exec:java</code>), the
-      executable must in the system path.</p></div><div class="simplesect" title="URI options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_URIoptions"></a>URI options</h2></div></div></div><p></p><p>
-      
-    </p><table id="d0e38037"><tr>
-        <th> Name </th>
-        <th> Default value </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">args</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td>
-          <p> The arguments of the executable. The arguments may be one or many
-            whitespace-separated tokens, that can be quoted with <code class="literal">"</code>, e.g.
-              <code class="literal">args="arg 1" arg2</code> will use two arguments <code class="literal">arg 1</code>
-            and <code class="literal">arg2</code>. To include the quotes use <code class="literal">""</code>, e.g.
-              <code class="literal">args=""arg 1"" arg2</code> will use the arguments <code class="literal">"arg
-              1"</code> and <code class="literal">arg2</code>.</p>
-        </td>
-      </tr><tr>
-        <td><code class="literal">workingDir</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td>The directory in which the command should be executed. If <code class="literal">null</code>, the
-          working directory of the current process will be used.</td>
-      </tr><tr>
-        <td><code class="literal">timeout</code>
-        </td>
-        <td><code class="literal">Long.MAX_VALUE</code>
-        </td>
-        <td>The timeout, in milliseconds, after which the executable should be terminated. If the
-          executable has has not finished within the timeout, the component will send a termination
-          request.</td>
-      </tr><tr>
-        <td><code class="literal">outFile</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td>The name of a file, created by the executable, that should be considered as output of
-          the executable. If no <code class="literal">outFile</code> is set, the standard output (stdout) of
-          the executable will be considered as output. </td>
-      </tr><tr>
-        <td><code class="literal">binding</code>
-        </td>
-        <td> a <code class="literal">DefaultExecBinding</code> instance </td>
-        <td> A reference to a <code class="literal">org.apache.commons.exec.ExecBinding</code> in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>.</td>
-      </tr><tr>
-        <td><code class="literal">commandExecutor</code>
-        </td>
-        <td>a <code class="literal">DefaultCommandExecutor</code> instance </td>
-        <td> A reference to a <code class="literal">org.apache.commons.exec.ExecCommandExecutor</code> in the
-            <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>, that customizes
-          the command execution. The default command executor utilizes the <a class="link" href="http://commons.apache.org/exec/" target="_top">commons-exec library</a>. It adds a
-          shutdown hook for every executed command.</td>
-      </tr><tr>
-        <td><code class="literal">useStderrOnEmptyStdout</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> A boolean which dictates when <code class="literal">stdin</code> is empty, it should fallback and
-          use <code class="literal">stderr</code> in the Message Body. This option is default
-            <code class="literal">false</code>. </td>
-      </tr></table><p>
-      
-    </p></div><div class="simplesect" title="Message headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Messageheaders"></a>Message headers</h2></div></div></div><p></p><p>The supported headers are defined in
-        <code class="literal">org.apache.camel.component.exec.ExecBinding</code>.
-      
-    </p><table id="d0e38228"><tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Message </th>
-        <th>Description</th>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_COMMAND_EXECUTABLE</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td><code class="literal">in</code>
-        </td>
-        <td> The name of the system command that will be executed. Overrides the
-            <code class="literal">executable</code> in the URI.</td>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_COMMAND_ARGS</code>
-        </td>
-        <td><code class="literal">java.util.List&lt;String&gt;</code>
-        </td>
-        <td><code class="literal">in</code>
-        </td>
-        <td>The arguments of the executable. The arguments are used literally, no quoting is
-          applied. Overrides existing <code class="literal">args</code> in the URI.</td>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_COMMAND_ARGS</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td><code class="literal">in</code>
-        </td>
-        <td><span class="bold"><strong>Camel 2.5:</strong></span> The arguments of the executable as a Single string where each argument is whitespace separated (see <code class="literal">args</code> in URI option). The arguments are used literally, no quoting is applied. Overrides existing <code class="literal">args</code> in the URI.</td>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_COMMAND_OUT_FILE</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td><code class="literal">in</code>
-        </td>
-        <td>The name of a file, created by the executable, that should be considered as output of
-          the executable. Overrides existing <code class="literal">outFile</code> in the URI.</td>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_COMMAND_TIMEOUT</code>
-        </td>
-        <td><code class="literal">long</code>
-        </td>
-        <td><code class="literal">in</code>
-        </td>
-        <td>The timeout, in milliseconds, after which the executable should be terminated. Overrides
-          existing <code class="literal">timeout</code> in the URI.</td>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_COMMAND_WORKING_DIR</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td><code class="literal">in</code>
-        </td>
-        <td>The directory in which the command should be executed. Overrides existing
-            <code class="literal">workingDir</code> in the URI.</td>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_EXIT_VALUE</code>
-        </td>
-        <td><code class="literal">int</code>
-        </td>
-        <td><code class="literal">out</code>
-        </td>
-        <td>The value of this header is the <span class="emphasis"><em>exit value</em></span> of the executable.
-          Typically not-zero exit values indicates abnormal termination. Note that the exit value is
-          OS-dependent.</td>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_STDERR</code>
-        </td>
-        <td><code class="literal">java.io.InputStream</code>
-        </td>
-        <td><code class="literal">out</code>
-        </td>
-        <td>The value of this header points to the standard error stream (stderr) of the executable.
-          If no stderr is written, the value is <code class="literal">null</code>.</td>
-      </tr><tr>
-        <td><code class="literal">ExecBinding.EXEC_USE_STDERR_ON_EMPTY_STDOUT</code>
-        </td>
-        <td><code class="literal">boolean</code>
-        </td>
-        <td><code class="literal">in</code>
-        </td>
-        <td> Indicates when the <code class="literal">stdin</code> is empty, should we fallback and use
-            <code class="literal">stderr</code> as the body of the Message. By default this option is
-            <code class="literal">false</code>. </td>
-      </tr></table><p>
-      
-    </p></div><div class="simplesect" title="Message body"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Messagebody"></a>Message body</h2></div></div></div><p>If the <code class="literal">in</code> message body, that that the <code class="literal">Exec</code> component
-      receives, is convertible to <code class="literal">java.io.InputStream</code>, it is used to feed input
-      of the executable via its stdin. After the execution, <a class="link" href="http://camel.apache.org/exchange.html" target="_top">the message body</a> is the result of the
-      execution, that is <code class="literal">org.apache.camel.components.exec.ExecResult</code> instance
-      containing the stdout, stderr, exit value and out file. The component supports the following
-        <code class="literal">ExecResult</code>
-      <a class="link" href="http://camel.apache.org/type-converter.html" target="_top">type converters</a> for
-      convenience:</p><p>
-      
-    </p><table id="d0e38495"><tr>
-        <th>From</th>
-        <th>To</th>
-      </tr><tr>
-        <td><code class="literal">ExecResult</code>
-        </td>
-        <td><code class="literal">java.io.InputStream</code>
-        </td>
-      </tr><tr>
-        <td><code class="literal">ExecResult</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-      </tr><tr>
-        <td><code class="literal">ExecResult</code>
-        </td>
-        <td><code class="literal">byte []</code>
-        </td>
-      </tr><tr>
-        <td><code class="literal">ExecResult</code>
-        </td>
-        <td><code class="literal">org.w3c.dom.Document</code>
-        </td>
-      </tr></table><p>If out file is used (the endpoint is configured with <code class="literal">outFile</code>, or there
-      is <code class="literal">ExecBinding.EXEC_COMMAND_OUT_FILE</code> header) the converters return the
-      content of the out file. If no out file is used, then the converters will use the stdout of
-      the process for conversion to the target type. For example refer to <a class="xref" href="exec.html#ExecExamples" title="Usage Examples">Usage Examples</a>.</p></div><div class="simplesect" title="Usage Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ExecExamples"></a>Usage Examples</h2></div></div></div><h3><a name="d0e38565"></a>Executing word count (Linux)</h3><p>The example below executes <code class="literal">wc</code> (word count, Linux) to count the words in
-      file <code class="literal">/usr/share/dict/words</code>. The word count (output) is written in the
-      standart output stream of <code class="literal">wc</code>.</p><pre class="programlisting">from("direct:exec")
+&lt;/dependency&gt;</pre><p>where <code class="literal">${camel-version}</code> must be replaced by the
+            actual version of Apache Camel (2.3.0 or higher). </p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">exec://executable[?options]</pre><p>where <code class="literal">executable</code> is the name, or file path, of
+            the system command that will be executed. If executable name is used
+            (e.g. <code class="literal">exec:java</code>), the executable must in the
+            system path.</p></div><div class="simplesect" title="URI options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_URIoptions"></a>URI options</h2></div></div></div><p>The supported uri options are listed <a class="xref" href="exec.html#_IDU_Exec_URIoptsTbl">Table&nbsp;51</a>:</p><div class="table"><a name="d0e38037"></a><p class="title"><b>Table&nbsp;51.&nbsp;URI options</b></p><div class="table-contents"><table summary="URI options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default value</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">args</code></td><td><code class="literal">null</code></td><td>
+                      <p> The arguments of the executable.</p>
+                      <p>The arguments may be one or many whitespace-separated tokens, that can be
+                        quoted with <code class="literal">"</code>, e.g. <code class="literal">args="arg 1" arg2</code> will use two
+                        arguments <code class="literal">arg 1</code> and <code class="literal">arg2</code>.</p>
+                      <p>To include the quotes use <code class="literal">""</code>, e.g. <code class="literal">args=""arg 1""
+                            arg2</code> will use the arguments <code class="literal">"arg 1"</code> and <code class="literal">arg2</code>.</p>
+                   </td></tr><tr><td><code class="literal">workingDir</code></td><td><code class="literal">null</code></td><td>
+                        <p>The directory in which the command should be executed.</p>
+                        <p>If <code class="literal">null</code>, the working directory
+                            of the current process will be used.</p>
+                    </td></tr><tr><td><code class="literal">timeout</code></td><td><code class="literal">Long.MAX_VALUE</code></td><td>
+                        <p>The timeout, in milliseconds, after which the executable should be terminated.</p>
+                        <p>If the executable has not finished within the timeout, the component will send a termination request.</p>
+                    </td></tr><tr><td><code class="literal">outFile</code></td><td><code class="literal">null</code></td><td>
+                        <p>The name of a file, created by the executable,
+                            that should be considered as output of the executable.</p>
+                        <p>If no <code class="literal">outFile</code> is set, the
+                            standard output (stdout) of the executable will be
+                            considered as output.</p>
+                    </td></tr><tr><td><code class="literal">binding</code></td><td>A <code class="literal">DefaultExecBinding</code> instance</td><td>A reference to a <code class="literal">org.apache.commons.exec.ExecBinding</code> in the 
+                       <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>.</td></tr><tr><td><code class="literal">commandExecutor</code></td><td>A <code class="literal">DefaultCommandExecutor</code> instance</td><td>
+                        <p>A reference to a <code class="literal">org.apache.commons.exec.ExecCommandExecutor</code> in the 
+                             <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>, that customizes 
+                             the command execution.</p>
+                        <p>The default command executor utilizes the <a class="link" href="http://commons.apache.org/exec/" target="_top">
+                              commons-exec library</a>. It adds a shutdown hook for
+                              every executed command.</p>
+                    </td></tr><tr><td><code class="literal">useStderrOnEmptyStdout</code></td><td><code class="literal">false</code></td><td>A boolean that dictates when <code class="literal">stdin</code>
+                           is empty, it should fallback and use
+                           <code class="literal">stderr</code> in the Message Body.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Message headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Messageheaders"></a>Message headers</h2></div></div></div><p>The supported headers are defined in
+                <code class="literal">org.apache.camel.component.exec.ExecBinding</code>.</p><div class="table"><a name="d0e38209"></a><p class="title"><b>Table&nbsp;52.&nbsp;Message header options</b></p><div class="table-contents"><table summary="Message header options" width="100%" border="1"><colgroup><col width="25%"><col width="25%"><col width="25%"><col width="25%"></colgroup><thead><tr><th>Name</th><th>Type</th><th>Message </th><th>Description</th></tr></thead><tbody><tr><td>
+                    <code class="literal">ExecBinding.EXEC_COMMAND_EXECUTABLE</code>
+                </td><td>
+                    <code class="literal">String</code>
+                </td><td>
+                    <code class="literal">in</code>
+                </td><td>The name of the system command that will be executed.
+                    Overrides the <code class="literal">executable</code> in the
+                    URI.</td></tr><tr><td>
+                    <code class="literal">ExecBinding.EXEC_COMMAND_ARGS</code>
+                </td><td>
+                    <code class="literal">java.util.List&lt;String&gt;</code>
+                </td><td>
+                    <code class="literal">in</code>
+                </td><td>The arguments of the executable. The arguments are used
+                    literally, no quoting is applied. Overrides existing
+                        <code class="literal">args</code> in the URI.</td></tr><tr><td>
+                    <code class="literal">ExecBinding.EXEC_COMMAND_ARGS</code>
+                </td><td>
+                    <code class="literal">String</code>
+                </td><td>
+                    <code class="literal">in</code>
+                </td><td><span class="bold"><strong>Camel 2.5:</strong></span> The arguments of
+                    the executable as a Single string where each argument is
+                    whitespace separated (see <code class="literal">args</code> in URI
+                    option). The arguments are used literally, no quoting is
+                    applied. Overrides existing <code class="literal">args</code> in the
+                    URI.</td></tr><tr><td>
+                    <code class="literal">ExecBinding.EXEC_COMMAND_OUT_FILE</code>
+                </td><td>
+                    <code class="literal">String</code>
+                </td><td>
+                    <code class="literal">in</code>
+                </td><td>The name of a file, created by the executable, that should
+                    be considered as output of the executable. Overrides
+                    existing <code class="literal">outFile</code> in the URI.</td></tr><tr><td>
+                    <code class="literal">ExecBinding.EXEC_COMMAND_TIMEOUT</code>
+                </td><td>
+                    <code class="literal">long</code>
+                </td><td>
+                    <code class="literal">in</code>
+                </td><td>The timeout, in milliseconds, after which the executable
+                    should be terminated. Overrides existing
+                        <code class="literal">timeout</code> in the URI.</td></tr><tr><td>
+                    <code class="literal">ExecBinding.EXEC_COMMAND_WORKING_DIR</code>
+                </td><td>
+                    <code class="literal">String</code>
+                </td><td>
+                    <code class="literal">in</code>
+                </td><td>The directory in which the command should be executed.
+                    Overrides existing <code class="literal">workingDir</code> in the
+                    URI.</td></tr><tr><td>
+                    <code class="literal">ExecBinding.EXEC_EXIT_VALUE</code>
+                </td><td>
+                    <code class="literal">int</code>
+                </td><td>
+                    <code class="literal">out</code>
+                </td><td>The value of this header is the <span class="emphasis"><em>exit
+                        value</em></span> of the executable. Typically not-zero
+                    exit values indicates abnormal termination. Note that the
+                    exit value is OS-dependent.</td></tr><tr><td>
+                    <code class="literal">ExecBinding.EXEC_STDERR</code>
+                </td><td>
+                    <code class="literal">java.io.InputStream</code>
+                </td><td>
+                    <code class="literal">out</code>
+                </td><td>The value of this header points to the standard error stream
+                    (stderr) of the executable. If no stderr is written, the
+                    value is <code class="literal">null</code>.</td></tr><tr><td>
+                    <code class="literal">ExecBinding.EXEC_USE_STDERR_ON_EMPTY_STDOUT</code>
+                </td><td>
+                    <code class="literal">boolean</code>
+                </td><td>
+                    <code class="literal">in</code>
+                </td><td> Indicates when the <code class="literal">stdin</code> is empty,
+                    should we fallback and use <code class="literal">stderr</code> as the
+                    body of the Message. By default this option is
+                        <code class="literal">false</code>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Message body"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Exec_HSH_Messagebody"></a>Message body</h2></div></div></div><p>If the <code class="literal">in</code> message body, that that the
+                <code class="literal">Exec</code> component receives, is convertible to
+                <code class="literal">java.io.InputStream</code>, it is used to feed input
+            of the executable via its stdin. After the execution, <a class="link" href="http://camel.apache.org/exchange.html" target="_top">the message
+                body</a> is the result of the execution, that is
+                <code class="literal">org.apache.camel.components.exec.ExecResult</code>
+            instance containing the stdout, stderr, exit value and out file. The
+            component supports the following <code class="literal">ExecResult</code>
+            <a class="link" href="http://camel.apache.org/type-converter.html" target="_top">type
+                converters</a> for convenience:</p><p>
+            
+        </p><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>From</th><th>To</th></tr></thead><tbody><tr><td>
+                    <code class="literal">ExecResult</code>
+                </td><td>
+                    <code class="literal">java.io.InputStream</code>
+                </td></tr><tr><td>
+                    <code class="literal">ExecResult</code>
+                </td><td>
+                    <code class="literal">String</code>
+                </td></tr><tr><td>
+                    <code class="literal">ExecResult</code>
+                </td><td>
+                    <code class="literal">byte []</code>
+                </td></tr><tr><td>
+                    <code class="literal">ExecResult</code>
+                </td><td>
+                    <code class="literal">org.w3c.dom.Document</code>
+                </td></tr></tbody></table></div><p>If out file is used (the endpoint is configured with
+                <code class="literal">outFile</code>, or there is
+                <code class="literal">ExecBinding.EXEC_COMMAND_OUT_FILE</code> header) the
+            converters return the content of the out file. If no out file is
+            used, then the converters will use the stdout of the process for
+            conversion to the target type. For example refer to <a class="xref" href="exec.html#ExecExamples" title="Usage Examples">Usage Examples</a>.</p></div><div class="simplesect" title="Usage Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ExecExamples"></a>Usage Examples</h2></div></div></div><h3><a name="d0e38520"></a>Executing word count (Linux)</h3><p>The example below executes <code class="literal">wc</code> (word count,
+            Linux) to count the words in file
+                <code class="literal">/usr/share/dict/words</code>. The word count
+            (output) is written in the standart output stream of
+                <code class="literal">wc</code>.</p><pre class="programlisting">from("direct:exec")
 .to("exec:wc?args=--words /usr/share/dict/words")
 .process(new Processor() {
      public void process(Exchange exchange) throws Exception {
@@ -214,22 +168,27 @@
        String wordCountOutput = exchange.getIn().getBody(String.class);
        // do something with the word count
      }
-});</pre><h3><a name="d0e38580"></a>Executing java</h3><p>The example below executes <code class="literal">java</code> with 2 arguments:
-        <code class="literal">-server</code> and <code class="literal">-version</code>, provided that
-        <code class="literal">java</code> is in the system path. </p><pre class="programlisting">from("direct:exec")
-.to("exec:java?args=-server -version")</pre><p>The example below executes <code class="literal">java</code> in <code class="literal">c:/temp</code> with 3
-      arguments: <code class="literal">-server</code>, <code class="literal">-version</code> and the sytem property
-        <code class="literal">user.name</code>.</p><pre class="programlisting">from("direct:exec")
-.to("exec:c:/program files/jdk/bin/java?args=-server -version -Duser.name=Camel&amp;workingDir=c:/temp")</pre><h3><a name="d0e38617"></a>Executing Ant scripts</h3><p>The following example executes <a class="link" href="http://ant.apache.org/" target="_top">Apache Ant</a>
-      (Windows only) with the build file <code class="literal">CamelExecBuildFile.xml</code>, provided that
-        <code class="literal">ant.bat</code> is in the system path, and that
-        <code class="literal">CamelExecBuildFile.xml</code> is in the current directory.</p><pre class="programlisting">from("direct:exec")
-.to(exec:ant.bat?args=-f CamelExecBuildFile.xml")</pre><p>In the next example, the <code class="literal">ant.bat</code> command, redirects the ant output to
-        <code class="literal">CamelExecOutFile.txt</code> with <code class="literal">-l</code>. The file
-        <code class="literal">CamelExecOutFile.txt</code> is used as out file with
-        <code class="literal">outFile=CamelExecOutFile.txt</code>. The example assumes that
-        <code class="literal">ant.bat</code> is in the system path, and that
-        <code class="literal">CamelExecBuildFile.xml</code> is in the current directory.</p><pre class="programlisting">from("direct:exec")
+});</pre><h3><a name="d0e38535"></a>Executing java</h3><p>The example below executes <code class="literal">java</code> with 2
+            arguments: <code class="literal">-server</code> and
+                <code class="literal">-version</code>, provided that
+                <code class="literal">java</code> is in the system path. </p><pre class="programlisting">from("direct:exec")
+.to("exec:java?args=-server -version")</pre><p>The example below executes <code class="literal">java</code> in
+                <code class="literal">c:/temp</code> with 3 arguments:
+                <code class="literal">-server</code>, <code class="literal">-version</code> and the
+            sytem property <code class="literal">user.name</code>.</p><pre class="programlisting">from("direct:exec")
+.to("exec:c:/program files/jdk/bin/java?args=-server -version -Duser.name=Camel&amp;workingDir=c:/temp")</pre><h3><a name="d0e38572"></a>Executing Ant scripts</h3><p>The following example executes <a class="link" href="http://ant.apache.org/" target="_top">Apache Ant</a> (Windows
+            only) with the build file <code class="literal">CamelExecBuildFile.xml</code>,
+            provided that <code class="literal">ant.bat</code> is in the system path, and
+            that <code class="literal">CamelExecBuildFile.xml</code> is in the current
+            directory.</p><pre class="programlisting">from("direct:exec")
+.to(exec:ant.bat?args=-f CamelExecBuildFile.xml")</pre><p>In the next example, the <code class="literal">ant.bat</code> command,
+            redirects the ant output to <code class="literal">CamelExecOutFile.txt</code>
+            with <code class="literal">-l</code>. The file
+                <code class="literal">CamelExecOutFile.txt</code> is used as out file with
+                <code class="literal">outFile=CamelExecOutFile.txt</code>. The example
+            assumes that <code class="literal">ant.bat</code> is in the system path, and
+            that <code class="literal">CamelExecBuildFile.xml</code> is in the current
+            directory.</p><pre class="programlisting">from("direct:exec")
 .to("exec:ant.bat?args=-f CamelExecBuildFile.xml -l CamelExecOutFile.txt&amp;outFile=CamelExecOutFile.txt")
 .process(new Processor() {
      public void process(Exchange exchange) throws Exception {
