@@ -1,10 +1,10 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>RSS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="rmi.html" title="RMI"><link rel="next" href="scalate.html" title="Scalate"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="RSS"><div class="titlepage"><div><div><h2 class="title"><a name="rss"></a>RSS</h2></div></div></div><div class="simplesect" title="RSS Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_RSS_HSH_RSSComponent"></a>RSS Component</h2></div></div></div><p>The <span class="bold"><strong>rss:</strong></span> component is used for polling RSS feeds.
+   <title>RSS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="rmi.html" title="RMI"><link rel="next" href="scalate.html" title="Scalate"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="RSS"><div class="titlepage"><div><div><h2 class="title"><a name="rss"></a>RSS</h2></div></div></div><div class="simplesect" title="RSS Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_RSS_HSH_RSSComponent"></a>RSS Component</h2></div></div></div><p>The <span class="bold"><strong>rss:</strong></span> component is used for polling RSS feeds.
       Apache Camel will default poll the feed every 60th seconds.</p><p><span class="bold"><strong>Note:</strong></span> The component currently only supports polling
       (consuming) feeds.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_RSS_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">rss:rssUri</pre><p>Where <code class="literal">rssUri</code> is the URI to the RSS feed to poll. </p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_RSS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e48254"><tr>
+    </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_RSS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e47853"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -81,7 +81,7 @@
       </tr></table></div><div class="simplesect" title="Exchange data types"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_RSS_HSH_Exchangedatatypes"></a>Exchange data types</h2></div></div></div><p>Apache Camel initializes the In body on the Exchange with a ROME <code class="literal">SyndFeed</code>.
       Depending on the value of the <code class="literal">splitEntries</code> flag, Apache Camel returns either a
         <code class="literal">SyndFeed</code> with one <code class="literal">SyndEntry</code> or a
-        <code class="literal">java.util.List</code> of <code class="literal">SyndEntrys</code>.</p><table id="d0e48465"><tr>
+        <code class="literal">java.util.List</code> of <code class="literal">SyndEntrys</code>.</p><table id="d0e48064"><tr>
         <th> Option </th>
         <th> Value </th>
         <th> Behavior </th>
@@ -97,7 +97,7 @@
         <td><code class="literal">false</code>
         </td>
         <td> The entire list of entries from the current feed is set in the exchange. </td>
-      </tr></table></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_RSS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e48510"><tr>
+      </tr></table></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_RSS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e48109"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -127,6 +127,6 @@ from("rss:file:src/test/data/rss20.xml?splitEntries=true&amp;consumer.delay=100"
         SyndEntry firstEntry = (SyndEntry) feed.getEntries().get(0);
         return firstEntry.getTitle().contains("Camel");
     }
-}</pre></div><div class="simplesect" title="See also"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48591"></a>See also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+}</pre></div><div class="simplesect" title="See also"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48190"></a>See also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
           <a href="PLUGINS_ROOT/com.fusesource.rider.help/atom.html" class="olink">Atom</a>
         </p></li></ul></div></div></div></body></html>

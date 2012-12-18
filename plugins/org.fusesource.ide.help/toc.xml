@@ -237,7 +237,7 @@
       </topic>
       <topic label="Route Icon" href="routeIcon.html"/>
    </topic>
-   <topic label="Component Reference" href="RiderCompRef.html">
+   <topic label="Endpoint Reference" href="RiderCompRef.html">
       <topic label="Table of Components" href="RiderCompTble.html"/>
       <topic label="Apache CXF Endpoints" href="cxf.html">
          <topic label="CXF" href="cxfComp.html"/>

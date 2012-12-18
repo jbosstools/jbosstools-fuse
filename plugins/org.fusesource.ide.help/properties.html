@@ -1,70 +1,92 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Properties</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="printer.html" title="Printer"><link rel="next" href="quickfix.html" title="Quickfix"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Properties"><div class="titlepage"><div><div><h2 class="title"><a name="properties"></a>Properties</h2></div></div></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e46984"></a>Overview</h2></div></div></div><p>Property endpoints allow you to resolve the address for an endpoint using a property
-            placeholder. Property placeholders can be created using a properties file, OSGi
-            properties, the OSGi registry, Spring beans, or as part of the route definition.</p><p>The property placeholder is typically used when:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>looking up or creating endpoints</p></li><li class="listitem"><p>looking up beans in the Registry</p></li><li class="listitem"><p>using Blueprint's <code class="filename">PropertyPlaceholder</code> with Apache Camel's
-                        <code class="filename">Properties</code> component</p></li><li class="listitem"><p>using property placeholder in many of Spring's Camel xml tags, such as
-                    <code class="filename">package</code>, <code class="filename">packageScan</code>,
-                    <code class="filename">contextScan</code>, <code class="filename">jmxAgent</code>,
-                    <code class="filename">endpoint</code>, <code class="filename">routeBuilder</code>,
-                    <code class="filename">proxy</code>, and others</p></li></ul></div></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47031"></a>URI format</h2></div></div></div><p>The URI format for a property endpoint is:</p><pre class="programlisting">properties:<em class="replaceable"><code>key</code></em>[?<em class="replaceable"><code>options</code></em>]</pre><p>Where <em class="replaceable"><code>key</code></em> is the key for the property to lookup.</p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47049"></a>Options</h2></div></div></div><p><a class="xref" href="properties.html#propertiesRefTbl010" title="Table&nbsp;52.&nbsp;Properties options">Table&nbsp;52, &#8220;Properties options&#8221;</a> describes the options for a property
-            endpoint.</p><div class="table"><a name="propertiesRefTbl010"></a><p class="title"><b>Table&nbsp;52.&nbsp;Properties options</b></p><div class="table-contents"><table summary="Properties options" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+   <title>Properties</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="printer.html" title="Printer"><link rel="next" href="quickfix.html" title="Quickfix"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Properties"><div class="titlepage"><div><div><h2 class="title"><a name="properties"></a>Properties</h2></div></div></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e46607"></a>Overview</h2></div></div></div><p>Property endpoints allow you to resolve the address for an
+            endpoint using a property placeholder. Property placeholders can be
+            created using a properties file, OSGi properties, the OSGi registry,
+            Spring beans, or as part of the route definition.</p><p>The property placeholder is typically used when:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>looking up or creating endpoints</p></li><li class="listitem"><p>looking up beans in the Registry</p></li><li class="listitem"><p>using Blueprint's <code class="filename">PropertyPlaceholder</code>
+                    with Apache Camel's <code class="filename">Properties</code>
+                    component</p></li><li class="listitem"><p>using property placeholder in many of Spring's Camel xml
+                    tags, such as <code class="filename">package</code>,
+                        <code class="filename">packageScan</code>,
+                        <code class="filename">contextScan</code>,
+                        <code class="filename">jmxAgent</code>,
+                        <code class="filename">endpoint</code>,
+                        <code class="filename">routeBuilder</code>,
+                        <code class="filename">proxy</code>, and others</p></li></ul></div></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e46654"></a>URI format</h2></div></div></div><p>The URI format for a property endpoint is:</p><pre class="programlisting">properties:<em class="replaceable"><code>key</code></em>[?<em class="replaceable"><code>options</code></em>]</pre><p>Where <em class="replaceable"><code>key</code></em> is the key for the property
+            to lookup.</p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e46672"></a>Options</h2></div></div></div><p><a class="xref" href="properties.html#propertiesRefTbl010" title="Table&nbsp;65.&nbsp;Properties options">Table&nbsp;65, &#8220;Properties options&#8221;</a> describes the options for a
+            property endpoint.</p><div class="table"><a name="propertiesRefTbl010"></a><p class="title"><b>Table&nbsp;65.&nbsp;Properties options</b></p><div class="table-contents"><table summary="Properties options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="code">cache</code>
                         </td><td>
                             <code class="code">true</code>
-                        </td><td>Specifies whether to cache loaded properties.</td></tr><tr><td>
+                        </td><td>Specifies whether to cache loaded
+                            properties.</td></tr><tr><td>
                             <code class="code">locations</code>
-                        </td><td>&nbsp;</td><td>Specifies a list of locations from which to load properties. A comma
-                            separated list is use to specify multiple locations. This option will
-                            override any locations specified in the <code class="sgmltag-element">
+                        </td><td>&nbsp;</td><td>Specifies a list of locations from which to load
+                            properties. A comma separated list is use to specify
+                            multiple locations. This option will override any
+                            locations specified in the <code class="sgmltag-element">
                                 camelContext</code> or the configuration.</td></tr><tr><td>
                             <code class="code">ignoreMissingLocation</code>
                         </td><td>
                             <code class="code">false</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.10:</strong></span> Specifies whether to
-                            silently ignore a resource that cannot be located, such as a properties
-                            file that cannot be found.</td></tr><tr><td>
+                        </td><td><span class="bold"><strong>Apache Camel 2.10:</strong></span>
+                            Specifies whether to silently ignore a resource that
+                            cannot be located, such as a properties file that
+                            cannot be found.</td></tr><tr><td>
                             <code class="code">propertyPrefix</code>
                         </td><td>
                             <code class="code">null</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span> Optional prefix
-                            prepended to property names before resolution.</td></tr><tr><td>
+                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
+                            Optional prefix prepended to property names before
+                            resolution.</td></tr><tr><td>
                             <code class="code">propertySuffix</code>
                         </td><td>
                             <code class="code">null</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span> Optional suffix
-                            appended to property names before resolution.</td></tr><tr><td>
+                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
+                            Optional suffix appended to property names before
+                            resolution.</td></tr><tr><td>
                             <code class="code">fallBackToUnaugmentedProperty</code>
                         </td><td>
                             <code class="code">true</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span> When
-                                <code class="literal">true</code>, first attempt to resolve property name
-                            augmented with <code class="literal">propertyPrefix</code> or
-                                <code class="literal">propertySuffix</code> before falling back to the
-                            specified unaugmented name. Otherwise, search only for the augmented
-                            property name.</td></tr><tr><td>
+                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
+                            When <code class="literal">true</code>, first attempt to
+                            resolve property name augmented with
+                                <code class="literal">propertyPrefix</code> or
+                                <code class="literal">propertySuffix</code> before falling
+                            back to the specified unaugmented name. Otherwise,
+                            search only for the augmented property name.</td></tr><tr><td>
                             <code class="code">prefixToken</code>
                         </td><td>
                             <code class="code">{{</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span> Specifies the token
-                            that indicates the beginning of a property token.</td></tr><tr><td>
+                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
+                            Specifies the token that indicates the beginning of
+                            a property token.</td></tr><tr><td>
                             <code class="code">suffixToken</code>
                         </td><td>
                             <code class="code">}}</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span> Specifies the token
-                            that indicates the end of a property token.</td></tr></tbody></table></div></div><br class="table-break"><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You can resolve a property from any Java code by using the
-            <code class="code">resolvePropertyPlaceholders</code> method on the <code class="code">CamelContext</code>.</p></td></tr></table></div></div><div class="simplesect" title="Bridging Spring and Apache Camel property placeholders"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="bridgeSprngCamel"></a>Bridging Spring and Apache Camel property placeholders</h2></div></div></div><p>Available as of <span class="bold"><strong>Apache Camel 2.10</strong></span>.</p><p>The Spring Framework does not allow third-party frameworks, such as Apache Camel, to
-            seamlessly hook into the Spring property placeholder mechanism. However, you can easily
-            bridge Spring and Camel by declaring a Spring bean with the type
-            <code class="literal">org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer</code>, which is a Spring
-            <code class="literal">org.springframework.beans.factory.config.PropertyPlaceholderConfigurer</code> type.</p><p>To bridge Spring and Camel you must define a single bean as shown here:</p><pre class="programlisting">&lt;!-- bridge spring property placeholder with Camel --&gt;
+                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
+                            Specifies the token that indicates the end of a
+                            property token.</td></tr></tbody></table></div></div><br class="table-break"><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You can resolve a property from any Java code by using the
+                    <code class="code">resolvePropertyPlaceholders</code> method on the
+                    <code class="code">CamelContext</code>.</p></td></tr></table></div></div><div class="simplesect" title="Bridging Spring and Apache Camel property placeholders"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="bridgeSprngCamel"></a>Bridging Spring and Apache Camel property placeholders</h2></div></div></div><p>Available as of <span class="bold"><strong>Apache Camel
+            2.10</strong></span>.</p><p>The Spring Framework does not allow third-party frameworks, such
+            as Apache Camel, to seamlessly hook into the Spring property placeholder
+            mechanism. However, you can easily bridge Spring and Camel by
+            declaring a Spring bean with the type
+                <code class="literal">org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer</code>,
+            which is a Spring
+                <code class="literal">org.springframework.beans.factory.config.PropertyPlaceholderConfigurer</code>
+            type.</p><p>To bridge Spring and Camel you must define a single bean as shown
+            here:</p><pre class="programlisting">&lt;!-- bridge spring property placeholder with Camel --&gt;
 &lt;!-- you must NOT use the &lt;context:property-placeholder at the same time, only this bridge bean --&gt;
 &lt;bean id="bridgePropertyPlaceholder" class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer"&gt;
   &lt;property name="location" value="classpath:org/apache/camel/component/properties/cheese.properties"/&gt;
 &lt;/bean&gt;
-</pre><div class="important" title="Important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.gif"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>You must not use the spring <code class="literal">context:property-placeholder</code>
-            namespace at the same time.</p></td></tr></table></div><p>After declaring this bean, you can define property placeholders using either the
-            Spring style or the Camel style within the &lt;camelContext&gt; tag as shown here:</p><pre class="programlisting">&lt;!-- a bean that uses Spring property placeholder --&gt;
+</pre><div class="important" title="Important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.gif"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>You must not use the spring
+                    <code class="literal">context:property-placeholder</code> namespace at
+                the same time.</p></td></tr></table></div><p>After declaring this bean, you can define property placeholders
+            using either the Spring style or the Camel style within the
+            &lt;camelContext&gt; tag as shown here:</p><pre class="programlisting">&lt;!-- a bean that uses Spring property placeholder --&gt;
 &lt;!-- the ${hi} is a spring property placeholder --&gt;
 &lt;bean id="hello" class="org.apache.camel.component.properties.HelloBean"&gt;
   &lt;property name="greeting" value="${hi}"/&gt;
@@ -77,6 +99,6 @@
     &lt;bean ref="hello"/&gt;
     &lt;to uri="{{cool.end}}"/&gt;
   &lt;/route&gt;
-&lt;/camelContext&gt;</pre><p>Notice how the hello bean uses pure Spring property placeholders via the ${ }
-            notation. And in the Camel routes, we use the Camel placeholder notation with {{
-            }}.</p></div></div></body></html>
+&lt;/camelContext&gt;</pre><p>Notice how the hello bean uses pure Spring property placeholders
+            via the ${ } notation. And in the Camel routes, we use the Camel
+            placeholder notation with {{ }}.</p></div></div></body></html>

@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Netty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="nagios.html" title="Nagios"><link rel="next" href="nmr.html" title="NMR"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Netty"><div class="titlepage"><div><div><h2 class="title"><a name="netty"></a>Netty</h2></div></div></div><div class="simplesect" title="Netty Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_NettyComponent"></a>Netty Component</h2></div></div></div><p>The <span class="bold"><strong>netty</strong></span> component in Apache Camel
+   <title>Netty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="nagios.html" title="Nagios"><link rel="next" href="nmr.html" title="NMR"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Netty"><div class="titlepage"><div><div><h2 class="title"><a name="netty"></a>Netty</h2></div></div></div><div class="simplesect" title="Netty Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_NettyComponent"></a>Netty Component</h2></div></div></div><p>The <span class="bold"><strong>netty</strong></span> component in Apache Camel
             is a socket communication component, based on the JBoss Netty
             community offering (available under an Apache 2.0 license). Netty is
             a NIO client server framework which enables quick and easy
@@ -14,420 +14,266 @@
 netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer and consumer endpoints for both
             TCP and UDP.</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_Options"></a>Options</h2></div></div></div><p>
-            
-        </p><table id="d0e45720"><tr>
-                <th> Name </th>
-                <th> Default Value </th>
-                <th> Description </th>
-            </tr><tr>
-                <td>
-                    <code class="literal">keepAlive</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td> Setting to ensure socket is not closed due to inactivity
-                </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">tcpNoDelay</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td> Setting to improve TCP protocol performance </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">broadcast</code>
-                </td>
-                <td>
-                    <code class="literal">false</code>
-                </td>
-                <td> Setting to choose Multicast over UDP </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">connectTimeout</code>
-                </td>
-                <td>
-                    <code class="literal">10000</code>
-                </td>
-                <td> Time to wait for a socket connection to be available. Value
-                    is in millis. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">reuseAddress</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td> Setting to facilitate socket multiplexing </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">sync</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td> Setting to set endpoint as one-way or request-response
-                </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">synchronous</code>
-                </td>
-                <td>
-                    <code class="literal">false</code>
-                </td>
-                <td><span class="bold"><strong>Apache Camel 2.10 </strong></span>Sets whether
-                    the <code class="filename">Asynchronous Routing Engine</code> is
-                    used. Set to <code class="literal">false</code>, the
-                        <code class="filename">Asynchronous Routing Engine</code> is
-                    used; otherwise, it is not.</td>
-            </tr><tr>
-                <td>
-                    <code class="literal">ssl</code>
-                </td>
-                <td>
-                    <code class="literal">false</code>
-                </td>
-                <td> Setting to specify whether SSL encryption is applied to
-                    this endpoint </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">sendBufferSize</code>
-                </td>
-                <td>
-                    <code class="literal">65536 bytes</code>
-                </td>
-                <td> The TCP/UDP buffer sizes to be used during outbound
-                    communication. Size is bytes. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">receiveBufferSize</code>
-                </td>
-                <td>
-                    <code class="literal">65536 bytes</code>
-                </td>
-                <td> The TCP/UDP buffer sizes to be used during inbound
-                    communication. Size is bytes. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">corePoolSize</code>
-                </td>
-                <td>
-                    <code class="literal">10</code>
-                </td>
-                <td> The number of allocated threads at component startup.
-                    Defaults to 10 </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">maxPoolSize</code>
-                </td>
-                <td>
-                    <code class="literal">100</code>
-                </td>
-                <td> The maximum number of threads that may be allocated to this
-                    endpoint. Defaults to 100 </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">disconnect</code>
-                </td>
-                <td>
-                    <code class="literal">false</code>
-                </td>
-                <td> Whether or not to disconnect(close) from Netty Channel
-                    right after use. Can be used for both consumer and producer.
-                </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">lazyChannelCreation</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td> Channels can be lazily created to avoid exceptions, if the
-                    remote server is not up and running when the Apache Camel
-                    producer is started. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">transferExchange</code>
-                </td>
-                <td>
-                    <code class="literal">false</code>
-                </td>
-                <td> Only used for TCP. You can transfer the exchange over the
-                    wire instead of just the body. The following fields are
-                    transferred: In body, Out body, fault body, In headers, Out
-                    headers, fault headers, exchange properties, exchange
-                    exception. This requires that the objects are serializable.
-                    Apache Camel will exclude any non-serializable objects and log
-                    it at WARN level. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">disconnectOnNoReply</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td> If sync is enabled then this option dictates NettyConsumer
-                    if it should disconnect where there is no reply to send
-                    back. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">noReplyLogLevel</code>
-                </td>
-                <td>
-                    <code class="literal">WARN</code>
-                </td>
-                <td> If sync is enabled this option dictates NettyConsumer which
-                    logging level to use when logging a there is no reply to
-                    send back. Values are: <code class="literal">FATAL, ERROR, INFO, DEBUG,
-                        OFF</code>. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">allowDefaultCodec</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.4:</strong></span> The netty
-                    component installs a default codec if both, encoder/deocder
-                    is null and textline is false. Setting allowDefaultCodec to
-                    false prevents the netty component from installing a default
-                    codec as the first element in the filter chain. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">textline</code>
-                </td>
-                <td>
-                    <code class="literal">false</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.4:</strong></span> Only used for
-                    TCP. If no codec is specified, you can use this flag to
-                    indicate a text line based codec; if not specified or the
-                    value is false, then Object Serialization is assumed over
-                    TCP. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">delimiter</code>
-                </td>
-                <td>
-                    <code class="literal">LINE</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.4:</strong></span> The delimiter to
-                    use for the textline codec. Possible values are
-                        <code class="literal">LINE</code> and <code class="literal">NULL</code>.
-                </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">decoderMaxLineLength</code>
-                </td>
-                <td>
-                    <code class="literal">1024</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.4:</strong></span> The max line
-                    length to use for the textline codec. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">autoAppendDelimiter</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.4:</strong></span> Whether or not
-                    to auto append missing end delimiter when sending using the
-                    textline codec. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">encoding</code>
-                </td>
-                <td>
-                    <code class="literal">null</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.4:</strong></span> The encoding (a
-                    charset name) to use for the textline codec. If not
-                    provided, Camel will use the JVM default Charset. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">workerCount</code>
-                </td>
-                <td>
-                    <code class="literal">null</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.9:</strong></span> Working in nio
-                    mode, netty uses its default
-                        <span class="property">WorkerCount</span> parameter, which is
-                        <code class="literal">cpu_core_threads*2</code>. Use this option
-                    to override netty's default
-                    <span class="property">WorkerCount</span>. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">sslContextParametersRef</code>
-                </td>
-                <td>
-                    <code class="literal">null</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.9:</strong></span> Reference to an
-                        <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code>
-                    in the Registry.  This reference overrides any configured
-                        <code class="literal">SSLContextParameters</code> at the component
-                    level. <span class="bold"><strong>See XREF to Using the JSSE
-                        Configuration Utiltity [TBAdded]</strong></span></td>
-            </tr><tr>
-                <td>
-                    <code class="literal">receiveBufferSizePredictor</code>
-                </td>
-                <td>
-                    <code class="literal">null</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.9:</strong></span> Configures the
-                    buffer size predictor. For details, see the Jetty
-                    documentation. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">orderedThreadPoolExecutor</code>
-                </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.10.2:</strong></span> Specifies
-                    whether to use an ordered thread pool to ensure that events
-                    are processed in order on the same channel. For details, see
-                    the Netty javadoc of
-                        <code class="filename">org.jboss.netty.handler.exception.OrderedMemoryAwareThreadPoolExecutor</code>.</td>
-            </tr><tr>
-                <td>
-                    <code class="literal">maximumPoolSize</code>
-                </td>
-                <td>
-                    <code class="literal">16</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.10.2:</strong></span> Specifies the
-                    core pool size for the ordered thread pool, if it's in use. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">producerPoolMaxActive</code>
-                </td>
-                <td>
-                    <code class="literal">-1</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.10.3:</strong></span> Producer
-                    only. Sets the cap on the number of objects that can be
-                    allocated by the pool (checked out to clients, or idle
-                    awaiting checkout) at a given time. Use a negative value for
-                    no limit.</td>
-            </tr><tr>
-                <td>
-                    <code class="literal">producerPoolMinIdle</code>
-                </td>
-                <td>
-                    <code class="literal">0</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.10.3:</strong></span>  Producer
-                    only. Sets the minimum number of instances allowed in the
-                    producer pool before the evictor thread (if active) spawns
-                    new objects.  </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">producerPoolMaxIdle</code>
-                </td>
-                <td>
-                    <code class="literal">100</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.10.3:</strong></span> Producer
-                    only. Sets the cap on the number of <span class="italic">idle</span> instances in the pool. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">producerPoolMinEvictableIdle</code>
-                </td>
-                <td>
-                    <code class="literal">30000</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.10.3:</strong></span> Producer
-                    only. Sets the minimum amount of time, in milliseconds, that
-                    an object can sit idle in the pool before it's eligible for
-                    eviction by the idle object evictor. </td>
-            </tr></table><p>
-            
-        </p></div><div class="simplesect" title="Registry based Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_RegistrybasedOptions"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="Registry" target="_top">Registry</a>, such as in the Spring XML
-            file. The values that could be passed in, are the following:</p><p>
-            
-        </p><table id="d0e46365"><tr>
-                <th> Name </th>
-                <th> Description </th>
-            </tr><tr>
-                <td>
-                    <code class="literal">passphrase</code>
-                </td>
-                <td> password setting to use in order to encrypt/decrypt
-                    payloads sent using SSH </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">keyStoreFormat</code>
-                </td>
-                <td> keystore format to be used for payload encryption. Defaults
-                    to "JKS" if not set </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">securityProvider</code>
-                </td>
-                <td> Security provider to be used for payload encryption.
-                    Defaults to "SunX509" if not set. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">keyStoreFile</code>
-                </td>
-                <td> Client side certificate keystore to be used for encryption
-                </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">trustStoreFile</code>
-                </td>
-                <td> Server side certificate keystore to be used for encryption
-                </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">sslHandler</code>
-                </td>
-                <td> Reference to a class that could be used to return an SSL
-                    Handler </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">encoder</code>
-                </td>
-                <td> A custom Handler class that can be used to perform special
-                    marshalling of outbound payloads. Must override
-                        <code class="literal">org.jboss.netty.channel.ChannelDownStreamHandler</code>.
-                </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">encorders</code>
-                </td>
-                <td> A list of encoder to be used. You can use a String which
-                    have values separated by comma, and have the values be
-                    looked up in the <a class="link" href="Registry" target="_top">Registry</a>.
-                    Just remember to prefix the value with # so Apache Camel knows
-                    it should lookup. </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">decoder</code>
-                </td>
-                <td> A custom Handler class that can be used to perform special
-                    marshalling of inbound payloads. Must override
-                        <code class="literal">org.jboss.netty.channel.ChannelUpStreamHandler</code>.
-                </td>
-            </tr><tr>
-                <td>
-                    <code class="literal">decoders</code>
-                </td>
-                <td> A list of decorder to be used. You can use a String which
-                    have values separated by comma, and have the values be
-                    looked up in the <a class="link" href="Registry" target="_top">Registry</a>.
-                    Just remember to prefix the value with # so Apache Camel knows
-                    it should lookup. </td>
-            </tr></table><p>
-            
-        </p></div><div class="simplesect" title="Using nonshareable encoders or decoders"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_nonShare_codesDecodes"></a>Using nonshareable encoders or decoders</h2></div></div></div><p>If your encoders or decoders are not shareable (for example, they
+        </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_Options"></a>Options</h2></div></div></div><p><a class="xref" href="netty.html#_IDU_Netty_Opts" title="Table&nbsp;63.&nbsp;URI options">Table&nbsp;63</a>
+            list the Netty uri options:</p><div class="table"><a name="_IDU_Netty_Opts"></a><p class="title"><b>Table&nbsp;63.&nbsp;URI options</b></p><div class="table-contents"><table summary="URI options" width="100%" border="1"><colgroup><col width="192" class="c1"><col width="96" class="c2"><col width="336" class="c3"></colgroup><thead><tr><th> Name </th><th> Default Value </th><th> Description </th></tr></thead><tbody><tr><td>
+                            <code class="literal">keepAlive</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td> Setting to ensure socket is not closed due to
+                            inactivity </td></tr><tr><td>
+                            <code class="literal">tcpNoDelay</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td> Setting to improve TCP protocol performance
+                        </td></tr><tr><td>
+                            <code class="literal">broadcast</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td> Setting to choose Multicast over UDP </td></tr><tr><td>
+                            <code class="literal">connectTimeout</code>
+                        </td><td>
+                            <code class="literal">10000</code>
+                        </td><td> Time to wait for a socket connection to be
+                            available. Value is in millis. </td></tr><tr><td>
+                            <code class="literal">reuseAddress</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td> Setting to facilitate socket multiplexing
+                        </td></tr><tr><td>
+                            <code class="literal">sync</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td> Setting to set endpoint as one-way or
+                            request-response </td></tr><tr><td>
+                            <code class="literal">synchronous</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td><span class="bold"><strong>Apache Camel 2.10
+                            </strong></span>Sets whether the <code class="filename">Asynchronous
+                                Routing Engine</code> is used. Set to
+                                <code class="literal">false</code>, the
+                                <code class="filename">Asynchronous Routing Engine</code>
+                            is used; otherwise, it is not.</td></tr><tr><td>
+                            <code class="literal">ssl</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td> Setting to specify whether SSL encryption is
+                            applied to this endpoint </td></tr><tr><td>
+                            <code class="literal">sendBufferSize</code>
+                        </td><td>
+                            <code class="literal">65536 bytes</code>
+                        </td><td> The TCP/UDP buffer sizes to be used during
+                            outbound communication. Size is bytes. </td></tr><tr><td>
+                            <code class="literal">receiveBufferSize</code>
+                        </td><td>
+                            <code class="literal">65536 bytes</code>
+                        </td><td> The TCP/UDP buffer sizes to be used during
+                            inbound communication. Size is bytes. </td></tr><tr><td>
+                            <code class="literal">corePoolSize</code>
+                        </td><td>
+                            <code class="literal">10</code>
+                        </td><td> The number of allocated threads at component
+                            startup. Defaults to 10 </td></tr><tr><td>
+                            <code class="literal">maxPoolSize</code>
+                        </td><td>
+                            <code class="literal">100</code>
+                        </td><td> The maximum number of threads that may be
+                            allocated to this endpoint. Defaults to 100 </td></tr><tr><td>
+                            <code class="literal">disconnect</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td> Whether or not to disconnect(close) from Netty
+                            Channel right after use. Can be used for both
+                            consumer and producer. </td></tr><tr><td>
+                            <code class="literal">lazyChannelCreation</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td> Channels can be lazily created to avoid
+                            exceptions, if the remote server is not up and
+                            running when the Apache Camel producer is started.
+                        </td></tr><tr><td>
+                            <code class="literal">transferExchange</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td> Only used for TCP. You can transfer the exchange
+                            over the wire instead of just the body. The
+                            following fields are transferred: In body, Out body,
+                            fault body, In headers, Out headers, fault headers,
+                            exchange properties, exchange exception. This
+                            requires that the objects are serializable. Apache Camel
+                            will exclude any non-serializable objects and log it
+                            at WARN level. </td></tr><tr><td>
+                            <code class="literal">disconnectOnNoReply</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td> If sync is enabled then this option dictates
+                            NettyConsumer if it should disconnect where there is
+                            no reply to send back. </td></tr><tr><td>
+                            <code class="literal">noReplyLogLevel</code>
+                        </td><td>
+                            <code class="literal">WARN</code>
+                        </td><td> If sync is enabled this option dictates
+                            NettyConsumer which logging level to use when
+                            logging a there is no reply to send back. Values
+                            are: <code class="literal">FATAL, ERROR, INFO, DEBUG,
+                                OFF</code>. </td></tr><tr><td>
+                            <code class="literal">allowDefaultCodec</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td><span class="bold"><strong>Camel 2.4:</strong></span> The
+                            netty component installs a default codec if both,
+                            encoder/deocder is null and textline is false.
+                            Setting allowDefaultCodec to false prevents the
+                            netty component from installing a default codec as
+                            the first element in the filter chain. </td></tr><tr><td>
+                            <code class="literal">textline</code>
+                        </td><td>
+                            <code class="literal">false</code>
+                        </td><td><span class="bold"><strong>Camel 2.4:</strong></span> Only
+                            used for TCP. If no codec is specified, you can use
+                            this flag to indicate a text line based codec; if
+                            not specified or the value is false, then Object
+                            Serialization is assumed over TCP. </td></tr><tr><td>
+                            <code class="literal">delimiter</code>
+                        </td><td>
+                            <code class="literal">LINE</code>
+                        </td><td><span class="bold"><strong>Camel 2.4:</strong></span> The
+                            delimiter to use for the textline codec. Possible
+                            values are <code class="literal">LINE</code> and
+                                <code class="literal">NULL</code>. </td></tr><tr><td>
+                            <code class="literal">decoderMaxLineLength</code>
+                        </td><td>
+                            <code class="literal">1024</code>
+                        </td><td><span class="bold"><strong>Camel 2.4:</strong></span> The
+                            max line length to use for the textline codec.
+                        </td></tr><tr><td>
+                            <code class="literal">autoAppendDelimiter</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td><span class="bold"><strong>Camel 2.4:</strong></span>
+                            Whether or not to auto append missing end delimiter
+                            when sending using the textline codec. </td></tr><tr><td>
+                            <code class="literal">encoding</code>
+                        </td><td>
+                            <code class="literal">null</code>
+                        </td><td><span class="bold"><strong>Camel 2.4:</strong></span> The
+                            encoding (a charset name) to use for the textline
+                            codec. If not provided, Camel will use the JVM
+                            default Charset. </td></tr><tr><td>
+                            <code class="literal">workerCount</code>
+                        </td><td>
+                            <code class="literal">null</code>
+                        </td><td><span class="bold"><strong>Camel 2.9:</strong></span>
+                            Working in nio mode, netty uses its default
+                                <span class="property">WorkerCount</span> parameter,
+                            which is <code class="literal">cpu_core_threads*2</code>. Use
+                            this option to override netty's default
+                                <span class="property">WorkerCount</span>. </td></tr><tr><td>
+                            <code class="literal">sslContextParametersRef</code>
+                        </td><td>
+                            <code class="literal">null</code>
+                        </td><td><span class="bold"><strong>Camel 2.9:</strong></span>
+                            Reference to an
+                                <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code>
+                            in the Registry. This reference overrides any
+                            configured <code class="literal">SSLContextParameters</code>
+                            at the component level. <span class="bold"><strong>See
+                                XREF to Using the JSSE Configuration Utiltity
+                                [TBAdded]</strong></span></td></tr><tr><td>
+                            <code class="literal">receiveBufferSizePredictor</code>
+                        </td><td>
+                            <code class="literal">null</code>
+                        </td><td><span class="bold"><strong>Camel 2.9:</strong></span>
+                            Configures the buffer size predictor. For details,
+                            see the Jetty documentation. </td></tr><tr><td>
+                            <code class="literal">orderedThreadPoolExecutor</code>
+                        </td><td>
+                            <code class="literal">true</code>
+                        </td><td><span class="bold"><strong>Camel 2.10.2:</strong></span>
+                            Specifies whether to use an ordered thread pool to
+                            ensure that events are processed in order on the
+                            same channel. For details, see the Netty javadoc of
+                                <code class="filename">org.jboss.netty.handler.exception.OrderedMemoryAwareThreadPoolExecutor</code>.</td></tr><tr><td>
+                            <code class="literal">maximumPoolSize</code>
+                        </td><td>
+                            <code class="literal">16</code>
+                        </td><td><span class="bold"><strong>Camel 2.10.2:</strong></span>
+                            Specifies the core pool size for the ordered thread
+                            pool, if it's in use. </td></tr><tr><td>
+                            <code class="literal">producerPoolMaxActive</code>
+                        </td><td>
+                            <code class="literal">-1</code>
+                        </td><td><span class="bold"><strong>Camel 2.10.3:</strong></span>
+                            Producer only. Sets the cap on the number of objects
+                            that can be allocated by the pool (checked out to
+                            clients, or idle awaiting checkout) at a given time.
+                            Use a negative value for no limit.</td></tr><tr><td>
+                            <code class="literal">producerPoolMinIdle</code>
+                        </td><td>
+                            <code class="literal">0</code>
+                        </td><td><span class="bold"><strong>Camel 2.10.3:</strong></span>
+                            Producer only. Sets the minimum number of instances
+                            allowed in the producer pool before the evictor
+                            thread (if active) spawns new objects. </td></tr><tr><td>
+                            <code class="literal">producerPoolMaxIdle</code>
+                        </td><td>
+                            <code class="literal">100</code>
+                        </td><td><span class="bold"><strong>Camel 2.10.3:</strong></span>
+                            Producer only. Sets the cap on the number of
+                                <span class="italic">idle</span>
+                            instances in the pool. </td></tr><tr><td>
+                            <code class="literal">producerPoolMinEvictableIdle</code>
+                        </td><td>
+                            <code class="literal">30000</code>
+                        </td><td><span class="bold"><strong>Camel 2.10.3:</strong></span>
+                            Producer only. Sets the minimum amount of time, in
+                            milliseconds, that an object can sit idle in the
+                            pool before it's eligible for eviction by the idle
+                            object evictor. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Registry based Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_RegistrybasedOptions"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="Registry" target="_top">Registry</a>, such as in the Spring XML
+            file. The values that could be passed in, are the following:</p><div class="table"><a name="_IDU_Netty_RegOpts"></a><p class="title"><b>Table&nbsp;64.&nbsp;Registry-based options</b></p><div class="table-contents"><table summary="Registry-based options" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Name </th><th> Description </th></tr></thead><tbody><tr><td>
+                            <code class="literal">passphrase</code>
+                        </td><td> password setting to use in order to
+                            encrypt/decrypt payloads sent using SSH </td></tr><tr><td>
+                            <code class="literal">keyStoreFormat</code>
+                        </td><td> keystore format to be used for payload
+                            encryption. Defaults to "JKS" if not set </td></tr><tr><td>
+                            <code class="literal">securityProvider</code>
+                        </td><td> Security provider to be used for payload
+                            encryption. Defaults to "SunX509" if not set.
+                        </td></tr><tr><td>
+                            <code class="literal">keyStoreFile</code>
+                        </td><td> Client side certificate keystore to be used for
+                            encryption </td></tr><tr><td>
+                            <code class="literal">trustStoreFile</code>
+                        </td><td> Server side certificate keystore to be used for
+                            encryption </td></tr><tr><td>
+                            <code class="literal">sslHandler</code>
+                        </td><td> Reference to a class that could be used to
+                            return an SSL Handler </td></tr><tr><td>
+                            <code class="literal">encoder</code>
+                        </td><td> A custom Handler class that can be used to
+                            perform special marshalling of outbound payloads.
+                            Must override
+                                <code class="literal">org.jboss.netty.channel.ChannelDownStreamHandler</code>.
+                        </td></tr><tr><td>
+                            <code class="literal">encorders</code>
+                        </td><td> A list of encoder to be used. You can use a
+                            String which have values separated by comma, and
+                            have the values be looked up in the <a class="link" href="Registry" target="_top">Registry</a>. Just
+                            remember to prefix the value with # so Apache Camel
+                            knows it should lookup. </td></tr><tr><td>
+                            <code class="literal">decoder</code>
+                        </td><td> A custom Handler class that can be used to
+                            perform special marshalling of inbound payloads.
+                            Must override
+                                <code class="literal">org.jboss.netty.channel.ChannelUpStreamHandler</code>.
+                        </td></tr><tr><td>
+                            <code class="literal">decoders</code>
+                        </td><td> A list of decorder to be used. You can use a
+                            String which have values separated by comma, and
+                            have the values be looked up in the <a class="link" href="Registry" target="_top">Registry</a>. Just
+                            remember to prefix the value with # so Apache Camel
+                            knows it should lookup. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect" title="Using nonshareable encoders or decoders"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_nonShare_codesDecodes"></a>Using nonshareable encoders or decoders</h2></div></div></div><p>If your encoders or decoders are not shareable (for example, they
             do not have the <code class="literal">@Shareable</code> class annotation),
             they must implement the
                 <code class="filename">org.apache.camel.component.netty.ChannelHandlerFactory</code>
@@ -464,7 +310,8 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
   }
 };</pre></div><div class="simplesect" title="An SSL/TCP based Netty consumer endpoint using Request-Reply communication"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_AnSSLTCPbasedNettyconsumerendpointusingRequestReplycommunication"></a>An SSL/TCP based Netty consumer endpoint using Request-Reply
             communication </h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Using basic SSL/TLS configuration on the Jetty
-                component</p><pre class="programlisting">JndiRegistry registry = new JndiRegistry(createJndiContext());
+                    component</p><p>
+                    </p><pre class="programlisting">JndiRegistry registry = new JndiRegistry(createJndiContext());
 registry.bind("password", "changeit");
 registry.bind("ksf", new File("src/test/resources/keystore.jks"));
 registry.bind("tsf", new File("src/test/resources/keystore.jks"));
@@ -486,7 +333,9 @@ context.addRoutes(new RouteBuilder() {
           }
        }
   }
-});</pre></li><li class="listitem"><p>Programmatic configuration of the component</p><pre class="programlisting">KeyStoreParameters ksp = new KeyStoreParameters();
+});</pre><p>
+                </p></li><li class="listitem"><p>Programmatic configuration of the component</p><p>
+                    </p><pre class="programlisting">KeyStoreParameters ksp = new KeyStoreParameters();
 ksp.setResource("/users/home/server/keystore.jks");
 ksp.setPassword("keystorePassword");
 
@@ -498,7 +347,9 @@ SSLContextParameters scp = new SSLContextParameters();
 scp.setKeyManagers(kmp);
 
 NettyComponent nettyComponent = getContext().getComponent("netty", NettyComponent.class);
-nettyComponent.setSslContextParameters(scp);</pre></li><li class="listitem"><p>Spring DSL-based configuration of the endpoint</p><pre class="programlisting">...
+nettyComponent.setSslContextParameters(scp);</pre><p>
+                </p></li><li class="listitem"><p>Spring DSL-based configuration of the endpoint</p><p>
+                    </p><pre class="programlisting">...
   &lt;camel:sslContextParameters 
       id="sslContextParameters"&gt;
     &lt;camel:keyManagers 
@@ -510,7 +361,8 @@ nettyComponent.setSslContextParameters(scp);</pre></li><li class="listitem"><p>S
   &lt;/camel:sslContextParameters&gt;...
 ...
   &lt;to uri="netty:tcp://localhost:5150?sync=true&amp;ssl=true&amp;sslContextParameters=#sslContextParameters"/&gt;
-...</pre></li></ul></div></div><div class="simplesect" title="Using Multiple Codecs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_UsingMultipleCodecs"></a>Using Multiple Codecs</h2></div></div></div><p>In certain cases it may be necessary to add chains of encoders and
+...</pre><p>
+                </p></li></ul></div></div><div class="simplesect" title="Using Multiple Codecs"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_UsingMultipleCodecs"></a>Using Multiple Codecs</h2></div></div></div><p>In certain cases it may be necessary to add chains of encoders and
             decoders to the netty pipeline. To add multpile codecs to a Apache Camel
             netty endpoint the 'encoders' and 'decoders' uri parameters should
             be used. Like the 'encoder' and 'decoder' parameters they are used

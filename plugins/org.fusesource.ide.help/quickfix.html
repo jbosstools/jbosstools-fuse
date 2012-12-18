@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Quickfix</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Component Reference"><link rel="prev" href="properties.html" title="Properties"><link rel="next" href="registry.html" title="Ref"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Quickfix"><div class="titlepage"><div><div><h2 class="title"><a name="quickfix"></a>Quickfix</h2></div></div></div><div class="simplesect" title="QuickFIX/J Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_QuickFIXJComponent"></a>QuickFIX/J Component</h2></div></div></div><p>The <span class="bold"><strong>quickfix</strong></span> component adapts the <a class="link" href="http://www.quickfixj.org/" target="_top">QuickFIX/J</a> FIX engine for using in Camel . This
+   <title>Quickfix</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse IDE, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="properties.html" title="Properties"><link rel="next" href="registry.html" title="Ref"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Quickfix"><div class="titlepage"><div><div><h2 class="title"><a name="quickfix"></a>Quickfix</h2></div></div></div><div class="simplesect" title="QuickFIX/J Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_QuickFIXJComponent"></a>QuickFIX/J Component</h2></div></div></div><p>The <span class="bold"><strong>quickfix</strong></span> component adapts the <a class="link" href="http://www.quickfixj.org/" target="_top">QuickFIX/J</a> FIX engine for using in Camel . This
       component uses the standard <a class="link" href="http://www.fixprotocol.org/" target="_top">Financial Interchange
         (FIX) protocol</a> for message transport.</p><div class="important" title="Previous Versions" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Previous Versions"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.gif"></td><th align="left">Previous Versions</th></tr><tr><td align="left" valign="top"><p>The <span class="bold"><strong>quickfix</strong></span> component was rewritten for Camel 2.5. For
         information about using the <span class="bold"><strong>quickfix</strong></span> component prior to 2.5
@@ -23,7 +23,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
       must include the session-related fields in the FIX message being sent. If a session is
       specified in the URI then the component will automatically inject the session-related fields
       into the FIX message.</p></div><div class="simplesect" title="Exchange Format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_ExchangeFormat"></a>Exchange Format</h2></div></div></div><p>The exchange headers include information to help with exchange filtering, routing and
-      other processing. The following headers are available:</p><table id="d0e47304"><tr>
+      other processing. The following headers are available:</p><table id="d0e46927"><tr>
         <th> Header Name </th>
         <th> Description </th>
       </tr><tr>
@@ -64,7 +64,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
         manual</a>.</p></div><div class="simplesect" title="Communication Connectors"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_CommunicationConnectors"></a>Communication Connectors</h2></div></div></div><p>When the component detects an initiator or acceptor session setting in the QuickFIX/J
       configuration file it will automatically create the corresponding initiator and/or acceptor
       connector. These settings can be in the default or in a specific session section of the
-      configuration file.</p><table id="d0e47404"><tr>
+      configuration file.</p><table id="d0e47027"><tr>
         <th> Session Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -77,7 +77,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
         <td> Create an acceptor connector </td>
       </tr></table><p>The threading model for the QuickFIX/J session connectors can also be specified. These
       settings affect all sessions in the configuration file and must be placed in the settings
-      default section.</p><table id="d0e47435"><tr>
+      default section.</p><table id="d0e47058"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -94,7 +94,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
       </tr></table></div><div class="simplesect" title="Logging"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_Logging"></a>Logging</h2></div></div></div><p>The QuickFIX/J logger implementation can be specified by including the following settings
       in the default section of the configuration file. The <code class="literal">ScreenLog</code> is the
       default if none of the following settings are present in the configuration. It's an error to
-      include settings that imply more than one log implementation.</p><table id="d0e47484"><tr>
+      include settings that imply more than one log implementation.</p><table id="d0e47107"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -130,7 +130,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
       </tr></table></div><div class="simplesect" title="Message Store"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_MessageStore"></a>Message Store</h2></div></div></div><p>The QuickFIX/J message store implementation can be specified by including the following
       settings in the default section of the configuration file. The <code class="literal">MemoryStore</code>
       is the default if none of the following settings are present in the configuration. It's an
-      error to include settings that imply more than one message store implementation.</p><table id="d0e47581"><tr>
+      error to include settings that imply more than one message store implementation.</p><table id="d0e47204"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -150,7 +150,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
         </td>
       </tr></table></div><div class="simplesect" title="Message Factory"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_MessageFactory"></a>Message Factory</h2></div></div></div><p>A message factory is used to construct domain objects from raw FIX messages. The default
       message factory is <code class="literal">DefaultMessageFactory</code>. However, advanced applications
-      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect" title="JMX"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e47640"><tr>
+      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect" title="JMX"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e47263"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
