@@ -263,6 +263,18 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
     }
   }
 
+
+  def generateHawtIO(outputDir: String): Unit = {
+    var uris = List("camelModel.js")
+
+    println("Generating files to " + outputDir)
+    new File(outputDir).mkdirs
+
+    for (u <- uris) {
+      render(u, outputDir, "src/main/resources/org/fusesource/ide/generator/hawtio")
+    }
+  }
+
   def render(u: String, outputDir: String, srcDir: String = "src/main/resources/org/fusesource/ide/generator", extension: String = ".ssp"): Unit = {
     val attributes = Map("generator" -> this)
     val uri = srcDir + "/" + u + extension

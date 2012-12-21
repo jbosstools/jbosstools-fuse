@@ -15,7 +15,7 @@ object Main {
 
     val outputDir = if (args.length > 0) args(0) else Generator.defaultOutputDir
     val sourceDir = if (args.length > 1) args(1) else Generator.defaultSourceDir
-    val app = new Generator(outputDir, sourceDir)
+    var app = new Generator(outputDir, sourceDir)
     val basedir = System.getProperty("basedir", ".")
     println("basedir is " + basedir)
 
@@ -74,6 +74,7 @@ object Main {
     var eclipseEditor = true
     var eclipseModel = true
     var webModel = false
+    var hawtio = false
 
     if (args.size > 0) {
       args(0) match {
@@ -85,6 +86,11 @@ object Main {
         case "eclipse" =>
           eclipseEditor = true
           eclipseModel = true
+        case "hawtio" =>
+          hawtio = true
+          eclipseEditor = false
+          eclipseModel = false
+          images = false
         case _ =>
           images = true
           eclipseEditor = true
@@ -97,6 +103,7 @@ object Main {
     val editorProjectDir = basedir + "/../plugins/org.fusesource.ide.camel.editor"
     val editorDir = editorProjectDir + "/src/org/fusesource/ide/camel/editor"
     val modelDir = basedir + "/../plugins/org.fusesource.ide.camel.model/src/org/fusesource/ide/camel/model/generated"
+    val hawtioDir = basedir + "/../../hawtio/hawtio-web/src/main/webapp/app/camel"
     val imageDir = new File(editorProjectDir + "/icons")
 
     val camelDescriptionElementsFile = new File(basedir + "/../../fuse/tooling/camel-tooling-util/src/main/resources/camelDescriptionElements.txt")
@@ -132,6 +139,11 @@ object Main {
 
       convertImages(imageDir)
       println("Converted the images")
+    }
+
+    if (hawtio) {
+      app = new Generator(outputDir, hawtioDir + "/img")
+      app.generateHawtIO(hawtioDir + "/js")
     }
     println("Done generating stuff! Enjoy!")
 
