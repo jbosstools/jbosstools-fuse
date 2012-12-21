@@ -1,4 +1,9 @@
 <%@ import val generator: org.fusesource.ide.generator.Generator %>
+<%
+  import org.fusesource.camel.tooling.util.Languages
+
+  val langTool = new Languages()
+%>
 var _apacheCamelModel = {
   "nodes": {
      "from": {
@@ -191,6 +196,14 @@ var _apacheCamelModel = {
   #end
       ]
 --%>
+    },
+#end
+	},
+	"languages": {
+#for( lang <- langTool.languages)
+    "${lang.id}": {
+      "name": "${lang.name}",
+      "description": "${lang.description}"
     },
 #end
 	}
