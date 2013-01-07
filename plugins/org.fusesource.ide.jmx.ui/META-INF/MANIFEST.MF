@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.fusesource.ide.jmx.ui;singleton:=true
-Bundle-Version: 7.1.0.qualifier
+Bundle-Version: 7.1.78
 Bundle-Activator: org.fusesource.ide.jmx.ui.JMXUIActivator
 Bundle-Vendor: Red Hat, Inc.
 Require-Bundle:  org.fusesource.ide.deployment,
