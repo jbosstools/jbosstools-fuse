@@ -30,6 +30,10 @@ public class CamelFilesContentProvider implements ITreeContentProvider {
 		if (parentElement instanceof IProject) {
 			IProject project = (IProject) parentElement;
 
+			if (!project.isAccessible()) {
+			    return new Object[0];
+			}
+
 			CamelVirtualFolder cvf = new CamelVirtualFolder(project);
 			cvf.populateChildren();
 
@@ -62,7 +66,7 @@ public class CamelFilesContentProvider implements ITreeContentProvider {
 				resVal[0] = cvf;
 				return resVal;
 			}
-			return null;
+			return new Object[0];
 		} else if (parentElement instanceof CamelVirtualFolder) {
 			CamelVirtualFolder cvf = (CamelVirtualFolder)parentElement;
 			if (cvf.getCamelFiles().size()<1) {
@@ -169,8 +173,9 @@ public class CamelFilesContentProvider implements ITreeContentProvider {
 					if (f.isDirectory()) {
 						findFiles(f);
 					} else {
-						IFile ifile = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(f.toURI())[0];
-						if (ifile.getContentDescription() != null && ifile.getContentDescription().getContentType().getId().equals("org.fusesource.ide.camel.editor.camelContentType")) {
+					    IFile[] mappedFiles = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(f.toURI());
+						IFile ifile = mappedFiles.length > 0 ? mappedFiles[0] : null;
+						if (ifile != null && ifile.getContentDescription() != null && ifile.getContentDescription().getContentType().getId().equals("org.fusesource.ide.camel.editor.camelContentType")) {
 							addCamelFile(new CamelVirtualFile((org.eclipse.core.internal.resources.File)ifile));
 						}
 					}

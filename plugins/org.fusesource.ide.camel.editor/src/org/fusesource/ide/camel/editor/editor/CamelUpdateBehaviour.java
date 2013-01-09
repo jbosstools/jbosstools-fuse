@@ -19,31 +19,31 @@ public class CamelUpdateBehaviour extends DefaultUpdateBehavior {
 		super(diagramEditor);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior#createEditingDomain()
-	 */
-	@Override
-	protected void createEditingDomain() {
-		this.editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain(); 
-		initializeEditingDomain(this.editingDomain);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior#getEditingDomain()
-	 */
-	@Override
-	public synchronized TransactionalEditingDomain getEditingDomain() {
-		if (this.editingDomain == null) {
-			createEditingDomain();
-		}
-		return this.editingDomain;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior#disposeEditingDomain()
-	 */
-	@Override
-	protected void disposeEditingDomain() {
-		this.editingDomain.dispose();
-	}
+//	/* (non-Javadoc)
+//	 * @see org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior#createEditingDomain()
+//	 */
+//	@Override
+//	protected void createEditingDomain() {
+//		this.editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain(); 
+//		initializeEditingDomain(this.editingDomain);
+//	}
+//	
+//	/* (non-Javadoc)
+//	 * @see org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior#getEditingDomain()
+//	 */
+//	@Override
+//	public synchronized TransactionalEditingDomain getEditingDomain() {
+//		if (this.editingDomain == null) {
+//			createEditingDomain();
+//		}
+//		return this.editingDomain;
+//	}
+//
+//	/* (non-Javadoc)
+//	 * @see org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior#disposeEditingDomain()
+//	 */
+//	@Override
+//	protected void disposeEditingDomain() {
+//		this.editingDomain.dispose();
+//	}
 }
