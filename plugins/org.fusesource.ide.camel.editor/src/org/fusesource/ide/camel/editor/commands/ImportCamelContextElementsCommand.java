@@ -46,16 +46,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 		createdResource = editingDomain.getResourceSet().createResource(uri);
 		createdResource.getContents().add(diagram);
 
-		// the following method doesn't seem to get the EditingDomain setup as well
-		IDiagramTypeProvider dtp = GraphitiUi.getExtensionManager().createDiagramTypeProvider(diagram, "org.fusesource.ide.camel.editor.dtp.id");
-		/*
-		IDiagramTypeProvider dtp2 = GraphitiInternal.getEmfService().getDTPForDiagram(getDiagram());
-		System.out.println("dtp:  " + dtp.getDiagramEditor().getEditingDomain());
-		System.out.println("dtp2: " + dtp2.getDiagramEditor().getEditingDomain());
-		 */
-
-		featureProvider = dtp.getFeatureProvider();
-		designEditor.setFeatureProvider(featureProvider);
+		featureProvider = designEditor.getFeatureProvider();
 
 		CamelModelLoader bpmnFileReader = new CamelModelLoader(diagram, featureProvider);
 		System.out.println("Loading diagram: " + diagram + " with route: " + selectedRoute + " # " + System.identityHashCode(selectedRoute));
