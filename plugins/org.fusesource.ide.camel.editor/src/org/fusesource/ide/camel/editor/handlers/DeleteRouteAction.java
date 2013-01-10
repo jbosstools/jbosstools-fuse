@@ -28,7 +28,6 @@ public class DeleteRouteAction extends Action {
 		DiagramOperations.deleteRoute(editor, getSelectedRoute());
 		if (editor.getModel().getChildren().size() < 1) {
 			editor.addNewRoute();
-			editor.getEditor().recreateDesignPage();
 		}
 	}
 	

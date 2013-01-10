@@ -88,7 +88,6 @@ public class EditorContributionItem extends ContributionItem {
 				editor.deleteRoute();
 				if (editor.getModel().getChildren().size()<1) {
 					editor.addNewRoute();
-					editor.getEditor().recreateDesignPage();
 				}
 			}
 

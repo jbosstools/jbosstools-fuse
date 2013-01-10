@@ -17,8 +17,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.ProgressMonitorWrapper;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditDomain;
@@ -82,7 +80,6 @@ import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
 import org.fusesource.ide.camel.editor.editor.io.CamelContextIOUtils;
 import org.fusesource.ide.camel.editor.outline.RiderOutlinePage;
-import org.fusesource.ide.camel.editor.utils.CamelContextSelectionSynchronizer;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteContainer;
@@ -116,14 +113,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	private IEditorSite editorSite;
 	private IEditorInput editorInput;
 
-	private IFeatureProvider featureProvider;
-	private Diagram diagram;
-
 	private IProject container;
 	private IFile camelContextFile;
 	private RouteContainer model;
 	private RouteSupport activeRoute;
-	private CamelContextSelectionSynchronizer synchronizer;
 	private CamelModelChangeListener camelModelListener;
 	private CamelUpdateBehaviour camelUpdateBehaviour;
 	private CamelPaletteBehaviour camelPaletteBehaviour;
@@ -224,8 +217,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
                 }
                 
                 // create the diagram
-                diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
-                return diagram;
+                activeConfig.diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
+                return activeConfig.diagram;
             }
         };
     }
@@ -255,20 +248,37 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
 		super.setInput(input);
 
-		// add the diagram contents
-        getEditingDomain().getCommandStack().execute(new ImportCamelContextElementsCommand(RiderDesignEditor.this, getEditingDomain(), diagram));
-
-        // layout the diagram
-        updateDiagramInput();
-
         if (data.loadModelOnSetInput) {
 			loadModelFromInput(input);
 		}
 
-		// setup grid visibility
-		setupGridVisibility();
+        initializeDiagram(activeConfig.diagram);
+		
+		getEditingDomain().getCommandStack().flush();
 	}
 
+	protected void initializeDiagramForSelectedRoute() {
+	    if (activeRoute == null) {
+	        return;
+	    }
+
+	    if (activeConfig.diagram == null) {
+	        // Create the diagram and its file
+	        activeConfig.diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
+	        initializeDiagram(activeConfig.diagram);
+	    }
+	}
+	
+	private void initializeDiagram(Diagram diagram) {
+        // add the diagram contents
+        getEditingDomain().getCommandStack().execute(new ImportCamelContextElementsCommand(RiderDesignEditor.this, getEditingDomain(), diagram));
+
+        // layout the diagram
+        DiagramOperations.layoutDiagram(RiderDesignEditor.this);
+
+        // setup grid visibility
+        setupGridVisibility();
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -350,34 +360,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			}
 		}
 		return false;
-	}
-
-	protected DiagramEditorInput createDiagram() {
-		// Create the diagram and its file
-		diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
-
-//		ResourceSet resourceSet = new ResourceSetImpl();
-
-		//this.editingDomain = TransactionUtil.getEditingDomain(resourceSet);
-//		this.editingDomain = getEditingDomain();
-//		if (this.editingDomain == null) {
-//			this.editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain();
-//
-//			// TODO we need to associate the editngDomain / resourceSet now with the diagram
-//			resourceSet = this.editingDomain.getResourceSet();
-//		}
-
-		// Create the data within a command and save (must not happen
-		// inside
-		// the command since finishing the command will trigger setting
-		// the
-		// modification flag on the resource which will be used by the
-		// save
-		// operation to determine which resources need to be saved)
-		DiagramEditorInput input = null;
-		getEditingDomain().getCommandStack().execute(new ImportCamelContextElementsCommand(this, getEditingDomain(), diagram));
-		input = DiagramEditorInput.createEditorInput(diagram, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId());
-		return input;
 	}
 
 	/**
@@ -917,7 +899,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			this.data.model = model;
 			this.data.selectedRoute = null;
 
-			updateDiagramIfNotLazyLoading();
+			setInitialRoute();
 		}
 	}
 
@@ -969,8 +951,16 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			this.activeConfig = new DesignerCache();
 			this.activeConfig.input = oldInput;
 		}
-		setInput(activeConfig.input);
-		refresh();
+		initializeDiagramForSelectedRoute();
+		if (activeConfig.diagram != null) {
+		    getDiagramTypeProvider().resourceReloaded(activeConfig.diagram);
+	        getRefreshBehavior().initRefresh();
+	        setPictogramElementsForSelection(null);
+	        // set Diagram as contents for the graphical viewer and refresh
+	        getGraphicalViewer().setContents(activeConfig.diagram);
+	        
+	        refreshContent();
+		}
 	}
 
 	private void setInitialRoute() {
@@ -986,38 +976,35 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public void setSelectedRouteIndex(int index) {
-		if (this.data.selectedRouteIndex != index) {
+		if (this.data.selectedRouteIndex != index && index >= 0) {
 			this.data.selectedRouteIndex = index;
-			this.data.selectedRoute = null;
+			this.data.selectedRoute = (RouteSupport) getModel().getChildren().get(index);
 
 			// now lets recreate the model so that we don't get any Graphiti woe since the model is intertwined with the diagram
-			data.recreateModel();
+			//data.recreateModel();
 
-			// setup grid visibility
-			setupGridVisibility();
-
-			try {
-				updateDiagramIfNotLazyLoading();
-			} catch (PartInitException e) {
-				Activator.getLogger().warning("Failed to update diagram on route selection change: " + e, e);
-			}
+			switchRoute(data.selectedRoute);
 		}
 	}
 
-	public void setupGridVisibility() {
+	public void setupGridVisibilityAsync() {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				// TODO is this causing transaction issues???
-				DiagramOperations.updateGridColor(RiderDesignEditor.this);
+			    setupGridVisibility();
+	        }
+	    });
+	}
 
-				// retrieve the grid visibility setting
-				boolean gridVisible = PreferenceManager.getInstance().loadPreferenceAsBoolean(PreferencesConstants.EDITOR_GRID_VISIBILITY);
+	public void setupGridVisibility() {
+		// TODO is this causing transaction issues???
+		DiagramOperations.updateGridColor(RiderDesignEditor.this);
 
-				// reset the grid visibility flag
-				DiagramUtils.setGridVisible(gridVisible);
-			}
-		});
+		// retrieve the grid visibility setting
+		boolean gridVisible = PreferenceManager.getInstance().loadPreferenceAsBoolean(PreferencesConstants.EDITOR_GRID_VISIBILITY);
+
+		// reset the grid visibility flag
+		DiagramUtils.setGridVisible(gridVisible);
 	}
 
 	/**
@@ -1026,36 +1013,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	public IProject getContainer() {
 		return this.container;
 	}
-
-	private void updateDiagramIfNotLazyLoading() throws PartInitException {
-		// lets only notify if we are not the first time we load the model
-		if (!data.lazyLoading) {
-			// lets clear all previous diagrams so we don't reuse them
-			clearCache();
-
-			// TODO if we ever get recreateModel = false working, we could just
-			// set the input here...
-			editor.recreateDesignPage();
-			fireModelChanged();
-		}
-	}
-
-	private void updateDiagramInput() {
-		// we currently don't need this to be async
-		boolean syncLayout = true;
-		if (syncLayout) {
-			autoLayoutRoute();
-		} else {
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					autoLayoutRoute();
-				}
-			});
-		}
-		//		clearChangedFlags();
-	}
-
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionSynchronizer()
@@ -1084,7 +1041,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	@Override
 	public void dispose() {
 		this.editorInput = null;
-		this.diagram = null;
+		this.activeConfig = null;
 
 		// dispose the ActionRegistry (will dispose all actions)
 		ActionRegistry actionRegistry = getActionRegistry();
@@ -1203,7 +1160,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public Diagram getDiagram() {
-		return diagram;
+		return activeConfig == null ? null : activeConfig.diagram;
 	}
 
 	public void setTransactionalEditingDomain(TransactionalEditingDomain editingDomain) {
@@ -1336,10 +1293,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
 	public IFeatureProvider getFeatureProvider() {
 		return getDiagramTypeProvider().getFeatureProvider();
-	}
-
-	public void setFeatureProvider(IFeatureProvider featureProvider) {
-		this.featureProvider = featureProvider;
 	}
 
 	protected RootEditPart getRootEditPart() {
