@@ -97,7 +97,9 @@ public class RecipientList extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -113,7 +115,9 @@ public class RecipientList extends AbstractNode {
 	public void setDelimiter(String delimiter) {
 		String oldValue = this.delimiter;
 		this.delimiter = delimiter;
-		firePropertyChange(PROPERTY_DELIMITER, oldValue, delimiter);
+		if (!isSame(oldValue, delimiter)) {
+		    firePropertyChange(PROPERTY_DELIMITER, oldValue, delimiter);
+		}
 	}
 
 	/**
@@ -129,7 +133,9 @@ public class RecipientList extends AbstractNode {
 	public void setStrategyRef(String strategyRef) {
 		String oldValue = this.strategyRef;
 		this.strategyRef = strategyRef;
-		firePropertyChange(PROPERTY_STRATEGYREF, oldValue, strategyRef);
+		if (!isSame(oldValue, strategyRef)) {
+		    firePropertyChange(PROPERTY_STRATEGYREF, oldValue, strategyRef);
+		}
 	}
 
 	/**
@@ -145,7 +151,9 @@ public class RecipientList extends AbstractNode {
 	public void setExecutorServiceRef(String executorServiceRef) {
 		String oldValue = this.executorServiceRef;
 		this.executorServiceRef = executorServiceRef;
-		firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		}
 	}
 
 	/**
@@ -161,7 +169,9 @@ public class RecipientList extends AbstractNode {
 	public void setOnPrepareRef(String onPrepareRef) {
 		String oldValue = this.onPrepareRef;
 		this.onPrepareRef = onPrepareRef;
-		firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
+		if (!isSame(oldValue, onPrepareRef)) {
+		    firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
+		}
 	}
 
 	/**
@@ -177,7 +187,9 @@ public class RecipientList extends AbstractNode {
 	public void setParallelProcessing(Boolean parallelProcessing) {
 		Boolean oldValue = this.parallelProcessing;
 		this.parallelProcessing = parallelProcessing;
-		firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
+		if (!isSame(oldValue, parallelProcessing)) {
+		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
+		}
 	}
 
 	/**
@@ -193,7 +205,9 @@ public class RecipientList extends AbstractNode {
 	public void setStopOnException(Boolean stopOnException) {
 		Boolean oldValue = this.stopOnException;
 		this.stopOnException = stopOnException;
-		firePropertyChange(PROPERTY_STOPONEXCEPTION, oldValue, stopOnException);
+		if (!isSame(oldValue, stopOnException)) {
+		    firePropertyChange(PROPERTY_STOPONEXCEPTION, oldValue, stopOnException);
+		}
 	}
 
 	/**
@@ -209,7 +223,9 @@ public class RecipientList extends AbstractNode {
 	public void setIgnoreInvalidEndpoints(Boolean ignoreInvalidEndpoints) {
 		Boolean oldValue = this.ignoreInvalidEndpoints;
 		this.ignoreInvalidEndpoints = ignoreInvalidEndpoints;
-		firePropertyChange(PROPERTY_IGNOREINVALIDENDPOINTS, oldValue, ignoreInvalidEndpoints);
+		if (!isSame(oldValue, ignoreInvalidEndpoints)) {
+		    firePropertyChange(PROPERTY_IGNOREINVALIDENDPOINTS, oldValue, ignoreInvalidEndpoints);
+		}
 	}
 
 	/**
@@ -225,7 +241,9 @@ public class RecipientList extends AbstractNode {
 	public void setStreaming(Boolean streaming) {
 		Boolean oldValue = this.streaming;
 		this.streaming = streaming;
-		firePropertyChange(PROPERTY_STREAMING, oldValue, streaming);
+		if (!isSame(oldValue, streaming)) {
+		    firePropertyChange(PROPERTY_STREAMING, oldValue, streaming);
+		}
 	}
 
 	/**
@@ -241,7 +259,9 @@ public class RecipientList extends AbstractNode {
 	public void setTimeout(Long timeout) {
 		Long oldValue = this.timeout;
 		this.timeout = timeout;
-		firePropertyChange(PROPERTY_TIMEOUT, oldValue, timeout);
+		if (!isSame(oldValue, timeout)) {
+		    firePropertyChange(PROPERTY_TIMEOUT, oldValue, timeout);
+		}
 	}
 
 	/**
@@ -257,7 +277,9 @@ public class RecipientList extends AbstractNode {
 	public void setShareUnitOfWork(Boolean shareUnitOfWork) {
 		Boolean oldValue = this.shareUnitOfWork;
 		this.shareUnitOfWork = shareUnitOfWork;
-		firePropertyChange(PROPERTY_SHAREUNITOFWORK, oldValue, shareUnitOfWork);
+		if (!isSame(oldValue, shareUnitOfWork)) {
+		    firePropertyChange(PROPERTY_SHAREUNITOFWORK, oldValue, shareUnitOfWork);
+		}
 	}
 
 

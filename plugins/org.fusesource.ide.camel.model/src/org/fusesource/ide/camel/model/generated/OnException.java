@@ -93,7 +93,9 @@ public class OnException extends AbstractNode {
 	public void setExceptions(List exceptions) {
 		List oldValue = this.exceptions;
 		this.exceptions = exceptions;
-		firePropertyChange(PROPERTY_EXCEPTIONS, oldValue, exceptions);
+		if (!isSame(oldValue, exceptions)) {
+		    firePropertyChange(PROPERTY_EXCEPTIONS, oldValue, exceptions);
+		}
 	}
 
 	/**
@@ -109,7 +111,9 @@ public class OnException extends AbstractNode {
 	public void setRetryWhile(ExpressionDefinition retryWhile) {
 		ExpressionDefinition oldValue = this.retryWhile;
 		this.retryWhile = retryWhile;
-		firePropertyChange(PROPERTY_RETRYWHILE, oldValue, retryWhile);
+		if (!isSame(oldValue, retryWhile)) {
+		    firePropertyChange(PROPERTY_RETRYWHILE, oldValue, retryWhile);
+		}
 	}
 
 	/**
@@ -125,7 +129,9 @@ public class OnException extends AbstractNode {
 	public void setRedeliveryPolicyRef(String redeliveryPolicyRef) {
 		String oldValue = this.redeliveryPolicyRef;
 		this.redeliveryPolicyRef = redeliveryPolicyRef;
-		firePropertyChange(PROPERTY_REDELIVERYPOLICYREF, oldValue, redeliveryPolicyRef);
+		if (!isSame(oldValue, redeliveryPolicyRef)) {
+		    firePropertyChange(PROPERTY_REDELIVERYPOLICYREF, oldValue, redeliveryPolicyRef);
+		}
 	}
 
 	/**
@@ -141,7 +147,9 @@ public class OnException extends AbstractNode {
 	public void setHandled(ExpressionDefinition handled) {
 		ExpressionDefinition oldValue = this.handled;
 		this.handled = handled;
-		firePropertyChange(PROPERTY_HANDLED, oldValue, handled);
+		if (!isSame(oldValue, handled)) {
+		    firePropertyChange(PROPERTY_HANDLED, oldValue, handled);
+		}
 	}
 
 	/**
@@ -157,7 +165,9 @@ public class OnException extends AbstractNode {
 	public void setContinued(ExpressionDefinition continued) {
 		ExpressionDefinition oldValue = this.continued;
 		this.continued = continued;
-		firePropertyChange(PROPERTY_CONTINUED, oldValue, continued);
+		if (!isSame(oldValue, continued)) {
+		    firePropertyChange(PROPERTY_CONTINUED, oldValue, continued);
+		}
 	}
 
 	/**
@@ -173,7 +183,9 @@ public class OnException extends AbstractNode {
 	public void setOnRedeliveryRef(String onRedeliveryRef) {
 		String oldValue = this.onRedeliveryRef;
 		this.onRedeliveryRef = onRedeliveryRef;
-		firePropertyChange(PROPERTY_ONREDELIVERYREF, oldValue, onRedeliveryRef);
+		if (!isSame(oldValue, onRedeliveryRef)) {
+		    firePropertyChange(PROPERTY_ONREDELIVERYREF, oldValue, onRedeliveryRef);
+		}
 	}
 
 	/**
@@ -189,7 +201,9 @@ public class OnException extends AbstractNode {
 	public void setRedeliveryPolicy(RedeliveryPolicyDefinition redeliveryPolicy) {
 		RedeliveryPolicyDefinition oldValue = this.redeliveryPolicy;
 		this.redeliveryPolicy = redeliveryPolicy;
-		firePropertyChange(PROPERTY_REDELIVERYPOLICY, oldValue, redeliveryPolicy);
+		if (!isSame(oldValue, redeliveryPolicy)) {
+		    firePropertyChange(PROPERTY_REDELIVERYPOLICY, oldValue, redeliveryPolicy);
+		}
 	}
 
 	/**
@@ -205,7 +219,9 @@ public class OnException extends AbstractNode {
 	public void setUseOriginalMessagePolicy(Boolean useOriginalMessagePolicy) {
 		Boolean oldValue = this.useOriginalMessagePolicy;
 		this.useOriginalMessagePolicy = useOriginalMessagePolicy;
-		firePropertyChange(PROPERTY_USEORIGINALMESSAGEPOLICY, oldValue, useOriginalMessagePolicy);
+		if (!isSame(oldValue, useOriginalMessagePolicy)) {
+		    firePropertyChange(PROPERTY_USEORIGINALMESSAGEPOLICY, oldValue, useOriginalMessagePolicy);
+		}
 	}
 
 

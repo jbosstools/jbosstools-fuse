@@ -80,7 +80,9 @@ public class Unmarshal extends AbstractNode {
 	public void setRef(String ref) {
 		String oldValue = this.ref;
 		this.ref = ref;
-		firePropertyChange(PROPERTY_REF, oldValue, ref);
+		if (!isSame(oldValue, ref)) {
+		    firePropertyChange(PROPERTY_REF, oldValue, ref);
+		}
 	}
 
 	/**
@@ -96,7 +98,9 @@ public class Unmarshal extends AbstractNode {
 	public void setDataFormatType(DataFormatDefinition dataFormatType) {
 		DataFormatDefinition oldValue = this.dataFormatType;
 		this.dataFormatType = dataFormatType;
-		firePropertyChange(PROPERTY_DATAFORMATTYPE, oldValue, dataFormatType);
+		if (!isSame(oldValue, dataFormatType)) {
+		    firePropertyChange(PROPERTY_DATAFORMATTYPE, oldValue, dataFormatType);
+		}
 	}
 
 

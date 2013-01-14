@@ -82,7 +82,9 @@ public class Sampling extends AbstractNode {
 	public void setSamplePeriod(Long samplePeriod) {
 		Long oldValue = this.samplePeriod;
 		this.samplePeriod = samplePeriod;
-		firePropertyChange(PROPERTY_SAMPLEPERIOD, oldValue, samplePeriod);
+		if (!isSame(oldValue, samplePeriod)) {
+		    firePropertyChange(PROPERTY_SAMPLEPERIOD, oldValue, samplePeriod);
+		}
 	}
 
 	/**
@@ -98,7 +100,9 @@ public class Sampling extends AbstractNode {
 	public void setMessageFrequency(Long messageFrequency) {
 		Long oldValue = this.messageFrequency;
 		this.messageFrequency = messageFrequency;
-		firePropertyChange(PROPERTY_MESSAGEFREQUENCY, oldValue, messageFrequency);
+		if (!isSame(oldValue, messageFrequency)) {
+		    firePropertyChange(PROPERTY_MESSAGEFREQUENCY, oldValue, messageFrequency);
+		}
 	}
 
 	/**
@@ -114,7 +118,9 @@ public class Sampling extends AbstractNode {
 	public void setUnits(TimeUnit units) {
 		TimeUnit oldValue = this.units;
 		this.units = units;
-		firePropertyChange(PROPERTY_UNITS, oldValue, units);
+		if (!isSame(oldValue, units)) {
+		    firePropertyChange(PROPERTY_UNITS, oldValue, units);
+		}
 	}
 
 

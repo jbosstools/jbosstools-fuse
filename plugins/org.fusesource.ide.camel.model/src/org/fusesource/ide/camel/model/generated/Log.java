@@ -84,7 +84,9 @@ public class Log extends AbstractNode {
 	public void setMessage(String message) {
 		String oldValue = this.message;
 		this.message = message;
-		firePropertyChange(PROPERTY_MESSAGE, oldValue, message);
+		if (!isSame(oldValue, message)) {
+		    firePropertyChange(PROPERTY_MESSAGE, oldValue, message);
+		}
 	}
 
 	/**
@@ -100,7 +102,9 @@ public class Log extends AbstractNode {
 	public void setLogName(String logName) {
 		String oldValue = this.logName;
 		this.logName = logName;
-		firePropertyChange(PROPERTY_LOGNAME, oldValue, logName);
+		if (!isSame(oldValue, logName)) {
+		    firePropertyChange(PROPERTY_LOGNAME, oldValue, logName);
+		}
 	}
 
 	/**
@@ -116,7 +120,9 @@ public class Log extends AbstractNode {
 	public void setMarker(String marker) {
 		String oldValue = this.marker;
 		this.marker = marker;
-		firePropertyChange(PROPERTY_MARKER, oldValue, marker);
+		if (!isSame(oldValue, marker)) {
+		    firePropertyChange(PROPERTY_MARKER, oldValue, marker);
+		}
 	}
 
 	/**
@@ -132,7 +138,9 @@ public class Log extends AbstractNode {
 	public void setLoggingLevel(LoggingLevel loggingLevel) {
 		LoggingLevel oldValue = this.loggingLevel;
 		this.loggingLevel = loggingLevel;
-		firePropertyChange(PROPERTY_LOGGINGLEVEL, oldValue, loggingLevel);
+		if (!isSame(oldValue, loggingLevel)) {
+		    firePropertyChange(PROPERTY_LOGGINGLEVEL, oldValue, loggingLevel);
+		}
 	}
 
 

@@ -113,7 +113,9 @@ public class Aggregate extends AbstractNode {
 	public void setCorrelationExpression(ExpressionDefinition correlationExpression) {
 		ExpressionDefinition oldValue = this.correlationExpression;
 		this.correlationExpression = correlationExpression;
-		firePropertyChange(PROPERTY_CORRELATIONEXPRESSION, oldValue, correlationExpression);
+		if (!isSame(oldValue, correlationExpression)) {
+		    firePropertyChange(PROPERTY_CORRELATIONEXPRESSION, oldValue, correlationExpression);
+		}
 	}
 
 	/**
@@ -129,7 +131,9 @@ public class Aggregate extends AbstractNode {
 	public void setCompletionPredicate(ExpressionDefinition completionPredicate) {
 		ExpressionDefinition oldValue = this.completionPredicate;
 		this.completionPredicate = completionPredicate;
-		firePropertyChange(PROPERTY_COMPLETIONPREDICATE, oldValue, completionPredicate);
+		if (!isSame(oldValue, completionPredicate)) {
+		    firePropertyChange(PROPERTY_COMPLETIONPREDICATE, oldValue, completionPredicate);
+		}
 	}
 
 	/**
@@ -145,7 +149,9 @@ public class Aggregate extends AbstractNode {
 	public void setCompletionTimeoutExpression(ExpressionDefinition completionTimeoutExpression) {
 		ExpressionDefinition oldValue = this.completionTimeoutExpression;
 		this.completionTimeoutExpression = completionTimeoutExpression;
-		firePropertyChange(PROPERTY_COMPLETIONTIMEOUTEXPRESSION, oldValue, completionTimeoutExpression);
+		if (!isSame(oldValue, completionTimeoutExpression)) {
+		    firePropertyChange(PROPERTY_COMPLETIONTIMEOUTEXPRESSION, oldValue, completionTimeoutExpression);
+		}
 	}
 
 	/**
@@ -161,7 +167,9 @@ public class Aggregate extends AbstractNode {
 	public void setCompletionSizeExpression(ExpressionDefinition completionSizeExpression) {
 		ExpressionDefinition oldValue = this.completionSizeExpression;
 		this.completionSizeExpression = completionSizeExpression;
-		firePropertyChange(PROPERTY_COMPLETIONSIZEEXPRESSION, oldValue, completionSizeExpression);
+		if (!isSame(oldValue, completionSizeExpression)) {
+		    firePropertyChange(PROPERTY_COMPLETIONSIZEEXPRESSION, oldValue, completionSizeExpression);
+		}
 	}
 
 	/**
@@ -177,7 +185,9 @@ public class Aggregate extends AbstractNode {
 	public void setExecutorServiceRef(String executorServiceRef) {
 		String oldValue = this.executorServiceRef;
 		this.executorServiceRef = executorServiceRef;
-		firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		}
 	}
 
 	/**
@@ -193,7 +203,9 @@ public class Aggregate extends AbstractNode {
 	public void setTimeoutCheckerExecutorServiceRef(String timeoutCheckerExecutorServiceRef) {
 		String oldValue = this.timeoutCheckerExecutorServiceRef;
 		this.timeoutCheckerExecutorServiceRef = timeoutCheckerExecutorServiceRef;
-		firePropertyChange(PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF, oldValue, timeoutCheckerExecutorServiceRef);
+		if (!isSame(oldValue, timeoutCheckerExecutorServiceRef)) {
+		    firePropertyChange(PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF, oldValue, timeoutCheckerExecutorServiceRef);
+		}
 	}
 
 	/**
@@ -209,7 +221,9 @@ public class Aggregate extends AbstractNode {
 	public void setAggregationRepositoryRef(String aggregationRepositoryRef) {
 		String oldValue = this.aggregationRepositoryRef;
 		this.aggregationRepositoryRef = aggregationRepositoryRef;
-		firePropertyChange(PROPERTY_AGGREGATIONREPOSITORYREF, oldValue, aggregationRepositoryRef);
+		if (!isSame(oldValue, aggregationRepositoryRef)) {
+		    firePropertyChange(PROPERTY_AGGREGATIONREPOSITORYREF, oldValue, aggregationRepositoryRef);
+		}
 	}
 
 	/**
@@ -225,7 +239,9 @@ public class Aggregate extends AbstractNode {
 	public void setStrategyRef(String strategyRef) {
 		String oldValue = this.strategyRef;
 		this.strategyRef = strategyRef;
-		firePropertyChange(PROPERTY_STRATEGYREF, oldValue, strategyRef);
+		if (!isSame(oldValue, strategyRef)) {
+		    firePropertyChange(PROPERTY_STRATEGYREF, oldValue, strategyRef);
+		}
 	}
 
 	/**
@@ -241,7 +257,9 @@ public class Aggregate extends AbstractNode {
 	public void setParallelProcessing(Boolean parallelProcessing) {
 		Boolean oldValue = this.parallelProcessing;
 		this.parallelProcessing = parallelProcessing;
-		firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
+		if (!isSame(oldValue, parallelProcessing)) {
+		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
+		}
 	}
 
 	/**
@@ -257,7 +275,9 @@ public class Aggregate extends AbstractNode {
 	public void setCompletionSize(Integer completionSize) {
 		Integer oldValue = this.completionSize;
 		this.completionSize = completionSize;
-		firePropertyChange(PROPERTY_COMPLETIONSIZE, oldValue, completionSize);
+		if (!isSame(oldValue, completionSize)) {
+		    firePropertyChange(PROPERTY_COMPLETIONSIZE, oldValue, completionSize);
+		}
 	}
 
 	/**
@@ -273,7 +293,9 @@ public class Aggregate extends AbstractNode {
 	public void setCompletionInterval(Long completionInterval) {
 		Long oldValue = this.completionInterval;
 		this.completionInterval = completionInterval;
-		firePropertyChange(PROPERTY_COMPLETIONINTERVAL, oldValue, completionInterval);
+		if (!isSame(oldValue, completionInterval)) {
+		    firePropertyChange(PROPERTY_COMPLETIONINTERVAL, oldValue, completionInterval);
+		}
 	}
 
 	/**
@@ -289,7 +311,9 @@ public class Aggregate extends AbstractNode {
 	public void setCompletionTimeout(Long completionTimeout) {
 		Long oldValue = this.completionTimeout;
 		this.completionTimeout = completionTimeout;
-		firePropertyChange(PROPERTY_COMPLETIONTIMEOUT, oldValue, completionTimeout);
+		if (!isSame(oldValue, completionTimeout)) {
+		    firePropertyChange(PROPERTY_COMPLETIONTIMEOUT, oldValue, completionTimeout);
+		}
 	}
 
 	/**
@@ -305,7 +329,9 @@ public class Aggregate extends AbstractNode {
 	public void setCompletionFromBatchConsumer(Boolean completionFromBatchConsumer) {
 		Boolean oldValue = this.completionFromBatchConsumer;
 		this.completionFromBatchConsumer = completionFromBatchConsumer;
-		firePropertyChange(PROPERTY_COMPLETIONFROMBATCHCONSUMER, oldValue, completionFromBatchConsumer);
+		if (!isSame(oldValue, completionFromBatchConsumer)) {
+		    firePropertyChange(PROPERTY_COMPLETIONFROMBATCHCONSUMER, oldValue, completionFromBatchConsumer);
+		}
 	}
 
 	/**
@@ -321,7 +347,9 @@ public class Aggregate extends AbstractNode {
 	public void setGroupExchanges(Boolean groupExchanges) {
 		Boolean oldValue = this.groupExchanges;
 		this.groupExchanges = groupExchanges;
-		firePropertyChange(PROPERTY_GROUPEXCHANGES, oldValue, groupExchanges);
+		if (!isSame(oldValue, groupExchanges)) {
+		    firePropertyChange(PROPERTY_GROUPEXCHANGES, oldValue, groupExchanges);
+		}
 	}
 
 	/**
@@ -337,7 +365,9 @@ public class Aggregate extends AbstractNode {
 	public void setEagerCheckCompletion(Boolean eagerCheckCompletion) {
 		Boolean oldValue = this.eagerCheckCompletion;
 		this.eagerCheckCompletion = eagerCheckCompletion;
-		firePropertyChange(PROPERTY_EAGERCHECKCOMPLETION, oldValue, eagerCheckCompletion);
+		if (!isSame(oldValue, eagerCheckCompletion)) {
+		    firePropertyChange(PROPERTY_EAGERCHECKCOMPLETION, oldValue, eagerCheckCompletion);
+		}
 	}
 
 	/**
@@ -353,7 +383,9 @@ public class Aggregate extends AbstractNode {
 	public void setIgnoreInvalidCorrelationKeys(Boolean ignoreInvalidCorrelationKeys) {
 		Boolean oldValue = this.ignoreInvalidCorrelationKeys;
 		this.ignoreInvalidCorrelationKeys = ignoreInvalidCorrelationKeys;
-		firePropertyChange(PROPERTY_IGNOREINVALIDCORRELATIONKEYS, oldValue, ignoreInvalidCorrelationKeys);
+		if (!isSame(oldValue, ignoreInvalidCorrelationKeys)) {
+		    firePropertyChange(PROPERTY_IGNOREINVALIDCORRELATIONKEYS, oldValue, ignoreInvalidCorrelationKeys);
+		}
 	}
 
 	/**
@@ -369,7 +401,9 @@ public class Aggregate extends AbstractNode {
 	public void setCloseCorrelationKeyOnCompletion(Integer closeCorrelationKeyOnCompletion) {
 		Integer oldValue = this.closeCorrelationKeyOnCompletion;
 		this.closeCorrelationKeyOnCompletion = closeCorrelationKeyOnCompletion;
-		firePropertyChange(PROPERTY_CLOSECORRELATIONKEYONCOMPLETION, oldValue, closeCorrelationKeyOnCompletion);
+		if (!isSame(oldValue, closeCorrelationKeyOnCompletion)) {
+		    firePropertyChange(PROPERTY_CLOSECORRELATIONKEYONCOMPLETION, oldValue, closeCorrelationKeyOnCompletion);
+		}
 	}
 
 	/**
@@ -385,7 +419,9 @@ public class Aggregate extends AbstractNode {
 	public void setDiscardOnCompletionTimeout(Boolean discardOnCompletionTimeout) {
 		Boolean oldValue = this.discardOnCompletionTimeout;
 		this.discardOnCompletionTimeout = discardOnCompletionTimeout;
-		firePropertyChange(PROPERTY_DISCARDONCOMPLETIONTIMEOUT, oldValue, discardOnCompletionTimeout);
+		if (!isSame(oldValue, discardOnCompletionTimeout)) {
+		    firePropertyChange(PROPERTY_DISCARDONCOMPLETIONTIMEOUT, oldValue, discardOnCompletionTimeout);
+		}
 	}
 
 	/**
@@ -401,7 +437,9 @@ public class Aggregate extends AbstractNode {
 	public void setForceCompletionOnStop(Boolean forceCompletionOnStop) {
 		Boolean oldValue = this.forceCompletionOnStop;
 		this.forceCompletionOnStop = forceCompletionOnStop;
-		firePropertyChange(PROPERTY_FORCECOMPLETIONONSTOP, oldValue, forceCompletionOnStop);
+		if (!isSame(oldValue, forceCompletionOnStop)) {
+		    firePropertyChange(PROPERTY_FORCECOMPLETIONONSTOP, oldValue, forceCompletionOnStop);
+		}
 	}
 
 

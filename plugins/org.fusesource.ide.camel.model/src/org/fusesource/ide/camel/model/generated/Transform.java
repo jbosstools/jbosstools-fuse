@@ -77,7 +77,9 @@ public class Transform extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 

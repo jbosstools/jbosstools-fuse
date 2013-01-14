@@ -78,7 +78,9 @@ public class SetExchangePattern extends AbstractNode {
 	public void setPattern(ExchangePattern pattern) {
 		ExchangePattern oldValue = this.pattern;
 		this.pattern = pattern;
-		firePropertyChange(PROPERTY_PATTERN, oldValue, pattern);
+		if (!isSame(oldValue, pattern)) {
+		    firePropertyChange(PROPERTY_PATTERN, oldValue, pattern);
+		}
 	}
 
 

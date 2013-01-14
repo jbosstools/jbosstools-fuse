@@ -90,7 +90,9 @@ public class WireTap extends AbstractNode {
 	public void setUri(String uri) {
 		String oldValue = this.uri;
 		this.uri = uri;
-		firePropertyChange(PROPERTY_URI, oldValue, uri);
+		if (!isSame(oldValue, uri)) {
+		    firePropertyChange(PROPERTY_URI, oldValue, uri);
+		}
 	}
 
 	/**
@@ -106,7 +108,9 @@ public class WireTap extends AbstractNode {
 	public void setNewExchangeProcessorRef(String newExchangeProcessorRef) {
 		String oldValue = this.newExchangeProcessorRef;
 		this.newExchangeProcessorRef = newExchangeProcessorRef;
-		firePropertyChange(PROPERTY_NEWEXCHANGEPROCESSORREF, oldValue, newExchangeProcessorRef);
+		if (!isSame(oldValue, newExchangeProcessorRef)) {
+		    firePropertyChange(PROPERTY_NEWEXCHANGEPROCESSORREF, oldValue, newExchangeProcessorRef);
+		}
 	}
 
 	/**
@@ -122,7 +126,9 @@ public class WireTap extends AbstractNode {
 	public void setNewExchangeExpression(ExpressionDefinition newExchangeExpression) {
 		ExpressionDefinition oldValue = this.newExchangeExpression;
 		this.newExchangeExpression = newExchangeExpression;
-		firePropertyChange(PROPERTY_NEWEXCHANGEEXPRESSION, oldValue, newExchangeExpression);
+		if (!isSame(oldValue, newExchangeExpression)) {
+		    firePropertyChange(PROPERTY_NEWEXCHANGEEXPRESSION, oldValue, newExchangeExpression);
+		}
 	}
 
 	/**
@@ -138,7 +144,9 @@ public class WireTap extends AbstractNode {
 	public void setHeaders(List headers) {
 		List oldValue = this.headers;
 		this.headers = headers;
-		firePropertyChange(PROPERTY_HEADERS, oldValue, headers);
+		if (!isSame(oldValue, headers)) {
+		    firePropertyChange(PROPERTY_HEADERS, oldValue, headers);
+		}
 	}
 
 	/**
@@ -154,7 +162,9 @@ public class WireTap extends AbstractNode {
 	public void setExecutorServiceRef(String executorServiceRef) {
 		String oldValue = this.executorServiceRef;
 		this.executorServiceRef = executorServiceRef;
-		firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		}
 	}
 
 	/**
@@ -170,7 +180,9 @@ public class WireTap extends AbstractNode {
 	public void setOnPrepareRef(String onPrepareRef) {
 		String oldValue = this.onPrepareRef;
 		this.onPrepareRef = onPrepareRef;
-		firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
+		if (!isSame(oldValue, onPrepareRef)) {
+		    firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
+		}
 	}
 
 	/**
@@ -186,7 +198,9 @@ public class WireTap extends AbstractNode {
 	public void setCopy(Boolean copy) {
 		Boolean oldValue = this.copy;
 		this.copy = copy;
-		firePropertyChange(PROPERTY_COPY, oldValue, copy);
+		if (!isSame(oldValue, copy)) {
+		    firePropertyChange(PROPERTY_COPY, oldValue, copy);
+		}
 	}
 
 

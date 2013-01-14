@@ -31,6 +31,7 @@ import org.apache.camel.model.TransactedDefinition;
 import org.apache.camel.model.UnmarshalDefinition;
 import org.apache.camel.model.WhenDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
+import org.apache.camel.model.language.XPathExpression;
 import org.apache.camel.model.loadbalancer.CustomLoadBalancerDefinition;
 import org.apache.camel.model.loadbalancer.FailoverLoadBalancerDefinition;
 import org.apache.camel.model.loadbalancer.RandomLoadBalancerDefinition;
@@ -1546,5 +1547,147 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	protected boolean isSame(Object a, Object b) {
+		// null checks
+		if (a == null && b == null) return true;
+		if (a == null && b != null) return false;
+		if (a != null && b == null) return false;
+		 
+		if (a instanceof ExpressionDefinition && 
+			b instanceof ExpressionDefinition) {
+			// compare expressions
+			ExpressionDefinition e_a = (ExpressionDefinition)a;
+			ExpressionDefinition e_b = (ExpressionDefinition)b;
 
+			if (!isSameExpression(e_a, e_b)) {
+				return false;
+			}
+		} else {
+			// do reflection crawling
+			if (!isSameByReflectionCompare(a, b)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * compares two expressions
+	 * 
+	 * @param e_a
+	 * @param e_b
+	 * @return
+	 */
+	private boolean isSameExpression(ExpressionDefinition e_a, ExpressionDefinition e_b) {
+		if (!e_a.getExpression().equals(e_b.getExpression()) ||
+			!e_a.getLanguage().equals(e_b.getLanguage())) {
+			return false;
+		}
+		
+		XPathExpression xp_a = null;
+		XPathExpression xp_b = null;
+		
+		if (e_a instanceof XPathExpression) {
+			xp_a = (XPathExpression)e_a;
+			xp_b = null;
+			
+			if (e_b instanceof XPathExpression) {
+				xp_b = (XPathExpression)e_b;
+			} else {
+				try {
+					Field f_original = e_b.getClass().getDeclaredField("original");
+					f_original.setAccessible(true);
+					xp_b = (XPathExpression)f_original.get(e_b);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}					
+			}
+			
+			if (xp_a.getResultTypeName() != xp_b.getResultTypeName()) {
+				return false;
+			}
+		} else if (e_b instanceof XPathExpression) {
+			xp_a = null;
+			xp_b = (XPathExpression)e_b;
+			
+			if (e_a instanceof XPathExpression) {
+				xp_a = (XPathExpression)e_a;
+			} else {
+				try {
+					Field f_original = e_a.getClass().getDeclaredField("original");
+					f_original.setAccessible(true);
+					xp_a = (XPathExpression)f_original.get(e_a);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}		
+			}
+			
+			if (xp_a.getResultTypeName() != xp_b.getResultTypeName()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean isSameByReflectionCompare(Object a, Object b) {
+		// now use reflection to compare all common fields of the objects
+		boolean isSame = compareObjects(a, b);
+		if (isSame) {
+			// now opposite order to compare really each field of each object
+			isSame = compareObjects(b, a);
+		}
+		return isSame;
+	}
+	
+	private boolean compareObjects(Object a, Object b) {
+		Class ca = a.getClass();
+		Class cb = b.getClass();
+		
+		boolean found = false;
+		for (Field fa : ca.getDeclaredFields()) {
+			fa.setAccessible(true);
+			found = false;
+			for (Field fb : cb.getDeclaredFields()) {
+				fb.setAccessible(true);
+				if (fb.getName().equals(fa.getName())) {
+					found = true;
+					try {
+						if (!fb.get(b).equals(fa.get(a))) {
+							return false;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+		
+		Class sca = ca.getSuperclass();
+		Class scb = cb.getSuperclass();
+		// both must have the same super class or both no super class
+		if (sca == null && scb == null) {
+			// all fine
+		} else if (sca != null && scb != null) {
+			// all fine
+		} else {
+			return false;
+		}
+		
+		// both super classes must be equal
+		if (!sca.getName().equals(scb.getName())) {
+			return false;
+		}
+		
+		Object superA = sca.cast(a);
+		Object superB = scb.cast(b);
+		if (!isSameByReflectionCompare(superA, superB)) {
+			return false;
+		}		
+		return isSameByReflectionCompare(superB, superA);
+	}
 }

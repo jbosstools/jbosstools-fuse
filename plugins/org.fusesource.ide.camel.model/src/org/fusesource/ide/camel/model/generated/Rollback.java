@@ -81,7 +81,9 @@ public class Rollback extends AbstractNode {
 	public void setMessage(String message) {
 		String oldValue = this.message;
 		this.message = message;
-		firePropertyChange(PROPERTY_MESSAGE, oldValue, message);
+		if (!isSame(oldValue, message)) {
+		    firePropertyChange(PROPERTY_MESSAGE, oldValue, message);
+		}
 	}
 
 	/**
@@ -97,7 +99,9 @@ public class Rollback extends AbstractNode {
 	public void setMarkRollbackOnly(Boolean markRollbackOnly) {
 		Boolean oldValue = this.markRollbackOnly;
 		this.markRollbackOnly = markRollbackOnly;
-		firePropertyChange(PROPERTY_MARKROLLBACKONLY, oldValue, markRollbackOnly);
+		if (!isSame(oldValue, markRollbackOnly)) {
+		    firePropertyChange(PROPERTY_MARKROLLBACKONLY, oldValue, markRollbackOnly);
+		}
 	}
 
 	/**
@@ -113,7 +117,9 @@ public class Rollback extends AbstractNode {
 	public void setMarkRollbackOnlyLast(Boolean markRollbackOnlyLast) {
 		Boolean oldValue = this.markRollbackOnlyLast;
 		this.markRollbackOnlyLast = markRollbackOnlyLast;
-		firePropertyChange(PROPERTY_MARKROLLBACKONLYLAST, oldValue, markRollbackOnlyLast);
+		if (!isSame(oldValue, markRollbackOnlyLast)) {
+		    firePropertyChange(PROPERTY_MARKROLLBACKONLYLAST, oldValue, markRollbackOnlyLast);
+		}
 	}
 
 

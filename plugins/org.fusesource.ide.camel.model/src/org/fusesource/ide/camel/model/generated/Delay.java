@@ -83,7 +83,9 @@ public class Delay extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -99,7 +101,9 @@ public class Delay extends AbstractNode {
 	public void setExecutorServiceRef(String executorServiceRef) {
 		String oldValue = this.executorServiceRef;
 		this.executorServiceRef = executorServiceRef;
-		firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		}
 	}
 
 	/**
@@ -115,7 +119,9 @@ public class Delay extends AbstractNode {
 	public void setAsyncDelayed(Boolean asyncDelayed) {
 		Boolean oldValue = this.asyncDelayed;
 		this.asyncDelayed = asyncDelayed;
-		firePropertyChange(PROPERTY_ASYNCDELAYED, oldValue, asyncDelayed);
+		if (!isSame(oldValue, asyncDelayed)) {
+		    firePropertyChange(PROPERTY_ASYNCDELAYED, oldValue, asyncDelayed);
+		}
 	}
 
 	/**
@@ -131,7 +137,9 @@ public class Delay extends AbstractNode {
 	public void setCallerRunsWhenRejected(Boolean callerRunsWhenRejected) {
 		Boolean oldValue = this.callerRunsWhenRejected;
 		this.callerRunsWhenRejected = callerRunsWhenRejected;
-		firePropertyChange(PROPERTY_CALLERRUNSWHENREJECTED, oldValue, callerRunsWhenRejected);
+		if (!isSame(oldValue, callerRunsWhenRejected)) {
+		    firePropertyChange(PROPERTY_CALLERRUNSWHENREJECTED, oldValue, callerRunsWhenRejected);
+		}
 	}
 
 

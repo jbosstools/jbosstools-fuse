@@ -79,7 +79,9 @@ public class Enrich extends AbstractNode {
 	public void setResourceUri(String resourceUri) {
 		String oldValue = this.resourceUri;
 		this.resourceUri = resourceUri;
-		firePropertyChange(PROPERTY_RESOURCEURI, oldValue, resourceUri);
+		if (!isSame(oldValue, resourceUri)) {
+		    firePropertyChange(PROPERTY_RESOURCEURI, oldValue, resourceUri);
+		}
 	}
 
 	/**
@@ -95,7 +97,9 @@ public class Enrich extends AbstractNode {
 	public void setAggregationStrategyRef(String aggregationStrategyRef) {
 		String oldValue = this.aggregationStrategyRef;
 		this.aggregationStrategyRef = aggregationStrategyRef;
-		firePropertyChange(PROPERTY_AGGREGATIONSTRATEGYREF, oldValue, aggregationStrategyRef);
+		if (!isSame(oldValue, aggregationStrategyRef)) {
+		    firePropertyChange(PROPERTY_AGGREGATIONSTRATEGYREF, oldValue, aggregationStrategyRef);
+		}
 	}
 
 

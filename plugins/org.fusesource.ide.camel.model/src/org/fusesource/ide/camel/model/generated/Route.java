@@ -71,7 +71,9 @@ public class Route extends RouteSupport {
 	public void setAutoStartup(String autoStartup) {
 		String oldValue = this.autoStartup;
 		this.autoStartup = autoStartup;
-		firePropertyChange(PROPERTY_AUTOSTARTUP, oldValue, autoStartup);
+		if (!isSame(oldValue, autoStartup)) {
+		    firePropertyChange(PROPERTY_AUTOSTARTUP, oldValue, autoStartup);
+		}
 	}
 
 	/**
@@ -87,7 +89,9 @@ public class Route extends RouteSupport {
 	public void setDelayer(String delayer) {
 		String oldValue = this.delayer;
 		this.delayer = delayer;
-		firePropertyChange(PROPERTY_DELAYER, oldValue, delayer);
+		if (!isSame(oldValue, delayer)) {
+		    firePropertyChange(PROPERTY_DELAYER, oldValue, delayer);
+		}
 	}
 
 	/**
@@ -103,7 +107,9 @@ public class Route extends RouteSupport {
 	public void setErrorHandlerRef(String errorHandlerRef) {
 		String oldValue = this.errorHandlerRef;
 		this.errorHandlerRef = errorHandlerRef;
-		firePropertyChange(PROPERTY_ERRORHANDLERREF, oldValue, errorHandlerRef);
+		if (!isSame(oldValue, errorHandlerRef)) {
+		    firePropertyChange(PROPERTY_ERRORHANDLERREF, oldValue, errorHandlerRef);
+		}
 	}
 
 	/**
@@ -119,7 +125,9 @@ public class Route extends RouteSupport {
 	public void setGroup(String group) {
 		String oldValue = this.group;
 		this.group = group;
-		firePropertyChange(PROPERTY_GROUP, oldValue, group);
+		if (!isSame(oldValue, group)) {
+		    firePropertyChange(PROPERTY_GROUP, oldValue, group);
+		}
 	}
 
 	/**
@@ -135,7 +143,9 @@ public class Route extends RouteSupport {
 	public void setHandleFault(String handleFault) {
 		String oldValue = this.handleFault;
 		this.handleFault = handleFault;
-		firePropertyChange(PROPERTY_HANDLEFAULT, oldValue, handleFault);
+		if (!isSame(oldValue, handleFault)) {
+		    firePropertyChange(PROPERTY_HANDLEFAULT, oldValue, handleFault);
+		}
 	}
 
 	/**
@@ -151,7 +161,9 @@ public class Route extends RouteSupport {
 	public void setRoutePolicyRef(String routePolicyRef) {
 		String oldValue = this.routePolicyRef;
 		this.routePolicyRef = routePolicyRef;
-		firePropertyChange(PROPERTY_ROUTEPOLICYREF, oldValue, routePolicyRef);
+		if (!isSame(oldValue, routePolicyRef)) {
+		    firePropertyChange(PROPERTY_ROUTEPOLICYREF, oldValue, routePolicyRef);
+		}
 	}
 
 	/**
@@ -167,7 +179,9 @@ public class Route extends RouteSupport {
 	public void setStreamCache(String streamCache) {
 		String oldValue = this.streamCache;
 		this.streamCache = streamCache;
-		firePropertyChange(PROPERTY_STREAMCACHE, oldValue, streamCache);
+		if (!isSame(oldValue, streamCache)) {
+		    firePropertyChange(PROPERTY_STREAMCACHE, oldValue, streamCache);
+		}
 	}
 
 	/**
@@ -183,7 +197,9 @@ public class Route extends RouteSupport {
 	public void setTrace(String trace) {
 		String oldValue = this.trace;
 		this.trace = trace;
-		firePropertyChange(PROPERTY_TRACE, oldValue, trace);
+		if (!isSame(oldValue, trace)) {
+		    firePropertyChange(PROPERTY_TRACE, oldValue, trace);
+		}
 	}
 
 

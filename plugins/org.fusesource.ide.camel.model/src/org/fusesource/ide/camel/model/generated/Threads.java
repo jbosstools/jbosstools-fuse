@@ -95,7 +95,9 @@ public class Threads extends AbstractNode {
 	public void setExecutorServiceRef(String executorServiceRef) {
 		String oldValue = this.executorServiceRef;
 		this.executorServiceRef = executorServiceRef;
-		firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		}
 	}
 
 	/**
@@ -111,7 +113,9 @@ public class Threads extends AbstractNode {
 	public void setThreadName(String threadName) {
 		String oldValue = this.threadName;
 		this.threadName = threadName;
-		firePropertyChange(PROPERTY_THREADNAME, oldValue, threadName);
+		if (!isSame(oldValue, threadName)) {
+		    firePropertyChange(PROPERTY_THREADNAME, oldValue, threadName);
+		}
 	}
 
 	/**
@@ -127,7 +131,9 @@ public class Threads extends AbstractNode {
 	public void setPoolSize(Integer poolSize) {
 		Integer oldValue = this.poolSize;
 		this.poolSize = poolSize;
-		firePropertyChange(PROPERTY_POOLSIZE, oldValue, poolSize);
+		if (!isSame(oldValue, poolSize)) {
+		    firePropertyChange(PROPERTY_POOLSIZE, oldValue, poolSize);
+		}
 	}
 
 	/**
@@ -143,7 +149,9 @@ public class Threads extends AbstractNode {
 	public void setMaxPoolSize(Integer maxPoolSize) {
 		Integer oldValue = this.maxPoolSize;
 		this.maxPoolSize = maxPoolSize;
-		firePropertyChange(PROPERTY_MAXPOOLSIZE, oldValue, maxPoolSize);
+		if (!isSame(oldValue, maxPoolSize)) {
+		    firePropertyChange(PROPERTY_MAXPOOLSIZE, oldValue, maxPoolSize);
+		}
 	}
 
 	/**
@@ -159,7 +167,9 @@ public class Threads extends AbstractNode {
 	public void setKeepAliveTime(Long keepAliveTime) {
 		Long oldValue = this.keepAliveTime;
 		this.keepAliveTime = keepAliveTime;
-		firePropertyChange(PROPERTY_KEEPALIVETIME, oldValue, keepAliveTime);
+		if (!isSame(oldValue, keepAliveTime)) {
+		    firePropertyChange(PROPERTY_KEEPALIVETIME, oldValue, keepAliveTime);
+		}
 	}
 
 	/**
@@ -175,7 +185,9 @@ public class Threads extends AbstractNode {
 	public void setTimeUnit(TimeUnit timeUnit) {
 		TimeUnit oldValue = this.timeUnit;
 		this.timeUnit = timeUnit;
-		firePropertyChange(PROPERTY_TIMEUNIT, oldValue, timeUnit);
+		if (!isSame(oldValue, timeUnit)) {
+		    firePropertyChange(PROPERTY_TIMEUNIT, oldValue, timeUnit);
+		}
 	}
 
 	/**
@@ -191,7 +203,9 @@ public class Threads extends AbstractNode {
 	public void setMaxQueueSize(Integer maxQueueSize) {
 		Integer oldValue = this.maxQueueSize;
 		this.maxQueueSize = maxQueueSize;
-		firePropertyChange(PROPERTY_MAXQUEUESIZE, oldValue, maxQueueSize);
+		if (!isSame(oldValue, maxQueueSize)) {
+		    firePropertyChange(PROPERTY_MAXQUEUESIZE, oldValue, maxQueueSize);
+		}
 	}
 
 	/**
@@ -207,7 +221,9 @@ public class Threads extends AbstractNode {
 	public void setRejectedPolicy(ThreadPoolRejectedPolicy rejectedPolicy) {
 		ThreadPoolRejectedPolicy oldValue = this.rejectedPolicy;
 		this.rejectedPolicy = rejectedPolicy;
-		firePropertyChange(PROPERTY_REJECTEDPOLICY, oldValue, rejectedPolicy);
+		if (!isSame(oldValue, rejectedPolicy)) {
+		    firePropertyChange(PROPERTY_REJECTEDPOLICY, oldValue, rejectedPolicy);
+		}
 	}
 
 	/**
@@ -223,7 +239,9 @@ public class Threads extends AbstractNode {
 	public void setCallerRunsWhenRejected(Boolean callerRunsWhenRejected) {
 		Boolean oldValue = this.callerRunsWhenRejected;
 		this.callerRunsWhenRejected = callerRunsWhenRejected;
-		firePropertyChange(PROPERTY_CALLERRUNSWHENREJECTED, oldValue, callerRunsWhenRejected);
+		if (!isSame(oldValue, callerRunsWhenRejected)) {
+		    firePropertyChange(PROPERTY_CALLERRUNSWHENREJECTED, oldValue, callerRunsWhenRejected);
+		}
 	}
 
 

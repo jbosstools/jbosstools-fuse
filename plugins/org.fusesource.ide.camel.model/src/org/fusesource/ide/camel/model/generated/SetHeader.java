@@ -79,7 +79,9 @@ public class SetHeader extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -95,7 +97,9 @@ public class SetHeader extends AbstractNode {
 	public void setHeaderName(String headerName) {
 		String oldValue = this.headerName;
 		this.headerName = headerName;
-		firePropertyChange(PROPERTY_HEADERNAME, oldValue, headerName);
+		if (!isSame(oldValue, headerName)) {
+		    firePropertyChange(PROPERTY_HEADERNAME, oldValue, headerName);
+		}
 	}
 
 

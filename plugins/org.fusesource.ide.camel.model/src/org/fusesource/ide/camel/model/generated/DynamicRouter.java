@@ -81,7 +81,9 @@ public class DynamicRouter extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -97,7 +99,9 @@ public class DynamicRouter extends AbstractNode {
 	public void setUriDelimiter(String uriDelimiter) {
 		String oldValue = this.uriDelimiter;
 		this.uriDelimiter = uriDelimiter;
-		firePropertyChange(PROPERTY_URIDELIMITER, oldValue, uriDelimiter);
+		if (!isSame(oldValue, uriDelimiter)) {
+		    firePropertyChange(PROPERTY_URIDELIMITER, oldValue, uriDelimiter);
+		}
 	}
 
 	/**
@@ -113,7 +117,9 @@ public class DynamicRouter extends AbstractNode {
 	public void setIgnoreInvalidEndpoints(Boolean ignoreInvalidEndpoints) {
 		Boolean oldValue = this.ignoreInvalidEndpoints;
 		this.ignoreInvalidEndpoints = ignoreInvalidEndpoints;
-		firePropertyChange(PROPERTY_IGNOREINVALIDENDPOINTS, oldValue, ignoreInvalidEndpoints);
+		if (!isSame(oldValue, ignoreInvalidEndpoints)) {
+		    firePropertyChange(PROPERTY_IGNOREINVALIDENDPOINTS, oldValue, ignoreInvalidEndpoints);
+		}
 	}
 
 

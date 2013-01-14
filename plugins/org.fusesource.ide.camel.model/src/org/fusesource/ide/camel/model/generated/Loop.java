@@ -79,7 +79,9 @@ public class Loop extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -95,7 +97,9 @@ public class Loop extends AbstractNode {
 	public void setCopy(Boolean copy) {
 		Boolean oldValue = this.copy;
 		this.copy = copy;
-		firePropertyChange(PROPERTY_COPY, oldValue, copy);
+		if (!isSame(oldValue, copy)) {
+		    firePropertyChange(PROPERTY_COPY, oldValue, copy);
+		}
 	}
 
 

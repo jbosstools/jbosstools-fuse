@@ -79,7 +79,9 @@ public class Sort extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -95,7 +97,9 @@ public class Sort extends AbstractNode {
 	public void setComparatorRef(String comparatorRef) {
 		String oldValue = this.comparatorRef;
 		this.comparatorRef = comparatorRef;
-		firePropertyChange(PROPERTY_COMPARATORREF, oldValue, comparatorRef);
+		if (!isSame(oldValue, comparatorRef)) {
+		    firePropertyChange(PROPERTY_COMPARATORREF, oldValue, comparatorRef);
+		}
 	}
 
 

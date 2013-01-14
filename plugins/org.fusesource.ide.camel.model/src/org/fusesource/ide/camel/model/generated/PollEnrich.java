@@ -81,7 +81,9 @@ public class PollEnrich extends AbstractNode {
 	public void setResourceUri(String resourceUri) {
 		String oldValue = this.resourceUri;
 		this.resourceUri = resourceUri;
-		firePropertyChange(PROPERTY_RESOURCEURI, oldValue, resourceUri);
+		if (!isSame(oldValue, resourceUri)) {
+		    firePropertyChange(PROPERTY_RESOURCEURI, oldValue, resourceUri);
+		}
 	}
 
 	/**
@@ -97,7 +99,9 @@ public class PollEnrich extends AbstractNode {
 	public void setAggregationStrategyRef(String aggregationStrategyRef) {
 		String oldValue = this.aggregationStrategyRef;
 		this.aggregationStrategyRef = aggregationStrategyRef;
-		firePropertyChange(PROPERTY_AGGREGATIONSTRATEGYREF, oldValue, aggregationStrategyRef);
+		if (!isSame(oldValue, aggregationStrategyRef)) {
+		    firePropertyChange(PROPERTY_AGGREGATIONSTRATEGYREF, oldValue, aggregationStrategyRef);
+		}
 	}
 
 	/**
@@ -113,7 +117,9 @@ public class PollEnrich extends AbstractNode {
 	public void setTimeout(Long timeout) {
 		Long oldValue = this.timeout;
 		this.timeout = timeout;
-		firePropertyChange(PROPERTY_TIMEOUT, oldValue, timeout);
+		if (!isSame(oldValue, timeout)) {
+		    firePropertyChange(PROPERTY_TIMEOUT, oldValue, timeout);
+		}
 	}
 
 
