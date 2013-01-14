@@ -1685,9 +1685,6 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		
 		Object superA = sca.cast(a);
 		Object superB = scb.cast(b);
-		if (!isSameByReflectionCompare(superA, superB)) {
-			return false;
-		}		
-		return isSameByReflectionCompare(superB, superA);
+		return isSameByReflectionCompare(superA, superB);
 	}
 }
