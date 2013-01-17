@@ -152,6 +152,7 @@
               	<groupId>org.jboss.tools.target-platforms.jbosstools</groupId>
 		<artifactId>unified</artifactId>
 		<version>4.2.0.c-SNAPSHOT</version>
+		<classifier>unified</classifier>
             </artifact>
 <!--
             <artifact>

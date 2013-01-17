@@ -8,11 +8,11 @@
 <repository location="http://repo.fusesource.com/beta/3.0.x"/>
 </location>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.drools.eclipse.feature.feature.group" version="5.5.0.Beta1"/>
-<unit id="org.guvnor.tools.feature.feature.group" version="5.5.0.Beta1"/>
-<unit id="org.jbpm.eclipse.feature.feature.group" version="5.5.0.Beta1"/>
-<unit id="org.jbpm.eclipse.task.feature.feature.group" version="5.5.0.Beta1"/>
-<repository location="http://download.jboss.org/drools/release/5.5.0.Beta1/org.drools.updatesite/"/>
+<unit id="org.drools.eclipse.feature.feature.group" version="5.5.0.Final"/>
+<unit id="org.guvnor.tools.feature.feature.group" version="5.5.0.Final"/>
+<unit id="org.jbpm.eclipse.feature.feature.group" version="5.5.0.Final"/>
+<unit id="org.jbpm.eclipse.task.feature.feature.group" version="5.5.0.Final"/>
+<repository location="http://download.jboss.org/drools/release/5.5.0.Final/org.drools.updatesite/"/>
 </location>
 <location path="/Users/lhein/git/fuseide/plugins/org.fusesource.ide.updatesite/target/repository" type="Directory"/>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
