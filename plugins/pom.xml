@@ -26,7 +26,7 @@
   <properties>
     <slf4j-version>1.7.0</slf4j-version>
     <google-guava-version>13.0</google-guava-version>		
-    <drools.updatesite.version>5.5.0.Beta1</drools.updatesite.version>		
+    <drools.updatesite.version>5.5.0.Final</drools.updatesite.version>		
 		
     <spring3-version>3.1.1.RELEASE</spring3-version>
     <scala.library.version>${scala-version}</scala.library.version>
@@ -148,20 +148,20 @@
           <resolver>p2</resolver>
           <pomDependencies>consider</pomDependencies>
           <target>
+<!--
             <artifact>
               	<groupId>org.jboss.tools.target-platforms.jbosstools</groupId>
 		<artifactId>unified</artifactId>
 		<version>4.2.0.c-SNAPSHOT</version>
 		<classifier>unified</classifier>
             </artifact>
-<!--
+-->
             <artifact>
               <groupId>org.fusesource.ide</groupId>
               <artifactId>org.fusesource.ide.targetplatform</artifactId>
               <version>${project.version}</version>
-              <classifier>indigo_dev</classifier>
+              <classifier>fuse-ide</classifier>
             </artifact>
--->
           </target>
           <ignoreTychoRepositories>false</ignoreTychoRepositories>
           <environments> 
@@ -872,7 +872,7 @@
     <repository>
       <id>fusesource-nexus-snapshots</id>
       <name>Fusesource Nexus Snapshots</name>
-      <url>http://download.jboss.org/drools/release/${drools.updatesite.version}/org.drools.updatesite</url>
+      <url>http://download.jboss.org/drools/release/${drools.updatesite.version}/org.drools.updatesite/</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
