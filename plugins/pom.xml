@@ -149,11 +149,18 @@
           <pomDependencies>consider</pomDependencies>
           <target>
             <artifact>
+              	<groupId>org.jboss.tools.target-platforms.jbosstools</groupId>
+		<artifactId>unified</artifactId>
+		<version>4.2.0.c-SNAPSHOT</version>
+            </artifact>
+<!--
+            <artifact>
               <groupId>org.fusesource.ide</groupId>
               <artifactId>org.fusesource.ide.targetplatform</artifactId>
               <version>${project.version}</version>
               <classifier>indigo_dev</classifier>
             </artifact>
+-->
           </target>
           <ignoreTychoRepositories>false</ignoreTychoRepositories>
           <environments> 
