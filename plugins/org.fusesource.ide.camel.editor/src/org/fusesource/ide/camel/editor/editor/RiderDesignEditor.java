@@ -892,7 +892,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public void switchRoute(final RouteSupport newRoute) {
-		if (newRoute == activeRoute) return;
+		if (newRoute == activeRoute) {
+			return;
+		}
 		if (activeRoute != null) {
 			this.cache.put(activeRoute, activeConfig);
 		}
@@ -904,6 +906,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			this.activeConfig = new DesignerCache();
 			this.activeConfig.input = oldInput;
 		}
+		refreshDiagramContents();
+	}
+	
+	public void refreshDiagramContents() {
 		initializeDiagramForSelectedRoute();
 		if (activeConfig.diagram != null) {
 	        getRefreshBehavior().initRefresh();
@@ -1072,7 +1078,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		editor.onInputLoading(editorInput);
 		this.setModel(editorInput.loadModel());
 	}
-
+	
 	public void loadEditorText(String text) {
 		try {
 			this.setModel(data.marshaller.loadRoutesFromText(text));
@@ -1267,7 +1273,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	 * clears the cache
 	 */
 	public void clearCache() {
-		// nothing here for now
+		activeRoute = null;
+		this.activeConfig.diagram = null;
+		getDiagramTypeProvider().getDiagram().eResource().eAdapters().clear();
+		getEditingDomain().getResourceSet().getResources().remove(getDiagramTypeProvider().getDiagram().eResource());
 	}
 
 	public void addNewRoute() {
