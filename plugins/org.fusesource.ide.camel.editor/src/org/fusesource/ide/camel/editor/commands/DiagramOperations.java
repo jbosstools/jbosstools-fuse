@@ -8,7 +8,7 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.platform.IDiagramEditor;
-import org.eclipse.graphiti.ui.editor.DiagramEditorFactory;
+import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
@@ -97,7 +97,7 @@ public class DiagramOperations {
 
 			editingDomain = TransactionUtil.getEditingDomain(resourceSet);
 			if (editingDomain == null) {
-				editingDomain = DiagramEditorFactory.createResourceSetAndEditingDomain();
+				editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain();
 			}
 		}
 		
