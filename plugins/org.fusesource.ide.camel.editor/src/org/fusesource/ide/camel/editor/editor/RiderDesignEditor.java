@@ -179,8 +179,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
 	private Composite parent;
 
-	private TransactionalEditingDomain editingDomain;
-
 	public static RiderDesignEditor toRiderDesignEditor(IDiagramEditor editor) {
 		if (editor instanceof RiderDesignEditor) {
 			return (RiderDesignEditor) editor;
@@ -400,7 +398,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 //		ResourceSet resourceSet = new ResourceSetImpl();
 
 		//this.editingDomain = TransactionUtil.getEditingDomain(resourceSet);
-		this.editingDomain = getEditingDomain();
+//		this.editingDomain = getEditingDomain();
 //		if (this.editingDomain == null) {
 //			this.editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain();
 //
@@ -432,7 +430,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	 * @param editingDomain the editingDomain to set
 	 */
 	public void setEditingDomain(TransactionalEditingDomain editingDomain) {
-		this.editingDomain = editingDomain;
+//		this.editingDomain = editingDomain;
 	}
 
 	public String getCamelContextURI() {
@@ -1304,7 +1302,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public void setTransactionalEditingDomain(TransactionalEditingDomain editingDomain) {
-		this.editingDomain = editingDomain;
+//		this.editingDomain = editingDomain;
 	}
 
 	protected DiagramEditorInput getDiagramInput() {
