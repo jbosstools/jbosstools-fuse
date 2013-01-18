@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.ProgressMonitorWrapper;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
@@ -51,7 +50,6 @@ import org.eclipse.graphiti.ui.editor.IDiagramEditorInput;
 import org.eclipse.graphiti.ui.internal.config.ConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.config.IConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.util.gef.ScalableRootEditPartAnimated;
-import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
@@ -98,11 +96,6 @@ import org.fusesource.scalate.util.IOUtil;
  */
 public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
-	boolean recreateModel = true;	// WARNING: THIS IS THE BIG EVIL SWITCH! DON'T TOUCH IF POSSIBLE!
-	// TODO have found when disabled round tripping is not yet working
-	// e.g. create a new XML file, add a route, switch to XML, edit XML say add a new route, switch back
-	// to diagram & its not updated
-
 	private final RiderDesignEditorData data;
 
 	private RiderEditor editor;
@@ -126,7 +119,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	private CamelUpdateBehaviour camelUpdateBehaviour;
 	private CamelPaletteBehaviour camelPaletteBehaviour;
 	private CamelPersistencyBehaviour camelPersistencyBehaviour;
-
 	private boolean graphitiDoesNotMarkAsDirty = true;
 	
 	private DesignerCache activeConfig;
@@ -244,8 +236,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	protected void setInput(IEditorInput input) {
 		setPartName(input.getName());
 
-		if (recreateModel) {
-			super.setInput(input);
+		super.setInput(input);
 
         if (data.loadModelOnSetInput) {
 			loadModelFromInput(input);
@@ -288,7 +279,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	public void createPartControl(Composite parent) {
 		this.parent = parent;
 		super.createPartControl(parent);
-		//	contributeToActionBars();
 	}
 
 	protected void contributeToActionBars() {
@@ -299,15 +289,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			Activator.getLogger().warning("No IEditorSite registered for " + this);
 			return;
 		}
-		//		fillLocalPullDown(bars.getMenuManager());
 		fillLocalToolBar(bars.getToolBarManager());
 	}
-
-	//	protected void fillLocalPullDown(IMenuManager manager) {
-	//		IContributionItem item = manager.find("rider.camel.menu");
-	//
-	//		manager.add(new EditorContributionItem());
-	//	}
 
 	protected void fillLocalToolBar(IToolBarManager manager) {
 	}
@@ -358,6 +341,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		if (fileEditorInput != null) {
 			return fileEditorInput.getFile();
 		}
+		return null;
 	}
 	
 	public void setCamelContextFile(IFile file) {
@@ -852,59 +836,47 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	 * @return the model
 	 */
 	public RouteContainer getModel() {
-		if (recreateModel) {
-			if (data.model == null && editorInput != null) {
-				data.lazyLoading = true;
-				try {
-					loadModelFromInput(editorInput);
-				} finally {
-					data.lazyLoading = false;
-				}
+		if (data.model == null && editorInput != null) {
+			data.lazyLoading = true;
+			try {
+				loadModelFromInput(editorInput);
+			} finally {
+				data.lazyLoading = false;
 			}
-			return this.data.model;
-		} else {
-			return this.model;
 		}
+		return this.data.model;
 	}
 
 	public void setModel(RouteContainer model) throws PartInitException {
-		if (recreateModel) {
-			if (model != this.data.model){
-				this.data.model = model;
-				this.data.selectedRoute = null;
-			}
+		if (model != this.data.model){
+			this.data.model = model;
+			this.data.selectedRoute = null;
+
 			setInitialRoute();
 		}
 	}
 
 	public RouteSupport getSelectedRoute() {
-		if (recreateModel) {
-			if (data.selectedRoute == null) {
-				List<AbstractNode> children = getModel().getChildren();
-				if (children != null) {
-					int size = children.size();
-					int idx = data.selectedRouteIndex;
-					if (idx < 0 || idx >= size) {
-						idx = 0;
-					}
-					if (size > 0) {
-						AbstractNode node = children.get(idx);
-						if (node instanceof RouteSupport) {
-							data.selectedRoute = (RouteSupport) node;
-						}
+		if (data.selectedRoute == null) {
+			List<AbstractNode> children = getModel().getChildren();
+			if (children != null) {
+				int size = children.size();
+				int idx = data.selectedRouteIndex;
+				if (idx < 0 || idx >= size) {
+					idx = 0;
+				}
+				if (size > 0) {
+					AbstractNode node = children.get(idx);
+					if (node instanceof RouteSupport) {
+						data.selectedRoute = (RouteSupport) node;
 					}
 				}
 			}
-			if (data.selectedRoute == null) {
-				setInitialRoute();
-			}
-			return data.selectedRoute;
-		} else {
-			if (this.activeRoute == null) {
-				setInitialRoute();
-			}
-			return this.activeRoute;
 		}
+		if (data.selectedRoute == null) {
+			setInitialRoute();
+		}
+		return data.selectedRoute;
 	}
 
 	public void clearSelectedRouteCache() {
@@ -913,18 +885,16 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public void setSelectedRoute(RouteSupport selectedRoute) {
-		if (recreateModel) {
-			if (this.data.selectedRoute != selectedRoute) {
-				int index = data.indexOfRoute(selectedRoute);
-				setSelectedRouteIndex(index);
-			}
-		} else {
-			switchRoute(selectedRoute);
+		if (this.data.selectedRoute != selectedRoute) {
+			int index = data.indexOfRoute(selectedRoute);
+			setSelectedRouteIndex(index);
 		}
 	}
 
 	public void switchRoute(final RouteSupport newRoute) {
-		if (newRoute == activeRoute) return;
+		if (newRoute == activeRoute) {
+			return;
+		}
 		if (activeRoute != null) {
 			this.cache.put(activeRoute, activeConfig);
 		}
@@ -936,6 +906,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			this.activeConfig = new DesignerCache();
 			this.activeConfig.input = oldInput;
 		}
+		refreshDiagramContents();
+	}
+	
+	public void refreshDiagramContents() {
 		initializeDiagramForSelectedRoute();
 		if (activeConfig.diagram != null) {
 	        getRefreshBehavior().initRefresh();
@@ -955,9 +929,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 				getModel().addChild(route);
 			}
 			this.activeRoute = (RouteSupport)getModel().getChildren().get(0);
-			if (recreateModel) {
-				this.data.selectedRoute = activeRoute;
-			}
+			this.data.selectedRoute = activeRoute;
 		}
 	}
 
@@ -1009,16 +981,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	 */
 	@Override
 	protected SelectionSynchronizer getSelectionSynchronizer() {
-		if (recreateModel) {
-			return super.getSelectionSynchronizer();
-		} else {
-			synchronized (this) {
-				if (this.synchronizer == null) {
-					this.synchronizer = new CamelContextSelectionSynchronizer(this);
-				}
-			}
-			return this.synchronizer;
-		}
+		return super.getSelectionSynchronizer();
 	}
 	
 	public SelectionSynchronizer getSelectionSyncer() {
@@ -1115,7 +1078,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		editor.onInputLoading(editorInput);
 		this.setModel(editorInput.loadModel());
 	}
-
+	
 	public void loadEditorText(String text) {
 		try {
 			this.setModel(data.marshaller.loadRoutesFromText(text));
@@ -1149,7 +1112,13 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public void autoLayoutRoute() {
-		DiagramOperations.layoutDiagram(this);
+		Display.getCurrent().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				DiagramOperations.layoutDiagram(RiderDesignEditor.this);	
+			}
+		});		
 	}
 
 	public Diagram getDiagram() {
@@ -1304,22 +1273,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	 * clears the cache
 	 */
 	public void clearCache() {
-		if (recreateModel) {
-			// nothing here for now
-		} else {
-			try {
-				if (this.activeConfig.diagram != null) this.activeConfig.diagram.eResource().delete(null);
-//				if (this.getModel() != null && this.getModel().eResource() != null) this.getModel().eResource().delete(null);
-			} catch (Exception ex) {
-				Activator.getLogger().error("Unable to clear the diagram editor cache.", ex);
-			}
-			this.cache.clear();
-			this.model = null;
-			this.activeRoute = null;
-//			this.activeConfig.input.dispose();
-			this.activeConfig = new DesignerCache();
-			refresh();
-		}
+		activeRoute = null;
+		this.activeConfig.diagram = null;
+		getDiagramTypeProvider().getDiagram().eResource().eAdapters().clear();
+		getEditingDomain().getResourceSet().getResources().remove(getDiagramTypeProvider().getDiagram().eResource());
 	}
 
 	public void addNewRoute() {

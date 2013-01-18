@@ -577,10 +577,12 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 			public void run() {
 				IDocument document = getDocument();
 				if (document != null) {
+					designEditor.clearCache();
 					String text = document.get();
 					Activator.getLogger().debug(
 							"Updating the design model from the updated text");
 					designEditor.loadEditorText(text);
+					designEditor.refreshDiagramContents();
 					designEditor.update();
 					designEditor.setFocus();
 				}
