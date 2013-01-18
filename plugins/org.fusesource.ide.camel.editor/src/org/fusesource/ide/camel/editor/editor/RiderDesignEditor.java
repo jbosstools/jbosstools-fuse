@@ -46,6 +46,7 @@ import org.eclipse.graphiti.ui.editor.DefaultPaletteBehavior;
 import org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
+import org.eclipse.graphiti.ui.internal.config.ConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.config.IConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.util.gef.ScalableRootEditPartAnimated;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
@@ -370,7 +371,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 					// Create the diagram and its file
 					if (diagram == null) {
 						diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
-						DiagramOperations.execute(this.editingDomain, new ImportCamelContextElementsCommand(this, this.editingDomain, diagram), true);
+						DiagramOperations.execute(getEditingDomain(), new ImportCamelContextElementsCommand(this, getEditingDomain(), diagram), true);
 						diagramInput = DiagramEditorInput.createEditorInput(diagram, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId());
 					}
 					return diagramInput;
@@ -378,7 +379,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 					// Create the diagram and its file
 					if (activeConfig.diagram == null) {
 						activeConfig.diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
-						DiagramOperations.execute(this.editingDomain, new ImportCamelContextElementsCommand(this, this.editingDomain, activeConfig.diagram), true);
+						DiagramOperations.execute(getEditingDomain(), new ImportCamelContextElementsCommand(this, getEditingDomain(), activeConfig.diagram), true);
 						activeConfig.input = DiagramEditorInput.createEditorInput(activeConfig.diagram, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId());
 					}
 					return activeConfig.input;
@@ -396,15 +397,16 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			activeConfig.diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		ResourceSet resourceSet = new ResourceSetImpl();
+//		ResourceSet resourceSet = new ResourceSetImpl();
 
-		this.editingDomain = TransactionUtil.getEditingDomain(resourceSet);
-		if (this.editingDomain == null) {
-			this.editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain();
-
-			// TODO we need to associate the editngDomain / resourceSet now with the diagram
-			resourceSet = this.editingDomain.getResourceSet();
-		}
+		//this.editingDomain = TransactionUtil.getEditingDomain(resourceSet);
+		this.editingDomain = getEditingDomain();
+//		if (this.editingDomain == null) {
+//			this.editingDomain = GraphitiUi.getEmfService().createResourceSetAndEditingDomain();
+//
+//			// TODO we need to associate the editngDomain / resourceSet now with the diagram
+//			resourceSet = this.editingDomain.getResourceSet();
+//		}
 
 		// Create the data within a command and save (must not happen
 		// inside
@@ -415,13 +417,13 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		// operation to determine which resources need to be saved)
 		DiagramEditorInput input = null;
 		if (recreateModel) {
-			this.editingDomain.getCommandStack().execute(new ImportCamelContextElementsCommand(this, this.editingDomain, diagram));
+			getEditingDomain().getCommandStack().execute(new ImportCamelContextElementsCommand(this, getEditingDomain(), diagram));
 			input = DiagramEditorInput.createEditorInput(diagram, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId());
-					//DiagramEditorInput.createEditorInput(diagram, this.editingDomain, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId(), false);
+					//DiagramEditorInput.createEditorInput(diagram, getEditingDomain(), GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId(), false);
 		} else {
-			this.editingDomain.getCommandStack().execute(new ImportCamelContextElementsCommand(this, this.editingDomain, activeConfig.diagram));
+			getEditingDomain().getCommandStack().execute(new ImportCamelContextElementsCommand(this, getEditingDomain(), activeConfig.diagram));
 			input = DiagramEditorInput.createEditorInput(activeConfig.diagram, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId());
-					//DiagramEditorInput.createEditorInput(activeConfig.diagram, this.editingDomain, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId(), false);
+					//DiagramEditorInput.createEditorInput(activeConfig.diagram, getEditingDomain(), GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId(), false);
 		}
 		return input;
 	}
@@ -708,7 +710,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 	
 	public IConfigurationProvider getConfigurationProvider() {
-		throw new RuntimeException("implement getConfigurationProvider()!");
+		IConfigurationProvider configurationProvider = new ConfigurationProvider(this, getDiagramTypeProvider());
+		return configurationProvider;
 	}
 
 	@Override
@@ -1301,8 +1304,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public void setTransactionalEditingDomain(TransactionalEditingDomain editingDomain) {
-		// TODO how do we do this???
-
+		this.editingDomain = editingDomain;
 	}
 
 	protected DiagramEditorInput getDiagramInput() {
