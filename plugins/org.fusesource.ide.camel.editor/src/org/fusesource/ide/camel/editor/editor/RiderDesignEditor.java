@@ -26,17 +26,13 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.gef.ui.palette.PaletteViewer;
-import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
@@ -46,8 +42,11 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.platform.IDiagramEditor;
 import org.eclipse.graphiti.services.Graphiti;
+import org.eclipse.graphiti.ui.editor.DefaultPaletteBehavior;
+import org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
+import org.eclipse.graphiti.ui.internal.config.IConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.util.gef.ScalableRootEditPartAnimated;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.jface.action.IToolBarManager;
@@ -127,6 +126,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	private RouteSupport activeRoute;
 	private CamelContextSelectionSynchronizer synchronizer;
 	private CamelModelChangeListener camelModelListener;
+	private CamelUpdateBehaviour camelUpdateBehaviour;
+	private CamelPaletteBehaviour camelPaletteBehaviour;
 	
 	private static final boolean selectFirstRouteOnLayout = true;
 	private boolean graphitiDoesNotMarkAsDirty = true;
@@ -207,10 +208,22 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.internal.editor.DiagramEditorInternal#registerBOListener()
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#createUpdateBehavior()
 	 */
 	@Override
-	protected void registerBOListener() {
+	protected synchronized DefaultUpdateBehavior createUpdateBehavior() {
+		if (this.camelUpdateBehaviour == null) {
+			this.camelUpdateBehaviour = new CamelUpdateBehaviour(this);
+		}
+		return this.camelUpdateBehaviour;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#registerBusinessObjectsListener()
+	 */
+	@Override
+	protected void registerBusinessObjectsListener() {
+		//super.registerBusinessObjectsListener();
 		camelModelListener = new CamelModelChangeListener(this);
 		
 		TransactionalEditingDomain eDomain = getEditingDomain();
@@ -300,11 +313,14 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.internal.editor.DiagramEditorInternal#createPaletteRoot()
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#createPaletteBehaviour()
 	 */
 	@Override
-	protected PaletteRoot createPaletteRoot() {
-		return new CamelPaletteRoot(getConfigurationProvider());
+	protected synchronized DefaultPaletteBehavior createPaletteBehaviour() {
+		if (this.camelPaletteBehaviour == null) {
+			this.camelPaletteBehaviour = new CamelPaletteBehaviour(this);
+		}
+		return this.camelPaletteBehaviour;
 	}
 	
 	/**
@@ -355,7 +371,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 					if (diagram == null) {
 						diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
 						DiagramOperations.execute(this.editingDomain, new ImportCamelContextElementsCommand(this, this.editingDomain, diagram), true);
-						diagramInput = DiagramEditorInput.createEditorInput(diagram, this.editingDomain, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId(), false);
+						diagramInput = DiagramEditorInput.createEditorInput(diagram, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId());
 					}
 					return diagramInput;
 				} else {
@@ -363,7 +379,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 					if (activeConfig.diagram == null) {
 						activeConfig.diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
 						DiagramOperations.execute(this.editingDomain, new ImportCamelContextElementsCommand(this, this.editingDomain, activeConfig.diagram), true);
-						activeConfig.input = DiagramEditorInput.createEditorInput(activeConfig.diagram, this.editingDomain, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId(), false);
+						activeConfig.input = DiagramEditorInput.createEditorInput(activeConfig.diagram, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId());
 					}
 					return activeConfig.input;
 				}
@@ -690,36 +706,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			data.diagramChanged = true;
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#
-	 * createPaletteViewerProvider()
-	 */
-	@Override
-	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new PaletteViewerProvider(getEditDomain()) {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see org.eclipse.gef.ui.palette.PaletteViewerProvider#
-			 * configurePaletteViewer(org.eclipse.gef.ui.palette.PaletteViewer)
-			 */
-			@Override
-			protected void configurePaletteViewer(PaletteViewer viewer) {
-				super.configurePaletteViewer(viewer);
-				// create a drag source listener for this palette viewer
-				// together with an appropriate transfer drop target listener,
-				// this will enable
-				// model element creation by dragging a
-				// CombinatedTemplateCreationEntries
-				// from the palette into the editor
-				// @see ShapesEditor#createTransferDropTargetListener()
-				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(
-						viewer));
-			}
-		};
+	
+	public IConfigurationProvider getConfigurationProvider() {
+		throw new RuntimeException("implement getConfigurationProvider()!");
 	}
 
 	@Override
@@ -1159,19 +1148,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 
-
-	/*
-	 * 
-	 */
-	@Override
-	public SelectionSynchronizer getSelectionSynchronizerInternal() {
-		if (recreateModel) {
-			return super.getSelectionSynchronizerInternal();
-		} else {
-			return getSelectionSynchronizer();
-		}
-	}
-
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionSynchronizer()
 	 */
@@ -1187,6 +1163,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			}
 			return this.synchronizer;
 		}
+	}
+	
+	public SelectionSynchronizer getSelectionSyncer() {
+		return getSelectionSynchronizer();
 	}
 
 	/**

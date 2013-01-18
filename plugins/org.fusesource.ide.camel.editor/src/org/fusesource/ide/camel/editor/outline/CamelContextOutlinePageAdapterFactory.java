@@ -19,8 +19,8 @@ import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.graphiti.internal.pref.GFPreferences;
-import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 
 /**
  * @author lhein
@@ -34,20 +34,19 @@ public class CamelContextOutlinePageAdapterFactory implements IAdapterFactory {
 			@SuppressWarnings("rawtypes") Class adapterType) {
 		if (GFPreferences.getInstance().isGenericOutlineActive()) {
 			if (IContentOutlinePage.class.equals(adapterType)) {
-				if (adaptableObject instanceof DiagramEditor) {
-					DiagramEditor diagramEditor = (DiagramEditor) adaptableObject;
+				if (adaptableObject instanceof RiderDesignEditor) {
+					RiderDesignEditor diagramEditor = (RiderDesignEditor) adaptableObject;
 					if (diagramEditor.getConfigurationProvider() != null) { // diagram
 																			// editor
 																			// initialized?
 						CamelContextOutlinePage outlinePage = new CamelContextOutlinePage(
 								new TreeViewer(),
 								diagramEditor.getGraphicalViewer(),
-								diagramEditor.getActionRegistryInternal(),
+								diagramEditor.getActionRegistry(),
 								diagramEditor.getEditDomain(),
-								diagramEditor.getCommonKeyHandler(),
+								diagramEditor.getKeyHandler(),
 								diagramEditor.getAdapter(ZoomManager.class),
-								diagramEditor
-										.getSelectionSynchronizerInternal(),
+								diagramEditor.getSelectionSyncer(),
 								diagramEditor);
 						return outlinePage;
 					}

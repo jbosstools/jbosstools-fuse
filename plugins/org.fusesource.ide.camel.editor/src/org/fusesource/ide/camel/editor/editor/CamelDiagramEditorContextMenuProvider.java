@@ -18,11 +18,11 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.tb.ContextMenuEntry;
 import org.eclipse.graphiti.tb.IContextMenuEntry;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
+import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorContextMenuProvider;
 import org.eclipse.graphiti.ui.internal.action.CustomAction;
 import org.eclipse.graphiti.ui.internal.action.RemoveAction;
 import org.eclipse.graphiti.ui.internal.config.IConfigurationProvider;
-import org.eclipse.graphiti.ui.internal.editor.DiagramEditorInternal;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.graphiti.util.ILocationInfo;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -41,7 +41,7 @@ public class CamelDiagramEditorContextMenuProvider extends DiagramEditorContextM
 
 	public CamelDiagramEditorContextMenuProvider(EditPartViewer viewer, ActionRegistry registry,
 			IConfigurationProvider configurationProvider) {
-		super(viewer, registry, configurationProvider);
+		super(viewer, registry, configurationProvider.getDiagramTypeProvider());
 		this.configurationProvider = configurationProvider;
 	}
 
@@ -86,7 +86,7 @@ public class CamelDiagramEditorContextMenuProvider extends DiagramEditorContextM
 		return this.configurationProvider;
 	}
 
-	private DiagramEditorInternal getEditor() {
+	private DiagramEditor getEditor() {
 		return getConfigurationProvider().getDiagramEditor();
 	}
 
