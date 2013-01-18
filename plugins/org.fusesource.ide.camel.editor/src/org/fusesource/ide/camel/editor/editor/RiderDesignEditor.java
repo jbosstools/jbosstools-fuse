@@ -38,7 +38,6 @@ import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
-import org.eclipse.graphiti.internal.services.GraphitiInternal;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.platform.IDiagramEditor;
@@ -80,7 +79,6 @@ import org.fusesource.ide.camel.editor.CamelModelChangeListener;
 import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
-import org.fusesource.ide.camel.editor.editor.io.CamelContextIOUtils;
 import org.fusesource.ide.camel.editor.outline.RiderOutlinePage;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
@@ -127,8 +125,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	private CamelModelChangeListener camelModelListener;
 	private CamelUpdateBehaviour camelUpdateBehaviour;
 	private CamelPaletteBehaviour camelPaletteBehaviour;
-	
-	private static final boolean selectFirstRouteOnLayout = true;
+	private CamelPersistencyBehaviour camelPersistencyBehaviour;
+
 	private boolean graphitiDoesNotMarkAsDirty = true;
 	
 	private DesignerCache activeConfig;
@@ -216,20 +214,11 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 	
 	@Override
-    protected DefaultPersistencyBehavior createPersistencyBehavior() {
-        return new DefaultPersistencyBehavior(this) {
-            @Override
-            public Diagram loadDiagram(org.eclipse.emf.common.util.URI uri) {
-                // load the model
-                if (!loadModel(getEditorInput())) {
-                    return null;
-                }
-                
-                // create the diagram
-                activeConfig.diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
-                return activeConfig.diagram;
-            }
-        };
+	protected synchronized DefaultPersistencyBehavior createPersistencyBehavior() {
+		if (this.camelPersistencyBehaviour == null) {
+			this.camelPersistencyBehaviour = new CamelPersistencyBehaviour(this);
+		}
+		return camelPersistencyBehaviour;
     }
 
     /* (non-Javadoc)
@@ -335,52 +324,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 	
 	/**
-	 * Creates the diagram from the current model
-	 */
-	protected boolean loadModel(IEditorInput input) {
-		IFileEditorInput fileEditorInput = asFileEditorInput(input);
-		if (fileEditorInput != null) {
-			this.camelContextFile = fileEditorInput.getFile();
-			this.container = this.camelContextFile.getProject();
-
-			// load the model
-			if (getModel() == null) {
-				this.model = CamelContextIOUtils.loadModelFromFile(camelContextFile);
-				ValidationHandler status = CamelContextIOUtils.validateModel(this.model);
-				if (status.hasErrors()) {
-					Activator.getLogger().error("Unable to validate the model. Invalid input!");
-					return false;
-				}
-			}
-			return true;
-		} else {
-			IRemoteCamelEditorInput remoteEditorInput = asRemoteCamelEditorInput(input);
-			if (remoteEditorInput != null) {
-				this.camelContextFile = null;
-				this.container = null;
-
-				// load the model
-				if (getModel() == null) {
-					try {
-						String text = remoteEditorInput.getXml();
-						this.model = CamelContextIOUtils.loadModelFromText(text);
-						ValidationHandler status = CamelContextIOUtils.validateModel(this.model);
-						if (status.hasErrors()) {
-							Activator.getLogger().error("Unable to validate the model. Invalid input!");
-							return false;
-						}
-					} catch (IOException e) {
-						Activator.getLogger().error("Unable to load the model: " + e, e);
-						return false;
-					}
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * @param editingDomain the editingDomain to set
 	 */
 	public void setEditingDomain(TransactionalEditingDomain editingDomain) {
@@ -405,18 +348,17 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		return id;
 	}
 
-	private IFile getCamelContextFile() {
-		if (recreateModel) {
-			IFileEditorInput fileEditorInput = getFileEditorInput();
-			if (fileEditorInput != null) {
-				return fileEditorInput.getFile();
-			}
-			return null;
-		} else {
-			return this.camelContextFile;
+	public IFile getCamelContextFile() {
+		IFileEditorInput fileEditorInput = getFileEditorInput();
+		if (fileEditorInput != null) {
+			return fileEditorInput.getFile();
 		}
 	}
-
+	
+	public void setCamelContextFile(IFile file) {
+		this.camelContextFile = file;
+	}
+	
 	protected IFileEditorInput getFileEditorInput() {
 		return asFileEditorInput(editorInput);
 	}
@@ -425,7 +367,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		return asRemoteCamelEditorInput(editorInput);
 	}
 
-	protected IFileEditorInput asFileEditorInput(IEditorInput input) {
+	public IFileEditorInput asFileEditorInput(IEditorInput input) {
 		if (input instanceof IFileEditorInput) {
 			return (IFileEditorInput) input;
 		} else if (input instanceof ICamelEditorInput) {
@@ -443,7 +385,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		return null;
 	}
 
-	protected IRemoteCamelEditorInput asRemoteCamelEditorInput(IEditorInput input) {
+	public IRemoteCamelEditorInput asRemoteCamelEditorInput(IEditorInput input) {
 		if (input instanceof IRemoteCamelEditorInput) {
 			return (IRemoteCamelEditorInput) input;
 		} else if (input instanceof ICamelEditorInput) {
@@ -1053,6 +995,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	public IProject getContainer() {
 		return this.container;
 	}
+	
+	public void setContainer(IProject container) {
+		this.container = container;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getSelectionSynchronizer()
@@ -1388,5 +1334,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	 */
 	public RiderEditor getEditor() {
 		return this.editor;
+	}
+	
+	public DesignerCache getActiveConfig() {
+		return this.activeConfig;
 	}
 }
