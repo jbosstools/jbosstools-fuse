@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -12,10 +13,12 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.ProgressMonitorWrapper;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gef.ContextMenuProvider;
@@ -43,9 +46,11 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.platform.IDiagramEditor;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.ui.editor.DefaultPaletteBehavior;
+import org.eclipse.graphiti.ui.editor.DefaultPersistencyBehavior;
 import org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
+import org.eclipse.graphiti.ui.editor.IDiagramEditorInput;
 import org.eclipse.graphiti.ui.internal.config.ConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.config.IConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.util.gef.ScalableRootEditPartAnimated;
@@ -67,6 +72,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.camel.tooling.util.ValidationHandler;
@@ -119,7 +125,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
 	private IFeatureProvider featureProvider;
 	private Diagram diagram;
-	private DiagramEditorInput diagramInput;
 
 	private IProject container;
 	private IFile camelContextFile;
@@ -217,7 +222,24 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		return this.camelUpdateBehaviour;
 	}
 	
-	/* (non-Javadoc)
+	@Override
+    protected DefaultPersistencyBehavior createPersistencyBehavior() {
+        return new DefaultPersistencyBehavior(this) {
+            @Override
+            public Diagram loadDiagram(org.eclipse.emf.common.util.URI uri) {
+                // load the model
+                if (!loadModel(getEditorInput())) {
+                    return null;
+                }
+                
+                // create the diagram
+                diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
+                return diagram;
+            }
+        };
+    }
+
+    /* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#registerBusinessObjectsListener()
 	 */
 	@Override
@@ -233,21 +255,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	public void init(IEditorSite editorSite, IEditorInput input) throws PartInitException {
 		this.editorSite = editorSite;
 		this.editorInput = input;
-		diagramInput = null;
-		if (input instanceof DiagramEditorInput) {
-			diagramInput = (DiagramEditorInput) input;
-		} else {
-			diagramInput = createDiagramInput(editorInput);
-		}
-		if (recreateModel) {
-			updateDiagramInput();
-		} else {
-			this.activeConfig.input = diagramInput;
-			super.init(editorSite, diagramInput);
-			autoLayoutRoute();
-			fireModelChanged();
-		}
-		//		clearChangedFlags();
+		super.init(editorSite, input);
 	}
 	
 	@Override
@@ -257,18 +265,14 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		if (recreateModel) {
 			super.setInput(input);
 
-			if (data.loadModelOnSetInput) {
-				loadModelFromInput(input);
-			}
-		} else {
-			if (input instanceof DiagramEditorInput) {
-				activeConfig.input = (DiagramEditorInput) input;
-			} else {
-				activeConfig.input = createDiagramInput(input);
-			}
-			super.setInput(activeConfig.input);
-			autoLayoutRoute();
-			fireModelChanged();
+		// add the diagram contents
+        getEditingDomain().getCommandStack().execute(new ImportCamelContextElementsCommand(RiderDesignEditor.this, getEditingDomain(), diagram));
+
+        // layout the diagram
+        updateDiagramInput();
+
+        if (data.loadModelOnSetInput) {
+			loadModelFromInput(input);
 		}
 
 		// setup grid visibility
@@ -325,7 +329,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	/**
 	 * Creates the diagram from the current model
 	 */
-	protected DiagramEditorInput createDiagramInput(IEditorInput input) {
+	protected boolean loadModel(IEditorInput input) {
 		IFileEditorInput fileEditorInput = asFileEditorInput(input);
 		if (fileEditorInput != null) {
 			this.camelContextFile = fileEditorInput.getFile();
@@ -337,10 +341,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 				ValidationHandler status = CamelContextIOUtils.validateModel(this.model);
 				if (status.hasErrors()) {
 					Activator.getLogger().error("Unable to validate the model. Invalid input!");
-					return null;
+					return false;
 				}
 			}
-			return createDiagram();
+			return true;
 		} else {
 			IRemoteCamelEditorInput remoteEditorInput = asRemoteCamelEditorInput(input);
 			if (remoteEditorInput != null) {
@@ -355,36 +359,17 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 						ValidationHandler status = CamelContextIOUtils.validateModel(this.model);
 						if (status.hasErrors()) {
 							Activator.getLogger().error("Unable to validate the model. Invalid input!");
-							return null;
+							return false;
 						}
 					} catch (IOException e) {
 						Activator.getLogger().error("Unable to load the model: " + e, e);
-						return null;
+						return false;
 					}
 				}
-				return createDiagram();
-
-			} else if (input instanceof DiagramEditorInput) {
-				if (recreateModel) {
-					// Create the diagram and its file
-					if (diagram == null) {
-						diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
-						DiagramOperations.execute(getEditingDomain(), new ImportCamelContextElementsCommand(this, getEditingDomain(), diagram), true);
-						diagramInput = DiagramEditorInput.createEditorInput(diagram, GraphitiInternal.getEmfService().getDTPForDiagram(diagram).getProviderId());
-					}
-					return diagramInput;
-				} else {
-					// Create the diagram and its file
-					if (activeConfig.diagram == null) {
-						activeConfig.diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", "CamelContext", true); //$NON-NLS-1$ //$NON-NLS-2$
-						DiagramOperations.execute(getEditingDomain(), new ImportCamelContextElementsCommand(this, getEditingDomain(), activeConfig.diagram), true);
-						activeConfig.input = DiagramEditorInput.createEditorInput(activeConfig.diagram, GraphitiInternal.getEmfService().getDTPForDiagram(activeConfig.diagram).getProviderId());
-					}
-					return activeConfig.input;
-				}
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
 
 	protected DiagramEditorInput createDiagram() {
@@ -480,6 +465,11 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			if (fileEditorInput instanceof IFileEditorInput) {
 				return (IFileEditorInput) fileEditorInput;
 			}
+		} else if (input instanceof IDiagramEditorInput) {
+		    org.eclipse.emf.common.util.URI uri = ((IDiagramEditorInput)input).getUri();
+		    if (uri.isPlatformResource()) {
+		        return new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.path())));
+		    }
 		}
 		return null;
 	}
@@ -507,6 +497,24 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 					return IOUtil.loadText(uriInput.getURI().toURL().openStream(), "UTF-8");
 				}
 			};
+        } else if (input instanceof DiagramEditorInput) {
+            final DiagramEditorInput uriInput = (DiagramEditorInput) input;
+            return new IRemoteCamelEditorInput() {
+
+                @Override
+                public String getUriText() {
+                    return uriInput.getName();
+                }
+
+                @Override
+                public String getXml() throws IOException {
+                    try {
+                        return IOUtil.loadText(new URI(uriInput.getUri().toString()).toURL().openStream(), "UTF-8");
+                    } catch (URISyntaxException e) {
+                        throw new IOException("Unable to resolve resource.", e);
+                    }
+                }
+            };
 		}
 		return null;
 	}
@@ -1029,7 +1037,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			this.activeConfig = new DesignerCache();
 			this.activeConfig.input = oldInput;
 		}
-		setInput(createDiagramInput(activeConfig.input));
+		setInput(activeConfig.input);
 		refresh();
 	}
 
@@ -1130,9 +1138,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		}
 	}
 
-	private void updateDiagramInput() throws PartInitException {
-		super.init(editorSite, diagramInput);
-
+	private void updateDiagramInput() {
 		// we currently don't need this to be async
 		boolean syncLayout = true;
 		if (syncLayout) {
@@ -1430,7 +1436,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public IFeatureProvider getFeatureProvider() {
-		return featureProvider;
+		return getDiagramTypeProvider().getFeatureProvider();
 	}
 
 	public void setFeatureProvider(IFeatureProvider featureProvider) {
