@@ -80,7 +80,9 @@ public class Resequence extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -96,7 +98,9 @@ public class Resequence extends AbstractNode {
 	public void setResequencerConfig(ResequencerConfig resequencerConfig) {
 		ResequencerConfig oldValue = this.resequencerConfig;
 		this.resequencerConfig = resequencerConfig;
-		firePropertyChange(PROPERTY_RESEQUENCERCONFIG, oldValue, resequencerConfig);
+		if (!isSame(oldValue, resequencerConfig)) {
+		    firePropertyChange(PROPERTY_RESEQUENCERCONFIG, oldValue, resequencerConfig);
+		}
 	}
 
 

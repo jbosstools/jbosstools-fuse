@@ -112,7 +112,9 @@ public class ${definitionName} extends ${baseClass} {
 	public void set${p.name.capitalize}(${propertyType(p)} ${p.name}) {
 		${propertyType(p)} oldValue = this.${p.name};
 		this.${p.name} = ${p.name};
-		firePropertyChange(PROPERTY_${p.name.toUpperCase}, oldValue, ${p.name});
+		if (!isSame(oldValue, ${p.name})) {
+		    firePropertyChange(PROPERTY_${p.name.toUpperCase}, oldValue, ${p.name});
+		}
 	}
 #end	
 

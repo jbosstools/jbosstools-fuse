@@ -83,7 +83,9 @@ public class OnCompletion extends AbstractNode {
 	public void setExecutorServiceRef(String executorServiceRef) {
 		String oldValue = this.executorServiceRef;
 		this.executorServiceRef = executorServiceRef;
-		firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		}
 	}
 
 	/**
@@ -99,7 +101,9 @@ public class OnCompletion extends AbstractNode {
 	public void setOnCompleteOnly(Boolean onCompleteOnly) {
 		Boolean oldValue = this.onCompleteOnly;
 		this.onCompleteOnly = onCompleteOnly;
-		firePropertyChange(PROPERTY_ONCOMPLETEONLY, oldValue, onCompleteOnly);
+		if (!isSame(oldValue, onCompleteOnly)) {
+		    firePropertyChange(PROPERTY_ONCOMPLETEONLY, oldValue, onCompleteOnly);
+		}
 	}
 
 	/**
@@ -115,7 +119,9 @@ public class OnCompletion extends AbstractNode {
 	public void setOnFailureOnly(Boolean onFailureOnly) {
 		Boolean oldValue = this.onFailureOnly;
 		this.onFailureOnly = onFailureOnly;
-		firePropertyChange(PROPERTY_ONFAILUREONLY, oldValue, onFailureOnly);
+		if (!isSame(oldValue, onFailureOnly)) {
+		    firePropertyChange(PROPERTY_ONFAILUREONLY, oldValue, onFailureOnly);
+		}
 	}
 
 	/**
@@ -131,7 +137,9 @@ public class OnCompletion extends AbstractNode {
 	public void setUseOriginalMessagePolicy(Boolean useOriginalMessagePolicy) {
 		Boolean oldValue = this.useOriginalMessagePolicy;
 		this.useOriginalMessagePolicy = useOriginalMessagePolicy;
-		firePropertyChange(PROPERTY_USEORIGINALMESSAGEPOLICY, oldValue, useOriginalMessagePolicy);
+		if (!isSame(oldValue, useOriginalMessagePolicy)) {
+		    firePropertyChange(PROPERTY_USEORIGINALMESSAGEPOLICY, oldValue, useOriginalMessagePolicy);
+		}
 	}
 
 

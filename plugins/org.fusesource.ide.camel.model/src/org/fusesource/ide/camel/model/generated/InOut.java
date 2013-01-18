@@ -77,7 +77,9 @@ public class InOut extends AbstractNode {
 	public void setUri(String uri) {
 		String oldValue = this.uri;
 		this.uri = uri;
-		firePropertyChange(PROPERTY_URI, oldValue, uri);
+		if (!isSame(oldValue, uri)) {
+		    firePropertyChange(PROPERTY_URI, oldValue, uri);
+		}
 	}
 
 

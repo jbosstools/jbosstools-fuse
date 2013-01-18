@@ -80,7 +80,9 @@ public class Catch extends AbstractNode {
 	public void setExceptions(List exceptions) {
 		List oldValue = this.exceptions;
 		this.exceptions = exceptions;
-		firePropertyChange(PROPERTY_EXCEPTIONS, oldValue, exceptions);
+		if (!isSame(oldValue, exceptions)) {
+		    firePropertyChange(PROPERTY_EXCEPTIONS, oldValue, exceptions);
+		}
 	}
 
 	/**
@@ -96,7 +98,9 @@ public class Catch extends AbstractNode {
 	public void setHandled(ExpressionDefinition handled) {
 		ExpressionDefinition oldValue = this.handled;
 		this.handled = handled;
-		firePropertyChange(PROPERTY_HANDLED, oldValue, handled);
+		if (!isSame(oldValue, handled)) {
+		    firePropertyChange(PROPERTY_HANDLED, oldValue, handled);
+		}
 	}
 
 

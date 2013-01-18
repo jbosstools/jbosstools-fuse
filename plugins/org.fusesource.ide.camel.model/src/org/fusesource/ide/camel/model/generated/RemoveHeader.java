@@ -77,7 +77,9 @@ public class RemoveHeader extends AbstractNode {
 	public void setHeaderName(String headerName) {
 		String oldValue = this.headerName;
 		this.headerName = headerName;
-		firePropertyChange(PROPERTY_HEADERNAME, oldValue, headerName);
+		if (!isSame(oldValue, headerName)) {
+		    firePropertyChange(PROPERTY_HEADERNAME, oldValue, headerName);
+		}
 	}
 
 

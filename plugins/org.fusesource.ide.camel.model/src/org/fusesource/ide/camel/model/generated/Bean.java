@@ -81,7 +81,9 @@ public class Bean extends AbstractNode {
 	public void setRef(String ref) {
 		String oldValue = this.ref;
 		this.ref = ref;
-		firePropertyChange(PROPERTY_REF, oldValue, ref);
+		if (!isSame(oldValue, ref)) {
+		    firePropertyChange(PROPERTY_REF, oldValue, ref);
+		}
 	}
 
 	/**
@@ -97,7 +99,9 @@ public class Bean extends AbstractNode {
 	public void setMethod(String method) {
 		String oldValue = this.method;
 		this.method = method;
-		firePropertyChange(PROPERTY_METHOD, oldValue, method);
+		if (!isSame(oldValue, method)) {
+		    firePropertyChange(PROPERTY_METHOD, oldValue, method);
+		}
 	}
 
 	/**
@@ -113,7 +117,9 @@ public class Bean extends AbstractNode {
 	public void setBeanType(String beanType) {
 		String oldValue = this.beanType;
 		this.beanType = beanType;
-		firePropertyChange(PROPERTY_BEANTYPE, oldValue, beanType);
+		if (!isSame(oldValue, beanType)) {
+		    firePropertyChange(PROPERTY_BEANTYPE, oldValue, beanType);
+		}
 	}
 
 

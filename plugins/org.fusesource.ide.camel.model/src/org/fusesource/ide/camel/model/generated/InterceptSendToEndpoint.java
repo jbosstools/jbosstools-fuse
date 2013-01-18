@@ -79,7 +79,9 @@ public class InterceptSendToEndpoint extends AbstractNode {
 	public void setUri(String uri) {
 		String oldValue = this.uri;
 		this.uri = uri;
-		firePropertyChange(PROPERTY_URI, oldValue, uri);
+		if (!isSame(oldValue, uri)) {
+		    firePropertyChange(PROPERTY_URI, oldValue, uri);
+		}
 	}
 
 	/**
@@ -95,7 +97,9 @@ public class InterceptSendToEndpoint extends AbstractNode {
 	public void setSkipSendToOriginalEndpoint(Boolean skipSendToOriginalEndpoint) {
 		Boolean oldValue = this.skipSendToOriginalEndpoint;
 		this.skipSendToOriginalEndpoint = skipSendToOriginalEndpoint;
-		firePropertyChange(PROPERTY_SKIPSENDTOORIGINALENDPOINT, oldValue, skipSendToOriginalEndpoint);
+		if (!isSame(oldValue, skipSendToOriginalEndpoint)) {
+		    firePropertyChange(PROPERTY_SKIPSENDTOORIGINALENDPOINT, oldValue, skipSendToOriginalEndpoint);
+		}
 	}
 
 

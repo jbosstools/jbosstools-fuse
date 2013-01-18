@@ -75,8 +75,10 @@ public class Endpoint extends AbstractNode {
 	public void setUri(String uri) {
 		String oldUri = this.uri;
 		this.uri = uri;
-		clearImages();
-		firePropertyChange(PROPERTY_URI, oldUri, uri);
+		if (!isSame(uri, oldUri)) {
+			clearImages();
+			firePropertyChange(PROPERTY_URI, oldUri, uri);	
+		}		
 	}
 
 	@Override

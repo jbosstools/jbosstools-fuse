@@ -85,7 +85,9 @@ public class IdempotentConsumer extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -101,7 +103,9 @@ public class IdempotentConsumer extends AbstractNode {
 	public void setMessageIdRepositoryRef(String messageIdRepositoryRef) {
 		String oldValue = this.messageIdRepositoryRef;
 		this.messageIdRepositoryRef = messageIdRepositoryRef;
-		firePropertyChange(PROPERTY_MESSAGEIDREPOSITORYREF, oldValue, messageIdRepositoryRef);
+		if (!isSame(oldValue, messageIdRepositoryRef)) {
+		    firePropertyChange(PROPERTY_MESSAGEIDREPOSITORYREF, oldValue, messageIdRepositoryRef);
+		}
 	}
 
 	/**
@@ -117,7 +121,9 @@ public class IdempotentConsumer extends AbstractNode {
 	public void setEager(Boolean eager) {
 		Boolean oldValue = this.eager;
 		this.eager = eager;
-		firePropertyChange(PROPERTY_EAGER, oldValue, eager);
+		if (!isSame(oldValue, eager)) {
+		    firePropertyChange(PROPERTY_EAGER, oldValue, eager);
+		}
 	}
 
 	/**
@@ -133,7 +139,9 @@ public class IdempotentConsumer extends AbstractNode {
 	public void setSkipDuplicate(Boolean skipDuplicate) {
 		Boolean oldValue = this.skipDuplicate;
 		this.skipDuplicate = skipDuplicate;
-		firePropertyChange(PROPERTY_SKIPDUPLICATE, oldValue, skipDuplicate);
+		if (!isSame(oldValue, skipDuplicate)) {
+		    firePropertyChange(PROPERTY_SKIPDUPLICATE, oldValue, skipDuplicate);
+		}
 	}
 
 	/**
@@ -149,7 +157,9 @@ public class IdempotentConsumer extends AbstractNode {
 	public void setRemoveOnFailure(Boolean removeOnFailure) {
 		Boolean oldValue = this.removeOnFailure;
 		this.removeOnFailure = removeOnFailure;
-		firePropertyChange(PROPERTY_REMOVEONFAILURE, oldValue, removeOnFailure);
+		if (!isSame(oldValue, removeOnFailure)) {
+		    firePropertyChange(PROPERTY_REMOVEONFAILURE, oldValue, removeOnFailure);
+		}
 	}
 
 

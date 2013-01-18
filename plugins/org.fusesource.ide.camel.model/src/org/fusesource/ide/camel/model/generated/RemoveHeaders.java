@@ -79,7 +79,9 @@ public class RemoveHeaders extends AbstractNode {
 	public void setPattern(String pattern) {
 		String oldValue = this.pattern;
 		this.pattern = pattern;
-		firePropertyChange(PROPERTY_PATTERN, oldValue, pattern);
+		if (!isSame(oldValue, pattern)) {
+		    firePropertyChange(PROPERTY_PATTERN, oldValue, pattern);
+		}
 	}
 
 	/**
@@ -95,7 +97,9 @@ public class RemoveHeaders extends AbstractNode {
 	public void setExcludePattern(String excludePattern) {
 		String oldValue = this.excludePattern;
 		this.excludePattern = excludePattern;
-		firePropertyChange(PROPERTY_EXCLUDEPATTERN, oldValue, excludePattern);
+		if (!isSame(oldValue, excludePattern)) {
+		    firePropertyChange(PROPERTY_EXCLUDEPATTERN, oldValue, excludePattern);
+		}
 	}
 
 

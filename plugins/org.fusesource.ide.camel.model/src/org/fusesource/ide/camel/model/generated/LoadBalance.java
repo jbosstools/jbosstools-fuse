@@ -80,7 +80,9 @@ public class LoadBalance extends AbstractNode {
 	public void setRef(String ref) {
 		String oldValue = this.ref;
 		this.ref = ref;
-		firePropertyChange(PROPERTY_REF, oldValue, ref);
+		if (!isSame(oldValue, ref)) {
+		    firePropertyChange(PROPERTY_REF, oldValue, ref);
+		}
 	}
 
 	/**
@@ -96,7 +98,9 @@ public class LoadBalance extends AbstractNode {
 	public void setLoadBalancerType(LoadBalancerDefinition loadBalancerType) {
 		LoadBalancerDefinition oldValue = this.loadBalancerType;
 		this.loadBalancerType = loadBalancerType;
-		firePropertyChange(PROPERTY_LOADBALANCERTYPE, oldValue, loadBalancerType);
+		if (!isSame(oldValue, loadBalancerType)) {
+		    firePropertyChange(PROPERTY_LOADBALANCERTYPE, oldValue, loadBalancerType);
+		}
 	}
 
 

@@ -81,7 +81,9 @@ public class AOP extends AbstractNode {
 	public void setBeforeUri(String beforeUri) {
 		String oldValue = this.beforeUri;
 		this.beforeUri = beforeUri;
-		firePropertyChange(PROPERTY_BEFOREURI, oldValue, beforeUri);
+		if (!isSame(oldValue, beforeUri)) {
+		    firePropertyChange(PROPERTY_BEFOREURI, oldValue, beforeUri);
+		}
 	}
 
 	/**
@@ -97,7 +99,9 @@ public class AOP extends AbstractNode {
 	public void setAfterUri(String afterUri) {
 		String oldValue = this.afterUri;
 		this.afterUri = afterUri;
-		firePropertyChange(PROPERTY_AFTERURI, oldValue, afterUri);
+		if (!isSame(oldValue, afterUri)) {
+		    firePropertyChange(PROPERTY_AFTERURI, oldValue, afterUri);
+		}
 	}
 
 	/**
@@ -113,7 +117,9 @@ public class AOP extends AbstractNode {
 	public void setAfterFinallyUri(String afterFinallyUri) {
 		String oldValue = this.afterFinallyUri;
 		this.afterFinallyUri = afterFinallyUri;
-		firePropertyChange(PROPERTY_AFTERFINALLYURI, oldValue, afterFinallyUri);
+		if (!isSame(oldValue, afterFinallyUri)) {
+		    firePropertyChange(PROPERTY_AFTERFINALLYURI, oldValue, afterFinallyUri);
+		}
 	}
 
 

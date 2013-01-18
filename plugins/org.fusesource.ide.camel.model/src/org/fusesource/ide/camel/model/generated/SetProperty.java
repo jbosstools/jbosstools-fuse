@@ -79,7 +79,9 @@ public class SetProperty extends AbstractNode {
 	public void setExpression(ExpressionDefinition expression) {
 		ExpressionDefinition oldValue = this.expression;
 		this.expression = expression;
-		firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		if (!isSame(oldValue, expression)) {
+		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
 	}
 
 	/**
@@ -95,7 +97,9 @@ public class SetProperty extends AbstractNode {
 	public void setPropertyName(String propertyName) {
 		String oldValue = this.propertyName;
 		this.propertyName = propertyName;
-		firePropertyChange(PROPERTY_PROPERTYNAME, oldValue, propertyName);
+		if (!isSame(oldValue, propertyName)) {
+		    firePropertyChange(PROPERTY_PROPERTYNAME, oldValue, propertyName);
+		}
 	}
 
 

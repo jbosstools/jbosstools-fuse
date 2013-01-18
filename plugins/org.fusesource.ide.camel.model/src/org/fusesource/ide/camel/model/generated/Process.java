@@ -77,7 +77,9 @@ public class Process extends AbstractNode {
 	public void setRef(String ref) {
 		String oldValue = this.ref;
 		this.ref = ref;
-		firePropertyChange(PROPERTY_REF, oldValue, ref);
+		if (!isSame(oldValue, ref)) {
+		    firePropertyChange(PROPERTY_REF, oldValue, ref);
+		}
 	}
 
 

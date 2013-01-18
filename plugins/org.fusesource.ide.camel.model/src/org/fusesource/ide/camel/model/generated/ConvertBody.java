@@ -79,7 +79,9 @@ public class ConvertBody extends AbstractNode {
 	public void setType(String type) {
 		String oldValue = this.type;
 		this.type = type;
-		firePropertyChange(PROPERTY_TYPE, oldValue, type);
+		if (!isSame(oldValue, type)) {
+		    firePropertyChange(PROPERTY_TYPE, oldValue, type);
+		}
 	}
 
 	/**
@@ -95,7 +97,9 @@ public class ConvertBody extends AbstractNode {
 	public void setCharset(String charset) {
 		String oldValue = this.charset;
 		this.charset = charset;
-		firePropertyChange(PROPERTY_CHARSET, oldValue, charset);
+		if (!isSame(oldValue, charset)) {
+		    firePropertyChange(PROPERTY_CHARSET, oldValue, charset);
+		}
 	}
 
 

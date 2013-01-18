@@ -77,7 +77,9 @@ public class RemoveProperty extends AbstractNode {
 	public void setPropertyName(String propertyName) {
 		String oldValue = this.propertyName;
 		this.propertyName = propertyName;
-		firePropertyChange(PROPERTY_PROPERTYNAME, oldValue, propertyName);
+		if (!isSame(oldValue, propertyName)) {
+		    firePropertyChange(PROPERTY_PROPERTYNAME, oldValue, propertyName);
+		}
 	}
 
 
