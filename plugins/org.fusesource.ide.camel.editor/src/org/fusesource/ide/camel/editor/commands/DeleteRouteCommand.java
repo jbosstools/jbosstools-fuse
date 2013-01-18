@@ -31,12 +31,10 @@ public class DeleteRouteCommand extends RecordingCommand {
 				if (model.getChildren().size()<1) {
 					// no more routes - create one
 					designEditor.addNewRoute();
-					designEditor.getEditor().recreateDesignPage();
 				}
 				newRoute = (RouteSupport)model.getChildren().get(0);
 				designEditor.clearSelectedRouteCache();
 				designEditor.setSelectedRoute(newRoute);
-				designEditor.refreshContent();
 			}
 		}
 	}
