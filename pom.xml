@@ -16,9 +16,9 @@
     <groupId>org.fusesource</groupId>
     <artifactId>fuse-project</artifactId>
     <!-- 
-    <version>99-master-SNAPSHOT</version>
-    -->
     <version>7.1.0.fuse-047</version>
+    -->
+    <version>99-master-SNAPSHOT</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
@@ -41,9 +41,9 @@
   <properties>
     <forge-project-id>ide</forge-project-id>
 <!--
-      <fabric-version>99-master-SNAPSHOT</fabric-version>
--->
     <fabric-version>7.1.0.fuse-047</fabric-version>
+-->
+    <fabric-version>99-master-SNAPSHOT</fabric-version>
     <fabric-jclouds-version>${fabric-version}</fabric-jclouds-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
