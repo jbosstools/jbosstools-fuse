@@ -124,7 +124,9 @@ public class DiagramView extends GraphViewSupport {
 					AbstractNode node = AbstractNodes.getSelectedNode(selection);
 					if (node != null && !(part instanceof RiderEditor)) {
 						//System.out.println("Part is: " + part + " of type : " + part.getClass());
-						updateGraph(node, part);
+						if (node != DiagramView.this.node) {
+							updateGraph(node, part);
+						}
 					} else {
 						if (firstSelection instanceof Node) {
 							updateGraph((Node) firstSelection, part);
