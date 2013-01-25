@@ -47,7 +47,8 @@
 					<products> 
 						<product> 
 							<id>FuseIDE</id> 
-							<rootFolder>FuseIDE</rootFolder> 
+							<rootFolder>FuseIDE-${project.version}</rootFolder>
+							<archiveFileName>FuseIDE-${project.version}</archiveFileName> 
 						</product> 
 					</products> 
 				</configuration>
