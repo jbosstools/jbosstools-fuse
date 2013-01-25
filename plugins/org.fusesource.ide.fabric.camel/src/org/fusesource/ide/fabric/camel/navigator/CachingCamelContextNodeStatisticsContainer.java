@@ -1,4 +1,5 @@
 package org.fusesource.ide.fabric.camel.navigator;
+package org.fusesource.ide.fabric.camel.navigator;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import org.fusesource.ide.fabric.camel.navigator.stats.model.RouteStatistics;
 
 
 public class CachingCamelContextNodeStatisticsContainer implements NodeStatisticsContainer {
-	private static final long THROTTLE_MILLIS = 300L;
+	private static final long THROTTLE_MILLIS = 15 * 1000L;
 
 	private final CamelContextNode camelContextNode;
 
