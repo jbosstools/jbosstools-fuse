@@ -1,9 +1,8 @@
 package org.fusesource.ide.fabric.camel.navigator;
 
+import org.fusesource.fabric.camel.facade.mbean.CamelProcessorMBean;
 import org.fusesource.fon.util.messages.INodeStatistics;
 import org.fusesource.fon.util.messages.NodeStatisticsContainer;
-
-import org.fusesource.fabric.camel.facade.mbean.CamelProcessorMBean;
 
 public class RuntimeNodeStatisticsContainer implements NodeStatisticsContainer {
 	private final CamelContextNode camelContextNode;
@@ -22,5 +21,4 @@ public class RuntimeNodeStatisticsContainer implements NodeStatisticsContainer {
 		}
 		return null;
 	}
-
 }

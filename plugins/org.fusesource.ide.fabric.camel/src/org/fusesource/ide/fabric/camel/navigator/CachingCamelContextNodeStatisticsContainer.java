@@ -1,5 +1,4 @@
 package org.fusesource.ide.fabric.camel.navigator;
-package org.fusesource.ide.fabric.camel.navigator;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -13,12 +12,13 @@ import org.fusesource.fon.util.messages.NodeStatisticsContainer;
 import org.fusesource.ide.fabric.camel.FabricCamelPlugin;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.CamelContextStatistics;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.IProcessorStatistics;
+import org.fusesource.ide.fabric.camel.navigator.stats.model.IProcessorStatisticsContainer;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.ProcessorStatistics;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.RouteStatistics;
 
 
-public class CachingCamelContextNodeStatisticsContainer implements NodeStatisticsContainer {
-	private static final long THROTTLE_MILLIS = 15 * 1000L;
+public class CachingCamelContextNodeStatisticsContainer implements NodeStatisticsContainer, IProcessorStatisticsContainer {
+	private static final long THROTTLE_MILLIS = 10 * 1000L;
 
 	private final CamelContextNode camelContextNode;
 
@@ -31,6 +31,12 @@ public class CachingCamelContextNodeStatisticsContainer implements NodeStatistic
 
 	@Override
 	public IProcessorStatistics getNodeStats(String nodeId) {
+		Map<String, IProcessorStatistics> statsMap = getNodeStatsMap();
+		return statsMap.get(nodeId);
+	}
+
+	@Override
+	public Map<String, IProcessorStatistics> getNodeStatsMap() {
 		if (shouldQuery()) {
 			// lets load the new data over JMX and unmarshal as XML here...
 			String managementName = camelContextNode.getManagementName();
@@ -64,7 +70,8 @@ public class CachingCamelContextNodeStatisticsContainer implements NodeStatistic
 				FabricCamelPlugin.getLogger().error("Failed to query the JMX statistics of Camel: " + managementName, e);
 			}
 		}
-		return cache.get(nodeId);
+		Map<String, IProcessorStatistics> statsMap = cache;
+		return statsMap;
 	}
 
 	/**

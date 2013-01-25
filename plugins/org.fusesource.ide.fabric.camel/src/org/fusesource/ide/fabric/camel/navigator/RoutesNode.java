@@ -1,6 +1,7 @@
 package org.fusesource.ide.fabric.camel.navigator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,9 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.fabric.camel.facade.CamelFacade;
 import org.fusesource.fabric.camel.facade.mbean.CamelRouteMBean;
 import org.fusesource.fon.util.messages.IExchange;
+import org.fusesource.fon.util.messages.IInvocationStatistics;
 import org.fusesource.fon.util.messages.ITraceExchangeBrowser;
+import org.fusesource.fon.util.messages.InvocationStatistics;
 import org.fusesource.fon.util.messages.NodeStatisticsContainer;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.AbstractNodeFacade;
@@ -23,10 +26,13 @@ import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
+import org.fusesource.ide.fabric.camel.navigator.stats.model.HasTotalStatistics;
+import org.fusesource.ide.fabric.camel.navigator.stats.model.IProcessorStatistics;
+import org.fusesource.ide.fabric.camel.navigator.stats.model.IProcessorStatisticsContainer;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 
 
-public class RoutesNode extends RefreshableCollectionNode implements AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider {
+public class RoutesNode extends RefreshableCollectionNode implements AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider, HasTotalStatistics {
 	private final CamelContextNode camelContextNode;
 	private RouteContainer routeContainer;
 
@@ -109,6 +115,24 @@ public class RoutesNode extends RefreshableCollectionNode implements AbstractNod
 		return getCamelContextNode().getNodeStatisticsContainer();
 	}
 
+
+
+	@Override
+	public IInvocationStatistics getTotalStatistics() {
+		NodeStatisticsContainer container = getNodeStatisticsContainer();
+		if (container instanceof IProcessorStatisticsContainer) {
+			IProcessorStatisticsContainer processorContainer = (IProcessorStatisticsContainer) container;
+			Map<String, IProcessorStatistics> map = processorContainer.getNodeStatsMap();
+			Collection<IProcessorStatistics> values = map.values();
+			InvocationStatistics stats = new InvocationStatistics();
+			for (IProcessorStatistics statistics : values) {
+				stats.combineChild(statistics);
+			}
+			return stats;
+		}
+		return null;
+	}
+
 	@Override
 	public AbstractNode getAbstractNode() {
 		checkLoaded();
@@ -136,4 +160,5 @@ public class RoutesNode extends RefreshableCollectionNode implements AbstractNod
 	public Image getImage() {
 		return FabricPlugin.getDefault().getImage("camel_route_folder.png");
 	}
+
 }

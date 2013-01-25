@@ -9,6 +9,7 @@ import org.fusesource.ide.commons.ui.views.TreeViewSupport;
 import org.fusesource.ide.commons.util.Function1;
 import org.fusesource.ide.commons.util.Function1Adapter;
 import org.fusesource.ide.commons.util.FunctionLong;
+import org.fusesource.ide.fabric.camel.navigator.stats.model.HasTotalStatistics;
 
 
 public class ProcessorCallView extends TreeViewSupport implements IPropertySheetPage {
@@ -108,6 +109,13 @@ public class ProcessorCallView extends TreeViewSupport implements IPropertySheet
 	protected IInvocationStatistics getTotalStatistics(Object element) {
 		if (element instanceof IInvocationStatistics) {
 			return (IInvocationStatistics) element;
+		}
+		if (element instanceof HasTotalStatistics) {
+			HasTotalStatistics node = (HasTotalStatistics) element;
+			IInvocationStatistics answer = node.getTotalStatistics();
+			if (answer != null) {
+				return answer;
+			}
 		}
 		if (element instanceof ProcessorNodeSupport) {
 			ProcessorNodeSupport node = (ProcessorNodeSupport) element;
