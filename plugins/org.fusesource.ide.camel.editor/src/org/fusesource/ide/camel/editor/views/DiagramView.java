@@ -204,6 +204,7 @@ public class DiagramView extends GraphViewSupport {
 	public void updateGraph(Node node, IWorkbenchPart part) {
 		this.selectedNode = node;
 		this.selectionPart = part;
+		this.node = null;
 		viewer.setContentProvider(new NodeGraphContentProvider());
 		setSelectedObjectOnly(node);
 	}
