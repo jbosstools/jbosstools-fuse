@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.fusesource.fon.util.messages.NodeStatisticsContainer;
+import org.fusesource.ide.commons.ui.propsrc.BeanPropertySource;
 import org.fusesource.ide.fabric.camel.FabricCamelPlugin;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.CamelContextStatistics;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.IProcessorStatistics;
@@ -18,7 +19,7 @@ import org.fusesource.ide.fabric.camel.navigator.stats.model.RouteStatistics;
 
 
 public class CachingCamelContextNodeStatisticsContainer implements NodeStatisticsContainer, IProcessorStatisticsContainer {
-	private static final long THROTTLE_MILLIS = 10 * 1000L;
+	private static final long THROTTLE_MILLIS = BeanPropertySource.THROTTLE;
 
 	private final CamelContextNode camelContextNode;
 
@@ -81,7 +82,6 @@ public class CachingCamelContextNodeStatisticsContainer implements NodeStatistic
 	 * @return the model or null on errors
 	 */
 	private CamelContextStatistics getStatistics(String xmlDump) {
-		System.err.println("CamelContextNode.getStatistics() called...");
 		CamelContextStatistics stats = null;
 		try {
 			JAXBContext context = JAXBContext.newInstance(CamelContextStatistics.class, RouteStatistics.class, ProcessorStatistics.class);
