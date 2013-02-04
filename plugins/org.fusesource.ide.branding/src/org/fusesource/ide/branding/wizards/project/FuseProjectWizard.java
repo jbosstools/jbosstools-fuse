@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
@@ -274,7 +275,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 				} else {
 					final IProject project = root.getProject(projectName);
 					try {
-						addCamelNature(project, null);	
+						enforceNatures(project, new NullProgressMonitor());	
 					} catch (CoreException ex) {
 						ex.printStackTrace();
 					}					
@@ -297,22 +298,34 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	private void addCamelNature(IProject project, IProgressMonitor monitor) throws CoreException {
+	private void enforceNatures(IProject project, IProgressMonitor monitor) throws CoreException {
 		IProjectDescription projectDescription = project.getDescription();
 		String[] ids = projectDescription.getNatureIds();
+		boolean camelNatureFound = false;
 		boolean javaNatureFound = false;
 		for (String id : ids) {
 			if (id.equals(JavaCore.NATURE_ID)) {
 				javaNatureFound = true;
-				break;
+			} else if (id.equals(Activator.CAMEL_NATURE_ID)) {
+				camelNatureFound = true;
 			}
 		}
-		int toAdd = javaNatureFound ? 1 : 2;
+		int toAdd = 0;
+		if (!camelNatureFound) {
+			toAdd++;			
+		} 
+		if (!javaNatureFound) {
+			toAdd++;
+		}
 		String[] newIds = new String[ids.length + toAdd];
 		System.arraycopy(ids, 0, newIds, 0, ids.length);
-		newIds[ids.length] = Activator.CAMEL_NATURE_ID;
-		if (!javaNatureFound) {
+		if (!camelNatureFound && !javaNatureFound) {
+			newIds[ids.length] = Activator.CAMEL_NATURE_ID;
 			newIds[newIds.length - 1] = JavaCore.NATURE_ID;
+		} else if (!camelNatureFound) {
+			newIds[ids.length] = Activator.CAMEL_NATURE_ID;
+		} else if (!javaNatureFound) {
+			newIds[ids.length] = JavaCore.NATURE_ID;
 		}
 		projectDescription.setNatureIds(newIds);
 		project.setDescription(projectDescription, monitor);
