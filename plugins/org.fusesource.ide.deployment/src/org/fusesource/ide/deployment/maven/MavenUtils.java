@@ -29,7 +29,7 @@ public class MavenUtils {
 		} else if (Objects.equal("pom", packaging)) {
 			return null;
 		} else if (Objects.equal("war", packaging)) {
-			return "war:" + answer;
+			return "war:" + answer + "/war";
 		} else {
 			return "fab:" + answer;
 		}
