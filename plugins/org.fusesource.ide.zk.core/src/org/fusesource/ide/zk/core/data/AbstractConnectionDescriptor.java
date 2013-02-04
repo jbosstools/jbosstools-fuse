@@ -23,7 +23,7 @@ package org.fusesource.ide.zk.core.data;
  */
 public abstract class AbstractConnectionDescriptor<T extends AbstractConnectionDescriptor<T>> implements Comparable<T> {
 
-    private final String _Name;
+    final String _Name;
 
     /**
      * Constructor. 
