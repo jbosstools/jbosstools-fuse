@@ -15,3 +15,5 @@ Eclipse-BuddyPolicy: app
 Bundle-Vendor: %providerName
 Export-Package: org.fusesource.ide.jvmmonitor.internal.tools;x-friends:="org.fusesource.ide.jvmmonitor.tools.tests",
  org.fusesource.ide.jvmmonitor.tools;x-friends:="org.fusesource.ide.jvmmonitor.tools.tests"
+Bundle-ClassPath: tools.jar,
+ .
