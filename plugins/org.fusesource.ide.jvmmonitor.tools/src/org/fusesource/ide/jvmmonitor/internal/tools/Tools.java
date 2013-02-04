@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.Set;
 
@@ -124,6 +125,8 @@ public class Tools implements IPropertyChangeListener, IConstants {
             Method method = clazz.getDeclaredMethod(GET_MONITORED_HOST_CLASS,
                     new Class[] { String.class });
             return method.invoke(null, name);
+        } catch (ClassNotFoundException cnfex) {
+        	return null;
         } catch (Throwable t) {
             throw new JvmCoreException(IStatus.ERROR, t.getMessage(), t);
         }
@@ -144,6 +147,8 @@ public class Tools implements IPropertyChangeListener, IConstants {
             Class<?> clazz = Class.forName(MONITORED_HOST_CLASS);
             Method method = clazz.getDeclaredMethod(ACTIVE_VMS_METHOD);
             return (Set<Integer>) method.invoke(monitoredHost);
+        } catch (ClassNotFoundException cex) {
+        	return Collections.EMPTY_SET;
         } catch (Throwable t) {
             throw new JvmCoreException(IStatus.ERROR, t.getMessage(), t);
         }
