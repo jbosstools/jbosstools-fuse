@@ -4,7 +4,7 @@
 		    style="overview.css" path="overview/@">
 		<group id="content-group" style-id="content-group">
 			<link id="fdfc-overview" style-id="content-link" 
-			      label="Fuse IDE Documentation"
+			      label="Red Hat JBoss Fuse IDE Documentation"
 			      url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.fusesource.ide.help/index.html">
 				<text>Read the documentation for Fuse IDE.</text>
 			</link>

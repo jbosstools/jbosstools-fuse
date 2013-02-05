@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.fusesource.ide.feature"
-      label="Fuse IDE"
+      label="Red Hat JBoss Fuse IDE"
       version="7.2.0.qualifier"
       provider-name="Red Hat Inc.">
 
    <description url="http://fusesource.com/products/fuse-ide/">
-      Fuse IDE lets you work with Fuse and Apache ActiveMQ, Camel, CXF, Karaf &amp; ServiceMix.
+      Red Hat JBoss Fuse IDE lets you work with Fuse and Apache ActiveMQ, Camel,
+CXF, Karaf &amp; ServiceMix.
 You can view, create and edit Enterprise Integration Patterns,
 browse endpoints and routes, drag and drop messages, trace message
 flows, deploy your code to Fuse ESB and 
@@ -14,11 +15,11 @@ browse and visualise runtime processes over JMX and Fuse Fabric.
    </description>
 
    <copyright url="http://redhat.com/">
-      Copyright (C) 2011 Red Hat Inc.
+      Copyright (C) 2013 Red Hat Inc.
    </copyright>
 
    <license url="http://fusesource.com/products/fuse-ide/">
-Fuse IDE User License Agreement
+      Red Hat JBoss Fuse IDE User License Agreement
 
 PLEASE READ THIS END USER LICENSE AGREEMENT CAREFULLY BEFORE USING SOFTWARE FROM RED HAT. BY USING RED HAT SOFTWARE, YOU SIGNIFY 
 YOUR ASSENT TO AND ACCEPTANCE OF THIS END USER LICENSE AGREEMENT AND ACKNOWLEDGE YOU HAVE READ AND UNDERSTAND THE TERMS. AN 
@@ -34,7 +35,7 @@ organization (the “Programs”), regardless of the delivery mechanism.
 
 1.  License Grant. Subject to the following terms, Red Hat, Inc. (“Red Hat”) grants to you a perpetual, worldwide license to the 
 Programs (most of which include multiple software components) pursuant to the Apache License v.2.0 (http://www.apache.org/licenses/LICENSE-2.0.html). 
-The license agreement for each software component is located in the software component's source code and permits you to run, copy, modify, 
+The license agreement for each software component is located in the software component&apos;s source code and permits you to run, copy, modify, 
 and redistribute the software component (subject to certain obligations in some cases), both in source code and binary code forms. 
 This EULA pertains solely to the Programs and does not limit your rights under, or grant you rights that supersede, the license terms 
 of any particular component.
@@ -43,7 +44,7 @@ of any particular component.
 under copyright law and under other laws as applicable. Title to the Programs and any component, or to any copy, modification, or 
 merged portion shall remain with Red Hat and other licensors, subject to the applicable license. The “Red Hat” trademark and the “Shadowman” 
 logo are registered trademarks of Red Hat in the U.S. and other countries. This EULA does not permit you to distribute the Programs or their 
-components using Red Hat's trademarks, regardless of whether the copy has been modified. You may make a commercial redistribution of the 
+components using Red Hat&apos;s trademarks, regardless of whether the copy has been modified. You may make a commercial redistribution of the 
 Programs only if (a) permitted under a separate written agreement with Red Hat authorizing such commercial redistribution, or (b) you remove 
 and replace all occurrences of Red Hat trademarks. Modifications to the software may corrupt the Programs. You should read the information 
 found at http://www.redhat.com/about/corporate/trademark/ before distributing a copy of the Programs. 
@@ -62,7 +63,7 @@ defective media within 30 days of delivery along with a copy of your payment rec
 you paid for the media. To the maximum extent permitted under applicable law, under no circumstances will Red Hat, its affiliates, any Red Hat authorized 
 distributor, or the licensor of any component provided to you under this EULA be liable to you for any incidental or consequential damages, including lost 
 profits or lost savings arising out of the use or inability to use the Programs or any component, even if Red Hat, its affiliates, an authorized distributor 
-and/or licensor has been advised of the possibility of such damages. In no event shall Red Hat's or its affiliates’ liability, an authorized distributor’s 
+and/or licensor has been advised of the possibility of such damages. In no event shall Red Hat&apos;s or its affiliates’ liability, an authorized distributor’s 
 liability or the liability of the licensor of a component provided to you under this EULA exceed the amount that you paid to Red Hat for the media under 
 this EULA.
 
@@ -89,15 +90,15 @@ transfer the third party software programs to another party, then you must conta
 or dispute arising under or relating to this EULA shall be governed by the laws of the State of New York and of the United States, without regard to any conflict 
 of laws provisions. The rights and obligations of the parties to this EULA shall not be governed by the United Nations Convention on the International Sale of Goods. 
 
-Copyright © 2012 Red Hat, Inc. All rights reserved. "Red Hat" and the Red Hat "Shadowman" logos are registered trademarks of Red Hat, Inc. "Linux" is a registered 
+Copyright © 2012 Red Hat, Inc. All rights reserved. &quot;Red Hat&quot; and the Red Hat &quot;Shadowman&quot; logos are registered trademarks of Red Hat, Inc. &quot;Linux&quot; is a registered 
 trademark of Linus Torvalds. All other trademarks are the property of their respective owners.
    </license>
 
    <url>
-      <update label="Fuse IDE Update Site" url="http://repo.fusesource.com/ide/"/>
-      <discovery label="Eclipse Helios" url="http://download.eclipse.org/releases/helios"/>
-      <discovery label="Eclipse Galileo" url="http://download.eclipse.org/releases/galileo"/>
+      <update label="Red Hat JBoss Fuse IDE Update Site" url="http://repo.fusesource.com/ide/"/>
       <discovery label="m2eclipse" url="http://m2eclipse.sonatype.org/sites/m2e/"/>
+      <discovery label="Eclipse Indigo" url="http://download.eclipse.org/releases/indigo"/>
+      <discovery label="Eclipse Juno" url="http://download.eclipse.org/releases/juno"/>
    </url>
 
    <requires>
@@ -459,14 +460,7 @@ trademark of Linus Torvalds. All other trademarks are the property of their resp
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-<!--
-   <plugin
-         id="osgi.cmpn"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
--->
+
    <plugin
          id="org.fusesource.fabric.camel-tooling-util"
          download-size="0"
@@ -734,14 +728,14 @@ trademark of Linus Torvalds. All other trademarks are the property of their resp
          version="0.0.0"
          fragment="true"
          unpack="false"/>
-   
+
    <plugin
          id="org.eclipse.osgi.services"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
- 
+
    <plugin
          id="org.eclipse.equinox.cm"
          download-size="0"
