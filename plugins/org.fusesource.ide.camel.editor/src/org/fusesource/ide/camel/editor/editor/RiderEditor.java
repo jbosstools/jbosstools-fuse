@@ -585,6 +585,7 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 					designEditor.refreshDiagramContents();
 					designEditor.update();
 					designEditor.setFocus();
+					designEditor.fireModelChanged(); // will update the outline view
 				}
 
 			}
