@@ -25,7 +25,7 @@ echo "Using MVN_SETTINGS: ${MVN_SETTINGS}"
 echo ============================================================================
 
 echo ${BUILDNO} > ${PERFECUT_ARTIFACT}-buildno.txt
-VERSION=7.1.${BUILDNO}
+VERSION=7.2.${BUILDNO}
 git commit -a -m "getting ready for version ${VERSION}"
 git push origin master:master
 git stash clear
@@ -36,16 +36,16 @@ git branch release-${VERSION}
 git checkout release-${VERSION}
 
 # root project uses regular maven versions
-find * -name 'pom.xml' | xargs perl -pi -e "s/<version>7.1.0-SNAPSHOT<\/version>/<version>${VERSION}<\/version>/g"
+find * -name 'pom.xml' | xargs perl -pi -e "s/<version>7.2.0-SNAPSHOT<\/version>/<version>${VERSION}<\/version>/g"
 
 # replace the OSGi version names in poms
-find plugins -name 'pom.xml' | xargs perl -pi -e "s/<version>7.1.0.qualifier<\/version>/<version>${VERSION}<\/version>/g"
+find plugins -name 'pom.xml' | xargs perl -pi -e "s/<version>7.2.0.qualifier<\/version>/<version>${VERSION}<\/version>/g"
 
 # replace manifest versions
-find plugins -name '*.xml' | xargs perl -pi -e "s/7.1.0.qualifier/${VERSION}/g"
-find plugins -name 'bundle.properties' | xargs perl -pi -e "s/7.1.0.qualifier/${VERSION}/g"
-find plugins -name 'MANIFEST.MF' | xargs perl -pi -e "s/7.1.0.qualifier/${VERSION}/g"
-find plugins -name 'fuse*.product' | xargs perl -pi -e "s/7.1.0.qualifier/${VERSION}/g"
+find plugins -name '*.xml' | xargs perl -pi -e "s/7.2.0.qualifier/${VERSION}/g"
+find plugins -name 'bundle.properties' | xargs perl -pi -e "s/7.2.0.qualifier/${VERSION}/g"
+find plugins -name 'MANIFEST.MF' | xargs perl -pi -e "s/7.2.0.qualifier/${VERSION}/g"
+find plugins -name 'fuse*.product' | xargs perl -pi -e "s/7.2.0.qualifier/${VERSION}/g"
 
 # replace IDE version
 perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>${VERSION}<\/ide-version>/g" plugins/pom.xml
