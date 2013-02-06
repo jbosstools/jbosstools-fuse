@@ -13,7 +13,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -23,11 +24,11 @@ import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.util.Util;
 import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.jvmmonitor.core.IHost;
 import org.fusesource.ide.jvmmonitor.core.JvmCoreException;
 import org.fusesource.ide.jvmmonitor.tools.Activator;
-
 
 /**
  * The class enabling to invoke the APIs in <tt>tools.jar</tt>.
@@ -118,15 +119,13 @@ public class Tools implements IPropertyChangeListener, IConstants {
      * @return The monitored host
      * @throws JvmCoreException
      */
-    protected Object invokeGetMonitoredHost(String name)
+    synchronized protected Object invokeGetMonitoredHost(String name)
             throws JvmCoreException {
         try {
             Class<?> clazz = Class.forName(MONITORED_HOST_CLASS);
             Method method = clazz.getDeclaredMethod(GET_MONITORED_HOST_CLASS,
                     new Class[] { String.class });
             return method.invoke(null, name);
-        } catch (ClassNotFoundException cnfex) {
-        	return null;
         } catch (Throwable t) {
             throw new JvmCoreException(IStatus.ERROR, t.getMessage(), t);
         }
@@ -147,8 +146,6 @@ public class Tools implements IPropertyChangeListener, IConstants {
             Class<?> clazz = Class.forName(MONITORED_HOST_CLASS);
             Method method = clazz.getDeclaredMethod(ACTIVE_VMS_METHOD);
             return (Set<Integer>) method.invoke(monitoredHost);
-        } catch (ClassNotFoundException cex) {
-        	return Collections.EMPTY_SET;
         } catch (Throwable t) {
             throw new JvmCoreException(IStatus.ERROR, t.getMessage(), t);
         }
@@ -182,7 +179,7 @@ public class Tools implements IPropertyChangeListener, IConstants {
      * @return The monitored VM
      * @throws JvmCoreException
      */
-    protected Object invokeGetMonitoredVm(Object monitoredHost,
+    synchronized protected Object invokeGetMonitoredVm(Object monitoredHost,
             Object vmIdentifier) throws JvmCoreException {
         try {
             Class<?> clazz = Class.forName(MONITORED_HOST_CLASS);
@@ -311,7 +308,18 @@ public class Tools implements IPropertyChangeListener, IConstants {
                     new Class[] { String.class, String.class });
             method.invoke(virtualMachine, path, options);
         } catch (Throwable t) {
-            throw new JvmCoreException(IStatus.ERROR, t.getMessage(), t);
+            String message = t.getMessage();
+            if (message == null) {
+                Throwable cause = t.getCause();
+                while (cause != null) {
+                    message = cause.getMessage();
+                    if (message != null) {
+                        break;
+                    }
+                    cause = cause.getCause();
+                }
+            }
+            throw new JvmCoreException(IStatus.ERROR, message, t);
         }
     }
 
@@ -392,25 +400,82 @@ public class Tools implements IPropertyChangeListener, IConstants {
 
         // search at the same directory as current JRE
         String javaHome = System.getProperty(JAVA_HOME_PROPERTY_KEY);
-        File parentDir = new File(javaHome + File.separator + ".."); //$NON-NLS-1$
-        if (parentDir.isDirectory()) {
-            for (File child : parentDir.listFiles()) {
-                if (!child.isDirectory()) {
-                    continue;
-                }
-                String path = child.getPath();
-                if (null == validateJdkRootDirectory(path)) {
-                    Activator.log(IStatus.INFO,
-                            NLS.bind(Messages.jdkRootDirectoryFoundMsg, path),
-                            new Exception());
-                    return path;
-                }
+        for (File directory : getPossibleJdkRootDirectory(javaHome)) {
+            String path = directory.getPath();
+            if (null == validateJdkRootDirectory(path)) {
+                Activator.log(IStatus.INFO,
+                        NLS.bind(Messages.jdkRootDirectoryFoundMsg, path),
+                        new Exception());
+                return path;
             }
         }
 
         Activator.log(IStatus.WARNING, Messages.jdkRootDirectoryNotFoundMsg,
                 new Exception());
         return ""; //$NON-NLS-1$
+    }
+
+    /**
+     * Gets the directories that could be JDK root directory.
+     * 
+     * @param javaHome
+     *            The java home path
+     * @return The directories that could be JDK root directory.
+     */
+    private static List<File> getPossibleJdkRootDirectory(String javaHome) {
+        List<File> dirs = new ArrayList<File>();
+
+        /*
+         * On Mac, java home path can be for example:
+         * /Library/Java/JavaVirtualMachines/jdk1.7.0_13.jdk/Contents/Home/jre
+         */
+        if (Util.isMac()) {
+            int index = javaHome
+                    .indexOf(IConstants.JAVA_INSTALLATION_DIR_ON_MAC);
+            if (index == -1) {
+                return dirs;
+            }
+
+            String javaVirtualMachinesPath = javaHome.substring(0, index
+                    + IConstants.JAVA_INSTALLATION_DIR_ON_MAC.length());
+            File dir = new File(javaVirtualMachinesPath);
+
+            collectDirs(dirs, dir, 3);
+            return dirs;
+        }
+
+        File parentDir = new File(javaHome + File.separator + ".."); //$NON-NLS-1$
+        if (parentDir.exists()) {
+            for (File file : parentDir.listFiles()) {
+                if (file.isDirectory()) {
+                    dirs.add(file);
+                }
+            }
+        }
+
+        return dirs;
+    }
+
+    /**
+     * Collects the directories which are within given depth from given base
+     * directory.
+     * 
+     * @param dirs
+     *            The directories to store result
+     * @param dir
+     *            The directory to search
+     * @param depth
+     *            The depth to search
+     */
+    private static void collectDirs(List<File> dirs, File dir, int depth) {
+        if (depth > 0) {
+            for (File file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    dirs.add(file);
+                    collectDirs(dirs, file, depth - 1);
+                }
+            }
+        }
     }
 
     /**
@@ -467,7 +532,7 @@ public class Tools implements IPropertyChangeListener, IConstants {
      *            The JDK root directory
      * @return The JRE library path or <tt>null</tt> it not found
      */
-    private String getJreLibraryPath(String jdkRootDirectory) {
+    private static String getJreLibraryPath(String jdkRootDirectory) {
         for (String path : LIBRARY_PATHS) {
             File attachLibraryFile = new File(jdkRootDirectory + path
                     + File.separator + System.mapLibraryName(ATTACH_LIBRARY));
@@ -485,7 +550,7 @@ public class Tools implements IPropertyChangeListener, IConstants {
      *            The JDK root directory
      * @throws Throwable
      */
-    private void addClassPath(String jdkRootDirectory) throws Throwable {
+    private static void addClassPath(String jdkRootDirectory) throws Throwable {
         File file = new File(jdkRootDirectory + TOOLS_JAR);
         URL toolsJarUrl = file.toURI().toURL();
 
@@ -508,7 +573,8 @@ public class Tools implements IPropertyChangeListener, IConstants {
      *            The JDK root directory
      * @throws Throwable
      */
-    private void addLibraryPath(String jdkRootDirectory) throws Throwable {
+    private static void addLibraryPath(String jdkRootDirectory)
+            throws Throwable {
         String libraryPath = System.getProperty(JAVA_LIBRARY_PATH);
         String jreLibraryPath = getJreLibraryPath(jdkRootDirectory);
 

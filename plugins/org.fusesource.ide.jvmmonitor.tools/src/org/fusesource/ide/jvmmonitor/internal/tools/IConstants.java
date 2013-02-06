@@ -10,7 +10,6 @@ import java.io.File;
 
 import org.fusesource.ide.jvmmonitor.tools.Activator;
 
-
 /**
  * The constants.
  */
@@ -22,8 +21,7 @@ public interface IConstants {
             + ".jdkRootDirectory";
 
     /** The preference key for update period. */
-    static final String UPDATE_PERIOD = Activator.PLUGIN_ID
-            + ".updatePeriod";
+    static final String UPDATE_PERIOD = Activator.PLUGIN_ID + ".updatePeriod";
 
     /** The properties key for local connector address. */
     static final String LOCAL_CONNECTOR_ADDRESS = "com.sun.management.jmxremote.localConnectorAddress";
@@ -103,11 +101,16 @@ public interface IConstants {
                     + "i386",
             // linux 64bit
             File.separator + "jre" + File.separator + "lib" + File.separator
-                    + "amd64" };
+                    + "amd64",
+            // mac
+            File.separator + "jre" + File.separator + "lib" };
 
     /** The relative path from JDK root directory to tools.jar. */
     static final String TOOLS_JAR = File.separator + "lib" + File.separator
             + "tools.jar";
+
+    /** The Java installation directory on Mac. */
+    static final String JAVA_INSTALLATION_DIR_ON_MAC = "JavaVirtualMachines";
 
     /** The system property for java library path. */
     static final String JAVA_LIBRARY_PATH = "java.library.path";
