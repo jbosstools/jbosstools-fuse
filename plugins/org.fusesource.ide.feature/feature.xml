@@ -154,6 +154,13 @@ trademark of Linus Torvalds. All other trademarks are the property of their resp
          unpack="false"/>
 
    <plugin
+         id="com.sun.jersey.jersey-server"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   <plugin
          id="com.sun.jersey.jersey-client"
          download-size="0"
          install-size="0"
