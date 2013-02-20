@@ -8,7 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.fabric,
  org.fusesource.ide.graph,
  org.fusesource.fabric.fabric-activemq-facade,
- org.apache.activemq.activemq-core;bundle-version="5.5.0",
+ org.apache.activemq.activemq-osgi,
  org.fusesource.fabric.tooling-fabric-all,
  org.fusesource.fabric.fabric-linkedin-zookeeper,
  org.apache.geronimo.specs.geronimo-j2ee-management_1.1_spec;bundle-version="1.0.1",

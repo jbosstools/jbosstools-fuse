@@ -364,13 +364,6 @@ trademark of Linus Torvalds. All other trademarks are the property of their resp
          unpack="false"/>
 
    <plugin
-         id="org.apache.activemq.kahadb"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.geronimo.specs.geronimo-jms_1.1_spec"
          download-size="0"
          install-size="0"
@@ -574,7 +567,7 @@ trademark of Linus Torvalds. All other trademarks are the property of their resp
          unpack="false"/>
 
    <plugin
-         id="org.apache.activemq.activemq-core"
+         id="org.apache.activemq.activemq-osgi"
          download-size="0"
          install-size="0"
          version="0.0.0"
