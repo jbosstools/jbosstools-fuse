@@ -15,20 +15,15 @@ import java.util.UUID;
 
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.model.BeanDefinition;
 import org.apache.camel.model.ChoiceDefinition;
 import org.apache.camel.model.DescriptionDefinition;
 import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.LoadBalanceDefinition;
-import org.apache.camel.model.MarshalDefinition;
 import org.apache.camel.model.OtherwiseDefinition;
-import org.apache.camel.model.PolicyDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.SetHeaderDefinition;
 import org.apache.camel.model.ToDefinition;
-import org.apache.camel.model.TransactedDefinition;
-import org.apache.camel.model.UnmarshalDefinition;
 import org.apache.camel.model.WhenDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.model.language.XPathExpression;
@@ -336,31 +331,8 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 */
 	public boolean canAcceptOutput() {
 		Class<?> aClass = getCamelDefinitionClass();
-		if (aClass == null) {
-			return false;
-		}
-
-		// special for bean/marshal/unmarshal, until their isOutputSupport would return false
-		if (BeanDefinition.class.isAssignableFrom(aClass)) {
-			return false;
-		}
-		if (MarshalDefinition.class.isAssignableFrom(aClass) ||
-				UnmarshalDefinition.class.isAssignableFrom(aClass) ||
-				TransactedDefinition.class.isAssignableFrom(aClass)) {
-			return false;
-		}
-
-		// use isOutputSupport on camel model
-		if (ProcessorDefinition.class.isAssignableFrom(aClass)) {
-			ProcessorDefinition def = createCamelDefinition();
-			if (def != null) {
-				boolean answer = def.isOutputSupported();
-				return answer;
-			}
-		}
-
-		// assume no output is supported
-		return false;
+		ProcessorDefinition def = createCamelDefinition();
+		return CamelModelUtils.canAcceptOutput(aClass, def);
 	}
 
 	/**
@@ -371,8 +343,8 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 */
 	public boolean isNextSiblingStepAddedAsNodeChild() {
 		Class<?> aClass = getCamelDefinitionClass();
-		boolean acceptOutput = canAcceptOutput();
-		return !acceptOutput || PolicyDefinition.class.isAssignableFrom(aClass);
+		ProcessorDefinition def = createCamelDefinition();
+		return CamelModelUtils.isNextSiblingStepAddedAsNodeChild(aClass, def);
 	}
 
 	/**
@@ -1547,15 +1519,15 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	protected boolean isSame(Object a, Object b) {
 		// null checks
 		if (a == null && b == null) return true;
 		if (a == null && b != null) return false;
 		if (a != null && b == null) return false;
-		 
-		if (a instanceof ExpressionDefinition && 
-			b instanceof ExpressionDefinition) {
+
+		if (a instanceof ExpressionDefinition &&
+				b instanceof ExpressionDefinition) {
 			// compare expressions
 			ExpressionDefinition e_a = (ExpressionDefinition)a;
 			ExpressionDefinition e_b = (ExpressionDefinition)b;
@@ -1569,10 +1541,10 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * compares two expressions
 	 * 
@@ -1582,17 +1554,17 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 */
 	private boolean isSameExpression(ExpressionDefinition e_a, ExpressionDefinition e_b) {
 		if (!e_a.getExpression().equals(e_b.getExpression()) ||
-			!e_a.getLanguage().equals(e_b.getLanguage())) {
+				!e_a.getLanguage().equals(e_b.getLanguage())) {
 			return false;
 		}
-		
+
 		XPathExpression xp_a = null;
 		XPathExpression xp_b = null;
-		
+
 		if (e_a instanceof XPathExpression) {
 			xp_a = (XPathExpression)e_a;
 			xp_b = null;
-			
+
 			if (e_b instanceof XPathExpression) {
 				xp_b = (XPathExpression)e_b;
 			} else {
@@ -1602,16 +1574,16 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 					xp_b = (XPathExpression)f_original.get(e_b);
 				} catch (Exception ex) {
 					ex.printStackTrace();
-				}					
+				}
 			}
-			
+
 			if (xp_a.getResultTypeName() != xp_b.getResultTypeName()) {
 				return false;
 			}
 		} else if (e_b instanceof XPathExpression) {
 			xp_a = null;
 			xp_b = (XPathExpression)e_b;
-			
+
 			if (e_a instanceof XPathExpression) {
 				xp_a = (XPathExpression)e_a;
 			} else {
@@ -1621,16 +1593,16 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 					xp_a = (XPathExpression)f_original.get(e_a);
 				} catch (Exception ex) {
 					ex.printStackTrace();
-				}		
+				}
 			}
-			
+
 			if (xp_a.getResultTypeName() != xp_b.getResultTypeName()) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	private boolean isSameByReflectionCompare(Object a, Object b) {
 		// now use reflection to compare all common fields of the objects
 		boolean isSame = compareObjects(a, b);
@@ -1640,11 +1612,11 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		}
 		return isSame;
 	}
-	
+
 	private boolean compareObjects(Object a, Object b) {
 		Class ca = a.getClass();
 		Class cb = b.getClass();
-		
+
 		boolean found = false;
 		for (Field fa : ca.getDeclaredFields()) {
 			fa.setAccessible(true);
@@ -1666,7 +1638,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 				return false;
 			}
 		}
-		
+
 		Class sca = ca.getSuperclass();
 		Class scb = cb.getSuperclass();
 		// both must have the same super class or both no super class
@@ -1677,12 +1649,12 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		} else {
 			return false;
 		}
-		
+
 		// both super classes must be equal
 		if (!sca.getName().equals(scb.getName())) {
 			return false;
 		}
-		
+
 		Object superA = sca.cast(a);
 		Object superB = scb.cast(b);
 		return isSameByReflectionCompare(superA, superB);
