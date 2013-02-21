@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.camel.editor</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Camel Editor</name>
+  <name>Fuse :: Plugins :: Camel Editor</name>
 </project>

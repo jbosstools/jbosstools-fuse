@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.camel.model</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Camel Model</name>
+  <name>Fuse :: Plugins :: Camel Model</name>
 </project>

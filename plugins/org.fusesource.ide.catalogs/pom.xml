@@ -13,5 +13,5 @@
   
   <artifactId>org.fusesource.ide.catalogs</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: XSD Catalogs</name>
+  <name>Fuse :: Plugins :: XSD Catalogs</name>
 </project>

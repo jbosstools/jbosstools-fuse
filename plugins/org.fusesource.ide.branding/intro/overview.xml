@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <introContent>
-	<extensionContent id="org.fusesource.ide" name="Fuse IDE"
+	<extensionContent id="org.fusesource.ide" name="Fuse Plugins for Eclipse"
 		    style="overview.css" path="overview/@">
 		<group id="content-group" style-id="content-group">
 			<link id="fdfc-overview" style-id="content-link" 
-			      label="Red Hat JBoss Fuse IDE Documentation"
+			      label="Red Hat JBoss Fuse Plugins for Eclipse Documentation"
 			      url="http://org.eclipse.ui.intro/showHelpTopic?id=/org.fusesource.ide.help/index.html">
-				<text>Read the documentation for Fuse IDE.</text>
-			</link>
-			<link id="fdfc-overview" style-id="content-link" 
-			      label="FuseSource Subscription Center"
-			      url="https://fusesource.com/enterprise-support/fusesource-support/">
-				<text>Visit the FuseSource Subscription Center.</text>
+				<text>Read the documentation for Fuse Plugins for Eclipse.</text>
 			</link>
 		</group>
 	</extensionContent>

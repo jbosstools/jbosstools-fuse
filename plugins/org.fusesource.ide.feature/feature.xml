@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.fusesource.ide.feature"
-      label="Red Hat JBoss Fuse IDE 6.0"
+      label="Red Hat JBoss Fuse Plugins for Eclipse 6.0"
       version="7.2.0.qualifier"
       provider-name="Red Hat Inc.">
 
    <description url="http://fusesource.com/products/fuse-ide/">
-      Red Hat JBoss Fuse IDE lets you work with Fuse and Apache ActiveMQ, Camel,
+      Red Hat JBoss Fuse Plugins for Eclipse lets you work with Fuse and Apache ActiveMQ, Camel,
 CXF, Karaf &amp; ServiceMix.
 You can view, create and edit Enterprise Integration Patterns,
 browse endpoints and routes, drag and drop messages, trace message
@@ -19,7 +19,7 @@ browse and visualise runtime processes over JMX and Fuse Fabric.
    </copyright>
 
    <license url="http://fusesource.com/products/fuse-ide/">
-      Red Hat JBoss Fuse IDE User License Agreement
+      Red Hat JBoss Fuse Plugins for Eclipse User License Agreement
 
 PLEASE READ THIS END USER LICENSE AGREEMENT CAREFULLY BEFORE USING SOFTWARE FROM RED HAT. BY USING RED HAT SOFTWARE, YOU SIGNIFY 
 YOUR ASSENT TO AND ACCEPTANCE OF THIS END USER LICENSE AGREEMENT AND ACKNOWLEDGE YOU HAVE READ AND UNDERSTAND THE TERMS. AN 
@@ -95,7 +95,7 @@ trademark of Linus Torvalds. All other trademarks are the property of their resp
    </license>
 
    <url>
-      <update label="Red Hat JBoss Fuse IDE Update Site" url="http://repo.fusesource.com/ide/"/>
+      <update label="Red Hat JBoss Fuse Plugins for Eclipse Update Site" url="http://repo.fusesource.com/ide/"/>
       <discovery label="m2eclipse" url="http://m2eclipse.sonatype.org/sites/m2e/"/>
       <discovery label="Eclipse Indigo" url="http://download.eclipse.org/releases/indigo"/>
       <discovery label="Eclipse Juno" url="http://download.eclipse.org/releases/juno"/>

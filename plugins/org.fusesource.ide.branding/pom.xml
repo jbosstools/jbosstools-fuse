@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.branding</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Branding</name>
+  <name>Fuse :: Plugins :: Branding</name>
 </project>

@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.zk.zookeeper</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: ZooKeeper</name>
+  <name>Fuse :: Plugins :: ZooKeeper</name>
 </project>

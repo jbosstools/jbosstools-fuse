@@ -8,7 +8,7 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="Fuse IDE"
+            name="Fuse"
             id="org.fusesource.ide">
       </category>
       <view

@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.launcher</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Launcher</name>
+  <name>Fuse :: Plugins :: Launcher</name>
 </project>

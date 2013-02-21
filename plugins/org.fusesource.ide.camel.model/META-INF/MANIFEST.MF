@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fuse IDE Model Plugin
+Bundle-Name: Fuse Plugins for Eclipse Model Plugin
 Bundle-SymbolicName: org.fusesource.ide.camel.model;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.

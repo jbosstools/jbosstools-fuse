@@ -14,7 +14,7 @@
   <artifactId>ide-parent</artifactId>
 
   <packaging>pom</packaging>
-  <name>Fuse IDE</name>
+  <name>Fuse Plugins for Eclipse</name>
 
   <url>http://fusesource.com/products/fuse-ide/</url>
 

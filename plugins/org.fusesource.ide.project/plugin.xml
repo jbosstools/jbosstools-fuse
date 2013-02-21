@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-	<extension id="RiderProjectNature" name="Fuse IDE Nature" point="org.eclipse.core.resources.natures">
+	<extension id="RiderProjectNature" name="Fuse Nature" point="org.eclipse.core.resources.natures">
       <runtime>
          <run class="org.fusesource.ide.project.RiderProjectNature">
          </run>

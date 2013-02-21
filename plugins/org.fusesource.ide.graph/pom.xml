@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.graph</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Graph</name>
+  <name>Fuse :: Plugins :: Graph</name>
 </project>

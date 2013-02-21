@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.maven</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Maven</name>
+  <name>Fuse :: Plugins :: Maven</name>
 </project>

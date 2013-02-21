@@ -13,5 +13,5 @@
 
 	<artifactId>org.fusesource.ide.maven.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<name>Fuse IDE :: Plugins :: Maven Tests</name>
+	<name>Fuse :: Plugins :: Maven Tests</name>
 </project>

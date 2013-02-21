@@ -13,5 +13,5 @@
 
   <artifactId>org.fusesource.ide.commons</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Commons</name>
+  <name>Fuse :: Plugins :: Commons</name>
 </project>

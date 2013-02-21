@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.deployment</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Deployment</name>
+  <name>Fuse :: Plugins :: Deployment</name>
 </project>

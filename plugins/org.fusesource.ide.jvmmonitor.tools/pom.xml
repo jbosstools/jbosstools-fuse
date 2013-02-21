@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.jvmmonitor.tools</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: JVM Monitor Tools</name>
+  <name>Fuse :: Plugins :: JVM Monitor Tools</name>
 </project>

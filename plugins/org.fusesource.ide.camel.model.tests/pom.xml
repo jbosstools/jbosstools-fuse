@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.camel.model.tests</artifactId>
   <packaging>eclipse-test-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Camel Model Tests</name>
+  <name>Fuse :: Plugins :: Camel Model Tests</name>
 </project>

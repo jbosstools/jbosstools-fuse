@@ -16,7 +16,7 @@
       </view>
       <category
             id="org.fusesource.ide"
-            name="Fuse IDE">
+            name="Fuse">
       </category>
       <view
             category="org.fusesource.ide"

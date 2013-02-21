@@ -13,7 +13,7 @@
 
 	<artifactId>org.fusesource.ide.targetplatform</artifactId>
 	<packaging>pom</packaging>
-	<name>Fuse IDE :: Plugins :: Development Target Platform</name>
+	<name>Fuse :: Plugins :: Development Target Platform</name>
 
 	<build>
 		<plugins>

@@ -12,7 +12,7 @@
 
 	<artifactId>org.fusesource.ide.updatesite</artifactId>
 	<packaging>eclipse-repository</packaging>
-	<name>Fuse IDE :: Plugins :: Update Site</name>
+	<name>Fuse :: Plugins :: Update Site</name>
 
 	<build>
 		<plugins>

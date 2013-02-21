@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.preferences</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Preferences</name>
+  <name>Fuse :: Plugins :: Preferences</name>
 </project>

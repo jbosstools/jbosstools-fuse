@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.fabric.activemq</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Fabric ActiveMQ</name>
+  <name>Fuse :: Plugins :: Fabric ActiveMQ</name>
 </project>

@@ -13,7 +13,7 @@
 
   <artifactId>org.fusesource.ide.help</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Help</name>
+  <name>Fuse :: Plugins :: Help</name>
 
    <build>
      <plugins>

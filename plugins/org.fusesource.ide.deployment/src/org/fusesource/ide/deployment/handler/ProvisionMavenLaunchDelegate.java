@@ -17,6 +17,6 @@ public class ProvisionMavenLaunchDelegate extends MavenLaunchDelegateSupport {
 	 */
 	@Override
 	public String getEclipseProcessName() {
-		return "Fuse IDE Deployment Runner";
+		return "Fuse Deployment Runner";
 	}
 }

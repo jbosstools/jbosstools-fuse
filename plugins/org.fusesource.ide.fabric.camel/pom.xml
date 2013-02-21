@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.fabric.camel</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Fabric Camel</name>
+  <name>Fuse :: Plugins :: Fabric Camel</name>
 </project>

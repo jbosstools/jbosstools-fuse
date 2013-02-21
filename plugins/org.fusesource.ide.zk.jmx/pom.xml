@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.zk.jmx</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: ZooKeeper JMX</name>
+  <name>Fuse :: Plugins :: ZooKeeper JMX</name>
 </project>

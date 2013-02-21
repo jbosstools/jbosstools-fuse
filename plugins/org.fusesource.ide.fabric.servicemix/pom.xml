@@ -12,5 +12,5 @@
   
   <artifactId>org.fusesource.ide.fabric.servicemix</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Fabric ServiceMix</name>
+  <name>Fuse :: Plugins :: Fabric ServiceMix</name>
 </project>

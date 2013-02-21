@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.server.karaf.view</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>Fuse IDE :: Plugins :: Server Karaf View</name>
+  <name>Fuse :: Plugins :: Server Karaf View</name>
 </project>
