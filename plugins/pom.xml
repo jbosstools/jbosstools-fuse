@@ -47,6 +47,9 @@
     not sure this dependency works for camel-spring?
     <spring-osgi-version>2.0.0.M2-SNAPSHOT</spring-osgi-version>
 -->
+
+    <jbtis.version>4.0.0-SNAPSHOT</jbtis.version>
+
     <tycho-version>0.16.0</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
   </properties>
@@ -77,37 +80,37 @@
   <build>
     <plugins>
   	   <plugin>
-                <artifactId>maven-remote-resources-plugin</artifactId>
-                <version>1.0</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.servicemix</groupId>
-                        <artifactId>servicemix-build</artifactId>
-                        <version>1.0</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <goals>
-                           <goal>process</goal>
-                        </goals>
-                        <configuration>
-                            <resourceBundles>
-                                <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
-                            </resourceBundles>
-                            <supplementalModels>
-                                <supplementalModel>notice-supplements.xml</supplementalModel>
-                            </supplementalModels>
-                            <properties>
-                                <projectName>Fuse IDE</projectName>
-                            </properties>
-                        </configuration>
-                    </execution>
-                </executions>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <version>1.0</version>
+          <dependencies>
+              <dependency>
+                  <groupId>org.apache.servicemix</groupId>
+                  <artifactId>servicemix-build</artifactId>
+                  <version>1.0</version>
+              </dependency>
+          </dependencies>
+          <executions>
+              <execution>
+                  <goals>
+                     <goal>process</goal>
+                  </goals>
+                  <configuration>
+                      <resourceBundles>
+                          <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+                      </resourceBundles>
+                      <supplementalModels>
+                          <supplementalModel>notice-supplements.xml</supplementalModel>
+                      </supplementalModels>
+                      <properties>
+                          <projectName>Fuse IDE</projectName>
+                      </properties>
+                  </configuration>
+              </execution>
+          </executions>
 	</plugin>
       <plugin>
 	      <groupId>${m2e.group.id}</groupId>
-              <artifactId>tycho-versions-plugin</artifactId>
+	         <artifactId>tycho-versions-plugin</artifactId>
 	      <version>${tycho-version}</version>
       </plugin>
       <plugin>
