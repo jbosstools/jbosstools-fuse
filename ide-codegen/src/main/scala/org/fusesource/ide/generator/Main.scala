@@ -71,10 +71,10 @@ object Main {
     }
 
     var images = false
-    var eclipseEditor = true
-    var eclipseModel = true
+    var eclipseEditor = false
+    var eclipseModel = false
     var webModel = false
-    var hawtio = false
+    var hawtio = true
 
     if (args.size > 0) {
       args(0) match {
@@ -144,6 +144,7 @@ object Main {
     if (hawtio) {
       app = new Generator(outputDir, hawtioDir + "/img")
       app.generateHawtIO(hawtioDir + "/js")
+      println("Generated hawtio to: " + app)
     }
     println("Done generating stuff! Enjoy!")
 

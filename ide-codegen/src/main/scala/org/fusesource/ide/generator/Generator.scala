@@ -307,8 +307,27 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
    */
 
   def javaScriptType(prop: Property[_]): String = {
-    prop.propertyType match {
-      case _ => "String"
+		val number = "number"
+		val string = "string"
+		val bool = "bool"
+    prop.propertyType.getName() match {
+			case "java.lang.Byte" => number
+			case "java.lang.Short" => number
+			case "java.lang.Integer" => number
+			case "java.lang.Long" => number
+			case "java.lang.Float" => number
+			case "java.lang.Double" => number
+			case "byte" => number
+			case "short" => number
+			case "int" => number
+			case "long" => number
+			case "float" => number
+			case "double" => number
+			case "java.util.Date" => string
+			case "java.lang.String" => string
+			case "boolean" => bool
+			case "java.lang.Boolean" => bool
+			case n: String => n
     }
   }
 

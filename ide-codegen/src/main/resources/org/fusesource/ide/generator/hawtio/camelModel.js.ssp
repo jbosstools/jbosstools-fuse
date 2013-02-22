@@ -11,21 +11,21 @@ var _apacheCamelModel = {
         "group":   "Endpoints",
         "description":  "Consumes from an endpoint",
         "tootip":  "Consumes from an endpoint",
-        "icon":     "endpoint24.png",
+        "icon":     "endpoint24.png"
       },
      "to": {
         "title":    "To",
         "group":   "Endpoints",
         "description":  "Sends messages to an endpoint",
         "tootip":  "Sends messages to an endpoint",
-        "icon":     "endpoint24.png",
+        "icon":     "endpoint24.png"
       },
      "route": {
         "title":    "Route",
         "group":   "",
         "description":  "A collection of EIP steps",
         "tootip":  "A collection of EIP steps",
-        "icon":     "route24.png",
+        "icon":     "route24.png"
       },
 
 #for( node <- nodeDefinitions)
@@ -39,163 +39,50 @@ var _apacheCamelModel = {
       "description":  "${node.description}",
       "tootip":  "${node.description}",
       "icon":     "${icon}",
-<%--
-      "type":     "node",
-      "view":     "${node.svg}",
-      "roles":    [${node.role}],
-<%--
       "properties": [
-  #for (prop <- node.simpleProperties)
-
+  #for (prop <- node.beanProperties)
         {
           "id":     "${prop.name.toLowerCase}",
+				  <% val xmlElements = node.xmlElements(prop) %>
+				    #if (xmlElements.isEmpty)
+				  	#else
+						"elements": {
+						  #for (xe <- xmlElements)
+				       "${xe.name()}": "${xe.`type`().getName}",
+						  #end
+							},
+				  	#end
       #if (node.isBeanMethod(prop))
-        "type":   "customcombo",
-        createCombo: function (pw) {
-          var cmp = new Ext.form.ComboBox({
-            store: new Ext.data.Store({
-              restful: true,
-              proxy: new Ext.data.HttpProxy({
-                url: ORYX.CONFIG.REQUEST_PATH + 'beans/combo/methods'
-              }),
-              reader: new Ext.data.JsonReader({
-                totalProperty: 'total',
-                successProperty: 'success',
-                idProperty: 'id',
-                root: 'data',
-                messageProperty: 'message'
-              }, [
-                {name: 'id'},
-                {name: 'name', allowBlank: false},
-              ])
-            }),
-            mode: 'remote',
-            displayField:'name',
-            allowBlank: true,
-            autoCreate: false,
-            forceSelection: true,
-            triggerAction: 'all',
-            queryDelay: 0,
-            minChars: 1,
-            typeAhead: true,
-            emptyText:'Select a method...',
-            selectOnFocus:false
-          });
-          var c = Rider.findField(pw, "ref")
-          var value = pw.shapeSelection.commonPropertiesValues["oryx-ref"]
-          if (cmp && c && value) {
-            cmp.store.baseParams.bean = value
-          }
-          return cmp;
-        },
+					"type":   "combo",
+					"kind": "beanMethod",
+          "title":'Select a method...',
       #elif (node.isBeanRef(prop))
-        "type":   "customcombo",
-        createCombo: function (pw) {
-          var c = new Ext.form.ComboBox({
-            store: new Ext.data.Store({
-              restful: true,
-              proxy: new Ext.data.HttpProxy({
-                url: ORYX.CONFIG.REQUEST_PATH + 'beans/combo'
-              }),
-              reader: new Ext.data.JsonReader({
-                totalProperty: 'total',
-                successProperty: 'success',
-                idProperty: 'id',
-                root: 'data',
-                messageProperty: 'message'
-              }, [
-                {name: 'id'},
-                {name: 'name', allowBlank: false},
-              ])
-            }),
-            mode: 'remote',
-            displayField:'name',
-            allowBlank: false,
-            autoCreate: false,
-            forceSelection: true,
-            triggerAction: 'all',
-            queryDelay: 0,
-            minChars: 1,
-            typeAhead: true,
-            emptyText:'Select a Bean...',
-            selectOnFocus:true,
-          });
-          c.on('select', function() {
-            var cmp = Rider.findField(pw, "method")
-            var value = pw.shapeSelection.commonPropertiesValues["oryx-ref"]
-            if (cmp && c && value) {
-              cmp.store.baseParams.bean = value
-            }
-            // lets check if we need to zap the old method as we've chosen a new bean
-            if (c.getValue() !== value && pw.shapeSelection.commonPropertiesValues["oryx-method"]) {
-              pw.shapeSelection.commonPropertiesValues["oryx-method"] = "";
-              if (cmp) {
-                // TODO cannot seem to work out how to clear the selected item in the method combo box!!!
-                cmp.validate();
-              }
-            }
-          });
-          var cmp = Rider.findField(pw, "method")
-          var value = pw.shapeSelection.commonPropertiesValues["oryx-ref"]
-          if (cmp && c && value) {
-            cmp.store.baseParams.bean = value
-          }
-          return c;
-        },
+        "type":   "combo",
+				"kind":   "beanRef",
+				"title": "Select a bean...",
+	    #elif (isExpression(prop))
+				"kind" : "expression",
       #else
-        "type":   "${javaScriptType(prop)}",
       #end
-          "title":  "${prop.label}",
-          "value":  "",
+	        "type":   "${javaScriptType(prop)}",
+          <%--
+					"type": "${propertyType(prop)}"
+					--%>
           "description":"${prop.description}",
           "tooltip":"${prop.description}",
-          "readonly": ${prop.readOnly},
-          "optional": ${prop.optional && !node.isRequired(prop)},
-          "length": "",
-          "refToView":"${prop.name}",
-          "wrapLines":${wrapLines(prop)}
+					#if (prop.readOnly)
+          "readonly": true,
+		      #end
+					#if (prop.optional && !node.isRequired(prop))
+          "optional": true,
+		      #end
+					#if (wrapLines(prop))
+          "wrapLines": true,
+		      #end
+          "title":  "${prop.label}"
         },
-      #if (isExpression(prop))
-          {
-            "id": "language",
-            "type": "Expression",
-            "title":"language",
-            "value":"XPath",
-            "description":"Language to use for the expression",
-            "readonly":false,
-            "optional":false,
-            "refToView":"",
-            "items": [
-              {
-                "id":"el",
-                "title":"EL",
-                "value":"EL",
-                "tooltip":"EL expression language from JSP/JSTL/JSF"
-              },
-              {
-                "id":"simple",
-                "title":"Simple",
-                "value":"simple",
-                "tooltip":"Simple expressions"
-              },
-              {
-                "id":"xpath",
-                "title":"XPath",
-                "value":"xpath",
-                "tooltip":"XPath expressions"
-              },
-              {
-                "id":"xquery",
-                "title":"XQuery",
-                "value":"xquery",
-                "tooltip":"XQuery expression"
-              }
-            ]
-          },
-      #end
   #end
       ]
---%>
     },
 #end
 	},
