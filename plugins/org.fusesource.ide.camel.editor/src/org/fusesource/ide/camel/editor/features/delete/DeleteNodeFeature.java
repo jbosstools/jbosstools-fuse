@@ -71,7 +71,7 @@ public class DeleteNodeFeature extends DefaultDeleteFeature {
 	}
 
 	private void deleteFlowFromModel(Flow bo) {
-		bo.detach();
+		bo.disconnect();
 	}
 
 }

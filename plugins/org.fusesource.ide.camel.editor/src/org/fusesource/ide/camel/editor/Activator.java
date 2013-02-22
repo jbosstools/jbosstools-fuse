@@ -36,6 +36,8 @@ public class Activator extends ImagesActivatorSupport {
 		return plugin;
 	}
 
+	private PreferredPerspectivePartListener perspectiveListener;
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
@@ -45,6 +47,8 @@ public class Activator extends ImagesActivatorSupport {
 		super.start(context);
 		plugin = this;
 		redirectContextSensitiveHelp();
+		perspectiveListener = new PreferredPerspectivePartListener();
+		perspectiveListener.earlyStartup();
 //		IAdapterManager manager = Platform.getAdapterManager();
 //        manager.registerAdapters(new CamelContextOutlinePageAdapterFactory(), RiderDesignEditor.class);
 	}

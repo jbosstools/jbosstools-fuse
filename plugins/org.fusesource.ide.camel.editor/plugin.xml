@@ -145,12 +145,6 @@
       </propertySections>
    </extension>
    <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.fusesource.ide.camel.editor.PreferredPerspectivePartListener">
-      </startup>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.fusesource.ide.branding.preferences.root"

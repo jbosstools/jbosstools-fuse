@@ -102,7 +102,7 @@ public class PreferredPerspectivePartListener implements IStartup,
             public void run() {
                 try {
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                            .addPartListener(new PreferredPerspectivePartListener());
+                            .addPartListener(PreferredPerspectivePartListener.this);
                 } catch (Exception e) {
                 }
             }
