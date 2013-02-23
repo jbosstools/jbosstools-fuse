@@ -125,19 +125,20 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 			if (list != null) {
 				// System.out.println("==== Browsed exchanges: " + list);
 				this.exchanges = list;
+				viewer.setInput(exchanges);
 				/*
 				recreateColumns();
 				getViewer().refresh();
 				 */
 				// only recreate viewer if its valid and visible
-				if (Viewers.isValid(viewer)) {
-					createViewer();
-				}
+				//if (Viewers.isValid(viewer)) {
+				//	createViewer();
+				//}
 			}
 		} else {
 			// create an empty viewer in case its not a browsable node
 			this.exchanges.clear();
-			createViewer();
+			viewer.refresh();
 		}
 	}
 

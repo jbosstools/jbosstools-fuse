@@ -166,20 +166,13 @@ public class MessageDetailView extends ViewPart implements IPropertySheetPage {
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		Object firstSelection = Selections.getFirstSelection(selection);
-		if (firstSelection != null) {
-			Exchange exchange = Exchanges.asExchange(firstSelection);
-			if (exchange != null) {
-				setSelectedExchange(exchange);
-			}
-		}
-
+		Exchange exchange = Exchanges.asExchange(firstSelection);
+		setSelectedExchange(exchange);
 	}
 
 	public void setSelectedExchange(Exchange selectedExchange) {
-		if (selectedExchange != null) {
-			this.selectedExchange = selectedExchange;
-			updateDataBinding();
-		}
+		this.selectedExchange = selectedExchange;
+		updateDataBinding();
 	}
 
 	protected void updateDataBinding() {
