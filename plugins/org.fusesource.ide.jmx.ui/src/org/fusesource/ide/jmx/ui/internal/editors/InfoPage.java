@@ -152,6 +152,7 @@ public class InfoPage extends FormPage {
         super.dispose();
         if (bold != null) {
             bold.dispose();
+            bold = null;
         }
     }
 }

@@ -90,8 +90,7 @@ public class HealthLabelProvider extends OwnerDrawLabelProvider {
 
 			x += width;
 		}
-		//		chartColour.dispose();
-
+		chartColour.dispose();
 	}
 
 	protected List<Bar> getBars(Object element) {

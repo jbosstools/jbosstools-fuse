@@ -7,6 +7,9 @@ import org.fusesource.ide.camel.model.generated.Route;
 
 
 public class AddNewRouteCommand extends RecordingCommand {
+
+	public static final String ID = "org.fusesource.ide.camel.editor.commands.addRouteCommand";
+	
 	private final RiderDesignEditor designEditor;
 
 	public AddNewRouteCommand(RiderDesignEditor designEditor, TransactionalEditingDomain editingDomain) {

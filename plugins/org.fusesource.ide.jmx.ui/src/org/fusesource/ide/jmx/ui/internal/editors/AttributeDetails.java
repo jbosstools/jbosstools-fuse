@@ -145,6 +145,8 @@ public class AttributeDetails extends AbstractFormPart implements IDetailsPage {
         valueLayout.marginWidth = 0;
         valueLayout.marginHeight = 0;
         valueComposite.setLayout(valueLayout);
+        
+        bold.dispose();
     }
 
     private GridData newLayoutData() {

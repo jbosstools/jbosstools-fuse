@@ -279,24 +279,6 @@
       </remote>
    </extension>
    <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:help?after=additions">
-         <separator
-               name="org.fusesource.ide.branding.separator1"
-               visible="true">
-         </separator>
-         <command
-               commandId="org.fusesource.ide.branding.visitsubscriptioncenter"
-               icon="icons/fuse_icon_16c.png"
-               label="%rider.help.visitsubscriptioncenter.label"
-               style="push"
-               tooltip="%rider.help.visitsubscriptioncenter.tooltip">
-         </command>
-      </menuContribution>
-   </extension>
-   <extension
          point="org.eclipse.ui.commands">
       <command
             description="%rider.help.visitsubscriptioncenter.tooltip"

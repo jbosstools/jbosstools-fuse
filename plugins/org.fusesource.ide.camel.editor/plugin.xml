@@ -49,6 +49,11 @@
             id="org.fusesource.ide.camel.editor.commands.addRouteCommand"
             name="Add Route">
       </command>
+      <command
+            categoryId="org.fusesource.ide.camel.editor.commands.category"
+            id="org.fusesource.ide.camel.editor.commands.deleteRouteCommand"
+            name="Delete Route">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -59,6 +64,10 @@
       <handler
             class="org.fusesource.ide.camel.editor.handlers.AddNewRouteHandler"
             commandId="org.fusesource.ide.camel.editor.commands.addRouteCommand">
+      </handler>
+      <handler
+            class="org.fusesource.ide.camel.editor.handlers.DeleteRouteHandler"
+            commandId="org.fusesource.ide.camel.editor.commands.deleteRouteCommand">
       </handler>
    </extension>
    <extension
@@ -212,10 +221,10 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <dynamic
-                  class="org.fusesource.ide.camel.editor.editor.EditorContributionItem"
-                  id="org.fusesource.ide.camel.editor.dynamic">
+            locationURI="menu:org.eclipse.ui.main.menu?before=window">
+         <menu
+               id="routesMenu"
+               label="Routes">
             <visibleWhen
                   checkEnabled="false">
                <with
@@ -225,7 +234,41 @@
                   </equals>
                </with>
             </visibleWhen>
-         </dynamic>
+            <command
+                  commandId="org.fusesource.ide.camel.editor.commands.addRouteCommand"
+                  id="add.route"
+                  label="Add Route"
+                  style="push"
+                  tooltip="Adds a new route to the selected context...">
+            </command>
+            <command
+                  commandId="org.fusesource.ide.camel.editor.commands.deleteRouteCommand"
+                  id="route.delete.id"
+                  label="Delete Route"
+                  style="push"
+                  tooltip="Deletes the selected route...">
+            </command>
+            <separator
+                  name="org.fusesource.ide.camel.editor.separator1"
+                  visible="true">
+            </separator>
+            <menu
+                  id="route.add.eip.id"
+                  label="Add...">
+               <dynamic
+                     class="org.fusesource.ide.camel.editor.editor.AddMenuContributionItem"
+                     id="org.fusesource.ide.camel.editor.dynamicAdd">
+               </dynamic>
+            </menu>
+            <separator
+                  name="org.fusesource.ide.camel.editor.separator2"
+                  visible="true">
+            </separator>
+            <dynamic
+                  class="org.fusesource.ide.camel.editor.editor.RoutesMenuContributionItem"
+                  id="org.fusesource.ide.camel.editor.dynamicRoutes">
+            </dynamic>
+         </menu>
       </menuContribution>
    </extension>
    <extension

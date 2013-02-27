@@ -196,6 +196,6 @@ public class ChartLabelProvider extends OwnerDrawLabelProvider implements Wrappe
 		gc.setBackground(background);
 		gc.drawText(text, x + textWidthOffset, y + textHeightOffset, true);
 		
-//		chartColour.dispose();
+		chartColour.dispose();
 	}
 }

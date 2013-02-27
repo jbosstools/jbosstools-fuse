@@ -92,6 +92,8 @@ public class TimelineSection extends AbstractJvmPropertySection {
 
     /** The page book. */
     private PageBook timelinePageBook;
+    
+    private Cursor cursor;
 
     /**
      * The constructor.
@@ -265,6 +267,10 @@ public class TimelineSection extends AbstractJvmPropertySection {
     @Override
     public void dispose() {
         super.dispose();
+        if (cursor != null) {
+        	cursor.dispose();
+        	cursor = null;
+        }
         IActiveJvm jvm = getJvm();
         if (jvm != null) {
             IMBeanServer server = jvm.getMBeanServer();
@@ -465,7 +471,7 @@ public class TimelineSection extends AbstractJvmPropertySection {
         ToolBar toolbar = toolBarManager.createControl(expandableComposite);
 
         // set cursor
-        final Cursor cursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
+        cursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
         toolbar.setCursor(cursor);
         toolbar.addDisposeListener(new DisposeListener() {
             @Override

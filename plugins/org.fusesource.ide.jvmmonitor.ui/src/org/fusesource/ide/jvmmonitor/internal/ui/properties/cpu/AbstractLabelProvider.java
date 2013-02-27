@@ -83,6 +83,7 @@ abstract public class AbstractLabelProvider implements ITableLabelProvider,
 
         if (monospacedFont != null) {
             monospacedFont.dispose();
+            monospacedFont = null;
         }
     }
 
