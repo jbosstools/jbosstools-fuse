@@ -19,6 +19,10 @@
   </prerequisites>
 
   <properties>
+    <codeGen>eclipse</codeGen>
+
+    <!-- TODO this is required until perfectus build 010 -->
+    <fabric-version>99-master-SNAPSHOT</fabric-version>
   </properties>
 
   <dependencies>
@@ -75,7 +79,7 @@
             <mainClass>org.fusesource.ide.generator.Main</mainClass>
             <cleanupDaemonThreads>false</cleanupDaemonThreads>
             <arguments>
-              <argument>target</argument>
+              <argument>${codeGen}</argument>
             </arguments>
             <systemProperties>
               <systemProperty>
