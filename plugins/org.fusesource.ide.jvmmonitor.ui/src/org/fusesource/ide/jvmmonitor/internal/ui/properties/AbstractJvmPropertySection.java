@@ -578,8 +578,10 @@ abstract public class AbstractJvmPropertySection extends
      * @return True of property sheet is focused.
      */
     private boolean isFocused() {
-        IWorkbenchPage page = PlatformUI.getWorkbench()
-                .getActiveWorkbenchWindow().getActivePage();
+        IWorkbenchPage page = null;
+        if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() != null) {
+        	page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        }
         if (page == null) {
             return false;
         }
