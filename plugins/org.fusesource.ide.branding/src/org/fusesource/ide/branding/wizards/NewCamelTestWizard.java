@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     James Strachan <jstracha@redhat.com> - Camel specific updates
  *******************************************************************************/
 package org.fusesource.ide.branding.wizards;
 

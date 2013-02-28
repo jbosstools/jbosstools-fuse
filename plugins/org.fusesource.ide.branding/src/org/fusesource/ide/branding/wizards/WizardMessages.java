@@ -8,6 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *     Johannes Utzig <mail@jutzig.de> - [JUnit] Update test suite wizard for JUnit 4: @RunWith(Suite.class)... - https://bugs.eclipse.org/155828
+ *     James Strachan <jstracha@redhat.com> - Camel specific updates
  *******************************************************************************/
 package org.fusesource.ide.branding.wizards;
 
