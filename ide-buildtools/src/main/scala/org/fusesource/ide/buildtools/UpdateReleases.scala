@@ -11,8 +11,8 @@ import org.fusesource.insight.maven.aether.Authentications
  */
 object UpdateReleases {
 
-  val fuseArchetypeVersion = System.getProperty("fabric-version", "7.1.0-fuse-015")
-  val fuseVersion = "fuse-71-" + fuseArchetypeVersion.split("-").last
+  val fuseArchetypeVersion = System.getProperty("fabric-version", "7.2.0.redhat-010")
+  val fuseVersion = "redhat-" + fuseArchetypeVersion.split("-").last
 
   val releaseRepo = if (true)
     "nexus/content/groups/m2-release-proxy"
