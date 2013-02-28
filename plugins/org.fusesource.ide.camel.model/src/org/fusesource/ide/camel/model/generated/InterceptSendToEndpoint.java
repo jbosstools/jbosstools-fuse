@@ -1,9 +1,3 @@
-
-/**
- * NOTE - this file is auto-generated using Scalate. 
- * 
- * DO NOT EDIT!
- */
 /*******************************************************************************
  * Copyright (c) 2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
@@ -15,6 +9,11 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
+/**
+ * NOTE - this file is auto-generated using Scalate. 
+ * 
+ * DO NOT EDIT!
+ */
 package org.fusesource.ide.camel.model.generated;
 
 import java.util.Map;
