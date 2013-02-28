@@ -74,9 +74,11 @@
           <configuration>
             <mainClass>org.fusesource.ide.generator.Main</mainClass>
             <cleanupDaemonThreads>false</cleanupDaemonThreads>
+<!--
             <arguments>
-              <argument>target</argument>
+              <argument></argument>
             </arguments>
+-->
             <systemProperties>
               <systemProperty>
                 <key>basedir</key>
