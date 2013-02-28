@@ -18,6 +18,7 @@ import org.apache.camel.spi.Required
 import org.fusesource.camel.tooling.util.Strings._
 import org.fusesource.camel.tooling.util.XmlHelper._
 import org.fusesource.camel.tooling.util.Objects._
+import org.fusesource.camel.tooling.util.CamelModelUtils
 
 import org.fusesource.scalate.{CompilerException, TemplateEngine}
 import org.fusesource.scalate.introspector.{BeanProperty, Property, Introspector}
@@ -538,6 +539,11 @@ case class NodeDefinition[T](name: String, clazz: Class[T], generator: Generator
   def isBeanMethod(prop: Property[_]) = classOf[BeanDefinition].isAssignableFrom(clazz) && prop.name == "method"
 
 
+	
+	def canAcceptInput(): Boolean = {
+		return CamelModelUtils.canAcceptInput(clazz.getName())
+	}
+	
   def title: String = {
     splitCamelCase(definitionName)
   }

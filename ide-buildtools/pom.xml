@@ -27,6 +27,11 @@
       <artifactId>insight-maven</artifactId>
       <version>${fabric-version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.fusesource.scalate</groupId>
+      <artifactId>scalate-util</artifactId>
+      <version>${scalate-version}</version>
+    </dependency>
 
   </dependencies>
 

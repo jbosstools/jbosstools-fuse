@@ -74,7 +74,7 @@ object Main {
     var eclipseEditor = false
     var eclipseModel = false
     var webModel = false
-    var hawtio = true
+    var hawtio = false
 
     if (args.size > 0) {
       args(0) match {

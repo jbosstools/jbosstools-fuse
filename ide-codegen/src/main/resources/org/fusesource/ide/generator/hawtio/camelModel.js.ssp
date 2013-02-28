@@ -39,6 +39,9 @@ var _apacheCamelModel = {
       "description":  "${node.description}",
       "tootip":  "${node.description}",
       "icon":     "${icon}",
+			#if (node.canAcceptInput())
+      "acceptInput": true,
+      #end
       "properties": [
   #for (prop <- node.beanProperties)
         {
