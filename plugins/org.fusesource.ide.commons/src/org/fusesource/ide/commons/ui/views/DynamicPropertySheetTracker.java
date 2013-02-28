@@ -64,7 +64,7 @@ public class DynamicPropertySheetTracker {
 	private void changePropertySheet(IPropertySheetPage page, PropertySheet propertySheet, IWorkbenchPart part,
 			ISelection selection) {
 		if (part != null) {
-			//propertySheet.partClosed(part);
+			propertySheet.partClosed(part);
 			propertySheet.partActivated(part);
 
 			// lets check if we have created and initialised a different page instance in the activation...
@@ -80,8 +80,7 @@ public class DynamicPropertySheetTracker {
 			if (selectionPage instanceof TabFolderSupport2) {
 				TabFolderSupport2 tfs = (TabFolderSupport2) selectionPage;
 				tfs.init(propertySheet);
-			}
-			else {
+			} else {
 				boolean initSelectionPage = false;
 				if (selectionPage instanceof Page) {
 					Page p = (Page) selectionPage;

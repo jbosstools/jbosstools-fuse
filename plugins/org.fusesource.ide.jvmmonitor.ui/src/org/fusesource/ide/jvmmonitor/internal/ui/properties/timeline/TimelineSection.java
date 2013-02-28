@@ -478,6 +478,7 @@ public class TimelineSection extends AbstractJvmPropertySection {
             public void widgetDisposed(DisposeEvent e) {
                 if (!cursor.isDisposed()) {
                     cursor.dispose();
+                    cursor = null;
                 }
             }
         });
