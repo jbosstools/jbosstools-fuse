@@ -79,9 +79,9 @@ public class JvmConnectionWrapper implements IConnectionWrapper, HasName, ImageP
 		vmAliasMap.put("scala.tools.nsc.MainGenericRunner", "scala repl");
 
 		karafSubTypeMap.put("default", "Apache Karaf");
-		karafSubTypeMap.put("esb-version.jar", "Fuse ESB");
+		karafSubTypeMap.put("esb-version.jar", "JBoss Fuse");
 		karafSubTypeMap.put("fabric-version.jar", "Fuse Fabric");
-		karafSubTypeMap.put("mq-version.jar", "Fuse MQ");
+		karafSubTypeMap.put("mq-version.jar", "JBoss A-MQ");
 		karafSubTypeMap.put("servicemix-version.jar", "Apache ServiceMix");
 	}
 
@@ -135,14 +135,13 @@ public class JvmConnectionWrapper implements IConnectionWrapper, HasName, ImageP
 		}
 		String lowerName = getName().toLowerCase();
 		// only support karaf and fuse esb
-		if (lowerName.contains("karaf") || lowerName.contains("fuse") || lowerName.contains("fmc")) {
+		if (lowerName.contains("karaf") || lowerName.contains("fuse") || lowerName.contains("fmc") || lowerName.contains("jboss a-mq")) {
 			// lets return a lazy drop handler for later when we've actually connected
 			return new DropHandler() {
 
 				public void drop(final DropTargetEvent localEvent) {
 					addOnLoadRunnable(new Runnable() {
 						public void run() {
-							System.out.println("Dropping on newly connected ESB!");
 							Root r = getRoot();
 							if (r == null) {
 								System.out.println("Cannot drop as no root yet, we've probably not been able to connect to " + getName());
