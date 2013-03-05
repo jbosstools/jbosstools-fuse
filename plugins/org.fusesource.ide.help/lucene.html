@@ -1,21 +1,21 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Lucene</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="log.html" title="Log"><link rel="next" href="mina.html" title="MINA Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Lucene"><div class="titlepage"><div><div><h2 class="title"><a name="lucene"></a>Lucene</h2></div></div></div><div class="simplesect" title="Lucene (Indexer and Search) Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_LuceneIndexerandSearchComponent"></a>Lucene (Indexer and Search) Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.2</strong></span>
-    </p><p>The <span class="bold"><strong>lucene</strong></span> component is based on the Apache Lucene
+   <title>Lucene</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="log.html" title="Log"><link rel="next" href="mina.html" title="MINA Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="lucene"></a>Lucene</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_LuceneIndexerandSearchComponent"></a>Lucene (Indexer and Search) Component</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.2</strong></span>
+        </p><p>The <span class="bold"><strong>lucene</strong></span> component is based on the Apache Lucene
       project. Apache Lucene is a powerful high-performance, full-featured text search engine
       library written entirely in Java. For more details about Lucene, please see the following
       links * <a class="link" href="http://lucene.apache.org/java/docs/" target="_top">
-        </a><a class="link" href="http://lucene.apache.org/java/docs/" target="_top">http://lucene.apache.org/java/docs/</a><a class="link" href="http://lucene.apache.org/java/docs/" target="_top">
+        http://lucene.apache.org/java/docs/
       </a> * <a class="link" href="http://lucene.apache.org/java/docs/features.html" target="_top">
-        </a><a class="link" href="http://lucene.apache.org/java/docs/features.html" target="_top">http://lucene.apache.org/java/docs/features.html</a><a class="link" href="http://lucene.apache.org/java/docs/features.html" target="_top">
+        http://lucene.apache.org/java/docs/features.html
       </a>
     </p><p>The lucene component in camel facilitates integration and utilization of Lucene endpoints
       in enterprise integration patterns and scenarios. The lucene component does the
-      following</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>builds a searchable index of documents when payloads are sent to the Lucene
-          Endpoint</p></li><li class="listitem"><p>facilitates performing of indexed searches in Apache Camel</p></li></ul></div><p>This component only supports producer endpoints. </p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">lucene:searcherName:insert[?options]
+      following</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>builds a searchable index of documents when payloads are sent to the Lucene
+          Endpoint</p></li><li class="listitem"><p>facilitates performing of indexed searches in Apache Camel</p></li></ul></div><p>This component only supports producer endpoints. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">lucene:searcherName:insert[?options]
 lucene:searcherName:query[?options]</pre><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect" title="Insert Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_InsertOptions"></a>Insert Options</h2></div></div></div><table id="d0e43932"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_InsertOptions"></a>Insert Options</h2></div></div></div><table id="d0e44543"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -42,7 +42,7 @@ lucene:searcherName:query[?options]</pre><p>You can append query options to the 
         </td>
         <td> An optional directory containing files to be used to be analyzed and added to the index
           at producer startup. </td>
-      </tr></table></div><div class="simplesect" title="Query Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_QueryOptions"></a>Query Options</h2></div></div></div><table id="d0e43992"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_QueryOptions"></a>Query Options</h2></div></div></div><table id="d0e44603"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -68,7 +68,7 @@ lucene:searcherName:query[?options]</pre><p>You can append query options to the 
         <td><code class="literal">10</code>
         </td>
         <td> An integer value that limits the result set of the search operation </td>
-      </tr></table></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e44052"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e44663"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -76,23 +76,25 @@ lucene:searcherName:query[?options]</pre><p>You can append query options to the 
         </td>
         <td> The Lucene Query to performed on the index. The query may include wildcards and phrases
         </td>
-      </tr></table></div><div class="simplesect" title="Lucene Producers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_LuceneProducers"></a>Lucene Producers </h2></div></div></div><p>This component supports 2 producer endpoints.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><span class="bold"><strong>insert</strong></span> - The insert producer builds a searchable
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_LuceneProducers"></a>Lucene Producers </h2></div></div></div><p>This component supports 2 producer endpoints.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="bold"><strong>insert</strong></span> - The insert producer builds a searchable
           index by analyzing the body in incoming exchanges and associating it with a token
-          ("content"). </p></li><li class="listitem"><p><span class="bold"><strong>query</strong></span> - The query producer performs searches on a
-          pre-created index. The query uses the searchable index to perform score &amp; relevance
-          based searches. Queries are sent via the incoming exchange contains a header property name
-          called 'QUERY'. The value of the header property 'QUERY' is a Lucene Query. For more
-          details on how to create Lucene Queries check out <a class="link" href="http://lucene.apache.org/java/3_0_0/queryparsersyntax.html" target="_top">
-            </a><a class="link" href="http://lucene.apache.org/java/3_0_0/queryparsersyntax.html" target="_top">http://lucene.apache.org/java/3_0_0/queryparsersyntax.html</a><a class="link" href="http://lucene.apache.org/java/3_0_0/queryparsersyntax.html" target="_top">
-          </a>
-        </p></li></ul></div></div><div class="simplesect" title="Lucene Processor"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_LuceneProcessor"></a>Lucene Processor </h2></div></div></div><p>There is a processor called LuceneQueryProcessor available to perform queries against
-      lucene without the need to create a producer.</p></div><div class="simplesect" title="Example 1: Creating a Lucene index"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_Example1CreatingaLuceneindex"></a>Example 1: Creating a Lucene index</h2></div></div></div><pre class="programlisting">RouteBuilder builder = new RouteBuilder() {
+          ("content"). </p></li><li class="listitem"><p><span class="bold"><strong>query</strong></span> - The query producer
+                    performs searches on a pre-created index. The query uses the
+                    searchable index to perform score- and relevance-based
+                    searches. Queries are sent via the incoming exchange
+                    contains a header property name called 'QUERY'. The value of
+                    the header property 'QUERY' is a Lucene Query. For more
+                    details on how to create Lucene Queries check out <a class="link" href="http://lucene.apache.org/java/3_0_0/queryparsersyntax.html" target="_top">
+                        http://lucene.apache.org/java/3_0_0/queryparsersyntax.html
+                    </a>
+                </p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_LuceneProcessor"></a>Lucene Processor </h2></div></div></div><p>There is a processor called LuceneQueryProcessor available to perform queries against
+      lucene without the need to create a producer.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_Example1CreatingaLuceneindex"></a>Example 1: Creating a Lucene index</h2></div></div></div><pre class="programlisting">RouteBuilder builder = new RouteBuilder() {
     public void configure() {
        from("direct:start").
            to("lucene:whitespaceQuotesIndex:insert?analyzer=#whitespaceAnalyzer&amp;indexDir=#whitespace&amp;srcDir=#load_dir").
            to("mock:result");
     }
-};</pre></div><div class="simplesect" title="Example 2: Loading properties into the JNDI registry in the Camel Context"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_Example2LoadingpropertiesintotheJNDIregistryintheCamelContext"></a>Example 2: Loading properties into the JNDI registry in the Camel Context </h2></div></div></div><pre class="programlisting">@Override
+};</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_Example2LoadingpropertiesintotheJNDIregistryintheCamelContext"></a>Example 2: Loading properties into the JNDI registry in the Camel Context </h2></div></div></div><pre class="programlisting">@Override
 protected JndiRegistry createRegistry() throws Exception {
   JndiRegistry registry =
          new JndiRegistry(createJndiContext());
@@ -104,7 +106,7 @@ protected JndiRegistry createRegistry() throws Exception {
   return registry;
 }
 ...
-CamelContext context = new DefaultCamelContext(createRegistry());</pre></div><div class="simplesect" title="Example 2: Performing searches using a Query Producer"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_Example2PerformingsearchesusingaQueryProducer"></a>Example 2: Performing searches using a Query Producer</h2></div></div></div><pre class="programlisting">RouteBuilder builder = new RouteBuilder() {
+CamelContext context = new DefaultCamelContext(createRegistry());</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_Example2PerformingsearchesusingaQueryProducer"></a>Example 2: Performing searches using a Query Producer</h2></div></div></div><pre class="programlisting">RouteBuilder builder = new RouteBuilder() {
     public void configure() {
        from("direct:start").
           setHeader("QUERY", constant("Seinfeld")).
@@ -127,7 +129,7 @@ CamelContext context = new DefaultCamelContext(createRegistry());</pre></div><di
            }
        }).to("mock:searchResult");
    }
-};</pre></div><div class="simplesect" title="Example 3: Performing searches using a Query Processor"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_Example3PerformingsearchesusingaQueryProcessor"></a>Example 3: Performing searches using a Query Processor </h2></div></div></div><pre class="programlisting">RouteBuilder builder = new RouteBuilder() {
+};</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Lucene_HSH_Example3PerformingsearchesusingaQueryProcessor"></a>Example 3: Performing searches using a Query Processor </h2></div></div></div><pre class="programlisting">RouteBuilder builder = new RouteBuilder() {
     public void configure() {            
         try {
             from("direct:start").

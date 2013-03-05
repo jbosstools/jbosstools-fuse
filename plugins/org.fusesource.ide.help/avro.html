@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>AVRO</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="atom.html" title="Atom Component"><link rel="next" href="bean.html" title="Bean"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="AVRO"><div class="titlepage"><div><div><h2 class="title"><a name="avro"></a>AVRO</h2></div></div></div><div class="simplesect" title="Avro Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroComponent"></a>Avro Component</h2></div></div></div><p>
-            <span class="bold"><strong>Available as of Camel 2.10</strong></span>
+   <title>AVRO</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="atom.html" title="Atom Component"><link rel="next" href="bean.html" title="Bean"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="avro"></a>AVRO</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroComponent"></a>Avro Component</h2></div></div></div><p>
+            <span class="bold"><strong>Available as of Apache Camel 2.10</strong></span>
         </p><p>The <span class="bold"><strong>avro:</strong></span> component provides a
             data format for avro, which enables serialization and
             deserialization of messages using Apache Avro's binary data format.
@@ -12,7 +12,7 @@
     &lt;artifactId&gt;camel-avro&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroIntro"></a>Overview</h2></div></div></div><p>Avro enables you to use a json-like format to define message types
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroIntro"></a>Overview</h2></div></div></div><p>Avro enables you to use a json-like format to define message types
             and a protocol, and then to generate java code for the specified
             types and messages. It does not, however, enforce a schema-first
             approach, so you can create schema for your existing classes. An
@@ -44,7 +44,7 @@
    }
  }</pre><p>You can easily generate classes from a schema, using Maven, ant,
             and so on. See the <a class="link" href="http://avro.apache.org/docs/1.7.2/" target="_top">Apache Avro
-                documentation</a> for more details.</p></div><div class="simplesect" title="Using the Avro Data Format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroDATAFORMAT"></a>Using the Avro Data Format</h2></div></div></div><p>Using the avro data format is as easy as specifying in your camel
+                documentation</a> for more details.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroDATAFORMAT"></a>Using the Avro Data Format</h2></div></div></div><p>Using the avro data format is as easy as specifying in your camel
             route the class that you want to marshal or unmarshal, like
             this:</p><pre class="programlisting">&lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
    &lt;route&gt;
@@ -67,7 +67,7 @@
    &lt;/route&gt;
 &lt;/camelContext&gt;
         </pre><p>You can use the avro data format in the same way to unmarshal
-            data.</p></div><div class="simplesect" title="Using Avro RPC in Camel"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroRPC"></a>Using Avro RPC in Camel</h2></div></div></div><p>Avro also provides RCP support over multiple transports, and Camel
+            data.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroRPC"></a>Using Avro RPC in Camel</h2></div></div></div><p>Avro also provides RCP support over multiple transports, and Camel
             provides producers and consumers for these transports.</p><pre class="programlisting">avro:[transport]:[host]:[port]</pre><p>Currently, the supported transport values are
                 <em class="replaceable"><code>http</code></em> and
                 <em class="replaceable"><code>netty</code></em>.</p><p>When using camel producers for inter-process communication (ipc),
@@ -77,11 +77,11 @@
             arguments are added to the <span class="emphasis"><em>in</em></span> message body of
             the created exchange, and, once the exchange is processed, the body
             of the <span class="emphasis"><em>out</em></span> message is sent as a
-            response.</p></div><div class="simplesect" title="Avro RPC options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroRCPoptions"></a>Avro RPC options</h2></div></div></div><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
+            response.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroRCPoptions"></a>Avro RPC options</h2></div></div></div><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="code">protocolClassName</code>
-                        </td><td>The class name of the avro protocol.</td></tr></tbody></table></div></div><div class="simplesect" title="Avro RPC headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroRCPheaders"></a>Avro RPC headers</h2></div></div></div><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
+                        </td><td>The class name of the avro protocol.</td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroRCPheaders"></a>Avro RPC headers</h2></div></div></div><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="code">CamelAvroMessageName</code>
-                        </td><td>The name of the message to send.</td></tr></tbody></table></div></div><div class="simplesect" title="Avro RPC headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroRCPexamples"></a>Avro RPC headers</h2></div></div></div><p>You can produce messages using Camel Avro producers via http, like
+                        </td><td>The name of the message to send.</td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="avroRCPexamples"></a>Avro RPC headers</h2></div></div></div><p>You can produce messages using Camel Avro producers via http, like
             this:</p><pre class="programlisting">&lt;route&gt;
     &lt;from uri="direct:start"/&gt;
     &lt;to uri="avro:http:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol"/&gt;

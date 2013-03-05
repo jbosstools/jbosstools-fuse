@@ -31,12 +31,12 @@ div.toc a:visited {
 }
 
 body, div, td, th, form {
-	font-family: Calibri, Verdana, Helvetica, sans-serif;
+	font-family: "liberation sans", "Myriad ", "Bitstream Vera Sans", "Lucida Grande", "Luxi Sans", "Trebuchet MS", helvetica, verdana, arial, sans-serif;
 	font-size: 12pt;
 }
 
 p {
-	font-family: Calibri, Verdana, Helvetica, sans-serif;
+	font-family: "liberation sans", "Myriad ", "Bitstream Vera Sans", "Lucida Grande", "Luxi Sans", "Trebuchet MS", helvetica, verdana, arial, sans-serif;
 	font-size: 12pt;
     clear: bottom;
 	padding-top: 2px;
@@ -67,7 +67,7 @@ code.methodsynopsis, pre.classsynopsis, code.constant, span.type , span.markup,
 span.package, div.cmdsynopsis {
 	background-color: transparent;
 	color: #990033;
-	font-family: "Lucida Console", "Courier New", Courier, monospace;
+	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
 	font-size: 9pt;
 }
 
@@ -75,7 +75,7 @@ span.package, div.cmdsynopsis {
 code.sgmltag-attvalue, em.replaceable {
 	background-color: transparent;
 	color: #990033;
-	font-family: "Lucida Console", "Courier New", Courier, monospace;
+	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
 	font-size: 9pt;
 	font-style: italic;
 }
@@ -103,7 +103,7 @@ div.abstract p {
 }
 
 div.navheader {
-	background-color: #be1e2d; 
+	background-color: #cc0000; 
 	border-bottom: 1px solid #393939;
 	padding-bottom: 0.5ex;
 	margin-top: 2px;
@@ -114,7 +114,7 @@ div.navheader {
 }
 
 div.fusenavheader {
-	background-color: #be1e2d;
+	background-color: #cc0000;
 	top: 0;
 	right: 0;
 	bottom: auto;
@@ -124,20 +124,18 @@ div.fusenavheader {
 	z-index: 2000;
 }
 
+div.fusenavheader a.prodlink {
+color: white;
+	font-variant: small-caps;
+	font-size: 190%;
+	font-weight: bold;
+	}
+
 div.navfooter {
 	background: none; 
 	border-top: 1px solid #393939;
 	margin-top: 2ex;
 	padding-top: 1ex;
-}
-
-div.caution, div.note, div.important, div.tip, div.warning {
-	background-color: #EEEEEE;
-	border: none;
-	color: #000000;
-	font-style: italic;
-	margin-left: 10%;
-	width: 80%;
 }
 
 img {
@@ -147,10 +145,10 @@ img {
 }
 
 h1 {	
-	color: #636363;
+	color: #a70000;
 	font-size: 150%;
 	font-weight: normal;
-	margin-top: 0;
+	margin-top:1ex;
 }
 
 /* h1.title applies to the book title on the cover page
@@ -158,10 +156,11 @@ h1 {
 h1.title {
 	background: none;
 	border: none;
-	color: #808080;
+	color: #a70000;
 	font-variant: small-caps;
 	font-size: 190%;
 	font-weight: bold;
+	margin-top:1ex;
 }
 
 /* h2.title applies only to the book subtitle on the cover page */
@@ -169,7 +168,7 @@ h2.subtitle {
 	font-weight:normal;
 	font-size:140%;
 	line-height:140%;
-	color:#28458E;
+	color:#a70000;
 	margin-bottom:0.5ex;  
 }
 
@@ -179,7 +178,7 @@ h2 {
 	font-size:210%;
 	line-height:130%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 }
@@ -188,14 +187,14 @@ div.titlepage span.productname {
 	font-weight:normal;
 	font-size:210%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 }
 
 /* div.section h2 applies to first-level sections in a chapter */
 div.section h2 {
 	font-size:170%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 	font-weight:normal;
@@ -205,7 +204,7 @@ h3, div.section h3 {
 	font-weight:normal;
 	font-size:140%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 }
@@ -214,7 +213,7 @@ div.section h4 {
 	font-weight:bold;
 	font-size:120%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 }
@@ -223,7 +222,7 @@ div.section h5 {
 	font-weight:bold;
 	font-size:110%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 }
@@ -234,19 +233,12 @@ div.simplesect {
 
 div.simplesect h2, div.simplesect h3, div.simplesect h4, 
 div.simplesect h5, div.simplesect h6, div.simplesect h1 {
-    float: left;
-	clear: left;
-	background-color: #CCCCCC;
-	color: #000000;
+	color:#a70000;
 	font-size: 100%;
 	font-weight: bold;
-	padding-bottom: 4px;
-	padding-left: 10px;
 	padding-top: 4px;
-	padding-right: 10px;
 	margin-top: 2px;
-	margin-bottom: 3px;
-	margin-right: 8px;}
+}
 
 div.itemizedlist ul.li {
 	list-style: square;
@@ -277,7 +269,7 @@ span.olinkdocname {
 strong.command, strong.userinput {
 	background-color: transparent;
 	color: #990033;
-	font-family: "Lucida Console", "Courier New", Courier, monospace;
+	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
 	font-size: 9pt;
 }
 
@@ -296,6 +288,7 @@ div.warning th, div.caution th {
 div.table p.title, div.example p.title, div.figure p.title {
 	font-style: italic;
 	font-size: 80%;
+	color:#a70000;
 }
 
 div.section table, div.informaltable table,
@@ -338,7 +331,7 @@ span.guimenuitem {
 span.property {
     background-color: transparent;
 	color: #990033;
-	font-family: "Lucida Console", "Courier New", Courier, monospace;
+	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
 	font-size: 9pt;
 }
 
@@ -422,6 +415,125 @@ dt {
 	margin-bottom:0.5ex;
 }
 
+/* Notices*/
+div.warning:before {
+	content:url(../imagesdb/warning.png);
+	padding-left: 5px;
+}
+
+div.caution:before {
+	content:url(../imagesdb/caution.png);
+	padding-left: 5px;
+}
+
+div.note:before {
+	content:url(../imagesdb/note.png);
+	padding-left: 5px;
+}
+
+div.tip:before {
+	content:url(../imagesdb/tip.png);
+	padding-left: 5px;
+}
+
+div.important:before {
+  content:url(../imagesdb/important.png);
+	padding-left: 5px;
+}
+
+div.caution, div.note, div.important, div.tip, div.warning {
+	width: 80%;
+	color: black;
+	margin: 0em;
+	margin-left: 10%;
+	padding: 0em;
+	background: none;
+	background-color: white;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #aaaaaa;
+	page-break-inside: avoid;
+}
+
+div.warning h2, div.note h2, div.important h2, div.tip h2, div.caution h2 {
+	margin: 0em;
+	padding: 0em;
+	color: #eeeeec;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	height: 1.4em;
+	line-height: 1.4em;
+	font-size: 1.4em;
+	display:inline;
+	float: none;
+	clear: none;
+	background-color: transparent;
+	font-weight: bold;
+	margin-top: 0em;
+	margin-bottom: 0em;
+	page-break-inside: avoid;
+	page-break-after: avoid;
+	}
+
+div.admonition_header {
+	clear: both;
+	margin: 0em;
+	padding: 0em;
+	margin-top: -3.3em;
+	padding-left: 58px;
+	line-height: 1.0em;
+	font-size: 1.0em;
+}
+
+div.warning div.admonition_header {
+	background: url(../imagesdb/red.png) top left repeat-x;
+	background-color: #590000;
+}
+
+div.caution div.admonition_header {
+	background: url(../imagesdb/orange.png) top left repeat-x;
+	background-color: #FF2400;
+}
+
+div.note div.admonition_header {
+	background: url(../imagesdb/green.png) top right repeat-x;
+	background-color: #597800;
+}
+
+div.tip div.admonition_header {
+	background: url(../imagesdb/green.png) top right repeat-x;
+	background-color: #597800;
+}
+
+div.important div.admonition_header {
+	background: url(../imagesdb/yellow.png) top right repeat-x;
+	background-color: #a6710f;
+}
+
+div.warning p, div.warning div.para,
+div.note p, div.note div.para,
+div.important p, div.important div.para, 
+div.tip p, div.tip para, 
+div.caution p, div.caution para {
+	padding: 0em;
+	margin: 0em;
+}
+
+div.admonition {
+	border: none;
+	border-left: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	padding: 0em;
+	margin: 0em;
+	padding-top: 1.5em;
+	padding-bottom: 1em;
+	padding-left: 2em;
+	padding-right: 1em;
+	background-color: #eeeeec;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+}
+
 /* WebHelp Specific Mods from DocBook XSLT 
    webhelp/template/common/poistioning.css */
 #content {
@@ -434,15 +546,12 @@ dt {
     padding-left: 5px;
     padding-right: 30px;
     color: #000000;
-    /*border-left: 2px solid #cccccc; overflow :scroll;*/
     z-index: 1000;
-
     max-width: 70em;
     min-width:800px;
 }
 
 #leftnavigation {
-/* background-color:#91e7b3;*/
     overflow: auto;
     position: fixed;
     height: auto;
@@ -453,6 +562,41 @@ dt {
     z-index: 1500;
     border-right:2px solid #CCCCCC;
 }
+
+.highlight { background-color: #c5d3c3; }
+
+#star ul.star { 
+    LIST-STYLE: none; 
+    MARGIN: 0; 
+    PADDING: 0; 
+    WIDTH: 85px;
+    /* was 100 */ 
+    HEIGHT: 20px;
+    LEFT: 1px; 
+    TOP: -5px; 
+    POSITION: relative; 
+    FLOAT: right; 
+    BACKGROUND: url('starsSmall.png') repeat-x 0 -25px;
+}
+#star li { 
+    PADDING: 0; 
+    MARGIN: 0; 
+    FLOAT: right; 
+    DISPLAY: block; 
+    WIDTH: 85px;
+    /* was 100 */
+    HEIGHT: 20px; 
+    TEXT-DECORATION: none; 
+    text-indent: -9000px; 
+    Z-INDEX: 20; 
+    POSITION: absolute; 
+    PADDING: 0; 
+}
+#star li.curr { 
+    BACKGROUND: url('starsSmall.png') left 25px; 
+    FONT-SIZE: 1px; 
+}
+
 
 @media print {
 

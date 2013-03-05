@@ -1,13 +1,13 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Spring Integration</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="solr.html" title="Solr"><link rel="next" href="springWS.html" title="Spring Web Services"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Spring Integration"><div class="titlepage"><div><div><h2 class="title"><a name="springIntegration"></a>Spring Integration</h2></div></div></div><div class="simplesect" title="Spring Integration Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_SpringIntegrationComponent"></a>Spring Integration Component</h2></div></div></div><p>The <span class="bold"><strong>spring-integration:</strong></span> component provides a bridge
+   <title>Spring Integration</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="solr.html" title="Solr"><link rel="next" href="springWS.html" title="Spring Web Services"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="springIntegration"></a>Spring Integration</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_SpringIntegrationComponent"></a>Spring Integration Component</h2></div></div></div><p>The <span class="bold"><strong>spring-integration:</strong></span> component provides a bridge
             for Apache Camel components to talk to <a class="link" href="http://camel.apache.org/springintegration.html" target="_top">spring integration
-                endpoints</a>.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">spring-integration:defaultChannelName[?options]</pre><p>Where <span class="bold"><strong>defaultChannelName</strong></span> represents the default
+                endpoints</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">spring-integration:defaultChannelName[?options]</pre><p>Where <span class="bold"><strong>defaultChannelName</strong></span> represents the default
             channel name which is used by the Spring Integration Spring context. It will equal to
             the <code class="literal">inputChannel</code> name for the Spring Integration consumer and the
                 <code class="literal">outputChannel</code> name for the Spring Integration provider.</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_Options"></a>Options</h2></div></div></div><p>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_Options"></a>Options</h2></div></div></div><p>
             <a class="xref" href="springIntegration.html#_IDU_SpringInt_Opts" title="Table&nbsp;68.&nbsp;URI options">Table&nbsp;68</a> lists the
             spring-integration uri options: </p><div class="table"><a name="_IDU_SpringInt_Opts"></a><p class="title"><b>Table&nbsp;68.&nbsp;URI options</b></p><div class="table-contents"><table summary="URI options" width="100%" border="1"><colgroup><col width="144" class="c1"><col width="192" class="c2"><col width="144" class="c3"><col width="48" class="c4"><col width="48" class="c5"></colgroup><thead><tr><th> Name </th><th> Description </th><th> Example </th><th> Required </th><th> Default Value </th></tr></thead><tbody><tr><td>
                             <code class="literal">inputChannel</code>
@@ -48,11 +48,11 @@
                             <code class="literal">false</code>
                         </td></tr></tbody></table></div></div><br class="table-break"><p>
             
-        </p></div><div class="simplesect" title="Usage"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_Usage"></a>Usage</h2></div></div></div><p>The Spring integration component is a bridge that connects Apache Camel endpoints with
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_Usage"></a>Usage</h2></div></div></div><p>The Spring integration component is a bridge that connects Apache Camel endpoints with
             Spring integration endpoints through the Spring integration's input channels and output
             channels. Using this component, we can send Camel messages to Spring Integration
             endpoints or receive messages from Spring integration endpoints in a Camel routing
-            context.</p></div><div class="simplesect" title="Using the Spring integration endpoint"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_UsingtheSpringintegrationendpoint"></a>Using the Spring integration endpoint</h2></div></div></div><p>You can set up a Spring integration endpoint using a URI, as follows: </p><pre class="programlisting">&lt;beans:beans xmlns="http://www.springframework.org/schema/integration"
+            context.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_UsingtheSpringintegrationendpoint"></a>Using the Spring integration endpoint</h2></div></div></div><p>You can set up a Spring integration endpoint using a URI, as follows: </p><pre class="programlisting">&lt;beans:beans xmlns="http://www.springframework.org/schema/integration"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -114,9 +114,9 @@
         &lt;from uri="outputChannel"/&gt;
         &lt;to uri="mock:result"/&gt;
       &lt;/route&gt;
-    &lt;/camelContext&gt;</pre></div><div class="simplesect" title="The Source and Target adapter"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_TheSourceandTargetadapter"></a>The Source and Target adapter</h2></div></div></div><p>Spring integration also provides the Spring integration's source and target adapters,
-            which can route messages from a Spring integration channel to a Apache Camel endpoint or
-            from a Apache Camel endpoint to a Spring integration channel.</p><p>This example uses the following namespaces:</p><pre class="programlisting">&lt;beans:beans xmlns="http://www.springframework.org/schema/integration"
+    &lt;/camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SpringIntegration_HSH_TheSourceandTargetadapter"></a>The Source and Target adapter</h2></div></div></div><p>Spring integration also provides the Spring integration's source and target adapters,
+            which can route messages from a Spring integration channel to an Apache Camel endpoint
+            or from an Apache Camel endpoint to a Spring integration channel.</p><p>This example uses the following namespaces:</p><pre class="programlisting">&lt;beans:beans xmlns="http://www.springframework.org/schema/integration"
        xmlns:beans="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:camel-si="http://camel.apache.org/schema/spring/integration"
@@ -129,7 +129,7 @@
        http://camel.apache.org/schema/spring/integration/camel-spring-integration.xsd
        http://camel.apache.org/schema/spring
        http://camel.apache.org/schema/spring/camel-spring.xsd
-    "&gt;</pre><p>You can bind your source or target to a Apache Camel endpoint as follows:</p><pre class="programlisting">&lt;!-- Create the camel context here --&gt;
+    "&gt;</pre><p>You can bind your source or target to an Apache Camel endpoint as follows:</p><pre class="programlisting">&lt;!-- Create the camel context here --&gt;
 &lt;camelContext id="camelTargetContext" xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;route&gt;
         &lt;from uri="direct:EndpointA" /&gt;

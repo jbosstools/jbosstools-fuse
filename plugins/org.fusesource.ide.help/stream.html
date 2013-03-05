@@ -1,19 +1,19 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Stream</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="sql.html" title="SQL Component"><link rel="next" href="stringTemplate.html" title="StringTemplate"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Stream"><div class="titlepage"><div><div><h2 class="title"><a name="stream"></a>Stream</h2></div></div></div><div class="simplesect" title="Stream Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_StreamComponent"></a>Stream Component</h2></div></div></div><p>The <span class="bold"><strong>stream:</strong></span> component provides access to the
+   <title>Stream</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="sql.html" title="SQL Component"><link rel="next" href="stringTemplate.html" title="StringTemplate"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="stream"></a>Stream</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_StreamComponent"></a>Stream Component</h2></div></div></div><p>The <span class="bold"><strong>stream:</strong></span> component provides access to the
                 <code class="literal">System.in</code>, <code class="literal">System.out</code> and
                 <code class="literal">System.err</code> streams as well as allowing streaming of file and
-            URL.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">stream:in[?options]
+            URL.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">stream:in[?options]
 stream:out[?options]
 stream:err[?options]
-stream:header[?options]</pre><p>In addition, the <code class="literal">file</code> and <code class="literal">url</code>
-            endpoint URIs are supported in <span class="bold"><strong>Apache Camel 2.0</strong></span>:</p><pre class="programlisting">stream:file?fileName=/foo/bar.txt
+stream:header[?options]</pre><p>In addition, the <code class="literal">file</code> and
+                <code class="literal">url</code> endpoint URIs are supported in <span class="bold"><strong>Apache Camel 2.0</strong></span>:</p><pre class="programlisting">stream:file?fileName=/foo/bar.txt
 stream:url[?options]</pre><p>If the <code class="literal">stream:header</code> URI is specified, the
                 <code class="literal">stream</code> header is used to find the stream to write to. This option
             is available only for stream producers (that is, it cannot appear in
                 <code class="literal">from()</code>).</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_Options"></a>Options</h2></div></div></div><table id="d0e50687"><tr>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_Options"></a>Options</h2></div></div></div><table id="d0e51230"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -35,45 +35,48 @@ stream:url[?options]</pre><p>If the <code class="literal">stream:header</code> U
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Message prompt to use when
-                    reading from <code class="literal">stream:in</code>; for example, you could set this to
-                        <code class="literal">Enter a command:</code>
+                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Message
+                    prompt to use when reading from
+                    <code class="literal">stream:in</code>; for example, you could set
+                    this to <code class="literal">Enter a command:</code>
                 </td>
             </tr><tr>
                 <td><code class="literal">promptDelay</code>
                 </td>
                 <td><code class="literal">0</code>
                 </td>
-                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Optional delay in milliseconds
-                    before showing the message prompt. </td>
+                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Optional
+                    delay in milliseconds before showing the message prompt. </td>
             </tr><tr>
                 <td><code class="literal">initialPromptDelay</code>
                 </td>
                 <td><code class="literal">2000</code>
                 </td>
-                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Initial delay in milliseconds
-                    before showing the message prompt. This delay occurs only once. Can be used
-                    during system startup to avoid message prompts being written while other logging
-                    is done to the system out. </td>
+                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Initial
+                    delay in milliseconds before showing the message prompt.
+                    This delay occurs only once. Can be used during system
+                    startup to avoid message prompts being written while other
+                    logging is done to the system out. </td>
             </tr><tr>
                 <td><code class="literal">fileName</code>
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> When using the
-                        <code class="literal">stream:file</code> URI format, this option specifies the
-                    filename to stream to/from. </td>
+                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> When
+                    using the <code class="literal">stream:file</code> URI format, this
+                    option specifies the filename to stream to/from. </td>
             </tr><tr>
                 <td><code class="literal">scanStream</code>
                 </td>
                 <td><code class="literal">false</code>
                 </td>
                 <td>
-                    <p><span class="bold"><strong>Apache Camel 2.0:</strong></span> To be used
-                        for continuously reading a stream such as the unix <code class="literal">tail</code>
-                        command. <span class="bold"><strong>Apache Camel 2.4:</strong></span> will
-                        retry opening the file if it is overwritten, like <code class="literal">tail
-                            --retry</code>
+                    <p><span class="bold"><strong>Apache Camel
+                            2.0:</strong></span> To be used for continuously reading
+                        a stream such as the unix <code class="literal">tail</code>
+                        command. <span class="bold"><strong>Apache Camel
+                            2.4:</strong></span> will retry opening the file if it is
+                        overwritten, like <code class="literal">tail --retry</code>
                     </p>
                 </td>
             </tr><tr>
@@ -81,30 +84,35 @@ stream:url[?options]</pre><p>If the <code class="literal">stream:header</code> U
                 </td>
                 <td><code class="literal">false</code>
                 </td>
-                <td><span class="bold"><strong>Camel 2.7:</strong></span> will retry opening the file if it's overwritten, somewhat like <code class="literal">tail --retry</code>
+                <td><span class="bold"><strong>Apache Camel 2.7:</strong></span> will
+                    retry opening the file if it's overwritten, somewhat like
+                        <code class="literal">tail --retry</code>
                 </td>
             </tr><tr>
                 <td><code class="literal">scanStreamDelay</code>
                 </td>
                 <td><code class="literal">0</code>
                 </td>
-                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Delay in milliseconds between
-                    read attempts when using <code class="literal">scanStream</code>. </td>
+                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Delay in
+                    milliseconds between read attempts when using
+                        <code class="literal">scanStream</code>. </td>
             </tr><tr>
                 <td><code class="literal">groupLines</code>
                 </td>
                 <td><code class="literal">0</code>
                 </td>
-                <td><span class="bold"><strong>Camel 2.5:</strong></span> To group X number of lines in the consumer.
-                    For example to group 10 lines and therefore only spit out an <a class="link" href="Exchange" target="_top">Exchange</a>
-                    with 10 lines, instead of 1 <a class="link" href="Exchange" target="_top">Exchange</a> per line. </td>
-            </tr></table></div><div class="simplesect" title="Message content"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_Messagecontent"></a>Message content</h2></div></div></div><p>The <span class="bold"><strong>stream:</strong></span> component supports either
+                <td><span class="bold"><strong>Apache Camel 2.5:</strong></span> To group
+                    X number of lines in the consumer. For example to group 10
+                    lines and therefore only spit out an <a class="link" href="Exchange" target="_top">Exchange</a> with 10 lines,
+                    instead of 1 <a class="link" href="Exchange" target="_top">Exchange</a> per
+                    line. </td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_Messagecontent"></a>Message content</h2></div></div></div><p>The <span class="bold"><strong>stream:</strong></span> component supports either
                 <code class="literal">String</code> or <code class="literal">byte[]</code> for writing to streams. Just
             add either <code class="literal">String</code> or <code class="literal">byte[]</code> content to the
                 <code class="literal">message.in.body</code>. The special <code class="literal">stream:header</code> URI
             is used for custom output streams. Just add a <code class="literal">java.io.OutputStream</code>
             object to <code class="literal">message.in.header</code> in the key <code class="literal">header</code>. See
-            samples for an example.</p></div><div class="simplesect" title="Samples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_Samples"></a>Samples</h2></div></div></div><p>In the following sample we route messages from the <code class="literal">direct:in</code>
+            samples for an example.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Stream_HSH_Samples"></a>Samples</h2></div></div></div><p>In the following sample we route messages from the <code class="literal">direct:in</code>
             endpoint to the <code class="literal">System.out</code> stream:</p><pre class="programlisting">@Test
 public void testStringContent() throws Exception {
     template.sendBody("direct:in", "Hello Text World\n");
@@ -155,7 +163,7 @@ private class MyOutputStream extends OutputStream {
         sb.append((char)b);
     }
 }</pre><p>The following sample demonstrates how to continuously read a file stream (analogous to
-            the UNIX <code class="literal">tail</code> command):</p><pre class="programlisting">from("stream:file?fileName=/server/logs/server.log&amp;scanStream=true&amp;scanStreamDelay=1000").to("bean:logService?method=parseLogLine");</pre><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>One difficulty with using the combination of <code class="code">scanStream</code> and
+            the UNIX <code class="literal">tail</code> command):</p><pre class="programlisting">from("stream:file?fileName=/server/logs/server.log&amp;scanStream=true&amp;scanStreamDelay=1000").to("bean:logService?method=parseLogLine");</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>One difficulty with using the combination of <code class="code">scanStream</code> and
                     <code class="code">retry</code> is that the file will be re-opened and scanned with each
                 iteration of <code class="code">scanStreamDelay</code>. Until NIO2 is available, we cannot
                 reliably detect when a file is deleted or recreated.</p></td></tr></table></div></div></div></body></html>

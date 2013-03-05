@@ -1,12 +1,12 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Language</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="jt400.html" title="JT400"><link rel="next" href="ldap.html" title="LDAP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Language"><div class="titlepage"><div><div><h2 class="title"><a name="language"></a>Language</h2></div></div></div><div class="simplesect" title="Language"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_Language"></a>Language</h2></div></div></div><p>The language component allows you to send <a class="link" href="Exchange" target="_top">Exchange</a> to an endpoint which executes a script by any of the supported <a class="link" href="Languages" target="_top">Languages</a> in Camel.
-By having a component to execute language scripts, it allows more dynamic routing capabilities. For example by using the <span>Routing SlipRouting Slip</span> or <span>Dynamic RouterDynamic Router</span> EIPs you can send messages to <code class="literal">language</code> endpoints where the script is dynamic defined as well.</p><p>This component is provided out of the box in <code class="literal">camel-core</code> and hence no additional JARs is needed. You only have to include additional Camel components if the language of choice mandates it, such as using <a class="link" href="Groovy" target="_top">Groovy</a> or <a class="link" href="JavaScript" target="_top">JavaScript</a> languages.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">
+   <title>Language</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="jt400.html" title="JT400"><link rel="next" href="ldap.html" title="LDAP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="language"></a>Language</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_Language"></a>Language</h2></div></div></div><p>The language component allows you to send <a class="link" href="Exchange" target="_top">Exchange</a> to an endpoint which executes a script by any of the supported <a class="link" href="Languages" target="_top">Languages</a> in Camel.
+By having a component to execute language scripts, it allows more dynamic routing capabilities. For example by using the <span class="phrase">Routing SlipRouting Slip</span> or <span class="phrase">Dynamic RouterDynamic Router</span> EIPs you can send messages to <code class="literal">language</code> endpoints where the script is dynamic defined as well.</p><p>This component is provided out of the box in <code class="literal">camel-core</code> and hence no additional JARs is needed. You only have to include additional Camel components if the language of choice mandates it, such as using <a class="link" href="Groovy" target="_top">Groovy</a> or <a class="link" href="JavaScript" target="_top">JavaScript</a> languages.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">
 language://languageName[:script][?options]
 
-</pre></div><div class="simplesect" title="URI Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><p>The component supports the following options. 
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><p>The component supports the following options. 
 
-    </p><table id="d0e43030"><tr>
+    </p><table id="d0e43643"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Type </th>
@@ -37,9 +37,9 @@ language://languageName[:script][?options]
         <td> Whether or not the result of the script should be used as the new message body. By setting to <code class="literal">false</code> the script is executed but the result of the script is discarded. </td>
       </tr></table><p>
 
-    </p></div><div class="simplesect" title="Message Headers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><p>The following message headers can be used to affect the behavior of the component</p><p>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><p>The following message headers can be used to affect the behavior of the component</p><p>
 
-    </p><table id="d0e43134"><tr>
+    </p><table id="d0e43747"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -48,7 +48,7 @@ language://languageName[:script][?options]
         <td> The script to execute provided in the header. Takes precedence over script configured on the endpoint. </td>
       </tr></table><p>
 
-    </p></div><div class="simplesect" title="Examples"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_Examples"></a>Examples</h2></div></div></div><p></p><p>For example you can use the <a class="link" href="Simple" target="_top">Simple</a> language to <span>Message TranslatorMessage Translator</span> a message:</p><pre class="programlisting">from("direct:start").to("language:simple:Hello ${body}").to("mock:result");
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_Examples"></a>Examples</h2></div></div></div><p></p><p>For example you can use the <a class="link" href="Simple" target="_top">Simple</a> language to <span class="phrase">Message TranslatorMessage Translator</span> a message:</p><pre class="programlisting">from("direct:start").to("language:simple:Hello ${body}").to("mock:result");
 </pre><p>In case you want to convert the message body type you can do this as well:</p><pre class="programlisting">from("direct:start").to("language:simple:${mandatoryBodyAs(String)}").to("mock:result");
 </pre><p>You can also use the <a class="link" href="Groovy" target="_top">Groovy</a> language, such as this example where the input message will by multiplied with 2:</p><pre class="programlisting">from("direct:start").to("language:groovy:request.body * 2").to("mock:result");
 </pre><p>You can also provide the script as a header as shown below. Here we use <a class="link" href="XPath" target="_top">XPath</a> language to extract the text from the <code class="literal">&lt;foo&gt;</code> tag.</p><pre class="programlisting">
@@ -57,8 +57,8 @@ assertEquals("Hello World", out);
 
 </pre><p>
 
-    </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <a class="link" href="Languages" target="_top">Languages</a>
-        </p></li><li class="listitem"><p><span>Routing SlipRouting Slip</span>
-        </p></li><li class="listitem"><p><span>Dynamic RouterDynamic Router</span>
+        </p></li><li class="listitem"><p><span class="phrase">Routing SlipRouting Slip</span>
+        </p></li><li class="listitem"><p><span class="phrase">Dynamic RouterDynamic Router</span>
         </p></li></ul></div></div></div></body></html>

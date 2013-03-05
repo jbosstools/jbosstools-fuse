@@ -1,28 +1,49 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Opening the Fuse Integration Perspective</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse Plugins for Eclipse"><link rel="up" href="RiderDebugPart.html" title="Part&nbsp;II.&nbsp;Debugging"><link rel="prev" href="IDEIntroDebugBrowse.html" title="JMS browsing"><link rel="next" href="FIDEJMXExplore.html" title="The JMX Explorer"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="Opening the Fuse Integration Perspective"><div class="titlepage"><div><div><h2 class="title"><a name="RiderFusePerspective"></a>Opening the Fuse Integration Perspective</h2></div><div><a href="rh-d0e3692.html">Revision History</a></div></div></div><div class="simplesect" title="Overview"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e3700"></a>Overview</h2></div></div></div><p>The Fuse Integration perspective provides access to all of the Fuse debugging tools. It 
-      contains all of the views used to monitor and debug Fuse integration projects 
-      including:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><span class="guilabel">Project Explorer</span></p><p>A standard Eclipse view that shows all of the projects known to the IDE. You can 
-        view and select the artifacts that make up each project.</p><p>In <span class="guilabel">Project Explorer</span>, Fuse displays all of the camel context
-                    files for a project under the project's <span class="guilabel">Camel Contexts</span>
-                    node. This makes it easy for you to find and open the context file of any route
-                    in a project. </p></li><li class="listitem"><p><span class="guilabel">JMX Explorer</span></p><p>A customized JMX view that allows you to browse JMX servers and the processes they are
-                    monitoring. The <span class="guilabel">JMX Explorer</span> automatically lists all of the
-                    JMX servers running on the local machine. It also can identify instances of Red
-                    Hat processes.</p></li><li class="listitem"><p><span class="guilabel">Diagram View</span></p><p>Displays a graphical tree representing the node selected in the 
-          <span class="guilabel">JMX Explorer</span>.</p><p>When you select a process, server, endpoint, or other node in <span class="guilabel">JMX 
-          Explorer</span>, the graphical tree in <span class="guilabel">Diagram View</span> shows the 
-          selected node as the root and branches down to the children and grandchildren. For 
-          example, if you select a broker in <span class="guilabel">JMX Explorer</span> the tree in 
-          <span class="guilabel">Diagram View</span> displays up to three children: connections, topics, 
-          and queues. It also shows configured connections and destinations as 
-          grandchildren.</p><p>When you select a route, the graphical tree includes all of the nodes in the route and the 
-          path that a message can take through it. If you select a context node, 
-          <span class="guilabel">Diagram View</span> shows all of the routes in the context.</p></li><li class="listitem"><p><span class="guilabel">Shell</span></p><p>Shows the command console of a container. You can control the connected 
-          container by entering commands into the shell.</p></li><li class="listitem"><p><span class="guilabel">Messages View</span></p><p>Displays the list of messages sitting in the node selected in <span class="guilabel">JMX
+   <title>Opening the Fuse Integration Perspective</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Plugins for Eclipse"><link rel="up" href="RiderDebugPart.html" title="Part&nbsp;II.&nbsp;Debugging"><link rel="prev" href="IDEIntroDebugBrowse.html" title="JMS browsing"><link rel="next" href="FIDEJMXExplore.html" title="The JMX Explorer"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="RiderFusePerspective"></a>Opening the Fuse Integration Perspective</h2></div><div><a href="rh-d0e3713.html">Revision History</a></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e3721"></a>Overview</h2></div></div></div><p>The Fuse Integration perspective provides access to all of the Red Hat JBoss Fuse debugging tooling.
+            It contains all of the views used to monitor and debug Fuse integration projects
+            including:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+                    <span class="guilabel">Project Explorer</span>
+                </p><p>A standard Eclipse view that shows all of the projects known to the Red Hat
+                    JBoss Fuse developer tools. You can view and select the artifacts that make up
+                    each project.</p><p>In <span class="guilabel">Project Explorer</span>, the debugging tooling displays all of the camel
+                    context files for a project under the project's <span class="guilabel">Camel
+                        Contexts</span> node. This makes it easy for you to find and open the
+                    context file of any route in a project. </p></li><li class="listitem"><p>
+                    <span class="guilabel">JMX Explorer</span>
+                </p><p>A customized JMX view that allows you to browse JMX servers and the processes
+                    they are monitoring. The <span class="guilabel">JMX Explorer</span> automatically lists
+                    all of the JMX servers running on the local machine. It also can identify
+                    instances of Red Hat processes.</p></li><li class="listitem"><p>
+                    <span class="guilabel">Diagram View</span>
+                </p><p>Displays a graphical tree representing the node selected in the <span class="guilabel">JMX
+                        Explorer</span>.</p><p>When you select a process, server, endpoint, or other node in <span class="guilabel">JMX
+                        Explorer</span>, the graphical tree in <span class="guilabel">Diagram View</span>
+                    shows the selected node as the root and branches down to the children and
+                    grandchildren. For example, if you select a broker in <span class="guilabel">JMX
+                        Explorer</span> the tree in <span class="guilabel">Diagram View</span> displays
+                    up to three children: connections, topics, and queues. It also shows configured
+                    connections and destinations as grandchildren.</p><p>When you select a route, the graphical tree includes all of the nodes in the
+                    route and the path that a message can take through it. If you select a context
+                    node, <span class="guilabel">Diagram View</span> shows all of the routes in the
+                    context.</p></li><li class="listitem"><p>
+                    <span class="guilabel">Shell</span>
+                </p><p>Shows the command console of a container. You can control the connected
+                    container by entering commands into the shell.</p></li><li class="listitem"><p>
+                    <span class="guilabel">Messages View</span>
+                </p><p>Displays the list of messages sitting in the node selected in <span class="guilabel">JMX
                         Explorer</span>. This view is populated only when a JMS destination or
-                    route endpoint is selected.</p><p>See <a href="PLUGINS_ROOT/com.fusesource.rider.help/RiderMessageView.html" class="olink"><i>Browsing messages</i></a> for more details.</p><div class="note" title="Note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Route endpoints contain messages only when route tracing is activated. See 
-            <a href="PLUGINS_ROOT/com.fusesource.rider.help/RiderRouteTrace.html" class="olink">Tracing messages through a route</a> for more information.</p></td></tr></table></div></li><li class="listitem"><p><span class="guilabel">Servers</span></p><p>Displays a list of the servers managed by Fuse. It displays their runtime status 
-          and provides controls for stopping and starting them.</p></li><li class="listitem"><p><span class="guilabel">Console</span></p><p>Displays the console output for recently executed actions.</p></li><li class="listitem"><p><span class="guilabel">Properties</span></p><p>The <span class="guilabel">Properties</span> view displays the JMX properties for the node
-                    selected in <span class="guilabel">JMX Explorer</span>.</p></li></ul></div></div><div class="simplesect" title="Opening the perspective"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e3805"></a>Opening the perspective</h2></div></div></div><p>To open the <span class="guilabel">Fabric Integration</span> perspective, select <span class="guimenu">Window</span> &gt; <span class="guisubmenu">Open Perspective</span> &gt; <span class="guimenuitem">Fuse Integration</span>, or click <span class="inlinemediaobject"><img src="./images/NewPerspectIcon.jpg" width="18" alt="new perspective button"></span>in the <span class="guilabel">Perspectives</span> tab, and select 
-      <span class="guimenuitem">Fuse Integration</span>.</p></div><div class="simplesect" title="Related topics"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e3834"></a>Related topics</h2></div></div></div><table border="0" summary="Simple list" class="simplelist"><tr><td><a href="PLUGINS_ROOT/com.fusesource.rider.help/IDEIntroDebugView.html" class="olink">The Fuse Integration perspective</a></td></tr></table></div></div></body></html>
+                    route endpoint is selected.</p><p>See <span class="olink">????</span> for more details.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.gif"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Route endpoints contain messages only when route tracing is activated. See
+                            <span class="olink">????</span> for more information.</p></td></tr></table></div></li><li class="listitem"><p>
+                    <span class="guilabel">Servers</span>
+                </p><p>Displays a list of the servers managed by the Red Hat JBoss developer tools.
+                    It displays their runtime status and provides controls for stopping and starting
+                    them.</p></li><li class="listitem"><p>
+                    <span class="guilabel">Console</span>
+                </p><p>Displays the console output for recently executed actions.</p></li><li class="listitem"><p>
+                    <span class="guilabel">Properties</span>
+                </p><p>The <span class="guilabel">Properties</span> view displays the JMX properties for the
+                    node selected in <span class="guilabel">JMX Explorer</span>.</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e3842"></a>Opening the perspective</h2></div></div></div><p>To open the <span class="guilabel">Fabric Integration</span> perspective, select <span class="guimenu">Window</span> &gt; <span class="guisubmenu">Open Perspective</span> &gt; <span class="guimenuitem">Fuse Integration</span>, or click <span class="inlinemediaobject"><img src="./images/NewPerspectIcon.jpg" width="18" alt="new perspective button"></span>in the <span class="guilabel">Perspectives</span> tab, and select
+                <span class="guimenuitem">Fuse Integration</span>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e3871"></a>Related topics</h2></div></div></div><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                <span class="olink">????</span>
+            </td></tr></table></div></div></body></html>

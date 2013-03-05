@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<toc label="Fuse IDE" topic="index.html">
-   <topic label="Using the Fuse IDE Tools" href="RiderUG.html">
-      <topic label="Application Development" href="RiderDevPart.html">
-         <topic label="Design Time Tools" href="IDEIntroDesign.html">
-            <topic label="The Fuse IDE route editor" href="RiderGSEclipseEditor.html"/>
+<toc label="Red Hat JBoss Fuse Plugins for Eclipse" topic="index.html">
+   <topic label="Using the Red Hat JBoss Fuse Plugins for Eclipse Tools" href="RiderUG.html">
+      <topic label="Developing Applications" href="RiderDevPart.html">
+         <topic label="Design Time Tooling" href="IDEIntroDesign.html">
+            <topic label="The Red Hat JBoss Fuse route editor" href="RiderGSEclipseEditor.html"/>
             <topic label="Creating projects, routes, and test cases" href="IDEIntroEclipseCreate.html"/>
             <topic label="Exercising routes" href="IDEIntroEclipseRun.html"/>
          </topic>
-         <topic label="Creating a New Fuse IDE Project" href="RiderNewProject.html"/>
+         <topic label="Creating a New Fuse Project" href="RiderNewProject.html"/>
          <topic label="Creating a New Camel XML file" href="FIDENewRouteFile.html"/>
          <topic label="Editing a routing context in the route editor" href="RiderEditRoute.html">
             <topic label="Adding routes to the routing context" href="RiderNewRoute.html"/>
@@ -25,11 +25,11 @@
             <topic label="Disconnecting two patterns" href="RiderRemoveConnect.html"/>
             <topic label="Deleting a route" href="RiderRemoveRoute.html"/>
             <topic label="Adding beans and configuration" href="RiderAddBeans.html"/>
-            <topic label="Configuring the Fuse IDE route editor" href="RiderEditPrefs.html"/>
+            <topic label="Configuring the route editor" href="RiderEditPrefs.html"/>
          </topic>
          <topic label="Creating a new Apache Camel JUnit test case" href="newCamelTestCase.html"/>
          <topic label="The Source View" href="RiderEditSource.html"/>
-         <topic label="Running routes inside Fuse IDE" href="RiderRunning.html">
+         <topic label="Running routes inside Red Hat JBoss Fuse Plugins for Eclipse" href="RiderRunning.html">
             <topic label="Running routes using Maven" href="RiderRunningMaven.html"/>
             <topic label="Running routes as a local Camel context" href="RiderRunningProfile.html"/>
             <topic label="Working with runtime profiles" href="RiderEditRunProfile.html">
@@ -47,7 +47,7 @@
          </topic>
       </topic>
       <topic label="Debugging" href="RiderDebugPart.html">
-         <topic label="Debugging tools" href="IDEIntroDebug.html">
+         <topic label="Debugging tooling" href="IDEIntroDebug.html">
             <topic label="The Fuse Integration perspective" href="IDEIntroDebugView.html"/>
             <topic label="Infrastructure monitoring" href="IDEIntroDebugMonitor.html"/>
             <topic label="Route debugging" href="IDEIntroDebugTrace.html"/>
@@ -137,7 +137,7 @@
          <topic label="Cloud Details" href="RiderFabCldDetailsWiz.html"/>
          <topic label="Create Fabric in the Cloud" href="RiderFabCldFabricWiz.html"/>
       </topic>
-      <topic label="Fuse IDE preferences" href="RiderPrefRef.html">
+      <topic label="Red Hat JBoss Developer Tools preferences" href="RiderPrefRef.html">
          <topic label="Deploy Folders" href="RiderDeployPrefRef.html"/>
          <topic label="Editor" href="RiderEditorPrefRef.html"/>
          <topic label="JMX Explorer" href="RiderMonitorPrefRef.html"/>
@@ -305,7 +305,6 @@
       <topic label="Esper" href="esper.html"/>
       <topic label="Event" href="event.html"/>
       <topic label="Exec" href="exec.html"/>
-      <topic label="FIX" href="fix.html"/>
       <topic label="Flatpack" href="flatpack.html"/>
       <topic label="Freemarker" href="freemarker.html"/>
       <topic label="Hazelcast Component" href="hazelcast.html"/>

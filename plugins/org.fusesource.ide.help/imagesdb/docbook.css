@@ -31,12 +31,12 @@ div.toc a:visited {
 }
 
 body, div, td, th, form {
-	font-family: "Trebuchet MS", Arial, Verdana, Helvetica, sans-serif;
+	font-family: "liberation sans", "Myriad ", "Bitstream Vera Sans", "Lucida Grande", "Luxi Sans", "Trebuchet MS", helvetica, verdana, arial, sans-serif;
 	font-size: 10pt;
 }
 
 p {
-	font-family: "Trebuchet MS", Arial, Verdana, Helvetica, sans-serif;
+	font-family: "liberation sans", "Myriad ", "Bitstream Vera Sans", "Lucida Grande", "Luxi Sans", "Trebuchet MS", helvetica, verdana, arial, sans-serif;
 	font-size: 10pt;
     clear: bottom;
 	padding-top: 2px;
@@ -67,7 +67,7 @@ code.methodsynopsis, pre.classsynopsis, code.constant, span.type , span.markup,
 span.package, div.cmdsynopsis {
 	background-color: transparent;
 	color: #990033;
-	font-family: "Lucida Console", "Courier New", Courier, monospace;
+	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
 	font-size: 9pt;
 }
 
@@ -75,7 +75,7 @@ span.package, div.cmdsynopsis {
 code.sgmltag-attvalue, em.replaceable {
 	background-color: transparent;
 	color: #990033;
-	font-family: "Lucida Console", "Courier New", Courier, monospace;
+	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
 	font-size: 9pt;
 	font-style: italic;
 }
@@ -122,15 +122,6 @@ div.navfooter {
 	padding-top: 1ex;
 }
 
-div.caution, div.note, div.important, div.tip, div.warning {
-	background-color: #EEEEEE;
-	border: none;
-	color: #000000;
-	font-style: italic;
-	margin-left: 10%;
-	width: 80%;
-}
-
 img {
 	border-width: 0px;
 	padding: 0px;
@@ -138,7 +129,7 @@ img {
 }
 
 h1 {	
-	color: #636363;
+	color: #a70000;
 	font-size: 150%;
 	font-weight: normal;
 	margin-top: 0;
@@ -149,7 +140,7 @@ h1 {
 h1.title {
 	background: none;
 	border: none;
-	color: #808080;
+	color: #a70000;
 	font-variant: small-caps;
 	font-size: 190%;
 	font-weight: bold;
@@ -160,7 +151,7 @@ h2.subtitle {
 	font-weight:normal;
 	font-size:140%;
 	line-height:140%;
-	color:#28458E;
+	color:#a70000;
 	margin-bottom:0.5ex;  
 }
 
@@ -170,7 +161,7 @@ h2 {
 	font-size:210%;
 	line-height:130%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 }
@@ -179,14 +170,14 @@ div.titlepage span.productname {
 	font-weight:normal;
 	font-size:210%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 }
 
 /* div.section h2 applies to first-level sections in a chapter */
 div.section h2 {
 	font-size:170%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 	font-weight:normal;
@@ -196,7 +187,7 @@ h3, div.section h3 {
 	font-weight:normal;
 	font-size:140%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 }
@@ -205,7 +196,7 @@ div.section h4 {
 	font-weight:bold;
 	font-size:120%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 }
@@ -214,7 +205,7 @@ div.section h5 {
 	font-weight:bold;
 	font-size:110%;
 	vertical-align:top;
-	color:#808080;
+	color:#a70000;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
 }
@@ -225,19 +216,12 @@ div.simplesect {
 
 div.simplesect h2, div.simplesect h3, div.simplesect h4, 
 div.simplesect h5, div.simplesect h6, div.simplesect h1 {
-    float: left;
-	clear: left;
-	background-color: #CCCCCC;
-	color: #000000;
+	color:#a70000;
 	font-size: 100%;
 	font-weight: bold;
-	padding-bottom: 4px;
-	padding-left: 10px;
 	padding-top: 4px;
-	padding-right: 10px;
 	margin-top: 2px;
-	margin-bottom: 3px;
-	margin-right: 8px;}
+}
 
 div.itemizedlist ul.li {
 	list-style: square;
@@ -268,7 +252,7 @@ span.olinkdocname {
 strong.command, strong.userinput {
 	background-color: transparent;
 	color: #990033;
-	font-family: "Lucida Console", "Courier New", Courier, monospace;
+	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
 	font-size: 9pt;
 }
 
@@ -287,6 +271,7 @@ div.warning th, div.caution th {
 div.table p.title, div.example p.title, div.figure p.title {
 	font-style: italic;
 	font-size: 80%;
+	color:#a70000;
 }
 
 div.section table, div.informaltable table,
@@ -309,17 +294,6 @@ div.calloutlist td {
 	border: none;
 }
 
-div.note table, div.note th, div.note td,
-div.important table, div.important th, div.important td,
-div.tip table, div.tip th, div.tip td,
-div.warning table, div.warning th, div.warning td,
-div.caution table, div.caution th, div.caution td,
-div.figure table, div.figure th, div.figure td,
-div.figure-contents table, div.figure-contents th, div.figure-contents td,
-div.mediaobject table, div.mediaobject th, div.mediaobject td {
-	border: none;
-}
-
 span.guibutton, span.guilabel, span.guimenu, span.guisubmenu, 
 span.guimenuitem { 
 	color: #000033;
@@ -329,7 +303,7 @@ span.guimenuitem {
 span.property {
     background-color: transparent;
 	color: #990033;
-	font-family: "Lucida Console", "Courier New", Courier, monospace;
+	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
 	font-size: 9pt;
 }
 
@@ -436,4 +410,123 @@ div.revhistory th {
 
 div.revhistory td {
 	padding: 10px;
+}
+
+/* Notices*/
+div.warning:before {
+	content:url(../imagesdb/warning.png);
+	padding-left: 5px;
+}
+
+div.caution:before {
+	content:url(../imagesdb/caution.png);
+	padding-left: 5px;
+}
+
+div.note:before {
+	content:url(../imagesdb/note.png);
+	padding-left: 5px;
+}
+
+div.tip:before {
+	content:url(../imagesdb/tip.png);
+	padding-left: 5px;
+}
+
+div.important:before {
+  content:url(../imagesdb/important.png);
+	padding-left: 5px;
+}
+
+div.caution, div.note, div.important, div.tip, div.warning {
+	width: 80%;
+	color: black;
+	margin: 0em;
+	margin-left: 10%;
+	padding: 0em;
+	background: none;
+	background-color: white;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #aaaaaa;
+	page-break-inside: avoid;
+}
+
+div.warning h2, div.note h2, div.important h2, div.tip h2, div.caution h2 {
+	margin: 0em;
+	padding: 0em;
+	color: #eeeeec;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	height: 1.4em;
+	line-height: 1.4em;
+	font-size: 1.4em;
+	display:inline;
+	float: none;
+	clear: none;
+	background-color: transparent;
+	font-weight: bold;
+	margin-top: 0em;
+	margin-bottom: 0em;
+	page-break-inside: avoid;
+	page-break-after: avoid;
+	}
+
+div.admonition_header {
+	clear: both;
+	margin: 0em;
+	padding: 0em;
+	margin-top: -3.3em;
+	padding-left: 58px;
+	line-height: 1.0em;
+	font-size: 1.0em;
+}
+
+div.warning div.admonition_header {
+	background: url(../imagesdb/red.png) top left repeat-x;
+	background-color: #590000;
+}
+
+div.caution div.admonition_header {
+	background: url(../imagesdb/orange.png) top left repeat-x;
+	background-color: #FF2400;
+}
+
+div.note div.admonition_header {
+	background: url(../imagesdb/green.png) top right repeat-x;
+	background-color: #597800;
+}
+
+div.tip div.admonition_header {
+	background: url(../imagesdb/green.png) top right repeat-x;
+	background-color: #597800;
+}
+
+div.important div.admonition_header {
+	background: url(../imagesdb/yellow.png) top right repeat-x;
+	background-color: #a6710f;
+}
+
+div.warning p, div.warning div.para,
+div.note p, div.note div.para,
+div.important p, div.important div.para, 
+div.tip p, div.tip para, 
+div.caution p, div.caution para {
+	padding: 0em;
+	margin: 0em;
+}
+
+div.admonition {
+	border: none;
+	border-left: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	padding: 0em;
+	margin: 0em;
+	padding-top: 1.5em;
+	padding-bottom: 1em;
+	padding-left: 2em;
+	padding-right: 1em;
+	background-color: #eeeeec;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
 }

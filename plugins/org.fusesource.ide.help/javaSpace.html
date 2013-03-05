@@ -1,75 +1,97 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>JavaSpace</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL-NS Stylesheets V1.76.1"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Fuse Plugins for Eclipse, Apache Camel, Open Source, open source, Fuse, Red Hat, Apache Camel, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="ibatis.html" title="iBATIS"><link rel="next" href="jbi.html" title="JBI"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" title="JavaSpace"><div class="titlepage"><div><div><h2 class="title"><a name="javaSpace"></a>JavaSpace</h2></div></div></div><div class="simplesect" title="JavaSpace Component"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_JavaSpaceComponent"></a>JavaSpace Component</h2></div></div></div><p>The <span class="bold"><strong>javaspace</strong></span> component is a transport for working with
-      any JavaSpace compliant implementation and this component has been tested with both the <a class="link" href="http://www.dancres.org/blitz/" target="_top">Blitz implementation</a> and the <a class="link" href="http://www.gigaspaces.com/" target="_top">GigaSpace implementation</a>. This component can be
-      used for sending and receiving any object inheriting from the Jini
-        <code class="literal">net.jini.core.entry.Entry</code> class. It is also possible to pass the bean ID
-      of a template that can be used for reading/taking the entries from the space. This component
-      can be used for sending/receiving any serializable object acting as a sort of generic
-      transport. The JavaSpace component contains a special optimization for dealing with the
-        <code class="literal">BeanExchange</code>. It can be used to invoke a POJO remotely, using a JavaSpace
-      as a transport. This latter feature can provide a simple implementation of the master/worker
-      pattern, where a POJO provides the business logic for the worker. Look at the test cases for
-      examples of various use cases for this component.</p></div><div class="simplesect" title="URI format"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">javaspace:jini://host[?options]</pre><p>You can append query options to the URI in the following format,
-        <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect" title="Options"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_Options"></a>Options</h2></div></div></div><table id="d0e40627"><tr>
-        <th> Name </th>
-        <th> Default Value </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">spaceName</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> Specifies the JavaSpace name. </td>
-      </tr><tr>
-        <td><code class="literal">verb</code>
-        </td>
-        <td><code class="literal">take</code>
-        </td>
-        <td> Specifies the verb for getting JavaSpace entries. The values can be:
-            <code class="literal">take</code> or <code class="literal">read</code>. </td>
-      </tr><tr>
-        <td><code class="literal">transactional</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> If <code class="literal">true</code>, sending and receiving entries is performed within a
-          transaction. </td>
-      </tr><tr>
-        <td><code class="literal">transactionalTimeout</code>
-        </td>
-        <td><code class="literal">Long.MAX_VALUE</code>
-        </td>
-        <td> Specifies the transaction timeout. </td>
-      </tr><tr>
-        <td><code class="literal">concurrentConsumers</code>
-        </td>
-        <td><code class="literal">1</code>
-        </td>
-        <td> Specifies the number of concurrent consumers getting entries from the JavaSpace. </td>
-      </tr><tr>
-        <td><code class="literal">templateId</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> If present, this option specifies the Spring bean ID of the template to use for
-          reading/taking entries. </td>
-      </tr></table></div><div class="simplesect" title="Sending and Receiving Entries"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_SendingandReceivingEntries"></a>Sending and Receiving Entries</h2></div></div></div><pre class="programlisting">//Sending route
+   <title>JavaSpace</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Plugins for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="ibatis.html" title="iBATIS"><link rel="next" href="jbi.html" title="JBI"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="javaSpace"></a>JavaSpace</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_JavaSpaceComponent"></a>JavaSpace Component</h2></div></div></div><p>The <span class="bold"><strong>javaspace</strong></span> component is a
+            transport for working with any JavaSpace compliant implementation
+            and this component has been tested with both the <a class="link" href="http://www.dancres.org/blitz/" target="_top">Blitz
+                implementation</a> and the <a class="link" href="http://www.gigaspaces.com/" target="_top">GigaSpace
+                implementation</a>. This component can be used for sending
+            and receiving any object inheriting from the Jini
+                <code class="literal">net.jini.core.entry.Entry</code> class. It is also
+            possible to pass the bean ID of a template that can be used for
+            reading/taking the entries from the space. This component can be
+            used for sending/receiving any serializable object acting as a sort
+            of generic transport. The JavaSpace component contains a special
+            optimization for dealing with the <code class="literal">BeanExchange</code>.
+            It can be used to invoke a POJO remotely, using a JavaSpace as a
+            transport. This latter feature can provide a simple implementation
+            of the master/worker pattern, where a POJO provides the business
+            logic for the worker. Look at the test cases for examples of various
+            use cases for this component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">javaspace:jini://host[?options]</pre><p>You can append query options to the URI in the following format,
+                <code class="literal">?option=value&amp;option=value&amp;...</code>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_Options"></a>Options</h2></div></div></div><table id="d0e41228"><tr>
+                <th> Name </th>
+                <th> Default Value </th>
+                <th> Description </th>
+            </tr><tr>
+                <td>
+                    <code class="literal">spaceName</code>
+                </td>
+                <td>
+                    <code class="literal">null</code>
+                </td>
+                <td> Specifies the JavaSpace name. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">verb</code>
+                </td>
+                <td>
+                    <code class="literal">take</code>
+                </td>
+                <td> Specifies the verb for getting JavaSpace entries. The
+                    values can be: <code class="literal">take</code> or
+                        <code class="literal">read</code>. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">transactional</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td> If <code class="literal">true</code>, sending and receiving entries
+                    is performed within a transaction. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">transactionalTimeout</code>
+                </td>
+                <td>
+                    <code class="literal">Long.MAX_VALUE</code>
+                </td>
+                <td> Specifies the transaction timeout. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">concurrentConsumers</code>
+                </td>
+                <td>
+                    <code class="literal">1</code>
+                </td>
+                <td> Specifies the number of concurrent consumers getting
+                    entries from the JavaSpace. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">templateId</code>
+                </td>
+                <td>
+                    <code class="literal">null</code>
+                </td>
+                <td> If present, this option specifies the Spring bean ID of the
+                    template to use for reading/taking entries. </td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_SendingandReceivingEntries"></a>Sending and Receiving Entries</h2></div></div></div><pre class="programlisting">//Sending route
 from("direct:input").to("javaspace:jini://localhost?spaceName=mySpace");
 
 //Receiving Route
-from("javaspace:jini://localhost?spaceName=mySpace&amp;templateId=template&amp;verb=take&amp;concurrentConsumers=1")</pre><p>In this case the payload can be any object that inherits from the Jini
-        <code class="literal">Entry</code> type.</p></div><div class="simplesect" title="Sending and receiving serializable objects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_Sendingandreceivingserializableobjects"></a>Sending and receiving serializable objects</h2></div></div></div><p>Using the preceding routes, it is also possible to send and receive any serializable
-      object. The JavaSpace component detects that the payload is not a Jini
-        <code class="literal">Entry</code> and then it automatically wraps the payload with a Camel Jini
-        <code class="literal">Entry</code>. In this way, a JavaSpace can be used as a generic transport
-      mechanism.</p></div><div class="simplesect" title="Using JavaSpace as a remote invocation transport"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_UsingJavaSpaceasaremoteinvocationtransport"></a>Using JavaSpace as a remote invocation transport</h2></div></div></div><p>The JavaSpace component has been tailored to work in combination with the Camel bean
-      component. It is therefore possible to call a remote POJO using JavaSpace as the
-      transport:</p><pre class="programlisting">from("direct:input").to("javaspace:jini://localhost?spaceName=mySpace"); //Client side
+from("javaspace:jini://localhost?spaceName=mySpace&amp;templateId=template&amp;verb=take&amp;concurrentConsumers=1")</pre><p>In this case the payload can be any object that inherits from the
+            Jini <code class="literal">Entry</code> type.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_Sendingandreceivingserializableobjects"></a>Sending and receiving serializable objects</h2></div></div></div><p>Using the preceding routes, it is also possible to send and
+            receive any serializable object. The JavaSpace component detects
+            that the payload is not a Jini <code class="literal">Entry</code> and then it
+            automatically wraps the payload with a Camel Jini
+                <code class="literal">Entry</code>. In this way, a JavaSpace can be used
+            as a generic transport mechanism.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JavaSpace_HSH_UsingJavaSpaceasaremoteinvocationtransport"></a>Using JavaSpace as a remote invocation transport</h2></div></div></div><p>The JavaSpace component has been tailored to work in combination
+            with the Camel bean component. It is therefore possible to call a
+            remote POJO using JavaSpace as the transport:</p><pre class="programlisting">from("direct:input").to("javaspace:jini://localhost?spaceName=mySpace"); //Client side
 
 from("javaspace:jini://localhost?concurrentConsumers=10&amp;spaceName=mySpace").to("pojo:pojo"); //Server side
 
-</pre><p>In the code there are two test cases showing how to use a POJO to realize the
-      master/worker pattern. The idea is to use the POJO to provide the business logic and rely on
-      Apache Camel for sending/receiving requests/replies with the proper correlation. </p></div></div></body></html>
+</pre><p>In the code there are two test cases showing how to use a POJO to
+            realize the master/worker pattern. The idea is to use the POJO to
+            provide the business logic and rely on Apache Camel for
+            sending/receiving requests/replies with the proper correlation. </p></div></div></body></html>

@@ -1,8 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Version: 7.2.0.qualifier
-Bundle-Name: Fuse Plugins for Eclipse Help Plugin
-Bundle-SymbolicName: org.fusesource.ide.help;singleton:=true
-Bundle-Vendor: Red Hat, Inc.
-Bundle-ManifestVersion: 2
-Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Version: 7.1.32
+Bundle-Name: Fuse IDE Help Plugin
+Bundle-SymbolicName: org.fusesource.ide.help
+Bundle-Vendor: FuseSource
