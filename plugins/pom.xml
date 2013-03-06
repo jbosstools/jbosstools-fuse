@@ -24,8 +24,9 @@
   </organization>
 
   <properties>
+    <commons-net.version>3.2</commons-net.version>
     <slf4j-version>1.7.0</slf4j-version>
-    <google-guava-version>13.0</google-guava-version>		
+    <google-guava-version>13.0.1</google-guava-version>		
     <drools.updatesite.version>5.5.0.Final</drools.updatesite.version>		
 		
     <spring3-version>3.1.1.RELEASE</spring3-version>
@@ -258,6 +259,11 @@
       <version>${spring3-version}</version>
     </dependency>
     <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>${commons-net.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.aopalliance</artifactId>
       <version>${aopalliance-bundle-version}</version>
@@ -354,7 +360,6 @@
       <groupId>org.apache.xbean</groupId>
       <artifactId>xbean-spring</artifactId>
       <version>${xbean-version}</version>
-      <optional>true</optional>
       <exclusions>
         <exclusion>
           <groupId>qdox</groupId>
