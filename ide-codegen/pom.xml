@@ -22,7 +22,7 @@
     <codeGen>eclipse</codeGen>
 
     <!-- TODO this is required until perfectus build 010 -->
-    <fabric-version>99-master-SNAPSHOT</fabric-version>
+    <!--<fabric-version>99-master-SNAPSHOT</fabric-version>-->
   </properties>
 
   <dependencies>
