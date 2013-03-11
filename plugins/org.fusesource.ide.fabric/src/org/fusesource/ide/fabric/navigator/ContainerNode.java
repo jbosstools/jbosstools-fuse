@@ -452,9 +452,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		try {
 			System.out.println("About to create child container of " + this + " with name: " + name + " and profiles: " + Arrays.asList(profiles));
 			FabricService fabricService = getFabricService();
-			String url = "child:" + getId();
 			CreateContainerOptions options = CreateContainerOptionsBuilder.child()
-					.providerUri(url)
 					.name(name)
 					.parent(getId())
 					.zookeeperUrl(fabricService.getZookeeperUrl())
