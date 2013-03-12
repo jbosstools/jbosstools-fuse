@@ -76,6 +76,7 @@ Require-Bundle: org.eclipse.osgi,
  org.eclipse.tm.terminal.view;bundle-version="2.2.0",
  org.apache.aries.blueprint;visibility:=reexport,
  org.eclipse.core.expressions,
+ org.apache.servicemix.bundles.javax-inject,
  com.sun.jersey.jersey-server;bundle-version="1.10.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin
