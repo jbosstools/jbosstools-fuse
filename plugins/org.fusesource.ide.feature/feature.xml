@@ -22,7 +22,7 @@ listing of individual contributors.
    </copyright>
 
    <license url="license.html">
-Red Hat, Inc. licenses these features and plugins to you under
+      Red Hat, Inc. licenses these features and plugins to you under
 certain open source licenses (or aggregations of such licenses),
 which in a particular case may include the Eclipse Public License,
 the GNU Lesser General Public License, and/or certain other open
@@ -42,6 +42,41 @@ Raleigh NC 27606 USA.
       <import plugin="org.eclipse.jst.server.tomcat.core"/>
       <import plugin="org.eclipse.jst.server.tomcat.ui"/>
    </requires>
+
+   <plugin
+         id="org.apache.commons.pool"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.servicemix.bundles.javax-inject"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.xbean.spring"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="javax.annotation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.net"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="log4j.over.slf4j"

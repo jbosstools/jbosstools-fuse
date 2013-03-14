@@ -54,7 +54,7 @@
                            <targetFiles>
                                <param>indigo_dev.target</param>
                            </targetFiles>
-                           <failOnError>true</failOnError>
+                           <failOnError>false</failOnError>
                        </configuration>
                    </execution>
                </executions>
