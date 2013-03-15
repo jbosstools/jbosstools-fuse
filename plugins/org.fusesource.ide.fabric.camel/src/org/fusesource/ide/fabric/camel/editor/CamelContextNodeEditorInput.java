@@ -17,6 +17,9 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
@@ -47,6 +50,13 @@ public class CamelContextNodeEditorInput implements ICamelEditorInput {
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+		// the following code is needed otherwise you can't edit remote routes
+		if (adapter.equals(IFile.class)) {
+			getFileEditorInput();
+			IPath p = Path.fromOSString(tempFile.getPath());
+			IFile file= ResourcesPlugin.getWorkspace().getRoot().getFile(p);
+			return file;
+		}
 		return null;
 	}
 
@@ -135,5 +145,4 @@ public class CamelContextNodeEditorInput implements ICamelEditorInput {
 	public void setLastSaveAsFile(IFile lastSaveAsFile) {
 		this.lastSaveAsFile = lastSaveAsFile;
 	}
-
 }
