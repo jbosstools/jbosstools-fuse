@@ -341,7 +341,7 @@ ImageProvider {
 	 */
 	protected boolean canTrace() {
 		String camelVersion = camelContextMBean.getCamelVersion();
-		if (camelVersion != null && camelVersion.contains("fuse")) {
+		if (camelVersion != null && (camelVersion.contains("fuse") || camelVersion.contains("redhat"))) {
 			return getTracer() != null;
 		}
 		return false;
