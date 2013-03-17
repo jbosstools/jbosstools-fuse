@@ -28,6 +28,11 @@
       <version>${fabric-version}</version>
     </dependency>
     <dependency>
+      <groupId>io.hawt</groupId>
+      <artifactId>hawtio-maven-indexer</artifactId>
+      <version>1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-util</artifactId>
       <version>${scalate-version}</version>
@@ -36,7 +41,9 @@
   </dependencies>
 
   <build>
+    <sourceDirectory>src/main/scala</sourceDirectory>
     <plugins>
+<!--
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
@@ -53,12 +60,13 @@
             <jvmArg>-Xmx1024m</jvmArg>
           </jvmArgs>
           <args>
-            <!-- arg>-unchecked</arg -->
+            &lt;!&ndash; arg>-unchecked</arg &ndash;&gt;
             <arg>-deprecation</arg>
           </args>
           <scalaVersion>${scala-version}</scalaVersion>
         </configuration>
       </plugin>
+-->
 
 
         <plugin>
@@ -73,7 +81,7 @@
             </execution>
           </executions>
           <configuration>
-            <mainClass>org.fusesource.ide.buildtools.UpdateReleases</mainClass>
+            <mainClass>org.fusesource.ide.buildtools.DownloadArchetypes</mainClass>
             <cleanupDaemonThreads>false</cleanupDaemonThreads>
 <!--
             <arguments>
