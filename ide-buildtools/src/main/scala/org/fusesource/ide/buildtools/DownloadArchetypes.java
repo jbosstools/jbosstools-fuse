@@ -15,6 +15,8 @@ import org.fusesource.insight.maven.aether.AetherResult;
 import org.fusesource.scalate.util.IOUtil;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class DownloadArchetypes {
@@ -94,14 +96,21 @@ public class DownloadArchetypes {
         String classifier = null;
         String packaging = "maven-archetype";
 
+        PrintWriter out = new PrintWriter(new FileWriter(new File(outputDir, "archetypes.xml")));
+        out.println("<archetypes>");
+
+
         String[] groupIds = {"org.apache.camel.archetypes", "org.apache.cxf.archetype", "org.fusesource.fabric"};
         for (String groupId : groupIds) {
             List<ArtifactDTO> answer = indexer.search(groupId, null, null, packaging, classifier);
             for (ArtifactDTO artifact : answer) {
+                out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + artifact.getVersion() + "'>" + artifact.getDescription() + "</archetype>");
                 downloadArtifact(artifact);
             }
             System.out.println("Found " + answer.size() + " results for groupId " + groupId);
         }
+        out.println("</archetypes>");
+        out.close();
 
         System.out.println("Running git add...");
         ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
