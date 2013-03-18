@@ -16,13 +16,15 @@ import org.fusesource.scalate.util.IOUtil;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class DownloadArchetypes {
+public class Downloader {
     private MavenIndexerFacade indexer;
     private Aether aether;
-    private File outputDir = new File("fuse-ide-archetypes");
+    private File archetypeDir = new File("fuse-ide-archetypes");
+    private File xsdDir = new File("fuse-ide-xsds");
     private boolean delete = true;
 
     public static void main(String[] args) {
@@ -46,7 +48,7 @@ public class DownloadArchetypes {
             File archetypesDir = new File(rs, "org.fusesource.ide.branding/archetypes");
             File xsdsDir = new File(rs, "org.fusesource.ide.catalogs");
 
-            DownloadArchetypes app = new DownloadArchetypes(archetypesDir);
+            Downloader app = new Downloader(archetypesDir, xsdsDir);
             app.start();
             app.run();
             app.stop();
@@ -61,11 +63,12 @@ public class DownloadArchetypes {
         System.exit(1);
     }
 
-    public DownloadArchetypes() {
+    public Downloader() {
     }
 
-    public DownloadArchetypes(File outputDir) {
-        this.outputDir = outputDir;
+    public Downloader(File archetypeDir, File xsdDir) {
+        this.archetypeDir = archetypeDir;
+        this.xsdDir = xsdDir;
     }
 
     public static File targetDir() {
@@ -88,15 +91,20 @@ public class DownloadArchetypes {
     }
 
     public void run() throws Exception {
+        downloadXsds();
+        downloadArchetypes();
+    }
+
+    public void downloadArchetypes() throws IOException {
         if (delete) {
-          IOUtil.recursiveDelete(outputDir);
-          outputDir.mkdirs();
+          IOUtil.recursiveDelete(archetypeDir);
+          archetypeDir.mkdirs();
         }
 
         String classifier = null;
         String packaging = "maven-archetype";
 
-        PrintWriter out = new PrintWriter(new FileWriter(new File(outputDir, "archetypes.xml")));
+        PrintWriter out = new PrintWriter(new FileWriter(new File(archetypeDir, "archetypes.xml")));
         out.println("<archetypes>");
 
 
@@ -114,12 +122,27 @@ public class DownloadArchetypes {
 
         System.out.println("Running git add...");
         ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
-        pb.directory(outputDir);
+        pb.directory(archetypeDir);
         pb.start();
     }
 
     public void downloadXsds() throws Exception {
+        // TODO can't seem to find the XSDs in the nexus index! No idea why! We find 2 out of the 8 schemas we need
+        // so lets keep the scala code for this part
+        new DownloadLatestXsds(xsdDir, true).run();
+/*
 
+        String[] groupIds = {"org.apache.camel.archetypes", "org.apache.cxf.archetype", "org.fusesource.fabric"};
+        String classifier = null;
+        String packaging =  "xsd";
+        String groupId = "org.apache.camel";
+        String artifactId = "camel-spring";
+        List<ArtifactDTO> answer = indexer.search(groupId, artifactId, null, packaging, classifier);
+        for (ArtifactDTO artifact : answer) {
+            System.out.println("Found: " + artifact);
+        }
+        System.out.println("Found " + answer.size() + " results for groupId " + groupId);
+*/
     }
 
     public boolean isDelete() {
@@ -146,12 +169,20 @@ public class DownloadArchetypes {
         this.indexer = indexer;
     }
 
-    public File getOutputDir() {
-        return outputDir;
+    public File getArchetypeDir() {
+        return archetypeDir;
     }
 
-    public void setOutputDir(File outputDir) {
-        this.outputDir = outputDir;
+    public void setArchetypeDir(File archetypeDir) {
+        this.archetypeDir = archetypeDir;
+    }
+
+    public File getXsdDir() {
+        return xsdDir;
+    }
+
+    public void setXsdDir(File xsdDir) {
+        this.xsdDir = xsdDir;
     }
 
     protected void downloadArtifact(ArtifactDTO artifact) {
@@ -161,7 +192,7 @@ public class DownloadArchetypes {
             if (files != null && files.size() > 0) {
                 File file = files.get(0);
                 //for (File file : files) {
-                File newFile = new File(outputDir, file.getName());
+                File newFile = new File(archetypeDir, file.getName());
                 IOUtil.copy(file, newFile);
                 System.out.println("Copied " + newFile.getPath());
             }

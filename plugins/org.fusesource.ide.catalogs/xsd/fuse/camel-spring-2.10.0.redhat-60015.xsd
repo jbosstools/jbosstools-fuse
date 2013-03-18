@@ -2651,7 +2651,9 @@
 
   <xs:complexType name="jxPathExpression">
     <xs:simpleContent>
-      <xs:extension base="tns:expression"/>
+      <xs:extension base="tns:expression">
+        <xs:attribute name="lenient" type="xs:boolean"/>
+      </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
 

@@ -4,18 +4,22 @@ import java.net.URL
 import org.fusesource.scalate.util.IOUtil
 import java.io.File
 
-case class Schema(val name: String, val postfix: String = "", val group: String = "camel")
+case class Schema(val name: String, val postfix: String = "", val group: String = "camel") {
+  val version = if (name.startsWith("activemq")) UpdateReleases.activemqVersion else UpdateReleases.camelVersion
+}
 
 class DownloadLatestXsds(rootDir: File, delete: Boolean) extends Runnable {
 
   override def toString = "Downloading latest XSDs to: " + rootDir
 
   val xsdArchetypes = List(
-    Schema("activemq-core", "", "activemq"),
+    Schema("activemq-spring", "", "activemq"),
     Schema("activemq-ra", "", "activemq"),
     Schema("camel-blueprint"),
     Schema("camel-cxf", "-blueprint"), Schema("camel-cxf", "-spring"),
-    Schema("camel-spring"), Schema("camel-spring-integration"), Schema("camel-spring-security"))
+    Schema("camel-spring"),
+    Schema("camel-spring-integration"),
+    Schema("camel-spring-security"))
 
   def run(): Unit = {
     if (!rootDir.exists()) {
@@ -38,26 +42,15 @@ class DownloadLatestXsds(rootDir: File, delete: Boolean) extends Runnable {
       		  		<catalogContribution id="org.fusesource.ide.catalogs">
     """)
 
-    for (Schema(n, postfix, group) <- xsdArchetypes) {
+    for (schema <- xsdArchetypes) {
       try {
+        val n = schema.name
+        val postfix = schema.postfix
+        val group = schema.group
+        val version = schema.version
       println("Finding " + n + " group: " + group + " postfix '" + postfix + "'")
-      val u = "http://repo.fusesource.com/" + UpdateReleases.releaseRepo + "/org/apache/" + group + "/" + n + "/"
-      val text = IOUtil.loadText(new URL(u).openStream())
-      val seq = r.findAllIn(text)
-      val ms = seq.matchData
-      var href = ""
-      var version = ""
-      for (m <- ms) {
-        // TODO lets assume that things are in order!
-        val g1 = m.group(1)
-        val g2 = m.group(2)
-        if (g1.contains(n) && !g2.startsWith("fuse") && !g2.contains("iona") && (g2.contains(UpdateReleases.fuseVersion))) {
-          href = g1
-          version = g2
-        }
-      }
-      val fileName = n + "-" + version.stripSuffix("/") + postfix + ".xsd"
-      val xsd = href + fileName
+        val fileName = n + "-" + version.stripSuffix("/") + postfix + ".xsd"
+      val xsd = "http://repo.fusesource.com/" + UpdateReleases.releaseRepo + "/org/apache/" + group + "/" + n + "/" + version + "/" + fileName
       val outFile = new File(outputDir, fileName)
       println("Downloading xsd: " + xsd + " to " + outFile)
       IOUtil.copy(new URL(xsd).openStream(), outFile)

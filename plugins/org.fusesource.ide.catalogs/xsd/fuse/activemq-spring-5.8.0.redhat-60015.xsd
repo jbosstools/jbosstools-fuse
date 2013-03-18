@@ -70,168 +70,6 @@ an abort.
   </xs:element>
 
 
-  <!-- element for type: org.apache.activemq.store.amq.AMQPersistenceAdapter -->
-  <xs:element name='amqPersistenceAdapter'>
-    <xs:annotation>
-      <xs:documentation><![CDATA[
-        An implementation of {@link PersistenceAdapter} designed for use with a
-{@link Journal} and then check pointing asynchronously on a timeout with some
-other long term persistent storage.
-      ]]></xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='asyncDataManager' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='brokerService' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:broker'/>
-              <xs:element ref='tns:brokerService'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='referenceStoreAdapter' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='taskRunnerFactory' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:taskRunnerFactory'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='usageManager' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:systemUsage'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='wireFormat' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
-      </xs:choice></xs:choice>
-      <xs:attribute name='archiveDataLogs' type='xs:boolean'/>
-      <xs:attribute name='asyncDataManager' type='xs:string'/>
-      <xs:attribute name='brokerName' type='xs:string'/>
-      <xs:attribute name='brokerService' type='xs:string'/>
-      <xs:attribute name='checkpointInterval' type='xs:long'/>
-      <xs:attribute name='cleanupInterval' type='xs:long'/>
-      <xs:attribute name='directory' type='xs:string'/>
-      <xs:attribute name='directoryArchive' type='xs:string'/>
-      <xs:attribute name='disableLocking' type='xs:boolean'/>
-      <xs:attribute name='forceRecoverReferenceStore' type='xs:boolean'/>
-      <xs:attribute name='indexBinSize' type='xs:integer'/>
-      <xs:attribute name='indexKeySize' type='xs:integer'/>
-      <xs:attribute name='indexLoadFactor' type='xs:integer'/>
-      <xs:attribute name='indexMaxBinSize' type='xs:integer'/>
-      <xs:attribute name='indexPageSize' type='xs:string'>
-        <xs:annotation>
-          <xs:documentation><![CDATA[
-            When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
-          ]]></xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name='journalThreadPriority' type='xs:integer'/>
-      <xs:attribute name='maxCheckpointMessageAddSize' type='xs:string'>
-        <xs:annotation>
-          <xs:documentation><![CDATA[
-            When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
-          ]]></xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name='maxFileLength' type='xs:string'>
-        <xs:annotation>
-          <xs:documentation><![CDATA[
-            When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
-          ]]></xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name='maxReferenceFileLength' type='xs:string'>
-        <xs:annotation>
-          <xs:documentation><![CDATA[
-            When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
-          ]]></xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name='persistentIndex' type='xs:boolean'/>
-      <xs:attribute name='recoverReferenceStore' type='xs:boolean'/>
-      <xs:attribute name='referenceStoreAdapter' type='xs:string'/>
-      <xs:attribute name='syncOnWrite' type='xs:boolean'/>
-      <xs:attribute name='taskRunnerFactory' type='xs:string'/>
-      <xs:attribute name='usageManager' type='xs:string'/>
-      <xs:attribute name='useDedicatedTaskRunner' type='xs:boolean'/>
-      <xs:attribute name='useNio' type='xs:boolean'/>
-      <xs:attribute name='wireFormat' type='xs:string'/>
-      <xs:attribute name='id' type='xs:ID'/>
-      <xs:anyAttribute namespace='##other' processContents='lax'/>
-    </xs:complexType>
-  </xs:element>
-
-
-  <!-- element for type: org.apache.activemq.store.amq.AMQPersistenceAdapterFactory -->
-  <xs:element name='amqPersistenceAdapterFactory'>
-    <xs:annotation>
-      <xs:documentation><![CDATA[
-        An implementation of {@link PersistenceAdapterFactory}
-      ]]></xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='referenceStoreAdapter' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='taskRunnerFactory' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:taskRunnerFactory'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
-      </xs:choice></xs:choice>
-      <xs:attribute name='brokerName' type='xs:string'/>
-      <xs:attribute name='checkpointInterval' type='xs:long'/>
-      <xs:attribute name='cleanupInterval' type='xs:long'/>
-      <xs:attribute name='dataDirectory' type='xs:string'/>
-      <xs:attribute name='forceRecoverReferenceStore' type='xs:boolean'/>
-      <xs:attribute name='indexBinSize' type='xs:integer'/>
-      <xs:attribute name='indexKeySize' type='xs:integer'/>
-      <xs:attribute name='indexLoadFactor' type='xs:integer'/>
-      <xs:attribute name='indexMaxBinSize' type='xs:integer'/>
-      <xs:attribute name='indexPageSize' type='xs:integer'/>
-      <xs:attribute name='journalThreadPriority' type='xs:integer'/>
-      <xs:attribute name='maxFileLength' type='xs:integer'/>
-      <xs:attribute name='maxReferenceFileLength' type='xs:integer'/>
-      <xs:attribute name='persistentIndex' type='xs:boolean'/>
-      <xs:attribute name='recoverReferenceStore' type='xs:boolean'/>
-      <xs:attribute name='referenceStoreAdapter' type='xs:string'/>
-      <xs:attribute name='syncOnTransaction' type='xs:boolean'/>
-      <xs:attribute name='syncOnWrite' type='xs:boolean'/>
-      <xs:attribute name='taskRunnerFactory' type='xs:string'/>
-      <xs:attribute name='useDedicatedTaskRunner' type='xs:boolean'/>
-      <xs:attribute name='useNio' type='xs:boolean'/>
-      <xs:attribute name='id' type='xs:ID'/>
-      <xs:anyAttribute namespace='##other' processContents='lax'/>
-    </xs:complexType>
-  </xs:element>
-
-
   <!-- element for type: org.apache.activemq.security.AuthenticationUser -->
   <xs:element name='authenticationUser'>
     <xs:annotation>
@@ -260,7 +98,7 @@ destination or a hierarchical wildcard area of destinations.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='adminACLs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='adminACLs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -276,12 +114,12 @@ destination or a hierarchical wildcard area of destinations.
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='readACLs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='readACLs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='writeACLs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='writeACLs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -327,7 +165,7 @@ for each operation.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='authorizationEntries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='authorizationEntries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the individual entries on the authorization map
@@ -346,7 +184,7 @@ for each operation.
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='entries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='entries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               A helper method to allow the destination map to be populated from a
@@ -429,7 +267,13 @@ Axion does not seem to support ALTER statements or sub-selects.  This means:
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -468,7 +312,13 @@ The databases/JDBC drivers that use this adapter are:
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -518,7 +368,7 @@ is disabled.
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='destinationInterceptors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='destinationInterceptors' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the destination interceptors to use
@@ -546,7 +396,7 @@ destinations or for wildcard areas of destinations.
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='destinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='destinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the destinations which should be loaded/created on startup
@@ -577,13 +427,18 @@ has experiences File or JDBC I/O Exceptions
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='jmsBridgeConnectors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='jmsBridgeConnectors' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:jmsQueueConnector'/>
               <xs:element ref='tns:jmsTopicConnector'/>
               <xs:any namespace='##other'/>
             </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='jobSchedulerStore' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:element name='managementContext' minOccurs='0' maxOccurs='1'>
@@ -605,12 +460,12 @@ consume a given message
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='networkConnectorURIs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='networkConnectorURIs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='networkConnectors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='networkConnectors' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the network connectors which this broker will use to connect to
@@ -634,11 +489,9 @@ other brokers in a federated network
           </xs:annotation>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:amqPersistenceAdapter'/>
               <xs:element ref='tns:jdbcPersistenceAdapter'/>
               <xs:element ref='tns:journalPersistenceAdapter'/>
               <xs:element ref='tns:kahaDB'/>
-              <xs:element ref='tns:kahaPersistenceAdapter'/>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
@@ -649,7 +502,6 @@ other brokers in a federated network
         <xs:element name='persistenceFactory' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:amqPersistenceAdapterFactory'/>
               <xs:element ref='tns:journalPersistenceAdapterFactory'/>
               <xs:element ref='tns:journaledJDBC'/>
               <xs:any namespace='##other'/>
@@ -664,7 +516,7 @@ other brokers in a federated network
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='plugins' minOccurs='0' maxOccurs='1'>
+        <xs:element name='plugins' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets a number of broker plugins to install such as for security
@@ -703,7 +555,7 @@ authentication or authorization
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='proxyConnectors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='proxyConnectors' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the network connectors which this broker will use to connect to
@@ -729,11 +581,10 @@ other brokers in a federated network
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='services' minOccurs='0' maxOccurs='1'>
+        <xs:element name='services' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
-              Sets the services associated with this broker such as a
-{@link MasterConnector}
+              Sets the services associated with this broker.
             ]]></xs:documentation>
           </xs:annotation>
           <xs:complexType>
@@ -748,6 +599,7 @@ other brokers in a federated network
               <xs:element ref='tns:jdbcPersistenceAdapter'/>
               <xs:element ref='tns:jmsQueueConnector'/>
               <xs:element ref='tns:jmsTopicConnector'/>
+              <xs:element ref='tns:jobSchedulerUsage'/>
               <xs:element ref='tns:journalPersistenceAdapterFactory'/>
               <xs:element ref='tns:journaledJDBC'/>
               <xs:element ref='tns:kahaDB'/>
@@ -755,13 +607,12 @@ other brokers in a federated network
               <xs:element ref='tns:lease-database-locker'/>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:managementContext'/>
-              <xs:element ref='tns:masterConnector'/>
               <xs:element ref='tns:memoryUsage'/>
               <xs:element ref='tns:multicastNetworkConnector'/>
               <xs:element ref='tns:networkConnector'/>
               <xs:element ref='tns:outboundQueueBridge'/>
               <xs:element ref='tns:outboundTopicBridge'/>
-              <xs:element ref='tns:pListStore'/>
+              <xs:element ref='tns:pListStoreImpl'/>
               <xs:element ref='tns:proxyConnector'/>
               <xs:element ref='tns:shared-file-locker'/>
               <xs:element ref='tns:storeUsage'/>
@@ -772,7 +623,7 @@ other brokers in a federated network
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='shutdownHooks' minOccurs='0' maxOccurs='1'>
+        <xs:element name='shutdownHooks' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets hooks to be executed when broker shut down
@@ -809,17 +660,18 @@ other brokers in a federated network
         <xs:element name='tempDataStore' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:pListStore'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:pListStoreImpl'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='transportConnectorURIs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='transportConnectorURIs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='transportConnectors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='transportConnectors' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the transport connectors which this broker will listen on for new
@@ -930,9 +782,9 @@ has experiences File or JDBC I/O Exceptions
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='jobSchedulerStore' type='xs:string'/>
       <xs:attribute name='keepDurableSubsActive' type='xs:boolean'/>
       <xs:attribute name='managementContext' type='xs:string'/>
-      <xs:attribute name='masterConnectorURI' type='xs:string'/>
       <xs:attribute name='maxPurgedDestinationsPerSweep' type='xs:integer'/>
       <xs:attribute name='mbeanInvocationTimeout' type='xs:long'>
         <xs:annotation>
@@ -952,8 +804,8 @@ consume a given message
       </xs:attribute>
       <xs:attribute name='monitorConnectionSplits' type='xs:boolean'/>
       <xs:attribute name='networkConnectorStartAsync' type='xs:boolean'/>
-      <xs:attribute name='offlineDurableSubscriberTaskSchedule' type='xs:integer'/>
-      <xs:attribute name='offlineDurableSubscriberTimeout' type='xs:integer'/>
+      <xs:attribute name='offlineDurableSubscriberTaskSchedule' type='xs:long'/>
+      <xs:attribute name='offlineDurableSubscriberTimeout' type='xs:long'/>
       <xs:attribute name='passiveSlave' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -1121,7 +973,7 @@ is disabled.
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='destinationInterceptors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='destinationInterceptors' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the destination interceptors to use
@@ -1149,7 +1001,7 @@ destinations or for wildcard areas of destinations.
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='destinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='destinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the destinations which should be loaded/created on startup
@@ -1180,13 +1032,18 @@ has experiences File or JDBC I/O Exceptions
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='jmsBridgeConnectors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='jmsBridgeConnectors' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:jmsQueueConnector'/>
               <xs:element ref='tns:jmsTopicConnector'/>
               <xs:any namespace='##other'/>
             </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='jobSchedulerStore' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:element name='managementContext' minOccurs='0' maxOccurs='1'>
@@ -1208,12 +1065,12 @@ consume a given message
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='networkConnectorURIs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='networkConnectorURIs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='networkConnectors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='networkConnectors' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the network connectors which this broker will use to connect to
@@ -1237,11 +1094,9 @@ other brokers in a federated network
           </xs:annotation>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:amqPersistenceAdapter'/>
               <xs:element ref='tns:jdbcPersistenceAdapter'/>
               <xs:element ref='tns:journalPersistenceAdapter'/>
               <xs:element ref='tns:kahaDB'/>
-              <xs:element ref='tns:kahaPersistenceAdapter'/>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
@@ -1252,7 +1107,6 @@ other brokers in a federated network
         <xs:element name='persistenceFactory' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:amqPersistenceAdapterFactory'/>
               <xs:element ref='tns:journalPersistenceAdapterFactory'/>
               <xs:element ref='tns:journaledJDBC'/>
               <xs:any namespace='##other'/>
@@ -1267,7 +1121,7 @@ other brokers in a federated network
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='plugins' minOccurs='0' maxOccurs='1'>
+        <xs:element name='plugins' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets a number of broker plugins to install such as for security
@@ -1306,7 +1160,7 @@ authentication or authorization
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='proxyConnectors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='proxyConnectors' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the network connectors which this broker will use to connect to
@@ -1332,11 +1186,10 @@ other brokers in a federated network
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='services' minOccurs='0' maxOccurs='1'>
+        <xs:element name='services' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
-              Sets the services associated with this broker such as a
-{@link MasterConnector}
+              Sets the services associated with this broker.
             ]]></xs:documentation>
           </xs:annotation>
           <xs:complexType>
@@ -1351,6 +1204,7 @@ other brokers in a federated network
               <xs:element ref='tns:jdbcPersistenceAdapter'/>
               <xs:element ref='tns:jmsQueueConnector'/>
               <xs:element ref='tns:jmsTopicConnector'/>
+              <xs:element ref='tns:jobSchedulerUsage'/>
               <xs:element ref='tns:journalPersistenceAdapterFactory'/>
               <xs:element ref='tns:journaledJDBC'/>
               <xs:element ref='tns:kahaDB'/>
@@ -1358,13 +1212,12 @@ other brokers in a federated network
               <xs:element ref='tns:lease-database-locker'/>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:managementContext'/>
-              <xs:element ref='tns:masterConnector'/>
               <xs:element ref='tns:memoryUsage'/>
               <xs:element ref='tns:multicastNetworkConnector'/>
               <xs:element ref='tns:networkConnector'/>
               <xs:element ref='tns:outboundQueueBridge'/>
               <xs:element ref='tns:outboundTopicBridge'/>
-              <xs:element ref='tns:pListStore'/>
+              <xs:element ref='tns:pListStoreImpl'/>
               <xs:element ref='tns:proxyConnector'/>
               <xs:element ref='tns:shared-file-locker'/>
               <xs:element ref='tns:storeUsage'/>
@@ -1375,7 +1228,7 @@ other brokers in a federated network
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='shutdownHooks' minOccurs='0' maxOccurs='1'>
+        <xs:element name='shutdownHooks' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets hooks to be executed when broker shut down
@@ -1412,17 +1265,18 @@ other brokers in a federated network
         <xs:element name='tempDataStore' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:pListStore'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:pListStoreImpl'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='transportConnectorURIs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='transportConnectorURIs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='transportConnectors' minOccurs='0' maxOccurs='1'>
+        <xs:element name='transportConnectors' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the transport connectors which this broker will listen on for new
@@ -1533,9 +1387,9 @@ has experiences File or JDBC I/O Exceptions
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='jobSchedulerStore' type='xs:string'/>
       <xs:attribute name='keepDurableSubsActive' type='xs:boolean'/>
       <xs:attribute name='managementContext' type='xs:string'/>
-      <xs:attribute name='masterConnectorURI' type='xs:string'/>
       <xs:attribute name='maxPurgedDestinationsPerSweep' type='xs:integer'/>
       <xs:attribute name='mbeanInvocationTimeout' type='xs:long'>
         <xs:annotation>
@@ -1555,8 +1409,8 @@ consume a given message
       </xs:attribute>
       <xs:attribute name='monitorConnectionSplits' type='xs:boolean'/>
       <xs:attribute name='networkConnectorStartAsync' type='xs:boolean'/>
-      <xs:attribute name='offlineDurableSubscriberTaskSchedule' type='xs:integer'/>
-      <xs:attribute name='offlineDurableSubscriberTimeout' type='xs:integer'/>
+      <xs:attribute name='offlineDurableSubscriberTaskSchedule' type='xs:long'/>
+      <xs:attribute name='offlineDurableSubscriberTimeout' type='xs:long'/>
       <xs:attribute name='passiveSlave' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -1696,7 +1550,13 @@ adapter are:
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -1715,7 +1575,7 @@ policy.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='authorizationEntries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='authorizationEntries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the individual entries on the authorization map
@@ -1734,7 +1594,7 @@ policy.
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='entries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='entries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               A helper method to allow the destination map to be populated from a
@@ -1859,7 +1719,7 @@ a single Transport could be communicating with multiple remote brokers
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -1870,7 +1730,7 @@ a single Transport could be communicating with multiple remote brokers
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -1881,7 +1741,7 @@ a single Transport could be communicating with multiple remote brokers
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -1907,7 +1767,7 @@ a single Transport could be communicating with multiple remote brokers
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -1942,7 +1802,7 @@ a single Transport could be communicating with multiple remote brokers
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='forwardTo' minOccurs='0' maxOccurs='1'>
+        <xs:element name='forwardTo' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the list of destinations to forward to
@@ -1994,7 +1854,7 @@ queue with the same name).
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='forwardTo' minOccurs='0' maxOccurs='1'>
+        <xs:element name='forwardTo' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the list of destinations to forward to
@@ -2041,10 +1901,10 @@ queue with the same name).
   <xs:element name='conditionalNetworkBridgeFilterFactory'>
     <xs:annotation>
       <xs:documentation><![CDATA[
-        implement conditional behaviour for queue consumers,
-allows replaying back to origin if no consumers are present on the local broker
-after a configurable delay, irrespective of the networkTTL
-Also allows rate limiting of messages through the network, useful for static includes
+        implement conditional behavior for queue consumers, allows replaying back to
+origin if no consumers are present on the local broker after a configurable
+delay, irrespective of the networkTTL Also allows rate limiting of messages
+through the network, useful for static includes
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
@@ -2617,7 +2477,13 @@ against the same logical database.
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -2681,7 +2547,13 @@ The databases/JDBC drivers that use this adapter are:
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -2694,7 +2566,7 @@ The databases/JDBC drivers that use this adapter are:
   <xs:element name='defaultNetworkBridgeFilterFactory'>
     <xs:annotation>
       <xs:documentation><![CDATA[
-        implement default behaviour, filter that will not allow resend to origin
+        implement default behavior, filter that will not allow re-send to origin
 based on brokerPath and which respects networkTTL
       ]]></xs:documentation>
     </xs:annotation>
@@ -2748,7 +2620,7 @@ based on brokerPath and which respects networkTTL
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -2759,7 +2631,7 @@ based on brokerPath and which respects networkTTL
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -2770,7 +2642,7 @@ based on brokerPath and which respects networkTTL
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -2796,7 +2668,7 @@ based on brokerPath and which respects networkTTL
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -3334,7 +3206,13 @@ messages.
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -3370,7 +3248,13 @@ The databases/JDBC drivers that use this adapter are:
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -3648,7 +3532,13 @@ Therefore be sure not to use longer names for container name and subscription id
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -3903,6 +3793,14 @@ performed against the Message store are done as a single uow.
       <xs:attribute name='auditRecoveryDepth' type='xs:integer'/>
       <xs:attribute name='brokerName' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
+      <xs:attribute name='changeAutoCommitAllowed' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Whether the JDBC driver allows to set the auto commit.
+Some drivers does not allow changing the auto commit. The default value is true.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='cleanupPeriod' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -3993,7 +3891,7 @@ BrokerService when the Connector is embedded
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='inboundQueueBridges' minOccurs='0' maxOccurs='1'>
+        <xs:element name='inboundQueueBridges' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:inboundQueueBridge'/>
@@ -4023,7 +3921,7 @@ BrokerService when the Connector is embedded
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='outboundQueueBridges' minOccurs='0' maxOccurs='1'>
+        <xs:element name='outboundQueueBridges' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:outboundQueueBridge'/>
@@ -4130,7 +4028,7 @@ BrokerService when the Connector is embedded
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='inboundTopicBridges' minOccurs='0' maxOccurs='1'>
+        <xs:element name='inboundTopicBridges' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:inboundTopicBridge'/>
@@ -4160,7 +4058,7 @@ BrokerService when the Connector is embedded
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='outboundTopicBridges' minOccurs='0' maxOccurs='1'>
+        <xs:element name='outboundTopicBridges' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:outboundTopicBridge'/>
@@ -4235,6 +4133,75 @@ ordering.
   </xs:element>
 
 
+  <!-- element for type: org.apache.activemq.usage.JobSchedulerUsage -->
+  <xs:element name='jobSchedulerUsage'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        Used to keep track of how much of something is being used so that a
+productive working set usage can be controlled. Main use case is manage
+memory usage.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='executor' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='limiter' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:defaultUsageCapacity'/>
+              <xs:element ref='tns:usageCapacity'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='parent' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='store' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='executor' type='xs:string'/>
+      <xs:attribute name='limit' type='xs:string'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets the memory limit in bytes. Setting the limit in bytes will set the
+usagePortion to 0 since the UsageManager is not going to be portion based
+off the parent.
+When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='limiter' type='xs:string'/>
+      <xs:attribute name='name' type='xs:string'/>
+      <xs:attribute name='parent' type='xs:string'/>
+      <xs:attribute name='percentUsage' type='xs:integer'/>
+      <xs:attribute name='percentUsageMinDelta' type='xs:string'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets the minimum number of percentage points the usage has to change
+before a UsageListener event is fired by the manager.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='pollingTime' type='xs:integer'/>
+      <xs:attribute name='store' type='xs:string'/>
+      <xs:attribute name='usagePortion' type='xs:float'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
   <!-- element for type: org.apache.activemq.store.journal.JournalPersistenceAdapter -->
   <xs:element name='journalPersistenceAdapter'>
     <xs:annotation>
@@ -4263,11 +4230,9 @@ other long term persistent storage.
         <xs:element name='longTermPersistence' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:amqPersistenceAdapter'/>
               <xs:element ref='tns:jdbcPersistenceAdapter'/>
               <xs:element ref='tns:journalPersistenceAdapter'/>
               <xs:element ref='tns:kahaDB'/>
-              <xs:element ref='tns:kahaPersistenceAdapter'/>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
@@ -4278,11 +4243,9 @@ other long term persistent storage.
         <xs:element name='persistenceAdapter' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:amqPersistenceAdapter'/>
               <xs:element ref='tns:jdbcPersistenceAdapter'/>
               <xs:element ref='tns:journalPersistenceAdapter'/>
               <xs:element ref='tns:kahaDB'/>
-              <xs:element ref='tns:kahaPersistenceAdapter'/>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
@@ -4809,53 +4772,6 @@ used with org.apache.activemq.ActiveMQConnectionFactory#setTransactedIndividualA
   </xs:element>
 
 
-  <!-- element for type: org.apache.activemq.store.kahadaptor.KahaPersistenceAdapter -->
-  <xs:element name='kahaPersistenceAdapter'>
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='brokerService' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:broker'/>
-              <xs:element ref='tns:brokerService'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='size' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='usageManager' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:systemUsage'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
-      </xs:choice></xs:choice>
-      <xs:attribute name='brokerName' type='xs:string'/>
-      <xs:attribute name='brokerService' type='xs:string'/>
-      <xs:attribute name='directory' type='xs:string'/>
-      <xs:attribute name='maxDataFileLength' type='xs:string'>
-        <xs:annotation>
-          <xs:documentation><![CDATA[
-            When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
-          ]]></xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name='persistentIndex' type='xs:boolean'/>
-      <xs:attribute name='size' type='xs:string'/>
-      <xs:attribute name='usageManager' type='xs:string'/>
-      <xs:attribute name='id' type='xs:ID'/>
-      <xs:anyAttribute namespace='##other' processContents='lax'/>
-    </xs:complexType>
-  </xs:element>
-
-
   <!-- element for type: org.apache.activemq.security.LDAPAuthorizationMap -->
   <xs:element name='lDAPAuthorizationMap'>
     <xs:annotation>
@@ -4870,7 +4786,7 @@ used with org.apache.activemq.ActiveMQConnectionFactory#setTransactedIndividualA
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='options' minOccurs='0' maxOccurs='1'>
+        <xs:element name='options' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -4952,10 +4868,10 @@ last message.
   <xs:element name='ldapNetworkConnector'>
     <xs:annotation>
       <xs:documentation><![CDATA[
-        class to create dynamic network connectors listed in an directory
-server using the LDAP v3 protocol as defined in RFC 2251, the
-entries listed in the directory server must implement the ipHost
-and ipService objectClasses as defined in RFC 2307.
+        class to create dynamic network connectors listed in an directory server
+using the LDAP v3 protocol as defined in RFC 2251, the entries listed in the
+directory server must implement the ipHost and ipService objectClasses as
+defined in RFC 2307.
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
@@ -4974,28 +4890,29 @@ and ipService objectClasses as defined in RFC 2307.
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
+      <xs:attribute name='advisoryForFailedForward' type='xs:boolean'/>
       <xs:attribute name='alwaysSyncSend' type='xs:boolean'/>
       <xs:attribute name='anonymousAuthentication' type='xs:boolean'>
         <xs:annotation>
@@ -5038,8 +4955,8 @@ and ipService objectClasses as defined in RFC 2307.
       <xs:attribute name='searchEventListener' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            enables/disable a persistent search to the LDAP server as defined
-in draft-ietf-ldapext-psearch-03.txt (2.16.840.1.113730.3.4.3)
+            enables/disable a persistent search to the LDAP server as defined in
+draft-ietf-ldapext-psearch-03.txt (2.16.840.1.113730.3.4.3)
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -5122,6 +5039,17 @@ LevelDB - Embedded Lightweight Non-Relational Database
             </xs:choice>
           </xs:complexType>
         </xs:element>
+        <xs:element name='locker' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:database-locker'/>
+              <xs:element ref='tns:lease-database-locker'/>
+              <xs:element ref='tns:shared-file-locker'/>
+              <xs:element ref='tns:transact-database-locker'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='usageManager' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
@@ -5136,7 +5064,6 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='brokerName' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
       <xs:attribute name='directory' type='xs:string'/>
-      <xs:attribute name='failIfLocked' type='xs:boolean'/>
       <xs:attribute name='flushDelay' type='xs:integer'/>
       <xs:attribute name='indexBlockRestartInterval' type='xs:integer'/>
       <xs:attribute name='indexBlockSize' type='xs:integer'/>
@@ -5145,6 +5072,8 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='indexFactory' type='xs:string'/>
       <xs:attribute name='indexMaxOpenFiles' type='xs:integer'/>
       <xs:attribute name='indexWriteBufferSize' type='xs:integer'/>
+      <xs:attribute name='lockKeepAlivePeriod' type='xs:long'/>
+      <xs:attribute name='locker' type='xs:string'/>
       <xs:attribute name='logCompression' type='xs:string'/>
       <xs:attribute name='logDirectory' type='xs:string'/>
       <xs:attribute name='logSize' type='xs:long'/>
@@ -5152,6 +5081,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='paranoidChecks' type='xs:boolean'/>
       <xs:attribute name='sync' type='xs:boolean'/>
       <xs:attribute name='usageManager' type='xs:string'/>
+      <xs:attribute name='useLock' type='xs:boolean'/>
       <xs:attribute name='verifyChecksums' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
@@ -5273,7 +5203,7 @@ distribution of destinations across multiple kahaDB persistence adapters
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='entries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='entries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               A helper method to allow the destination map to be populated from a
@@ -5284,7 +5214,7 @@ dependency injection framework such as Spring
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='filteredPersistenceAdapters' minOccurs='0' maxOccurs='1'>
+        <xs:element name='filteredPersistenceAdapters' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the  FilteredKahaDBPersistenceAdapter entries
@@ -5357,7 +5287,7 @@ be used
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='environment' minOccurs='0' maxOccurs='1'>
+        <xs:element name='environment' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -5414,47 +5344,6 @@ if the broker name was not set.
   </xs:element>
 
 
-  <!-- element for type: org.apache.activemq.broker.ft.MasterConnector -->
-  <xs:element name='masterConnector'>
-    <xs:annotation>
-      <xs:documentation><![CDATA[
-        Connects a Slave Broker to a Master when using <a
-href="http://activemq.apache.org/masterslave.html">Master Slave</a> for High
-Availability of messages.
-      ]]></xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='brokerService' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:broker'/>
-              <xs:element ref='tns:brokerService'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
-      </xs:choice></xs:choice>
-      <xs:attribute name='brokerService' type='xs:string'/>
-      <xs:attribute name='failedToStart' type='xs:boolean'>
-        <xs:annotation>
-          <xs:documentation><![CDATA[
-            Get the failedToStart
-          ]]></xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name='localURI' type='xs:string'/>
-      <xs:attribute name='password' type='xs:string'/>
-      <xs:attribute name='remoteURI' type='xs:string'/>
-      <xs:attribute name='remoteUri' type='xs:string'/>
-      <xs:attribute name='userName' type='xs:string'/>
-      <xs:attribute name='id' type='xs:ID'/>
-      <xs:anyAttribute namespace='##other' processContents='lax'/>
-    </xs:complexType>
-  </xs:element>
-
-
   <!-- element for type: org.apache.activemq.store.jdbc.adapter.MaxDBJDBCAdapter -->
   <xs:element name='maxdb-jdbc-adapter'>
     <xs:annotation>
@@ -5475,7 +5364,13 @@ Availability of messages.
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -5691,17 +5586,17 @@ based transport could be used.
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -5721,13 +5616,14 @@ based transport could be used.
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
+      <xs:attribute name='advisoryForFailedForward' type='xs:boolean'/>
       <xs:attribute name='alwaysSyncSend' type='xs:boolean'/>
       <xs:attribute name='bridge' type='xs:string'/>
       <xs:attribute name='bridgeTempDestinations' type='xs:boolean'/>
@@ -5853,7 +5749,13 @@ socket.
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
       <xs:attribute name='engineType' type='xs:string'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='typeStatement' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
@@ -5892,28 +5794,29 @@ available and setup a connection to each available remote broker
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='durableDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='dynamicallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='excludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='staticallyIncludedDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
+      <xs:attribute name='advisoryForFailedForward' type='xs:boolean'/>
       <xs:attribute name='alwaysSyncSend' type='xs:boolean'/>
       <xs:attribute name='bridgeTempDestinations' type='xs:boolean'/>
       <xs:attribute name='brokerName' type='xs:string'/>
@@ -6056,7 +5959,13 @@ The databases/JDBC drivers that use this adapter are:
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -6091,7 +6000,13 @@ in JDBC Driver implementations.
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -6275,8 +6190,8 @@ to set the inbound topic name as well.
   </xs:element>
 
 
-  <!-- element for type: org.apache.activemq.store.kahadb.plist.PListStore -->
-  <xs:element name='pListStore'>
+  <!-- element for type: org.apache.activemq.store.kahadb.plist.PListStoreImpl -->
+  <xs:element name='pListStoreImpl'>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
         <xs:element name='brokerService' minOccurs='0' maxOccurs='1'>
@@ -6347,6 +6262,7 @@ should be used
         <xs:element name='dispatchPolicy' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:priorityDispatchPolicy'/>
               <xs:element ref='tns:priorityNetworkDispatchPolicy'/>
               <xs:element ref='tns:roundRobinDispatchPolicy'/>
               <xs:element ref='tns:simpleDispatchPolicy'/>
@@ -6642,7 +6558,7 @@ different policies.
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='entries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='entries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               A helper method to allow the destination map to be populated from a
@@ -6653,7 +6569,7 @@ dependency injection framework such as Spring
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='policyEntries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='policyEntries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the individual entries on the policy map
@@ -6666,6 +6582,62 @@ dependency injection framework such as Spring
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='defaultEntry' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- element for type: org.apache.activemq.pool.PooledConnectionFactoryBean -->
+  <xs:element name='pooledConnectionFactory'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        Simple factory bean used to create a jencks connection pool.
+Depending on the properties set, it will create a simple pool,
+a transaction aware connection pool, or a jca aware connection pool.
+
+<pre class="code">
+<bean id="pooledConnectionFactory" class="javax.script.ScriptEngineFactory.PooledConnectionFactoryFactoryBean">
+  <property name="connectionFactory" ref="connectionFactory" />
+  <property name="transactionManager" ref="transactionManager" />
+  <property name="resourceName" value="ResourceName" />
+</bean>
+</pre>
+
+The <code>resourceName</code> property should be used along with the {@link ActiveMQResourceManager} and have
+the same value than its <code>resourceName</code> property. This will make sure the transaction manager
+maps correctly the connection factory to the recovery process.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='connectionFactory' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:connectionFactory'/>
+              <xs:element ref='tns:xaConnectionFactory'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='poolFactory' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='transactionManager' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='connectionFactory' type='xs:string'/>
+      <xs:attribute name='maxConnections' type='xs:integer'/>
+      <xs:attribute name='maximumActive' type='xs:integer'/>
+      <xs:attribute name='poolFactory' type='xs:string'/>
+      <xs:attribute name='resourceName' type='xs:string'/>
+      <xs:attribute name='transactionManager' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -6706,7 +6678,13 @@ The databases/JDBC drivers that use this adapter are:
       </xs:choice></xs:choice>
       <xs:attribute name='acksPkName' type='xs:string'/>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -6767,6 +6745,21 @@ messages for non-durable topics before messages are discarded.
   </xs:element>
 
 
+  <!-- element for type: org.apache.activemq.broker.region.policy.PriorityDispatchPolicy -->
+  <xs:element name='priorityDispatchPolicy'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        Priority dispatch policy that sends a message to every subscription that
+matches the message in consumer priority order.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
   <!-- element for type: org.apache.activemq.broker.region.policy.PriorityNetworkDispatchPolicy -->
   <xs:element name='priorityNetworkDispatchPolicy'>
     <xs:annotation>
@@ -6799,6 +6792,31 @@ used in conjunction with network bridge suppresDuplicateTopicSubscriptions
       <xs:attribute name='proxyToLocalBroker' type='xs:boolean'/>
       <xs:attribute name='remote' type='xs:string'/>
       <xs:attribute name='server' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- element for type: org.apache.activemq.broker.PublishedAddressPolicy -->
+  <xs:element name='publishedAddressPolicy'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        Policy object that controls how a TransportConnector publishes the connector's
+address to the outside world.  By default the connector will publish itself
+using the resolved host name of the bound server socket.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name='clusterClientUriQuery' type='xs:string'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Gets the URI query that's configured on the published URI that's sent to client's
+when the cluster info is updated.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='publishedHostStrategy' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -6865,7 +6883,7 @@ specific query mechanism to load any messages they may have missed.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='compositeDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='compositeDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -7167,7 +7185,7 @@ different policies.
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='entries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='entries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               A helper method to allow the destination map to be populated from a
@@ -7178,7 +7196,7 @@ dependency injection framework such as Spring
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='redeliveryPolicyEntries' minOccurs='0' maxOccurs='1'>
+        <xs:element name='redeliveryPolicyEntries' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the individual entries on the redeliveryPolicyMap
@@ -7273,7 +7291,7 @@ a constant destination.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='userGroups' minOccurs='0' maxOccurs='1'>
+        <xs:element name='userGroups' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the groups a user is in. The key is the user name and the value is a
@@ -7284,7 +7302,7 @@ Set of groups
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='userPasswords' minOccurs='0' maxOccurs='1'>
+        <xs:element name='userPasswords' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets the map indexed by user name with the value the password
@@ -7294,7 +7312,7 @@ Set of groups
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='users' minOccurs='0' maxOccurs='1'>
+        <xs:element name='users' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
               Sets individual users for authentication
@@ -7492,7 +7510,7 @@ matches the message.
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='keyManagers' minOccurs='0' maxOccurs='1'>
+        <xs:element name='keyManagers' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -7502,7 +7520,7 @@ matches the message.
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='trustManagers' minOccurs='0' maxOccurs='1'>
+        <xs:element name='trustManagers' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -7533,12 +7551,12 @@ matches the message.
   <xs:element name='statements'>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='createSchemaStatements' minOccurs='0' maxOccurs='1'>
+        <xs:element name='createSchemaStatements' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='dropSchemaStatements' minOccurs='0' maxOccurs='1'>
+        <xs:element name='dropSchemaStatements' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -7702,11 +7720,9 @@ memory usage.
         <xs:element name='store' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:amqPersistenceAdapter'/>
               <xs:element ref='tns:jdbcPersistenceAdapter'/>
               <xs:element ref='tns:journalPersistenceAdapter'/>
               <xs:element ref='tns:kahaDB'/>
-              <xs:element ref='tns:kahaPersistenceAdapter'/>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
@@ -7774,7 +7790,13 @@ The databases/JDBC drivers that use this adapter are:
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -7818,7 +7840,13 @@ order.
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -7840,11 +7868,9 @@ manage memory usage.
         <xs:element name='adapter' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:amqPersistenceAdapter'/>
               <xs:element ref='tns:jdbcPersistenceAdapter'/>
               <xs:element ref='tns:journalPersistenceAdapter'/>
               <xs:element ref='tns:kahaDB'/>
-              <xs:element ref='tns:kahaPersistenceAdapter'/>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
@@ -7855,6 +7881,19 @@ manage memory usage.
         <xs:element name='executor' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='jobSchedulerStore' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='jobSchedulerUsage' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:jobSchedulerUsage'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
           </xs:complexType>
         </xs:element>
         <xs:element name='memoryUsage' minOccurs='0' maxOccurs='1'>
@@ -7884,7 +7923,8 @@ manage memory usage.
         <xs:element name='tempStore' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:pListStore'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:pListStoreImpl'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -7901,6 +7941,8 @@ manage memory usage.
       </xs:choice></xs:choice>
       <xs:attribute name='adapter' type='xs:string'/>
       <xs:attribute name='executor' type='xs:string'/>
+      <xs:attribute name='jobSchedulerStore' type='xs:string'/>
+      <xs:attribute name='jobSchedulerUsage' type='xs:string'/>
       <xs:attribute name='memoryUsage' type='xs:string'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='parent' type='xs:string'/>
@@ -7975,7 +8017,7 @@ destination
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='adminACLs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='adminACLs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -7991,12 +8033,12 @@ destination
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='readACLs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='readACLs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='writeACLs' minOccurs='0' maxOccurs='1'>
+        <xs:element name='writeACLs' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -8039,7 +8081,7 @@ destination
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='compositeDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='compositeDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -8094,7 +8136,7 @@ destination
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='compositeDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='compositeDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -8173,7 +8215,8 @@ memory usage.
         <xs:element name='store' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:pListStore'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:pListStoreImpl'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -8332,7 +8375,7 @@ subscriptions.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='compositeDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='compositeDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:queue'/>
@@ -8461,7 +8504,13 @@ against the same logical database.
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='batchStatments' type='xs:boolean'/>
-      <xs:attribute name='maxRows' type='xs:integer'/>
+      <xs:attribute name='maxRows' type='xs:integer'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            the max value for statement maxRows, used to limit jdbc queries
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='useExternalMessageReferences' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -8507,6 +8556,20 @@ consume a given message
           </xs:annotation>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='publishedAddressPolicy' minOccurs='0' maxOccurs='1'>
+          <xs:annotation>
+            <xs:documentation><![CDATA[
+              Gets the currently configured policy for creating the published connection address of this
+TransportConnector.
+            ]]></xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:publishedAddressPolicy'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
           </xs:complexType>
         </xs:element>
         <xs:element name='server' minOccurs='0' maxOccurs='1'>
@@ -8555,6 +8618,14 @@ consume a given message
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='name' type='xs:string'/>
+      <xs:attribute name='publishedAddressPolicy' type='xs:string'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Gets the currently configured policy for creating the published connection address of this
+TransportConnector.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='rebalanceClusterClients' type='xs:boolean'/>
       <xs:attribute name='server' type='xs:string'/>
       <xs:attribute name='taskRunnerFactory' type='xs:string'/>
@@ -8685,7 +8756,7 @@ href="http://activemq.apache.org/virtual-destinations.html">Virtual Topics</a>.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='virtualDestinations' minOccurs='0' maxOccurs='1'>
+        <xs:element name='virtualDestinations' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:compositeQueue'/>

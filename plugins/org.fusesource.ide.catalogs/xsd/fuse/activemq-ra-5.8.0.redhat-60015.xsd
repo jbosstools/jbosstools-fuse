@@ -62,6 +62,7 @@ from a single ActiveMQDestination POJO
       <xs:attribute name='subscriptionDurability' type='xs:string'/>
       <xs:attribute name='subscriptionName' type='xs:string'/>
       <xs:attribute name='useExponentialBackOff' type='xs:boolean'/>
+      <xs:attribute name='useJndi' type='xs:boolean'/>
       <xs:attribute name='useRAManagedTransaction' type='xs:string'/>
       <xs:attribute name='userName' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>

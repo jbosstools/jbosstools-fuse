@@ -12,60 +12,20 @@ import org.fusesource.insight.maven.aether.Authentications
 object UpdateReleases {
 
   val fuseArchetypeVersion = System.getProperty("fabric-version", "7.2.0.redhat-010")
+  val activemqVersion = System.getProperty("activemq-version", "5.7.0.redhat-010")
+  val camelVersion = System.getProperty("camel-version", "2.10.0.redhat-010")
+
   val fuseVersion = "redhat-" + fuseArchetypeVersion.split("-").last
 
   val releaseRepo = if (true)
-    "nexus/content/groups/m2-release-proxy"
+    "nexus/content/groups/ea"
+    //"nexus/content/groups/m2-release-proxy"
   else
     "nexus/content/repositories/releases"
 
   val fuseAuthenticator = new FuseRepoAuthenticator()
-
-
-  def main(args: Array[String]): Unit = {
-    println("Using fuseVersion " + fuseVersion + " and fuseArchetypeVersion " + fuseArchetypeVersion)
-    println("Adding new authenticator!!!")
-    Authenticator.setDefault(fuseAuthenticator)
-
-    // lets find the eclipse plugins directory
-    var rs = new File("../plugins")
-    if (args.length > 1) {
-      rs = new File(args(0))
-    } else if (!rs.exists()) {
-      rs = new File("../../plugins")
-    }
-
-    println("Using IDE directory: " + rs.getAbsolutePath)
-    if (!rs.exists()) {
-      fail("IDE directory does not exist!")
-    }
-    if (!rs.isDirectory()) {
-      fail("IDE directory is a file, not a directory!")
-    }
-
-    val archetypesDir = new File(rs, "org.fusesource.ide.branding/archetypes")
-    val xsdsDir = new File(rs, "org.fusesource.ide.catalogs")
-
-    val tasks = List(
-      new DownloadArchetypes(archetypesDir)
-/*
-      new DownloadLatestXsds(xsdsDir, true),
-      new DownloadFuseArchetypes(archetypesDir, true)
-*/
-    )
-
-    for (task <- tasks) {
-      println("Starting: " + task)
-      task.run()
-    }
-    println("Done!")
-  }
-
-  protected def fail(message: String): Unit = {
-    println(message)
-    System.exit(1)
-  }
 }
+
 class FuseRepoAuthenticator extends Authenticator {
   override def getPasswordAuthentication() : PasswordAuthentication = {
     val authentication = Authentications.getFuseRepoAuthentication()
