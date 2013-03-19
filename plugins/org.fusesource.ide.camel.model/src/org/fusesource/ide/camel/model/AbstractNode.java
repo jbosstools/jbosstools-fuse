@@ -1536,6 +1536,10 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		if (a == null && b == null) return true;
 		if (a == null && b != null) return false;
 		if (a != null && b == null) return false;
+		
+		if (a instanceof String && b instanceof String) {
+			return ((String)a).equals((String)b);
+		}
 
 		if (a instanceof ExpressionDefinition &&
 				b instanceof ExpressionDefinition) {
