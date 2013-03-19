@@ -12,11 +12,10 @@
 package org.fusesource.ide.project.providers;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.project.Activator;
-import org.fusesource.ide.project.providers.CamelFilesContentProvider.CamelVirtualFile;
-import org.fusesource.ide.project.providers.CamelFilesContentProvider.CamelVirtualFolder;
 
 /**
  * @author lhein
@@ -31,7 +30,9 @@ public class CamelFilesLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		String name;
-		if (element instanceof CamelVirtualFolder) {
+		if (element instanceof IProject) {
+			return super.getImage(element);
+		} else if (element instanceof CamelVirtualFolder) {
 			name = "camelFolderIcon";
 		} else {
 			name = "camelFileIcon";
@@ -50,10 +51,13 @@ public class CamelFilesLabelProvider extends LabelProvider {
 		} else if (element instanceof CamelVirtualFile) {
 			IFile ifile = (IFile)element;
 			return ifile.getProjectRelativePath().toString();
+		} else if (element instanceof IProject) {
+			IProject prj = (IProject)element;
+			return prj.getName();
 		} else if (element instanceof IFile) {
 			IFile ifile = (IFile)element;
 			return ifile.getName();
 		}
-		return element.toString();
+		return super.getText(element);
 	}
 }

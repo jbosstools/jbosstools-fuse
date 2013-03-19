@@ -58,6 +58,17 @@
                  </adapt>
              </and>
           </possibleChildren>
+       <enablement>
+          <and>
+             <instanceof
+                   value="org.eclipse.core.resources.IProject">
+             </instanceof>
+             <test
+                   forcePluginActivation="true"
+                   property="org.fusesource.ide.project.CamelContextFilesCountTester.camelContextFileCount">
+             </test>
+          </and>
+       </enablement>
 	   </navigatorContent>
 	</extension>
 	
@@ -82,4 +93,14 @@
 	      </includes>
 	   </viewerContentBinding>
 	</extension>
+ <extension
+       point="org.eclipse.core.expressions.propertyTesters">
+    <propertyTester
+          class="org.fusesource.ide.project.CamelContextFilesCountTester"
+          id="org.fusesource.ide.project.CamelContextFilesCountTester"
+          namespace="org.fusesource.ide.project.CamelContextFilesCountTester"
+          properties="camelContextFileCount"
+          type="org.eclipse.core.resources.IProject">
+    </propertyTester>
+ </extension>
 </plugin>

@@ -12,6 +12,7 @@ Require-Bundle: org.fusesource.ide.commons,
  org.eclipse.core.runtime,
  org.eclipse.ui.ide,
  org.eclipse.ui.navigator,
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ org.eclipse.core.expressions
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.project.Activator
