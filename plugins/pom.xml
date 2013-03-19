@@ -219,11 +219,6 @@
       <version>1_2</version>
     </dependency>
     <dependency>
-      <groupId>commons-net</groupId>
-      <artifactId>commons-net</artifactId>
-      <version>3.2</version>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.jetty.orbit</groupId>
       <artifactId>javax.annotation</artifactId>
       <version>1.1.0.v201108011116</version>

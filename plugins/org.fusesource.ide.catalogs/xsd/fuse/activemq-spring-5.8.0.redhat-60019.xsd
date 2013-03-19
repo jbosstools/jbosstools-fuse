@@ -6620,11 +6620,6 @@ maps correctly the connection factory to the recovery process.
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='poolFactory' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name='transactionManager' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
@@ -6635,7 +6630,6 @@ maps correctly the connection factory to the recovery process.
       <xs:attribute name='connectionFactory' type='xs:string'/>
       <xs:attribute name='maxConnections' type='xs:integer'/>
       <xs:attribute name='maximumActive' type='xs:integer'/>
-      <xs:attribute name='poolFactory' type='xs:string'/>
       <xs:attribute name='resourceName' type='xs:string'/>
       <xs:attribute name='transactionManager' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
