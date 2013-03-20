@@ -132,6 +132,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	}
 
 	private void addBeanInstances(List<ICreateFeature> featureList, Map<String, String> beans) {
+		ArrayList<String> processedBeans = new ArrayList<String>();
 		Set<Entry<String, String>> entrySet = beans.entrySet();
 		for (Entry<String, String> entry : entrySet) {
 			String name = entry.getKey();
@@ -141,6 +142,9 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 				continue;
 			}
 
+			if (processedBeans.contains(name)) continue;
+			processedBeans.add(name);
+			
 			Bean bean = new Bean();
 			bean.setName(name);
 			bean.setRef(name);
@@ -154,12 +158,15 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	}
 
 	private void addEndpointInstances(List<ICreateFeature> featureList, Set<Endpoint> endpoints) {
+		ArrayList<String> processedURIs = new ArrayList<String>();
 		for (Endpoint endpoint : endpoints) {
 			String id = endpoint.getId();
 			String url = endpoint.getUri();
 			if (Strings.isBlank(id) && Strings.isBlank(url)) {
 				continue;
 			}
+			if (processedURIs.contains(url)) continue;
+			processedURIs.add(url);
 			String description = endpoint.getDescription();
 			String title = endpoint.getDisplayText();
 			featureList.add(new CreateEndpointFigureFeature(this, title, description, endpoint));

@@ -151,13 +151,17 @@ public abstract class AbstractAddNodeMenuFactory {
 
 	protected void addBeanInstances(ContextMenuEntry menu, Map<String, String> beans, ICustomContext context,
 			IFeatureProvider fp) {
-
+		ArrayList<String> processedBeans = new ArrayList<String>();
+		
 		for (Map.Entry<String,String> entry : beans.entrySet()) {
 			final String name = entry.getKey();
 			final String aClass = entry.getValue();
 			if (Strings.isBlank(name) && Strings.isBlank(aClass)) {
 				continue;
 			}
+			if (processedBeans.contains(name)) continue;
+			processedBeans.add(name);
+			
 			String description = "bean '" + name + "' of type " + aClass;
 			addMenuItem(menu, name, description, Bean.class, context, fp, new CreateNodeConnectionFeature(fp, Bean.class) {
 
@@ -177,6 +181,7 @@ public abstract class AbstractAddNodeMenuFactory {
 
 	protected void addEndpointInstances(ContextMenuEntry menu, Set<Endpoint> endpoints, ICustomContext context, IFeatureProvider fp) {
 		SortedMap<String,Endpoint> map = new TreeMap<String,Endpoint>();
+		ArrayList<String> processedURIs = new ArrayList<String>();
 		for (Endpoint endpoint : endpoints) {
 			map.put(endpoint.getDisplayText(), endpoint);
 		}
@@ -187,6 +192,8 @@ public abstract class AbstractAddNodeMenuFactory {
 			if (Strings.isBlank(id) && Strings.isBlank(url)) {
 				continue;
 			}
+			if (processedURIs.contains(url)) continue;
+			processedURIs.add(url);
 			String description = endpoint.getDescription();
 			String title = endpoint.getDisplayText();
 
