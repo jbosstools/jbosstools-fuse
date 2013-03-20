@@ -18,6 +18,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.String;
+import java.lang.System;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Downloader {
@@ -26,6 +29,13 @@ public class Downloader {
     private File archetypeDir = new File("fuse-ide-archetypes");
     private File xsdDir = new File("fuse-ide-xsds");
     private boolean delete = true;
+
+    // setup an ignore list for unwanted archetypes
+    private static ArrayList<String> ignoredArtifacts = new ArrayList<String>();
+    static {
+        ignoredArtifacts.add("camel-archetype-component-scala");
+        ignoredArtifacts.add("camel-archetype-scala");
+    }
 
     public static void main(String[] args) {
         try {
@@ -110,8 +120,12 @@ public class Downloader {
 
         String[] groupIds = {"org.apache.camel.archetypes", "org.apache.cxf.archetype", "org.fusesource.fabric"};
         for (String groupId : groupIds) {
-            List<ArtifactDTO> answer = indexer.search(groupId, null, null, packaging, classifier);
+            List<ArtifactDTO> answer = indexer.search(groupId, "", "", packaging, classifier, null);
             for (ArtifactDTO artifact : answer) {
+                if (ignoredArtifacts.contains(artifact.getArtifactId())) {
+                    System.out.println("Ignored: " + artifact.getArtifactId());
+                    continue;
+                }
                 out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + artifact.getVersion() + "'>" + artifact.getDescription() + "</archetype>");
                 downloadArtifact(artifact);
             }
