@@ -75,16 +75,6 @@ from a single ActiveMQDestination POJO
   <xs:element name='managedConnectionFactory'>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='allPrefetchValues' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='durableTopicPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name='info' minOccurs='0' maxOccurs='1'>
           <xs:annotation>
             <xs:documentation><![CDATA[
@@ -95,37 +85,7 @@ from a single ActiveMQDestination POJO
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='inputStreamPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name='logWriter' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='maximumRedeliveries' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='optimizeDurableTopicPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='queueBrowserPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='queuePrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='redeliveryUseExponentialBackOff' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -135,21 +95,11 @@ from a single ActiveMQDestination POJO
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='topicPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='useInboundSession' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='allPrefetchValues' type='xs:string'/>
+      <xs:attribute name='allPrefetchValues' type='xs:integer'/>
       <xs:attribute name='clientid' type='xs:string'/>
-      <xs:attribute name='durableTopicPrefetch' type='xs:string'/>
+      <xs:attribute name='durableTopicPrefetch' type='xs:integer'/>
       <xs:attribute name='info' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -158,20 +108,20 @@ from a single ActiveMQDestination POJO
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='initialRedeliveryDelay' type='xs:long'/>
-      <xs:attribute name='inputStreamPrefetch' type='xs:string'/>
+      <xs:attribute name='inputStreamPrefetch' type='xs:integer'/>
       <xs:attribute name='logWriter' type='xs:string'/>
-      <xs:attribute name='maximumRedeliveries' type='xs:string'/>
+      <xs:attribute name='maximumRedeliveries' type='xs:integer'/>
       <xs:attribute name='maximumRedeliveryDelay' type='xs:long'/>
-      <xs:attribute name='optimizeDurableTopicPrefetch' type='xs:string'/>
+      <xs:attribute name='optimizeDurableTopicPrefetch' type='xs:integer'/>
       <xs:attribute name='password' type='xs:string'/>
-      <xs:attribute name='queueBrowserPrefetch' type='xs:string'/>
-      <xs:attribute name='queuePrefetch' type='xs:string'/>
+      <xs:attribute name='queueBrowserPrefetch' type='xs:integer'/>
+      <xs:attribute name='queuePrefetch' type='xs:integer'/>
       <xs:attribute name='redeliveryBackOffMultiplier' type='xs:double'/>
-      <xs:attribute name='redeliveryUseExponentialBackOff' type='xs:string'/>
+      <xs:attribute name='redeliveryUseExponentialBackOff' type='xs:boolean'/>
       <xs:attribute name='resourceAdapter' type='xs:string'/>
       <xs:attribute name='serverUrl' type='xs:string'/>
-      <xs:attribute name='topicPrefetch' type='xs:string'/>
-      <xs:attribute name='useInboundSession' type='xs:string'/>
+      <xs:attribute name='topicPrefetch' type='xs:integer'/>
+      <xs:attribute name='useInboundSession' type='xs:boolean'/>
       <xs:attribute name='userName' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
@@ -188,17 +138,7 @@ from a single ActiveMQDestination POJO
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='allPrefetchValues' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name='connectionFactory' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='durableTopicPrefetch' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
@@ -213,49 +153,9 @@ from a single ActiveMQDestination POJO
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name='inputStreamPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='maximumRedeliveries' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='optimizeDurableTopicPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='queueBrowserPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='queuePrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='redeliveryUseExponentialBackOff' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='topicPrefetch' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='useInboundSession' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='allPrefetchValues' type='xs:string'/>
+      <xs:attribute name='allPrefetchValues' type='xs:integer'/>
       <xs:attribute name='brokerXmlConfig' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -267,7 +167,7 @@ if using embedded mode.
       </xs:attribute>
       <xs:attribute name='clientid' type='xs:string'/>
       <xs:attribute name='connectionFactory' type='xs:string'/>
-      <xs:attribute name='durableTopicPrefetch' type='xs:string'/>
+      <xs:attribute name='durableTopicPrefetch' type='xs:integer'/>
       <xs:attribute name='info' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -276,18 +176,18 @@ if using embedded mode.
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='initialRedeliveryDelay' type='xs:long'/>
-      <xs:attribute name='inputStreamPrefetch' type='xs:string'/>
-      <xs:attribute name='maximumRedeliveries' type='xs:string'/>
+      <xs:attribute name='inputStreamPrefetch' type='xs:integer'/>
+      <xs:attribute name='maximumRedeliveries' type='xs:integer'/>
       <xs:attribute name='maximumRedeliveryDelay' type='xs:long'/>
-      <xs:attribute name='optimizeDurableTopicPrefetch' type='xs:string'/>
+      <xs:attribute name='optimizeDurableTopicPrefetch' type='xs:integer'/>
       <xs:attribute name='password' type='xs:string'/>
-      <xs:attribute name='queueBrowserPrefetch' type='xs:string'/>
-      <xs:attribute name='queuePrefetch' type='xs:string'/>
+      <xs:attribute name='queueBrowserPrefetch' type='xs:integer'/>
+      <xs:attribute name='queuePrefetch' type='xs:integer'/>
       <xs:attribute name='redeliveryBackOffMultiplier' type='xs:double'/>
-      <xs:attribute name='redeliveryUseExponentialBackOff' type='xs:string'/>
+      <xs:attribute name='redeliveryUseExponentialBackOff' type='xs:boolean'/>
       <xs:attribute name='serverUrl' type='xs:string'/>
-      <xs:attribute name='topicPrefetch' type='xs:string'/>
-      <xs:attribute name='useInboundSession' type='xs:string'/>
+      <xs:attribute name='topicPrefetch' type='xs:integer'/>
+      <xs:attribute name='useInboundSession' type='xs:boolean'/>
       <xs:attribute name='userName' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>

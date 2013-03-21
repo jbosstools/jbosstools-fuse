@@ -8293,17 +8293,12 @@ Attribute 'ttlCeiling' can be used to apply a limit to the expiration time
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='processNetworkMessages' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='adminConnectionContext' type='xs:string'/>
       <xs:attribute name='futureOnly' type='xs:boolean'/>
       <xs:attribute name='next' type='xs:string'/>
-      <xs:attribute name='processNetworkMessages' type='xs:string'/>
+      <xs:attribute name='processNetworkMessages' type='xs:boolean'/>
       <xs:attribute name='ttlCeiling' type='xs:long'>
         <xs:annotation>
           <xs:documentation><![CDATA[
