@@ -36,8 +36,8 @@ import org.fusesource.fabric.service.ssh.SshContainerProvider;
 import org.fusesource.fabric.zookeeper.IZKClient;
 import org.fusesource.fabric.zookeeper.spring.ZKClientFactoryBean;
 import org.fusesource.ide.commons.Bundles;
+import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.fabric.actions.FabricDetails;
-import org.fusesource.ide.fabric.actions.jclouds.JClouds;
 import org.fusesource.ide.fabric.navigator.Fabric;
 import org.linkedin.zookeeper.client.LifecycleListener;
 import org.osgi.framework.BundleContext;
@@ -195,12 +195,16 @@ public class FabricConnector {
 				}
 				 */
 			}
-
+			
 			addWatcher();
+			
+			// Trigger a FabricNotConnectedException if the connection failed.
+			checkConnected();
 
 		} else {
 			FabricPlugin.getLogger().warning("Fabric not found on url: " + url);
 		}
+
 	}
 
 	public IZKClient getZooKeeper() {
@@ -262,7 +266,7 @@ public class FabricConnector {
 			} catch (Exception e) {
 				FabricNotConnectedException fnce = new FabricNotConnectedException(this, e);
 				final String PID = FabricPlugin.PLUGIN_ID;
-				MultiStatus status = new MultiStatus(PID, 1, "Unable to connect to Fabric. Please make sure Fabric is running on the specified host and the used ports are not blocked.", fnce);
+				MultiStatus status = new MultiStatus(PID, 1, "Unable to connect to Fabric. Please make sure Fabric is running on the specified host, the used ports are not blocked and the ZooKeeper password is correct.", fnce);
 				StatusManager.getManager().handle(status, StatusManager.SHOW);
 				fabric.onDisconnect();
 				throw fnce;
@@ -314,7 +318,8 @@ public class FabricConnector {
 
 						@Override
 						public void onConnected() {
-							FabricPlugin.getLogger().info("Fabric ZooKeeper connected");
+							RiderLogFacade logger = FabricPlugin.getLogger();
+							logger.info("Fabric ZooKeeper connected");
 							connected.set(true);
 						}
 					});
