@@ -28,6 +28,20 @@ import org.eclipse.ui.part.Page;
 public class FormPage extends Page {
 	private FormSupport form;
 	private Composite control;
+	private ISelectionChangedListener selectionListener = new ISelectionChangedListener() {
+
+        @Override
+        public void selectionChanged(SelectionChangedEvent event) {
+            Object source = event.getSource();
+            IWorkbenchPart part = null;
+            if (source instanceof IWorkbenchPart) {
+                part = (IWorkbenchPart) source;
+            } else {
+                part = getSite().getPage().getActivePart();
+            }
+            ((ISelectionListener)form).selectionChanged(part, event.getSelection());
+        }
+    };
 
 	public FormPage(FormSupport form) {
 		this.form = form;
@@ -44,21 +58,7 @@ public class FormPage extends Page {
 		super.init(pageSite);
 		ISelectionProvider selectionProvider = pageSite.getSelectionProvider();
 		if (selectionProvider != null && form instanceof ISelectionListener) {
-			final ISelectionListener listener = (ISelectionListener) form;
-			selectionProvider.addSelectionChangedListener(new ISelectionChangedListener() {
-
-				@Override
-				public void selectionChanged(SelectionChangedEvent event) {
-					Object source = event.getSource();
-					IWorkbenchPart part = null;
-					if (source instanceof IWorkbenchPart) {
-						part = (IWorkbenchPart) source;
-					} else {
-						part = pageSite.getPage().getActivePart();
-					}
-					listener.selectionChanged(part, event.getSelection());
-				}
-			});
+			selectionProvider.addSelectionChangedListener(selectionListener);
 		}
 	}
 
@@ -74,6 +74,13 @@ public class FormPage extends Page {
 
 	@Override
 	public void dispose() {
+	    final IPageSite pageSite = getSite();
+	    if (pageSite != null) {
+            ISelectionProvider selectionProvider = pageSite.getSelectionProvider();
+            if (selectionProvider != null && form instanceof ISelectionListener) {
+                selectionProvider.removeSelectionChangedListener(selectionListener);
+            }
+	    }
 		form.dispose();
 		super.dispose();
 	}

@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -54,6 +55,22 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 	private boolean showToNode = true;
 	private boolean showTraceExchangeId = true;
 	private boolean showElapsedTime = true;
+	private ISelectionListener selectionListener = new ISelectionListener() {
+
+        @Override
+        public void selectionChanged(IWorkbenchPart part,
+                ISelection selection) {
+
+            // we only want to process selection change events from few selected sources...so filtering here
+            if (!isRelevantSelectionSource(part, selection)) {
+                return;
+            }
+
+            IExchangeBrowser browser = ExchangeBrowsers.getSelectedExchangeBrowser(selection);
+            setExchangeBrowser(browser);
+        }
+
+    };
 
 	public MessagesView() {
 	}
@@ -85,29 +102,26 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 		super.init(site);
 
 		if (site != null) {
-			site.getWorkbenchWindow().getSelectionService()
-			.addSelectionListener(new ISelectionListener() {
-
-				@Override
-				public void selectionChanged(IWorkbenchPart part,
-						ISelection selection) {
-
-					// we only want to process selection change events from few selected sources...so filtering here
-					if (!isRelevantSelectionSource(part, selection)) {
-						return;
-					}
-
-					IExchangeBrowser browser = ExchangeBrowsers.getSelectedExchangeBrowser(selection);
-					setExchangeBrowser(browser);
-				}
-
-			});
+			site.getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
 		}
-		makeActions();
-		aboutToBeShown();
 	}
 
-	private boolean isRelevantSelectionSource(IWorkbenchPart part, ISelection selection) {
+	@Override
+    public void createPartControl(Composite parent) {
+        super.createPartControl(parent);
+        aboutToBeShown();
+    }
+
+    @Override
+    public void dispose() {
+	    IViewSite site = getViewSite();
+	    if (site != null) {
+	        site.getWorkbenchWindow().getSelectionService().removeSelectionListener(selectionListener);
+	    }
+        super.dispose();
+    }
+
+    private boolean isRelevantSelectionSource(IWorkbenchPart part, ISelection selection) {
 		boolean process = false;
 
 		// we filter for specific selection sources...

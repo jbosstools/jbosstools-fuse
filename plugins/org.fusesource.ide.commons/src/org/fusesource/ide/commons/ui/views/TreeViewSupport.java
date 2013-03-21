@@ -93,12 +93,14 @@ public abstract class TreeViewSupport extends ColumnViewSupport {
 	}
 
 	protected void recreateColumns() {
+	    // remove the listeners
+        setConfiguration(null);
 		createColumns();
 		// force lazy creation
 		columnNames = null;
 		getColumns();
-		getConfiguration().addColumnListeners(getViewer());
 		reorderColumns();
+        getConfiguration().addColumnListeners(getViewer());
 	}
 
 	/**

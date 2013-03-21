@@ -60,13 +60,18 @@ public abstract class ProcessorNodeSupport extends RefreshableCollectionNode imp
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == IPropertySheetPage.class) {
-			//return new ViewPropertySheetPage(new ProcessorTabViewPage(this));
-			return new ProcessorTabViewPage(this);
+		    // no generic contents properties
+			return null;
 		}
 		return super.getAdapter(adapter);
 	}
 
-	public List<IPropertySource> getAllProcessorsPropertySourceList() {
+	@Override
+    public boolean requiresContentsPropertyPage() {
+        return false;
+    }
+
+    public List<IPropertySource> getAllProcessorsPropertySourceList() {
 		List<IPropertySource> answer = new ArrayList<IPropertySource>();
 		appendAllProcessorSourceList(answer);
 		return answer;

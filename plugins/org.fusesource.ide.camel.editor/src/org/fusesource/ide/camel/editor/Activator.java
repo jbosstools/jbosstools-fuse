@@ -57,7 +57,7 @@ public class Activator extends ImagesActivatorSupport {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		redirectContextSensitiveHelp();
+		//redirectContextSensitiveHelp();
 		perspectiveListener = new PreferredPerspectivePartListener();
 		perspectiveListener.earlyStartup();
 //		IAdapterManager manager = Platform.getAdapterManager();

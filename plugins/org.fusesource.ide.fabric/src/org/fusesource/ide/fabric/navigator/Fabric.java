@@ -131,7 +131,13 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		return super.getAdapter(adapter);
 	}
 
-	public FabricService getFabricService() {
+	@Override
+    public boolean requiresContentsPropertyPage() {
+        return false;
+    }
+
+
+    public FabricService getFabricService() {
 		if (connector != null) {
 			return connector.getFabricService();
 		}

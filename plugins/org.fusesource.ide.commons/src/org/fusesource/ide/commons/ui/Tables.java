@@ -37,14 +37,11 @@ public class Tables {
 		}
 	}
 
-	public static TableColumn[] getColumns(TableViewer viewer) {
-		if (viewer != null) {
-			Table table = viewer.getTable();
-			if (table != null && !table.isDisposed()) {
-				TableColumn[] columnArray = table.getColumns();
-				if (columnArray != null) {
-					return columnArray;
-				}
+	public static TableColumn[] getColumns(Table table) {
+		if (table != null && !table.isDisposed()) {
+			TableColumn[] columnArray = table.getColumns();
+			if (columnArray != null) {
+				return columnArray;
 			}
 		}
 		return new TableColumn[0];

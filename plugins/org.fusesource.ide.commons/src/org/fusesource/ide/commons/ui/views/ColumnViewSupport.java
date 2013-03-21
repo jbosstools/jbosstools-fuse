@@ -156,6 +156,9 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 			isSectionActivated = true;
 			addToolBarActions();
 			addLocalMenus();
+			if (getActionBars() != null) {
+			    getActionBars().updateActionBars();
+			}
 			setSelectionProvider();
 		}
 	}
@@ -220,6 +223,9 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 				System.out.println("############ NO MENUMANAGER!");
 			}
 
+			if (getActionBars() != null) {
+			    getActionBars().updateActionBars();
+			}
 			// clear status line
 			clearStatusLine();
 		}
@@ -289,7 +295,6 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 		IToolBarManager toolBarManager = getToolBarManager();
 		if (toolBarManager != null) {
 			addToolBarActions(toolBarManager);
-			toolBarManager.update(false);
 		}
 	}
 
@@ -341,18 +346,11 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 	 * Adds the local menus.
 	 */
 	private void addLocalMenus() {
-		// defer adding menus to properly order menus
-		Viewers.async(new Runnable() {
-			@Override
-			public void run() {
-				IMenuManager menuManager = getMenuManager();
-				if (menuManager != null) {
-					addLocalMenus(menuManager);
-					menuManager.setVisible(true);
-					menuManager.update(false);
-				}
-			}
-		});
+		IMenuManager menuManager = getMenuManager();
+		if (menuManager != null) {
+			addLocalMenus(menuManager);
+			menuManager.setVisible(true);
+		}
 	}
 
 	protected IMenuManager getMenuManager() {
@@ -539,7 +537,15 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 	protected abstract TableChartOptions createChartOptions();
 
 	public void setConfiguration(TableConfiguration configuration) {
-		this.configuration = configuration;
+	    if (configuration != this.configuration) {
+	        if (this.configuration != null) {
+	            this.configuration.removeColumnListeners(getViewer());
+	        }
+	        this.configuration = configuration;
+            if (this.configuration != null) {
+                this.configuration.addColumnListeners(getViewer());
+            }
+	    }
 	}
 
 	protected boolean showChartAction() {

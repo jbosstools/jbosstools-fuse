@@ -32,9 +32,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.util.LocalSelectionTransfer;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceListener;
@@ -62,18 +59,17 @@ import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.PropertySheetPage;
+import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.tree.HasChildrenArray;
 import org.fusesource.ide.commons.tree.HasViewer;
 import org.fusesource.ide.commons.tree.RefreshableUI;
-import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.ui.UIConstants;
 import org.fusesource.ide.commons.ui.drop.DelegateDropListener;
 import org.fusesource.ide.commons.ui.drop.DeployMenuProvider;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
 import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
-import org.fusesource.ide.commons.ui.views.DynamicPropertySheetTracker;
 import org.fusesource.ide.deployment.DeployPlugin;
 import org.fusesource.ide.deployment.DeployViews;
 import org.fusesource.ide.deployment.maven.ProjectDropHandler;
@@ -90,7 +86,8 @@ import org.fusesource.ide.jmx.ui.internal.actions.RefreshAction;
 /**
  * The view itself
  */
-public class Navigator extends CommonNavigator implements DeployMenuProvider {
+public class Navigator extends CommonNavigator implements DeployMenuProvider, ITabbedPropertySheetPageContributor {
+    private static final String ID = "org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer";
 	public final class RefreshableUIImplementation implements RefreshableUI, HasViewer {
 		public void fireRefresh(final Object node, final boolean full) {
 			Display.getDefault().asyncExec(new Runnable() {
@@ -115,9 +112,7 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider {
 
 	private Text filterText;
 	private QueryContribution query;
-	private DynamicPropertySheetTracker propertySheetTracker = new DynamicPropertySheetTracker();
 	private RefreshAction refreshAction;
-	private ISelection viewerSelection;
 	private Object[] rootNodes;
 	protected RefreshableUI refreshableUI = new RefreshableUIImplementation();
 	private boolean registered;
@@ -134,31 +129,17 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider {
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == IPropertySheetPage.class) {
-			// lets see if the current selection has a custom page?
-			Object firstSelection = null;
-			if (viewerSelection != null) {
-				firstSelection = Selections.getFirstSelection(viewerSelection);
-			}
-			if (firstSelection == null) {
-				firstSelection = Selections.getFirstSelection(getViewSite());
-			}
-			if (firstSelection == null) {
-				firstSelection = Selections.getFirstSelection(getCommonViewer());
-			}
-			if (firstSelection instanceof IAdaptable) {
-				IAdaptable adaptable = (IAdaptable) firstSelection;
-				Object answer = adaptable.getAdapter(adapter);
-				if (answer != null) {
-					return answer;
-				}
-			}
-			return new PropertySheetPage();
+			return new TabbedPropertySheetPage(this);
 		}
 		return super.getAdapter(adapter);
 	}
 
-
 	@Override
+    public String getContributorId() {
+        return ID;
+    }
+
+    @Override
 	public void createPartControl(Composite aParent) {
 		fillActionBars();
 		Composite newParent = new Composite(aParent, SWT.NONE);
@@ -209,15 +190,6 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider {
 		final CommonViewer viewer = getCommonViewer();
 		Tree tree = viewer.getTree();
 		tree.setLayoutData(fd);
-
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			public void selectionChanged(SelectionChangedEvent event) {
-				ISelection selection = event.getSelection();
-				viewerSelection = selection;
-				propertySheetTracker.selectionChanged(Navigator.this, selection);
-			}
-		});
 
 		filterText.setToolTipText("Type in a filter");
 		filterText.setText("Type in a filter");

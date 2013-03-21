@@ -25,6 +25,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
@@ -64,6 +65,21 @@ public class LogsView extends TableViewSupport implements LogContext { // implem
 
 	private boolean filterChanged;
 	private OpenStackTraceAction openStackAction;
+	private ISelectionListener selectionListener = new ISelectionListener() {
+
+        @Override
+        public void selectionChanged(IWorkbenchPart part,
+                ISelection selection) {
+
+            // ignore selection from myself
+            if (part instanceof LogsView) {
+                return;
+            }
+            ILogBrowser browser = Logs.getSelectionLogBrowser(selection);
+            setExchangeBrowser(browser);
+        }
+
+    };
 
 	public LogsView() {
 		// avoid fetching too many logs up front
@@ -144,25 +160,8 @@ public class LogsView extends TableViewSupport implements LogContext { // implem
 		super.init(site);
 
 		if (site != null) {
-			site.getWorkbenchWindow().getSelectionService()
-			.addSelectionListener(new ISelectionListener() {
-
-				@Override
-				public void selectionChanged(IWorkbenchPart part,
-						ISelection selection) {
-
-					// ignore selection from myself
-					if (part instanceof LogsView) {
-						return;
-					}
-					ILogBrowser browser = Logs.getSelectionLogBrowser(selection);
-					setExchangeBrowser(browser);
-				}
-
-			});
+			site.getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
 		}
-		makeActions();
-		aboutToBeShown();
 
 		job.schedule();
 	}
@@ -173,9 +172,19 @@ public class LogsView extends TableViewSupport implements LogContext { // implem
 	}
 
 
+    @Override
+    public void createPartControl(Composite parent) {
+        super.createPartControl(parent);
+        aboutToBeShown();
+    }
+
 	@Override
 	public void dispose() {
 		job.cancel();
+		final IViewSite site = getViewSite();
+		if (site != null) {
+            site.getWorkbenchWindow().getSelectionService().removeSelectionListener(selectionListener);
+		}
 		super.dispose();
 	}
 

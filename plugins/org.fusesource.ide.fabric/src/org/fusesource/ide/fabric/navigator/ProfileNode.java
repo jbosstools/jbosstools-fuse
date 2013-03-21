@@ -98,8 +98,6 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == IPropertySheetPage.class) {
-			checkLoaded();
-			getVersionNode().getChildren();
 			return new ProfileTabViewPage(this);
 		}
 		return super.getAdapter(adapter);
@@ -107,6 +105,13 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 
 
 	@Override
+    public boolean requiresContentsPropertyPage() {
+        checkLoaded();
+        getVersionNode().getChildren();
+        return false;
+    }
+
+    @Override
 	public RefreshableUI getRefreshableUI() {
 		return super.getRefreshableUI();
 	}

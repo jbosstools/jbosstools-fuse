@@ -289,9 +289,8 @@
      <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
 
-      <propertyContributor contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer"             
-      typeMapper="org.fusesource.ide.jmx.ui.internal.propertysheet.JmxTypeMapper">
-         <propertyCategory category="JMX.jmesnil.jmx.ui.views"/>
+      <propertyContributor contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
+         <propertyCategory category="org.fusesource.ide.jmx.ui.views"/>
       </propertyContributor>
    </extension>
    <extension
@@ -299,36 +298,30 @@
       <propertyTabs contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
          <propertyTab
                category="org.fusesource.ide.jmx.ui.views"
-               id="DetailsTab"
-               label="Details"/>
+               id="org.fusesource.ide.jmx.ui.views.PropertiesTab"
+               label="Properties"/>
          <propertyTab
-               afterTab="DetailsTab"
+               afterTab="org.fusesource.ide.jmx.ui.views.PropertiesTab"
                category="org.fusesource.ide.jmx.ui.views"
-               id="AdvancedTab"
-               label="Advanced"/>
+               id="org.fusesource.ide.jmx.ui.views.ContentsTab"
+               label="Contents"/>
       </propertyTabs>
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
          <propertySection
-               class="org.fusesource.ide.jmx.ui.internal.propertysheet.DetailsSection"
-               id="org.fusesource.ide.jmx.ui.internal.propertysheet.DetailsSection"
-               tab="DetailsTab">
-            <input type="org.fusesource.ide.commons.tree.Node"/>
-            <input
-                  type="org.fusesource.ide.jmx.core.MBeanFeatureInfoWrapper">
-            </input>
+               class="org.eclipse.ui.views.properties.tabbed.AdvancedPropertySection"
+               filter="org.fusesource.ide.jmx.ui.internal.propertysheet.PropertiesSectionFilter"
+               id="PropertiesSection"
+               tab="org.fusesource.ide.jmx.ui.views.PropertiesTab">
          </propertySection>
 
          <propertySection
-               class="org.eclipse.ui.views.properties.tabbed.AdvancedPropertySection"
-               id="AdvancedSection"
-               tab="AdvancedTab">
-            <input type="org.fusesource.ide.commons.tree.Node"/>
-            <input
-                  type="org.fusesource.ide.jmx.core.MBeanFeatureInfoWrapper">
-            </input>
+               class="org.fusesource.ide.jmx.ui.internal.propertysheet.ContentsTabSection"
+               filter="org.fusesource.ide.jmx.ui.internal.propertysheet.ContentsSectionFilter"
+               id="ContentsSection"
+               tab="org.fusesource.ide.jmx.ui.views.ContentsTab">
          </propertySection>
       </propertySections>
    </extension>

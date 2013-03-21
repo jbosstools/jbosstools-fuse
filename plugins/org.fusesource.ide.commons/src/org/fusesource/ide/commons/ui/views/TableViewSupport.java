@@ -101,12 +101,14 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 	}
 
 	protected void recreateColumns() {
+	    // remove the listeners
+	    setConfiguration(null);
 		createColumns();
 		// force lazy creation
 		columnNames = null;
 		getColumns();
-		getConfiguration().addColumnListeners(getViewer());
 		reorderColumns();
+        getConfiguration().addColumnListeners(getViewer());
 	}
 
 	/**
@@ -167,6 +169,10 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 
 	protected String getInitialSearchText() {
 		return "";
+	}
+
+	protected Text getSearchText() {
+	    return searchText;
 	}
 
 	protected void setFilterText(String text) {
@@ -234,7 +240,7 @@ public abstract class TableViewSupport extends ColumnViewSupport {
 		Map<String,Integer> columnIndexes = new HashMap<String,Integer>();
 		List<String> columnNameOrderList = new ArrayList<String>();
 		List<Integer> columnOrderList = new ArrayList<Integer>();
-		TableColumn[] columnArray = Tables.getColumns(viewer);
+		TableColumn[] columnArray = Tables.getColumns(table);
 		for (int i = 0, size = columnArray.length; i < size; i++) {
 			TableColumn column = columnArray[i];
 			String name = column.getText();

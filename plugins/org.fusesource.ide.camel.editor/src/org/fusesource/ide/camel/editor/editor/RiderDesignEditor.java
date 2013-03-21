@@ -379,7 +379,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		} else if (input instanceof IDiagramEditorInput) {
 		    org.eclipse.emf.common.util.URI uri = ((IDiagramEditorInput)input).getUri();
 		    if (uri.isPlatformResource()) {
-		        return new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.path())));
+		        return new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true))));
 		    }
 		}
 		return null;

@@ -476,7 +476,7 @@ public class TimelineSection extends AbstractJvmPropertySection {
         toolbar.addDisposeListener(new DisposeListener() {
             @Override
             public void widgetDisposed(DisposeEvent e) {
-                if (!cursor.isDisposed()) {
+                if (cursor != null && !cursor.isDisposed()) {
                     cursor.dispose();
                     cursor = null;
                 }
