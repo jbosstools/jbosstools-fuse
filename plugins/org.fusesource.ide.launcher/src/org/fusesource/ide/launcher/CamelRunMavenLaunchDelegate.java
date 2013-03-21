@@ -30,6 +30,9 @@ public class CamelRunMavenLaunchDelegate extends MavenLaunchDelegate {
 			throws CoreException {
 		String filePath = configuration.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, "");
 		if (filePath.trim().length()>0) {
+			if (!filePath.trim().startsWith("file:")) {
+				filePath = String.format("%s%s", CamelContextLaunchConfigConstants.ATTR_PROTOCOL_PREFIX, filePath.trim());
+			}
 			boolean isBluePrint = CamelUtils.isBlueprintFile(filePath);
 			filePath = String.format(" -D%s=%s", CamelContextLaunchConfigConstants.ATTR_CONTEXT_FILE, filePath);
 			if (isBluePrint) {
