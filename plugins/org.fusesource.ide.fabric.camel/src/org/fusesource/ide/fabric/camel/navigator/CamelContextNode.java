@@ -56,7 +56,7 @@ import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 public class CamelContextNode extends NodeSupport implements Refreshable, AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser,
 ImageProvider {
 
-	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.plugin.editor";
+	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
 	private final CamelContextsNode camelContextsNode;
 	private final CamelFacade facade;
 	private final CamelContextMBean camelContextMBean;

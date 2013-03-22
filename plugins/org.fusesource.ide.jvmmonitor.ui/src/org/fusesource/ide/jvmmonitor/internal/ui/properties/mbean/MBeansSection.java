@@ -140,7 +140,9 @@ public class MBeansSection extends AbstractJvmPropertySection {
     @Override
     protected void deactivateSection() {
         super.deactivateSection();
-        sashForm.deactivated();
+        if (sashForm != null && !sashForm.isDisposed()) {
+        	sashForm.deactivated();	
+        }        
         IToolBarManager manager = getActionBars().getToolBarManager();
         removeToolBarActions(manager);
     }

@@ -86,14 +86,16 @@ public class FabricStatusTabSection extends TableViewSupport {
         current = fabric;
         if (current != null) {
             current.addFabricUpdateRunnable(refreshRunnable);
-        }
+        } 
         final Collection<ProfileStatus> statuses = getProfileStatuses();
         setInput(statuses);
         getViewer().setInput(statuses);
         getViewer().refresh(true);
-        getCreateChildContainerAction().setFabric(current);
-        getCreateCloudContainerAction().setFabric(current);
-        getCreateSshContainerAction().setFabric(current);
+        if (fabric != null) {
+	        getCreateChildContainerAction().setFabric(current);
+	        getCreateCloudContainerAction().setFabric(current);
+	        getCreateSshContainerAction().setFabric(current);
+        }
         updateActionStatus();
     }
 
