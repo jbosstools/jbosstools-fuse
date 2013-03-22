@@ -21,7 +21,7 @@
       <name>Fusesource Release Repository</name>
       <!-- <url>http://repo.fusesource.com/nexus/service/local/staging/deploy/maven2</url>
          <url>dav:http://fusesource.com/forge/dav/rider/update/${project.version}</url> -->
-      <url>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/3.0.x/${project.version}</url>
+      <url>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/7.2.x.jbds6/${project.version}</url>
     </repository>
     <snapshotRepository>
       <id>snapshot.fusesource.org</id>
@@ -162,7 +162,7 @@
   	<repository>
         <id>ide-beta</id>
         <name>Fuse IDE Beta Update Site</name>
-        <url>http://repo.fusesource.com/beta/3.0.x/</url>
+        <url>http://repo.fusesource.com/beta/7.2.x.jbds6/</url>
         <layout>p2</layout>
     </repository>
   </repositories>

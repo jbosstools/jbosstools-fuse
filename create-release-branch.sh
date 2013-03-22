@@ -10,7 +10,7 @@ ACTION=$1
 cd "${basedir}"
 
 git stash
-git checkout master
+git checkout jbds6test
 git stash
 git pull
 
@@ -27,13 +27,10 @@ echo ===========================================================================
 echo ${BUILDNO} > ${PERFECUT_ARTIFACT}-buildno.txt
 VERSION=7.2.${BUILDNO}
 git commit -a -m "getting ready for version ${VERSION}"
-git push origin master:master
+git push origin jbds6test:jbds6test
 git stash clear
 
 echo "Creating release branch for ${VERSION}"
-
-git branch release-${VERSION}
-git checkout release-${VERSION}
 
 # root project uses regular maven versions
 find * -name 'pom.xml' | xargs perl -pi -e "s/<version>7.2.0-SNAPSHOT<\/version>/<version>${VERSION}<\/version>/g"
@@ -60,7 +57,6 @@ rm -rf /mnt/hudson/.m2/repository/p2/osgi/bundle/*/*SNAPSHOT
 
 echo "Building the update site..."
 cd plugins
-#mvn ${MVN_SETTINGS} -Psign -Dkeystore=$PWD/fusesource.ks -Dstorepass=sp33d0 -Dalias=fusesource.com clean install
 #mvn ${MVN_SETTINGS} clean install
 
 # lets not fail the build if tests fail
@@ -103,7 +99,7 @@ cd ../..
 # read dummy
 
 # update the update site versions
-./addUpdateSiteVersion ${VERSION} beta/3.0.x
+./addUpdateSiteVersion ${VERSION} beta/7.2.x.jbds6
 
 
 echo ============================================================================
@@ -111,7 +107,6 @@ echo "Creating the RCP build"
 echo ============================================================================
 
 cd plugins/rcp_build
-#mvn ${MVN_SETTINGS} -Psign -Dkeystore=$PWD/fusesource.ks -Dstorepass=sp33d0 -Dalias=fusesource.com clean install
 mvn ${MVN_SETTINGS} clean install
 
 if [ $? -eq 0 ]         # Test exit status of "mvn" command.
@@ -137,29 +132,12 @@ else
 fi
 
 
-
-#echo "Executing the integration tests"
-#echo ============================================================================
-#cd ../testing
-#mvn ${MVN_SETTINGS} clean install -Djubula.home=/opt/jubula_5.2.00266 -Djubula.plugin.archive=/opt/jubula_5.2.00266/rcp-support.zip
-#
-#if [ $? -eq 0 ]         # Test exit status of "mvn" command.
-#then
-#  echo "Integration testing succeeded. Progress to RCP deployment..."
-#else  
-#  echo "Integration testing failed. Exit now..."
-#  exit $?
-#fi
-
 cd ../../..
 
 echo "Deployed update site for Release ${VERSION}"
-echo "Now committing branch"
 
-git commit -a -m "Release ${VERSION}"
-git push origin release-${VERSION}
-
-git checkout master
+git stash
+git stash clear
 
 echo "One it has been tested, move it to the production repo area"
 

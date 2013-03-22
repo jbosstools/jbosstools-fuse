@@ -79,7 +79,7 @@
 				<version>1.15</version>
 				<configuration>
 					<remoteServerId>website.fusesource.org</remoteServerId>
-					<remoteServerUrl>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/rcp</remoteServerUrl>
+					<remoteServerUrl>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/rcp.jbds6/</remoteServerUrl>
 					<mvOptions></mvOptions>
 					<inputDirectory>${project.build.directory}/zips</inputDirectory>
 				</configuration>

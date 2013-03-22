@@ -29,7 +29,7 @@
 				<configuration>
 				    <inputDirectory>${project.build.directory}/repository</inputDirectory>
 					<remoteServerId>website.fusesource.org</remoteServerId>
-					<remoteServerUrl>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/3.0.x</remoteServerUrl>
+					<remoteServerUrl>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/7.2.x.jbds6</remoteServerUrl>
 					<!-- <remoteServerUrl>dav:http://fusesource.com/forge/dav/rider/eclipse</remoteServerUrl> -->
 					<mvOptions></mvOptions>
 				</configuration>
