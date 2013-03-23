@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Rider Preferences Plugin
 Bundle-SymbolicName: org.fusesource.ide.preferences;singleton:=true
-Bundle-Version: 7.2.0.qualifier
+Bundle-Version: 7.2.65
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.ui,
