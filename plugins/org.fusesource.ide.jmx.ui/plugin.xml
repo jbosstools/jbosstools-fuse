@@ -196,7 +196,7 @@
             class="org.fusesource.ide.jmx.ui.internal.perspectives.JMXPerspective"
             icon="icons/releng_gears.gif"
             id="org.fusesource.ide.jmx.ui.perspectives.JMXPerspective"
-            name="JMX">
+            name="Fuse JMX">
       </perspective>
    </extension>
    <extension
