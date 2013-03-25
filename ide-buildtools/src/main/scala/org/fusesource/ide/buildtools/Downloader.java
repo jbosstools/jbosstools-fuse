@@ -60,6 +60,7 @@ public class Downloader {
 
             Downloader app = new Downloader(archetypesDir, xsdsDir);
             app.start();
+            System.out.println("Indexer has started, now trying to find stuff");
             app.run();
             app.stop();
         } catch (Exception e) {
@@ -101,8 +102,8 @@ public class Downloader {
     }
 
     public void run() throws Exception {
-        downloadXsds();
         downloadArchetypes();
+        downloadXsds();
     }
 
     public void downloadArchetypes() throws IOException {
@@ -111,25 +112,15 @@ public class Downloader {
           archetypeDir.mkdirs();
         }
 
-        String classifier = null;
-        String packaging = "maven-archetype";
-
         PrintWriter out = new PrintWriter(new FileWriter(new File(archetypeDir, "archetypes.xml")));
         out.println("<archetypes>");
 
 
         String[] groupIds = {"org.apache.camel.archetypes", "org.apache.cxf.archetype", "org.fusesource.fabric"};
         for (String groupId : groupIds) {
-            List<ArtifactDTO> answer = indexer.search(groupId, "", "", packaging, classifier, null);
-            for (ArtifactDTO artifact : answer) {
-                if (ignoredArtifacts.contains(artifact.getArtifactId())) {
-                    System.out.println("Ignored: " + artifact.getArtifactId());
-                    continue;
-                }
-                out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + artifact.getVersion() + "'>" + artifact.getDescription() + "</archetype>");
-                downloadArtifact(artifact);
-            }
-            System.out.println("Found " + answer.size() + " results for groupId " + groupId);
+            //String version = System.getProperty("camel-version");
+            String version = "";
+            downloadArchetypesForGroup(out, groupId, version);
         }
         out.println("</archetypes>");
         out.close();
@@ -138,6 +129,23 @@ public class Downloader {
         ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
         pb.directory(archetypeDir);
         pb.start();
+    }
+
+    protected void downloadArchetypesForGroup(PrintWriter out, String groupId, String version)
+            throws IOException {
+        String classifier = null;
+        String packaging = "maven-archetype";
+
+        List<ArtifactDTO> answer = indexer.search(groupId, "", version, packaging, classifier, null);
+        for (ArtifactDTO artifact : answer) {
+            if (ignoredArtifacts.contains(artifact.getArtifactId())) {
+                System.out.println("Ignored: " + artifact.getArtifactId());
+                continue;
+            }
+            out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + artifact.getVersion() + "'>" + artifact.getDescription() + "</archetype>");
+            downloadArtifact(artifact);
+        }
+        System.out.println("Found " + answer.size() + " results for groupId " + groupId + " version " + version);
     }
 
     public void downloadXsds() throws Exception {
