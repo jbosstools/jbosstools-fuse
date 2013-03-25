@@ -123,6 +123,10 @@
                 <key>activemq-version</key>
                 <value>${activemq-version}</value>
               </systemProperty>
+              <systemProperty>
+                <key>cxf-version</key>
+                <value>${cxf-version}</value>
+              </systemProperty>
             </systemProperties>
           </configuration>
         </plugin>
