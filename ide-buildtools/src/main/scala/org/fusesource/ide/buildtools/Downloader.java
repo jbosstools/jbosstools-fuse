@@ -139,7 +139,7 @@ public class Downloader {
                 System.out.println("Ignored: " + artifact.getArtifactId());
                 continue;
             }
-            out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + artifact.getVersion() + "'>" + artifact.getDescription() + "</archetype>");
+            out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + version + "'>" + artifact.getDescription() + "</archetype>");
             downloadArtifact(artifact, version);
         }
         System.out.println("Found " + answer.size() + " results for groupId " + groupId + " version " + version);
