@@ -115,13 +115,10 @@ public class Downloader {
         PrintWriter out = new PrintWriter(new FileWriter(new File(archetypeDir, "archetypes.xml")));
         out.println("<archetypes>");
 
+        downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel-version"));
+        downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf-version"));
+        downloadArchetypesForGroup(out, "org.fusesource.fabric", System.getProperty("fabric-version"));
 
-        String[] groupIds = {"org.apache.camel.archetypes", "org.apache.cxf.archetype", "org.fusesource.fabric"};
-        for (String groupId : groupIds) {
-            //String version = System.getProperty("camel-version");
-            String version = "";
-            downloadArchetypesForGroup(out, groupId, version);
-        }
         out.println("</archetypes>");
         out.close();
 
@@ -136,14 +133,14 @@ public class Downloader {
         String classifier = null;
         String packaging = "maven-archetype";
 
-        List<ArtifactDTO> answer = indexer.search(groupId, "", version, packaging, classifier, null);
+        List<ArtifactDTO> answer = indexer.search(groupId, "", "", packaging, classifier, null);
         for (ArtifactDTO artifact : answer) {
             if (ignoredArtifacts.contains(artifact.getArtifactId())) {
                 System.out.println("Ignored: " + artifact.getArtifactId());
                 continue;
             }
             out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + artifact.getVersion() + "'>" + artifact.getDescription() + "</archetype>");
-            downloadArtifact(artifact);
+            downloadArtifact(artifact, version);
         }
         System.out.println("Found " + answer.size() + " results for groupId " + groupId + " version " + version);
     }
@@ -207,8 +204,8 @@ public class Downloader {
         this.xsdDir = xsdDir;
     }
 
-    protected void downloadArtifact(ArtifactDTO artifact) {
-        AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), "jar", null);
+    protected void downloadArtifact(ArtifactDTO artifact, String version) {
+        AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(),version, "jar", null);
         if (result != null) {
             List<File> files = result.resolvedFiles();
             if (files != null && files.size() > 0) {
