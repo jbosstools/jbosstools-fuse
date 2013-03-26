@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.fusesource.ide</groupId>
     <artifactId>rcp-build</artifactId>
-    <version>7.2.0-SNAPSHOT</version>
+    <version>7.2.100</version>
   </parent>
   
   <artifactId>org.fusesource.ide.rcp.branding</artifactId>
