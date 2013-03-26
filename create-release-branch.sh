@@ -25,7 +25,7 @@ echo "Using MVN_SETTINGS: ${MVN_SETTINGS}"
 echo ============================================================================
 
 echo ${BUILDNO} > ${PERFECUT_ARTIFACT}-buildno.txt
-VERSION=7.2.${BUILDNO}
+VERSION=7.2.${BUILDNO}.jbds6
 git commit -a -m "getting ready for version ${VERSION}"
 git push origin jbds6test:jbds6test
 git stash clear
