@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.fusesource.fabric.api.Container;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
@@ -71,6 +72,17 @@ public class ContainersNode extends FabricNodeSupport implements ImageProvider {
         return false;
     }
 
+	@Override
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+		if (adapter == IPropertySheetPage.class) {
+			checkLoaded();
+			if (getFabric() != null) {
+				return new ContainerTableSheetPage(getFabric());
+			}
+		}
+		return super.getAdapter(adapter);
+	}
+	
     @Override
 	protected PropertySourceTableSheetPage createPropertySourceTableSheetPage() {
 		return new ContainerTableSheetPage(getFabric());

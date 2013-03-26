@@ -9,7 +9,7 @@
             default="false"
             extensions="xml"
             icon="icons/route_editor_icon.png"
-            id="org.fusesource.ide.plugin.editor"
+            id="org.fusesource.ide.camel.editor"
             name="%rider.editor.label">
          <contentTypeBinding
                contentTypeId="org.fusesource.ide.camel.editor.camelContentType">
@@ -48,13 +48,13 @@
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
          
-      <propertyContributor contributorId="org.fusesource.ide.plugin.editor" typeMapper="org.fusesource.ide.camel.editor.propertysheet.RiderTypeMapper">
+      <propertyContributor contributorId="org.fusesource.ide.camel.editor" typeMapper="org.fusesource.ide.camel.editor.propertysheet.RiderTypeMapper">
          <propertyCategory category="sample"/>
       </propertyContributor>
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
-      <propertyTabs contributorId="org.fusesource.ide.plugin.editor">
+      <propertyTabs contributorId="org.fusesource.ide.camel.editor">
          <propertyTab
                category="sample"
                id="DetailsTab"
@@ -73,7 +73,7 @@
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
-      <propertySections contributorId="org.fusesource.ide.plugin.editor">
+      <propertySections contributorId="org.fusesource.ide.camel.editor">
          <propertySection
                class="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
                id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"

@@ -35,7 +35,10 @@ public class CreateSshContainerAction extends ActionSupport {
 	}
 
 	public CreateSshContainerAction(Fabric fabric) {
-		this(fabric.getDefaultVersionNode(), null, null);
+		super(Messages.createSshAgentMenuLabel, Messages.createSshAgentToolTip, FabricPlugin.getDefault().getImageDescriptor("new_ssh_container.png"));
+		this.versionNode = fabric != null ? fabric.getDefaultVersionNode() : null;
+		this.agentNode = null;
+		this.profileNode = null;
 	}
 
 	@Override
@@ -52,7 +55,9 @@ public class CreateSshContainerAction extends ActionSupport {
 	}
 
     public void setFabric(Fabric fabric) {
-        this.versionNode = fabric.getDefaultVersionNode();
+    	if (fabric != null) {
+    		this.versionNode = fabric.getDefaultVersionNode();
+    	}
     }
 
 	protected void showCreateAgentDialog() {

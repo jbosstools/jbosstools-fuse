@@ -35,8 +35,8 @@ public class Activator extends ImagesActivatorSupport {
 
 	// The shared instance
 	private static Activator plugin;
-	public  static final String PLUGIN_ID = "org.fusesource.ide.plugin.editor";
-	public  static final String RIDER_EDITOR_ID = "org.fusesource.ide.plugin.editor";
+	public  static final String PLUGIN_ID = "org.fusesource.ide.camel.editor";
+	public  static final String RIDER_EDITOR_ID = "org.fusesource.ide.camel.editor";
 
 	/**
 	 * Returns the shared instance

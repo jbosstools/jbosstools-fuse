@@ -196,6 +196,7 @@ public abstract class AbstractContainersTabSection extends ContainerTableView {
         }
         List<?> propertySources = getPropertySourcesForNode(containers);
         setPropertySources(propertySources);
+        if (getViewer() == null) createViewer();
         getViewer().setInput(propertySources);
         recreateColumns();
         getViewer().refresh(true);
@@ -282,6 +283,7 @@ public abstract class AbstractContainersTabSection extends ContainerTableView {
 
     @Override
     public void createPartControl(Composite parent) {
+    	super.createPartControl(parent);
         addToolBarActions(openTerminalAction, startAction, stopAction, destroyAction);
 
         addLocalMenuActions(separator1, openTerminalAction, startAction, stopAction, destroyAction,
@@ -311,6 +313,10 @@ public abstract class AbstractContainersTabSection extends ContainerTableView {
 
         });
 
+        if (getViewer() == null) {
+        	createViewer();
+        }
+        
         getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
             @Override
             public void selectionChanged(SelectionChangedEvent event) {

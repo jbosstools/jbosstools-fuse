@@ -195,12 +195,11 @@ public class FabricConnector {
 				}
 				 */
 			}
-			
+
 			addWatcher();
-			
+
 			// Trigger a FabricNotConnectedException if the connection failed.
 			checkConnected();
-
 		} else {
 			FabricPlugin.getLogger().warning("Fabric not found on url: " + url);
 		}
