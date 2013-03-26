@@ -41,9 +41,6 @@ import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.commons.tree.HasName;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
-import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.ui.views.DynamicPropertySheetTracker;
-import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
 
@@ -55,7 +52,6 @@ ISelectionChangedListener {
 	private Set<AbstractNode> selectedConnections;
 	private NumberFormat numberFormat = NumberFormat.getInstance();
 	private boolean useNodeIdForLabel;
-	private DynamicPropertySheetTracker propertySheetTracker = new DynamicPropertySheetTracker();
 
 	public DiagramGraphLabelProvider(DiagramView view) {
 		super(view.getViewer());
@@ -100,12 +96,6 @@ ISelectionChangedListener {
 		Object[] connections = viewer.getConnectionElements();
 		for (int i = 0; i < connections.length; i++) {
 			viewer.update(connections[i], null);
-		}
-
-		Object firstSelection = Selections.getFirstSelection(selection);
-		if (firstSelection != null) {
-			System.out.println("============= Selection event " + event + " selection: " + firstSelection + " " + Objects.typeName(firstSelection));
-			propertySheetTracker.selectionChanged(view, selection);
 		}
 	}
 

@@ -60,11 +60,16 @@ public class RoutesNode extends RefreshableCollectionNode implements AbstractNod
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == IPropertySheetPage.class) {
-			//return new ViewPropertySheetPage(new RoutesTabViewPage(this));
-			return new RoutesTabViewPage(this);
+		    // no default "Contents" page for routes
+			return null;
 		}
 		return super.getAdapter(adapter);
 	}
+
+    @Override
+    public boolean requiresContentsPropertyPage() {
+        return false;
+    }
 
 	public CamelFacade getFacade() {
 		return camelContextNode.getFacade();

@@ -67,9 +67,6 @@ abstract public class AbstractJvmPropertySection extends
     /** The state indicating if suspending refresh. */
     protected boolean suspendRefresh;
 
-    /** The part listener. */
-    private PartListener partListener;
-
     /** The property sheet. */
     PropertySheet propertySheet;
 
@@ -81,6 +78,7 @@ abstract public class AbstractJvmPropertySection extends
 
     /** The state indicating if section is activated. */
     protected boolean isSectionActivated;
+    private TabbedPropertySheetPage tabbedPropertySheetPage;
 
     /**
      * The constructor.
@@ -97,6 +95,7 @@ abstract public class AbstractJvmPropertySection extends
     public final void createControls(Composite parent,
             final TabbedPropertySheetPage tabbedPropertySheetPage) {
         super.createControls(parent, tabbedPropertySheetPage);
+        this.tabbedPropertySheetPage = tabbedPropertySheetPage;
         parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
         pageBook = new PageBook(parent, SWT.NONE);
@@ -109,7 +108,6 @@ abstract public class AbstractJvmPropertySection extends
                 .getSite());
         createControls(composite);
 
-        partListener = new PartListener(this, tabbedPropertySheetPage);
         perspectiveListener = new PerspectiveListener(this,
                 tabbedPropertySheetPage.getSite(), propertySheet);
 
@@ -123,9 +121,6 @@ abstract public class AbstractJvmPropertySection extends
      */
     @Override
     public void dispose() {
-        if (partListener != null) {
-            partListener.dispose();
-        }
         if (perspectiveListener != null) {
             perspectiveListener.dispose();
         }
@@ -165,6 +160,7 @@ abstract public class AbstractJvmPropertySection extends
 
         addToolBarActions();
         addLocalMenus();
+        getActionBars().updateActionBars();
 
         if (newJvm.isConnected()) {
             activateSection();
@@ -177,10 +173,10 @@ abstract public class AbstractJvmPropertySection extends
      */
     @Override
     final public void aboutToBeHidden() {
-        if (isFocused() || !propertySheet.isPinned()) {
+        //if (isFocused() || !propertySheet.isPinned()) {
             // hidden by selecting another tab
             deactivateSection();
-        }
+        //}
     }
 
     /*
@@ -324,7 +320,7 @@ abstract public class AbstractJvmPropertySection extends
      * Clears the status line.
      */
     public void clearStatusLine() {
-        IStatusLineManager manager = propertySheet.getViewSite()
+        IStatusLineManager manager = tabbedPropertySheetPage.getSite()
                 .getActionBars().getStatusLineManager();
 
         IContributionItem[] items = manager.getItems();
@@ -342,7 +338,7 @@ abstract public class AbstractJvmPropertySection extends
      * @return The action bars.
      */
     public IActionBars getActionBars() {
-        return propertySheet.getViewSite().getActionBars();
+        return tabbedPropertySheetPage.getSite().getActionBars();
     }
 
     /**
@@ -391,6 +387,8 @@ abstract public class AbstractJvmPropertySection extends
             menuManager.update(false);
         }
 
+        getActionBars().updateActionBars();
+
         // clear status line
         clearStatusLine();
     }
@@ -402,6 +400,7 @@ abstract public class AbstractJvmPropertySection extends
         isSectionActivated = true;
         addToolBarActions();
         addLocalMenus();
+        getActionBars().updateActionBars();
     }
 
     /**
@@ -529,7 +528,7 @@ abstract public class AbstractJvmPropertySection extends
      * @return The tool bar manager
      */
     private IToolBarManager getToolBarManager() {
-        return propertySheet.getViewSite().getActionBars().getToolBarManager();
+        return tabbedPropertySheetPage.getSite().getActionBars().getToolBarManager();
     }
 
     /**
@@ -538,7 +537,7 @@ abstract public class AbstractJvmPropertySection extends
      * @return The menu manager
      */
     IMenuManager getMenuManager() {
-        return propertySheet.getViewSite().getActionBars().getMenuManager();
+        return tabbedPropertySheetPage.getSite().getActionBars().getMenuManager();
     }
 
     /**

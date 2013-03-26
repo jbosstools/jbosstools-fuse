@@ -21,10 +21,10 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
@@ -49,12 +49,52 @@ public class TableConfiguration implements IFlushable {
 	protected static final int CONFIG_UPDATE_ONMOVE_DELAY = 1500;
 	protected static final String COLUMN_NAME_SEPARATOR = ",";
 	protected static final String COLUMN_ORDER = "columnOrder";
-	private static AtomicInteger moveEventCounter = new AtomicInteger();
+	private AtomicInteger moveEventCounter = new AtomicInteger();
 	private static Map<String,TableConfiguration> defaultCache = new HashMap<String,TableConfiguration>();
 	private List<ColumnConfiguration> columnConfigurations;
 	private Map<String,ColumnConfiguration> columnMap;
 	private final Preferences node;
 	private boolean cleared;
+	private Listener tableColumnListener = new Listener() {
+        @Override
+        public void handleEvent(Event event) {
+            final int value = moveEventCounter.incrementAndGet();
+            final TableColumn column = (TableColumn) event.widget;
+            // when we've stopped moving update the columns
+            event.display.timerExec(CONFIG_UPDATE_ONMOVE_DELAY, new Runnable() {
+                @Override
+                public void run() {
+                    if (moveEventCounter.compareAndSet(value, 0)) {
+                        //System.out.println("We are the last move event at counter: " + value + " so updating the config model");
+                        if (column == null || column.isDisposed()) {
+                            return;
+                        }
+                        onColumnsMoved(column.getParent());
+                    }
+                }
+            });
+        }
+    };
+    private Listener treeColumnListener = new Listener() {
+        @Override
+        public void handleEvent(Event event) {
+            final int value = moveEventCounter.incrementAndGet();
+            final TreeColumn column = (TreeColumn) event.widget;
+            // when we've stopped moving update the columns
+            event.display.timerExec(CONFIG_UPDATE_ONMOVE_DELAY, new Runnable() {
+                @Override
+                public void run() {
+                    if (moveEventCounter.compareAndSet(value, 0)) {
+                        if (column == null || column.isDisposed()) {
+                            return;
+                        }
+                        //System.out.println("We are the last move event at counter: " + value + " so updating the config model");
+                        onColumnsMoved(column.getParent());
+                    }
+                }
+            });
+        }
+    };
 
 	public TableConfiguration(Preferences node) {
 		this.node = node;
@@ -323,14 +363,13 @@ public class TableConfiguration implements IFlushable {
 	/**
 	 * Called when the user moves columns around themselves using drag and drop in the table viewer
 	 */
-	public void onColumnsMoved(TableViewer viewer) {
-		if (isCleared() || viewer.getTable() == null || viewer.getTable().isDisposed()) {
+	public void onColumnsMoved(Table table) {
+		if (isCleared() || table == null || table.isDisposed()) {
 			//System.out.println("Ignoring move events as configuration is cleared");
 			return;
 		}
-		Table table = viewer.getTable();
 		List<ColumnConfiguration> newOrder = new ArrayList<ColumnConfiguration>();
-		TableColumn[] columns = Tables.getColumns(viewer);
+		TableColumn[] columns = Tables.getColumns(table);
 		if (columns.length > 0) {
 			int[] columnOrder = table.getColumnOrder();
 			for (int idx : columnOrder) {
@@ -354,15 +393,14 @@ public class TableConfiguration implements IFlushable {
 	/**
 	 * Called when the user moves columns around themselves using drag and drop in the tree viewer
 	 */
-	public void onColumnsMoved(TreeViewer viewer) {
-		if (isCleared() || viewer.getTree() == null || viewer.getTree().isDisposed()) {
+	public void onColumnsMoved(Tree tree) {
+		if (isCleared() || tree == null || tree.isDisposed()) {
 			//System.out.println("Ignoring move events as configuration is cleared");
 			return;
 		}
-		Tree table = viewer.getTree();
 		List<ColumnConfiguration> newOrder = new ArrayList<ColumnConfiguration>();
-		TreeColumn[] columns = table.getColumns();
-		int[] columnOrder = table.getColumnOrder();
+		TreeColumn[] columns = tree.getColumns();
+		int[] columnOrder = tree.getColumnOrder();
 		for (int idx : columnOrder) {
 			if (idx >= 0 && idx < columns.length) {
 				TreeColumn column = columns[idx];
@@ -398,6 +436,14 @@ public class TableConfiguration implements IFlushable {
 		// TODO there's no generic hook yet for doing listening of the underlying node...
 	}
 
+    public void addColumnListeners(final ColumnViewer viewer) {
+        if (viewer instanceof TreeViewer) {
+            addColumnListeners((TreeViewer) viewer);
+        } else if (viewer instanceof TableViewer) {
+            addColumnListeners((TableViewer) viewer);
+        }
+    }
+    
 	public void addColumnListeners(final TableViewer viewer) {
 		TableColumn[] columns = viewer.getTable().getColumns();
 		for (TableColumn column : columns) {
@@ -414,43 +460,46 @@ public class TableConfiguration implements IFlushable {
 
 	protected void addColumnListeners(final TableViewer viewer, final TableColumn column) {
 		// TODO ignore listeners if we're disposing the columns to update it!!!
-		column.addListener(SWT.Move, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				final int value = moveEventCounter.incrementAndGet();
-
-				// when we've stopped moving update the columns
-				Display.getCurrent().timerExec(CONFIG_UPDATE_ONMOVE_DELAY, new Runnable() {
-					@Override
-					public void run() {
-						if (moveEventCounter.compareAndSet(value, 0)) {
-							//System.out.println("We are the last move event at counter: " + value + " so updating the config model");
-							onColumnsMoved(viewer);
-						}
-					}
-				});
-			}
-		});
+		column.addListener(SWT.Move, tableColumnListener);
 
 	}
 
 	protected void addColumnListeners(final TreeViewer viewer, final TreeColumn column) {
-		column.addListener(SWT.Move, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				final int value = moveEventCounter.incrementAndGet();
-				// when we've stopped moving update the columns
-				Display.getCurrent().timerExec(CONFIG_UPDATE_ONMOVE_DELAY, new Runnable() {
-					@Override
-					public void run() {
-						if (moveEventCounter.compareAndSet(value, 0)) {
-							//System.out.println("We are the last move event at counter: " + value + " so updating the config model");
-							onColumnsMoved(viewer);
-						}
-					}
-				});
-			}
-		});
+		column.addListener(SWT.Move, treeColumnListener);
 	}
+
+    public void removeColumnListeners(final ColumnViewer viewer) {
+        if (viewer instanceof TreeViewer) {
+            removeColumnListeners((TreeViewer) viewer);
+        } else if (viewer instanceof TableViewer) {
+            removeColumnListeners((TableViewer) viewer);
+        }
+    }
+    
+    public void removeColumnListeners(final TableViewer viewer) {
+        moveEventCounter.set(0);
+        TableColumn[] columns = viewer.getTable().getColumns();
+        for (TableColumn column : columns) {
+            removeColumnListeners(viewer, column);
+        }
+    }
+
+    public void removeColumnListeners(final TreeViewer viewer) {
+        moveEventCounter.set(0);
+        TreeColumn[] columns = viewer.getTree().getColumns();
+        for (TreeColumn column : columns) {
+            removeColumnListeners(viewer, column);
+        }
+    }
+
+    protected void removeColumnListeners(final TableViewer viewer, final TableColumn column) {
+        // TODO ignore listeners if we're disposing the columns to update it!!!
+        column.removeListener(SWT.Move, tableColumnListener);
+
+    }
+
+    protected void removeColumnListeners(final TreeViewer viewer, final TreeColumn column) {
+        column.removeListener(SWT.Move, treeColumnListener);
+    }
 
 }

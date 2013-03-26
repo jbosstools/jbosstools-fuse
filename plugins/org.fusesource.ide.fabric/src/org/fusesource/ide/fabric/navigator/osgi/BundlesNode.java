@@ -81,6 +81,11 @@ public class BundlesNode extends RefreshableCollectionNode implements ImageProvi
 	}
 
 	@Override
+    public boolean requiresContentsPropertyPage() {
+        return false;
+    }
+
+    @Override
 	protected PropertySourceTableSheetPage createPropertySourceTableSheetPage() {
 		return new BundlesTableSheetPage(this);
 	}

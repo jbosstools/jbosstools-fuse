@@ -24,6 +24,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ISection;
 import org.eclipse.ui.views.properties.tabbed.TabContents;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.ui.IConfigurableColumns;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
@@ -84,20 +85,28 @@ public class ConfigureColumnsAction extends Action {
 			if (ps.getCurrentPage() instanceof PropertySourceTableSheetPage) {
 				PropertySourceTableSheetPage sp = (PropertySourceTableSheetPage)ps.getCurrentPage();
 				this.columns = (IConfigurableColumns)sp.getTableView();
-			} else if (ps.getCurrentPage() instanceof TabFolderSupport2) {
-				TabFolderSupport2 tfs = (TabFolderSupport2)ps.getCurrentPage();
-				ISection[] secs = ((TabContents)tfs.getCurrentTab()).getSections();
-				for (ISection sec : secs) {
-					if (sec instanceof TableViewSupport) {
-						this.columns = (IConfigurableColumns) ((TableViewSupport)sec);
-						break;
-					} else {
-						System.out.println("Unsupported type: " + sec.getClass().getName());
-					}
-				}
 			} else {
-				System.out.println("Unsupported type: " + ps.getCurrentPage().getClass().getName());
-			}	
+			    ISection[] secs = null;
+			    if (ps.getCurrentPage() instanceof TabFolderSupport2) {
+    				TabFolderSupport2 tfs = (TabFolderSupport2)ps.getCurrentPage();
+    				secs = ((TabContents)tfs.getCurrentTab()).getSections();
+			    } else if (ps.getCurrentPage() instanceof TabbedPropertySheetPage) {
+			        TabbedPropertySheetPage tabbedPage = (TabbedPropertySheetPage) ps.getCurrentPage();
+			        secs = tabbedPage.getCurrentTab() == null ? null : tabbedPage.getCurrentTab().getSections();
+			    }
+			    if (secs != null) {
+    				for (ISection sec : secs) {
+    					if (sec instanceof IConfigurableColumns) {
+    						this.columns = (IConfigurableColumns) sec;
+    						break;
+    					} else {
+    						System.out.println("Unsupported type: " + sec.getClass().getName());
+    					}
+    				}
+    			} else {
+    				System.out.println("Unsupported type: " + ps.getCurrentPage().getClass().getName());
+    			}
+			}
 		} else if (part instanceof TableViewSupport) {
 			this.columns = (IConfigurableColumns) ((TableViewSupport)part);
 		} else {
@@ -111,9 +120,6 @@ public class ConfigureColumnsAction extends Action {
 	 * @return The configure columns dialog
 	 */
 	private ConfigureColumnsDialog getDialog() {
-		if (dialog == null) {
-			dialog = new ConfigureColumnsDialog(columns);
-		}
-		return dialog;
+		return new ConfigureColumnsDialog(columns);
 	}
 }

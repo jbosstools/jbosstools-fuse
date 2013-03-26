@@ -42,6 +42,10 @@ public abstract class RefreshableCollectionNode extends RefreshableNode implemen
 		return null;
 	}
 
+	public boolean requiresContentsPropertyPage() {
+	    return true;
+	}
+
 	public ViewPropertySheetPage getPropertySourceTablePage() {
 		List<IPropertySource> list = getPropertySourceList();
 		if (!list.isEmpty()) {

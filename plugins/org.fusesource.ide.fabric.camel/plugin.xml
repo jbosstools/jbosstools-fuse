@@ -60,4 +60,44 @@
       </initializer>
    </extension>
   
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
+         <propertyTab
+               afterTab="org.fusesource.ide.jmx.ui.views.ContentsTab"
+               category="org.fusesource.ide.jmx.ui.views"
+               id="org.fusesource.ide.jmx.ui.views.ProcessorsTab"
+               label="Processors"/>
+         <propertyTab
+               afterTab="org.fusesource.ide.jmx.ui.views.ProcessorsTab"
+               category="org.fusesource.ide.jmx.ui.views"
+               id="org.fusesource.ide.jmx.ui.views.ProfileTab"
+               label="Profile"/>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
+         <propertySection
+               class="org.fusesource.ide.fabric.camel.navigator.RoutesProcessorsTabSection"
+               id="RoutesProcessorsSection"
+               tab="org.fusesource.ide.jmx.ui.views.ProcessorsTab">
+            <input
+                  type="org.fusesource.ide.fabric.camel.navigator.RoutesNode">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.fabric.camel.navigator.ProcessorTabSection"
+               filter="org.fusesource.ide.fabric.camel.navigator.ProcessorTabSectionFilter"
+               id="ProcessorProcessorsSection"
+               tab="org.fusesource.ide.jmx.ui.views.ProcessorsTab">
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.fabric.camel.navigator.ProcessorCallsTabSection"
+               filter="org.fusesource.ide.fabric.camel.navigator.ProcessorCallsTabSectionFilter"
+               id="ProfileSection"
+               tab="org.fusesource.ide.jmx.ui.views.ProfileTab">
+         </propertySection>
+      </propertySections>
+   </extension>
 </plugin>

@@ -54,6 +54,10 @@ public class CreateJCloudsContainerAction extends ActionSupport {
 		this.profileNode = profileNode;
 	}
 
+	public void setFabric(Fabric fabric) {
+	    this.fabric = fabric;
+	}
+
 	protected void showCreateAgentDialog() {
 		if (versionNode == null && fabric != null) {
 			versionNode = fabric.getDefaultVersionNode();

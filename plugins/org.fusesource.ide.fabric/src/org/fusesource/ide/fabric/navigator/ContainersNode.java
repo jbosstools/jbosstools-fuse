@@ -67,6 +67,11 @@ public class ContainersNode extends FabricNodeSupport implements ImageProvider {
 	}
 
 	@Override
+    public boolean requiresContentsPropertyPage() {
+        return false;
+    }
+
+    @Override
 	protected PropertySourceTableSheetPage createPropertySourceTableSheetPage() {
 		return new ContainerTableSheetPage(getFabric());
 	}

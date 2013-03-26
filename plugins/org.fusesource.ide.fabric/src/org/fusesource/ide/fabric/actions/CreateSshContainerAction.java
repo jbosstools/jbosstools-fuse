@@ -23,7 +23,7 @@ import org.fusesource.ide.fabric.navigator.VersionNode;
 public class CreateSshContainerAction extends ActionSupport {
 	public static final boolean createLocalAgents = true;
 
-	private final VersionNode versionNode;
+	private VersionNode versionNode;
 	private final ContainerNode agentNode;
 	private ProfileNode profileNode;
 
@@ -50,6 +50,10 @@ public class CreateSshContainerAction extends ActionSupport {
 	public void setProfileNode(ProfileNode profileNode) {
 		this.profileNode = profileNode;
 	}
+
+    public void setFabric(Fabric fabric) {
+        this.versionNode = fabric.getDefaultVersionNode();
+    }
 
 	protected void showCreateAgentDialog() {
 		FormDialogSupport dialog = new CreateSshContainerDialog(versionNode, agentNode, versionNode.getFabric().getNewAgentName(), profileNode);

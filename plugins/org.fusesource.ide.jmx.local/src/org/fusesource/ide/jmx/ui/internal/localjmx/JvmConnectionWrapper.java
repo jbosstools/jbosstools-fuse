@@ -133,6 +133,12 @@ public class JvmConnectionWrapper implements IConnectionWrapper, HasName, ImageP
 			};
 			TabbedPropertySheetPage page = new TabbedPropertySheetPage(contributor);
 			return page;
+		} else if (adapter == ITabbedPropertySheetPageContributor.class) {
+		    return new ITabbedPropertySheetPageContributor() {
+                public String getContributorId() {
+                    return "org.fusesource.ide.jvmmonitor.ui.JvmExplorer";
+                }
+            };
 		}
 		return null;
 	}

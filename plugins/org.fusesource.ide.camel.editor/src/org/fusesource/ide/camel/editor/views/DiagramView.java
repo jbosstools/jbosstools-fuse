@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
@@ -64,6 +65,12 @@ public class DiagramView extends GraphViewSupport {
 	}
 
 	@Override
+    public void createPartControl(Composite parent) {
+        super.createPartControl(parent);
+        getSite().setSelectionProvider(getViewer());
+    }
+
+    @Override
 	protected GraphLabelProviderSupport createGraphLabelProvider() {
 		return new DiagramGraphLabelProvider(this);
 	}
@@ -288,35 +295,9 @@ public class DiagramView extends GraphViewSupport {
 
 	@Override
 	protected void doubleClickSelection(ISelection selection) {
-		Object obj = ((IStructuredSelection) selection).getFirstElement();
-		IViewSite viewSite = getViewSite();
-		if (obj instanceof Node) {
-			ISelectionProvider selectionProvider = Selections.getSelectionProvider(viewSite);
-			IWorkbenchPartSite site = getSite();
-			if (selectionProvider == null && site != null) {
-				selectionProvider = site.getSelectionProvider();
-				if (selectionProvider == null) {
-					IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
-					if (workbenchWindow != null) {
-						IWorkbenchPage activePage = workbenchWindow.getActivePage();
-						if (activePage != null) {
-							IWorkbenchPart activePart = activePage.getActivePart();
-							if (activePart != null) {
-								IWorkbenchPartSite activeSite = activePart.getSite();
-								if (activeSite != null) {
-									selectionProvider = activeSite.getSelectionProvider();
-								}
-							}
-						}
-					}
-				}
-			}
-			if (selectionProvider == null) {
-				selectionProvider = Selections.getSelectionProvider(selectionPart);
-			}
-			if (selectionProvider != null) {
-				selectionProvider.setSelection(selection);
-			}
+		ISelectionProvider selectionProvider = Selections.getSelectionProvider(selectionPart);
+		if (selectionProvider != null) {
+			selectionProvider.setSelection(selection);
 		}
 	}
 }
