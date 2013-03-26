@@ -92,7 +92,7 @@ public class Downloader {
         String[] repositories = {"http://repo.fusesource.com/nexus/content/groups/ea@fusesource-ea-repo"};
         indexer.setRepositories(repositories);
         indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
-        indexer.startAndWait();
+        indexer.start();
 
         aether = new Aether(Aether.userRepository(), Aether.defaultRepositories());
     }
