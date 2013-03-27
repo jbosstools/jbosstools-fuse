@@ -1,7 +1,7 @@
 #!/bin/bash
 export PERFECUT_ARTIFACT=ide
 
-MVN_SETTINGS="--settings ${HOME}/.m2/m3-settings.xml"
+MVN_SETTINGS="--settings ${HOME}/.m2/fuseide-settings.xml"
 
 . `dirname $0 2> /dev/null`/common.sh
 
