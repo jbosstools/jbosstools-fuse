@@ -42,10 +42,9 @@ var _apacheCamelModel = {
 			#if (node.canAcceptInput())
       "acceptInput": true,
       #end
-      "properties": [
+      "properties": {
   #for (prop <- node.beanProperties)
-        {
-          "id":     "${prop.name.toLowerCase}",
+        "${prop.name.toLowerCase}": {
 				  <% val xmlElements = node.xmlElements(prop) %>
 				    #if (xmlElements.isEmpty)
 				  	#else
@@ -85,7 +84,7 @@ var _apacheCamelModel = {
           "title":  "${prop.label}"
         },
   #end
-      ]
+			}
     },
 #end
 	},
