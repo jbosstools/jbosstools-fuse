@@ -12,11 +12,15 @@
 package org.fusesource.ide.fabric.navigator;
 
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.fusesource.fabric.api.Container;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.ide.fabric.Messages;
@@ -27,9 +31,11 @@ import scala.actors.threadpool.Arrays;
 
 public class ProfileTreeForm extends ProfileTreeSelectionFormSupport {
 	private final ContainerNode node;
+	private boolean selectionChanged = false;
 
 	public ProfileTreeForm(ContainerNode node) {
 		this.node = node;
+		this.selectionChanged = false;
 	}
 
 	@Override
@@ -53,16 +59,40 @@ public class ProfileTreeForm extends ProfileTreeSelectionFormSupport {
 		setProfilesViewerInput(node.getVersionNode());
 		Profile[] profiles = node.getContainer().getProfiles();
 		setCheckedProfiles(profiles);
+		
+		getProfilesViewer().getTree().addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (selectionChanged) {
+					if (MessageDialog.openConfirm(Display.getDefault().getActiveShell(), Messages.confirmProfileSelectionChangesTitle, Messages.confirmProfileSelectionChangesText)) {
+						if (isValid()) {
+							okPressed();
+						}	
+					} else {
+						getProfilesViewer().getTree().deselectAll();
+						setProfilesViewerInput(node.getVersionNode());
+						Profile[] profiles = node.getContainer().getProfiles();
+						setCheckedProfiles(profiles);
+						getProfilesViewer().refresh();
+					}
+				}				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.fabric.actions.ProfileTreeSelectionFormSupport#onProfileSelectionChanged()
+	 */
 	@Override
 	protected void onProfileSelectionChanged() {
 		super.onProfileSelectionChanged();
-
-		if (isValid()) {
-			okPressed();
-		}
+		selectionChanged = true;
 	}
 
 	@Override
@@ -72,6 +102,7 @@ public class ProfileTreeForm extends ProfileTreeSelectionFormSupport {
 		System.out.println("Updating the profiles of " + agent + " to: " + Arrays.asList(profiles));
 		agent.setProfiles(profiles);
 		node.refresh();
+		selectionChanged = false;
 	}
 
 	@Override

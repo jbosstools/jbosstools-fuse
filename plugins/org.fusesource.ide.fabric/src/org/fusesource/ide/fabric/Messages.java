@@ -103,6 +103,9 @@ public class Messages extends NLS {
 	public static String profile_editRepositoryDialogText;
 	public static String profile_deleteRepositoryDialogTitle;
 
+	public static String confirmProfileSelectionChangesTitle;
+	public static String confirmProfileSelectionChangesText;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
