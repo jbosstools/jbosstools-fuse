@@ -650,7 +650,7 @@
                   <data columnCount="3">
                     <data>
                       <language>en_US</language>
-                      <value>http://repo.fusesource.com/beta/3.0.x</value>
+                      <value>http://repo.fusesource.com/beta/updatesite</value>
                     </data>
                   </data>
                 </row>
