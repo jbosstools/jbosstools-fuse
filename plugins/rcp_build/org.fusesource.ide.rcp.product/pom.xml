@@ -48,8 +48,8 @@
 						<product> 
 							<id>FuseIDE</id> 
 							<rootFolder>FuseIDE-${fuse.version}</rootFolder>
-							<archiveFileName>FuseIDE-${fuse.version}</archiveFileName> 
-						</product> 
+							<archiveFileName>FuseIDE-${fuse.version}.${ide-buildno}</archiveFileName> 
+						</product>
 					</products> 
 				</configuration>
 			</plugin>

@@ -49,6 +49,7 @@ find plugins -name 'fuse*.product' | xargs perl -pi -e "s/7.2.0.qualifier/${VERS
 
 # replace IDE version
 perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>${VERSION}<\/ide-version>/g" plugins/pom.xml
+perl -pi -e "s/<ide-buildno>.*<\/ide-buildno>/<ide-buildno>${BUILDNO}<\/ide-buildno>/g" plugins/rcp_build/pom.xml
 
 #echo "Zapping P2 cache of fusesource and snapshot stuff"
 #rm -rf /mnt/hudson/.m2/repository/p2/osgi/bundle/org.fusesource*
