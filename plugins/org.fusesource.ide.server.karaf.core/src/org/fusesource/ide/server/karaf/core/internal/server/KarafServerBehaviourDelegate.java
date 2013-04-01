@@ -293,7 +293,7 @@ public class KarafServerBehaviourDelegate extends ServerBehaviourDelegate {
 	protected String getVMArguments(String karafInstallDir) {
 		StringBuilder vmArguments = new StringBuilder();
 
-		vmArguments.append("-Xms128M  -Xmx512M ");
+		vmArguments.append("-Xms128M  -Xmx512M -XX:+UnlockDiagnosticVMOptions -XX:+UnsyncloadClass ");
 		vmArguments.append(SPACE + "-Dderby.system.home=" + QUOTE + karafInstallDir + SEPARATOR + "data" + SEPARATOR + "derby" + QUOTE); 
 		vmArguments.append(SPACE + "-Dderby.storage.fileSyncTransactionLog=true");
 		//vmArguments.append(SPACE + "-Dcom.sun.management.jmxremote");
