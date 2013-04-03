@@ -104,7 +104,7 @@ cd ../..
 # read dummy
 
 # update the update site versions
-./addUpdateSiteVersion ${VERSION} beta/3.0.x
+./addUpdateSiteVersion ${VERSION} beta/updatesite
 
 
 echo ============================================================================
@@ -117,7 +117,20 @@ mvn ${MVN_SETTINGS} clean install
 
 if [ $? -eq 0 ]         # Test exit status of "mvn" command.
 then
-  echo "Build succeeded. Progress to integration testing..."
+  echo "Build succeeded. Progress to source archive creation..."
+else  
+  echo "Build failed. Exit now..."
+  exit $?
+fi
+
+echo "Generating the sources archive"
+echo ============================================================================
+cd ../..
+./create-source-archive.sh
+
+if [ $? -eq 0 ]         # Test exit status of "mvn" command.
+then
+  echo "Build succeeded. Progress to product archive deployment..."
 else  
   echo "Build failed. Exit now..."
   exit $?
@@ -126,7 +139,7 @@ fi
 echo "Deploying the distribution archives"
 echo ============================================================================
 
-cd org.fusesource.ide.rcp.product
+cd plugins/rcp_build/org.fusesource.ide.rcp.product
 mvn ${MVN_SETTINGS} updatesite:deploy
 
 if [ $? -eq 0 ]         # Test exit status of "mvn" command.
@@ -136,21 +149,6 @@ else
   echo "RCP deployment failed. Exit now..."
   exit $?
 fi
-
-
-
-#echo "Executing the integration tests"
-#echo ============================================================================
-#cd ../testing
-#mvn ${MVN_SETTINGS} clean install -Djubula.home=/opt/jubula_5.2.00266 -Djubula.plugin.archive=/opt/jubula_5.2.00266/rcp-support.zip
-#
-#if [ $? -eq 0 ]         # Test exit status of "mvn" command.
-#then
-#  echo "Integration testing succeeded. Progress to RCP deployment..."
-#else  
-#  echo "Integration testing failed. Exit now..."
-#  exit $?
-#fi
 
 cd ../../..
 
