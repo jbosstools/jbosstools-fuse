@@ -87,7 +87,7 @@ an abort.
   </xs:element>
 
 
-  <!-- element for type: org.apache.activemq.security.AuthorizationEntry -->
+  <!-- element for type: org.apache.activemq.security.XBeanAuthorizationEntry -->
   <xs:element name='authorizationEntry'>
     <xs:annotation>
       <xs:documentation><![CDATA[
@@ -153,16 +153,8 @@ destination or a hierarchical wildcard area of destinations.
   </xs:element>
 
 
-  <!-- element for type: org.apache.activemq.security.DefaultAuthorizationMap -->
+  <!-- element for type: org.apache.activemq.security.XBeanAuthorizationMap -->
   <xs:element name='authorizationMap'>
-    <xs:annotation>
-      <xs:documentation><![CDATA[
-        Represents a destination based configuration of policies so that individual
-destinations or wildcard hierarchies of destinations can be configured using
-different policies. Each entry in the map represents the authorization ACLs
-for each operation.
-      ]]></xs:documentation>
-    </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
         <xs:element name='authorizationEntries' minOccurs='0' maxOccurs='unbounded'>
@@ -206,6 +198,7 @@ dependency injection framework such as Spring
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='defaultEntry' type='xs:string'/>
+      <xs:attribute name='groupClass' type='xs:string'/>
       <xs:attribute name='tempDestinationAuthorizationEntry' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
@@ -591,7 +584,6 @@ other brokers in a federated network
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:broker'/>
               <xs:element ref='tns:brokerService'/>
-              <xs:element ref='tns:commandAgent'/>
               <xs:element ref='tns:database-locker'/>
               <xs:element ref='tns:forwardingBridge'/>
               <xs:element ref='tns:inboundQueueBridge'/>
@@ -1196,7 +1188,6 @@ other brokers in a federated network
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:broker'/>
               <xs:element ref='tns:brokerService'/>
-              <xs:element ref='tns:commandAgent'/>
               <xs:element ref='tns:database-locker'/>
               <xs:element ref='tns:forwardingBridge'/>
               <xs:element ref='tns:inboundQueueBridge'/>
@@ -1622,6 +1613,7 @@ dependency injection framework such as Spring
       <xs:attribute name='connectionURL' type='xs:string'/>
       <xs:attribute name='connectionUsername' type='xs:string'/>
       <xs:attribute name='defaultEntry' type='xs:string'/>
+      <xs:attribute name='groupClass' type='xs:string'/>
       <xs:attribute name='groupNameAttribute' type='xs:string'/>
       <xs:attribute name='groupObjectClass' type='xs:string'/>
       <xs:attribute name='legacyGroupMapping' type='xs:boolean'/>
@@ -1636,54 +1628,6 @@ dependency injection framework such as Spring
       <xs:attribute name='userNameAttribute' type='xs:string'/>
       <xs:attribute name='userObjectClass' type='xs:string'/>
       <xs:attribute name='writePermissionGroupSearchFilter' type='xs:string'/>
-      <xs:attribute name='id' type='xs:ID'/>
-      <xs:anyAttribute namespace='##other' processContents='lax'/>
-    </xs:complexType>
-  </xs:element>
-
-
-  <!-- element for type: org.apache.activemq.broker.util.CommandAgent -->
-  <xs:element name='commandAgent'>
-    <xs:annotation>
-      <xs:documentation><![CDATA[
-        An agent which listens to commands on a JMS destination
-      ]]></xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='commandDestination' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:queue'/>
-              <xs:element ref='tns:tempQueue'/>
-              <xs:element ref='tns:tempTopic'/>
-              <xs:element ref='tns:topic'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='connection' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='connectionFactory' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:connectionFactory'/>
-              <xs:element ref='tns:xaConnectionFactory'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
-      </xs:choice></xs:choice>
-      <xs:attribute name='brokerUrl' type='xs:string'/>
-      <xs:attribute name='commandDestination' type='xs:string'/>
-      <xs:attribute name='connection' type='xs:string'/>
-      <xs:attribute name='connectionFactory' type='xs:string'/>
-      <xs:attribute name='password' type='xs:string'/>
-      <xs:attribute name='username' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -1998,10 +1942,7 @@ on connection (as it will be if more than one connection is subsequently created
             ]]></xs:documentation>
           </xs:annotation>
           <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:commandAgent'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:element name='prefetchPolicy' minOccurs='0' maxOccurs='1'>
@@ -8293,17 +8234,12 @@ Attribute 'ttlCeiling' can be used to apply a limit to the expiration time
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='processNetworkMessages' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='adminConnectionContext' type='xs:string'/>
       <xs:attribute name='futureOnly' type='xs:boolean'/>
       <xs:attribute name='next' type='xs:string'/>
-      <xs:attribute name='processNetworkMessages' type='xs:string'/>
+      <xs:attribute name='processNetworkMessages' type='xs:boolean'/>
       <xs:attribute name='ttlCeiling' type='xs:long'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -8937,10 +8873,7 @@ on connection (as it will be if more than one connection is subsequently created
             ]]></xs:documentation>
           </xs:annotation>
           <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:commandAgent'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:element name='prefetchPolicy' minOccurs='0' maxOccurs='1'>
