@@ -6,7 +6,7 @@ import xml.{Elem, Node, XML}
 
 import Math._
 import java.{util => ju}
-import java.io.{FileInputStream, File}
+import java.io.{FileReader, FileInputStream, File}
 
 import org.apache.camel.CamelContext
 import org.apache.camel.impl.DefaultCamelContext
@@ -20,12 +20,13 @@ import org.fusesource.camel.tooling.util.XmlHelper._
 import org.fusesource.camel.tooling.util.Objects._
 import org.fusesource.camel.tooling.util.CamelModelUtils
 
-import org.fusesource.scalate.{CompilerException, TemplateEngine}
+import org.fusesource.scalate.{RenderContext, CompilerException, TemplateEngine}
 import org.fusesource.scalate.introspector.{BeanProperty, Property, Introspector}
 import org.fusesource.scalate.util.{Logging, IOUtil}
 import java.lang.reflect.{AnnotatedElement, Field, Modifier}
 import java.lang.annotation.{Annotation => JAnnotation}
 import javax.xml.bind.annotation.{XmlRootElement, XmlElements, XmlElementRef, XmlAttribute, XmlElement, XmlAccessType, XmlAccessorType, XmlTransient}
+import com.google.gson.{JsonParser, GsonBuilder}
 
 object Reflections {
 
@@ -127,6 +128,8 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
   lazy val nodeDefinitionMap = Map[String, NodeDefinition[_]](nodeDefinitions.map(n => n.id -> n): _*)
   lazy val nodeDefinitionClassMap = Map[Class[_], NodeDefinition[_]](nodeDefinitions.map(n => n.clazz -> n): _*)
 
+  lazy val baseClassAndNestedClasses = loadBaseClassAndNestedClasses
+
   lazy val toDefinition = createNodeDefinition("ToDefinition")
 
   val dir = new File(outputDir)
@@ -135,6 +138,21 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
   val imageExtensions = List("png", "gif", "jpg", "jpeg")
 
   val eclipseIconDir = "../../../../../../plugins/org.fusesource.ide.camel.model/icons/"
+
+
+  /**
+   * Make it easy to add a comma between values while iterating
+   */
+  def comma[T](iter: Iterable[T])(fn: T => Any): Unit = {
+    var first = true
+    for (t <- iter) {
+      if (first)
+        first = false
+      else
+        RenderContext() << ", "
+      fn(t)
+    }
+  }
 
 
   def run: Unit = {
@@ -266,13 +284,22 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
 
 
   def generateHawtIO(outputDir: String): Unit = {
-    var uris = List("camelModel.js")
+    var uris = List("camelModel.json")
 
     println("Generating files to " + outputDir)
     new File(outputDir).mkdirs
 
     for (u <- uris) {
       render(u, outputDir, "src/main/resources/org/fusesource/ide/generator/hawtio")
+
+      // now lets parse and pretty print the JSON
+      val file = new File(outputDir, u)
+      val gson = new GsonBuilder().setPrettyPrinting().create()
+      val jp = new JsonParser()
+      val je = jp.parse(new FileReader(file))
+      val prettyJsonString = gson.toJson(je)
+      IOUtil.writeText(new File(outputDir, "camelModel.js"), "var _apacheCamelModel = " + prettyJsonString + ";")
+      println("Pretty printed JSON " + file)
     }
   }
 
@@ -384,6 +411,17 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
     loadStrings("org/apache/camel/model/jaxb.index").
             map(n => createNodeDefinition(n)).
             filter(_.isProcessor)
+  }
+
+  protected def loadBaseClassAndNestedClasses: Seq[NodeDefinition[_]] = {
+    val classes = scala.collection.mutable.HashSet[Class[_]]()
+    classes += classOf[DescriptionDefinition]
+    for (node <- nodeDefinitions) {
+      for (prop <- node.beanProperties) {
+        classes += prop.propertyType
+      }
+    }
+    classes.map(c => NodeDefinition(c.getName, c, this)).toSeq
   }
 
   protected def createNodeDefinition(n: String) = NodeDefinition(n, classLoader.loadClass("org.apache.camel.model." + n), this)

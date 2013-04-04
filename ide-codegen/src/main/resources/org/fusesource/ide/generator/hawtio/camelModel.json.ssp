@@ -4,8 +4,8 @@
 
   val langTool = new Languages()
 %>
-var _apacheCamelModel = {
-  "nodes": {
+{
+  "definitions": {
      "from": {
         "title":    "From",
         "group":   "Endpoints",
@@ -27,6 +27,19 @@ var _apacheCamelModel = {
         "tootip":  "A collection of EIP steps",
         "icon":     "route24.png"
       },
+			"org.apache.camel.model.OptionalIdentifiedDefintion": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"description": {
+						"type:": "org.apache.camel.model.DescriptionDefinition"
+					},
+					"inheritErrorHandler": {
+						"type:": "java.lang.Boolean"
+					}
+				}
+			},
 
 #for( node <- nodeDefinitions)
 <%
@@ -43,23 +56,31 @@ var _apacheCamelModel = {
       "acceptInput": true,
       #end
       "properties": {
-  #for (prop <- node.beanProperties)
+	<%
+	comma(node.beanProperties){ prop =>
+	%>		
         "${prop.name.toLowerCase}": {
-				  <% val xmlElements = node.xmlElements(prop) %>
+				  <% 
+					val xmlElements = node.xmlElements(prop) 
+					%>
 				    #if (xmlElements.isEmpty)
 				  	#else
 						"elements": {
-						  #for (xe <- xmlElements)
-				       "${xe.name()}": "${xe.`type`().getName}",
-						  #end
+							<%
+							comma(xmlElements){ xe =>
+							%>		
+				       "${xe.name()}": "${xe.`type`().getName}"
+ 						 	<%
+ 						 	}
+ 						 	%>				
 							},
 				  	#end
       #if (node.isBeanMethod(prop))
-					"type":   "combo",
+					"control":   "combo",
 					"kind": "beanMethod",
-          "title":'Select a method...',
+          "title":"Select a method...",
       #elif (node.isBeanRef(prop))
-        "type":   "combo",
+        "control":   "combo",
 				"kind":   "beanRef",
 				"title": "Select a bean...",
 	    #elif (isExpression(prop))
@@ -82,18 +103,87 @@ var _apacheCamelModel = {
           "wrapLines": true,
 		      #end
           "title":  "${prop.label}"
-        },
-  #end
+        }
+	<%
+	}
+	%>				
 			}
     },
 #end
+<%
+comma(baseClassAndNestedClasses){ node =>
+%>		
+     "${node.id}": {
+      "description":  "${node.description}",
+      "tootip":  "${node.description}",
+      "properties": {
+	<%
+	comma(node.beanProperties){ prop =>
+	%>		
+        "${prop.name.toLowerCase}": {
+				  <% 
+					val xmlElements = node.xmlElements(prop) 
+					%>
+				    #if (xmlElements.isEmpty)
+				  	#else
+						"elements": {
+							<%
+							comma(xmlElements){ xe =>
+							%>		
+				       "${xe.name()}": "${xe.`type`().getName}"
+						 	<%
+						 	}
+						 	%>				
+							},
+				  	#end
+      #if (node.isBeanMethod(prop))
+					"control":   "combo",
+					"kind": "beanMethod",
+          "title":'Select a method...',
+      #elif (node.isBeanRef(prop))
+        "control":   "combo",
+				"kind":   "beanRef",
+				"title": "Select a bean...",
+	    #elif (isExpression(prop))
+				"kind" : "expression",
+      #else
+      #end
+	        "type":   "${javaScriptType(prop)}",
+          <%--
+					"type": "${propertyType(prop)}"
+					--%>
+          "description":"${prop.description}",
+          "tooltip":"${prop.description}",
+					#if (prop.readOnly)
+          "readonly": true,
+		      #end
+					#if (prop.optional && !node.isRequired(prop))
+          "optional": true,
+		      #end
+					#if (wrapLines(prop))
+          "wrapLines": true,
+		      #end
+          "title":  "${prop.label}"
+        }
+	<%
+	}
+	%>				
+			}
+    }
+<%
+}
+%>				
 	},
 	"languages": {
-#for( lang <- langTool.languages)
+<%
+comma(langTool.languages){ lang =>
+%>		
     "${lang.id}": {
       "name": "${lang.name}",
       "description": "${lang.description}"
-    },
-#end
+    }
+<%
+}
+%>				
 	}
-};
+}
