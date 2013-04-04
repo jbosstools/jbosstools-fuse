@@ -6,28 +6,51 @@
 %>
 {
   "definitions": {
+     "endpoint": {
+				"type": "object",
+				"extends": {
+					"type": "org.apache.camel.model.OptionalIdentifiedDefinition"
+				},
+				"properties": {
+					"uri": {
+						"type": "string"
+					},
+					"ref": {
+						"type:": "string"
+					}
+				}
+      },
      "from": {
         "title":    "From",
+				"type": "object",
+				"extends": {
+					"type": "endpoint"
+				},
         "group":   "Endpoints",
         "description":  "Consumes from an endpoint",
-        "tootip":  "Consumes from an endpoint",
+        "tooltip":  "Consumes from an endpoint",
         "icon":     "endpoint24.png"
       },
      "to": {
         "title":    "To",
+				"type": "object",
+				"extends": {
+					"type": "endpoint"
+				},
         "group":   "Endpoints",
         "description":  "Sends messages to an endpoint",
-        "tootip":  "Sends messages to an endpoint",
+        "tooltip":  "Sends messages to an endpoint",
         "icon":     "endpoint24.png"
       },
      "route": {
         "title":    "Route",
         "group":   "",
         "description":  "A collection of EIP steps",
-        "tootip":  "A collection of EIP steps",
+        "tooltip":  "A collection of EIP steps",
         "icon":     "route24.png"
       },
-			"org.apache.camel.model.OptionalIdentifiedDefintion": {
+			"org.apache.camel.model.OptionalIdentifiedDefinition": {
+				"type": "object",
 				"properties": {
 					"id": {
 						"type": "string"
@@ -40,6 +63,25 @@
 					}
 				}
 			},
+			"org.apache.camel.model.language.ExpressionDefinition": {
+	      "description": "A Camel expression",
+	      "tooltip": "Pick an expression language and enter an expression",
+				"type": "object",
+	      "properties": {
+	        "expression": {
+	          "type": "java.lang.String",
+	          "description": "The expression",
+	          "tooltip": "Enter the expression in your chosen Came expression language",
+	          "title": "expression"
+	        },
+	        "language": {
+	          "type": "java.lang.String",
+	          "description": "The camel expression language ot use",
+	          "tooltip": "Pick the expression language you want to use",
+	          "title": "language"
+	        }
+	      }
+			},
 
 #for( node <- nodeDefinitions)
 <%
@@ -47,10 +89,14 @@
     val icon = findIconFileOrElse("", node.id + "24", node.defaultImageName + "24.png")
  %>
      "${node.id}": {
+			"type": "object",
+			"extends": {
+				"type": "org.apache.camel.model.OptionalIdentifiedDefinition"
+			},
       "title":    "${node.title}",
       "group":   "${node.group}",
       "description":  "${node.description}",
-      "tootip":  "${node.description}",
+      "tooltip":  "${node.description}",
       "icon":     "${icon}",
 			#if (node.canAcceptInput())
       "acceptInput": true,
@@ -59,7 +105,7 @@
 	<%
 	comma(node.beanProperties){ prop =>
 	%>		
-        "${prop.name.toLowerCase}": {
+        "${prop.name}": {
 				  <% 
 					val xmlElements = node.xmlElements(prop) 
 					%>
@@ -114,13 +160,14 @@
 comma(baseClassAndNestedClasses){ node =>
 %>		
      "${node.id}": {
+ 			"type": "object",
       "description":  "${node.description}",
-      "tootip":  "${node.description}",
+      "tooltip":  "${node.description}",
       "properties": {
 	<%
 	comma(node.beanProperties){ prop =>
 	%>		
-        "${prop.name.toLowerCase}": {
+        "${prop.name}": {
 				  <% 
 					val xmlElements = node.xmlElements(prop) 
 					%>

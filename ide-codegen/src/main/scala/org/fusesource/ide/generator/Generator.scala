@@ -335,6 +335,8 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
    */
 
   def javaScriptType(prop: Property[_]): String = {
+    return prop.propertyType.getName()
+    /*
 		val number = "number"
 		val string = "string"
 		val bool = "bool"
@@ -357,6 +359,7 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
 			case "java.lang.Boolean" => bool
 			case n: String => n
     }
+    */
   }
 
   def isExpression(prop: Property[_]) = classOf[ExpressionDefinition].isAssignableFrom(prop.propertyType)
@@ -416,9 +419,15 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
   protected def loadBaseClassAndNestedClasses: Seq[NodeDefinition[_]] = {
     val classes = scala.collection.mutable.HashSet[Class[_]]()
     classes += classOf[DescriptionDefinition]
+    val ignoredTypeNames = Set("java.util.List", "java.lang.String",
+      "org.apache.camel.model.language.Expression")
     for (node <- nodeDefinitions) {
       for (prop <- node.beanProperties) {
-        classes += prop.propertyType
+        val propType = prop.propertyType
+        if (!propType.isPrimitive && node.isSimplePropertyType(prop) &&
+                !ignoredTypeNames.contains(propType.getName)) {
+          classes += propType
+        }
       }
     }
     classes.map(c => NodeDefinition(c.getName, c, this)).toSeq
