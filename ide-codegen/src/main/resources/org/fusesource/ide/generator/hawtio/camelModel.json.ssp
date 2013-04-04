@@ -16,7 +16,7 @@
 						"type": "string"
 					},
 					"ref": {
-						"type:": "string"
+						"type": "string"
 					}
 				}
       },
@@ -56,10 +56,10 @@
 						"type": "string"
 					},
 					"description": {
-						"type:": "org.apache.camel.model.DescriptionDefinition"
+						"type": "org.apache.camel.model.DescriptionDefinition"
 					},
 					"inheritErrorHandler": {
-						"type:": "java.lang.Boolean"
+						"type": "java.lang.Boolean"
 					}
 				}
 			},
