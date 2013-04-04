@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.fusesource.ide</groupId>
     <artifactId>project</artifactId>
-    <version>7.2.0-SNAPSHOT</version>
+    <version>7.2.120</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -41,7 +41,7 @@
 
     <!-- TODO update -->
     <nmr-version>1.5.0-fuse-00-39</nmr-version>
-    <ide-version>${project.version}</ide-version>
+    <ide-version>7.2.120</ide-version>
     <servicemix-specs-version>1.6.0</servicemix-specs-version>
     <spring-osgi-version>1.2.1</spring-osgi-version>
 <!--
