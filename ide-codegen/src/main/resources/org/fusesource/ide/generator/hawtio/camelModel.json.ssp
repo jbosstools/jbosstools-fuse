@@ -104,23 +104,20 @@
       "properties": {
 	<%
 	comma(node.beanProperties){ prop =>
+		val xmlElements = node.xmlElements(prop) 
 	%>		
         "${prop.name}": {
-				  <% 
-					val xmlElements = node.xmlElements(prop) 
-					%>
-				    #if (xmlElements.isEmpty)
-				  	#else
-						"elements": {
+    #if (!xmlElements.isEmpty)
+						"type": [
 							<%
 							comma(xmlElements){ xe =>
 							%>		
-				       "${xe.name()}": "${xe.`type`().getName}"
+				       "${xe.`type`().getName}"
  						 	<%
  						 	}
  						 	%>				
-							},
-				  	#end
+							],
+		#else
       #if (node.isBeanMethod(prop))
 					"control":   "combo",
 					"kind": "beanMethod",
@@ -134,9 +131,7 @@
       #else
       #end
 	        "type":   "${javaScriptType(prop)}",
-          <%--
-					"type": "${propertyType(prop)}"
-					--%>
+					#end
           "description":"${prop.description}",
           "tooltip":"${prop.description}",
 					#if (prop.readOnly)

@@ -428,6 +428,10 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
                 !ignoredTypeNames.contains(propType.getName)) {
           classes += propType
         }
+        val elements = node.xmlElements(prop)
+        for (el <- elements) {
+          classes += el.`type`()
+        }
       }
     }
     classes.map(c => NodeDefinition(c.getName, c, this)).toSeq
