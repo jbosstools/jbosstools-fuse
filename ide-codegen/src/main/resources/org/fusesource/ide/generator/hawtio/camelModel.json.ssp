@@ -7,37 +7,38 @@
 {
   "definitions": {
      "endpoint": {
-				"type": "object",
-				"extends": {
-					"type": "org.apache.camel.model.OptionalIdentifiedDefinition"
-				},
-				"properties": {
-					"uri": {
-						"type": "string"
-					},
-					"ref": {
-						"type": "string"
-					}
-				}
+        "title":    "Endpoint",
+        "type": "object",
+        "extends": {
+            "type": "org.apache.camel.model.OptionalIdentifiedDefinition"
+        },
+        "group":   "Endpoints",
+        "description":  "Represents a camel endpoint which is used to consume messages or send messages to some kind of middleware or technology",
+        "properties": {
+            "uri": {
+                "type": "string"
+            },
+            "ref": {
+                "type": "string"
+            }
+        }
       },
      "from": {
         "title":    "From",
-				"type": "object",
-				"extends": {
-					"type": "endpoint"
-				},
-        "group":   "Endpoints",
+        "type": "object",
+        "extends": {
+            "type": "Endpoint"
+        },
         "description":  "Consumes from an endpoint",
         "tooltip":  "Consumes from an endpoint",
         "icon":     "endpoint24.png"
       },
      "to": {
         "title":    "To",
-				"type": "object",
-				"extends": {
-					"type": "endpoint"
-				},
-        "group":   "Endpoints",
+        "type": "object",
+        "extends": {
+            "type": "Endpoint"
+        },
         "description":  "Sends messages to an endpoint",
         "tooltip":  "Sends messages to an endpoint",
         "icon":     "endpoint24.png"
@@ -71,11 +72,20 @@
 	        "expression": {
 	          "type": "java.lang.String",
 	          "description": "The expression",
-	          "tooltip": "Enter the expression in your chosen Came expression language",
+	          "tooltip": "Enter the expression in your chosen Camel expression language",
 	          "title": "expression"
 	        },
 	        "language": {
-	          "type": "java.lang.String",
+	          "type": "string",
+						"enum": [
+						<%
+						comma(langTool.languages){ lang =>
+						%>		
+						    "${lang.id}"
+						<%
+						}
+						%>				
+						],
 	          "description": "The camel expression language ot use",
 	          "tooltip": "Pick the expression language you want to use",
 	          "title": "language"
