@@ -56,6 +56,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
+import org.fusesource.camel.tooling.util.CamelModelUtils;
 import org.fusesource.ide.camel.model.generated.Bean;
 import org.fusesource.ide.camel.model.generated.Catch;
 import org.fusesource.ide.camel.model.generated.Choice;
@@ -1536,9 +1537,9 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		if (a == null && b == null) return true;
 		if (a == null && b != null) return false;
 		if (a != null && b == null) return false;
-		
+
 		if (a instanceof String && b instanceof String) {
-			return ((String)a).equals((String)b);
+			return ((String)a).equals(b);
 		}
 
 		if (a instanceof ExpressionDefinition &&
