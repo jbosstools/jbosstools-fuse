@@ -59,7 +59,7 @@
 					"description": {
 						// "type": "org.apache.camel.model.DescriptionDefinition"
 						"type": "string",
-						"formTemplate": "<textarea class='input-xxlarge' placeholder='Description' rows='8'></textarea>"
+						"formTemplate": "&lt;textarea class=&quot;input-xxlarge&quot; rows=&quot;8&quot;&gt;&lt;/textarea&gt;"
 					},
 					"inheritErrorHandler": {
 						"type": "java.lang.Boolean"
