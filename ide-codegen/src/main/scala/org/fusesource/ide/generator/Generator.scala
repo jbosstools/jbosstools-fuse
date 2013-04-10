@@ -595,6 +595,16 @@ case class NodeDefinition[T](name: String, clazz: Class[T], generator: Generator
 		return CamelModelUtils.canAcceptInput(clazz.getName())
 	}
 	
+	def canAcceptOutput(): Boolean = {
+    import generator.camelContext
+    return CamelModelJavaHelper.canAcceptOutput(camelContext, clazz)
+	}
+
+	def isNextSiblingStepAddedAsNodeChild(): Boolean = {
+    import generator.camelContext
+    return CamelModelJavaHelper.isNextSiblingStepAddedAsNodeChild(camelContext, clazz)
+	}
+
   def title: String = {
     splitCamelCase(definitionName)
   }
