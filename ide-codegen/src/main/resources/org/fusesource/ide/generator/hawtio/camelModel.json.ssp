@@ -14,6 +14,7 @@
         },
         "group":   "Endpoints",
         "description":  "Represents a camel endpoint which is used to consume messages or send messages to some kind of middleware or technology",
+        "icon":     "endpoint24.png",
         "properties": {
             "uri": {
                 "type": "string"
@@ -59,7 +60,7 @@
 					"description": {
 						// "type": "org.apache.camel.model.DescriptionDefinition"
 						"type": "string",
-						"formTemplate": "&lt;textarea class=&quot;input-xxlarge&quot; rows=&quot;8&quot;&gt;&lt;/textarea&gt;"
+						"formTemplate": "<textarea class='input-xxlarge' rows='8'></textarea>"
 					},
 					"inheritErrorHandler": {
 						"type": "java.lang.Boolean"

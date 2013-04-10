@@ -294,7 +294,7 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
 
       // now lets parse and pretty print the JSON
       val file = new File(outputDir, u)
-      val gson = new GsonBuilder().setPrettyPrinting().create()
+      val gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
       val jp = new JsonParser()
       val je = jp.parse(new FileReader(file))
       val prettyJsonString = gson.toJson(je)
