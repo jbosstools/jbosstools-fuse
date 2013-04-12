@@ -808,6 +808,22 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	}
 
 	/**
+	 * Adds the given node as the last step in this tree of steps.
+	 * For example for a Choice node then we add this to the last When / Otherwise branches etc.
+	 */
+	public void addTargetNodeAsLastStep(AbstractNode node) {
+		List<AbstractNode> children = getOutputs();
+		if (children == null || children.isEmpty()) {
+			addTargetNode(node);
+		} else {
+			for (AbstractNode child : children) {
+				child.addTargetNodeAsLastStep(node);
+			}
+		}
+	}
+
+
+	/**
 	 * Add an incoming or outgoing connection to this shape.
 	 * 
 	 * @param conn

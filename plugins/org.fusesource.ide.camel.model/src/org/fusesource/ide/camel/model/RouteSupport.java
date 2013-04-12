@@ -128,7 +128,7 @@ public abstract class RouteSupport extends RouteContainer {
 					endpoint.saveChildrenToCamelDefinitions(answer, processedNodes);
 					// remember that node is processed
 					processedNodes.add(node);
-				}				
+				}
 			} else {
 				LOG.warn(node + " is not connected to anything!");
 				// throw new IllegalStateException(node +
@@ -160,12 +160,19 @@ public abstract class RouteSupport extends RouteContainer {
 		List<ProcessorDefinition> outputs = processor.getOutputs();
 
 		AbstractNode parent = null;
+		AbstractNode lastNode = null;
 		for (ProcessorDefinition childProcessor : outputs) {
 			AbstractNode node = NodeFactory.createNode(childProcessor, this);
 			if (parent == null) {
-				for (FromDefinition input : inputs) {
-					Endpoint endpoint = getOrCreateEndpoint(input);
-					endpoint.addTargetNode(node);
+				if (lastNode == null) {
+					for (FromDefinition input : inputs) {
+						Endpoint endpoint = getOrCreateEndpoint(input);
+						endpoint.addTargetNode(node);
+					}
+				} else {
+					// lets find all the last nodes added
+					// such as the When / Otherwise nodes in a Choice...
+					lastNode.addTargetNodeAsLastStep(node);
 				}
 			} else {
 				parent.addTargetNode(node);
@@ -173,6 +180,7 @@ public abstract class RouteSupport extends RouteContainer {
 			if (!isMulticastNode(parent, node) && node.isNextSiblingStepAddedAsNodeChild()) {
 				parent = node;
 			}
+			lastNode = node;
 		}
 	}
 
