@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Plugins for Eclipse Camel Editor Plugin Tests
 Bundle-SymbolicName: org.fusesource.ide.camel.editor.tests;singleton:=true
-Bundle-Version: 7.2.0.qualifier
+Bundle-Version: 7.2.141
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: org.fusesource.ide.camel.model
