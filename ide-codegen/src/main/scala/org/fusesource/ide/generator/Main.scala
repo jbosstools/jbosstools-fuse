@@ -142,8 +142,10 @@ object Main {
     }
 
     if (hawtio) {
+      val hawtioJsDir = hawtioDir + "/js"
+      new CamelHeaderModelGenerator(hawtioJsDir).run()
       app = new Generator(outputDir, hawtioDir + "/img")
-      app.generateHawtIO(hawtioDir + "/js")
+      app.generateHawtIO(hawtioJsDir)
       println("Generated hawtio to: " + app)
     }
     println("Done generating stuff! Enjoy!")
