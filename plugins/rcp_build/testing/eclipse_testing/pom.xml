@@ -8,7 +8,7 @@
   <parent>
      <groupId>org.fusesource.ide</groupId>
      <artifactId>testing</artifactId>
-     <version>7.1.60</version>
+     <version>7.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>eclipse_testing</artifactId>
