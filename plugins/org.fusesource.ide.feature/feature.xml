@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.feature"
       label="Red Hat JBoss Fuse Plugins for Eclipse 6.0"
-      version="7.2.0.qualifier"
+      version="7.2.145"
       provider-name="Red Hat Inc.">
 
    <description url="http://fusesource.com/products/fuse-ide/">
