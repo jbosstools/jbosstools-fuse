@@ -23,6 +23,7 @@ package org.fusesource.ide.jmx.ui.internal.views.navigator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -304,11 +305,11 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider, IT
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public Object[] getRootNodes() {
-		if (rootNodes == null) {
-			IConnectionWrapper[] connections = ExtensionManager.getAllConnections();
-			List list = new ArrayList();
-			JMXUIActivator.provideRootNodes(refreshableUI , list);
+		IConnectionWrapper[] connections = ExtensionManager.getAllConnections();
+		List<NodeProvider> list = new ArrayList<NodeProvider>();
+		JMXUIActivator.provideRootNodes(refreshableUI , list);
 			/*
 		try {
 			LocalJmxNodeProvider localJmxProvider = new LocalJmxNodeProvider(this);
@@ -317,13 +318,13 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider, IT
 			JMXUIActivator.log(IStatus.WARNING, e.getMessage(), e);
 		}
 			 */
-			list.addAll(Arrays.asList(connections));
-			List<NodeProvider> nodeProviders = JMXActivator.getNodeProviders();
-			for (NodeProvider provider : nodeProviders) {
-				provider.provideRootNodes(list);
-			}
-			rootNodes = list.toArray();
-		}
+		list.addAll((Collection<? extends NodeProvider>) Arrays.asList(connections));
+		List<NodeProvider> nodeProviders = JMXActivator.getNodeProviders();
+		
+		for (NodeProvider provider : nodeProviders)
+			provider.provideRootNodes(list);
+
+		rootNodes = list.toArray();
 		Object[] answer = rootNodes;
 		if (answer != null && answer.length == 0) {
 			rootNodes = null;

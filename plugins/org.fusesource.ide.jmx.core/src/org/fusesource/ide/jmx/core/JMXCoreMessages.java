@@ -31,6 +31,8 @@ public class JMXCoreMessages extends NLS {
 	public static String DefaultConnection_ErrorRemoving;
 	public static String DefaultConnection_ErrorLoading;
 	public static String DefaultConnection_ErrorRunningJMXCode;
+	public static String RefreshJob;
+	public static String RefreshJobFailed;
 	static {
 	    NLS.initializeMessages("org.fusesource.ide.jmx.core.JMXCoreMessages", //$NON-NLS-1$
 	                    JMXCoreMessages.class);

@@ -12,12 +12,17 @@
 package org.fusesource.ide.jmx.ui.internal.actions;
 
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -26,7 +31,10 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.Refreshable;
 import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.jmx.core.ExtensionManager;
 import org.fusesource.ide.jmx.core.IConnectionWrapper;
+import org.fusesource.ide.jmx.core.JMXActivator;
+import org.fusesource.ide.jmx.core.JMXCoreMessages;
 import org.fusesource.ide.jmx.core.tree.Root;
 import org.fusesource.ide.jmx.ui.Messages;
 import org.fusesource.ide.jmx.ui.internal.JMXImages;
@@ -36,6 +44,7 @@ import org.fusesource.ide.jmx.ui.internal.JMXImages;
  * @author lhein
  */
 public class RefreshAction extends Action implements IWorkbenchWindowActionDelegate {
+	@SuppressWarnings("unused")
 	private IWorkbenchWindow window;
 	private StructuredViewer viewer;
 	private final String viewId;
@@ -52,6 +61,57 @@ public class RefreshAction extends Action implements IWorkbenchWindowActionDeleg
 		JMXImages.setLocalImageDescriptors(this, "refresh.gif");
 	}
 
+	/**
+	 * Refresh the specified node in the tree viewer/ structured selection.
+	 * 
+	 * @param onode - node to refresh
+	 */
+	private void refreshObjectNode(Object onode)
+	{
+		if (onode == null)
+			return;
+		
+		if (onode instanceof Refreshable) {
+			Refreshable refreshable = (Refreshable) onode;
+			refreshable.refresh();
+			refreshViewer(onode);
+		} 
+		else {
+			IConnectionWrapper wrapper = null;
+			
+			// Identify the connection wrapper.
+			if (onode instanceof IConnectionWrapper) 
+				wrapper = (IConnectionWrapper) onode;
+
+			else if (onode instanceof Node) {
+				Node node = (Node) onode;
+				while ((node != null) && (!(node instanceof Root)))
+					node = node.getParent();
+
+				if (node != null) 
+					wrapper = ((Root)node).getConnection();
+			}
+			
+			if (wrapper != null) {
+				try {
+					wrapper.disconnect();
+					wrapper.connect();
+					refreshViewer(wrapper);
+					
+					if (viewer instanceof TreeViewer) {
+						TreeViewer treeViewer = (TreeViewer) viewer;
+						treeViewer.expandToLevel(wrapper, 1);
+					}
+				} catch (Exception ex) {
+				    Status status =
+				    	new Status(IStatus.ERROR, JMXActivator.PLUGIN_ID, JMXCoreMessages.RefreshJobFailed,	ex);
+					ErrorDialog.openError(Display.getCurrent().getActiveShell(), JMXCoreMessages.RefreshJob, 
+							null, status);
+				}
+			}
+		}		
+	}  // refreshObjectNode
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.jface.action.Action#run()
@@ -74,42 +134,19 @@ public class RefreshAction extends Action implements IWorkbenchWindowActionDeleg
 		}
 
 		ISelection sel = getSelection(ap);
-		if (sel instanceof StructuredSelection) {
-			StructuredSelection ss = (StructuredSelection) sel;
-			Object onode = ss.getFirstElement();
-			if (onode instanceof Refreshable) {
-				Refreshable refreshable = (Refreshable) onode;
-				refreshable.refresh();
-				refreshViewer(onode);
-			} else {
-				IConnectionWrapper wrapper = null;
-				if (onode instanceof IConnectionWrapper) {
-					wrapper = (IConnectionWrapper) onode;
-				} else if (onode instanceof Node) {
-					Node node = (Node) onode;
-					while ((node instanceof Root) == false && node != null) {
-						node = node.getParent();
-					}
-					if (node != null) {
-						wrapper = ((Root) node).getConnection();
-					}
-				}
-				if (wrapper != null) {
-					try {
-						wrapper.disconnect();
-						wrapper.connect();
-						refreshViewer(wrapper);
-						if (viewer instanceof TreeViewer) {
-							TreeViewer treeViewer = (TreeViewer) viewer;
-							treeViewer.expandToLevel(wrapper, 1);
-						}
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
-				}
-			}
+		if (sel == null) {
+			IConnectionWrapper[] connections = ExtensionManager.getAllConnections();
+			refreshObjectNode(connections[0]);
 		}
-	}
+		else if (sel instanceof TreeSelection) {
+			TreeSelection treeSelection = (TreeSelection)sel;
+			refreshObjectNode(treeSelection.getFirstElement());			
+		}
+		else if (sel instanceof StructuredSelection) {
+			StructuredSelection ss = (StructuredSelection) sel;
+			refreshObjectNode(ss.getFirstElement());			
+		}
+	}  // run
 
 	protected ISelection getSelection(IWorkbenchPage ap) {
 		return ap.getSelection(viewId);
