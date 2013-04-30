@@ -62,7 +62,7 @@ public class RoutingSlip extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "routingSlip.png";
+    	return "generic.png";
     }
     
   	@Override

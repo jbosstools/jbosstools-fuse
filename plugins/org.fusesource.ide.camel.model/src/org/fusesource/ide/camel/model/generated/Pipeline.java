@@ -56,7 +56,7 @@ public class Pipeline extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "pipeline.png";
+    	return "generic.png";
     }
     
   	@Override

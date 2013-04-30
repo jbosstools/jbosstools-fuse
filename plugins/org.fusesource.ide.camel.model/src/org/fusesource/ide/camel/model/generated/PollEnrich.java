@@ -62,7 +62,7 @@ public class PollEnrich extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "pollEnrich.png";
+    	return "transform.png";
     }
     
   	@Override

@@ -81,5 +81,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin
 Bundle-ClassPath: .
 Export-Package: org.fusesource.ide.fabric,
- org.fusesource.ide.fabric.messages,
  org.fusesource.ide.fabric.navigator

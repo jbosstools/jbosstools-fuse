@@ -60,7 +60,7 @@ public class ConvertBody extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "convertBody.png";
+    	return "transform.png";
     }
     
   	@Override

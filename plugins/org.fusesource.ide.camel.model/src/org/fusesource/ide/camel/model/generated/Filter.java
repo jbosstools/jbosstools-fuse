@@ -58,7 +58,7 @@ public class Filter extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "filter.png";
+    	return "generic.png";
     }
     
   	@Override

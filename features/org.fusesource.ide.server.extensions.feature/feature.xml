@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.fusesource.ide.server.extensions.feature"
+      label="JBoss Fuse Server Extension Plugins for Eclipse 6.0"
+      version="7.2.0.qualifier"
+      provider-name="Red Hat Inc.">
+
+   <description url="http://fusesource.com/products/fuse-ide/">
+      Red Hat JBoss Fuse Plugins for Eclipse lets you work with Fuse and Apache ActiveMQ, Camel,
+CXF, Karaf &amp; ServiceMix.
+You can view, create and edit Enterprise Integration Patterns,
+browse endpoints and routes, drag and drop messages, trace message
+flows, deploy your code to Fuse ESB and 
+browse and visualise runtime processes over JMX and Fuse Fabric.
+   </description>
+
+   <copyright url="http://redhat.com/">
+      JBoss, Home of Professional Open Source\nCopyright (c) Red Hat,
+Inc., and individual contributors as indicated\nby the @authors
+tag, 2013. See the copyright.txt in the distribution\nfor a full
+listing of individual contributors.
+   </copyright>
+
+   <license url="license.html">
+      Red Hat, Inc. licenses these features and plugins to you under
+certain open source licenses (or aggregations of such licenses),
+which in a particular case may include the Eclipse Public License,
+the GNU Lesser General Public License, and/or certain other open
+source licenses. For precise licensing details, consult the corresponding
+source code, or contact Red Hat Legal Affairs, 1801 Varsity Drive,
+Raleigh NC 27606 USA.
+   </license>
+
+   <requires>
+      <import feature="org.eclipse.emf" version="2.6.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.emf.compare" version="1.2.0" match="compatible"/>
+      <import feature="org.eclipse.graphiti.feature" version="0.9.0" match="equivalent"/>
+      <import feature="org.eclipse.platform" version="3.6.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jdt" version="3.6.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.m2e.feature" version="1.0.0" match="greaterOrEqual"/>
+      
+      <import plugin="org.eclipse.jst.server.tomcat.core"/>
+      <import plugin="org.eclipse.jst.server.tomcat.ui"/>
+   </requires>
+
+   <plugin
+         id="org.fusesource.ide.server.karaf.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.server.karaf.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.server.karaf.view"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

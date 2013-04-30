@@ -58,7 +58,7 @@ public class SetBody extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "setBody.png";
+    	return "transform.png";
     }
     
   	@Override

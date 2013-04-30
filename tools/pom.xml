@@ -1,0 +1,62 @@
+<!--
+
+    Copyright (C) 2010 FuseSource, Corp. All rights reserved.
+    http://fusesource.com
+
+    The software in this package is published under the terms of the AGPL license
+    a copy of which has been included with this distribution in the license.txt file.
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.fusesource.ide</groupId>
+    <artifactId>project</artifactId>
+    <version>7.2.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.fusesource.ide</groupId>
+  <artifactId>tools</artifactId>
+  <packaging>pom</packaging>
+  <name>Fuse :: Tools</name>
+
+  <modules>
+    <module>ide-buildtools</module>
+    <module>ide-codegen</module>
+  </modules>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.scala-tools</groupId>
+          <artifactId>maven-scala-plugin</artifactId>
+          <version>${scala-plugin-version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <jvmArgs>
+              <jvmArg>-Xmx1024m</jvmArg>
+            </jvmArgs>
+            <args>
+              <!-- arg>-unchecked</arg -->
+              <arg>-deprecation</arg>
+            </args>
+            <scalaVersion>${scala-version}</scalaVersion>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

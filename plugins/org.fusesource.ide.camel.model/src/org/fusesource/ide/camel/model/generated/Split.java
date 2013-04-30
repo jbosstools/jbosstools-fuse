@@ -74,7 +74,7 @@ public class Split extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "split.png";
+    	return "generic.png";
     }
     
   	@Override

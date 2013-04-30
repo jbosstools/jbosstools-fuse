@@ -62,7 +62,7 @@ public class Bean extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "bean.png";
+    	return "endpoint.png";
     }
     
   	@Override

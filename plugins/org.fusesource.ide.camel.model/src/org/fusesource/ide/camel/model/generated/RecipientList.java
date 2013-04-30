@@ -78,7 +78,7 @@ public class RecipientList extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "recipientList.png";
+    	return "generic.png";
     }
     
   	@Override

@@ -65,7 +65,7 @@ public class Log extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "log.png";
+    	return "endpoint.png";
     }
     
   	@Override

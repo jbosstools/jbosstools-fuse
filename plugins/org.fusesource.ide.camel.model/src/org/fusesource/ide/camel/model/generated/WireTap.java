@@ -71,7 +71,7 @@ public class WireTap extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "wireTap.png";
+    	return "generic.png";
     }
     
   	@Override

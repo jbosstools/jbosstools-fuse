@@ -61,7 +61,7 @@ public class Marshal extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "marshal.png";
+    	return "transform.png";
     }
     
   	@Override

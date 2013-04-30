@@ -56,7 +56,7 @@ public class Choice extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "choice.png";
+    	return "generic.png";
     }
     
   	@Override
