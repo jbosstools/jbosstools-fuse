@@ -162,7 +162,7 @@
   	<repository>
         <id>ide-beta</id>
         <name>Fuse IDE Beta Update Site</name>
-        <url>http://repo.fusesource.com/beta/updatesite/</url>
+        <url>http://repo.fusesource.com/beta/updatesite/${project.version}</url>
         <layout>p2</layout>
     </repository>
   </repositories>

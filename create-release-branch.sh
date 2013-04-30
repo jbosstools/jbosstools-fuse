@@ -46,6 +46,7 @@ find plugins -name '*.xml' | xargs perl -pi -e "s/7.1.1.qualifier/${VERSION}/g"
 find plugins -name 'bundle.properties' | xargs perl -pi -e "s/7.1.1.qualifier/${VERSION}/g"
 find plugins -name 'MANIFEST.MF' | xargs perl -pi -e "s/7.1.1.qualifier/${VERSION}/g"
 find plugins -name 'fuse*.product' | xargs perl -pi -e "s/7.1.1.qualifier/${VERSION}/g"
+find plugins -name '*.target' | xargs perl -pi -e "s/7.1.1.qualifier/${VERSION}/g"
 
 # replace IDE version
 perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>${VERSION}<\/ide-version>/g" plugins/pom.xml
@@ -101,7 +102,8 @@ cd ../..
 # read dummy
 
 # update the update site versions
-./addUpdateSiteVersion ${VERSION} beta/updatesite
+# we don't want to do this for older versions
+# ./addUpdateSiteVersion ${VERSION} beta/updatesite
 
 
 echo ============================================================================
