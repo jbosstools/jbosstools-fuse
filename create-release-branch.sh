@@ -10,7 +10,7 @@ ACTION=$1
 cd "${basedir}"
 
 git stash
-git checkout master
+git checkout 7.1.x
 git stash
 git pull
 
@@ -27,7 +27,7 @@ echo ===========================================================================
 echo ${BUILDNO} > ${PERFECUT_ARTIFACT}-buildno.txt
 VERSION=7.1.${BUILDNO}
 git commit -a -m "getting ready for version ${VERSION}"
-git push origin master:master
+git push origin 7.1.x:7.1.x
 git stash clear
 
 echo "Creating release branch for ${VERSION}"
@@ -60,8 +60,6 @@ rm -rf /mnt/hudson/.m2/repository/p2/osgi/bundle/*/*SNAPSHOT
 
 echo "Building the update site..."
 cd plugins
-#mvn ${MVN_SETTINGS} -Psign -Dkeystore=$PWD/fusesource.ks -Dstorepass=sp33d0 -Dalias=fusesource.com clean install
-#mvn ${MVN_SETTINGS} clean install
 
 # lets not fail the build if tests fail
 mvn ${MVN_SETTINGS} -Dtest=false -DfailIfNoTests=false -Dmaven.test.skip=true clean install
@@ -103,7 +101,7 @@ cd ../..
 # read dummy
 
 # update the update site versions
-./addUpdateSiteVersion ${VERSION} beta/3.0.x
+./addUpdateSiteVersion ${VERSION} beta/updatesite
 
 
 echo ============================================================================
@@ -111,7 +109,6 @@ echo "Creating the RCP build"
 echo ============================================================================
 
 cd plugins/rcp_build
-#mvn ${MVN_SETTINGS} -Psign -Dkeystore=$PWD/fusesource.ks -Dstorepass=sp33d0 -Dalias=fusesource.com clean install
 mvn ${MVN_SETTINGS} clean install
 
 if [ $? -eq 0 ]         # Test exit status of "mvn" command.
@@ -136,21 +133,6 @@ else
   exit $?
 fi
 
-
-
-echo "Executing the integration tests"
-echo ============================================================================
-cd ../testing
-mvn ${MVN_SETTINGS} clean install -Djubula.home=/opt/jubula_5.2.00266 -Djubula.plugin.archive=/opt/jubula_5.2.00266/rcp-support.zip
-
-if [ $? -eq 0 ]         # Test exit status of "mvn" command.
-then
-  echo "Integration testing succeeded. Progress to RCP deployment..."
-else  
-  echo "Integration testing failed. Exit now..."
-  exit $?
-fi
-
 cd ../../..
 
 echo "Deployed update site for Release ${VERSION}"
@@ -159,7 +141,7 @@ echo "Now committing branch"
 git commit -a -m "Release ${VERSION}"
 git push origin release-${VERSION}
 
-git checkout master
+git checkout 7.1.x
 
 echo "One it has been tested, move it to the production repo area"
 

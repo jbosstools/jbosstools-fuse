@@ -5,7 +5,7 @@
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.fusesource.ide.feature.feature.group" version="0.0.0"/>
-<repository location="http://repo.fusesource.com/beta/3.0.x"/>
+<repository location="http://repo.fusesource.com/beta/updatesite"/>
 </location>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.drools.eclipse.feature.feature.group" version="5.5.0.Beta1"/>
@@ -14,7 +14,6 @@
 <unit id="org.jbpm.eclipse.task.feature.feature.group" version="5.5.0.Beta1"/>
 <repository location="http://download.jboss.org/drools/release/5.5.0.Beta1/org.drools.updatesite/"/>
 </location>
-<location path="/Users/lhein/git/fuseide/plugins/org.fusesource.ide.updatesite/target/repository" type="Directory"/>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.graphiti.feature.feature.group" version="0.8.2.v20120215-0845"/>
 <unit id="org.eclipse.graphiti.feature.examples.feature.group" version="0.8.2.v20120215-0845"/>

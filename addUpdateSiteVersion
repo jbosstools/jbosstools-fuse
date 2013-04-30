@@ -40,7 +40,7 @@ def add_version(file_name, version, clear = true)
 end
 
 version = ARGV[0]
-path = "beta/ide"
+path = "beta/updatesite"
 if ARGV.size > 1
   path = ARGV[1]
 end
