@@ -10,7 +10,7 @@ Community
 
 IRC
 ----------------
-#fusetools at FreeNode
+Join channel "#fusetools" at FreeNode
 
 Issues
 ----------------
