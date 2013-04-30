@@ -14,7 +14,7 @@ Join channel "#fusetools" at FreeNode
 
 Issues
 ----------------
-http://fusesource.com/issues/
+http://fusesource.com/issues/browse/ECLIPSE
 
 Forums
 ----------------
