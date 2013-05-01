@@ -1,7 +1,7 @@
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.fusesource.ide.jmx.core;singleton:=true
-Bundle-Version: 7.1.1.qualifier
+Bundle-Version: 7.1.164
 Bundle-Activator: org.fusesource.ide.jmx.core.JMXActivator
 Bundle-Vendor: Red Hat, Inc.
 Require-Bundle: org.fusesource.ide.commons,
