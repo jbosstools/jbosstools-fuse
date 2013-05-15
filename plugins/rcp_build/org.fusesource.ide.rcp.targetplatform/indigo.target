@@ -5,7 +5,7 @@
 <locations>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.fusesource.ide.feature.feature.group" version="0.0.0"/>
-<repository location="http://repo.fusesource.com/beta/updatesite/7.1.1.qualifier"/>
+<repository location="http://repo.fusesource.com/beta/updatesite/7.1.178"/>
 </location>
 <location includeAllPlatforms="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.drools.eclipse.feature.feature.group" version="5.5.0.Beta1"/>
