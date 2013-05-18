@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: org.fusesource.ide.server.karaf.ui;singleton:=true
-Bundle-Version: 7.1.1.qualifier
+Bundle-Version: 7.1.181
 Bundle-Activator: org.fusesource.ide.server.karaf.ui.KarafUIPlugin
 Bundle-Vendor: %vendor.name
 Require-Bundle: org.fusesource.ide.server.karaf.core,
