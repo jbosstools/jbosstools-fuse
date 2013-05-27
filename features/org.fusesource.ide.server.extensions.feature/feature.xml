@@ -32,15 +32,35 @@ Raleigh NC 27606 USA.
    </license>
 
    <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.core.resources" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.core.commands" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.core" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.core" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.launching" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.server.core" version="1.0.204" match="compatible"/>
+      <import plugin="org.eclipse.jst.server.core" version="1.0.103" match="compatible"/>
+      <import plugin="org.eclipse.jst.common.project.facet.core" version="1.1.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.modulecore" version="1.1.0" match="compatible"/>
+      <import plugin="org.eclipse.emf.common" version="2.2.0" match="compatible"/>
+      <import plugin="org.eclipse.wst.common.project.facet.core" version="1.1.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.fusesource.ide.commons"/>
+      <import plugin="org.fusesource.ide.preferences"/>
+      <import plugin="org.eclipse.tm.terminal" version="3.1.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.tm.terminal.ssh" version="2.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.tm.terminal.view" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.wst.server.ui"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
       <import feature="org.eclipse.emf" version="2.6.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.emf.compare" version="1.2.0" match="compatible"/>
-      <import feature="org.eclipse.graphiti.feature" version="0.9.0" match="equivalent"/>
+      <import feature="org.eclipse.emf.compare" version="1.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.graphiti.feature" version="0.10.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.platform" version="3.6.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jdt" version="3.6.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.m2e.feature" version="1.0.0" match="greaterOrEqual"/>
-      
-      <import plugin="org.eclipse.jst.server.tomcat.core"/>
-      <import plugin="org.eclipse.jst.server.tomcat.ui"/>
    </requires>
 
    <plugin

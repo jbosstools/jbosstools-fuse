@@ -29,11 +29,11 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.tb.ContextMenuEntry;
 import org.eclipse.graphiti.tb.IContextMenuEntry;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
-import org.eclipse.graphiti.ui.editor.DiagramEditor;
+import org.eclipse.graphiti.ui.editor.DiagramBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramEditorContextMenuProvider;
 import org.eclipse.graphiti.ui.internal.action.CustomAction;
 import org.eclipse.graphiti.ui.internal.action.RemoveAction;
-import org.eclipse.graphiti.ui.internal.config.IConfigurationProvider;
+import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.graphiti.util.ILocationInfo;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -52,7 +52,7 @@ public class CamelDiagramEditorContextMenuProvider extends DiagramEditorContextM
 
 	public CamelDiagramEditorContextMenuProvider(EditPartViewer viewer, ActionRegistry registry,
 			IConfigurationProvider configurationProvider) {
-		super(viewer, registry, configurationProvider.getDiagramTypeProvider());
+		super(viewer, registry, configurationProvider);
 		this.configurationProvider = configurationProvider;
 	}
 
@@ -60,7 +60,7 @@ public class CamelDiagramEditorContextMenuProvider extends DiagramEditorContextM
 	protected void addDefaultMenuGroupRest(IMenuManager manager) {
 		addAlignmentSubMenu(manager, GEFActionConstants.GROUP_REST);
 
-		PictogramElement pes[] = getEditor().getSelectedPictogramElements();
+		PictogramElement pes[] = getBehavior().getSelectedPictogramElements();
 		ICustomContext context = new CustomContext(pes);
 
 		IToolBehaviorProvider tb = getConfigurationProvider().getDiagramTypeProvider().getCurrentToolBehaviorProvider();
@@ -97,8 +97,8 @@ public class CamelDiagramEditorContextMenuProvider extends DiagramEditorContextM
 		return this.configurationProvider;
 	}
 
-	private DiagramEditor getEditor() {
-		return getConfigurationProvider().getDiagramEditor();
+	private DiagramBehavior getBehavior() {
+		return getConfigurationProvider().getDiagramBehavior();
 	}
 
 	private void addEntries(IMenuManager manager, IContextMenuEntry[] contextMenuEntries, ICustomContext context, String groupID,
@@ -117,13 +117,14 @@ public class CamelDiagramEditorContextMenuProvider extends DiagramEditorContextM
 		if (children.length == 0) {
 			IFeature feature = cmEntry.getFeature();
 			if (feature instanceof ICustomFeature && feature.isAvailable(context)) {
-				IAction action = new CustomAction((ICustomFeature) feature, context, getEditor());
+				IAction action = new CustomAction((ICustomFeature) feature, context, getBehavior());
 				if (textParentEntry != null) {
 					text = textParentEntry + " " + text; //$NON-NLS-1$
 				}
 				action.setText(text);
 				action.setDescription(cmEntry.getDescription());
-				ImageDescriptor image = GraphitiUi.getImageService().getImageDescriptorForId(cmEntry.getIconId());
+				// TODO: pleacu - changed getImageDescriptorForId to getPlatformImageDescriptorForId
+				ImageDescriptor image = GraphitiUi.getImageService().getPlatformImageDescriptorForId(cmEntry.getIconId());
 				action.setImageDescriptor(image);
 				appendContributionItem(manager, groupID, new ActionContributionItem(action));
 			}
@@ -155,7 +156,7 @@ public class CamelDiagramEditorContextMenuProvider extends DiagramEditorContextM
 	// ====================== add single menu-entries =========================
 
 	private void extendCustomContext(PictogramElement pe, CustomContext context) {
-		Point location = getEditor().getMouseLocation();
+		Point location = getBehavior().getMouseLocation();
 		int mX = location.x;
 		int mY = location.y;
 		context.setX(mX);

@@ -76,10 +76,10 @@ public class CamelContextSelectionSynchronizer extends SelectionSynchronizer {
                 // an element from another route was selected - we need to load the route into the diagram
                 AbstractNode node = (AbstractNode)o;
                 editor.switchRoute((RouteSupport)node.getParent());
-                editor.refreshContent();
-                Iterator it = viewer.getEditPartRegistry().entrySet().iterator();
+                editor.getDiagramBehavior().refreshContent();
+                Iterator<?> it = viewer.getEditPartRegistry().entrySet().iterator();
                 while (it.hasNext()) {
-                    Entry e = (Entry)it.next();
+                    Entry<?, ?> e = (Entry<?, ?>)it.next();
                     Object key = e.getKey();
                     EditPart value = (EditPart)e.getValue();
                     if (key instanceof ContainerShape) {
@@ -98,7 +98,7 @@ public class CamelContextSelectionSynchronizer extends SelectionSynchronizer {
                 // if all fails return the root edit part
                 return viewer.getRootEditPart();
             }
-            return editor.getEditPartForPictogramElement(pes[0]);
+            return editor.getDiagramBehavior().getEditPartForPictogramElement(pes[0]);
         } else if (o instanceof Diagram) {
             // someone selected the route inside the diagram editor
             RouteSupport route = editor.getSelectedRoute();
@@ -115,9 +115,9 @@ public class CamelContextSelectionSynchronizer extends SelectionSynchronizer {
     }
      
     private EditPart getEditPart(EditPartViewer viewer, AbstractNode node) {
-        Iterator it = viewer.getEditPartRegistry().entrySet().iterator();
+        Iterator<?> it = viewer.getEditPartRegistry().entrySet().iterator();
         while (it.hasNext()) {
-            Entry e = (Entry)it.next();
+            Entry<?, ?> e = (Entry<?, ?>)it.next();
             Object key = e.getKey();
             EditPart value = (EditPart)e.getValue();
             if (key instanceof AbstractNode) {

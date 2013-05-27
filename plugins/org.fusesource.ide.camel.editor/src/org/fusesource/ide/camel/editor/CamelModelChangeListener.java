@@ -25,18 +25,20 @@ import org.eclipse.emf.transaction.RollbackException;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.platform.IDiagramEditor;
+import org.eclipse.graphiti.platform.IDiagramBehavior;
+import org.eclipse.graphiti.platform.IDiagramContainer;
 import org.eclipse.swt.widgets.Display;
+import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 
 /**
  * @author lhein
  */
 public class CamelModelChangeListener implements ResourceSetListener {
 
-	private IDiagramEditor diagramEditor;
+	private IDiagramBehavior diagramBehavior;
 
-	public CamelModelChangeListener(IDiagramEditor diagramEditor) {
-		setDiagramEditor(diagramEditor);
+	public CamelModelChangeListener(RiderDesignEditor riderDesignEditor) {
+		setDiagramEditor(riderDesignEditor.getDiagramBehavior());
 	}
 
 	/*
@@ -89,13 +91,14 @@ public class CamelModelChangeListener implements ResourceSetListener {
 			 */
 			@Override
 			public void run() {
-				if (getDiagramTypeProvider().isAutoUpdateAtRuntime() && getDiagramTypeProvider().getDiagramEditor().isDirty()) {
+
+				if (getDiagramTypeProvider().isAutoUpdateAtRuntime() && getDiagramContainer().isDirty()) {
 					// The notification service takes care of not only the
 					// linked BOs but also asks the diagram provider about
 					// related BOs.
 					getDiagramTypeProvider().getNotificationService().updatePictogramElements(dirtyPes);
 				} else {
-					getDiagramTypeProvider().getDiagramEditor().refresh();
+					getDiagramTypeProvider().getDiagramBehavior().refresh();
 				}
 			}
 		});
@@ -147,14 +150,18 @@ public class CamelModelChangeListener implements ResourceSetListener {
 	}
 	
 	private IDiagramTypeProvider getDiagramTypeProvider() {
-		return getDiagramEditor().getDiagramTypeProvider();
+		return getDiagramBehavior().getDiagramContainer().getDiagramTypeProvider();
+	}
+	
+	private IDiagramContainer getDiagramContainer() {
+		return getDiagramBehavior().getDiagramContainer();
+	}
+	
+	private IDiagramBehavior getDiagramBehavior() {
+		return diagramBehavior;
 	}
 
-	private IDiagramEditor getDiagramEditor() {
-		return diagramEditor;
-	}
-
-	private void setDiagramEditor(IDiagramEditor diagramEditor) {
-		this.diagramEditor = diagramEditor;
+	private void setDiagramEditor(IDiagramBehavior diagramBehavior) {
+		this.diagramBehavior = diagramBehavior;
 	}
 }
