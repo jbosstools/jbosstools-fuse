@@ -50,17 +50,14 @@ import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.platform.IDiagramEditor;
+import org.eclipse.graphiti.platform.IDiagramBehavior;
 import org.eclipse.graphiti.services.Graphiti;
-import org.eclipse.graphiti.ui.editor.DefaultPaletteBehavior;
-import org.eclipse.graphiti.ui.editor.DefaultPersistencyBehavior;
-import org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior;
+import org.eclipse.graphiti.ui.editor.DiagramBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.graphiti.ui.editor.IDiagramEditorInput;
-import org.eclipse.graphiti.ui.internal.config.ConfigurationProvider;
-import org.eclipse.graphiti.ui.internal.config.IConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.util.gef.ScalableRootEditPartAnimated;
+import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
@@ -84,7 +81,6 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.camel.tooling.util.ValidationHandler;
 import org.fusesource.ide.camel.editor.AbstractNodes;
 import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.CamelModelChangeListener;
 import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
@@ -126,10 +122,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	private IFile camelContextFile;
 	private RouteContainer model;
 	private RouteSupport activeRoute;
-	private CamelModelChangeListener camelModelListener;
-	private CamelUpdateBehaviour camelUpdateBehaviour;
-	private CamelPaletteBehaviour camelPaletteBehaviour;
-	private CamelPersistencyBehaviour camelPersistencyBehaviour;
+	
+	private CamelDiagramBehaviour camelDiagramBehaviour;
 	private boolean graphitiDoesNotMarkAsDirty = true;
 	
 	private DesignerCache activeConfig;
@@ -205,42 +199,32 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		this.editor = parent;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#createUpdateBehavior()
-	 */
-	@Override
-	protected synchronized DefaultUpdateBehavior createUpdateBehavior() {
-		if (this.camelUpdateBehaviour == null) {
-			this.camelUpdateBehaviour = new CamelUpdateBehaviour(this);
-		}
-		return this.camelUpdateBehaviour;
-	}
-	
-	@Override
-	protected synchronized DefaultPersistencyBehavior createPersistencyBehavior() {
-		if (this.camelPersistencyBehaviour == null) {
-			this.camelPersistencyBehaviour = new CamelPersistencyBehaviour(this);
-		}
-		return camelPersistencyBehaviour;
-    }
-
-    /* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#registerBusinessObjectsListener()
-	 */
-	@Override
-	protected void registerBusinessObjectsListener() {
-		//super.registerBusinessObjectsListener();
-		camelModelListener = new CamelModelChangeListener(this);
-		
-		TransactionalEditingDomain eDomain = getEditingDomain();
-		eDomain.addResourceSetListener(camelModelListener);
-	}
-
 	@Override
 	public void init(IEditorSite editorSite, IEditorInput input) throws PartInitException {
 		this.editorSite = editorSite;
 		this.editorInput = input;
 		super.init(editorSite, input);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#createDiagramBehavior()
+	 */
+	@Override
+	protected DiagramBehavior createDiagramBehavior() {
+		this.camelDiagramBehaviour = new CamelDiagramBehaviour(this);
+		return this.camelDiagramBehaviour;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#getDiagramBehavior()
+	 */
+	@Override
+	public DiagramBehavior getDiagramBehavior() {
+		return this.camelDiagramBehaviour;
+	}
+	
+	public IConfigurationProvider getConfigurationProvider() {
+		return this.camelDiagramBehaviour.getConfigurationProvider();
 	}
 	
 	@Override
@@ -311,17 +295,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		return parent;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#createPaletteBehaviour()
-	 */
-	@Override
-	protected synchronized DefaultPaletteBehavior createPaletteBehaviour() {
-		if (this.camelPaletteBehaviour == null) {
-			this.camelPaletteBehaviour = new CamelPaletteBehaviour(this);
-		}
-		return this.camelPaletteBehaviour;
-	}
-	
 	/**
 	 * @param editingDomain the editingDomain to set
 	 */
@@ -624,16 +597,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		if (!disableCommandEvents && (changed || graphitiDoesNotMarkAsDirty)) {
 			data.diagramChanged = true;
 		}
-	}
-	
-	public IConfigurationProvider getConfigurationProvider() {
-		IConfigurationProvider configurationProvider = new ConfigurationProvider(this, getDiagramTypeProvider());
-		return configurationProvider;
-	}
-
-	@Override
-	protected ContextMenuProvider createContextMenuProvider() {
-		return new CamelDiagramEditorContextMenuProvider(getGraphicalViewer(), getActionRegistry(), getConfigurationProvider());
 	}
 
 	/**
