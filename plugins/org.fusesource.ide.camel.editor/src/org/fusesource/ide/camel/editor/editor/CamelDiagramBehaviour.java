@@ -78,14 +78,6 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.editor.DiagramBehavior#getDiagramTypeProvider()
-	 */
-	@Override
-	public IDiagramTypeProvider getDiagramTypeProvider() {
-		return this.riderDesignEditor.getDiagramTypeProvider();
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.editor.DiagramBehavior#getEditingDomain()
 	 */
 	@Override
@@ -98,8 +90,7 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	 */
 	@Override
 	protected IConfigurationProvider getConfigurationProvider() {
-		IConfigurationProvider configurationProvider = new ConfigurationProvider(this, getDiagramTypeProvider());
-		return configurationProvider;
+		return super.getConfigurationProvider();
 	}
 	
 	/* (non-Javadoc)
