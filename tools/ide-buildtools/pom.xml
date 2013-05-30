@@ -29,7 +29,7 @@
     <dependency>
       <groupId>io.hawt</groupId>
       <artifactId>hawtio-maven-indexer</artifactId>
-      <version>1.1-SNAPSHOT</version>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
