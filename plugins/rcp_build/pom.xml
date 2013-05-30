@@ -12,8 +12,8 @@
   <name>Fuse IDE :: RCP</name>
 
   <properties>
-    <tycho-version>0.16.0</tycho-version>
-    <fuse.version>6.0.0</fuse.version>
+    <tycho-version>0.18.0</tycho-version>
+    <fuse.version>6.1.0</fuse.version>
     <ide-buildno>GA</ide-buildno>
   </properties>
   

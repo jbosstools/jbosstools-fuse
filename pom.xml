@@ -63,7 +63,7 @@
     <spring-osgi-version>2.0.0.M2-SNAPSHOT</spring-osgi-version>
 -->
 
-    <tycho-version>0.17.0</tycho-version>
+    <tycho-version>0.18.0</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
     <forge-project-id>ide</forge-project-id>
     <fabric-version>7.2.0.redhat-024</fabric-version>
