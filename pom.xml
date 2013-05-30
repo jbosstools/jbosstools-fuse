@@ -87,17 +87,9 @@
     <repository>
       <id>fusesource-nexus-staging</id>
       <name>Fusesource Release Repository</name>
-      <!-- <url>http://repo.fusesource.com/nexus/service/local/staging/deploy/maven2</url>
          <url>dav:http://fusesource.com/forge/dav/rider/update/${project.version}</url> -->
       <url>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/ide-2.x</url>
     </repository>
-    <snapshotRepository>
-      <id>fusesource-nexus-snapshots</id>
-      <name>Fusesource Nexus Snapshots</name>
-      <!-- <url>http://repo.fusesource.com/nexus/content/repositories/subscriber-snapshot</url>
-         <url>dav:http://fusesource.com/forge/dav/rider/update-snapshot/${project.version}</url> -->
-      <url>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/ide-2.x</url>
-    </snapshotRepository>
     <site>
       <id>website.fusesource.org</id>
       <name>website</name>
@@ -199,6 +191,7 @@
           <enabled>true</enabled>
         </releases>
       </repository>
+<!--
     <repository>
       <id>fusesource-nexus-snapshots</id>
       <name>Fusesource Nexus Snapshots</name>
@@ -209,7 +202,8 @@
       <releases>
         <enabled>false</enabled>
       </releases>
-    </repository>    
+    </repository> 
+-->   
   </repositories>
   <pluginRepositories>
     <pluginRepository>
