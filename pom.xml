@@ -87,7 +87,6 @@
     <repository>
       <id>fusesource-nexus-staging</id>
       <name>Fusesource Release Repository</name>
-         <url>dav:http://fusesource.com/forge/dav/rider/update/${project.version}</url> -->
       <url>scpexe://repo.fusesource.com/www/repo.fusesource.com/beta/ide-2.x</url>
     </repository>
     <site>
