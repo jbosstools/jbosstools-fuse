@@ -1658,7 +1658,10 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 				if (fb.getName().equals(fa.getName())) {
 					found = true;
 					try {
-						if (!fb.get(b).equals(fa.get(a))) {
+						Object valA = fa.get(a);
+						Object valB = fb.get(b);
+						if (valB == null && valA != null) return false;
+						if (valB != null && valA != null && !valB.equals(valA)) {
 							return false;
 						}
 					} catch (Exception e) {
@@ -1687,8 +1690,6 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 			return false;
 		}
 
-		Object superA = sca.cast(a);
-		Object superB = scb.cast(b);
-		return isSameByReflectionCompare(superA, superB);
+		return true;
 	}
 }

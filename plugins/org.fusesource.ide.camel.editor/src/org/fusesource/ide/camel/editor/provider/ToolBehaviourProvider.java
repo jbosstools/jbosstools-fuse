@@ -365,7 +365,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 				return name;
 			}
 		}
-		return super.getToolTip(ga);
+		return (String) super.getToolTip(ga);
 	}
 
 	/*

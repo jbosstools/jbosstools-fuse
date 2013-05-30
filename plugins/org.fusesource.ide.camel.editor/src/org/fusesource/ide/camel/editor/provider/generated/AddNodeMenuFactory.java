@@ -17,16 +17,69 @@
  */
 package org.fusesource.ide.camel.editor.provider.generated;
 
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.tb.ContextMenuEntry;
-
+import org.eclipse.jface.action.IMenuManager;
 import org.fusesource.ide.camel.editor.Messages;
 import org.fusesource.ide.camel.editor.provider.AbstractAddNodeMenuFactory;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.generated.*;
+import org.fusesource.ide.camel.model.generated.AOP;
+import org.fusesource.ide.camel.model.generated.Aggregate;
+import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.camel.model.generated.Catch;
+import org.fusesource.ide.camel.model.generated.Choice;
+import org.fusesource.ide.camel.model.generated.ConvertBody;
+import org.fusesource.ide.camel.model.generated.Delay;
+import org.fusesource.ide.camel.model.generated.DynamicRouter;
+import org.fusesource.ide.camel.model.generated.Enrich;
+import org.fusesource.ide.camel.model.generated.Filter;
+import org.fusesource.ide.camel.model.generated.Finally;
+import org.fusesource.ide.camel.model.generated.IdempotentConsumer;
+import org.fusesource.ide.camel.model.generated.InOnly;
+import org.fusesource.ide.camel.model.generated.InOut;
+import org.fusesource.ide.camel.model.generated.Intercept;
+import org.fusesource.ide.camel.model.generated.InterceptFrom;
+import org.fusesource.ide.camel.model.generated.InterceptSendToEndpoint;
+import org.fusesource.ide.camel.model.generated.LoadBalance;
+import org.fusesource.ide.camel.model.generated.Log;
+import org.fusesource.ide.camel.model.generated.Loop;
+import org.fusesource.ide.camel.model.generated.Marshal;
+import org.fusesource.ide.camel.model.generated.Multicast;
+import org.fusesource.ide.camel.model.generated.OnCompletion;
+import org.fusesource.ide.camel.model.generated.OnException;
+import org.fusesource.ide.camel.model.generated.Otherwise;
+import org.fusesource.ide.camel.model.generated.Pipeline;
+import org.fusesource.ide.camel.model.generated.Policy;
+import org.fusesource.ide.camel.model.generated.PollEnrich;
 import org.fusesource.ide.camel.model.generated.Process;
+import org.fusesource.ide.camel.model.generated.RecipientList;
+import org.fusesource.ide.camel.model.generated.RemoveHeader;
+import org.fusesource.ide.camel.model.generated.RemoveHeaders;
+import org.fusesource.ide.camel.model.generated.RemoveProperty;
+import org.fusesource.ide.camel.model.generated.Resequence;
+import org.fusesource.ide.camel.model.generated.Rollback;
+import org.fusesource.ide.camel.model.generated.RoutingSlip;
+import org.fusesource.ide.camel.model.generated.Sampling;
+import org.fusesource.ide.camel.model.generated.SetBody;
+import org.fusesource.ide.camel.model.generated.SetExchangePattern;
+import org.fusesource.ide.camel.model.generated.SetFaultBody;
+import org.fusesource.ide.camel.model.generated.SetHeader;
+import org.fusesource.ide.camel.model.generated.SetOutHeader;
+import org.fusesource.ide.camel.model.generated.SetProperty;
+import org.fusesource.ide.camel.model.generated.Sort;
+import org.fusesource.ide.camel.model.generated.Split;
+import org.fusesource.ide.camel.model.generated.Stop;
+import org.fusesource.ide.camel.model.generated.Threads;
+import org.fusesource.ide.camel.model.generated.Throttle;
+import org.fusesource.ide.camel.model.generated.ThrowException;
+import org.fusesource.ide.camel.model.generated.Transacted;
+import org.fusesource.ide.camel.model.generated.Transform;
+import org.fusesource.ide.camel.model.generated.Try;
+import org.fusesource.ide.camel.model.generated.Unmarshal;
+import org.fusesource.ide.camel.model.generated.Validate;
+import org.fusesource.ide.camel.model.generated.When;
+import org.fusesource.ide.camel.model.generated.WireTap;
 
 /**
  * A helper class for creating a popup menu to allow the addition of new nodes in a context menu.

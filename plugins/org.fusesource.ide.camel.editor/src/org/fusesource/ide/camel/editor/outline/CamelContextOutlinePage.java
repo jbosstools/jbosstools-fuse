@@ -307,7 +307,7 @@ public class CamelContextOutlinePage extends ContentOutlinePage implements
 		// TODO: put in an image for the showOutline action
 		_showOutlineAction
 				.setImageDescriptor(GraphitiUi.getImageService()
-						.getImageDescriptorForId(
+						.getImageDescriptorForId(_diagramEditor.getDiagramTypeProvider().getProviderId(),
 								ImageProvider.IMG_OUTLINE_TREE));
 		tbm.add(_showOutlineAction);
 		_showOverviewAction = new Action() {
@@ -319,7 +319,7 @@ public class CamelContextOutlinePage extends ContentOutlinePage implements
 		};
 		// TODO: put in an image for the showOverview action
 		_showOverviewAction.setImageDescriptor(GraphitiUi.getImageService()
-				.getImageDescriptorForId(
+				.getImageDescriptorForId(_diagramEditor.getDiagramTypeProvider().getProviderId(),
 						ImageProvider.IMG_OUTLINE_THUMBNAIL));
 		tbm.add(_showOverviewAction);
 

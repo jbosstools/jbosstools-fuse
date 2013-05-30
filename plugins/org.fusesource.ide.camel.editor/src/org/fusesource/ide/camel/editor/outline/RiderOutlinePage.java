@@ -16,6 +16,7 @@ import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.parts.ScrollableThumbnail;
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
@@ -118,7 +119,12 @@ public class RiderOutlinePage extends ContentOutlinePage implements INodeViewer,
 		// Creation de la miniature.
 		Canvas canvas = new Canvas(sash, SWT.BORDER);
 		LightweightSystem lws = new LightweightSystem(canvas);
-		RootEditPart rootEditPart = editor.getGraphicalViewer().getRootEditPart();
+		GraphicalViewer graphicalViewer = editor.getGraphicalViewer();
+		if (graphicalViewer == null)
+			return;
+		
+		RootEditPart rootEditPart = graphicalViewer.getRootEditPart();
+		
 		// TODO Graphiti - not a ScalableRootEditPart but some kind of DiagramEditPart
 		if (rootEditPart instanceof ScalableRootEditPartAnimated) {
 			ScalableRootEditPartAnimated diagramEditPart = (ScalableRootEditPartAnimated) rootEditPart;
@@ -145,7 +151,7 @@ public class RiderOutlinePage extends ContentOutlinePage implements INodeViewer,
 				}
 			}
 		};
-		editor.getGraphicalViewer().getControl().addDisposeListener(disposeListener);
+		graphicalViewer.getControl().addDisposeListener(disposeListener);
 
 		final TreeViewer viewer = getTreeViewer();
 		// TODO how to find the part?
@@ -259,7 +265,8 @@ public class RiderOutlinePage extends ContentOutlinePage implements INodeViewer,
 	public void dispose() {
 		this.editor.removeModelChangeListener(this);
 		editor.getSelectionSyncer().removeViewer(getViewer());
-		if (editor.getGraphicalViewer().getControl() != null && !editor.getGraphicalViewer().getControl().isDisposed()) {
+		if (editor.getGraphicalViewer() != null && editor.getGraphicalViewer().getControl() != null && 
+			!editor.getGraphicalViewer().getControl().isDisposed()) {
 			editor.getGraphicalViewer().getControl().removeDisposeListener(disposeListener);
 		}
 		super.dispose();

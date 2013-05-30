@@ -56,7 +56,7 @@ public class ChangeGridColorCommand extends RecordingCommand {
 						ga.setForeground(GraphitiUi.getGaService().manageColor(diagram, cc));
 						gridFigure.repaint();
 						gridFigure.revalidate();
-						designEditor.refreshContent();
+						designEditor.getDiagramBehavior().refreshContent();
 					}
 				}
 			}

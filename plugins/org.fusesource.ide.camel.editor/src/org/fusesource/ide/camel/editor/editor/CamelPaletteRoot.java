@@ -37,11 +37,11 @@ import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
 import org.eclipse.graphiti.ui.editor.IEclipseImageDescriptor;
 import org.eclipse.graphiti.ui.internal.Messages;
-import org.eclipse.graphiti.ui.internal.config.IConfigurationProvider;
 import org.eclipse.graphiti.ui.internal.editor.GFConnectionCreationTool;
 import org.eclipse.graphiti.ui.internal.editor.GFCreationTool;
 import org.eclipse.graphiti.ui.internal.editor.GFPanningSelectionToolEntry;
 import org.eclipse.graphiti.ui.internal.util.gef.MultiCreationFactory;
+import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -79,6 +79,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 	public void updatePaletteEntries() {
 		// remove old entries
 		setDefaultEntry(null);
+		@SuppressWarnings("unchecked")
 		List<PaletteEntry> allEntries = new ArrayList<PaletteEntry>(getChildren()); // MUST
 																					// make
 																					// a
@@ -117,7 +118,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 				} else if (toolEntry instanceof IStackToolEntry) {
 					IStackToolEntry stackToolEntry = (IStackToolEntry) toolEntry;
 					PaletteStack stack = new PaletteStack(stackToolEntry.getLabel(), stackToolEntry.getDescription(), GraphitiUi
-							.getImageService().getImageDescriptorForId(stackToolEntry.getIconId()));
+							.getImageService().getImageDescriptorForId(cfgProvider.getDiagramTypeProvider().getProviderId(), stackToolEntry.getIconId()));
 					drawer.add(stack);
 					List<ICreationToolEntry> creationToolEntries = stackToolEntry.getCreationToolEntries();
 					for (ICreationToolEntry creationToolEntry : creationToolEntries) {
@@ -299,7 +300,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 			imageDescriptor = ((IEclipseImageDescriptor) creationToolEntry).getImageDescriptor();
 		} else {
 			String iconId = (smallImage) ? creationToolEntry.getIconId() : creationToolEntry.getLargeIconId();
-			imageDescriptor = GraphitiUi.getImageService().getImageDescriptorForId(iconId);
+			imageDescriptor = GraphitiUi.getImageService().getImageDescriptorForId(cfgProvider.getDiagramTypeProvider().getProviderId(), iconId);
 		}
 		return imageDescriptor;
 	}
@@ -309,7 +310,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 		if (compartmentEntry instanceof IEclipseImageDescriptor) {
 			imageDescriptor = ((IEclipseImageDescriptor) compartmentEntry).getImageDescriptor();
 		} else {
-			imageDescriptor = GraphitiUi.getImageService().getImageDescriptorForId(compartmentEntry.getIconId());
+			imageDescriptor = GraphitiUi.getImageService().getImageDescriptorForId(cfgProvider.getDiagramTypeProvider().getProviderId(), compartmentEntry.getIconId());
 		}
 		return imageDescriptor;
 	}

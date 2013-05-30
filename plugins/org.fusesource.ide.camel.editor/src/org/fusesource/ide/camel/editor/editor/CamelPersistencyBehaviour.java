@@ -39,7 +39,7 @@ public class CamelPersistencyBehaviour extends DefaultPersistencyBehavior {
 	 * @param editor
 	 */
 	public CamelPersistencyBehaviour(RiderDesignEditor editor) {
-		super(editor);
+		super(editor.getDiagramBehavior());
 		this.editor = editor;
 	}
 	
