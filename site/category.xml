@@ -12,18 +12,20 @@
    <feature url="features/org.fusesource.ide.runtimes.feature_0.0.0.jar" id="org.fusesource.ide.runtimes.feature" version="0.0.0">
       <category name="org.fusesource.ide"/>
    </feature>
-   <feature url="features/org.drools.eclipse.feature_5.5.0.Final.jar" id="org.drools.eclipse.feature" version="5.5.0.Final">
+
+   <feature url="features/org.drools.eclipse.feature_6.0.0.201304021236.jar" id="org.drools.eclipse.feature" version="6.0.0.201304021236">
       <category name="ide_dependencies"/>
    </feature>
-   <feature url="features/org.guvnor.tools.feature_5.5.0.Final.jar" id="org.guvnor.tools.feature" version="5.5.0.Final">
+   <feature url="features/org.guvnor.tools.feature_6.0.0.201304021236.jar" id="org.guvnor.tools.feature" version="6.0.0.201304021236">
       <category name="ide_dependencies"/>
    </feature>
-   <feature url="features/org.jbpm.eclipse.feature_5.5.0.Final.jar" id="org.jbpm.eclipse.feature" version="5.5.0.Final">
+   <feature url="features/org.jbpm.eclipse.feature_6.0.0.201304021236.jar" id="org.jbpm.eclipse.feature" version="6.0.0.201304021236">
       <category name="ide_dependencies"/>
    </feature>
-   <feature url="features/org.jbpm.eclipse.task.feature_5.5.0.Final.jar" id="org.jbpm.eclipse.task.feature" version="5.5.0.Final">
+   <feature url="features/org.jbpm.eclipse.task.feature_6.0.0.201304021236.jar" id="org.jbpm.eclipse.task.feature" version="6.0.0.201304021236">
       <category name="ide_dependencies"/>
    </feature>
+
    <category-def name="org.fusesource.ide" label="JBoss Fuse Plugins for Eclipse"/>
    <category-def name="ide_dependencies" label="Dependencies"/>
 </site>

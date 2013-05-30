@@ -13,20 +13,17 @@ package org.fusesource.ide.camel.editor.editor;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.DocumentEvent;
@@ -39,19 +36,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -101,11 +91,13 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 
 	/** The graphical editor used in design page */
 	private RiderDesignEditor designEditor;
+	
 
 	/** stores the last selection before saving and restores it after saving **/
 	private ISelection savedSelection;
 
 	private RiderDesignEditorData designEditorData = new RiderDesignEditorData();
+	@SuppressWarnings("unused")
 	private int designPageIndex;
 
 	/**
@@ -726,7 +718,7 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 				   event.getProperty().equals(PreferencesConstants.EDITOR_CONNECTION_COLOR) ||
 				   event.getProperty().equals(PreferencesConstants.EDITOR_FIGURE_BG_COLOR) ||
 				   event.getProperty().equals(PreferencesConstants.EDITOR_FIGURE_FG_COLOR)) {
-			designEditor.refresh();
+			designEditor.getDiagramBehavior().refresh();
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
 			designEditor.setupGridVisibility();
 		} 	

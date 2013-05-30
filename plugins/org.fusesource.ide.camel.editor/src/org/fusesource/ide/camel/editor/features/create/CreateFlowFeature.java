@@ -85,7 +85,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		if (target != null) {
 			if (source == null) {
 				// lets add the target to the diagram
-				RiderDesignEditor editor = RiderDesignEditor.toRiderDesignEditor(getDiagramEditor());
+				RiderDesignEditor editor = RiderDesignEditor.toRiderDesignEditor(getDiagramBehavior());
 				if (editor != null) {
 					RouteSupport route = editor.getSelectedRoute();
 					if (route != null) {

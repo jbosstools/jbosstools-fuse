@@ -16,18 +16,18 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.graphiti.ui.editor.DefaultPaletteBehavior;
-import org.eclipse.graphiti.ui.editor.DiagramEditor;
 
 /**
  * @author lhein
  */
 public class CamelPaletteBehaviour extends DefaultPaletteBehavior {
-	
+	RiderDesignEditor riderDesignEditor = null;
 	/**
-	 * @param diagramEditor
+	 * @param riderDesignEditor
 	 */
-	public CamelPaletteBehaviour(DiagramEditor diagramEditor) {
-		super(diagramEditor);
+	public CamelPaletteBehaviour(RiderDesignEditor riderDesignEditor) {
+		super(riderDesignEditor.getDiagramBehavior());
+		this.riderDesignEditor = riderDesignEditor;
 	}
 
 	/* (non-Javadoc)
@@ -35,7 +35,7 @@ public class CamelPaletteBehaviour extends DefaultPaletteBehavior {
 	 */
 	@Override
 	protected PaletteRoot createPaletteRoot() {
-		return new CamelPaletteRoot(((RiderDesignEditor)diagramEditor).getConfigurationProvider());
+		return new CamelPaletteRoot(riderDesignEditor.getConfigurationProvider());
 	}
 	
 	/* (non-Javadoc)
@@ -43,7 +43,7 @@ public class CamelPaletteBehaviour extends DefaultPaletteBehavior {
 	 */
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new PaletteViewerProvider(diagramEditor.getEditDomain()) {
+		return new PaletteViewerProvider(diagramBehavior.getEditDomain()) {
 			/*
 			 * (non-Javadoc)
 			 * 

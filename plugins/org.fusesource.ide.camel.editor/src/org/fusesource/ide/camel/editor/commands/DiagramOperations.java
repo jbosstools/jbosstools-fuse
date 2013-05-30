@@ -18,7 +18,7 @@ import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
-import org.eclipse.graphiti.platform.IDiagramEditor;
+import org.eclipse.graphiti.platform.IDiagramBehavior;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.model.AbstractNode;
@@ -91,9 +91,9 @@ public class DiagramOperations {
 		TransactionalEditingDomain editingDomain = designEditor.getEditingDomain();
 		Diagram diagram = designEditor.getDiagram();
 		if (editingDomain == null) {
-			IDiagramEditor diagramEditor = designEditor.getDiagramTypeProvider().getDiagramEditor();
-			if (diagramEditor != null) {
-				editingDomain = diagramEditor.getEditingDomain();
+			IDiagramBehavior diagramBehavior = designEditor.getDiagramTypeProvider().getDiagramBehavior();
+			if (diagramBehavior != null) {
+				editingDomain = diagramBehavior.getEditingDomain();
 			}
 		}
 		if (editingDomain == null) {

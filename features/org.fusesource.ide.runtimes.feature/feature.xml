@@ -36,12 +36,111 @@ Raleigh NC 27606 USA.
       <discovery label="m2eclipse" url="http://m2eclipse.sonatype.org/sites/m2e/"/>
       <discovery label="Eclipse Indigo" url="http://download.eclipse.org/releases/indigo"/>
       <discovery label="Eclipse Juno" url="http://download.eclipse.org/releases/juno"/>
+      <discovery label="Eclipse Kepler" url="http://download.eclipse.org/releases/kepler"/>
    </url>
 
    <requires>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.apache.ant"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.filesystem"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.ui.views.properties.tabbed"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.fusesource.ide.commons"/>
+      <import plugin="com.sun.jersey"/>
+      <import plugin="javax.mail"/>
+      <import plugin="javax.ws.rs"/>
+      <import plugin="org.objectweb.asm"/>
+      <import plugin="org.apache.xalan"/>
+      <import plugin="javax.persistence"/>
+      <import plugin="javax.ejb"/>
+      <import plugin="javax.el"/>
+      <import plugin="org.apache.velocity"/>
+      <import plugin="org.apache.commons.collections"/>
+      <import plugin="org.eclipse.equinox.common"/>
+      <import plugin="javax.servlet"/>
+      <import plugin="org.apache.commons.codec"/>
+      <import plugin="org.eclipse.m2e.maven.runtime"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.ui.navigator"/>
+      <import plugin="org.eclipse.ui.forms" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.navigator" version="3.3.100" match="greaterOrEqual"/>
+      <import plugin="osgi.enterprise" version="4.2.0" match="greaterOrEqual"/>
+      <import plugin="org.fusesource.ide.preferences"/>
+      <import plugin="org.fusesource.ide.server.karaf.view"/>
+      <import plugin="org.fusesource.ide.launcher"/>
+      <import plugin="org.fusesource.ide.launcher.ui"/>
+      <import plugin="com.sun.jersey.jersey-client" version="1.10.0" match="greaterOrEqual"/>
+      <import plugin="com.sun.jersey.jersey-core" version="1.10.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.codec" version="1.3.0" match="greaterOrEqual"/>
+      <import plugin="org.springframework.beans" version="3.0.0" match="compatible"/>
+      <import plugin="org.springframework.core" version="3.0.0" match="compatible"/>
+      <import plugin="org.springframework.context" version="3.0.0" match="compatible"/>
+      <import plugin="org.fusesource.scalate.scalate-util" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="scala-library" version="2.9.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.databinding"/>
+      <import plugin="org.eclipse.core.databinding.beans"/>
+      <import plugin="org.eclipse.core.databinding.property"/>
+      <import plugin="org.eclipse.core.variables"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.jface.databinding"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.m2e.archetype.common"/>
+      <import plugin="org.eclipse.m2e.core"/>
+      <import plugin="org.eclipse.m2e.core.ui"/>
+      <import plugin="org.eclipse.m2e.discovery"/>
+      <import plugin="org.eclipse.m2e.editor"/>
+      <import plugin="org.eclipse.m2e.editor.xml"/>
+      <import plugin="org.eclipse.m2e.jdt"/>
+      <import plugin="org.eclipse.m2e.launching"/>
+      <import plugin="org.eclipse.m2e.lifecyclemapping.defaults"/>
+      <import plugin="org.eclipse.m2e.maven.indexer"/>
+      <import plugin="org.eclipse.m2e.model.edit"/>
+      <import plugin="org.eclipse.m2e.refactoring"/>
+      <import plugin="org.eclipse.m2e.scm"/>
+      <import plugin="org.eclipse.ui.externaltools"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.ui.navigator.resources"/>
+      <import plugin="org.eclipse.tm.terminal" version="3.1.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.tm.terminal.ssh" version="2.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.tm.terminal.view" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="com.sun.jersey.jersey-server" version="1.10.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.geronimo.specs.geronimo-j2ee-management_1.1_spec" version="1.0.1" match="greaterOrEqual"/>
+      <import plugin="org.apache.geronimo.specs.geronimo-jms_1.1_spec" version="1.1.1" match="greaterOrEqual"/>
+      <import plugin="org.apache.geronimo.specs.geronimo-annotation_1.0_spec" version="1.1.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.zest.core"/>
+      <import plugin="org.eclipse.zest.layouts"/>
+      <import plugin="org.fusesource.ide.camel.model"/>
+      <import plugin="org.apache.camel.camel-core" version="2.7.0" match="compatible"/>
+      <import plugin="org.apache.camel.camel-spring" version="2.7.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.apache.commons.logging" version="1.1.1" match="compatible"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.apache.servicemix.nmr.api" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.servicemix.nmr.management" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="org.xmlpull"/>
+      <import plugin="org.codehaus.jettison"/>
+      <import plugin="org.apache.httpcomponents.httpcore"/>
+      <import plugin="org.apache.httpcomponents.httpclient"/>
+      <import plugin="org.apache.derby.core"/>
+      <import plugin="com.thoughtworks.xstream"/>
+      <import plugin="org.slf4j.api" version="1.6.1" match="equivalent"/>
+      <import plugin="org.eclipse.wst.server.core"/>
       <import feature="org.eclipse.emf" version="2.6.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.emf.compare" version="1.2.0" match="compatible"/>
-      <import feature="org.eclipse.graphiti.feature" version="0.9.0" match="equivalent"/>
+      <import feature="org.eclipse.emf.compare" version="1.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.graphiti.feature" version="0.10.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.platform" version="3.6.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jdt" version="3.6.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.m2e.feature" version="1.0.0" match="greaterOrEqual"/>

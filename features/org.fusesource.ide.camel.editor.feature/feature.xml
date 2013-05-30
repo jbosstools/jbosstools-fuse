@@ -32,13 +32,6 @@ Raleigh NC 27606 USA.
    </license>
 
    <requires>
-      <import feature="org.eclipse.emf" version="2.6.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.emf.compare" version="1.2.0" match="compatible"/>
-      <import feature="org.eclipse.graphiti.feature" version="0.9.0" match="equivalent"/>
-      <import feature="org.eclipse.platform" version="3.6.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jdt" version="3.6.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.m2e.feature" version="1.0.0" match="greaterOrEqual"/>
-      
       <import plugin="commons-management"/>
       <import plugin="org.fusesource.ide.graph"/>
       <import plugin="org.fusesource.ide.camel.model"/>
@@ -47,9 +40,71 @@ Raleigh NC 27606 USA.
       <import plugin="org.fusesource.ide.jmx.core"/>
       <import plugin="org.apache.camel.camel-core" version="2.7.0" match="compatible"/>
       <import plugin="org.apache.camel.camel-spring" version="2.7.0" match="compatible"/>
+      <import plugin="org.eclipse.core.databinding"/>
+      <import plugin="org.eclipse.core.databinding.beans"/>
+      <import plugin="org.eclipse.core.databinding.property"/>
+      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.draw2d"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.emf.transaction"/>
+      <import plugin="org.eclipse.gef"/>
+      <import plugin="org.eclipse.help"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.jface.databinding"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.ui.views.properties.tabbed"/>
+      <import plugin="org.eclipse.wst.common.ui"/>
+      <import plugin="org.eclipse.wst.sse.core"/>
+      <import plugin="org.eclipse.wst.sse.ui"/>
+      <import plugin="org.eclipse.wst.xml.core"/>
+      <import plugin="org.eclipse.wst.xml.ui"/>
+      <import plugin="org.eclipse.zest.core"/>
+      <import plugin="org.eclipse.zest.layouts"/>
+      <import plugin="org.junit"/>
       <import plugin="org.fusesource.fabric.camel-tooling-util"/>
       <import plugin="org.fusesource.scalate.scalate-util" version="1.5.0" match="greaterOrEqual"/>
       <import plugin="com.google.guava" version="13.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.graphiti"/>
+      <import plugin="org.eclipse.graphiti.mm"/>
+      <import plugin="org.eclipse.graphiti.pattern"/>
+      <import plugin="org.eclipse.graphiti.ui"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.core.variables"/>
+      <import plugin="org.eclipse.ui.externaltools"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.m2e.archetype.common"/>
+      <import plugin="org.eclipse.m2e.core"/>
+      <import plugin="org.eclipse.m2e.core.ui"/>
+      <import plugin="org.eclipse.m2e.discovery"/>
+      <import plugin="org.eclipse.m2e.editor"/>
+      <import plugin="org.eclipse.m2e.editor.xml"/>
+      <import plugin="org.eclipse.m2e.jdt"/>
+      <import plugin="org.eclipse.m2e.launching"/>
+      <import plugin="org.eclipse.m2e.lifecyclemapping.defaults"/>
+      <import plugin="org.eclipse.m2e.maven.indexer"/>
+      <import plugin="org.eclipse.m2e.maven.runtime"/>
+      <import plugin="org.eclipse.m2e.model.edit"/>
+      <import plugin="org.eclipse.m2e.refactoring"/>
+      <import plugin="org.eclipse.m2e.scm"/>
+      <import plugin="org.slf4j.api" version="1.6.1" match="compatible"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.core.externaltools"/>
+      <import feature="org.eclipse.emf" version="2.6.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.emf.compare" version="1.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.graphiti.feature" version="0.10.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.platform" version="3.6.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jdt" version="3.6.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.m2e.feature" version="1.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

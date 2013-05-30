@@ -59,7 +59,7 @@ public class DiagramUtils {
 				ScalableFreeformRootEditPart rootEditPart = (ScalableFreeformRootEditPart) graphicalViewer.getEditPartRegistry().get(LayerManager.ID);
 				IFigure gridFigure = ((LayerManager) rootEditPart).getLayer(LayerConstants.GRID_LAYER);
 				gridFigure.setVisible(visible);
-				editor.refreshContent();
+				editor.getDiagramBehavior().refreshContent();
 			}
 		}
 	}

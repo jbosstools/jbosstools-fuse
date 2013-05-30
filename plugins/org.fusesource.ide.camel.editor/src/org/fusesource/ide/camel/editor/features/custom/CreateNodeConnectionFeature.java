@@ -161,7 +161,7 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 					}
 				}
 				// and refresh the editor to do the selection
-				ed.refresh();
+				ed.getDiagramBehavior().refresh();
 			}
 		});
 	}
