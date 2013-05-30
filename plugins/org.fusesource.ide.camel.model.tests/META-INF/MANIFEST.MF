@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse IDE Model Plugin Tests
 Bundle-SymbolicName: org.fusesource.ide.camel.model.tests;singleton:=true
-Bundle-Version: 7.1.1.qualifier
+Bundle-Version: 7.1.193
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: org.fusesource.ide.camel.model
