@@ -711,18 +711,6 @@
         <artifactId>fabric-linkedin-zookeeper</artifactId>
         <version>${fabric-version}</version>
       </dependency>
-      <!--
-      <dependency>
-        <groupId>org.fusesource.fabric</groupId>
-        <artifactId>fabric-zookeeper-spring</artifactId>
-        <version>${fabric-version}</version>
-      </dependency>
-    <dependency>
-      <groupId>org.fusesource.fabric</groupId>
-      <artifactId>fabric-zookeeper</artifactId>
-      <version>${fabric-version}</version>
-    </dependency>
-    -->
 
     <dependency>
       <groupId>org.apache.xerces</groupId>
