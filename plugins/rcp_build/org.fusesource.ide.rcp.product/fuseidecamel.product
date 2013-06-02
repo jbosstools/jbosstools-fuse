@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Fuse IDE" uid="FuseIDE" id="org.fusesource.ide.rcp.branding.fuseide" application="org.eclipse.ui.ide.workbench" version="7.1.1.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Fuse IDE" uid="FuseIDE" id="org.fusesource.ide.rcp.branding.fuseide" application="org.eclipse.ui.ide.workbench" version="7.1.196" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/about.gif"/>
