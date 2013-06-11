@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.fusesource.ide</groupId>
     <artifactId>rcp-build</artifactId>
-    <version>7.1.1-SNAPSHOT</version>
+    <version>7.1.205</version>
   </parent>
 
   <artifactId>org.fusesource.ide.rcp.feature</artifactId>
