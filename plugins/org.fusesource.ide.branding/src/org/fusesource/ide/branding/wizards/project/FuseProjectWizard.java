@@ -47,9 +47,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.INewWizard;
 import org.fusesource.ide.branding.Activator;
 import org.fusesource.ide.branding.wizards.WizardMessages;
-import org.fusesource.ide.camel.editor.wizard.NewFuseProjectHelper;
 import org.fusesource.ide.maven.MavenFacade;
-
 
 /**
  * Simple project wizard for creating a new Fuse Project
@@ -87,7 +85,8 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	public FuseProjectWizard() {
 		super();
 		setWindowTitle(WizardMessages.wizardProjectTitle);
-		setDefaultPageImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "/icons/new_fuse_project_wizard.png"));
+		setDefaultPageImageDescriptor(ImageDescriptor.createFromFile(
+				this.getClass(), "/icons/new_fuse_project_wizard.png"));
 		setNeedsProgressMonitor(true);
 	}
 
@@ -228,11 +227,10 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		final String javaPackage = archetypePage.getJavaPackage();
 		final Properties properties = archetypePage.getProperties();
 
-		Activator.getLogger().debug("About to create project: " + projectName
-				+ " from archetype: " + archetype + " for " + groupId + ": "
-				+ artifactId + ":" + version + " at " + rootPath);
-
-		final NewFuseProjectHelper helper = new NewFuseProjectHelper();
+		Activator.getLogger().debug(
+				"About to create project: " + projectName + " from archetype: "
+						+ archetype + " for " + groupId + ": " + artifactId
+						+ ":" + version + " at " + rootPath);
 
 		String jobName = NLS.bind(WizardMessages.wizardProjectJobCreating,
 				projectName);
@@ -251,14 +249,15 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 					 * IFiles.toFile(projectDir);
 					 */
 
-					helper.createProject(in, outputDir, groupId, artifactId,
-							version, javaPackage);
+					createProject(in, outputDir, groupId, artifactId, version,
+							javaPackage);
 
 					final IProject project = root.getProject(projectName);
 
 					MavenFacade facade = new MavenFacade();
-					facade.importProjects(monitor, pomFile, projectName, groupId, artifactId, version);
-					
+					facade.importProjects(monitor, pomFile, projectName,
+							groupId, artifactId, version);
+
 					return Arrays.asList(project);
 				} catch (IOException e) {
 					Status status = new Status(IStatus.ERROR,
@@ -286,10 +285,10 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 				} else {
 					final IProject project = root.getProject(projectName);
 					try {
-						enforceNatures(project, new NullProgressMonitor());	
+						enforceNatures(project, new NullProgressMonitor());
 					} catch (CoreException ex) {
 						ex.printStackTrace();
-					}					
+					}
 				}
 			}
 		});
@@ -301,7 +300,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 
 		return true;
 	}
-	
+
 	/**
 	 * adds the Camel nature to the project and also a maybe missing java nature
 	 * 
@@ -309,7 +308,8 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	private void enforceNatures(IProject project, IProgressMonitor monitor) throws CoreException {
+	private void enforceNatures(IProject project, IProgressMonitor monitor)
+			throws CoreException {
 		IProjectDescription projectDescription = project.getDescription();
 		String[] ids = projectDescription.getNatureIds();
 		boolean camelNatureFound = false;
@@ -323,8 +323,8 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		}
 		int toAdd = 0;
 		if (!camelNatureFound) {
-			toAdd++;			
-		} 
+			toAdd++;
+		}
 		if (!javaNatureFound) {
 			toAdd++;
 		}
@@ -341,5 +341,4 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		projectDescription.setNatureIds(newIds);
 		project.setDescription(projectDescription, monitor);
 	}
-
 }

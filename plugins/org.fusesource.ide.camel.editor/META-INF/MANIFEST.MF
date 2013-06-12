@@ -54,5 +54,4 @@ Require-Bundle: commons-management,
  org.eclipse.graphiti.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: org.fusesource.ide.camel.editor,
- org.fusesource.ide.camel.editor.wizard
+Export-Package: org.fusesource.ide.camel.editor

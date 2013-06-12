@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.fusesource.ide.core.feature"
+      label="JBoss Fuse Core Plugins"
+      version="7.2.0.qualifier"
+      provider-name="Red Hat Inc.">
+
+   <description url="http://fusesource.com/products/fuse-ide/">
+      Red Hat JBoss Fuse Plugins for Eclipse lets you work with Fuse
+and Apache ActiveMQ, Camel,
+CXF, Karaf &amp; ServiceMix.
+This is the core feature containing mandatory shared libraries used by all
+the other features of Red Hat JBoss Fuse Plugins.
+   </description>
+
+   <copyright url="http://redhat.com/">
+      JBoss, Home of Professional Open Source\nCopyright (c) Red Hat,
+Inc., and individual contributors as indicated\nby the @authors
+tag, 2013. See the copyright.txt in the distribution\nfor a full
+listing of individual contributors.
+   </copyright>
+
+   <license url="license.html">
+      Red Hat, Inc. licenses these features and plugins to you under
+certain open source licenses (or aggregations of such licenses),
+which in a particular case may include the Eclipse Public License,
+the GNU Lesser General Public License, and/or certain other open
+source licenses. For precise licensing details, consult the corresponding
+source code, or contact Red Hat Legal Affairs, 1801 Varsity Drive,
+Raleigh NC 27606 USA.
+   </license>
+
+   <requires>
+      <import feature="org.eclipse.m2e.feature" version="1.4.0.20130318-1103"/>
+      <import feature="org.eclipse.platform" version="4.3.0.v20130502-0800"/>
+   </requires>
+
+   <plugin
+         id="org.fusesource.ide.branding"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.cheatsheets"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.commons"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.maven"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.preferences"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.project"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.fabric.camel-tooling-util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.scalate.scalate-util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scala-library"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.camel.camel-core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="commons-management"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.logging"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.camel.camel-blueprint"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.camel.camel-core-osgi"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.camel.camel-spring"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.aries.blueprint"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.aries.proxy.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.aries.util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

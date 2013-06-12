@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.branding.wizards.project;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,52 +20,39 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkingSet;
-
+import org.fusesource.camel.tooling.util.ArchetypeHelper;
+import org.fusesource.ide.branding.Activator;
 
 public abstract class AbstractFuseProjectWizard extends Wizard {
 
-  protected IStructuredSelection selection;
+	protected IStructuredSelection selection;
 
-  protected List<IWorkingSet> workingSets = new ArrayList<IWorkingSet>();
+	protected List<IWorkingSet> workingSets = new ArrayList<IWorkingSet>();
 
-  /*
-  protected ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		this.selection = selection;
+		IWorkingSet workingSet = SelectionUtil.getSelectedWorkingSet(selection);
+		if (workingSet != null) {
+			this.workingSets.add(workingSet);
+		}
+	}
 
-  private IMavenDiscovery discovery;
+	/**
+	 * Create a new project from an archetype
+	 */
+	public void createProject(InputStream archetypeJarIn, File outputDir,
+			String groupId, String artifactId, String version,
+			String packageName) {
+		ArchetypeHelper helper = new ArchetypeHelper(archetypeJarIn, outputDir,
+				groupId, artifactId, version);
+		if (packageName != null && packageName.length() > 0) {
+			helper.packageName_$eq(packageName);
+		}
+		Activator.getLogger().debug(
+				"Creating archetype for outputDir: " + outputDir);
 
-  private IImportWizardPageFactory pageFactory;
-*/
-  
-  public void init(IWorkbench workbench, IStructuredSelection selection) {
-    this.selection = selection;
-    /*
-    this.importConfiguration = new ProjectImportConfiguration();
-    this.discovery = M2EUIPluginActivator.getDefault().getMavenDiscovery();
-    this.pageFactory = M2EUIPluginActivator.getDefault().getImportWizardPageFactory();
-    */
-    IWorkingSet workingSet = SelectionUtil.getSelectedWorkingSet(selection);
-    if(workingSet != null) {
-      this.workingSets.add(workingSet);
-    }
-  }
+		helper.execute();
 
-  /*
-  @Override
-  public void dispose() {
-    M2EUIPluginActivator.getDefault().ungetMavenDiscovery(discovery);
-    super.dispose();
-  }
-
-  public ProjectImportConfiguration getProjectImportConfiguration() {
-    return importConfiguration;
-  }
-
-  public IMavenDiscovery getDiscovery() {
-    return discovery;
-  }
-
-  public IImportWizardPageFactory getPageFactory() {
-    return pageFactory;
-  }
-  */
+		Activator.getLogger().debug("Done!");
+	}
 }
