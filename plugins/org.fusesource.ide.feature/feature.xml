@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.feature"
       label="Fuse IDE"
-      version="7.1.1.qualifier"
+      version="7.1.213"
       provider-name="Red Hat Inc.">
 
    <description url="http://fusesource.com/products/fuse-ide/">
