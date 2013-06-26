@@ -6,6 +6,7 @@ Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.preferences,
+ org.fusesource.fabric.camel-tooling-util,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.core.databinding,
@@ -18,7 +19,7 @@ Require-Bundle: org.fusesource.ide.preferences,
  org.eclipse.ui.ide,
  org.eclipse.ui.views,
  org.eclipse.ui.views.properties.tabbed,
- org.fusesource.fabric.camel-tooling-util
+ org.apache.camel.camel-core
 Export-Package: org.fusesource.ide.commons,
  org.fusesource.ide.commons.contenttype,
  org.fusesource.ide.commons.jobs,
