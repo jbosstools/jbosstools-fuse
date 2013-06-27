@@ -39,7 +39,7 @@
 
   <properties>
     <commons-net.version>3.2</commons-net.version>
-    <slf4j-version>1.7.0</slf4j-version>
+  <!--  <slf4j-version>1.7.0</slf4j-version> -->
     <google-guava-version>13.0.1</google-guava-version>   
     <drools.updatesite.version>6.0.0.201304021236</drools.updatesite.version>
     
@@ -424,16 +424,20 @@
       <artifactId>commons-beanutils</artifactId>
       <version>${commons-beanutils-version}</version>
     </dependency>
+<!--
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
       <version>1_2</version>
     </dependency>
+-->
+<!--
     <dependency>
       <groupId>org.eclipse.jetty.orbit</groupId>
       <artifactId>javax.annotation</artifactId>
       <version>1.1.0.v201108011116</version>
     </dependency>
+-->    
     <dependency>
       <groupId>org.fusesource.commonman</groupId>
       <artifactId>commons-management</artifactId>
@@ -908,7 +912,7 @@
       <artifactId>scalate-util</artifactId>
       <version>${scalate-version}</version>
     </dependency>
-
+<!--
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -925,6 +929,7 @@
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j-version}</version>
     </dependency>
+-->
 
     <dependency>
       <groupId>com.weiglewilczek.scala-lang-osgi</groupId>
