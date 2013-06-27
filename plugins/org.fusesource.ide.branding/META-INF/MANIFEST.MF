@@ -19,11 +19,11 @@ Require-Bundle: org.fusesource.ide.camel.model,
  org.eclipse.ltk.core.refactoring,
  org.eclipse.m2e.core,
  org.eclipse.m2e.core.ui,
- org.eclipse.m2e.maven.runtime,
  org.eclipse.m2e.model.edit,
  org.eclipse.ui.intro,
  org.eclipse.ui.intro.universal
 Bundle-Activator: org.fusesource.ide.branding.Activator
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.branding
-Import-Package: org.fusesource.camel.tooling.util
+Import-Package: org.apache.maven.model,
+ org.fusesource.camel.tooling.util
