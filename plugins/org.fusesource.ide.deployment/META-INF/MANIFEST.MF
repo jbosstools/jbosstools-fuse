@@ -34,7 +34,6 @@ Require-Bundle: org.fusesource.ide.preferences,
  org.eclipse.m2e.launching,
  org.eclipse.m2e.lifecyclemapping.defaults,
  org.eclipse.m2e.maven.indexer,
- org.eclipse.m2e.maven.runtime,
  org.eclipse.m2e.model.edit,
  org.eclipse.m2e.refactoring,
  org.eclipse.m2e.scm,
@@ -44,3 +43,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.deployment.DeployPlugin
 Export-Package: org.fusesource.ide.deployment, org.fusesource.ide.deployment.handler,
  org.fusesource.ide.deployment.maven
+Import-Package: org.apache.maven.model

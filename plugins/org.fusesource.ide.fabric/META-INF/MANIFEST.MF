@@ -58,7 +58,6 @@ Require-Bundle: org.eclipse.osgi,
  org.eclipse.m2e.launching,
  org.eclipse.m2e.lifecyclemapping.defaults,
  org.eclipse.m2e.maven.indexer,
- org.eclipse.m2e.maven.runtime,
  org.eclipse.m2e.model.edit,
  org.eclipse.m2e.refactoring,
  org.eclipse.m2e.scm,
@@ -82,3 +81,5 @@ Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin
 Bundle-ClassPath: .
 Export-Package: org.fusesource.ide.fabric,
  org.fusesource.ide.fabric.navigator
+Import-Package: org.apache.maven.cli,
+ org.apache.maven.model

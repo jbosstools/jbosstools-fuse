@@ -26,7 +26,6 @@ Require-Bundle: org.fusesource.ide.commons,
  org.eclipse.m2e.launching,
  org.eclipse.m2e.lifecyclemapping.defaults,
  org.eclipse.m2e.maven.indexer,
- org.eclipse.m2e.maven.runtime,
  org.eclipse.m2e.model.edit,
  org.eclipse.m2e.refactoring,
  org.eclipse.m2e.scm,
@@ -35,3 +34,4 @@ Require-Bundle: org.fusesource.ide.commons,
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.Activator
 Export-Package: org.fusesource.ide.launcher
+Import-Package: org.apache.maven.artifact

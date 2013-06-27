@@ -25,13 +25,7 @@ Require-Bundle: org.fusesource.ide.commons,
  org.eclipse.m2e.editor,
  org.eclipse.m2e.editor.xml,
  org.eclipse.m2e.jdt,
- org.eclipse.m2e.launching,
- org.eclipse.m2e.lifecyclemapping.defaults,
- org.eclipse.m2e.maven.indexer,
- org.eclipse.m2e.maven.runtime,
- org.eclipse.m2e.model.edit,
- org.eclipse.m2e.refactoring,
- org.eclipse.m2e.scm,
+ org.eclipse.m2e.launching;bundle-version="1.4.0",
  org.slf4j.api;bundle-version="[1.6.1,2.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.ui.Activator
