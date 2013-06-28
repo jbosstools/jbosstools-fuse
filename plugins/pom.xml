@@ -17,18 +17,18 @@
   <modules>
     <module>org.fusesource.ide.commons</module>
 
-<!-- 
-    <module>org.fusesource.ide.zk.core</module>
-    <module>org.fusesource.ide.zk.jmx</module>
-    <module>org.fusesource.ide.zk.zookeeper</module>
+    <module>org.fusesource.ide.jmx.core</module>
+    <module>org.fusesource.ide.jmx.ui</module>
+    <module>org.fusesource.ide.jmx.local</module>
 
     <module>org.fusesource.ide.jvmmonitor.core</module>
     <module>org.fusesource.ide.jvmmonitor.tools</module>
     <module>org.fusesource.ide.jvmmonitor.ui</module>
 
-    <module>org.fusesource.ide.jmx.core</module>
-    <module>org.fusesource.ide.jmx.ui</module>
-    <module>org.fusesource.ide.jmx.local</module>
+<!--
+    <module>org.fusesource.ide.zk.core</module>
+    <module>org.fusesource.ide.zk.jmx</module>
+    <module>org.fusesource.ide.zk.zookeeper</module>
 
     <module>org.fusesource.ide.fabric</module>
     <module>org.fusesource.ide.fabric.activemq</module>
@@ -36,12 +36,12 @@
     <module>org.fusesource.ide.fabric.servicemix</module>
 
     <module>org.fusesource.ide.deployment</module>
+-->
 
     <module>org.fusesource.ide.server.karaf.core</module>
     <module>org.fusesource.ide.server.karaf.ui</module>
     <module>org.fusesource.ide.server.karaf.view</module>
 
--->
     <module>org.fusesource.ide.preferences</module>
     <module>org.fusesource.ide.maven</module>
     <module>org.fusesource.ide.cheatsheets</module>
