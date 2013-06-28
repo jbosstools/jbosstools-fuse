@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.fusesource.ide.camel.editor.feature"
-      label="JBoss Fuse Camel Editor Plugins for Eclipse 6.0"
+      id="org.fusesource.ide.core.feature"
+      label="JBoss Fuse Core Plugins"
       version="7.2.0.qualifier"
       provider-name="Red Hat Inc.">
 
@@ -9,8 +9,8 @@
       Red Hat JBoss Fuse Plugins for Eclipse lets you work with Fuse
 and Apache ActiveMQ, Camel,
 CXF, Karaf &amp; ServiceMix.
-This feature contains all needed plugins for creating, editing,
-visualizing and local testing of Camel Routes.
+This is the core feature containing mandatory shared libraries used by all
+the other features of Red Hat JBoss Fuse Plugins.
    </description>
 
    <copyright url="http://redhat.com/">
@@ -33,39 +33,17 @@ Raleigh NC 27606 USA.
    <requires>
       <import feature="org.eclipse.m2e.feature" version="1.4.0.20130318-1103"/>
       <import feature="org.eclipse.platform" version="4.3.0.v20130502-0800"/>
-      <import feature="org.eclipse.zest" version="1.5.0.201305060205" match="greaterOrEqual"/>
-      <import feature="org.eclipse.graphiti.feature" version="0.10.0.v20130508-0709" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jdt" version="3.9.0.v20130502-0800" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.common.fproj" version="3.4.0.v201202292300-377F8N8s735555393B7B"/>
-      <import feature="org.eclipse.wst.common_core.feature" version="3.5.0.v201303130500-7B7EFR8F7RZHOnIpOvR3QS"/>
-      <import feature="org.eclipse.wst.common_ui.feature" version="3.5.0.v201303130500-7C7BFeDEdhOawiz0hCnQfyoJqPwS4RT"/>
-      <import feature="org.eclipse.wst.xml_core.feature" version="3.5.0.v201209252144-7C7OFvSF7RZHQWIhO6PwRi"/>
-      <import feature="org.eclipse.wst.xml_ui.feature" version="3.5.0.v201301022000-7H7IFisDxumVt037ridXmTt0LZaO8hpKrQxT5SU"/>
    </requires>
 
    <plugin
-         id="org.apache.camel.camel-core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.jmx.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.google.guava"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.fusesource.scalate.scalate-util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.camel.camel-core"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -346,41 +324,6 @@ Raleigh NC 27606 USA.
 
    <plugin
          id="org.springframework.transaction"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.camel.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.launcher"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.launcher.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.catalogs"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.graph"
          download-size="0"
          install-size="0"
          version="0.0.0"

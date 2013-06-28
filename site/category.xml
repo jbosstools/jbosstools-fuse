@@ -3,16 +3,20 @@
    <description name="Fuse Plugins for Eclipse Update Site">
       Fuse Plugins for Eclipse Update Site
    </description>
+   <feature url="features/org.fusesource.ide.core.feature_0.0.0.jar" id="org.fusesource.ide.core.feature" version="0.0.0">
+      <category name="org.fusesource.ide"/>
+   </feature>
    <feature url="features/org.fusesource.ide.camel.editor.feature_0.0.0.jar" id="org.fusesource.ide.camel.editor.feature" version="0.0.0">
       <category name="org.fusesource.ide"/>
    </feature>
    <feature url="features/org.fusesource.ide.server.extensions.feature_0.0.0.jar" id="org.fusesource.ide.server.extensions.feature" version="0.0.0">
       <category name="org.fusesource.ide"/>
    </feature>
+<!--
    <feature url="features/org.fusesource.ide.runtimes.feature_0.0.0.jar" id="org.fusesource.ide.runtimes.feature" version="0.0.0">
       <category name="org.fusesource.ide"/>
    </feature>
-
+-->
    <feature url="features/org.drools.eclipse.feature_6.0.0.201304021236.jar" id="org.drools.eclipse.feature" version="6.0.0.201304021236">
       <category name="ide_dependencies"/>
    </feature>
@@ -25,7 +29,6 @@
    <feature url="features/org.jbpm.eclipse.task.feature_6.0.0.201304021236.jar" id="org.jbpm.eclipse.task.feature" version="6.0.0.201304021236">
       <category name="ide_dependencies"/>
    </feature>
-
    <category-def name="org.fusesource.ide" label="JBoss Fuse Plugins for Eclipse"/>
    <category-def name="ide_dependencies" label="Dependencies"/>
 </site>

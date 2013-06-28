@@ -15,7 +15,7 @@
   <parent>
     <groupId>org.fusesource</groupId>
     <artifactId>fuse-project</artifactId>
-    <version>7.2.0.redhat-024</version>
+    <version>7.3.0.redhat-005</version>
     <!-- 
     <version>99-master-SNAPSHOT</version>
     -->
@@ -39,7 +39,7 @@
 
   <properties>
     <commons-net.version>3.2</commons-net.version>
-    <slf4j-version>1.7.0</slf4j-version>
+  <!--  <slf4j-version>1.7.0</slf4j-version> -->
     <google-guava-version>13.0.1</google-guava-version>   
     <drools.updatesite.version>6.0.0.201304021236</drools.updatesite.version>
     
@@ -66,7 +66,7 @@
     <tycho-version>0.18.0</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
     <forge-project-id>ide</forge-project-id>
-    <fabric-version>7.2.0.redhat-024</fabric-version>
+    <fabric-version>7.3.0.redhat-005</fabric-version>
 <!--
     <fabric-version>99-master-SNAPSHOT</fabric-version>
 -->
@@ -77,7 +77,9 @@
   <modules>
     <module>tools</module>
     <module>plugins</module>
+<!--
     <module>tests</module>
+-->
     <module>features</module>
     <module>site</module>
     <module>targetplatform</module>
@@ -418,15 +420,24 @@
       <version>1.6</version>
     </dependency>
     <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>${commons-beanutils-version}</version>
+    </dependency>
+<!--
+    <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
       <version>1_2</version>
     </dependency>
+-->
+<!--
     <dependency>
       <groupId>org.eclipse.jetty.orbit</groupId>
       <artifactId>javax.annotation</artifactId>
       <version>1.1.0.v201108011116</version>
     </dependency>
+-->    
     <dependency>
       <groupId>org.fusesource.commonman</groupId>
       <artifactId>commons-management</artifactId>
@@ -722,7 +733,7 @@
       <artifactId>fabric-zookeeper</artifactId>
       <version>${fabric-version}</version>
     </dependency>
-    -->
+-->
 
     <dependency>
       <groupId>org.apache.xerces</groupId>
@@ -891,6 +902,10 @@
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>tooling-fabric-all</artifactId>
       <version>${fabric-version}</version>
+
+<!--
+      <version>99-master-SNAPSHOT</version>
+-->
     </dependency>
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
@@ -903,7 +918,7 @@
       <artifactId>scalate-util</artifactId>
       <version>${scalate-version}</version>
     </dependency>
-
+<!--
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -920,6 +935,7 @@
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j-version}</version>
     </dependency>
+-->
 
     <dependency>
       <groupId>com.weiglewilczek.scala-lang-osgi</groupId>

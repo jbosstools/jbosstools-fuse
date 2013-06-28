@@ -15,9 +15,12 @@
   <name>Fuse :: Features</name>
 
   <modules>
+    <module>org.fusesource.ide.core.feature</module>
     <module>org.fusesource.ide.camel.editor.feature</module>
     <module>org.fusesource.ide.server.extensions.feature</module>
+<!--
     <module>org.fusesource.ide.runtimes.feature</module>
+-->
   </modules>
 
 </project>

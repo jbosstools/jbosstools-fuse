@@ -53,7 +53,6 @@ Raleigh NC 27606 USA.
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.jdt.debug"/>
       <import plugin="org.eclipse.jdt.ui"/>
-      <import plugin="org.fusesource.ide.commons"/>
       <import plugin="com.sun.jersey"/>
       <import plugin="javax.mail"/>
       <import plugin="javax.ws.rs"/>
@@ -75,7 +74,6 @@ Raleigh NC 27606 USA.
       <import plugin="org.eclipse.ui.forms" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.ui.navigator" version="3.3.100" match="greaterOrEqual"/>
       <import plugin="osgi.enterprise" version="4.2.0" match="greaterOrEqual"/>
-      <import plugin="org.fusesource.ide.preferences"/>
       <import plugin="org.fusesource.ide.server.karaf.view"/>
       <import plugin="org.fusesource.ide.launcher"/>
       <import plugin="org.fusesource.ide.launcher.ui"/>
@@ -85,7 +83,6 @@ Raleigh NC 27606 USA.
       <import plugin="org.springframework.beans" version="3.0.0" match="compatible"/>
       <import plugin="org.springframework.core" version="3.0.0" match="compatible"/>
       <import plugin="org.springframework.context" version="3.0.0" match="compatible"/>
-      <import plugin="org.fusesource.scalate.scalate-util" version="1.5.0" match="greaterOrEqual"/>
       <import plugin="scala-library" version="2.9.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.databinding"/>
       <import plugin="org.eclipse.core.databinding.beans"/>
@@ -120,9 +117,6 @@ Raleigh NC 27606 USA.
       <import plugin="org.apache.geronimo.specs.geronimo-j2ee-management_1.1_spec" version="1.0.1" match="greaterOrEqual"/>
       <import plugin="org.apache.geronimo.specs.geronimo-jms_1.1_spec" version="1.1.1" match="greaterOrEqual"/>
       <import plugin="org.apache.geronimo.specs.geronimo-annotation_1.0_spec" version="1.1.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.zest.core"/>
-      <import plugin="org.eclipse.zest.layouts"/>
-      <import plugin="org.fusesource.ide.camel.model"/>
       <import plugin="org.apache.camel.camel-core" version="2.7.0" match="compatible"/>
       <import plugin="org.apache.camel.camel-spring" version="2.7.0" match="compatible"/>
       <import plugin="org.eclipse.ui.editors"/>
@@ -144,10 +138,18 @@ Raleigh NC 27606 USA.
       <import feature="org.eclipse.platform" version="3.6.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jdt" version="3.6.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.m2e.feature" version="1.0.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.core.feature" version="7.2.0.qualifier"/>
    </requires>
 
    <plugin
          id="org.apache.commons.pool"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.zookeeper.zookeeper"
          download-size="0"
          install-size="0"
          version="0.0.0"
