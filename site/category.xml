@@ -3,9 +3,6 @@
    <description name="Fuse Plugins for Eclipse Update Site">
       Fuse Plugins for Eclipse Update Site
    </description>
-   <feature url="features/org.fusesource.ide.core.feature_0.0.0.jar" id="org.fusesource.ide.core.feature" version="0.0.0">
-      <category name="org.fusesource.ide"/>
-   </feature>
    <feature url="features/org.fusesource.ide.camel.editor.feature_0.0.0.jar" id="org.fusesource.ide.camel.editor.feature" version="0.0.0">
       <category name="org.fusesource.ide"/>
    </feature>

@@ -138,7 +138,6 @@ Raleigh NC 27606 USA.
       <import feature="org.eclipse.platform" version="3.6.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jdt" version="3.6.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.m2e.feature" version="1.0.0" match="greaterOrEqual"/>
-      <import feature="org.fusesource.ide.core.feature" version="7.2.0.qualifier"/>
    </requires>
 
    <plugin
