@@ -5,18 +5,15 @@ Bundle-SymbolicName: org.fusesource.ide.fabric.activemq;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.fusesource.ide.fabric,
+Require-Bundle: org.fusesource.fabric-jolokia-facade;bundle-version="1.0.0",
+ org.fusesource.fabric.fabric-api,
+ org.fusesource.ide.fabric,
  org.fusesource.ide.graph,
  org.fusesource.fabric.fabric-activemq-facade,
  org.apache.activemq.activemq-osgi,
- org.fusesource.fabric.tooling-fabric-all,
- org.fusesource.fabric.fabric-zookeeper,
  org.apache.geronimo.specs.geronimo-j2ee-management_1.1_spec;bundle-version="1.0.1",
  org.apache.geronimo.specs.geronimo-jms_1.1_spec;bundle-version="1.1.1",
  org.apache.geronimo.specs.geronimo-annotation_1.0_spec;bundle-version="1.1.1",
- org.eclipse.osgi,
- org.eclipse.osgi.services,
- osgi.enterprise;bundle-version="4.2.0",
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.jmx.ui,

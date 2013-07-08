@@ -71,6 +71,8 @@
     <fabric-version>99-master-SNAPSHOT</fabric-version>
 -->
     <fabric-jclouds-version>${fabric-version}</fabric-jclouds-version>
+    <fabric-api-version>99-master-SNAPSHOT</fabric-api-version>
+    <fabric-jolokia-facade-version>1.0.0-SNAPSHOT</fabric-jolokia-facade-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
 
@@ -620,18 +622,23 @@
     
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
+      <artifactId>fabric-api</artifactId>
+      <version>${fabric-api-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-activemq-facade</artifactId>
-      <version>${fmc-version}</version>
+      <version>${fabric-version}</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-camel-facade</artifactId>
-      <version>${fmc-version}</version>
+      <version>${fabric-version}</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-servicemix-facade</artifactId>
-      <version>${fmc-version}</version>
+      <version>${fabric-version}</version>
     </dependency>
 
     <!-- servicemix facade -->
@@ -717,6 +724,12 @@
       <version>${jackson-version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.zookeeper</groupId>
+      <artifactId>zookeeper</artifactId>
+      <version>${zookeeper-version}</version>
+    </dependency>
+    
       <dependency>
         <groupId>org.fusesource.fabric</groupId>
         <artifactId>fabric-linkedin-zookeeper</artifactId>
@@ -892,6 +905,11 @@
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>camel-tooling-util</artifactId>
       <version>${fabric-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource</groupId>
+      <artifactId>fabric-jolokia-facade</artifactId>
+      <version>${fabric-jolokia-facade-version}</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>

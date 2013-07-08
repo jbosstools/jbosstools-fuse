@@ -35,7 +35,7 @@ public class RequirementsPropertyTester extends PropertyTester {
 			if(selection instanceof ProfileStatus){
 				ProfileStatus status = (ProfileStatus)selection;
 				if(property.equals("requirementsNotEmpty")) {
-					return !status.requirements().isEmpty();
+					return !status.requirements().checkIsEmpty();
 				}
 			}			
 		}

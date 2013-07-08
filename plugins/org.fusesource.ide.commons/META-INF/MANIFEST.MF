@@ -5,8 +5,8 @@ Bundle-SymbolicName: org.fusesource.ide.commons;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.fusesource.ide.preferences,
- org.fusesource.fabric.camel-tooling-util,
+Require-Bundle: org.fusesource.fabric.camel-tooling-util,
+ org.fusesource.ide.preferences,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.core.databinding,
@@ -18,8 +18,7 @@ Require-Bundle: org.fusesource.ide.preferences,
  org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.ui.views,
- org.eclipse.ui.views.properties.tabbed,
- org.apache.camel.camel-core
+ org.eclipse.ui.views.properties.tabbed
 Export-Package: org.fusesource.ide.commons,
  org.fusesource.ide.commons.contenttype,
  org.fusesource.ide.commons.jobs,
