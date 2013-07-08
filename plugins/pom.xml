@@ -25,10 +25,10 @@
     <module>org.fusesource.ide.jvmmonitor.tools</module>
     <module>org.fusesource.ide.jvmmonitor.ui</module>
 
-<!--
     <module>org.fusesource.ide.zk.core</module>
     <module>org.fusesource.ide.zk.jmx</module>
     <module>org.fusesource.ide.zk.zookeeper</module>
+<!--
 
     <module>org.fusesource.ide.fabric</module>
     <module>org.fusesource.ide.fabric.activemq</module>

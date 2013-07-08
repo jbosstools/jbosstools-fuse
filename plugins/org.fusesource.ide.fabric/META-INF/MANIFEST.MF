@@ -5,33 +5,16 @@ Bundle-SymbolicName: org.fusesource.ide.fabric;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.eclipse.osgi,
- osgi.enterprise;bundle-version="4.2.0",
+Require-Bundle: org.fusesource.fabric-jolokia-facade;bundle-version="1.0.0",
+ org.fusesource.fabric.fabric-api,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.deployment,
  org.fusesource.ide.server.karaf.view,
  org.fusesource.ide.jmx.ui,
  org.fusesource.ide.jmx.core,
- org.fusesource.insight.insight-log,
- org.fusesource.fabric.tooling-fabric-all,
- org.fusesource.fabric.fabric-zookeeper,
- org.fusesource.fabric.tooling-jclouds-all,
  org.fusesource.ide.launcher,
  org.fusesource.ide.launcher.ui,
- org.apache.servicemix.bundles.commons-io,
- com.sun.jersey.jersey-client;bundle-version="1.10",
- com.sun.jersey.jersey-core;bundle-version="1.10",
- org.apache.commons.codec;bundle-version="1.3.0",
- jackson-core-asl,
- jackson-mapper-asl,
- jackson-jaxrs,
- org.springframework.beans;bundle-version="[3.0.0,4.0.0)",
- org.springframework.core;bundle-version="[3.0.0,4.0.0)",
- org.springframework.context;bundle-version="[3.0.0,4.0.0)",
- org.fusesource.scalate.scalate-util;bundle-version="1.5.0",
- org.fusesource.fabric.camel-tooling-util,
- scala-library;bundle-version="2.9.0",
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property,
@@ -74,8 +57,7 @@ Require-Bundle: org.eclipse.osgi,
  org.eclipse.tm.terminal.ssh;bundle-version="2.1.0",
  org.eclipse.tm.terminal.view;bundle-version="2.2.0",
  org.apache.aries.blueprint;visibility:=reexport,
- org.eclipse.core.expressions,
- com.sun.jersey.jersey-server;bundle-version="1.10.0"
+ org.eclipse.core.expressions
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin
 Bundle-ClassPath: .

@@ -18,9 +18,10 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.zookeeper.ZooKeeper;
-import org.apache.zookeeper.common.PathUtils;
+//import org.apache.zookeeper.common.PathUtils;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Stat;
+import org.fusesource.ide.zk.zookeeper.PathUtils;
 
 /**
  * A ZooKeeper node (called znode for short). Each unique znode instance corresponds to a ZooKeeper path.

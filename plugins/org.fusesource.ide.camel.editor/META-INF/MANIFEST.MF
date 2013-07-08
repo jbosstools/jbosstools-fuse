@@ -5,19 +5,14 @@ Bundle-SymbolicName: org.fusesource.ide.camel.editor;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Activator: org.fusesource.ide.camel.editor.Activator
 Bundle-Vendor: Red Hat, Inc.
-Require-Bundle: commons-management,
- org.fusesource.ide.graph,
- org.fusesource.ide.camel.model,
+Require-Bundle: org.fusesource.ide.camel.model,
  org.fusesource.ide.commons,
+ org.fusesource.ide.graph,
  org.fusesource.ide.preferences,
  org.fusesource.ide.jmx.core,
+ org.fusesource.fabric.camel-tooling-util,
+ org.fusesource.scalate.scalate-util;bundle-version="1.5.0",
  org.apache.camel.camel-core;bundle-version="[2.7,3)",
- org.apache.camel.camel-core-osgi;bundle-version="[2.7,3)";resolution:=optional,
- org.apache.camel.camel-blueprint;bundle-version="[2.7.0,3.0.0)";resolution:=optional,
- org.apache.camel.camel-spring;bundle-version="[2.7,3)",
- org.apache.aries.blueprint;resolution:=optional,
- org.apache.aries.util;resolution:=optional,
- org.apache.aries.proxy.api;resolution:=optional,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property,
@@ -44,14 +39,12 @@ Require-Bundle: commons-management,
  org.eclipse.wst.xml.ui,
  org.eclipse.zest.core,
  org.eclipse.zest.layouts,
- org.junit,
- org.fusesource.fabric.camel-tooling-util,
- org.fusesource.scalate.scalate-util;bundle-version="1.5.0",
- com.google.guava;bundle-version="13.0.0",
  org.eclipse.graphiti,
  org.eclipse.graphiti.mm,
  org.eclipse.graphiti.pattern,
- org.eclipse.graphiti.ui
+ org.eclipse.graphiti.ui,
+ com.google.guava,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.camel.editor

@@ -5,7 +5,6 @@ Bundle-SymbolicName: org.fusesource.ide.cheatsheets;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.eclipse.ui.cheatsheets,
- org.fusesource.ide.branding
+Require-Bundle: org.eclipse.ui.cheatsheets
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

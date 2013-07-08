@@ -5,9 +5,10 @@ Bundle-SymbolicName: org.fusesource.ide.fabric.camel;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.fusesource.ide.fabric,
+Require-Bundle: org.fusesource.fabric-jolokia-facade;bundle-version="1.0.0",
+ org.fusesource.fabric.fabric-api,
+ org.fusesource.ide.fabric,
  org.fusesource.fabric.fabric-camel-facade,
- org.fusesource.fabric.tooling-fabric-all,
  org.fusesource.fabric.camel-tooling-util,
  org.fusesource.ide.camel.model,
  org.fusesource.ide.preferences,
@@ -21,9 +22,6 @@ Require-Bundle: org.fusesource.ide.fabric,
  org.apache.aries.proxy.api;resolution:=optional,
  org.fusesource.scalate.scalate-util;bundle-version="1.5.0",
  scala-library;bundle-version="2.9.0",
- org.eclipse.osgi,
- org.eclipse.osgi.services,
- osgi.enterprise;bundle-version="4.2.0",
  org.fusesource.ide.jmx.ui,
  org.fusesource.ide.jmx.core,
  org.eclipse.core.filesystem,
