@@ -70,6 +70,7 @@
 <!--
     <fabric-version>99-master-SNAPSHOT</fabric-version>
 -->
+
     <fabric-jclouds-version>${fabric-version}</fabric-jclouds-version>
     <fabric-api-version>99-master-SNAPSHOT</fabric-api-version>
     <fabric-jolokia-facade-version>1.0.0-SNAPSHOT</fabric-jolokia-facade-version>
@@ -182,45 +183,8 @@
           <enabled>false</enabled>
       </snapshots>
     </repository>
-<!--
-    <repository>
-        <id>release-proxy.fusesource.org</id>
-        <name>FuseSource Release Proxy Repository</name>
-        <url>http://repo.fusesource.com/nexus/content/groups/m2-release-proxy</url>
-        <snapshots>
-          <enabled>false</enabled>
-        </snapshots>
-        <releases>
-          <enabled>true</enabled>
-        </releases>
-      </repository>
-    <repository>
-      <id>fusesource-nexus-snapshots</id>
-      <name>Fusesource Nexus Snapshots</name>
-      <url>http://repo.fusesource.com/nexus/content/repositories/subscriber-snapshot</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository> 
--->   
   </repositories>
   <pluginRepositories>
-<!--
-    <pluginRepository>
-      <id>release-proxy.fusesource.org</id>
-      <name>FuseSource Release Proxy Repository</name>
-      <url>http://repo.fusesource.com/nexus/content/groups/m2-release-proxy</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
--->
     <pluginRepository>
       <id>release.fusesource.org</id>
       <name>FuseSource Release Repository</name>
@@ -416,6 +380,7 @@
   </build>
 
   <dependencies>
+<!--
     <dependency>
       <groupId>commons-pool</groupId>
       <artifactId>commons-pool</artifactId>
@@ -426,14 +391,11 @@
       <artifactId>commons-beanutils</artifactId>
       <version>${commons-beanutils-version}</version>
     </dependency>
-<!--
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
       <version>1_2</version>
     </dependency>
--->
-<!--
     <dependency>
       <groupId>org.eclipse.jetty.orbit</groupId>
       <artifactId>javax.annotation</artifactId>
@@ -490,21 +452,25 @@
       <artifactId>spring-tx</artifactId>
       <version>${spring3-version}</version>
     </dependency>
+<!--
     <dependency>
       <groupId>commons-net</groupId>
       <artifactId>commons-net</artifactId>
       <version>${commons-net.version}</version>
     </dependency>
+-->
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.aopalliance</artifactId>
       <version>${aopalliance-bundle-version}</version>
     </dependency>
+<!--  
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.cglib</artifactId>
       <version>2.2_2</version>
     </dependency>
+-->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
@@ -758,7 +724,7 @@
       <artifactId>xercesImpl</artifactId>
       <version>${xerces.version}</version>
     </dependency>
-
+-->
     <!-- karaf stuff -->
     <dependency>
       <groupId>org.apache.karaf</groupId>
@@ -917,25 +883,25 @@
       <version>${fabric-jclouds-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.fusesource.fabric</groupId>
-      <artifactId>tooling-fabric-all</artifactId>
-      <version>${fabric-version}</version>
-
-<!--
-      <version>99-master-SNAPSHOT</version>
--->
-    </dependency>
-    <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.commons-io</artifactId>
       <version>${commons-io-version}</version>
     </dependency>
+
+<!--
+    <dependency>
+      <groupId>org.fusesource.fabric</groupId>
+      <artifactId>tooling-fabric-all</artifactId>
+      <version>${fabric-version}</version>
+    </dependency>
+-->
 
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-util</artifactId>
       <version>${scalate-version}</version>
     </dependency>
+
 <!--
     <dependency>
       <groupId>org.slf4j</groupId>
