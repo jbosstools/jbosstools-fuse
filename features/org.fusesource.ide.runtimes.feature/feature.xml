@@ -124,7 +124,7 @@ Raleigh NC 27606 USA.
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.fabric-jolokia-facade"
+         id="org.fusesource.fabric.fabric-client"
          download-size="0"
          install-size="0"
          version="0.0.0"
