@@ -73,7 +73,7 @@
 
     <fabric-jclouds-version>${fabric-version}</fabric-jclouds-version>
     <fabric-api-version>99-master-SNAPSHOT</fabric-api-version>
-    <fabric-jolokia-facade-version>1.0.0-SNAPSHOT</fabric-jolokia-facade-version>
+    <fabric-client-version>${fabric-api-version}</fabric-client-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
 
@@ -873,9 +873,9 @@
       <version>${fabric-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.fusesource</groupId>
-      <artifactId>fabric-jolokia-facade</artifactId>
-      <version>${fabric-jolokia-facade-version}</version>
+      <groupId>org.fusesource.fabric</groupId>
+      <artifactId>fabric-client</artifactId>
+      <version>${fabric-client-version}</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
