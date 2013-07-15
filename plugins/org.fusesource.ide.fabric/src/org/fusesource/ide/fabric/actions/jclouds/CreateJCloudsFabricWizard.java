@@ -18,7 +18,6 @@
 package org.fusesource.ide.fabric.actions.jclouds;
 
 
-import java.net.URI;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,7 +34,6 @@ import org.fusesource.fabric.service.jclouds.firewall.internal.Ec2FirewallSuppor
 import org.fusesource.fabric.service.jclouds.firewall.internal.FirewallManagerFactoryImpl;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.jobs.Jobs;
-import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.Messages;
 import org.fusesource.ide.fabric.navigator.Fabrics;
@@ -100,27 +98,39 @@ public class CreateJCloudsFabricWizard extends Wizard {
 				final String fabricName = form.getFabricName();
 				try {
 					String agentName = form.getAgentName();
-					CreateJCloudsContainerOptions args = form.getCreateCloudArguments();
-					args.setName(agentName);
-					args.setEnsembleServer(true);
-					args.adminAccess(true);
+					CreateJCloudsContainerOptions args = null;//form.getCreateCloudArguments();
+//					args.setName(agentName);
+//					args.setEnsembleServer(true);
+//					args.adminAccess(true);
 					//args.setResolver(ZkDefs.PUBLIC_IP);
 					String proxyUri = Fabrics.DEFAULT_MAVEN_PROXY_URI;
 					if (form instanceof CloudFabricDetailsForm) {
 						CloudFabricDetailsForm fabricForm = form;
 						proxyUri = fabricForm.getProxyUri();
 					}
-					if (!Strings.isBlank(proxyUri)) {
-						args.setProxyUri(new URI(proxyUri));
-					}
-					System.out.println("============ proxy URI: " + args.getProxyUri());
-					args.setCreationStateListener(new CreationStateListener() {
-
+//					if (!Strings.isBlank(proxyUri)) {
+//						args.setProxyUri(new URI(proxyUri));
+//					}
+//					System.out.println("============ proxy URI: " + args.getProxyUri());
+					
+					args = CreateJCloudsContainerOptions.builder().adminAccess(true).ensembleServer(true).name(agentName).proxyUri(proxyUri).creationStateListener(new CreationStateListener() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.fusesource.fabric.api.CreationStateListener#onStateChange(java.lang.String)
+						 */
 						@Override
 						public void onStateChange(String message) {
 							monitor.subTask(message);
 						}
-					});
+					}).build();
+					
+//					args.setCreationStateListener(new CreationStateListener() {
+//
+//						@Override
+//						public void onStateChange(String message) {
+//							monitor.subTask(message);
+//						}
+//					});
 
 					System.out.println("Create cloud fabric: " + fabricName + " container: " + agentName);
 

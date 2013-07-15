@@ -380,7 +380,6 @@
   </build>
 
   <dependencies>
-<!--
     <dependency>
       <groupId>commons-pool</groupId>
       <artifactId>commons-pool</artifactId>
@@ -401,7 +400,6 @@
       <artifactId>javax.annotation</artifactId>
       <version>1.1.0.v201108011116</version>
     </dependency>
--->    
     <dependency>
       <groupId>org.fusesource.commonman</groupId>
       <artifactId>commons-management</artifactId>
@@ -701,7 +699,6 @@
         <artifactId>fabric-linkedin-zookeeper</artifactId>
         <version>${fabric-version}</version>
       </dependency>
-      <!--
       <dependency>
         <groupId>org.fusesource.fabric</groupId>
         <artifactId>fabric-zookeeper-spring</artifactId>
@@ -724,7 +721,7 @@
       <artifactId>xercesImpl</artifactId>
       <version>${xerces.version}</version>
     </dependency>
--->
+
     <!-- karaf stuff -->
     <dependency>
       <groupId>org.apache.karaf</groupId>
@@ -888,13 +885,11 @@
       <version>${commons-io-version}</version>
     </dependency>
 
-<!--
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>tooling-fabric-all</artifactId>
       <version>${fabric-version}</version>
     </dependency>
--->
 
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
@@ -902,7 +897,6 @@
       <version>${scalate-version}</version>
     </dependency>
 
-<!--
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -919,7 +913,6 @@
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j-version}</version>
     </dependency>
--->
 
     <dependency>
       <groupId>com.weiglewilczek.scala-lang-osgi</groupId>

@@ -63,28 +63,29 @@ public abstract class DestinationNodeSupport extends NodeSupport implements Mess
 
 	public void dropMessage(IMessage message) {
 		Map<String, Object> headers = message.getHeaders();
-		Map<String, Object> cleanHeaders = new HashMap<String, Object>();
+		Map<String, String> cleanHeaders = new HashMap<String, String>();
 		Set<Entry<String, Object>> entrySet = headers.entrySet();
 		for (Entry<String, Object> entry : entrySet) {
 			String key = entry.getKey();
 			Object value = entry.getValue();
+			String sValue = null;
 			if (value != null && !ignoreSendHeaders.contains(key)) {
 				if (Objects.equal("JMSReplyTo", key)) {
-					value = JmsTypeConverters.toDestination(value);
+					sValue = JmsTypeConverters.toDestination(value).toString();
 				} else if (Objects.equal("JMSExpiration", key)) {
-					value = JmsTypeConverters.toTimestamp(value);
+					sValue = JmsTypeConverters.toTimestamp(value).toString();
 				} else if (Objects.equal("JMSTimestamp", key)) {
-					value = JmsTypeConverters.toTimestamp(value);
+					sValue = JmsTypeConverters.toTimestamp(value).toString();
 				} else if (Objects.equal("JMSDeliveryMode", key)) {
-					value = JmsTypeConverters.toDeliveryMode(value);
+					sValue = JmsTypeConverters.toDeliveryMode(value).toString();
 				} else if (Objects.equal("JMSRedelivered", key)) {
-					value = JmsTypeConverters.toBoolean(value);
+					sValue = JmsTypeConverters.toBoolean(value).toString();
 				} else if (Objects.equal("JMSPriority", key)) {
-					value = JmsTypeConverters.toInteger(value);
+					sValue = JmsTypeConverters.toInteger(value).toString();
 				}
 
-				if (value != null) {
-					cleanHeaders.put(key, value);
+				if (sValue != null) {
+					cleanHeaders.put(key, sValue);
 				}
 			}
 		}
