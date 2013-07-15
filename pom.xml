@@ -66,13 +66,13 @@
     <tycho-version>0.18.0</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
     <forge-project-id>ide</forge-project-id>
-    <fabric-version>7.3.0.redhat-005</fabric-version>
-<!--
     <fabric-version>99-master-SNAPSHOT</fabric-version>
+<!--
+    <fabric-version>7.3.0.redhat-005</fabric-version>
 -->
 
     <fabric-jclouds-version>${fabric-version}</fabric-jclouds-version>
-    <fabric-api-version>99-master-SNAPSHOT</fabric-api-version>
+    <fabric-api-version>${fabric-version}</fabric-api-version>
     <fabric-client-version>${fabric-api-version}</fabric-client-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
@@ -606,6 +606,11 @@
       <artifactId>fabric-servicemix-facade</artifactId>
       <version>${fabric-version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-framework</artifactId>
+      <version>${curator.version}</version>
+    </dependency>
 
     <!-- servicemix facade -->
     <dependency>
@@ -701,17 +706,20 @@
         <artifactId>fabric-linkedin-zookeeper</artifactId>
         <version>${fabric-version}</version>
       </dependency>
+
+    <dependency>
+      <groupId>org.fusesource.fabric</groupId>
+      <artifactId>fabric-zookeeper</artifactId>
+      <version>${fabric-version}</version>
+    </dependency>
+
+
       <!--
       <dependency>
         <groupId>org.fusesource.fabric</groupId>
         <artifactId>fabric-zookeeper-spring</artifactId>
         <version>${fabric-version}</version>
       </dependency>
-    <dependency>
-      <groupId>org.fusesource.fabric</groupId>
-      <artifactId>fabric-zookeeper</artifactId>
-      <version>${fabric-version}</version>
-    </dependency>
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
