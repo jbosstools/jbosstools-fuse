@@ -18,7 +18,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.list.WritableList;
-import org.eclipse.jdt.internal.ui.preferences.formatter.WhiteSpaceOptions.Node;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
@@ -27,6 +26,7 @@ import org.fusesource.fabric.api.Version;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
 import org.fusesource.ide.commons.tree.HasViewer;
+import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.tree.RefreshableUI;
 import org.fusesource.ide.commons.ui.ImageProvider;
@@ -195,7 +195,7 @@ public class Fabrics extends RefreshableCollectionNode implements ImageProvider,
 	public static String getVersionName(Version version) {
 		String text = null;
 		if (version != null) {
-			text = version.getName();
+			text = version.getId();
 		}
 		return Strings.getOrElse(text, "");
 	}

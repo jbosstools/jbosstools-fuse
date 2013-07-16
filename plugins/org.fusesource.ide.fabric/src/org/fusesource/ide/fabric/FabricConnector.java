@@ -86,12 +86,16 @@ public class FabricConnector {
 		if (service != null) {
 			Version defaultVersion = service.getDefaultVersion();
 			if (defaultVersion != null) {
-				return defaultVersion.getName();
+				return defaultVersion.getId();
 			}
 		}
 		return null;
 	}
 
+	public JolokiaFabricConnector getConnector() {
+		return this.connector;
+	}
+	
 	public FabricService getFabricService() {
 		checkConnected();
 		return fabricService;
@@ -131,5 +135,11 @@ public class FabricConnector {
 			return false;
 		}
 		return connected.get();
+	}
+	
+	public void dispose() {
+		this.connector.disconnect();
+		this.connector = null;
+		this.fabricService = null;
 	}
 }

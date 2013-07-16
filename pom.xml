@@ -73,7 +73,7 @@
 
     <fabric-jclouds-version>${fabric-version}</fabric-jclouds-version>
     <fabric-api-version>${fabric-version}</fabric-api-version>
-    <fabric-client-version>${fabric-api-version}</fabric-client-version>
+    <fabric-client-version>${fabric-version}</fabric-client-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
 

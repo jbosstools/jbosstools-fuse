@@ -85,30 +85,30 @@ public class FabricPlugin extends ImagesActivatorSupport {
 			context.registerService(MBeanServer.class, mbeanServer, null);
 			System.out.println("================== registered MBeanServer!" + mbeanServer);
 		}
-		// if jersey is started already lets stop it first!
-		// as it must be started explicitly each time - restarting
-		// JVMs often thinks the bundle is started but it must be restarted :)
-		Bundles.stopBundle(context, "jersey-client");
-		Bundles.stopBundle(context, "jersey-core");
-
-		// lets make sure Jersey has been started already!
-		Bundles.startBundle(context, "jersey-core");
-		Bundles.startBundle(context, "jersey-client");
-
-		Bundles.startBundle(context, "jackson");
-		Bundles.startBundle(context, "jsr311");
-		Bundles.startBundle(context, "aries.util");
-		Bundles.startBundle(context, "aries.jmx");
-		Bundles.startBundle(context, "aries.proxy");
-		boolean useBlueprint = false;
-		if (useBlueprint) {
-			Bundles.startBundle(context, "aries.quiesce");
-			Bundles.startBundle(context, "blueprint");
-		}
-		Bundles.startBundle(context, "fabric-core-agent-ssh");
-		Bundles.startBundle(context, "fabric-core-agent-jclouds");
-		Bundles.startBundle(context, "fabric-core");
-		Bundles.startBundle(context, "maven-proxy");
+//		// if jersey is started already lets stop it first!
+//		// as it must be started explicitly each time - restarting
+//		// JVMs often thinks the bundle is started but it must be restarted :)
+//		Bundles.stopBundle(context, "jersey-client");
+//		Bundles.stopBundle(context, "jersey-core");
+//
+//		// lets make sure Jersey has been started already!
+//		Bundles.startBundle(context, "jersey-core");
+//		Bundles.startBundle(context, "jersey-client");
+//
+//		Bundles.startBundle(context, "jackson");
+//		Bundles.startBundle(context, "jsr311");
+//		Bundles.startBundle(context, "aries.util");
+//		Bundles.startBundle(context, "aries.jmx");
+//		Bundles.startBundle(context, "aries.proxy");
+//		boolean useBlueprint = false;
+//		if (useBlueprint) {
+//			Bundles.startBundle(context, "aries.quiesce");
+//			Bundles.startBundle(context, "blueprint");
+//		}
+//		Bundles.startBundle(context, "fabric-core-agent-ssh");
+//		Bundles.startBundle(context, "fabric-core-agent-jclouds");
+//		Bundles.startBundle(context, "fabric-core");
+//		Bundles.startBundle(context, "maven-proxy");
 		plugin = this;
 		registerPlugins();
 	}

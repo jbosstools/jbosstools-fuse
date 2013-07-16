@@ -39,7 +39,6 @@ import org.fusesource.fabric.api.FabricService;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.fabric.api.ProfileStatus;
 import org.fusesource.fabric.api.Version;
-import org.fusesource.fabric.zookeeper.IZKClient;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.commons.tree.GraphableNode;
