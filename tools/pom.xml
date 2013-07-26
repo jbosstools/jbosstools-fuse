@@ -13,14 +13,21 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.fusesource.ide</groupId>
-    <artifactId>project</artifactId>
-    <version>7.2.0-SNAPSHOT</version>
+      <!-- I can't build the root project for now so lets separate the dependency on the root project
+
+      <groupId>org.fusesource.ide</groupId>
+      <artifactId>project</artifactId>
+      <version>7.2.0-SNAPSHOT</version>
+-->
+      <groupId>org.fusesource</groupId>
+      <artifactId>fuse-project</artifactId>
+      <version>7.3.0.redhat-023</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
   <artifactId>tools</artifactId>
   <packaging>pom</packaging>
+   <version>7.2.0-SNAPSHOT</version>
   <name>Fuse :: Tools</name>
 
   <modules>
@@ -59,4 +66,41 @@
       </plugins>
     </pluginManagement>
   </build>
+
+    <repositories>
+      <repository>
+          <id>fusesource.61</id>
+          <name>FuseSource Community Early Access 61 Repository</name>
+          <url>http://repo.fusesource.com/nexus/content/repositories/jboss-fuse-6.1.x</url>
+          <snapshots>
+              <enabled>false</enabled>
+          </snapshots>
+          <releases>
+              <enabled>true</enabled>
+          </releases>
+      </repository>
+      <repository>
+        <id>release.fusesource.org</id>
+        <name>FuseSource Release Repository</name>
+        <url>http://repo.fusesource.com/nexus/content/repositories/releases</url>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+      </repository>
+      <repository>
+        <id>snapshot.fusesource.org</id>
+        <name>FuseSource Early Access Repository</name>
+        <url>http://repo.fusesource.com/nexus/content/groups/ea</url>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+      </repository>
+    </repositories>
+
 </project>

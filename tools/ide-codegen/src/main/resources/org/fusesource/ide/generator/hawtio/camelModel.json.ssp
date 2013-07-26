@@ -75,8 +75,8 @@
 	        "expression": {
 	          "type": "java.lang.String",
 	          "description": "The expression",
-	          "tooltip": "Enter the expression in your chosen Camel expression language",
-	          "title": "expression"
+	          "tooltip": "Enter the expression in your chosen language syntax",
+	          "title": "Expression"
 	        },
 	        "language": {
 	          "type": "string",
@@ -91,7 +91,7 @@
 						],
 	          "description": "The camel expression language ot use",
 	          "tooltip": "Pick the expression language you want to use",
-	          "title": "language"
+	          "title": "Language"
 	        }
 	      }
 			},
