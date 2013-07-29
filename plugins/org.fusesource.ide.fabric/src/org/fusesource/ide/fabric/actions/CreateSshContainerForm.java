@@ -46,7 +46,6 @@ public class CreateSshContainerForm extends CreateContainerFormSupport {
 		addMandatoryPropertyNames("host", "path", "username", "password");
 	}
 
-
 	@Override
 	public void setFocus() {
 		hostField.setFocus();

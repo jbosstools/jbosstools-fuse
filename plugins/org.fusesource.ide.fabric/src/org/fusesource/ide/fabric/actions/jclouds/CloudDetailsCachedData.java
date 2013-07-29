@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.core.internal.expressions.util.LRUCache;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.internal.core.util.LRUCache;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.commons.jobs.LoadListJobSupport;
@@ -28,8 +28,6 @@ import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.domain.Location;
-import org.fusesource.fabric.zookeeper.IZKClient;
-
 
 public class CloudDetailsCachedData {
 	protected static LRUCache cache = new LRUCache(5);
@@ -172,10 +170,10 @@ public class CloudDetailsCachedData {
 		this.computeClient = computeClient;
 	}
 
-	public ComputeService createComputeClient(IZKClient izkClient) {
-		details.setZooKeeper(izkClient);
-		return CloudDetails.createComputeService(details);
-	}
+//	public ComputeService createComputeClient(IZKClient izkClient) {
+//		details.setZooKeeper(izkClient);
+//		return CloudDetails.createComputeService(details);
+//	}
 
 
 	public void reloadNodes() {

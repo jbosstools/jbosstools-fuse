@@ -21,7 +21,6 @@ import org.eclipse.swt.graphics.Image;
 import org.fusesource.fabric.api.Version;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
-import org.fusesource.ide.fabric.FabricConnector;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.CreateVersionAction;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
@@ -47,9 +46,7 @@ public class VersionsNode extends FabricNodeSupport implements ImageProvider, Co
 	@Override
 	protected void loadChildren() {
 		map.clear();
-		FabricConnector connector = getFabric().getConnector();
-		if (connector == null) return;
-		Version[] versions = connector.getVersions();
+		Version[] versions = getFabric().getFabricService().getVersions();
 		if (versions != null) {
 			for (Version version : versions) {
 				VersionNode node = new VersionNode(this, version);

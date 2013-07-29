@@ -12,8 +12,6 @@
 package org.fusesource.ide.fabric.views.logs;
 
 import org.fusesource.ide.fabric.navigator.ContainerNode;
-import org.fusesource.insight.log.service.LogQueryCallback;
-
 
 public class ContainerLogBrowser extends LogBrowserSupport {
 	private final ContainerNode node;
@@ -22,10 +20,27 @@ public class ContainerLogBrowser extends LogBrowserSupport {
 		this.node = node;
 	}
 
-
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.fabric.views.logs.LogBrowserSupport#getJolokiaUrl()
+	 */
 	@Override
-	protected <T> T execute(LogQueryCallback<T> callback) {
-		return node.getContainerTemplate().execute(callback);
+	protected String getJolokiaUrl() {
+		return node.getContainer().getJolokiaUrl();
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.fabric.views.logs.LogBrowserSupport#getJolokiaPassword()
+	 */
+	@Override
+	protected String getJolokiaPassword() {
+		return node.getFabric().getDetails().getPassword();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.fabric.views.logs.LogBrowserSupport#getJolokiaUser()
+	 */
+	@Override
+	protected String getJolokiaUser() {
+		return node.getFabric().getDetails().getUserName();
+	}
 }

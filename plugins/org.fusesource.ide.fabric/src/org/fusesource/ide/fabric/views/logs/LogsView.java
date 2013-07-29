@@ -393,11 +393,7 @@ public class LogsView extends TableViewSupport implements LogContext { // implem
 			public Object apply(Object element) {
 				LogEventBean log = Logs.toLogEvent(element);
 				if (log != null) {
-					String[] exception = log.getException();
-					if (exception != null) {
-						return joiner.join(exception);
-					}
-					return exception;
+					return log.getExceptionText();
 				}
 				return null;
 			}

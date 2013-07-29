@@ -25,7 +25,7 @@ import org.jclouds.domain.Location;
 public class CreateJCloudsContainerArgumentsBean extends BeanSupport {
 	private static final long serialVersionUID = 1L;
 
-	private CreateJCloudsContainerOptions delegate = new CreateJCloudsContainerOptions();
+	private CreateJCloudsContainerOptions.Builder delegate = new CreateJCloudsContainerOptions.Builder();
 	private Image image;
 	private Location location;
 	private Hardware hardware;
@@ -37,17 +37,21 @@ public class CreateJCloudsContainerArgumentsBean extends BeanSupport {
 	private Map<String,String> containerOptions;
 
 	public CreateJCloudsContainerOptions delegate() {
+		return delegate.build();
+	}
+	
+	public CreateJCloudsContainerOptions.Builder getBuilder() {
 		return delegate;
 	}
-
+	
 	/**
 	 * Sets the properties from the given cloud details object
 	 */
 	public void setProperties(CloudDetails details) {
 		setProviderName(details.getProviderId());
-		delegate.setIdentity(details.getIdentity());
-		delegate.setOwner(details.getOwnerId());
-		delegate.setCredential(details.getCredential());
+		delegate = delegate.identity(details.getIdentity());
+		delegate = delegate.owner(details.getOwnerId());
+		delegate = delegate.credential(details.getCredential());
 	}
 
 	public String getGroup() {
@@ -90,31 +94,31 @@ public class CreateJCloudsContainerArgumentsBean extends BeanSupport {
 	}
 
 	public void setGroup(String group) {
-		delegate.setGroup(group);
+		delegate = delegate.group(group);
 	}
 
 	public void setHardwareId(String hardwareId) {
-		delegate.setHardwareId(hardwareId);
+		delegate = delegate.hardwareId(hardwareId);
 	}
 
 	public void setImageId(String imageId) {
-		delegate.setImageId(imageId);
+		delegate = delegate.imageId(imageId);
 	}
 
 	public void setInstanceType(JCloudsInstanceType instanceType) {
-		delegate.setInstanceType(instanceType);
+		delegate = delegate.instanceType(instanceType);
 	}
 
 	public void setLocationId(String locationId) {
-		delegate.setLocationId(locationId);
+		delegate = delegate.locationId(locationId);
 	}
 
 	public void setProviderName(String providerName) {
-		delegate.setProviderName(providerName);
+		delegate = delegate.providerName(providerName);
 	}
 
 	public void setUser(String user) {
-		delegate.setUser(user);
+		delegate = delegate.user(user);
 	}
 
 	@Override
@@ -178,7 +182,7 @@ public class CreateJCloudsContainerArgumentsBean extends BeanSupport {
 	 * @param osFamily the osFamily to set
 	 */
 	public void setOsFamily(String osFamily) {
-		this.delegate.setOsFamily(osFamily);
+		delegate = this.delegate.osFamily(osFamily);
 	}
 
 	/**
@@ -192,7 +196,7 @@ public class CreateJCloudsContainerArgumentsBean extends BeanSupport {
 	 * @param osVersion the osVersion to set
 	 */
 	public void setOsVersion(String osVersion) {
-		this.delegate.setOsVersion(osVersion);
+		delegate = this.delegate.osVersion(osVersion);
 	}
 
 	/**

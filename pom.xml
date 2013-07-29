@@ -66,14 +66,14 @@
     <tycho-version>0.18.0</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
     <forge-project-id>ide</forge-project-id>
-    <fabric-version>7.3.0.redhat-005</fabric-version>
-<!--
     <fabric-version>99-master-SNAPSHOT</fabric-version>
+<!--
+    <fabric-version>7.3.0.redhat-005</fabric-version>
 -->
 
     <fabric-jclouds-version>${fabric-version}</fabric-jclouds-version>
-    <fabric-api-version>99-master-SNAPSHOT</fabric-api-version>
-    <fabric-client-version>${fabric-api-version}</fabric-client-version>
+    <fabric-api-version>${fabric-version}</fabric-api-version>
+    <fabric-client-version>${fabric-version}</fabric-client-version>
     <fmc-version>${fabric-version}</fmc-version>
   </properties>
 
@@ -413,6 +413,7 @@
   </build>
 
   <dependencies>
+<!--
     <dependency>
       <groupId>commons-pool</groupId>
       <artifactId>commons-pool</artifactId>
@@ -433,6 +434,7 @@
       <artifactId>javax.annotation</artifactId>
       <version>1.1.0.v201108011116</version>
     </dependency>
+-->    
     <dependency>
       <groupId>org.fusesource.commonman</groupId>
       <artifactId>commons-management</artifactId>
@@ -624,6 +626,11 @@
     </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
+      <artifactId>fabric-client</artifactId>
+      <version>${fabric-client-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-activemq-facade</artifactId>
       <version>${fabric-version}</version>
     </dependency>
@@ -636,6 +643,11 @@
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-servicemix-facade</artifactId>
       <version>${fabric-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-framework</artifactId>
+      <version>${curator.version}</version>
     </dependency>
 
     <!-- servicemix facade -->
@@ -732,17 +744,25 @@
         <artifactId>fabric-linkedin-zookeeper</artifactId>
         <version>${fabric-version}</version>
       </dependency>
-      <dependency>
-        <groupId>org.fusesource.fabric</groupId>
-        <artifactId>fabric-zookeeper-spring</artifactId>
-        <version>${fabric-version}</version>
-      </dependency>
+
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-zookeeper</artifactId>
       <version>${fabric-version}</version>
     </dependency>
 
+      <!--
+      <dependency>
+        <groupId>org.fusesource.fabric</groupId>
+        <artifactId>fabric-zookeeper-spring</artifactId>
+        <version>${fabric-version}</version>
+      </dependency>
+    <dependency>
+      <groupId>org.apache.zookeeper</groupId>
+      <artifactId>zookeeper</artifactId>
+      <version>${zookeeper-version}</version>
+    </dependency>
+    
 
     <dependency>
       <groupId>org.apache.xerces</groupId>
@@ -754,7 +774,7 @@
       <artifactId>xercesImpl</artifactId>
       <version>${xerces.version}</version>
     </dependency>
-
+-->
     <!-- karaf stuff -->
     <dependency>
       <groupId>org.apache.karaf</groupId>
@@ -904,11 +924,6 @@
     </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
-      <artifactId>fabric-client</artifactId>
-      <version>${fabric-client-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.fusesource.fabric</groupId>
       <artifactId>tooling-jclouds-all</artifactId>
       <version>${fabric-jclouds-version}</version>
     </dependency>
@@ -917,19 +932,13 @@
       <artifactId>org.apache.servicemix.bundles.commons-io</artifactId>
       <version>${commons-io-version}</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.fusesource.fabric</groupId>
-      <artifactId>tooling-fabric-all</artifactId>
-      <version>${fabric-version}</version>
-    </dependency>
-
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-util</artifactId>
       <version>${scalate-version}</version>
     </dependency>
 
+<!--
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -946,6 +955,7 @@
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j-version}</version>
     </dependency>
+-->
 
     <dependency>
       <groupId>com.weiglewilczek.scala-lang-osgi</groupId>

@@ -98,26 +98,22 @@ public class CreateJCloudsFabricWizard extends Wizard {
 				final String fabricName = form.getFabricName();
 				try {
 					String agentName = form.getAgentName();
-					CreateJCloudsContainerOptions args = null;//form.getCreateCloudArguments();
-//					args.setName(agentName);
-//					args.setEnsembleServer(true);
-//					args.adminAccess(true);
+					CreateJCloudsContainerOptions.Builder args = form.getCreateCloudArguments();
+					args = args.name(agentName);
+					args = args.ensembleServer(true);
+					args = args.adminAccess(true);
 					//args.setResolver(ZkDefs.PUBLIC_IP);
 					String proxyUri = Fabrics.DEFAULT_MAVEN_PROXY_URI;
 					if (form instanceof CloudFabricDetailsForm) {
 						CloudFabricDetailsForm fabricForm = form;
 						proxyUri = fabricForm.getProxyUri();
 					}
-//					if (!Strings.isBlank(proxyUri)) {
-//						args.setProxyUri(new URI(proxyUri));
-//					}
-//					System.out.println("============ proxy URI: " + args.getProxyUri());
-					
-					args = CreateJCloudsContainerOptions.builder().adminAccess(true).ensembleServer(true).name(agentName).proxyUri(proxyUri).creationStateListener(new CreationStateListener() {
-						/*
-						 * (non-Javadoc)
-						 * @see org.fusesource.fabric.api.CreationStateListener#onStateChange(java.lang.String)
-						 */
+					if (!Strings.isBlank(proxyUri)) {
+						args = args.proxyUri(new URI(proxyUri));
+					}
+					System.out.println("============ proxy URI: " + args.getProxyUri());
+					args = args.creationStateListener(new CreationStateListener() {
+
 						@Override
 						public void onStateChange(String message) {
 							monitor.subTask(message);
@@ -134,7 +130,6 @@ public class CreateJCloudsFabricWizard extends Wizard {
 
 					System.out.println("Create cloud fabric: " + fabricName + " container: " + agentName);
 
-
 					JcloudsContainerProvider provider = new JcloudsContainerProvider();
 					FirewallManagerFactoryImpl firewallManagerFactory = new FirewallManagerFactoryImpl();
 					String providerName = args.getProviderName();
@@ -144,7 +139,7 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					}
 					provider.setFirewallManagerFactory(firewallManagerFactory);
 
-					Set<CreateJCloudsContainerMetadata> metadatas = provider.create(args);
+					Set<CreateJCloudsContainerMetadata> metadatas = provider.create(args.build());
 
 					final StringBuilder urisBuilder = new StringBuilder();
 

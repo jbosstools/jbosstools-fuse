@@ -36,9 +36,6 @@ import org.fusesource.fabric.api.CreateContainerOptionsBuilder;
 import org.fusesource.fabric.api.FabricService;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.fabric.api.Version;
-import org.fusesource.fabric.service.ContainerTemplate;
-import org.fusesource.fabric.service.Containers;
-import org.fusesource.fabric.service.JmxTemplateSupport;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.tree.GraphableNode;
 import org.fusesource.ide.commons.tree.GraphableNodeConnected;
@@ -67,14 +64,11 @@ import org.fusesource.ide.server.karaf.view.SshView;
 import scala.actors.threadpool.Arrays;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 
 public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI, ImageProvider, GraphableNode, GraphableNodeConnected, ContextMenuProvider, ITerminalConnectionListener, HasLogBrowser {
 
 	private final Container container;
-	private JmxTemplateSupport jmxTemplate;
 	private ILogBrowser logBrowser;
-	private ContainerTemplate containerTemplate;
 	private FabricConnectionWrapper connectionWrapper;
 
 	public static ContainerNode toContainerNode(Object object) {
@@ -208,9 +202,10 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 	@Override
 	protected void checkLoaded() {
-		if (hasJmxConnector()) {
-			super.checkLoaded();
-		}
+		System.out.println("TODO: checkLoaded()");
+//		if (hasJmxConnector()) {
+//			super.checkLoaded();
+//		}
 	}
 
 	@Override
@@ -221,45 +216,15 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 	@Override
 	protected void loadChildren() {
-		if (hasJmxConnector()) {
-			connectionWrapper = new FabricConnectionWrapper(this);
-			addChild(connectionWrapper);
-		}
-	}
-
-	protected boolean hasJmxConnector() {
-		Container a = getContainer();
-		String jmxUrl = a.getJmxUrl();
-		String provisionResult = a.getProvisionResult();
-		String provisionException = a.getProvisionException();
-		System.out.println("=============== PROVISION: " + provisionResult + " exception: " + provisionException + " alive: " + a.isAlive() + " provisoned: " + a.isProvisioningComplete());
-		boolean provisioned = a.isAlive() && a.isProvisioningComplete();
-		return !Strings.isNullOrEmpty(jmxUrl) && (provisioned || a.isRoot());
+		System.out.println("TODO: plug the JMX via Jolokia under the container node...");
+//		if (hasJmxConnector()) {
+//			connectionWrapper = new FabricConnectionWrapper(this);
+//			addChild(connectionWrapper);
+//		}
 	}
 
 	public Container getContainer() {
 		return container;
-	}
-
-	public ContainerTemplate getContainerTemplate() {
-		if (containerTemplate == null) {
-			Fabric fabric = getFabric();
-			containerTemplate = Containers.newContainerTemplate(container, fabric.getUserName(), fabric.getPassword());
-			containerTemplate.setLogin(fabric.getUserName());
-			containerTemplate.setPassword(fabric.getPassword());
-		}
-		return containerTemplate;
-	}
-
-	public void setContainerTemplate(ContainerTemplate agentTemplate) {
-		this.containerTemplate = agentTemplate;
-	}
-
-	public JmxTemplateSupport getJmxTemplate() {
-		if (jmxTemplate == null) {
-			jmxTemplate = getContainerTemplate().getJmxTemplate();
-		}
-		return jmxTemplate;
 	}
 
 	/**
@@ -459,7 +424,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 					.zookeeperPassword(getFabric().getDetails().getZkPassword())
 					.jmxUser(getFabric().getDetails().getUserName())
 					.jmxPassword(getFabric().getDetails().getPassword())
-					.proxyUri(fabricService.getMavenRepoURI());
+					.proxyUri(fabricService.getMavenRepoURI()).build();
 
 			CreateContainerMetadata[] newContainers = fabricService.createContainers(options);
 
@@ -520,7 +485,4 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 	public FabricService getFabricService() {
 		return getFabric().getFabricService();
 	}
-
-
-
 }

@@ -29,6 +29,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.fusesource.fabric.api.FabricException;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.ide.commons.properties.PropertySources;
 import org.fusesource.ide.commons.tree.GraphableNode;
@@ -124,10 +125,6 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 
 	@Override
 	protected void loadChildren() {
-		Map<String, Map<String, String>> configurations = getProfile().getConfigurations();
-		System.out.println("Configuration of " + this + " = " + configurations);
-
-
 		Set<Profile> childProfiles = versionNode.getChildProfiles(getProfileId());
 		if (childProfiles != null) {
 			for (Profile profile : childProfiles) {
@@ -215,18 +212,18 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 							// TODO handle feature file
 							// deduce if there's a feature file created for this project and use that instead!
 						}
-						Map<String, Map<String, String>> config = profile.getConfigurations();
-						if (config == null) {
-							config = new HashMap<String, Map<String, String>>();
+
+						try {
+							fabric.getFabricService().setConfigurationValue(
+									getVersionNode().getVersionId(), 
+									getProfileId(), 
+									AGENT_PID, 
+									"org.fusesource.fabric.buildTime", "" + uri + " at " + new Date());
+						} catch (FabricException ex) {
+							ex.printStackTrace();
+						} finally {
+							refresh();
 						}
-						Map<String,String> agentConfig = config.get(AGENT_PID);
-						if (agentConfig == null) {
-							agentConfig = new HashMap<String,String>();
-							config.put(AGENT_PID, agentConfig);
-						}
-						agentConfig.put("org.fusesource.fabric.buildTime", "" + uri + " at " + new Date());
-						profile.setConfigurations(config);
-						refresh();
 					}
 				}
 

@@ -20,17 +20,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
-import java.util.ServiceLoader;
 import java.util.Set;
 
-import com.google.common.reflect.TypeToken;
-import org.fusesource.fabric.service.jclouds.JcloudsContainerProvider;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.Strings;
 import org.jclouds.Context;
 import org.jclouds.View;
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.apis.ApiPredicates;
 import org.jclouds.apis.Apis;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.domain.ComputeMetadata;
@@ -41,15 +37,12 @@ import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.ResourceMetadata;
 import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.providers.ProviderPredicates;
+import org.jclouds.providers.Providers;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
 import com.google.inject.Module;
-
-import org.jclouds.providers.Providers;
-import org.jclouds.providers.ProviderMetadata.Builder;
 
 public class JClouds {
 
