@@ -5,8 +5,7 @@ Bundle-SymbolicName: org.fusesource.ide.fabric.servicemix;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.fusesource.fabric-jolokia-facade;bundle-version="1.0.0",
- org.fusesource.fabric.fabric-api,
+Require-Bundle: org.fusesource.fabric.fabric-api,
  org.fusesource.ide.fabric,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,

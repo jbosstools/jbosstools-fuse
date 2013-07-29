@@ -11,7 +11,6 @@
 
 package org.fusesource.ide.fabric.actions.jclouds;
 
-import java.lang.String;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,7 +18,6 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.databinding.observable.list.WritableList;
-import org.fusesource.fabric.service.jclouds.modules.ZookeeperCredentialStore;
 import org.fusesource.ide.commons.ui.config.ConfigurationDetails;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.fabric.FabricPlugin;
@@ -27,15 +25,14 @@ import org.jclouds.ContextBuilder;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceContext;
-import org.jclouds.logging.log4j.config.Log4JLoggingModule;
+import org.jclouds.management.config.ManagementLifecycle;
+import org.jclouds.management.internal.BaseManagementContext;
 import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.sshj.config.SshjSshClientModule;
-import org.fusesource.fabric.zookeeper.IZKClient;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 
 public class CloudDetails extends ConfigurationDetails {
     private static final String PROPERTY_SETTINGS_PREFIX = "settings_";
@@ -62,13 +59,11 @@ public class CloudDetails extends ConfigurationDetails {
     private String apiId;
     private String endpoint;
     private CloudDetailsKey key;
-    private IZKClient izkClient;
     private HashMap<String, String> settings = new HashMap<String, String>();
 
     public static void reloadCloudDetailList() {
         cloudDetailList.clear();
         load(cloudDetailList);
-
     }
 
     public static WritableList getCloudDetailList() {
@@ -361,53 +356,37 @@ public class CloudDetails extends ConfigurationDetails {
                 props.put("jclouds.ec2.ami-query=owner-id", owner + ";state=available;image-type=machine");
             }
 
-            ImmutableSet<AbstractModule> modules;
-            IZKClient izkClient = details.getIzkClient();
-            if (izkClient != null) {
-                ZookeeperCredentialStore credentialStore = new ZookeeperCredentialStore();
-                credentialStore.setZooKeeper(izkClient);
-                credentialStore.init();
-                modules = ImmutableSet.of(new Log4JLoggingModule(), new SshjSshClientModule(), credentialStore);
-            } else {
-                modules = ImmutableSet.of(new Log4JLoggingModule(), new SshjSshClientModule());
-            }
-
+//            ImmutableSet<AbstractModule> modules;
+//            IZKClient izkClient = details.getIzkClient();
+//            if (izkClient != null) {
+//                ZookeeperCredentialStore credentialStore = new ZookeeperCredentialStore();
+//                credentialStore.setZooKeeper(izkClient);
+//                credentialStore.init();
+//                modules = ImmutableSet.of(new Log4JLoggingModule(), new SshjSshClientModule(), credentialStore);
+//            } else {
+//                modules = ImmutableSet.of(new Log4JLoggingModule(), new SshjSshClientModule());
+//            }
 
             ContextBuilder builder = null;
+
             if (selectedProvider != null && selectedProvider != JClouds.EMPTY_PROVIDER) {
                 builder = ContextBuilder.newBuilder(selectedProvider);
             } else if (selectedApi != null && selectedApi != JClouds.EMPTY_API) {
                 builder = ContextBuilder.newBuilder(selectedApi);
-            } else {
-            	return null;
             }
 
             if (endpoint != null && !endpoint.isEmpty()) {
                 builder = builder.endpoint(endpoint);
             }
 
-            builder = builder.name(details.getName()).modules(modules);
-            builder = builder.name(details.getName()).credentials(identity, credential).overrides(props);
-
+            builder = builder.credentials(identity, credential);
+            builder = builder.overrides(props);
+            builder = builder.modules(ImmutableSet.<Module>of(new ManagementLifecycle(BaseManagementContext.INSTANCE)));
+            
             ComputeServiceContext context = builder.build(ComputeServiceContext.class);
+            
             return context.getComputeService();
         }
         return null;
     }
-
-
-    protected IZKClient getIzkClient() {
-        return izkClient;
-    }
-
-    protected void setIzkClient(IZKClient izkClient) {
-        this.izkClient = izkClient;
-    }
-
-    public void setZooKeeper(IZKClient izkClient) {
-        this.izkClient = izkClient;
-
-    }
-
-
 }

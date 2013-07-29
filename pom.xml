@@ -626,6 +626,11 @@
     </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
+      <artifactId>fabric-client</artifactId>
+      <version>${fabric-client-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-activemq-facade</artifactId>
       <version>${fabric-version}</version>
     </dependency>
@@ -745,7 +750,6 @@
       <artifactId>fabric-zookeeper</artifactId>
       <version>${fabric-version}</version>
     </dependency>
-
 
       <!--
       <dependency>
@@ -920,11 +924,6 @@
     </dependency>
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
-      <artifactId>fabric-client</artifactId>
-      <version>${fabric-client-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.fusesource.fabric</groupId>
       <artifactId>tooling-jclouds-all</artifactId>
       <version>${fabric-jclouds-version}</version>
     </dependency>
@@ -933,15 +932,6 @@
       <artifactId>org.apache.servicemix.bundles.commons-io</artifactId>
       <version>${commons-io-version}</version>
     </dependency>
-
-<!--
-    <dependency>
-      <groupId>org.fusesource.fabric</groupId>
-      <artifactId>tooling-fabric-all</artifactId>
-      <version>${fabric-version}</version>
-    </dependency>
--->
-
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-util</artifactId>

@@ -21,7 +21,6 @@ import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
 import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.fabric.FabricConnector;
 import org.fusesource.ide.fabric.FabricPlugin;
 
 
@@ -42,9 +41,7 @@ public class ContainersNode extends FabricNodeSupport implements ImageProvider {
 
 	@Override
 	protected void loadChildren() {
-		FabricConnector connector = getFabric().getConnector();
-		if (connector == null) return;
-		Container[] agents = connector.getAgents();
+		Container[] agents = getFabric().getConnector().getAgents();
 		if (agents != null) {
 			IdBasedFabricNode[] answer = new IdBasedFabricNode[agents.length];
 			int idx = 0;

@@ -21,7 +21,7 @@ import org.fusesource.ide.commons.util.BeanSupport;
 
 public class CreateSshContainerArgumentsBean extends BeanSupport {
 
-	private CreateSshContainerOptions delegate = new CreateSshContainerOptions();
+	private CreateSshContainerOptions.Builder delegate = CreateSshContainerOptions.builder();
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
 	@Override
@@ -40,7 +40,7 @@ public class CreateSshContainerArgumentsBean extends BeanSupport {
 	}
 
 	public CreateSshContainerOptions delegate() {
-		return delegate;
+		return delegate.build();
 	}
 
 	public String getHost() {
@@ -115,13 +115,11 @@ public class CreateSshContainerArgumentsBean extends BeanSupport {
 	}
 	
 	public void setName(String name) {
-		delegate.setName(name);
+		delegate = delegate.name(name);
 	}
 
 	@Override
 	public String toString() {
 		return delegate.toString();
 	}
-
-
 }

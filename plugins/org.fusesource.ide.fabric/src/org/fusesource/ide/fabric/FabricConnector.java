@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.fusesource.fabric.api.Container;
 import org.fusesource.fabric.api.FabricService;
+import org.fusesource.fabric.api.FabricStatus;
 import org.fusesource.fabric.api.Version;
 import org.fusesource.fabric.jolokia.facade.JolokiaFabricConnector;
 import org.fusesource.ide.fabric.actions.FabricDetails;
@@ -48,7 +49,7 @@ public class FabricConnector {
 		if (fabricService == null) {
 			this.fabricService = this.connector.getFabricServiceFacade();
 		}
-
+		
 		// Trigger a FabricNotConnectedException if the connection failed.
 		checkConnected();
 	}
@@ -100,7 +101,7 @@ public class FabricConnector {
 		checkConnected();
 		return fabricService;
 	}
-
+	
 	public void checkConnected() {
 		if (initialised.compareAndSet(false, true)) {
 			try {
@@ -115,8 +116,10 @@ public class FabricConnector {
 			}
 		} else {
 			try {
-				this.fabricService.getFabricStatus();
+				FabricStatus status = this.fabricService.getFabricStatus();
+				connected.set(status != null);
 			} catch (Exception ex) {
+				connected.set(false);
 				throw new FabricNotConnectedException(this, ex);
 			}
 		}
@@ -138,7 +141,7 @@ public class FabricConnector {
 	}
 	
 	public void dispose() {
-		this.connector.disconnect();
+		if (this.connector != null) this.connector.disconnect();
 		this.connector = null;
 		this.fabricService = null;
 	}

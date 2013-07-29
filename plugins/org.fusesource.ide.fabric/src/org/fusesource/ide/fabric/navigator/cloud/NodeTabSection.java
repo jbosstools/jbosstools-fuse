@@ -49,7 +49,6 @@ import org.jclouds.compute.domain.ComputeMetadata;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.NodeMetadata.Status;
-import org.jclouds.compute.domain.NodeState;
 import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LoginCredentials;
@@ -131,7 +130,7 @@ public class NodeTabSection extends TableViewSupport {
             public Object apply(Object element) {
                 NodeMetadata value = JClouds.asNodeMetadata(element);
                 if (value != null) {
-                    return value.getState();
+                    return value.getStatus();
                 }
                 return null;
             }
@@ -492,7 +491,7 @@ public class NodeTabSection extends TableViewSupport {
         for (Object object : list) {
             NodeMetadata value = JClouds.asNodeMetadata(object);
             if (value != null) {
-                NodeState state = value.getState();
+            	NodeMetadata.Status state = value.getStatus();
                 if (state != null) {
                     answer.add(state.toString());
                 }

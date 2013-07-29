@@ -20,6 +20,7 @@ package org.fusesource.ide.fabric.actions.jclouds;
 
 import java.util.Map;
 
+import org.apache.curator.framework.CuratorFramework;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.fusesource.fabric.api.Container;
@@ -33,7 +34,6 @@ import org.fusesource.ide.fabric.navigator.ContainerNode;
 import org.fusesource.ide.fabric.navigator.Fabric;
 import org.fusesource.ide.fabric.navigator.ProfileNode;
 import org.fusesource.ide.fabric.navigator.VersionNode;
-import org.fusesource.fabric.zookeeper.IZKClient;
 
 
 /**
@@ -110,9 +110,9 @@ public class CreateJCloudsContainerWizard extends Wizard {
 		CloudContainerDetailsForm form = getPage2().getForm();
 		form.saveSettings();
 		String agentName = form.getAgentName();
-		CreateJCloudsContainerOptions args = form.getCreateCloudArguments();
-		args.setName(agentName);
-		args.setResolver(ZkDefs.PUBLIC_IP);
+		CreateJCloudsContainerOptions.Builder args = form.getCreateCloudArguments();
+		args.name(agentName);
+		args.resolver(ZkDefs.PUBLIC_IP);
 
 		Fabric fabric = getFabric();
 
@@ -127,9 +127,11 @@ public class CreateJCloudsContainerWizard extends Wizard {
 					String zkUrl = config.get("zookeeper.url");
 					if (zkUrl != null) {
 						try {
-							IZKClient zooKeeper = fabric.getZooKeeper();
-							zkUrl = ZooKeeperUtils.getSubstitutedData(zooKeeper, zkUrl);
-							args.setZookeeperUrl(zkUrl);
+							// TODO: HOW TO GET THE CURATORFRAMEWORK OBJECT?
+							System.err.println("TODO: HOW TO GET THE CURATOR FRAMEWORK");
+							CuratorFramework curator = null;
+							zkUrl = ZooKeeperUtils.getSubstitutedData(curator, zkUrl);
+							args.zookeeperUrl(zkUrl);
 						} catch (Exception e) {
 							FabricPlugin.getLogger().warning("Failed to get ZooKeeperURL: " + e, e);
 						}
@@ -144,7 +146,7 @@ public class CreateJCloudsContainerWizard extends Wizard {
 			agent = selectedAgent.getContainer();
 		}
 		Profile[] profiles = form.getSelectedProfileArray();
-		versionNode.getFabric().createContainer(agent, profiles, args);
+		versionNode.getFabric().createContainer(agent, profiles, args.build());
 
 		return true;
 	}

@@ -43,16 +43,16 @@
       <unit id="org.apache.felix.eventadmin" version="1.3.0.redhat-610-SNAPSHOT"/>
       <unit id="org.apache.servicemix.bundles.aopalliance" version="1.0.0.3"/>
 
-      <unit id="org.jboss.tools.locus.jcip.annotations" version="1.0.0.CR2-v20130719-1328-B29"/>
-      <unit id="org.jboss.tools.locus.mockito" version="1.9.5.Final_patched_TEIIDDES-1681-v20130719-1328-B29"/>
-      <unit id="org.jboss.tools.locus.sf.saxon" version="9.2.1.5j-Final-v20130719-1328-B29"/>
+      <unit id="org.jboss.tools.locus.jcip.annotations" version="1.0.0.Final-v20130729-1137-B34"/>
+      <unit id="org.jboss.tools.locus.mockito" version="1.9.5.Final_patched_TEIIDDES-1681-v20130729-1137-B34"/>
+      <unit id="org.jboss.tools.locus.sf.saxon" version="9.2.1.5j-Final-v20130729-1137-B34"/>
 
       <unit id="org.springframework.aspects" version="3.1.4.RELEASE"/>
       <unit id="org.springframework.osgi.core" version="1.2.1"/>
       <unit id="org.springframework.osgi.extender" version="1.2.1"/>
       <unit id="org.springframework.osgi.extensions.annotations" version="1.2.1"/>
       <unit id="org.springframework.osgi.io" version="1.2.1"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/integration/locus/"/>
+      <repository location="http://download.jboss.org/tools/updates/stable/locus/1.0.0.Final"/>
     </location>
 
     <!-- Eclipse Graphiti -->

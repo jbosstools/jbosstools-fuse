@@ -49,7 +49,6 @@ import org.fusesource.ide.fabric.navigator.Fabric;
 import org.fusesource.ide.fabric.navigator.ProfileNode;
 import org.fusesource.ide.fabric.navigator.VersionNode;
 import org.jclouds.compute.domain.Image;
-import org.fusesource.fabric.zookeeper.IZKClient;
 
 
 /**
@@ -137,15 +136,8 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 		return true;
 	}
 
-	public CreateJCloudsContainerOptions getCreateCloudArguments() {
-		CreateJCloudsContainerOptions answer = args.delegate();
-		// lets pass in the ComputeService
-		IZKClient zooKeeper = null;
-		Fabric fab = getFabric();
-		if (fab != null) {
-			zooKeeper = fab.getZooKeeper();
-		}
-		answer.setComputeService(cloudCacheData.createComputeClient(zooKeeper));
+	public CreateJCloudsContainerOptions.Builder getCreateCloudArguments() {
+		CreateJCloudsContainerOptions.Builder answer = args.getBuilder();
 		return answer;
 	}
 

@@ -79,6 +79,14 @@ public class LogEventBean extends BeanSupport implements Comparable<LogEventBean
 		return this.event.compareTo(that.event);
 	}
 
+	public String getExceptionShortText() {
+		String[] exception = getException();
+		if (exception == null) {
+			return "";
+		}
+		return exception[0];
+	}
+	
 	public String getExceptionText() {
 		String[] exception = getException();
 		if (exception == null) {

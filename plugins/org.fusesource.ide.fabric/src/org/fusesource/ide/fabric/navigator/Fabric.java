@@ -384,20 +384,20 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		if (!isConnected()) return;
 		try {
 			if (agent != null) {
-				args.setParent(agent.getId());
+//				args.setParent(agent.getId());
 			}
 			Jobs.schedule(new Job("Create container") {
 
 				@Override
 				protected IStatus run(final IProgressMonitor monitor) {
 					try {
-						args.setCreationStateListener(new CreationStateListener() {
-
-							@Override
-							public void onStateChange(String message) {
-								monitor.subTask(message);
-							}
-						});
+//						args.setCreationStateListener(new CreationStateListener() {
+//
+//							@Override
+//							public void onStateChange(String message) {
+//								monitor.subTask(message);
+//							}
+//						});
 						FabricService fabricService = getFabricService();
 						final CreateContainerMetadata[] newAgents;
 						if (agent != null) {
@@ -575,14 +575,6 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 			}
 		});
 	}
-
-	public IZKClient getZooKeeper() {
-		if (connector != null) {
-			return connector.getZooKeeper();
-		}
-		return null;
-	}
-
 
 	public Collection<ProfileStatus> getProfileStatuses() {
 		FabricService service = getFabricService();

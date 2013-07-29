@@ -16,15 +16,18 @@ import java.util.List;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.fusesource.fabric.jolokia.facade.JolokiaFabricConnector;
+import org.fusesource.fabric.jolokia.facade.utils.Helpers;
 import org.fusesource.insight.log.LogEvent;
 import org.fusesource.insight.log.LogFilter;
 import org.fusesource.insight.log.LogResults;
-import org.fusesource.insight.log.service.LogQueryCallback;
-import org.fusesource.insight.log.service.LogQueryMBean;
 
 import com.google.common.collect.Lists;
 
 public abstract class LogBrowserSupport implements ILogBrowser {
+	private static final String INSIGHT_MBEAN_URL 	= "org.fusesource.insight:type=LogQuery";
+	private static final String LOG_QUERY_OPERATION = "jsonQueryLogResults(java.lang.String)";
+		
 	private ObjectMapper mapper = new ObjectMapper();
 
 	public LogBrowserSupport() {
@@ -35,48 +38,52 @@ public abstract class LogBrowserSupport implements ILogBrowser {
 		return mapper;
 	}
 
-
 	@Override
 	public void queryLogs(final LogContext context, boolean filterChanged) throws IOException {
 		final LogFilter logFilter = context.getLogFilter();
 		final String queryJson = JsonHelper.toJSON(mapper, logFilter);
-		//System.out.println("Query JSON: " + queryJson);
+//		System.out.println("Query JSON: " + queryJson);
 
-		LogQueryCallback<List<LogEventBean>> callback = new LogQueryCallback<List<LogEventBean>>() {
-
-			@Override
-			public List<LogEventBean> doWithLogQuery(LogQueryMBean mbean) throws Exception {
-				String json = mbean.filterLogEvents(queryJson);
-				//System.out.println("===== JSON: " + json);
-				List<LogEventBean> answer = Lists.newArrayList();
-				if (json != null) {
-					json = json.trim();
-					if (!json.equals("[]") && json.length() > 2) {
-						LogResults results = mapper.reader(LogResults.class).readValue(json);
-						if (results != null) {
-							Long to = results.getToTimestamp();
-							if (to != null) {
-								logFilter.setAfterTimestamp(to);
+		String json = filterLogEvents(queryJson);
+		System.out.println("===== JSON: " + json);
+		
+		List<LogEventBean> answer = Lists.newArrayList();
+		if (json != null) {
+			json = json.trim();
+			if (!json.equals("[]") && json.length() > 2) {
+				LogResults results = mapper.reader(LogResults.class).readValue(json);
+				if (results != null) {
+					Long to = results.getToTimestamp();
+					if (to != null) {
+						logFilter.setAfterTimestamp(to);
+					}
+					List<LogEvent> events = results.getEvents();
+					if (events != null) {
+						for (LogEvent event : events) {
+							if (event.getHost() == null) {
+								event.setHost(results.getHost());
 							}
-							List<LogEvent> events = results.getEvents();
-							if (events != null) {
-								for (LogEvent event : events) {
-									if (event.getHost() == null) {
-										event.setHost(results.getHost());
-									}
-									answer.add(LogEventBean.toLogEventBean(event));
-								}
-							}
+							answer.add(LogEventBean.toLogEventBean(event));
 						}
 					}
 				}
-				context.addLogResults(answer);
-				return answer;
 			}
-		};
-		execute(callback);
+		}
+		context.addLogResults(answer);
 	}
 
-	protected abstract <T> T execute(LogQueryCallback<T> callback);
-
+	protected abstract String getJolokiaUser();
+	
+	protected abstract String getJolokiaPassword();
+	
+	protected abstract String getJolokiaUrl();
+	
+	private String filterLogEvents(String queryJSON) {
+		String result = null;
+		
+		JolokiaFabricConnector connector = JolokiaFabricConnector.getFabricConnector(getJolokiaUser(), getJolokiaPassword(), getJolokiaUrl());
+		result = Helpers.execCustomToJSON(connector.getJolokiaClient(),INSIGHT_MBEAN_URL, LOG_QUERY_OPERATION, queryJSON);
+		
+		return result;
+	}
 }
