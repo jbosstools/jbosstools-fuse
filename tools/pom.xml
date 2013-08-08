@@ -13,21 +13,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-      <!-- I can't build the root project for now so lets separate the dependency on the root project
-
       <groupId>org.fusesource.ide</groupId>
       <artifactId>project</artifactId>
       <version>7.2.0-SNAPSHOT</version>
--->
-      <groupId>org.fusesource</groupId>
-      <artifactId>fuse-project</artifactId>
-      <version>7.3.0.redhat-023</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
   <artifactId>tools</artifactId>
   <packaging>pom</packaging>
-   <version>7.2.0-SNAPSHOT</version>
+  <version>7.2.0-SNAPSHOT</version>
   <name>Fuse :: Tools</name>
 
   <modules>
