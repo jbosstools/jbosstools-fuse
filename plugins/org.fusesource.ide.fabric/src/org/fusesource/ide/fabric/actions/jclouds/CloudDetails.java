@@ -25,9 +25,11 @@ import org.jclouds.ContextBuilder;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceContext;
+import org.jclouds.logging.log4j.config.Log4JLoggingModule;
 import org.jclouds.management.config.ManagementLifecycle;
 import org.jclouds.management.internal.BaseManagementContext;
 import org.jclouds.providers.ProviderMetadata;
+import org.jclouds.sshj.config.SshjSshClientModule;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -382,6 +384,7 @@ public class CloudDetails extends ConfigurationDetails {
             builder = builder.credentials(identity, credential);
             builder = builder.overrides(props);
             builder = builder.modules(ImmutableSet.<Module>of(new ManagementLifecycle(BaseManagementContext.INSTANCE)));
+            builder = builder.name(providerId).modules(ImmutableSet.<Module>of(new Log4JLoggingModule(), new SshjSshClientModule()));
             
             ComputeServiceContext context = builder.build(ComputeServiceContext.class);
             

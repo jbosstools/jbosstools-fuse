@@ -24,7 +24,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.fusesource.fabric.api.Container;
-import org.fusesource.fabric.api.CreateJCloudsContainerOptions;
+import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerOptions;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.fabric.zookeeper.ZkDefs;
 import org.fusesource.fabric.zookeeper.utils.ZooKeeperUtils;

@@ -18,6 +18,7 @@
 package org.fusesource.ide.fabric.actions.jclouds;
 
 
+import java.net.URI;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,8 +27,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.fusesource.fabric.api.CreateJCloudsContainerMetadata;
-import org.fusesource.fabric.api.CreateJCloudsContainerOptions;
+import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerMetadata;
+import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerOptions;
 import org.fusesource.fabric.api.CreationStateListener;
 import org.fusesource.fabric.service.jclouds.JcloudsContainerProvider;
 import org.fusesource.fabric.service.jclouds.firewall.internal.Ec2FirewallSupport;
@@ -37,6 +38,10 @@ import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.Messages;
 import org.fusesource.ide.fabric.navigator.Fabrics;
+import org.jclouds.compute.ComputeService;
+import org.osgi.framework.BundleContext;
+
+import com.google.common.base.Strings;
 
 
 /**
@@ -108,37 +113,34 @@ public class CreateJCloudsFabricWizard extends Wizard {
 						CloudFabricDetailsForm fabricForm = form;
 						proxyUri = fabricForm.getProxyUri();
 					}
-					if (!Strings.isBlank(proxyUri)) {
+					if (!Strings.isNullOrEmpty(proxyUri)) {
 						args = args.proxyUri(new URI(proxyUri));
 					}
 					System.out.println("============ proxy URI: " + args.getProxyUri());
 					args = args.creationStateListener(new CreationStateListener() {
-
 						@Override
 						public void onStateChange(String message) {
 							monitor.subTask(message);
 						}
-					}).build();
-					
-//					args.setCreationStateListener(new CreationStateListener() {
-//
-//						@Override
-//						public void onStateChange(String message) {
-//							monitor.subTask(message);
-//						}
-//					});
+					});
 
 					System.out.println("Create cloud fabric: " + fabricName + " container: " + agentName);
 
+					BundleContext context = FabricPlugin.getDefault().getBundle().getBundleContext();
+					
 					JcloudsContainerProvider provider = new JcloudsContainerProvider();
+					provider.setBundleContext(context);
 					FirewallManagerFactoryImpl firewallManagerFactory = new FirewallManagerFactoryImpl();
 					String providerName = args.getProviderName();
+					args = args.contextName(providerName);
+					ComputeService computeClient = CloudDetails.createComputeService(getSelectedCloud());
+					args = args.computeService(computeClient);
 					System.out.println("Creating Jclouds provider type: " + providerName);
 					if ("aws-ec2".equals(providerName)) {
 						firewallManagerFactory.bind(new Ec2FirewallSupport());
 					}
 					provider.setFirewallManagerFactory(firewallManagerFactory);
-
+					
 					Set<CreateJCloudsContainerMetadata> metadatas = provider.create(args.build());
 
 					final StringBuilder urisBuilder = new StringBuilder();

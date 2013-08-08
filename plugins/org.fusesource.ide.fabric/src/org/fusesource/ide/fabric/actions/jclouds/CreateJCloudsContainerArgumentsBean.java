@@ -13,7 +13,7 @@ package org.fusesource.ide.fabric.actions.jclouds;
 
 import java.util.Map;
 
-import org.fusesource.fabric.api.CreateJCloudsContainerOptions;
+import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerOptions;
 import org.fusesource.fabric.api.JCloudsInstanceType;
 import org.fusesource.ide.commons.util.BeanSupport;
 import org.jclouds.compute.domain.Hardware;

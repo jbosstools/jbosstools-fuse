@@ -30,9 +30,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.fusesource.fabric.api.Container;
+import org.fusesource.fabric.api.CreateChildContainerOptions;
 import org.fusesource.fabric.api.CreateContainerMetadata;
 import org.fusesource.fabric.api.CreateContainerOptions;
-import org.fusesource.fabric.api.CreateContainerOptionsBuilder;
 import org.fusesource.fabric.api.FabricService;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.fabric.api.Version;
@@ -417,7 +417,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		try {
 			System.out.println("About to create child container of " + this + " with name: " + name + " and profiles: " + Arrays.asList(profiles));
 			FabricService fabricService = getFabricService();
-			CreateContainerOptions options = CreateContainerOptionsBuilder.child()
+			CreateContainerOptions options = CreateChildContainerOptions.builder()
 					.name(name)
 					.parent(getId())
 					.zookeeperUrl(fabricService.getZookeeperUrl())
