@@ -141,7 +141,9 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					}
 					provider.setFirewallManagerFactory(firewallManagerFactory);
 					
-					Set<CreateJCloudsContainerMetadata> metadatas = provider.create(args.build());
+					CreateJCloudsContainerOptions opts = args.build();
+					System.err.println("Compute Service: " + opts.getComputeService());
+					Set<CreateJCloudsContainerMetadata> metadatas = provider.create(opts);
 
 					final StringBuilder urisBuilder = new StringBuilder();
 

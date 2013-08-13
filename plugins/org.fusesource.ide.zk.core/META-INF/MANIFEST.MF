@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.fusesource.ide.zk.core;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.apache.hadoop.zookeeper,
+Require-Bundle: org.fusesource.fabric.tooling-fabric-all,
+ org.fusesource.fabric.tooling-jclouds-all,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.jmx.ui,

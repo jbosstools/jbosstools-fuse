@@ -75,20 +75,6 @@ Raleigh NC 27606 USA.
          unpack="false"/>
 
    <plugin
-         id="org.apache.servicemix.nmr.api"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.aries.util"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.fusesource.ide.zk.core"
          download-size="0"
          install-size="0"
@@ -122,70 +108,49 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-client"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-api"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-zookeeper"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.fabric-linkedin-zookeeper"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.fabric.tooling-jclouds-all"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
+         
    <plugin
          id="org.fusesource.insight.insight-log"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+         
    <plugin
-         id="org.apache.hadoop.zookeeper"
+         id="org.apache.aries.util"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+         
    <plugin
-         id="org.apache.servicemix.nmr.api"
+         id="org.apache.aries.blueprint.annotation.api"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+   
    <plugin
-         id="org.apache.servicemix.nmr.management"
+         id="org.apache.aries.blueprint.annotation.impl"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+         
+   <plugin
+         id="org.fusesource.fabric.tooling-fabric-all"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   <plugin
+         id="org.fusesource.fabric.tooling-jclouds-all"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
    <plugin
          id="jackson-core-asl"
          download-size="0"
@@ -206,6 +171,146 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+         
+   <plugin
+         id="bcprov"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="osgi.enterprise"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+<!--
+   
+   <plugin
+         id="org.fusesource.fabric.fabric-client"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.fabric.fabric-api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   <plugin
+         id="org.fusesource.fabric.tooling-jclouds-all"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.fabric.fabric-zookeeper"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.hadoop.zookeeper"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="org.fusesource.fabric.fabric-linkedin-zookeeper"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.karaf.jaas.boot"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   <plugin
+         id="org.apache.felix.gogo.runtime"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   <plugin
+         id="org.apache.karaf.features.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="org.apache.commons.beanutils"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="org.apache.felix.configadmin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+       
+    <plugin
+         id="org.fusesource.fabric.fabric-core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+    
+         
+    <plugin
+         id="org.apache.karaf.admin.management"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+    
+    <plugin
+         id="org.apache.commons.codec"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   
+   
+   ########################################
+   
+
+   
+
+
+
+   <plugin
+         id="org.apache.servicemix.nmr.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.servicemix.nmr.management"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+
 
    <plugin
          id="commons-management"
@@ -213,4 +318,5 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+-->
 </feature>

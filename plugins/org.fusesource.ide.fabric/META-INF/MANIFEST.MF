@@ -5,11 +5,8 @@ Bundle-SymbolicName: org.fusesource.ide.fabric;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.fusesource.fabric.fabric-client,
- org.fusesource.fabric.fabric-api,
- org.fusesource.fabric.tooling-jclouds-all,
- org.fusesource.fabric.fabric-zookeeper,
- org.fusesource.fabric.fabric-linkedin-zookeeper,
+Require-Bundle: org.fusesource.fabric.tooling-jclouds-all,
+ org.fusesource.fabric.tooling-fabric-all,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.deployment,
@@ -67,8 +64,7 @@ Require-Bundle: org.fusesource.fabric.fabric-client,
  org.eclipse.core.expressions,
  jackson-core-asl;bundle-version="1.9.10",
  jackson-jaxrs;bundle-version="1.9.10",
- jackson-mapper-asl;bundle-version="1.9.10",
- commons-management
+ jackson-mapper-asl;bundle-version="1.9.10"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin
 Bundle-ClassPath: .
