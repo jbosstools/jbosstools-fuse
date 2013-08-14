@@ -68,7 +68,7 @@
     <forge-project-id>ide</forge-project-id>
     <fabric-version>99-master-SNAPSHOT</fabric-version>
 <!--
-    <fabric-version>7.3.0.redhat-005</fabric-version>
+    <fabric-version>7.3.0.redhat-036</fabric-version>
 -->
 
     <fabric-jclouds-version>${fabric-version}</fabric-jclouds-version>
@@ -366,7 +366,7 @@
 	      <associateSites>
 		<associateSite>http://download.jboss.org/jbosstools/updates/development/kepler/</associateSite>
 		<associateSite>http://download.jboss.org/jbosstools/updates/requirements/kepler/201306260900-R/</associateSite>
-		<associateSite>http://download.jboss.org/jbosstools/updates/integration/locus/1.0.0.x/</associateSite>
+		<associateSite>http://download.jboss.org/jbosstools/updates/integration/locus/1.1.0.CI/</associateSite>
 		<associateSite>http://download.jboss.org/jbosstools/updates/requirements/springide/3.2.0.201303060654-RELEASE-e4.3/</associateSite>
 	      </associateSites>
 
@@ -655,6 +655,18 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.library.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.configadmin</artifactId>
+      <version>${felix-configadmin-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.eventadmin</artifactId>
+      <version>${felix-eventadmin-version}</version>
+    </dependency>
+
 
     <dependency>
       <groupId>org.slf4j</groupId>
