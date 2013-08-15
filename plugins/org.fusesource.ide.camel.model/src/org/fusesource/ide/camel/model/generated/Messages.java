@@ -42,7 +42,9 @@ public class Messages extends NLS {
     public static String propertyLabelAggregateTimeoutCheckerExecutorServiceRef;
     public static String propertyLabelAggregateAggregationRepositoryRef;
     public static String propertyLabelAggregateStrategyRef;
+    public static String propertyLabelAggregateOptimisticLockRetryPolicyDefinition;
     public static String propertyLabelAggregateParallelProcessing;
+    public static String propertyLabelAggregateOptimisticLocking;
     public static String propertyLabelAggregateCompletionSize;
     public static String propertyLabelAggregateCompletionInterval;
     public static String propertyLabelAggregateCompletionTimeout;
@@ -178,6 +180,7 @@ public class Messages extends NLS {
     public static String propertyLabelRouteErrorHandlerRef;
     public static String propertyLabelRouteGroup;
     public static String propertyLabelRouteHandleFault;
+    public static String propertyLabelRouteMessageHistory;
     public static String propertyLabelRouteRoutePolicyRef;
     public static String propertyLabelRouteStreamCache;
     public static String propertyLabelRouteTrace;
@@ -278,7 +281,9 @@ public class Messages extends NLS {
     map.put("propertyLabelAggregate.TimeoutCheckerExecutorServiceRef", propertyLabelAggregateTimeoutCheckerExecutorServiceRef);
     map.put("propertyLabelAggregate.AggregationRepositoryRef", propertyLabelAggregateAggregationRepositoryRef);
     map.put("propertyLabelAggregate.StrategyRef", propertyLabelAggregateStrategyRef);
+    map.put("propertyLabelAggregate.OptimisticLockRetryPolicyDefinition", propertyLabelAggregateOptimisticLockRetryPolicyDefinition);
     map.put("propertyLabelAggregate.ParallelProcessing", propertyLabelAggregateParallelProcessing);
+    map.put("propertyLabelAggregate.OptimisticLocking", propertyLabelAggregateOptimisticLocking);
     map.put("propertyLabelAggregate.CompletionSize", propertyLabelAggregateCompletionSize);
     map.put("propertyLabelAggregate.CompletionInterval", propertyLabelAggregateCompletionInterval);
     map.put("propertyLabelAggregate.CompletionTimeout", propertyLabelAggregateCompletionTimeout);
@@ -379,6 +384,7 @@ public class Messages extends NLS {
     map.put("propertyLabelRoute.ErrorHandlerRef", propertyLabelRouteErrorHandlerRef);
     map.put("propertyLabelRoute.Group", propertyLabelRouteGroup);
     map.put("propertyLabelRoute.HandleFault", propertyLabelRouteHandleFault);
+    map.put("propertyLabelRoute.MessageHistory", propertyLabelRouteMessageHistory);
     map.put("propertyLabelRoute.RoutePolicyRef", propertyLabelRouteRoutePolicyRef);
     map.put("propertyLabelRoute.StreamCache", propertyLabelRouteStreamCache);
     map.put("propertyLabelRoute.Trace", propertyLabelRouteTrace);

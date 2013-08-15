@@ -18,6 +18,7 @@ package org.fusesource.ide.camel.model.generated;
 
 import java.util.Map;
 import org.apache.camel.model.AggregateDefinition;
+import org.apache.camel.model.OptimisticLockRetryPolicyDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -46,7 +47,9 @@ public class Aggregate extends AbstractNode {
 	public static final String PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF = "Aggregate.TimeoutCheckerExecutorServiceRef";
 	public static final String PROPERTY_AGGREGATIONREPOSITORYREF = "Aggregate.AggregationRepositoryRef";
 	public static final String PROPERTY_STRATEGYREF = "Aggregate.StrategyRef";
+	public static final String PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION = "Aggregate.OptimisticLockRetryPolicyDefinition";
 	public static final String PROPERTY_PARALLELPROCESSING = "Aggregate.ParallelProcessing";
+	public static final String PROPERTY_OPTIMISTICLOCKING = "Aggregate.OptimisticLocking";
 	public static final String PROPERTY_COMPLETIONSIZE = "Aggregate.CompletionSize";
 	public static final String PROPERTY_COMPLETIONINTERVAL = "Aggregate.CompletionInterval";
 	public static final String PROPERTY_COMPLETIONTIMEOUT = "Aggregate.CompletionTimeout";
@@ -66,7 +69,9 @@ public class Aggregate extends AbstractNode {
 	private String timeoutCheckerExecutorServiceRef;
 	private String aggregationRepositoryRef;
 	private String strategyRef;
+	private OptimisticLockRetryPolicyDefinition optimisticLockRetryPolicyDefinition;
 	private Boolean parallelProcessing;
+	private Boolean optimisticLocking;
 	private Integer completionSize;
 	private Long completionInterval;
 	private Long completionTimeout;
@@ -255,6 +260,24 @@ public class Aggregate extends AbstractNode {
 	}
 
 	/**
+	 * @return the optimisticLockRetryPolicyDefinition
+	 */
+	public OptimisticLockRetryPolicyDefinition getOptimisticLockRetryPolicyDefinition() {
+		return this.optimisticLockRetryPolicyDefinition;
+	}
+	
+	/**
+	 * @param optimisticLockRetryPolicyDefinition the optimisticLockRetryPolicyDefinition to set
+	 */
+	public void setOptimisticLockRetryPolicyDefinition(OptimisticLockRetryPolicyDefinition optimisticLockRetryPolicyDefinition) {
+		OptimisticLockRetryPolicyDefinition oldValue = this.optimisticLockRetryPolicyDefinition;
+		this.optimisticLockRetryPolicyDefinition = optimisticLockRetryPolicyDefinition;
+		if (!isSame(oldValue, optimisticLockRetryPolicyDefinition)) {
+		    firePropertyChange(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, oldValue, optimisticLockRetryPolicyDefinition);
+		}
+	}
+
+	/**
 	 * @return the parallelProcessing
 	 */
 	public Boolean getParallelProcessing() {
@@ -269,6 +292,24 @@ public class Aggregate extends AbstractNode {
 		this.parallelProcessing = parallelProcessing;
 		if (!isSame(oldValue, parallelProcessing)) {
 		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
+		}
+	}
+
+	/**
+	 * @return the optimisticLocking
+	 */
+	public Boolean getOptimisticLocking() {
+		return this.optimisticLocking;
+	}
+	
+	/**
+	 * @param optimisticLocking the optimisticLocking to set
+	 */
+	public void setOptimisticLocking(Boolean optimisticLocking) {
+		Boolean oldValue = this.optimisticLocking;
+		this.optimisticLocking = optimisticLocking;
+		if (!isSame(oldValue, optimisticLocking)) {
+		    firePropertyChange(PROPERTY_OPTIMISTICLOCKING, oldValue, optimisticLocking);
 		}
 	}
 
@@ -474,7 +515,11 @@ public class Aggregate extends AbstractNode {
     		PropertyDescriptor descTimeoutCheckerExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF, Messages.propertyLabelAggregateTimeoutCheckerExecutorServiceRef);
     		PropertyDescriptor descAggregationRepositoryRef = new TextPropertyDescriptor(PROPERTY_AGGREGATIONREPOSITORYREF, Messages.propertyLabelAggregateAggregationRepositoryRef);
     		PropertyDescriptor descStrategyRef = new TextPropertyDescriptor(PROPERTY_STRATEGYREF, Messages.propertyLabelAggregateStrategyRef);
-      	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelAggregateParallelProcessing);
+    
+      
+		PropertyDescriptor descOptimisticLockRetryPolicyDefinition = new ComplexPropertyDescriptor(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, Messages.propertyLabelAggregateOptimisticLockRetryPolicyDefinition, OptimisticLockRetryPolicyDefinition.class);
+  	      	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelAggregateParallelProcessing);
+      	PropertyDescriptor descOptimisticLocking = new BooleanPropertyDescriptor(PROPERTY_OPTIMISTICLOCKING, Messages.propertyLabelAggregateOptimisticLocking);
     		PropertyDescriptor descCompletionSize = new TextPropertyDescriptor(PROPERTY_COMPLETIONSIZE, Messages.propertyLabelAggregateCompletionSize);
     		PropertyDescriptor descCompletionInterval = new TextPropertyDescriptor(PROPERTY_COMPLETIONINTERVAL, Messages.propertyLabelAggregateCompletionInterval);
     		PropertyDescriptor descCompletionTimeout = new TextPropertyDescriptor(PROPERTY_COMPLETIONTIMEOUT, Messages.propertyLabelAggregateCompletionTimeout);
@@ -493,7 +538,9 @@ public class Aggregate extends AbstractNode {
 		descriptors.put(PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF, descTimeoutCheckerExecutorServiceRef);
 		descriptors.put(PROPERTY_AGGREGATIONREPOSITORYREF, descAggregationRepositoryRef);
 		descriptors.put(PROPERTY_STRATEGYREF, descStrategyRef);
+		descriptors.put(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, descOptimisticLockRetryPolicyDefinition);
 		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
+		descriptors.put(PROPERTY_OPTIMISTICLOCKING, descOptimisticLocking);
 		descriptors.put(PROPERTY_COMPLETIONSIZE, descCompletionSize);
 		descriptors.put(PROPERTY_COMPLETIONINTERVAL, descCompletionInterval);
 		descriptors.put(PROPERTY_COMPLETIONTIMEOUT, descCompletionTimeout);
@@ -527,8 +574,12 @@ public class Aggregate extends AbstractNode {
 			setAggregationRepositoryRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			setStrategyRef(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION.equals(id)) {
+			setOptimisticLockRetryPolicyDefinition(Objects.convertTo(value, OptimisticLockRetryPolicyDefinition.class));
 		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
 			setParallelProcessing(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_OPTIMISTICLOCKING.equals(id)) {
+			setOptimisticLocking(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_COMPLETIONSIZE.equals(id)) {
 			setCompletionSize(Objects.convertTo(value, Integer.class));
 		}		else if (PROPERTY_COMPLETIONINTERVAL.equals(id)) {
@@ -575,8 +626,12 @@ public class Aggregate extends AbstractNode {
 			return this.getAggregationRepositoryRef();
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			return this.getStrategyRef();
+		}		else if (PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION.equals(id)) {
+			return this.getOptimisticLockRetryPolicyDefinition();
 		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
 			return this.getParallelProcessing();
+		}		else if (PROPERTY_OPTIMISTICLOCKING.equals(id)) {
+			return this.getOptimisticLocking();
 		}		else if (PROPERTY_COMPLETIONSIZE.equals(id)) {
 			return this.getCompletionSize();
 		}		else if (PROPERTY_COMPLETIONINTERVAL.equals(id)) {
@@ -614,7 +669,9 @@ public class Aggregate extends AbstractNode {
     answer.setTimeoutCheckerExecutorServiceRef(toXmlPropertyValue(PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF, this.getTimeoutCheckerExecutorServiceRef()));
     answer.setAggregationRepositoryRef(toXmlPropertyValue(PROPERTY_AGGREGATIONREPOSITORYREF, this.getAggregationRepositoryRef()));
     answer.setStrategyRef(toXmlPropertyValue(PROPERTY_STRATEGYREF, this.getStrategyRef()));
+    answer.setOptimisticLockRetryPolicyDefinition(toXmlPropertyValue(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, this.getOptimisticLockRetryPolicyDefinition()));
     Objects.setField(answer, "parallelProcessing", toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
+    Objects.setField(answer, "optimisticLocking", toXmlPropertyValue(PROPERTY_OPTIMISTICLOCKING, this.getOptimisticLocking()));
     answer.setCompletionSize(toXmlPropertyValue(PROPERTY_COMPLETIONSIZE, this.getCompletionSize()));
     answer.setCompletionInterval(toXmlPropertyValue(PROPERTY_COMPLETIONINTERVAL, this.getCompletionInterval()));
     answer.setCompletionTimeout(toXmlPropertyValue(PROPERTY_COMPLETIONTIMEOUT, this.getCompletionTimeout()));
@@ -650,7 +707,9 @@ public class Aggregate extends AbstractNode {
       this.setTimeoutCheckerExecutorServiceRef(node.getTimeoutCheckerExecutorServiceRef());
       this.setAggregationRepositoryRef(node.getAggregationRepositoryRef());
       this.setStrategyRef(node.getStrategyRef());
+      this.setOptimisticLockRetryPolicyDefinition(node.getOptimisticLockRetryPolicyDefinition());
       Objects.setField(this, "parallelProcessing", node.getParallelProcessing());
+      Objects.setField(this, "optimisticLocking", node.getOptimisticLocking());
       this.setCompletionSize(node.getCompletionSize());
       this.setCompletionInterval(node.getCompletionInterval());
       this.setCompletionTimeout(node.getCompletionTimeout());

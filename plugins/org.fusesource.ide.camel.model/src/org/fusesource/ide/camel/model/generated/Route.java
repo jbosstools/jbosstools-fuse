@@ -43,6 +43,7 @@ public class Route extends RouteSupport {
 	public static final String PROPERTY_ERRORHANDLERREF = "Route.ErrorHandlerRef";
 	public static final String PROPERTY_GROUP = "Route.Group";
 	public static final String PROPERTY_HANDLEFAULT = "Route.HandleFault";
+	public static final String PROPERTY_MESSAGEHISTORY = "Route.MessageHistory";
 	public static final String PROPERTY_ROUTEPOLICYREF = "Route.RoutePolicyRef";
 	public static final String PROPERTY_STREAMCACHE = "Route.StreamCache";
 	public static final String PROPERTY_TRACE = "Route.Trace";
@@ -52,6 +53,7 @@ public class Route extends RouteSupport {
 	private String errorHandlerRef;
 	private String group;
 	private String handleFault;
+	private String messageHistory;
 	private String routePolicyRef;
 	private String streamCache;
 	private String trace;
@@ -159,6 +161,24 @@ public class Route extends RouteSupport {
 	}
 
 	/**
+	 * @return the messageHistory
+	 */
+	public String getMessageHistory() {
+		return this.messageHistory;
+	}
+	
+	/**
+	 * @param messageHistory the messageHistory to set
+	 */
+	public void setMessageHistory(String messageHistory) {
+		String oldValue = this.messageHistory;
+		this.messageHistory = messageHistory;
+		if (!isSame(oldValue, messageHistory)) {
+		    firePropertyChange(PROPERTY_MESSAGEHISTORY, oldValue, messageHistory);
+		}
+	}
+
+	/**
 	 * @return the routePolicyRef
 	 */
 	public String getRoutePolicyRef() {
@@ -227,6 +247,7 @@ public class Route extends RouteSupport {
     		PropertyDescriptor descErrorHandlerRef = new TextPropertyDescriptor(PROPERTY_ERRORHANDLERREF, Messages.propertyLabelRouteErrorHandlerRef);
     		PropertyDescriptor descGroup = new TextPropertyDescriptor(PROPERTY_GROUP, Messages.propertyLabelRouteGroup);
     		PropertyDescriptor descHandleFault = new TextPropertyDescriptor(PROPERTY_HANDLEFAULT, Messages.propertyLabelRouteHandleFault);
+    		PropertyDescriptor descMessageHistory = new TextPropertyDescriptor(PROPERTY_MESSAGEHISTORY, Messages.propertyLabelRouteMessageHistory);
     		PropertyDescriptor descRoutePolicyRef = new TextPropertyDescriptor(PROPERTY_ROUTEPOLICYREF, Messages.propertyLabelRouteRoutePolicyRef);
     		PropertyDescriptor descStreamCache = new TextPropertyDescriptor(PROPERTY_STREAMCACHE, Messages.propertyLabelRouteStreamCache);
     		PropertyDescriptor descTrace = new TextPropertyDescriptor(PROPERTY_TRACE, Messages.propertyLabelRouteTrace);
@@ -235,6 +256,7 @@ public class Route extends RouteSupport {
 		descriptors.put(PROPERTY_ERRORHANDLERREF, descErrorHandlerRef);
 		descriptors.put(PROPERTY_GROUP, descGroup);
 		descriptors.put(PROPERTY_HANDLEFAULT, descHandleFault);
+		descriptors.put(PROPERTY_MESSAGEHISTORY, descMessageHistory);
 		descriptors.put(PROPERTY_ROUTEPOLICYREF, descRoutePolicyRef);
 		descriptors.put(PROPERTY_STREAMCACHE, descStreamCache);
 		descriptors.put(PROPERTY_TRACE, descTrace);
@@ -255,6 +277,8 @@ public class Route extends RouteSupport {
 			setGroup(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_HANDLEFAULT.equals(id)) {
 			setHandleFault(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_MESSAGEHISTORY.equals(id)) {
+			setMessageHistory(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_ROUTEPOLICYREF.equals(id)) {
 			setRoutePolicyRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_STREAMCACHE.equals(id)) {
@@ -281,6 +305,8 @@ public class Route extends RouteSupport {
 			return this.getGroup();
 		}		else if (PROPERTY_HANDLEFAULT.equals(id)) {
 			return this.getHandleFault();
+		}		else if (PROPERTY_MESSAGEHISTORY.equals(id)) {
+			return this.getMessageHistory();
 		}		else if (PROPERTY_ROUTEPOLICYREF.equals(id)) {
 			return this.getRoutePolicyRef();
 		}		else if (PROPERTY_STREAMCACHE.equals(id)) {
@@ -301,6 +327,7 @@ public class Route extends RouteSupport {
     answer.setErrorHandlerRef(toXmlPropertyValue(PROPERTY_ERRORHANDLERREF, this.getErrorHandlerRef()));
     answer.setGroup(toXmlPropertyValue(PROPERTY_GROUP, this.getGroup()));
     answer.setHandleFault(toXmlPropertyValue(PROPERTY_HANDLEFAULT, this.getHandleFault()));
+    answer.setMessageHistory(toXmlPropertyValue(PROPERTY_MESSAGEHISTORY, this.getMessageHistory()));
     answer.setRoutePolicyRef(toXmlPropertyValue(PROPERTY_ROUTEPOLICYREF, this.getRoutePolicyRef()));
     answer.setStreamCache(toXmlPropertyValue(PROPERTY_STREAMCACHE, this.getStreamCache()));
     answer.setTrace(toXmlPropertyValue(PROPERTY_TRACE, this.getTrace()));
@@ -326,6 +353,7 @@ public class Route extends RouteSupport {
       this.setErrorHandlerRef(node.getErrorHandlerRef());
       this.setGroup(node.getGroup());
       this.setHandleFault(node.getHandleFault());
+      this.setMessageHistory(node.getMessageHistory());
       this.setRoutePolicyRef(node.getRoutePolicyRef());
       this.setStreamCache(node.getStreamCache());
       this.setTrace(node.getTrace());

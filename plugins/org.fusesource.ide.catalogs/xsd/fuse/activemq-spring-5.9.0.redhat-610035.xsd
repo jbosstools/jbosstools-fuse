@@ -6,6 +6,87 @@
            xmlns:xs='http://www.w3.org/2001/XMLSchema'
            xmlns:tns='http://activemq.apache.org/schema/core'>
 
+  <!-- element for type: org.apache.activemq.broker.region.policy.AbortSlowAckConsumerStrategy -->
+  <xs:element name='abortSlowAckConsumerStrategy'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        Abort slow consumers when they reach the configured threshold of slowness,
+
+default is that a consumer that has not Ack'd a message for 30 seconds is slow.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='brokerService' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:forcePersistencyModeBroker'/>
+              <xs:element ref='tns:loggingBrokerPlugin'/>
+              <xs:element ref='tns:multicastTraceBrokerPlugin'/>
+              <xs:element ref='tns:redeliveryPlugin'/>
+              <xs:element ref='tns:timeStampingBrokerPlugin'/>
+              <xs:element ref='tns:traceBrokerPathPlugin'/>
+              <xs:element ref='tns:udpTraceBrokerPlugin'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='abortConnection' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            abort the consumers connection rather than sending a stop command to the remote consumer
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='brokerService' type='xs:string'/>
+      <xs:attribute name='checkPeriod' type='xs:long'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            time in milliseconds between checks for slow subscriptions
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='ignoreIdleConsumers' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Returns whether the strategy is configured to ignore consumers that are simply idle, i.e
+consumers that have no pending acks (dispatch queue is empty).
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='maxSlowCount' type='xs:long'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            number of times a subscription can be deemed slow before triggering abort
+effect depends on dispatch rate as slow determination is done on dispatch
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='maxSlowDuration' type='xs:long'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            time in milliseconds that a sub can remain slow before triggering
+an abort.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='maxTimeSinceLastAck' type='xs:long'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Gets the maximum time since last Ack before a subscription is considered to be slow.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='name' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
   <!-- element for type: org.apache.activemq.broker.region.policy.AbortSlowConsumerStrategy -->
   <xs:element name='abortSlowConsumerStrategy'>
     <xs:annotation>
@@ -488,6 +569,7 @@ other brokers in a federated network
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -606,6 +688,7 @@ other brokers in a federated network
               <xs:element ref='tns:outboundTopicBridge'/>
               <xs:element ref='tns:pListStoreImpl'/>
               <xs:element ref='tns:proxyConnector'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:element ref='tns:shared-file-locker'/>
               <xs:element ref='tns:storeUsage'/>
               <xs:element ref='tns:systemUsage'/>
@@ -654,6 +737,7 @@ other brokers in a federated network
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:pListStoreImpl'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -840,6 +924,13 @@ value filled in or not.
       <xs:attribute name='producerSystemUsage' type='xs:string'/>
       <xs:attribute name='producerSystemUsagePortion' type='xs:integer'/>
       <xs:attribute name='regionBroker' type='xs:string'/>
+      <xs:attribute name='restartAllowed' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets if the broker allowed to restart on shutdown.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='schedulePeriodForDestinationPurge' type='xs:integer'/>
       <xs:attribute name='schedulerDirectory' type='xs:string'/>
       <xs:attribute name='schedulerDirectoryFile' type='xs:string'/>
@@ -858,6 +949,7 @@ with JUnit tests you may wish to start and stop the broker explicitly yourself.
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='startAsync' type='xs:boolean'/>
+      <xs:attribute name='storeOpenWireVersion' type='xs:integer'/>
       <xs:attribute name='supportFailOver' type='xs:boolean'/>
       <xs:attribute name='systemExitOnShutdown' type='xs:string'/>
       <xs:attribute name='systemExitOnShutdownExitCode' type='xs:integer'/>
@@ -1092,6 +1184,7 @@ other brokers in a federated network
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -1210,6 +1303,7 @@ other brokers in a federated network
               <xs:element ref='tns:outboundTopicBridge'/>
               <xs:element ref='tns:pListStoreImpl'/>
               <xs:element ref='tns:proxyConnector'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:element ref='tns:shared-file-locker'/>
               <xs:element ref='tns:storeUsage'/>
               <xs:element ref='tns:systemUsage'/>
@@ -1258,6 +1352,7 @@ other brokers in a federated network
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:pListStoreImpl'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -1444,6 +1539,13 @@ value filled in or not.
       <xs:attribute name='producerSystemUsage' type='xs:string'/>
       <xs:attribute name='producerSystemUsagePortion' type='xs:integer'/>
       <xs:attribute name='regionBroker' type='xs:string'/>
+      <xs:attribute name='restartAllowed' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets if the broker allowed to restart on shutdown.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='schedulePeriodForDestinationPurge' type='xs:integer'/>
       <xs:attribute name='schedulerDirectory' type='xs:string'/>
       <xs:attribute name='schedulerDirectoryFile' type='xs:string'/>
@@ -1453,6 +1555,7 @@ value filled in or not.
       <xs:attribute name='splitSystemUsageForProducersConsumers' type='xs:boolean'/>
       <xs:attribute name='sslContext' type='xs:string'/>
       <xs:attribute name='startAsync' type='xs:boolean'/>
+      <xs:attribute name='storeOpenWireVersion' type='xs:integer'/>
       <xs:attribute name='supportFailOver' type='xs:boolean'/>
       <xs:attribute name='systemExitOnShutdown' type='xs:string'/>
       <xs:attribute name='systemExitOnShutdownExitCode' type='xs:integer'/>
@@ -1565,55 +1668,12 @@ policy.
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
-        <xs:element name='authorizationEntries' minOccurs='0' maxOccurs='unbounded'>
-          <xs:annotation>
-            <xs:documentation><![CDATA[
-              Sets the individual entries on the authorization map
-            ]]></xs:documentation>
-          </xs:annotation>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='defaultEntry' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:authorizationEntry'/>
-              <xs:element ref='tns:tempDestinationAuthorizationEntry'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='entries' minOccurs='0' maxOccurs='unbounded'>
-          <xs:annotation>
-            <xs:documentation><![CDATA[
-              A helper method to allow the destination map to be populated from a
-dependency injection framework such as Spring
-            ]]></xs:documentation>
-          </xs:annotation>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name='tempDestinationAuthorizationEntry' minOccurs='0' maxOccurs='1'>
-          <xs:complexType>
-            <xs:choice minOccurs='0' maxOccurs='1'>
-              <xs:element ref='tns:tempDestinationAuthorizationEntry'/>
-              <xs:any namespace='##other'/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
-      </xs:choice></xs:choice>
       <xs:attribute name='adminPermissionGroupSearchFilter' type='xs:string'/>
       <xs:attribute name='authentication' type='xs:string'/>
       <xs:attribute name='connectionPassword' type='xs:string'/>
       <xs:attribute name='connectionProtocol' type='xs:string'/>
       <xs:attribute name='connectionURL' type='xs:string'/>
       <xs:attribute name='connectionUsername' type='xs:string'/>
-      <xs:attribute name='defaultEntry' type='xs:string'/>
-      <xs:attribute name='groupClass' type='xs:string'/>
       <xs:attribute name='groupNameAttribute' type='xs:string'/>
       <xs:attribute name='groupObjectClass' type='xs:string'/>
       <xs:attribute name='legacyGroupMapping' type='xs:boolean'/>
@@ -1622,7 +1682,6 @@ dependency injection framework such as Spring
       <xs:attribute name='readPermissionGroupSearchFilter' type='xs:string'/>
       <xs:attribute name='refreshDisabled' type='xs:boolean'/>
       <xs:attribute name='refreshInterval' type='xs:integer'/>
-      <xs:attribute name='tempDestinationAuthorizationEntry' type='xs:string'/>
       <xs:attribute name='tempSearchBase' type='xs:string'/>
       <xs:attribute name='topicSearchBase' type='xs:string'/>
       <xs:attribute name='userNameAttribute' type='xs:string'/>
@@ -1847,7 +1906,7 @@ queue with the same name).
       <xs:documentation><![CDATA[
         implement conditional behavior for queue consumers, allows replaying back to
 origin if no consumers are present on the local broker after a configurable
-delay, irrespective of the networkTTL Also allows rate limiting of messages
+delay, irrespective of the TTL. Also allows rate limiting of messages
 through the network, useful for static includes
       ]]></xs:documentation>
     </xs:annotation>
@@ -2745,6 +2804,38 @@ file creator plugin which creates a DOT file showing the current topic & queue h
       <xs:attribute name='adminConnectionContext' type='xs:string'/>
       <xs:attribute name='next' type='xs:string'/>
       <xs:attribute name='pathSeparator' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- element for type: org.apache.activemq.broker.region.policy.DiscardingDeadLetterStrategy -->
+  <xs:element name='discarding'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        Dead Letter Strategy that discards all messages
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='deadLetterQueue' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:queue'/>
+              <xs:element ref='tns:tempQueue'/>
+              <xs:element ref='tns:tempTopic'/>
+              <xs:element ref='tns:topic'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='deadLetterQueue' type='xs:string'/>
+      <xs:attribute name='enableAudit' type='xs:boolean'/>
+      <xs:attribute name='processExpired' type='xs:boolean'/>
+      <xs:attribute name='processNonPersistent' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -4115,10 +4206,9 @@ memory usage.
       <xs:attribute name='limit' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Sets the memory limit in bytes. Setting the limit in bytes will set the
-usagePortion to 0 since the UsageManager is not going to be portion based
-off the parent.
-When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
+            Sets the memory limit in bytes. Setting the limit in bytes will set the usagePortion to 0 since the UsageManager
+is not going to be portion based off the parent. When set using Xbean, values of the form "20 Mb", "1024kb", and
+"1g" can be used
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -4129,8 +4219,8 @@ When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
       <xs:attribute name='percentUsageMinDelta' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Sets the minimum number of percentage points the usage has to change
-before a UsageListener event is fired by the manager.
+            Sets the minimum number of percentage points the usage has to change before a UsageListener event is fired by the
+manager.
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -4177,6 +4267,7 @@ other long term persistent storage.
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -4190,6 +4281,7 @@ other long term persistent storage.
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -4876,12 +4968,14 @@ defined in RFC 2307.
       <xs:attribute name='conduitSubscriptions' type='xs:boolean'/>
       <xs:attribute name='connectionFilter' type='xs:string'/>
       <xs:attribute name='consumerPriorityBase' type='xs:integer'/>
+      <xs:attribute name='consumerTTL' type='xs:integer'/>
       <xs:attribute name='decreaseNetworkConsumerPriority' type='xs:boolean'/>
       <xs:attribute name='destinationFilter' type='xs:string'/>
       <xs:attribute name='dispatchAsync' type='xs:boolean'/>
       <xs:attribute name='duplex' type='xs:boolean'/>
       <xs:attribute name='dynamicOnly' type='xs:boolean'/>
       <xs:attribute name='localUri' type='xs:string'/>
+      <xs:attribute name='messageTTL' type='xs:integer'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='networkTTL' type='xs:integer'/>
       <xs:attribute name='objectName' type='xs:string'/>
@@ -5002,9 +5096,11 @@ LevelDB - Embedded Lightweight Non-Relational Database
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='asyncBufferSize' type='xs:integer'/>
+      <xs:attribute name='autoCompactionRatio' type='xs:integer'/>
       <xs:attribute name='brokerName' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
       <xs:attribute name='directory' type='xs:string'/>
+      <xs:attribute name='failoverProducersAuditDepth' type='xs:integer'/>
       <xs:attribute name='flushDelay' type='xs:integer'/>
       <xs:attribute name='indexBlockRestartInterval' type='xs:integer'/>
       <xs:attribute name='indexBlockSize' type='xs:integer'/>
@@ -5018,6 +5114,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='logCompression' type='xs:string'/>
       <xs:attribute name='logDirectory' type='xs:string'/>
       <xs:attribute name='logSize' type='xs:long'/>
+      <xs:attribute name='maxFailoverProducersToTrack' type='xs:integer'/>
       <xs:attribute name='monitorStats' type='xs:boolean'/>
       <xs:attribute name='paranoidChecks' type='xs:boolean'/>
       <xs:attribute name='sync' type='xs:boolean'/>
@@ -5381,10 +5478,9 @@ memory usage.
       <xs:attribute name='limit' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Sets the memory limit in bytes. Setting the limit in bytes will set the
-usagePortion to 0 since the UsageManager is not going to be portion based
-off the parent.
-When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
+            Sets the memory limit in bytes. Setting the limit in bytes will set the usagePortion to 0 since the UsageManager
+is not going to be portion based off the parent. When set using Xbean, values of the form "20 Mb", "1024kb", and
+"1g" can be used
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -5395,8 +5491,8 @@ When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
       <xs:attribute name='percentUsageMinDelta' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Sets the minimum number of percentage points the usage has to change
-before a UsageListener event is fired by the manager.
+            Sets the minimum number of percentage points the usage has to change before a UsageListener event is fired by the
+manager.
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -5574,6 +5670,7 @@ based transport could be used.
       <xs:attribute name='conduitSubscriptions' type='xs:boolean'/>
       <xs:attribute name='connectionFilter' type='xs:string'/>
       <xs:attribute name='consumerPriorityBase' type='xs:integer'/>
+      <xs:attribute name='consumerTTL' type='xs:integer'/>
       <xs:attribute name='decreaseNetworkConsumerPriority' type='xs:boolean'/>
       <xs:attribute name='destinationFilter' type='xs:string'/>
       <xs:attribute name='dispatchAsync' type='xs:boolean'/>
@@ -5581,6 +5678,7 @@ based transport could be used.
       <xs:attribute name='dynamicOnly' type='xs:boolean'/>
       <xs:attribute name='localTransport' type='xs:string'/>
       <xs:attribute name='localUri' type='xs:string'/>
+      <xs:attribute name='messageTTL' type='xs:integer'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='networkTTL' type='xs:integer'/>
       <xs:attribute name='objectName' type='xs:string'/>
@@ -5766,6 +5864,7 @@ available and setup a connection to each available remote broker
       <xs:attribute name='conduitSubscriptions' type='xs:boolean'/>
       <xs:attribute name='connectionFilter' type='xs:string'/>
       <xs:attribute name='consumerPriorityBase' type='xs:integer'/>
+      <xs:attribute name='consumerTTL' type='xs:integer'/>
       <xs:attribute name='decreaseNetworkConsumerPriority' type='xs:boolean'/>
       <xs:attribute name='destinationFilter' type='xs:string'/>
       <xs:attribute name='discoveryAgent' type='xs:string'/>
@@ -5774,6 +5873,7 @@ available and setup a connection to each available remote broker
       <xs:attribute name='duplex' type='xs:boolean'/>
       <xs:attribute name='dynamicOnly' type='xs:boolean'/>
       <xs:attribute name='localUri' type='xs:string'/>
+      <xs:attribute name='messageTTL' type='xs:integer'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='networkTTL' type='xs:integer'/>
       <xs:attribute name='objectName' type='xs:string'/>
@@ -6183,6 +6283,7 @@ should be used
           </xs:annotation>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:discarding'/>
               <xs:element ref='tns:individualDeadLetterStrategy'/>
               <xs:element ref='tns:sharedDeadLetterStrategy'/>
               <xs:any namespace='##other'/>
@@ -6305,6 +6406,7 @@ oldest first.
         <xs:element name='slowConsumerStrategy' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:abortSlowAckConsumerStrategy'/>
               <xs:element ref='tns:abortSlowConsumerStrategy'/>
               <xs:any namespace='##other'/>
             </xs:choice>
@@ -7150,6 +7252,85 @@ dependency injection framework such as Spring
   </xs:element>
 
 
+  <!-- element for type: org.apache.activemq.store.leveldb.ReplicatedLevelDBPersistenceAdapter -->
+  <xs:element name='replicatedLevelDB'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        An implementation of {@link org.apache.activemq.store.PersistenceAdapter} designed for use with
+LevelDB - Embedded Lightweight Non-Relational Database
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='brokerService' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:broker'/>
+              <xs:element ref='tns:brokerService'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='locker' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:database-locker'/>
+              <xs:element ref='tns:lease-database-locker'/>
+              <xs:element ref='tns:shared-file-locker'/>
+              <xs:element ref='tns:transact-database-locker'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='usageManager' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:systemUsage'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='asyncBufferSize' type='xs:integer'/>
+      <xs:attribute name='bind' type='xs:string'/>
+      <xs:attribute name='brokerName' type='xs:string'/>
+      <xs:attribute name='brokerService' type='xs:string'/>
+      <xs:attribute name='container' type='xs:string'/>
+      <xs:attribute name='directory' type='xs:string'/>
+      <xs:attribute name='failoverProducersAuditDepth' type='xs:integer'/>
+      <xs:attribute name='flushDelay' type='xs:integer'/>
+      <xs:attribute name='hostname' type='xs:string'/>
+      <xs:attribute name='indexBlockRestartInterval' type='xs:integer'/>
+      <xs:attribute name='indexBlockSize' type='xs:integer'/>
+      <xs:attribute name='indexCacheSize' type='xs:long'/>
+      <xs:attribute name='indexCompression' type='xs:string'/>
+      <xs:attribute name='indexFactory' type='xs:string'/>
+      <xs:attribute name='indexMaxOpenFiles' type='xs:integer'/>
+      <xs:attribute name='indexWriteBufferSize' type='xs:integer'/>
+      <xs:attribute name='lockKeepAlivePeriod' type='xs:long'/>
+      <xs:attribute name='locker' type='xs:string'/>
+      <xs:attribute name='logCompression' type='xs:string'/>
+      <xs:attribute name='logSize' type='xs:long'/>
+      <xs:attribute name='maxFailoverProducersToTrack' type='xs:integer'/>
+      <xs:attribute name='monitorStats' type='xs:boolean'/>
+      <xs:attribute name='paranoidChecks' type='xs:boolean'/>
+      <xs:attribute name='replicas' type='xs:integer'/>
+      <xs:attribute name='securityToken' type='xs:string'/>
+      <xs:attribute name='sync' type='xs:string'/>
+      <xs:attribute name='usageManager' type='xs:string'/>
+      <xs:attribute name='useLock' type='xs:boolean'/>
+      <xs:attribute name='verifyChecksums' type='xs:boolean'/>
+      <xs:attribute name='zkAddress' type='xs:string'/>
+      <xs:attribute name='zkPassword' type='xs:string'/>
+      <xs:attribute name='zkPath' type='xs:string'/>
+      <xs:attribute name='zkSessionTmeout' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
   <!-- element for type: org.apache.activemq.broker.region.policy.RoundRobinDispatchPolicy -->
   <xs:element name='roundRobinDispatchPolicy'>
     <xs:annotation>
@@ -7297,7 +7478,6 @@ each operation.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:authorizationMap'/>
-              <xs:element ref='tns:cachedLDAPAuthorizationMap'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:policyMap'/>
               <xs:element ref='tns:redeliveryPolicyMap'/>
@@ -7309,7 +7489,6 @@ each operation.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:authorizationMap'/>
-              <xs:element ref='tns:cachedLDAPAuthorizationMap'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:policyMap'/>
               <xs:element ref='tns:redeliveryPolicyMap'/>
@@ -7329,7 +7508,6 @@ each operation.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:authorizationMap'/>
-              <xs:element ref='tns:cachedLDAPAuthorizationMap'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:policyMap'/>
               <xs:element ref='tns:redeliveryPolicyMap'/>
@@ -7661,6 +7839,7 @@ memory usage.
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -7671,10 +7850,9 @@ memory usage.
       <xs:attribute name='limit' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Sets the memory limit in bytes. Setting the limit in bytes will set the
-usagePortion to 0 since the UsageManager is not going to be portion based
-off the parent.
-When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
+            Sets the memory limit in bytes. Setting the limit in bytes will set the usagePortion to 0 since the UsageManager
+is not going to be portion based off the parent. When set using Xbean, values of the form "20 Mb", "1024kb", and
+"1g" can be used
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -7685,8 +7863,8 @@ When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
       <xs:attribute name='percentUsageMinDelta' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Sets the minimum number of percentage points the usage has to change
-before a UsageListener event is fired by the manager.
+            Sets the minimum number of percentage points the usage has to change before a UsageListener event is fired by the
+manager.
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -7809,6 +7987,7 @@ manage memory usage.
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:memoryPersistenceAdapter'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -7860,6 +8039,7 @@ manage memory usage.
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:pListStoreImpl'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -8152,6 +8332,7 @@ memory usage.
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:levelDB'/>
               <xs:element ref='tns:pListStoreImpl'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -8162,10 +8343,9 @@ memory usage.
       <xs:attribute name='limit' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Sets the memory limit in bytes. Setting the limit in bytes will set the
-usagePortion to 0 since the UsageManager is not going to be portion based
-off the parent.
-When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
+            Sets the memory limit in bytes. Setting the limit in bytes will set the usagePortion to 0 since the UsageManager
+is not going to be portion based off the parent. When set using Xbean, values of the form "20 Mb", "1024kb", and
+"1g" can be used
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -8176,8 +8356,8 @@ When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
       <xs:attribute name='percentUsageMinDelta' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Sets the minimum number of percentage points the usage has to change
-before a UsageListener event is fired by the manager.
+            Sets the minimum number of percentage points the usage has to change before a UsageListener event is fired by the
+manager.
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>

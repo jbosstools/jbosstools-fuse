@@ -7,6 +7,8 @@
 
   <xs:element name="avro" type="tns:avroDataFormat"/>
 
+  <xs:element name="base64" type="tns:base64DataFormat"/>
+
   <xs:element name="batchResequencerConfig" type="tns:batchResequencerConfig"/>
 
   <xs:element name="bean" type="tns:beanDefinition"/>
@@ -133,6 +135,8 @@
 
   <xs:element name="onException" type="tns:onExceptionDefinition"/>
 
+  <xs:element name="optimisticLockRetryPolicy" type="tns:optimisticLockRetryPolicyDefinition"/>
+
   <xs:element name="otherwise" type="tns:otherwiseDefinition"/>
 
   <xs:element name="packageScan" type="tns:packageScanDefinition"/>
@@ -237,6 +241,8 @@
 
   <xs:element name="stop" type="tns:stopDefinition"/>
 
+  <xs:element name="streamCaching" type="tns:camelStreamCachingStrategyDefinition"/>
+
   <xs:element name="streamResequencerConfig" type="tns:streamResequencerConfig"/>
 
   <xs:element name="string" type="tns:stringDataFormat"/>
@@ -271,6 +277,8 @@
 
   <xs:element name="validate" type="tns:validateDefinition"/>
 
+  <xs:element name="vtdxml" type="tns:vtdXmlExpression"/>
+
   <xs:element name="weighted" type="tns:weightedLoadBalancerDefinition"/>
 
   <xs:element name="when" type="tns:whenDefinition"/>
@@ -281,6 +289,8 @@
 
   <xs:element name="xmljson" type="tns:xmlJsonDataFormat"/>
 
+  <xs:element name="xmlrpc" type="tns:xmlRpcDataFormat"/>
+
   <xs:element name="xpath" type="tns:xPathExpression"/>
 
   <xs:element name="xquery" type="tns:xQueryExpression"/>
@@ -288,6 +298,8 @@
   <xs:element name="xstream" type="tns:xStreamDataFormat"/>
 
   <xs:element name="zip" type="tns:zipDataFormat"/>
+
+  <xs:element name="zipFile" type="tns:zipFileDataFormat"/>
 
   <xs:complexType name="abstractCamelConsumerTemplateFactoryBean" abstract="true">
     <xs:complexContent>
@@ -363,6 +375,7 @@
         <xs:attribute name="logExhausted" type="xs:string"/>
         <xs:attribute name="disableRedelivery" type="xs:string"/>
         <xs:attribute name="delayPattern" type="xs:string"/>
+        <xs:attribute name="allowRedeliveryWhileStopping" type="xs:string"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -399,6 +412,8 @@
         <xs:attribute name="registerAlways" type="xs:string"/>
         <xs:attribute name="registerNewRoutes" type="xs:string"/>
         <xs:attribute name="statisticsLevel" type="tns:managementStatisticsLevel"/>
+        <xs:attribute name="loadStatisticsEnabled" type="xs:string"/>
+        <xs:attribute name="sanitize" type="xs:string"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -441,6 +456,25 @@
         <xs:attribute name="serviceRef" type="xs:string"/>
         <xs:attribute name="serviceInterface" type="xs:string"/>
         <xs:attribute name="camelContextId" type="xs:string"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="camelStreamCachingStrategyDefinition">
+    <xs:complexContent>
+      <xs:extension base="tns:identifiedType">
+        <xs:sequence/>
+        <xs:attribute name="enabled" type="xs:string"/>
+        <xs:attribute name="spoolDirectory" type="xs:string"/>
+        <xs:attribute name="spoolChiper" type="xs:string"/>
+        <xs:attribute name="spoolThreshold" type="xs:string"/>
+        <xs:attribute name="spoolUsedHeapMemoryThreshold" type="xs:string"/>
+        <xs:attribute name="spoolUsedHeapMemoryLimit" type="xs:string"/>
+        <xs:attribute name="spoolRules" type="xs:string"/>
+        <xs:attribute name="bufferSize" type="xs:string"/>
+        <xs:attribute name="removeSpoolDirectoryWhenStopping" type="xs:string"/>
+        <xs:attribute name="statisticsEnabled" type="xs:string"/>
+        <xs:attribute name="anySpoolRules" type="xs:string"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -615,7 +649,7 @@
     <xs:sequence>
       <xs:element ref="tns:description" minOccurs="0"/>
     </xs:sequence>
-    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="id" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="descriptionDefinition">
@@ -638,6 +672,7 @@
           <xs:element name="completionPredicate" type="tns:expressionSubElementDefinition" minOccurs="0"/>
           <xs:element name="completionTimeout" type="tns:expressionSubElementDefinition" minOccurs="0"/>
           <xs:element name="completionSize" type="tns:expressionSubElementDefinition" minOccurs="0"/>
+          <xs:element ref="tns:optimisticLockRetryPolicy" minOccurs="0"/>
           <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="tns:aop"/>
             <xs:element ref="tns:aggregate"/>
@@ -700,6 +735,7 @@
           </xs:choice>
         </xs:sequence>
         <xs:attribute name="parallelProcessing" type="xs:boolean"/>
+        <xs:attribute name="optimisticLocking" type="xs:boolean"/>
         <xs:attribute name="executorServiceRef" type="xs:string"/>
         <xs:attribute name="timeoutCheckerExecutorServiceRef" type="xs:string"/>
         <xs:attribute name="aggregationRepositoryRef" type="xs:string"/>
@@ -741,6 +777,7 @@
       <xs:element ref="tns:spel"/>
       <xs:element ref="tns:sql"/>
       <xs:element ref="tns:tokenize"/>
+      <xs:element ref="tns:vtdxml"/>
       <xs:element ref="tns:xpath"/>
       <xs:element ref="tns:xquery"/>
     </xs:choice>
@@ -753,6 +790,15 @@
         <xs:attribute name="trim" type="xs:boolean"/>
       </xs:extension>
     </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="optimisticLockRetryPolicyDefinition">
+    <xs:sequence/>
+    <xs:attribute name="maximumRetries" type="xs:int"/>
+    <xs:attribute name="retryDelay" type="xs:long"/>
+    <xs:attribute name="maximumRetryDelay" type="xs:long"/>
+    <xs:attribute name="exponentialBackOff" type="xs:boolean"/>
+    <xs:attribute name="randomBackOff" type="xs:boolean"/>
   </xs:complexType>
 
   <xs:complexType name="beanDefinition">
@@ -883,6 +929,7 @@
             <xs:element ref="tns:spel"/>
             <xs:element ref="tns:sql"/>
             <xs:element ref="tns:tokenize"/>
+            <xs:element ref="tns:vtdxml"/>
             <xs:element ref="tns:xpath"/>
             <xs:element ref="tns:xquery"/>
           </xs:choice>
@@ -1334,10 +1381,11 @@
         <xs:sequence>
           <xs:choice minOccurs="0">
             <xs:element ref="tns:avro"/>
+            <xs:element ref="tns:base64"/>
             <xs:element ref="tns:beanio"/>
             <xs:element ref="tns:bindy"/>
-            <xs:element ref="tns:c24io"/>
             <xs:element ref="tns:castor"/>
+            <xs:element ref="tns:c24io"/>
             <xs:element ref="tns:crypto"/>
             <xs:element ref="tns:csv"/>
             <xs:element name="custom" type="tns:customDataFormat"/>
@@ -1357,9 +1405,11 @@
             <xs:element ref="tns:tidyMarkup"/>
             <xs:element ref="tns:xmlBeans"/>
             <xs:element ref="tns:xmljson"/>
+            <xs:element ref="tns:xmlrpc"/>
             <xs:element ref="tns:xstream"/>
             <xs:element ref="tns:pgp"/>
             <xs:element ref="tns:zip"/>
+            <xs:element ref="tns:zipFile"/>
           </xs:choice>
         </xs:sequence>
         <xs:attribute name="ref" type="xs:string"/>
@@ -1373,6 +1423,17 @@
       <xs:extension base="tns:dataFormat">
         <xs:sequence/>
         <xs:attribute name="instanceClassName" type="xs:string"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="base64DataFormat">
+    <xs:complexContent>
+      <xs:extension base="tns:dataFormat">
+        <xs:sequence/>
+        <xs:attribute name="lineLength" type="xs:int"/>
+        <xs:attribute name="lineSeparator" type="xs:string"/>
+        <xs:attribute name="urlSafe" type="xs:boolean"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1407,17 +1468,6 @@
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="c24IODataFormat">
-    <xs:complexContent>
-      <xs:extension base="tns:dataFormat">
-        <xs:sequence/>
-        <xs:attribute name="elementTypeName" type="xs:string"/>
-        <xs:attribute name="elementType" type="xs:string"/>
-        <xs:attribute name="contentType" type="tns:c24IOContentType"/>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
   <xs:complexType name="castorDataFormat">
     <xs:complexContent>
       <xs:extension base="tns:dataFormat">
@@ -1435,6 +1485,17 @@
             <xs:list itemType="xs:string"/>
           </xs:simpleType>
         </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="c24IODataFormat">
+    <xs:complexContent>
+      <xs:extension base="tns:dataFormat">
+        <xs:sequence/>
+        <xs:attribute name="elementTypeName" type="xs:string"/>
+        <xs:attribute name="elementType" type="xs:string"/>
+        <xs:attribute name="contentType" type="tns:c24IOContentType"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1508,6 +1569,7 @@
       <xs:extension base="tns:dataFormat">
         <xs:sequence/>
         <xs:attribute name="contextPath" type="xs:string" use="required"/>
+        <xs:attribute name="schema" type="xs:string"/>
         <xs:attribute name="prettyPrint" type="xs:boolean"/>
         <xs:attribute name="ignoreJAXBElement" type="xs:boolean"/>
         <xs:attribute name="filterNonXmlChars" type="xs:boolean"/>
@@ -1515,6 +1577,7 @@
         <xs:attribute name="fragment" type="xs:boolean"/>
         <xs:attribute name="partClass" type="xs:string"/>
         <xs:attribute name="partNamespace" type="xs:string"/>
+        <xs:attribute name="namespacePrefixRef" type="xs:string"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1535,6 +1598,7 @@
         <xs:attribute name="prettyPrint" type="xs:boolean"/>
         <xs:attribute name="library" type="tns:jsonLibrary"/>
         <xs:attribute name="unmarshalTypeName" type="xs:string"/>
+        <xs:attribute name="jsonView" type="xs:string"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1588,6 +1652,7 @@
         <xs:attribute name="encoding" type="xs:string"/>
         <xs:attribute name="elementNameStrategyRef" type="xs:string"/>
         <xs:attribute name="version" type="xs:string"/>
+        <xs:attribute name="namespacePrefixRef" type="xs:string"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1647,6 +1712,15 @@
           </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="typeHints" type="xs:string"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="xmlRpcDataFormat">
+    <xs:complexContent>
+      <xs:extension base="tns:dataFormat">
+        <xs:sequence/>
+        <xs:attribute name="request" type="xs:boolean"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1738,6 +1812,15 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="zipFileDataFormat">
+    <xs:complexContent>
+      <xs:extension base="tns:dataFormat">
+        <xs:sequence/>
+        <xs:attribute name="usingIterator" type="xs:boolean"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="modelHelper" final="extension restriction">
     <xs:sequence/>
   </xs:complexType>
@@ -1757,10 +1840,6 @@
         <xs:anyAttribute namespace="##other" processContents="skip"/>
       </xs:extension>
     </xs:complexContent>
-  </xs:complexType>
-
-  <xs:complexType name="nodeFactory">
-    <xs:sequence/>
   </xs:complexType>
 
   <xs:complexType name="onCompletionDefinition">
@@ -1935,8 +2014,10 @@
     <xs:attribute name="logHandled" type="xs:string"/>
     <xs:attribute name="logContinued" type="xs:string"/>
     <xs:attribute name="logExhausted" type="xs:string"/>
+    <xs:attribute name="logExhaustedMessageHistory" type="xs:string"/>
     <xs:attribute name="disableRedelivery" type="xs:string"/>
     <xs:attribute name="delayPattern" type="xs:string"/>
+    <xs:attribute name="allowRedeliveryWhileStopping" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="packageScanDefinition">
@@ -2072,6 +2153,7 @@
             <xs:element ref="tns:spel"/>
             <xs:element ref="tns:sql"/>
             <xs:element ref="tns:tokenize"/>
+            <xs:element ref="tns:vtdxml"/>
             <xs:element ref="tns:xpath"/>
             <xs:element ref="tns:xquery"/>
           </xs:choice>
@@ -2165,6 +2247,7 @@
         <xs:attribute name="capacity" type="xs:int"/>
         <xs:attribute name="timeout" type="xs:long"/>
         <xs:attribute name="ignoreInvalidExchanges" type="xs:boolean"/>
+        <xs:attribute name="rejectOld" type="xs:boolean"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2266,6 +2349,7 @@
         <xs:attribute name="errorHandlerRef" type="xs:string"/>
         <xs:attribute name="group" type="xs:string"/>
         <xs:attribute name="handleFault" type="xs:string"/>
+        <xs:attribute name="messageHistory" type="xs:string"/>
         <xs:attribute name="routePolicyRef" type="xs:string"/>
         <xs:attribute name="shutdownRoute" type="tns:shutdownRoute"/>
         <xs:attribute name="shutdownRunningTask" type="tns:shutdownRunningTask"/>
@@ -2509,13 +2593,14 @@
         <xs:sequence>
           <xs:choice minOccurs="0">
             <xs:element ref="tns:avro"/>
+            <xs:element ref="tns:base64"/>
             <xs:element ref="tns:beanio"/>
             <xs:element ref="tns:bindy"/>
-            <xs:element ref="tns:c24io"/>
             <xs:element ref="tns:castor"/>
             <xs:element ref="tns:crypto"/>
             <xs:element ref="tns:csv"/>
             <xs:element name="custom" type="tns:customDataFormat"/>
+            <xs:element ref="tns:c24io"/>
             <xs:element ref="tns:flatpack"/>
             <xs:element ref="tns:gzip"/>
             <xs:element ref="tns:hl7"/>
@@ -2532,9 +2617,11 @@
             <xs:element ref="tns:tidyMarkup"/>
             <xs:element ref="tns:xmlBeans"/>
             <xs:element ref="tns:xmljson"/>
+            <xs:element ref="tns:xmlrpc"/>
             <xs:element ref="tns:xstream"/>
             <xs:element ref="tns:pgp"/>
             <xs:element ref="tns:zip"/>
+            <xs:element ref="tns:zipFile"/>
           </xs:choice>
         </xs:sequence>
         <xs:attribute name="ref" type="xs:string"/>
@@ -2595,9 +2682,9 @@
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="tns:avro"/>
+        <xs:element ref="tns:base64"/>
         <xs:element ref="tns:beanio"/>
         <xs:element ref="tns:bindy"/>
-        <xs:element ref="tns:c24io"/>
         <xs:element ref="tns:castor"/>
         <xs:element ref="tns:crypto"/>
         <xs:element ref="tns:csv"/>
@@ -2618,9 +2705,11 @@
         <xs:element ref="tns:tidyMarkup"/>
         <xs:element ref="tns:xmlBeans"/>
         <xs:element ref="tns:xmljson"/>
+        <xs:element ref="tns:xmlrpc"/>
         <xs:element ref="tns:xstream"/>
         <xs:element ref="tns:pgp"/>
         <xs:element ref="tns:zip"/>
+        <xs:element ref="tns:zipFile"/>
       </xs:choice>
     </xs:sequence>
   </xs:complexType>
@@ -2765,6 +2854,12 @@
     </xs:simpleContent>
   </xs:complexType>
 
+  <xs:complexType name="vtdXmlExpression">
+    <xs:simpleContent>
+      <xs:extension base="tns:namespaceAwareExpression"/>
+    </xs:simpleContent>
+  </xs:complexType>
+
   <xs:complexType name="xPathExpression">
     <xs:simpleContent>
       <xs:extension base="tns:namespaceAwareExpression">
@@ -2773,6 +2868,7 @@
         <xs:attribute name="factoryRef" type="xs:string"/>
         <xs:attribute name="objectModel" type="xs:string"/>
         <xs:attribute name="logNamespaces" type="xs:boolean"/>
+        <xs:attribute name="headerName" type="xs:string"/>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
@@ -2781,6 +2877,7 @@
     <xs:simpleContent>
       <xs:extension base="tns:namespaceAwareExpression">
         <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="headerName" type="xs:string"/>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
@@ -2806,6 +2903,7 @@
           <xs:element name="package" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element ref="tns:packageScan" minOccurs="0"/>
           <xs:element ref="tns:contextScan" minOccurs="0"/>
+          <xs:element ref="tns:streamCaching" minOccurs="0"/>
           <xs:element ref="tns:jmxAgent" minOccurs="0"/>
           <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="tns:template"/>
@@ -2830,6 +2928,7 @@
         </xs:sequence>
         <xs:attribute name="depends-on" type="xs:string"/>
         <xs:attribute name="trace" type="xs:string"/>
+        <xs:attribute name="messageHistory" type="xs:string"/>
         <xs:attribute name="streamCache" type="xs:string"/>
         <xs:attribute name="delayer" type="xs:string"/>
         <xs:attribute name="handleFault" type="xs:string"/>
@@ -2838,9 +2937,11 @@
         <xs:attribute name="useMDCLogging" type="xs:string"/>
         <xs:attribute name="useBreadcrumb" type="xs:string"/>
         <xs:attribute name="managementNamePattern" type="xs:string"/>
+        <xs:attribute name="threadNamePattern" type="xs:string"/>
         <xs:attribute name="shutdownRoute" type="tns:shutdownRoute"/>
         <xs:attribute name="shutdownRunningTask" type="tns:shutdownRunningTask"/>
         <xs:attribute name="lazyLoadTypeConverters" type="xs:boolean"/>
+        <xs:attribute name="typeConverterStatisticsEnabled" type="xs:boolean"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2997,33 +3098,71 @@
 
   <xs:simpleType name="exchangePattern">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="InOnly"/>
-      <xs:enumeration value="RobustInOnly"/>
-      <xs:enumeration value="InOut"/>
-      <xs:enumeration value="InOptionalOut"/>
-      <xs:enumeration value="OutOnly"/>
-      <xs:enumeration value="RobustOutOnly"/>
       <xs:enumeration value="OutIn"/>
+      <xs:enumeration value="RobustOutOnly"/>
+      <xs:enumeration value="InOptionalOut"/>
+      <xs:enumeration value="RobustInOnly"/>
       <xs:enumeration value="OutOptionalIn"/>
+      <xs:enumeration value="OutOnly"/>
+      <xs:enumeration value="InOut"/>
+      <xs:enumeration value="InOnly"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="loggingLevel">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="DEBUG"/>
       <xs:enumeration value="ERROR"/>
       <xs:enumeration value="INFO"/>
       <xs:enumeration value="TRACE"/>
-      <xs:enumeration value="WARN"/>
       <xs:enumeration value="OFF"/>
+      <xs:enumeration value="WARN"/>
+      <xs:enumeration value="DEBUG"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="threadPoolRejectedPolicy">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DiscardOldest"/>
+      <xs:enumeration value="CallerRuns"/>
+      <xs:enumeration value="Abort"/>
+      <xs:enumeration value="Discard"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="managementStatisticsLevel">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="All"/>
-      <xs:enumeration value="RoutesOnly"/>
       <xs:enumeration value="Off"/>
+      <xs:enumeration value="RoutesOnly"/>
+      <xs:enumeration value="All"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="bindyType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="KeyValue"/>
+      <xs:enumeration value="Fixed"/>
+      <xs:enumeration value="Csv"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="c24IOContentType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Java"/>
+      <xs:enumeration value="Text"/>
+      <xs:enumeration value="Binary"/>
+      <xs:enumeration value="Default"/>
+      <xs:enumeration value="Auto"/>
+      <xs:enumeration value="TagValuePair"/>
+      <xs:enumeration value="Sax"/>
+      <xs:enumeration value="Xml"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="jsonLibrary">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="XStream"/>
+      <xs:enumeration value="Gson"/>
+      <xs:enumeration value="Jackson"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -3041,59 +3180,13 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <xs:simpleType name="threadPoolRejectedPolicy">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Abort"/>
-      <xs:enumeration value="CallerRuns"/>
-      <xs:enumeration value="DiscardOldest"/>
-      <xs:enumeration value="Discard"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="waitForTaskToComplete">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Never"/>
-      <xs:enumeration value="IfReplyExpected"/>
-      <xs:enumeration value="Always"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="bindyType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Csv"/>
-      <xs:enumeration value="Fixed"/>
-      <xs:enumeration value="KeyValue"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="c24IOContentType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Default"/>
-      <xs:enumeration value="Auto"/>
-      <xs:enumeration value="Binary"/>
-      <xs:enumeration value="Text"/>
-      <xs:enumeration value="Java"/>
-      <xs:enumeration value="Xml"/>
-      <xs:enumeration value="Sax"/>
-      <xs:enumeration value="TagValuePair"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="jsonLibrary">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="XStream"/>
-      <xs:enumeration value="Jackson"/>
-      <xs:enumeration value="Gson"/>
-    </xs:restriction>
-  </xs:simpleType>
-
   <xs:simpleType name="errorHandlerType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="DefaultErrorHandler"/>
-      <xs:enumeration value="DeadLetterChannel"/>
-      <xs:enumeration value="LoggingErrorHandler"/>
       <xs:enumeration value="NoErrorHandler"/>
+      <xs:enumeration value="LoggingErrorHandler"/>
       <xs:enumeration value="TransactionErrorHandler"/>
+      <xs:enumeration value="DeadLetterChannel"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

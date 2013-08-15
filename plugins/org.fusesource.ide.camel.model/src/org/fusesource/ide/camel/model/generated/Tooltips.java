@@ -40,7 +40,9 @@ public class Tooltips extends NLS {
     public static String tooltipAggregateTimeoutCheckerExecutorServiceRef;
     public static String tooltipAggregateAggregationRepositoryRef;
     public static String tooltipAggregateStrategyRef;
+    public static String tooltipAggregateOptimisticLockRetryPolicyDefinition;
     public static String tooltipAggregateParallelProcessing;
+    public static String tooltipAggregateOptimisticLocking;
     public static String tooltipAggregateCompletionSize;
     public static String tooltipAggregateCompletionInterval;
     public static String tooltipAggregateCompletionTimeout;
@@ -211,6 +213,7 @@ public class Tooltips extends NLS {
     public static String tooltipRouteErrorHandlerRef;
     public static String tooltipRouteGroup;
     public static String tooltipRouteHandleFault;
+    public static String tooltipRouteMessageHistory;
     public static String tooltipRouteRoutePolicyRef;
     public static String tooltipRouteStreamCache;
     public static String tooltipRouteTrace;
@@ -338,7 +341,9 @@ public class Tooltips extends NLS {
     map.put("tooltipAggregate.TimeoutCheckerExecutorServiceRef", tooltipAggregateTimeoutCheckerExecutorServiceRef);
     map.put("tooltipAggregate.AggregationRepositoryRef", tooltipAggregateAggregationRepositoryRef);
     map.put("tooltipAggregate.StrategyRef", tooltipAggregateStrategyRef);
+    map.put("tooltipAggregate.OptimisticLockRetryPolicyDefinition", tooltipAggregateOptimisticLockRetryPolicyDefinition);
     map.put("tooltipAggregate.ParallelProcessing", tooltipAggregateParallelProcessing);
+    map.put("tooltipAggregate.OptimisticLocking", tooltipAggregateOptimisticLocking);
     map.put("tooltipAggregate.CompletionSize", tooltipAggregateCompletionSize);
     map.put("tooltipAggregate.CompletionInterval", tooltipAggregateCompletionInterval);
     map.put("tooltipAggregate.CompletionTimeout", tooltipAggregateCompletionTimeout);
@@ -474,6 +479,7 @@ public class Tooltips extends NLS {
     map.put("tooltipRoute.ErrorHandlerRef", tooltipRouteErrorHandlerRef);
     map.put("tooltipRoute.Group", tooltipRouteGroup);
     map.put("tooltipRoute.HandleFault", tooltipRouteHandleFault);
+    map.put("tooltipRoute.MessageHistory", tooltipRouteMessageHistory);
     map.put("tooltipRoute.RoutePolicyRef", tooltipRouteRoutePolicyRef);
     map.put("tooltipRoute.StreamCache", tooltipRouteStreamCache);
     map.put("tooltipRoute.Trace", tooltipRouteTrace);

@@ -128,10 +128,11 @@ public class Marshal extends AbstractNode {
       
 		PropertyDescriptor descDataFormatType = new ComplexUnionPropertyDescriptor(PROPERTY_DATAFORMATTYPE, Messages.propertyLabelMarshalDataFormatType, DataFormatDefinition.class, new UnionTypeValue[]{
 		        new UnionTypeValue("avro", org.apache.camel.model.dataformat.AvroDataFormat.class),
+		        new UnionTypeValue("base64", org.apache.camel.model.dataformat.Base64DataFormat.class),
 		        new UnionTypeValue("beanio", org.apache.camel.model.dataformat.BeanioDataFormat.class),
 		        new UnionTypeValue("bindy", org.apache.camel.model.dataformat.BindyDataFormat.class),
-		        new UnionTypeValue("c24io", org.apache.camel.model.dataformat.C24IODataFormat.class),
 		        new UnionTypeValue("castor", org.apache.camel.model.dataformat.CastorDataFormat.class),
+		        new UnionTypeValue("c24io", org.apache.camel.model.dataformat.C24IODataFormat.class),
 		        new UnionTypeValue("crypto", org.apache.camel.model.dataformat.CryptoDataFormat.class),
 		        new UnionTypeValue("csv", org.apache.camel.model.dataformat.CsvDataFormat.class),
 		        new UnionTypeValue("custom", org.apache.camel.model.dataformat.CustomDataFormat.class),
@@ -151,9 +152,11 @@ public class Marshal extends AbstractNode {
 		        new UnionTypeValue("tidyMarkup", org.apache.camel.model.dataformat.TidyMarkupDataFormat.class),
 		        new UnionTypeValue("xmlBeans", org.apache.camel.model.dataformat.XMLBeansDataFormat.class),
 		        new UnionTypeValue("xmljson", org.apache.camel.model.dataformat.XmlJsonDataFormat.class),
+		        new UnionTypeValue("xmlrpc", org.apache.camel.model.dataformat.XmlRpcDataFormat.class),
 		        new UnionTypeValue("xstream", org.apache.camel.model.dataformat.XStreamDataFormat.class),
 		        new UnionTypeValue("pgp", org.apache.camel.model.dataformat.PGPDataFormat.class),
 		        new UnionTypeValue("zip", org.apache.camel.model.dataformat.ZipDataFormat.class),
+		        new UnionTypeValue("zipFile", org.apache.camel.model.dataformat.ZipFileDataFormat.class),
 		  		});
   	  		descriptors.put(PROPERTY_REF, descRef);
 		descriptors.put(PROPERTY_DATAFORMATTYPE, descDataFormatType);
