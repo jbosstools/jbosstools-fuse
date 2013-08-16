@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.fusesource.ide.server.extensions.feature"
-      label="JBoss Fuse Server Extension Plugins for Eclipse 6.0"
+      label="JBoss Fuse Server Extension Feature"
       version="7.2.0.qualifier"
       provider-name="Red Hat Inc.">
 

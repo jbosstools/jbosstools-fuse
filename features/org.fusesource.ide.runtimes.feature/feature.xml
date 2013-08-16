@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.fusesource.ide.runtimes.feature"
-      label="JBoss Fuse Runtimes Plugins for Eclipse 6.0"
+      label="JBoss Fuse Runtimes Feature"
       version="7.2.0.qualifier"
       provider-name="Red Hat Inc.">
 
