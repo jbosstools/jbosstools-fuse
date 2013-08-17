@@ -7,15 +7,45 @@
 		<groupId>org.fusesource.ide</groupId>
 		<artifactId>project</artifactId>
 		<version>7.2.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>org.fusesource.ide.updatesite</artifactId>
 	<packaging>eclipse-repository</packaging>
 	<name>Fuse :: Update Site</name>
 
+	<properties>
+		<update.site.name>Fuse</update.site.name>
+		<update.site.description>Nightly Build</update.site.description>
+		<update.site.version>7.2.0.${BUILD_ALIAS}</update.site.version>
+		<target.eclipse.version>4.3 (Kepler)</target.eclipse.version>
+		<siteTemplateFolder>siteTemplateFolder</siteTemplateFolder>
+	</properties>
+	
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.jboss.tools.tycho-plugins</groupId>
+				<artifactId>repository-utils</artifactId>
+				<version>0.16.0-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>generate-facade</id>
+						<phase>package</phase>
+						<goals>
+							<goal>generate-repository-facade</goal>
+						</goals>
+						<configuration>
+							<siteTemplateFolder>${siteTemplateFolder}</siteTemplateFolder>
+							<symbols>
+								<update.site.name>${update.site.name}</update.site.name>
+								<update.site.description>${update.site.description}</update.site.description>
+								<update.site.version>${update.site.version}</update.site.version>
+								<target.eclipse.version>${target.eclipse.version}</target.eclipse.version>
+							</symbols>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-dependency-plugin</artifactId> 
 				<executions> <execution> <id>copy-dependencies</id> <phase>package</phase> 
 				<goals> <goal>copy-dependencies</goal> </goals> <configuration> <outputDirectory>${project.build.directory}/site/plugins/</outputDirectory> 
