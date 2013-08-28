@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.fabric.camel.navigator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +31,6 @@ import org.fusesource.fon.util.messages.IMessage;
 import org.fusesource.fon.util.messages.ITraceExchangeBrowser;
 import org.fusesource.fon.util.messages.ITraceExchangeList;
 import org.fusesource.fon.util.messages.NodeStatisticsContainer;
-
 import org.fusesource.fabric.camel.facade.CamelFacade;
 import org.fusesource.fabric.camel.facade.mbean.CamelContextMBean;
 import org.fusesource.fabric.camel.facade.mbean.CamelFabricTracerMBean;
@@ -421,11 +421,12 @@ ImageProvider {
 			// all routes
 			CamelFabricTracerMBean tracer = getTracer();
 			if (tracer != null) {
+				String traceXml = tracer.dumpAllTracedMessagesAsXml();
 				List<FabricTracerEventMessage> traceMessages;
 				if (id == null) {
-					traceMessages = tracer.dumpAllTracedMessages();
+					traceMessages = getTraceMessagesFromXml(traceXml);
 				} else {
-					traceMessages = tracer.dumpTracedMessages(id);
+					traceMessages = getTraceMessagesFromXml(traceXml, id);
 				}
 				traceList.addTraceMessages(traceMessages);
 			} else {
@@ -437,7 +438,23 @@ ImageProvider {
 		}
 		return traceList;
 	}
+	
+	private List<FabricTracerEventMessage> getTraceMessagesFromXml(String xmlDump) {
+		List<FabricTracerEventMessage> events = new ArrayList<FabricTracerEventMessage>();
+		
+		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml()");
+		
+		return events;
+	}
 
+	private List<FabricTracerEventMessage> getTraceMessagesFromXml(String xmlDump, String id) {
+		List<FabricTracerEventMessage> events = new ArrayList<FabricTracerEventMessage>();
+		
+		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml(id)");
+		
+		return events;
+	}
+	
 	@Override
 	public Image getImage() {
 		if (isTracing()) {

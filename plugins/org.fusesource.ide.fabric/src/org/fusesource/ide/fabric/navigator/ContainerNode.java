@@ -36,6 +36,9 @@ import org.fusesource.fabric.api.CreateContainerOptions;
 import org.fusesource.fabric.api.FabricService;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.fabric.api.Version;
+import org.fusesource.fabric.service.ContainerTemplate;
+import org.fusesource.fabric.service.Containers;
+import org.fusesource.fabric.service.JmxTemplateSupport;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.tree.GraphableNode;
 import org.fusesource.ide.commons.tree.GraphableNodeConnected;
@@ -69,6 +72,8 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 	private final Container container;
 	private ILogBrowser logBrowser;
+	private JmxTemplateSupport jmxTemplate;
+	private ContainerTemplate containerTemplate;
 	private FabricConnectionWrapper connectionWrapper;
 
 	public static ContainerNode toContainerNode(Object object) {
@@ -202,10 +207,9 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 	@Override
 	protected void checkLoaded() {
-		System.out.println("TODO: checkLoaded()");
-//		if (hasJmxConnector()) {
-//			super.checkLoaded();
-//		}
+		if (hasJmxConnector()) {
+			super.checkLoaded();
+		}
 	}
 
 	@Override
@@ -216,13 +220,19 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 	@Override
 	protected void loadChildren() {
-		System.out.println("TODO: plug the JMX via Jolokia under the container node...");
-//		if (hasJmxConnector()) {
-//			connectionWrapper = new FabricConnectionWrapper(this);
-//			addChild(connectionWrapper);
-//		}
+		if (hasJmxConnector()) {
+			connectionWrapper = new FabricConnectionWrapper(this);
+			addChild(connectionWrapper);
+		}
 	}
 
+	protected boolean hasJmxConnector() {
+		Container a = getContainer();
+		String jmxUrl = a.getJmxUrl();
+		boolean provisioned = a.isAlive() && a.isProvisioningComplete();
+		return jmxUrl != null && jmxUrl.trim().length()>0 && (provisioned || a.isRoot());
+	}
+	
 	public Container getContainer() {
 		return container;
 	}
@@ -477,6 +487,27 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		}
 	}
 
+	public ContainerTemplate getContainerTemplate() {
+		if (containerTemplate == null) {
+			Fabric fabric = getFabric();
+			containerTemplate = Containers.newContainerTemplate(container, fabric.getUserName(), fabric.getPassword());
+			containerTemplate.setLogin(fabric.getUserName());
+			containerTemplate.setPassword(fabric.getPassword());
+		}
+		return containerTemplate;
+	}
+	
+	public void setContainerTemplate(ContainerTemplate agentTemplate) {
+		this.containerTemplate = agentTemplate;
+	}
+	
+	public JmxTemplateSupport getJmxTemplate() {
+		if (jmxTemplate == null) {
+			jmxTemplate = getContainerTemplate().getJmxTemplate();
+		}
+		return jmxTemplate;
+	}
+	
 	@Override
 	public RefreshableNode getParent() {
 		return (RefreshableNode) super.getParent();
