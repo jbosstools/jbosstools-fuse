@@ -571,12 +571,13 @@
       <artifactId>jackson-mapper-asl</artifactId>
       <version>${jackson-version}</version>
     </dependency>
+<!--
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-jaxrs</artifactId>
       <version>${jackson-version}</version>
     </dependency>
-
+-->
     <dependency>
       <groupId>org.apache.aries</groupId>
       <artifactId>org.apache.aries.util</artifactId>
@@ -597,11 +598,13 @@
       <artifactId>org.apache.aries.blueprint.annotation.api</artifactId>
       <version>${aries-blueprint-version}</version>
     </dependency>
+<!--
     <dependency>
       <groupId>org.apache.aries.blueprint</groupId>
       <artifactId>org.apache.aries.blueprint.annotation.impl</artifactId>
       <version>${aries-blueprint-version}</version>
     </dependency>
+-->
     <dependency>
       <groupId>org.apache.aries.quiesce</groupId>
       <artifactId>org.apache.aries.quiesce.api</artifactId>
@@ -719,6 +722,36 @@
       <artifactId>tooling-servicemix-facade</artifactId>
       <version>${fabric-version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-osgi</artifactId>
+      <version>${activemq-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jms_1.1_spec</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-j2ee-management_1.1_spec</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-annotation_1.0_spec</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.servicemix.nmr</groupId>
+      <artifactId>org.apache.servicemix.nmr.api</artifactId>
+      <version>${nmr-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.servicemix.nmr</groupId>
+      <artifactId>org.apache.servicemix.nmr.management</artifactId>
+      <version>${nmr-version}</version>
+    </dependency>
     <!-- HERE ENDS JMX Facades for Camel, SMX and AMQ -->
 
 
@@ -762,11 +795,7 @@
       <artifactId>org.apache.servicemix.bundles.cglib</artifactId>
       <version>2.2_2</version>
     </dependency>
-    <dependency>
-        <groupId>org.apache.activemq</groupId>
-        <artifactId>activemq-osgi</artifactId>
-        <version>${activemq-version}</version>
-    </dependency>
+    
     <dependency>
         <groupId>org.apache.activemq</groupId>
         <artifactId>activemq-karaf</artifactId>
@@ -782,21 +811,7 @@
       <artifactId>jettison</artifactId>
       <version>${jettison-version}</version>
     </dependency>  
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-jms_1.1_spec</artifactId>
-      <version>1.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-j2ee-management_1.1_spec</artifactId>
-      <version>1.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-annotation_1.0_spec</artifactId>
-      <version>1.1.1</version>
-    </dependency>
+    
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.xmlpull</artifactId>
@@ -809,16 +824,7 @@
       <artifactId>curator-framework</artifactId>
       <version>${curator.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.servicemix.nmr</groupId>
-      <artifactId>org.apache.servicemix.nmr.api</artifactId>
-      <version>${nmr-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicemix.nmr</groupId>
-      <artifactId>org.apache.servicemix.nmr.management</artifactId>
-      <version>${nmr-version}</version>
-    </dependency>
+    
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>fabric-core</artifactId>

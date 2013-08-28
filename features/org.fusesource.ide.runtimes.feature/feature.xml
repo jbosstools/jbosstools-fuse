@@ -49,6 +49,30 @@ Raleigh NC 27606 USA.
    </requires>
 
    <plugin
+         id="org.fusesource.ide.fabric"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.fusesource.ide.fabric.activemq"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.fusesource.ide.fabric.camel"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.fusesource.ide.fabric.servicemix"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
          id="org.fusesource.ide.jvmmonitor.core"
          download-size="0"
          install-size="0"
@@ -136,14 +160,14 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   
+   <!--
    <plugin
          id="org.apache.aries.blueprint.annotation.impl"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+   -->      
    <plugin
          id="org.fusesource.fabric.tooling-fabric-all"
          download-size="0"
@@ -172,13 +196,14 @@ Raleigh NC 27606 USA.
          version="0.0.0"
          unpack="false"/>
 
+<!--
    <plugin
          id="jackson-jaxrs"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+-->         
    <plugin
          id="bcprov"
          download-size="0"
@@ -213,138 +238,53 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-<!--
-   
+         
    <plugin
-         id="org.fusesource.fabric.fabric-client"
+         id="org.apache.activemq.activemq-osgi"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.fabric.fabric-api"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-   
-   <plugin
-         id="org.fusesource.fabric.tooling-jclouds-all"
+         id="org.apache.geronimo.specs.geronimo-j2ee-management_1.1_spec"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.fabric.fabric-zookeeper"
+         id="org.apache.geronimo.specs.geronimo-jms_1.1_spec"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.hadoop.zookeeper"
+         id="org.apache.geronimo.specs.geronimo-annotation_1.0_spec"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
          
-   <plugin
-         id="org.fusesource.fabric.fabric-linkedin-zookeeper"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.karaf.jaas.boot"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-   
-   <plugin
-         id="org.apache.felix.gogo.runtime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-   
-   <plugin
-         id="org.apache.karaf.features.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-         
-   <plugin
-         id="org.apache.commons.beanutils"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-         
-   <plugin
-         id="org.apache.felix.configadmin"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-       
-    <plugin
-         id="org.fusesource.fabric.fabric-core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-    
-         
-    <plugin
-         id="org.apache.karaf.admin.management"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-    
-    <plugin
-         id="org.apache.commons.codec"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-   
-   
-   ########################################
-   
-
-   
-
-
-
    <plugin
          id="org.apache.servicemix.nmr.api"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+         
    <plugin
          id="org.apache.servicemix.nmr.management"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-
-
+   
    <plugin
          id="commons-management"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
--->
 </feature>

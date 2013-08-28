@@ -63,7 +63,6 @@ Require-Bundle: org.fusesource.fabric.tooling-jclouds-all,
  org.eclipse.tm.terminal.view;bundle-version="2.2.0",
  org.eclipse.core.expressions,
  jackson-core-asl;bundle-version="1.9.10",
- jackson-jaxrs;bundle-version="1.9.10",
  jackson-mapper-asl;bundle-version="1.9.10"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin

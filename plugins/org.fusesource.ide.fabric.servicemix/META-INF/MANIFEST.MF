@@ -5,8 +5,7 @@ Bundle-SymbolicName: org.fusesource.ide.fabric.servicemix;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.fusesource.fabric.fabric-api,
- org.fusesource.ide.fabric,
+Require-Bundle: org.fusesource.ide.fabric,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.jmx.ui,
@@ -30,7 +29,8 @@ Require-Bundle: org.fusesource.fabric.fabric-api,
  org.eclipse.ui.navigator.resources,
  org.apache.servicemix.nmr.api;bundle-version="1.5.0",
  org.apache.servicemix.nmr.management;bundle-version="1.5.0",
- org.fusesource.fabric.fabric-servicemix-facade
+ org.fusesource.fabric.tooling-fabric-all,
+ org.fusesource.fabric.tooling-servicemix-facade
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.servicemix.FabricServiceMixPlugin
 Bundle-ClassPath: .
