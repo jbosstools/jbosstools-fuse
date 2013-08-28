@@ -278,6 +278,5 @@ public class StartMonitoringAction extends Action implements
             throws PartInitException {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
                 .bringToTop(view);
-        view.setPinned(true);
     }
 }

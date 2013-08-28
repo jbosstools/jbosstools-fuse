@@ -225,7 +225,7 @@ abstract public class AbstractJvmPropertySection extends
                     propertySheet.setPinned(false);
                 } else if (e.state == State.JvmConnected) {
                     updatePage();
-                    propertySheet.setPinned(true);
+                    propertySheet.setPinned(false);
                 }
                 refresh();
             }
