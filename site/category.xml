@@ -24,6 +24,6 @@
    <feature url="features/org.jbpm.eclipse.task.feature_6.0.0.201304021236.jar" id="org.jbpm.eclipse.task.feature" version="6.0.0.201304021236">
       <category name="ide_dependencies"/>
    </feature>
-   <category-def name="org.fusesource.ide" label="JBoss Fuse Plugins for Eclipse"/>
+   <category-def name="org.fusesource.ide" label="JBoss Fuse Tooling"/>
    <category-def name="ide_dependencies" label="Dependencies"/>
 </site>
