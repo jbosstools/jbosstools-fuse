@@ -52,6 +52,9 @@
     <module>org.fusesource.ide.launcher</module>
     <module>org.fusesource.ide.launcher.ui</module>
     <module>org.fusesource.ide.project</module>
+
+    <module>org.fusesource.ide.tooling</module>
+
   </modules>
 
 </project>

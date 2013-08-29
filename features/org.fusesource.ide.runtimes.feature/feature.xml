@@ -3,15 +3,12 @@
       id="org.fusesource.ide.runtimes.feature"
       label="JBoss Fuse Runtimes Feature"
       version="7.2.0.qualifier"
-      provider-name="Red Hat Inc.">
+      provider-name="Red Hat Inc."
+      plugin="org.fusesource.ide.tooling">
 
    <description url="http://fusesource.com/products/fuse-ide/">
-      Red Hat JBoss Fuse Plugins for Eclipse lets you work with Fuse and Apache ActiveMQ, Camel,
-CXF, Karaf &amp; ServiceMix.
-You can view, create and edit Enterprise Integration Patterns,
-browse endpoints and routes, drag and drop messages, trace message
-flows, deploy your code to Fuse ESB and 
-browse and visualise runtime processes over JMX and Fuse Fabric.
+      JBoss Fuse Runtimes Feature lets you work with Fuse
+Fabric, monitor processes via JMX, deploy routes to runtimes and work with the cloud.
    </description>
 
    <copyright url="http://redhat.com/">
@@ -32,7 +29,6 @@ Raleigh NC 27606 USA.
    </license>
 
    <url>
-      <update label="Red Hat JBoss Fuse Plugins for Eclipse Update Site" url="http://repo.fusesource.com/ide/"/>
       <discovery label="m2eclipse" url="http://m2eclipse.sonatype.org/sites/m2e/"/>
       <discovery label="Eclipse Indigo" url="http://download.eclipse.org/releases/indigo"/>
       <discovery label="Eclipse Juno" url="http://download.eclipse.org/releases/juno"/>
@@ -139,49 +135,42 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.fusesource.insight.insight-log"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.apache.aries.util"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.apache.aries.blueprint.annotation.api"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   <!--
-   <plugin
-         id="org.apache.aries.blueprint.annotation.impl"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-   -->      
+
    <plugin
          id="org.fusesource.fabric.tooling-fabric-all"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   
+
    <plugin
          id="org.fusesource.fabric.tooling-jclouds-all"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   
+
    <plugin
          id="jackson-core-asl"
          download-size="0"
@@ -196,21 +185,13 @@ Raleigh NC 27606 USA.
          version="0.0.0"
          unpack="false"/>
 
-<!--
-   <plugin
-         id="jackson-jaxrs"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
--->         
    <plugin
          id="bcprov"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.eclipse.gemini.management"
          download-size="0"
@@ -224,21 +205,21 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   
+
    <plugin
          id="org.fusesource.fabric.tooling-servicemix-facade"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.fusesource.fabric.tooling-activemq-facade"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.apache.activemq.activemq-osgi"
          download-size="0"
@@ -266,25 +247,40 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.apache.servicemix.nmr.api"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.apache.servicemix.nmr.management"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   
+
    <plugin
          id="commons-management"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.tooling"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

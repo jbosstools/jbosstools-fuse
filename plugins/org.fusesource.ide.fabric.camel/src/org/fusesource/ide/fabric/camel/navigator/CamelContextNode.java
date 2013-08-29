@@ -442,6 +442,7 @@ ImageProvider {
 	private List<FabricTracerEventMessage> getTraceMessagesFromXml(String xmlDump) {
 		List<FabricTracerEventMessage> events = new ArrayList<FabricTracerEventMessage>();
 		
+		// TODO: unmarshal events from the xml and put to the list of messages
 		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml()");
 		
 		return events;
@@ -450,6 +451,7 @@ ImageProvider {
 	private List<FabricTracerEventMessage> getTraceMessagesFromXml(String xmlDump, String id) {
 		List<FabricTracerEventMessage> events = new ArrayList<FabricTracerEventMessage>();
 		
+		// TODO: unmarshal events from the xml and put to the list of messages
 		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml(id)");
 		
 		return events;

@@ -3,15 +3,12 @@
       id="org.fusesource.ide.server.extensions.feature"
       label="JBoss Fuse Server Extension Feature"
       version="7.2.0.qualifier"
-      provider-name="Red Hat Inc.">
+      provider-name="Red Hat Inc."
+      plugin="org.fusesource.ide.tooling">
 
    <description url="http://fusesource.com/products/fuse-ide/">
-      Red Hat JBoss Fuse Plugins for Eclipse lets you work with Fuse and Apache ActiveMQ, Camel,
-CXF, Karaf &amp; ServiceMix.
-You can view, create and edit Enterprise Integration Patterns,
-browse endpoints and routes, drag and drop messages, trace message
-flows, deploy your code to Fuse ESB and 
-browse and visualise runtime processes over JMX and Fuse Fabric.
+      JBoss Fuse Server Extension Feature lets create servers for Fuse runtimes and enables
+you to start and stop the servers and to connect to the runtimes via SSH console.
    </description>
 
    <copyright url="http://redhat.com/">
@@ -59,6 +56,20 @@ Raleigh NC 27606 USA.
 
    <plugin
          id="org.fusesource.ide.server.karaf.view"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.tooling"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -3,10 +3,11 @@
       id="org.fusesource.ide.camel.editor.feature"
       label="JBoss Fuse Camel Editor Feature"
       version="7.2.0.qualifier"
-      provider-name="Red Hat Inc.">
+      provider-name="Red Hat Inc."
+      plugin="org.fusesource.ide.tooling">
 
    <description url="http://fusesource.com/products/fuse-ide/">
-      Red Hat JBoss Fuse Plugins for Eclipse lets you work with Fuse
+      JBoss Fuse Camel Editor Feature lets you work with Fuse
 and Apache ActiveMQ, Camel,
 CXF, Karaf &amp; ServiceMix.
 This feature contains all needed plugins for creating, editing,
@@ -234,6 +235,13 @@ Raleigh NC 27606 USA.
 
    <plugin
          id="org.eclipse.gemini.management"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.tooling"
          download-size="0"
          install-size="0"
          version="0.0.0"
