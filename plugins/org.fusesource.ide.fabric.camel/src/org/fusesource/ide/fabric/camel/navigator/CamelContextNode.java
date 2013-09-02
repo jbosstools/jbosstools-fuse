@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.camel.RuntimeCamelException;
+import org.apache.camel.api.management.mbean.BacklogTracerEventMessage;
+import org.apache.camel.api.management.mbean.ManagedBacklogTracerMBean;
 import org.apache.camel.fabric.FabricTracerEventMessage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
@@ -26,15 +28,15 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.fusesource.fabric.camel.facade.CamelFacade;
+import org.fusesource.fabric.camel.facade.mbean.CamelContextMBean;
+import org.fusesource.fabric.camel.facade.mbean.CamelFabricTracerMBean;
+import org.fusesource.fabric.camel.facade.mbean.CamelProcessorMBean;
 import org.fusesource.fon.util.messages.IExchange;
 import org.fusesource.fon.util.messages.IMessage;
 import org.fusesource.fon.util.messages.ITraceExchangeBrowser;
 import org.fusesource.fon.util.messages.ITraceExchangeList;
 import org.fusesource.fon.util.messages.NodeStatisticsContainer;
-import org.fusesource.fabric.camel.facade.CamelFacade;
-import org.fusesource.fabric.camel.facade.mbean.CamelContextMBean;
-import org.fusesource.fabric.camel.facade.mbean.CamelFabricTracerMBean;
-import org.fusesource.fabric.camel.facade.mbean.CamelProcessorMBean;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.AbstractNodeFacade;
 import org.fusesource.ide.camel.model.Activator;
@@ -157,7 +159,14 @@ ImageProvider {
 	}
 
 	public boolean isTracing() {
-		return getTracer() != null && getTracer().isEnabled();
+		Object tracer = getTracer();
+		if (tracer == null) return false;
+		
+		if (tracer instanceof ManagedBacklogTracerMBean) {
+			return ((ManagedBacklogTracerMBean)tracer).isEnabled();
+		} else {
+			return ((CamelFabricTracerMBean)tracer).isEnabled();
+		}
 	}
 
 	// Operations
@@ -175,7 +184,12 @@ ImageProvider {
 
 	public void startTracing() {
 		try {
-			getTracer().setEnabled(true);
+			Object tracer = getTracer();
+			if (tracer instanceof ManagedBacklogTracerMBean) {
+				((ManagedBacklogTracerMBean)tracer).setEnabled(true);
+			} else {
+				((CamelFabricTracerMBean)tracer).setEnabled(true);
+			}
 			reloadRoutes();
 			refresh();
 		} catch (Exception e) {
@@ -189,7 +203,12 @@ ImageProvider {
 	}
 
 	public void stopTracing() {
-		getTracer().setEnabled(false);
+		Object tracer = getTracer();
+		if (tracer instanceof ManagedBacklogTracerMBean) {
+			((ManagedBacklogTracerMBean)tracer).setEnabled(false);
+		} else {
+			((CamelFabricTracerMBean)tracer).setEnabled(false);
+		}
 		traceMessageMap.clear();
 		reloadRoutes();
 		refresh();
@@ -340,11 +359,7 @@ ImageProvider {
 	 * Returns true if the camel version allows tracing
 	 */
 	protected boolean canTrace() {
-		String camelVersion = camelContextMBean.getCamelVersion();
-		if (camelVersion != null && (camelVersion.contains("fuse") || camelVersion.contains("redhat"))) {
-			return getTracer() != null;
-		}
-		return false;
+		return getTracer() != null;
 	}
 
 	protected void startMBean() {
@@ -419,19 +434,35 @@ ImageProvider {
 		try {
 			// TODO we should add trace messages for a specific route ID to the
 			// all routes
-			CamelFabricTracerMBean tracer = getTracer();
-			if (tracer != null) {
-				String traceXml = tracer.dumpAllTracedMessagesAsXml();
-				List<FabricTracerEventMessage> traceMessages;
-				if (id == null) {
-					traceMessages = getTraceMessagesFromXml(traceXml);
+			Object tracer = getTracer();
+			if (tracer instanceof ManagedBacklogTracerMBean) {
+				ManagedBacklogTracerMBean camelTracer = (ManagedBacklogTracerMBean)tracer;
+				if (camelTracer != null) {
+					List<BacklogTracerEventMessage> traceMessages = null;
+					if (id == null) {
+						traceMessages = camelTracer.dumpAllTracedMessages();
+					} else {
+						traceMessages = camelTracer.dumpTracedMessages(id);
+					}
+					traceList.addBackLogTraceMessages(traceMessages);
 				} else {
-					traceMessages = getTraceMessagesFromXml(traceXml, id);
+					// TODO should we highlight in the UI that there's no tracer enabled?
 				}
-				traceList.addTraceMessages(traceMessages);
 			} else {
-				// TODO should we highlight in the UI that there's no tracer enabled?
-			}
+				CamelFabricTracerMBean fabricTracer = (CamelFabricTracerMBean)tracer;
+				if (fabricTracer != null) {
+					String traceXml = fabricTracer.dumpAllTracedMessagesAsXml();
+					List<FabricTracerEventMessage> traceMessages;
+					if (id == null) {
+						traceMessages = getTraceMessagesFromXml(traceXml);
+					} else {
+						traceMessages = getTraceMessagesFromXml(traceXml, id);
+					}
+					traceList.addFabricTraceMessages(traceMessages);
+				} else {
+					// TODO should we highlight in the UI that there's no tracer enabled?
+				}
+			}			
 		} catch (Exception e) {
 			FabricPlugin.showUserError("Failed to get tracing messages",
 					"Failed to get tracing messages on CamelContext " + this, e);
@@ -444,6 +475,8 @@ ImageProvider {
 		
 		// TODO: unmarshal events from the xml and put to the list of messages
 		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml()");
+	
+		System.out.println(xmlDump);
 		
 		return events;
 	}
@@ -453,6 +486,8 @@ ImageProvider {
 		
 		// TODO: unmarshal events from the xml and put to the list of messages
 		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml(id)");
+		
+		System.out.println(id + ": >>> \n" + xmlDump);
 		
 		return events;
 	}
@@ -470,9 +505,14 @@ ImageProvider {
 		return getTraceExchangeList(id).getExchangeList();
 	}
 
-	public CamelFabricTracerMBean getTracer() {
+	public Object getTracer() {
 		try {
-			return getFacade().getFabricTracer(getManagementName());
+			ManagedBacklogTracerMBean mbean = getFacade().getCamelTracer(getManagementName());
+			if (mbean != null) {
+				return mbean;
+			} else {
+				return getFacade().getFabricTracer(getManagementName());
+			}
 		} catch (Exception e) {
 			throw new RuntimeCamelException(e);
 		}

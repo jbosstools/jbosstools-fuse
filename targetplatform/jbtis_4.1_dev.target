@@ -27,9 +27,11 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.servicemix.bundles.aopalliance" version="1.0.0.3"/>
+<!--
 <unit id="org.jboss.tools.locus.jcip.annotations" version="1.0.0.Final-v20130729-2113-B39"/>
 <unit id="org.jboss.tools.locus.mockito" version="1.9.5.Final_patched_TEIIDDES-1681-v20130729-2113-B39"/>
 <unit id="org.jboss.tools.locus.sf.saxon" version="9.2.1.5j-Final-v20130729-2113-B39"/>
+-->
 <unit id="org.springframework.aspects" version="3.1.4.RELEASE"/>
 <unit id="org.springframework.osgi.core" version="1.2.1"/>
 <unit id="org.springframework.osgi.extender" version="1.2.1"/>

@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.camel.api.management.mbean.BacklogTracerEventMessage;
 import org.apache.camel.fabric.FabricTracerEventMessage;
 import org.fusesource.fon.util.messages.Exchange;
 import org.fusesource.fon.util.messages.Exchanges;
@@ -48,7 +49,26 @@ public class TraceExchangeList implements ITraceExchangeList {
 		return exchangeList;
 	}
 
-	public void addTraceMessages(List<FabricTracerEventMessage> traceMessages) throws JAXBException, SAXException {
+	public void addBackLogTraceMessages(List<BacklogTracerEventMessage> traceMessages) throws JAXBException, SAXException {
+		for (BacklogTracerEventMessage traceMessage : traceMessages) {
+			String exchangeId = traceMessage.getExchangeId();
+			ExchangeStepList stepList = stepListMap.get(exchangeId);
+			if (stepList == null) {
+				stepList = new ExchangeStepList(exchangeId);
+				stepLists.add(stepList);
+				stepListMap.put(exchangeId, stepList);
+			}
+			IExchange exchange = stepList.addExchange(traceMessage);
+			String toNode = traceMessage.getToNode();
+			if (exchange != null && toNode != null) {
+				INodeStatistics nodeStats = getNodeStats(toNode);
+				nodeStats.addExchange(exchange);
+			}
+		}
+		refreshExchangeList(stepLists);
+	}
+	
+	public void addFabricTraceMessages(List<FabricTracerEventMessage> traceMessages) throws JAXBException, SAXException {
 		for (FabricTracerEventMessage traceMessage : traceMessages) {
 			String exchangeId = traceMessage.getExchangeId();
 			ExchangeStepList stepList = stepListMap.get(exchangeId);
@@ -114,6 +134,17 @@ public class TraceExchangeList implements ITraceExchangeList {
 			return exchangeList;
 		}
 
+		public IExchange addExchange(BacklogTracerEventMessage traceMessage) throws JAXBException, SAXException {
+			IExchange answer = createExchange(traceMessage);
+			if (answer != null) {
+//				answer.getIn().setExchangeIndex(exchangeList.size() + 1);
+				exchangeList.add(answer);
+			}
+			// remember the uuid of this iexchange
+			uuidSet.put(answer, traceMessage.getUid());
+			return answer;
+		}
+		
 		public IExchange addExchange(FabricTracerEventMessage traceMessage) throws JAXBException, SAXException {
 			IExchange answer = createExchange(traceMessage);
 			if (answer != null) {
@@ -161,5 +192,40 @@ public class TraceExchangeList implements ITraceExchangeList {
 			return exchange;
 		}
 
+		public IExchange createExchange(BacklogTracerEventMessage traceMessage) throws JAXBException, SAXException {
+			String xml = traceMessage.getMessageAsXml();
+			Exchange exchange = null;
+			if (!Strings.isBlank(xml)) {
+				exchange = Exchanges.unmarshalNoNamespaceXmlString(xml);
+			}
+			if (exchange == null) {
+				exchange = new Exchange();
+			}
+			IMessage in = exchange.getIn();
+			in.setToNode(traceMessage.getToNode());
+			in.setUuid(traceMessage.getUid());
+			Date timestamp = traceMessage.getTimestamp();
+			if (timestamp != null) {
+				in.setTimestamp(timestamp);
+				long time = timestamp.getTime();
+				long relative = 0;
+				boolean first = false;
+				if (firstExchangeTimeMs == null) {
+					firstExchangeTimeMs = time;
+					first = true;
+				} else {
+					relative = time - firstExchangeTimeMs;
+				}
+				long elapsed = relative - lastTime;
+				lastTime = relative;
+				in.setRelativeTime(relative);
+				if (!first) {
+					in.setElapsedTime(elapsed);
+				}
+			}
+			exchange.setId(traceMessage.getExchangeId());
+			
+			return exchange;
+		}
 	}
 }
