@@ -1306,7 +1306,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 		if (this.wizard.isBlueprintFile(file.getRawLocation().toOSString())) {
 			setSuperClass("org.apache.camel.test.blueprint.CamelBlueprintTestSupport", false);
 		} else {
-			setSuperClass("org.apache.camel.test.junit4.CamelSpringTestSupport", false);
+			setSuperClass("org.apache.camel.test.spring.CamelSpringTestSupport", false);
 		}
 		superClassChanged();
 	}
