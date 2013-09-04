@@ -16,6 +16,7 @@ package org.fusesource.ide.launcher;
  */
 public interface CamelContextLaunchConfigConstants {
 	static final String CAMEL_CONTEXT_LAUNCH_CONFIG_TYPE_ID = "org.fusesource.ide.launcher.camelContext";
+	static final String CAMEL_CONTEXT_NO_TESTS_LAUNCH_CONFIG_TYPE_ID = "org.fusesource.ide.launcher.camelContextNoTests";
 	static final String ATTR_PROTOCOL_PREFIX = "file:";
 	static final String ATTR_CONTEXT_FILE = "camel.fileApplicationContextUri";
 	static final String ATTR_FILE = "rider.file";
