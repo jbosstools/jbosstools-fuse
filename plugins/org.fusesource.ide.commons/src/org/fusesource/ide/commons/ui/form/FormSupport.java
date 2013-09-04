@@ -146,7 +146,7 @@ public abstract class FormSupport implements PropertyChangeListener  {
 			formChild.setText(header);
 		}
 		toolkit.decorateFormHeading(formChild);
-		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		//form.getBody().setLayout(new GridLayout(1, false));
 		GridLayout layout = new GridLayout();
@@ -185,7 +185,7 @@ public abstract class FormSupport implements PropertyChangeListener  {
 	}
 
 	protected Text createText(Composite inner) {
-		return createText(inner, SWT.None);
+		return createText(inner, SWT.NONE | SWT.BORDER);
 	}
 
 	protected Text createText(Composite inner, int flags) {
@@ -213,7 +213,7 @@ public abstract class FormSupport implements PropertyChangeListener  {
 
 	protected Text createTextArea(Composite inner, int flags) {
 		Text answer = toolkit.createText(inner,  "", flags);
-		GridData gdata = new GridData(GridData.FILL_BOTH);
+		GridData gdata = new GridData(SWT.FILL, SWT.FILL, true, true);
 		answer.setLayoutData(gdata);
 		answer.addKeyListener(new KeyListener() {
 
@@ -231,7 +231,7 @@ public abstract class FormSupport implements PropertyChangeListener  {
 	}
 
 	protected Text createBeanPropertyTextField(Composite parent, Object bean, String propertyName, String labelText, String tooltip) {
-		return createBeanPropertyTextField(parent, bean, propertyName, labelText, tooltip, SWT.None);
+		return createBeanPropertyTextField(parent, bean, propertyName, labelText, tooltip, SWT.NONE | SWT.BORDER);
 	}
 
 	protected Text createBeanPropertyTextField(Composite parent, Object bean, String propertyName, String labelText, String tooltip,
@@ -252,14 +252,14 @@ public abstract class FormSupport implements PropertyChangeListener  {
 
 		IViewerObservableValue comboValue = ViewersObservables.observeSingleSelection(combo);
 		Control control = combo.getControl();
-		GridData gdata = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gdata = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		gdata.widthHint = 400;
 		control.setLayoutData(gdata);
 
 		IValidator validator = null;
 		if (isMandatory(bean, propertyName)) {
 			if (control instanceof Combo) {
 				validator = new MandatoryComboValidator(labelText, (Combo) control);
-
 			} else {
 				validator = new MandatoryValidator(labelText);
 			}
@@ -285,6 +285,7 @@ public abstract class FormSupport implements PropertyChangeListener  {
 		Forms.bindBeanProperty(getDataBindingContext(), getMessageManager(), bean, propertyName, isMandatory(bean, propertyName), labelText, comboValue, control);
 
 		toolkit.adapt(control, true, true);
+		combo.refresh();
 		return combo;
 	}
 

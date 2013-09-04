@@ -19,7 +19,6 @@ package org.fusesource.ide.fabric.actions.jclouds;
 
 
 
-import com.google.common.collect.Lists;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -37,6 +36,7 @@ import org.jclouds.apis.ApiMetadata;
 import org.jclouds.providers.ProviderMetadata;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 
 /**
  * The form for adding or editing {@link CloudDetails}
@@ -71,12 +71,12 @@ public class CloudDetailsForm extends FormSupport {
 
     @Override
     public void setFocus() {
-        nameField.setFocus();
+        if (nameField != null) nameField.setFocus();
     }
 
     @Override
     public void createTextFields(Composite parent) {
-        Composite inner = createSectionComposite(Messages.jclouds_cloudDetails, new GridData(GridData.FILL_BOTH));
+        Composite inner = createSectionComposite(Messages.jclouds_cloudDetails, new GridData(SWT.FILL, SWT.FILL, true, true));
 
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
@@ -120,8 +120,8 @@ public class CloudDetailsForm extends FormSupport {
 
         endpointField = createBeanPropertyTextField(inner, details, "endpoint", Messages.jclouds_endpointLabel, Messages.jclouds_endpointTooltip);
         identityField = createBeanPropertyTextField(inner, details, "identity", Messages.jclouds_identityLabel, Messages.jclouds_identityTooltip);
-        createBeanPropertyTextField(inner, details, "credential", Messages.jclouds_credentialLabel, Messages.jclouds_credentialTooltip, SWT.PASSWORD);
-        createBeanPropertyTextField(inner, details, "ownerId", Messages.jclouds_ownerLabel, Messages.jclouds_ownerTooltip, SWT.PASSWORD);
+        createBeanPropertyTextField(inner, details, "credential", Messages.jclouds_credentialLabel, Messages.jclouds_credentialTooltip, SWT.BORDER | SWT.PASSWORD);
+        createBeanPropertyTextField(inner, details, "ownerId", Messages.jclouds_ownerLabel, Messages.jclouds_ownerTooltip, SWT.BORDER | SWT.PASSWORD);
 
         endpointField.setEnabled(false);
         apiNameField.addPostSelectionChangedListener(new ISelectionChangedListener() {
@@ -135,7 +135,7 @@ public class CloudDetailsForm extends FormSupport {
 
 
     protected ComboViewer createBeanPropertyCombo(Composite parent, Object bean, String propertyName, String labelText, String tooltip, Iterable<?> input) {
-        ComboViewer answer = createBeanPropertyCombo(parent, bean, propertyName, labelText, tooltip, SWT.READ_ONLY);
+        ComboViewer answer = createBeanPropertyCombo(parent, bean, propertyName, labelText, tooltip, SWT.BORDER | SWT.READ_ONLY);
         answer.setInput(Lists.newArrayList(input));
         answer.setLabelProvider(JCloudsLabelProvider.getInstance());
         return answer;

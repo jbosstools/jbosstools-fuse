@@ -65,12 +65,12 @@ public class JClouds {
 		
 		@Override
 		public String getName() {
-			return "";
+			return " ";
 		}
 		
 		@Override
 		public String getIdentityName() {
-			return "";
+			return " ";
 		}
 		
 		@Override
@@ -138,7 +138,7 @@ public class JClouds {
 		
 		@Override
 		public String getName() {
-			return "";
+			return " ";
 		}
 		
 		@Override
