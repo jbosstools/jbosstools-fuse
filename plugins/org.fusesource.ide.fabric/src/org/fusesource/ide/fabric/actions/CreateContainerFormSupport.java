@@ -150,7 +150,7 @@ public abstract class CreateContainerFormSupport extends ProfileTreeSelectionFor
 		containerNameField = createBeanPropertyTextField(inner, this, AGENT_NAME_PROPERTY, Messages.agentNameLabel, Messages.agentNameTooltip);
 
 		if (chooseVersion()) {
-			versionCombo = createBeanPropertyCombo(inner, this, AGENT_VERSION_PROPERTY, Messages.agentVersionLabel, Messages.agentVersionTooltip, SWT.READ_ONLY);
+			versionCombo = createBeanPropertyCombo(inner, this, AGENT_VERSION_PROPERTY, Messages.agentVersionLabel, Messages.agentVersionTooltip, SWT.READ_ONLY | SWT.BORDER);
 			versionCombo.setContentProvider(new IStructuredContentProvider() {
 				@Override
 				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {

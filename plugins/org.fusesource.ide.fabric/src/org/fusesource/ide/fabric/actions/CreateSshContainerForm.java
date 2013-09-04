@@ -84,7 +84,7 @@ public class CreateSshContainerForm extends CreateContainerFormSupport {
 
 		hostField = createBeanPropertyTextField(inner, args, "host", Messages.agentHostLabel, Messages.agentHostLabel);
 		createBeanPropertyTextField(inner, args, "username", Messages.agentUserLabel, Messages.agentUserLabel);
-		createBeanPropertyTextField(inner, args, "password", Messages.agentPasswordLabel, Messages.agentPasswordLabel, SWT.PASSWORD);
+		createBeanPropertyTextField(inner, args, "password", Messages.agentPasswordLabel, Messages.agentPasswordLabel, SWT.PASSWORD | SWT.BORDER);
 		createBeanPropertyTextField(inner, args, "path", Messages.agentPathLabel, Messages.agentPathTooltip);
 		createBeanPropertyTextField(inner, args, "port", Messages.agentPortLabel, Messages.agentPortLabel);
 		createBeanPropertyTextField(inner, args, "sshRetries", Messages.agentSshRetriesLabel, Messages.agentSshRetriesTooltip);

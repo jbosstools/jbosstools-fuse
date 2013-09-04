@@ -189,14 +189,14 @@ public class ProfileRequirementsForm extends ProfilesFormSupport {
 		createLabel(inner, "Minimum Instances");
 		GridData data = new GridData(SWT.LEFT, SWT.TOP, true, false, 2, 1);
 		data.minimumWidth = 60;
-		minInstances = createText(inner, SWT.RIGHT);
+		minInstances = createText(inner, SWT.RIGHT | SWT.BORDER);
 		minInstances.setLayoutData(data);
 		minInstances.addFocusListener(focusListener);
 		
 		createLabel(inner, "Maximum Instances");
 		data = new GridData(SWT.LEFT, SWT.TOP, true, false, 2, 1);
 		data.minimumWidth = 60;
-		maxInstances = createText(inner, SWT.RIGHT);
+		maxInstances = createText(inner, SWT.RIGHT | SWT.BORDER);
 		maxInstances.setLayoutData(data);
 		maxInstances.addFocusListener(focusListener);
 		
@@ -217,7 +217,7 @@ public class ProfileRequirementsForm extends ProfilesFormSupport {
 
 		createLabel(inner, "");
 		
-		Button clearSelectionBtn = new Button(inner, SWT.PUSH);
+		Button clearSelectionBtn = new Button(inner, SWT.PUSH | SWT.BORDER);
 		data = new GridData(SWT.LEFT, SWT.TOP, true, false, 2, 1);
 		clearSelectionBtn.setLayoutData(data);
 		clearSelectionBtn.setText("Deselect All");

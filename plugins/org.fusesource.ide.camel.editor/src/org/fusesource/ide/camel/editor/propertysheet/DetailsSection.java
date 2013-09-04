@@ -285,7 +285,7 @@ public class DetailsSection extends NodeSectionSupport {
 				composite.setLayout(layout);
 				widget = composite;
 
-				Text text = toolkit.createText(composite, "");
+				Text text = toolkit.createText(composite, "", SWT.BORDER);
 				text.setToolTipText(tooltip);
 
 				gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -307,7 +307,7 @@ public class DetailsSection extends NodeSectionSupport {
 				toolkit.createLabel(composite, languageLabel);
 				// toolkit.createSeparator(composite, SWT.SEPARATOR);
 
-				Combo combo = new Combo(composite, SWT.NONE);
+				Combo combo = new Combo(composite, SWT.NONE | SWT.BORDER);
 				combo.setItems(new Languages().languageArray());
 				toolkit.adapt(combo, true, true);
 
@@ -338,7 +338,7 @@ public class DetailsSection extends NodeSectionSupport {
 				String propertyName = getPropertyName(id);
 				Class refType = isBeanRef(node, propertyName);
 				if (refType != null) {
-					Combo combo = new Combo(parent, SWT.NONE);
+					Combo combo = new Combo(parent, SWT.NONE | SWT.BORDER);
 					String[] beanRefs = getBeanRefs(refType);
 					combo.setItems(beanRefs);
 					toolkit.adapt(combo, true, true);
@@ -347,7 +347,7 @@ public class DetailsSection extends NodeSectionSupport {
 					ISWTObservableValue comboValue = WidgetProperties.selection().observe(combo);
 					Forms.bindBeanProperty(bindingContext, mmng, node, propertyName, isMandatory(node, propertyName), labelText, comboValue, combo);
 				} else if (isEndpointUri(node, propertyName)) {
-					Combo combo = new Combo(parent, SWT.NONE);
+					Combo combo = new Combo(parent, SWT.NONE | SWT.BORDER);
 					combo.setItems(getEndpointUris());
 					toolkit.adapt(combo, true, true);
 					widget = combo;
@@ -369,7 +369,7 @@ public class DetailsSection extends NodeSectionSupport {
 					}
 				} else if (descriptor instanceof EnumPropertyDescriptor) {
 					EnumPropertyDescriptor enumProperty = (EnumPropertyDescriptor) descriptor;
-					ComboViewer combo = new ComboViewer(parent, SWT.READ_ONLY);
+					ComboViewer combo = new ComboViewer(parent, SWT.READ_ONLY | SWT.BORDER);
 					combo.setContentProvider(ArrayContentProvider.getInstance());
 					combo.setInput(getEnumValues(enumProperty.getEnumType()));
 
@@ -384,7 +384,7 @@ public class DetailsSection extends NodeSectionSupport {
 					if (isDescription) {
 						text = toolkit.createText(parent, "", SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
 					} else {
-						text = toolkit.createText(parent, "");
+						text = toolkit.createText(parent, "", SWT.BORDER);
 					}
 					text.setToolTipText(tooltip);
 					widget = text;
@@ -547,13 +547,13 @@ public class DetailsSection extends NodeSectionSupport {
 		Class refType = isBeanRef(value, propertyName);
 		IObservable observable;
 		if (boolean.class.isAssignableFrom(propertyType) || Boolean.class.isAssignableFrom(propertyType)) {
-			Button checkbox = new Button(parent, SWT.CHECK);
+			Button checkbox = new Button(parent, SWT.CHECK | SWT.BORDER);
 			widget = checkbox;
 			ISWTObservableValue textValue = Forms.observe(checkbox);
 			observable = textValue;
 			Forms.bindPojoProperty(bindingContext, mmng, value, propertyName, isMandatory(value, propertyName), labelText, textValue, checkbox);
 		} else if (refType != null) {
-			Combo combo = new Combo(parent, SWT.NONE);
+			Combo combo = new Combo(parent, SWT.NONE | SWT.BORDER);
 			String[] beanRefs = getBeanRefs(refType);
 			combo.setItems(beanRefs);
 			toolkit.adapt(combo, true, true);
@@ -563,7 +563,7 @@ public class DetailsSection extends NodeSectionSupport {
 			observable = comboValue;
 			Forms.bindPojoProperty(bindingContext, mmng, value, propertyName, isMandatory(value, propertyName), labelText, comboValue, combo);
 		} else if (isEndpointUri(value, propertyName)) {
-			Combo combo = new Combo(parent, SWT.NONE);
+			Combo combo = new Combo(parent, SWT.NONE | SWT.BORDER);
 			combo.setItems(getEndpointUris());
 			toolkit.adapt(combo, true, true);
 			widget = combo;
@@ -572,7 +572,7 @@ public class DetailsSection extends NodeSectionSupport {
 			observable = comboValue;
 			Forms.bindPojoProperty(bindingContext, mmng, value, propertyName, isMandatory(value, propertyName), labelText, comboValue, combo);
 		} else if (Enum.class.isAssignableFrom(propertyType)) {
-			ComboViewer combo = new ComboViewer(parent, SWT.READ_ONLY);
+			ComboViewer combo = new ComboViewer(parent, SWT.READ_ONLY | SWT.BORDER);
 			combo.setContentProvider(ArrayContentProvider.getInstance());
 			combo.setInput(getEnumValues((Class<? extends Enum>) propertyType));
 
@@ -616,15 +616,15 @@ public class DetailsSection extends NodeSectionSupport {
 		final Text name = toolkit.createText(panel, "");
 		name.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		final Button add = new Button(panel, SWT.PUSH);
+		final Button add = new Button(panel, SWT.PUSH | SWT.BORDER);
 		add.setText("Add");
 		add.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 
-		final Button delete = new Button(panel, SWT.PUSH);
+		final Button delete = new Button(panel, SWT.PUSH | SWT.BORDER);
 		delete.setText("Delete");
 		// delete.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 
-		final ListViewer viewer = new ListViewer(panel);
+		final ListViewer viewer = new ListViewer(panel, SWT.BORDER);
 		viewer.setContentProvider(new ObservableListContentProvider());
 
 		final Control control = viewer.getControl();
@@ -845,15 +845,15 @@ public class DetailsSection extends NodeSectionSupport {
 		buttonPanel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_CENTER));
 		buttonPanel.setLayout(new GridLayout(1, false));
 
-		final Button add = new Button(buttonPanel, SWT.PUSH);
+		final Button add = new Button(buttonPanel, SWT.PUSH | SWT.BORDER);
 		add.setText("Add");
 		add.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 
-		final Button edit = new Button(buttonPanel, SWT.PUSH);
+		final Button edit = new Button(buttonPanel, SWT.PUSH | SWT.BORDER);
 		edit.setText("Edit");
 		edit.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 
-		final Button delete = new Button(buttonPanel, SWT.PUSH);
+		final Button delete = new Button(buttonPanel, SWT.PUSH | SWT.BORDER);
 		delete.setText("Delete");
 		delete.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 

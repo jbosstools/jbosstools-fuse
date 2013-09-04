@@ -57,7 +57,7 @@ public class SetHeaderForm extends FormSupport {
 		headerNameField = createBeanPropertyTextField(panel, beanView, "headerName", "Header", "Name of the header to set");
 		expressionField = createBeanPropertyTextField(panel, beanView, "expression", "Expression", "Expression used to set the header value");
 
-		languageCombo = createBeanPropertyCombo(panel, beanView, "language", "Language", "Expression language to use", SWT.READ_ONLY);
+		languageCombo = createBeanPropertyCombo(panel, beanView, "language", "Language", "Expression language to use", SWT.READ_ONLY | SWT.BORDER);
 		languageCombo.setContentProvider(new ArrayContentProvider());
 		languageCombo.setInput(new Languages().languageArray());
 		languageCombo.setSelection(new StructuredSelection(beanView.getLanguage()));

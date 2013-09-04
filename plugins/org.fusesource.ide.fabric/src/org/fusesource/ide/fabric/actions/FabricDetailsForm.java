@@ -69,8 +69,8 @@ public class FabricDetailsForm extends FormSupport {
 		nameField = createBeanPropertyTextField(inner, details, "name", Messages.fabricNameLabel, Messages.fabricNameTooltip);
 		createBeanPropertyTextField(inner, details, "urls", Messages.fabricUrlsLabel, Messages.fabricUrlsTooltip);
 		createBeanPropertyTextField(inner, details, "userName", Messages.fabricUserNameLabel, Messages.fabricUserNameTooltip);
-		createBeanPropertyTextField(inner, details, "password", Messages.fabricPasswordLabel, Messages.fabricPasswordTooltip, SWT.PASSWORD);
-		createBeanPropertyTextField(inner, details, "zkPassword", Messages.zkPasswordLabel, Messages.zkPasswordTooltip, SWT.PASSWORD);
+		createBeanPropertyTextField(inner, details, "password", Messages.fabricPasswordLabel, Messages.fabricPasswordTooltip, SWT.PASSWORD | SWT.BORDER);
+		createBeanPropertyTextField(inner, details, "zkPassword", Messages.zkPasswordLabel, Messages.zkPasswordTooltip, SWT.PASSWORD | SWT.BORDER);
 	}
 
 	@Override

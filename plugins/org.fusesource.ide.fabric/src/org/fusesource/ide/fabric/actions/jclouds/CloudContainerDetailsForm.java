@@ -310,7 +310,7 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 	}
 	
 	protected ComboViewer createBeanPropertyCombo(Composite parent, Object bean, String propertyName, String labelText, String tooltip, List<?> input) {
-		ComboViewer answer = createBeanPropertyCombo(parent, bean, propertyName, labelText, tooltip, SWT.READ_ONLY);
+		ComboViewer answer = createBeanPropertyCombo(parent, bean, propertyName, labelText, tooltip, SWT.READ_ONLY | SWT.BORDER);
 		answer.setInput(input);
 		answer.setLabelProvider(JCloudsLabelProvider.getInstance());
 		return answer;
