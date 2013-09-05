@@ -50,8 +50,8 @@
     <aries-proxy-version>1.0.0</aries-proxy-version>
     <commons-management-version>1.0</commons-management-version>
     <aopalliance-bundle-version>1.0_3</aopalliance-bundle-version>
-    <jaxb-bundle-version>2.1.13_1</jaxb-bundle-version>
     <jettison-version>1.2</jettison-version>
+    <jaxb-basics-version>0.6.4</jaxb-basics-version>
 
     <!-- TODO update -->
     <nmr-version>1.5.0-fuse-00-39</nmr-version>
@@ -752,6 +752,17 @@
       <artifactId>org.apache.servicemix.nmr.management</artifactId>
       <version>${nmr-version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.servicemix.bundles</groupId>
+      <artifactId>org.apache.servicemix.bundles.jaxb-impl</artifactId>
+      <version>${jaxb-impl.bundle.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.jaxb2_commons</groupId>
+      <artifactId>jaxb2-basics-runtime</artifactId>
+      <version>${jaxb-basics-version}</version>
+    </dependency>
+    
     <!-- HERE ENDS JMX Facades for Camel, SMX and AMQ -->
 
 
