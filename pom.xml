@@ -75,6 +75,7 @@
     <fabric-api-version>${fabric-version}</fabric-api-version>
     <fabric-client-version>${fabric-version}</fabric-client-version>
     <fmc-version>${fabric-version}</fmc-version>
+    <jboss-tycho-version>0.16.0.CR2</jboss-tycho-version>
   </properties>
 
   <modules>
@@ -183,7 +184,19 @@
           <enabled>false</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>jboss-releases-repository</id>
+      <name>JBoss Releases Repository</name>
+      <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+      <snapshots>
+	<enabled>false</enabled>
+      </snapshots>
+      <releases>
+	<enabled>true</enabled>
+      </releases>
+    </repository>
   </repositories>
+
   <pluginRepositories>
     <pluginRepository>
       <id>release.fusesource.org</id>
@@ -352,7 +365,7 @@
       <plugin>
 	<groupId>org.jboss.tools.tycho-plugins</groupId>
 	<artifactId>repository-utils</artifactId>
-	<version>0.16.0-SNAPSHOT</version>
+	<version>${jboss-tycho-version}</version>
 
 	<executions>
 	  <execution>
@@ -364,10 +377,8 @@
 
 	    <configuration>
 	      <associateSites>
-		<associateSite>http://download.jboss.org/jbosstools/updates/development/kepler/</associateSite>
-		<associateSite>http://download.jboss.org/jbosstools/updates/requirements/kepler/201306260900-R/</associateSite>
-		<associateSite>http://download.jboss.org/jbosstools/updates/integration/locus/1.1.0.CI/</associateSite>
-		<associateSite>http://download.jboss.org/jbosstools/updates/requirements/springide/3.2.0.201303060654-RELEASE-e4.3/</associateSite>
+		<associateSite>http://download.jboss.org/jbosstools/updates/stable/kepler/</associateSite>
+		<associateSite>http://download.jboss.org/jbosstools/targetplatforms/jbtistarget/kepler/</associateSite>
 	      </associateSites>
 
 	      <symbols>
