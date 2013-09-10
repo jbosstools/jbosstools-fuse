@@ -40,11 +40,15 @@ public class PollEnrich extends AbstractNode {
 
 	public static final String PROPERTY_RESOURCEURI = "PollEnrich.ResourceUri";
 	public static final String PROPERTY_AGGREGATIONSTRATEGYREF = "PollEnrich.AggregationStrategyRef";
+	public static final String PROPERTY_AGGREGATIONSTRATEGYMETHODNAME = "PollEnrich.AggregationStrategyMethodName";
 	public static final String PROPERTY_TIMEOUT = "PollEnrich.Timeout";
+	public static final String PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL = "PollEnrich.AggregationStrategyMethodAllowNull";
 	
 	private String resourceUri;
 	private String aggregationStrategyRef;
+	private String aggregationStrategyMethodName;
 	private Long timeout;
+	private Boolean aggregationStrategyMethodAllowNull;
 	
     public PollEnrich() {
     }		
@@ -115,6 +119,24 @@ public class PollEnrich extends AbstractNode {
 	}
 
 	/**
+	 * @return the aggregationStrategyMethodName
+	 */
+	public String getAggregationStrategyMethodName() {
+		return this.aggregationStrategyMethodName;
+	}
+	
+	/**
+	 * @param aggregationStrategyMethodName the aggregationStrategyMethodName to set
+	 */
+	public void setAggregationStrategyMethodName(String aggregationStrategyMethodName) {
+		String oldValue = this.aggregationStrategyMethodName;
+		this.aggregationStrategyMethodName = aggregationStrategyMethodName;
+		if (!isSame(oldValue, aggregationStrategyMethodName)) {
+		    firePropertyChange(PROPERTY_AGGREGATIONSTRATEGYMETHODNAME, oldValue, aggregationStrategyMethodName);
+		}
+	}
+
+	/**
 	 * @return the timeout
 	 */
 	public Long getTimeout() {
@@ -132,6 +154,24 @@ public class PollEnrich extends AbstractNode {
 		}
 	}
 
+	/**
+	 * @return the aggregationStrategyMethodAllowNull
+	 */
+	public Boolean getAggregationStrategyMethodAllowNull() {
+		return this.aggregationStrategyMethodAllowNull;
+	}
+	
+	/**
+	 * @param aggregationStrategyMethodAllowNull the aggregationStrategyMethodAllowNull to set
+	 */
+	public void setAggregationStrategyMethodAllowNull(Boolean aggregationStrategyMethodAllowNull) {
+		Boolean oldValue = this.aggregationStrategyMethodAllowNull;
+		this.aggregationStrategyMethodAllowNull = aggregationStrategyMethodAllowNull;
+		if (!isSame(oldValue, aggregationStrategyMethodAllowNull)) {
+		    firePropertyChange(PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL, oldValue, aggregationStrategyMethodAllowNull);
+		}
+	}
+
 
 	
 	/*
@@ -144,10 +184,14 @@ public class PollEnrich extends AbstractNode {
 		
   		PropertyDescriptor descResourceUri = new TextPropertyDescriptor(PROPERTY_RESOURCEURI, Messages.propertyLabelPollEnrichResourceUri);
     		PropertyDescriptor descAggregationStrategyRef = new TextPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYREF, Messages.propertyLabelPollEnrichAggregationStrategyRef);
+    		PropertyDescriptor descAggregationStrategyMethodName = new TextPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYMETHODNAME, Messages.propertyLabelPollEnrichAggregationStrategyMethodName);
     		PropertyDescriptor descTimeout = new TextPropertyDescriptor(PROPERTY_TIMEOUT, Messages.propertyLabelPollEnrichTimeout);
+      	PropertyDescriptor descAggregationStrategyMethodAllowNull = new BooleanPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL, Messages.propertyLabelPollEnrichAggregationStrategyMethodAllowNull);
   		descriptors.put(PROPERTY_RESOURCEURI, descResourceUri);
 		descriptors.put(PROPERTY_AGGREGATIONSTRATEGYREF, descAggregationStrategyRef);
+		descriptors.put(PROPERTY_AGGREGATIONSTRATEGYMETHODNAME, descAggregationStrategyMethodName);
 		descriptors.put(PROPERTY_TIMEOUT, descTimeout);
+		descriptors.put(PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL, descAggregationStrategyMethodAllowNull);
 	}
 	
 	/* (non-Javadoc)
@@ -159,8 +203,12 @@ public class PollEnrich extends AbstractNode {
 			setResourceUri(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_AGGREGATIONSTRATEGYREF.equals(id)) {
 			setAggregationStrategyRef(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_AGGREGATIONSTRATEGYMETHODNAME.equals(id)) {
+			setAggregationStrategyMethodName(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_TIMEOUT.equals(id)) {
 			setTimeout(Objects.convertTo(value, Long.class));
+		}		else if (PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL.equals(id)) {
+			setAggregationStrategyMethodAllowNull(Objects.convertTo(value, Boolean.class));
 		}    else {
 			super.setPropertyValue(id, value);
 		}
@@ -175,8 +223,12 @@ public class PollEnrich extends AbstractNode {
 			return this.getResourceUri();
 		}		else if (PROPERTY_AGGREGATIONSTRATEGYREF.equals(id)) {
 			return this.getAggregationStrategyRef();
+		}		else if (PROPERTY_AGGREGATIONSTRATEGYMETHODNAME.equals(id)) {
+			return this.getAggregationStrategyMethodName();
 		}		else if (PROPERTY_TIMEOUT.equals(id)) {
 			return this.getTimeout();
+		}		else if (PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL.equals(id)) {
+			return this.getAggregationStrategyMethodAllowNull();
 		}    else {
 			return super.getPropertyValue(id);
 		}
@@ -188,7 +240,9 @@ public class PollEnrich extends AbstractNode {
 		PollEnrichDefinition answer = new PollEnrichDefinition();
     answer.setResourceUri(toXmlPropertyValue(PROPERTY_RESOURCEURI, this.getResourceUri()));
     answer.setAggregationStrategyRef(toXmlPropertyValue(PROPERTY_AGGREGATIONSTRATEGYREF, this.getAggregationStrategyRef()));
+    answer.setAggregationStrategyMethodName(toXmlPropertyValue(PROPERTY_AGGREGATIONSTRATEGYMETHODNAME, this.getAggregationStrategyMethodName()));
     answer.setTimeout(toXmlPropertyValue(PROPERTY_TIMEOUT, this.getTimeout()));
+    answer.setAggregationStrategyMethodAllowNull(toXmlPropertyValue(PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL, this.getAggregationStrategyMethodAllowNull()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -208,7 +262,9 @@ public class PollEnrich extends AbstractNode {
       PollEnrichDefinition node = (PollEnrichDefinition) processor;
       this.setResourceUri(node.getResourceUri());
       this.setAggregationStrategyRef(node.getAggregationStrategyRef());
+      this.setAggregationStrategyMethodName(node.getAggregationStrategyMethodName());
       this.setTimeout(node.getTimeout());
+      this.setAggregationStrategyMethodAllowNull(node.getAggregationStrategyMethodAllowNull());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof PollEnrichDefinition. Was " + processor.getClass().getName());
     }

@@ -40,9 +40,11 @@ public class Tooltips extends NLS {
     public static String tooltipAggregateTimeoutCheckerExecutorServiceRef;
     public static String tooltipAggregateAggregationRepositoryRef;
     public static String tooltipAggregateStrategyRef;
+    public static String tooltipAggregateStrategyMethodName;
     public static String tooltipAggregateOptimisticLockRetryPolicyDefinition;
     public static String tooltipAggregateParallelProcessing;
     public static String tooltipAggregateOptimisticLocking;
+    public static String tooltipAggregateStrategyMethodAllowNull;
     public static String tooltipAggregateCompletionSize;
     public static String tooltipAggregateCompletionInterval;
     public static String tooltipAggregateCompletionTimeout;
@@ -88,6 +90,8 @@ public class Tooltips extends NLS {
     public static String tooltipEnrich;
     public static String tooltipEnrichResourceUri;
     public static String tooltipEnrichAggregationStrategyRef;
+    public static String tooltipEnrichAggregationStrategyMethodName;
+    public static String tooltipEnrichAggregationStrategyMethodAllowNull;
 
     public static String tooltipFilter;
     public static String tooltipFilterExpression;
@@ -136,9 +140,11 @@ public class Tooltips extends NLS {
 
     public static String tooltipMulticast;
     public static String tooltipMulticastStrategyRef;
+    public static String tooltipMulticastStrategyMethodName;
     public static String tooltipMulticastExecutorServiceRef;
     public static String tooltipMulticastOnPrepareRef;
     public static String tooltipMulticastParallelProcessing;
+    public static String tooltipMulticastStrategyMethodAllowNull;
     public static String tooltipMulticastStreaming;
     public static String tooltipMulticastStopOnException;
     public static String tooltipMulticastTimeout;
@@ -170,7 +176,9 @@ public class Tooltips extends NLS {
     public static String tooltipPollEnrich;
     public static String tooltipPollEnrichResourceUri;
     public static String tooltipPollEnrichAggregationStrategyRef;
+    public static String tooltipPollEnrichAggregationStrategyMethodName;
     public static String tooltipPollEnrichTimeout;
+    public static String tooltipPollEnrichAggregationStrategyMethodAllowNull;
 
     public static String tooltipProcess;
     public static String tooltipProcessRef;
@@ -179,9 +187,11 @@ public class Tooltips extends NLS {
     public static String tooltipRecipientListExpression;
     public static String tooltipRecipientListDelimiter;
     public static String tooltipRecipientListStrategyRef;
+    public static String tooltipRecipientListStrategyMethodName;
     public static String tooltipRecipientListExecutorServiceRef;
     public static String tooltipRecipientListOnPrepareRef;
     public static String tooltipRecipientListParallelProcessing;
+    public static String tooltipRecipientListStrategyMethodAllowNull;
     public static String tooltipRecipientListStopOnException;
     public static String tooltipRecipientListIgnoreInvalidEndpoints;
     public static String tooltipRecipientListStreaming;
@@ -256,9 +266,11 @@ public class Tooltips extends NLS {
     public static String tooltipSplit;
     public static String tooltipSplitExpression;
     public static String tooltipSplitStrategyRef;
+    public static String tooltipSplitStrategyMethodName;
     public static String tooltipSplitExecutorServiceRef;
     public static String tooltipSplitOnPrepareRef;
     public static String tooltipSplitParallelProcessing;
+    public static String tooltipSplitStrategyMethodAllowNull;
     public static String tooltipSplitStreaming;
     public static String tooltipSplitStopOnException;
     public static String tooltipSplitTimeout;
@@ -341,9 +353,11 @@ public class Tooltips extends NLS {
     map.put("tooltipAggregate.TimeoutCheckerExecutorServiceRef", tooltipAggregateTimeoutCheckerExecutorServiceRef);
     map.put("tooltipAggregate.AggregationRepositoryRef", tooltipAggregateAggregationRepositoryRef);
     map.put("tooltipAggregate.StrategyRef", tooltipAggregateStrategyRef);
+    map.put("tooltipAggregate.StrategyMethodName", tooltipAggregateStrategyMethodName);
     map.put("tooltipAggregate.OptimisticLockRetryPolicyDefinition", tooltipAggregateOptimisticLockRetryPolicyDefinition);
     map.put("tooltipAggregate.ParallelProcessing", tooltipAggregateParallelProcessing);
     map.put("tooltipAggregate.OptimisticLocking", tooltipAggregateOptimisticLocking);
+    map.put("tooltipAggregate.StrategyMethodAllowNull", tooltipAggregateStrategyMethodAllowNull);
     map.put("tooltipAggregate.CompletionSize", tooltipAggregateCompletionSize);
     map.put("tooltipAggregate.CompletionInterval", tooltipAggregateCompletionInterval);
     map.put("tooltipAggregate.CompletionTimeout", tooltipAggregateCompletionTimeout);
@@ -381,6 +395,8 @@ public class Tooltips extends NLS {
     map.put("tooltipEnrich", tooltipEnrich);
     map.put("tooltipEnrich.ResourceUri", tooltipEnrichResourceUri);
     map.put("tooltipEnrich.AggregationStrategyRef", tooltipEnrichAggregationStrategyRef);
+    map.put("tooltipEnrich.AggregationStrategyMethodName", tooltipEnrichAggregationStrategyMethodName);
+    map.put("tooltipEnrich.AggregationStrategyMethodAllowNull", tooltipEnrichAggregationStrategyMethodAllowNull);
     map.put("tooltipFilter", tooltipFilter);
     map.put("tooltipFilter.Expression", tooltipFilterExpression);
     map.put("tooltipFinally", tooltipFinally);
@@ -416,9 +432,11 @@ public class Tooltips extends NLS {
     map.put("tooltipMarshal.DataFormatType", tooltipMarshalDataFormatType);
     map.put("tooltipMulticast", tooltipMulticast);
     map.put("tooltipMulticast.StrategyRef", tooltipMulticastStrategyRef);
+    map.put("tooltipMulticast.StrategyMethodName", tooltipMulticastStrategyMethodName);
     map.put("tooltipMulticast.ExecutorServiceRef", tooltipMulticastExecutorServiceRef);
     map.put("tooltipMulticast.OnPrepareRef", tooltipMulticastOnPrepareRef);
     map.put("tooltipMulticast.ParallelProcessing", tooltipMulticastParallelProcessing);
+    map.put("tooltipMulticast.StrategyMethodAllowNull", tooltipMulticastStrategyMethodAllowNull);
     map.put("tooltipMulticast.Streaming", tooltipMulticastStreaming);
     map.put("tooltipMulticast.StopOnException", tooltipMulticastStopOnException);
     map.put("tooltipMulticast.Timeout", tooltipMulticastTimeout);
@@ -444,16 +462,20 @@ public class Tooltips extends NLS {
     map.put("tooltipPollEnrich", tooltipPollEnrich);
     map.put("tooltipPollEnrich.ResourceUri", tooltipPollEnrichResourceUri);
     map.put("tooltipPollEnrich.AggregationStrategyRef", tooltipPollEnrichAggregationStrategyRef);
+    map.put("tooltipPollEnrich.AggregationStrategyMethodName", tooltipPollEnrichAggregationStrategyMethodName);
     map.put("tooltipPollEnrich.Timeout", tooltipPollEnrichTimeout);
+    map.put("tooltipPollEnrich.AggregationStrategyMethodAllowNull", tooltipPollEnrichAggregationStrategyMethodAllowNull);
     map.put("tooltipProcess", tooltipProcess);
     map.put("tooltipProcess.Ref", tooltipProcessRef);
     map.put("tooltipRecipientList", tooltipRecipientList);
     map.put("tooltipRecipientList.Expression", tooltipRecipientListExpression);
     map.put("tooltipRecipientList.Delimiter", tooltipRecipientListDelimiter);
     map.put("tooltipRecipientList.StrategyRef", tooltipRecipientListStrategyRef);
+    map.put("tooltipRecipientList.StrategyMethodName", tooltipRecipientListStrategyMethodName);
     map.put("tooltipRecipientList.ExecutorServiceRef", tooltipRecipientListExecutorServiceRef);
     map.put("tooltipRecipientList.OnPrepareRef", tooltipRecipientListOnPrepareRef);
     map.put("tooltipRecipientList.ParallelProcessing", tooltipRecipientListParallelProcessing);
+    map.put("tooltipRecipientList.StrategyMethodAllowNull", tooltipRecipientListStrategyMethodAllowNull);
     map.put("tooltipRecipientList.StopOnException", tooltipRecipientListStopOnException);
     map.put("tooltipRecipientList.IgnoreInvalidEndpoints", tooltipRecipientListIgnoreInvalidEndpoints);
     map.put("tooltipRecipientList.Streaming", tooltipRecipientListStreaming);
@@ -512,9 +534,11 @@ public class Tooltips extends NLS {
     map.put("tooltipSplit", tooltipSplit);
     map.put("tooltipSplit.Expression", tooltipSplitExpression);
     map.put("tooltipSplit.StrategyRef", tooltipSplitStrategyRef);
+    map.put("tooltipSplit.StrategyMethodName", tooltipSplitStrategyMethodName);
     map.put("tooltipSplit.ExecutorServiceRef", tooltipSplitExecutorServiceRef);
     map.put("tooltipSplit.OnPrepareRef", tooltipSplitOnPrepareRef);
     map.put("tooltipSplit.ParallelProcessing", tooltipSplitParallelProcessing);
+    map.put("tooltipSplit.StrategyMethodAllowNull", tooltipSplitStrategyMethodAllowNull);
     map.put("tooltipSplit.Streaming", tooltipSplitStreaming);
     map.put("tooltipSplit.StopOnException", tooltipSplitStopOnException);
     map.put("tooltipSplit.Timeout", tooltipSplitTimeout);

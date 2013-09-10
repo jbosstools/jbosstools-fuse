@@ -41,9 +41,11 @@ public class RecipientList extends AbstractNode {
 	public static final String PROPERTY_EXPRESSION = "RecipientList.Expression";
 	public static final String PROPERTY_DELIMITER = "RecipientList.Delimiter";
 	public static final String PROPERTY_STRATEGYREF = "RecipientList.StrategyRef";
+	public static final String PROPERTY_STRATEGYMETHODNAME = "RecipientList.StrategyMethodName";
 	public static final String PROPERTY_EXECUTORSERVICEREF = "RecipientList.ExecutorServiceRef";
 	public static final String PROPERTY_ONPREPAREREF = "RecipientList.OnPrepareRef";
 	public static final String PROPERTY_PARALLELPROCESSING = "RecipientList.ParallelProcessing";
+	public static final String PROPERTY_STRATEGYMETHODALLOWNULL = "RecipientList.StrategyMethodAllowNull";
 	public static final String PROPERTY_STOPONEXCEPTION = "RecipientList.StopOnException";
 	public static final String PROPERTY_IGNOREINVALIDENDPOINTS = "RecipientList.IgnoreInvalidEndpoints";
 	public static final String PROPERTY_STREAMING = "RecipientList.Streaming";
@@ -53,9 +55,11 @@ public class RecipientList extends AbstractNode {
 	private ExpressionDefinition expression;
 	private String delimiter;
 	private String strategyRef;
+	private String strategyMethodName;
 	private String executorServiceRef;
 	private String onPrepareRef;
 	private Boolean parallelProcessing;
+	private Boolean strategyMethodAllowNull;
 	private Boolean stopOnException;
 	private Boolean ignoreInvalidEndpoints;
 	private Boolean streaming;
@@ -149,6 +153,24 @@ public class RecipientList extends AbstractNode {
 	}
 
 	/**
+	 * @return the strategyMethodName
+	 */
+	public String getStrategyMethodName() {
+		return this.strategyMethodName;
+	}
+	
+	/**
+	 * @param strategyMethodName the strategyMethodName to set
+	 */
+	public void setStrategyMethodName(String strategyMethodName) {
+		String oldValue = this.strategyMethodName;
+		this.strategyMethodName = strategyMethodName;
+		if (!isSame(oldValue, strategyMethodName)) {
+		    firePropertyChange(PROPERTY_STRATEGYMETHODNAME, oldValue, strategyMethodName);
+		}
+	}
+
+	/**
 	 * @return the executorServiceRef
 	 */
 	public String getExecutorServiceRef() {
@@ -199,6 +221,24 @@ public class RecipientList extends AbstractNode {
 		this.parallelProcessing = parallelProcessing;
 		if (!isSame(oldValue, parallelProcessing)) {
 		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
+		}
+	}
+
+	/**
+	 * @return the strategyMethodAllowNull
+	 */
+	public Boolean getStrategyMethodAllowNull() {
+		return this.strategyMethodAllowNull;
+	}
+	
+	/**
+	 * @param strategyMethodAllowNull the strategyMethodAllowNull to set
+	 */
+	public void setStrategyMethodAllowNull(Boolean strategyMethodAllowNull) {
+		Boolean oldValue = this.strategyMethodAllowNull;
+		this.strategyMethodAllowNull = strategyMethodAllowNull;
+		if (!isSame(oldValue, strategyMethodAllowNull)) {
+		    firePropertyChange(PROPERTY_STRATEGYMETHODALLOWNULL, oldValue, strategyMethodAllowNull);
 		}
 	}
 
@@ -306,9 +346,11 @@ public class RecipientList extends AbstractNode {
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelRecipientListExpression);
     		PropertyDescriptor descDelimiter = new TextPropertyDescriptor(PROPERTY_DELIMITER, Messages.propertyLabelRecipientListDelimiter);
     		PropertyDescriptor descStrategyRef = new TextPropertyDescriptor(PROPERTY_STRATEGYREF, Messages.propertyLabelRecipientListStrategyRef);
+    		PropertyDescriptor descStrategyMethodName = new TextPropertyDescriptor(PROPERTY_STRATEGYMETHODNAME, Messages.propertyLabelRecipientListStrategyMethodName);
     		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelRecipientListExecutorServiceRef);
     		PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelRecipientListOnPrepareRef);
       	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelRecipientListParallelProcessing);
+      	PropertyDescriptor descStrategyMethodAllowNull = new BooleanPropertyDescriptor(PROPERTY_STRATEGYMETHODALLOWNULL, Messages.propertyLabelRecipientListStrategyMethodAllowNull);
       	PropertyDescriptor descStopOnException = new BooleanPropertyDescriptor(PROPERTY_STOPONEXCEPTION, Messages.propertyLabelRecipientListStopOnException);
       	PropertyDescriptor descIgnoreInvalidEndpoints = new BooleanPropertyDescriptor(PROPERTY_IGNOREINVALIDENDPOINTS, Messages.propertyLabelRecipientListIgnoreInvalidEndpoints);
       	PropertyDescriptor descStreaming = new BooleanPropertyDescriptor(PROPERTY_STREAMING, Messages.propertyLabelRecipientListStreaming);
@@ -317,9 +359,11 @@ public class RecipientList extends AbstractNode {
   		descriptors.put(PROPERTY_EXPRESSION, descExpression);
 		descriptors.put(PROPERTY_DELIMITER, descDelimiter);
 		descriptors.put(PROPERTY_STRATEGYREF, descStrategyRef);
+		descriptors.put(PROPERTY_STRATEGYMETHODNAME, descStrategyMethodName);
 		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
 		descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
 		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
+		descriptors.put(PROPERTY_STRATEGYMETHODALLOWNULL, descStrategyMethodAllowNull);
 		descriptors.put(PROPERTY_STOPONEXCEPTION, descStopOnException);
 		descriptors.put(PROPERTY_IGNOREINVALIDENDPOINTS, descIgnoreInvalidEndpoints);
 		descriptors.put(PROPERTY_STREAMING, descStreaming);
@@ -338,12 +382,16 @@ public class RecipientList extends AbstractNode {
 			setDelimiter(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			setStrategyRef(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
+			setStrategyMethodName(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			setExecutorServiceRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
 			setOnPrepareRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
 			setParallelProcessing(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
+			setStrategyMethodAllowNull(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STOPONEXCEPTION.equals(id)) {
 			setStopOnException(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_IGNOREINVALIDENDPOINTS.equals(id)) {
@@ -370,12 +418,16 @@ public class RecipientList extends AbstractNode {
 			return this.getDelimiter();
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			return this.getStrategyRef();
+		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
+			return this.getStrategyMethodName();
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			return this.getExecutorServiceRef();
 		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
 			return this.getOnPrepareRef();
 		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
 			return this.getParallelProcessing();
+		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
+			return this.getStrategyMethodAllowNull();
 		}		else if (PROPERTY_STOPONEXCEPTION.equals(id)) {
 			return this.getStopOnException();
 		}		else if (PROPERTY_IGNOREINVALIDENDPOINTS.equals(id)) {
@@ -398,9 +450,11 @@ public class RecipientList extends AbstractNode {
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
     answer.setDelimiter(toXmlPropertyValue(PROPERTY_DELIMITER, this.getDelimiter()));
     answer.setStrategyRef(toXmlPropertyValue(PROPERTY_STRATEGYREF, this.getStrategyRef()));
+    answer.setStrategyMethodName(toXmlPropertyValue(PROPERTY_STRATEGYMETHODNAME, this.getStrategyMethodName()));
     answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
     answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
     answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
+    answer.setStrategyMethodAllowNull(toXmlPropertyValue(PROPERTY_STRATEGYMETHODALLOWNULL, this.getStrategyMethodAllowNull()));
     answer.setStopOnException(toXmlPropertyValue(PROPERTY_STOPONEXCEPTION, this.getStopOnException()));
     answer.setIgnoreInvalidEndpoints(toXmlPropertyValue(PROPERTY_IGNOREINVALIDENDPOINTS, this.getIgnoreInvalidEndpoints()));
     answer.setStreaming(toXmlPropertyValue(PROPERTY_STREAMING, this.getStreaming()));
@@ -426,9 +480,11 @@ public class RecipientList extends AbstractNode {
       this.setExpression(node.getExpression());
       this.setDelimiter(node.getDelimiter());
       this.setStrategyRef(node.getStrategyRef());
+      this.setStrategyMethodName(node.getStrategyMethodName());
       this.setExecutorServiceRef(node.getExecutorServiceRef());
       this.setOnPrepareRef(node.getOnPrepareRef());
       this.setParallelProcessing(node.getParallelProcessing());
+      this.setStrategyMethodAllowNull(node.getStrategyMethodAllowNull());
       this.setStopOnException(node.getStopOnException());
       this.setIgnoreInvalidEndpoints(node.getIgnoreInvalidEndpoints());
       this.setStreaming(node.getStreaming());

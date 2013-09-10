@@ -40,9 +40,11 @@ public class Split extends AbstractNode {
 
 	public static final String PROPERTY_EXPRESSION = "Split.Expression";
 	public static final String PROPERTY_STRATEGYREF = "Split.StrategyRef";
+	public static final String PROPERTY_STRATEGYMETHODNAME = "Split.StrategyMethodName";
 	public static final String PROPERTY_EXECUTORSERVICEREF = "Split.ExecutorServiceRef";
 	public static final String PROPERTY_ONPREPAREREF = "Split.OnPrepareRef";
 	public static final String PROPERTY_PARALLELPROCESSING = "Split.ParallelProcessing";
+	public static final String PROPERTY_STRATEGYMETHODALLOWNULL = "Split.StrategyMethodAllowNull";
 	public static final String PROPERTY_STREAMING = "Split.Streaming";
 	public static final String PROPERTY_STOPONEXCEPTION = "Split.StopOnException";
 	public static final String PROPERTY_TIMEOUT = "Split.Timeout";
@@ -50,9 +52,11 @@ public class Split extends AbstractNode {
 	
 	private ExpressionDefinition expression;
 	private String strategyRef;
+	private String strategyMethodName;
 	private String executorServiceRef;
 	private String onPrepareRef;
 	private Boolean parallelProcessing;
+	private Boolean strategyMethodAllowNull;
 	private Boolean streaming;
 	private Boolean stopOnException;
 	private Long timeout;
@@ -127,6 +131,24 @@ public class Split extends AbstractNode {
 	}
 
 	/**
+	 * @return the strategyMethodName
+	 */
+	public String getStrategyMethodName() {
+		return this.strategyMethodName;
+	}
+	
+	/**
+	 * @param strategyMethodName the strategyMethodName to set
+	 */
+	public void setStrategyMethodName(String strategyMethodName) {
+		String oldValue = this.strategyMethodName;
+		this.strategyMethodName = strategyMethodName;
+		if (!isSame(oldValue, strategyMethodName)) {
+		    firePropertyChange(PROPERTY_STRATEGYMETHODNAME, oldValue, strategyMethodName);
+		}
+	}
+
+	/**
 	 * @return the executorServiceRef
 	 */
 	public String getExecutorServiceRef() {
@@ -177,6 +199,24 @@ public class Split extends AbstractNode {
 		this.parallelProcessing = parallelProcessing;
 		if (!isSame(oldValue, parallelProcessing)) {
 		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
+		}
+	}
+
+	/**
+	 * @return the strategyMethodAllowNull
+	 */
+	public Boolean getStrategyMethodAllowNull() {
+		return this.strategyMethodAllowNull;
+	}
+	
+	/**
+	 * @param strategyMethodAllowNull the strategyMethodAllowNull to set
+	 */
+	public void setStrategyMethodAllowNull(Boolean strategyMethodAllowNull) {
+		Boolean oldValue = this.strategyMethodAllowNull;
+		this.strategyMethodAllowNull = strategyMethodAllowNull;
+		if (!isSame(oldValue, strategyMethodAllowNull)) {
+		    firePropertyChange(PROPERTY_STRATEGYMETHODALLOWNULL, oldValue, strategyMethodAllowNull);
 		}
 	}
 
@@ -265,18 +305,22 @@ public class Split extends AbstractNode {
   
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelSplitExpression);
     		PropertyDescriptor descStrategyRef = new TextPropertyDescriptor(PROPERTY_STRATEGYREF, Messages.propertyLabelSplitStrategyRef);
+    		PropertyDescriptor descStrategyMethodName = new TextPropertyDescriptor(PROPERTY_STRATEGYMETHODNAME, Messages.propertyLabelSplitStrategyMethodName);
     		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelSplitExecutorServiceRef);
     		PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelSplitOnPrepareRef);
       	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelSplitParallelProcessing);
+      	PropertyDescriptor descStrategyMethodAllowNull = new BooleanPropertyDescriptor(PROPERTY_STRATEGYMETHODALLOWNULL, Messages.propertyLabelSplitStrategyMethodAllowNull);
       	PropertyDescriptor descStreaming = new BooleanPropertyDescriptor(PROPERTY_STREAMING, Messages.propertyLabelSplitStreaming);
       	PropertyDescriptor descStopOnException = new BooleanPropertyDescriptor(PROPERTY_STOPONEXCEPTION, Messages.propertyLabelSplitStopOnException);
     		PropertyDescriptor descTimeout = new TextPropertyDescriptor(PROPERTY_TIMEOUT, Messages.propertyLabelSplitTimeout);
       	PropertyDescriptor descShareUnitOfWork = new BooleanPropertyDescriptor(PROPERTY_SHAREUNITOFWORK, Messages.propertyLabelSplitShareUnitOfWork);
   		descriptors.put(PROPERTY_EXPRESSION, descExpression);
 		descriptors.put(PROPERTY_STRATEGYREF, descStrategyRef);
+		descriptors.put(PROPERTY_STRATEGYMETHODNAME, descStrategyMethodName);
 		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
 		descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
 		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
+		descriptors.put(PROPERTY_STRATEGYMETHODALLOWNULL, descStrategyMethodAllowNull);
 		descriptors.put(PROPERTY_STREAMING, descStreaming);
 		descriptors.put(PROPERTY_STOPONEXCEPTION, descStopOnException);
 		descriptors.put(PROPERTY_TIMEOUT, descTimeout);
@@ -292,12 +336,16 @@ public class Split extends AbstractNode {
 			setExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			setStrategyRef(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
+			setStrategyMethodName(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			setExecutorServiceRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
 			setOnPrepareRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
 			setParallelProcessing(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
+			setStrategyMethodAllowNull(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STREAMING.equals(id)) {
 			setStreaming(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STOPONEXCEPTION.equals(id)) {
@@ -320,12 +368,16 @@ public class Split extends AbstractNode {
 			return this.getExpression();
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			return this.getStrategyRef();
+		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
+			return this.getStrategyMethodName();
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			return this.getExecutorServiceRef();
 		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
 			return this.getOnPrepareRef();
 		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
 			return this.getParallelProcessing();
+		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
+			return this.getStrategyMethodAllowNull();
 		}		else if (PROPERTY_STREAMING.equals(id)) {
 			return this.getStreaming();
 		}		else if (PROPERTY_STOPONEXCEPTION.equals(id)) {
@@ -345,9 +397,11 @@ public class Split extends AbstractNode {
 		SplitDefinition answer = new SplitDefinition();
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
     answer.setStrategyRef(toXmlPropertyValue(PROPERTY_STRATEGYREF, this.getStrategyRef()));
+    answer.setStrategyMethodName(toXmlPropertyValue(PROPERTY_STRATEGYMETHODNAME, this.getStrategyMethodName()));
     answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
     answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
     answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
+    answer.setStrategyMethodAllowNull(toXmlPropertyValue(PROPERTY_STRATEGYMETHODALLOWNULL, this.getStrategyMethodAllowNull()));
     answer.setStreaming(toXmlPropertyValue(PROPERTY_STREAMING, this.getStreaming()));
     answer.setStopOnException(toXmlPropertyValue(PROPERTY_STOPONEXCEPTION, this.getStopOnException()));
     answer.setTimeout(toXmlPropertyValue(PROPERTY_TIMEOUT, this.getTimeout()));
@@ -371,9 +425,11 @@ public class Split extends AbstractNode {
       SplitDefinition node = (SplitDefinition) processor;
       this.setExpression(node.getExpression());
       this.setStrategyRef(node.getStrategyRef());
+      this.setStrategyMethodName(node.getStrategyMethodName());
       this.setExecutorServiceRef(node.getExecutorServiceRef());
       this.setOnPrepareRef(node.getOnPrepareRef());
       this.setParallelProcessing(node.getParallelProcessing());
+      this.setStrategyMethodAllowNull(node.getStrategyMethodAllowNull());
       this.setStreaming(node.getStreaming());
       this.setStopOnException(node.getStopOnException());
       this.setTimeout(node.getTimeout());

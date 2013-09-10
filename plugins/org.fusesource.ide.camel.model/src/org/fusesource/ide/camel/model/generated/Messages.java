@@ -42,9 +42,11 @@ public class Messages extends NLS {
     public static String propertyLabelAggregateTimeoutCheckerExecutorServiceRef;
     public static String propertyLabelAggregateAggregationRepositoryRef;
     public static String propertyLabelAggregateStrategyRef;
+    public static String propertyLabelAggregateStrategyMethodName;
     public static String propertyLabelAggregateOptimisticLockRetryPolicyDefinition;
     public static String propertyLabelAggregateParallelProcessing;
     public static String propertyLabelAggregateOptimisticLocking;
+    public static String propertyLabelAggregateStrategyMethodAllowNull;
     public static String propertyLabelAggregateCompletionSize;
     public static String propertyLabelAggregateCompletionInterval;
     public static String propertyLabelAggregateCompletionTimeout;
@@ -82,6 +84,8 @@ public class Messages extends NLS {
 
     public static String propertyLabelEnrichResourceUri;
     public static String propertyLabelEnrichAggregationStrategyRef;
+    public static String propertyLabelEnrichAggregationStrategyMethodName;
+    public static String propertyLabelEnrichAggregationStrategyMethodAllowNull;
 
     public static String propertyLabelFilterExpression;
 
@@ -117,9 +121,11 @@ public class Messages extends NLS {
     public static String propertyLabelMarshalDataFormatType;
 
     public static String propertyLabelMulticastStrategyRef;
+    public static String propertyLabelMulticastStrategyMethodName;
     public static String propertyLabelMulticastExecutorServiceRef;
     public static String propertyLabelMulticastOnPrepareRef;
     public static String propertyLabelMulticastParallelProcessing;
+    public static String propertyLabelMulticastStrategyMethodAllowNull;
     public static String propertyLabelMulticastStreaming;
     public static String propertyLabelMulticastStopOnException;
     public static String propertyLabelMulticastTimeout;
@@ -145,16 +151,20 @@ public class Messages extends NLS {
 
     public static String propertyLabelPollEnrichResourceUri;
     public static String propertyLabelPollEnrichAggregationStrategyRef;
+    public static String propertyLabelPollEnrichAggregationStrategyMethodName;
     public static String propertyLabelPollEnrichTimeout;
+    public static String propertyLabelPollEnrichAggregationStrategyMethodAllowNull;
 
     public static String propertyLabelProcessRef;
 
     public static String propertyLabelRecipientListExpression;
     public static String propertyLabelRecipientListDelimiter;
     public static String propertyLabelRecipientListStrategyRef;
+    public static String propertyLabelRecipientListStrategyMethodName;
     public static String propertyLabelRecipientListExecutorServiceRef;
     public static String propertyLabelRecipientListOnPrepareRef;
     public static String propertyLabelRecipientListParallelProcessing;
+    public static String propertyLabelRecipientListStrategyMethodAllowNull;
     public static String propertyLabelRecipientListStopOnException;
     public static String propertyLabelRecipientListIgnoreInvalidEndpoints;
     public static String propertyLabelRecipientListStreaming;
@@ -213,9 +223,11 @@ public class Messages extends NLS {
 
     public static String propertyLabelSplitExpression;
     public static String propertyLabelSplitStrategyRef;
+    public static String propertyLabelSplitStrategyMethodName;
     public static String propertyLabelSplitExecutorServiceRef;
     public static String propertyLabelSplitOnPrepareRef;
     public static String propertyLabelSplitParallelProcessing;
+    public static String propertyLabelSplitStrategyMethodAllowNull;
     public static String propertyLabelSplitStreaming;
     public static String propertyLabelSplitStopOnException;
     public static String propertyLabelSplitTimeout;
@@ -281,9 +293,11 @@ public class Messages extends NLS {
     map.put("propertyLabelAggregate.TimeoutCheckerExecutorServiceRef", propertyLabelAggregateTimeoutCheckerExecutorServiceRef);
     map.put("propertyLabelAggregate.AggregationRepositoryRef", propertyLabelAggregateAggregationRepositoryRef);
     map.put("propertyLabelAggregate.StrategyRef", propertyLabelAggregateStrategyRef);
+    map.put("propertyLabelAggregate.StrategyMethodName", propertyLabelAggregateStrategyMethodName);
     map.put("propertyLabelAggregate.OptimisticLockRetryPolicyDefinition", propertyLabelAggregateOptimisticLockRetryPolicyDefinition);
     map.put("propertyLabelAggregate.ParallelProcessing", propertyLabelAggregateParallelProcessing);
     map.put("propertyLabelAggregate.OptimisticLocking", propertyLabelAggregateOptimisticLocking);
+    map.put("propertyLabelAggregate.StrategyMethodAllowNull", propertyLabelAggregateStrategyMethodAllowNull);
     map.put("propertyLabelAggregate.CompletionSize", propertyLabelAggregateCompletionSize);
     map.put("propertyLabelAggregate.CompletionInterval", propertyLabelAggregateCompletionInterval);
     map.put("propertyLabelAggregate.CompletionTimeout", propertyLabelAggregateCompletionTimeout);
@@ -313,6 +327,8 @@ public class Messages extends NLS {
     map.put("propertyLabelDynamicRouter.IgnoreInvalidEndpoints", propertyLabelDynamicRouterIgnoreInvalidEndpoints);
     map.put("propertyLabelEnrich.ResourceUri", propertyLabelEnrichResourceUri);
     map.put("propertyLabelEnrich.AggregationStrategyRef", propertyLabelEnrichAggregationStrategyRef);
+    map.put("propertyLabelEnrich.AggregationStrategyMethodName", propertyLabelEnrichAggregationStrategyMethodName);
+    map.put("propertyLabelEnrich.AggregationStrategyMethodAllowNull", propertyLabelEnrichAggregationStrategyMethodAllowNull);
     map.put("propertyLabelFilter.Expression", propertyLabelFilterExpression);
     map.put("propertyLabelIdempotentConsumer.Expression", propertyLabelIdempotentConsumerExpression);
     map.put("propertyLabelIdempotentConsumer.MessageIdRepositoryRef", propertyLabelIdempotentConsumerMessageIdRepositoryRef);
@@ -335,9 +351,11 @@ public class Messages extends NLS {
     map.put("propertyLabelMarshal.Ref", propertyLabelMarshalRef);
     map.put("propertyLabelMarshal.DataFormatType", propertyLabelMarshalDataFormatType);
     map.put("propertyLabelMulticast.StrategyRef", propertyLabelMulticastStrategyRef);
+    map.put("propertyLabelMulticast.StrategyMethodName", propertyLabelMulticastStrategyMethodName);
     map.put("propertyLabelMulticast.ExecutorServiceRef", propertyLabelMulticastExecutorServiceRef);
     map.put("propertyLabelMulticast.OnPrepareRef", propertyLabelMulticastOnPrepareRef);
     map.put("propertyLabelMulticast.ParallelProcessing", propertyLabelMulticastParallelProcessing);
+    map.put("propertyLabelMulticast.StrategyMethodAllowNull", propertyLabelMulticastStrategyMethodAllowNull);
     map.put("propertyLabelMulticast.Streaming", propertyLabelMulticastStreaming);
     map.put("propertyLabelMulticast.StopOnException", propertyLabelMulticastStopOnException);
     map.put("propertyLabelMulticast.Timeout", propertyLabelMulticastTimeout);
@@ -357,14 +375,18 @@ public class Messages extends NLS {
     map.put("propertyLabelPolicy.Ref", propertyLabelPolicyRef);
     map.put("propertyLabelPollEnrich.ResourceUri", propertyLabelPollEnrichResourceUri);
     map.put("propertyLabelPollEnrich.AggregationStrategyRef", propertyLabelPollEnrichAggregationStrategyRef);
+    map.put("propertyLabelPollEnrich.AggregationStrategyMethodName", propertyLabelPollEnrichAggregationStrategyMethodName);
     map.put("propertyLabelPollEnrich.Timeout", propertyLabelPollEnrichTimeout);
+    map.put("propertyLabelPollEnrich.AggregationStrategyMethodAllowNull", propertyLabelPollEnrichAggregationStrategyMethodAllowNull);
     map.put("propertyLabelProcess.Ref", propertyLabelProcessRef);
     map.put("propertyLabelRecipientList.Expression", propertyLabelRecipientListExpression);
     map.put("propertyLabelRecipientList.Delimiter", propertyLabelRecipientListDelimiter);
     map.put("propertyLabelRecipientList.StrategyRef", propertyLabelRecipientListStrategyRef);
+    map.put("propertyLabelRecipientList.StrategyMethodName", propertyLabelRecipientListStrategyMethodName);
     map.put("propertyLabelRecipientList.ExecutorServiceRef", propertyLabelRecipientListExecutorServiceRef);
     map.put("propertyLabelRecipientList.OnPrepareRef", propertyLabelRecipientListOnPrepareRef);
     map.put("propertyLabelRecipientList.ParallelProcessing", propertyLabelRecipientListParallelProcessing);
+    map.put("propertyLabelRecipientList.StrategyMethodAllowNull", propertyLabelRecipientListStrategyMethodAllowNull);
     map.put("propertyLabelRecipientList.StopOnException", propertyLabelRecipientListStopOnException);
     map.put("propertyLabelRecipientList.IgnoreInvalidEndpoints", propertyLabelRecipientListIgnoreInvalidEndpoints);
     map.put("propertyLabelRecipientList.Streaming", propertyLabelRecipientListStreaming);
@@ -407,9 +429,11 @@ public class Messages extends NLS {
     map.put("propertyLabelSort.ComparatorRef", propertyLabelSortComparatorRef);
     map.put("propertyLabelSplit.Expression", propertyLabelSplitExpression);
     map.put("propertyLabelSplit.StrategyRef", propertyLabelSplitStrategyRef);
+    map.put("propertyLabelSplit.StrategyMethodName", propertyLabelSplitStrategyMethodName);
     map.put("propertyLabelSplit.ExecutorServiceRef", propertyLabelSplitExecutorServiceRef);
     map.put("propertyLabelSplit.OnPrepareRef", propertyLabelSplitOnPrepareRef);
     map.put("propertyLabelSplit.ParallelProcessing", propertyLabelSplitParallelProcessing);
+    map.put("propertyLabelSplit.StrategyMethodAllowNull", propertyLabelSplitStrategyMethodAllowNull);
     map.put("propertyLabelSplit.Streaming", propertyLabelSplitStreaming);
     map.put("propertyLabelSplit.StopOnException", propertyLabelSplitStopOnException);
     map.put("propertyLabelSplit.Timeout", propertyLabelSplitTimeout);
