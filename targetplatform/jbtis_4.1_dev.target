@@ -122,9 +122,10 @@
     <!-- JBoss Tools Core Tests -->
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 
-      <!-- Required by BPEL -->
-      <unit id="org.jboss.tools.tests" version="3.5.0.Final-v20130717-0450-B102"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/nightly/coretests/4.1.kepler/"/>
+      <!-- Required by BPEL, ESB, and any projects w/ UI tests -->
+      <!-- TODO: consider migrating UI tests to https://github.com/jbosstools/jbosstools-integration-tests/ so they're built downstream instead of within the components' builds -->
+      <unit id="org.jboss.tools.tests" version="3.5.0.Alpha1-v20130907-0531-B106"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.Alpha1.coretests/"/>
     </location>
 
   
