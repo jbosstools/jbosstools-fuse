@@ -58,7 +58,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 		featureProvider = designEditor.getFeatureProvider();
 
 		CamelModelLoader bpmnFileReader = new CamelModelLoader(diagram, featureProvider);
-		System.out.println("Loading diagram: " + diagram + " with route: " + selectedRoute + " # " + System.identityHashCode(selectedRoute));
+		//System.out.println("Loading diagram: " + diagram + " with route: " + selectedRoute + " # " + System.identityHashCode(selectedRoute));
 		try {
 			bpmnFileReader.loadModel(selectedRoute);
 		} catch (RuntimeException e) {
