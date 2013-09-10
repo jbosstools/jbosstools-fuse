@@ -35,6 +35,7 @@ public class Downloader {
     static {
         ignoredArtifacts.add("camel-archetype-component-scala");
         ignoredArtifacts.add("camel-archetype-scala");
+	    ignoredArtifacts.add("camel-web-osgi-archetype");
     }
 
     public static void main(String[] args) {
@@ -115,12 +116,16 @@ public class Downloader {
         PrintWriter out = new PrintWriter(new FileWriter(new File(archetypeDir, "archetypes.xml")));
         out.println("<archetypes>");
 
-        downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel-version"));
-        downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf-version"));
-        downloadArchetypesForGroup(out, "org.fusesource.fabric", System.getProperty("fabric-version"));
-
-        out.println("</archetypes>");
-        out.close();
+	    try {
+            downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel-version"));
+            downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf-version"));
+            downloadArchetypesForGroup(out, "org.fusesource.fabric", System.getProperty("fabric-version"));
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+	    } finally {
+		    out.println("</archetypes>");
+		    out.close();
+	    }
 
         System.out.println("Running git add...");
         ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
