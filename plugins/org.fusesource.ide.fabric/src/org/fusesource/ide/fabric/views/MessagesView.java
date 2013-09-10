@@ -12,6 +12,7 @@
 package org.fusesource.ide.fabric.views;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -33,6 +34,7 @@ import org.fusesource.fon.util.messages.IExchangeBrowser;
 import org.fusesource.fon.util.messages.IMessage;
 import org.fusesource.fon.util.messages.ITraceExchangeBrowser;
 import org.fusesource.ide.commons.Viewers;
+import org.fusesource.ide.commons.ui.config.TableConfiguration;
 import org.fusesource.ide.commons.ui.views.TableViewSupport;
 import org.fusesource.ide.commons.util.Function1;
 import org.fusesource.ide.commons.util.FunctionLong;
@@ -79,6 +81,18 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 	protected String getHelpID() {
 		return ID;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.IConfigurableColumns#getColumnConfigurationId()
+	 */
+	@Override
+	public String getColumnConfigurationId() {
+		String key = ID;
+		if (browser instanceof ITraceExchangeBrowser) {
+			key += "_tracing";
+		}
+		return key;
+	}
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
@@ -105,7 +119,27 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 			site.getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
 		}
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.views.TableViewSupport#getColumns()
+	 */
+	@Override
+	public List<String> getColumns() {
+		TableConfiguration tc = getConfiguration();
+		List<String> cols = new ArrayList<String>();
+		
+		if (tc == null || tc.hasColumns() == false) return super.getColumns();
+		
+		tc.reload();
+		Iterator<String> names = tc.getColumnMap().keySet().iterator();
+		while (names.hasNext()) {
+			cols.add(names.next());
+		}
+		tc.sortDefaultColumnNames(cols);
+		
+		return cols;
+	}
+	
 	@Override
     public void createPartControl(Composite parent) {
         super.createPartControl(parent);
@@ -165,6 +199,10 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 			this.exchanges.clear();
 			viewer.refresh();
 		}
+		
+		setConfiguration(null);
+		updateColumnConfiguration(getConfiguration());
+		Viewers.refresh(getViewer());
 	}
 
 	@Override
@@ -306,7 +344,6 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 		viewer.setInput(exchanges);
 		new MessageDragListener(viewer).register();
 	}
-
 
 	@Override
 	protected IStructuredContentProvider createContentProvider() {

@@ -462,6 +462,14 @@ public class NodeTable extends TableViewSupport implements IPropertySheetPage {
 	protected String getHelpID() {
 		return getClass().getName();
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.IConfigurableColumns#getColumnConfigurationId()
+	 */
+	@Override
+	public String getColumnConfigurationId() {
+		return getClass().getName();
+	}
 
 	public ComputeMetadata getSelectedNode() {
 		return JClouds.asComputeMetadata(Selections.getFirstSelection(getViewer()));

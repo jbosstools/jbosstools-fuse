@@ -35,7 +35,7 @@ public interface IConfigurableColumns {
 	 * 
 	 * @return The ID
 	 */
-	String getId();
+	String getColumnConfigurationId();
 
 	/**
 	 * Gets the columns with default order.

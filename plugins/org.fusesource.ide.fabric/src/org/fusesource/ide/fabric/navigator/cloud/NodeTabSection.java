@@ -469,6 +469,14 @@ public class NodeTabSection extends TableViewSupport {
         return NodeTable.class.getName();
     }
 
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.commons.ui.IConfigurableColumns#getColumnConfigurationId()
+     */
+    @Override
+    public String getColumnConfigurationId() {
+    	return NodeTable.class.getName();
+    }
+    
     public ComputeMetadata getSelectedNode() {
         return JClouds.asComputeMetadata(Selections.getFirstSelection(getViewer()));
     }

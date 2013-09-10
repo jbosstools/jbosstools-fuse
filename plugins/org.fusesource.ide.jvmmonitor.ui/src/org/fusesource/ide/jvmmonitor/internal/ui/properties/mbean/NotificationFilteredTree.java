@@ -125,7 +125,7 @@ public class NotificationFilteredTree extends ConfigurableFilteredTree implement
 	 * @see IConfigurableColumn#getId()
 	 */
 	@Override
-	public String getId() {
+	public String getColumnConfigurationId() {
 		return getClass().getName();
 	}
 

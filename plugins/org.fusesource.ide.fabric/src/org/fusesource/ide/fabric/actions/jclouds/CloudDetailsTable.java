@@ -218,6 +218,13 @@ public class CloudDetailsTable extends TableViewSupport {
 		return getClass().getName();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.IConfigurableColumns#getColumnConfigurationId()
+	 */
+	@Override
+	public String getColumnConfigurationId() {
+		return getClass().getName();
+	}
 
 	public CloudDetails getSelectedCloud() {
 		return this.selectedCloud;

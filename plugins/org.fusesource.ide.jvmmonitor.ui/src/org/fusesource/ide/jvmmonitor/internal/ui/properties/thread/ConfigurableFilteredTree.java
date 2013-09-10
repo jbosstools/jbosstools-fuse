@@ -31,7 +31,7 @@ public abstract class ConfigurableFilteredTree extends FilteredTree implements I
 	@Override
 	public TableConfiguration getConfiguration() {
 		if (configuration == null) {
-			configuration = TableConfiguration.loadConfiguration(getId());
+			configuration = TableConfiguration.loadConfiguration(getColumnConfigurationId());
 			configuration.addDefaultColumns(getColumns());
 		}
 		return configuration;

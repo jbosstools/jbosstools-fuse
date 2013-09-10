@@ -63,7 +63,7 @@ public class PropertySourceTreeView extends TreeViewSupport implements IProperty
 	}
 
 	@Override
-	public String getId() {
+	public String getColumnConfigurationId() {
 		return viewId;
 	}
 

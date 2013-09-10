@@ -114,6 +114,13 @@ public class LogsView extends TableViewSupport implements LogContext { // implem
 		return ID;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.IConfigurableColumns#getColumnConfigurationId()
+	 */
+	@Override
+	public String getColumnConfigurationId() {
+		return ID;
+	}
 
 	@Override
 	protected void addToolBarActions(IToolBarManager manager) {

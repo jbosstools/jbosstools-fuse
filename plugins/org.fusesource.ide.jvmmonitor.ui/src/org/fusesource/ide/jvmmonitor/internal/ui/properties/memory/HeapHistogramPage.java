@@ -150,7 +150,7 @@ public class HeapHistogramPage extends Composite implements IConfigurableColumns
 	 * @see IConfigurableColumn#getId()
 	 */
 	@Override
-	public String getId() {
+	public String getColumnConfigurationId() {
 		return getClass().getName();
 	}
 
@@ -166,7 +166,7 @@ public class HeapHistogramPage extends Composite implements IConfigurableColumns
 	@Override
 	public TableConfiguration getConfiguration() {
 		if (configuration == null) {
-			configuration = TableConfiguration.loadConfiguration(getId());
+			configuration = TableConfiguration.loadConfiguration(getColumnConfigurationId());
 			configuration.addDefaultColumns(getColumns());
 		}
 		return configuration;
@@ -217,7 +217,7 @@ public class HeapHistogramPage extends Composite implements IConfigurableColumns
 		final boolean isVisible = isVisible();
 
 		new RefreshJob(NLS.bind(Messages.refreshMemorySectionJobLabel, section
-				.getJvm().getPid()), getId()) {
+				.getJvm().getPid()), getColumnConfigurationId()) {
 			@Override
 			protected void refreshModel(IProgressMonitor monitor) {
 				if (!isSupported() || !isVisible) {
@@ -262,7 +262,7 @@ public class HeapHistogramPage extends Composite implements IConfigurableColumns
 	 * Invoked when section is deactivated.
 	 */
 	protected void deactivated() {
-		Job.getJobManager().cancel(getId());
+		Job.getJobManager().cancel(getColumnConfigurationId());
 		IToolBarManager manager = section.getActionBars().getToolBarManager();
 		removeToolBarActions(manager);
 	}

@@ -283,11 +283,6 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 
 	protected abstract void showChartDialog();
 
-	@Override
-	public String getId() {
-		return getHelpID();
-	}
-
 	/**
 	 * Adds the tool bar actions.
 	 */
@@ -528,7 +523,7 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 	@Override
 	public TableConfiguration getConfiguration() {
 		if (configuration == null) {
-			configuration = TableConfiguration.loadConfiguration(getId());
+			configuration = TableConfiguration.loadConfiguration(getColumnConfigurationId());
 			configuration.addDefaultColumns(getColumns());
 		}
 		return configuration;

@@ -27,8 +27,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.fusesource.fabric.api.FabricRequirements;
-import org.fusesource.fabric.api.Profile;
 import org.fusesource.fabric.api.ProfileStatus;
 import org.fusesource.fabric.api.Version;
 import org.fusesource.ide.commons.Viewers;
@@ -298,7 +296,15 @@ public class FabricStatusTableSheetPage extends TableViewSupport implements IPro
 	protected String getHelpID() {
 		return VIEW_ID;
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.IConfigurableColumns#getColumnConfigurationId()
+	 */
+	@Override
+	public String getColumnConfigurationId() {
+		return VIEW_ID;
+	}
+	
 	public Fabric getFabric() {
 		return fabric;
 	}

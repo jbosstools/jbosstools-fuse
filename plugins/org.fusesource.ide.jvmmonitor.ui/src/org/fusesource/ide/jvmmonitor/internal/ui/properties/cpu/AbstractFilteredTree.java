@@ -104,7 +104,7 @@ abstract public class AbstractFilteredTree extends ConfigurableFilteredTree {
 	 * @see IConfigurableColumn#getId()
 	 */
 	@Override
-	public String getId() {
+	public String getColumnConfigurationId() {
 		return getClass().getName();
 	}
 

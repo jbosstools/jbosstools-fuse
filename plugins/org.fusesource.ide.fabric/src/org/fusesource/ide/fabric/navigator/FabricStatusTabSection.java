@@ -303,6 +303,14 @@ public class FabricStatusTabSection extends TableViewSupport {
     protected String getHelpID() {
         return FabricStatusTableSheetPage.VIEW_ID;
     }
+    
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.commons.ui.IConfigurableColumns#getColumnConfigurationId()
+     */
+    @Override
+    public String getColumnConfigurationId() {
+    	return FabricStatusTableSheetPage.VIEW_ID;
+    }
 
     protected IStructuredSelection getSelection() {
         return Selections.getStructuredSelection(getViewer());

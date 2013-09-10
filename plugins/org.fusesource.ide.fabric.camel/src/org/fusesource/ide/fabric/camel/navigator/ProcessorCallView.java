@@ -33,7 +33,7 @@ public class ProcessorCallView extends TreeViewSupport implements IPropertySheet
 	}
 
 	@Override
-	public String getId() {
+	public String getColumnConfigurationId() {
 		return ID;
 	}
 

@@ -44,6 +44,14 @@ public class SetHeaderTableView extends TableViewSupport {
 	protected String getHelpID() {
 		return ID;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.IConfigurableColumns#getColumnConfigurationId()
+	 */
+	@Override
+	public String getColumnConfigurationId() {
+		return ID;
+	}
 
 	public WritableList getInput() {
 		return input;

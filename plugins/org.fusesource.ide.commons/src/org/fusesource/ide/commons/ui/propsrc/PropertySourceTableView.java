@@ -96,7 +96,7 @@ public class PropertySourceTableView extends TableViewSupport implements IProper
 	}
 
 	@Override
-	public String getId() {
+	public String getColumnConfigurationId() {
 		return viewId;
 	}
 

@@ -47,8 +47,8 @@ public class ContentsTabSection extends PropertySourceTableView {
     }
 
     @Override
-    public String getId() {
-        return current == null ? super.getId() : current.getClass().getName();
+    public String getColumnConfigurationId() {
+        return current == null ? super.getColumnConfigurationId() : current.getClass().getName();
     }
 
     @Override
