@@ -75,7 +75,16 @@ public class FabricDetails extends ConfigurationDetails {
 
 	public FabricDetails(String name, String urls) {
 		this.name = name;
-		this.urls = urls;
+		if (urls.startsWith("http://") && urls.endsWith("/jolokia/")) {
+			this.urls = urls;	
+		} else {
+			if (urls.contains(",")) {
+				// seems to be more than one public url - take the first best
+				this.urls = String.format(Fabrics.DEFAULT_FABRIC_URL_FORMAT, urls.substring(0, urls.indexOf(',')).trim());
+			} else {
+				this.urls = String.format(Fabrics.DEFAULT_FABRIC_URL_FORMAT, urls.trim());
+			}
+		}		
 	}
 
 	public FabricDetails(String id, Preferences node) {

@@ -40,7 +40,8 @@ import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 
 public class Fabrics extends RefreshableCollectionNode implements ImageProvider, HasRefreshableUI, HasViewer, ContextMenuProvider {
 
-	public static final String DEFAULT_FABRIC_URL = "localhost:2181";
+	public static final String DEFAULT_FABRIC_URL = "http://localhost:8181/jolokia/";
+	public static final String DEFAULT_FABRIC_URL_FORMAT = "http://%s:8181/jolokia/";
 
 	public static final String DEFAULT_USERNAME = "karaf";
 
@@ -176,8 +177,7 @@ public class Fabrics extends RefreshableCollectionNode implements ImageProvider,
 		System.out.println("Created fabric details: " + details);
 		return addFabric(details);
 	}
-
-
+	
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
 		menu.add(addAction);
