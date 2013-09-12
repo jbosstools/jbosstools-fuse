@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fuse Fabric Camel Plugin
+Bundle-Name: Fuse Fabric Camel Facade Plugin
 Bundle-SymbolicName: org.fusesource.ide.fabric.camel;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.

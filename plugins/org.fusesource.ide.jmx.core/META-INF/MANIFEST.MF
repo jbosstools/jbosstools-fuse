@@ -1,5 +1,5 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: %BundleName
+Bundle-Name: Fuse JMX Core Plugin
 Bundle-SymbolicName: org.fusesource.ide.jmx.core;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Activator: org.fusesource.ide.jmx.core.JMXActivator

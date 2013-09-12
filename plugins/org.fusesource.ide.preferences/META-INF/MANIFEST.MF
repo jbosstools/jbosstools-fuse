@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Rider Preferences Plugin
+Bundle-Name: Fuse Preferences Plugin
 Bundle-SymbolicName: org.fusesource.ide.preferences;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: Red Hat, Inc.
