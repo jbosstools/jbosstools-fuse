@@ -24,10 +24,10 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
-import org.fusesource.ide.server.karaf.core.internal.KarafUtils;
-import org.fusesource.ide.server.karaf.core.internal.runtime.IKarafRuntime;
-import org.fusesource.ide.server.karaf.core.internal.server.IServerConfiguration;
-import org.fusesource.ide.server.karaf.core.internal.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.KarafUtils;
+import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
+import org.fusesource.ide.server.karaf.core.server.IServerConfiguration;
+import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
 
 
 public abstract class AbstractKarafServerWizardFragment extends WizardFragment {

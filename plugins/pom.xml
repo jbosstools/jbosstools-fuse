@@ -36,9 +36,13 @@
 
     <module>org.fusesource.ide.deployment</module>
 
+    <module>org.fusesource.ide.server.view</module>
     <module>org.fusesource.ide.server.karaf.core</module>
     <module>org.fusesource.ide.server.karaf.ui</module>
-    <module>org.fusesource.ide.server.karaf.view</module>
+    <module>org.fusesource.ide.server.servicemix.core</module>
+    <module>org.fusesource.ide.server.servicemix.ui</module>
+    <module>org.fusesource.ide.server.fuse.core</module>
+    <module>org.fusesource.ide.server.fuse.ui</module>
 
     <module>org.fusesource.ide.preferences</module>
     <module>org.fusesource.ide.maven</module>

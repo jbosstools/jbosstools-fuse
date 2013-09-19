@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+  <extension point="org.eclipse.wst.server.core.runtimeTypes">
+    <runtimeType
+          class="org.fusesource.ide.server.fuse.core.runtime.FuseESBRuntimeDelegate"
+          description="%runtimeTypeFuseESBDescription_60"
+          id="org.fusesource.ide.fuseesb.runtime.60"
+          name="%runtimeTypeFuseESBLabel_60"
+          vendor="%fusesource"
+          vendorId="%fusesource"
+          version="6.0">
+       <moduleType
+         types="jst.web"
+         versions="2.2, 2.3, 2.4, 2.5, 3.0"/>
+       <moduleType
+         types="jst.utility"
+         versions="1.0"/>
+    </runtimeType>
+    <runtimeType
+          class="org.fusesource.ide.server.fuse.core.runtime.FuseESBRuntimeDelegate"
+          description="%runtimeTypeFuseESBDescription_61"
+          id="org.fusesource.ide.fuseesb.runtime.61"
+          name="%runtimeTypeFuseESBLabel_61"
+          vendor="%fusesource"
+          vendorId="%fusesource"
+          version="6.1">
+       <moduleType
+             types="jst.web"
+             versions="2.2, 2.3, 2.4, 2.5, 3.0">
+       </moduleType>
+       <moduleType
+             types="jst.utility"
+             versions="1.0">
+       </moduleType>
+    </runtimeType>
+  </extension>
+
+  <extension point="org.eclipse.wst.server.core.serverTypes">
+     <serverType
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
+           description="%fuseESBServerDescription_60"
+           hasConfiguration="true"
+           id="org.fusesource.ide.fuseesb.server.60"
+           initialState="stopped"
+           launchModes="run"
+           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           name="%fuseESBServerType_60"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.fuseesb.runtime.60"
+           startTimeout="90000"
+           stopTimeout="45000"
+           supportsRemoteHosts="false">
+     </serverType>
+     <serverType
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
+           description="%fuseESBServerDescription_61"
+           hasConfiguration="true"
+           id="org.fusesource.ide.fuseesb.server.61"
+           initialState="stopped"
+           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           launchModes="run"
+           name="%fuseESBServerType_61"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.fuseesb.runtime.61"
+           startTimeout="90000"
+           stopTimeout="45000"
+           supportsRemoteHosts="false">
+     </serverType>
+  </extension>
+
+  <extension point="org.eclipse.wst.server.core.runtimeLocators">
+    <runtimeLocator
+       id="org.fusesource.ide.server.fuseesb.runtime.locator"
+       typeIds="org.fusesource.ide.fuseesb.runtime.*"
+       class="org.fusesource.ide.server.fuse.core.runtime.FuseESBRuntimeLocator"/>
+  </extension>
+
+  <extension point="org.eclipse.wst.server.core.serverLocators">
+    <serverLocator
+       id="org.fusesource.ide.server.fuseesb.server.locator"
+       supportsRemoteHosts="false"
+       typeIds="org.fusesource.ide.fuseesb.server.*"
+       class="org.fusesource.ide.server.fuse.core.server.FuseESBServerLocator"/>
+  </extension>
+
+  <extension point="org.eclipse.wst.server.core.installableRuntimes">
+    <runtime
+          archivePath="jboss-fuse-6.0.0.redhat-031"
+          archiveUrl="http://repo.fusesource.com/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.0.0.redhat-031/jboss-fuse-6.0.0.redhat-031.zip"
+          id="org.fusesource.ide.fuseesb.runtime.60"
+          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
+          os="win32">
+    </runtime>
+    <runtime
+          archivePath="jboss-fuse-6.0.0.redhat-031"
+          archiveUrl="http://repo.fusesource.com/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.0.0.redhat-031/jboss-fuse-6.0.0.redhat-031.zip"
+          id="org.fusesource.ide.fuseesb.runtime.60"
+          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
+          os="linux">
+    </runtime>
+    <runtime
+          archivePath="jboss-fuse-6.1.0.redhat-086"
+          archiveUrl="http://repo.fusesource.com/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.1.0.redhat-086/jboss-fuse-6.1.0.redhat-086.zip"
+          id="org.fusesource.ide.fuseesb.runtime.61"
+          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
+          os="win32">
+    </runtime>
+    <runtime
+          archivePath="jboss-fuse-6.1.0.redhat-086"
+          archiveUrl="http://repo.fusesource.com/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.1.0.redhat-086/jboss-fuse-6.1.0.redhat-086.zip"
+          id="org.fusesource.ide.fuseesb.runtime.61"
+          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
+          os="linux">
+    </runtime>
+  </extension>
+  
+</plugin>

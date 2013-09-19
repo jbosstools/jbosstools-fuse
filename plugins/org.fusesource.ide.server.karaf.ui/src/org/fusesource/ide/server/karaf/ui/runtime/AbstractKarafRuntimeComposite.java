@@ -12,8 +12,22 @@
 package org.fusesource.ide.server.karaf.ui.runtime;
 
 import java.io.File;
+import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -27,9 +41,16 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
+import org.eclipse.wst.server.core.TaskModel;
+import org.eclipse.wst.server.core.internal.IInstallableRuntime;
+import org.eclipse.wst.server.core.internal.ServerPlugin;
 import org.eclipse.wst.server.ui.internal.ImageResource;
+import org.eclipse.wst.server.ui.internal.wizard.TaskWizard;
+import org.eclipse.wst.server.ui.internal.wizard.fragment.LicenseWizardFragment;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
-import org.fusesource.ide.server.karaf.core.internal.KarafUtils;
+import org.eclipse.wst.server.ui.wizard.WizardFragment;
+import org.fusesource.ide.server.karaf.core.KarafUtils;
 import org.fusesource.ide.server.karaf.ui.Messages;
 
 
@@ -42,7 +63,14 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 	protected Text txtKarafDir;
 	protected final KarafWizardDataModel model;
 	protected boolean valid = false;
-
+	protected IInstallableRuntime ir;
+    protected Job installRuntimeJob;
+    protected IJobChangeListener jobListener;
+    protected Button btnBrowseButton;
+    protected Button btnDownloadAndInstallButton;
+    protected Label installLabel;
+    protected IRuntimeWorkingCopy runtimeWC;
+	
 	public AbstractKarafRuntimeComposite(Composite parent, IWizardHandle wizardHandle, KarafWizardDataModel model) {
 		super(parent, SWT.NONE);
 		this.parent = parent;
@@ -124,7 +152,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 		txtKarafDirGridData.horizontalAlignment = SWT.FILL;
 		txtKarafDir.setLayoutData(txtKarafDirGridData);
 		
-		Button btnBrowseButton = new Button(this,SWT.NONE);
+		btnBrowseButton = new Button(this, SWT.PUSH);
 		btnBrowseButton.setText(Messages.AbstractKarafRuntimeComposite_browse_text);
 		btnBrowseButton.addMouseListener(new MouseListener(){
 
@@ -146,11 +174,151 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 			}
 			
 		});
+		
+		installLabel = new Label(this, SWT.NONE);
+		installLabel.setText(Messages.AbstractKarafRuntimeComposite_runtimeinstall_label);
+		GridData installLabelGridData = new GridData();
+		installLabelGridData.grabExcessHorizontalSpace = true;
+		installLabelGridData.horizontalAlignment = SWT.FILL;
+		installLabelGridData.horizontalSpan = 2;
+		installLabel.setLayoutData(installLabelGridData);
+		
+		btnDownloadAndInstallButton = new Button(this, SWT.PUSH);
+		btnDownloadAndInstallButton.setText(Messages.AbstractKarafRuntimeComposite_downloadAndInstall_text);
+		btnDownloadAndInstallButton.setToolTipText(Messages.AbstractKarafRuntimeComposite_downloadAndInstall_description);
+		btnDownloadAndInstallButton.addMouseListener(new MouseListener(){
+
+			public void mouseDoubleClick(MouseEvent e) {
+			}
+
+			public void mouseDown(MouseEvent e) {
+				
+			}
+
+			public void mouseUp(MouseEvent e) {
+				ir = ServerPlugin.findInstallableRuntime(runtimeWC
+						.getRuntimeType().getId());
+				if (ir != null) {
+					btnDownloadAndInstallButton.setEnabled(true);
+//					installLabel.setText(ir.getName());
+				}
+
+				String license = null;
+				try {
+					license = ir.getLicense(new NullProgressMonitor());
+				} catch (CoreException ex) {
+					ex.printStackTrace();
+				}
+				TaskModel taskModel = new TaskModel();
+				taskModel.putObject(LicenseWizardFragment.LICENSE, license);
+				TaskWizard wizard2 = new TaskWizard(
+						Messages.AbstractKarafRuntimeComposite_installDialogTitle, new WizardFragment() {
+							protected void createChildFragments(List list) {
+								list.add(new LicenseWizardFragment());
+							}
+						}, taskModel);
+
+				WizardDialog dialog2 = new WizardDialog(getShell(), wizard2);
+				if (dialog2.open() == Window.CANCEL)
+					return;
+
+				DirectoryDialog dialog = new DirectoryDialog(AbstractKarafRuntimeComposite.this.getShell());
+				dialog.setMessage(Messages.AbstractKarafRuntimeComposite_selectInstallDir);
+				dialog.setFilterPath(txtKarafDir.getText());
+				String selectedDirectory = dialog.open();
+				if (selectedDirectory != null) {
+					// ir.install(new Path(selectedDirectory));
+					final IPath installPath = new Path(selectedDirectory);
+					installRuntimeJob = new Job("Installing server runtime " + ir.getName() + "...") {
+						
+						public boolean belongsTo(Object family) {
+							return ServerPlugin.PLUGIN_ID.equals(family);
+						}
+
+						protected IStatus run(IProgressMonitor monitor) {
+							try {
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										installLabel.setText(getName());
+										btnBrowseButton.setEnabled(false);
+										btnDownloadAndInstallButton.setEnabled(false);
+										txtKarafDir.setEnabled(false);
+										parent.update();
+									}
+								});
+								ir.install(installPath, monitor);
+							} catch (CoreException ce) {
+								return ce.getStatus();
+							}
+
+							return Status.OK_STATUS;
+						}
+					};
+
+					txtKarafDir.setText(selectedDirectory);
+					jobListener = new JobChangeAdapter() {
+						public void done(IJobChangeEvent event) {
+							Display.getDefault().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									installLabel.setText("Installation of " + ir.getName() + " completed.");
+									btnBrowseButton.setEnabled(true);
+									btnDownloadAndInstallButton.setEnabled(true);
+									txtKarafDir.setEnabled(true);
+									parent.update();
+								}
+							});
+							installRuntimeJob.removeJobChangeListener(this);
+							installRuntimeJob = null;
+							Display.getDefault().asyncExec(new Runnable() {
+								public void run() {
+									if (!isDisposed()) {
+										validate();
+									}
+								}
+							});
+						}
+					};
+					installRuntimeJob.addJobChangeListener(jobListener);
+					installRuntimeJob.schedule();
+				}
+			}
+			
+		});
 		wizardHandle.update();
 	}
 	
+	protected void setRuntime(IRuntimeWorkingCopy newRuntime) {
+		if (newRuntime == null) {
+			runtimeWC = null;
+		} else {
+			runtimeWC = newRuntime;
+		}
+
+		if (runtimeWC == null) {
+			ir = null;
+			btnDownloadAndInstallButton.setEnabled(false);
+			installLabel.setText("");
+		} else {
+			ir = ServerPlugin.findInstallableRuntime(runtimeWC.getRuntimeType().getId());
+			if (ir != null) {
+				btnDownloadAndInstallButton.setEnabled(true);
+//				installLabel.setText(ir.getName());
+			}
+		}
+		init();
+		validate();
+	}
+	
+	protected void init() {
+		if (runtimeWC.getLocation() != null)
+			txtKarafDir.setText(runtimeWC.getLocation().toOSString());
+		else
+			txtKarafDir.setText("");
+	}
+	
 	void performFinish() {
-		
 	}
 	
 	protected boolean isValid(){

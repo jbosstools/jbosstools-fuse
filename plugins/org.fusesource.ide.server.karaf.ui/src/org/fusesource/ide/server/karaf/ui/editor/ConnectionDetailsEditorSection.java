@@ -25,7 +25,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wst.server.ui.editor.ServerEditorSection;
-import org.fusesource.ide.server.karaf.core.internal.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
 import org.fusesource.ide.server.karaf.ui.Messages;
 
 

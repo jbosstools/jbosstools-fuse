@@ -373,8 +373,8 @@ public class DeploymentContributionItem extends ContributionItem {
 				if (runtimeType != null) {
 					String id = runtimeType.getId();
 					if (id != null) {
-						if (id.startsWith("org.fusesource.ide.server.karaf.runtime.") ||
-								id.startsWith("org.fusesource.ide.server.smx.runtime.")) {
+						if (id.startsWith("org.fusesource.ide.karaf.runtime.") ||
+							id.startsWith("org.fusesource.ide.smx.runtime.")) {
 							// create a dummy config item for that server
 							HotfolderDeploymentConfiguration cfg = new HotfolderDeploymentConfiguration();
 							cfg.setName(rt.getName() + " (" + rt.getLocation().toOSString() + ")");

@@ -5,56 +5,86 @@
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
             class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x"
-            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.2x"
-            typeIds="org.fusesource.ide.server.karaf.runtime.2x">
+            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.20"
+            typeIds="org.fusesource.ide.karaf.runtime.20">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.21"
+            typeIds="org.fusesource.ide.karaf.runtime.21">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.22"
+            typeIds="org.fusesource.ide.karaf.runtime.22">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.23"
+            typeIds="org.fusesource.ide.karaf.runtime.23">
       </fragment>
       <fragment
             class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
-            id="org.fusesource.ide.server.karaf.ui.server.fragment.2x"
-            typeIds="org.fusesource.ide.server.karaf.2x">
+            id="org.fusesource.ide.server.karaf.ui.server.fragment.20"
+            typeIds="org.fusesource.ide.karaf.server.20">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.karaf.ui.runtime.smx4x.ServiceMixRuntimeWizardFragment4x"
-            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.smx4x"
-            typeIds="org.fusesource.ide.server.smx.runtime.4x">
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.server.fragment.21"
+            typeIds="org.fusesource.ide.karaf.server.21">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.karaf.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
-            id="org.fusesource.ide.server.karaf.ui.server.fragment.smx4x"
-            typeIds="org.fusesource.ide.server.smx.4x">
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.server.fragment.22"
+            typeIds="org.fusesource.ide.karaf.server.22">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.karaf.ui.runtime.fuseesb7x.FuseESBRuntimeWizardFragment7x"
-            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.fuseesb7x"
-            typeIds="org.fusesource.ide.server.fuseesb.runtime.7x">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.karaf.ui.runtime.fuseesb7x.FuseESBServerWizardFragment7x"
-            id="org.fusesource.ide.server.karaf.ui.server.fragment.fuseesb7x"
-            typeIds="org.fusesource.ide.server.fuseesb.7x">
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.server.fragment.23"
+            typeIds="org.fusesource.ide.karaf.server.23">
       </fragment>
    </extension>
    <extension
          point="org.eclipse.wst.server.ui.serverImages">
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.karaf.ui.server.image"
-            typeIds="org.fusesource.ide.server.karaf.2x,org.fusesource.ide.server.smx.4x,org.fusesource.ide.server.fuseesb.7x">
+            id="org.fusesource.ide.server.karaf.ui.server.image.20"
+            typeIds="org.fusesource.ide.karaf.server.20">
       </image>
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.karaf.ui.runtime.image"
-            typeIds="org.fusesource.ide.server.karaf.runtime.2x,org.fusesource.ide.server.smx.runtime.4x,org.fusesource.ide.server.fuseesb.runtime.7x">
+            id="org.fusesource.ide.server.karaf.ui.server.image.21"
+            typeIds="org.fusesource.ide.karaf.server.21">
       </image>
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.karaf.ui.sa.image"
-            typeIds="jbi.sa">
+            id="org.fusesource.ide.server.karaf.ui.server.image.22"
+            typeIds="org.fusesource.ide.karaf.server.22">
       </image>
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.karaf.ui.sa.image"
-            typeIds="module.fuse.osgi">
+            id="org.fusesource.ide.server.karaf.ui.server.image.23"
+            typeIds="org.fusesource.ide.karaf.server.23">
+      </image>
+      <image
+            icon="icons/fuse_server.png"
+            id="org.fusesource.ide.server.karaf.ui.runtime.image.20"
+            typeIds="org.fusesource.ide.karaf.runtime.20">
+      </image>
+      <image
+            icon="icons/fuse_server.png"
+            id="org.fusesource.ide.server.karaf.ui.runtime.image.21"
+            typeIds="org.fusesource.ide.karaf.runtime.21">
+      </image>
+      <image
+            icon="icons/fuse_server.png"
+            id="org.fusesource.ide.server.karaf.ui.runtime.image.22"
+            typeIds="org.fusesource.ide.karaf.runtime.22">
+      </image>
+      <image
+            icon="icons/fuse_server.png"
+            id="org.fusesource.ide.server.karaf.ui.runtime.image.23"
+            typeIds="org.fusesource.ide.karaf.runtime.23">
       </image>
    </extension>
    <extension
@@ -72,7 +102,7 @@
             id="org.fusesource.ide.server.karaf.ui.connection.details"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
-            typeIds="org.fusesource.ide.server.karaf.*,org.fusesource.ide.server.smx.*,org.fusesource.ide.server.fuseesb.*">
+            typeIds="org.fusesource.ide.karaf.server.*">
       </section>
    </extension>
    <extension

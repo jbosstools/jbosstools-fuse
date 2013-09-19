@@ -61,8 +61,8 @@ import org.fusesource.ide.fabric.views.logs.HasLogBrowser;
 import org.fusesource.ide.fabric.views.logs.ILogBrowser;
 import org.fusesource.ide.fabric.views.logs.Logs;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
-import org.fusesource.ide.server.karaf.view.ITerminalConnectionListener;
-import org.fusesource.ide.server.karaf.view.SshView;
+import org.fusesource.ide.server.view.ITerminalConnectionListener;
+import org.fusesource.ide.server.view.SshView;
 
 import scala.actors.threadpool.Arrays;
 
@@ -393,7 +393,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 	}
 
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.view.ITerminalConnectionListener#onConnect()
+	 * @see org.fusesource.ide.server.view.ITerminalConnectionListener#onConnect()
 	 */
 	@Override
 	public void onConnect() {
@@ -401,7 +401,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 	}
 
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.view.ITerminalConnectionListener#onDisconnect()
+	 * @see org.fusesource.ide.server.view.ITerminalConnectionListener#onDisconnect()
 	 */
 	@Override
 	public void onDisconnect() {

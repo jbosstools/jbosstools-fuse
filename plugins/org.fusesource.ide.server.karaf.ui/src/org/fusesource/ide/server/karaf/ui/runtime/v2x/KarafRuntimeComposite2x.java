@@ -32,6 +32,7 @@ public class KarafRuntimeComposite2x extends AbstractKarafRuntimeComposite {
 	protected static final String LIB_KARAF_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "karaf.jar");
 	protected static final String LIB_KARAF_JAAS_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "karaf-jaas-boot.jar");
 	protected static final String LIB_KARAF_CLIENT_JAR = String.format("%s%s%s", LIB_BIN_FOLDER, SEPARATOR, "karaf-client.jar");
+	protected static final String LIB_KARAF_CLIENT_JAR_ALT = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "karaf-client.jar");
 	
 	/**
 	 * constructor 
@@ -52,8 +53,9 @@ public class KarafRuntimeComposite2x extends AbstractKarafRuntimeComposite {
 		File libKarafJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_KARAF_JAR));
 		File libKarafjassJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_KARAF_JAAS_JAR));
 		File libKarafClientJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_KARAF_CLIENT_JAR));
+		File libKarafClientJarAlternate = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_KARAF_CLIENT_JAR_ALT));
 		File confDir = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, CONF_FOLDER));
-		return libKarafClientJar.exists() && libKarafJar.exists() && libKarafjassJar.exists() && confDir.exists();
+		return (libKarafClientJar.exists() || libKarafClientJarAlternate.exists()) && libKarafJar.exists() && libKarafjassJar.exists() && confDir.exists();
 	}
 
 	/* (non-Javadoc)

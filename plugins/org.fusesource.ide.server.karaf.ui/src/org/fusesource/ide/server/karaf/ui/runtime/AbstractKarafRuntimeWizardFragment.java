@@ -23,9 +23,9 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
-import org.fusesource.ide.server.karaf.core.internal.KarafUtils;
-import org.fusesource.ide.server.karaf.core.internal.runtime.IKarafRuntime;
-import org.fusesource.ide.server.karaf.core.internal.runtime.IKarafRuntimeWorkingCopy;
+import org.fusesource.ide.server.karaf.core.KarafUtils;
+import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
+import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
 
 
 public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment {
@@ -117,4 +117,11 @@ public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment
 	public boolean isComplete() {
 		return composite != null ? composite.isValid() : true;
 	}
+	
+	public void enter() {
+        if (composite != null) {
+                IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject(TaskModel.TASK_RUNTIME);
+                composite.setRuntime(runtime);
+        }
+}
 }

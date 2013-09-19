@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Fuse Server Core Plugin for Fuse Runtimes
+Bundle-SymbolicName: org.fusesource.ide.server.fuse.core;singleton:=true
+Bundle-Version: 7.2.0.qualifier
+Bundle-Vendor: Red Hat, Inc.
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.fusesource.ide.commons,
+ org.fusesource.ide.preferences,
+ org.fusesource.ide.server.karaf.core,
+ org.eclipse.core.runtime;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.core.resources;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.core.commands;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.debug.core;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.jdt.core;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.jdt.launching;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.wst.server.core;bundle-version="[1.0.204,2.0.0)",
+ org.eclipse.jst.server.core;bundle-version="[1.0.103,2.0.0)",
+ org.eclipse.jst.common.project.facet.core;bundle-version="[1.1.0,2.0.0)",
+ org.eclipse.wst.common.modulecore;bundle-version="[1.1.0,2.0.0)",
+ org.eclipse.emf.common;bundle-version="[2.2.0,3.0.0)",
+ org.eclipse.wst.common.project.facet.core;bundle-version="[1.1.0,2.0.0)",
+ org.eclipse.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.swt
+Bundle-Activator: org.fusesource.ide.server.fuse.core.Activator
+Bundle-ActivationPolicy: lazy
+Export-Package: org.fusesource.ide.server.fuse.core,
+ org.fusesource.ide.server.fuse.core.runtime,
+ org.fusesource.ide.server.fuse.core.server

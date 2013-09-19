@@ -27,7 +27,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -52,7 +51,7 @@ import org.osgi.framework.BundleContext;
 public class FabricPlugin extends ImagesActivatorSupport {
 
 	public static final String PLUGIN_ID = "org.fusesource.ide.fabric";
-	public static final String TERMINAL_VIEW_ID = "org.fusesource.ide.server.karaf.view.TerminalView";
+	public static final String TERMINAL_VIEW_ID = "org.fusesource.ide.server.view.TerminalView";
 
 	private static IViewPart part;
 	private static FabricPlugin plugin;

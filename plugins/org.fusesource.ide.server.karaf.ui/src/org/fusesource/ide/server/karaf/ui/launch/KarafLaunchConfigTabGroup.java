@@ -22,7 +22,7 @@ import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaArgumentsTab;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaClasspathTab;
 import org.eclipse.wst.server.ui.ServerLaunchConfigurationTab;
-import org.fusesource.ide.server.karaf.core.internal.server.IServerConfiguration;
+import org.fusesource.ide.server.karaf.core.server.IServerConfiguration;
 
 
 public class KarafLaunchConfigTabGroup extends

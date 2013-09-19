@@ -31,6 +31,11 @@ public class Messages extends NLS {
 	public static String AbstractKarafRuntimeComposite_bin_karaf;
 	public static String AbstractKarafRuntimeComposite_bin_karaf_bat;
 	public static String AbstractKarafRuntimeComposite_browse_text;
+	public static String AbstractKarafRuntimeComposite_downloadAndInstall_text;
+	public static String AbstractKarafRuntimeComposite_downloadAndInstall_description;
+	public static String AbstractKarafRuntimeComposite_runtimeinstall_label;
+	public static String AbstractKarafRuntimeComposite_installDialogTitle;
+	public static String AbstractKarafRuntimeComposite_selectInstallDir;
 	public static String AbstractKarafRuntimeComposite_install_dir_label;
 	public static String AbstractKarafRuntimeComposite_invalid_dir;
 	public static String AbstractKarafRuntimeComposite_no_dir;
@@ -45,20 +50,6 @@ public class Messages extends NLS {
 	public static String KarafServerPorpertiesComposite_user_name_label;
 	public static String KarafServerPorpertiesComposite_wizard_desc;
 	public static String KarafServerPorpertiesComposite_wizard_title;
-	public static String ServiceMixServerPorpertiesComposite_wizard_desc;
-	public static String ServiceMixServerPorpertiesComposite_wizard_title;
-	public static String FuseESBServerPorpertiesComposite_wizard_desc;
-	public static String FuseESBServerPorpertiesComposite_wizard_title;
-	public static String ServiceMixRuntimeComposite_wizard_desc;
-	public static String ServiceMixRuntimeComposite_wizard_tite;
-	public static String FuseESBRuntimeComposite_wizard_tite;
-	public static String FuseESBRuntimeComposite_wizard_desc;
-	
-	public static String FuseESBRuntimeComposite_bin_fuseesb;
-	public static String FuseESBRuntimeComposite_bin_fuseesb_bat;
-	
-	public static String ServiceMix4xRuntimeComposite_bin_servicemix;
-	public static String ServiceMix4xRuntimeComposite_bin_servicemix_bat;
 	
 	static {
 		// initialize resource bundle

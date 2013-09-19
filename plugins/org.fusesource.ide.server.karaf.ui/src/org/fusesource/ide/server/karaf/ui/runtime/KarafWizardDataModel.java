@@ -11,8 +11,8 @@
 
 package org.fusesource.ide.server.karaf.ui.runtime;
 
-import org.fusesource.ide.server.karaf.core.internal.runtime.IKarafRuntimeWorkingCopy;
-import org.fusesource.ide.server.karaf.core.internal.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
 
 public class KarafWizardDataModel implements
 		IKarafRuntimeWorkingCopy, IServerConfigurationWorkingCopy {

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.fusesource.ide"
+            class="org.fusesource.ide.server.view.SshView"
+            id="org.fusesource.ide.server.view.TerminalView"
+            name="%karaf.shell.label"
+            restorable="true">
+      </view>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.propertiesView">
+      <excludeSources
+            id="org.fusesource.ide.server.view.TerminalView">
+      </excludeSources>
+   </extension>
+</plugin>

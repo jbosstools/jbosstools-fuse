@@ -50,15 +50,15 @@ public class KarafServerPorpertiesComposite extends Composite implements
 	}
 
 	public void handleEvent(Event event) {
-		boolean valid = false;
+		boolean val = false;
 		if (event.type == SWT.FocusIn) {
 			handleFocusEvent(event);
 		} else {
 			if (event.widget == txtHostName) {
 				model.setHostName(txtHostName.getText());
 			} else if (event.widget == txtPortNumber) {
-				valid = validate();
-				if (valid) {
+				val = validate();
+				if (val) {
 					try {
 						model.setPortNumber(Integer.parseInt(txtPortNumber
 								.getText()));
@@ -82,7 +82,7 @@ public class KarafServerPorpertiesComposite extends Composite implements
 
 	protected boolean validate() {
 		try {
-			Integer.parseInt(txtPortNumber.getText());
+			Integer.parseInt(txtPortNumber.getText().trim());
 			valid = true;
 		} catch (NumberFormatException ne) {
 			valid = false;
