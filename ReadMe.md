@@ -104,7 +104,9 @@ Usually with a Zip exception like this...
       at org.codehaus.tycho.osgitools.EquinoxResolver.newState(EquinoxResolver.java:157)
       at org.codehaus.tycho.osgitools.EquinoxResolver.newResolvedState(EquinoxResolver.java:52)
 
-The quick fix is to trash your "~/.m2/repository/p2" directory!
+The quick fix is to trash your folder:
+    
+     ~/.m2/repository/p2
 
 
 Code Generation (NO NEED FOR THIS STEP UNLESS CAMEL VERSION CHANGED)
@@ -117,8 +119,8 @@ This step is only required if you upgrade the version of Camel, change the code 
 
 From the fuseide directory type:
 
-  cd tools/ide-codegen
-  mvn compile exec:java
+    cd tools/ide-codegen
+    mvn compile exec:java
 
 The generator then runs and updates the sources. Don't forget to push the regenerated source files.
 
