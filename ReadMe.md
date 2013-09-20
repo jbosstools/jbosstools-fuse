@@ -1,4 +1,4 @@
-Fuse Plugins for Eclipse Repository
+JBoss Fuse Tooling for Eclipse - Repository
 ================
 
 This repository holds the tooling for Eclipse which was formerly known as Fuse IDE. 
@@ -28,4 +28,4 @@ coming soon
 
 Build Notes
 ================
-TODO
+see the ReadMe.md in the plugins folder
