@@ -1258,7 +1258,8 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 			if (name != null) {
 				String ext = ifile.getFileExtension();
 				if (ext != null) {
-					name = name.substring(0, name.length() - ext.length());
+					int start = name.lastIndexOf('/') >= 0 ? name.lastIndexOf('/') +1 : 0;
+					name = name.substring(start, name.length() - ext.length());
 				}
 
 				// lets replace "_" or "-" in the name
