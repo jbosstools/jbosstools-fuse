@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.management.MalformedObjectNameException;
 
-import org.fusesource.fabric.monitor.api.FetchMonitoredViewDTO;
+//import org.fusesource.fabric.monitor.api.FetchMonitoredViewDTO;
 import org.fusesource.fabric.service.JmxTemplateSupport;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
@@ -45,15 +45,15 @@ public class FabricNodeProvider implements NodeProvider, org.fusesource.ide.jmx.
 			JmxTemplateSupport jmxTemplate = new JmxPluginJmxTemplate(root.getConnection());
 			//Object list = MonitorFacade.list(jmxTemplate);
 
-			FetchMonitoredViewDTO view = new FetchMonitoredViewDTO();
-
-			view.data_sources.addAll(Arrays.asList(new String[]{
-					"java.lang:name=CMS Old Gen,type=MemoryPool@Usage@used",
-					"java.lang:name=Par Survivor Space,type=MemoryPool@Usage@used",
-					"java.lang:name=Par Eden Space,type=MemoryPool@Usage@used",
-					"java.lang:type=Memory@HeapMemoryUsage@committed"
-			}));
-			view.monitored_set = "jvm-default";
+//			FetchMonitoredViewDTO view = new FetchMonitoredViewDTO();
+//
+//			view.data_sources.addAll(Arrays.asList(new String[]{
+//					"java.lang:name=CMS Old Gen,type=MemoryPool@Usage@used",
+//					"java.lang:name=Par Survivor Space,type=MemoryPool@Usage@used",
+//					"java.lang:name=Par Eden Space,type=MemoryPool@Usage@used",
+//					"java.lang:type=Memory@HeapMemoryUsage@committed"
+//			}));
+//			view.monitored_set = "jvm-default";
 
 			//System.out.println("======== doing Fabric Monitor call with: " + view);
 			//MonitoredViewDTO answer = MonitorFacade.fetch(jmxTemplate, view);
