@@ -198,11 +198,10 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 			public void mouseUp(MouseEvent e) {
 				ir = ServerPlugin.findInstallableRuntime(runtimeWC
 						.getRuntimeType().getId());
-				if (ir != null) {
-					btnDownloadAndInstallButton.setEnabled(true);
-//					installLabel.setText(ir.getName());
-				}
+				btnDownloadAndInstallButton.setEnabled(ir != null);
 
+				if (ir == null) return;
+				
 				String license = null;
 				try {
 					license = ir.getLicense(new NullProgressMonitor());
