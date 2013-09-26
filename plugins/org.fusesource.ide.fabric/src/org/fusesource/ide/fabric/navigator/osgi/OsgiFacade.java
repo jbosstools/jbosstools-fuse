@@ -11,20 +11,26 @@
 
 package org.fusesource.ide.fabric.navigator.osgi;
 
+import java.util.Set;
+
+import javax.management.MBeanServerConnection;
+import javax.management.MBeanServerInvocationHandler;
 import javax.management.MalformedObjectNameException;
 import javax.management.NotificationFilter;
 import javax.management.NotificationListener;
 import javax.management.ObjectName;
 import javax.management.openmbean.TabularData;
+import javax.management.remote.JMXConnector;
 
-import org.fusesource.fabric.jolokia.facade.JolokiaFabricConnector;
+import org.fusesource.fabric.service.JmxTemplateSupport;
+import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
+import org.osgi.jmx.framework.BundleStateMBean;
+import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.jmx.framework.ServiceStateMBean;
+
 
 public class OsgiFacade {
-	private static final String BUNDLE_STATE_MBEAN = "osgi.core:type=bundleState";
-	private static final String SERVICE_STATE_MBEAN = "osgi.core:type=serviceState";
-	private static final String FRAMEWORK_MBEAN = "osgi.core:type=framework";
-	
-	private JolokiaFabricConnector connector;
+	private final JmxPluginJmxTemplate template;
 	private ObjectName bundleStateQueryObjectName;
 	private ObjectName frameworkQueryObjectName;
 	private ObjectName packageQueryObjectName;
@@ -35,7 +41,7 @@ public class OsgiFacade {
 	 */
 	public interface BundleStateMBeanCallback<T> {
 
-		T doWithBundleStateMBean() throws Exception;
+		T doWithBundleStateMBean(BundleStateMBean mbean) throws Exception;
 	}
 
 	/**
@@ -43,7 +49,7 @@ public class OsgiFacade {
 	 */
 	public interface ServiceStateMBeanCallback<T> {
 
-		T doWithServiceStateMBean() throws Exception;
+		T doWithServiceStateMBean(ServiceStateMBean mbean) throws Exception;
 	}
 
 	/**
@@ -51,16 +57,18 @@ public class OsgiFacade {
 	 */
 	public interface FrameworkMBeanCallback<T> {
 
-		T doWithFrameworkMBean() throws Exception;
+		T doWithFrameworkMBean(FrameworkMBean mbean) throws Exception;
 	}
 
-	public OsgiFacade(JolokiaFabricConnector connector) throws MalformedObjectNameException {
-		this.connector = connector;
+	public OsgiFacade(JmxPluginJmxTemplate template) throws MalformedObjectNameException {
+		this.template = template;
 		bundleStateQueryObjectName = new ObjectName("osgi.core:type=bundleState,*");
 		frameworkQueryObjectName = new ObjectName("osgi.core:type=framework,*");
 		packageQueryObjectName = new ObjectName("osgi.core:type=packageState,*");
 		serviceStateQueryObjectName = new ObjectName("osgi.core:type=serviceState,*");
 	}
+
+
 
 	/**
 	 * Adds a NotificationListener to the BundleStateMBean
@@ -69,20 +77,18 @@ public class OsgiFacade {
 			final NotificationFilter filter,
 			final Object handback) {
 
-		System.out.println("TODO: add notification support for bundle state (add)");
-		
-//		template.execute(new JmxTemplateSupport.JmxConnectorCallback<Void>() {
-//			@Override
-//			public Void doWithJmxConnector(JMXConnector connector) throws Exception {
-//				MBeanServerConnection connection = connector.getMBeanServerConnection();
-//				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
-//				for (ObjectName bundleStateObjectName : queryNames) {
-//					connection.addNotificationListener(bundleStateObjectName, listener, filter, handback);
-//					return null;
-//				}
-//				return null;
-//			}
-//		});
+		template.execute(new JmxTemplateSupport.JmxConnectorCallback<Void>() {
+			@Override
+			public Void doWithJmxConnector(JMXConnector connector) throws Exception {
+				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
+				for (ObjectName bundleStateObjectName : queryNames) {
+					connection.addNotificationListener(bundleStateObjectName, listener, filter, handback);
+					return null;
+				}
+				return null;
+			}
+		});
 	}
 
 
@@ -95,230 +101,210 @@ public class OsgiFacade {
 			final NotificationFilter filter,
 			final Object handback) {
 
-		System.out.println("TODO: add notification support for bundle state (remove)");
-		
-//		template.execute(new JmxTemplateSupport.JmxConnectorCallback<Void>() {
-//			@Override
-//			public Void doWithJmxConnector(JMXConnector connector) throws Exception {
-//				MBeanServerConnection connection = connector.getMBeanServerConnection();
-//				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
-//				for (ObjectName bundleStateObjectName : queryNames) {
-//					connection.removeNotificationListener(bundleStateObjectName, listener, filter, handback);
-//					return null;
-//				}
-//				return null;
-//			}
-//		});
+		template.execute(new JmxTemplateSupport.JmxConnectorCallback<Void>() {
+			@Override
+			public Void doWithJmxConnector(JMXConnector connector) throws Exception {
+				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
+				for (ObjectName bundleStateObjectName : queryNames) {
+					connection.removeNotificationListener(bundleStateObjectName, listener, filter, handback);
+					return null;
+				}
+				return null;
+			}
+		});
 	}
 
 	/**
 	 * Executes a JMX operation on a BundleStateMBean
 	 */
 	public <T> T execute(final BundleStateMBeanCallback<T> callback) {
-		System.out.println("TODO: add execute support for bundle state");
-		return null;
-//		return template.execute(new JmxTemplateSupport.JmxConnectorCallback<T>() {
-//			@Override
-//			public T doWithJmxConnector(JMXConnector connector) throws Exception {
-//				MBeanServerConnection connection = connector.getMBeanServerConnection();
-//				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
-//				for (ObjectName bundleStateObjectName : queryNames) {
-//					BundleStateMBean BundleStateMBean = MBeanServerInvocationHandler.newProxyInstance(connection, bundleStateObjectName, BundleStateMBean.class, true);
-//					return callback.doWithBundleStateMBean(BundleStateMBean);
-//				}
-//				return null;
-//			}
-//		});
+		return template.execute(new JmxTemplateSupport.JmxConnectorCallback<T>() {
+			@Override
+			public T doWithJmxConnector(JMXConnector connector) throws Exception {
+				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
+				for (ObjectName bundleStateObjectName : queryNames) {
+					BundleStateMBean BundleStateMBean = MBeanServerInvocationHandler.newProxyInstance(connection, bundleStateObjectName, BundleStateMBean.class, true);
+					return callback.doWithBundleStateMBean(BundleStateMBean);
+				}
+				return null;
+			}
+		});
 	}
 
 	/**
 	 * Executes a JMX operation on a ServiceStateMBean
 	 */
 	public <T> T execute(final ServiceStateMBeanCallback<T> callback) {
-		System.out.println("TODO: add execute support for service state");
-		return null;
-//		return template.execute(new JmxTemplateSupport.JmxConnectorCallback<T>() {
-//			@Override
-//			public T doWithJmxConnector(JMXConnector connector) throws Exception {
-//				MBeanServerConnection connection = connector.getMBeanServerConnection();
-//				final Set<ObjectName> queryNames = connection.queryNames(serviceStateQueryObjectName, null);
-//				for (ObjectName ServiceStateObjectName : queryNames) {
-//					ServiceStateMBean serviceStateMBean = MBeanServerInvocationHandler.newProxyInstance(connection, ServiceStateObjectName, ServiceStateMBean.class, true);
-//					return callback.doWithServiceStateMBean(serviceStateMBean);
-//				}
-//				return null;
-//			}
-//		});
+		return template.execute(new JmxTemplateSupport.JmxConnectorCallback<T>() {
+			@Override
+			public T doWithJmxConnector(JMXConnector connector) throws Exception {
+				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				final Set<ObjectName> queryNames = connection.queryNames(serviceStateQueryObjectName, null);
+				for (ObjectName ServiceStateObjectName : queryNames) {
+					ServiceStateMBean serviceStateMBean = MBeanServerInvocationHandler.newProxyInstance(connection, ServiceStateObjectName, ServiceStateMBean.class, true);
+					return callback.doWithServiceStateMBean(serviceStateMBean);
+				}
+				return null;
+			}
+		});
 	}
 
 	/**
 	 * Executes a JMX operation on a FrameworkMBean
 	 */
 	public <T> T execute(final FrameworkMBeanCallback<T> callback) throws Exception {
-		System.out.println("TODO: add execute support for framework");
-		return null;
-//		return template.executeAndThrow(new JmxTemplateSupport.JmxConnectorCallback<T>() {
-//			@Override
-//			public T doWithJmxConnector(JMXConnector connector) throws Exception {
-//				MBeanServerConnection connection = connector.getMBeanServerConnection();
-//				final Set<ObjectName> queryNames = connection.queryNames(frameworkQueryObjectName, null);
-//				for (ObjectName FrameworkObjectName : queryNames) {
-//					FrameworkMBean mbean = MBeanServerInvocationHandler.newProxyInstance(connection, FrameworkObjectName, FrameworkMBean.class, true);
-//					return callback.doWithFrameworkMBean(mbean);
-//				}
-//				return null;
-//			}
-//		});
+		return template.executeAndThrow(new JmxTemplateSupport.JmxConnectorCallback<T>() {
+			@Override
+			public T doWithJmxConnector(JMXConnector connector) throws Exception {
+				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				final Set<ObjectName> queryNames = connection.queryNames(frameworkQueryObjectName, null);
+				for (ObjectName FrameworkObjectName : queryNames) {
+					FrameworkMBean mbean = MBeanServerInvocationHandler.newProxyInstance(connection, FrameworkObjectName, FrameworkMBean.class, true);
+					return callback.doWithFrameworkMBean(mbean);
+				}
+				return null;
+			}
+		});
 	}
 
 	/**
 	 * Lists the mbean data for the bundles
 	 */
 	public TabularData listBundles() throws Exception {
-		System.out.println("TODO: return the list of bundles");
-		return null;
-//		return execute(new BundleStateMBeanCallback<TabularData>() {
-//			@Override
-//			public TabularData doWithBundleStateMBean(BundleStateMBean bean) throws Exception {
-//				return bean.listBundles();
-//			}
-//		});
+		return execute(new BundleStateMBeanCallback<TabularData>() {
+			@Override
+			public TabularData doWithBundleStateMBean(BundleStateMBean bean) throws Exception {
+				return bean.listBundles();
+			}
+		});
 	}
 
 	public void startBundle(final long bundleIdentifier) throws Exception {
-		System.out.println("TODO: start bundle");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.startBundle(bundleIdentifier);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.startBundle(bundleIdentifier);
+				return null;
+			}
+		});
 	}
 
 	public void startBundles(final long[] bundleIds) throws Exception {
-		System.out.println("TODO: start bundles");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.startBundles(bundleIds);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.startBundles(bundleIds);
+				return null;
+			}
+		});
 	}
 
 	public void stopBundle(final long bundleIdentifier) throws Exception {
-		System.out.println("TODO: stop bundle");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.stopBundle(bundleIdentifier);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.stopBundle(bundleIdentifier);
+				return null;
+			}
+		});
 	}
 
 	public void stopBundles(final long[] bundleIds) throws Exception {
-		System.out.println("TODO: stop bundles");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.stopBundles(bundleIds);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.stopBundles(bundleIds);
+				return null;
+			}
+		});
 	}
 
 	public void updateBundles(final long[] bundleIds) throws Exception {
-		System.out.println("TODO: update bundles");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.updateBundles(bundleIds);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.updateBundles(bundleIds);
+				return null;
+			}
+		});
 	}
 
 	public void updateBundle(final long bundleIdentifier) throws Exception {
-		System.out.println("TODO: update bundle");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.updateBundle(bundleIdentifier);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.updateBundle(bundleIdentifier);
+				return null;
+			}
+		});
 	}
 
 	public void updateBundleFromURL(final long bundleIdentifier, final String url) throws Exception {
-		System.out.println("TODO: update bundle from url");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.updateBundleFromURL(bundleIdentifier, url);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.updateBundleFromURL(bundleIdentifier, url);
+				return null;
+			}
+		});
 	}
 
 	public void refreshBundle(final long bundleIdentifier) throws Exception {
-		System.out.println("TODO: refresh bundle");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.refreshBundle(bundleIdentifier);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.refreshBundle(bundleIdentifier);
+				return null;
+			}
+		});
 	}
 
 	public void refreshBundles(final long[] bundleIds) throws Exception {
-		System.out.println("TODO: refresh bundles");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.refreshBundles(bundleIds);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.refreshBundles(bundleIds);
+				return null;
+			}
+		});
 	}
 
 	public void uninstallBundle(final long bundleIdentifier) throws Exception {
-		System.out.println("TODO: uninstall bundle");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.uninstallBundle(bundleIdentifier);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.uninstallBundle(bundleIdentifier);
+				return null;
+			}
+		});
 	}
 
 	public void uninstallBundles(final long[] bundleIds) throws Exception {
-		System.out.println("TODO: uninstall bundles");
-//		execute(new FrameworkMBeanCallback<Void>() {
-//			@Override
-//			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				mbean.uninstallBundles(bundleIds);
-//				return null;
-//			}
-//		});
+		execute(new FrameworkMBeanCallback<Void>() {
+			@Override
+			public Void doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				mbean.uninstallBundles(bundleIds);
+				return null;
+			}
+		});
 	}
 
+
+
+
 	public Long installBundle(final String url, final boolean startOnDeploy) throws Exception {
-		System.out.println("TODO: install bundle");
-		return null;
-//		return execute(new FrameworkMBeanCallback<Long>() {
-//			@Override
-//			public Long doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				long id = mbean.installBundle(url);
-//				if (startOnDeploy) {
-//					mbean.startBundle(id);
-//				}
-//				return id;
-//			}
-//		});
+		return execute(new FrameworkMBeanCallback<Long>() {
+			@Override
+			public Long doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				long id = mbean.installBundle(url);
+				if (startOnDeploy) {
+					mbean.startBundle(id);
+				}
+				return id;
+			}
+		});
 	}
 
 	/**
@@ -328,18 +314,16 @@ public class OsgiFacade {
 	 * @param startOnDeploy
 	 */
 	public Long installOrUpdateBundle(final String url, final boolean startOnDeploy) throws Exception {
-		System.out.println("TODO: install or update bundle");
-		return null;
-//		return execute(new FrameworkMBeanCallback<Long>() {
-//			@Override
-//			public Long doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
-//				long id = mbean.installBundle(url);
-//				if (startOnDeploy) {
-//					mbean.startBundle(id);
-//				}
-//				return id;
-//			}
-//		});
+		return execute(new FrameworkMBeanCallback<Long>() {
+			@Override
+			public Long doWithFrameworkMBean(FrameworkMBean mbean) throws Exception {
+				long id = mbean.installBundle(url);
+				if (startOnDeploy) {
+					mbean.startBundle(id);
+				}
+				return id;
+			}
+		});
 	}
 
 
@@ -347,14 +331,12 @@ public class OsgiFacade {
 	 * Lists the mbean data for the services
 	 */
 	public TabularData listServices() throws Exception {
-		System.out.println("TODO: list services");
-		return null;
-//		return execute(new ServiceStateMBeanCallback<TabularData>() {
-//			@Override
-//			public TabularData doWithServiceStateMBean(ServiceStateMBean bean) throws Exception {
-//				return bean.listServices();
-//			}
-//		});
+		return execute(new ServiceStateMBeanCallback<TabularData>() {
+			@Override
+			public TabularData doWithServiceStateMBean(ServiceStateMBean bean) throws Exception {
+				return bean.listServices();
+			}
+		});
 	}
 
 }
