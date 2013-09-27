@@ -41,6 +41,7 @@ import org.eclipse.graphiti.tb.IContextButtonPadData;
 import org.eclipse.graphiti.tb.IContextMenuEntry;
 import org.eclipse.graphiti.tb.IDecorator;
 import org.eclipse.graphiti.tb.ImageDecorator;
+import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.Messages;
 import org.fusesource.ide.camel.editor.features.custom.AddRouteFeature;
 import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
@@ -201,7 +202,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		// create a sub-menu for all AddNode operations
 		ContextMenuEntry addNodesMenu = new ContextMenuEntry(null, null);
 		// set the menu label
-		addNodesMenu.setText("Add"); //$NON-NLS-1$
+		addNodesMenu.setText(EditorMessages.camelMenuAddLabel); //$NON-NLS-1$
 		// set the description
 		addNodesMenu.setDescription("Add and connect new nodes"); //$NON-NLS-1$
 		// display sub-menu hierarchical or flat

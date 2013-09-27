@@ -34,7 +34,6 @@ import org.eclipse.graphiti.ui.editor.DiagramEditorContextMenuProvider;
 import org.eclipse.graphiti.ui.internal.action.CustomAction;
 import org.eclipse.graphiti.ui.internal.action.RemoveAction;
 import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
-import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.graphiti.util.ILocationInfo;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -43,6 +42,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.features.custom.DeleteRouteFeature;
 
 
@@ -123,8 +123,7 @@ public class CamelDiagramEditorContextMenuProvider extends DiagramEditorContextM
 				}
 				action.setText(text);
 				action.setDescription(cmEntry.getDescription());
-				// TODO: pleacu - changed getImageDescriptorForId to getPlatformImageDescriptorForId
-				ImageDescriptor image = GraphitiUi.getImageService().getPlatformImageDescriptorForId(cmEntry.getIconId());
+				ImageDescriptor image = Activator.getDefault().getImageDescriptor(cmEntry.getIconId());
 				action.setImageDescriptor(image);
 				appendContributionItem(manager, groupID, new ActionContributionItem(action));
 			}
