@@ -15,7 +15,7 @@
   <parent>
     <groupId>org.fusesource</groupId>
     <artifactId>fuse-project</artifactId>
-    <version>7.3.0.redhat-062</version>
+    <version>7.3.0.redhat-SNAPSHOT</version>
     <!-- 
     <version>99-master-SNAPSHOT</version>
     -->
@@ -66,7 +66,7 @@
     <tycho-version>0.18.0</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
     <forge-project-id>ide</forge-project-id>
-    <fabric-version>7.3.0.redhat-062</fabric-version>
+    <fabric-version>7.3.0.redhat-SNAPSHOT</fabric-version>
 <!--
     <fabric-version>7.3.0.redhat-035</fabric-version>
 -->
@@ -768,12 +768,13 @@
       <artifactId>org.apache.servicemix.bundles.jaxb-impl</artifactId>
       <version>${jaxb-impl.bundle.version}</version>
     </dependency>
+<!--
     <dependency>
       <groupId>org.jvnet.jaxb2_commons</groupId>
       <artifactId>jaxb2-basics-runtime</artifactId>
       <version>${jaxb-basics-version}</version>
     </dependency>
-    
+-->
     <!-- HERE ENDS JMX Facades for Camel, SMX and AMQ -->
 
 

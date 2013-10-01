@@ -33,6 +33,7 @@ import org.fusesource.fabric.api.CreationStateListener;
 import org.fusesource.fabric.service.jclouds.JcloudsContainerProvider;
 import org.fusesource.fabric.service.jclouds.firewall.internal.Ec2FirewallSupport;
 import org.fusesource.fabric.service.jclouds.firewall.internal.FirewallManagerFactoryImpl;
+import org.fusesource.fabric.service.jclouds.firewall.internal.NovaFirewallSupport;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.fabric.FabricPlugin;
@@ -129,17 +130,17 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					BundleContext context = FabricPlugin.getDefault().getBundle().getBundleContext();
 					
 					JcloudsContainerProvider provider = new JcloudsContainerProvider();
-					provider.setBundleContext(context);
+//					provider.setBundleContext(context);
 					FirewallManagerFactoryImpl firewallManagerFactory = new FirewallManagerFactoryImpl();
 					String providerName = args.getProviderName();
 					args = args.contextName(providerName);
 					ComputeService computeClient = CloudDetails.createComputeService(getSelectedCloud());
 					args = args.computeService(computeClient);
 					System.out.println("Creating Jclouds provider type: " + providerName);
-					if ("aws-ec2".equals(providerName)) {
-						firewallManagerFactory.bind(new Ec2FirewallSupport());
-					}
-					provider.setFirewallManagerFactory(firewallManagerFactory);
+					
+				    firewallManagerFactory.bind(new Ec2FirewallSupport());
+					firewallManagerFactory.bind(new NovaFirewallSupport());
+				    provider.bindFirewallManagerFactory(firewallManagerFactory);
 					
 					CreateJCloudsContainerOptions opts = args.build();
 					System.err.println("Compute Service: " + opts.getComputeService());

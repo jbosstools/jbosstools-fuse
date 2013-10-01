@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerOptions;
-import org.fusesource.fabric.api.JCloudsInstanceType;
+import org.fusesource.fabric.service.jclouds.JCloudsInstanceType;
 import org.fusesource.fabric.api.Profile;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.ui.ICanValidate;
