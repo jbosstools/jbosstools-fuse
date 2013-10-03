@@ -279,7 +279,6 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider, IT
 							final DropHandler handler = factory.createDropHandler(null);
 							if (handler instanceof ProjectDropHandler) {
 								final ProjectDropHandler projectHandler = (ProjectDropHandler) handler;
-								System.out.println("Found child " + child);
 								//dropHandler.dropProject((IProject) resource);
 
 								MenuItem i = new MenuItem(menu, SWT.PUSH);
@@ -289,7 +288,6 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider, IT
 								i.addSelectionListener(new SelectionAdapter() {
 									@Override
 									public void widgetSelected(SelectionEvent e) {
-										System.out.println("======== about to deploy to handler: " + projectHandler);
 										projectHandler.dropProject((IProject) resource);
 									}
 								});

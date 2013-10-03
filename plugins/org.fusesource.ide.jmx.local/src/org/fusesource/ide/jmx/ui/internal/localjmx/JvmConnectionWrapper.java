@@ -145,6 +145,8 @@ public class JvmConnectionWrapper implements IConnectionWrapper, HasName, ImageP
 
 	public DropHandler createDropHandler(DropTargetEvent event) {
 		if (isConnected()) {
+			if (getRoot() == null)
+				loadRoot();
 			DropHandler handler = DelegateDropListener.createDropHandler(getRoot(), event);
 			if (handler != null) {
 				return handler;
