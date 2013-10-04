@@ -138,8 +138,8 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					args = args.computeService(computeClient);
 					System.out.println("Creating Jclouds provider type: " + providerName);
 					
-				    firewallManagerFactory.bind(new Ec2FirewallSupport());
-					firewallManagerFactory.bind(new NovaFirewallSupport());
+				    firewallManagerFactory.bindFirewallSupport(new Ec2FirewallSupport());
+				    firewallManagerFactory.bindFirewallSupport(new NovaFirewallSupport());
 				    provider.bindFirewallManagerFactory(firewallManagerFactory);
 					
 					CreateJCloudsContainerOptions opts = args.build();
