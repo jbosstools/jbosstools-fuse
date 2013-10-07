@@ -282,4 +282,7 @@ public class BundlesTabSection extends BundlesTableView {
         }
         return answer;
     }
+    public BundlesNode getCurrent() {
+		return current;
+	}
 }

@@ -17,7 +17,7 @@ import org.fusesource.ide.commons.util.Function1;
 
 
 public class BundlesTableView extends PropertySourceTableView {
-	private final BundlesNode bundlesNode;
+	private BundlesNode bundlesNode;
 
 	public BundlesTableView(String viewId, BundlesNode bundlesNode) {
 		super(viewId);
@@ -27,6 +27,8 @@ public class BundlesTableView extends PropertySourceTableView {
 
 	@Override
 	protected String getInitialSearchText() {
+		if (bundlesNode == null)
+			return "";
 		return bundlesNode.getBundlefilterText();
 	}
 
@@ -34,6 +36,8 @@ public class BundlesTableView extends PropertySourceTableView {
 	@Override
 	protected void setFilterText(String text) {
 		super.setFilterText(text);
+		if (bundlesNode == null)
+			bundlesNode = ((BundlesTabSection)this).getCurrent();
 		bundlesNode.setBundlefilterText(text);
 	}
 

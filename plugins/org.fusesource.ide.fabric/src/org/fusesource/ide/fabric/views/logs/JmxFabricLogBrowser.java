@@ -85,7 +85,7 @@ public class JmxFabricLogBrowser extends LogBrowserSupport {
 	@Override
 	protected String getJolokiaPassword() {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 	
 	/* (non-Javadoc)
@@ -94,7 +94,7 @@ public class JmxFabricLogBrowser extends LogBrowserSupport {
 	@Override
 	protected String getJolokiaUrl() {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 	
 	/* (non-Javadoc)
@@ -103,6 +103,6 @@ public class JmxFabricLogBrowser extends LogBrowserSupport {
 	@Override
 	protected String getJolokiaUser() {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 }
