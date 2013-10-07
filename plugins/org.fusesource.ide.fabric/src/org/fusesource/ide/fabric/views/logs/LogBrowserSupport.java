@@ -45,7 +45,7 @@ public abstract class LogBrowserSupport implements ILogBrowser {
 //		System.out.println("Query JSON: " + queryJson);
 
 		String json = filterLogEvents(queryJson);
-		System.out.println("===== JSON: " + json);
+		//System.out.println("===== JSON: " + json);
 		
 		List<LogEventBean> answer = Lists.newArrayList();
 		if (json != null) {
@@ -80,8 +80,12 @@ public abstract class LogBrowserSupport implements ILogBrowser {
 	
 	private String filterLogEvents(String queryJSON) {
 		String result = null;
+		String jUser = getJolokiaUser();
 		
-		JolokiaFabricConnector connector = JolokiaFabricConnector.getFabricConnector(getJolokiaUser(), getJolokiaPassword(), getJolokiaUrl());
+		if (jUser.isEmpty())
+		    return "";
+		
+		JolokiaFabricConnector connector = JolokiaFabricConnector.getFabricConnector(jUser, getJolokiaPassword(), getJolokiaUrl());
 		result = Helpers.execCustomToJSON(connector.getJolokiaClient(),INSIGHT_MBEAN_URL, LOG_QUERY_OPERATION, queryJSON);
 		
 		return result;
