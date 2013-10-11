@@ -130,16 +130,21 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					BundleContext context = FabricPlugin.getDefault().getBundle().getBundleContext();
 					
 					JcloudsContainerProvider provider = new JcloudsContainerProvider();
+					provider.activateComponent();
 //					provider.setBundleContext(context);
 					FirewallManagerFactoryImpl firewallManagerFactory = new FirewallManagerFactoryImpl();
+					firewallManagerFactory.activateComponent();
 					String providerName = args.getProviderName();
 					args = args.contextName(providerName);
 					ComputeService computeClient = CloudDetails.createComputeService(getSelectedCloud());
 					args = args.computeService(computeClient);
 					System.out.println("Creating Jclouds provider type: " + providerName);
-					
-				    firewallManagerFactory.bindFirewallSupport(new Ec2FirewallSupport());
-				    firewallManagerFactory.bindFirewallSupport(new NovaFirewallSupport());
+					Ec2FirewallSupport ec2fw = new Ec2FirewallSupport();
+					ec2fw.activateComponent();
+				    firewallManagerFactory.bindFirewallSupport(ec2fw);
+				    NovaFirewallSupport novafw = new NovaFirewallSupport();
+				    novafw.activateComponent();
+				    firewallManagerFactory.bindFirewallSupport(novafw);
 				    provider.bindFirewallManagerFactory(firewallManagerFactory);
 					
 					CreateJCloudsContainerOptions opts = args.build();
