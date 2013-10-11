@@ -89,28 +89,36 @@ public class DirectedDiagramViewLayoutAlgorithm extends AbstractLayoutAlgorithm 
 				if (node.getLeft()!=null) {
 					// check space to left
 					Node left = node.getLeft();
-					InternalNode internalLeft = (InternalNode) left.data;
-					Insets padLeft = g.getPadding(left);
-	
-					double left_end = internalLeft.getCurrentX() + internalLeft.getWidthInLayout() + padLeft.right + padNode.left;
-					if (internalNode.getCurrentX() <= left_end) {
-						// node overlaps with left neighbor
-//						node.x = (int)left_end;
-						internalNode.setLocation(left_end, internalNode.getCurrentY());
+					if (left.data instanceof InternalNode) {
+						InternalNode internalLeft = (InternalNode) left.data;
+						Insets padLeft = g.getPadding(left);
+		
+						double left_end = internalLeft.getCurrentX() + internalLeft.getWidthInLayout() + padLeft.right + padNode.left;
+						if (internalNode.getCurrentX() <= left_end) {
+							// node overlaps with left neighbor
+	//						node.x = (int)left_end;
+							internalNode.setLocation(left_end, internalNode.getCurrentY());
+						}
+					} else {
+						System.err.println("Unsupported object " + left.data + " can't be cast to InternalNode!");
 					}
 				}
 				
 				if (node.getRight()!=null) {
 					// check space to right
 					Node right = node.getRight();
-					InternalNode internalRight = (InternalNode) right.data;
-					Insets padRight = g.getPadding(right);
-					
-					double node_end = internalNode.getCurrentX() + internalNode.getWidthInLayout() + padNode.right + padRight.left;
-					if (node_end >= internalRight.getCurrentX()) {
-						// node overlaps with right neighbor
-//						right.x = (int)node_end;
-						internalRight.setLocation(node_end, internalRight.getCurrentY());
+					if (right.data instanceof InternalNode) { 
+						InternalNode internalRight = (InternalNode) right.data;
+						Insets padRight = g.getPadding(right);
+						
+						double node_end = internalNode.getCurrentX() + internalNode.getWidthInLayout() + padNode.right + padRight.left;
+						if (node_end >= internalRight.getCurrentX()) {
+							// node overlaps with right neighbor
+	//						right.x = (int)node_end;
+							internalRight.setLocation(node_end, internalRight.getCurrentY());
+						}
+					} else {
+						System.err.println("Unsupported object " + right.data + " can't be cast to InternalNode!");
 					}
 				}
 			}
