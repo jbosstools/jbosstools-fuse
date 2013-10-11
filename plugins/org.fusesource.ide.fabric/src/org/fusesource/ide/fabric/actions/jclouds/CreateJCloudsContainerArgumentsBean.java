@@ -81,6 +81,14 @@ public class CreateJCloudsContainerArgumentsBean extends BeanSupport {
 	public String getUser() {
 		return delegate.getUser();
 	}
+	
+	public String getPassword() {
+		return delegate.getPassword();
+	}
+	
+	public String getZookeeperPassword() {
+		return delegate.getZookeeperPassword();
+	}
 
 	public boolean isDebugAgent() {
 		return false;
@@ -119,6 +127,14 @@ public class CreateJCloudsContainerArgumentsBean extends BeanSupport {
 
 	public void setUser(String user) {
 		delegate = delegate.user(user);
+	}
+	
+	public void setPassword(String password) {
+		delegate = delegate.password(password);
+	}
+	
+	public void setZookeeperPassword(String zookeeperPassword) {
+		delegate = delegate.zookeeperPassword(zookeeperPassword);
 	}
 
 	@Override

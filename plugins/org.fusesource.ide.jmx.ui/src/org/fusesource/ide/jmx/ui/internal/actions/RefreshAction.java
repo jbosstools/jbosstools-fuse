@@ -47,12 +47,17 @@ public class RefreshAction extends Action implements IWorkbenchWindowActionDeleg
 	@SuppressWarnings("unused")
 	private IWorkbenchWindow window;
 	private StructuredViewer viewer;
-	private final String viewId;
+	private String viewId;
 
+	public RefreshAction() {
+		super();
+	}
+	
 	/**
 	 * creates the refresh action
 	 */
 	public RefreshAction(String viewId) {
+		super();
 		this.viewId = viewId;
 		Objects.notNull(viewId, "No viewId for RefreshAction");
 		setText(Messages.RefreshAction_text);

@@ -11,10 +11,10 @@
 
 package org.fusesource.ide.commons;
 
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -30,7 +30,7 @@ public class PreferencesHelper {
 	}
 
 	public static Preferences configurationNode(String... paths) {
-		Preferences node = getConfigurationScope();
+		Preferences node = getInstanceScope();
 		return node(node, paths);
 	}
 
@@ -48,21 +48,15 @@ public class PreferencesHelper {
 		} catch (Throwable e) {
 			// ignore could be backwards compatibility issue
 		}
-		if (instance == null) {
-			instance = new DefaultScope();
-		}
 		return instance.getNode(FUSE_ROOT_KEY);
 	}
 
-	public static IEclipsePreferences getConfigurationScope() {
+	public static IEclipsePreferences getInstanceScope() {
 		IScopeContext instance = null;
 		try {
-			instance = ConfigurationScope.INSTANCE;
+			instance = InstanceScope.INSTANCE;
 		} catch (Throwable e) {
 			// ignore could be backwards compatibility issue
-		}
-		if (instance == null) {
-			instance = new ConfigurationScope();
 		}
 		return instance.getNode(FUSE_ROOT_KEY);
 	}

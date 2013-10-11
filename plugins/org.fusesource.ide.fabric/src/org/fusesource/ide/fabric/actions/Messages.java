@@ -120,6 +120,12 @@ public final class Messages extends NLS {
 	public static String jclouds_userLabel;
 	public static String jclouds_userTooltip;
 
+	public static String jclouds_passwordLabel;
+	public static String jclouds_passwordTooltip;
+
+	public static String jclouds_zkPasswordLabel;
+	public static String jclouds_zkPasswordTooltip;
+
 	public static String jclouds_osFamilyLabel;
 	public static String jclouds_osFamilyTooltip;
 

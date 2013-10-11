@@ -27,9 +27,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.fusesource.fabric.api.CreationStateListener;
 import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerMetadata;
 import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerOptions;
-import org.fusesource.fabric.api.CreationStateListener;
 import org.fusesource.fabric.service.jclouds.JcloudsContainerProvider;
 import org.fusesource.fabric.service.jclouds.firewall.internal.Ec2FirewallSupport;
 import org.fusesource.fabric.service.jclouds.firewall.internal.FirewallManagerFactoryImpl;
@@ -37,6 +37,8 @@ import org.fusesource.fabric.service.jclouds.firewall.internal.NovaFirewallSuppo
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.fabric.FabricPlugin;
+import org.fusesource.ide.fabric.actions.FabricDetails;
+import org.fusesource.ide.fabric.actions.FabricDetailsAddAction;
 import org.fusesource.ide.fabric.actions.Messages;
 import org.fusesource.ide.fabric.navigator.Fabrics;
 import org.jclouds.compute.ComputeService;
@@ -162,6 +164,7 @@ public class CreateJCloudsFabricWizard extends Wizard {
 							urisBuilder.append(address).append(",");
 						}
 					}
+					final CreateJCloudsContainerOptions.Builder arguments = args; 
 					Viewers.async(new Runnable() {
 
 						@Override
@@ -171,7 +174,12 @@ public class CreateJCloudsFabricWizard extends Wizard {
 								uris = uris.substring(0, uris.length() - 1);
 							}
 							System.out.println("Creating fabric with uris: " + uris);
-							fabrics.addFabric(fabricName, uris);
+							FabricDetails details = FabricDetails.newInstance(fabricName, uris);
+							details.setUserName(arguments.getUser());
+							details.setPassword(arguments.getPassword());
+							details.setZkPassword(arguments.getZookeeperPassword());
+							FabricDetailsAddAction action = new FabricDetailsAddAction(fabrics);
+							action.addCloud(details);
 						}});
 					return Status.OK_STATUS;
 				} catch (Throwable e) {

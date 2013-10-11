@@ -230,6 +230,10 @@ public abstract class FormSupport implements PropertyChangeListener  {
 		return answer;
 	}
 
+	protected Text createBeanPropertyPasswordField(Composite parent, Object bean, String propertyName, String labelText, String tooltip) {
+		return createBeanPropertyTextField(parent, bean, propertyName, labelText, tooltip, SWT.NONE | SWT.BORDER | SWT.PASSWORD);
+	}
+	
 	protected Text createBeanPropertyTextField(Composite parent, Object bean, String propertyName, String labelText, String tooltip) {
 		return createBeanPropertyTextField(parent, bean, propertyName, labelText, tooltip, SWT.NONE | SWT.BORDER);
 	}

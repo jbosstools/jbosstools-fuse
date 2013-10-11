@@ -37,9 +37,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.fabric.api.Profile;
 import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerOptions;
 import org.fusesource.fabric.service.jclouds.JCloudsInstanceType;
-import org.fusesource.fabric.api.Profile;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.ui.ICanValidate;
 import org.fusesource.ide.fabric.actions.CreateContainerFormSupport;
@@ -62,6 +62,8 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 	private static final String PROP_HARDWARE = "hardware";
 	private static final String PROP_LOCATION = "location";
 	private static final String PROP_USER = "user";
+	private static final String PROP_PASSWORD = "password";
+	private static final String PROP_ZKPASSWORD = "zookeeperPassword";
 	private static final String PROP_GROUP = "group";
 
 	private final ContainerNode selectedAgent;
@@ -75,6 +77,8 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 	private ComboViewer osVersionField;
 	private CloudDetails selectedCloud;
 	private Text userField;
+	private Text passwordField;
+	private Text zkPasswordField;
 	private Text groupField;
 	private CloudDetailsCachedData cloudCacheData = new CloudDetailsCachedData(null);
 	private ImageViewerFilter imageFilter = new ImageViewerFilter(null);
@@ -214,8 +218,9 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 
 		groupField = createBeanPropertyTextField(inner, args, PROP_GROUP, Messages.jclouds_groupLabel, Messages.jclouds_groupTooltip);
 		userField = createBeanPropertyTextField(inner, args, PROP_USER, Messages.jclouds_userLabel, Messages.jclouds_userTooltip);
-
-
+		passwordField = createBeanPropertyPasswordField(inner, args, PROP_PASSWORD, Messages.jclouds_passwordLabel, Messages.jclouds_passwordTooltip);
+		zkPasswordField = createBeanPropertyPasswordField(inner, args, PROP_ZKPASSWORD, Messages.jclouds_zkPasswordLabel, Messages.jclouds_zkPasswordTooltip);
+		
 		// TODO how to bind the ID value from the selection lists?
 		locationField = createBeanPropertyCombo(inner, args, PROP_LOCATION, Messages.jclouds_locationIdLabel, Messages.jclouds_locationIdTooltip, getLocationList());
 		locationField.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -300,6 +305,8 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 		}
 		groupField.setText("");
 		userField.setText("");
+		passwordField.setText("");
+		zkPasswordField.setText("");
 	}
 
 	private void restoreAll() {
@@ -361,6 +368,8 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 	
 	public void saveSettings() {
 		if (!userField.isDisposed()) cloudCacheData.getDetails().addSetting("user", userField.getText());
+		if (!passwordField.isDisposed()) cloudCacheData.getDetails().addSetting("password", passwordField.getText());
+		if (!zkPasswordField.isDisposed()) cloudCacheData.getDetails().addSetting("zookeeperPassword", zkPasswordField.getText());
 		if (!groupField.isDisposed()) cloudCacheData.getDetails().addSetting("group", groupField.getText());
 		if (!imageField.getCombo().isDisposed()) cloudCacheData.getDetails().addSetting("image", imageField.getCombo().getText());
 		if (!hardwareField.getCombo().isDisposed()) cloudCacheData.getDetails().addSetting("hardware", hardwareField.getCombo().getText());
@@ -402,6 +411,8 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 			@Override
 			public void run() {
 				if (!userField.isDisposed())  userField.setText(cloudCacheData.getDetails().getSetting("user", userField.getText()));
+				if (!passwordField.isDisposed())  passwordField.setText(cloudCacheData.getDetails().getSetting("password", passwordField.getText()));
+				if (!zkPasswordField.isDisposed())  zkPasswordField.setText(cloudCacheData.getDetails().getSetting("zookeeperPassword", zkPasswordField.getText()));
 				if (!groupField.isDisposed()) groupField.setText(cloudCacheData.getDetails().getSetting("group", groupField.getText()));
 				if (!osFamilyField.getCombo().isDisposed()) preSelectItem(osFamilyField, cloudCacheData.getDetails().getSetting("osfamily", osFamilyField.getCombo().getText()));
 				if (!osVersionField.getCombo().isDisposed()) preSelectItem(osVersionField, cloudCacheData.getDetails().getSetting("osversion", osVersionField.getCombo().getText()));
