@@ -22,8 +22,10 @@ import javax.management.ObjectName;
 import javax.management.openmbean.TabularData;
 import javax.management.remote.JMXConnector;
 
+import org.eclipse.core.runtime.IStatus;
 import org.fusesource.fabric.service.JmxTemplateSupport;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
+import org.fusesource.ide.preferences.Activator;
 import org.osgi.jmx.framework.BundleStateMBean;
 import org.osgi.jmx.framework.FrameworkMBean;
 import org.osgi.jmx.framework.ServiceStateMBean;
@@ -107,7 +109,11 @@ public class OsgiFacade {
 				MBeanServerConnection connection = connector.getMBeanServerConnection();
 				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
 				for (ObjectName bundleStateObjectName : queryNames) {
-					connection.removeNotificationListener(bundleStateObjectName, listener, filter, handback);
+					try {
+						connection.removeNotificationListener(bundleStateObjectName, listener, filter, handback);
+					} catch (Exception ex) {
+						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
+					}
 					return null;
 				}
 				return null;
