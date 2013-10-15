@@ -289,21 +289,18 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   
+
    <plugin
          id="org.apache.servicemix.bundles.jaxb-impl"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   
-<!--
+
    <plugin
-         id="org.jvnet.jaxb2_commons.jaxb2-basics-runtime"
+         id="com.google.guava"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>      
--->
+         version="0.0.0"/>
 
 </feature>
