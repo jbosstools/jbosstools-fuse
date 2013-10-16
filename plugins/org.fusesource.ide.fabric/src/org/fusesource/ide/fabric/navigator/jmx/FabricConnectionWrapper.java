@@ -148,6 +148,7 @@ public class FabricConnectionWrapper extends RefreshableNode implements ImagePro
 
 	public void loadChildren(Node parent) {
 		loadRoot();
+		System.err.println("FabricConnectionWrapper:loadChildren(Node)...root == null ? " + (root == null));
 		if (root != null) {
 			// lets add all the children
 			Node[] children = root.getChildren();

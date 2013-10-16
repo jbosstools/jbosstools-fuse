@@ -120,13 +120,6 @@ public class CreateJCloudsFabricWizard extends Wizard {
 						args = args.proxyUri(new URI(proxyUri));
 					}
 					System.out.println("============ proxy URI: " + args.getProxyUri());
-					args = args.creationStateListener(new CreationStateListener() {
-						@Override
-						public void onStateChange(String message) {
-							monitor.subTask(message);
-						}
-					});
-
 					System.out.println("Create cloud fabric: " + fabricName + " container: " + agentName);
 
 					BundleContext context = FabricPlugin.getDefault().getBundle().getBundleContext();
@@ -151,19 +144,23 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					
 					CreateJCloudsContainerOptions opts = args.build();
 					System.err.println("Compute Service: " + opts.getComputeService());
-					Set<CreateJCloudsContainerMetadata> metadatas = provider.create(opts);
+					CreateJCloudsContainerMetadata metadata = provider.create(opts, new CreationStateListener() {
+						@Override
+						public void onStateChange(String message) {
+							monitor.subTask(message);
+						}
+					});
 
 					final StringBuilder urisBuilder = new StringBuilder();
 
-					for (CreateJCloudsContainerMetadata metadata : metadatas) {
-						Throwable failure = metadata.getFailure();
-						if (failure != null) {
-							return new Status(Status.ERROR, FabricPlugin.PLUGIN_ID, "Failed to create Fabric: " + fabricName, failure);
-						}
-						for(String address:metadata.getPublicAddresses()) {
-							urisBuilder.append(address).append(",");
-						}
+					Throwable failure = metadata.getFailure();
+					if (failure != null) {
+						return new Status(Status.ERROR, FabricPlugin.PLUGIN_ID, "Failed to create Fabric: " + fabricName, failure);
 					}
+					for(String address:metadata.getPublicAddresses()) {
+						urisBuilder.append(address).append(",");
+					}
+
 					final CreateJCloudsContainerOptions.Builder arguments = args; 
 					Viewers.async(new Runnable() {
 
