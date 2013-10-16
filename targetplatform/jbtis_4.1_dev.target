@@ -5,18 +5,10 @@
         <location path="${project_loc}/../site/target/repository" type="Directory"/>
 
         <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-	  <unit id="org.eclipse.core.net" version="1.2.200.v20130430-1352"/>
-	  <unit id="org.eclipse.equinox.cm" version="1.0.400.v20130327-1442"/>
-	  <unit id="org.eclipse.equinox.security" version="1.2.0.v20130424-1801"/>
-	  <repository location="http://download.jboss.org/jbosstools/updates/requirements/kepler/201306260900-R/"/>
-        </location>
-
-        <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-	  <unit id="org.drools.eclipse.feature.feature.group" version="6.0.0.201304021236"/>
-	  <unit id="org.guvnor.tools.feature.feature.group" version="6.0.0.201304021236"/>
-	  <unit id="org.jbpm.eclipse.feature.feature.group" version="6.0.0.201304021236"/>
-	  <unit id="org.jbpm.eclipse.task.feature.feature.group" version="6.0.0.201304021236"/>
-	  <repository location="http://download.jboss.org/drools/release/6.0.0.201304021236/org.drools.updatesite/"/>
+	  <unit id="org.drools.eclipse.feature.feature.group" version="6.0.0.201308222359"/>
+	  <unit id="org.guvnor.tools.feature.feature.group" version="6.0.0.201308222359"/>
+	  <unit id="org.jbpm.eclipse.feature.feature.group" version="6.0.0.201308222359"/>
+	  <repository location="http://download.jboss.org/jbpm/release/6.0.0.201308222359/org.drools.updatesite/"/>
         </location>
 
         <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -87,9 +79,9 @@
       <unit id="org.eclipse.bpmn2.feature.feature.group" version="0.7.0.201308220617"/>
 
       <!-- BPMN2 - Modeler -->
-      <unit id="org.eclipse.bpmn2.modeler.feature.feature.group" version="0.2.7.201308301511"/>
-      <unit id="org.eclipse.bpmn2.modeler.jboss.runtime.feature.feature.group" version="0.2.7.201308301511"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/requirements/bpmn2-modeler/0.2.7.201308301511_0.7.0.201308220617_kepler/"/>
+      <unit id="org.eclipse.bpmn2.modeler.feature.feature.group" version="0.2.7.201309191900"/>
+      <unit id="org.eclipse.bpmn2.modeler.jboss.runtime.feature.feature.group" version="0.2.7.201309191900"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/requirements/bpmn2-modeler/0.2.7.201309191900_0.7.0.201308220617_kepler/"/>
     </location>
 
     <!-- BPEL -->
@@ -109,6 +101,21 @@
       <unit id="org.springframework.expression" version="3.1.4.RELEASE"/>
       <unit id="org.springframework.transaction" version="3.1.4.RELEASE"/>
       <repository location="http://download.jboss.org/jbosstools/updates/requirements/springide/3.2.0.201303060654-RELEASE-e4.3/"/>
+    </location>
+
+    <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.core.net" version="1.2.200.v20130430-1352"/>
+      <unit id="org.eclipse.equinox.cm" version="1.0.400.v20130327-1442"/>
+      <unit id="org.eclipse.equinox.security" version="1.2.0.v20130424-1801"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/requirements/kepler/201306260900-R/"/>
+    </location>
+
+    <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+      <unit id="org.drools.eclipse.feature.feature.group" version="6.0.0.201304021236"/>
+      <unit id="org.guvnor.tools.feature.feature.group" version="6.0.0.201304021236"/>
+      <unit id="org.jbpm.eclipse.feature.feature.group" version="6.0.0.201304021236"/>
+      <unit id="org.jbpm.eclipse.task.feature.feature.group" version="6.0.0.201304021236"/>
+      <repository location="http://download.jboss.org/drools/release/6.0.0.201304021236/org.drools.updatesite/"/>
     </location>
 
     <!-- Teiid -->

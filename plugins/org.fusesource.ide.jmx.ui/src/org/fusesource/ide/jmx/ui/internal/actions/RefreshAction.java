@@ -141,7 +141,8 @@ public class RefreshAction extends Action implements IWorkbenchWindowActionDeleg
 		ISelection sel = getSelection(ap);
 		if (sel == null) {
 			IConnectionWrapper[] connections = ExtensionManager.getAllConnections();
-			refreshObjectNode(connections[0]);
+			if (connections.length > 0)
+				refreshObjectNode(connections[0]);
 		}
 		else if (sel instanceof TreeSelection) {
 			TreeSelection treeSelection = (TreeSelection)sel;

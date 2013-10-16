@@ -237,7 +237,6 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 						protected IStatus run(IProgressMonitor monitor) {
 							try {
 								Display.getDefault().asyncExec(new Runnable() {
-									@Override
 									public void run() {
 										installLabel.setText(getName());
 										btnBrowseButton.setEnabled(false);
@@ -259,7 +258,6 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 					jobListener = new JobChangeAdapter() {
 						public void done(IJobChangeEvent event) {
 							Display.getDefault().asyncExec(new Runnable() {
-								@Override
 								public void run() {
 									installLabel.setText("Installation of " + ir.getName() + " completed.");
 									btnBrowseButton.setEnabled(true);
