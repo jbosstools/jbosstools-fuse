@@ -25,7 +25,7 @@
   <artifactId>project</artifactId>
   <packaging>pom</packaging>
   <version>7.2.0-SNAPSHOT</version>
-  <name>Fuse Plugins for Eclipse</name>
+  <name>JBoss Fuse Plugins for Eclipse</name>
   <url>http://fuse.fusesource.org/</url>
 
   <organization>
@@ -360,36 +360,6 @@
               </archive>
               <strictVersions>true</strictVersions>
           </configuration>
-      </plugin>
-
-      <plugin>
-	<groupId>org.jboss.tools.tycho-plugins</groupId>
-	<artifactId>repository-utils</artifactId>
-	<version>${jboss-tycho-version}</version>
-
-	<executions>
-	  <execution>
-	    <id>generate-facade</id>
-	    <phase>package</phase>
-	    <goals>
-	      <goal>generate-repository-facade</goal>
-	    </goals>
-
-	    <configuration>
-	      <associateSites>
-		<associateSite>http://download.jboss.org/jbosstools/updates/stable/kepler/</associateSite>
-		<associateSite>http://download.jboss.org/jbosstools/targetplatforms/jbtistarget/kepler/</associateSite>
-	      </associateSites>
-
-	      <symbols>
-		<update.site.name>${project.name}</update.site.name>
-		<update.site.description>${project.url}</update.site.description>
-		<update.site.version>${project.version}</update.site.version>
-		<target.eclipse.version>-</target.eclipse.version>
-	      </symbols>
-	    </configuration>
-	  </execution>
-	</executions>
       </plugin>
 
     </plugins>
