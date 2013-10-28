@@ -166,7 +166,7 @@ public class AbstractNodeTreeEditPart extends AbstractTreeEditPart implements Pr
                             }
                         }
                     } else {
-                        //                      System.out.println("PROP: " + evt.getPropertyName());
+                        //  Activator.getLogger().debug("PROP: " + evt.getPropertyName());
                     }
                 }
             }

@@ -59,11 +59,11 @@ public class DeleteNodeFeature extends DefaultDeleteFeature {
 				EClassifier eType = eimpl.getEType();
 				if (eType instanceof AbstractNode) {
 					AbstractNode target = (AbstractNode) eType;
-					System.out.println("==== trying to zap the target: " + target);
+					Activator.getLogger().debug("==== trying to zap the target: " + target);
 					EObject eContainer = eimpl.eContainer();
 					if (eContainer instanceof AbstractNode) {
 						AbstractNode source = (AbstractNode) eContainer;
-						System.out.println("==== trying to source: " + source + " -> target: " + target);
+						Activator.getLogger().debug("==== trying to source: " + source + " -> target: " + target);
 						source.removeConnection(target);
 					}
 				}

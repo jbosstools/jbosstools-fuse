@@ -174,7 +174,7 @@ public class Fabrics extends RefreshableCollectionNode implements ImageProvider,
 	 */
 	public Fabric addFabric(String fabricName, String uris) {
 		FabricDetails details = FabricDetails.newInstance(fabricName, uris);
-		System.out.println("Created fabric details: " + details);
+		FabricPlugin.getLogger().debug("Created fabric details: " + details);
 		return addFabric(details);
 	}
 	

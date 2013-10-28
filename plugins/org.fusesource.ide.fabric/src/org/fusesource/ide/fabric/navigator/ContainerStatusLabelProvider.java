@@ -32,7 +32,7 @@ public class ContainerStatusLabelProvider extends StyledCellLabelProvider {
 			String image = "yellow-dot.png";
 			String status = bean.getStatus();
 
-			System.out.println("Container: " + container.getId() + " alive: " + container.isAlive() + " managed: " + container.isManaged()
+			FabricPlugin.getLogger().debug("Container: " + container.getId() + " alive: " + container.isAlive() + " managed: " + container.isManaged()
 					+ " pending: " + container.isProvisioningPending() + " complete: " + container.isProvisioningComplete() + " status: " + container.getProvisionStatus());
 
 			if (!bean.isAlive()) {

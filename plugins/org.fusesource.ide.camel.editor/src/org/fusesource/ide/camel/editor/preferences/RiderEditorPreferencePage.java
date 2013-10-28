@@ -21,6 +21,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.camel.tooling.util.Languages;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
@@ -123,7 +124,7 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 	 */
 	@Override
 	public void setElement(IAdaptable element) {
-		//System.out.println("====== set from element: " + element);
+		//Activator.getLogger().debug("====== set from element: " + element);
 		setPreferenceStore(PreferenceManager.getInstance().getUnderlyingStorage());
 		setDescription(EditorMessages.editorPreferencePageDescription);
 	}

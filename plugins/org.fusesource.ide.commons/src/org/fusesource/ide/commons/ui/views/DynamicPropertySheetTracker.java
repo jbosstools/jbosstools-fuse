@@ -95,7 +95,7 @@ public class DynamicPropertySheetTracker {
 				boolean initSelectionPage = false;
 				if (selectionPage instanceof Page) {
 					Page p = (Page) selectionPage;
-					System.out.println("Current page: "+ p + " has Site: " + p.getSite());
+					Activator.getLogger().debug("Current page: "+ p + " has Site: " + p.getSite());
 					if (initSelectionPage) {
 						IViewSite viewSite = propertySheet.getViewSite();
 						p.init(new PageSite(viewSite));

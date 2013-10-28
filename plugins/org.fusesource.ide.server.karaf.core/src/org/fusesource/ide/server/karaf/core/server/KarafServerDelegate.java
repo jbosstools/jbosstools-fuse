@@ -139,7 +139,7 @@ public class KarafServerDelegate extends ServerDelegate implements
 	}
 	
 	private void removeModule(IModule mod) throws CoreException, IOException {
-		System.out.println("Remove Module: " + mod.getId());
+		Activator.getLogger().debug("Remove Module: " + mod.getId());
 //		IFuseESBModule esbModule = (IFuseESBModule) mod.loadAdapter(
 //				IFuseESBModule.class, null);
 //		if (esbModule != null) {

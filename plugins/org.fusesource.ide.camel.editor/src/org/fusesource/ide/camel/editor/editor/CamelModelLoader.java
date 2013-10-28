@@ -22,6 +22,7 @@ import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
@@ -80,7 +81,7 @@ public class CamelModelLoader {
 				PictogramElement srcState = featureProvider.getPictogramElementForBusinessObject(route);
 				//PictogramElement destState = featureProvider.getPictogramElementForBusinessObject(node);
 				if (srcState == destState) {
-					System.out.println("Should not be the same element for different nodes: " + route + " and " + node);
+					Activator.getLogger().debug("Should not be the same element for different nodes: " + route + " and " + node);
 				}
 				connectContext.setSourcePictogramElement(srcState);
 				connectContext.setTargetPictogramElement(destState);
@@ -100,7 +101,7 @@ public class CamelModelLoader {
 				y = addProcessor(node, child, x, y, processedNodes);
 			}
 		} else {
-			System.out.println("Cannot add node: " + node);
+			Activator.getLogger().warning("Cannot add node: " + node);
 		}
 
 		return y;

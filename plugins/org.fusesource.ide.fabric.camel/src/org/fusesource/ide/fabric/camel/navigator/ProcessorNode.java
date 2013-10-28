@@ -17,6 +17,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.commons.tree.Node;
+import org.fusesource.ide.fabric.camel.FabricCamelPlugin;
 
 
 public class ProcessorNode extends ProcessorNodeSupport {
@@ -57,7 +58,7 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	@Override
 	protected Object createPropertyBean() {
 		String nodeId = getNodeId();
-		//System.out.println("" + this + " has nodeId: " + nodeId);
+		//FabricCamelPlugin.getLogger().debug("" + this + " has nodeId: " + nodeId);
 		if (nodeId != null) {
 			if (useCaching) {
 				return getCamelContextNode().createProcessorBeanView(getRouteId(), nodeId);

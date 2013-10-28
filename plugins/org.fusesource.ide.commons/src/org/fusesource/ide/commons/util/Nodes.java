@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
 import org.fusesource.ide.commons.tree.HasViewer;
@@ -131,7 +132,7 @@ public class Nodes {
 				}
 			}
 			if (!found) {
-				System.out.println("Could not find root expanded path!!");
+				Activator.getLogger().debug("Could not find root expanded path!!");
 			}
 			 */
 			tv.setSelection(new StructuredSelection(node));

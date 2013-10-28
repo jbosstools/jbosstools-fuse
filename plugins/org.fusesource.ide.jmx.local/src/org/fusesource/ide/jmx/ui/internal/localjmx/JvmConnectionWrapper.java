@@ -163,13 +163,13 @@ public class JvmConnectionWrapper implements IConnectionWrapper, HasName, ImageP
 						public void run() {
 							Root r = getRoot();
 							if (r == null) {
-								System.out.println("Cannot drop as no root yet, we've probably not been able to connect to " + getName());
+								Activator.getLogger().warning("Cannot drop as no root yet, we've probably not been able to connect to " + getName());
 							} else {
 								DropHandler handler = DelegateDropListener.createDropHandler(r, localEvent);
 								if (handler != null) {
 									handler.drop(localEvent);
 								} else {
-									System.out.println("No DropHandler available. We've probably not been able to connect to " + getName());
+									Activator.getLogger().warning("No DropHandler available. We've probably not been able to connect to " + getName());
 								}
 							}
 						}

@@ -125,7 +125,7 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 			srcState = context.getPictogramElements()[0];
 			destState = getFeatureProvider().getPictogramElementForBusinessObject(node);
 			if (srcState == destState) {
-				System.out.println("Should not be the same element for different nodes: " + context.getPictogramElements()[0].getLink().getBusinessObjects().get(0) + " and " + node);
+				Activator.getLogger().warning("Should not be the same element for different nodes: " + context.getPictogramElements()[0].getLink().getBusinessObjects().get(0) + " and " + node);
 			}
 			connectContext.setSourcePictogramElement(srcState);
 			connectContext.setTargetPictogramElement(destState);

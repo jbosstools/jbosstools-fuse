@@ -100,17 +100,17 @@ public class ConfigureColumnsAction extends Action {
     						this.columns = (IConfigurableColumns) sec;
     						break;
     					} else {
-    						System.out.println("Unsupported type: " + sec.getClass().getName());
+    						Activator.getLogger().warning("Unsupported type: " + sec.getClass().getName());
     					}
     				}
     			} else {
-    				System.out.println("Unsupported type: " + ps.getCurrentPage().getClass().getName());
+    				Activator.getLogger().warning("Unsupported type: " + ps.getCurrentPage().getClass().getName());
     			}
 			}
 		} else if (part instanceof TableViewSupport) {
 			this.columns = (IConfigurableColumns) ((TableViewSupport)part);
 		} else {
-			System.out.println("Unsupported type: " + part.getClass().getName());
+			Activator.getLogger().warning("Unsupported type: " + part.getClass().getName());
 		}
 	}
 	

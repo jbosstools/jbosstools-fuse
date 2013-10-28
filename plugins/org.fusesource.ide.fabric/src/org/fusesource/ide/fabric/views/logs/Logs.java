@@ -16,6 +16,7 @@ import javax.management.ObjectName;
 import org.eclipse.jface.viewers.ISelection;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.Selections;
+import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.jmx.core.IConnectionWrapper;
 import org.fusesource.ide.jmx.core.tree.DomainNode;
 import org.fusesource.ide.jmx.core.tree.ObjectNameNode;
@@ -57,7 +58,7 @@ public class Logs {
 								if (objectName != null) {
 									String typeName = objectName.getKeyProperty("type");
 									if (typeName != null && typeName.equals("LogQuery")) {
-										System.out.println("================ found objectName: " + objectName);
+										FabricPlugin.getLogger().debug("================ found objectName: " + objectName);
 										return new JmxFabricLogBrowser(root.getConnection(), objectName);
 									}
 								}

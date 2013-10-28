@@ -22,7 +22,7 @@ public class JMXUtils {
 				String type = split[1];
 				return type.split(",")[0]; //$NON-NLS-1$
 			}
-			System.out.println("Can't split: " + canonicalName);
+			//System.out.println("Can't split: " + canonicalName);
 		}
 		return "";
 	}

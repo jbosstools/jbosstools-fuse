@@ -636,7 +636,7 @@ public class NodeTabSection extends TableViewSupport {
 
         // create the connection
         try {
-            System.out.println("Creating the connection if it doesn't exist for host: " + host + " port " + port
+        	FabricPlugin.getLogger().debug("Creating the connection if it doesn't exist for host: " + host + " port " + port
                     + " user " + user);
 
             // TODO set the title? open a new view if there's not one already

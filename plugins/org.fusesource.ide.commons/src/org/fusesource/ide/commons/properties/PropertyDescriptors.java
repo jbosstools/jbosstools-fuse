@@ -16,6 +16,7 @@ import java.beans.PropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import org.fusesource.camel.tooling.util.Strings;
+import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.ReturnType;
 
@@ -58,7 +59,7 @@ public class PropertyDescriptors {
 		} else if (descriptor instanceof TextPropertyDescriptor) {
 			return String.class;
 		} else {
-			System.out.println("Unknown property type for " + descriptor + " of class: "
+			Activator.getLogger().debug("Unknown property type for " + descriptor + " of class: "
 					+ descriptor.getClass().getName() + " " + descriptor.getId());
 			return String.class;
 		}

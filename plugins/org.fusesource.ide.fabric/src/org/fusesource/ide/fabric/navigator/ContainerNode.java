@@ -109,10 +109,10 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 			// TODO throws exception!
 			//Profile overlay = profile.getOverlay();
 			Profile overlay = profile;
-			System.out.println("Profile: " + overlay);
-			System.out.println("  bundles: " + joiner.join(overlay.getBundles()));
-			System.out.println("  features: " + joiner.join(overlay.getFeatures()));
-			System.out.println("  repos:   " + joiner.join(overlay.getRepositories()));
+			FabricPlugin.getLogger().debug("Profile: " + overlay);
+			FabricPlugin.getLogger().debug("  bundles: " + joiner.join(overlay.getBundles()));
+			FabricPlugin.getLogger().debug("  features: " + joiner.join(overlay.getFeatures()));
+			FabricPlugin.getLogger().debug("  repos:   " + joiner.join(overlay.getRepositories()));
 		}
 	}
 
@@ -380,7 +380,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 		// create the connection
 		try {
-			System.out.println("Creating the connection if it doesn't exist for host: " + host + " port " + port + " user " + user + " pwd " + password);
+			FabricPlugin.getLogger().debug("Creating the connection if it doesn't exist for host: " + host + " port " + port + " user " + user + " pwd " + password);
 
 			// TODO set the title? open a new view if there's not one already etc?
 			connectorView.createConnectionIfNotExists(host,
@@ -425,7 +425,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 	 */
 	public void createContainer(final String name, Profile[] profiles) {
 		try {
-			System.out.println("About to create child container of " + this + " with name: " + name + " and profiles: " + Arrays.asList(profiles));
+			FabricPlugin.getLogger().debug("About to create child container of " + this + " with name: " + name + " and profiles: " + Arrays.asList(profiles));
 			FabricService fabricService = getFabricService();
 			CreateContainerOptions options = CreateChildContainerOptions.builder()
 					.name(name)

@@ -13,6 +13,7 @@ package org.fusesource.ide.fabric.views.logs;
 
 import org.fusesource.fabric.jolokia.facade.JolokiaFabricConnector;
 import org.fusesource.fabric.jolokia.facade.utils.Helpers;
+import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.navigator.Fabric;
 import org.fusesource.insight.log.LogFilter;
 import org.fusesource.insight.log.rest.LogRequest;
@@ -29,7 +30,7 @@ public class FabricLogBrowser implements ILogBrowser {
 
 	@Override
 	public void queryLogs(LogContext context, boolean filterChanged) {
-		System.out.println("================ Querying logs.....");
+		FabricPlugin.getLogger().debug("================ Querying logs.....");
 
 		LogFilter logFilter = context.getLogFilter();
 		LogRequest search = LogRequest.newInstance(logFilter.getAfterTimestamp());
@@ -39,7 +40,7 @@ public class FabricLogBrowser implements ILogBrowser {
 		JolokiaFabricConnector connector = fabric.getConnector().getConnector();
 		String result = Helpers.execCustomToJSON(connector.getJolokiaClient(), INSIGHT_MBEAN_URL, LOG_QUERY_OPERATION, logFilter);
 		
-		System.err.println(result);
+		System.err.println("TODO: queryLogs(): " + result);
 		
 //				LogResponse result = resource.post(LogResponse.class, search);
 //				if (result != null) {

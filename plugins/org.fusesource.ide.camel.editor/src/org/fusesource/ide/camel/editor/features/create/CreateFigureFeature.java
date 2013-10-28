@@ -130,7 +130,7 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 		if (selectedRoute != null) {
 			selectedRoute.addChild(node);
 		} else {
-			System.out.println("Warning could not find currently selectedNode so can't associate this node with the route!: " + node);
+			Activator.getLogger().warning("Warning! Could not find currently selectedNode, so can't associate this node with the route!: " + node);
 		}
 
 		// Add model element to resource.

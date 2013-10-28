@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.fabric.api.Container;
 import org.fusesource.fabric.api.Profile;
+import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.Messages;
 import org.fusesource.ide.fabric.actions.ProfileTreeSelectionFormSupport;
 
@@ -99,7 +100,7 @@ public class ProfileTreeForm extends ProfileTreeSelectionFormSupport {
 	public void okPressed() {
 		Profile[] profiles = getSelectedProfileArray();
 		Container agent = node.getContainer();
-		System.out.println("Updating the profiles of " + agent + " to: " + Arrays.asList(profiles));
+		FabricPlugin.getLogger().debug("Updating the profiles of " + agent + " to: " + Arrays.asList(profiles));
 		agent.setProfiles(profiles);
 		node.refresh();
 		selectionChanged = false;

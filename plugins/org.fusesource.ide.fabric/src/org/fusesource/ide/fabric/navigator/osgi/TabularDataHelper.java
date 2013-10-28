@@ -38,7 +38,7 @@ public class TabularDataHelper {
 						CompositeData cd = (CompositeData) row;
 						answer.add(new CompositeDataPropertySource(cd));
 					} else {
-						System.out.println("===== uknown row type: " + row + " of type " + Objects.typeName(row));
+						FabricPlugin.getLogger().debug("===== uknown row type: " + row + " of type " + Objects.typeName(row));
 					}
 				}
 			}

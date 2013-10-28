@@ -41,6 +41,7 @@ import org.fusesource.ide.commons.ui.Widgets;
 import org.fusesource.ide.commons.ui.form.FormPropertySheetPage;
 import org.fusesource.ide.commons.ui.views.TableViewSupport;
 import org.fusesource.ide.commons.util.Function1;
+import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.views.logs.actions.OpenStackTraceAction;
 import org.fusesource.insight.log.LogFilter;
 
@@ -96,7 +97,7 @@ public class LogsView extends TableViewSupport implements LogContext { // implem
 				if (!Widgets.isDisposed(getControl())) {
 					Jobs.schedule(logPollTime, this);
 				} else {
-					System.out.println("Control disposed to not rescheduling query job");
+					FabricPlugin.getLogger().warning("Control disposed to not rescheduling query job");
 				}
 				return Status.OK_STATUS;
 			}
@@ -198,7 +199,7 @@ public class LogsView extends TableViewSupport implements LogContext { // implem
 	protected void queryLogs() {
 		try {
 			if (!Widgets.isValidFromOtherThread(getControl())) {
-				System.out.println("Control not valid so not querying logs...");
+				FabricPlugin.getLogger().warning("Control not valid so not querying logs...");
 				return;
 			}
 			boolean value = filterChanged;

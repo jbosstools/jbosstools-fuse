@@ -100,7 +100,7 @@ public class DirectedDiagramViewLayoutAlgorithm extends AbstractLayoutAlgorithm 
 							internalNode.setLocation(left_end, internalNode.getCurrentY());
 						}
 					} else {
-						System.err.println("Unsupported object " + left.data + " can't be cast to InternalNode!");
+						Activator.getLogger().warning("Unsupported object " + left.data + " can't be cast to InternalNode!");
 					}
 				}
 				
@@ -118,7 +118,7 @@ public class DirectedDiagramViewLayoutAlgorithm extends AbstractLayoutAlgorithm 
 							internalRight.setLocation(node_end, internalRight.getCurrentY());
 						}
 					} else {
-						System.err.println("Unsupported object " + right.data + " can't be cast to InternalNode!");
+						Activator.getLogger().warning("Unsupported object " + right.data + " can't be cast to InternalNode!");
 					}
 				}
 			}

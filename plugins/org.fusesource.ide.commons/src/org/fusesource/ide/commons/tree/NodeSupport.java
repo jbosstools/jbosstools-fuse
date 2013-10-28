@@ -48,7 +48,7 @@ public abstract class NodeSupport extends Node implements IPropertySourceProvide
 	public IPropertySource getPropertySource(Object object) {
 		// avoid infinite recursion!
 		if (object != null && object != this) {
-			//System.out.println("====== warning getPropertySource() asked for: " + object + " of class: "+ object.getClass());
+			Activator.getLogger().debug("====== warning getPropertySource() asked for: " + object + " of class: "+ object.getClass());
 			return null;
 		}
 		if (object == null) {

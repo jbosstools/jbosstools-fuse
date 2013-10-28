@@ -65,7 +65,7 @@ public class TableConfiguration implements IFlushable {
                 @Override
                 public void run() {
                     if (moveEventCounter.compareAndSet(value, 0)) {
-                        //System.out.println("We are the last move event at counter: " + value + " so updating the config model");
+                        //Activator.getLogger().debug("We are the last move event at counter: " + value + " so updating the config model");
                         if (column == null || column.isDisposed()) {
                             return;
                         }
@@ -88,7 +88,7 @@ public class TableConfiguration implements IFlushable {
                         if (column == null || column.isDisposed()) {
                             return;
                         }
-                        //System.out.println("We are the last move event at counter: " + value + " so updating the config model");
+                        //Activator.getLogger().debug("We are the last move event at counter: " + value + " so updating the config model");
                         onColumnsMoved(column.getParent());
                     }
                 }
@@ -256,7 +256,7 @@ public class TableConfiguration implements IFlushable {
 		String columnOrderText = Strings.join(COLUMN_NAME_SEPARATOR, names.toArray());
 		node.put(COLUMN_ORDER, columnOrderText);
 
-		//System.out.println("Updated columns to: " + names);
+		//Activator.getLogger().debug("Updated columns to: " + names);
 		return names;
 	}
 
@@ -365,7 +365,7 @@ public class TableConfiguration implements IFlushable {
 	 */
 	public void onColumnsMoved(Table table) {
 		if (isCleared() || table == null || table.isDisposed()) {
-			//System.out.println("Ignoring move events as configuration is cleared");
+			//Activator.getLogger().debug("Ignoring move events as configuration is cleared");
 			return;
 		}
 		List<ColumnConfiguration> newOrder = new ArrayList<ColumnConfiguration>();
@@ -385,7 +385,7 @@ public class TableConfiguration implements IFlushable {
 		}
 		if (columns.length > 1 && newOrder.size() > 1) {
 			makeOtherColumnsInvisilbe(newOrder);
-			System.out.println("Flushing column configuration with newOrder: " + newOrder + " and columns: " + columns.length);
+			Activator.getLogger().debug("Flushing column configuration with newOrder: " + newOrder + " and columns: " + columns.length);
 			flush();
 		}
 	}
@@ -395,7 +395,7 @@ public class TableConfiguration implements IFlushable {
 	 */
 	public void onColumnsMoved(Tree tree) {
 		if (isCleared() || tree == null || tree.isDisposed()) {
-			//System.out.println("Ignoring move events as configuration is cleared");
+			//Activator.getLogger().debug("Ignoring move events as configuration is cleared");
 			return;
 		}
 		List<ColumnConfiguration> newOrder = new ArrayList<ColumnConfiguration>();

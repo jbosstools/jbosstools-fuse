@@ -100,7 +100,7 @@ public class CachingCamelContextNodeStatisticsContainer implements NodeStatistic
 			stats = (CamelContextStatistics) um.unmarshal(new StringReader(xmlDump));
 		} catch (Exception ex) {
 			stats = null;
-			System.err.println("Error retrieving the statistics for camel context: " + camelContextNode.getContextId());
+			FabricCamelPlugin.getLogger().error("Error retrieving the statistics for camel context: " + camelContextNode.getContextId(), ex);
 		}
 		return stats;
 	}

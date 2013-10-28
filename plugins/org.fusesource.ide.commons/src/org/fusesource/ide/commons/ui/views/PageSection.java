@@ -42,7 +42,7 @@ public class PageSection implements ISection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedSheetPage) {
 		this.tabbedSheetPage = tabbedSheetPage;
 
-		System.out.println("Creating page controls for " + page);
+		Activator.getLogger().debug("Creating page controls for " + page);
 		IPageSite pageSite = getPageSite();
 		if (pageSite != null) {
 			// lets clear the menu first...

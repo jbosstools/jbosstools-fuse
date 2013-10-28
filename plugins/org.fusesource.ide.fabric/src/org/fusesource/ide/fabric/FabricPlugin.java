@@ -75,14 +75,16 @@ public class FabricPlugin extends ImagesActivatorSupport {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
+		plugin = this;
+		
 		// lets make sure we can find the MBeanServer!
 		MBeanServer mbeanServer = Bundles.lookupService(context, MBeanServer.class);
 		if (mbeanServer == null) {
-			System.out.println("================== no MBeanServer in OSGi registry so creating one");
+			FabricPlugin.getLogger().debug("================== no MBeanServer in OSGi registry so creating one");
 			mbeanServer = ManagementFactory.getPlatformMBeanServer();
-			System.out.println("================== found platform MBeanServer: " + mbeanServer);
+			FabricPlugin.getLogger().debug("================== found platform MBeanServer: " + mbeanServer);
 			context.registerService(MBeanServer.class, mbeanServer, null);
-			System.out.println("================== registered MBeanServer!" + mbeanServer);
+			FabricPlugin.getLogger().debug("================== registered MBeanServer!" + mbeanServer);
 		}
 //		// if jersey is started already lets stop it first!
 //		// as it must be started explicitly each time - restarting
@@ -108,7 +110,7 @@ public class FabricPlugin extends ImagesActivatorSupport {
 //		Bundles.startBundle(context, "fabric-core-agent-jclouds");
 //		Bundles.startBundle(context, "fabric-core");
 //		Bundles.startBundle(context, "maven-proxy");
-		plugin = this;
+		
 		registerPlugins();
 	}
 

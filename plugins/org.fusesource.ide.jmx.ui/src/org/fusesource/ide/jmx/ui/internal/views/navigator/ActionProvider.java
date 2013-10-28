@@ -34,6 +34,7 @@ import org.eclipse.ui.navigator.ICommonActionConstants;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.fusesource.ide.jmx.core.IConnectionWrapper;
 import org.fusesource.ide.jmx.core.tree.Root;
+import org.fusesource.ide.jmx.ui.JMXUIActivator;
 import org.fusesource.ide.jmx.ui.internal.actions.DeleteConnectionAction;
 import org.fusesource.ide.jmx.ui.internal.actions.DoubleClickAction;
 import org.fusesource.ide.jmx.ui.internal.actions.MBeanServerConnectAction;
@@ -58,7 +59,7 @@ public class ActionProvider extends CommonActionProvider {
 		doubleClickAction = new DoubleClickAction();
 		newConnectionAction = new NewConnectionAction();
 		String viewId = site.getViewSite().getId();
-		System.out.println("============================= View ID: " + viewId);
+		JMXUIActivator.getLogger().debug("============================= View ID: " + viewId);
 		refreshAction = new RefreshAction(viewId);
 		StructuredViewer viewer = site.getStructuredViewer();
 		refreshAction.setViewer(viewer);

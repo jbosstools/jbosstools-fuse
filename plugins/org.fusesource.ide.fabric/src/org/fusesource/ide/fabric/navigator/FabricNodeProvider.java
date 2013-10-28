@@ -55,9 +55,9 @@ public class FabricNodeProvider implements NodeProvider, org.fusesource.ide.jmx.
 //			}));
 //			view.monitored_set = "jvm-default";
 
-			//System.out.println("======== doing Fabric Monitor call with: " + view);
+			//FabricPlugin.getLogger().debug("======== doing Fabric Monitor call with: " + view);
 			//MonitoredViewDTO answer = MonitorFacade.fetch(jmxTemplate, view);
-			//System.out.println("Got: " + answer);
+			//FabricPlugin.getLogger().debug("Got: " + answer);
 		}
 
 		if (root.containsDomain("osgi.core")) {

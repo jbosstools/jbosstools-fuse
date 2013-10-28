@@ -42,6 +42,7 @@ import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerOptions;
 import org.fusesource.fabric.service.jclouds.JCloudsInstanceType;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.ui.ICanValidate;
+import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.CreateContainerFormSupport;
 import org.fusesource.ide.fabric.actions.Messages;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
@@ -173,7 +174,7 @@ public class CloudContainerDetailsForm extends CreateContainerFormSupport {
 
 			@Override
 			public void handleChange(ChangeEvent event) {
-//				System.out.println("Updating viewer " + viewer + " with list of " + list.size() + " of type: " + list.getElementType());
+//				FabricPlugin.getLogger().debug("Updating viewer " + viewer + " with list of " + list.size() + " of type: " + list.getElementType());
 				restoreSettings(viewer);
 				Viewers.refresh(viewer);				
 			}

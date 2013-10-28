@@ -51,7 +51,7 @@ public class ActiveMQConverter {
 		Set<String> keySet = data.getCompositeType().keySet();
 		for (String key : keySet) {
 			Object value = data.get(key);
-			// System.out.println("Key: " + key + " value " + value);
+			// FabricActiveMQPlugin.getLogger().debug("Key: " + key + " value " + value);
 			if (ignoredKeys.contains(key)) {
 				continue;
 			}
@@ -95,7 +95,7 @@ public class ActiveMQConverter {
 					Object key = cd.get("key");
 					if (key != null) {
 						Object value = cd.get("value");
-						//System.out.println("Got key " + key + " value " + value);
+						//FabricActiveMQPlugin.getLogger().debug("Got key " + key + " value " + value);
 						answer.put(key.toString(), value);
 					}
 				} else {
@@ -103,7 +103,7 @@ public class ActiveMQConverter {
 					for (Object key : keys) {
 						String keyText = key.toString();
 						Object value = cd.get(keyText);
-						//System.out.println("Got key " + key + " value " + value);
+						//FabricActiveMQPlugin.getLogger().debug("Got key " + key + " value " + value);
 						answer.put(keyText, value);
 					}
 				}

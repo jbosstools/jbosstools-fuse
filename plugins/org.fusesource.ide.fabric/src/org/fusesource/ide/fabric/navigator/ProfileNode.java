@@ -253,7 +253,7 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 			} else {
 				uriText = u.toString();
 			}
-			System.out.println("===== deploying to the mavenRepoURL: " + uriText + " based on the URI from Fabric: " + u);
+			FabricPlugin.getLogger().debug("===== deploying to the mavenRepoURL: " + uriText + " based on the URI from Fabric: " + u);
 
 			return getFabricNameWithoutSpaces() + "::default::" + uriText;
 		} catch (URISyntaxException e) {

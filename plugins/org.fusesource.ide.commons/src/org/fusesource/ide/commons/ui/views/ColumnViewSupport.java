@@ -220,7 +220,7 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 				removeLocalMenus(menuManager);
 				menuManager.update(false);
 			} else {
-				System.out.println("############ NO MENUMANAGER!");
+				Activator.getLogger().debug("############ NO MENUMANAGER!");
 			}
 
 			if (getActionBars() != null) {
@@ -601,7 +601,7 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 			Object provider = field.get(viewerColumn);
 			return provider != null;
 		} catch (Exception e) {
-			System.out.println("Failed to get labelProvider field: " + e);
+			Activator.getLogger().debug("Failed to get labelProvider field: " + e);
 			return false;
 		}
 	}

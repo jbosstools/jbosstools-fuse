@@ -55,7 +55,7 @@ public class CloudConnectJob extends Job {
 		try {
 			ComputeService computeClient = cacheData.getComputeClient();
 			if (computeClient == null) {
-				System.out.println("Starting to connect to " + details);
+				FabricPlugin.getLogger().debug("Starting to connect to " + details);
 				computeClient = CloudDetails.createComputeService(details);
 			}
 			if (computeClient != null) {

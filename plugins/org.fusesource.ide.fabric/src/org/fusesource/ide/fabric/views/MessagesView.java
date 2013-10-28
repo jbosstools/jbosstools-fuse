@@ -38,6 +38,7 @@ import org.fusesource.ide.commons.ui.config.TableConfiguration;
 import org.fusesource.ide.commons.ui.views.TableViewSupport;
 import org.fusesource.ide.commons.util.Function1;
 import org.fusesource.ide.commons.util.FunctionLong;
+import org.fusesource.ide.fabric.FabricPlugin;
 
 
 /**
@@ -182,7 +183,7 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 		if (browser != null) {
 			List<IExchange> list = browser.browseExchanges();
 			if (list != null) {
-				// System.out.println("==== Browsed exchanges: " + list);
+				// FabricPlugin.getLogger().debug("==== Browsed exchanges: " + list);
 				this.exchanges = list;
 				viewer.setInput(exchanges);
 				/*

@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.ui.Trees;
 import org.fusesource.ide.commons.ui.Widgets;
@@ -208,7 +209,7 @@ public abstract class TreeViewSupport extends ColumnViewSupport {
 				Widgets.dispose(column);
 			} else {
 				if (column == null) {
-					System.out.println("No column found for name '" + columnName + "'");
+					Activator.getLogger().debug("No column found for name '" + columnName + "'");
 				} else {
 					columnNameOrderList.add(columnName);
 					int width = config.getWidth();
@@ -239,7 +240,7 @@ public abstract class TreeViewSupport extends ColumnViewSupport {
 			// lets find the order of this column
 			Integer i = indexMap.get(columnName);
 			if (i == null) {
-				System.out.println("Warning no column index for name '" + columnName + "' found!");
+				Activator.getLogger().warning("Warning - no column index for name '" + columnName + "' found!");
 			} else {
 				columnOrderList.add(i);
 			}

@@ -192,7 +192,7 @@ public class KarafLaunchDelegate implements ILaunchConfigurationDelegate {
 					//behaviorDelegate.setLaunch(launch2);
 					IProcess[] processes = launch2.getProcesses();
 					if (processes != null && processes.length > 0) {
-//						System.err.println(processes[0].getAttribute(IProcess.ATTR_CMDLINE));
+//						Activator.getLogger().debug(processes[0].getAttribute(IProcess.ATTR_CMDLINE));
 						launch.addProcess(processes[0]);
 						return processes[0];
 					}

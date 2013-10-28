@@ -213,7 +213,7 @@ public class RiderOutlinePage extends ContentOutlinePage implements INodeViewer,
 		if (model != null) {
 			Tree tree = getTree();
 			if (tree == null) {
-				System.out.println("Warning - attempt to set the model when no tree!");
+				Activator.getLogger().warning("Warning - attempt to set the model when no tree!");
 			} else {
 				getViewer().setContents(model);
 				Trees.expandAll(tree);

@@ -58,7 +58,7 @@ public class Activator extends ImagesActivatorSupport {
 						break;
 					}
 				}
-				//System.out.println("for path: " + path + " xsd " + xsd + " found: " + answer);
+				//Activator.getLogger().debug("for path: " + path + " xsd " + xsd + " found: " + answer);
 				return answer;
 			}
 		});

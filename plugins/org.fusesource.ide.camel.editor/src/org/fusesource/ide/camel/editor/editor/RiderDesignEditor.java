@@ -625,7 +625,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 				} else if (template instanceof Class) {
 					return new SimpleFactory((Class) template);
 				} else {
-					System.out.println("============= Template: " + template + " is not a CreationFactory or Class! " + Objects.typeName(template));
+					Activator.getLogger().debug("============= Template: " + template + " is not a CreationFactory or Class! " + Objects.typeName(template));
 					return new CreationFactory() {
 
 						@Override
@@ -1236,7 +1236,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		CommandStack stack = getCommandStack();
 		if (stack == null) {
 			Activator.getLogger().warning("No command stack available when trying to save document!");
-			System.out.println("================= No command stack available when trying to save document!");
 		} else {
 			stack.markSaveLocation();
 		}

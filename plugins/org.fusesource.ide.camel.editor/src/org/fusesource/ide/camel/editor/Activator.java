@@ -96,7 +96,7 @@ public class Activator extends ImagesActivatorSupport {
 						if (page.findView(UIConstants.PROPERTIES_VIEW_ID) == null) {
 							IViewPart propView = page.showView(UIConstants.PROPERTIES_VIEW_ID);
 							IWorkbenchHelpSystem helpSystem = propView.getSite().getWorkbenchWindow().getWorkbench().getHelpSystem();
-							//System.err.println(propView.getClass().getName());
+							//Activator.getLogger().debug(propView.getClass().getName());
 							//helpSystem.setHelp(propView, PLUGIN_ID);
 						}
 					} catch (PartInitException ex) {

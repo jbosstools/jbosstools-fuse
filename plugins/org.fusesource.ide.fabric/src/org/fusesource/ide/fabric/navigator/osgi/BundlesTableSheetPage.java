@@ -100,12 +100,12 @@ public class BundlesTableSheetPage extends PropertySourceTableSheetPage {
 
 			@Override
 			public void handleNotification(Notification notification, Object handback) {
-				//System.out.println("================= notification: " + notification);
+				//FabricPlugin.getLogger().debug("================= notification: " + notification);
 				refresh();
 			}
 		};
 		bundlesNode.getFacade().addBundleStateNotificationListener(notificationListener, null, null);
-		//System.out.println("============== added notificationlistener on: "+ this);
+		//FabricPlugin.getLogger().debug("============== added notificationlistener on: "+ this);
 
 	}
 
@@ -113,7 +113,7 @@ public class BundlesTableSheetPage extends PropertySourceTableSheetPage {
 
 	@Override
 	public void dispose() {
-		//System.out.println("============== removing notificationlistener on: "+ this);
+		//FabricPlugin.getLogger().debug("============== removing notificationlistener on: "+ this);
 		bundlesNode.getFacade().removeBundleStateNotificationListener(notificationListener, null, null);
 		super.dispose();
 	}

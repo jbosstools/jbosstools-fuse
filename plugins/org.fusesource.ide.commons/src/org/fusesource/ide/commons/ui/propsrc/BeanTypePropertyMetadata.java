@@ -72,7 +72,7 @@ public class BeanTypePropertyMetadata {
 				propertyDest = new ComplexPropertyDescriptor(id, displayName, propertyType);
 			} else {
 				// TODO support other property types??
-				System.out.println("Ignoring property for " + beanType.getName() + " of name: " + displayName + " of type" + propertyType.getName());
+				Activator.getLogger().debug("Ignoring property for " + beanType.getName() + " of name: " + displayName + " of type" + propertyType.getName());
 			}
 			descriptorMap.put(id, descriptor);
 			if (propertyDest != null) {

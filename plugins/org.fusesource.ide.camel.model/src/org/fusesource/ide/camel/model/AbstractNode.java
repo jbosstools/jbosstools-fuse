@@ -1118,7 +1118,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 				parent = node;
 			}
 		}
-		// System.out.println("Now " + this + " with outputs " + getOutputs() +
+		// Activator.getLogger().debug("Now " + this + " with outputs " + getOutputs() +
 		// " from camel outputs " + outputs);
 	}
 

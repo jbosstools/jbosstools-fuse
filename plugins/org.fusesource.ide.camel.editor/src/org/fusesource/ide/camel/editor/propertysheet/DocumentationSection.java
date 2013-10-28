@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
@@ -92,9 +93,9 @@ public class DocumentationSection extends NodeSectionSupport {
 					if (idx > 0) {
 						String scheme = uri.substring(0, idx);
 						String contextId = "org.fusesource.ide.camel.editor." + scheme;
-						//System.out.println("Resolving context ID:" + contextId);
+						//Activator.getLogger().debug("Resolving context ID:" + contextId);
 						loadedPage = resolvePage(contextId, true);
-						System.out.println("Loaded page " + contextId + " " + loadedPage);
+						Activator.getLogger().debug("Loaded page " + contextId + " " + loadedPage);
 					}
 				}
 			}
@@ -104,7 +105,7 @@ public class DocumentationSection extends NodeSectionSupport {
 				if (text != null) {
 					uri = "org.fusesource.ide.camel.editor." + text;
 				}
-				//System.out.println("Resolving context ID:" + uri);
+				//Activator.getLogger().debug("Resolving context ID:" + uri);
 				resolvePage(uri, false);
 			}
 			//browser.layout();
@@ -132,11 +133,11 @@ public class DocumentationSection extends NodeSectionSupport {
 			context = HelpSystem
 					.getContext(contextName);
 
-			// System.out.println("Context ID " + contextId +
+			// Activator.getLogger().debug("Context ID " + contextId +
 			// " is bad using default.");
 		}
 		if (context == null) {
-			System.out.println("Could not find context: " + contextName);
+			Activator.getLogger().warning("Could not find context: " + contextName);
 			return false;
 		}
 		IHelpResource[] relatedTopics = context.getRelatedTopics();
@@ -150,7 +151,7 @@ public class DocumentationSection extends NodeSectionSupport {
 				return browser.setUrl(url.toExternalForm());
 			}
 		}
-		System.out.println("Could not find resource in context: " + contextName);
+		Activator.getLogger().warning("Could not find resource in context: " + contextName);
 		return false;
 	}
 

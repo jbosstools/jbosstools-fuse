@@ -20,6 +20,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.util.Objects;
 
 
@@ -117,17 +118,17 @@ public class Menus {
 			if (id != null) {
 				manager.remove(id);
 			} else {
-				System.out.println("==== CANNOT remove action - no ID: " + action);
+				Activator.getLogger().debug("==== CANNOT remove action - no ID: " + action);
 			}
 		} else {
-			System.out.println("==== CANNOT remove object - no ID: " + actionOrContributionItem);
+			Activator.getLogger().debug("==== CANNOT remove object - no ID: " + actionOrContributionItem);
 		}
 	}
 
 	protected static String getActionId(IAction action) {
 		String id = action.getId();
 		if (id == null){
-			System.out.println("Warning no ID for action: " + action);
+			Activator.getLogger().debug("Warning no ID for action: " + action);
 		}
 		return id;
 	}
@@ -135,7 +136,7 @@ public class Menus {
 	protected static String getContributionItemId(IContributionItem item) {
 		String id = item.getId();
 		if (id == null){
-			System.out.println("Warning no ID for contribution item: " + item);
+			Activator.getLogger().debug("Warning no ID for contribution item: " + item);
 		}
 		return id;
 	}

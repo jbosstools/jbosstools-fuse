@@ -13,6 +13,7 @@ package org.fusesource.ide.fabric.views.logs;
 
 import javax.management.ObjectName;
 
+import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.jmx.core.IConnectionWrapper;
 
 
@@ -49,7 +50,7 @@ public class JmxFabricLogBrowser extends LogBrowserSupport {
 
 //	@Override
 //	protected <T> T execute(LogQueryCallback<T> callback) {
-//		System.out.println("TODO: query fabric logs via jolokia");
+//		FabricPlugin.getLogger().debug("TODO: query fabric logs via jolokia");
 //		return null;
 ////		return jmxTemplate.execute(callback);
 //	}

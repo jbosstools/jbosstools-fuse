@@ -155,7 +155,7 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 	public void addFabricUpdateRunnable(Runnable runnable) {
 		fabricUpdateTasks.add(runnable);
 
-		System.out.println("=============== Now have " + fabricUpdateTasks.size() + " runnables");
+		FabricPlugin.getLogger().debug("=============== Now have " + fabricUpdateTasks.size() + " runnables");
 	}
 
 	public void removeFabricUpdateRunnable(Runnable runnable) {
@@ -565,7 +565,7 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 			@Override
 			public void run() {
 				//FabricPlugin.getLogger().info("Refreshing due to ZK change!");
-				System.out.println("Refreshing Fabric " + this + " due to ZK change!");
+				FabricPlugin.getLogger().debug("Refreshing Fabric " + this + " due to ZK change!");
 
 				getContainersNode().refresh();
 

@@ -119,8 +119,8 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					if (!Strings.isNullOrEmpty(proxyUri)) {
 						args = args.proxyUri(new URI(proxyUri));
 					}
-					System.out.println("============ proxy URI: " + args.getProxyUri());
-					System.out.println("Create cloud fabric: " + fabricName + " container: " + agentName);
+					FabricPlugin.getLogger().debug("============ proxy URI: " + args.getProxyUri());
+					FabricPlugin.getLogger().debug("Create cloud fabric: " + fabricName + " container: " + agentName);
 
 					BundleContext context = FabricPlugin.getDefault().getBundle().getBundleContext();
 					
@@ -133,7 +133,7 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					args = args.contextName(providerName);
 					ComputeService computeClient = CloudDetails.createComputeService(getSelectedCloud());
 					args = args.computeService(computeClient);
-					System.out.println("Creating Jclouds provider type: " + providerName);
+					FabricPlugin.getLogger().debug("Creating Jclouds provider type: " + providerName);
 					Ec2FirewallSupport ec2fw = new Ec2FirewallSupport();
 					ec2fw.activateComponent();
 				    firewallManagerFactory.bindFirewallSupport(ec2fw);
@@ -143,7 +143,7 @@ public class CreateJCloudsFabricWizard extends Wizard {
 				    provider.bindFirewallManagerFactory(firewallManagerFactory);
 					
 					CreateJCloudsContainerOptions opts = args.build();
-					System.err.println("Compute Service: " + opts.getComputeService());
+					FabricPlugin.getLogger().debug("Compute Service: " + opts.getComputeService());
 					CreateJCloudsContainerMetadata metadata = provider.create(opts, new CreationStateListener() {
 						@Override
 						public void onStateChange(String message) {
@@ -170,7 +170,7 @@ public class CreateJCloudsFabricWizard extends Wizard {
 							if(uris.endsWith(",")) {
 								uris = uris.substring(0, uris.length() - 1);
 							}
-							System.out.println("Creating fabric with uris: " + uris);
+							FabricPlugin.getLogger().debug("Creating fabric with uris: " + uris);
 							FabricDetails details = FabricDetails.newInstance(fabricName, uris);
 							details.setUserName(arguments.getUser());
 							details.setPassword(arguments.getPassword());

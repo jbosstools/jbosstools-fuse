@@ -16,6 +16,7 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.features.IUpdateFeature;
 import org.eclipse.graphiti.features.context.impl.UpdateContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
@@ -43,7 +44,7 @@ public class UpdateCommand extends RecordingCommand {
 		}
 		PictogramElement pe = selectedNode instanceof RouteSupport ? designEditor.getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(selectedNode);
 		if (pe == null) {
-			System.out.println("Warning could not find PictogramElement for selectedNode: " + selectedNode);
+			Activator.getLogger().debug("Warning could not find PictogramElement for selectedNode: " + selectedNode);
 		}
 		UpdateContext ctx = new UpdateContext(pe);
 		IUpdateFeature updateFeature = designEditor.getFeatureProvider().getUpdateFeature(ctx);

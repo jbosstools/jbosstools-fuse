@@ -682,7 +682,7 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 				viewer.reveal(selected);
 			}
 
-			System.out.println("================= Setting visible");
+			Activator.getLogger().debug("================= Setting visible");
 			userChangedArtifactId = false;
 		}
 	}

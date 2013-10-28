@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.preferences.ViewSettingsDialog;
+import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.ui.actions.Messages;
 import org.fusesource.ide.commons.ui.config.ColumnConfiguration;
 import org.fusesource.ide.commons.ui.views.ColumnViewSupport;
@@ -113,7 +114,7 @@ public class TableChartDialog extends ViewSettingsDialog {
 	protected void okPressed() {
 		// storePreferences();
 
-		System.out.println("About to open chart!!!");
+		Activator.getLogger().debug("About to open chart!!!");
 		super.okPressed();
 	}
 

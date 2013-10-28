@@ -23,6 +23,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
 
 
@@ -60,7 +61,7 @@ public abstract class ImagesActivatorSupport extends AbstractUIPlugin {
 			String file = u.getFile();
 			String fileName = file;
 			if (!file.startsWith(prefix)) {
-				System.out.println("Warning: image: " + fileName + " does not start with prefix: " + prefix);
+				Activator.getLogger().warning("Warning: image: " + fileName + " does not start with prefix: " + prefix);
 			}
 			fileName = fileName.substring(prefix.length());
 			registerImage(reg, fileName, fileName);

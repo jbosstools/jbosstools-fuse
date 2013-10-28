@@ -32,6 +32,7 @@ import org.fusesource.ide.commons.properties.BooleanPropertyDescriptor;
 import org.fusesource.ide.commons.properties.ComplexPropertyDescriptor;
 import org.fusesource.ide.commons.properties.ListPropertyDescriptor;
 import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.fabric.FabricPlugin;
 
 
 public class CompositeDataPropertySource implements IPropertySource {
@@ -97,7 +98,7 @@ public class CompositeDataPropertySource implements IPropertySource {
 	public Object getPropertyValue(Object id) {
 		final String idText = Strings.getOrElse(id);
 		if (!keyNames.contains(idText)) {
-			System.out.println("Error: No such key " + idText + " on " + this + " with keys: " + keyNames);
+			FabricPlugin.getLogger().error("Error: No such key " + idText + " on " + this + " with keys: " + keyNames);
 			return null;
 		}
 		final Object answer = cd.get(idText);

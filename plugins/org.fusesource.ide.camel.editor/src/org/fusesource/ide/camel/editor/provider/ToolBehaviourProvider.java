@@ -41,6 +41,7 @@ import org.eclipse.graphiti.tb.IContextButtonPadData;
 import org.eclipse.graphiti.tb.IContextMenuEntry;
 import org.eclipse.graphiti.tb.IDecorator;
 import org.eclipse.graphiti.tb.ImageDecorator;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.Messages;
 import org.fusesource.ide.camel.editor.features.custom.AddRouteFeature;
@@ -164,7 +165,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 
 				@Override
 				public void execute() {
-					System.out.println("====== should be showing my menu now!!!");
+					Activator.getLogger().debug("====== should be showing my menu now!!!");
 					menu.execute();
 				}
 

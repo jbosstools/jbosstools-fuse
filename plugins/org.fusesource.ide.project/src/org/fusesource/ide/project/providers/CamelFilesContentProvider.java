@@ -61,7 +61,7 @@ public class CamelFilesContentProvider implements ITreeContentProvider {
 				try {
 					addCamelNature(project, null);
 				} catch (CoreException ex) {
-					System.err.println("Unable to set Camel Nature on the project...");
+					Activator.getLogger().warning("Unable to set Camel Nature on the project...");
 				} finally {
 					validNature = true;
 				}

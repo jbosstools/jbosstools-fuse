@@ -18,6 +18,7 @@ import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.fusesource.fabric.jolokia.facade.JolokiaFabricConnector;
 import org.fusesource.fabric.jolokia.facade.utils.Helpers;
+import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.insight.log.LogEvent;
 import org.fusesource.insight.log.LogFilter;
 import org.fusesource.insight.log.LogResults;
@@ -42,10 +43,10 @@ public abstract class LogBrowserSupport implements ILogBrowser {
 	public void queryLogs(final LogContext context, boolean filterChanged) throws IOException {
 		final LogFilter logFilter = context.getLogFilter();
 		final String queryJson = JsonHelper.toJSON(mapper, logFilter);
-//		System.out.println("Query JSON: " + queryJson);
+		FabricPlugin.getLogger().debug("Query JSON: " + queryJson);
 
 		String json = filterLogEvents(queryJson);
-		//System.out.println("===== JSON: " + json);
+		FabricPlugin.getLogger().debug("===== JSON: " + json);
 		
 		List<LogEventBean> answer = Lists.newArrayList();
 		if (json != null) {

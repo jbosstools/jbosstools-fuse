@@ -105,7 +105,7 @@ public class CreateJCloudsContainerWizard extends Wizard {
 	
 	@Override
 	public boolean performFinish() {
-//		System.out.println("Create the container!!!");
+//		FabricPlugin.getLogger().debug("Create the container!!!");
 
 		CloudContainerDetailsForm form = getPage2().getForm();
 		form.saveSettings();
@@ -128,7 +128,7 @@ public class CreateJCloudsContainerWizard extends Wizard {
 					if (zkUrl != null) {
 						try {
 							// TODO: HOW TO GET THE CURATORFRAMEWORK OBJECT?
-							System.err.println("TODO: HOW TO GET THE CURATOR FRAMEWORK");
+							FabricPlugin.getLogger().debug("TODO: HOW TO GET THE CURATOR FRAMEWORK");
 							CuratorFramework curator = null;
 							zkUrl = ZooKeeperUtils.getSubstitutedData(curator, zkUrl);
 							args.zookeeperUrl(zkUrl);

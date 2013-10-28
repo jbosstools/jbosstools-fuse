@@ -123,33 +123,6 @@ public class RiderEditorContextMenuProvider extends ContextMenuProvider {
 		menu.add(new Separator());
 		// auto layout action
 		menu.add(new AutoLayoutAction());
-
-
-
-		//		// Add standard action groups to the menu
-		//		GEFActionConstants.addStandardActionGroups(menu);
-		//
-		//		//		IContributionItem item = find("org.fusesource.ide.camel.editor.commands.autoLayoutCommand");
-		//		//		System.out.println(">>>> Found: " + item);
-		//
-		//		final RiderEditorContextMenuProvider provider = this;
-		//
-		//
-		//		// Add actions to the menu
-		//		//menu.appendToGroup("org.fusesource.ide.group.autoLayout", getAction("org.fusesource.ide.camel.editor.commands.autoLayoutCommand"));
-		//		//menu.appendToGroup("org.fusesource.ide.group.autoLayout", getAction("org.fusesource.ide.camel.editor.menus.autoLayoutCommand"));
-		//
-		//		menu.appendToGroup(
-		//				GEFActionConstants.GROUP_UNDO, // target group id
-		//				getAction(ActionFactory.UNDO.getId())); // action to add
-		//		menu.appendToGroup(
-		//				GEFActionConstants.GROUP_UNDO,
-		//				getAction(ActionFactory.REDO.getId()));
-		//		menu.appendToGroup(
-		//				GEFActionConstants.GROUP_EDIT,
-		//				getAction(ActionFactory.DELETE.getId()));
-		//
-		//
 	}
 
 	/**

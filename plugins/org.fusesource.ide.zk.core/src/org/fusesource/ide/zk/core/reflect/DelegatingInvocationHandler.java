@@ -23,6 +23,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.fusesource.ide.zk.core.EclipseCoreActivator;
+
 /**
  * An {@link InvocationHandler} that delegates calls to an {@link #getDelegate() Object}.
  * 
@@ -198,12 +202,10 @@ public class DelegatingInvocationHandler implements InvocationHandler {
             result = _DelegateMethods.get(methodKey).invoke(_Delegate, args);
         }
         catch (InvocationTargetException e) {
-            System.err.println(e);
-            e.getCause().printStackTrace();
+            EclipseCoreActivator.getDefault().getLog().log(new Status(IStatus.ERROR, EclipseCoreActivator.getDefault().getBundle().getSymbolicName(), e.getMessage()));
         }
         catch (Throwable t) {
-            System.err.println(t);
-            t.printStackTrace();
+        	EclipseCoreActivator.getDefault().getLog().log(new Status(IStatus.ERROR, EclipseCoreActivator.getDefault().getBundle().getSymbolicName(), t.getMessage()));
         }
         return result;
     }

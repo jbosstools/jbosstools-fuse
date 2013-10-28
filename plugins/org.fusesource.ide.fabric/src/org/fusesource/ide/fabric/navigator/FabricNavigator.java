@@ -159,13 +159,13 @@ public class FabricNavigator extends Navigator {
 										profileItem.addSelectionListener(new SelectionAdapter() {
 											@Override
 											public void widgetSelected(SelectionEvent e) {
-												System.out.println("================= profile: widgetSelected " + profileItem);
+												FabricPlugin.getLogger().debug("================= profile: widgetSelected " + profileItem);
 												projectHandler.dropProject(project);
 											}
 
 											@Override
 											public void widgetDefaultSelected(SelectionEvent e) {
-												System.out.println("================= profile: widgetDefaultSelected " + profileItem);
+												FabricPlugin.getLogger().debug("================= profile: widgetDefaultSelected " + profileItem);
 											}
 										});
 										added = true;

@@ -26,6 +26,7 @@ import org.fusesource.fon.util.messages.HasNodeStatisticsContainer;
 import org.fusesource.fon.util.messages.IMessage;
 import org.fusesource.fon.util.messages.NodeStatisticsContainer;
 import org.fusesource.ide.camel.editor.AbstractNodes;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderEditor;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteContainer;
@@ -137,7 +138,7 @@ public class DiagramView extends GraphViewSupport {
 					
 					AbstractNode node = AbstractNodes.getSelectedNode(selection);
 					if (node != null && !(part instanceof RiderEditor)) {
-						//System.out.println("Part is: " + part + " of type : " + part.getClass());
+						//Activator.getLogger().debug("Part is: " + part + " of type : " + part.getClass());
 						if (node != DiagramView.this.node) {
 							updateGraph(node, part);
 						}

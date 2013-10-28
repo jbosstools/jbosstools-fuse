@@ -170,7 +170,7 @@ public class SshView extends TerminalView {
 			super.onTerminalDisconnect();
 			fireOnDisconnect();
 		} catch (Exception ex) {
-			//System.err.println("Problem occured while disconnecting from SSH terminal..." + ex.getMessage());
+			ServerViewPlugin.getLogger().error("Problem occured while disconnecting from SSH terminal...", ex);
 		}
 	}
 

@@ -793,7 +793,7 @@ public class DetailsSection extends NodeSectionSupport {
 		final Runnable editAction = new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("Starting the edit...");
+				Activator.getLogger().debug("Starting the edit...");
 
 				final TableViewer viewer = tableView.getViewer();
 				if (!viewer.getSelection().isEmpty()) {

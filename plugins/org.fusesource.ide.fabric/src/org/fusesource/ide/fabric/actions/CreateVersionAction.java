@@ -80,7 +80,7 @@ public class CreateVersionAction extends Action {
 
 	protected void createVersion(String newVersion) {
 		Version oldVersion = oldVersionSupplier.get();
-		System.out.println("Creating new version " + newVersion + " from old " + Fabrics.getVersionName(oldVersion));
+		FabricPlugin.getLogger().debug("Creating new version " + newVersion + " from old " + Fabrics.getVersionName(oldVersion));
 
 		if (oldVersion != null) {
 			fabric.getFabricService().createVersion(oldVersion, newVersion);

@@ -671,7 +671,7 @@ public class NodeTable extends TableViewSupport implements IPropertySheetPage {
 
 		// create the connection
 		try {
-			System.out.println("Creating the connection if it doesn't exist for host: " + host + " port " + port + " user " + user);
+			FabricPlugin.getLogger().debug("Creating the connection if it doesn't exist for host: " + host + " port " + port + " user " + user);
 
 			// TODO set the title? open a new view if there's not one already etc?
 			connectorView.createConnectionIfNotExists(host,

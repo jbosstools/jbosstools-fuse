@@ -72,7 +72,7 @@ public class RouteTreeEditPartFactory implements EditPartFactory {
 			}
 		}
 		
-//		System.err.println("Created EditPart for Object: " + model + "[" + model.hashCode() + "] with context: " + (context != null ? context.getModel() : context) + "[" + (context != null && context.getModel() != null ? context.getModel().hashCode() : "null") + "]");
+//		Activator.getLogger().error("Created EditPart for Object: " + model + "[" + model.hashCode() + "] with context: " + (context != null ? context.getModel() : context) + "[" + (context != null && context.getModel() != null ? context.getModel().hashCode() : "null") + "]");
 		
 		return part;
 	}

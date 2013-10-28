@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.commons.jobs.LoadListJobSupport;
+import org.fusesource.ide.fabric.FabricPlugin;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.domain.ComputeMetadata;
 import org.jclouds.compute.domain.Hardware;
@@ -195,14 +196,14 @@ public class CloudDetailsCachedData {
 				setName("Loading nodes");
 				monitor.setTaskName("Loading nodes");
 				final Set<? extends ComputeMetadata> listNodes = client.listNodes();
-				System.out.println("==============  Loaded " + listNodes.size() + " nodes!");
+				FabricPlugin.getLogger().debug("==============  Loaded " + listNodes.size() + " nodes!");
 				Display.getDefault().asyncExec(new Runnable(){
 
 					@Override
 					public void run() {
 						nodePropertyList.clear();
 						nodePropertyList.addAll(listNodes);
-						System.out.println("==============  Added " + listNodes.size() + " nodes!");
+						FabricPlugin.getLogger().debug("==============  Added " + listNodes.size() + " nodes!");
 					}});
 			}
 		};
