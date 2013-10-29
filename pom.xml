@@ -399,11 +399,13 @@
       <artifactId>org.osgi.enterprise</artifactId>
       <version>${osgi-enterprise-version}</version>
     </dependency>
+<!--
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk15on</artifactId>
       <version>1.49</version>
     </dependency>
+-->
     <dependency>
       <groupId>org.fusesource.commonman</groupId>
       <artifactId>commons-management</artifactId>
@@ -624,11 +626,19 @@
       <artifactId>camel-tooling-util</artifactId>
       <version>${fabric-version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.fusesource.fabric</groupId>
       <artifactId>tooling-jclouds-all</artifactId>
       <version>${fabric-jclouds-version}</version>
+      <exclusions>
+        <exclusion>
+	  <groupId>org.bouncycastle</groupId>
+	  <artifactId>bcprov-jdk15on</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-util</artifactId>
