@@ -185,8 +185,10 @@
     <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-log4j:1.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-sshj:1.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-slf4j:1.5.0" level="project" />
+<!--
     <orderEntry type="library" name="Maven: org.jclouds.driver:jclouds-bouncycastle:1.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk16:1.46" level="project" />
+-->
     <orderEntry type="library" name="Maven: net.schmizz:sshj:0.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.jclouds.karaf:utils:1.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.fusesource.fabric:fabric-core-agent-ssh:99-master-SNAPSHOT" level="project" />
