@@ -112,7 +112,7 @@ public class SshConnector implements ITerminalConnectionListener {
 		final SshView connectorView = (SshView)vp;
 		
 		// add a connection listener
-		connectorView.removeConnectionListener(this);
+		connectorView.addConnectionListener(this);
 		
 		connectorView.setPartName(TERMINAL_VIEW_LABEL);
 	}
