@@ -88,7 +88,7 @@ public class OsgiFacade {
 				try { 
 					connection = connector.getMBeanServerConnection();
 				} catch (IOException ex) {
-					// No need to report a closed or net yet established connection.
+					// No need to report a closed or not yet established connection.
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
@@ -118,7 +118,7 @@ public class OsgiFacade {
 				try { 
 					connection = connector.getMBeanServerConnection();
 				} catch (IOException ex) {
-					// No need to report a closed or net yet established connection.
+					// No need to report a closed or not yet established connection.
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
@@ -148,7 +148,7 @@ public class OsgiFacade {
 				try { 
 					connection = connector.getMBeanServerConnection();
 				} catch (IOException ex) {
-					// No need to report a closed or net yet established connection.
+					// No need to report a closed or not yet established connection.
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
@@ -174,7 +174,7 @@ public class OsgiFacade {
 				try { 
 					connection = connector.getMBeanServerConnection();
 				} catch (IOException ex) {
-					// No need to report a closed or net yet established connection.
+					// No need to report a closed or not yet established connection.
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
@@ -200,7 +200,7 @@ public class OsgiFacade {
 				try { 
 					connection = connector.getMBeanServerConnection();
 				} catch (IOException ex) {
-					// No need to report a closed or net yet established connection.
+					// No need to report a closed or not yet established connection.
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
