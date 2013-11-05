@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.fabric.navigator.osgi;
 
+import java.io.IOException;
 import java.util.Set;
 
 import javax.management.MBeanServerConnection;
@@ -35,6 +36,7 @@ public class OsgiFacade {
 	private final JmxPluginJmxTemplate template;
 	private ObjectName bundleStateQueryObjectName;
 	private ObjectName frameworkQueryObjectName;
+	@SuppressWarnings("unused")
 	private ObjectName packageQueryObjectName;
 	private ObjectName serviceStateQueryObjectName;
 
@@ -82,7 +84,16 @@ public class OsgiFacade {
 		template.execute(new JmxTemplateSupport.JmxConnectorCallback<Void>() {
 			@Override
 			public Void doWithJmxConnector(JMXConnector connector) throws Exception {
-				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				MBeanServerConnection connection = null;
+				try { 
+					connection = connector.getMBeanServerConnection();
+				} catch (IOException ex) {
+					// No need to report a closed or not yet established connection.
+					if (!ex.getMessage().contentEquals("Connection closed"))
+						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
+					return null;
+				}
+				
 				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
 				for (ObjectName bundleStateObjectName : queryNames) {
 					connection.addNotificationListener(bundleStateObjectName, listener, filter, handback);
@@ -92,9 +103,6 @@ public class OsgiFacade {
 			}
 		});
 	}
-
-
-
 
 	/**
 	 * Removes a NotificationListener to the BundleStateMBean
@@ -106,7 +114,15 @@ public class OsgiFacade {
 		template.execute(new JmxTemplateSupport.JmxConnectorCallback<Void>() {
 			@Override
 			public Void doWithJmxConnector(JMXConnector connector) throws Exception {
-				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				MBeanServerConnection connection = null;
+				try { 
+					connection = connector.getMBeanServerConnection();
+				} catch (IOException ex) {
+					// No need to report a closed or not yet established connection.
+					if (!ex.getMessage().contentEquals("Connection closed"))
+						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
+					return null;
+				}
 				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
 				for (ObjectName bundleStateObjectName : queryNames) {
 					try {
@@ -128,7 +144,15 @@ public class OsgiFacade {
 		return template.execute(new JmxTemplateSupport.JmxConnectorCallback<T>() {
 			@Override
 			public T doWithJmxConnector(JMXConnector connector) throws Exception {
-				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				MBeanServerConnection connection = null;
+				try { 
+					connection = connector.getMBeanServerConnection();
+				} catch (IOException ex) {
+					// No need to report a closed or not yet established connection.
+					if (!ex.getMessage().contentEquals("Connection closed"))
+						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
+					return null;
+				}
 				final Set<ObjectName> queryNames = connection.queryNames(bundleStateQueryObjectName, null);
 				for (ObjectName bundleStateObjectName : queryNames) {
 					BundleStateMBean BundleStateMBean = MBeanServerInvocationHandler.newProxyInstance(connection, bundleStateObjectName, BundleStateMBean.class, true);
@@ -146,7 +170,15 @@ public class OsgiFacade {
 		return template.execute(new JmxTemplateSupport.JmxConnectorCallback<T>() {
 			@Override
 			public T doWithJmxConnector(JMXConnector connector) throws Exception {
-				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				MBeanServerConnection connection = null;
+				try { 
+					connection = connector.getMBeanServerConnection();
+				} catch (IOException ex) {
+					// No need to report a closed or not yet established connection.
+					if (!ex.getMessage().contentEquals("Connection closed"))
+						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
+					return null;
+				}
 				final Set<ObjectName> queryNames = connection.queryNames(serviceStateQueryObjectName, null);
 				for (ObjectName ServiceStateObjectName : queryNames) {
 					ServiceStateMBean serviceStateMBean = MBeanServerInvocationHandler.newProxyInstance(connection, ServiceStateObjectName, ServiceStateMBean.class, true);
@@ -164,7 +196,15 @@ public class OsgiFacade {
 		return template.executeAndThrow(new JmxTemplateSupport.JmxConnectorCallback<T>() {
 			@Override
 			public T doWithJmxConnector(JMXConnector connector) throws Exception {
-				MBeanServerConnection connection = connector.getMBeanServerConnection();
+				MBeanServerConnection connection = null;
+				try { 
+					connection = connector.getMBeanServerConnection();
+				} catch (IOException ex) {
+					// No need to report a closed or not yet established connection.
+					if (!ex.getMessage().contentEquals("Connection closed"))
+						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
+					return null;
+				}
 				final Set<ObjectName> queryNames = connection.queryNames(frameworkQueryObjectName, null);
 				for (ObjectName FrameworkObjectName : queryNames) {
 					FrameworkMBean mbean = MBeanServerInvocationHandler.newProxyInstance(connection, FrameworkObjectName, FrameworkMBean.class, true);
