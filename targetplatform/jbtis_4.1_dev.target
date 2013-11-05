@@ -44,7 +44,7 @@
 
     <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
       <unit id="javax.xml.soap" version="1.3.0.v201105210645"/>
-      <repository location="http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.30.5.Final/REPO/"/>
+      <repository location="http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.31.1.Alpha1/REPO/"/>
     </location>
 
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -92,9 +92,9 @@
       <unit id="org.eclipse.bpmn2.feature.feature.group" version="0.7.0.201308220617"/>
 
       <!-- BPMN2 - Modeler -->
-      <unit id="org.eclipse.bpmn2.modeler.feature.feature.group" version="1.0.0.201310151945"/>
-      <unit id="org.eclipse.bpmn2.modeler.jboss.runtime.feature.feature.group" version="1.0.0.201310151945"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/requirements/bpmn2-modeler/1.0M1.201310151945_0.7.0.201308220617_kepler/"/>
+      <unit id="org.eclipse.bpmn2.modeler.feature.feature.group" version="1.0.0.201311042148"/>
+      <unit id="org.eclipse.bpmn2.modeler.jboss.runtime.feature.feature.group" version="1.0.0.201311042148"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/requirements/bpmn2-modeler/1.0.0.201311042148_0.7.0.201308220617_kepler/"/>
     </location>
 
     <!-- BPEL -->
@@ -187,7 +187,8 @@
       <unit id="org.hibernate.eclipse.feature.feature.group" version="0.0.0"/>
       <unit id="org.mozilla.xulrunner.feature.feature.group" version="0.0.0"/>
 
-      <repository location="http://download.jboss.org/jbosstools/updates/development/kepler/"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.Beta1b.core/"/>
+      <!-- <repository location="http://download.jboss.org/jbosstools/updates/development/kepler/"/> -->
     </location>
 
   
@@ -203,7 +204,7 @@
     <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
       <!-- don't forget to increment these files when moving up a version:
         build.xml, *.target*, publish.sh, target2p2mirror.xml -->
-      <repository location="http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.30.5.Final/REPO/"/>
+      <repository location="http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.31.1.Alpha1/REPO/"/>
 
       <!-- for these IUs we need multiple versions -->
       <unit id="javax.wsdl" version="1.6.2.v201012040545"/>
@@ -294,10 +295,10 @@
 
       <unit id="org.sonatype.m2e.mavenarchiver.feature.feature.group" version="0.15.0.201212080009"/>
       <unit id="org.sonatype.m2e.buildhelper.feature.feature.group" version="0.15.0.201212120353"/>
-      <unit id="org.eclipse.m2e.wtp.feature.feature.group" version="1.0.0.20130613-0136"/>
-      <unit id="org.eclipse.m2e.wtp.jaxrs.feature.feature.group" version="1.0.0.20130613-0136"/>
-      <unit id="org.eclipse.m2e.wtp.jpa.feature.feature.group" version="1.0.0.e43-20130613-0137"/>
-      <unit id="org.eclipse.m2e.wtp.jsf.feature.feature.group" version="1.0.0.20130613-0136"/>
+      <unit id="org.eclipse.m2e.wtp.feature.feature.group" version="1.0.1.20130911-1545"/>
+      <unit id="org.eclipse.m2e.wtp.jaxrs.feature.feature.group" version="1.0.1.20130911-1545"/>
+      <unit id="org.eclipse.m2e.wtp.jpa.feature.feature.group" version="1.0.1.e43-20130911-1546"/>
+      <unit id="org.eclipse.m2e.wtp.jsf.feature.feature.group" version="1.0.1.20130911-1545"/>
       <unit id="org.jboss.tools.maven.apt.feature.feature.group" version="1.0.1.201209200721"/>
       <unit id="org.jboss.tools.m2e.jdt.feature.feature.group" version="1.0.1.201209200903"/>
       <unit id="org.jboss.tools.m2e.wro4j.feature.feature.group" version="1.0.1.201209200854"/>
@@ -315,77 +316,77 @@
       <unit id="org.eclipse.emf.workspace.feature.group" version="1.7.0.201306111400"/>
       <unit id="org.eclipse.emf.validation.feature.group" version="1.7.0.201306111341"/>
       <unit id="org.eclipse.emf.transaction.feature.group" version="1.7.0.201306111400"/>
-      <unit id="org.eclipse.emf.feature.group" version="2.9.0.v20130610-0406"/>
-      <unit id="org.eclipse.emf.ecore.feature.group" version="2.9.0.v20130528-0742"/>
-      <unit id="org.eclipse.emf.codegen.feature.group" version="2.9.0.v20130610-0406"/>
-      <unit id="org.eclipse.emf.common.feature.group" version="2.9.0.v20130528-0742"/>
-      <unit id="org.eclipse.emf.databinding.feature.group" version="1.3.0.v20130610-0406"/>
-      <unit id="org.eclipse.emf.codegen.ecore.feature.group" version="2.9.0.v20130610-0406"/>
-      <unit id="org.eclipse.emf.ecore.edit.feature.group" version="2.8.0.v20130610-0406"/>
-      <unit id="org.eclipse.emf.ecore.editor.feature.group" version="2.9.0.v20130610-0406"/>
-      <unit id="org.eclipse.emf.ecore.feature.group" version="2.9.0.v20130528-0742"/>
-      <unit id="org.eclipse.emf.edit.feature.group" version="2.9.0.v20130610-0406"/>
-      <unit id="org.eclipse.xsd.edit.feature.group" version="2.7.0.v20130610-0406"/>
-      <unit id="org.eclipse.xsd.ecore.converter.feature.group" version="2.8.0.v20130610-0406"/>
-      <unit id="org.eclipse.xsd.editor.feature.group" version="2.7.0.v20130610-0406"/>
-      <unit id="org.eclipse.xsd.mapping.editor.feature.group" version="2.8.0.v20130610-0406"/>
-      <unit id="org.eclipse.xsd.mapping.feature.group" version="2.7.0.v20130610-0406"/>
-      <unit id="org.eclipse.xsd.feature.group" version="2.9.0.v20130610-0406"/>
+      <unit id="org.eclipse.emf.feature.group" version="2.9.1.v20130902-0605"/>
+      <unit id="org.eclipse.emf.ecore.feature.group" version="2.9.1.v20130827-0309"/>
+      <unit id="org.eclipse.emf.codegen.feature.group" version="2.9.0.v20130902-0605"/>
+      <unit id="org.eclipse.emf.common.feature.group" version="2.9.1.v20130827-0309"/>
+      <unit id="org.eclipse.emf.databinding.feature.group" version="1.3.0.v20130902-0605"/>
+      <unit id="org.eclipse.emf.codegen.ecore.feature.group" version="2.9.1.v20130902-0605"/>
+      <unit id="org.eclipse.emf.ecore.edit.feature.group" version="2.8.0.v20130902-0605"/>
+      <unit id="org.eclipse.emf.ecore.editor.feature.group" version="2.9.0.v20130902-0605"/>
+      <unit id="org.eclipse.emf.ecore.feature.group" version="2.9.1.v20130827-0309"/>
+      <unit id="org.eclipse.emf.edit.feature.group" version="2.9.0.v20130902-0605"/>
+      <unit id="org.eclipse.xsd.edit.feature.group" version="2.7.0.v20130902-0605"/>
+      <unit id="org.eclipse.xsd.ecore.converter.feature.group" version="2.8.0.v20130902-0605"/>
+      <unit id="org.eclipse.xsd.editor.feature.group" version="2.7.0.v20130902-0605"/>
+      <unit id="org.eclipse.xsd.mapping.editor.feature.group" version="2.8.0.v20130902-0605"/>
+      <unit id="org.eclipse.xsd.mapping.feature.group" version="2.7.0.v20130902-0605"/>
+      <unit id="org.eclipse.xsd.feature.group" version="2.9.1.v20130902-0605"/>
 
       <!-- GEF, Draw2D -->
-      <unit id="org.eclipse.draw2d.feature.group" version="3.9.0.201305060205"/>
-      <unit id="org.eclipse.gef.feature.group" version="3.9.0.201305060205"/>
+      <unit id="org.eclipse.draw2d.feature.group" version="3.9.1.201308190730"/>
+      <unit id="org.eclipse.gef.feature.group" version="3.9.1.201308190730"/>
 
       <!-- Platform: CVS, JDT, RCP, PDE, Equinox, Help -->
       <unit id="com.ibm.icu.base" version="50.1.1.v201304230130"/>
-      <unit id="org.eclipse.platform.feature.group" version="4.3.0.v20130605-2000"/>
-      <unit id="org.eclipse.cvs.feature.group" version="1.4.0.v20130605-2000"/>
-      <unit id="org.eclipse.jdt.feature.group" version="3.9.0.v20130605-2000"/>
-      <unit id="org.eclipse.equinox.server.core.feature.group" version="1.2.0.v20130529-1710"/>
-      <unit id="org.eclipse.equinox.executable.feature.group" version="3.6.0.v20130521-0416"/>
+      <unit id="org.eclipse.platform.feature.group" version="4.3.1.v20130911-1000"/>
+      <unit id="org.eclipse.cvs.feature.group" version="1.4.0.v20130911-1000"/>
+      <unit id="org.eclipse.jdt.feature.group" version="3.9.1.v20130911-1000"/>
+      <unit id="org.eclipse.equinox.server.core.feature.group" version="1.2.0.v20130814-1242"/>
+      <unit id="org.eclipse.equinox.executable.feature.group" version="3.6.0.v20130807-1835"/>
       <unit id="org.eclipse.equinox.p2.discovery.feature.feature.group" version="1.0.100.v20130502-0334"/>
-      <unit id="org.eclipse.equinox.p2.user.ui.feature.group" version="2.2.0.v20130604-2046"/>
+      <unit id="org.eclipse.equinox.p2.user.ui.feature.group" version="2.2.0.v20130828-0031"/>
       <unit id="org.eclipse.equinox.server.jetty.feature.group" version="1.1.0.v20130429-1600"/>
-      <unit id="org.eclipse.equinox.server.p2.feature.group" version="1.2.0.v20130604-2047"/>
-      <unit id="org.eclipse.rcp.feature.group" version="4.3.0.v20130605-2000"/>
-      <unit id="org.eclipse.pde.feature.group" version="3.9.0.v20130605-2000"/>
-      <unit id="org.eclipse.help.feature.group" version="2.0.0.v20130605-2000"/>
+      <unit id="org.eclipse.equinox.server.p2.feature.group" version="1.2.1.v20130827-1615"/>
+      <unit id="org.eclipse.rcp.feature.group" version="4.3.1.v20130911-1000"/>
+      <unit id="org.eclipse.pde.feature.group" version="3.9.1.v20130911-1000"/>
+      <unit id="org.eclipse.help.feature.group" version="2.0.1.v20130911-1000"/>
 
       <!-- DTP -->
-      <unit id="org.eclipse.datatools.modelbase.feature.feature.group" version="1.11.0.v201302211047-7707GCcNBHLDaKTEcRi"/>
-      <unit id="org.eclipse.datatools.connectivity.feature.feature.group" version="1.11.0.v201302211047-7C7k98Et1byqRCfljSoSHcUXJ3K"/>
-      <unit id="org.eclipse.datatools.connectivity.oda.feature.feature.group" version="1.11.0.v201302211047-7H7D7WCcNBHRCfIfDfUc"/>
-      <unit id="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group" version="1.11.0.v201302211047-4137w312412222241"/>
-      <unit id="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group" version="1.11.0.v201302211047-7B7C7UCcNBGWEXDhDbYg"/>
-      <unit id="org.eclipse.datatools.enablement.feature.feature.group" version="1.11.0.v201302211047-7J9e0BWxjQqR0kgQ1jnlpGyTAuTm"/>
-      <unit id="org.eclipse.datatools.enablement.apache.derby.feature.feature.group" version="1.11.0.v201302211047-777A8gBmKEQ3NjRZLqcr8KIQ"/>
-      <unit id="org.eclipse.datatools.enablement.hsqldb.feature.feature.group" version="1.11.0.v201302211047-67F0AqGCM7KfNUIqKM8KIQ"/>
-      <unit id="org.eclipse.datatools.enablement.ibm.feature.feature.group" version="1.11.0.v201302211047-7F47YFC7sRdqUcnsbg_0"/>
-      <unit id="org.eclipse.datatools.enablement.jdbc.feature.feature.group" version="1.11.0.v201302211047-4-39oB5896KB97JHP"/>
-      <unit id="org.eclipse.datatools.enablement.jdt.feature.feature.group" version="1.11.0.v201302211047-2-07w312218332612"/>
-      <unit id="org.eclipse.datatools.enablement.msft.feature.feature.group" version="1.11.0.v201302211047-546AkF7AM9ICL8W9Q"/>
-      <unit id="org.eclipse.datatools.enablement.mysql.feature.feature.group" version="1.11.0.v201302211047-5478AkF7AK8X9JCREG"/>
-      <unit id="org.eclipse.datatools.enablement.oda.feature.feature.group" version="1.11.0.v201302211047-7A7T7FDZRDKKEeFlGbIQ"/>
-      <unit id="org.eclipse.datatools.enablement.oda.designer.feature.feature.group" version="1.11.0.v201302211047-337A8s73593D7E43B5"/>
-      <unit id="org.eclipse.datatools.enablement.oracle.feature.feature.group" version="1.11.0.v201302211047-548fAkF7AL7RBJANAI"/>
-      <unit id="org.eclipse.datatools.enablement.postgresql.feature.feature.group" version="1.11.0.v201302211047-553AkF7AK8PCRBQBP"/>
-      <unit id="org.eclipse.datatools.enablement.sap.feature.feature.group" version="1.11.0.v201302211047-540AkF7AJ7YEJBU7S"/>
-      <unit id="org.eclipse.datatools.enablement.sybase.feature.feature.group" version="1.11.0.v201302211047-7E478F9NiNc2S7fxRCTD"/>
-      <unit id="org.eclipse.datatools.enablement.ingres.feature.feature.group" version="1.11.0.v201302211047-540AkF78Z7UCRAQDB"/>
-      <unit id="org.eclipse.datatools.enablement.sqlite.feature.feature.group" version="1.11.0.v201302211047-542AkF7AJ7SAKAPBF"/>
-      <unit id="org.eclipse.datatools.sqldevtools.feature.feature.group" version="1.11.0.v201302211047-7N8I7IFDri5nhCyg6O46XaTte7m0"/>
-      <unit id="org.eclipse.datatools.sqldevtools.results.feature.feature.group" version="1.11.0.v201302211047-427E9oB58D6E9C6LEA"/>
-      <unit id="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group" version="1.11.0.v201302211047-7A-7DF7RZHQUMdThK5_t"/>
-      <unit id="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group" version="1.11.0.v201302211047-27A-78B08EG8S_IRVNeUiL6au"/>
-      <unit id="org.eclipse.datatools.sqldevtools.data.feature.feature.group" version="1.11.0.v201302211047-647ABgJ9EKDJDNAdHO"/>
-      <unit id="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group" version="1.11.0.v201302211047-623BgJ9EE9ZJRDZLA"/>
-      <unit id="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group" version="1.11.0.v201302211047-79-7DEVVFNQJaPfHz0Uc"/>
-      <unit id="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group" version="1.11.0.v201302211047-4218375LG5BJ93413"/>
-      <unit id="org.eclipse.datatools.intro.feature.group" version="1.11.0.v201302211047-26-7w312116392911"/>
-      <unit id="org.eclipse.datatools.doc.user.feature.group" version="1.11.0.v201302211047-47C08w95FFAK89FHEC7"/>
-      <unit id="org.eclipse.datatools.common.doc.user.feature.group" version="1.11.0.v201302211047-26-311A16321A3557"/>
-      <unit id="org.eclipse.datatools.connectivity.doc.user.feature.group" version="1.11.0.v201302211047-37D-7733L3D753L7BBF"/>
-      <unit id="org.eclipse.datatools.sqltools.doc.user.feature.group" version="1.11.0.v201302211047-37D-7733L3D753L7BBF"/>
+      <unit id="org.eclipse.datatools.modelbase.feature.feature.group" version="1.11.1.v201306041610-7707GCcNBHLDaKTEcRi"/>
+      <unit id="org.eclipse.datatools.connectivity.feature.feature.group" version="1.11.1.v201306041610-7C7k9DEt1byrWKfqjWoRWcUXFvC"/>
+      <unit id="org.eclipse.datatools.connectivity.oda.feature.feature.group" version="1.11.1.v201306041610-7H7D7_CcNBHSClIkDbLd"/>
+      <unit id="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group" version="1.11.1.v201306041610-4137w312412222241"/>
+      <unit id="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group" version="1.11.1.v201306041610-7B7C7WCcNBGXDfDcDcXY"/>
+      <unit id="org.eclipse.datatools.enablement.feature.feature.group" version="1.11.1.v201306041610-7J9e7FBWxkRGy8hVdt6a4VTgz-Bv"/>
+      <unit id="org.eclipse.datatools.enablement.apache.derby.feature.feature.group" version="1.11.1.v201306041610-777A8hBmKEQ3NjRZLqcr8KIQ"/>
+      <unit id="org.eclipse.datatools.enablement.hsqldb.feature.feature.group" version="1.11.1.v201306041610-67F1AqGCM7KfNUIqKM8KIQ"/>
+      <unit id="org.eclipse.datatools.enablement.ibm.feature.feature.group" version="1.11.1.v201306041610-7F47YFC7sRdqUcnsbg_0"/>
+      <unit id="org.eclipse.datatools.enablement.jdbc.feature.feature.group" version="1.11.1.v201306041610-4-39oB5896KB97JHP"/>
+      <unit id="org.eclipse.datatools.enablement.jdt.feature.feature.group" version="1.11.1.v201306041610-2-07w312218332612"/>
+      <unit id="org.eclipse.datatools.enablement.msft.feature.feature.group" version="1.11.1.v201306041610-5478AkF7AO7UBQAK8M"/>
+      <unit id="org.eclipse.datatools.enablement.mysql.feature.feature.group" version="1.11.1.v201306041610-5478AkF7AK8X9JCREG"/>
+      <unit id="org.eclipse.datatools.enablement.oda.feature.feature.group" version="1.11.1.v201306041610-7A7T7GDZRDKKEgFnGiJR"/>
+      <unit id="org.eclipse.datatools.enablement.oda.designer.feature.feature.group" version="1.11.1.v201306041610-337C8s73593K3F53B7"/>
+      <unit id="org.eclipse.datatools.enablement.oracle.feature.feature.group" version="1.11.1.v201306041610-548fAkF7AL7RBJANAI"/>
+      <unit id="org.eclipse.datatools.enablement.postgresql.feature.feature.group" version="1.11.1.v201306041610-553AkF7AK8PCRBQBP"/>
+      <unit id="org.eclipse.datatools.enablement.sap.feature.feature.group" version="1.11.1.v201306041610-540AkF7AJ7YEJBU7S"/>
+      <unit id="org.eclipse.datatools.enablement.sybase.feature.feature.group" version="1.11.1.v201306041610-7E478F9NiNc2S7fxRCTD"/>
+      <unit id="org.eclipse.datatools.enablement.ingres.feature.feature.group" version="1.11.1.v201306041610-540AkF78Z7UCRAQDB"/>
+      <unit id="org.eclipse.datatools.enablement.sqlite.feature.feature.group" version="1.11.1.v201306041610-542AkF7AJ7SAKAPBF"/>
+      <unit id="org.eclipse.datatools.sqldevtools.feature.feature.group" version="1.11.1.v201306041610-7N8I7PFDri5piCyg6O57bgXtXfxO"/>
+      <unit id="org.eclipse.datatools.sqldevtools.results.feature.feature.group" version="1.11.1.v201306041610-427F9oB58D6G8I6KBF"/>
+      <unit id="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group" version="1.11.1.v201306041610-7A-7DF7RZHQUMdThK5_t"/>
+      <unit id="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group" version="1.11.1.v201306041610-27A078B08EG8S_IRVNeUiL6au"/>
+      <unit id="org.eclipse.datatools.sqldevtools.data.feature.feature.group" version="1.11.1.v201306041610-647ABgJ9EKDJDNAdHO"/>
+      <unit id="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group" version="1.11.1.v201306041610-623BgJ9EE9ZJRDZLA"/>
+      <unit id="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group" version="1.11.1.v201306041610-79-7EEVVFNRIgPjIuUf"/>
+      <unit id="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group" version="1.11.1.v201306041610-4218375LG5BJ93413"/>
+      <unit id="org.eclipse.datatools.intro.feature.group" version="1.11.1.v201306041610-26-7w312116392911"/>
+      <unit id="org.eclipse.datatools.doc.user.feature.group" version="1.11.1.v201306041610-47C08w95FFAK89FHEC7"/>
+      <unit id="org.eclipse.datatools.common.doc.user.feature.group" version="1.11.1.v201306041610-26-311A16321A3557"/>
+      <unit id="org.eclipse.datatools.connectivity.doc.user.feature.group" version="1.11.1.v201306041610-37D-7733L3D753L7BBF"/>
+      <unit id="org.eclipse.datatools.sqltools.doc.user.feature.group" version="1.11.1.v201306041610-37D-7733L3D753L7BBF"/>
 
       <!-- JBIDE-9549, JBDS-1904 add egit/jgit and mylyn support to TP, including dependent plugins -->
       <unit id="org.eclipse.jsch.ui" version="1.1.400.v20111007-1310"/>
@@ -397,71 +398,71 @@
 
       <unit id="org.eclipse.ui" version="3.105.0.v20130522-1122"/>
       <unit id="org.eclipse.core.runtime" version="3.9.0.v20130326-1255"/>
-      <unit id="org.eclipse.core.resources" version="3.8.100.v20130521-2026"/>
-      <unit id="org.eclipse.ui.ide" version="3.9.0.v20130517-0139"/>
-      <unit id="org.eclipse.ui.workbench.texteditor" version="3.8.100.v20130514-1533"/>
-      <unit id="org.eclipse.jface.text" version="3.8.100.v20130515-1957"/>
+      <unit id="org.eclipse.core.resources" version="3.8.101.v20130717-0806"/>
+      <unit id="org.eclipse.ui.ide" version="3.9.1.v20130704-1828"/>
+      <unit id="org.eclipse.ui.workbench.texteditor" version="3.8.101.v20130729-1318"/>
+      <unit id="org.eclipse.jface.text" version="3.8.101.v20130802-1147"/>
       <!-- have to manually update this one if more than one version exists in Kepler mirror -->
-      <unit id="org.eclipse.osgi" version="3.9.0.v20130529-1710"/>
+      <unit id="org.eclipse.osgi" version="3.9.1.v20130814-1242"/>
       <unit id="org.eclipse.core.filesystem" version="1.4.0.v20130514-1240"/>
-      <unit id="org.eclipse.ui.forms" version="3.6.0.v20130517-0139"/>
+      <unit id="org.eclipse.ui.forms" version="3.6.1.v20130822-1117"/>
       <unit id="org.eclipse.ui.editors" version="3.8.100.v20130513-1637"/>
       <unit id="org.eclipse.team.core" version="3.7.0.v20130514-1224"/>
-      <unit id="org.eclipse.team.ui" version="3.7.0.v20130514-1224"/>
-      <unit id="org.eclipse.jface" version="3.9.0.v20130521-1714"/>
-      <unit id="org.eclipse.compare" version="3.5.400.v20130514-1224"/>
+      <unit id="org.eclipse.team.ui" version="3.7.1.v20130729-1104"/>
+      <unit id="org.eclipse.jface" version="3.9.1.v20130725-1141"/>
+      <unit id="org.eclipse.compare" version="3.5.401.v20130709-1308"/>
 
       <!-- Zest -->
-      <unit id="org.eclipse.zest.feature.group" version="1.5.0.201305060205"/>
-      <unit id="org.eclipse.draw2d.feature.group" version="3.9.0.201305060205"/>
-      <unit id="org.eclipse.gef.feature.group" version="3.9.0.201305060205"/>
+      <unit id="org.eclipse.zest.feature.group" version="1.5.1.201308190730"/>
+      <unit id="org.eclipse.draw2d.feature.group" version="3.9.1.201308190730"/>
+      <unit id="org.eclipse.gef.feature.group" version="3.9.1.201308190730"/>
     
       
-      <unit id="org.eclipse.mylyn.bugzilla_feature.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.compatibility.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.core" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.identity.feature.group" version="1.1.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.net" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.notifications.feature.group" version="1.1.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.repositories.feature.group" version="1.1.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.repositories.http.feature.group" version="1.1.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.screenshots" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.soap" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.ui" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.commons.xmlrpc" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.context_feature.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.cvs.feature.group" version="1.1.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.discovery.core" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.discovery.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.discovery.ui" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn_feature.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.git.feature.group" version="1.1.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.ide_feature.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.java_feature.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.monitor.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.pde_feature.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.tasks.bugs" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.tasks.core" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.tasks.ide.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.tasks.ui" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.team_feature.feature.group" version="3.9.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.versions.feature.group" version="1.1.0.v20130612-0100"/>
-      <unit id="org.eclipse.mylyn.wikitext_feature.feature.group" version="1.8.0.v20130612-0100"/>
+      <unit id="org.eclipse.mylyn.bugzilla_feature.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.compatibility.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.core" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.identity.feature.group" version="1.1.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.net" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.notifications.feature.group" version="1.1.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.repositories.feature.group" version="1.1.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.repositories.http.feature.group" version="1.1.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.screenshots" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.soap" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.ui" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.commons.xmlrpc" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.context_feature.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.cvs.feature.group" version="1.1.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.discovery.core" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.discovery.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.discovery.ui" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn_feature.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.git.feature.group" version="1.1.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.ide_feature.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.java_feature.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.monitor.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.pde_feature.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.tasks.bugs" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.tasks.core" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.tasks.ide.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.tasks.ui" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.team_feature.feature.group" version="3.9.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.versions.feature.group" version="1.1.1.v20130917-0100"/>
+      <unit id="org.eclipse.mylyn.wikitext_feature.feature.group" version="1.8.1.v20130917-0100"/>
     
       
-      <unit id="org.eclipse.rse.feature.group" version="3.5.0.201305311734"/>
+      <unit id="org.eclipse.rse.feature.group" version="3.5.0.201309112143"/>
       <unit id="org.eclipse.rse.ssh.feature.group" version="3.0.500.201305201712"/>
-      <unit id="org.eclipse.rse.terminals.feature.group" version="1.2.100.201305201712"/>
+      <unit id="org.eclipse.rse.terminals.feature.group" version="1.2.100.201308011444"/>
       <unit id="org.eclipse.rse.telnet.feature.group" version="2.3.100.201305201712"/>
       <unit id="org.eclipse.rse.ftp.feature.group" version="3.2.0.201305152119"/>
       <unit id="org.eclipse.rse.local.feature.group" version="2.1.500.201305211438"/>
       <unit id="org.eclipse.rse.useractions.feature.group" version="1.1.500.201305201712"/>
-      <unit id="org.eclipse.tm.terminal.feature.group" version="3.2.100.201305201712"/>
+      <unit id="org.eclipse.tm.terminal.feature.group" version="3.2.100.201308011444"/>
       <unit id="org.eclipse.tm.terminal.view.feature.group" version="2.4.100.201305201712"/>
       <unit id="org.eclipse.tm.terminal.telnet.feature.group" version="2.1.300.201305201712"/>
-      <unit id="org.eclipse.tm.terminal.serial.feature.group" version="2.1.300.201305201712"/>
-      <unit id="org.eclipse.tm.terminal.feature.group" version="3.2.100.201305201712"/>
+      <unit id="org.eclipse.tm.terminal.serial.feature.group" version="2.1.300.201308290741"/>
+      <unit id="org.eclipse.tm.terminal.feature.group" version="3.2.100.201308011444"/>
       <unit id="org.eclipse.tm.terminal.ssh.feature.group" version="2.1.300.201305201712"/>
     
       
@@ -478,18 +479,18 @@
       <unit id="org.eclipse.jetty.rewrite" version="8.1.10.v20130312"/>
     
       
-      <unit id="org.eclipse.jgit.feature.group" version="3.0.0.201306101825-r"/>
-      <unit id="org.eclipse.egit.feature.group" version="3.0.0.201306101825-r"/>
-      <unit id="org.eclipse.egit.mylyn.feature.group" version="3.0.0.201306101825-r"/>
+      <unit id="org.eclipse.jgit.feature.group" version="3.0.3.201309161630-r"/>
+      <unit id="org.eclipse.egit.feature.group" version="3.0.3.201309161630-r"/>
+      <unit id="org.eclipse.egit.mylyn.feature.group" version="3.0.3.201309161630-r"/>
       <unit id="org.eclipse.mylyn.github.feature.feature.group" version="3.0.0.201306101825-r"/>
     
       
       <!-- JBIDE-13682 only include commons.core and jira since these are the only ones on which JBoss Mylyn stuff depends -->
-      <unit id="com.atlassian.connector.eclipse.jira.feature.group" version="3.2.1.v20130402"/>
-      <unit id="com.atlassian.connector.eclipse.monitor.feature.group" version="3.2.1.v20130402"/>
-      <unit id="com.atlassian.connector.eclipse.commons.feature.group" version="3.2.1.v20130402"/>
-      <unit id="com.atlassian.connector.commons.feature.group" version="3.2.1.v20130402"/>
-      <unit id="com.atlassian.jira.rest.client" version="3.2.1.v20130402"/>
+      <unit id="com.atlassian.connector.eclipse.jira.feature.group" version="3.2.2.v20130909"/>
+      <unit id="com.atlassian.connector.eclipse.monitor.feature.group" version="3.2.2.v20130909"/>
+      <unit id="com.atlassian.connector.eclipse.commons.feature.group" version="3.2.2.v20130909"/>
+      <unit id="com.atlassian.connector.commons.feature.group" version="3.2.2.v20130909"/>
+      <unit id="com.atlassian.jira.rest.client" version="3.2.2.v20130909"/>
       <unit id="com.google.guava" version="13.0.0"/>
       <unit id="org.codehaus.jettison" version="1.0.0"/>
       <unit id="org.joda.time" version="1.6.0.v20081202-0100"/>
@@ -530,24 +531,24 @@
 
       <unit id="org.eclipse.jpt.common.feature.feature.group" version="1.3.0.v201210121950-67A-AkF7BI7UCR9SIV"/>
       <unit id="org.eclipse.jpt.common.eclipselink.feature.feature.group" version="1.3.0.v201210121950-35-8s73583G695AB6"/>
-      <unit id="org.eclipse.jpt.jpa.eclipselink.feature.feature.group" version="3.3.0.v201210121950-7K7P0EVVFNaGlMxJ_tiDG8E"/>
-      <unit id="org.eclipse.jpt.jpa.feature.feature.group" version="3.3.0.v201305142100-7V7_0FC7sRe5TOgMc1Sqdd3c"/>
-      <unit id="org.eclipse.jpt.jaxb.feature.feature.group" version="1.3.0.v201210121950-57A-AkF7BI7S9TCOIS"/>
+      <unit id="org.eclipse.jpt.jpa.eclipselink.feature.feature.group" version="3.3.1.v201308261920-7K7P4EVVFNaGz-Q1IkpW99EG"/>
+      <unit id="org.eclipse.jpt.jpa.feature.feature.group" version="3.3.1.v201308261920-7V7_5FC7sRe5TdgZcI05646d"/>
+      <unit id="org.eclipse.jpt.jaxb.feature.feature.group" version="1.3.1.v201308091651-57A0AkF7BI7V8XBSJP"/>
 
       <unit id="org.eclipse.jsf.feature.feature.group" version="3.6.0.v201305011549-7E7e-F9JgLWrMBLWXC1s"/>
       <unit id="org.eclipse.jst.common.fproj.enablement.jdt.feature.group" version="3.4.0.v201108231500-377DG8s73543J5H6D66"/>
       <unit id="org.eclipse.jst.enterprise_core.feature.feature.group" version="3.5.0.v201303132100-52FXNAkF7BG7QBHAJ77"/>
-      <unit id="org.eclipse.jst.enterprise_ui.feature.feature.group" version="3.5.0.v201303132100-7b7KIaeFSK2WQtQTAGyA7QXyUmRm"/>
+      <unit id="org.eclipse.jst.enterprise_ui.feature.feature.group" version="3.5.1.v201308281800-7b7KIahFSK2WQtQeBOuHz-QXyUmRm"/>
       <unit id="org.eclipse.jst.enterprise_userdoc.feature.feature.group" version="3.3.100.v201105122000-62FUGBgJ9EA9aEeHRHc"/>
       <unit id="org.eclipse.jst.jsf.apache.trinidad.tagsupport.feature.feature.group" version="2.4.0.v201305011549-22-7w31241612265A"/>
-      <unit id="org.eclipse.jst.server_adapters.ext.feature.feature.group" version="3.3.103.v20130403_1405-57CFGEAkF7BI7NDMLBJLO"/>
+      <unit id="org.eclipse.jst.server_adapters.ext.feature.feature.group" version="3.3.104.v20130826_1426-57CFGFAkF7BI7RFJLBHKT"/>
       <unit id="org.eclipse.jst.server_adapters.feature.feature.group" version="3.2.201.v20130123_1813-20A87w31241234a2924"/>
       <unit id="org.eclipse.jst.server_core.feature.feature.group" version="3.4.1.v20130412_1040-31FGD8s73583C49A53B5"/>
       <unit id="org.eclipse.jst.server_ui.feature.feature.group" version="3.4.1.v20130412_1040-7A77FHs9xFcDcCFLZBFIOHFGAFC6"/>
       <unit id="org.eclipse.jst.server_userdoc.feature.feature.group" version="3.3.100.v20110303-2-Eo7w3121162A3329"/>
-      <unit id="org.eclipse.jst.web_core.feature.feature.group" version="3.5.0.v201303132100-7Q7GGb8FE9LeBTMTz0kc2Ne2kwz-0sN863877"/>
+      <unit id="org.eclipse.jst.web_core.feature.feature.group" version="3.5.1.v201307171500-7Q7GGbAFE9LeBTMX2gc1Mh2kwz-0sN863877"/>
       <unit id="org.eclipse.jst.webpageeditor.feature.feature.group" version="2.5.0.v201305011549-47C-9oB58E5K588KHW"/>
-      <unit id="org.eclipse.jst.web_ui.feature.feature.group" version="3.5.0.v201303132100-7F7GFUGC27SvlcDqtgjb-_fmALvT7epNrsnxz0Wx"/>
+      <unit id="org.eclipse.jst.web_ui.feature.feature.group" version="3.5.1.v201307171500-7F7GFVsC27SvmcOpwjkc0_jpG-mtRz-U3suvul0j"/>
       <unit id="org.eclipse.jst.web_userdoc.feature.feature.group" version="3.5.0.v201303142300-23-7w312415412669"/>
       <unit id="org.eclipse.jst.ws.axis2tools.feature.feature.group" version="1.1.200.v201103022333-78-FF0DZRDKDDePSKwHj"/>
       <unit id="org.eclipse.jst.ws.cxf.feature.feature.group" version="1.1.100.v201302202059-7H79FMfFAKldNxGz0bPo0kz0D8798"/>
@@ -557,23 +558,23 @@
 
       <unit id="org.eclipse.wst.common.frameworks" version="1.2.200.v201203141800"/>
       <unit id="org.eclipse.wst.common.project.facet.ui" version="1.4.300.v201111030424"/>
-      <unit id="org.eclipse.wst.common_core.feature.feature.group" version="3.5.0.v201303130500-7B7EFShF7RZHOoIrQwQ4NJ"/>
+      <unit id="org.eclipse.wst.common_core.feature.feature.group" version="3.5.1.v201308310200-7B7EFSiF7RZHOoIuSrQ7NJ"/>
       <unit id="org.eclipse.wst.common.fproj.feature.group" version="3.4.0.v201202292300-377F8N8s735555393B7B"/>
-      <unit id="org.eclipse.wst.common_ui.feature.feature.group" version="3.5.0.v201303130500-7C7BFeDEdhOawkYhCnQfypJsRxR5OK"/>
-      <unit id="org.eclipse.wst.jsdt.feature.feature.group" version="1.5.0.v201301022000-7H7DFhZFC7sReqSz-frflXk"/>
+      <unit id="org.eclipse.wst.common_ui.feature.feature.group" version="3.5.1.v201308310200-7C7BFeEEdhOawkZhCnQfypJvTsR8OK"/>
+      <unit id="org.eclipse.wst.jsdt.feature.feature.group" version="1.5.1.v201307171524-7H7FFhVFC7sResSz-gpggbs"/>
       <unit id="org.eclipse.wst.server_adapters.feature.feature.group" version="3.2.300.v20130502_0936-7L3FD9CcNBGWBgJUl7NCO"/>
       <unit id="org.eclipse.wst.server_core.feature.feature.group" version="3.3.201.v20130412_1040-34Et8s73573C4Da2815"/>
-      <unit id="org.eclipse.wst.server_ui.feature.feature.group" version="3.3.203.v20130413_1400-7B7AFO9AtNdu_xdIf1JkOkC8EAB"/>
+      <unit id="org.eclipse.wst.server_ui.feature.feature.group" version="3.3.206.v20130830_1134-7B7AFOCAtNdu_xhLc1JiMgC8EAB"/>
       <unit id="org.eclipse.wst.server_userdoc.feature.feature.group" version="3.3.200.v20120830_2320-20Eo7w31231941a3363"/>
-      <unit id="org.eclipse.wst.web_core.feature.feature.group" version="3.5.0.v201209252144-7E7KFYxAJz0mwD584sMRRsRid0oqjcal"/>
-      <unit id="org.eclipse.wst.web_ui.feature.feature.group" version="3.5.0.v201209252144-7O7QG-6EMkBQ3Bg_peduj80T4Kg8QYEUELicbYyf"/>
+      <unit id="org.eclipse.wst.web_core.feature.feature.group" version="3.5.1.v201307171524-7E7KFZ1AJz0myD5G5lLSQsTiq2gmoWit"/>
+      <unit id="org.eclipse.wst.web_ui.feature.feature.group" version="3.5.1.v201307171524-7O7QG2NEMkBS3C2az0gQwwALctEj3DZPgTEZceV4"/>
       <unit id="org.eclipse.wst.web_userdoc.feature.feature.group" version="3.3.0.v201102200555-31Eo8s734B3E4H7799"/>
       <unit id="org.eclipse.wst.ws_core.feature.feature.group" version="3.5.0.v201303141425-7L7SFpmFGtGd01jvy-rM752766"/>
-      <unit id="org.eclipse.wst.ws_ui.feature.feature.group" version="3.5.0.v201303130455-7I7EFkYEtEo_L098-I7p2F8I3unvwcXr-HEeS_Lu"/>
+      <unit id="org.eclipse.wst.ws_ui.feature.feature.group" version="3.5.1.v201308141733-7I7EFkZEtEo_L0D8-I7p2FOHuutqrcZ--DCfQcLx"/>
       <unit id="org.eclipse.wst.ws_userdoc.feature.feature.group" version="3.1.300.v201102200555-44FR79oB5855Q8IBD7G"/>
       <unit id="org.eclipse.wst.ws_wsdl15.feature.feature.group" version="1.5.301.v201102200555-2407w312123151655"/>
-      <unit id="org.eclipse.wst.xml_core.feature.feature.group" version="3.5.0.v201209252144-7C7OFvSF7RZHQWIhO6PwRi"/>
-      <unit id="org.eclipse.wst.xml_ui.feature.feature.group" version="3.5.0.v201301022000-7H7IFisDxumVt037ridXmVSgs8DdRZKtSyS6PL"/>
+      <unit id="org.eclipse.wst.xml_core.feature.feature.group" version="3.5.1.v201307171524-7C7OFvUF7RZHQWIrO2NxPl"/>
+      <unit id="org.eclipse.wst.xml_ui.feature.feature.group" version="3.5.1.v201307171524-7H7IFiwDxumVt0J7gijShVTqs4BePbKwUtS9PL"/>
       <unit id="org.eclipse.wst.xml_userdoc.feature.feature.group" version="3.3.0.v201102071641-50FYwAkF7B77UBZFDBL"/>
       <unit id="org.eclipse.wst.xml.xpath2.processor.feature.feature.group" version="2.0.200.v201302282018-7A7K8ZCcNBGPDQJ_GZKf"/>
       <unit id="org.eclipse.wst.xsl.feature.feature.group" version="1.3.300.v201302282018-7T7_F_uFIqUoKCGIeb62mhZKaH_Lg"/>
@@ -592,10 +593,10 @@
       <unit id="org.eclipse.swtbot.generator.feature.feature.group" version="2.1.1.201305311053"/>
     
       
-      <unit id="org.eclipse.birt.feature.group" version="4.3.0.v201306051647-DTDN7DGjtEqcbHuY3YHRG7D26DT4"/>
-      <unit id="org.eclipse.birt.chart.feature.group" version="4.3.0.v201306051647-828v2FQCnvKm6cypLpq9"/>
-      <unit id="org.eclipse.birt.integration.wtp.feature.group" version="4.3.0.v20130611-1045-52-7w3124172202156"/>
-      <unit id="org.eclipse.birt.chart.integration.wtp.feature.group" version="4.3.0.v20130611-1045-52-7w3124172202156"/>
+      <unit id="org.eclipse.birt.feature.group" version="4.3.1.v201308301349-DTDN8fGjtEqcbZz0BQWLW07D_cfT"/>
+      <unit id="org.eclipse.birt.chart.feature.group" version="4.3.1.v201308301349-828v7EFQCnvKm71SELRN7"/>
+      <unit id="org.eclipse.birt.integration.wtp.feature.group" version="4.3.1.v20130917-1035-5207w31241A2802146"/>
+      <unit id="org.eclipse.birt.chart.integration.wtp.feature.group" version="4.3.1.v20130917-1035-5207w31241A2802146"/>
     </location>
 
     <!-- m2e and family -->
