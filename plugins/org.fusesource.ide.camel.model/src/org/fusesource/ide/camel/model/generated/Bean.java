@@ -41,10 +41,12 @@ public class Bean extends AbstractNode {
 	public static final String PROPERTY_REF = "Bean.Ref";
 	public static final String PROPERTY_METHOD = "Bean.Method";
 	public static final String PROPERTY_BEANTYPE = "Bean.BeanType";
+	public static final String PROPERTY_CACHE = "Bean.Cache";
 	
 	private String ref;
 	private String method;
 	private String beanType;
+	private Boolean cache;
 	
     public Bean() {
     }		
@@ -62,7 +64,7 @@ public class Bean extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "endpoint.png";
+    	return "bean.png";
     }
     
   	@Override
@@ -132,6 +134,24 @@ public class Bean extends AbstractNode {
 		}
 	}
 
+	/**
+	 * @return the cache
+	 */
+	public Boolean getCache() {
+		return this.cache;
+	}
+	
+	/**
+	 * @param cache the cache to set
+	 */
+	public void setCache(Boolean cache) {
+		Boolean oldValue = this.cache;
+		this.cache = cache;
+		if (!isSame(oldValue, cache)) {
+		    firePropertyChange(PROPERTY_CACHE, oldValue, cache);
+		}
+	}
+
 
 	
 	/*
@@ -145,9 +165,11 @@ public class Bean extends AbstractNode {
   		PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelBeanRef);
     		PropertyDescriptor descMethod = new TextPropertyDescriptor(PROPERTY_METHOD, Messages.propertyLabelBeanMethod);
     		PropertyDescriptor descBeanType = new TextPropertyDescriptor(PROPERTY_BEANTYPE, Messages.propertyLabelBeanBeanType);
+      	PropertyDescriptor descCache = new BooleanPropertyDescriptor(PROPERTY_CACHE, Messages.propertyLabelBeanCache);
   		descriptors.put(PROPERTY_REF, descRef);
 		descriptors.put(PROPERTY_METHOD, descMethod);
 		descriptors.put(PROPERTY_BEANTYPE, descBeanType);
+		descriptors.put(PROPERTY_CACHE, descCache);
 	}
 	
 	/* (non-Javadoc)
@@ -161,6 +183,8 @@ public class Bean extends AbstractNode {
 			setMethod(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_BEANTYPE.equals(id)) {
 			setBeanType(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_CACHE.equals(id)) {
+			setCache(Objects.convertTo(value, Boolean.class));
 		}    else {
 			super.setPropertyValue(id, value);
 		}
@@ -177,6 +201,8 @@ public class Bean extends AbstractNode {
 			return this.getMethod();
 		}		else if (PROPERTY_BEANTYPE.equals(id)) {
 			return this.getBeanType();
+		}		else if (PROPERTY_CACHE.equals(id)) {
+			return this.getCache();
 		}    else {
 			return super.getPropertyValue(id);
 		}
@@ -189,6 +215,7 @@ public class Bean extends AbstractNode {
     answer.setRef(toXmlPropertyValue(PROPERTY_REF, this.getRef()));
     answer.setMethod(toXmlPropertyValue(PROPERTY_METHOD, this.getMethod()));
     answer.setBeanType(toXmlPropertyValue(PROPERTY_BEANTYPE, this.getBeanType()));
+    answer.setCache(toXmlPropertyValue(PROPERTY_CACHE, this.getCache()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -209,6 +236,7 @@ public class Bean extends AbstractNode {
       this.setRef(node.getRef());
       this.setMethod(node.getMethod());
       this.setBeanType(node.getBeanType());
+      this.setCache(node.getCache());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof BeanDefinition. Was " + processor.getClass().getName());
     }

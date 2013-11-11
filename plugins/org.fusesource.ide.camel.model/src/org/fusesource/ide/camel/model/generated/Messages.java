@@ -65,6 +65,7 @@ public class Messages extends NLS {
     public static String propertyLabelBeanRef;
     public static String propertyLabelBeanMethod;
     public static String propertyLabelBeanBeanType;
+    public static String propertyLabelBeanCache;
 
     public static String propertyLabelCatchExceptions;
     public static String propertyLabelCatchHandled;
@@ -314,6 +315,7 @@ public class Messages extends NLS {
     map.put("propertyLabelBean.Ref", propertyLabelBeanRef);
     map.put("propertyLabelBean.Method", propertyLabelBeanMethod);
     map.put("propertyLabelBean.BeanType", propertyLabelBeanBeanType);
+    map.put("propertyLabelBean.Cache", propertyLabelBeanCache);
     map.put("propertyLabelCatch.Exceptions", propertyLabelCatchExceptions);
     map.put("propertyLabelCatch.Handled", propertyLabelCatchHandled);
     map.put("propertyLabelConvertBody.Type", propertyLabelConvertBodyType);

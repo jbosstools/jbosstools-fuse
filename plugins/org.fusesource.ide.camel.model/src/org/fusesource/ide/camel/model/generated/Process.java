@@ -58,7 +58,7 @@ public class Process extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "endpoint.png";
+    	return "process.png";
     }
     
   	@Override

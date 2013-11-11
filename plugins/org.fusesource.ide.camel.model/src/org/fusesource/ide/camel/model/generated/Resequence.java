@@ -61,7 +61,7 @@ public class Resequence extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "generic.png";
+    	return "resequence.png";
     }
     
   	@Override

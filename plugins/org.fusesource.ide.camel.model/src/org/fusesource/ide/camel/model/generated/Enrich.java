@@ -64,7 +64,7 @@ public class Enrich extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "transform.png";
+    	return "enrich.png";
     }
     
   	@Override

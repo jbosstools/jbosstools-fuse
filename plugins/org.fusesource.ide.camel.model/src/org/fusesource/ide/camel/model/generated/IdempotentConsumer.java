@@ -66,7 +66,7 @@ public class IdempotentConsumer extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "generic.png";
+    	return "idempotentConsumer.png";
     }
     
   	@Override

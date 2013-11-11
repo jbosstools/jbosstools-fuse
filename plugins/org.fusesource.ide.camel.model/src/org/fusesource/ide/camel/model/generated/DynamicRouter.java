@@ -62,7 +62,7 @@ public class DynamicRouter extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "generic.png";
+    	return "dynamicRouter.png";
     }
     
   	@Override

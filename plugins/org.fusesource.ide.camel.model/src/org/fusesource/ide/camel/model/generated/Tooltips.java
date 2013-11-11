@@ -65,6 +65,7 @@ public class Tooltips extends NLS {
     public static String tooltipBeanRef;
     public static String tooltipBeanMethod;
     public static String tooltipBeanBeanType;
+    public static String tooltipBeanCache;
 
     public static String tooltipCatch;
     public static String tooltipCatchExceptions;
@@ -376,6 +377,7 @@ public class Tooltips extends NLS {
     map.put("tooltipBean.Ref", tooltipBeanRef);
     map.put("tooltipBean.Method", tooltipBeanMethod);
     map.put("tooltipBean.BeanType", tooltipBeanBeanType);
+    map.put("tooltipBean.Cache", tooltipBeanCache);
     map.put("tooltipCatch", tooltipCatch);
     map.put("tooltipCatch.Exceptions", tooltipCatchExceptions);
     map.put("tooltipCatch.Handled", tooltipCatchHandled);

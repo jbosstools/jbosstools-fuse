@@ -76,7 +76,7 @@ public class Multicast extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "generic.png";
+    	return "multicast.png";
     }
     
   	@Override

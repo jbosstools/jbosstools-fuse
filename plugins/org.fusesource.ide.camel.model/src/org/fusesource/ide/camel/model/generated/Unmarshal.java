@@ -61,7 +61,7 @@ public class Unmarshal extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "transform.png";
+    	return "unmarshal.png";
     }
     
   	@Override

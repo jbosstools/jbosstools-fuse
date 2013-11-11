@@ -103,7 +103,7 @@ public class Aggregate extends AbstractNode {
      */
     @Override
     public String getIconName() {
-    	return "generic.png";
+    	return "aggregate.png";
     }
     
   	@Override
