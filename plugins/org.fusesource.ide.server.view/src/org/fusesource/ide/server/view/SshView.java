@@ -169,6 +169,14 @@ public class SshView extends TerminalView {
 		try {
 			super.onTerminalDisconnect();
 			fireOnDisconnect();
+			Display.getDefault().syncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					// clear the console view to make it clear to the user that the connection ended
+					fActionEditClearAll.run();					
+				}
+			});
 		} catch (Exception ex) {
 			ServerViewPlugin.getLogger().error("Problem occured while disconnecting from SSH terminal...", ex);
 		}
