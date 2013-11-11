@@ -231,6 +231,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	
 	@Override
 	protected void setInput(IEditorInput input) {
+		
 		setPartName(input.getName());
 
 		super.setInput(input);

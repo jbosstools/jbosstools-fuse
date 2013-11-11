@@ -73,6 +73,7 @@ import org.fusesource.ide.commons.ui.UIConstants;
 import org.fusesource.ide.commons.ui.Workbenches;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
+import org.fusesource.ide.project.providers.CamelVirtualFile;
 
 
 /**
@@ -679,7 +680,11 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	}
 
 	public void onFileLoading(IFile file) {
-		setPartName(file.getName());
+		if (file instanceof CamelVirtualFile) {
+			setPartName(((CamelVirtualFile)file).getLocation().lastSegment());
+		} else {
+			setPartName(file.getName());			
+		}
 	}
 
 
