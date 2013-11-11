@@ -137,7 +137,7 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
 
   val imageExtensions = List("png", "gif", "jpg", "jpeg")
 
-  val eclipseIconDir = "../../../../../../plugins/org.fusesource.ide.camel.model/icons/"
+  val eclipseIconDir = "../../../../../../../plugins/org.fusesource.ide.camel.model/icons/"
 
 
   /**
