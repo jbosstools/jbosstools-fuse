@@ -89,29 +89,29 @@
 
   <extension point="org.eclipse.wst.server.core.installableRuntimes">
     <runtime
-          archivePath="jboss-fuse-6.0.0.redhat-031"
-          archiveUrl="http://repo.fusesource.com/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.0.0.redhat-031/jboss-fuse-6.0.0.redhat-031.zip"
+          archivePath="jboss-fuse-6.0.0.redhat-024"
+          archiveUrl="https://repository.jboss.org/nexus/content/groups/fs-public/org/jboss/fuse/jboss-fuse/6.0.0.redhat-024/jboss-fuse-6.0.0.redhat-024.zip"
           id="org.fusesource.ide.fuseesb.runtime.60"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="win32">
     </runtime>
     <runtime
-          archivePath="jboss-fuse-6.0.0.redhat-031"
-          archiveUrl="http://repo.fusesource.com/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.0.0.redhat-031/jboss-fuse-6.0.0.redhat-031.zip"
+          archivePath="jboss-fuse-6.0.0.redhat-024"
+          archiveUrl="https://repository.jboss.org/nexus/content/groups/fs-public/org/jboss/fuse/jboss-fuse/6.0.0.redhat-024/jboss-fuse-6.0.0.redhat-024.zip"
           id="org.fusesource.ide.fuseesb.runtime.60"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="linux">
     </runtime>
     <runtime
-          archivePath="jboss-fuse-6.1.0.redhat-086"
-          archiveUrl="http://repo.fusesource.com/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.1.0.redhat-086/jboss-fuse-6.1.0.redhat-086.zip"
+          archivePath="jboss-fuse-6.1.0.redhat-139"
+          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.1.0.redhat-139/jboss-fuse-6.1.0.redhat-139.zip"
           id="org.fusesource.ide.fuseesb.runtime.61"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="win32">
     </runtime>
     <runtime
-          archivePath="jboss-fuse-6.1.0.redhat-086"
-          archiveUrl="http://repo.fusesource.com/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.1.0.redhat-086/jboss-fuse-6.1.0.redhat-086.zip"
+          archivePath="jboss-fuse-6.1.0.redhat-139"
+          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse/6.1.0.redhat-139/jboss-fuse-6.1.0.redhat-139.zip"
           id="org.fusesource.ide.fuseesb.runtime.61"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="linux">
