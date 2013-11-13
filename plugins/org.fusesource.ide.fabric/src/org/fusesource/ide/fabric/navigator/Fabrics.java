@@ -48,7 +48,7 @@ public class Fabrics extends RefreshableCollectionNode implements ImageProvider,
 	public static final String DEFAULT_PASSWORD = "karaf";
 
 	// TODO move to stanard repo before GA!
-	public static final String DEFAULT_MAVEN_PROXY_URI = "http://repo.fusesource.com/nexus/content/groups/ea";
+	public static final String DEFAULT_MAVEN_PROXY_URI = "https://repository.jboss.org/nexus/content/groups/ea";
 
 	private final RefreshableUI refreshableUI;
 	private List<Fabric> fabrics = new CopyOnWriteArrayList<Fabric>();
