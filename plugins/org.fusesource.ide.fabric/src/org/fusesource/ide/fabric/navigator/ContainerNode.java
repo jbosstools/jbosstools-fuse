@@ -423,13 +423,20 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 	/**
 	 * Creates a child container
 	 */
-	public void createContainer(final String name, Profile[] profiles) {
+	public void createContainer(final String name, Profile[] profiles, VersionNode version) {
 		try {
+			ArrayList<String> profilesList = new ArrayList<String>();
+			for (Profile p : profiles) {
+				profilesList.add(p.getId());
+			}
+			
 			FabricPlugin.getLogger().debug("About to create child container of " + this + " with name: " + name + " and profiles: " + Arrays.asList(profiles));
 			FabricService fabricService = getFabricService();
 			CreateContainerOptions options = CreateChildContainerOptions.builder()
 					.name(name)
 					.parent(getId())
+					.version(version.getVersionId())
+					.profiles(profilesList)
 					.zookeeperUrl(fabricService.getZookeeperUrl())
 					.zookeeperPassword(getFabric().getDetails().getZkPassword())
 					.jmxUser(getFabric().getDetails().getUserName())
@@ -438,11 +445,11 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 			CreateContainerMetadata[] newContainers = fabricService.createContainers(options);
 
-			for(CreateContainerMetadata metadata : newContainers) {
-				Container newContainer = metadata.getContainer();
-				getFabric().setContainerProfiles(newContainer, profiles);
-				getFabric().refreshCreatedAgent(name);
-			}
+//			for(CreateContainerMetadata metadata : newContainers) {
+//				Container newContainer = metadata.getContainer();
+//				getFabric().setContainerProfiles(newContainer, profiles);
+//			}
+			getFabric().refreshCreatedAgent(name);
 		} catch (Exception e) {
 			FabricPlugin.showUserError("Failed to create new child container of " + this, e.getMessage(), e);
 		}

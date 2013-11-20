@@ -44,7 +44,7 @@ public class CreateChildContainerForm extends CreateContainerFormSupport {
 		Profile[] profiles = getSelectedProfileArray();
 
 		if (agentName.length() > 0 && profiles.length > 0) {
-			agentNode.createContainer(agentName, profiles);
+			agentNode.createContainer(agentName, profiles, getAgentVersion());
 		}
 	}
 
