@@ -171,7 +171,6 @@ public class SshView extends TerminalView {
 			fireOnDisconnect();
 			Display.getDefault().syncExec(new Runnable() {
 				
-				@Override
 				public void run() {
 					// clear the console view to make it clear to the user that the connection ended
 					fActionEditClearAll.run();					

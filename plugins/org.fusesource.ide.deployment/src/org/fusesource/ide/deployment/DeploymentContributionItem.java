@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.ContributionItem;
@@ -128,11 +129,13 @@ public class DeploymentContributionItem extends ContributionItem {
 							for (HotfolderDeploymentConfiguration cfg : configs) {
 								if (cfg.isDefaultConfig()) {
 									ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+									IHandlerService handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
 									try {
-										HashMap params = new HashMap();
+										HashMap<String, HotfolderDeploymentConfiguration> params = new HashMap<String, HotfolderDeploymentConfiguration>();
 										params.put(DeploymentHandler.DEPLOY_PARAMETER_KEY, cfg);
-										ExecutionEvent evt = new ExecutionEvent(commandService.getCommand(EXECUTE_DEPLOYMENT_ID), params, null, null);
-										commandService.getCommand(EXECUTE_DEPLOYMENT_ID).executeWithChecks(evt);
+										Command command = commandService.getCommand(EXECUTE_DEPLOYMENT_ID);
+										ParameterizedCommand paramCommand = ParameterizedCommand.generateCommand(command, params);
+										handlerService.executeCommand(paramCommand, null);
 										return;
 									} catch (Exception ex) {
 										DeployPlugin.getLogger().error(ex);
@@ -174,11 +177,13 @@ public class DeploymentContributionItem extends ContributionItem {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+					IHandlerService handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
 					try {
-						HashMap params = new HashMap();
+						HashMap<String, HotfolderDeploymentConfiguration> params = new HashMap<String, HotfolderDeploymentConfiguration>();
 						params.put(DeploymentHandler.DEPLOY_PARAMETER_KEY, cfg);
-						ExecutionEvent evt = new ExecutionEvent(commandService.getCommand(EXECUTE_DEPLOYMENT_ID), params, null, null);
-						commandService.getCommand(EXECUTE_DEPLOYMENT_ID).executeWithChecks(evt);
+						Command command = commandService.getCommand(EXECUTE_DEPLOYMENT_ID);
+						ParameterizedCommand paramCommand = ParameterizedCommand.generateCommand(command, params);
+						handlerService.executeCommand(paramCommand, null);
 					} catch (Exception ex) {
 						DeployPlugin.getLogger().error(ex);
 						throw new RuntimeException("Execution exception occured: " + ex.getMessage());
@@ -289,11 +294,13 @@ public class DeploymentContributionItem extends ContributionItem {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+					IHandlerService handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
 					try {
-						HashMap params = new HashMap();
+						HashMap<String, HotfolderDeploymentConfiguration> params = new HashMap<String, HotfolderDeploymentConfiguration>();
 						params.put(DeploymentHandler.DEPLOY_PARAMETER_KEY, cfg);
-						ExecutionEvent evt = new ExecutionEvent(commandService.getCommand(EXECUTE_DEPLOYMENT_ID), params, null, null);
-						commandService.getCommand(EXECUTE_DEPLOYMENT_ID).executeWithChecks(evt);
+						Command command = commandService.getCommand(EXECUTE_DEPLOYMENT_ID);
+						ParameterizedCommand paramCommand = ParameterizedCommand.generateCommand(command, params);
+						handlerService.executeCommand(paramCommand, null);
 					} catch (Exception ex) {
 						DeployPlugin.getLogger().error(ex);
 						throw new RuntimeException("Execution exception occured: " + ex.getMessage());
