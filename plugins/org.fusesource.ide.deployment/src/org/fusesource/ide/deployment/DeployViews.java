@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.ui.packageview.PackageFragmentRootContainer;
@@ -25,6 +26,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.ui.Workbenches;
 
@@ -80,15 +82,28 @@ public class DeployViews {
 	public static IProject selectionToProject(ISelection selection) {
 		Object element = Selections.getFirstSelection(selection);
 		IProject project = null;
-		if (element instanceof IResource) {
+		
+		if (element == null)
+			return null;
+		
+		if (element instanceof IResource)
 			project = ((IResource)element).getProject();
-		} else if (element instanceof PackageFragmentRootContainer) {
-			IJavaProject jProject =
-					((PackageFragmentRootContainer)element).getJavaProject();
-			project = jProject.getProject();
-		} else if (element instanceof IJavaElement) {
+		
+		else if (element instanceof IJavaElement) {
 			IJavaProject jProject= ((IJavaElement)element).getJavaProject();
 			project = jProject.getProject();
+		}
+		else if (element instanceof IAdaptable) {
+		    IAdaptable adaptElement = (IAdaptable)element;
+		    IWorkbenchAdapter adapter = 
+		    	(IWorkbenchAdapter)adaptElement.getAdapter(IWorkbenchAdapter.class);
+		    if (adapter != null) {
+		      Object parent = adapter.getParent(adaptElement);
+		      if (parent instanceof IJavaProject) {
+		        IJavaProject javaProject = (IJavaProject) parent;
+		        project = javaProject.getProject();
+		      }
+		    }
 		}
 		/*
 		else if (selection instanceof ITextSelection) {
