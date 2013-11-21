@@ -224,7 +224,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				DirectoryDialog dialog = new DirectoryDialog(AbstractKarafRuntimeComposite.this.getShell());
 				dialog.setMessage(Messages.AbstractKarafRuntimeComposite_selectInstallDir);
 				dialog.setFilterPath(txtKarafDir.getText());
-				String selectedDirectory = dialog.open();
+				final String selectedDirectory = dialog.open();
 				if (selectedDirectory != null) {
 					// ir.install(new Path(selectedDirectory));
 					final IPath installPath = new Path(selectedDirectory);
@@ -253,8 +253,6 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 							return Status.OK_STATUS;
 						}
 					};
-
-					txtKarafDir.setText(selectedDirectory);
 					jobListener = new JobChangeAdapter() {
 						public void done(IJobChangeEvent event) {
 							Display.getDefault().asyncExec(new Runnable() {
@@ -263,6 +261,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 									btnBrowseButton.setEnabled(true);
 									btnDownloadAndInstallButton.setEnabled(true);
 									txtKarafDir.setEnabled(true);
+									txtKarafDir.setText(selectedDirectory);
 									parent.update();
 								}
 							});
