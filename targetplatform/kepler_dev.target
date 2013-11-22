@@ -5,10 +5,10 @@
         <location path="${project_loc}/../site/target/repository" type="Directory"/>
 
         <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-	  <unit id="org.drools.eclipse.feature.feature.group" version="6.0.0.201308222359"/>
-	  <unit id="org.guvnor.tools.feature.feature.group" version="6.0.0.201308222359"/>
-	  <unit id="org.jbpm.eclipse.feature.feature.group" version="6.0.0.201308222359"/>
-	  <repository location="http://download.jboss.org/jbpm/release/6.0.0.201308222359/org.drools.updatesite/"/>
+	  <unit id="org.drools.eclipse.feature.feature.group" version="6.0.0.Final"/>
+	  <unit id="org.guvnor.tools.feature.feature.group" version="6.0.0.Final"/>
+	  <unit id="org.jbpm.eclipse.feature.feature.group" version="6.0.0.Final"/>
+	  <repository location="http://downloads.jboss.org/jbpm/release/6.0.0.Final/updatesite/"/>
         </location>
 
         <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">

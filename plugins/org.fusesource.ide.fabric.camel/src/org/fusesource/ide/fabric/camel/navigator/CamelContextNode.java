@@ -94,7 +94,12 @@ ImageProvider {
 	}
 
 	public String getContextId() {
-		return camelContextMBean.getCamelId();
+		try {
+			return camelContextMBean.getCamelId();
+		} catch (Exception e) {
+			refresh();
+			return "";
+		}
 	}
 
 	public String getManagementName() {
@@ -102,7 +107,7 @@ ImageProvider {
 			return camelContextMBean.getManagementName();
 		} catch (Exception e) {
 			refresh();
-			return null;
+			return "";
 		}
 	}
 
@@ -115,7 +120,12 @@ ImageProvider {
 	}
 
 	public String getXmlString() {
-		return camelContextMBean.dumpRoutesAsXml();
+		try {
+			return camelContextMBean.dumpRoutesAsXml();
+		} catch (Exception e) {
+			refresh();
+			return "";
+		}
 	}
 
 	public RouteContainer getModelContainer() {
