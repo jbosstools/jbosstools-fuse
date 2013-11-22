@@ -167,8 +167,11 @@ public class SshView extends TerminalView {
 	@Override
 	public void onTerminalDisconnect() {
 		try {
-			super.onTerminalDisconnect();
-			fireOnDisconnect();
+			if ((this.connected) && (fCtlTerminal.isConnected())) {
+				super.onTerminalDisconnect();			
+				fireOnDisconnect();
+			}
+			
 			Display.getDefault().syncExec(new Runnable() {
 				
 				public void run() {

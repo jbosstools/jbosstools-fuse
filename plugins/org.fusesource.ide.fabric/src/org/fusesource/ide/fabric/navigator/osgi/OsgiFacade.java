@@ -72,8 +72,6 @@ public class OsgiFacade {
 		serviceStateQueryObjectName = new ObjectName("osgi.core:type=serviceState,*");
 	}
 
-
-
 	/**
 	 * Adds a NotificationListener to the BundleStateMBean
 	 */
@@ -86,9 +84,10 @@ public class OsgiFacade {
 			public Void doWithJmxConnector(JMXConnector connector) throws Exception {
 				MBeanServerConnection connection = null;
 				try { 
-					connection = connector.getMBeanServerConnection();
-				} catch (IOException ex) {
 					// No need to report a closed or not yet established connection.
+					if ((connection = connector.getMBeanServerConnection()) == null)
+						return null;
+				} catch (IOException ex) {					
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
@@ -116,9 +115,10 @@ public class OsgiFacade {
 			public Void doWithJmxConnector(JMXConnector connector) throws Exception {
 				MBeanServerConnection connection = null;
 				try { 
-					connection = connector.getMBeanServerConnection();
-				} catch (IOException ex) {
 					// No need to report a closed or not yet established connection.
+					if ((connection = connector.getMBeanServerConnection()) == null)
+						return null;
+				} catch (IOException ex) {
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
@@ -146,9 +146,10 @@ public class OsgiFacade {
 			public T doWithJmxConnector(JMXConnector connector) throws Exception {
 				MBeanServerConnection connection = null;
 				try { 
-					connection = connector.getMBeanServerConnection();
-				} catch (IOException ex) {
 					// No need to report a closed or not yet established connection.
+					if ((connection = connector.getMBeanServerConnection()) == null)
+						return null;
+				} catch (IOException ex) {
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
@@ -172,9 +173,10 @@ public class OsgiFacade {
 			public T doWithJmxConnector(JMXConnector connector) throws Exception {
 				MBeanServerConnection connection = null;
 				try { 
-					connection = connector.getMBeanServerConnection();
-				} catch (IOException ex) {
 					// No need to report a closed or not yet established connection.
+					if ((connection = connector.getMBeanServerConnection()) == null)
+						return null;
+				} catch (IOException ex) {
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
@@ -198,9 +200,10 @@ public class OsgiFacade {
 			public T doWithJmxConnector(JMXConnector connector) throws Exception {
 				MBeanServerConnection connection = null;
 				try { 
-					connection = connector.getMBeanServerConnection();
-				} catch (IOException ex) {
 					// No need to report a closed or not yet established connection.
+					if ((connection = connector.getMBeanServerConnection()) == null)
+						return null;
+				} catch (IOException ex) {
 					if (!ex.getMessage().contentEquals("Connection closed"))
 						Activator.log(IStatus.WARNING, ex.getMessage(), ex);
 					return null;
