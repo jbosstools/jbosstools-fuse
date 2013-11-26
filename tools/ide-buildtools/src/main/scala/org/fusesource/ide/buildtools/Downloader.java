@@ -36,6 +36,7 @@ public class Downloader {
         ignoredArtifacts.add("camel-archetype-component-scala");
         ignoredArtifacts.add("camel-archetype-scala");
 	    ignoredArtifacts.add("camel-web-osgi-archetype");
+        ignoredArtifacts.add("camel-archetype-groovy");
     }
 
     public static void main(String[] args) {
