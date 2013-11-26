@@ -81,9 +81,7 @@
   <modules>
     <module>tools</module>
     <module>plugins</module>
-<!--
     <module>tests</module>
--->
     <module>features</module>
     <module>site</module>
     <module>targetplatform</module>

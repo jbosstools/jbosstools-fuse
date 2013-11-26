@@ -35,7 +35,7 @@ public class XmlMarshalTest {
 	
 	ContainerMarshaler marshaller = new XmlContainerMarshaller();
 	
-	protected File sourceDir = new File("src");
+	protected File sourceDir = new File("src/test/resources");
 	protected File outputDir = new File("target/testData");
 	
 	@Test
