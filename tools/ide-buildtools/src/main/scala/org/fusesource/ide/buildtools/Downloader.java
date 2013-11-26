@@ -90,7 +90,7 @@ public class Downloader {
 
     public void start() throws Exception {
         indexer = new MavenIndexerFacade();
-        String[] repositories = {"http://repo.fusesource.com/nexus/content/groups/ea@fusesource-ea-repo"};
+        String[] repositories = {"http://repository.jboss.org/nexus/content/groups/ea/"};
         indexer.setRepositories(repositories);
         indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
         indexer.start();

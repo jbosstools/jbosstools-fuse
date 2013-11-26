@@ -11,7 +11,7 @@ object ArchetypeCatalogConverter {
 
     if (args.size > 0) {
       val outFile = args(0)
-      val url = if (args.size > 1) args(1) else "http://repo.fusesource.com/nexus/content/groups/public/archetype-catalog.xml"
+      val url = if (args.size > 1) args(1) else "http://repository.jboss.org/nexus/content/groups/fs-public/archetype-catalog.xml"
 
       println("Saving XML to file: " + outFile)
       println("Parsing Archetype Catalog: " + url)
@@ -19,7 +19,7 @@ object ArchetypeCatalogConverter {
       val elem = XML.load(new URL(url))
 
       val repo = Text("  ") ::
-              <repository>http://repo.fusesource.com/nexus/content/groups/public</repository> ::
+              <repository>http://repository.jboss.org/nexus/content/groups/fs-public</repository> ::
               Text("\n    ") :: Nil
 
       object rewrite extends RewriteRule {

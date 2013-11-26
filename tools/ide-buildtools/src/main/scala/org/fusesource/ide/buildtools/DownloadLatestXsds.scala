@@ -50,7 +50,7 @@ class DownloadLatestXsds(rootDir: File, delete: Boolean) extends Runnable {
         val version = schema.version
       println("Finding " + n + " group: " + group + " postfix '" + postfix + "'")
         val fileName = n + "-" + version.stripSuffix("/") + postfix + ".xsd"
-      val xsd = "http://repo.fusesource.com/" + UpdateReleases.releaseRepo + "/org/apache/" + group + "/" + n + "/" + version + "/" + fileName
+      val xsd = "http://repository.jboss.org/" + UpdateReleases.releaseRepo + "/org/apache/" + group + "/" + n + "/" + version + "/" + fileName
       val outFile = new File(outputDir, fileName)
       println("Downloading xsd: " + xsd + " to " + outFile)
       IOUtil.copy(new URL(xsd).openStream(), outFile)
