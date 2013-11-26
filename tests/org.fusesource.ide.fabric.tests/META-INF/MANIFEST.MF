@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Fabric Plugin Tests
 Bundle-SymbolicName: org.fusesource.ide.fabric.tests;singleton:=true
 Bundle-Version: 7.2.0.qualifier
-Bundle-Vendor: Red Hat, Inc.
+Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: org.fusesource.ide.fabric
 Require-Bundle: org.junit
