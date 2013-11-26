@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fuse Server UI Plugin for Fuse Runtimes
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.server.fuse.ui;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Activator: org.fusesource.ide.server.fuse.ui.FuseESBUIPlugin
-Bundle-Vendor: Red Hat, Inc.
+Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.fusesource.ide.server.karaf.core,
  org.fusesource.ide.server.karaf.ui,
  org.fusesource.ide.server.fuse.core,

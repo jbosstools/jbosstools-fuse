@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Plugins for Eclipse Maven Plugin Tests
 Bundle-SymbolicName: org.fusesource.ide.maven.tests;singleton:=true
 Bundle-Version: 7.2.0.qualifier
-Bundle-Vendor: Red Hat, Inc.
+Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: org.fusesource.ide.maven
 Require-Bundle: org.junit
