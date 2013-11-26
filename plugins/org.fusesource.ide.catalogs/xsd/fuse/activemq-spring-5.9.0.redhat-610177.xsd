@@ -57,6 +57,21 @@ consumers that have no pending acks (dispatch queue is empty).
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='ignoreNetworkConsumers' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets whether the strategy is configured to ignore consumers that are part of a network
+connection to another broker.
+
+When configured to not ignore idle consumers this strategy acts not only on consumers
+that are actually slow but also on any consumer that has not received any messages for
+the maxTimeSinceLastAck.  This allows for a way to evict idle consumers while also
+aborting slow consumers however for a network subscription this can create a lot of
+unnecessary churn and if the abort connection option is also enabled this can result
+in the entire network connection being torn down and rebuilt for no reason.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxSlowCount' type='xs:long'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -611,6 +626,7 @@ authentication or authorization
               <xs:element ref='tns:jaasDualAuthenticationPlugin'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
+              <xs:element ref='tns:partitionBrokerPlugin'/>
               <xs:element ref='tns:redeliveryPlugin'/>
               <xs:element ref='tns:runtimeConfigurationPlugin'/>
               <xs:element ref='tns:simpleAuthenticationPlugin'/>
@@ -681,6 +697,7 @@ other brokers in a federated network
               <xs:element ref='tns:ldapNetworkConnector'/>
               <xs:element ref='tns:lease-database-locker'/>
               <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:managementContext'/>
               <xs:element ref='tns:memoryUsage'/>
               <xs:element ref='tns:multicastNetworkConnector'/>
@@ -1227,6 +1244,7 @@ authentication or authorization
               <xs:element ref='tns:jaasDualAuthenticationPlugin'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
+              <xs:element ref='tns:partitionBrokerPlugin'/>
               <xs:element ref='tns:redeliveryPlugin'/>
               <xs:element ref='tns:runtimeConfigurationPlugin'/>
               <xs:element ref='tns:simpleAuthenticationPlugin'/>
@@ -1297,6 +1315,7 @@ other brokers in a federated network
               <xs:element ref='tns:ldapNetworkConnector'/>
               <xs:element ref='tns:lease-database-locker'/>
               <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:managementContext'/>
               <xs:element ref='tns:memoryUsage'/>
               <xs:element ref='tns:multicastNetworkConnector'/>
@@ -1689,6 +1708,22 @@ policy.
       <xs:attribute name='userNameAttribute' type='xs:string'/>
       <xs:attribute name='userObjectClass' type='xs:string'/>
       <xs:attribute name='writePermissionGroupSearchFilter' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- element for type: org.apache.activemq.broker.region.group.CachedMessageGroupMapFactory -->
+  <xs:element name='cachedMessageGroupMapFactory'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        A factory to create instances of {@link org.apache.activemq.broker.region.group.CachedMessageGroupMap} when implementing the
+<a href="http://activemq.apache.org/message-groups.html">Message Groups</a> functionality.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name='cacheSize' type='xs:integer'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -2446,18 +2481,49 @@ against the same logical database.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='dataSource' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='exceptionHandler' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name='lockable' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:jdbcPersistenceAdapter'/>
+              <xs:element ref='tns:journalPersistenceAdapterFactory'/>
+              <xs:element ref='tns:journaledJDBC'/>
+              <xs:element ref='tns:kahaDB'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:mKahaDB'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='statements' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:statements'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
+      <xs:attribute name='createTablesOnStartup' type='xs:boolean'/>
+      <xs:attribute name='dataSource' type='xs:string'/>
       <xs:attribute name='exceptionHandler' type='xs:string'/>
       <xs:attribute name='failIfLocked' type='xs:boolean'/>
       <xs:attribute name='lockAcquireSleepInterval' type='xs:long'/>
+      <xs:attribute name='lockable' type='xs:string'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='queryTimeout' type='xs:integer'/>
+      <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -2975,7 +3041,13 @@ so that messages are only dispatched to the destination if they match the filter
         <xs:element name='adapter' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:jdbcPersistenceAdapter'/>
+              <xs:element ref='tns:journalPersistenceAdapter'/>
               <xs:element ref='tns:kahaDB'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:mKahaDB'/>
+              <xs:element ref='tns:memoryPersistenceAdapter'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -2994,7 +3066,13 @@ so that messages are only dispatched to the destination if they match the filter
         <xs:element name='persistenceAdapter' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:jdbcPersistenceAdapter'/>
+              <xs:element ref='tns:journalPersistenceAdapter'/>
               <xs:element ref='tns:kahaDB'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:mKahaDB'/>
+              <xs:element ref='tns:memoryPersistenceAdapter'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -4677,6 +4755,11 @@ KahaDB - Embedded Lightweight Non-Relational Database
             </xs:choice>
           </xs:complexType>
         </xs:element>
+        <xs:element name='transactionIdTransformer' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='usageManager' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
@@ -4798,6 +4881,7 @@ used with org.apache.activemq.ActiveMQConnectionFactory#setTransactedIndividualA
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='transactionIdTransformer' type='xs:string'/>
       <xs:attribute name='usageManager' type='xs:string'/>
       <xs:attribute name='useIndexLFRUEviction' type='xs:boolean'/>
       <xs:attribute name='useLock' type='xs:boolean'/>
@@ -5021,6 +5105,7 @@ draft-ietf-ldapext-psearch-03.txt (2.16.840.1.113730.3.4.3)
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='useBrokerNameAsIdSees' type='xs:boolean'/>
       <xs:attribute name='useCompression' type='xs:boolean'/>
       <xs:attribute name='user' type='xs:string'>
         <xs:annotation>
@@ -5045,12 +5130,46 @@ against the same logical database.
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='dataSource' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='lockable' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:jdbcPersistenceAdapter'/>
+              <xs:element ref='tns:journalPersistenceAdapterFactory'/>
+              <xs:element ref='tns:journaledJDBC'/>
+              <xs:element ref='tns:kahaDB'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:mKahaDB'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='statements' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:statements'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='createTablesOnStartup' type='xs:boolean'/>
+      <xs:attribute name='dataSource' type='xs:string'/>
       <xs:attribute name='failIfLocked' type='xs:boolean'/>
       <xs:attribute name='leaseHolderId' type='xs:string'/>
       <xs:attribute name='lockAcquireSleepInterval' type='xs:long'/>
+      <xs:attribute name='lockable' type='xs:string'/>
       <xs:attribute name='maxAllowableDiffFromDBTime' type='xs:integer'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='queryTimeout' type='xs:integer'/>
+      <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -5087,6 +5206,11 @@ LevelDB - Embedded Lightweight Non-Relational Database
             </xs:choice>
           </xs:complexType>
         </xs:element>
+        <xs:element name='transactionIdTransformer' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='usageManager' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
@@ -5120,6 +5244,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='monitorStats' type='xs:boolean'/>
       <xs:attribute name='paranoidChecks' type='xs:boolean'/>
       <xs:attribute name='sync' type='xs:boolean'/>
+      <xs:attribute name='transactionIdTransformer' type='xs:string'/>
       <xs:attribute name='usageManager' type='xs:string'/>
       <xs:attribute name='useLock' type='xs:boolean'/>
       <xs:attribute name='verifyChecksums' type='xs:boolean'/>
@@ -5244,17 +5369,6 @@ distribution of destinations across multiple kahaDB persistence adapters
             </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name='entries' minOccurs='0' maxOccurs='unbounded'>
-          <xs:annotation>
-            <xs:documentation><![CDATA[
-              A helper method to allow the destination map to be populated from a
-dependency injection framework such as Spring
-            ]]></xs:documentation>
-          </xs:annotation>
-          <xs:complexType>
-            <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name='filteredPersistenceAdapters' minOccurs='0' maxOccurs='unbounded'>
           <xs:annotation>
             <xs:documentation><![CDATA[
@@ -5263,6 +5377,17 @@ dependency injection framework such as Spring
           </xs:annotation>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='locker' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:database-locker'/>
+              <xs:element ref='tns:lease-database-locker'/>
+              <xs:element ref='tns:shared-file-locker'/>
+              <xs:element ref='tns:transact-database-locker'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
           </xs:complexType>
         </xs:element>
         <xs:element name='transactionStore' minOccurs='0' maxOccurs='1'>
@@ -5301,8 +5426,11 @@ be used
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='lockKeepAlivePeriod' type='xs:long'/>
+      <xs:attribute name='locker' type='xs:string'/>
       <xs:attribute name='transactionStore' type='xs:string'/>
       <xs:attribute name='usageManager' type='xs:string'/>
+      <xs:attribute name='useLock' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -5532,6 +5660,7 @@ buckets that will be used (i.e. the maximum possible concurrency).
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='cacheSize' type='xs:integer'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -5706,6 +5835,7 @@ based transport could be used.
       <xs:attribute name='staticBridge' type='xs:boolean'/>
       <xs:attribute name='suppressDuplicateQueueSubscriptions' type='xs:boolean'/>
       <xs:attribute name='suppressDuplicateTopicSubscriptions' type='xs:boolean'/>
+      <xs:attribute name='useBrokerNameAsIdSees' type='xs:boolean'/>
       <xs:attribute name='useCompression' type='xs:boolean'/>
       <xs:attribute name='userName' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -5887,6 +6017,7 @@ available and setup a connection to each available remote broker
       <xs:attribute name='suppressDuplicateQueueSubscriptions' type='xs:boolean'/>
       <xs:attribute name='suppressDuplicateTopicSubscriptions' type='xs:boolean'/>
       <xs:attribute name='uri' type='xs:string'/>
+      <xs:attribute name='useBrokerNameAsIdSees' type='xs:boolean'/>
       <xs:attribute name='useCompression' type='xs:boolean'/>
       <xs:attribute name='userName' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -6268,6 +6399,31 @@ to set the inbound topic name as well.
   </xs:element>
 
 
+  <!-- element for type: org.apache.activemq.partition.PartitionBrokerPlugin -->
+  <xs:element name='partitionBrokerPlugin'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        A BrokerPlugin which partitions client connections over a cluster of brokers.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='config' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='config' type='xs:string'/>
+      <xs:attribute name='configAsJson' type='xs:string'/>
+      <xs:attribute name='minTransferCount' type='xs:integer'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
   <!-- element for type: org.apache.activemq.broker.region.policy.PolicyEntry -->
   <xs:element name='policyEntry'>
     <xs:annotation>
@@ -6344,6 +6500,7 @@ functionality.
           </xs:annotation>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:cachedMessageGroupMapFactory'/>
               <xs:element ref='tns:messageGroupHashBucketFactory'/>
               <xs:element ref='tns:simpleMessageGroupMapFactory'/>
               <xs:any namespace='##other'/>
@@ -6505,6 +6662,7 @@ functionality.
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='messageGroupMapFactoryType' type='xs:string'/>
       <xs:attribute name='minimumMessageSize' type='xs:long'/>
       <xs:attribute name='networkBridgeFilterFactory' type='xs:string'/>
       <xs:attribute name='optimizeMessageStoreInFlightLimit' type='xs:integer'/>
@@ -6651,7 +6809,7 @@ a transaction aware connection pool, or a jca aware connection pool.
 </bean>
 </pre>
 
-The <code>resourceName</code> property should be used along with the {@link ActiveMQResourceManager} and have
+The <code>resourceName</code> property should be used along with the {@link org.apache.activemq.jms.pool.GenericResourceManager} and have
 the same value than its <code>resourceName</code> property. This will make sure the transaction manager
 maps correctly the connection factory to the recovery process.
       ]]></xs:documentation>
@@ -7334,6 +7492,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='usageManager' type='xs:string'/>
       <xs:attribute name='useLock' type='xs:boolean'/>
       <xs:attribute name='verifyChecksums' type='xs:boolean'/>
+      <xs:attribute name='weight' type='xs:integer'/>
       <xs:attribute name='zkAddress' type='xs:string'/>
       <xs:attribute name='zkPassword' type='xs:string'/>
       <xs:attribute name='zkPath' type='xs:string'/>
@@ -7384,9 +7543,27 @@ against the same logical database.
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='lockable' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:jdbcPersistenceAdapter'/>
+              <xs:element ref='tns:journalPersistenceAdapterFactory'/>
+              <xs:element ref='tns:journaledJDBC'/>
+              <xs:element ref='tns:kahaDB'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:mKahaDB'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
       <xs:attribute name='directory' type='xs:string'/>
       <xs:attribute name='failIfLocked' type='xs:boolean'/>
       <xs:attribute name='lockAcquireSleepInterval' type='xs:long'/>
+      <xs:attribute name='lockable' type='xs:string'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
@@ -7507,7 +7684,6 @@ each operation.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:authorizationMap'/>
-              <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:policyMap'/>
               <xs:element ref='tns:redeliveryPolicyMap'/>
               <xs:any namespace='##other'/>
@@ -7518,7 +7694,6 @@ each operation.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:authorizationMap'/>
-              <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:policyMap'/>
               <xs:element ref='tns:redeliveryPolicyMap'/>
               <xs:any namespace='##other'/>
@@ -7537,7 +7712,6 @@ each operation.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:authorizationMap'/>
-              <xs:element ref='tns:mKahaDB'/>
               <xs:element ref='tns:policyMap'/>
               <xs:element ref='tns:redeliveryPolicyMap'/>
               <xs:any namespace='##other'/>
@@ -7693,6 +7867,11 @@ matches the message.
   <xs:element name='statements'>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='createLockSchemaStatements' minOccurs='0' maxOccurs='unbounded'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='createSchemaStatements' minOccurs='0' maxOccurs='unbounded'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='unbounded'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
@@ -8605,18 +8784,49 @@ against the same logical database.
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='dataSource' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='exceptionHandler' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name='lockable' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:jdbcPersistenceAdapter'/>
+              <xs:element ref='tns:journalPersistenceAdapterFactory'/>
+              <xs:element ref='tns:journaledJDBC'/>
+              <xs:element ref='tns:kahaDB'/>
+              <xs:element ref='tns:levelDB'/>
+              <xs:element ref='tns:mKahaDB'/>
+              <xs:element ref='tns:replicatedLevelDB'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='statements' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:statements'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
+      <xs:attribute name='createTablesOnStartup' type='xs:boolean'/>
+      <xs:attribute name='dataSource' type='xs:string'/>
       <xs:attribute name='exceptionHandler' type='xs:string'/>
       <xs:attribute name='failIfLocked' type='xs:boolean'/>
       <xs:attribute name='lockAcquireSleepInterval' type='xs:long'/>
+      <xs:attribute name='lockable' type='xs:string'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='queryTimeout' type='xs:integer'/>
+      <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -8726,6 +8936,7 @@ TransportConnector.
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
+      <xs:attribute name='allowLinkStealing' type='xs:boolean'/>
       <xs:attribute name='auditNetworkProducers' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -9494,6 +9705,7 @@ warning if the user forgets. To disable the warning just set the value to <
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='watchTopicAdvisories' type='xs:boolean'/>
+      <xs:attribute name='xaAckMode' type='xs:integer'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
