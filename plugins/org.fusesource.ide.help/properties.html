@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Properties</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="printer.html" title="Printer"><link rel="next" href="quickfix.html" title="Quickfix"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="properties"></a>Properties</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47284"></a>Overview</h2></div></div></div><p>Property endpoints allow you to resolve the address for an
+   <title>Properties</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="printer.html" title="Printer"><link rel="next" href="quickfix.html" title="Quickfix"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="properties"></a>Properties</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62417"></a>Overview</h2></div></div></div><p>Property endpoints allow you to resolve the address for an
             endpoint using a property placeholder. Property placeholders can be
             created using a properties file, OSGi properties, the OSGi registry,
             Spring beans, or as part of the route definition.</p><p>The property placeholder is typically used when:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>looking up or creating endpoints</p></li><li class="listitem"><p>looking up beans in the Registry</p></li><li class="listitem"><p>using Blueprint's <code class="filename">PropertyPlaceholder</code>
@@ -12,67 +12,82 @@
                         <code class="filename">jmxAgent</code>,
                         <code class="filename">endpoint</code>,
                         <code class="filename">routeBuilder</code>,
-                        <code class="filename">proxy</code>, and others</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47331"></a>URI format</h2></div></div></div><p>The URI format for a property endpoint is:</p><pre class="programlisting">properties:<em class="replaceable"><code>key</code></em>[?<em class="replaceable"><code>options</code></em>]</pre><p>Where <em class="replaceable"><code>key</code></em> is the key for the property
-            to lookup.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47349"></a>Options</h2></div></div></div><p><a class="xref" href="properties.html#propertiesRefTbl010" title="Table&nbsp;65.&nbsp;Properties options">Table&nbsp;65, &#8220;Properties options&#8221;</a> describes the options for a
-            property endpoint.</p><div class="table"><a name="propertiesRefTbl010"></a><p class="title"><b>Table&nbsp;65.&nbsp;Properties options</b></p><div class="table-contents"><table summary="Properties options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
-                            <code class="code">cache</code>
+                        <code class="filename">proxy</code>, and others</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62464"></a>URI format</h2></div></div></div><p>The URI format for a property endpoint is:</p><pre class="programlisting">properties:<em class="replaceable"><code>key</code></em>[?<em class="replaceable"><code>options</code></em>]</pre><p>Where <em class="replaceable"><code>key</code></em> is the key for the property
+            to lookup.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62482"></a>Options</h2></div></div></div><p><a class="xref" href="properties.html#propertiesRefTbl010" title="Table&nbsp;66.&nbsp;Properties options">Table&nbsp;66, &#8220;Properties options&#8221;</a> describes the options for a
+            property endpoint.</p><div class="table"><a name="propertiesRefTbl010"></a><p class="title"><b>Table&nbsp;66.&nbsp;Properties options</b></p><div class="table-contents"><table summary="Properties options" width="100%" border="1"><colgroup><col width="36%" class="c1"><col width="12%" class="c2"><col width="52%" class="c3"></colgroup><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>
+                            <code class="literal">cache</code>
                         </td><td>
-                            <code class="code">true</code>
-                        </td><td>Specifies whether to cache loaded
-                            properties.</td></tr><tr><td>
-                            <code class="code">locations</code>
-                        </td><td>&nbsp;</td><td>Specifies a list of locations from which to load
-                            properties. A comma separated list is use to specify
-                            multiple locations. This option will override any
-                            locations specified in the <code class="sgmltag-element">
-                                camelContext</code> or the configuration.</td></tr><tr><td>
-                            <code class="code">ignoreMissingLocation</code>
+                            <code class="literal">boolean</code>
+                        </td><td><p>Whether or not to cache loaded
+                            properties.</p>
+                            <p>Defaults to <code class="literal">true</code>.</p>
+                        </td></tr><tr><td>
+                            <code class="literal">locations</code>
                         </td><td>
-                            <code class="code">false</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.10:</strong></span>
-                            Specifies whether to silently ignore a resource that
-                            cannot be located, such as a properties file that
-                            cannot be found.</td></tr><tr><td>
-                            <code class="code">propertyPrefix</code>
+                            <code class="literal">String</code>
+                        </td><td><p>A list of locations to load properties. You can
+                            use comma to separate multiple locations. This
+                            option will override any default locations and
+                                <span class="bold"><strong>only</strong></span> use the
+                            locations from this option.</p>
+                            <p>Defaults to
+                                <code class="literal">null</code>.</p>
+                        </td></tr><tr><td>
+                            <code class="literal">ignoreMissingLocation</code>
                         </td><td>
-                            <code class="code">null</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
-                            Optional prefix prepended to property names before
-                            resolution.</td></tr><tr><td>
-                            <code class="code">propertySuffix</code>
+                            <code class="literal">boolean</code>
+                        </td><td><p><span class="bold"><strong>Apache Camel 2.10 onwards:</strong></span> Whether to silently ignore if a
+                            location cannot be located, such as a properties
+                            file not found.</p>
+                            <p>Defaults to <code class="literal">false</code>.</p>
+                        </td></tr><tr><td>
+                            <code class="literal">propertyPrefix</code>
                         </td><td>
-                            <code class="code">null</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
-                            Optional suffix appended to property names before
-                            resolution.</td></tr><tr><td>
-                            <code class="code">fallBackToUnaugmentedProperty</code>
+                            <code class="literal">String</code>
+                        </td><td><p><span class="bold"><strong>Apache Camel 2.9 onwards:</strong></span> Optional prefix prepended to
+                            property names before resolution.</p>
+                            <p>Defaults to <code class="literal">null</code>.</p>
+                        </td></tr><tr><td>
+                            <code class="literal">propertySuffix</code>
                         </td><td>
-                            <code class="code">true</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
-                            When <code class="literal">true</code>, first attempt to
-                            resolve property name augmented with
-                                <code class="literal">propertyPrefix</code> or
-                                <code class="literal">propertySuffix</code> before falling
-                            back to the specified unaugmented name. Otherwise,
-                            search only for the augmented property name.</td></tr><tr><td>
-                            <code class="code">prefixToken</code>
+                            <code class="literal">String</code>
+                        </td><td><p><span class="bold"><strong>Apache Camel 2.9 onwards:</strong></span> Optional suffix appended to property
+                            names before resolution.</p>
+                            <p>Defaults to <code class="literal">null</code>.</p>
+                        </td></tr><tr><td>
+                            <code class="literal">fallbackToUnaugmentedProperty</code>
                         </td><td>
-                            <code class="code">{{</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
-                            Specifies the token that indicates the beginning of
-                            a property token.</td></tr><tr><td>
-                            <code class="code">suffixToken</code>
+                            <code class="literal">boolean</code>
+                        </td><td><p><span class="bold"><strong>Apache Camel 2.9 onwards:</strong></span> If true, first
+                                attempt resolution of property name augmented
+                                with <code class="literal">propertyPrefix</code> and
+                                    <code class="literal">propertySuffix</code> before
+                                falling back to the plain property name
+                                specified. If false, only the augmented property
+                                name is searched.</p>
+                            <p>Defaults to <code class="literal">true</code>.</p>
+                        </td></tr><tr><td>
+                            <code class="literal">prefixToken</code>
                         </td><td>
-                            <code class="code">}}</code>
-                        </td><td><span class="bold"><strong>Apache Camel 2.9:</strong></span>
-                            Specifies the token that indicates the end of a
-                            property token.</td></tr></tbody></table></div></div><br class="table-break"><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You can resolve a property from any Java code by using the
+                            <code class="literal">String</code>
+                        </td><td><p><span class="bold"><strong>Apache Camel 2.9 onwards:</strong></span> The token to
+                                indicate the beginning of a property
+                                token.</p>
+                            <p>Defaults to <code class="literal">{{</code>.</p>
+                        </td></tr><tr><td>
+                            <code class="literal">suffixToken</code>
+                        </td><td>
+                            <code class="literal">String</code>
+                        </td><td><p><span class="bold"><strong>Apache Camel 2.9 onwards:</strong></span> The token to
+                                indicate the end of a property token.</p>
+                            <p>Defaults to <code class="literal">{{</code>.</p>
+                        </td></tr></tbody></table></div></div><br class="table-break"><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>You can resolve a property from any Java code by using the
                     <code class="code">resolvePropertyPlaceholders</code> method on the
                     <code class="code">CamelContext</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="bridgeSprngCamel"></a>Bridging Spring and Apache Camel property placeholders</h2></div></div></div><p>Available as of <span class="bold"><strong>Apache Camel
             2.10</strong></span>.</p><p>The Spring Framework does not allow third-party frameworks, such
-            as Apache Camel, to seamlessly hook into the Spring property placeholder
-            mechanism. However, you can easily bridge Spring and Camel by
-            declaring a Spring bean with the type
+            as Apache Camel, to seamlessly hook into the Spring property
+            placeholder mechanism. However, you can easily bridge Spring and
+            Camel by declaring a Spring bean with the type
                 <code class="literal">org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer</code>,
             which is a Spring
                 <code class="literal">org.springframework.beans.factory.config.PropertyPlaceholderConfigurer</code>
@@ -101,4 +116,5 @@
   &lt;/route&gt;
 &lt;/camelContext&gt;</pre><p>Notice how the hello bean uses pure Spring property placeholders
             via the ${ } notation. And in the Camel routes, we use the Camel
-            placeholder notation with {{ }}.</p></div></div></body></html>
+            placeholder notation with {{ }}.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62736"></a>See also</h2></div></div></div><p><a class="link" href="http://camel.apache.org/properties.html" target="_top">Properties
+                Component</a>.</p></div></div></body></html>

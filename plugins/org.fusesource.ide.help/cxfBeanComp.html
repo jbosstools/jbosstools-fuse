@@ -1,25 +1,154 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>CXF Bean</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat Fuse IDE"><link rel="up" href="cxf.html" title="Apache CXF Endpoints"><link rel="prev" href="cxfComp.html" title="CXF"><link rel="next" href="cxfrs.html" title="CXF REST"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="cxfBeanComp"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CXF Bean &#8212; allows other Apache CXF endpoints to send exchanges and invoke Web service bean
-            objects</p></div><div class="refsection"><a name="d0e23673"></a><h2>Overview</h2><p>The CXF Bean component allows other Apache Camel endpoints to send exchanges and invoke
-            JAX-WS or JAXRS annotated service beans.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The CXF Bean component works similarly to the <a href="PLUGINS_ROOT/com.fusesource.rider.help/bean.html" class="olink"><i>Bean</i></a> component.</p></td></tr></table></div></div><div class="refsection"><a name="d0e23683"></a><h2>URI format</h2><p>The URI format for a CXF Bean endpoint is:</p><pre class="programlisting">cxfbean:<em class="replaceable"><code>serviceBeanRef</code></em>[?<em class="replaceable"><code>options</code></em>]</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If <em class="replaceable"><code>serviceBeanRef</code></em> references a <code class="literal">List</code> 
-        object, the elements of the <code class="literal">List</code> are the service bean objects accepted 
-        by the endpoint.</p></td></tr></table></div></div><div class="refsection"><a name="d0e23708"></a><h2>Dependencies</h2><p>Maven users will need to add a dependency on <code class="code">camel-cxf</code> to their poms as 
-      shown in <a class="xref" href="cxfBeanComp.html#CXFBeanRefDepEx" title="Example&nbsp;2.&nbsp;Apache CXF dependency">Example&nbsp;2, &#8220;Apache CXF dependency&#8221;</a>.</p><div class="example"><a name="CXFBeanRefDepEx"></a><p class="title"><b>Example&nbsp;2.&nbsp;Apache CXF dependency</b></p><div class="example-contents"><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
-    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.camel<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
-    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>camel-cxf<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
-    <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;version&gt;</strong>x.x.x<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
-    <em xmlns="http://www.w3.org/1999/xhtml" class="hl-comment" style="color: silver">&lt;!-- use the same version as your Camel core version --&gt;</em>
-<strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong></pre></div></div><br class="example-break"><p>If you want to learn about Apache CXF dependencies, see the <a class="link" href="http://svn.apache.org/repos/asf/cxf/trunk/distribution/src/main/release/lib/WHICH_JARS" target="_top">WHICH-JARS</a> text file.</p></div><div class="refsection"><a name="d0e23728"></a><h2>Options</h2><p><a class="xref" href="cxfBeanComp.html#CXFBeanOptsTbl" title="Table&nbsp;3.&nbsp;CXF Bean options">Table&nbsp;3, &#8220;CXF Bean options&#8221;</a> lists the options for a CXF Bean endpoint.</p><div class="table"><a name="CXFBeanOptsTbl"></a><p class="title"><b>Table&nbsp;3.&nbsp;CXF Bean options</b></p><div class="table-contents"><table summary="CXF Bean options" width="100%" border="1"><colgroup><col width="24%" class="c1"><col width="7%" class="c2"><col width="69%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default Value</th><th>Description</th></tr></thead><tbody><tr><td><code class="option">cxfBeanBinding</code></td><td>&nbsp;</td><td>Specifies a CXF bean binding using the <code class="literal">#</code> notation. The 
-              referenced object must be an instance of 
-              <code class="literal">org.apache.camel.component.cxf.cxfbean.CxfBeanBinding</code>.</td></tr><tr><td><code class="option">bus</code></td><td>&nbsp;</td><td>Specifies a reference to a bus object in the registry using the 
-              <code class="literal">#</code> notation. The referenced bus is used in place of the default 
-              bus.</td></tr><tr><td><code class="option">headerFilterStrategy</code></td><td>&nbsp;</td><td>Specifies a reference to an instance of 
-              <code class="interfacename">org.apache.camel.spi.HeaderFilterStrategy</code> in the 
-              registry using the <code class="literal">#</code> notation. The referenced instance is used in 
-              place of the default header filter strategy.</td></tr><tr><td><code class="option">setDefaultBus</code></td><td><code class="literal">false</code></td><td>Specifies whether to use the default Apache CXF bus for this endpoint.</td></tr><tr><td><code class="option">populateFromClass</code></td><td><code class="literal">true</code></td><td>Specifies if the <code class="code">wsdlLocation</code> annotation on the POJO is ignored.</td></tr><tr><td><code class="option">providers</code></td><td>&nbsp;</td><td>Sets the providers for a CXFRS endpoint.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e23814"></a><h2>Headers</h2><p><a class="xref" href="cxfBeanComp.html#CXFBeanHeadersTbl" title="Table&nbsp;4.&nbsp;CXF Bean headers">Table&nbsp;4, &#8220;CXF Bean headers&#8221;</a> lists the headers used by a CXF Bean endpoint.</p><div class="table"><a name="CXFBeanHeadersTbl"></a><p class="title"><b>Table&nbsp;4.&nbsp;CXF Bean headers</b></p><div class="table-contents"><table summary="CXF Bean headers" width="100%" border="1"><colgroup><col width="32%" class="c1"><col width="9%" class="c2"><col width="9%" class="c3"><col width="13%" class="c4"><col width="5%" class="c5"><col width="32%" class="c6"></colgroup><thead><tr><th>Name</th><th>Required</th><th>Type</th><th>Default Value</th><th>In/Out</th><th>Description</th></tr></thead><tbody><tr><td><span class="property">CamelHttpCharacterEncoding</span></td><td>No</td><td><code class="literal">String</code></td><td>&nbsp;</td><td>In</td><td>Specifies the character encoding of the message.</td></tr><tr><td><span class="property">Content-Type</span></td><td>No</td><td><code class="literal">String</code></td><td><code class="literal">\**/*\*</code></td><td>In</td><td>Specifies the content type of the message.</td></tr><tr><td><span class="property">CamelHttpBaseUri</span></td><td>Yes</td><td><code class="literal">String</code></td><td>The Endpoint URI of the source endpoint in the Camel exchange</td><td>In</td><td>Specifies the scheme, host and port portion of the request URI. The value of 
-              this header will be set in the CXF message as the 
-              <span class="property">Message.BASE_PATH</span> property.  It is needed by Apache CXF JAX-RS 
-              processing.</td></tr><tr><td><span class="property">CamelHttpPath</span></td><td>Yes</td><td><code class="literal">String</code></td><td>&nbsp;</td><td>In</td><td>Specifies the request URI's path.</td></tr><tr><td><span class="property">CamelHttpMethod</span></td><td>Yes</td><td><code class="literal">String</code></td><td>&nbsp;</td><td>In</td><td>Specifies the RESTful request verb.</td></tr><tr><td><span class="property">CamelHttpResponseCode</span></td><td>No</td><td><code class="literal">Integer</code></td><td>&nbsp;</td><td>Out</td><td>Specifies the HTTP response code.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e23935"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td><a href="PLUGINS_ROOT/com.fusesource.rider.help/bean.html" class="olink"><i>Bean</i></a></td></tr><tr><td><a class="link" href="http://cxf.apache.org" target="_top">Apache CXF</a></td></tr><tr><td><a class="link" href="http://cxf.apache.org/docs/" target="_top">
-        Apache CXF Documentation
-      </a></td></tr></table></div></div></body></html>
+   <title>CXF Bean</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="cxf.html" title="Apache CXF Endpoints"><link rel="prev" href="cxfComp.html" title="CXF"><link rel="next" href="cxfrs.html" title="CXF REST"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="cxfBeanComp"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CXF Bean &#8212; allows other Apache CXF endpoints to send exchanges and invoke Web service bean
+            objects</p></div><div class="refsection"><a name="d0e25793"></a><h2>Overview</h2><p>The CXF Bean component allows other Apache Camel endpoints to send exchanges and
+            invoke Web service bean objects. Currently it supports only JAXRS and JAXWS (new in
+            Apache Camel 2.1) annotated service bean.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p><code class="literal">CxfBeanEndpoint</code> is a <code class="literal">ProcessorEndpoint</code>, so
+                it has no consumers. It works similarly to a Bean component.</p></td></tr></table></div></div><div class="refsection"><a name="d0e25806"></a><h2>URI format</h2><p>The URI format for a CXF Bean endpoint is:</p><pre class="programlisting">cxfbean:<em class="replaceable"><code>serviceBeanRef</code></em>[?<em class="replaceable"><code>options</code></em>]</pre><p>Where <em class="replaceable"><code>serviceBeanRef</code></em> is a registry key for looking up the
+            service bean object.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If <em class="replaceable"><code>serviceBeanRef</code></em> references a <code class="literal">List</code>
+                object, the elements of the <code class="literal">List</code> are the service bean objects
+                accepted by the endpoint.</p></td></tr></table></div></div><div class="refsection"><a name="d0e25836"></a><h2>Options</h2><p><a class="xref" href="cxfBeanComp.html#CXFBeanOptsTbl" title="Table&nbsp;4.&nbsp;CXF Bean options">Table&nbsp;4, &#8220;CXF Bean options&#8221;</a> lists the options for a CXF Bean endpoint. None of
+            these options are required.</p><div class="table"><a name="CXFBeanOptsTbl"></a><p class="title"><b>Table&nbsp;4.&nbsp;CXF Bean options</b></p><div class="table-contents"><table summary="CXF Bean options" width="100%" border="1"><colgroup><col width="20%" class="c1"><col width="55%" class="c2"><col width="25%" class="c3"></colgroup><thead><tr><th>Name</th><th>Descriptione</th><th>Default</th></tr></thead><tbody><tr><td>
+                            <code class="literal">bus</code>
+                        </td><td>
+                            <p>CXF bus reference specified by the <code class="literal">\#</code>
+                                notation.</p>
+                            <p>The referenced object must be an instance of
+                                    <code class="literal">org.apache.cxf.Bus</code>.</p>
+                            <p>For example: <code class="literal">bus=#busName</code></p>
+                        </td><td>Default bus created by CXF Bus Factory </td></tr><tr><td>
+                            <code class="literal">cxfBeanBinding</code>
+                        </td><td>
+                            <p>CXF bean binding specified by the <code class="literal">\#</code> notation.
+                                The referenced object must be an instance of
+                                    <code class="literal">org.apache.camel.component.cxf.cxfbean.CxfBeanBinding</code>.</p>
+                            <p>For example: <code class="literal">cxfBinding=#bindingName</code></p>
+                        </td><td>
+                            <code class="literal">DefaultCxfBeanBinding</code>
+                        </td></tr><tr><td>
+                            <code class="literal">headerFilterStrategy</code>
+                        </td><td>
+                            <p>Header filter strategy specified by the <code class="literal">\#</code>
+                                notation. The referenced object must be an instance of
+                                    <code class="literal">org.apache.camel.spi.HeaderFilterStrategy</code>.</p>
+                            <p>For example:
+                                <code class="literal">headerFilterStrategy=#strategyName</code></p>
+                        </td><td>
+                            <code class="literal">CxfHeaderFilterStrategy</code>
+                        </td></tr><tr><td>
+                            <code class="literal">populateFromClass</code>
+                        </td><td>Since 2.3, the wsdlLocation annotated in the POJO is ignored (by
+                            default) unless this option is set to <code class="literal">false.</code>. Prior
+                            to 2.3, the wsdlLocation annotated in the POJO is always honored, and it
+                            is not possible to ignore.</td><td>
+                            <code class="literal">true</code>
+                        </td></tr><tr><td>
+                            <code class="literal">providers</code>
+                        </td><td>
+                            <p>Since 2.5, setting the providers for the CXFRS endpoint.</p>
+                            <p>For example:
+                                    <code class="literal">providers=#providerRef1,#providerRef2</code></p>
+                        </td><td>
+                            <code class="literal">null</code>
+                        </td></tr><tr><td>
+                            <code class="literal">setDefaultBus</code>
+                        </td><td>Sets the default bus when the CXF endpoint creates a bus by itself. </td><td>
+                            <code class="literal">false</code>
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e25989"></a><h2>Headers</h2><p><a class="xref" href="cxfBeanComp.html#CXFBeanHeadersTbl" title="Table&nbsp;5.&nbsp;CXF Bean headers">Table&nbsp;5, &#8220;CXF Bean headers&#8221;</a> lists the headers used by a CXF Bean
+            endpoint.</p><div class="table"><a name="CXFBeanHeadersTbl"></a><p class="title"><b>Table&nbsp;5.&nbsp;CXF Bean headers</b></p><div class="table-contents"><table summary="CXF Bean headers" width="100%" border="1"><colgroup><col width="32%" class="c1"><col width="10%" class="c2"><col width="58%" class="c3"></colgroup><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>
+                            <code class="literal">CamelHttpCharacterEncoding</code>
+                        </td><td>
+                            <code class="literal">String</code>
+                        </td><td>
+                            <p>Character encoding; for example:
+                                <code class="literal">ISO-8859-1</code></p>
+                            <p>Applies to In message headers only.</p>
+                            <p>(Prior to v2.0-m2, was named
+                                    <code class="literal">CamelCxfBeanCharacterEncoding</code>).</p>
+                        </td></tr><tr><td>
+                            <code class="literal">CamelContentType</code>
+                        </td><td>
+                            <code class="literal">String</code>
+                        </td><td>
+                            <p>Content type; for example: <code class="literal">text/xml</code></p>
+                            <p>Defaults to <code class="literal">\**/*\*</code>
+                            </p>
+                            <p>Applies to In message headers only.</p>
+                            <p> (Prior to v2.0-m2, was named
+                                    <code class="literal">CamelCxfBeanContentType</code>)</p>
+                        </td></tr><tr><td>
+                            <p>CamelHttpBaseUri</p>
+                        </td><td>
+                            <code class="literal">String</code>
+                        </td><td>
+                            <p>The value of this header is set in the CXF message as the
+                                    <code class="literal">Message.BASE_PATH</code> property; for example:
+                                    <code class="literal">http://localhost:9000</code>.</p>
+                            <p>It is a required option and used by CXF JAX-RS processing.
+                                Basically, it is the scheme, host, and port portion of the request
+                                URI.</p>
+                            <p>Defaults to the endpoint URI of the source endpoint in the Camel
+                                exchange.</p>
+                            <p>Applies to In message headers only.</p>
+                            <p>(Prior to v2.0-m3, was named
+                                    <code class="literal">CamelCxfBeanRequestBasePath</code>)</p>
+                        </td></tr><tr><td>
+                            <code class="literal">CamelHttpPath</code>
+                        </td><td>
+                            <code class="literal">String</code>
+                        </td><td>
+                            <p>Request URI's path; for example:
+                                <code class="literal">consumer/123</code></p>
+                            <p>This is a required option.</p>
+                            <p>Applies to In message headers only.</p>
+                            <p>(Prior to v2.0-m2, was named
+                                    <code class="literal">CamelCxfBeanRequestPath{}</code>)</p>
+                        </td></tr><tr><td>
+                            <code class="literal">CamelHttpMethod</code>
+                        </td><td>
+                            <code class="literal">String</code>
+                        </td><td>
+                            <p>RESTful request verb; for example: <code class="literal">GET</code>,
+                                    <code class="literal">PUT</code>, <code class="literal">POST</code>,
+                                    <code class="literal">DELETE</code></p>
+                            <p>This is a required option.</p>
+                            <p>Applies to In message headers only.</p>
+                            <p>(Prior 2.0-m2, was named
+                                <code class="literal">CamelCxfBeanVerb</code>)</p>
+                        </td></tr><tr><td>
+                            <code class="literal">CamelHttpResponseCode</code>
+                        </td><td>
+                            <code class="literal">Integer</code>
+                        </td><td>
+                            <p>HTTP response code; for example: <code class="literal">200</code></p>
+                            <p>Applies to Out message headers only.</p>
+                        </td></tr></tbody></table></div></div><br class="table-break"><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Currently, CXF Bean component has (only) been tested with Jetty HTTP component it
+                can understand headers from Jetty HTTP component without requiring
+                conversion.</p></td></tr></table></div></div><div class="refsection"><a name="_IDU_CXFBeanComponent_HSH_AWorkingSample"></a><h2>A Working Sample</h2><p>This sample shows how to create a route that starts a Jetty HTTP server. The route
+            sends requests to a CXF Bean and invokes a JAXRS annotated service.</p><p>First, create a route as follows. The <code class="literal">from</code> endpoint is a Jetty HTTP
+            endpoint that is listening on port 9000. Notice that the
+                <code class="literal">matchOnUriPrefix</code> option must be set to <code class="literal">true</code>
+            because RESTful request URI will not match the endpoint's URI http://localhost:9000
+            exactly.</p><pre class="programlisting">&lt;route&gt;
+	&lt;from uri="jetty:http://localhost:9000?matchOnUriPrefix=true" /&gt;
+	&lt;to uri="cxfbean:customerServiceBean" /&gt;
+	&lt;to uri="mock:endpointA" /&gt;
+&lt;/route&gt;</pre><p>The <code class="literal">to</code> endpoint is a CXF Bean with bean name
+                <code class="literal">customerServiceBean</code>. The name will be looked up from the
+            registry. Next, we make sure our service bean is available in Spring registry. We create
+            a bean definition in the Spring configuration. In this example, we create a List of
+            service beans (of one element). We could have created just a single bean without a
+            List.</p><pre class="programlisting">&lt;util:list id="customerServiceBean"&gt;
+	&lt;bean class="org.apache.camel.component.cxf.jaxrs.testbean.CustomerService" /&gt;
+&lt;/util:list&gt;
+
+&lt;bean class="org.apache.camel.wsdl_first.PersonImpl" id="jaxwsBean" /&gt;</pre><p>That's it. Once the route is started, the web service is ready for business. A HTTP
+            client can make a request and receive response.</p><pre class="programlisting">url = new URL("http://localhost:9000/customerservice/orders/223/products/323");
+in = url.openStream();
+assertEquals("{\"Product\":{\"description\":\"product 323\",\"id\":323}}", CxfUtils.getStringFromInputStream(in));</pre></div><div class="refsection"><a name="d0e26233"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                <a href="PLUGINS_ROOT/com.fusesource.rider.help/bean.html" class="olink"><i>Bean</i></a>
+            </td></tr><tr><td>
+                <a class="link" href="http://cxf.apache.org" target="_top">Apache CXF</a>
+            </td></tr><tr><td>
+                <a class="link" href="http://cxf.apache.org/docs/" target="_top"> Apache CXF Documentation </a>
+            </td></tr></table></div></div></body></html>

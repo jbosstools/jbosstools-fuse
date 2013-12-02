@@ -3,17 +3,17 @@
 }
 
 a:link {
-	color: #3366FF;
+	color: #3333CC;
 	text-decoration: none;
 }
 
 a:visited {
-	color: #3366FF;
+	color: #3333CC;
 	text-decoration: none;
 }
 
 a.dotted {
-	color: #3366FF;
+	color: #3333CC;
 	text-decoration: none;
 	border-bottom: 1px dotted #000;  
 }
@@ -32,12 +32,12 @@ div.toc a:visited {
 
 body, div, td, th, form {
 	font-family: "liberation sans", "Myriad ", "Bitstream Vera Sans", "Lucida Grande", "Luxi Sans", "Trebuchet MS", helvetica, verdana, arial, sans-serif;
-	font-size: 10pt;
+	font-size: 12pt;
 }
 
 p {
 	font-family: "liberation sans", "Myriad ", "Bitstream Vera Sans", "Lucida Grande", "Luxi Sans", "Trebuchet MS", helvetica, verdana, arial, sans-serif;
-	font-size: 10pt;
+	font-size: 12pt;
     clear: bottom;
 	padding-top: 2px;
 }
@@ -64,7 +64,7 @@ code.sgmltag-localname, code.sgmltag-namespace, code.function, code.type, code.e
 code.varname, code.interfacename, code.oointerface, code.classname, code.ooclass, code.methodname, code.coexception, 
 code.computeroutput, code.command, code.option, code.filename, code.literal, code.uri , code.envar, code.code,
 code.methodsynopsis, pre.classsynopsis, code.constant, span.type , span.markup, 
-span.package, div.cmdsynopsis {
+span.package, div.cmdsynopsis, code.constructorsynopsis {
 	background-color: transparent;
 	color: #990033;
 	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
@@ -132,7 +132,7 @@ h1 {
 	color: #a70000;
 	font-size: 150%;
 	font-weight: normal;
-	margin-top: 0;
+	margin-top:1ex;
 }
 
 /* h1.title applies to the book title on the cover page
@@ -144,6 +144,7 @@ h1.title {
 	font-variant: small-caps;
 	font-size: 190%;
 	font-weight: bold;
+	margin-top:1ex;
 }
 
 /* h2.title applies only to the book subtitle on the cover page */
@@ -291,6 +292,17 @@ div.informaltable th, div.informaltable td {
 
 div.calloutlist table, div.calloutlist th, 
 div.calloutlist td {
+	border: none;
+}
+
+div.note table, div.note th, div.note td,
+div.important table, div.important th, div.important td,
+div.tip table, div.tip th, div.tip td,
+div.warning table, div.warning th, div.warning td,
+div.caution table, div.caution th, div.caution td,
+div.figure table, div.figure th, div.figure td,
+div.figure-contents table, div.figure-contents th, div.figure-contents td,
+div.mediaobject table, div.mediaobject th, div.mediaobject td {
 	border: none;
 }
 

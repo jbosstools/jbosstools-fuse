@@ -1,12 +1,12 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Language</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="jt400.html" title="JT400"><link rel="next" href="ldap.html" title="LDAP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="language"></a>Language</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_Language"></a>Language</h2></div></div></div><p>The language component allows you to send <a class="link" href="Exchange" target="_top">Exchange</a> to an endpoint which executes a script by any of the supported <a class="link" href="Languages" target="_top">Languages</a> in Camel.
+   <title>Language</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="jt400.html" title="JT400"><link rel="next" href="ldap.html" title="LDAP"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="language"></a>Language</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_Language"></a>Language</h2></div></div></div><p>The language component allows you to send <a class="link" href="Exchange" target="_top">Exchange</a> to an endpoint which executes a script by any of the supported <a class="link" href="Languages" target="_top">Languages</a> in Camel.
 By having a component to execute language scripts, it allows more dynamic routing capabilities. For example by using the <span class="phrase">Routing SlipRouting Slip</span> or <span class="phrase">Dynamic RouterDynamic Router</span> EIPs you can send messages to <code class="literal">language</code> endpoints where the script is dynamic defined as well.</p><p>This component is provided out of the box in <code class="literal">camel-core</code> and hence no additional JARs is needed. You only have to include additional Camel components if the language of choice mandates it, such as using <a class="link" href="Groovy" target="_top">Groovy</a> or <a class="link" href="JavaScript" target="_top">JavaScript</a> languages.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">
 language://languageName[:script][?options]
 
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><p>The component supports the following options. 
 
-    </p><table id="d0e43709"><tr>
+    </p><table id="d0e57997"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Type </th>
@@ -39,7 +39,7 @@ language://languageName[:script][?options]
 
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Language_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><p>The following message headers can be used to affect the behavior of the component</p><p>
 
-    </p><table id="d0e43813"><tr>
+    </p><table id="d0e58101"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>

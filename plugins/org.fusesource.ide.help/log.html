@@ -1,145 +1,295 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Log</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="list.html" title="List"><link rel="next" href="lucene.html" title="Lucene"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="log"></a>Log</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_LogComponent"></a>Log Component</h2></div></div></div><p>The <span class="bold"><strong>log:</strong></span> component logs message exchanges to the
-      underlying logging mechanism.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">log:loggingCategory[?options]</pre><p>Where <span class="bold"><strong>loggingCategory</strong></span> is the name of the logging category
-      to use. You can append query options to the URI in the following format,
-        <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p><p>For example, a log endpoint typically specifies the logging level using the
-        <code class="literal">level</code> option, as follows:</p><pre class="programlisting">log:org.apache.camel.example?level=DEBUG</pre><p>The default logger logs every exchange (<span class="emphasis"><em>regular logging</em></span>). But Apache
-            Camel also ships with the <code class="literal">Throughput</code> logger, which is used whenever
-            the <code class="literal">groupSize</code> option is specified.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>In <span class="bold"><strong>Apache Camel 2.2</strong></span> onwards there is a
+   <title>Log</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="list.html" title="List"><link rel="next" href="lucene.html" title="Lucene"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="log"></a>Log</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_LogComponent"></a>Log Component</h2></div></div></div><p>The <span class="bold"><strong>log:</strong></span> component logs message exchanges to the
+            underlying logging mechanism.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">log:loggingCategory[?options]</pre><p>Where <span class="bold"><strong>loggingCategory</strong></span> is the name of the logging
+            category to use. You can append query options to the URI in the following format,
+                <code class="literal">?option=value&amp;option=value&amp;...</code>
+        </p><p>For example, a log endpoint typically specifies the logging level using the
+                <code class="literal">level</code> option, as follows:</p><pre class="programlisting">log:org.apache.camel.example?level=DEBUG</pre><p>The default logger logs every exchange (<span class="emphasis"><em>regular logging</em></span>). But
+            Apache Camel also ships with the <code class="literal">Throughput</code> logger, which is used
+            whenever the <code class="literal">groupSize</code> option is specified.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>In <span class="bold"><strong>Apache Camel 2.2</strong></span> onwards there is a
                     <code class="literal">log</code> directly in the DSL, but it has a different purpose. Its
-                meant for lightweight and human logs.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Options"></a>Options</h2></div></div></div><table id="d0e44195"><tr>
-        <th> Option </th>
-        <th> Default </th>
-        <th> Type </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">level</code>
-        </td>
-        <td><code class="literal">INFO</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td> Logging level to use. Possible values: <code class="literal">FATAL</code>,
-            <code class="literal">ERROR</code>, <code class="literal">WARN</code>, <code class="literal">INFO</code>,
-            <code class="literal">DEBUG</code>, <code class="literal">TRACE</code>, <code class="literal">OFF</code>
-        </td>
-      </tr><tr>
-        <td><code class="literal">groupSize</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td><code class="literal">Integer</code>
-        </td>
-        <td> An integer that specifies a group size for throughput logging. By default, regular
-          logging is used. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Formatting"></a>Formatting</h2></div></div></div><p>The log formats the execution of exchanges to log lines. By default, the log uses
-        <code class="literal">LogFormatter</code> to format the log output, where
-        <code class="literal">LogFormatter</code> has the following options:</p><table id="d0e44282"><tr>
-        <th> Option </th>
-        <th> Default </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">showAll</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> Quick option for turning all options on (multiline, maxChars has to be manually set if to be used). </td>
-      </tr><tr>
-        <td><code class="literal">showExchangeId</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> Show the unique exchange ID. </td>
-      </tr><tr>
-        <td><code class="literal">showExchangePattern</code>
-        </td>
-        <td><code class="literal">true</code>
-        </td>
-        <td><span class="bold"><strong>Apache Camel 2.3:</strong></span> Shows the Message Exchange Pattern
-                    (or MEP for short). </td>
-      </tr><tr>
-        <td><code class="literal">showProperties</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> Show the exchange properties. </td>
-      </tr><tr>
-        <td><code class="literal">showHeaders</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> Show the In message headers. </td>
-      </tr><tr>
-        <td><code class="literal">showBodyType</code>
-        </td>
-        <td><code class="literal">true</code>
-        </td>
-        <td> Show the In body Java type. </td>
-      </tr><tr>
-        <td><code class="literal">showBody</code>
-        </td>
-        <td><code class="literal">true</code>
-        </td>
-        <td> Show the In body. </td>
-      </tr><tr>
-        <td><code class="literal">showOut</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> If the exchange has an Out message, show the Out message. </td>
-      </tr><tr>
-        <td><code class="literal">showException</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> If the exchange has an exception,
+                meant for lightweight and human logs.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Options"></a>Options</h2></div></div></div><table id="d0e58483"><tr>
+                <th> Option </th>
+                <th> Default </th>
+                <th> Type </th>
+                <th> Description </th>
+            </tr><tr>
+                <td>
+                    <code class="literal">level</code>
+                </td>
+                <td>
+                    <code class="literal">INFO</code>
+                </td>
+                <td>
+                    <code class="literal">String</code>
+                </td>
+                <td> Logging level to use. Possible values: <code class="literal">ERROR</code>,
+                        <code class="literal">WARN</code>, <code class="literal">INFO</code>, <code class="literal">DEBUG</code>,
+                        <code class="literal">TRACE</code>, <code class="literal">OFF</code>
+                </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">marker</code>
+                </td>
+                <td>
+                    <code class="literal">null</code>
+                </td>
+                <td>
+                    <code class="literal">String</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.9:</strong></span> An optional <a class="link" href="http://www.slf4j.org/api/org/slf4j/Marker.html" target="_top">Marker</a> name
+                    to use. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">groupSize</code>
+                </td>
+                <td>
+                    <code class="literal">null</code>
+                </td>
+                <td>
+                    <code class="literal">Integer</code>
+                </td>
+                <td> An integer that specifies a group size for throughput logging.</td>
+            </tr><tr>
+                <td>
+                    <code class="literal">groupInterval</code>
+                </td>
+                <td>
+                    <code class="literal">null</code>
+                </td>
+                <td>
+                    <code class="literal">Integer</code>
+                </td>
+                <td> If specified will group message stats by this time interval (in millis) </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">groupDelay</code>
+                </td>
+                <td>
+                    <code class="literal">0</code>
+                </td>
+                <td>
+                    <code class="literal">Integer</code>
+                </td>
+                <td> Set the initial delay for stats (in millis) </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">groupActiveOnly</code>
+                </td>
+                <td>
+                    <code class="literal">true</code>
+                </td>
+                <td>
+                    <code class="literal">boolean</code>
+                </td>
+                <td> If true, will hide stats when no new messages have been received for a time
+                    interval, if false, show stats regardless of message traffic </td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Formatting"></a>Formatting</h2></div></div></div><p>The log formats the execution of exchanges to log lines. By default, the log uses
+                <code class="literal">LogFormatter</code> to format the log output, where
+                <code class="literal">LogFormatter</code> has the following options:</p><table id="d0e58670"><tr>
+                <th> Option </th>
+                <th> Default </th>
+                <th> Description </th>
+            </tr><tr>
+                <td>
+                    <code class="literal">showAll</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td> Quick option for turning all options on (multiline, maxChars has to be manually
+                    set if to be used). </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showExchangeId</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td> Show the unique exchange ID. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showExchangePattern</code>
+                </td>
+                <td>
+                    <code class="literal">true</code>
+                </td>
+                <td> Shows the Message Exchange Pattern (or MEP for short). </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showProperties</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td> Show the exchange properties. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showHeaders</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td> Show the In message headers. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showBodyType</code>
+                </td>
+                <td>
+                    <code class="literal">true</code>
+                </td>
+                <td> Show the In body Java type. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showBody</code>
+                </td>
+                <td>
+                    <code class="literal">true</code>
+                </td>
+                <td> Show the In body. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showOut</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td> If the exchange has an Out message, show the Out message. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showException</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> If the exchange has an exception,
                     show the exception message (no stack trace). </td>
-      </tr><tr>
-        <td><code class="literal">showCaughtException</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> If the exchange has a caught
+            </tr><tr>
+                <td>
+                    <code class="literal">showCaughtException</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> If the exchange has a caught
                     exception, show the exception message (no stack trace). A caught exception is
                     stored as a property on the exchange and for instance a
                         <code class="literal">doCatch</code> can catch exceptions. See <a class="link" href="Try Catch Finally" target="_top">Try Catch Finally</a>. </td>
-      </tr><tr>
-        <td><code class="literal">showStackTrace</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Show the stack trace, if an exchange
-                    has an exception. </td>
-      </tr><tr>
-        <td><code class="literal">showFuture</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td><span class="bold"><strong>Apache Camel 2.1:</strong></span> Whether Camel should show
-                        <code class="literal">java.util.concurrent.Future</code> bodies or not. If enabled
-                    Camel could potentially wait until the <code class="literal">Future</code> task is done.
-                    Will by default not wait. </td>
-      </tr><tr>
-        <td><code class="literal">multiline</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> If <code class="literal">true</code>, each piece of information is logged on a new line. </td>
-      </tr><tr>
-        <td><code class="literal">maxChars</code>
-        </td>
-        <td></td>
-        <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Limits the number of characters
-                    logged per line. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Regularloggersample"></a>Regular logger sample</h2></div></div></div><p>In the route below we log the incoming orders at <code class="literal">DEBUG</code> level before the
-    order is processed:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
+            </tr><tr>
+                <td>
+                    <code class="literal">showStackTrace</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Show the stack trace, if an
+                    exchange has an exception. Only effective if one of <code class="literal">showAll</code>,
+                        <code class="literal">showException</code> or <code class="literal">showCaughtException</code>
+                    are enabled.</td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showFiles</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.9:</strong></span> Whether Camel should show file
+                    bodies or not (eg such as java.io.File). </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showFuture</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td> Whether Camel should show <code class="literal">java.util.concurrent.Future</code> bodies
+                    or not. If enabled Camel could potentially wait until the
+                        <code class="literal">Future</code> task is done. Will by default not wait. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">showStreams</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td><span class="bold"><strong>Camel 2.8:</strong></span> Whether Camel should show stream
+                    bodies or not (eg such as java.io.InputStream). Beware if you enable this option
+                    then you may not be able later to access the message body as the stream have
+                    already been read by this logger. To remedy this you will have to use <a class="link" href="Stream Caching" target="_top">Stream Caching</a>. </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">multiline</code>
+                </td>
+                <td>
+                    <code class="literal">false</code>
+                </td>
+                <td> If <code class="literal">true</code>, each piece of information is logged on a new line.
+                </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">maxChars</code>
+                </td>
+                <td></td>
+                <td> Limits the number of characters logged per line. The default value is
+                        <code class="literal">10000</code> from <span class="bold"><strong>Camel 2.9</strong></span>
+                    onwards. </td>
+            </tr></table><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>For older versions of Camel that do not support the <span class="property">showFiles</span>
+                or <span class="property">showStreams</span> properties, you can set the following property
+                instead on the <a class="link" href="CamelContext" target="_top">CamelContext</a> to log both stream
+                and file bodies:</p><pre class="programlisting">
+ camelContext.getProperties().put(Exchange.LOG_DEBUG_BODY_STREAMS, true);
+ 
+ </pre></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Regularloggersample"></a>Regular logger sample</h2></div></div></div><p>In the route below we log the incoming orders at <code class="literal">DEBUG</code> level before
+            the order is processed:</p><pre class="programlisting"><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;route&gt;</strong>
     <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;from</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"activemq:orders"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
     <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"log:com.mycompany.order?level=DEBUG"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
     <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;to</strong> <span xmlns="http://www.w3.org/1999/xhtml" class="hl-attribute" style="color: #F5844C">uri</span>=<span xmlns="http://www.w3.org/1999/xhtml" class="hl-value" style="color: #993300">"bean:processOrder"</span><strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">/&gt;</strong>
-  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong> </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Regularloggerwithformattersample"></a>Regular logger with formatter sample</h2></div></div></div><p>In the route below we log the incoming orders at <code class="literal">INFO</code> level before the
-      order is processed.</p><pre class="programlisting">from("activemq:orders").
-    to("log:com.mycompany.order?showAll=true&amp;multiline=true").to("bean:processOrder");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Throughputloggersample"></a>Throughput logger sample</h2></div></div></div><p>In the route below we log the throughput of the incoming orders at
-        <code class="literal">DEBUG</code> level grouped by 10 messages.</p><pre class="programlisting">from("activemq:orders").
-    to("log:com.mycompany.order?level=DEBUG?groupSize=10").to("bean:processOrder");</pre></div></div></body></html>
+  <strong xmlns="http://www.w3.org/1999/xhtml" class="hl-tag" style="color: #000096">&lt;/route&gt;</strong> </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Regularloggerwithformattersample"></a>Regular logger with formatter sample</h2></div></div></div><p>In the route below we log the incoming orders at <code class="literal">INFO</code> level before
+            the order is processed.</p><pre class="programlisting">from("activemq:orders").
+    to("log:com.mycompany.order?showAll=true&amp;multiline=true").to("bean:processOrder");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Throughputloggersample"></a>Throughput logger with groupSize sample</h2></div></div></div><p>In the route below we log the throughput of the incoming orders at
+                <code class="literal">DEBUG</code> level grouped by 10 messages.</p><pre class="programlisting">from("activemq:orders").
+    to("log:com.mycompany.order?level=DEBUG&amp;groupSize=10").to("bean:processOrder");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_ThroughputloggerwithgroupIntervalsample"></a>Throughput logger with groupInterval sample</h2></div></div></div><p>This route will result in message stats logged every 10s, with an initial 60s delay
+            and stats should be displayed even if there isn't any message traffic.</p><pre class="programlisting">from("activemq:orders")
+    .to("log:com.mycompany.order?level=DEBUG&amp;groupInterval=10000&amp;groupDelay=60000&amp;groupActiveOnly=false")
+    .to("bean:processOrder");</pre><p>The following will be logged:</p><pre class="programlisting">"Received: 1000 new messages, with total 2000 so far. Last group took: 10000 millis which is: 100 messages per second. average: 100"</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Fullcustomizationoftheloggingoutput"></a>Full customization of the logging output</h2></div></div></div><p></p><p>
+            <span class="bold"><strong>Available as of Camel 2.11</strong></span>
+        </p><p>With the options outlined in the Formatting
+            section, you can control much of the output of the logger. However, log lines will
+            always follow this structure:</p><pre class="programlisting">
+Exchange[Id:ID-machine-local-50656-1234567901234-1-2, ExchangePattern:InOut, 
+Properties:{CamelToEndpoint=log://org.apache.camel.component.log.TEST?showAll=true, 
+CamelCreatedTimestamp=Thu Mar 28 00:00:00 WET 2013}, 
+Headers:{breadcrumbId=ID-machine-local-50656-1234567901234-1-1}, BodyType:String, Body:Hello World, Out: null]
+</pre><p>This format is unsuitable in some cases, perhaps because, among other things, you need
+            to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Filter the headers and properties that are printed, to strike a balance
+                    between insight and verbosity.</p></li><li class="listitem"><p>Adjust the log message to whatever you deem most readable.</p></li><li class="listitem"><p>Tailor log messages for digestion by log mining systems, e.g. Splunk.</p></li><li class="listitem"><p>Print specific body types differently.</p></li></ul></div><p>Whenever you require absolute customization, you can create a class that implements
+            the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/ExchangeFormatter.html" target="_top"><code class="literal">ExchangeFormatter</code>
+            </a> interface. Within the <code class="literal">format(Exchange)</code> method you have access
+            to the full Exchange, so you can select and extract the precise information you need,
+            format it in a custom manner and return it. The return value will become the final log
+            message.</p><p>You can have the Log component pick up your custom
+                <code class="literal">ExchangeFormatter</code> in either of two ways:</p><p>
+            <span class="bold"><strong>Explicitly instantiating the LogComponent in your
+                Registry:</strong></span>
+        </p><pre class="programlisting">
+&lt;bean name="log" class="org.apache.camel.component.log.LogComponent"&gt;
+   &lt;property name="exchangeFormatter" ref="myCustomFormatter" /&gt;
+&lt;/bean&gt;
+</pre><p>
+            <span class="bold"><strong>Convention over configuration:</strong></span>
+        </p><p>Simply by registering a bean with the name <code class="literal">logFormatter</code>; the Log
+            Component is intelligent enough to pick it up automatically.</p><pre class="programlisting">
+&lt;bean name="logFormatter" class="com.xyz.MyCustomExchangeFormatter" /&gt;
+</pre><p>NOTE: the <code class="literal">ExchangeFormatter</code> gets applied to <span class="bold"><strong>all Log endpoints within that Camel Context</strong></span>. If you need different
+            ExchangeFormatters for different endpoints, just instantiate the LogComponent as many
+            times as needed, and use the relevant bean name as the endpoint prefix.</p><p>From <span class="bold"><strong>Camel 2.11.2/2.12</strong></span> onwards when using a custom
+            log formatter, you can specify parameters in the log uri, which gets configured on the
+            custom log formatter. Though when you do that you should define the "logForamtter" as
+            prototype scoped so its not shared if you have different parameters, eg:</p><pre class="programlisting">
+&lt;bean name="logFormatter" class="com.xyz.MyCustomExchangeFormatter" scope="prototype"/&gt;
+</pre><p>And then we can have Camel routes using the log uri with different options:</p><pre class="programlisting">
+&lt;to uri="log:foo?param1=foo&amp;aram2=100"/&gt;
+...
+&lt;to uri="log:bar?param1=bar&amp;aram2=200"/&gt;
+</pre></div></div></body></html>

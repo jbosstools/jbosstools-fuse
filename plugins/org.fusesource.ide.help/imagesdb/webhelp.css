@@ -64,7 +64,7 @@ code.sgmltag-localname, code.sgmltag-namespace, code.function, code.type, code.e
 code.varname, code.interfacename, code.oointerface, code.classname, code.ooclass, code.methodname, code.coexception, 
 code.computeroutput, code.command, code.option, code.filename, code.literal, code.uri , code.envar, code.code,
 code.methodsynopsis, pre.classsynopsis, code.constant, span.type , span.markup, 
-span.package, div.cmdsynopsis {
+span.package, div.cmdsynopsis, code.constructorsynopsis {
 	background-color: transparent;
 	color: #990033;
 	font-family: "liberation mono", "bitstream vera mono", "dejavu mono", monospace;
@@ -413,6 +413,20 @@ dt {
 	color:#333333;
 	margin-top:1ex;
 	margin-bottom:0.5ex;
+}
+
+div.revhistory table {
+	border-collapse:collapse;
+}
+
+div.revhistory th {
+	background-color: #EEEEEE;
+	color: #003366;
+	padding: 10px;
+}
+
+div.revhistory td {
+	padding: 10px;
 }
 
 /* Notices*/
