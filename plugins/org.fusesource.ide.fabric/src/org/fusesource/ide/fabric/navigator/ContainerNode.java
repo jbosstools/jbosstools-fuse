@@ -220,10 +220,11 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 	@Override
 	protected void loadChildren() {
-		if (hasJmxConnector()) {
-			connectionWrapper = new FabricConnectionWrapper(this);
-			addChild(connectionWrapper);
-		}
+// commented out as we currently do not support JMX under a container node
+//		if (hasJmxConnector()) {
+//			connectionWrapper = new FabricConnectionWrapper(this);
+//			addChild(connectionWrapper);
+//		}
 	}
 
 	protected boolean hasJmxConnector() {
