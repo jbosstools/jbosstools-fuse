@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<toc label="Red Hat Fuse IDE" topic="index.html">
-   <topic label="Using the Red Hat Fuse IDE Tools" href="RiderUG.html">
+<toc label="Red Hat JBoss Fuse Tooling for Eclipse" topic="index.html">
+   <topic label="Using the Red Hat JBoss Fuse Tooling for Eclipse Tools" href="RiderUG.html">
       <topic label="Developing Applications" href="RiderDevPart.html">
          <topic label="Design Time Tooling" href="IDEIntroDesign.html">
             <topic label="The route editor" href="RiderGSEclipseEditor.html"/>
@@ -29,7 +29,7 @@
          </topic>
          <topic label="Creating a new Apache Camel JUnit test case" href="newCamelTestCase.html"/>
          <topic label="The Source View" href="RiderEditSource.html"/>
-         <topic label="Running routes inside Red Hat Fuse IDE" href="RiderRunning.html">
+         <topic label="Running routes inside Red Hat JBoss Fuse Plugins for Eclipse" href="RiderRunning.html">
             <topic label="Running routes using Maven" href="RiderRunningMaven.html"/>
             <topic label="Running routes as a local Camel context" href="RiderRunningProfile.html"/>
             <topic label="Working with runtime profiles" href="RiderEditRunProfile.html">
@@ -37,16 +37,8 @@
                <topic label="Editing a Maven runtime profile" href="RiderMvnRunProfile.html"/>
             </topic>
          </topic>
-         <topic label="Deploying Projects to a Container" href="FIDEDeployingContainer.html">
-            <topic label="Using a Container's Deploy Folder" href="FIDEDeployHot.html">
-               <topic label="Configuring a Container's Deploy Folder" href="FIDEDeployPrefs.html"/>
-               <topic label="Deploying a Project to a Container's Deploy Folder" href="RiderDeployProject.html"/>
-            </topic>
-            <topic label="Deploying a Project to a JMX Connected Container" href="RiderDeployESB.html"/>
-            <topic label="Deploying a Project to a Fabric Container" href="RiderDeployProfile.html"/>
-         </topic>
       </topic>
-      <topic label="Debugging" href="RiderDebugPart.html">
+      <topic label="Debugging and Deploying Applications" href="RiderDebugPart.html">
          <topic label="Debugging tooling" href="IDEIntroDebug.html">
             <topic label="The Fuse Integration perspective" href="IDEIntroDebugView.html"/>
             <topic label="Infrastructure monitoring" href="IDEIntroDebugMonitor.html"/>
@@ -57,6 +49,14 @@
          <topic label="The Fuse JMX Navigator" href="FIDEJMXExplore.html">
             <topic label="Viewing Processes in JMX" href="FIDEJMXViewProcesses.html"/>
             <topic label="Adding a JMX server" href="FIDEJMXAddServer.html"/>
+         </topic>
+         <topic label="Deploying Projects to a Container" href="FIDEDeployingContainer.html">
+            <topic label="Using a Container's Deploy Folder" href="FIDEDeployHot.html">
+               <topic label="Configuring a Container's Deploy Folder" href="FIDEDeployPrefs.html"/>
+               <topic label="Deploying a Project to a Container's Deploy Folder" href="RiderDeployProject.html"/>
+            </topic>
+            <topic label="Deploying a Project to a JMX Connected Container" href="RiderDeployESB.html"/>
+            <topic label="Deploying a Project to a Fabric Container" href="RiderDeployProfile.html"/>
          </topic>
          <topic label="Viewing a component's properties" href="FIDEJMXProps.html"/>
          <topic label="Browsing messages" href="RiderMessageView.html"/>
@@ -137,7 +137,7 @@
          <topic label="Cloud Details" href="RiderFabCldDetailsWiz.html"/>
          <topic label="Create Fabric in the Cloud" href="RiderFabCldFabricWiz.html"/>
       </topic>
-      <topic label="Developer Tools preferences" href="RiderPrefRef.html">
+      <topic label="Tooling preferences" href="RiderPrefRef.html">
          <topic label="Deploy Folders" href="RiderDeployPrefRef.html"/>
          <topic label="Editor" href="RiderEditorPrefRef.html"/>
          <topic label="Fuse JMX Navigator" href="RiderMonitorPrefRef.html"/>
@@ -246,8 +246,8 @@
       </topic>
       <topic label="File Endpoints" href="RiderFileEptRef.html">
          <topic label="ActiveMQ Journal" href="ActiveMQJournal.html"/>
-         <topic label="File" href="file.html"/>
-         <topic label="FTP/SFTP" href="ftp.html"/>
+         <topic label="File2" href="file.html"/>
+         <topic label="FTP2/SFTP" href="FTP2.html"/>
          <topic label="HDFS" href="hdfs.html"/>
       </topic>
       <topic label="Google App Engine Endpoints" href="gae.html">
@@ -275,13 +275,13 @@
          <topic label="IRC" href="irc.html"/>
          <topic label="JMS" href="jms.html"/>
          <topic label="Mail" href="mail.html"/>
-         <topic label="MSMQ" href="msmq.html"/>
          <topic label="SIP" href="sip.html"/>
          <topic label="SMPP" href="smpp.html"/>
          <topic label="XMPP" href="xmpp.html"/>
       </topic>
       <topic label="Scheduling Endpoints" href="scheduling.html">
          <topic label="Quartz" href="quartz.html"/>
+         <topic label="Quartz2" href="Quartz2.html"/>
          <topic label="Timer" href="timer.html"/>
       </topic>
       <topic label="Testing Endpoints" href="RiderTestEptRef.html">
@@ -303,7 +303,7 @@
       <topic label="DNS" href="_IDU_DNS.html"/>
       <topic label="EJB" href="ejb.html"/>
       <topic label="Esper" href="esper.html"/>
-      <topic label="Event" href="event.html"/>
+      <topic label="Event" href="SpringEvent.html"/>
       <topic label="Exec" href="exec.html"/>
       <topic label="Flatpack" href="flatpack.html"/>
       <topic label="Freemarker" href="freemarker.html"/>

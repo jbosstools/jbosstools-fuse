@@ -1,27 +1,36 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Esper</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="ejb.html" title="EJB"><link rel="next" href="event.html" title="Event"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="esper"></a>Esper</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_Esper"></a>Esper</h2></div></div></div><p>The Esper component supports the <a class="link" href="http://esper.codehaus.org" target="_top">Esper
+   <title>Esper</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="ejb.html" title="EJB"><link rel="next" href="SpringEvent.html" title="Event"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="esper"></a>Esper</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_Esper"></a>Esper</h2></div></div></div><p>The Esper component supports the <a class="link" href="http://esper.codehaus.org" target="_top">Esper
                 Library</a> for Event Stream Processing. The <span class="bold"><strong>camel-esper</strong></span> library is provided by the <a class="link" href="http://code.google.com/p/camel-extra/" target="_top">Camel Extra</a> project which
             hosts all *GPL related components for Apache Camel.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">esper:name[?options]</pre><p>When consuming from an Esper endpoint you must specify a <span class="bold"><strong>pattern</strong></span> or <span class="bold"><strong>eql</strong></span> statement to query the
             event stream.</p><p>For example</p><pre class="programlisting">from("esper://cheese?pattern=every event=MyEvent(bar=5)").
-	to("activemq:Foo");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_Options"></a>Options</h2></div></div></div><table id="d0e38611"><tr>
-        <th> Name </th>
-        <th> Default Value </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">pattern</code>
-        </td>
-        <td></td>
-        <td> The <a class="link" href="http://esper.codehaus.org/esper-1.11.0/doc/reference/en/html/event_patterns.html" target="_top">Esper Pattern expression</a> as a String to filter events </td>
-      </tr><tr>
-        <td><code class="literal">eql</code>
-        </td>
-        <td></td>
-        <td> The <a class="link" href="http://esper.codehaus.org/esper-1.11.0/doc/reference/en/html/eql_clauses.html" target="_top">Esper EQL expression</a> as a String to filter events </td>
-      </tr></table><p>You can append query options to the URI in the following format,
-                <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_Demo"></a>Demo</h2></div></div></div><p>There is a <a class="link" href="http://code.google.com/p/camel-extra/wiki/EsperDemo" target="_top">demo
-        which shows how to work with ActiveMQ, Apache Camel, and Esper</a> in the <a class="link" href="http://code.google.com/p/camel-extra/" target="_top">Camel Extra</a> project</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-          <a class="link" href="http://code.google.com/p/camel-extra/wiki/EsperDemo" target="_top">Esper
-              Apache Camel Demo</a>
-        </p></li></ul></div></div></div></body></html>
+	to("activemq:Foo");</pre><p>You can append query options to the URI in the following format,
+	    <code class="literal">?option=value&amp;option=value&amp;...</code>
+	</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_Options"></a>Options</h2></div></div></div><table id="d0e52589"><tr>
+                <th> Name </th>
+                <th> Default Value </th>
+                <th> Description </th>
+            </tr><tr>
+                <td>
+                    <code class="literal">pattern</code>
+                </td>
+                <td></td>
+                <td> The <a class="link" href="http://esper.codehaus.org/esper-1.11.0/doc/reference/en/html/event_patterns.html" target="_top">Esper Pattern expression</a> as a String to filter events </td>
+            </tr><tr>
+                <td>
+                    <code class="literal">eql</code>
+                </td>
+                <td></td>
+                <td> The <a class="link" href="http://esper.codehaus.org/esper-1.11.0/doc/reference/en/html/eql_clauses.html" target="_top">Esper EQL expression</a> as a String to filter events </td>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_EsperMessage"></a>EsperMessage</h2></div></div></div><p>From <span class="bold"><strong>Camel 2.12</strong></span> onwards the esper consumer stores new
+            and old events in the
+            <code class="literal">org.apacheextras.camel.component.esper.EsperMessage</code> message as
+            the input <span class="olink">Message</span> on the <a class="link" href="Exchange" target="_top">Exchange</a>. You can get access
+            to the esper event beans from java code with:</p><pre class="programlisting">EventBean newEvent = exchange.getIn(EsperMessage.class).getNewEvent();
+EventBean oldEvent = exchange.getIn(EsperMessage.class).getOldEvent();</pre><p>By default if you get the body of
+            <code class="literal">org.apacheextras.camel.component.esper.EsperMessage</code> it returns
+            the new <code class="literal">EventBean</code> as in previous versions.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_Demo"></a>Demo</h2></div></div></div><p>There is a <a class="link" href="http://code.google.com/p/camel-extra/wiki/EsperDemo" target="_top">demo
+                which shows how to work with ActiveMQ, Apache Camel, and Esper</a> in the <a class="link" href="http://code.google.com/p/camel-extra/" target="_top">Camel Extra</a> project</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+                    <a class="link" href="http://code.google.com/p/camel-extra/wiki/EsperDemo" target="_top">Esper Apache
+                        Camel Demo</a>
+                </p></li></ul></div></div></div></body></html>

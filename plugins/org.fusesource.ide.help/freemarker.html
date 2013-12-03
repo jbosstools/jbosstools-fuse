@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Freemarker</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat Fuse IDE"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="flatpack.html" title="Flatpack"><link rel="next" href="hazelcast.html" title="Hazelcast Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="freemarker"></a>Freemarker</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Freemarker_HSH_Freemarker"></a>Freemarker</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 1.6</strong></span>
+   <title>Freemarker</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="flatpack.html" title="Flatpack"><link rel="next" href="hazelcast.html" title="Hazelcast Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="freemarker"></a>Freemarker</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Freemarker_HSH_Freemarker"></a>Freemarker</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 1.6</strong></span>
         </p><p>The <span class="bold"><strong>freemarker:</strong></span> component allows you to process a
             message using a <a class="link" href="http://freemarker.org/" target="_top">Freemarker</a> template. This
             can be ideal when using <a class="link" href="Templating" target="_top">Templating</a> to generate
@@ -16,7 +16,7 @@
             template to invoke; or the complete URL of the remote template (for example,
                 <code class="code">file://folder/myfile.ftl</code>).</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Freemarker_HSH_Options"></a>Options</h2></div></div></div><table id="d0e39621"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Freemarker_HSH_Options"></a>Options</h2></div></div></div><table id="d0e53649"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -34,7 +34,7 @@
         <td> Character encoding of the resource content. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Freemarker_HSH_FreemarkerContext"></a>Freemarker Context</h2></div></div></div><p>Apache Camel will provide exchange information in the Freemarker
             context (just a <code class="literal">Map</code>). The
-                <code class="literal">Exchange</code> is transfered as:</p><table id="d0e39674"><tr>
+                <code class="literal">Exchange</code> is transfered as:</p><table id="d0e53702"><tr>
         <th> Key </th>
         <th> Value </th>
       </tr><tr>
@@ -70,7 +70,7 @@
             resource location for a template or the template content itself. If
             any of these headers is set then Camel uses this over the endpoint
             configured resource. This allows you to provide a dynamic template
-            at runtime.</p><table id="d0e39761"><tr>
+            at runtime.</p><table id="d0e53789"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

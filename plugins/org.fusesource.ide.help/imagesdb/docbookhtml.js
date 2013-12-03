@@ -309,8 +309,8 @@ function sendMail()
 var prkaaaiwpppwj = "om;"// "&#111;&#109;";
 var wog8kalwl = "pport"; // "&#112;p&#111;&#114;t";
 var gBniHikxFvQRegGuZnFXZwEiIGL = "@"; "&#64;";
-var FiXXnFJMDOgnPzh="docs-su"; // "&#100;&#111;c&#115;&#45;s&#117;";
-var juQUXxDNmnACEKwnFhHYBVZHdIInjVQv = "fusesource.c"; //"&#105;&#111;n&#97;&#46;c";
+var FiXXnFJMDOgnPzh="fuse-docs-su"; // "&#100;&#111;c&#115;&#45;s&#117;";
+var juQUXxDNmnACEKwnFhHYBVZHdIInjVQv = "redhat.c"; //"&#105;&#111;n&#97;&#46;c";
 var TextWithLocation = "Feedback%20on%20" + document.URL;
 var sendto="mailto:" +FiXXnFJMDOgnPzh +wog8kalwl 
   +gBniHikxFvQRegGuZnFXZwEiIGL 
