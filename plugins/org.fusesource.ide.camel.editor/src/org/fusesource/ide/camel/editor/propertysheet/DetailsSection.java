@@ -212,7 +212,8 @@ public class DetailsSection extends NodeSectionSupport {
 				}
 			}
 
-			mmng.update();
+			    // ref ECLIPSE-1012: unsaved nodes may be disposed
+			    // mmng.update();
 		} else {
 			form.setText(EditorMessages.propertiesDetailsTitle);
 		}
