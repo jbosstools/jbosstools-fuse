@@ -59,6 +59,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.KeyAdapter;
@@ -212,7 +213,15 @@ public class DetailsSection extends NodeSectionSupport {
 				}
 			}
 
-			mmng.update();
+			try {
+				mmng.update();
+			} catch(SWTException e) {
+				// if the user restarted the server, didn't save then attempted to remove a node they
+				// will trigger a reference to a disposed object.  The result on layout is correct.
+				if (e.code != SWT.ERROR_GRAPHIC_DISPOSED)
+					throw e;
+			}
+
 		} else {
 			form.setText(EditorMessages.propertiesDetailsTitle);
 		}
