@@ -27,6 +27,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.fusesource.fabric.api.Container;
@@ -40,6 +41,7 @@ import org.fusesource.fabric.service.ContainerTemplate;
 import org.fusesource.fabric.service.Containers;
 import org.fusesource.fabric.service.JmxTemplateSupport;
 import org.fusesource.ide.commons.Activator;
+import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.tree.GraphableNode;
 import org.fusesource.ide.commons.tree.GraphableNodeConnected;
 import org.fusesource.ide.commons.tree.HasOwner;
@@ -49,6 +51,7 @@ import org.fusesource.ide.commons.tree.RefreshableNode;
 import org.fusesource.ide.commons.tree.RefreshableUI;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.actions.ActionSupport;
+import org.fusesource.ide.commons.ui.views.ViewPropertySheetPage;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.CreateChildContainerAction;
@@ -451,6 +454,18 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 //				getFabric().setContainerProfiles(newContainer, profiles);
 //			}
 			getFabric().refreshCreatedAgent(name);
+			Display.getDefault().syncExec(new Runnable() {
+				@Override
+				public void run() {
+                    getFabric().getContainersNode().refresh();
+                    ViewPropertySheetPage p = getFabric().getContainersNode().getPropertySourceTablePage();
+                    if (p instanceof ContainerTableSheetPage) {
+                    	((ContainerTableSheetPage)p).updateData();
+                    	Viewers.refresh(((ContainerTableSheetPage)p).getTableView().getViewer());
+                    }
+                    refresh();
+				}
+			});
 		} catch (Exception e) {
 			FabricPlugin.showUserError("Failed to create new child container of " + this, e.getMessage(), e);
 		}

@@ -52,15 +52,20 @@ public class Viewers {
 	 * Refreshes the viewer and by default makes sure the selection is viewable too
 	 * @param viewer
 	 */
-	public static void refresh(Viewer viewer) {
-		if (isValid(viewer)) {
-			viewer.refresh();
-			Control control = viewer.getControl();
-			if (control instanceof Table) {
-				Table table = (Table) control;
-				table.showSelection();
+	public static void refresh(final Viewer viewer) {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				if (isValid(viewer)) {
+					viewer.refresh();
+					Control control = viewer.getControl();
+					if (control instanceof Table) {
+						Table table = (Table) control;
+						table.showSelection();
+					}
+				}
 			}
-		}
+		});
 	}
 
 	public static void async(Runnable runnable) {

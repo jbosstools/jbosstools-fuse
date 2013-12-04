@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.fabric.api.Container;
@@ -236,7 +237,14 @@ public abstract class AbstractContainersTabSection extends ContainerTableView {
                         container.stop();
                     }
                 }
-                refresh();
+                Display.getDefault().syncExec(new Runnable() {
+					@Override
+					public void run() {
+	                    fabric.getContainersNode().refresh();
+	                    updateData();
+	                    refresh();
+					}
+				});
             }
         });
     }
@@ -253,7 +261,14 @@ public abstract class AbstractContainersTabSection extends ContainerTableView {
                         container.start();
                     }
                 }
-                refresh();
+                Display.getDefault().syncExec(new Runnable() {
+					@Override
+					public void run() {
+	                    fabric.getContainersNode().refresh();
+	                    updateData();
+	                    refresh();
+					}
+				});
             }
         });
     }
@@ -271,7 +286,14 @@ public abstract class AbstractContainersTabSection extends ContainerTableView {
                     for (Container container : containers) {
                         container.destroy();
                     }
-                    refresh();
+                    Display.getDefault().syncExec(new Runnable() {
+						@Override
+						public void run() {
+		                    fabric.getContainersNode().refresh();
+		                    updateData();
+		                    refresh();
+						}
+					});
                 }
             });
         }
