@@ -44,7 +44,7 @@
 
     <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
       <unit id="javax.xml.soap" version="1.3.0.v201105210645"/>
-      <repository location="http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.31.1.Alpha1/REPO/"/>
+      <repository location="http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.31.1.Final/REPO/"/>
     </location>
 
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -92,9 +92,9 @@
       <unit id="org.eclipse.bpmn2.feature.feature.group" version="0.7.0.201308220617"/>
 
       <!-- BPMN2 - Modeler -->
-      <unit id="org.eclipse.bpmn2.modeler.feature.feature.group" version="1.0.0.201311042148"/>
-      <unit id="org.eclipse.bpmn2.modeler.jboss.runtime.feature.feature.group" version="1.0.0.201311042148"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/requirements/bpmn2-modeler/1.0.0.201311042148_0.7.0.201308220617_kepler/"/>
+      <unit id="org.eclipse.bpmn2.modeler.feature.feature.group" version="1.0.1.201312041646"/>
+      <unit id="org.eclipse.bpmn2.modeler.jboss.runtime.feature.feature.group" version="1.0.1.201312041646"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/requirements/bpmn2-modeler/1.0.1.201312041646_0.7.0.201308220617_kepler/"/>
     </location>
 
     <!-- BPEL -->
@@ -129,8 +129,8 @@
 
       <!-- Required by BPEL, ESB, and any projects w/ UI tests -->
       <!-- TODO: consider migrating UI tests to https://github.com/jbosstools/jbosstools-integration-tests/ so they're built downstream instead of within the components' builds -->
-      <unit id="org.jboss.tools.tests" version="3.5.0.Alpha2-v20130927-0137-B114"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.Alpha2.coretests/"/>
+      <unit id="org.jboss.tools.tests" version="3.5.0.CR1-v20131123-0650-B135"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.CR1.coretests/"/>
     </location>
 
   
@@ -187,7 +187,7 @@
       <unit id="org.hibernate.eclipse.feature.feature.group" version="0.0.0"/>
       <unit id="org.mozilla.xulrunner.feature.feature.group" version="0.0.0"/>
 
-      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.Beta1b.core/"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.CR1.core/"/>
       <!-- <repository location="http://download.jboss.org/jbosstools/updates/development/kepler/"/> -->
     </location>
 
@@ -204,7 +204,7 @@
     <location includeAllPlatforms="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
       <!-- don't forget to increment these files when moving up a version:
         build.xml, *.target*, publish.sh, target2p2mirror.xml -->
-      <repository location="http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.31.1.Alpha1/REPO/"/>
+      <repository location="http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.31.1.Final/REPO/"/>
 
       <!-- for these IUs we need multiple versions -->
       <unit id="javax.wsdl" version="1.6.2.v201012040545"/>
@@ -301,10 +301,12 @@
       <unit id="org.eclipse.m2e.wtp.jsf.feature.feature.group" version="1.0.1.20130911-1545"/>
       <unit id="org.jboss.tools.maven.apt.feature.feature.group" version="1.0.1.201209200721"/>
       <unit id="org.jboss.tools.m2e.jdt.feature.feature.group" version="1.0.1.201209200903"/>
-      <unit id="org.jboss.tools.m2e.wro4j.feature.feature.group" version="1.0.1.201209200854"/>
 
       <unit id="com.ning.async-http-client" version="1.6.5.20130531-2315"/>
       <unit id="org.jboss.netty" version="3.2.5.Final-20130531-2315"/>
+    
+      
+      <unit id="org.jboss.tools.m2e.wro4j.feature.feature.group" version="1.0.2.201311130036"/>
     
       
 
@@ -580,7 +582,7 @@
       <unit id="org.eclipse.wst.xsl.feature.feature.group" version="1.3.300.v201302282018-7T7_F_uFIqUoKCGIeb62mhZKaH_Lg"/>
     
       
-      <unit id="com.google.gdt.eclipse.suite.e42.feature.feature.group" version="3.2.3.v201304260926-rel-r42"/>
+      <unit id="com.google.gdt.eclipse.suite.e43.feature.feature.group" version="3.4.2.v201310081834-rel-r43"/>
       <unit id="com.google.gwt.eclipse.sdkbundle.feature.feature.group" version="2.5.1"/>
     
       
@@ -600,6 +602,7 @@
     </location>
 
     <!-- m2e and family -->
+    
     
 
     <!-- Eclipse -->
