@@ -18,12 +18,18 @@ import org.eclipse.help.IContext;
 import org.eclipse.help.IHelpResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -201,16 +207,48 @@ public class DocumentationSection extends NodeSectionSupport {
 		toolkit.decorateFormHeading(form);
 
 		form.getBody().setLayout(new GridLayout(1, false));
-
+		
 		Composite sbody = form.getBody();
-
-		browser = new Browser(sbody, SWT.NONE);
+		
+		ToolBar navBar = new ToolBar(sbody, SWT.NONE);
+		toolkit.adapt(navBar);
+		navBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_BEGINNING));
+		final ToolItem back = new ToolItem(navBar, SWT.PUSH);
+		back.setText("<");
+		back.setEnabled(false);
+		final ToolItem forward = new ToolItem(navBar, SWT.PUSH);
+		forward.setText(">");
+		forward.setEnabled(false);
+		
+		back.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event event) {
+				browser.back();
+			}
+		});
+		forward.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event event) {
+				browser.forward();
+			}
+		});
+		
+		final LocationListener locationListener = new LocationListener() {
+			public void changed(LocationEvent event) {
+				Browser browser = (Browser)event.widget;
+				back.setEnabled(browser.isBackEnabled());
+				forward.setEnabled(browser.isForwardEnabled());
+			}
+			public void changing(LocationEvent event) {
+			}
+		};
+		
+		browser = new Browser(sbody, SWT.WEBKIT);
 		GridData data = new GridData(GridData.FILL_BOTH);
 		browser.setLayoutData(data);
 		IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench().getHelpSystem();
 		URL url = helpSystem.resolve("org.fusesource.ide.help/index.html", true);
 		browser.setUrl(url.toExternalForm());
-
+		browser.addLocationListener(locationListener);
+		
 		// section.pack();
 		// form.pack();
 		form.layout(true, true);
