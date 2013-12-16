@@ -15,7 +15,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import org.fusesource.fabric.service.ssh.CreateSshContainerOptions;
+import io.fabric8.service.ssh.CreateSshContainerOptions;
 import org.fusesource.ide.commons.util.BeanSupport;
 
 

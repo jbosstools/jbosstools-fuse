@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
-import org.fusesource.fabric.camel.facade.mbean.CamelProcessorMBean;
+import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableView;
 

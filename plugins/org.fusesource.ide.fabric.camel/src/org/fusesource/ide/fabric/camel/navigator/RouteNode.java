@@ -17,7 +17,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.fabric.camel.facade.mbean.CamelRouteMBean;
+import io.fabric8.camel.facade.mbean.CamelRouteMBean;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.commons.ui.ImageProvider;

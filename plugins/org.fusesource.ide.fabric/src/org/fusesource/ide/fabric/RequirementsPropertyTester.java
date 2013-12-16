@@ -13,7 +13,7 @@ package org.fusesource.ide.fabric;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.jface.viewers.ISelection;
-import org.fusesource.fabric.api.ProfileStatus;
+import io.fabric8.api.ProfileStatus;
 import org.fusesource.ide.commons.ui.Selections;
 
 

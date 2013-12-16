@@ -29,8 +29,8 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.fabric.api.FabricException;
-import org.fusesource.fabric.api.Profile;
+import io.fabric8.api.FabricException;
+import io.fabric8.api.Profile;
 import org.fusesource.ide.commons.properties.PropertySources;
 import org.fusesource.ide.commons.tree.GraphableNode;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
@@ -56,7 +56,7 @@ import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
 
 
 public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, ImageProvider, GraphableNode, ContextMenuProvider, ProjectDropTarget, DropHandlerFactory {
-	private static final String AGENT_PID = "org.fusesource.fabric.agent";
+	private static final String AGENT_PID = "io.fabric8.agent";
 	private static final boolean addContainersToTree = false;
 
 	private Map<String,ProfileNode> map = new HashMap<String, ProfileNode>();
@@ -218,7 +218,7 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 									getVersionNode().getVersionId(), 
 									getProfileId(), 
 									AGENT_PID, 
-									"org.fusesource.fabric.buildTime", "" + uri + " at " + new Date());
+									"io.fabric8.buildTime", "" + uri + " at " + new Date());
 						} catch (FabricException ex) {
 							ex.printStackTrace();
 						} finally {

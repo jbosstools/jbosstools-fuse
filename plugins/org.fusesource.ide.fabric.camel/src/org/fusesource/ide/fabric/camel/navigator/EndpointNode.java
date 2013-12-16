@@ -26,9 +26,9 @@ import org.fusesource.fon.util.messages.IExchange;
 import org.fusesource.fon.util.messages.IExchangeBrowser;
 import org.fusesource.fon.util.messages.IMessage;
 
-import org.fusesource.fabric.camel.facade.mbean.CamelBrowsableEndpointMBean;
-import org.fusesource.fabric.camel.facade.mbean.CamelContextMBean;
-import org.fusesource.fabric.camel.facade.mbean.CamelEndpointMBean;
+import io.fabric8.camel.facade.mbean.CamelBrowsableEndpointMBean;
+import io.fabric8.camel.facade.mbean.CamelContextMBean;
+import io.fabric8.camel.facade.mbean.CamelEndpointMBean;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.Shells;

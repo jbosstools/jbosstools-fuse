@@ -12,7 +12,7 @@
 package org.fusesource.ide.fabric.servicemix.navigator;
 
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.fabric.servicemix.facade.ServiceMixFacade;
+import io.fabric8.servicemix.facade.ServiceMixFacade;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.commons.ui.ImageProvider;

@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.apache.servicemix.nmr.management.ManagedEndpointMBean;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.fabric.servicemix.facade.ServiceMixFacade;
+import io.fabric8.servicemix.facade.ServiceMixFacade;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;

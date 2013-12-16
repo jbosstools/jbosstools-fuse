@@ -14,8 +14,8 @@ package org.fusesource.ide.fabric.servicemix.navigator;
 import java.util.List;
 
 
-import org.fusesource.fabric.servicemix.facade.JmxTemplateServiceMixFacade;
-import org.fusesource.fabric.servicemix.facade.ServiceMixFacade;
+import io.fabric8.servicemix.facade.JmxTemplateServiceMixFacade;
+import io.fabric8.servicemix.facade.ServiceMixFacade;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
 import org.fusesource.ide.fabric.navigator.NodeProvider;

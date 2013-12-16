@@ -18,7 +18,7 @@ import java.util.Map;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.fabric.api.Version;
+import io.fabric8.api.Version;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;

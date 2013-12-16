@@ -13,7 +13,7 @@ package org.fusesource.ide.fabric.navigator;
 
 import java.util.Map;
 
-import org.fusesource.fabric.api.Profile;
+import io.fabric8.api.Profile;
 import org.fusesource.ide.commons.util.BeanSupport;
 import org.fusesource.ide.commons.util.Strings;
 

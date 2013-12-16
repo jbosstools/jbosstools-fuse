@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.fusesource.fabric.jolokia.facade.JolokiaFabricConnector;
-import org.fusesource.fabric.jolokia.facade.utils.Helpers;
+import io.fabric8.jolokia.facade.JolokiaFabricConnector;
+import io.fabric8.jolokia.facade.utils.Helpers;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.insight.log.LogEvent;
 import org.fusesource.insight.log.LogFilter;

@@ -21,7 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.fusesource.fabric.api.Profile;
+import io.fabric8.api.Profile;
 import org.fusesource.ide.commons.ui.ICanValidate;
 import org.fusesource.ide.fabric.actions.Messages;
 import org.fusesource.ide.fabric.actions.ProfileTreeSelectionFormSupport;

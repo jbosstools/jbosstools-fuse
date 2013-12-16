@@ -23,11 +23,11 @@ import java.util.Map;
 import org.apache.curator.framework.CuratorFramework;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.fusesource.fabric.api.Container;
-import org.fusesource.fabric.service.jclouds.CreateJCloudsContainerOptions;
-import org.fusesource.fabric.api.Profile;
-import org.fusesource.fabric.zookeeper.ZkDefs;
-import org.fusesource.fabric.zookeeper.utils.ZooKeeperUtils;
+import io.fabric8.api.Container;
+import io.fabric8.service.jclouds.CreateJCloudsContainerOptions;
+import io.fabric8.api.Profile;
+import io.fabric8.zookeeper.ZkDefs;
+import io.fabric8.zookeeper.utils.ZooKeeperUtils;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.Messages;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
@@ -122,7 +122,7 @@ public class CreateJCloudsContainerWizard extends Wizard {
 		if (defaultProfile != null && fabric != null) {
 			Profile profile = defaultProfile.getProfile();
 			if (profile != null) {
-				Map<String, String> config = profile.getConfigurations().get("org.fusesource.fabric.zookeeper");
+				Map<String, String> config = profile.getConfigurations().get("io.fabric8.zookeeper");
 				if (config != null) {
 					String zkUrl = config.get("zookeeper.url");
 					if (zkUrl != null) {

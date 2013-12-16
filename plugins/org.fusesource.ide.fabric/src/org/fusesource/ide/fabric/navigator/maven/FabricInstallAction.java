@@ -20,8 +20,8 @@ import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
  */
 public class FabricInstallAction extends ExecutePomActionSupport {
 
-	public static final String CONFIG_TAB_GROUP = "org.fusesource.fabric.build.tabGroup";
-	public static final String CONFIG_TYPE_ID = "org.fusesource.fabric.build";
+	public static final String CONFIG_TAB_GROUP = "io.fabric8.build.tabGroup";
+	public static final String CONFIG_TYPE_ID = "io.fabric8.build";
 
 	public FabricInstallAction() {
 		super(CONFIG_TAB_GROUP, CONFIG_TYPE_ID, "install");

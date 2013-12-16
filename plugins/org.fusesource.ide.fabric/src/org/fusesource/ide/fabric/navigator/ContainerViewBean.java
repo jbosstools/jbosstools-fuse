@@ -13,9 +13,9 @@ package org.fusesource.ide.fabric.navigator;
 
 import java.util.List;
 
-import org.fusesource.fabric.api.Container;
-import org.fusesource.fabric.api.Profile;
-import org.fusesource.fabric.api.Version;
+import io.fabric8.api.Container;
+import io.fabric8.api.Profile;
+import io.fabric8.api.Version;
 import org.fusesource.ide.commons.ui.propsrc.BeanPropertySource;
 
 import scala.actors.threadpool.Arrays;

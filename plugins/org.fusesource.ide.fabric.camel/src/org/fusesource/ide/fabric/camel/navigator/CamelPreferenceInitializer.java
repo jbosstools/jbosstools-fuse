@@ -11,7 +11,7 @@
 
 package org.fusesource.ide.fabric.camel.navigator;
 
-import org.fusesource.fabric.camel.facade.mbean.CamelProcessorMBean;
+import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
 import org.fusesource.ide.commons.ui.UIPreferencesInitialiserSupport;
 import org.fusesource.ide.commons.ui.config.TableConfiguration;
 

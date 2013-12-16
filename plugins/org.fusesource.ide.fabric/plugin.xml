@@ -146,7 +146,7 @@
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             delegate="org.fusesource.ide.fabric.navigator.maven.ProvisionMavenLaunchDelegate"
-            id="org.fusesource.fabric.build"
+            id="io.fabric8.build"
             modes="run"
             name="%build.name"
             public="true"
@@ -157,9 +157,9 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
-            configTypeID="org.fusesource.fabric.build"
+            configTypeID="io.fabric8.build"
             icon="icons/m2.gif"
-            id="org.fusesource.fabric.build.launchConfigurationTypeImage">
+            id="io.fabric8.build.launchConfigurationTypeImage">
       </launchConfigurationTypeImage>
    </extension>
 
@@ -168,8 +168,8 @@
       <launchConfigurationTabGroup
             class="org.fusesource.ide.fabric.navigator.maven.BuildLaunchConfigurationTabGroup"
             description="%tabgroup.build.description"
-            id="org.fusesource.fabric.build.tabGroup"
-            type="org.fusesource.fabric.build">
+            id="io.fabric8.build.tabGroup"
+            type="io.fabric8.build">
       </launchConfigurationTabGroup>
    </extension>
    <extension
@@ -191,7 +191,7 @@
                   <iterate
                         operator="or">
                      <instanceof
-                           value="org.fusesource.fabric.api.ProfileStatus">
+                           value="io.fabric8.api.ProfileStatus">
                      </instanceof>
                   </iterate>
                </with>
@@ -227,7 +227,7 @@
                <iterate
                      operator="or">
                   <instanceof
-                        value="org.fusesource.fabric.api.ProfileStatus">
+                        value="io.fabric8.api.ProfileStatus">
                   </instanceof>
                </iterate>
             </with>

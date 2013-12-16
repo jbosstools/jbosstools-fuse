@@ -144,6 +144,20 @@ Raleigh NC 27606 USA.
          unpack="false"/>
 
    <plugin
+         id="org.fusesource.ide.tooling"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.fusesource.insight.insight-log"
          download-size="0"
          install-size="0"
@@ -165,14 +179,14 @@ Raleigh NC 27606 USA.
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.fabric.tooling-fabric-all"
+         id="io.fabric8.tooling-fabric-all"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.fabric.tooling-jclouds-all"
+         id="io.fabric8.tooling-jclouds-all"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -208,21 +222,21 @@ Raleigh NC 27606 USA.
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.fabric.tooling-camel-facade"
+         id="io.fabric8.tooling-camel-facade"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.fabric.tooling-servicemix-facade"
+         id="io.fabric8.tooling-servicemix-facade"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.fabric.tooling-activemq-facade"
+         id="io.fabric8.tooling-activemq-facade"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -272,20 +286,6 @@ Raleigh NC 27606 USA.
 
    <plugin
          id="commons-management"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.tooling"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.help"
          download-size="0"
          install-size="0"
          version="0.0.0"

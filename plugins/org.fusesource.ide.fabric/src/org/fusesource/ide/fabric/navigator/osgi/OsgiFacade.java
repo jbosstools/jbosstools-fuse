@@ -24,7 +24,7 @@ import javax.management.openmbean.TabularData;
 import javax.management.remote.JMXConnector;
 
 import org.eclipse.core.runtime.IStatus;
-import org.fusesource.fabric.service.JmxTemplateSupport;
+import io.fabric8.service.JmxTemplateSupport;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.preferences.Activator;
 import org.osgi.jmx.framework.BundleStateMBean;

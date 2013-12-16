@@ -22,7 +22,7 @@ package org.fusesource.ide.fabric.navigator;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.fusesource.fabric.api.Profile;
+import io.fabric8.api.Profile;
 import org.fusesource.ide.commons.ui.ICanValidate;
 
 

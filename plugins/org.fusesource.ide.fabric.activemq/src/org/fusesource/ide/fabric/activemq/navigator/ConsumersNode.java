@@ -17,7 +17,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.fabric.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.BrokerFacade;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.Shells;

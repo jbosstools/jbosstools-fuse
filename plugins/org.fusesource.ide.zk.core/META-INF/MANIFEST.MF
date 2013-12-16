@@ -5,8 +5,8 @@ Bundle-SymbolicName: org.fusesource.ide.zk.core;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.fusesource.fabric.tooling-fabric-all,
- org.fusesource.fabric.tooling-jclouds-all,
+Require-Bundle: io.fabric8.tooling-fabric-all,
+ io.fabric8.tooling-jclouds-all,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.jmx.ui,
@@ -23,7 +23,7 @@ Require-Bundle: org.fusesource.fabric.tooling-fabric-all,
  org.eclipse.ui.ide,
  org.eclipse.ui.views,
  org.eclipse.ui.views.properties.tabbed,
- org.fusesource.fabric.camel-tooling-util,
+ io.fabric8.camel-tooling-util,
  org.fusesource.scalate.scalate-util;bundle-version="1.5.0",
  scala-library;bundle-version="2.9.0"
 Bundle-ActivationPolicy: lazy

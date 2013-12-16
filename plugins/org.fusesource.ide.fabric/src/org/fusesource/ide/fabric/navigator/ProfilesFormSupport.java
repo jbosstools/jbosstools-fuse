@@ -25,7 +25,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.fusesource.fabric.api.Profile;
+import io.fabric8.api.Profile;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.ui.ICanValidate;
 import org.fusesource.ide.commons.ui.Selections;

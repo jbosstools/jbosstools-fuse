@@ -15,7 +15,7 @@ import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.fusesource.fabric.api.Container;
+import io.fabric8.api.Container;
 import org.fusesource.ide.fabric.FabricPlugin;
 
 

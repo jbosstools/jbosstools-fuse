@@ -16,8 +16,8 @@ import java.util.List;
 
 import javax.management.MalformedObjectNameException;
 
-//import org.fusesource.fabric.monitor.api.FetchMonitoredViewDTO;
-import org.fusesource.fabric.service.JmxTemplateSupport;
+//import io.fabric8.monitor.api.FetchMonitoredViewDTO;
+import io.fabric8.service.JmxTemplateSupport;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.fabric.navigator.osgi.BundlesNode;

@@ -13,8 +13,8 @@ package org.fusesource.ide.fabric.camel.navigator;
 
 import java.util.List;
 
-import org.fusesource.fabric.camel.facade.CamelFacade;
-import org.fusesource.fabric.camel.facade.mbean.CamelProcessorMBean;
+import io.fabric8.camel.facade.CamelFacade;
+import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.commons.util.Objects;
 

@@ -24,7 +24,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
-import org.fusesource.fabric.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.BrokerFacade;
 import org.fusesource.fon.util.messages.IExchange;
 import org.fusesource.fon.util.messages.IExchangeBrowser;
 import org.fusesource.ide.commons.tree.ConnectedNode;

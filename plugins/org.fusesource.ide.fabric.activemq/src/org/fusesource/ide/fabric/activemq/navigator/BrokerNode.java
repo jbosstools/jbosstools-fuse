@@ -14,7 +14,7 @@ package org.fusesource.ide.fabric.activemq.navigator;
 
 import org.eclipse.swt.graphics.Image;
 
-import org.fusesource.fabric.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.BrokerFacade;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.NodeSupport;

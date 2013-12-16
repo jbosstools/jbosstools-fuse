@@ -29,8 +29,8 @@ Require-Bundle: org.fusesource.ide.fabric,
  org.eclipse.ui.navigator.resources,
  org.apache.servicemix.nmr.api;bundle-version="1.5.0",
  org.apache.servicemix.nmr.management;bundle-version="1.5.0",
- org.fusesource.fabric.tooling-fabric-all,
- org.fusesource.fabric.tooling-servicemix-facade
+ io.fabric8.tooling-fabric-all,
+ io.fabric8.tooling-servicemix-facade
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.servicemix.FabricServiceMixPlugin
 Bundle-ClassPath: .

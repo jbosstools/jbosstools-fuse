@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.fusesource.fabric.api.Container;
+import io.fabric8.api.Container;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;

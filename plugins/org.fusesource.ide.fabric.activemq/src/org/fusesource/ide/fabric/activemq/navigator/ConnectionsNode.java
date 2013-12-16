@@ -15,8 +15,8 @@ import java.util.Collection;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.fabric.activemq.facade.BrokerFacade;
-import org.fusesource.fabric.activemq.facade.ConnectionViewFacade;
+import io.fabric8.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.ConnectionViewFacade;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;

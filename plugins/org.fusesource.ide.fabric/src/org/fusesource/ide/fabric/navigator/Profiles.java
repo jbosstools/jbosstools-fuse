@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.fusesource.fabric.api.Profile;
+import io.fabric8.api.Profile;
 
 
 public class Profiles {

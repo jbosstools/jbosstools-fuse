@@ -7,8 +7,8 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.fabric,
  org.fusesource.ide.graph,
- org.fusesource.fabric.tooling-activemq-facade,
- org.fusesource.fabric.tooling-fabric-all,
+ io.fabric8.tooling-activemq-facade,
+ io.fabric8.tooling-fabric-all,
  org.apache.activemq.activemq-osgi,
  org.apache.geronimo.specs.geronimo-j2ee-management_1.1_spec;bundle-version="1.0.1",
  org.apache.geronimo.specs.geronimo-jms_1.1_spec;bundle-version="1.1.1",

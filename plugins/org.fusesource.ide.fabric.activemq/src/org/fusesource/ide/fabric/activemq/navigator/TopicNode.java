@@ -22,7 +22,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.fabric.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.BrokerFacade;
 import org.fusesource.ide.commons.tree.ConnectedNode;
 import org.fusesource.ide.commons.tree.GraphableNode;
 import org.fusesource.ide.commons.tree.Node;

@@ -5,8 +5,8 @@ Bundle-SymbolicName: org.fusesource.ide.fabric;singleton:=true
 Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.fusesource.fabric.tooling-jclouds-all,
- org.fusesource.fabric.tooling-fabric-all,
+Require-Bundle: io.fabric8.tooling-jclouds-all,
+ io.fabric8.tooling-fabric-all,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.deployment,

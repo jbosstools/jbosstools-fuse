@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.fusesource.fabric.api.Container;
+import io.fabric8.api.Container;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.navigator.ContainerNode;

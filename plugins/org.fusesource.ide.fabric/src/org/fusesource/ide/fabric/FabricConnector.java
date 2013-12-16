@@ -15,11 +15,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.fusesource.fabric.api.Container;
-import org.fusesource.fabric.api.FabricService;
-import org.fusesource.fabric.api.FabricStatus;
-import org.fusesource.fabric.api.Version;
-import org.fusesource.fabric.jolokia.facade.JolokiaFabricConnector;
+import io.fabric8.api.Container;
+import io.fabric8.api.FabricService;
+import io.fabric8.api.FabricStatus;
+import io.fabric8.api.Version;
+import io.fabric8.jolokia.facade.JolokiaFabricConnector;
 import org.fusesource.ide.fabric.actions.FabricDetails;
 import org.fusesource.ide.fabric.navigator.Fabric;
 import org.osgi.framework.BundleContext;

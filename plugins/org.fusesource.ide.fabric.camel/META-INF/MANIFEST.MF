@@ -6,9 +6,9 @@ Bundle-Version: 7.2.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.fabric,
- org.fusesource.fabric.camel-tooling-util,
- org.fusesource.fabric.tooling-fabric-all,
- org.fusesource.fabric.tooling-camel-facade,
+ io.fabric8.camel-tooling-util,
+ io.fabric8.tooling-fabric-all,
+ io.fabric8.tooling-camel-facade,
  org.fusesource.ide.camel.model,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,

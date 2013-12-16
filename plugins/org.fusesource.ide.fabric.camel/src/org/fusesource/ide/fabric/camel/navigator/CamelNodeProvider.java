@@ -14,8 +14,8 @@ package org.fusesource.ide.fabric.camel.navigator;
 import java.util.List;
 
 
-import org.fusesource.fabric.camel.facade.CamelFacade;
-import org.fusesource.fabric.camel.facade.JmxTemplateCamelFacade;
+import io.fabric8.camel.facade.CamelFacade;
+import io.fabric8.camel.facade.JmxTemplateCamelFacade;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.fabric.camel.FabricCamelPlugin;
 import org.fusesource.ide.fabric.navigator.ContainerNode;

@@ -13,7 +13,7 @@ package org.fusesource.ide.fabric.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.fusesource.fabric.api.Profile;
+import io.fabric8.api.Profile;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.fabric.FabricPlugin;

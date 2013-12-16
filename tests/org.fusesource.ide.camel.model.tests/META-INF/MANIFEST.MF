@@ -7,7 +7,7 @@ Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: org.fusesource.ide.camel.model
 Require-Bundle: org.junit,
- org.fusesource.fabric.tooling-fabric-all,
+ io.fabric8.tooling-fabric-all,
  org.slf4j.api;bundle-version="[1.6.1,2.0.0)"
  
  

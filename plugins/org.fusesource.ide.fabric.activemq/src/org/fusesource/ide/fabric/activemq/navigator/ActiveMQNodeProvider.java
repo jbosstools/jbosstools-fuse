@@ -17,9 +17,9 @@ import javax.management.MBeanServerConnection;
 
 
 import org.eclipse.core.runtime.CoreException;
-import org.fusesource.fabric.activemq.facade.BrokerFacade;
-import org.fusesource.fabric.activemq.facade.JmxTemplateBrokerFacade;
-import org.fusesource.fabric.activemq.facade.RemoteBrokerFacade;
+import io.fabric8.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.JmxTemplateBrokerFacade;
+import io.fabric8.activemq.facade.RemoteBrokerFacade;
 import org.fusesource.ide.fabric.activemq.FabricActiveMQPlugin;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
 import org.fusesource.ide.fabric.navigator.NodeProvider;

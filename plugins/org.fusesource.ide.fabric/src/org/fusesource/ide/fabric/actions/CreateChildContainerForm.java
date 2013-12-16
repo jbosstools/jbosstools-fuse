@@ -11,7 +11,7 @@
 
 package org.fusesource.ide.fabric.actions;
 
-import org.fusesource.fabric.api.Profile;
+import io.fabric8.api.Profile;
 import org.fusesource.ide.commons.ui.ICanValidate;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
 
