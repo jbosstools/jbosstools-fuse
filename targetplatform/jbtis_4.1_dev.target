@@ -92,9 +92,9 @@
       <unit id="org.eclipse.bpmn2.feature.feature.group" version="0.7.0.201308220617"/>
 
       <!-- BPMN2 - Modeler -->
-      <unit id="org.eclipse.bpmn2.modeler.feature.feature.group" version="1.0.1.201312041646"/>
-      <unit id="org.eclipse.bpmn2.modeler.jboss.runtime.feature.feature.group" version="1.0.1.201312041646"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/requirements/bpmn2-modeler/1.0.1.201312041646_0.7.0.201308220617_kepler/"/>
+      <unit id="org.eclipse.bpmn2.modeler.feature.feature.group" version="1.0.1.201312111931"/>
+      <unit id="org.eclipse.bpmn2.modeler.jboss.runtime.feature.feature.group" version="1.0.1.201312111931"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/requirements/bpmn2-modeler/1.0.1.201312111931_0.7.0.201308220617_kepler/"/>
     </location>
 
     <!-- BPEL -->
@@ -129,8 +129,12 @@
 
       <!-- Required by BPEL, ESB, and any projects w/ UI tests -->
       <!-- TODO: consider migrating UI tests to https://github.com/jbosstools/jbosstools-integration-tests/ so they're built downstream instead of within the components' builds -->
-      <unit id="org.jboss.tools.tests" version="3.5.0.CR1-v20131123-0650-B135"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.CR1.coretests/"/>
+      <unit id="org.jboss.tools.tests" version="3.5.0.Final-v20131204-1734-B141"/>
+      <unit id="org.jboss.tools.as.test.core" version="2.4.101.Final-v20131206-1843-B159"/>
+      <unit id="org.jboss.tools.common.base.test" version="3.5.2.Final-v20131204-1734-B141"/>
+      <unit id="org.jboss.tools.common.test" version="3.5.2.Final-v20131204-1734-B141"/>
+      <unit id="org.jboss.tools.jmx.core.test" version="1.4.1.Final-v20131206-1843-B159"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.Final.coretests/"/>
     </location>
 
   
@@ -187,8 +191,7 @@
       <unit id="org.hibernate.eclipse.feature.feature.group" version="0.0.0"/>
       <unit id="org.mozilla.xulrunner.feature.feature.group" version="0.0.0"/>
 
-      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.CR1.core/"/>
-      <!-- <repository location="http://download.jboss.org/jbosstools/updates/development/kepler/"/> -->
+      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.Final.core/"/>
     </location>
 
   
