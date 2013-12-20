@@ -5051,6 +5051,7 @@ defined in RFC 2307.
       <xs:attribute name='brokerName' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
       <xs:attribute name='brokerURL' type='xs:string'/>
+      <xs:attribute name='checkDuplicateMessagesOnDuplex' type='xs:boolean'/>
       <xs:attribute name='conduitSubscriptions' type='xs:boolean'/>
       <xs:attribute name='connectionFilter' type='xs:string'/>
       <xs:attribute name='consumerPriorityBase' type='xs:integer'/>
@@ -5060,6 +5061,8 @@ defined in RFC 2307.
       <xs:attribute name='dispatchAsync' type='xs:boolean'/>
       <xs:attribute name='duplex' type='xs:boolean'/>
       <xs:attribute name='dynamicOnly' type='xs:boolean'/>
+      <xs:attribute name='gcDestinationViews' type='xs:boolean'/>
+      <xs:attribute name='gcSweepTime' type='xs:long'/>
       <xs:attribute name='localUri' type='xs:string'/>
       <xs:attribute name='messageTTL' type='xs:integer'/>
       <xs:attribute name='name' type='xs:string'/>
@@ -5800,6 +5803,7 @@ based transport could be used.
       <xs:attribute name='brokerName' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
       <xs:attribute name='brokerURL' type='xs:string'/>
+      <xs:attribute name='checkDuplicateMessagesOnDuplex' type='xs:boolean'/>
       <xs:attribute name='conduitSubscriptions' type='xs:boolean'/>
       <xs:attribute name='connectionFilter' type='xs:string'/>
       <xs:attribute name='consumerPriorityBase' type='xs:integer'/>
@@ -5809,6 +5813,8 @@ based transport could be used.
       <xs:attribute name='dispatchAsync' type='xs:boolean'/>
       <xs:attribute name='duplex' type='xs:boolean'/>
       <xs:attribute name='dynamicOnly' type='xs:boolean'/>
+      <xs:attribute name='gcDestinationViews' type='xs:boolean'/>
+      <xs:attribute name='gcSweepTime' type='xs:long'/>
       <xs:attribute name='localTransport' type='xs:string'/>
       <xs:attribute name='localUri' type='xs:string'/>
       <xs:attribute name='messageTTL' type='xs:integer'/>
@@ -5995,6 +6001,7 @@ available and setup a connection to each available remote broker
       <xs:attribute name='brokerName' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
       <xs:attribute name='brokerURL' type='xs:string'/>
+      <xs:attribute name='checkDuplicateMessagesOnDuplex' type='xs:boolean'/>
       <xs:attribute name='conduitSubscriptions' type='xs:boolean'/>
       <xs:attribute name='connectionFilter' type='xs:string'/>
       <xs:attribute name='consumerPriorityBase' type='xs:integer'/>
@@ -6006,6 +6013,8 @@ available and setup a connection to each available remote broker
       <xs:attribute name='dispatchAsync' type='xs:boolean'/>
       <xs:attribute name='duplex' type='xs:boolean'/>
       <xs:attribute name='dynamicOnly' type='xs:boolean'/>
+      <xs:attribute name='gcDestinationViews' type='xs:boolean'/>
+      <xs:attribute name='gcSweepTime' type='xs:long'/>
       <xs:attribute name='localUri' type='xs:string'/>
       <xs:attribute name='messageTTL' type='xs:integer'/>
       <xs:attribute name='name' type='xs:string'/>
