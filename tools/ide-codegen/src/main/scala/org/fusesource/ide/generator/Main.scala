@@ -104,6 +104,7 @@ object Main {
     val editorDir = editorProjectDir + "/src/org/fusesource/ide/camel/editor"
     val modelDir = basedir + "/../../plugins/org.fusesource.ide.camel.model/src/org/fusesource/ide/camel/model/generated"
     val hawtioDir = basedir + "/../../../hawtio/hawtio-web/src/main/webapp/app/camel"
+    val hawtioLibDir = basedir + "/../../../hawtio/hawtio-web/src/main/webapp/lib"
     val imageDir = new File(editorProjectDir + "/icons")
 
     val camelDescriptionElementsFile = new File(basedir + "/../../../fuse/tooling/camel-tooling-util/src/main/resources/camelDescriptionElements.txt")
@@ -142,8 +143,8 @@ object Main {
     }
 
     if (hawtio) {
-      val hawtioJsDir = hawtioDir + "/js"
-      new CamelHeaderModelGenerator(hawtioJsDir).run()
+      val hawtioJsDir = hawtioLibDir
+      new CamelHeaderModelGenerator(hawtioDir + "/js").run()
       app = new Generator(outputDir, hawtioDir + "/img")
       app.generateHawtIO(hawtioJsDir)
       println("Generated hawtio to: " + app)

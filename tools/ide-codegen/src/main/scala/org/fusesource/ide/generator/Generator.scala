@@ -23,10 +23,12 @@ import org.fusesource.camel.tooling.util.CamelModelUtils
 import org.fusesource.scalate.{RenderContext, CompilerException, TemplateEngine}
 import org.fusesource.scalate.introspector.{BeanProperty, Property, Introspector}
 import org.fusesource.scalate.util.{Logging, IOUtil}
-import java.lang.reflect.{AnnotatedElement, Field, Modifier}
+import scala.Array
+import java.lang.reflect._
 import java.lang.annotation.{Annotation => JAnnotation}
 import javax.xml.bind.annotation.{XmlRootElement, XmlElements, XmlElementRef, XmlAttribute, XmlElement, XmlAccessType, XmlAccessorType, XmlTransient}
 import com.google.gson.{JsonParser, GsonBuilder}
+import org.fusesource.scalate.introspector.BeanProperty
 
 object Reflections {
 
@@ -330,12 +332,58 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
     }
   }
 
+  def elementType(prop: Property[_]): Option[String] = {
+    if (isJavaCollection(prop)) {
+      if (prop.isInstanceOf[FieldProperty[_]]) {
+        val fieldProp = prop.asInstanceOf[FieldProperty[_]]
+        var fld = fieldProp.field
+        return elementType(fld.getGenericType)
+      }
+      if (prop.isInstanceOf[BeanProperty[_]]) {
+        val beanProp = prop.asInstanceOf[BeanProperty[_]]
+        val readMethod = beanProp.descriptor.getReadMethod
+        if (readMethod != null) {
+          return elementType(readMethod.getGenericReturnType)
+        }
+      }
+    }
+    return None
+  }
+
+  def elementType(retType: Type): Option[String] =  {
+    if (retType != null && retType.isInstanceOf[ParameterizedType]) {
+      var paramType = retType.asInstanceOf[ParameterizedType]
+      val arguments: Array[Type] = paramType.getActualTypeArguments
+      if (arguments != null && arguments.length > 0) {
+        return arguments(0) match {
+          case c: Class[_] => Some(c.getName)
+          case _ => None
+        }
+      }
+    }
+    return None
+  }
+
+  def isJavaCollection(prop: Property[_]): Boolean = {
+    return prop.propertyType.getName() match {
+      case "java.util.List" => true
+      case "java.util.Set" => true
+      case "java.util.Collection" => true
+      case "java.lang.Iterable" => true
+      case n => false
+    }
+}
+
   /**
    * Returns the JavaScript type we should use for editing the property
    */
 
   def javaScriptType(prop: Property[_]): String = {
-    return prop.propertyType.getName()
+    return if (prop.propertyType.isArray || isJavaCollection(prop)) {
+      "array"
+    } else {
+      prop.propertyType.getName()
+    }
     /*
 		val number = "number"
 		val string = "string"

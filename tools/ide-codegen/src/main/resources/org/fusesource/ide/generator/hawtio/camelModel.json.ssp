@@ -124,6 +124,7 @@
 	<%
 	comma(node.beanProperties){ prop =>
 		val xmlElements = node.xmlElements(prop) 
+    val optElementType = elementType(prop)
 	%>		
         "${prop.name}": {
     #if (!xmlElements.isEmpty)
@@ -151,6 +152,9 @@
       #end
 	        "type":   "${javaScriptType(prop)}",
 					#end
+					#if (optElementType.isDefined)
+          "items": { "type": "${optElementType.get}" },
+ 		      #end
           "description":"${prop.description}",
           "tooltip":"${prop.description}",
 					#if (prop.readOnly)
