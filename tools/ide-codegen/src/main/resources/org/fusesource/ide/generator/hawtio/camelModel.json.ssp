@@ -124,7 +124,7 @@
 	<%
 	comma(node.beanProperties){ prop =>
 		val xmlElements = node.xmlElements(prop) 
-    val optElementType = elementType(prop)
+    val optElementType = elementTypeId(prop)
 	%>		
         "${prop.name}": {
     #if (!xmlElements.isEmpty)
