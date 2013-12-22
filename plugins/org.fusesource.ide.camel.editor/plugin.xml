@@ -76,7 +76,7 @@
             commandId="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+6">
+            sequence="M1+L">
       </key>
    </extension>
 
