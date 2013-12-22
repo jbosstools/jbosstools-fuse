@@ -150,6 +150,29 @@ public class KarafServerBehaviourDelegate extends ServerBehaviourDelegate {
 	
 	public void setKarafProcess(IProcess proc, IProgressMonitor monitor) {
 		this.process = proc;
+		if (proc != null) setupProcessMonitor();
+	}
+	
+	/**
+	 * monitors the server process and updates the server status on changes
+	 */
+	private void setupProcessMonitor() {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (process != null && !process.isTerminated()) {
+					// wait for the process to end
+					try {
+						Thread.sleep(2000L);
+					} catch (InterruptedException ex) {
+						// ignore
+					}
+				}
+				KarafServerBehaviourDelegate.this.stop(false);
+			}
+		});
+		t.setName("Process Watcher " + process.getLabel());
+		t.start();
 	}
 	
 	/* (non-Javadoc)
