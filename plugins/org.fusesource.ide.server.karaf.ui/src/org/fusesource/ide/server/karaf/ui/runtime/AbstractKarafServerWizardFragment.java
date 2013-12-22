@@ -137,7 +137,7 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 				karafServerWorkingCopy.setPortNumber(model.getPortNumber());
 				karafServerWorkingCopy.setUserName(model.getUserName());
 				karafServerWorkingCopy.setPassword(model.getPassword());
-				workingCopy.setName(new File(model.getKarafInstallDir()).getName());
+				workingCopy.setRuntime(getRuntimeWorkingCopy());
 				try {
 					workingCopy.save(true, new NullProgressMonitor());
 				} catch (CoreException ex) {

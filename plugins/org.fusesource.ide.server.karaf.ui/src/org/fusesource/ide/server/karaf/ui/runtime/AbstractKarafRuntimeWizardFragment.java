@@ -97,8 +97,6 @@ public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment
 				String installDir = model.getKarafInstallDir();
 				IPath path = new Path(installDir);
 				workingCopy.setLocation(path);
-// commented out the naming of the runtime as it seems to break server to runtime links
-//				workingCopy.setName(path.toFile().getName());
 				karafRuntimeWorkingCopy.setKarafInstallDir(path.removeTrailingSeparator().toOSString());
 				karafRuntimeWorkingCopy.setKarafPropertiesFileLocation(model.getKarafPropertiesFileLocation());
 				karafRuntimeWorkingCopy.setKarafVersion(model.getKarafVersion());
