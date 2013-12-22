@@ -59,6 +59,8 @@ object Generator {
     //val separator = System.getProperty("line.separator", "\r\n")
   val separator = "\r\n"
 
+  val ignoreClasses = Set[Class[_]](classOf[ToDefinition])
+
 
   private val singleton = new Generator
 
@@ -131,6 +133,8 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
   lazy val nodeDefinitionClassMap = Map[Class[_], NodeDefinition[_]](nodeDefinitions.map(n => n.clazz -> n): _*)
 
   lazy val baseClassAndNestedClasses = loadBaseClassAndNestedClasses
+
+  lazy val nodeDefinitionsAndBaseClasses = (nodeDefinitions ++ baseClassAndNestedClasses).toSet
 
   lazy val toDefinition = createNodeDefinition("ToDefinition")
 
@@ -332,31 +336,59 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
     }
   }
 
-  def elementType(prop: Property[_]): Option[String] = {
+  def toId(name: String): String = {
+    val idx = name.lastIndexOf("Definition")
+    val definitionName = if (idx > 0) name.substring(0, idx) else name
+    return decapitalize(definitionName)
+  }
+
+  def isProcessor(clazz: Class[_]) = !Modifier.isAbstract(clazz.getModifiers) &&
+          classOf[ProcessorDefinition[_]].isAssignableFrom(clazz) &&
+          !ignoreClasses.contains(clazz)
+
+  def elementTypeClass(prop: Property[_]): Option[Class[_]] = {
     if (isJavaCollection(prop)) {
       if (prop.isInstanceOf[FieldProperty[_]]) {
         val fieldProp = prop.asInstanceOf[FieldProperty[_]]
         var fld = fieldProp.field
-        return elementType(fld.getGenericType)
+        return elementTypeClass(fld.getGenericType)
       }
       if (prop.isInstanceOf[BeanProperty[_]]) {
         val beanProp = prop.asInstanceOf[BeanProperty[_]]
         val readMethod = beanProp.descriptor.getReadMethod
         if (readMethod != null) {
-          return elementType(readMethod.getGenericReturnType)
+          return elementTypeClass(readMethod.getGenericReturnType)
         }
       }
     }
     return None
   }
 
-  def elementType(retType: Type): Option[String] =  {
+  def elementTypeId(prop: Property[_]): Option[String] = {
+    elementTypeClass(prop) match {
+      case Some(clazz) => Some(if (isProcessor(clazz)) {
+        toId(clazz.getSimpleName)
+      } else {
+        clazz.getName
+      })
+      case _ => None
+    }
+  }
+
+  def elementType(prop: Property[_]): Option[String] = {
+    return elementTypeClass(prop) match {
+      case Some(aClass) => Some(aClass.getName)
+      case _ => None
+    }
+  }
+
+  def elementTypeClass(retType: Type): Option[Class[_]] =  {
     if (retType != null && retType.isInstanceOf[ParameterizedType]) {
       var paramType = retType.asInstanceOf[ParameterizedType]
       val arguments: Array[Type] = paramType.getActualTypeArguments
       if (arguments != null && arguments.length > 0) {
         return arguments(0) match {
-          case c: Class[_] => Some(c.getName)
+          case c: Class[_] => Some(c)
           case _ => None
         }
       }
@@ -475,6 +507,10 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
         if (!propType.isPrimitive && node.isSimplePropertyType(prop) &&
                 !ignoredTypeNames.contains(propType.getName)) {
           classes += propType
+        }
+        elementTypeClass(prop) match {
+          case Some(aClass) => classes += aClass
+          case _ =>
         }
         val elements = node.xmlElements(prop)
         for (el <- elements) {
@@ -640,17 +676,17 @@ case class NodeDefinition[T](name: String, clazz: Class[T], generator: Generator
 
 	
 	def canAcceptInput(): Boolean = {
-		return CamelModelUtils.canAcceptInput(clazz.getName())
+		return isProcessor && CamelModelUtils.canAcceptInput(clazz.getName())
 	}
 	
 	def canAcceptOutput(): Boolean = {
     import generator.camelContext
-    return CamelModelJavaHelper.canAcceptOutput(camelContext, clazz)
+    return isProcessor && CamelModelJavaHelper.canAcceptOutput(camelContext, clazz)
 	}
 
 	def isNextSiblingStepAddedAsNodeChild(): Boolean = {
     import generator.camelContext
-    return CamelModelJavaHelper.isNextSiblingStepAddedAsNodeChild(camelContext, clazz)
+    return isProcessor && CamelModelJavaHelper.isNextSiblingStepAddedAsNodeChild(camelContext, clazz)
 	}
 
   def title: String = {
