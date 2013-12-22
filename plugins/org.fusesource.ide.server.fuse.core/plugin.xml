@@ -55,7 +55,7 @@
            supportsRemoteHosts="false">
      </serverType>
      <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           behaviourClass="org.fusesource.ide.server.fuse.core.server.FuseESBServerBehaviourDelegate"
            class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
            description="%fuseESBServerDescription_61"
            hasConfiguration="true"
@@ -89,15 +89,15 @@
 
   <extension point="org.eclipse.wst.server.core.installableRuntimes">
     <runtime
-          archivePath="jboss-fuse-6.0.0.redhat-024"
-          archiveUrl="https://repository.jboss.org/nexus/content/groups/fs-public/org/jboss/fuse/jboss-fuse/6.0.0.redhat-024/jboss-fuse-6.0.0.redhat-024.zip"
+          archivePath="jboss-fuse-6.0.0.redhat-059"
+          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.0.0.redhat-059/jboss-fuse-full-6.0.0.redhat-059.zip"
           id="org.fusesource.ide.fuseesb.runtime.60"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="win32">
     </runtime>
     <runtime
-          archivePath="jboss-fuse-6.0.0.redhat-024"
-          archiveUrl="https://repository.jboss.org/nexus/content/groups/fs-public/org/jboss/fuse/jboss-fuse/6.0.0.redhat-024/jboss-fuse-6.0.0.redhat-024.zip"
+          archivePath="jboss-fuse-6.0.0.redhat-059"
+          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.0.0.redhat-059/jboss-fuse-full-6.0.0.redhat-059.zip"
           id="org.fusesource.ide.fuseesb.runtime.60"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="linux">

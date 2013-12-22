@@ -34,8 +34,8 @@ public class KarafServerDelegate extends ServerDelegate implements
 	public static final String DEFAULT_KARAF_SSH_PASSWORD = "karaf";
 	public static final String DEFAULT_SMX_SSH_USER = "smx";
 	public static final String DEFAULT_SMX_SSH_PASSWORD = "smx";
-	public static final String DEFAULT_FUSEESB_SSH_USER = "smx";
-	public static final String DEFAULT_FUSEESB_SSH_PASSWORD = "smx";
+	public static final String DEFAULT_FUSEESB_SSH_USER = "admin";
+	public static final String DEFAULT_FUSEESB_SSH_PASSWORD = "admin";
 	
 	private static final String DEFAULT_DUMMY = null;
 	
