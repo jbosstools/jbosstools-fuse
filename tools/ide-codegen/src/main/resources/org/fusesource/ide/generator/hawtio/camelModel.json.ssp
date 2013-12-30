@@ -73,7 +73,7 @@
 				"type": "object",
 	      "properties": {
 	        "expression": {
-	          "type": "java.lang.String",
+	          "type": "string",
 	          "description": "The expression",
 	          "tooltip": "Enter the expression in your chosen language syntax",
 	          "title": "Expression"
