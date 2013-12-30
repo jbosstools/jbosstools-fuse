@@ -1,6 +1,7 @@
 <%@ import val generator: org.fusesource.ide.generator.Generator %>
 <%
   import org.fusesource.camel.tooling.util.Languages
+  import org.fusesource.camel.tooling.util.Strings._
 
   val langTool = new Languages()
 %>
@@ -155,8 +156,8 @@
 					#if (optElementType.isDefined)
           "items": { "type": "${optElementType.get}" },
  		      #end
-          "description":"${prop.description}",
-          "tooltip":"${prop.description}",
+          "description":"${capitalize(splitCamelCase(prop.description))}",
+          "tooltip":"${capitalize(splitCamelCase(prop.description))}",
 					#if (prop.readOnly)
           "readonly": true,
 		      #end
@@ -166,7 +167,7 @@
 					#if (wrapLines(prop))
           "wrapLines": true,
 		      #end
-          "title":  "${prop.label}"
+          "title":  "${capitalize(splitCamelCase(prop.label))}"
         }
 	<%
 	}
@@ -217,8 +218,8 @@ comma(baseClassAndNestedClasses){ node =>
           <%--
 					"type": "${propertyType(prop)}"
 					--%>
-          "description":"${prop.description}",
-          "tooltip":"${prop.description}",
+          "description":"${capitalize(splitCamelCase(prop.description))}",
+          "tooltip":"${capitalize(splitCamelCase(prop.description))}",
 					#if (prop.readOnly)
           "readonly": true,
 		      #end
@@ -228,7 +229,7 @@ comma(baseClassAndNestedClasses){ node =>
 					#if (wrapLines(prop))
           "wrapLines": true,
 		      #end
-          "title":  "${prop.label}"
+          "title":  "${capitalize(splitCamelCase(prop.label))}"
         }
 	<%
 	}
