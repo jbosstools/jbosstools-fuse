@@ -414,32 +414,29 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
     return if (prop.propertyType.isArray || isJavaCollection(prop)) {
       "array"
     } else {
-      prop.propertyType.getName()
+      val number = "number"
+      val string = "string"
+      val bool = "bool"
+      prop.propertyType.getName() match {
+        case "java.lang.Byte" => number
+        case "java.lang.Short" => number
+        case "java.lang.Integer" => number
+        case "java.lang.Long" => number
+        case "java.lang.Float" => number
+        case "java.lang.Double" => number
+        case "byte" => number
+        case "short" => number
+        case "int" => number
+        case "long" => number
+        case "float" => number
+        case "double" => number
+        case "java.util.Date" => string
+        case "java.lang.String" => string
+        case "boolean" => bool
+        case "java.lang.Boolean" => bool
+        case n: String => n
+      }
     }
-    /*
-		val number = "number"
-		val string = "string"
-		val bool = "bool"
-    prop.propertyType.getName() match {
-			case "java.lang.Byte" => number
-			case "java.lang.Short" => number
-			case "java.lang.Integer" => number
-			case "java.lang.Long" => number
-			case "java.lang.Float" => number
-			case "java.lang.Double" => number
-			case "byte" => number
-			case "short" => number
-			case "int" => number
-			case "long" => number
-			case "float" => number
-			case "double" => number
-			case "java.util.Date" => string
-			case "java.lang.String" => string
-			case "boolean" => bool
-			case "java.lang.Boolean" => bool
-			case n: String => n
-    }
-    */
   }
 
   def isExpression(prop: Property[_]) = classOf[ExpressionDefinition].isAssignableFrom(prop.propertyType)
