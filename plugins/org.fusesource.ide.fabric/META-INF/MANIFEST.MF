@@ -63,24 +63,12 @@ Require-Bundle: io.fabric8.tooling-jclouds-all,
  org.eclipse.core.expressions,
  jackson-core-asl;bundle-version="1.9.10",
  jackson-mapper-asl;bundle-version="1.9.10",
- org.eclipse.gemini.management
+ org.eclipse.gemini.management,
+ com.google.guava;bundle-version="[14.0.0,15.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin
 Bundle-ClassPath: .
 Export-Package: org.fusesource.ide.fabric,
  org.fusesource.ide.fabric.navigator
 Import-Package: org.apache.maven.cli,
- org.apache.maven.model,
- com.google.common.annotations;version="[14.0.0,15.0.0)",
- com.google.common.base;version="[14.0.0,15.0.0)",
- com.google.common.base.internal;version="[14.0.0,15.0.0)",
- com.google.common.cache;version="[14.0.0,15.0.0)",
- com.google.common.collect;version="[14.0.0,15.0.0)",
- com.google.common.eventbus;version="[14.0.0,15.0.0)",
- com.google.common.hash;version="[14.0.0,15.0.0)",
- com.google.common.io;version="[14.0.0,15.0.0)",
- com.google.common.math;version="[14.0.0,15.0.0)",
- com.google.common.net;version="[14.0.0,15.0.0)",
- com.google.common.primitives;version="[14.0.0,15.0.0)",
- com.google.common.reflect;version="[14.0.0,15.0.0)",
- com.google.common.util.concurrent;version="[14.0.0,15.0.0)"
+ org.apache.maven.model
