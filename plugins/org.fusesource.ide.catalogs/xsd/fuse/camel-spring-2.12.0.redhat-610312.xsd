@@ -1533,6 +1533,7 @@
         <xs:attribute name="configRef" type="xs:string"/>
         <xs:attribute name="strategyRef" type="xs:string"/>
         <xs:attribute name="skipFirstLine" type="xs:boolean"/>
+        <xs:attribute name="lazyLoad" type="xs:boolean"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3123,33 +3124,33 @@
 
   <xs:simpleType name="exchangePattern">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="OutOptionalIn"/>
+      <xs:enumeration value="RobustInOnly"/>
       <xs:enumeration value="OutOnly"/>
       <xs:enumeration value="InOptionalOut"/>
-      <xs:enumeration value="InOut"/>
-      <xs:enumeration value="RobustInOnly"/>
-      <xs:enumeration value="OutOptionalIn"/>
       <xs:enumeration value="RobustOutOnly"/>
-      <xs:enumeration value="InOnly"/>
       <xs:enumeration value="OutIn"/>
+      <xs:enumeration value="InOut"/>
+      <xs:enumeration value="InOnly"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="loggingLevel">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="INFO"/>
-      <xs:enumeration value="WARN"/>
-      <xs:enumeration value="DEBUG"/>
-      <xs:enumeration value="TRACE"/>
       <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="DEBUG"/>
+      <xs:enumeration value="WARN"/>
       <xs:enumeration value="OFF"/>
+      <xs:enumeration value="TRACE"/>
+      <xs:enumeration value="INFO"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="threadPoolRejectedPolicy">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Discard"/>
-      <xs:enumeration value="CallerRuns"/>
       <xs:enumeration value="Abort"/>
+      <xs:enumeration value="CallerRuns"/>
+      <xs:enumeration value="Discard"/>
       <xs:enumeration value="DiscardOldest"/>
     </xs:restriction>
   </xs:simpleType>
@@ -3164,22 +3165,22 @@
 
   <xs:simpleType name="c24IOContentType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Default"/>
-      <xs:enumeration value="Xml"/>
-      <xs:enumeration value="Text"/>
-      <xs:enumeration value="TagValuePair"/>
+      <xs:enumeration value="Binary"/>
+      <xs:enumeration value="Sax"/>
       <xs:enumeration value="Java"/>
       <xs:enumeration value="Auto"/>
-      <xs:enumeration value="Sax"/>
-      <xs:enumeration value="Binary"/>
+      <xs:enumeration value="TagValuePair"/>
+      <xs:enumeration value="Xml"/>
+      <xs:enumeration value="Text"/>
+      <xs:enumeration value="Default"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="jsonLibrary">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Gson"/>
       <xs:enumeration value="XStream"/>
       <xs:enumeration value="Jackson"/>
+      <xs:enumeration value="Gson"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -3199,11 +3200,11 @@
 
   <xs:simpleType name="errorHandlerType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="DeadLetterChannel"/>
-      <xs:enumeration value="NoErrorHandler"/>
-      <xs:enumeration value="DefaultErrorHandler"/>
-      <xs:enumeration value="LoggingErrorHandler"/>
       <xs:enumeration value="TransactionErrorHandler"/>
+      <xs:enumeration value="LoggingErrorHandler"/>
+      <xs:enumeration value="NoErrorHandler"/>
+      <xs:enumeration value="DeadLetterChannel"/>
+      <xs:enumeration value="DefaultErrorHandler"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

@@ -796,6 +796,7 @@
         <xs:attribute name="configRef" type="xs:string"/>
         <xs:attribute name="strategyRef" type="xs:string"/>
         <xs:attribute name="skipFirstLine" type="xs:boolean"/>
+        <xs:attribute name="lazyLoad" type="xs:boolean"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3140,20 +3141,20 @@
 
   <xs:simpleType name="errorHandlerType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="DeadLetterChannel"/>
-      <xs:enumeration value="LoggingErrorHandler"/>
-      <xs:enumeration value="DefaultErrorHandler"/>
       <xs:enumeration value="NoErrorHandler"/>
+      <xs:enumeration value="DefaultErrorHandler"/>
+      <xs:enumeration value="LoggingErrorHandler"/>
+      <xs:enumeration value="DeadLetterChannel"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="loggingLevel">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="ERROR"/>
-      <xs:enumeration value="TRACE"/>
-      <xs:enumeration value="OFF"/>
-      <xs:enumeration value="WARN"/>
       <xs:enumeration value="INFO"/>
+      <xs:enumeration value="OFF"/>
+      <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="WARN"/>
+      <xs:enumeration value="TRACE"/>
       <xs:enumeration value="DEBUG"/>
     </xs:restriction>
   </xs:simpleType>
@@ -3161,51 +3162,51 @@
   <xs:simpleType name="threadPoolRejectedPolicy">
     <xs:restriction base="xs:string">
       <xs:enumeration value="DiscardOldest"/>
-      <xs:enumeration value="CallerRuns"/>
       <xs:enumeration value="Discard"/>
+      <xs:enumeration value="CallerRuns"/>
       <xs:enumeration value="Abort"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="exchangePattern">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="OutOptionalIn"/>
-      <xs:enumeration value="OutIn"/>
-      <xs:enumeration value="RobustInOnly"/>
-      <xs:enumeration value="OutOnly"/>
-      <xs:enumeration value="InOptionalOut"/>
-      <xs:enumeration value="RobustOutOnly"/>
-      <xs:enumeration value="InOut"/>
       <xs:enumeration value="InOnly"/>
+      <xs:enumeration value="RobustInOnly"/>
+      <xs:enumeration value="InOptionalOut"/>
+      <xs:enumeration value="OutOptionalIn"/>
+      <xs:enumeration value="InOut"/>
+      <xs:enumeration value="OutIn"/>
+      <xs:enumeration value="RobustOutOnly"/>
+      <xs:enumeration value="OutOnly"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="bindyType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Fixed"/>
-      <xs:enumeration value="KeyValue"/>
       <xs:enumeration value="Csv"/>
+      <xs:enumeration value="KeyValue"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="jsonLibrary">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="Gson"/>
       <xs:enumeration value="Jackson"/>
       <xs:enumeration value="XStream"/>
-      <xs:enumeration value="Gson"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="c24IOContentType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Java"/>
-      <xs:enumeration value="TagValuePair"/>
+      <xs:enumeration value="Xml"/>
       <xs:enumeration value="Text"/>
+      <xs:enumeration value="TagValuePair"/>
       <xs:enumeration value="Auto"/>
       <xs:enumeration value="Sax"/>
-      <xs:enumeration value="Default"/>
-      <xs:enumeration value="Xml"/>
       <xs:enumeration value="Binary"/>
+      <xs:enumeration value="Default"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
