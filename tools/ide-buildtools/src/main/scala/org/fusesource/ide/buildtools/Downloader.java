@@ -120,7 +120,8 @@ public class Downloader {
 	    try {
             downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel-version"));
             downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf-version"));
-            downloadArchetypesForGroup(out, "org.fusesource.fabric", System.getProperty("fabric-version"));
+//            downloadArchetypesForGroup(out, "org.fusesource.fabric", System.getProperty("fabric-version"));
+            downloadArchetypesForGroup(out, "io.fabric8", System.getProperty("fabric-version"));
 	    } catch (Exception ex) {
 			ex.printStackTrace();
 	    } finally {
