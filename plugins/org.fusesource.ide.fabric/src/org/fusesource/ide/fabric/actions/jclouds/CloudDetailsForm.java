@@ -34,6 +34,7 @@ import org.fusesource.ide.commons.ui.form.FormSupport;
 import org.fusesource.ide.fabric.actions.Messages;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.providers.ProviderMetadata;
+import org.jclouds.providers.Providers;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
@@ -85,12 +86,19 @@ public class CloudDetailsForm extends FormSupport {
         inner.setLayout(layout);
 
         nameField = createBeanPropertyTextField(inner, details, "name", Messages.jclouds_nameLabel, Messages.jclouds_nameTooltip);
-        providerNameField = createBeanPropertyCombo(inner, details, "provider", Messages.jclouds_providerNameLabel, Messages.jclouds_providerNameTooltip, JClouds.getComputeProviders());
-        apiNameField = createBeanPropertyCombo(inner, details, "api", Messages.jclouds_apiNameLabel, Messages.jclouds_apiNameTooltip, JClouds.getComputeApis());
-
-        providerNameField.getCombo().select(0);
-        apiNameField.getCombo().select(0);
         
+        // this classloader trick is needed because otherwise api and provider fields are empty - ECLIPSE-1028
+        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+    	try {
+    		Thread.currentThread().setContextClassLoader(Providers.class.getClassLoader());
+            providerNameField = createBeanPropertyCombo(inner, details, "provider", Messages.jclouds_providerNameLabel, Messages.jclouds_providerNameTooltip, JClouds.getComputeProviders());
+            apiNameField = createBeanPropertyCombo(inner, details, "api", Messages.jclouds_apiNameLabel, Messages.jclouds_apiNameTooltip, JClouds.getComputeApis());
+            providerNameField.getCombo().select(0);
+            apiNameField.getCombo().select(0);
+    	} finally {
+    		Thread.currentThread().setContextClassLoader(oldClassLoader);
+    	}
+    	
         providerNameField.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -108,7 +116,6 @@ public class CloudDetailsForm extends FormSupport {
 			}
 		});
 
-        // TODO not sure why we need this :)
         ProviderMetadata provider = details.getProvider();
         if (provider != null) {
             providerNameField.setSelection(new StructuredSelection(provider));
