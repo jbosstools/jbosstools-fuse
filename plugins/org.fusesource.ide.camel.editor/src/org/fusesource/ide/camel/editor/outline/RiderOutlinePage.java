@@ -203,6 +203,15 @@ public class RiderOutlinePage extends ContentOutlinePage implements INodeViewer,
 				}
 				return super.getText(event);
 			}
+			
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.window.ToolTip#shouldCreateToolTip(org.eclipse.swt.widgets.Event)
+			 */
+			@Override
+			protected boolean shouldCreateToolTip(Event event) {
+				TreeItem item = tree.getItem(new Point(event.x, event.y));
+				return item != null;
+			}
 		};
 	}
 
