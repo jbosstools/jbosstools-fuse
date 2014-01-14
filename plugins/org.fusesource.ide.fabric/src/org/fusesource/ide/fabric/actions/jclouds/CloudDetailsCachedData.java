@@ -109,7 +109,7 @@ public class CloudDetailsCachedData {
 	}
 
 	public void startLoadingDataJobs() {
-		if (details == null) {
+		if (details == null || !getImageList().isEmpty()) { // maybe we have cached data we can reuse
 			return;
 		}
 		cancelLoadingJobs();
