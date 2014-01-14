@@ -24,10 +24,15 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.Section;
 import org.fusesource.ide.commons.ui.ICanValidate;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.ui.form.FormSupport;
@@ -49,17 +54,18 @@ public class CloudDetailsForm extends FormSupport {
     private Text identityField;
     private CloudDetails details = new CloudDetails();
     private Text nameField;
-
+    private Color originalColor;
+    
     public CloudDetailsForm(ICanValidate validator) {
         super(validator);
     }
 
     @Override
     protected boolean isMandatory(Object bean, String propertyName) {
-        return !Objects.equal(propertyName, "ownerId") &&
-        	   !Objects.equal(propertyName, "provider") &&
-	           !Objects.equal(propertyName, "api") &&
-        	   !Objects.equal(propertyName, "endpoint");
+    	return !Objects.equal(propertyName, "ownerId") &&
+         	   !Objects.equal(propertyName, "provider") &&
+ 	           !Objects.equal(propertyName, "api") &&
+         	   !Objects.equal(propertyName, "endpoint");	
     }
 
     public CloudDetails getDetails() {
@@ -78,7 +84,7 @@ public class CloudDetailsForm extends FormSupport {
     @Override
     public void createTextFields(Composite parent) {
         Composite inner = createSectionComposite(Messages.jclouds_cloudDetails, new GridData(SWT.FILL, SWT.FILL, true, true));
-
+        
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
         layout.marginHeight = 0;
@@ -126,6 +132,7 @@ public class CloudDetailsForm extends FormSupport {
         }
 
         endpointField = createBeanPropertyTextField(inner, details, "endpoint", Messages.jclouds_endpointLabel, Messages.jclouds_endpointTooltip);
+        originalColor = endpointField.getBackground();
         identityField = createBeanPropertyTextField(inner, details, "identity", Messages.jclouds_identityLabel, Messages.jclouds_identityTooltip);
         createBeanPropertyTextField(inner, details, "credential", Messages.jclouds_credentialLabel, Messages.jclouds_credentialTooltip, SWT.BORDER | SWT.PASSWORD);
         createBeanPropertyTextField(inner, details, "ownerId", Messages.jclouds_ownerLabel, Messages.jclouds_ownerTooltip, SWT.BORDER | SWT.PASSWORD);
@@ -134,9 +141,26 @@ public class CloudDetailsForm extends FormSupport {
         apiNameField.addPostSelectionChangedListener(new ISelectionChangedListener() {
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
-                endpointField.setEnabled(!event.getSelection().isEmpty());
+                endpointField.setEnabled(!event.getSelection().isEmpty() && !Selections.getFirstSelection(event.getSelection()).equals(JClouds.EMPTY_API));
+                if (endpointField.isEnabled()) {
+                	endpointField.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+                	endpointField.setFocus();
+                } else {
+                	endpointField.setText("");
+                	endpointField.setBackground(originalColor);
+                }
             }
         });
+        endpointField.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (endpointField.getText().trim().length()>0) {
+					endpointField.setBackground(originalColor);
+				} else {
+					endpointField.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+				}
+			}
+		});
     }
 
 
@@ -161,6 +185,6 @@ public class CloudDetailsForm extends FormSupport {
     public boolean isValid() {
     	ApiMetadata api = (ApiMetadata)Selections.getFirstSelection(apiNameField.getSelection());
     	ProviderMetadata provider = (ProviderMetadata)Selections.getFirstSelection(providerNameField.getSelection());
-    	return super.isValid() && (api != JClouds.EMPTY_API || provider != JClouds.EMPTY_PROVIDER);
+    	return super.isValid() && ((api != JClouds.EMPTY_API && endpointField.getText().trim().length()>0) || provider != JClouds.EMPTY_PROVIDER);
     }
 }

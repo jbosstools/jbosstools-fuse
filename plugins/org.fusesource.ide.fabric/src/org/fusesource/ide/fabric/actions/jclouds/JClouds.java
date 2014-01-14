@@ -237,10 +237,15 @@ public class JClouds {
 
     public static ProviderMetadata getProvider(String providerId) {
     	if (providerId != null) {
+    		// this classloader trick is needed because otherwise api and provider fields are empty - ECLIPSE-1028
+    		ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
     		try {
+    			Thread.currentThread().setContextClassLoader(Providers.class.getClassLoader());
     			return Providers.withId(providerId);
     		} catch (NoSuchElementException ex) {
     			return JClouds.EMPTY_PROVIDER;
+    		} finally {
+    			Thread.currentThread().setContextClassLoader(oldClassLoader);
     		}
     	}
     	return null;
@@ -248,12 +253,16 @@ public class JClouds {
 
     public static ApiMetadata getApi(String apiId) {
         if (apiId != null) {
+        	// this classloader trick is needed because otherwise api and provider fields are empty - ECLIPSE-1028
+    		ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         	try {
+        		Thread.currentThread().setContextClassLoader(Apis.class.getClassLoader());
         		return Apis.withId(apiId);	
         	} catch (NoSuchElementException ex) {
         		return JClouds.EMPTY_API;
-        	}
-        	
+        	}finally {
+    			Thread.currentThread().setContextClassLoader(oldClassLoader);
+    		}        	
         }
         return null;
     }
