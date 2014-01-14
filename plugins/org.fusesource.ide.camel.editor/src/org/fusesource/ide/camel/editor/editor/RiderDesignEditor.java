@@ -158,6 +158,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 				@Override
 				public void run() {
 					DiagramOperations.updateSelectedNode(RiderDesignEditor.this);
+					getDiagramTypeProvider().getDiagramBehavior().refresh();
 				}
 
 			});
