@@ -264,8 +264,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		if (diagramTypeProvider == null)
 			return;
 		
-	    if (diagramTypeProvider.getDiagram() != diagram)
+	    if (diagramTypeProvider.getDiagram() != diagram) {
 	    	diagramTypeProvider.resourceReloaded(activeConfig.diagram);
+	    }
 
 	    // add the diagram contents
         getEditingDomain().getCommandStack().execute(new ImportCamelContextElementsCommand(RiderDesignEditor.this, getEditingDomain(), diagram));
@@ -898,6 +899,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	public void refreshDiagramContents() {
 		initializeDiagramForSelectedRoute();
 		if (activeConfig.diagram != null) {
+			getDiagramTypeProvider().init(activeConfig.diagram, getDiagramBehavior());
 			getDiagramBehavior().getRefreshBehavior().initRefresh();
 	        setPictogramElementsForSelection(null);
 	        GraphicalViewer graphicalViewer = getGraphicalViewer();
