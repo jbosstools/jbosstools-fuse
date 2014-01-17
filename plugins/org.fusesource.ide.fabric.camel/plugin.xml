@@ -2,16 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.views">
-      <view
-            class="org.fusesource.ide.fabric.navigator.FabricNavigator"
-            icon="icons/fabric_explorer.png"
-            id="org.fusesource.ide.fabric.navigator"
-            name="Fabric Navigator"
-            restorable="true">
-      </view>
-   </extension>
-   <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewer
             viewerId="org.fusesource.ide.fabric.navigator">
