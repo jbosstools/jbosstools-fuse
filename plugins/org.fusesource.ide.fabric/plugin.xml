@@ -286,6 +286,11 @@
                category="org.fusesource.ide.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ProfileRequirementsTab"
                label="Requirements"/>
+         <propertyTab
+               category="org.fusesource.ide.jmx.ui.views"
+               id="org.fusesource.ide.jmx.ui.views.NodesTab"
+               label="Nodes">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -353,6 +358,14 @@
                tab="org.fusesource.ide.jmx.ui.views.ProfileRequirementsTab">
             <input
                   type="org.fusesource.ide.fabric.navigator.ProfileNode">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.fabric.navigator.cloud.NodeTabSection"
+               id="NodesSection"
+               tab="org.fusesource.ide.jmx.ui.views.NodesTab">
+            <input
+                  type="org.fusesource.ide.fabric.navigator.cloud.CloudNode">
             </input>
          </propertySection>
       </propertySections>
