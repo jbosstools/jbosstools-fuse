@@ -28,10 +28,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+
 import io.fabric8.camel.facade.CamelFacade;
 import io.fabric8.camel.facade.mbean.CamelContextMBean;
 import io.fabric8.camel.facade.mbean.CamelFabricTracerMBean;
 import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
+
 import org.fusesource.fon.util.messages.IExchange;
 import org.fusesource.fon.util.messages.IMessage;
 import org.fusesource.fon.util.messages.ITraceExchangeBrowser;
@@ -52,6 +54,7 @@ import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.camel.Messages;
 import org.fusesource.ide.fabric.camel.editor.CamelContextNodeEditorInput;
+import org.fusesource.ide.jmx.core.tree.Root;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 
 
@@ -379,7 +382,7 @@ ImageProvider {
 
 	protected void stopMBean() {
 		camelContextMBean.stop();
-		refresh();
+		camelContextsNode.removeChild(this);
 	}
 
 	protected void suspendMBean() {
