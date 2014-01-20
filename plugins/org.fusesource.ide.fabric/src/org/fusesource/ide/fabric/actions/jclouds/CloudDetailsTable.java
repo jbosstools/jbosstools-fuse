@@ -52,12 +52,19 @@ public class CloudDetailsTable extends TableViewSupport {
 		setShowSearchBox(false);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.views.ColumnViewSupport#warnNoSite()
+	 */
+	@Override
+	protected void warnNoSite() {
+		// no site used
+	}
+	
 	@Override
 	public void dispose() {
 		CloudDetails.getCloudDetailList().removeChangeListener(changeListener);
 		super.dispose();
 	}
-
 
 	@Override
 	protected void createColumns() {
