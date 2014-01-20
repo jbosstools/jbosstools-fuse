@@ -240,6 +240,12 @@ public final class Messages extends NLS {
 	public static String createVersionDialogTitle;
 	public static String createVersionDialogMessage;
 
+	public static String deleteVersionMenuLabel;
+	public static String deleteVersionDescription;
+
+	public static String deleteVersionDialogTitle;
+	public static String deleteVersionDialogMessage;
+	
 	public static String fabricConnectButton;
 	public static String fabricConnectButtonTooltip;
 	public static String fabricDisconnectButton;

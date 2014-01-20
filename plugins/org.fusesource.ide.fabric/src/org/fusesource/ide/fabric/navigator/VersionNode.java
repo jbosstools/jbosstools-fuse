@@ -23,8 +23,10 @@ import java.util.Set;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.graphics.Image;
+
 import io.fabric8.api.Profile;
 import io.fabric8.api.Version;
+
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
@@ -34,6 +36,7 @@ import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.CreateSshContainerAction;
 import org.fusesource.ide.fabric.actions.CreateVersionAction;
+import org.fusesource.ide.fabric.actions.DeleteVersionAction;
 import org.fusesource.ide.fabric.actions.ProfileAddAction;
 import org.fusesource.ide.fabric.actions.jclouds.CreateJCloudsContainerAction;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
@@ -185,6 +188,7 @@ public class VersionNode extends RefreshableCollectionNode implements HasRefresh
 		menu.add(new ProfileAddAction(this));
 		menu.add(new Separator());
 		menu.add(new CreateVersionAction(this));
+//		menu.add(new DeleteVersionAction(this)); //uncomment me when this is finally working in fabric
 	}
 
 }
