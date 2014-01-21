@@ -25,9 +25,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.ProgressMonitorWrapper;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditDomain;
@@ -69,7 +67,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IURIEditorInput;
@@ -77,7 +74,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.camel.tooling.util.ValidationHandler;
 import org.fusesource.ide.camel.editor.AbstractNodes;
 import org.fusesource.ide.camel.editor.Activator;
@@ -112,7 +108,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	private AbstractEditPart lastSelectedEditPart;
 
 	private boolean asyncSwitchToSource;
-
+	private boolean dirty = false;
 	private boolean disableCommandEvents;
 
 	private IEditorSite editorSite;
@@ -596,8 +592,24 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		fireModelDirty();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#isDirty()
+	 */
+	@Override
+	public boolean isDirty() {
+		return this.dirty;
+	}
+	
+	/**
+	 * @param dirty the dirty to set
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+		firePropertyChange(PROP_DIRTY);
+	}
+	
 	protected void fireModelDirty() {
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		setDirty(true);
 
 		// only mark the diagram as changed if we really have just performed a command
 		// (rather than just doing a save which just clears the dirty flag)
@@ -719,78 +731,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		}
 		getModel().setFailedToParseXml(true);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.
-	 * IProgressMonitor)
-	 */
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-		saveModelToFile();
-
-		// now lets tell the source editor to save
-		StructuredTextEditor sourceEditor = editor.getSourceEditor();
-		if (sourceEditor != null) {
-			ProgressMonitorWrapper wrapper = createSaveProgressMonitorWrapper(monitor);
-			sourceEditor.doSave(wrapper);
-		} else {
-			// update CommandStack
-			getCommandStack().markSaveLocation();
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs()
-	 */
-	@Override
-	public void doSaveAs() {
-		saveModelToFile();
-
-		// now lets tell the source editor to save
-		StructuredTextEditor sourceEditor = editor.getSourceEditor();
-		if (sourceEditor != null) {
-			sourceEditor.doSaveAs();
-		}
-	}
-
-	/**
-	 * Creates a save monitor wrapper
-	 */
-	public ProgressMonitorWrapper createSaveProgressMonitorWrapper(IProgressMonitor monitor) {
-		ProgressMonitorWrapper wrapper = new ProgressMonitorWrapper(monitor) {
-
-			@Override
-			public void done() {
-				super.done();
-				// now to avoid any other change events occurring just after us, lets do an async mark as saved...
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						saveCamelEditorInput();
-						markXmlSaved();
-					}
-				});
-			}
-
-		};
-		return wrapper;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#isSaveAsAllowed()
-	 */
-	@Override
-	public boolean isSaveAsAllowed() {
-		return editor.isSaveAsAllowed();
-	}
-
+	
 	/**
 	 * refresh the editor contents
 	 */
@@ -1131,32 +1072,17 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		return diagramInput;
 	}
 
-	public void saveModelToFile() {
-		// lets update the XML editor with the latest design if we've updated the design
-		try {
-			disableCommandEvents = true;
-			editor.updatedDesignPage(false);
-
-		} finally {
-			disableCommandEvents = false;
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.EditorPart#getEditorInput()
+	 */
+	@Override
+	public IEditorInput getEditorInput() {
+		if (this.editorInput != null) {
+			return this.editorInput;
 		}
-
-		saveCamelEditorInput();
-
-		// NOTE assumes that the XML editor is saved after us!
+		return super.getEditorInput();
 	}
-
-	protected void saveCamelEditorInput() {
-		if (editorInput instanceof ICamelEditorInput) {
-			ICamelEditorInput camelInput = (ICamelEditorInput) editorInput;
-			IDocument document = editor.getDocument();
-			if (document != null) {
-				String xml = document.get();
-				camelInput.save(xml);
-			}
-		}
-	}
-
+	
 	public String updateEditorText(String editorXml) {
 		return data.marshaller.updateText(editorXml, getModel());
 	}
@@ -1186,8 +1112,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		data.textChanged = false;
 		getCommandStack().markSaveLocation();
 		getEditingDomain().getCommandStack().flush();
+		setDirty(false);
 	}
-
+	
 	public void onTextEditorPropertyChange() {
 		data.textChanged = true;
 	}

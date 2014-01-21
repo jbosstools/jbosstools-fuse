@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -32,13 +31,7 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -49,7 +42,6 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -58,7 +50,6 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.eclipse.ui.wizards.newresource.BasicNewFileResourceWizard;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.IPrefersPerspective;
@@ -70,7 +61,6 @@ import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.io.ICamelEditorInput;
 import org.fusesource.ide.camel.model.util.Objects;
 import org.fusesource.ide.commons.ui.UIConstants;
-import org.fusesource.ide.commons.ui.Workbenches;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 import org.fusesource.ide.project.providers.CamelVirtualFile;
@@ -109,7 +99,7 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 		PreferenceManager.getInstance().getUnderlyingStorage().addPropertyChangeListener(this);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -311,21 +301,49 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		IEditorPart activeEditor = getActiveEditor();
-		if (activeEditor != null) {
-			if (activeEditor != designEditor) {
-				monitor = designEditor.createSaveProgressMonitorWrapper(monitor);
+		if (getActiveEditor() == null)	return;
+		
+		// first check which page is active
+		if (getActiveEditor().equals(designEditor)) {
+			// if the design editor is active we need to update the xml with
+			// the contents of the design model
+			IDocument document = getDocument();
+			if (document != null) {
+				String text = document.get();
+
+				// lets update the text with the latest from the model..
+				String newText = designEditor.updateEditorText(text);
+				if (!Objects.equal(newText, text)) {
+					// only update the document if its actually different
+					// to avoid setting the dirty flag unnecessarily
+					document.set(newText);
+				}
 			}
-			activeEditor.doSave(monitor);
-		} else {
-			saveSelection();
+		}
 
-			IEditorPart editor1 = getEditor(DESIGN_PAGE_INDEX);
-			editor1.doSave(monitor);
-			IEditorPart editor2 = getEditor(SOURCE_PAGE_INDEX);
-			editor2.doSave(monitor);
-
-			restoreSelection();
+		// if we have a remote camel input then we need to write it back to the remote context
+		if (designEditor.getEditorInput() != null && designEditor.getEditorInput() instanceof ICamelEditorInput) {
+			ICamelEditorInput camelInput = (ICamelEditorInput) designEditor.getEditorInput();
+			IDocument doc = getDocument();
+			if (doc != null) {
+				String xml = doc.get();
+				camelInput.save(xml);
+			}
+		} else {		
+			// then we call the save method of the text editor
+			sourceEditor.doSave(monitor);
+		}
+		
+		IDocument document = getDocument();
+		if (document != null) {
+			designEditor.clearCache();
+			String text = document.get();
+			Activator.getLogger().debug("Updating the design model from the updated text");
+			designEditor.loadEditorText(text);
+			designEditor.refreshDiagramContents();
+			designEditor.fireModelChanged(); // will update the outline view
+			sourceEditor.doRevertToSaved();
+			designEditor.clearChangedFlags();
 		}
 	}
 
@@ -336,71 +354,26 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	 */
 	@Override
 	public void doSaveAs() {
-		IEditorPart activeEditor = getActiveEditor();
-		if (activeEditor != null) {
-			IEditorInput oldInput = getEditorInput();
-			if (oldInput instanceof ICamelEditorInput) {
-				final ICamelEditorInput camelInput = (ICamelEditorInput) oldInput;
-				Shell shell = getSite().getShell();
-				BasicNewFileResourceWizard wizard = new BasicNewFileResourceWizard() {
-					@Override
-					public void addPages() {
-						super.addPages();
-						IWizardPage page = getPage("newFilePage1");
-						if (page instanceof WizardNewFileCreationPage) {
-							final WizardNewFileCreationPage fileCreationPage = (WizardNewFileCreationPage) page;
-							fileCreationPage.setTitle("Save as new file");
-							fileCreationPage.setDescription("Choose the folder and file name to save the routes as a file");
-							IFile lastSaveAsFile = camelInput.getLastSaveAsFile();
-							if (lastSaveAsFile != null) {
-								fileCreationPage.setContainerFullPath(lastSaveAsFile.getFullPath());
-								fileCreationPage.setFileName(lastSaveAsFile.getName());
-
-								Display.getDefault().asyncExec(new Runnable() {
-									@Override
-									public void run() {
-										// lets force a validation
-										Event dummyEvent = new Event();
-										fileCreationPage.handleEvent(dummyEvent);
-									}
-								});
-							} else {
-								fileCreationPage.setFileName("routes.xml");
-							}
-
-						}
-					}
-
-					@Override
-					protected void selectAndReveal(IResource newResource) {
-						// lets now write to the file!!!
-						if (newResource instanceof IFile) {
-							IFile file = (IFile) newResource;
-							camelInput.setLastSaveAsFile(file);
-//							camelInput.setLastSaveAsFile(file);
-							saveAsFile(file);
-						}
-						super.selectAndReveal(newResource);
-					}
-
-				};
-				IWorkbench workbench = Workbenches.getActiveWorkbench();
-				IStructuredSelection selection = new StructuredSelection();
-				wizard.setForcePreviousAndNextButtons(false);
-				wizard.setWindowTitle("Save as new file");
-				wizard.init(workbench, selection);
-				WizardDialog dialog = new WizardDialog(shell, wizard);
-				dialog.setTitle("Save as new file");
-				dialog.open();
-				return;
-			} else {
-				activeEditor.doSaveAs();
-			}
-		} else {
-			saveSelection();
-			doSaveAs(getEditor(DESIGN_PAGE_INDEX));
-			doSaveAs(getEditor(SOURCE_PAGE_INDEX));
-			restoreSelection();
+		if (getActiveEditor() == null)	return;
+				
+		// first check which page is active
+		if (getActiveEditor().equals(designEditor)) {
+			// if the design editor is active we need to update the xml with
+			// the contents of the design model
+			updatedDesignPage(false);
+		}
+		// then we call the save method of the text editor
+		sourceEditor.doSaveAs();
+		
+		IDocument document = getDocument();
+		if (document != null) {
+			designEditor.clearCache();
+			String text = document.get();
+			Activator.getLogger().debug("Updating the design model from the updated text");
+			designEditor.loadEditorText(text);
+			designEditor.refreshDiagramContents();
+			designEditor.fireModelChanged(); // will update the outline view
+			designEditor.clearChangedFlags();
 		}
 	}
 
