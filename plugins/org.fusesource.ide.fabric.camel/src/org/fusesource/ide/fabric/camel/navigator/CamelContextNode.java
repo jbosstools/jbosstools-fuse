@@ -100,7 +100,6 @@ ImageProvider {
 		try {
 			return camelContextMBean.getCamelId();
 		} catch (Exception e) {
-			refresh();
 			return "";
 		}
 	}
@@ -109,7 +108,6 @@ ImageProvider {
 		try {
 			return camelContextMBean.getManagementName();
 		} catch (Exception e) {
-			refresh();
 			return "";
 		}
 	}
@@ -126,7 +124,6 @@ ImageProvider {
 		try {
 			return camelContextMBean.dumpRoutesAsXml();
 		} catch (Exception e) {
-			refresh();
 			return "";
 		}
 	}
