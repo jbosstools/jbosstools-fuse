@@ -142,9 +142,11 @@ public class CreateJCloudsFabricWizard extends Wizard {
 				    firewallManagerFactory.bindFirewallSupport(novafw);
 				    provider.bindFirewallManagerFactory(firewallManagerFactory);
 					
-					CreateJCloudsContainerOptions opts = args.build();
+				    // we need to set the fabric user , pw and role in that way, otherwise the user is not created
+					CreateJCloudsContainerOptions opts = args.withUser(args.getUser(), args.getPassword(), "admin").build();
+				
 					FabricPlugin.getLogger().debug("Compute Service: " + opts.getComputeService());
-					CreateJCloudsContainerMetadata metadata = provider.create(opts, new CreationStateListener() {
+					final CreateJCloudsContainerMetadata metadata = provider.create(opts, new CreationStateListener() {
 						@Override
 						public void onStateChange(String message) {
 							monitor.subTask(message);
@@ -165,7 +167,7 @@ public class CreateJCloudsFabricWizard extends Wizard {
 					Viewers.async(new Runnable() {
 
 						@Override
-						public void run() {
+						public void run() {							
 							String uris = urisBuilder.toString();
 							if(uris.endsWith(",")) {
 								uris = uris.substring(0, uris.length() - 1);
