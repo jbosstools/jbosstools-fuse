@@ -11,17 +11,12 @@
 
 package org.fusesource.ide.camel.editor.editor;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ISafeRunnable;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -336,10 +331,12 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 		
 		IDocument document = getDocument();
 		if (document != null) {
+			int oldRouteSelection = designEditor.getSelectedRouteIndex();
 			designEditor.clearCache();
 			String text = document.get();
 			Activator.getLogger().debug("Updating the design model from the updated text");
 			designEditor.loadEditorText(text);
+			designEditor.setSelectedRouteIndex(oldRouteSelection);
 			designEditor.refreshDiagramContents();
 			designEditor.fireModelChanged(); // will update the outline view
 			sourceEditor.doRevertToSaved();
@@ -364,39 +361,6 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 		}
 		// then we call the save method of the text editor
 		sourceEditor.doSaveAs();
-		
-		IDocument document = getDocument();
-		if (document != null) {
-			designEditor.clearCache();
-			String text = document.get();
-			Activator.getLogger().debug("Updating the design model from the updated text");
-			designEditor.loadEditorText(text);
-			designEditor.refreshDiagramContents();
-			designEditor.fireModelChanged(); // will update the outline view
-			designEditor.clearChangedFlags();
-		}
-	}
-
-	protected void saveAsFile(IFile file) {
-		InputStream source = new ByteArrayInputStream(getDocument().get().getBytes());
-
-		// lets write the document to the new output file
-		try {
-			if (file.exists()) {
-				file.setContents(source, true, true, new NullProgressMonitor());
-			} else {
-				file.create(source, true, new NullProgressMonitor());
-			}
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			Activator.showUserError("Failed to save file", "Failed to write to " + file, e);
-		}
-	}
-
-	protected void doSaveAs(IEditorPart editor) {
-		editor.doSaveAs();
-		setPageText(SOURCE_PAGE_INDEX, editor.getTitle());
-		setInput(editor.getEditorInput());
 	}
 
 	/*

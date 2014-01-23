@@ -783,6 +783,13 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			setInitialRoute();
 		}
 	}
+	
+	public int getSelectedRouteIndex() {
+		if (data.selectedRoute != null) {
+			return data.indexOfRoute(getSelectedRoute());
+		}
+		return data.selectedRouteIndex;
+	}
 
 	public RouteSupport getSelectedRoute() {
 		if (data.selectedRoute == null) {
@@ -867,7 +874,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	}
 
 	public void setSelectedRouteIndex(int index) {
-		if (this.data.selectedRouteIndex != index && index >= 0) {
+		if (this.data.selectedRouteIndex != index) {
 			this.data.selectedRouteIndex = index;
 			this.data.selectedRoute = (RouteSupport) getModel().getChildren().get(index);
 
@@ -1194,6 +1201,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	public void clearCache() {
 		activeRoute = null;
 		this.activeConfig.diagram = null;
+		this.data.selectedRouteIndex = -1;
 		getDiagramTypeProvider().getDiagram().eResource().eAdapters().clear();
 		getEditingDomain().getResourceSet().getResources().remove(getDiagramTypeProvider().getDiagram().eResource());
 	}

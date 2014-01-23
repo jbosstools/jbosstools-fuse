@@ -33,6 +33,7 @@ public class AddNewRouteCommand extends RecordingCommand {
 		Route route = new Route();
 		designEditor.getModel().addChild(route);
 		designEditor.setSelectedRoute(route);
+		designEditor.switchRoute(route);
 	}
 
 }

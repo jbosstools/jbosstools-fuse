@@ -34,7 +34,7 @@ public class RiderDesignEditorData {
 	public boolean shownValidationError;
 	public boolean loadModelOnSetInput;
 	public AbstractNode selectedNode;
-	public int selectedRouteIndex;
+	public int selectedRouteIndex = -1;
 
 	public void recreateModel() {
 		model = model.recreateModel();
