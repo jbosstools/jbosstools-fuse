@@ -55,7 +55,7 @@ public class CamelVirtualFolder {
 	}
 
 	public void populateChildren() {
-		IPath p = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().append(project.getFullPath());
+		IPath p = project.getRawLocation() != null ? project.getRawLocation() : ResourcesPlugin.getWorkspace().getRoot().getRawLocation().append(project.getFullPath());
 		try {
 			findFiles(p.toFile());
 		} catch (CoreException ex) {
@@ -64,12 +64,12 @@ public class CamelVirtualFolder {
 	}
 
 	private void findFiles(File folder) throws CoreException {
-		// ignore the target folder
-		if (folder.getName().equalsIgnoreCase("target") && folder.getParentFile().getName().equalsIgnoreCase(project.getName())) return;
 		File[] files = folder.listFiles();
 		if (files != null) {
 			for (File f : files) {
 				if (f.isDirectory()) {
+					// ignore the target folder
+					if (f.getName().equalsIgnoreCase("target") && f.getParentFile().getName().equalsIgnoreCase(project.getName())) continue;
 					findFiles(f);
 				} else {
 				    IFile[] mappedFiles = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(f.toURI());
