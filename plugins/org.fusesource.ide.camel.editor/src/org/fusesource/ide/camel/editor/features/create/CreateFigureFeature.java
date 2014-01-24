@@ -162,7 +162,58 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 		// return newly created business object(s)
 		return new Object[] { node };
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.func.ICreate#create(org.eclipse.graphiti.features.context.ICreateContext)
+	 */
+	public void createPEandLink(ICreateContext context, AbstractNode node, int insertionIndex) {
 
+		RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
+		Diagram diagram = getDiagram();
+
+		if (selectedRoute != null) {
+			selectedRoute.addChildSilent(node, insertionIndex);
+		} else {
+			Activator.getLogger().warning("Warning! Could not find currently selectedNode, so can't associate this node with the route!: " + node);
+		}
+
+		// do the add
+		PictogramElement pe = addGraphicalRepresentation(context, node);
+
+		getFeatureProvider().link(pe, node);
+		
+		// activate direct editing after object creation
+		getFeatureProvider().getDirectEditingInfo().setActive(true);
+		
+		// return newly created business object(s)
+		return;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.func.ICreate#create(org.eclipse.graphiti.features.context.ICreateContext)
+	 */
+	public Object[] createOnPE(ICreateContext context, PictogramElement pe) {
+		AbstractNode node = createNode();
+
+		RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
+		Diagram diagram = getDiagram();
+
+		if (selectedRoute != null) {
+			selectedRoute.addChild(node);
+		} else {
+			Activator.getLogger().warning("Warning! Could not find currently selectedNode, so can't associate this node with the route!: " + node);
+		}
+
+		getFeatureProvider().link(pe, node);
+		
+		// activate direct editing after object creation
+		getFeatureProvider().getDirectEditingInfo().setActive(true);
+		
+		// return newly created business object(s)
+		return new Object[] { node };
+	}
 
 	protected AbstractNode createNode() {
 		AbstractNode node = null;
