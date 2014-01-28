@@ -57,7 +57,7 @@ public class DeleteVersionAction extends Action {
 
 	protected void deleteVersion() {
 		FabricPlugin.getLogger().debug("Deleting version " + this.versionNode.getVersionId() + "...");
-		// temporarily commented out - pleacu fabric.getFabricService().deleteVersion(this.versionNode.getVersionId());
+		fabric.getFabricService().deleteVersion(this.versionNode.getVersionId());
 		fabric.getVersionsNode().refresh();
 	}
 }
