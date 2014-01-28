@@ -165,36 +165,7 @@ public class RouteContainer extends AbstractNode {
 		 */
 		fireChildAdded(CHILD_ADDED_PROP, child, new Integer(index));
 	}
-	/** 
-	 * adds the child at the given index with firing child added
-	 * 
-	 * @param child
-	 * @param index
-	 */
-	public void addChildSilent(AbstractNode child, int index) {
-		if (this.children.contains(child)) {
-			if (index >= 0 && index < children.size()) {
-				Activator.getLogger().warning("WARN: adding child at index: " + index + " when it was already there in " + this + " children: " + children);
-			}
-			return;
-		}
-		if (index < 0 || index > this.children.size()-1) {
-			this.children.add(child);
-		} else {
-			this.children.add(index, child);
-		}
-		if (child.getParent() == null) {
-			child.setParent(this);
-		}
-		/*
- 		// assign to same Route...
-		RouteContainer parent = getParent();
-		if (parent instanceof Route && !(child instanceof RouteContainer)) {
-			child.setParent(parent);
-		}
-		 */
-		//fireChildAdded(CHILD_ADDED_PROP, child, new Integer(index));
-	}
+
 	/**
 	 * Adds the given children
 	 */

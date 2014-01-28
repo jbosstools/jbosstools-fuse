@@ -141,7 +141,6 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	private Image image;
 	private Image smallImage;
 	private Boolean inheritErrorHandler;
-	private int insertionIndex;
 
 	/**
 	 * default constructor
@@ -151,7 +150,6 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		this.targetConnections = new ArrayList<Flow>();
 		this.listeners = new PropertyChangeSupport(this);
 		this.layout = DEFAULT_LAYOUT;
-		this.setInsertionIndex(0);
 
 		this.descriptors = new HashMap<String, PropertyDescriptor>();
 		this.descriptors.put(PROPERTY_ID, new TextPropertyDescriptor(PROPERTY_ID, Messages.propertyLabelId));
@@ -1693,13 +1691,5 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		}
 
 		return true;
-	}
-
-	public int getInsertionIndex() {
-		return insertionIndex;
-	}
-
-	public void setInsertionIndex(int insertionIndex) {
-		this.insertionIndex = insertionIndex;
 	}
 }
