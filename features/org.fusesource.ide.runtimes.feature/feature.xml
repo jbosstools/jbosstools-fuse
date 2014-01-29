@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.runtimes.feature"
       label="JBoss Fuse Runtimes Feature"
-      version="7.2.0.qualifier"
+      version="7.3.0.qualifier"
       provider-name="JBoss by Red Hat"
       plugin="org.fusesource.ide.tooling">
 
