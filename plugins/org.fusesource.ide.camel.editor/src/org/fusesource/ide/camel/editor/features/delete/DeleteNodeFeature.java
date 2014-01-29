@@ -11,10 +11,14 @@
 
 package org.fusesource.ide.camel.editor.features.delete;
 
+import java.util.Stack;
+
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.EReferenceImpl;
+import org.eclipse.graphiti.features.ICustomUndoableFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.IDeleteContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.ui.features.DefaultDeleteFeature;
@@ -27,7 +31,8 @@ import org.fusesource.ide.camel.model.RouteContainer;
 /**
  * @author lhein
  */
-public class DeleteNodeFeature extends DefaultDeleteFeature {
+public class DeleteNodeFeature extends DefaultDeleteFeature implements ICustomUndoableFeature {
+	private Stack<AbstractNode> deletedNodes = new Stack<AbstractNode>();
 
 	/**
 	 * 
@@ -76,13 +81,39 @@ public class DeleteNodeFeature extends DefaultDeleteFeature {
 	private void deleteBOFromModel(AbstractNode nodeToRemove) {
 		// we can't remove null objects or the root of the routes
 		if (nodeToRemove == null || nodeToRemove instanceof RouteContainer) return;
-
+		
 		// lets remove all connections
 		nodeToRemove.detach();
 	}
 
 	private void deleteFlowFromModel(Flow bo) {
 		bo.disconnect();
+	}
+	
+	@Override
+	// See https://github.com/pleacu/fuseide/blob/fuse-eclipse-1007/plugins/org.fusesource.ide.camel.editor/src/org/fusesource/ide/camel/editor/features/delete/DeleteNodeFeature.java
+	public void undo(IContext context) {
+
+		if ((!(context instanceof IDeleteContext)) || (deletedNodes.empty()))
+			return;
+
+	}
+
+	@Override
+	public boolean canUndo(IContext context) {
+		// See https://issues.jboss.org/browse/ECLIPSE-1007
+		return false;
+	}
+	
+	@Override
+	public boolean canRedo(IContext context) {
+		// See https://issues.jboss.org/browse/ECLIPSE-1007
+		return false;
+	}
+
+	@Override
+	public void redo(IContext context) {
+		// TODO Auto-generated method stub		
 	}
 
 }

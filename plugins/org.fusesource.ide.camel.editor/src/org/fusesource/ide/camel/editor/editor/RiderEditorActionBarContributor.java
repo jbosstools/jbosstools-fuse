@@ -36,8 +36,9 @@ public class RiderEditorActionBarContributor extends ActionBarContributor {
 	 */
 	@Override
 	protected void buildActions() {
-		addRetargetAction(new UndoRetargetAction()); 
-		addRetargetAction(new RedoRetargetAction());
+		// See https://issues.jboss.org/browse/ECLIPSE-1007
+		//addRetargetAction(new UndoRetargetAction()); 
+		//addRetargetAction(new RedoRetargetAction());
 		addRetargetAction(new DeleteRetargetAction());
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
@@ -58,8 +59,9 @@ public class RiderEditorActionBarContributor extends ActionBarContributor {
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
 		super.contributeToToolBar(toolBarManager);
 		
-		toolBarManager.add(getAction(ActionFactory.UNDO.getId())); 
-		toolBarManager.add(getAction(ActionFactory.REDO.getId()));
+		// See https://issues.jboss.org/browse/ECLIPSE-1007
+		//toolBarManager.add(getAction(ActionFactory.UNDO.getId())); 
+		//toolBarManager.add(getAction(ActionFactory.REDO.getId()));
 		toolBarManager.add(getAction(ActionFactory.DELETE.getId()));
 		toolBarManager.add(new Separator());
 		toolBarManager.add(new ZoomComboContributionItem(getPage()));
