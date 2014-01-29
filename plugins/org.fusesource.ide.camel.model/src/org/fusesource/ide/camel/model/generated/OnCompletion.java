@@ -38,14 +38,16 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class OnCompletion extends AbstractNode {
 
-	public static final String PROPERTY_EXECUTORSERVICEREF = "OnCompletion.ExecutorServiceRef";
+	public static final String PROPERTY_INHERITERRORHANDLER = "OnCompletion.InheritErrorHandler";
 	public static final String PROPERTY_ONCOMPLETEONLY = "OnCompletion.OnCompleteOnly";
 	public static final String PROPERTY_ONFAILUREONLY = "OnCompletion.OnFailureOnly";
+	public static final String PROPERTY_EXECUTORSERVICEREF = "OnCompletion.ExecutorServiceRef";
 	public static final String PROPERTY_USEORIGINALMESSAGEPOLICY = "OnCompletion.UseOriginalMessagePolicy";
 	
-	private String executorServiceRef;
+	private Boolean inheritErrorHandler;
 	private Boolean onCompleteOnly;
 	private Boolean onFailureOnly;
+	private String executorServiceRef;
 	private Boolean useOriginalMessagePolicy;
 	
     public OnCompletion() {
@@ -81,20 +83,20 @@ public class OnCompletion extends AbstractNode {
 	
 
 	/**
-	 * @return the executorServiceRef
+	 * @return the inheritErrorHandler
 	 */
-	public String getExecutorServiceRef() {
-		return this.executorServiceRef;
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
 	}
 	
 	/**
-	 * @param executorServiceRef the executorServiceRef to set
+	 * @param inheritErrorHandler the inheritErrorHandler to set
 	 */
-	public void setExecutorServiceRef(String executorServiceRef) {
-		String oldValue = this.executorServiceRef;
-		this.executorServiceRef = executorServiceRef;
-		if (!isSame(oldValue, executorServiceRef)) {
-		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
 		}
 	}
 
@@ -135,6 +137,24 @@ public class OnCompletion extends AbstractNode {
 	}
 
 	/**
+	 * @return the executorServiceRef
+	 */
+	public String getExecutorServiceRef() {
+		return this.executorServiceRef;
+	}
+	
+	/**
+	 * @param executorServiceRef the executorServiceRef to set
+	 */
+	public void setExecutorServiceRef(String executorServiceRef) {
+		String oldValue = this.executorServiceRef;
+		this.executorServiceRef = executorServiceRef;
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
+		}
+	}
+
+	/**
 	 * @return the useOriginalMessagePolicy
 	 */
 	public Boolean getUseOriginalMessagePolicy() {
@@ -162,13 +182,15 @@ public class OnCompletion extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelOnCompletionExecutorServiceRef);
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelOnCompletionInheritErrorHandler);
       	PropertyDescriptor descOnCompleteOnly = new BooleanPropertyDescriptor(PROPERTY_ONCOMPLETEONLY, Messages.propertyLabelOnCompletionOnCompleteOnly);
       	PropertyDescriptor descOnFailureOnly = new BooleanPropertyDescriptor(PROPERTY_ONFAILUREONLY, Messages.propertyLabelOnCompletionOnFailureOnly);
+    		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelOnCompletionExecutorServiceRef);
       	PropertyDescriptor descUseOriginalMessagePolicy = new BooleanPropertyDescriptor(PROPERTY_USEORIGINALMESSAGEPOLICY, Messages.propertyLabelOnCompletionUseOriginalMessagePolicy);
-  		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
 		descriptors.put(PROPERTY_ONCOMPLETEONLY, descOnCompleteOnly);
 		descriptors.put(PROPERTY_ONFAILUREONLY, descOnFailureOnly);
+		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
 		descriptors.put(PROPERTY_USEORIGINALMESSAGEPOLICY, descUseOriginalMessagePolicy);
 	}
 	
@@ -177,12 +199,14 @@ public class OnCompletion extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
-			setExecutorServiceRef(Objects.convertTo(value, String.class));
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_ONCOMPLETEONLY.equals(id)) {
 			setOnCompleteOnly(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_ONFAILUREONLY.equals(id)) {
 			setOnFailureOnly(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
+			setExecutorServiceRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_USEORIGINALMESSAGEPOLICY.equals(id)) {
 			setUseOriginalMessagePolicy(Objects.convertTo(value, Boolean.class));
 		}    else {
@@ -195,12 +219,14 @@ public class OnCompletion extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
-			return this.getExecutorServiceRef();
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
 		}		else if (PROPERTY_ONCOMPLETEONLY.equals(id)) {
 			return this.getOnCompleteOnly();
 		}		else if (PROPERTY_ONFAILUREONLY.equals(id)) {
 			return this.getOnFailureOnly();
+		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
+			return this.getExecutorServiceRef();
 		}		else if (PROPERTY_USEORIGINALMESSAGEPOLICY.equals(id)) {
 			return this.getUseOriginalMessagePolicy();
 		}    else {
@@ -212,9 +238,10 @@ public class OnCompletion extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		OnCompletionDefinition answer = new OnCompletionDefinition();
-    answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setOnCompleteOnly(toXmlPropertyValue(PROPERTY_ONCOMPLETEONLY, this.getOnCompleteOnly()));
     answer.setOnFailureOnly(toXmlPropertyValue(PROPERTY_ONFAILUREONLY, this.getOnFailureOnly()));
+    answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
     answer.setUseOriginalMessagePolicy(toXmlPropertyValue(PROPERTY_USEORIGINALMESSAGEPOLICY, this.getUseOriginalMessagePolicy()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
@@ -233,9 +260,10 @@ public class OnCompletion extends AbstractNode {
     
     if (processor instanceof OnCompletionDefinition) {
       OnCompletionDefinition node = (OnCompletionDefinition) processor;
-      this.setExecutorServiceRef(node.getExecutorServiceRef());
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setOnCompleteOnly(node.getOnCompleteOnly());
       this.setOnFailureOnly(node.getOnFailureOnly());
+      this.setExecutorServiceRef(node.getExecutorServiceRef());
       this.setUseOriginalMessagePolicy(node.getUseOriginalMessagePolicy());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof OnCompletionDefinition. Was " + processor.getClass().getName());

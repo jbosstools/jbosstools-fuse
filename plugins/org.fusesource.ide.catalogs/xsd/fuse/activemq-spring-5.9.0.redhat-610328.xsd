@@ -8272,6 +8272,7 @@ manage memory usage.
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='adapter' type='xs:string'/>
+      <xs:attribute name='checkLimitsLogLevel' type='xs:string'/>
       <xs:attribute name='executor' type='xs:string'/>
       <xs:attribute name='jobSchedulerStore' type='xs:string'/>
       <xs:attribute name='jobSchedulerUsage' type='xs:string'/>

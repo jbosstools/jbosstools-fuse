@@ -44,16 +44,16 @@ public class WireTap extends AbstractNode {
 	public static final String PROPERTY_NEWEXCHANGEEXPRESSION = "WireTap.NewExchangeExpression";
 	public static final String PROPERTY_HEADERS = "WireTap.Headers";
 	public static final String PROPERTY_EXECUTORSERVICEREF = "WireTap.ExecutorServiceRef";
-	public static final String PROPERTY_ONPREPAREREF = "WireTap.OnPrepareRef";
 	public static final String PROPERTY_COPY = "WireTap.Copy";
+	public static final String PROPERTY_ONPREPAREREF = "WireTap.OnPrepareRef";
 	
 	private String uri;
 	private String newExchangeProcessorRef;
 	private ExpressionDefinition newExchangeExpression;
 	private List headers;
 	private String executorServiceRef;
-	private String onPrepareRef;
 	private Boolean copy;
+	private String onPrepareRef;
 	
     public WireTap() {
     }		
@@ -178,24 +178,6 @@ public class WireTap extends AbstractNode {
 	}
 
 	/**
-	 * @return the onPrepareRef
-	 */
-	public String getOnPrepareRef() {
-		return this.onPrepareRef;
-	}
-	
-	/**
-	 * @param onPrepareRef the onPrepareRef to set
-	 */
-	public void setOnPrepareRef(String onPrepareRef) {
-		String oldValue = this.onPrepareRef;
-		this.onPrepareRef = onPrepareRef;
-		if (!isSame(oldValue, onPrepareRef)) {
-		    firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
-		}
-	}
-
-	/**
 	 * @return the copy
 	 */
 	public Boolean getCopy() {
@@ -210,6 +192,24 @@ public class WireTap extends AbstractNode {
 		this.copy = copy;
 		if (!isSame(oldValue, copy)) {
 		    firePropertyChange(PROPERTY_COPY, oldValue, copy);
+		}
+	}
+
+	/**
+	 * @return the onPrepareRef
+	 */
+	public String getOnPrepareRef() {
+		return this.onPrepareRef;
+	}
+	
+	/**
+	 * @param onPrepareRef the onPrepareRef to set
+	 */
+	public void setOnPrepareRef(String onPrepareRef) {
+		String oldValue = this.onPrepareRef;
+		this.onPrepareRef = onPrepareRef;
+		if (!isSame(oldValue, onPrepareRef)) {
+		    firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
 		}
 	}
 
@@ -229,15 +229,15 @@ public class WireTap extends AbstractNode {
   	PropertyDescriptor descNewExchangeExpression = new ExpressionPropertyDescriptor(PROPERTY_NEWEXCHANGEEXPRESSION, Messages.propertyLabelWireTapNewExchangeExpression);
       	PropertyDescriptor descHeaders = new ListPropertyDescriptor(PROPERTY_HEADERS, Messages.propertyLabelWireTapHeaders);
     		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelWireTapExecutorServiceRef);
-    		PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelWireTapOnPrepareRef);
       	PropertyDescriptor descCopy = new BooleanPropertyDescriptor(PROPERTY_COPY, Messages.propertyLabelWireTapCopy);
+    		PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelWireTapOnPrepareRef);
   		descriptors.put(PROPERTY_URI, descUri);
 		descriptors.put(PROPERTY_NEWEXCHANGEPROCESSORREF, descNewExchangeProcessorRef);
 		descriptors.put(PROPERTY_NEWEXCHANGEEXPRESSION, descNewExchangeExpression);
 		descriptors.put(PROPERTY_HEADERS, descHeaders);
 		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
-		descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
 		descriptors.put(PROPERTY_COPY, descCopy);
+		descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
 	}
 	
 	/* (non-Javadoc)
@@ -255,10 +255,10 @@ public class WireTap extends AbstractNode {
 			setHeaders(Objects.convertTo(value, List.class));
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			setExecutorServiceRef(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
-			setOnPrepareRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_COPY.equals(id)) {
 			setCopy(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
+			setOnPrepareRef(Objects.convertTo(value, String.class));
 		}    else {
 			super.setPropertyValue(id, value);
 		}
@@ -279,10 +279,10 @@ public class WireTap extends AbstractNode {
 			return this.getHeaders();
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			return this.getExecutorServiceRef();
-		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
-			return this.getOnPrepareRef();
 		}		else if (PROPERTY_COPY.equals(id)) {
 			return this.getCopy();
+		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
+			return this.getOnPrepareRef();
 		}    else {
 			return super.getPropertyValue(id);
 		}
@@ -297,8 +297,8 @@ public class WireTap extends AbstractNode {
     Objects.setField(answer, "newExchangeExpression", toXmlPropertyValue(PROPERTY_NEWEXCHANGEEXPRESSION, this.getNewExchangeExpression()));
     answer.setHeaders(toXmlPropertyValue(PROPERTY_HEADERS, this.getHeaders()));
     answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
-    answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
     answer.setCopy(toXmlPropertyValue(PROPERTY_COPY, this.getCopy()));
+    answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -321,8 +321,8 @@ public class WireTap extends AbstractNode {
       Objects.setField(this, "newExchangeExpression", node.getNewExchangeExpression());
       this.setHeaders(node.getHeaders());
       this.setExecutorServiceRef(node.getExecutorServiceRef());
-      this.setOnPrepareRef(node.getOnPrepareRef());
       this.setCopy(node.getCopy());
+      this.setOnPrepareRef(node.getOnPrepareRef());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof WireTapDefinition. Was " + processor.getClass().getName());
     }

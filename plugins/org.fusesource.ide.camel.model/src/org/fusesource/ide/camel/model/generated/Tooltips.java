@@ -32,18 +32,18 @@ public class Tooltips extends NLS {
     public static String tooltipEndpointUrl;
 
     public static String tooltipAggregate;
+    public static String tooltipAggregateInheritErrorHandler;
     public static String tooltipAggregateCorrelationExpression;
     public static String tooltipAggregateCompletionPredicate;
     public static String tooltipAggregateCompletionTimeoutExpression;
     public static String tooltipAggregateCompletionSizeExpression;
+    public static String tooltipAggregateParallelProcessing;
+    public static String tooltipAggregateOptimisticLocking;
     public static String tooltipAggregateExecutorServiceRef;
     public static String tooltipAggregateTimeoutCheckerExecutorServiceRef;
     public static String tooltipAggregateAggregationRepositoryRef;
     public static String tooltipAggregateStrategyRef;
     public static String tooltipAggregateStrategyMethodName;
-    public static String tooltipAggregateOptimisticLockRetryPolicyDefinition;
-    public static String tooltipAggregateParallelProcessing;
-    public static String tooltipAggregateOptimisticLocking;
     public static String tooltipAggregateStrategyMethodAllowNull;
     public static String tooltipAggregateCompletionSize;
     public static String tooltipAggregateCompletionInterval;
@@ -55,8 +55,10 @@ public class Tooltips extends NLS {
     public static String tooltipAggregateCloseCorrelationKeyOnCompletion;
     public static String tooltipAggregateDiscardOnCompletionTimeout;
     public static String tooltipAggregateForceCompletionOnStop;
+    public static String tooltipAggregateOptimisticLockRetryPolicyDefinition;
 
     public static String tooltipAOP;
+    public static String tooltipAOPInheritErrorHandler;
     public static String tooltipAOPBeforeUri;
     public static String tooltipAOPAfterUri;
     public static String tooltipAOPAfterFinallyUri;
@@ -68,22 +70,26 @@ public class Tooltips extends NLS {
     public static String tooltipBeanCache;
 
     public static String tooltipCatch;
+    public static String tooltipCatchInheritErrorHandler;
     public static String tooltipCatchExceptions;
     public static String tooltipCatchHandled;
 
     public static String tooltipChoice;
+    public static String tooltipChoiceInheritErrorHandler;
 
     public static String tooltipConvertBody;
     public static String tooltipConvertBodyType;
     public static String tooltipConvertBodyCharset;
 
     public static String tooltipDelay;
+    public static String tooltipDelayInheritErrorHandler;
     public static String tooltipDelayExpression;
     public static String tooltipDelayExecutorServiceRef;
     public static String tooltipDelayAsyncDelayed;
     public static String tooltipDelayCallerRunsWhenRejected;
 
     public static String tooltipDynamicRouter;
+    public static String tooltipDynamicRouterInheritErrorHandler;
     public static String tooltipDynamicRouterExpression;
     public static String tooltipDynamicRouterUriDelimiter;
     public static String tooltipDynamicRouterIgnoreInvalidEndpoints;
@@ -95,11 +101,14 @@ public class Tooltips extends NLS {
     public static String tooltipEnrichAggregationStrategyMethodAllowNull;
 
     public static String tooltipFilter;
+    public static String tooltipFilterInheritErrorHandler;
     public static String tooltipFilterExpression;
 
     public static String tooltipFinally;
+    public static String tooltipFinallyInheritErrorHandler;
 
     public static String tooltipIdempotentConsumer;
+    public static String tooltipIdempotentConsumerInheritErrorHandler;
     public static String tooltipIdempotentConsumerExpression;
     public static String tooltipIdempotentConsumerMessageIdRepositoryRef;
     public static String tooltipIdempotentConsumerEager;
@@ -113,25 +122,30 @@ public class Tooltips extends NLS {
     public static String tooltipInOutUri;
 
     public static String tooltipIntercept;
+    public static String tooltipInterceptInheritErrorHandler;
 
     public static String tooltipInterceptFrom;
+    public static String tooltipInterceptFromInheritErrorHandler;
     public static String tooltipInterceptFromUri;
 
     public static String tooltipInterceptSendToEndpoint;
+    public static String tooltipInterceptSendToEndpointInheritErrorHandler;
     public static String tooltipInterceptSendToEndpointUri;
     public static String tooltipInterceptSendToEndpointSkipSendToOriginalEndpoint;
 
     public static String tooltipLoadBalance;
+    public static String tooltipLoadBalanceInheritErrorHandler;
     public static String tooltipLoadBalanceRef;
     public static String tooltipLoadBalanceLoadBalancerType;
 
     public static String tooltipLog;
     public static String tooltipLogMessage;
+    public static String tooltipLogLoggingLevel;
     public static String tooltipLogLogName;
     public static String tooltipLogMarker;
-    public static String tooltipLogLoggingLevel;
 
     public static String tooltipLoop;
+    public static String tooltipLoopInheritErrorHandler;
     public static String tooltipLoopExpression;
     public static String tooltipLoopCopy;
 
@@ -140,63 +154,70 @@ public class Tooltips extends NLS {
     public static String tooltipMarshalDataFormatType;
 
     public static String tooltipMulticast;
+    public static String tooltipMulticastInheritErrorHandler;
+    public static String tooltipMulticastParallelProcessing;
     public static String tooltipMulticastStrategyRef;
     public static String tooltipMulticastStrategyMethodName;
-    public static String tooltipMulticastExecutorServiceRef;
-    public static String tooltipMulticastOnPrepareRef;
-    public static String tooltipMulticastParallelProcessing;
     public static String tooltipMulticastStrategyMethodAllowNull;
+    public static String tooltipMulticastExecutorServiceRef;
     public static String tooltipMulticastStreaming;
     public static String tooltipMulticastStopOnException;
     public static String tooltipMulticastTimeout;
+    public static String tooltipMulticastOnPrepareRef;
     public static String tooltipMulticastShareUnitOfWork;
 
     public static String tooltipOnCompletion;
-    public static String tooltipOnCompletionExecutorServiceRef;
+    public static String tooltipOnCompletionInheritErrorHandler;
     public static String tooltipOnCompletionOnCompleteOnly;
     public static String tooltipOnCompletionOnFailureOnly;
+    public static String tooltipOnCompletionExecutorServiceRef;
     public static String tooltipOnCompletionUseOriginalMessagePolicy;
 
     public static String tooltipOnException;
+    public static String tooltipOnExceptionInheritErrorHandler;
     public static String tooltipOnExceptionExceptions;
     public static String tooltipOnExceptionRetryWhile;
     public static String tooltipOnExceptionRedeliveryPolicyRef;
     public static String tooltipOnExceptionHandled;
     public static String tooltipOnExceptionContinued;
     public static String tooltipOnExceptionOnRedeliveryRef;
-    public static String tooltipOnExceptionRedeliveryPolicy;
     public static String tooltipOnExceptionUseOriginalMessagePolicy;
+    public static String tooltipOnExceptionRedeliveryPolicy;
 
     public static String tooltipOtherwise;
+    public static String tooltipOtherwiseInheritErrorHandler;
 
     public static String tooltipPipeline;
+    public static String tooltipPipelineInheritErrorHandler;
 
     public static String tooltipPolicy;
+    public static String tooltipPolicyInheritErrorHandler;
     public static String tooltipPolicyRef;
 
     public static String tooltipPollEnrich;
     public static String tooltipPollEnrichResourceUri;
+    public static String tooltipPollEnrichTimeout;
     public static String tooltipPollEnrichAggregationStrategyRef;
     public static String tooltipPollEnrichAggregationStrategyMethodName;
-    public static String tooltipPollEnrichTimeout;
     public static String tooltipPollEnrichAggregationStrategyMethodAllowNull;
 
     public static String tooltipProcess;
     public static String tooltipProcessRef;
 
     public static String tooltipRecipientList;
+    public static String tooltipRecipientListInheritErrorHandler;
     public static String tooltipRecipientListExpression;
     public static String tooltipRecipientListDelimiter;
+    public static String tooltipRecipientListParallelProcessing;
     public static String tooltipRecipientListStrategyRef;
     public static String tooltipRecipientListStrategyMethodName;
-    public static String tooltipRecipientListExecutorServiceRef;
-    public static String tooltipRecipientListOnPrepareRef;
-    public static String tooltipRecipientListParallelProcessing;
     public static String tooltipRecipientListStrategyMethodAllowNull;
+    public static String tooltipRecipientListExecutorServiceRef;
     public static String tooltipRecipientListStopOnException;
     public static String tooltipRecipientListIgnoreInvalidEndpoints;
     public static String tooltipRecipientListStreaming;
     public static String tooltipRecipientListTimeout;
+    public static String tooltipRecipientListOnPrepareRef;
     public static String tooltipRecipientListShareUnitOfWork;
 
     public static String tooltipRemoveHeader;
@@ -210,13 +231,14 @@ public class Tooltips extends NLS {
     public static String tooltipRemovePropertyPropertyName;
 
     public static String tooltipResequence;
+    public static String tooltipResequenceInheritErrorHandler;
     public static String tooltipResequenceExpression;
     public static String tooltipResequenceResequencerConfig;
 
     public static String tooltipRollback;
-    public static String tooltipRollbackMessage;
     public static String tooltipRollbackMarkRollbackOnly;
     public static String tooltipRollbackMarkRollbackOnlyLast;
+    public static String tooltipRollbackMessage;
 
     public static String tooltipRoute;
     public static String tooltipRouteAutoStartup;
@@ -226,71 +248,85 @@ public class Tooltips extends NLS {
     public static String tooltipRouteHandleFault;
     public static String tooltipRouteMessageHistory;
     public static String tooltipRouteRoutePolicyRef;
+    public static String tooltipRouteShutdownRoute;
+    public static String tooltipRouteShutdownRunningTask;
+    public static String tooltipRouteStartupOrder;
     public static String tooltipRouteStreamCache;
     public static String tooltipRouteTrace;
 
     public static String tooltipRoutingSlip;
+    public static String tooltipRoutingSlipInheritErrorHandler;
     public static String tooltipRoutingSlipExpression;
     public static String tooltipRoutingSlipUriDelimiter;
     public static String tooltipRoutingSlipIgnoreInvalidEndpoints;
 
     public static String tooltipSampling;
+    public static String tooltipSamplingInheritErrorHandler;
     public static String tooltipSamplingSamplePeriod;
     public static String tooltipSamplingMessageFrequency;
     public static String tooltipSamplingUnits;
 
     public static String tooltipSetBody;
+    public static String tooltipSetBodyInheritErrorHandler;
     public static String tooltipSetBodyExpression;
 
     public static String tooltipSetExchangePattern;
     public static String tooltipSetExchangePatternPattern;
 
     public static String tooltipSetFaultBody;
+    public static String tooltipSetFaultBodyInheritErrorHandler;
     public static String tooltipSetFaultBodyExpression;
 
     public static String tooltipSetHeader;
+    public static String tooltipSetHeaderInheritErrorHandler;
     public static String tooltipSetHeaderExpression;
     public static String tooltipSetHeaderHeaderName;
 
     public static String tooltipSetOutHeader;
+    public static String tooltipSetOutHeaderInheritErrorHandler;
     public static String tooltipSetOutHeaderExpression;
     public static String tooltipSetOutHeaderHeaderName;
 
     public static String tooltipSetProperty;
+    public static String tooltipSetPropertyInheritErrorHandler;
     public static String tooltipSetPropertyExpression;
     public static String tooltipSetPropertyPropertyName;
 
     public static String tooltipSort;
+    public static String tooltipSortInheritErrorHandler;
     public static String tooltipSortExpression;
     public static String tooltipSortComparatorRef;
 
     public static String tooltipSplit;
+    public static String tooltipSplitInheritErrorHandler;
     public static String tooltipSplitExpression;
+    public static String tooltipSplitParallelProcessing;
     public static String tooltipSplitStrategyRef;
     public static String tooltipSplitStrategyMethodName;
-    public static String tooltipSplitExecutorServiceRef;
-    public static String tooltipSplitOnPrepareRef;
-    public static String tooltipSplitParallelProcessing;
     public static String tooltipSplitStrategyMethodAllowNull;
+    public static String tooltipSplitExecutorServiceRef;
     public static String tooltipSplitStreaming;
     public static String tooltipSplitStopOnException;
     public static String tooltipSplitTimeout;
+    public static String tooltipSplitOnPrepareRef;
     public static String tooltipSplitShareUnitOfWork;
 
     public static String tooltipStop;
 
     public static String tooltipThreads;
+    public static String tooltipThreadsInheritErrorHandler;
     public static String tooltipThreadsExecutorServiceRef;
-    public static String tooltipThreadsThreadName;
     public static String tooltipThreadsPoolSize;
     public static String tooltipThreadsMaxPoolSize;
     public static String tooltipThreadsKeepAliveTime;
     public static String tooltipThreadsTimeUnit;
     public static String tooltipThreadsMaxQueueSize;
+    public static String tooltipThreadsThreadName;
     public static String tooltipThreadsRejectedPolicy;
     public static String tooltipThreadsCallerRunsWhenRejected;
 
     public static String tooltipThrottle;
+    public static String tooltipThrottleInheritErrorHandler;
     public static String tooltipThrottleExpression;
     public static String tooltipThrottleExecutorServiceRef;
     public static String tooltipThrottleTimePeriodMillis;
@@ -301,21 +337,26 @@ public class Tooltips extends NLS {
     public static String tooltipThrowExceptionRef;
 
     public static String tooltipTransacted;
+    public static String tooltipTransactedInheritErrorHandler;
     public static String tooltipTransactedRef;
 
     public static String tooltipTransform;
+    public static String tooltipTransformInheritErrorHandler;
     public static String tooltipTransformExpression;
 
     public static String tooltipTry;
+    public static String tooltipTryInheritErrorHandler;
 
     public static String tooltipUnmarshal;
     public static String tooltipUnmarshalRef;
     public static String tooltipUnmarshalDataFormatType;
 
     public static String tooltipValidate;
+    public static String tooltipValidateInheritErrorHandler;
     public static String tooltipValidateExpression;
 
     public static String tooltipWhen;
+    public static String tooltipWhenInheritErrorHandler;
     public static String tooltipWhenExpression;
 
     public static String tooltipWireTap;
@@ -324,8 +365,8 @@ public class Tooltips extends NLS {
     public static String tooltipWireTapNewExchangeExpression;
     public static String tooltipWireTapHeaders;
     public static String tooltipWireTapExecutorServiceRef;
-    public static String tooltipWireTapOnPrepareRef;
     public static String tooltipWireTapCopy;
+    public static String tooltipWireTapOnPrepareRef;
 
 
     public static String tooltip(String key) {
@@ -346,18 +387,18 @@ public class Tooltips extends NLS {
         map.put("Route", tooltipRoute);
         
     map.put("tooltipAggregate", tooltipAggregate);
+    map.put("tooltipAggregate.InheritErrorHandler", tooltipAggregateInheritErrorHandler);
     map.put("tooltipAggregate.CorrelationExpression", tooltipAggregateCorrelationExpression);
     map.put("tooltipAggregate.CompletionPredicate", tooltipAggregateCompletionPredicate);
     map.put("tooltipAggregate.CompletionTimeoutExpression", tooltipAggregateCompletionTimeoutExpression);
     map.put("tooltipAggregate.CompletionSizeExpression", tooltipAggregateCompletionSizeExpression);
+    map.put("tooltipAggregate.ParallelProcessing", tooltipAggregateParallelProcessing);
+    map.put("tooltipAggregate.OptimisticLocking", tooltipAggregateOptimisticLocking);
     map.put("tooltipAggregate.ExecutorServiceRef", tooltipAggregateExecutorServiceRef);
     map.put("tooltipAggregate.TimeoutCheckerExecutorServiceRef", tooltipAggregateTimeoutCheckerExecutorServiceRef);
     map.put("tooltipAggregate.AggregationRepositoryRef", tooltipAggregateAggregationRepositoryRef);
     map.put("tooltipAggregate.StrategyRef", tooltipAggregateStrategyRef);
     map.put("tooltipAggregate.StrategyMethodName", tooltipAggregateStrategyMethodName);
-    map.put("tooltipAggregate.OptimisticLockRetryPolicyDefinition", tooltipAggregateOptimisticLockRetryPolicyDefinition);
-    map.put("tooltipAggregate.ParallelProcessing", tooltipAggregateParallelProcessing);
-    map.put("tooltipAggregate.OptimisticLocking", tooltipAggregateOptimisticLocking);
     map.put("tooltipAggregate.StrategyMethodAllowNull", tooltipAggregateStrategyMethodAllowNull);
     map.put("tooltipAggregate.CompletionSize", tooltipAggregateCompletionSize);
     map.put("tooltipAggregate.CompletionInterval", tooltipAggregateCompletionInterval);
@@ -369,7 +410,9 @@ public class Tooltips extends NLS {
     map.put("tooltipAggregate.CloseCorrelationKeyOnCompletion", tooltipAggregateCloseCorrelationKeyOnCompletion);
     map.put("tooltipAggregate.DiscardOnCompletionTimeout", tooltipAggregateDiscardOnCompletionTimeout);
     map.put("tooltipAggregate.ForceCompletionOnStop", tooltipAggregateForceCompletionOnStop);
+    map.put("tooltipAggregate.OptimisticLockRetryPolicyDefinition", tooltipAggregateOptimisticLockRetryPolicyDefinition);
     map.put("tooltipAOP", tooltipAOP);
+    map.put("tooltipAOP.InheritErrorHandler", tooltipAOPInheritErrorHandler);
     map.put("tooltipAOP.BeforeUri", tooltipAOPBeforeUri);
     map.put("tooltipAOP.AfterUri", tooltipAOPAfterUri);
     map.put("tooltipAOP.AfterFinallyUri", tooltipAOPAfterFinallyUri);
@@ -379,18 +422,22 @@ public class Tooltips extends NLS {
     map.put("tooltipBean.BeanType", tooltipBeanBeanType);
     map.put("tooltipBean.Cache", tooltipBeanCache);
     map.put("tooltipCatch", tooltipCatch);
+    map.put("tooltipCatch.InheritErrorHandler", tooltipCatchInheritErrorHandler);
     map.put("tooltipCatch.Exceptions", tooltipCatchExceptions);
     map.put("tooltipCatch.Handled", tooltipCatchHandled);
     map.put("tooltipChoice", tooltipChoice);
+    map.put("tooltipChoice.InheritErrorHandler", tooltipChoiceInheritErrorHandler);
     map.put("tooltipConvertBody", tooltipConvertBody);
     map.put("tooltipConvertBody.Type", tooltipConvertBodyType);
     map.put("tooltipConvertBody.Charset", tooltipConvertBodyCharset);
     map.put("tooltipDelay", tooltipDelay);
+    map.put("tooltipDelay.InheritErrorHandler", tooltipDelayInheritErrorHandler);
     map.put("tooltipDelay.Expression", tooltipDelayExpression);
     map.put("tooltipDelay.ExecutorServiceRef", tooltipDelayExecutorServiceRef);
     map.put("tooltipDelay.AsyncDelayed", tooltipDelayAsyncDelayed);
     map.put("tooltipDelay.CallerRunsWhenRejected", tooltipDelayCallerRunsWhenRejected);
     map.put("tooltipDynamicRouter", tooltipDynamicRouter);
+    map.put("tooltipDynamicRouter.InheritErrorHandler", tooltipDynamicRouterInheritErrorHandler);
     map.put("tooltipDynamicRouter.Expression", tooltipDynamicRouterExpression);
     map.put("tooltipDynamicRouter.UriDelimiter", tooltipDynamicRouterUriDelimiter);
     map.put("tooltipDynamicRouter.IgnoreInvalidEndpoints", tooltipDynamicRouterIgnoreInvalidEndpoints);
@@ -400,9 +447,12 @@ public class Tooltips extends NLS {
     map.put("tooltipEnrich.AggregationStrategyMethodName", tooltipEnrichAggregationStrategyMethodName);
     map.put("tooltipEnrich.AggregationStrategyMethodAllowNull", tooltipEnrichAggregationStrategyMethodAllowNull);
     map.put("tooltipFilter", tooltipFilter);
+    map.put("tooltipFilter.InheritErrorHandler", tooltipFilterInheritErrorHandler);
     map.put("tooltipFilter.Expression", tooltipFilterExpression);
     map.put("tooltipFinally", tooltipFinally);
+    map.put("tooltipFinally.InheritErrorHandler", tooltipFinallyInheritErrorHandler);
     map.put("tooltipIdempotentConsumer", tooltipIdempotentConsumer);
+    map.put("tooltipIdempotentConsumer.InheritErrorHandler", tooltipIdempotentConsumerInheritErrorHandler);
     map.put("tooltipIdempotentConsumer.Expression", tooltipIdempotentConsumerExpression);
     map.put("tooltipIdempotentConsumer.MessageIdRepositoryRef", tooltipIdempotentConsumerMessageIdRepositoryRef);
     map.put("tooltipIdempotentConsumer.Eager", tooltipIdempotentConsumerEager);
@@ -413,75 +463,87 @@ public class Tooltips extends NLS {
     map.put("tooltipInOut", tooltipInOut);
     map.put("tooltipInOut.Uri", tooltipInOutUri);
     map.put("tooltipIntercept", tooltipIntercept);
+    map.put("tooltipIntercept.InheritErrorHandler", tooltipInterceptInheritErrorHandler);
     map.put("tooltipInterceptFrom", tooltipInterceptFrom);
+    map.put("tooltipInterceptFrom.InheritErrorHandler", tooltipInterceptFromInheritErrorHandler);
     map.put("tooltipInterceptFrom.Uri", tooltipInterceptFromUri);
     map.put("tooltipInterceptSendToEndpoint", tooltipInterceptSendToEndpoint);
+    map.put("tooltipInterceptSendToEndpoint.InheritErrorHandler", tooltipInterceptSendToEndpointInheritErrorHandler);
     map.put("tooltipInterceptSendToEndpoint.Uri", tooltipInterceptSendToEndpointUri);
     map.put("tooltipInterceptSendToEndpoint.SkipSendToOriginalEndpoint", tooltipInterceptSendToEndpointSkipSendToOriginalEndpoint);
     map.put("tooltipLoadBalance", tooltipLoadBalance);
+    map.put("tooltipLoadBalance.InheritErrorHandler", tooltipLoadBalanceInheritErrorHandler);
     map.put("tooltipLoadBalance.Ref", tooltipLoadBalanceRef);
     map.put("tooltipLoadBalance.LoadBalancerType", tooltipLoadBalanceLoadBalancerType);
     map.put("tooltipLog", tooltipLog);
     map.put("tooltipLog.Message", tooltipLogMessage);
+    map.put("tooltipLog.LoggingLevel", tooltipLogLoggingLevel);
     map.put("tooltipLog.LogName", tooltipLogLogName);
     map.put("tooltipLog.Marker", tooltipLogMarker);
-    map.put("tooltipLog.LoggingLevel", tooltipLogLoggingLevel);
     map.put("tooltipLoop", tooltipLoop);
+    map.put("tooltipLoop.InheritErrorHandler", tooltipLoopInheritErrorHandler);
     map.put("tooltipLoop.Expression", tooltipLoopExpression);
     map.put("tooltipLoop.Copy", tooltipLoopCopy);
     map.put("tooltipMarshal", tooltipMarshal);
     map.put("tooltipMarshal.Ref", tooltipMarshalRef);
     map.put("tooltipMarshal.DataFormatType", tooltipMarshalDataFormatType);
     map.put("tooltipMulticast", tooltipMulticast);
+    map.put("tooltipMulticast.InheritErrorHandler", tooltipMulticastInheritErrorHandler);
+    map.put("tooltipMulticast.ParallelProcessing", tooltipMulticastParallelProcessing);
     map.put("tooltipMulticast.StrategyRef", tooltipMulticastStrategyRef);
     map.put("tooltipMulticast.StrategyMethodName", tooltipMulticastStrategyMethodName);
-    map.put("tooltipMulticast.ExecutorServiceRef", tooltipMulticastExecutorServiceRef);
-    map.put("tooltipMulticast.OnPrepareRef", tooltipMulticastOnPrepareRef);
-    map.put("tooltipMulticast.ParallelProcessing", tooltipMulticastParallelProcessing);
     map.put("tooltipMulticast.StrategyMethodAllowNull", tooltipMulticastStrategyMethodAllowNull);
+    map.put("tooltipMulticast.ExecutorServiceRef", tooltipMulticastExecutorServiceRef);
     map.put("tooltipMulticast.Streaming", tooltipMulticastStreaming);
     map.put("tooltipMulticast.StopOnException", tooltipMulticastStopOnException);
     map.put("tooltipMulticast.Timeout", tooltipMulticastTimeout);
+    map.put("tooltipMulticast.OnPrepareRef", tooltipMulticastOnPrepareRef);
     map.put("tooltipMulticast.ShareUnitOfWork", tooltipMulticastShareUnitOfWork);
     map.put("tooltipOnCompletion", tooltipOnCompletion);
-    map.put("tooltipOnCompletion.ExecutorServiceRef", tooltipOnCompletionExecutorServiceRef);
+    map.put("tooltipOnCompletion.InheritErrorHandler", tooltipOnCompletionInheritErrorHandler);
     map.put("tooltipOnCompletion.OnCompleteOnly", tooltipOnCompletionOnCompleteOnly);
     map.put("tooltipOnCompletion.OnFailureOnly", tooltipOnCompletionOnFailureOnly);
+    map.put("tooltipOnCompletion.ExecutorServiceRef", tooltipOnCompletionExecutorServiceRef);
     map.put("tooltipOnCompletion.UseOriginalMessagePolicy", tooltipOnCompletionUseOriginalMessagePolicy);
     map.put("tooltipOnException", tooltipOnException);
+    map.put("tooltipOnException.InheritErrorHandler", tooltipOnExceptionInheritErrorHandler);
     map.put("tooltipOnException.Exceptions", tooltipOnExceptionExceptions);
     map.put("tooltipOnException.RetryWhile", tooltipOnExceptionRetryWhile);
     map.put("tooltipOnException.RedeliveryPolicyRef", tooltipOnExceptionRedeliveryPolicyRef);
     map.put("tooltipOnException.Handled", tooltipOnExceptionHandled);
     map.put("tooltipOnException.Continued", tooltipOnExceptionContinued);
     map.put("tooltipOnException.OnRedeliveryRef", tooltipOnExceptionOnRedeliveryRef);
-    map.put("tooltipOnException.RedeliveryPolicy", tooltipOnExceptionRedeliveryPolicy);
     map.put("tooltipOnException.UseOriginalMessagePolicy", tooltipOnExceptionUseOriginalMessagePolicy);
+    map.put("tooltipOnException.RedeliveryPolicy", tooltipOnExceptionRedeliveryPolicy);
     map.put("tooltipOtherwise", tooltipOtherwise);
+    map.put("tooltipOtherwise.InheritErrorHandler", tooltipOtherwiseInheritErrorHandler);
     map.put("tooltipPipeline", tooltipPipeline);
+    map.put("tooltipPipeline.InheritErrorHandler", tooltipPipelineInheritErrorHandler);
     map.put("tooltipPolicy", tooltipPolicy);
+    map.put("tooltipPolicy.InheritErrorHandler", tooltipPolicyInheritErrorHandler);
     map.put("tooltipPolicy.Ref", tooltipPolicyRef);
     map.put("tooltipPollEnrich", tooltipPollEnrich);
     map.put("tooltipPollEnrich.ResourceUri", tooltipPollEnrichResourceUri);
+    map.put("tooltipPollEnrich.Timeout", tooltipPollEnrichTimeout);
     map.put("tooltipPollEnrich.AggregationStrategyRef", tooltipPollEnrichAggregationStrategyRef);
     map.put("tooltipPollEnrich.AggregationStrategyMethodName", tooltipPollEnrichAggregationStrategyMethodName);
-    map.put("tooltipPollEnrich.Timeout", tooltipPollEnrichTimeout);
     map.put("tooltipPollEnrich.AggregationStrategyMethodAllowNull", tooltipPollEnrichAggregationStrategyMethodAllowNull);
     map.put("tooltipProcess", tooltipProcess);
     map.put("tooltipProcess.Ref", tooltipProcessRef);
     map.put("tooltipRecipientList", tooltipRecipientList);
+    map.put("tooltipRecipientList.InheritErrorHandler", tooltipRecipientListInheritErrorHandler);
     map.put("tooltipRecipientList.Expression", tooltipRecipientListExpression);
     map.put("tooltipRecipientList.Delimiter", tooltipRecipientListDelimiter);
+    map.put("tooltipRecipientList.ParallelProcessing", tooltipRecipientListParallelProcessing);
     map.put("tooltipRecipientList.StrategyRef", tooltipRecipientListStrategyRef);
     map.put("tooltipRecipientList.StrategyMethodName", tooltipRecipientListStrategyMethodName);
-    map.put("tooltipRecipientList.ExecutorServiceRef", tooltipRecipientListExecutorServiceRef);
-    map.put("tooltipRecipientList.OnPrepareRef", tooltipRecipientListOnPrepareRef);
-    map.put("tooltipRecipientList.ParallelProcessing", tooltipRecipientListParallelProcessing);
     map.put("tooltipRecipientList.StrategyMethodAllowNull", tooltipRecipientListStrategyMethodAllowNull);
+    map.put("tooltipRecipientList.ExecutorServiceRef", tooltipRecipientListExecutorServiceRef);
     map.put("tooltipRecipientList.StopOnException", tooltipRecipientListStopOnException);
     map.put("tooltipRecipientList.IgnoreInvalidEndpoints", tooltipRecipientListIgnoreInvalidEndpoints);
     map.put("tooltipRecipientList.Streaming", tooltipRecipientListStreaming);
     map.put("tooltipRecipientList.Timeout", tooltipRecipientListTimeout);
+    map.put("tooltipRecipientList.OnPrepareRef", tooltipRecipientListOnPrepareRef);
     map.put("tooltipRecipientList.ShareUnitOfWork", tooltipRecipientListShareUnitOfWork);
     map.put("tooltipRemoveHeader", tooltipRemoveHeader);
     map.put("tooltipRemoveHeader.HeaderName", tooltipRemoveHeaderHeaderName);
@@ -491,12 +553,13 @@ public class Tooltips extends NLS {
     map.put("tooltipRemoveProperty", tooltipRemoveProperty);
     map.put("tooltipRemoveProperty.PropertyName", tooltipRemovePropertyPropertyName);
     map.put("tooltipResequence", tooltipResequence);
+    map.put("tooltipResequence.InheritErrorHandler", tooltipResequenceInheritErrorHandler);
     map.put("tooltipResequence.Expression", tooltipResequenceExpression);
     map.put("tooltipResequence.ResequencerConfig", tooltipResequenceResequencerConfig);
     map.put("tooltipRollback", tooltipRollback);
-    map.put("tooltipRollback.Message", tooltipRollbackMessage);
     map.put("tooltipRollback.MarkRollbackOnly", tooltipRollbackMarkRollbackOnly);
     map.put("tooltipRollback.MarkRollbackOnlyLast", tooltipRollbackMarkRollbackOnlyLast);
+    map.put("tooltipRollback.Message", tooltipRollbackMessage);
     map.put("tooltipRoute", tooltipRoute);
     map.put("tooltipRoute.AutoStartup", tooltipRouteAutoStartup);
     map.put("tooltipRoute.Delayer", tooltipRouteDelayer);
@@ -505,58 +568,72 @@ public class Tooltips extends NLS {
     map.put("tooltipRoute.HandleFault", tooltipRouteHandleFault);
     map.put("tooltipRoute.MessageHistory", tooltipRouteMessageHistory);
     map.put("tooltipRoute.RoutePolicyRef", tooltipRouteRoutePolicyRef);
+    map.put("tooltipRoute.ShutdownRoute", tooltipRouteShutdownRoute);
+    map.put("tooltipRoute.ShutdownRunningTask", tooltipRouteShutdownRunningTask);
+    map.put("tooltipRoute.StartupOrder", tooltipRouteStartupOrder);
     map.put("tooltipRoute.StreamCache", tooltipRouteStreamCache);
     map.put("tooltipRoute.Trace", tooltipRouteTrace);
     map.put("tooltipRoutingSlip", tooltipRoutingSlip);
+    map.put("tooltipRoutingSlip.InheritErrorHandler", tooltipRoutingSlipInheritErrorHandler);
     map.put("tooltipRoutingSlip.Expression", tooltipRoutingSlipExpression);
     map.put("tooltipRoutingSlip.UriDelimiter", tooltipRoutingSlipUriDelimiter);
     map.put("tooltipRoutingSlip.IgnoreInvalidEndpoints", tooltipRoutingSlipIgnoreInvalidEndpoints);
     map.put("tooltipSampling", tooltipSampling);
+    map.put("tooltipSampling.InheritErrorHandler", tooltipSamplingInheritErrorHandler);
     map.put("tooltipSampling.SamplePeriod", tooltipSamplingSamplePeriod);
     map.put("tooltipSampling.MessageFrequency", tooltipSamplingMessageFrequency);
     map.put("tooltipSampling.Units", tooltipSamplingUnits);
     map.put("tooltipSetBody", tooltipSetBody);
+    map.put("tooltipSetBody.InheritErrorHandler", tooltipSetBodyInheritErrorHandler);
     map.put("tooltipSetBody.Expression", tooltipSetBodyExpression);
     map.put("tooltipSetExchangePattern", tooltipSetExchangePattern);
     map.put("tooltipSetExchangePattern.Pattern", tooltipSetExchangePatternPattern);
     map.put("tooltipSetFaultBody", tooltipSetFaultBody);
+    map.put("tooltipSetFaultBody.InheritErrorHandler", tooltipSetFaultBodyInheritErrorHandler);
     map.put("tooltipSetFaultBody.Expression", tooltipSetFaultBodyExpression);
     map.put("tooltipSetHeader", tooltipSetHeader);
+    map.put("tooltipSetHeader.InheritErrorHandler", tooltipSetHeaderInheritErrorHandler);
     map.put("tooltipSetHeader.Expression", tooltipSetHeaderExpression);
     map.put("tooltipSetHeader.HeaderName", tooltipSetHeaderHeaderName);
     map.put("tooltipSetOutHeader", tooltipSetOutHeader);
+    map.put("tooltipSetOutHeader.InheritErrorHandler", tooltipSetOutHeaderInheritErrorHandler);
     map.put("tooltipSetOutHeader.Expression", tooltipSetOutHeaderExpression);
     map.put("tooltipSetOutHeader.HeaderName", tooltipSetOutHeaderHeaderName);
     map.put("tooltipSetProperty", tooltipSetProperty);
+    map.put("tooltipSetProperty.InheritErrorHandler", tooltipSetPropertyInheritErrorHandler);
     map.put("tooltipSetProperty.Expression", tooltipSetPropertyExpression);
     map.put("tooltipSetProperty.PropertyName", tooltipSetPropertyPropertyName);
     map.put("tooltipSort", tooltipSort);
+    map.put("tooltipSort.InheritErrorHandler", tooltipSortInheritErrorHandler);
     map.put("tooltipSort.Expression", tooltipSortExpression);
     map.put("tooltipSort.ComparatorRef", tooltipSortComparatorRef);
     map.put("tooltipSplit", tooltipSplit);
+    map.put("tooltipSplit.InheritErrorHandler", tooltipSplitInheritErrorHandler);
     map.put("tooltipSplit.Expression", tooltipSplitExpression);
+    map.put("tooltipSplit.ParallelProcessing", tooltipSplitParallelProcessing);
     map.put("tooltipSplit.StrategyRef", tooltipSplitStrategyRef);
     map.put("tooltipSplit.StrategyMethodName", tooltipSplitStrategyMethodName);
-    map.put("tooltipSplit.ExecutorServiceRef", tooltipSplitExecutorServiceRef);
-    map.put("tooltipSplit.OnPrepareRef", tooltipSplitOnPrepareRef);
-    map.put("tooltipSplit.ParallelProcessing", tooltipSplitParallelProcessing);
     map.put("tooltipSplit.StrategyMethodAllowNull", tooltipSplitStrategyMethodAllowNull);
+    map.put("tooltipSplit.ExecutorServiceRef", tooltipSplitExecutorServiceRef);
     map.put("tooltipSplit.Streaming", tooltipSplitStreaming);
     map.put("tooltipSplit.StopOnException", tooltipSplitStopOnException);
     map.put("tooltipSplit.Timeout", tooltipSplitTimeout);
+    map.put("tooltipSplit.OnPrepareRef", tooltipSplitOnPrepareRef);
     map.put("tooltipSplit.ShareUnitOfWork", tooltipSplitShareUnitOfWork);
     map.put("tooltipStop", tooltipStop);
     map.put("tooltipThreads", tooltipThreads);
+    map.put("tooltipThreads.InheritErrorHandler", tooltipThreadsInheritErrorHandler);
     map.put("tooltipThreads.ExecutorServiceRef", tooltipThreadsExecutorServiceRef);
-    map.put("tooltipThreads.ThreadName", tooltipThreadsThreadName);
     map.put("tooltipThreads.PoolSize", tooltipThreadsPoolSize);
     map.put("tooltipThreads.MaxPoolSize", tooltipThreadsMaxPoolSize);
     map.put("tooltipThreads.KeepAliveTime", tooltipThreadsKeepAliveTime);
     map.put("tooltipThreads.TimeUnit", tooltipThreadsTimeUnit);
     map.put("tooltipThreads.MaxQueueSize", tooltipThreadsMaxQueueSize);
+    map.put("tooltipThreads.ThreadName", tooltipThreadsThreadName);
     map.put("tooltipThreads.RejectedPolicy", tooltipThreadsRejectedPolicy);
     map.put("tooltipThreads.CallerRunsWhenRejected", tooltipThreadsCallerRunsWhenRejected);
     map.put("tooltipThrottle", tooltipThrottle);
+    map.put("tooltipThrottle.InheritErrorHandler", tooltipThrottleInheritErrorHandler);
     map.put("tooltipThrottle.Expression", tooltipThrottleExpression);
     map.put("tooltipThrottle.ExecutorServiceRef", tooltipThrottleExecutorServiceRef);
     map.put("tooltipThrottle.TimePeriodMillis", tooltipThrottleTimePeriodMillis);
@@ -565,16 +642,21 @@ public class Tooltips extends NLS {
     map.put("tooltipThrowException", tooltipThrowException);
     map.put("tooltipThrowException.Ref", tooltipThrowExceptionRef);
     map.put("tooltipTransacted", tooltipTransacted);
+    map.put("tooltipTransacted.InheritErrorHandler", tooltipTransactedInheritErrorHandler);
     map.put("tooltipTransacted.Ref", tooltipTransactedRef);
     map.put("tooltipTransform", tooltipTransform);
+    map.put("tooltipTransform.InheritErrorHandler", tooltipTransformInheritErrorHandler);
     map.put("tooltipTransform.Expression", tooltipTransformExpression);
     map.put("tooltipTry", tooltipTry);
+    map.put("tooltipTry.InheritErrorHandler", tooltipTryInheritErrorHandler);
     map.put("tooltipUnmarshal", tooltipUnmarshal);
     map.put("tooltipUnmarshal.Ref", tooltipUnmarshalRef);
     map.put("tooltipUnmarshal.DataFormatType", tooltipUnmarshalDataFormatType);
     map.put("tooltipValidate", tooltipValidate);
+    map.put("tooltipValidate.InheritErrorHandler", tooltipValidateInheritErrorHandler);
     map.put("tooltipValidate.Expression", tooltipValidateExpression);
     map.put("tooltipWhen", tooltipWhen);
+    map.put("tooltipWhen.InheritErrorHandler", tooltipWhenInheritErrorHandler);
     map.put("tooltipWhen.Expression", tooltipWhenExpression);
     map.put("tooltipWireTap", tooltipWireTap);
     map.put("tooltipWireTap.Uri", tooltipWireTapUri);
@@ -582,7 +664,7 @@ public class Tooltips extends NLS {
     map.put("tooltipWireTap.NewExchangeExpression", tooltipWireTapNewExchangeExpression);
     map.put("tooltipWireTap.Headers", tooltipWireTapHeaders);
     map.put("tooltipWireTap.ExecutorServiceRef", tooltipWireTapExecutorServiceRef);
-    map.put("tooltipWireTap.OnPrepareRef", tooltipWireTapOnPrepareRef);
     map.put("tooltipWireTap.Copy", tooltipWireTapCopy);
+    map.put("tooltipWireTap.OnPrepareRef", tooltipWireTapOnPrepareRef);
     }
 }

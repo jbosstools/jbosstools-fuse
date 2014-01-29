@@ -40,14 +40,14 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
 public class Log extends AbstractNode {
 
 	public static final String PROPERTY_MESSAGE = "Log.Message";
+	public static final String PROPERTY_LOGGINGLEVEL = "Log.LoggingLevel";
 	public static final String PROPERTY_LOGNAME = "Log.LogName";
 	public static final String PROPERTY_MARKER = "Log.Marker";
-	public static final String PROPERTY_LOGGINGLEVEL = "Log.LoggingLevel";
 	
 	private String message;
+	private LoggingLevel loggingLevel;
 	private String logName;
 	private String marker;
-	private LoggingLevel loggingLevel;
 	
     public Log() {
     }		
@@ -100,6 +100,24 @@ public class Log extends AbstractNode {
 	}
 
 	/**
+	 * @return the loggingLevel
+	 */
+	public LoggingLevel getLoggingLevel() {
+		return this.loggingLevel;
+	}
+	
+	/**
+	 * @param loggingLevel the loggingLevel to set
+	 */
+	public void setLoggingLevel(LoggingLevel loggingLevel) {
+		LoggingLevel oldValue = this.loggingLevel;
+		this.loggingLevel = loggingLevel;
+		if (!isSame(oldValue, loggingLevel)) {
+		    firePropertyChange(PROPERTY_LOGGINGLEVEL, oldValue, loggingLevel);
+		}
+	}
+
+	/**
 	 * @return the logName
 	 */
 	public String getLogName() {
@@ -135,24 +153,6 @@ public class Log extends AbstractNode {
 		}
 	}
 
-	/**
-	 * @return the loggingLevel
-	 */
-	public LoggingLevel getLoggingLevel() {
-		return this.loggingLevel;
-	}
-	
-	/**
-	 * @param loggingLevel the loggingLevel to set
-	 */
-	public void setLoggingLevel(LoggingLevel loggingLevel) {
-		LoggingLevel oldValue = this.loggingLevel;
-		this.loggingLevel = loggingLevel;
-		if (!isSame(oldValue, loggingLevel)) {
-		    firePropertyChange(PROPERTY_LOGGINGLEVEL, oldValue, loggingLevel);
-		}
-	}
-
 
 	
 	/*
@@ -164,13 +164,13 @@ public class Log extends AbstractNode {
 		super.addCustomProperties(descriptors);
 		
   		PropertyDescriptor descMessage = new TextPropertyDescriptor(PROPERTY_MESSAGE, Messages.propertyLabelLogMessage);
+      	PropertyDescriptor descLoggingLevel = new EnumPropertyDescriptor(PROPERTY_LOGGINGLEVEL, Messages.propertyLabelLogLoggingLevel, LoggingLevel.class);
     		PropertyDescriptor descLogName = new TextPropertyDescriptor(PROPERTY_LOGNAME, Messages.propertyLabelLogLogName);
     		PropertyDescriptor descMarker = new TextPropertyDescriptor(PROPERTY_MARKER, Messages.propertyLabelLogMarker);
-      	PropertyDescriptor descLoggingLevel = new EnumPropertyDescriptor(PROPERTY_LOGGINGLEVEL, Messages.propertyLabelLogLoggingLevel, LoggingLevel.class);
   		descriptors.put(PROPERTY_MESSAGE, descMessage);
+		descriptors.put(PROPERTY_LOGGINGLEVEL, descLoggingLevel);
 		descriptors.put(PROPERTY_LOGNAME, descLogName);
 		descriptors.put(PROPERTY_MARKER, descMarker);
-		descriptors.put(PROPERTY_LOGGINGLEVEL, descLoggingLevel);
 	}
 	
 	/* (non-Javadoc)
@@ -180,12 +180,12 @@ public class Log extends AbstractNode {
 	public void setPropertyValue(Object id, Object value) {
 		if (PROPERTY_MESSAGE.equals(id)) {
 			setMessage(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_LOGGINGLEVEL.equals(id)) {
+			setLoggingLevel(Objects.convertTo(value, LoggingLevel.class));
 		}		else if (PROPERTY_LOGNAME.equals(id)) {
 			setLogName(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_MARKER.equals(id)) {
 			setMarker(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_LOGGINGLEVEL.equals(id)) {
-			setLoggingLevel(Objects.convertTo(value, LoggingLevel.class));
 		}    else {
 			super.setPropertyValue(id, value);
 		}
@@ -198,12 +198,12 @@ public class Log extends AbstractNode {
 	public Object getPropertyValue(Object id) {
 		if (PROPERTY_MESSAGE.equals(id)) {
 			return this.getMessage();
+		}		else if (PROPERTY_LOGGINGLEVEL.equals(id)) {
+			return this.getLoggingLevel();
 		}		else if (PROPERTY_LOGNAME.equals(id)) {
 			return this.getLogName();
 		}		else if (PROPERTY_MARKER.equals(id)) {
 			return this.getMarker();
-		}		else if (PROPERTY_LOGGINGLEVEL.equals(id)) {
-			return this.getLoggingLevel();
 		}    else {
 			return super.getPropertyValue(id);
 		}
@@ -214,9 +214,9 @@ public class Log extends AbstractNode {
 	public ProcessorDefinition createCamelDefinition() {
 		LogDefinition answer = new LogDefinition();
     answer.setMessage(toXmlPropertyValue(PROPERTY_MESSAGE, this.getMessage()));
+    answer.setLoggingLevel(toXmlPropertyValue(PROPERTY_LOGGINGLEVEL, this.getLoggingLevel()));
     answer.setLogName(toXmlPropertyValue(PROPERTY_LOGNAME, this.getLogName()));
     answer.setMarker(toXmlPropertyValue(PROPERTY_MARKER, this.getMarker()));
-    answer.setLoggingLevel(toXmlPropertyValue(PROPERTY_LOGGINGLEVEL, this.getLoggingLevel()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -235,9 +235,9 @@ public class Log extends AbstractNode {
     if (processor instanceof LogDefinition) {
       LogDefinition node = (LogDefinition) processor;
       this.setMessage(node.getMessage());
+      this.setLoggingLevel(node.getLoggingLevel());
       this.setLogName(node.getLogName());
       this.setMarker(node.getMarker());
-      this.setLoggingLevel(node.getLoggingLevel());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof LogDefinition. Was " + processor.getClass().getName());
     }

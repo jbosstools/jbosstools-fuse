@@ -38,12 +38,14 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class IdempotentConsumer extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "IdempotentConsumer.InheritErrorHandler";
 	public static final String PROPERTY_EXPRESSION = "IdempotentConsumer.Expression";
 	public static final String PROPERTY_MESSAGEIDREPOSITORYREF = "IdempotentConsumer.MessageIdRepositoryRef";
 	public static final String PROPERTY_EAGER = "IdempotentConsumer.Eager";
 	public static final String PROPERTY_SKIPDUPLICATE = "IdempotentConsumer.SkipDuplicate";
 	public static final String PROPERTY_REMOVEONFAILURE = "IdempotentConsumer.RemoveOnFailure";
 	
+	private Boolean inheritErrorHandler;
 	private ExpressionDefinition expression;
 	private String messageIdRepositoryRef;
 	private Boolean eager;
@@ -81,6 +83,24 @@ public class IdempotentConsumer extends AbstractNode {
 
 
 	
+
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
 
 	/**
 	 * @return the expression
@@ -182,13 +202,15 @@ public class IdempotentConsumer extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelIdempotentConsumerInheritErrorHandler);
+    
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelIdempotentConsumerExpression);
     		PropertyDescriptor descMessageIdRepositoryRef = new TextPropertyDescriptor(PROPERTY_MESSAGEIDREPOSITORYREF, Messages.propertyLabelIdempotentConsumerMessageIdRepositoryRef);
       	PropertyDescriptor descEager = new BooleanPropertyDescriptor(PROPERTY_EAGER, Messages.propertyLabelIdempotentConsumerEager);
       	PropertyDescriptor descSkipDuplicate = new BooleanPropertyDescriptor(PROPERTY_SKIPDUPLICATE, Messages.propertyLabelIdempotentConsumerSkipDuplicate);
       	PropertyDescriptor descRemoveOnFailure = new BooleanPropertyDescriptor(PROPERTY_REMOVEONFAILURE, Messages.propertyLabelIdempotentConsumerRemoveOnFailure);
-  		descriptors.put(PROPERTY_EXPRESSION, descExpression);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXPRESSION, descExpression);
 		descriptors.put(PROPERTY_MESSAGEIDREPOSITORYREF, descMessageIdRepositoryRef);
 		descriptors.put(PROPERTY_EAGER, descEager);
 		descriptors.put(PROPERTY_SKIPDUPLICATE, descSkipDuplicate);
@@ -200,7 +222,9 @@ public class IdempotentConsumer extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			setExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}		else if (PROPERTY_MESSAGEIDREPOSITORYREF.equals(id)) {
 			setMessageIdRepositoryRef(Objects.convertTo(value, String.class));
@@ -220,7 +244,9 @@ public class IdempotentConsumer extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			return this.getExpression();
 		}		else if (PROPERTY_MESSAGEIDREPOSITORYREF.equals(id)) {
 			return this.getMessageIdRepositoryRef();
@@ -239,6 +265,7 @@ public class IdempotentConsumer extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		IdempotentConsumerDefinition answer = new IdempotentConsumerDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
     answer.setMessageIdRepositoryRef(toXmlPropertyValue(PROPERTY_MESSAGEIDREPOSITORYREF, this.getMessageIdRepositoryRef()));
     answer.setEager(toXmlPropertyValue(PROPERTY_EAGER, this.getEager()));
@@ -261,6 +288,7 @@ public class IdempotentConsumer extends AbstractNode {
     
     if (processor instanceof IdempotentConsumerDefinition) {
       IdempotentConsumerDefinition node = (IdempotentConsumerDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExpression(node.getExpression());
       this.setMessageIdRepositoryRef(node.getMessageIdRepositoryRef());
       this.setEager(node.getEager());

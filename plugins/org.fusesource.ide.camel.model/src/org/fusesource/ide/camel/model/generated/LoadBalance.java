@@ -39,9 +39,11 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class LoadBalance extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "LoadBalance.InheritErrorHandler";
 	public static final String PROPERTY_REF = "LoadBalance.Ref";
 	public static final String PROPERTY_LOADBALANCERTYPE = "LoadBalance.LoadBalancerType";
 	
+	private Boolean inheritErrorHandler;
 	private String ref;
 	private LoadBalancerDefinition loadBalancerType;
 	
@@ -76,6 +78,24 @@ public class LoadBalance extends AbstractNode {
 
 
 	
+
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
 
 	/**
 	 * @return the ref
@@ -123,7 +143,8 @@ public class LoadBalance extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  		PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelLoadBalanceRef);
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelLoadBalanceInheritErrorHandler);
+    		PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelLoadBalanceRef);
     
       
 		PropertyDescriptor descLoadBalancerType = new ComplexUnionPropertyDescriptor(PROPERTY_LOADBALANCERTYPE, Messages.propertyLabelLoadBalanceLoadBalancerType, LoadBalancerDefinition.class, new UnionTypeValue[]{
@@ -135,7 +156,8 @@ public class LoadBalance extends AbstractNode {
 		        new UnionTypeValue("topic", org.apache.camel.model.loadbalancer.TopicLoadBalancerDefinition.class),
 		        new UnionTypeValue("weighted", org.apache.camel.model.loadbalancer.WeightedLoadBalancerDefinition.class),
 		  		});
-  	  		descriptors.put(PROPERTY_REF, descRef);
+  	  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_REF, descRef);
 		descriptors.put(PROPERTY_LOADBALANCERTYPE, descLoadBalancerType);
 	}
 	
@@ -144,7 +166,9 @@ public class LoadBalance extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_REF.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_REF.equals(id)) {
 			setRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_LOADBALANCERTYPE.equals(id)) {
 			setLoadBalancerType(Objects.convertTo(value, LoadBalancerDefinition.class));
@@ -158,7 +182,9 @@ public class LoadBalance extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_REF.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_REF.equals(id)) {
 			return this.getRef();
 		}		else if (PROPERTY_LOADBALANCERTYPE.equals(id)) {
 			return this.getLoadBalancerType();
@@ -171,6 +197,7 @@ public class LoadBalance extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		LoadBalanceDefinition answer = new LoadBalanceDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setRef(toXmlPropertyValue(PROPERTY_REF, this.getRef()));
     answer.setLoadBalancerType(toXmlPropertyValue(PROPERTY_LOADBALANCERTYPE, this.getLoadBalancerType()));
         super.savePropertiesToCamelDefinition(answer);
@@ -190,6 +217,7 @@ public class LoadBalance extends AbstractNode {
     
     if (processor instanceof LoadBalanceDefinition) {
       LoadBalanceDefinition node = (LoadBalanceDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setRef(node.getRef());
       this.setLoadBalancerType(node.getLoadBalancerType());
     } else {

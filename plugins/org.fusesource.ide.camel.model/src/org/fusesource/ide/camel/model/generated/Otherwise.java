@@ -38,7 +38,9 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Otherwise extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Otherwise.InheritErrorHandler";
 	
+	private Boolean inheritErrorHandler;
 	
     public Otherwise() {
     }		
@@ -72,6 +74,24 @@ public class Otherwise extends AbstractNode {
 
 	
 
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
+
 
 	
 	/*
@@ -82,6 +102,8 @@ public class Otherwise extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelOtherwiseInheritErrorHandler);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
 	}
 	
 	/* (non-Javadoc)
@@ -89,7 +111,9 @@ public class Otherwise extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-    {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}    else {
 			super.setPropertyValue(id, value);
 		}
 	}
@@ -99,7 +123,9 @@ public class Otherwise extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-    {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}    else {
 			return super.getPropertyValue(id);
 		}
 	}
@@ -108,6 +134,7 @@ public class Otherwise extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		OtherwiseDefinition answer = new OtherwiseDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -125,6 +152,7 @@ public class Otherwise extends AbstractNode {
     
     if (processor instanceof OtherwiseDefinition) {
       OtherwiseDefinition node = (OtherwiseDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof OtherwiseDefinition. Was " + processor.getClass().getName());
     }

@@ -39,9 +39,11 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Resequence extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Resequence.InheritErrorHandler";
 	public static final String PROPERTY_EXPRESSION = "Resequence.Expression";
 	public static final String PROPERTY_RESEQUENCERCONFIG = "Resequence.ResequencerConfig";
 	
+	private Boolean inheritErrorHandler;
 	private ExpressionDefinition expression;
 	private ResequencerConfig resequencerConfig;
 	
@@ -76,6 +78,24 @@ public class Resequence extends AbstractNode {
 
 
 	
+
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
 
 	/**
 	 * @return the expression
@@ -123,7 +143,8 @@ public class Resequence extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelResequenceInheritErrorHandler);
+    
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelResequenceExpression);
     
       
@@ -131,7 +152,8 @@ public class Resequence extends AbstractNode {
 		        new UnionTypeValue("batch-config", org.apache.camel.model.config.BatchResequencerConfig.class),
 		        new UnionTypeValue("stream-config", org.apache.camel.model.config.StreamResequencerConfig.class),
 		  		});
-  	  		descriptors.put(PROPERTY_EXPRESSION, descExpression);
+  	  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXPRESSION, descExpression);
 		descriptors.put(PROPERTY_RESEQUENCERCONFIG, descResequencerConfig);
 	}
 	
@@ -140,7 +162,9 @@ public class Resequence extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			setExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}		else if (PROPERTY_RESEQUENCERCONFIG.equals(id)) {
 			setResequencerConfig(Objects.convertTo(value, ResequencerConfig.class));
@@ -154,7 +178,9 @@ public class Resequence extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			return this.getExpression();
 		}		else if (PROPERTY_RESEQUENCERCONFIG.equals(id)) {
 			return this.getResequencerConfig();
@@ -167,6 +193,7 @@ public class Resequence extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		ResequenceDefinition answer = new ResequenceDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
     answer.setResequencerConfig(toXmlPropertyValue(PROPERTY_RESEQUENCERCONFIG, this.getResequencerConfig()));
         super.savePropertiesToCamelDefinition(answer);
@@ -186,6 +213,7 @@ public class Resequence extends AbstractNode {
     
     if (processor instanceof ResequenceDefinition) {
       ResequenceDefinition node = (ResequenceDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExpression(node.getExpression());
       this.setResequencerConfig(node.getResequencerConfig());
     } else {

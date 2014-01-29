@@ -17,6 +17,8 @@
 package org.fusesource.ide.camel.model.generated;
 
 import java.util.Map;
+import org.apache.camel.ShutdownRoute;
+import org.apache.camel.ShutdownRunningTask;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
@@ -45,6 +47,9 @@ public class Route extends RouteSupport {
 	public static final String PROPERTY_HANDLEFAULT = "Route.HandleFault";
 	public static final String PROPERTY_MESSAGEHISTORY = "Route.MessageHistory";
 	public static final String PROPERTY_ROUTEPOLICYREF = "Route.RoutePolicyRef";
+	public static final String PROPERTY_SHUTDOWNROUTE = "Route.ShutdownRoute";
+	public static final String PROPERTY_SHUTDOWNRUNNINGTASK = "Route.ShutdownRunningTask";
+	public static final String PROPERTY_STARTUPORDER = "Route.StartupOrder";
 	public static final String PROPERTY_STREAMCACHE = "Route.StreamCache";
 	public static final String PROPERTY_TRACE = "Route.Trace";
 	
@@ -55,6 +60,9 @@ public class Route extends RouteSupport {
 	private String handleFault;
 	private String messageHistory;
 	private String routePolicyRef;
+	private ShutdownRoute shutdownRoute;
+	private ShutdownRunningTask shutdownRunningTask;
+	private Integer startupOrder;
 	private String streamCache;
 	private String trace;
 	
@@ -197,6 +205,60 @@ public class Route extends RouteSupport {
 	}
 
 	/**
+	 * @return the shutdownRoute
+	 */
+	public ShutdownRoute getShutdownRoute() {
+		return this.shutdownRoute;
+	}
+	
+	/**
+	 * @param shutdownRoute the shutdownRoute to set
+	 */
+	public void setShutdownRoute(ShutdownRoute shutdownRoute) {
+		ShutdownRoute oldValue = this.shutdownRoute;
+		this.shutdownRoute = shutdownRoute;
+		if (!isSame(oldValue, shutdownRoute)) {
+		    firePropertyChange(PROPERTY_SHUTDOWNROUTE, oldValue, shutdownRoute);
+		}
+	}
+
+	/**
+	 * @return the shutdownRunningTask
+	 */
+	public ShutdownRunningTask getShutdownRunningTask() {
+		return this.shutdownRunningTask;
+	}
+	
+	/**
+	 * @param shutdownRunningTask the shutdownRunningTask to set
+	 */
+	public void setShutdownRunningTask(ShutdownRunningTask shutdownRunningTask) {
+		ShutdownRunningTask oldValue = this.shutdownRunningTask;
+		this.shutdownRunningTask = shutdownRunningTask;
+		if (!isSame(oldValue, shutdownRunningTask)) {
+		    firePropertyChange(PROPERTY_SHUTDOWNRUNNINGTASK, oldValue, shutdownRunningTask);
+		}
+	}
+
+	/**
+	 * @return the startupOrder
+	 */
+	public Integer getStartupOrder() {
+		return this.startupOrder;
+	}
+	
+	/**
+	 * @param startupOrder the startupOrder to set
+	 */
+	public void setStartupOrder(Integer startupOrder) {
+		Integer oldValue = this.startupOrder;
+		this.startupOrder = startupOrder;
+		if (!isSame(oldValue, startupOrder)) {
+		    firePropertyChange(PROPERTY_STARTUPORDER, oldValue, startupOrder);
+		}
+	}
+
+	/**
 	 * @return the streamCache
 	 */
 	public String getStreamCache() {
@@ -249,6 +311,9 @@ public class Route extends RouteSupport {
     		PropertyDescriptor descHandleFault = new TextPropertyDescriptor(PROPERTY_HANDLEFAULT, Messages.propertyLabelRouteHandleFault);
     		PropertyDescriptor descMessageHistory = new TextPropertyDescriptor(PROPERTY_MESSAGEHISTORY, Messages.propertyLabelRouteMessageHistory);
     		PropertyDescriptor descRoutePolicyRef = new TextPropertyDescriptor(PROPERTY_ROUTEPOLICYREF, Messages.propertyLabelRouteRoutePolicyRef);
+      	PropertyDescriptor descShutdownRoute = new EnumPropertyDescriptor(PROPERTY_SHUTDOWNROUTE, Messages.propertyLabelRouteShutdownRoute, ShutdownRoute.class);
+      	PropertyDescriptor descShutdownRunningTask = new EnumPropertyDescriptor(PROPERTY_SHUTDOWNRUNNINGTASK, Messages.propertyLabelRouteShutdownRunningTask, ShutdownRunningTask.class);
+    		PropertyDescriptor descStartupOrder = new TextPropertyDescriptor(PROPERTY_STARTUPORDER, Messages.propertyLabelRouteStartupOrder);
     		PropertyDescriptor descStreamCache = new TextPropertyDescriptor(PROPERTY_STREAMCACHE, Messages.propertyLabelRouteStreamCache);
     		PropertyDescriptor descTrace = new TextPropertyDescriptor(PROPERTY_TRACE, Messages.propertyLabelRouteTrace);
   		descriptors.put(PROPERTY_AUTOSTARTUP, descAutoStartup);
@@ -258,6 +323,9 @@ public class Route extends RouteSupport {
 		descriptors.put(PROPERTY_HANDLEFAULT, descHandleFault);
 		descriptors.put(PROPERTY_MESSAGEHISTORY, descMessageHistory);
 		descriptors.put(PROPERTY_ROUTEPOLICYREF, descRoutePolicyRef);
+		descriptors.put(PROPERTY_SHUTDOWNROUTE, descShutdownRoute);
+		descriptors.put(PROPERTY_SHUTDOWNRUNNINGTASK, descShutdownRunningTask);
+		descriptors.put(PROPERTY_STARTUPORDER, descStartupOrder);
 		descriptors.put(PROPERTY_STREAMCACHE, descStreamCache);
 		descriptors.put(PROPERTY_TRACE, descTrace);
 	}
@@ -281,6 +349,12 @@ public class Route extends RouteSupport {
 			setMessageHistory(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_ROUTEPOLICYREF.equals(id)) {
 			setRoutePolicyRef(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_SHUTDOWNROUTE.equals(id)) {
+			setShutdownRoute(Objects.convertTo(value, ShutdownRoute.class));
+		}		else if (PROPERTY_SHUTDOWNRUNNINGTASK.equals(id)) {
+			setShutdownRunningTask(Objects.convertTo(value, ShutdownRunningTask.class));
+		}		else if (PROPERTY_STARTUPORDER.equals(id)) {
+			setStartupOrder(Objects.convertTo(value, Integer.class));
 		}		else if (PROPERTY_STREAMCACHE.equals(id)) {
 			setStreamCache(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_TRACE.equals(id)) {
@@ -309,6 +383,12 @@ public class Route extends RouteSupport {
 			return this.getMessageHistory();
 		}		else if (PROPERTY_ROUTEPOLICYREF.equals(id)) {
 			return this.getRoutePolicyRef();
+		}		else if (PROPERTY_SHUTDOWNROUTE.equals(id)) {
+			return this.getShutdownRoute();
+		}		else if (PROPERTY_SHUTDOWNRUNNINGTASK.equals(id)) {
+			return this.getShutdownRunningTask();
+		}		else if (PROPERTY_STARTUPORDER.equals(id)) {
+			return this.getStartupOrder();
 		}		else if (PROPERTY_STREAMCACHE.equals(id)) {
 			return this.getStreamCache();
 		}		else if (PROPERTY_TRACE.equals(id)) {
@@ -329,6 +409,9 @@ public class Route extends RouteSupport {
     answer.setHandleFault(toXmlPropertyValue(PROPERTY_HANDLEFAULT, this.getHandleFault()));
     answer.setMessageHistory(toXmlPropertyValue(PROPERTY_MESSAGEHISTORY, this.getMessageHistory()));
     answer.setRoutePolicyRef(toXmlPropertyValue(PROPERTY_ROUTEPOLICYREF, this.getRoutePolicyRef()));
+    answer.setShutdownRoute(toXmlPropertyValue(PROPERTY_SHUTDOWNROUTE, this.getShutdownRoute()));
+    answer.setShutdownRunningTask(toXmlPropertyValue(PROPERTY_SHUTDOWNRUNNINGTASK, this.getShutdownRunningTask()));
+    answer.setStartupOrder(toXmlPropertyValue(PROPERTY_STARTUPORDER, this.getStartupOrder()));
     answer.setStreamCache(toXmlPropertyValue(PROPERTY_STREAMCACHE, this.getStreamCache()));
     answer.setTrace(toXmlPropertyValue(PROPERTY_TRACE, this.getTrace()));
         super.savePropertiesToCamelDefinition(answer);
@@ -355,6 +438,9 @@ public class Route extends RouteSupport {
       this.setHandleFault(node.getHandleFault());
       this.setMessageHistory(node.getMessageHistory());
       this.setRoutePolicyRef(node.getRoutePolicyRef());
+      this.setShutdownRoute(node.getShutdownRoute());
+      this.setShutdownRunningTask(node.getShutdownRunningTask());
+      this.setStartupOrder(node.getStartupOrder());
       this.setStreamCache(node.getStreamCache());
       this.setTrace(node.getTrace());
     } else {
