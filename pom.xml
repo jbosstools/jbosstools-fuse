@@ -15,7 +15,7 @@
   <parent>
     <groupId>org.fusesource</groupId>
     <artifactId>fuse-project</artifactId>
-    <version>1.0.0.redhat-312</version>
+    <version>1.0.0.redhat-328</version>
     <!-- 
     <version>99-master-SNAPSHOT</version>
     -->
@@ -65,7 +65,7 @@
     <tycho-version>0.18.1</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
     <forge-project-id>ide</forge-project-id>
-    <fabric-version>1.0.0.redhat-312</fabric-version>
+    <fabric-version>1.0.0.redhat-328</fabric-version>
 <!--
     <fabric-version>7.3.0.redhat-139</fabric-version>
 -->

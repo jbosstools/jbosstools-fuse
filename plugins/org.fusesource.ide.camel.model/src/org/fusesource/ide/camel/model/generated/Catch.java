@@ -39,9 +39,11 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Catch extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Catch.InheritErrorHandler";
 	public static final String PROPERTY_EXCEPTIONS = "Catch.Exceptions";
 	public static final String PROPERTY_HANDLED = "Catch.Handled";
 	
+	private Boolean inheritErrorHandler;
 	private List exceptions;
 	private ExpressionDefinition handled;
 	
@@ -76,6 +78,24 @@ public class Catch extends AbstractNode {
 
 
 	
+
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
 
 	/**
 	 * @return the exceptions
@@ -123,10 +143,12 @@ public class Catch extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-    	PropertyDescriptor descExceptions = new ListPropertyDescriptor(PROPERTY_EXCEPTIONS, Messages.propertyLabelCatchExceptions);
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelCatchInheritErrorHandler);
+      	PropertyDescriptor descExceptions = new ListPropertyDescriptor(PROPERTY_EXCEPTIONS, Messages.propertyLabelCatchExceptions);
     
   	PropertyDescriptor descHandled = new ExpressionPropertyDescriptor(PROPERTY_HANDLED, Messages.propertyLabelCatchHandled);
-  		descriptors.put(PROPERTY_EXCEPTIONS, descExceptions);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXCEPTIONS, descExceptions);
 		descriptors.put(PROPERTY_HANDLED, descHandled);
 	}
 	
@@ -135,7 +157,9 @@ public class Catch extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXCEPTIONS.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXCEPTIONS.equals(id)) {
 			setExceptions(Objects.convertTo(value, List.class));
 		}		else if (PROPERTY_HANDLED.equals(id)) {
 			setHandled(Objects.convertTo(value, ExpressionDefinition.class));
@@ -149,7 +173,9 @@ public class Catch extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXCEPTIONS.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXCEPTIONS.equals(id)) {
 			return this.getExceptions();
 		}		else if (PROPERTY_HANDLED.equals(id)) {
 			return this.getHandled();
@@ -162,6 +188,7 @@ public class Catch extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		CatchDefinition answer = new CatchDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExceptions(toXmlPropertyValue(PROPERTY_EXCEPTIONS, this.getExceptions()));
     Objects.setField(answer, "handled", toXmlPropertyValue(PROPERTY_HANDLED, this.getHandled()));
         super.savePropertiesToCamelDefinition(answer);
@@ -181,6 +208,7 @@ public class Catch extends AbstractNode {
     
     if (processor instanceof CatchDefinition) {
       CatchDefinition node = (CatchDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExceptions(node.getExceptions());
       Objects.setField(this, "handled", node.getHandled());
     } else {

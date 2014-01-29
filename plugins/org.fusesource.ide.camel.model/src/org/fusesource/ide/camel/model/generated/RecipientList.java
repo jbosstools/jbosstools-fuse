@@ -38,32 +38,34 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class RecipientList extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "RecipientList.InheritErrorHandler";
 	public static final String PROPERTY_EXPRESSION = "RecipientList.Expression";
 	public static final String PROPERTY_DELIMITER = "RecipientList.Delimiter";
+	public static final String PROPERTY_PARALLELPROCESSING = "RecipientList.ParallelProcessing";
 	public static final String PROPERTY_STRATEGYREF = "RecipientList.StrategyRef";
 	public static final String PROPERTY_STRATEGYMETHODNAME = "RecipientList.StrategyMethodName";
-	public static final String PROPERTY_EXECUTORSERVICEREF = "RecipientList.ExecutorServiceRef";
-	public static final String PROPERTY_ONPREPAREREF = "RecipientList.OnPrepareRef";
-	public static final String PROPERTY_PARALLELPROCESSING = "RecipientList.ParallelProcessing";
 	public static final String PROPERTY_STRATEGYMETHODALLOWNULL = "RecipientList.StrategyMethodAllowNull";
+	public static final String PROPERTY_EXECUTORSERVICEREF = "RecipientList.ExecutorServiceRef";
 	public static final String PROPERTY_STOPONEXCEPTION = "RecipientList.StopOnException";
 	public static final String PROPERTY_IGNOREINVALIDENDPOINTS = "RecipientList.IgnoreInvalidEndpoints";
 	public static final String PROPERTY_STREAMING = "RecipientList.Streaming";
 	public static final String PROPERTY_TIMEOUT = "RecipientList.Timeout";
+	public static final String PROPERTY_ONPREPAREREF = "RecipientList.OnPrepareRef";
 	public static final String PROPERTY_SHAREUNITOFWORK = "RecipientList.ShareUnitOfWork";
 	
+	private Boolean inheritErrorHandler;
 	private ExpressionDefinition expression;
 	private String delimiter;
+	private Boolean parallelProcessing;
 	private String strategyRef;
 	private String strategyMethodName;
-	private String executorServiceRef;
-	private String onPrepareRef;
-	private Boolean parallelProcessing;
 	private Boolean strategyMethodAllowNull;
+	private String executorServiceRef;
 	private Boolean stopOnException;
 	private Boolean ignoreInvalidEndpoints;
 	private Boolean streaming;
 	private Long timeout;
+	private String onPrepareRef;
 	private Boolean shareUnitOfWork;
 	
     public RecipientList() {
@@ -99,6 +101,24 @@ public class RecipientList extends AbstractNode {
 	
 
 	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
+
+	/**
 	 * @return the expression
 	 */
 	public ExpressionDefinition getExpression() {
@@ -131,6 +151,24 @@ public class RecipientList extends AbstractNode {
 		this.delimiter = delimiter;
 		if (!isSame(oldValue, delimiter)) {
 		    firePropertyChange(PROPERTY_DELIMITER, oldValue, delimiter);
+		}
+	}
+
+	/**
+	 * @return the parallelProcessing
+	 */
+	public Boolean getParallelProcessing() {
+		return this.parallelProcessing;
+	}
+	
+	/**
+	 * @param parallelProcessing the parallelProcessing to set
+	 */
+	public void setParallelProcessing(Boolean parallelProcessing) {
+		Boolean oldValue = this.parallelProcessing;
+		this.parallelProcessing = parallelProcessing;
+		if (!isSame(oldValue, parallelProcessing)) {
+		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
 		}
 	}
 
@@ -171,60 +209,6 @@ public class RecipientList extends AbstractNode {
 	}
 
 	/**
-	 * @return the executorServiceRef
-	 */
-	public String getExecutorServiceRef() {
-		return this.executorServiceRef;
-	}
-	
-	/**
-	 * @param executorServiceRef the executorServiceRef to set
-	 */
-	public void setExecutorServiceRef(String executorServiceRef) {
-		String oldValue = this.executorServiceRef;
-		this.executorServiceRef = executorServiceRef;
-		if (!isSame(oldValue, executorServiceRef)) {
-		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
-		}
-	}
-
-	/**
-	 * @return the onPrepareRef
-	 */
-	public String getOnPrepareRef() {
-		return this.onPrepareRef;
-	}
-	
-	/**
-	 * @param onPrepareRef the onPrepareRef to set
-	 */
-	public void setOnPrepareRef(String onPrepareRef) {
-		String oldValue = this.onPrepareRef;
-		this.onPrepareRef = onPrepareRef;
-		if (!isSame(oldValue, onPrepareRef)) {
-		    firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
-		}
-	}
-
-	/**
-	 * @return the parallelProcessing
-	 */
-	public Boolean getParallelProcessing() {
-		return this.parallelProcessing;
-	}
-	
-	/**
-	 * @param parallelProcessing the parallelProcessing to set
-	 */
-	public void setParallelProcessing(Boolean parallelProcessing) {
-		Boolean oldValue = this.parallelProcessing;
-		this.parallelProcessing = parallelProcessing;
-		if (!isSame(oldValue, parallelProcessing)) {
-		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
-		}
-	}
-
-	/**
 	 * @return the strategyMethodAllowNull
 	 */
 	public Boolean getStrategyMethodAllowNull() {
@@ -239,6 +223,24 @@ public class RecipientList extends AbstractNode {
 		this.strategyMethodAllowNull = strategyMethodAllowNull;
 		if (!isSame(oldValue, strategyMethodAllowNull)) {
 		    firePropertyChange(PROPERTY_STRATEGYMETHODALLOWNULL, oldValue, strategyMethodAllowNull);
+		}
+	}
+
+	/**
+	 * @return the executorServiceRef
+	 */
+	public String getExecutorServiceRef() {
+		return this.executorServiceRef;
+	}
+	
+	/**
+	 * @param executorServiceRef the executorServiceRef to set
+	 */
+	public void setExecutorServiceRef(String executorServiceRef) {
+		String oldValue = this.executorServiceRef;
+		this.executorServiceRef = executorServiceRef;
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
 		}
 	}
 
@@ -315,6 +317,24 @@ public class RecipientList extends AbstractNode {
 	}
 
 	/**
+	 * @return the onPrepareRef
+	 */
+	public String getOnPrepareRef() {
+		return this.onPrepareRef;
+	}
+	
+	/**
+	 * @param onPrepareRef the onPrepareRef to set
+	 */
+	public void setOnPrepareRef(String onPrepareRef) {
+		String oldValue = this.onPrepareRef;
+		this.onPrepareRef = onPrepareRef;
+		if (!isSame(oldValue, onPrepareRef)) {
+		    firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
+		}
+	}
+
+	/**
 	 * @return the shareUnitOfWork
 	 */
 	public Boolean getShareUnitOfWork() {
@@ -342,32 +362,34 @@ public class RecipientList extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRecipientListInheritErrorHandler);
+    
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelRecipientListExpression);
     		PropertyDescriptor descDelimiter = new TextPropertyDescriptor(PROPERTY_DELIMITER, Messages.propertyLabelRecipientListDelimiter);
+      	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelRecipientListParallelProcessing);
     		PropertyDescriptor descStrategyRef = new TextPropertyDescriptor(PROPERTY_STRATEGYREF, Messages.propertyLabelRecipientListStrategyRef);
     		PropertyDescriptor descStrategyMethodName = new TextPropertyDescriptor(PROPERTY_STRATEGYMETHODNAME, Messages.propertyLabelRecipientListStrategyMethodName);
-    		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelRecipientListExecutorServiceRef);
-    		PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelRecipientListOnPrepareRef);
-      	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelRecipientListParallelProcessing);
       	PropertyDescriptor descStrategyMethodAllowNull = new BooleanPropertyDescriptor(PROPERTY_STRATEGYMETHODALLOWNULL, Messages.propertyLabelRecipientListStrategyMethodAllowNull);
+    		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelRecipientListExecutorServiceRef);
       	PropertyDescriptor descStopOnException = new BooleanPropertyDescriptor(PROPERTY_STOPONEXCEPTION, Messages.propertyLabelRecipientListStopOnException);
       	PropertyDescriptor descIgnoreInvalidEndpoints = new BooleanPropertyDescriptor(PROPERTY_IGNOREINVALIDENDPOINTS, Messages.propertyLabelRecipientListIgnoreInvalidEndpoints);
       	PropertyDescriptor descStreaming = new BooleanPropertyDescriptor(PROPERTY_STREAMING, Messages.propertyLabelRecipientListStreaming);
     		PropertyDescriptor descTimeout = new TextPropertyDescriptor(PROPERTY_TIMEOUT, Messages.propertyLabelRecipientListTimeout);
+    		PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelRecipientListOnPrepareRef);
       	PropertyDescriptor descShareUnitOfWork = new BooleanPropertyDescriptor(PROPERTY_SHAREUNITOFWORK, Messages.propertyLabelRecipientListShareUnitOfWork);
-  		descriptors.put(PROPERTY_EXPRESSION, descExpression);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXPRESSION, descExpression);
 		descriptors.put(PROPERTY_DELIMITER, descDelimiter);
+		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
 		descriptors.put(PROPERTY_STRATEGYREF, descStrategyRef);
 		descriptors.put(PROPERTY_STRATEGYMETHODNAME, descStrategyMethodName);
-		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
-		descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
-		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
 		descriptors.put(PROPERTY_STRATEGYMETHODALLOWNULL, descStrategyMethodAllowNull);
+		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
 		descriptors.put(PROPERTY_STOPONEXCEPTION, descStopOnException);
 		descriptors.put(PROPERTY_IGNOREINVALIDENDPOINTS, descIgnoreInvalidEndpoints);
 		descriptors.put(PROPERTY_STREAMING, descStreaming);
 		descriptors.put(PROPERTY_TIMEOUT, descTimeout);
+		descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
 		descriptors.put(PROPERTY_SHAREUNITOFWORK, descShareUnitOfWork);
 	}
 	
@@ -376,22 +398,22 @@ public class RecipientList extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			setExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}		else if (PROPERTY_DELIMITER.equals(id)) {
 			setDelimiter(Objects.convertTo(value, String.class));
+		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
+			setParallelProcessing(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			setStrategyRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
 			setStrategyMethodName(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
-			setExecutorServiceRef(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
-			setOnPrepareRef(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
-			setParallelProcessing(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
 			setStrategyMethodAllowNull(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
+			setExecutorServiceRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_STOPONEXCEPTION.equals(id)) {
 			setStopOnException(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_IGNOREINVALIDENDPOINTS.equals(id)) {
@@ -400,6 +422,8 @@ public class RecipientList extends AbstractNode {
 			setStreaming(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_TIMEOUT.equals(id)) {
 			setTimeout(Objects.convertTo(value, Long.class));
+		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
+			setOnPrepareRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_SHAREUNITOFWORK.equals(id)) {
 			setShareUnitOfWork(Objects.convertTo(value, Boolean.class));
 		}    else {
@@ -412,22 +436,22 @@ public class RecipientList extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			return this.getExpression();
 		}		else if (PROPERTY_DELIMITER.equals(id)) {
 			return this.getDelimiter();
+		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
+			return this.getParallelProcessing();
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			return this.getStrategyRef();
 		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
 			return this.getStrategyMethodName();
-		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
-			return this.getExecutorServiceRef();
-		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
-			return this.getOnPrepareRef();
-		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
-			return this.getParallelProcessing();
 		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
 			return this.getStrategyMethodAllowNull();
+		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
+			return this.getExecutorServiceRef();
 		}		else if (PROPERTY_STOPONEXCEPTION.equals(id)) {
 			return this.getStopOnException();
 		}		else if (PROPERTY_IGNOREINVALIDENDPOINTS.equals(id)) {
@@ -436,6 +460,8 @@ public class RecipientList extends AbstractNode {
 			return this.getStreaming();
 		}		else if (PROPERTY_TIMEOUT.equals(id)) {
 			return this.getTimeout();
+		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
+			return this.getOnPrepareRef();
 		}		else if (PROPERTY_SHAREUNITOFWORK.equals(id)) {
 			return this.getShareUnitOfWork();
 		}    else {
@@ -447,18 +473,19 @@ public class RecipientList extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		RecipientListDefinition answer = new RecipientListDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
     answer.setDelimiter(toXmlPropertyValue(PROPERTY_DELIMITER, this.getDelimiter()));
+    answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
     answer.setStrategyRef(toXmlPropertyValue(PROPERTY_STRATEGYREF, this.getStrategyRef()));
     answer.setStrategyMethodName(toXmlPropertyValue(PROPERTY_STRATEGYMETHODNAME, this.getStrategyMethodName()));
-    answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
-    answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
-    answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
     answer.setStrategyMethodAllowNull(toXmlPropertyValue(PROPERTY_STRATEGYMETHODALLOWNULL, this.getStrategyMethodAllowNull()));
+    answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
     answer.setStopOnException(toXmlPropertyValue(PROPERTY_STOPONEXCEPTION, this.getStopOnException()));
     answer.setIgnoreInvalidEndpoints(toXmlPropertyValue(PROPERTY_IGNOREINVALIDENDPOINTS, this.getIgnoreInvalidEndpoints()));
     answer.setStreaming(toXmlPropertyValue(PROPERTY_STREAMING, this.getStreaming()));
     answer.setTimeout(toXmlPropertyValue(PROPERTY_TIMEOUT, this.getTimeout()));
+    answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
     answer.setShareUnitOfWork(toXmlPropertyValue(PROPERTY_SHAREUNITOFWORK, this.getShareUnitOfWork()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
@@ -477,18 +504,19 @@ public class RecipientList extends AbstractNode {
     
     if (processor instanceof RecipientListDefinition) {
       RecipientListDefinition node = (RecipientListDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExpression(node.getExpression());
       this.setDelimiter(node.getDelimiter());
+      this.setParallelProcessing(node.getParallelProcessing());
       this.setStrategyRef(node.getStrategyRef());
       this.setStrategyMethodName(node.getStrategyMethodName());
-      this.setExecutorServiceRef(node.getExecutorServiceRef());
-      this.setOnPrepareRef(node.getOnPrepareRef());
-      this.setParallelProcessing(node.getParallelProcessing());
       this.setStrategyMethodAllowNull(node.getStrategyMethodAllowNull());
+      this.setExecutorServiceRef(node.getExecutorServiceRef());
       this.setStopOnException(node.getStopOnException());
       this.setIgnoreInvalidEndpoints(node.getIgnoreInvalidEndpoints());
       this.setStreaming(node.getStreaming());
       this.setTimeout(node.getTimeout());
+      this.setOnPrepareRef(node.getOnPrepareRef());
       this.setShareUnitOfWork(node.getShareUnitOfWork());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof RecipientListDefinition. Was " + processor.getClass().getName());

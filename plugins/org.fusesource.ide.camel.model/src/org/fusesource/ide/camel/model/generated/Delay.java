@@ -38,11 +38,13 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Delay extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Delay.InheritErrorHandler";
 	public static final String PROPERTY_EXPRESSION = "Delay.Expression";
 	public static final String PROPERTY_EXECUTORSERVICEREF = "Delay.ExecutorServiceRef";
 	public static final String PROPERTY_ASYNCDELAYED = "Delay.AsyncDelayed";
 	public static final String PROPERTY_CALLERRUNSWHENREJECTED = "Delay.CallerRunsWhenRejected";
 	
+	private Boolean inheritErrorHandler;
 	private ExpressionDefinition expression;
 	private String executorServiceRef;
 	private Boolean asyncDelayed;
@@ -79,6 +81,24 @@ public class Delay extends AbstractNode {
 
 
 	
+
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
 
 	/**
 	 * @return the expression
@@ -162,12 +182,14 @@ public class Delay extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelDelayInheritErrorHandler);
+    
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelDelayExpression);
     		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelDelayExecutorServiceRef);
       	PropertyDescriptor descAsyncDelayed = new BooleanPropertyDescriptor(PROPERTY_ASYNCDELAYED, Messages.propertyLabelDelayAsyncDelayed);
       	PropertyDescriptor descCallerRunsWhenRejected = new BooleanPropertyDescriptor(PROPERTY_CALLERRUNSWHENREJECTED, Messages.propertyLabelDelayCallerRunsWhenRejected);
-  		descriptors.put(PROPERTY_EXPRESSION, descExpression);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXPRESSION, descExpression);
 		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
 		descriptors.put(PROPERTY_ASYNCDELAYED, descAsyncDelayed);
 		descriptors.put(PROPERTY_CALLERRUNSWHENREJECTED, descCallerRunsWhenRejected);
@@ -178,7 +200,9 @@ public class Delay extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			setExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			setExecutorServiceRef(Objects.convertTo(value, String.class));
@@ -196,7 +220,9 @@ public class Delay extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			return this.getExpression();
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			return this.getExecutorServiceRef();
@@ -213,6 +239,7 @@ public class Delay extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		DelayDefinition answer = new DelayDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
     answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
     answer.setAsyncDelayed(toXmlPropertyValue(PROPERTY_ASYNCDELAYED, this.getAsyncDelayed()));
@@ -234,6 +261,7 @@ public class Delay extends AbstractNode {
     
     if (processor instanceof DelayDefinition) {
       DelayDefinition node = (DelayDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExpression(node.getExpression());
       this.setExecutorServiceRef(node.getExecutorServiceRef());
       this.setAsyncDelayed(node.getAsyncDelayed());

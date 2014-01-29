@@ -39,18 +39,18 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Aggregate extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Aggregate.InheritErrorHandler";
 	public static final String PROPERTY_CORRELATIONEXPRESSION = "Aggregate.CorrelationExpression";
 	public static final String PROPERTY_COMPLETIONPREDICATE = "Aggregate.CompletionPredicate";
 	public static final String PROPERTY_COMPLETIONTIMEOUTEXPRESSION = "Aggregate.CompletionTimeoutExpression";
 	public static final String PROPERTY_COMPLETIONSIZEEXPRESSION = "Aggregate.CompletionSizeExpression";
+	public static final String PROPERTY_PARALLELPROCESSING = "Aggregate.ParallelProcessing";
+	public static final String PROPERTY_OPTIMISTICLOCKING = "Aggregate.OptimisticLocking";
 	public static final String PROPERTY_EXECUTORSERVICEREF = "Aggregate.ExecutorServiceRef";
 	public static final String PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF = "Aggregate.TimeoutCheckerExecutorServiceRef";
 	public static final String PROPERTY_AGGREGATIONREPOSITORYREF = "Aggregate.AggregationRepositoryRef";
 	public static final String PROPERTY_STRATEGYREF = "Aggregate.StrategyRef";
 	public static final String PROPERTY_STRATEGYMETHODNAME = "Aggregate.StrategyMethodName";
-	public static final String PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION = "Aggregate.OptimisticLockRetryPolicyDefinition";
-	public static final String PROPERTY_PARALLELPROCESSING = "Aggregate.ParallelProcessing";
-	public static final String PROPERTY_OPTIMISTICLOCKING = "Aggregate.OptimisticLocking";
 	public static final String PROPERTY_STRATEGYMETHODALLOWNULL = "Aggregate.StrategyMethodAllowNull";
 	public static final String PROPERTY_COMPLETIONSIZE = "Aggregate.CompletionSize";
 	public static final String PROPERTY_COMPLETIONINTERVAL = "Aggregate.CompletionInterval";
@@ -62,19 +62,20 @@ public class Aggregate extends AbstractNode {
 	public static final String PROPERTY_CLOSECORRELATIONKEYONCOMPLETION = "Aggregate.CloseCorrelationKeyOnCompletion";
 	public static final String PROPERTY_DISCARDONCOMPLETIONTIMEOUT = "Aggregate.DiscardOnCompletionTimeout";
 	public static final String PROPERTY_FORCECOMPLETIONONSTOP = "Aggregate.ForceCompletionOnStop";
+	public static final String PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION = "Aggregate.OptimisticLockRetryPolicyDefinition";
 	
+	private Boolean inheritErrorHandler;
 	private ExpressionDefinition correlationExpression;
 	private ExpressionDefinition completionPredicate;
 	private ExpressionDefinition completionTimeoutExpression;
 	private ExpressionDefinition completionSizeExpression;
+	private Boolean parallelProcessing;
+	private Boolean optimisticLocking;
 	private String executorServiceRef;
 	private String timeoutCheckerExecutorServiceRef;
 	private String aggregationRepositoryRef;
 	private String strategyRef;
 	private String strategyMethodName;
-	private OptimisticLockRetryPolicyDefinition optimisticLockRetryPolicyDefinition;
-	private Boolean parallelProcessing;
-	private Boolean optimisticLocking;
 	private Boolean strategyMethodAllowNull;
 	private Integer completionSize;
 	private Long completionInterval;
@@ -86,6 +87,7 @@ public class Aggregate extends AbstractNode {
 	private Integer closeCorrelationKeyOnCompletion;
 	private Boolean discardOnCompletionTimeout;
 	private Boolean forceCompletionOnStop;
+	private OptimisticLockRetryPolicyDefinition optimisticLockRetryPolicyDefinition;
 	
     public Aggregate() {
     }		
@@ -118,6 +120,24 @@ public class Aggregate extends AbstractNode {
 
 
 	
+
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
 
 	/**
 	 * @return the correlationExpression
@@ -188,6 +208,42 @@ public class Aggregate extends AbstractNode {
 		this.completionSizeExpression = completionSizeExpression;
 		if (!isSame(oldValue, completionSizeExpression)) {
 		    firePropertyChange(PROPERTY_COMPLETIONSIZEEXPRESSION, oldValue, completionSizeExpression);
+		}
+	}
+
+	/**
+	 * @return the parallelProcessing
+	 */
+	public Boolean getParallelProcessing() {
+		return this.parallelProcessing;
+	}
+	
+	/**
+	 * @param parallelProcessing the parallelProcessing to set
+	 */
+	public void setParallelProcessing(Boolean parallelProcessing) {
+		Boolean oldValue = this.parallelProcessing;
+		this.parallelProcessing = parallelProcessing;
+		if (!isSame(oldValue, parallelProcessing)) {
+		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
+		}
+	}
+
+	/**
+	 * @return the optimisticLocking
+	 */
+	public Boolean getOptimisticLocking() {
+		return this.optimisticLocking;
+	}
+	
+	/**
+	 * @param optimisticLocking the optimisticLocking to set
+	 */
+	public void setOptimisticLocking(Boolean optimisticLocking) {
+		Boolean oldValue = this.optimisticLocking;
+		this.optimisticLocking = optimisticLocking;
+		if (!isSame(oldValue, optimisticLocking)) {
+		    firePropertyChange(PROPERTY_OPTIMISTICLOCKING, oldValue, optimisticLocking);
 		}
 	}
 
@@ -278,60 +334,6 @@ public class Aggregate extends AbstractNode {
 		this.strategyMethodName = strategyMethodName;
 		if (!isSame(oldValue, strategyMethodName)) {
 		    firePropertyChange(PROPERTY_STRATEGYMETHODNAME, oldValue, strategyMethodName);
-		}
-	}
-
-	/**
-	 * @return the optimisticLockRetryPolicyDefinition
-	 */
-	public OptimisticLockRetryPolicyDefinition getOptimisticLockRetryPolicyDefinition() {
-		return this.optimisticLockRetryPolicyDefinition;
-	}
-	
-	/**
-	 * @param optimisticLockRetryPolicyDefinition the optimisticLockRetryPolicyDefinition to set
-	 */
-	public void setOptimisticLockRetryPolicyDefinition(OptimisticLockRetryPolicyDefinition optimisticLockRetryPolicyDefinition) {
-		OptimisticLockRetryPolicyDefinition oldValue = this.optimisticLockRetryPolicyDefinition;
-		this.optimisticLockRetryPolicyDefinition = optimisticLockRetryPolicyDefinition;
-		if (!isSame(oldValue, optimisticLockRetryPolicyDefinition)) {
-		    firePropertyChange(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, oldValue, optimisticLockRetryPolicyDefinition);
-		}
-	}
-
-	/**
-	 * @return the parallelProcessing
-	 */
-	public Boolean getParallelProcessing() {
-		return this.parallelProcessing;
-	}
-	
-	/**
-	 * @param parallelProcessing the parallelProcessing to set
-	 */
-	public void setParallelProcessing(Boolean parallelProcessing) {
-		Boolean oldValue = this.parallelProcessing;
-		this.parallelProcessing = parallelProcessing;
-		if (!isSame(oldValue, parallelProcessing)) {
-		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
-		}
-	}
-
-	/**
-	 * @return the optimisticLocking
-	 */
-	public Boolean getOptimisticLocking() {
-		return this.optimisticLocking;
-	}
-	
-	/**
-	 * @param optimisticLocking the optimisticLocking to set
-	 */
-	public void setOptimisticLocking(Boolean optimisticLocking) {
-		Boolean oldValue = this.optimisticLocking;
-		this.optimisticLocking = optimisticLocking;
-		if (!isSame(oldValue, optimisticLocking)) {
-		    firePropertyChange(PROPERTY_OPTIMISTICLOCKING, oldValue, optimisticLocking);
 		}
 	}
 
@@ -533,6 +535,24 @@ public class Aggregate extends AbstractNode {
 		}
 	}
 
+	/**
+	 * @return the optimisticLockRetryPolicyDefinition
+	 */
+	public OptimisticLockRetryPolicyDefinition getOptimisticLockRetryPolicyDefinition() {
+		return this.optimisticLockRetryPolicyDefinition;
+	}
+	
+	/**
+	 * @param optimisticLockRetryPolicyDefinition the optimisticLockRetryPolicyDefinition to set
+	 */
+	public void setOptimisticLockRetryPolicyDefinition(OptimisticLockRetryPolicyDefinition optimisticLockRetryPolicyDefinition) {
+		OptimisticLockRetryPolicyDefinition oldValue = this.optimisticLockRetryPolicyDefinition;
+		this.optimisticLockRetryPolicyDefinition = optimisticLockRetryPolicyDefinition;
+		if (!isSame(oldValue, optimisticLockRetryPolicyDefinition)) {
+		    firePropertyChange(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, oldValue, optimisticLockRetryPolicyDefinition);
+		}
+	}
+
 
 	
 	/*
@@ -543,7 +563,8 @@ public class Aggregate extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelAggregateInheritErrorHandler);
+    
   	PropertyDescriptor descCorrelationExpression = new ExpressionPropertyDescriptor(PROPERTY_CORRELATIONEXPRESSION, Messages.propertyLabelAggregateCorrelationExpression);
     
   	PropertyDescriptor descCompletionPredicate = new ExpressionPropertyDescriptor(PROPERTY_COMPLETIONPREDICATE, Messages.propertyLabelAggregateCompletionPredicate);
@@ -551,16 +572,13 @@ public class Aggregate extends AbstractNode {
   	PropertyDescriptor descCompletionTimeoutExpression = new ExpressionPropertyDescriptor(PROPERTY_COMPLETIONTIMEOUTEXPRESSION, Messages.propertyLabelAggregateCompletionTimeoutExpression);
     
   	PropertyDescriptor descCompletionSizeExpression = new ExpressionPropertyDescriptor(PROPERTY_COMPLETIONSIZEEXPRESSION, Messages.propertyLabelAggregateCompletionSizeExpression);
+      	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelAggregateParallelProcessing);
+      	PropertyDescriptor descOptimisticLocking = new BooleanPropertyDescriptor(PROPERTY_OPTIMISTICLOCKING, Messages.propertyLabelAggregateOptimisticLocking);
     		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelAggregateExecutorServiceRef);
     		PropertyDescriptor descTimeoutCheckerExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF, Messages.propertyLabelAggregateTimeoutCheckerExecutorServiceRef);
     		PropertyDescriptor descAggregationRepositoryRef = new TextPropertyDescriptor(PROPERTY_AGGREGATIONREPOSITORYREF, Messages.propertyLabelAggregateAggregationRepositoryRef);
     		PropertyDescriptor descStrategyRef = new TextPropertyDescriptor(PROPERTY_STRATEGYREF, Messages.propertyLabelAggregateStrategyRef);
     		PropertyDescriptor descStrategyMethodName = new TextPropertyDescriptor(PROPERTY_STRATEGYMETHODNAME, Messages.propertyLabelAggregateStrategyMethodName);
-    
-      
-		PropertyDescriptor descOptimisticLockRetryPolicyDefinition = new ComplexPropertyDescriptor(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, Messages.propertyLabelAggregateOptimisticLockRetryPolicyDefinition, OptimisticLockRetryPolicyDefinition.class);
-  	      	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelAggregateParallelProcessing);
-      	PropertyDescriptor descOptimisticLocking = new BooleanPropertyDescriptor(PROPERTY_OPTIMISTICLOCKING, Messages.propertyLabelAggregateOptimisticLocking);
       	PropertyDescriptor descStrategyMethodAllowNull = new BooleanPropertyDescriptor(PROPERTY_STRATEGYMETHODALLOWNULL, Messages.propertyLabelAggregateStrategyMethodAllowNull);
     		PropertyDescriptor descCompletionSize = new TextPropertyDescriptor(PROPERTY_COMPLETIONSIZE, Messages.propertyLabelAggregateCompletionSize);
     		PropertyDescriptor descCompletionInterval = new TextPropertyDescriptor(PROPERTY_COMPLETIONINTERVAL, Messages.propertyLabelAggregateCompletionInterval);
@@ -572,18 +590,21 @@ public class Aggregate extends AbstractNode {
     		PropertyDescriptor descCloseCorrelationKeyOnCompletion = new TextPropertyDescriptor(PROPERTY_CLOSECORRELATIONKEYONCOMPLETION, Messages.propertyLabelAggregateCloseCorrelationKeyOnCompletion);
       	PropertyDescriptor descDiscardOnCompletionTimeout = new BooleanPropertyDescriptor(PROPERTY_DISCARDONCOMPLETIONTIMEOUT, Messages.propertyLabelAggregateDiscardOnCompletionTimeout);
       	PropertyDescriptor descForceCompletionOnStop = new BooleanPropertyDescriptor(PROPERTY_FORCECOMPLETIONONSTOP, Messages.propertyLabelAggregateForceCompletionOnStop);
-  		descriptors.put(PROPERTY_CORRELATIONEXPRESSION, descCorrelationExpression);
+    
+      
+		PropertyDescriptor descOptimisticLockRetryPolicyDefinition = new ComplexPropertyDescriptor(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, Messages.propertyLabelAggregateOptimisticLockRetryPolicyDefinition, OptimisticLockRetryPolicyDefinition.class);
+  	  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_CORRELATIONEXPRESSION, descCorrelationExpression);
 		descriptors.put(PROPERTY_COMPLETIONPREDICATE, descCompletionPredicate);
 		descriptors.put(PROPERTY_COMPLETIONTIMEOUTEXPRESSION, descCompletionTimeoutExpression);
 		descriptors.put(PROPERTY_COMPLETIONSIZEEXPRESSION, descCompletionSizeExpression);
+		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
+		descriptors.put(PROPERTY_OPTIMISTICLOCKING, descOptimisticLocking);
 		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
 		descriptors.put(PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF, descTimeoutCheckerExecutorServiceRef);
 		descriptors.put(PROPERTY_AGGREGATIONREPOSITORYREF, descAggregationRepositoryRef);
 		descriptors.put(PROPERTY_STRATEGYREF, descStrategyRef);
 		descriptors.put(PROPERTY_STRATEGYMETHODNAME, descStrategyMethodName);
-		descriptors.put(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, descOptimisticLockRetryPolicyDefinition);
-		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
-		descriptors.put(PROPERTY_OPTIMISTICLOCKING, descOptimisticLocking);
 		descriptors.put(PROPERTY_STRATEGYMETHODALLOWNULL, descStrategyMethodAllowNull);
 		descriptors.put(PROPERTY_COMPLETIONSIZE, descCompletionSize);
 		descriptors.put(PROPERTY_COMPLETIONINTERVAL, descCompletionInterval);
@@ -595,6 +616,7 @@ public class Aggregate extends AbstractNode {
 		descriptors.put(PROPERTY_CLOSECORRELATIONKEYONCOMPLETION, descCloseCorrelationKeyOnCompletion);
 		descriptors.put(PROPERTY_DISCARDONCOMPLETIONTIMEOUT, descDiscardOnCompletionTimeout);
 		descriptors.put(PROPERTY_FORCECOMPLETIONONSTOP, descForceCompletionOnStop);
+		descriptors.put(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, descOptimisticLockRetryPolicyDefinition);
 	}
 	
 	/* (non-Javadoc)
@@ -602,7 +624,9 @@ public class Aggregate extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_CORRELATIONEXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_CORRELATIONEXPRESSION.equals(id)) {
 			setCorrelationExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}		else if (PROPERTY_COMPLETIONPREDICATE.equals(id)) {
 			setCompletionPredicate(Objects.convertTo(value, ExpressionDefinition.class));
@@ -610,6 +634,10 @@ public class Aggregate extends AbstractNode {
 			setCompletionTimeoutExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}		else if (PROPERTY_COMPLETIONSIZEEXPRESSION.equals(id)) {
 			setCompletionSizeExpression(Objects.convertTo(value, ExpressionDefinition.class));
+		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
+			setParallelProcessing(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_OPTIMISTICLOCKING.equals(id)) {
+			setOptimisticLocking(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			setExecutorServiceRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF.equals(id)) {
@@ -620,12 +648,6 @@ public class Aggregate extends AbstractNode {
 			setStrategyRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
 			setStrategyMethodName(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION.equals(id)) {
-			setOptimisticLockRetryPolicyDefinition(Objects.convertTo(value, OptimisticLockRetryPolicyDefinition.class));
-		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
-			setParallelProcessing(Objects.convertTo(value, Boolean.class));
-		}		else if (PROPERTY_OPTIMISTICLOCKING.equals(id)) {
-			setOptimisticLocking(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
 			setStrategyMethodAllowNull(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_COMPLETIONSIZE.equals(id)) {
@@ -648,6 +670,8 @@ public class Aggregate extends AbstractNode {
 			setDiscardOnCompletionTimeout(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_FORCECOMPLETIONONSTOP.equals(id)) {
 			setForceCompletionOnStop(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION.equals(id)) {
+			setOptimisticLockRetryPolicyDefinition(Objects.convertTo(value, OptimisticLockRetryPolicyDefinition.class));
 		}    else {
 			super.setPropertyValue(id, value);
 		}
@@ -658,7 +682,9 @@ public class Aggregate extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_CORRELATIONEXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_CORRELATIONEXPRESSION.equals(id)) {
 			return this.getCorrelationExpression();
 		}		else if (PROPERTY_COMPLETIONPREDICATE.equals(id)) {
 			return this.getCompletionPredicate();
@@ -666,6 +692,10 @@ public class Aggregate extends AbstractNode {
 			return this.getCompletionTimeoutExpression();
 		}		else if (PROPERTY_COMPLETIONSIZEEXPRESSION.equals(id)) {
 			return this.getCompletionSizeExpression();
+		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
+			return this.getParallelProcessing();
+		}		else if (PROPERTY_OPTIMISTICLOCKING.equals(id)) {
+			return this.getOptimisticLocking();
 		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			return this.getExecutorServiceRef();
 		}		else if (PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF.equals(id)) {
@@ -676,12 +706,6 @@ public class Aggregate extends AbstractNode {
 			return this.getStrategyRef();
 		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
 			return this.getStrategyMethodName();
-		}		else if (PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION.equals(id)) {
-			return this.getOptimisticLockRetryPolicyDefinition();
-		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
-			return this.getParallelProcessing();
-		}		else if (PROPERTY_OPTIMISTICLOCKING.equals(id)) {
-			return this.getOptimisticLocking();
 		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
 			return this.getStrategyMethodAllowNull();
 		}		else if (PROPERTY_COMPLETIONSIZE.equals(id)) {
@@ -704,6 +728,8 @@ public class Aggregate extends AbstractNode {
 			return this.getDiscardOnCompletionTimeout();
 		}		else if (PROPERTY_FORCECOMPLETIONONSTOP.equals(id)) {
 			return this.getForceCompletionOnStop();
+		}		else if (PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION.equals(id)) {
+			return this.getOptimisticLockRetryPolicyDefinition();
 		}    else {
 			return super.getPropertyValue(id);
 		}
@@ -713,18 +739,18 @@ public class Aggregate extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		AggregateDefinition answer = new AggregateDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     Objects.setField(answer, "correlationExpression", toXmlPropertyValue(PROPERTY_CORRELATIONEXPRESSION, this.getCorrelationExpression()));
     Objects.setField(answer, "completionPredicate", toXmlPropertyValue(PROPERTY_COMPLETIONPREDICATE, this.getCompletionPredicate()));
     Objects.setField(answer, "completionTimeoutExpression", toXmlPropertyValue(PROPERTY_COMPLETIONTIMEOUTEXPRESSION, this.getCompletionTimeoutExpression()));
     Objects.setField(answer, "completionSizeExpression", toXmlPropertyValue(PROPERTY_COMPLETIONSIZEEXPRESSION, this.getCompletionSizeExpression()));
+    Objects.setField(answer, "parallelProcessing", toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
+    Objects.setField(answer, "optimisticLocking", toXmlPropertyValue(PROPERTY_OPTIMISTICLOCKING, this.getOptimisticLocking()));
     answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
     answer.setTimeoutCheckerExecutorServiceRef(toXmlPropertyValue(PROPERTY_TIMEOUTCHECKEREXECUTORSERVICEREF, this.getTimeoutCheckerExecutorServiceRef()));
     answer.setAggregationRepositoryRef(toXmlPropertyValue(PROPERTY_AGGREGATIONREPOSITORYREF, this.getAggregationRepositoryRef()));
     answer.setStrategyRef(toXmlPropertyValue(PROPERTY_STRATEGYREF, this.getStrategyRef()));
     answer.setStrategyMethodName(toXmlPropertyValue(PROPERTY_STRATEGYMETHODNAME, this.getStrategyMethodName()));
-    answer.setOptimisticLockRetryPolicyDefinition(toXmlPropertyValue(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, this.getOptimisticLockRetryPolicyDefinition()));
-    Objects.setField(answer, "parallelProcessing", toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
-    Objects.setField(answer, "optimisticLocking", toXmlPropertyValue(PROPERTY_OPTIMISTICLOCKING, this.getOptimisticLocking()));
     answer.setStrategyMethodAllowNull(toXmlPropertyValue(PROPERTY_STRATEGYMETHODALLOWNULL, this.getStrategyMethodAllowNull()));
     answer.setCompletionSize(toXmlPropertyValue(PROPERTY_COMPLETIONSIZE, this.getCompletionSize()));
     answer.setCompletionInterval(toXmlPropertyValue(PROPERTY_COMPLETIONINTERVAL, this.getCompletionInterval()));
@@ -736,6 +762,7 @@ public class Aggregate extends AbstractNode {
     answer.setCloseCorrelationKeyOnCompletion(toXmlPropertyValue(PROPERTY_CLOSECORRELATIONKEYONCOMPLETION, this.getCloseCorrelationKeyOnCompletion()));
     answer.setDiscardOnCompletionTimeout(toXmlPropertyValue(PROPERTY_DISCARDONCOMPLETIONTIMEOUT, this.getDiscardOnCompletionTimeout()));
     answer.setForceCompletionOnStop(toXmlPropertyValue(PROPERTY_FORCECOMPLETIONONSTOP, this.getForceCompletionOnStop()));
+    answer.setOptimisticLockRetryPolicyDefinition(toXmlPropertyValue(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, this.getOptimisticLockRetryPolicyDefinition()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -753,18 +780,18 @@ public class Aggregate extends AbstractNode {
     
     if (processor instanceof AggregateDefinition) {
       AggregateDefinition node = (AggregateDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       Objects.setField(this, "correlationExpression", node.getCorrelationExpression());
       Objects.setField(this, "completionPredicate", node.getCompletionPredicate());
       Objects.setField(this, "completionTimeoutExpression", node.getCompletionTimeoutExpression());
       Objects.setField(this, "completionSizeExpression", node.getCompletionSizeExpression());
+      Objects.setField(this, "parallelProcessing", node.getParallelProcessing());
+      Objects.setField(this, "optimisticLocking", node.getOptimisticLocking());
       this.setExecutorServiceRef(node.getExecutorServiceRef());
       this.setTimeoutCheckerExecutorServiceRef(node.getTimeoutCheckerExecutorServiceRef());
       this.setAggregationRepositoryRef(node.getAggregationRepositoryRef());
       this.setStrategyRef(node.getStrategyRef());
       this.setStrategyMethodName(node.getStrategyMethodName());
-      this.setOptimisticLockRetryPolicyDefinition(node.getOptimisticLockRetryPolicyDefinition());
-      Objects.setField(this, "parallelProcessing", node.getParallelProcessing());
-      Objects.setField(this, "optimisticLocking", node.getOptimisticLocking());
       this.setStrategyMethodAllowNull(node.getStrategyMethodAllowNull());
       this.setCompletionSize(node.getCompletionSize());
       this.setCompletionInterval(node.getCompletionInterval());
@@ -776,6 +803,7 @@ public class Aggregate extends AbstractNode {
       this.setCloseCorrelationKeyOnCompletion(node.getCloseCorrelationKeyOnCompletion());
       this.setDiscardOnCompletionTimeout(node.getDiscardOnCompletionTimeout());
       this.setForceCompletionOnStop(node.getForceCompletionOnStop());
+      this.setOptimisticLockRetryPolicyDefinition(node.getOptimisticLockRetryPolicyDefinition());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof AggregateDefinition. Was " + processor.getClass().getName());
     }

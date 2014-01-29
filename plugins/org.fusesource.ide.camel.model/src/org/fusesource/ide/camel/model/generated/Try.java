@@ -38,7 +38,9 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Try extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Try.InheritErrorHandler";
 	
+	private Boolean inheritErrorHandler;
 	
     public Try() {
     }		
@@ -72,6 +74,24 @@ public class Try extends AbstractNode {
 
 	
 
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
+
 
 	
 	/*
@@ -82,6 +102,8 @@ public class Try extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelTryInheritErrorHandler);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
 	}
 	
 	/* (non-Javadoc)
@@ -89,7 +111,9 @@ public class Try extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-    {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}    else {
 			super.setPropertyValue(id, value);
 		}
 	}
@@ -99,7 +123,9 @@ public class Try extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-    {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}    else {
 			return super.getPropertyValue(id);
 		}
 	}
@@ -108,6 +134,7 @@ public class Try extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		TryDefinition answer = new TryDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -125,6 +152,7 @@ public class Try extends AbstractNode {
     
     if (processor instanceof TryDefinition) {
       TryDefinition node = (TryDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof TryDefinition. Was " + processor.getClass().getName());
     }

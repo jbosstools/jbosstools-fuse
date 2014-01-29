@@ -38,8 +38,10 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class SetBody extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "SetBody.InheritErrorHandler";
 	public static final String PROPERTY_EXPRESSION = "SetBody.Expression";
 	
+	private Boolean inheritErrorHandler;
 	private ExpressionDefinition expression;
 	
     public SetBody() {
@@ -75,6 +77,24 @@ public class SetBody extends AbstractNode {
 	
 
 	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
+
+	/**
 	 * @return the expression
 	 */
 	public ExpressionDefinition getExpression() {
@@ -102,9 +122,11 @@ public class SetBody extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSetBodyInheritErrorHandler);
+    
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelSetBodyExpression);
-  		descriptors.put(PROPERTY_EXPRESSION, descExpression);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXPRESSION, descExpression);
 	}
 	
 	/* (non-Javadoc)
@@ -112,7 +134,9 @@ public class SetBody extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			setExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}    else {
 			super.setPropertyValue(id, value);
@@ -124,7 +148,9 @@ public class SetBody extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			return this.getExpression();
 		}    else {
 			return super.getPropertyValue(id);
@@ -135,6 +161,7 @@ public class SetBody extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		SetBodyDefinition answer = new SetBodyDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
@@ -153,6 +180,7 @@ public class SetBody extends AbstractNode {
     
     if (processor instanceof SetBodyDefinition) {
       SetBodyDefinition node = (SetBodyDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExpression(node.getExpression());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof SetBodyDefinition. Was " + processor.getClass().getName());

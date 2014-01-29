@@ -40,23 +40,25 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Threads extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Threads.InheritErrorHandler";
 	public static final String PROPERTY_EXECUTORSERVICEREF = "Threads.ExecutorServiceRef";
-	public static final String PROPERTY_THREADNAME = "Threads.ThreadName";
 	public static final String PROPERTY_POOLSIZE = "Threads.PoolSize";
 	public static final String PROPERTY_MAXPOOLSIZE = "Threads.MaxPoolSize";
 	public static final String PROPERTY_KEEPALIVETIME = "Threads.KeepAliveTime";
 	public static final String PROPERTY_TIMEUNIT = "Threads.TimeUnit";
 	public static final String PROPERTY_MAXQUEUESIZE = "Threads.MaxQueueSize";
+	public static final String PROPERTY_THREADNAME = "Threads.ThreadName";
 	public static final String PROPERTY_REJECTEDPOLICY = "Threads.RejectedPolicy";
 	public static final String PROPERTY_CALLERRUNSWHENREJECTED = "Threads.CallerRunsWhenRejected";
 	
+	private Boolean inheritErrorHandler;
 	private String executorServiceRef;
-	private String threadName;
 	private Integer poolSize;
 	private Integer maxPoolSize;
 	private Long keepAliveTime;
 	private TimeUnit timeUnit;
 	private Integer maxQueueSize;
+	private String threadName;
 	private ThreadPoolRejectedPolicy rejectedPolicy;
 	private Boolean callerRunsWhenRejected;
 	
@@ -93,6 +95,24 @@ public class Threads extends AbstractNode {
 	
 
 	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
+
+	/**
 	 * @return the executorServiceRef
 	 */
 	public String getExecutorServiceRef() {
@@ -107,24 +127,6 @@ public class Threads extends AbstractNode {
 		this.executorServiceRef = executorServiceRef;
 		if (!isSame(oldValue, executorServiceRef)) {
 		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
-		}
-	}
-
-	/**
-	 * @return the threadName
-	 */
-	public String getThreadName() {
-		return this.threadName;
-	}
-	
-	/**
-	 * @param threadName the threadName to set
-	 */
-	public void setThreadName(String threadName) {
-		String oldValue = this.threadName;
-		this.threadName = threadName;
-		if (!isSame(oldValue, threadName)) {
-		    firePropertyChange(PROPERTY_THREADNAME, oldValue, threadName);
 		}
 	}
 
@@ -219,6 +221,24 @@ public class Threads extends AbstractNode {
 	}
 
 	/**
+	 * @return the threadName
+	 */
+	public String getThreadName() {
+		return this.threadName;
+	}
+	
+	/**
+	 * @param threadName the threadName to set
+	 */
+	public void setThreadName(String threadName) {
+		String oldValue = this.threadName;
+		this.threadName = threadName;
+		if (!isSame(oldValue, threadName)) {
+		    firePropertyChange(PROPERTY_THREADNAME, oldValue, threadName);
+		}
+	}
+
+	/**
 	 * @return the rejectedPolicy
 	 */
 	public ThreadPoolRejectedPolicy getRejectedPolicy() {
@@ -264,22 +284,24 @@ public class Threads extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelThreadsExecutorServiceRef);
-    		PropertyDescriptor descThreadName = new TextPropertyDescriptor(PROPERTY_THREADNAME, Messages.propertyLabelThreadsThreadName);
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelThreadsInheritErrorHandler);
+    		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelThreadsExecutorServiceRef);
     		PropertyDescriptor descPoolSize = new TextPropertyDescriptor(PROPERTY_POOLSIZE, Messages.propertyLabelThreadsPoolSize);
     		PropertyDescriptor descMaxPoolSize = new TextPropertyDescriptor(PROPERTY_MAXPOOLSIZE, Messages.propertyLabelThreadsMaxPoolSize);
     		PropertyDescriptor descKeepAliveTime = new TextPropertyDescriptor(PROPERTY_KEEPALIVETIME, Messages.propertyLabelThreadsKeepAliveTime);
       	PropertyDescriptor descTimeUnit = new EnumPropertyDescriptor(PROPERTY_TIMEUNIT, Messages.propertyLabelThreadsTimeUnit, TimeUnit.class);
     		PropertyDescriptor descMaxQueueSize = new TextPropertyDescriptor(PROPERTY_MAXQUEUESIZE, Messages.propertyLabelThreadsMaxQueueSize);
+    		PropertyDescriptor descThreadName = new TextPropertyDescriptor(PROPERTY_THREADNAME, Messages.propertyLabelThreadsThreadName);
       	PropertyDescriptor descRejectedPolicy = new EnumPropertyDescriptor(PROPERTY_REJECTEDPOLICY, Messages.propertyLabelThreadsRejectedPolicy, ThreadPoolRejectedPolicy.class);
       	PropertyDescriptor descCallerRunsWhenRejected = new BooleanPropertyDescriptor(PROPERTY_CALLERRUNSWHENREJECTED, Messages.propertyLabelThreadsCallerRunsWhenRejected);
-  		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
-		descriptors.put(PROPERTY_THREADNAME, descThreadName);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
 		descriptors.put(PROPERTY_POOLSIZE, descPoolSize);
 		descriptors.put(PROPERTY_MAXPOOLSIZE, descMaxPoolSize);
 		descriptors.put(PROPERTY_KEEPALIVETIME, descKeepAliveTime);
 		descriptors.put(PROPERTY_TIMEUNIT, descTimeUnit);
 		descriptors.put(PROPERTY_MAXQUEUESIZE, descMaxQueueSize);
+		descriptors.put(PROPERTY_THREADNAME, descThreadName);
 		descriptors.put(PROPERTY_REJECTEDPOLICY, descRejectedPolicy);
 		descriptors.put(PROPERTY_CALLERRUNSWHENREJECTED, descCallerRunsWhenRejected);
 	}
@@ -289,10 +311,10 @@ public class Threads extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			setExecutorServiceRef(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_THREADNAME.equals(id)) {
-			setThreadName(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_POOLSIZE.equals(id)) {
 			setPoolSize(Objects.convertTo(value, Integer.class));
 		}		else if (PROPERTY_MAXPOOLSIZE.equals(id)) {
@@ -303,6 +325,8 @@ public class Threads extends AbstractNode {
 			setTimeUnit(Objects.convertTo(value, TimeUnit.class));
 		}		else if (PROPERTY_MAXQUEUESIZE.equals(id)) {
 			setMaxQueueSize(Objects.convertTo(value, Integer.class));
+		}		else if (PROPERTY_THREADNAME.equals(id)) {
+			setThreadName(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_REJECTEDPOLICY.equals(id)) {
 			setRejectedPolicy(Objects.convertTo(value, ThreadPoolRejectedPolicy.class));
 		}		else if (PROPERTY_CALLERRUNSWHENREJECTED.equals(id)) {
@@ -317,10 +341,10 @@ public class Threads extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
 			return this.getExecutorServiceRef();
-		}		else if (PROPERTY_THREADNAME.equals(id)) {
-			return this.getThreadName();
 		}		else if (PROPERTY_POOLSIZE.equals(id)) {
 			return this.getPoolSize();
 		}		else if (PROPERTY_MAXPOOLSIZE.equals(id)) {
@@ -331,6 +355,8 @@ public class Threads extends AbstractNode {
 			return this.getTimeUnit();
 		}		else if (PROPERTY_MAXQUEUESIZE.equals(id)) {
 			return this.getMaxQueueSize();
+		}		else if (PROPERTY_THREADNAME.equals(id)) {
+			return this.getThreadName();
 		}		else if (PROPERTY_REJECTEDPOLICY.equals(id)) {
 			return this.getRejectedPolicy();
 		}		else if (PROPERTY_CALLERRUNSWHENREJECTED.equals(id)) {
@@ -344,13 +370,14 @@ public class Threads extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		ThreadsDefinition answer = new ThreadsDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
-    answer.setThreadName(toXmlPropertyValue(PROPERTY_THREADNAME, this.getThreadName()));
     answer.setPoolSize(toXmlPropertyValue(PROPERTY_POOLSIZE, this.getPoolSize()));
     answer.setMaxPoolSize(toXmlPropertyValue(PROPERTY_MAXPOOLSIZE, this.getMaxPoolSize()));
     answer.setKeepAliveTime(toXmlPropertyValue(PROPERTY_KEEPALIVETIME, this.getKeepAliveTime()));
     answer.setTimeUnit(toXmlPropertyValue(PROPERTY_TIMEUNIT, this.getTimeUnit()));
     answer.setMaxQueueSize(toXmlPropertyValue(PROPERTY_MAXQUEUESIZE, this.getMaxQueueSize()));
+    answer.setThreadName(toXmlPropertyValue(PROPERTY_THREADNAME, this.getThreadName()));
     answer.setRejectedPolicy(toXmlPropertyValue(PROPERTY_REJECTEDPOLICY, this.getRejectedPolicy()));
     answer.setCallerRunsWhenRejected(toXmlPropertyValue(PROPERTY_CALLERRUNSWHENREJECTED, this.getCallerRunsWhenRejected()));
         super.savePropertiesToCamelDefinition(answer);
@@ -370,13 +397,14 @@ public class Threads extends AbstractNode {
     
     if (processor instanceof ThreadsDefinition) {
       ThreadsDefinition node = (ThreadsDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExecutorServiceRef(node.getExecutorServiceRef());
-      this.setThreadName(node.getThreadName());
       this.setPoolSize(node.getPoolSize());
       this.setMaxPoolSize(node.getMaxPoolSize());
       this.setKeepAliveTime(node.getKeepAliveTime());
       this.setTimeUnit(node.getTimeUnit());
       this.setMaxQueueSize(node.getMaxQueueSize());
+      this.setThreadName(node.getThreadName());
       this.setRejectedPolicy(node.getRejectedPolicy());
       this.setCallerRunsWhenRejected(node.getCallerRunsWhenRejected());
     } else {
