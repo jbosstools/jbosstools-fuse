@@ -30,7 +30,10 @@ import org.eclipse.jdt.core.JavaCore;
 public class IFiles {
 
 	public static File toFile(IFile file) {
-		return file.getLocation().toFile();
+		File f = file.getRawLocation() != null ? file.getRawLocation().toFile() : null;
+		if (f == null) f = file.getLocation() != null ? file.getLocation().toFile() : null;
+		if (f == null) f = file.getFullPath() != null ? file.getFullPath().toFile() : null;
+		return f;
 	}
 	
 	public static List<IFile> filter(IContainer container, Predicate<IFile> filter) throws CoreException {
