@@ -448,8 +448,7 @@ public class NewCamelTestWizard extends JUnitWizard {
 	
 	private IRunnableWithProgress addCamelTestToPomDeps(final IJavaProject project, final IRunnableWithProgress runnable) throws Exception {
 		// first load the pom file into some model
-		IPath pomPathValue = project.getProject().getParent().getRawLocation().append(project.getPath()).append("pom.xml");
-		//IPath pomPathValue = project.getProject().getRawLocation().append("pom.xml");
+		IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getPath().append("pom.xml"));
 		String pomPath = pomPathValue.toOSString();
 		final File pomFile = new File(pomPath);
 		final Model model = MavenPlugin.getMaven().readModel(pomFile);
