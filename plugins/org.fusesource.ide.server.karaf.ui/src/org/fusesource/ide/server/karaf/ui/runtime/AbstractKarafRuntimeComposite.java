@@ -54,6 +54,7 @@ import org.fusesource.ide.server.karaf.core.KarafUtils;
 import org.fusesource.ide.server.karaf.ui.Messages;
 
 
+@SuppressWarnings("restriction")
 public abstract class AbstractKarafRuntimeComposite extends Composite implements Listener{
 	
 	public static final String SEPARATOR = File.separator;
@@ -196,8 +197,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 			}
 
 			public void mouseUp(MouseEvent e) {
-				ir = ServerPlugin.findInstallableRuntime(runtimeWC
-						.getRuntimeType().getId());
+				ir = ServerPlugin.findInstallableRuntime(runtimeWC.getRuntimeType().getId());
 				btnDownloadAndInstallButton.setEnabled(ir != null);
 
 				if (ir == null) return;
@@ -211,20 +211,19 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				TaskModel taskModel = new TaskModel();
 				taskModel.putObject(LicenseWizardFragment.LICENSE, license);
 				TaskWizard wizard2 = new TaskWizard(
-						Messages.AbstractKarafRuntimeComposite_installDialogTitle, new WizardFragment() {
-							protected void createChildFragments(List list) {
-								list.add(new LicenseWizardFragment());
-							}
-						}, taskModel);
+					Messages.AbstractKarafRuntimeComposite_jboss_fuse_rt_label, new WizardFragment() {
+						protected void createChildFragments(List<WizardFragment> list) {
+							list.add(new LicenseWizardFragment());
+							list.add(new RTITargetFolderWizardFragment());
+						}
+					}, taskModel);
 
 				WizardDialog dialog2 = new WizardDialog(getShell(), wizard2);
 				if (dialog2.open() == Window.CANCEL)
 					return;
 
-				DirectoryDialog dialog = new DirectoryDialog(AbstractKarafRuntimeComposite.this.getShell());
-				dialog.setMessage(Messages.AbstractKarafRuntimeComposite_selectInstallDir);
-				dialog.setFilterPath(txtKarafDir.getText());
-				final String selectedDirectory = dialog.open();
+				final String selectedDirectory = (String)taskModel.getObject(RTITargetFolderWizardFragment.FUSE_RT_LOC);
+				
 				if (selectedDirectory != null) {
 					// ir.install(new Path(selectedDirectory));
 					final IPath installPath = new Path(selectedDirectory);

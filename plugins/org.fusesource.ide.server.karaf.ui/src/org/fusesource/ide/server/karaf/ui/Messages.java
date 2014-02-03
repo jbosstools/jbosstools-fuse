@@ -33,6 +33,7 @@ public class Messages extends NLS {
 	public static String AbstractKarafRuntimeComposite_browse_text;
 	public static String AbstractKarafRuntimeComposite_downloadAndInstall_text;
 	public static String AbstractKarafRuntimeComposite_downloadAndInstall_description;
+	public static String AbstractKarafRuntimeComposite_jboss_fuse_rt_label;
 	public static String AbstractKarafRuntimeComposite_runtimeinstall_label;
 	public static String AbstractKarafRuntimeComposite_installDialogTitle;
 	public static String AbstractKarafRuntimeComposite_selectInstallDir;
