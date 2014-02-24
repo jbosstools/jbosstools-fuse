@@ -1,12 +1,12 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>Restlet</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderHTTPEptRef.html" title="HTTP Endpoints"><link rel="prev" href="jetty.html" title="Jetty"><link rel="next" href="servlet.html" title="Servlet"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="restlet"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Restlet &#8212; provides Restlet-based endpoints for consuming and producing RESTful
-            resources</p></div><div class="refsection"><a name="d0e36895"></a><h2>Overview</h2><p>Restlet promotes decoupling of protocol and application concerns. The reference
+            resources</p></div><div class="refsection"><a name="d0e36910"></a><h2>Overview</h2><p>Restlet promotes decoupling of protocol and application concerns. The reference
             implementation of <a class="link" href="http://www.noelios.com/products/restlet-engine" target="_top">Restlet
                 Engine</a> supports a number of protocols. However, we have tested the HTTP
-            protocol only.</p></div><div class="refsection"><a name="d0e36903"></a><h2>URI format</h2><p>The URI format for a Restlet endpoint is:</p><pre class="programlisting">restlet:restletUrl[?options]</pre><p>Format of restletUrl:</p><pre class="programlisting">protocol://hostname[:port][/resourcePattern]</pre><p>The default port is port 80. We do not automatically switch default port
-            based on the protocol yet.</p><p>You can append query options to the URI in this format:
-                <code class="literal">?option=value&amp;option=value&amp;...</code></p></div><div class="refsection"><a name="d0e36920"></a><h2>Endpoint options</h2><p><a class="xref" href="restlet.html#RestletRefOptsTbl" title="Table&nbsp;30.&nbsp;Restlet endpoint options">Table&nbsp;30, &#8220;Restlet endpoint options&#8221;</a> lists the options for a Servlet endpoint.</p><div class="table"><a name="RestletRefOptsTbl"></a><p class="title"><b>Table&nbsp;30.&nbsp;Restlet endpoint options</b></p><div class="table-contents"><table summary="Restlet endpoint options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+            protocol only.</p></div><div class="refsection"><a name="d0e36918"></a><h2>URI format</h2><p>The URI format for a Restlet endpoint is:</p><pre class="programlisting">restlet:restletUrl[?options]</pre><p>Format of restletUrl:</p><pre class="programlisting">protocol://hostname[:port][/resourcePattern]</pre><p>The default port is <code class="literal">80</code>. We do not automatically switch the default
+            port based on the protocol.</p><p>You can append query options to the URI in this format:
+                <code class="literal">?option=value&amp;option=value&amp;...</code></p></div><div class="refsection"><a name="d0e36938"></a><h2>Endpoint options</h2><p><a class="xref" href="restlet.html#RestletRefOptsTbl" title="Table&nbsp;30.&nbsp;Restlet endpoint options">Table&nbsp;30, &#8220;Restlet endpoint options&#8221;</a> lists the options for a Servlet endpoint.</p><div class="table"><a name="RestletRefOptsTbl"></a><p class="title"><b>Table&nbsp;30.&nbsp;Restlet endpoint options</b></p><div class="table-contents"><table summary="Restlet endpoint options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="code">headerFilterStrategy</code>
                         </td><td>An instance of <code class="literal">RestletHeaderFilterStrategy</code></td><td>Use the <span class="italic">#</span> notation
                                 (<code class="literal">headerFilterStrategy=#</code><em class="replaceable"><code>refName</code></em>)
@@ -47,7 +47,7 @@
                         </td><td>
                             <code class="literal">true</code>
                         </td><td><span class="bold"><strong>Camel 2.6+</strong></span><span class="bold"><strong>Producer only:</strong></span> Throws an exception on a producer
-                            failure.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e37078"></a><h2>Component options</h2><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>These component options cannot be configured on the
+                            failure.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e37096"></a><h2>Component options</h2><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>These component options cannot be configured on the
             endpoint.</p></td></tr></table></div><p>The Restlet component can be configured using the following options (available as
                 <span class="bold"><strong>Apache Camel 2.10</strong></span> ) :</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="code">controllerDaemon</code>
@@ -111,7 +111,7 @@
                             information is safe only for intermediary components within the local
                             network. Other addresses could easily be changed by setting a fake
                             header, so should not be trusted for serious security checks.</td></tr><tr><td><code class="literal">reuseAddress</code></td><td><code class="literal">true</code></td><td>Enables/disables the <code class="literal">SO_REUSEADDR</code> socket option.
-                            See the <code class="literal">java.io.ServerSocket#reuseAddress</code> property.</td></tr></tbody></table></div></div><div class="refsection"><a name="d0e37277"></a><h2>Message headers</h2><p>Restlet endpoints use the following message headers:</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>
+                            See the <code class="literal">java.io.ServerSocket#reuseAddress</code> property.</td></tr></tbody></table></div></div><div class="refsection"><a name="d0e37295"></a><h2>Message headers</h2><p>Restlet endpoints use the following message headers:</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="code">Content-Type</code>
                         </td><td>
                             <code class="code">String</code>
@@ -173,7 +173,7 @@
                         </td><td>&nbsp;</td><td>Specifies the attributes of a Restlet message that get propagated to
                             Apache Camel IN headers.</td></tr><tr><td><code class="literal">cache-control</code></td><td><code class="literal">String</code> or <code class="literal">List&lt;CacheDirective&gt;</code></td><td>Apache Camel 2.11: User can set this option using either a
                                 <code class="literal">String</code> value or a list of
-                                <code class="literal">CacheDirective</code>.</td></tr></tbody></table></div></div><div class="refsection"><a name="d0e37466"></a><h2>Message Body</h2><p>Apache Camel stores the restlet response from the external server in the OUT body. All
+                                <code class="literal">CacheDirective</code>.</td></tr></tbody></table></div></div><div class="refsection"><a name="d0e37484"></a><h2>Message Body</h2><p>Apache Camel stores the restlet response from the external server in the OUT body. All
             headers from the IN message are copied to the OUT message, so that headers are preserved
             during routing.</p></div><div class="refsection"><a name="_IDU_Restlet_HSH_RestletEndpointwithAuthentication"></a><h2>Restlet Endpoint with Authentication</h2><p>The following route starts a <code class="literal">restlet</code> consumer endpoint that listens
             for <code class="literal">POST</code> requests on <a class="link" href="http://localhost:8080" target="_top">
@@ -210,7 +210,7 @@ headers.put("id", id);
 
 String response = (String) template.requestBodyAndHeaders("direct:start-auth", 
         "&lt;order foo='1'/&gt;", headers);</pre><p>The sample client sends a request to the <code class="literal">direct:start-auth</code> endpoint
-            with the following headers:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">CamelRestletLogin</code> (used internally by Apache Camel)</p></li><li class="listitem"><p><code class="literal">CamelRestletPassword</code> (used internally by Apache Camel)</p></li><li class="listitem"><p><code class="literal">id</code> (application header)</p></li></ul></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p><code class="literal">org.apache.camel.restlet.auth.login</code> and
+            with the following headers:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">CamelRestletLogin</code> (used internally by Apache Camel)</p></li><li class="listitem"><p><code class="literal">CamelRestletPassword</code> (used internally by Apache Camel)</p></li><li class="listitem"><p><code class="literal">id</code> (application header)</p></li></ul></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p><code class="literal">org.apache.camel.restlet.auth.login</code> and
                 <code class="literal">org.apache.camel.restlet.auth.password</code> will not be propagated
                 as Restlet header.</p></td></tr></table></div><p>The sample client gets a response like the following:</p><pre class="programlisting">received [&lt;order foo='1'/&gt;] as an order id = 89531</pre></div><div class="refsection"><a name="_IDU_Restlet_HSH_SinglerestletendpointtoservicemultiplemethodsandURItemplates20orlater"></a><h2>Single restlet endpoint to service multiple methods and URI templates (2.0 or
             later)</h2><p>It is possible to create a single route to service multiple HTTP methods using the
@@ -252,7 +252,7 @@ String response = (String) template.requestBodyAndHeaders("direct:start-auth",
         </p><p>You may want to use the <code class="literal">org.restlet.Response</code> API to populate the
             response. This gives you full access to the Restlet API and fine grained control of the
             response. See the route snippet below where we generate the response from an inlined
-            Camel <a class="link" href="Processor" target="_top">Processor</a>:</p><pre class="programlisting">from("restlet:http://localhost:" + portNum + "/users/{id}/like/{beer}")
+            Camel <a class="link" href="http://camel.apache.org/processor.html" target="_top">Processor</a>:</p><pre class="programlisting">from("restlet:http://localhost:" + portNum + "/users/{id}/like/{beer}")
      .process(new Processor() {
          public void process(Exchange exchange) throws Exception {
              // the Restlet request should be available if neeeded
@@ -272,12 +272,12 @@ String response = (String) template.requestBodyAndHeaders("direct:start-auth",
 &lt;bean id="restlet" class="org.apache.camel.component.RestletComponent"&gt;
   &lt;property name="maxThreads" value="100"/&gt;
 &lt;/bean&gt;
-</pre></div><div class="refsection"><a name="_IDU_Restlet_HSH_UsingtheRestletservletwithinawebapp"></a><h2>Using the Restlet servlet within a webapp</h2><p><span class="bold"><strong>Available as of Camel 2.8</strong></span> There are <a class="link" href="http://www.restlet.org/documentation/2.0/jee/ext/org/restlet/ext/servlet/ServerServlet.html" target="_top">three possible ways</a> to configure a Restlet application within a servlet
-            container and using the subclassed SpringServerServlet enables configuration within
-            Camel by injecting the Restlet Component.</p><p>Use of the Restlet servlet within a servlet container enables routes to be configured
+</pre></div><div class="refsection"><a name="_IDU_Restlet_HSH_UsingtheRestletservletwithinawebapp"></a><h2>Using the Restlet servlet within a webapp</h2><p><span class="bold"><strong>Available as of Camel 2.8</strong></span> There are <a class="link" href="http://www.restlet.org/documentation/2.0/jee/ext/org/restlet/ext/servlet/ServerServlet.html" target="_top">three ways</a> to configure a Restlet application within a servlet container,
+            and using the subclassed, <code class="literal">SpringServerServlet</code>, enables configuration
+            within Camel by injecting the Restlet Component.</p><p>Use of the Restlet servlet within a servlet container enables routes to be configured
             with relative paths in URIs (removing the restrictions of hard-coded absolute URIs) and
-            for the hosting servlet container to handle incoming requests (rather than have to spawn
-            a separate server process on a new port).</p><p>To configure, add the following to your camel-context.xml;</p><pre class="programlisting"> &lt;camelContext&gt;
+            the hosting servlet container to handle incoming requests (rather than have to spawn a
+            separate server process on a new port).</p><p>To configure, add the following to your camel-context.xml;</p><pre class="programlisting"> &lt;camelContext&gt;
    &lt;route id="RS_RestletDemo"&gt;
      &lt;from uri="restlet:/demo/{id}" /&gt;
      &lt;transform&gt;
@@ -315,6 +315,6 @@ String response = (String) template.requestBodyAndHeaders("direct:start-auth",
     &lt;id&gt;maven-restlet&lt;/id&gt;  
     &lt;name&gt;Public online Restlet repository&lt;/name&gt;  
     &lt;url&gt;http://maven.restlet.org&lt;/url&gt;  
- &lt;/repository&gt;</pre></div><div class="refsection"><a name="d0e37650"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
+ &lt;/repository&gt;</pre></div><div class="refsection"><a name="d0e37669"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
                 <a class="link" href="http://www.restlet.org/documentation/" target="_top">The Restlet Project</a>
             </td></tr></table></div></div></body></html>

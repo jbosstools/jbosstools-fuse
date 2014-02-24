@@ -3,7 +3,7 @@
    <title>Creating a New Fuse Project</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderDevPart.html" title="Part&nbsp;I.&nbsp;Developing Applications"><link rel="prev" href="IDEIntroEclipseRun.html" title="Exercising routes"><link rel="next" href="FIDENewRouteFile.html" title="Creating a New Camel XML file"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="RiderNewProject"></a>Creating a New Fuse Project</h2></div><div><a href="rh-d0e514.html">Revision History</a></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e536"></a>Overview</h2></div></div></div><p>The tooling uses Maven archetypes to generate a project with all of the dependencies
             preconfigured. The archetypes also create the POM file needed to run and deploy your
             application, as well as sample code and data to get you started.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e541"></a>Procedure</h2></div></div></div><p>To create a Fuse project:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>Select <span class="guimenu">File</span> &gt; <span class="guisubmenu">New</span> &gt; <span class="guimenuitem">Fuse Project</span> to open the <span class="guilabel">New Fuse Project</span> wizard shown in
-                        <a class="xref" href="RiderNewProject.html#NewProjWizFrst" title="Figure&nbsp;3.&nbsp;New Fuse Project Wizard's Project Location Page">Figure&nbsp;3, &#8220;New Fuse Project Wizard's Project Location Page&#8221;</a>.</p><div class="figure"><a name="NewProjWizFrst"></a><p class="title"><b>Figure&nbsp;3.&nbsp;New Fuse Project Wizard's Project Location Page</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/newFuseProjWS.png" alt="project location page of Red Hat JBoss Fuse Plugins for Eclipse's new project wizard"></div></div></div><br class="figure-break"><p>The wizard opens with the <span class="guilabel">Use default workspace location</span>
+                        <a class="xref" href="RiderNewProject.html#NewProjWizFrst" title="Figure&nbsp;3.&nbsp;New Fuse Project Wizard's Project Location Page">Figure&nbsp;3, &#8220;New Fuse Project Wizard's Project Location Page&#8221;</a>.</p><div class="figure"><a name="NewProjWizFrst"></a><p class="title"><b>Figure&nbsp;3.&nbsp;New Fuse Project Wizard's Project Location Page</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/newFuseProjWS.png" alt="project location page of Red Hat JBoss Fuse Tooling's new project wizard"></div></div></div><br class="figure-break"><p>The wizard opens with the <span class="guilabel">Use default workspace location</span>
                     option selected on the <span class="italic">location</span> page.</p></li><li class="step"><p>Specify the location where the data for the project will be stored.</p><ul class="stepalternatives">
                     <li class="step"><p>To use the default workspace select <span class="guilabel">Use default workspace
                                 location</span>.</p></li>
@@ -14,37 +14,7 @@
                         <span class="guilabel">Add project(s) to working set</span> and enter the name of the
                     working set.</p></li><li class="step"><p>Click <span class="inlinemediaobject"><img src="images/NextButton.jpg" width="68" alt="Next button"></span> to open the <span class="bold"><strong>New Fuse
                         Project</strong></span>
-                    <span class="italic">details</span> page shown in <a class="xref" href="RiderNewProject.html#NewProjWizSecond" title="Figure&nbsp;4.&nbsp;New Fuse Project wizard's details page">Figure&nbsp;4</a>.</p><div class="figure"><a name="NewProjWizSecond"></a><p class="title"><b>Figure&nbsp;4.&nbsp;New Fuse Project wizard's details page</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/newFuseProj1.png" alt="project details page of Fuse new project wizard"></div></div></div><br class="figure-break"></li><li class="step"><p>Select a project type from the list.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The route editor works with these project types:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-activemq</span>
-                            </p><p>Creates a new Apache Camel project that configures and interacts
-                                with Apache ActiveMQ.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-blueprint</span>
-                            </p><p>Creates a new Apache Camel project with support for OSGi
-                                blueprint.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-component</span>
-                            </p><p>Creates a new Apache Camel project for building a new
-                                component.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-dataformat</span>
-                            </p><p>Creates a new Apache Camel project for building a new data
-                                format.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-groovy</span>
-                            </p><p>Creates a new Apache Camel project using Groovy DSL.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-java</span>
-                            </p><p>Creates a new Apache Camel project using Java DSL.</p><p>You cannot edit Java DSL in the route editor.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-spring</span>
-                            </p><p>Creates a new Apache Camel project with added support for Spring
-                                DSL.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-spring-dm</span>
-                            </p><p>Creates a new Apache Camel web project that deploys the routes as
-                                a WAR.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-web</span>
-                            </p><p>Creates a new Apache Camel project with added support for Spring
-                                DSL.</p></li><li class="listitem"><p>
-                                <span class="guilabel">camel-archetype-webconsole</span>
-                            </p><p>Creates a new Apache Camel project that deploys the Apache Camel
-                                Web Console, REST API, and your routes as a WAR.</p></li><li class="listitem"><p><span class="guilabel">cxf-jaxrs-service</span></p><p>Creates a project for developing a simple CXF JAX-RS web
-                                application service, using Spring configuration.</p></li><li class="listitem"><p><span class="guilabel">cxf-jaxws-javafirst</span></p><p>Creates a project for developing a Web service starting from Java
-                                code.</p></li><li class="listitem"><p>
+                    <span class="italic">details</span> page shown in <a class="xref" href="RiderNewProject.html#NewProjWizSecond" title="Figure&nbsp;4.&nbsp;New Fuse Project wizard's details page">Figure&nbsp;4</a>.</p><div class="figure"><a name="NewProjWizSecond"></a><p class="title"><b>Figure&nbsp;4.&nbsp;New Fuse Project wizard's details page</b></p><div class="figure-contents"><div class="mediaobject"><img src="images/NewFuseProject.png" alt="project details page of Fuse new project wizard"></div></div></div><br class="figure-break"></li><li class="step"><p>Select a project type from the list.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The route editor works with these project types:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
                                 <span class="guilabel">camel-cxf-code-first-archetype</span>
                             </p><p>Creates a new Apache Camel project using Apache CXF code (Java)
                                 first.</p></li><li class="listitem"><p>
@@ -53,11 +23,41 @@
                                 (WSDL) first.</p></li><li class="listitem"><p>
                                 <span class="guilabel">camel-drools-archetype</span>
                             </p><p>Creates a new Apache Camel project that uses the Drools rule
-                                engine. Because this archetype is not yet OSGi-ready with Spring and
-                                Camel, it is provided as a technical preview only. It is not ready
-                                for use in production environments. </p></li><li class="listitem"><p>
+                                engine.  </p></li><li class="listitem"><p>
                                 <span class="guilabel">camel-webservice-archetype</span>
-                            </p><p>Creates a new Apache Camel web services project.</p></li></ul></div></td></tr></table></div></li><li class="step"><p>Enter a group ID for the project in the <span class="guilabel">Group Id</span> field,
+                            </p><p>Creates a new Apache Camel web services project.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-activemq</span>
+                            </p><p>Creates a new Apache Camel project that configures and interacts
+                                with Apache ActiveMQ.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-blueprint</span>
+                            </p><p>Creates a new Apache Camel project with support for OSGi
+                                blueprint that is deployment-ready for OSGi.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-component</span>
+                            </p><p>Creates a new Apache Camel component.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-cxf-code-first</span>
+                            </p><p>Creates a new Apache Camel project with Apache CXF code-first
+                            example using OSGi Blueprint.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-cxf-contract-first</span>
+                            </p><p>Creates a new Apache Camel project with Apache CXF contract-first
+                                example using OSGi Blueprint.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-dataformat</span>
+                            </p><p>Creates a new Apache Camel data format.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-java</span>
+                            </p><p>Creates a new Apache Camel project using Java DSL.</p><p>You cannot edit Java DSL in the route editor.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-spring</span>
+                            </p><p>Creates a new Apache Camel project with added support for Spring
+                                DSL.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-spring-dm</span>
+                            </p><p>Creates a new Apache Camel project with added support for Spring
+                                DSL that is deployment-ready for OSGi.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-web</span>
+                            </p><p>Creates a new Apache Camel web project that deploys the Camel
+                                routes as a WAR.</p></li><li class="listitem"><p>
+                                <span class="guilabel">camel-archetype-webconsole</span>
+                            </p><p>Creates a new Apache Camel project that deploys the Apache Camel
+                                Web Console, REST API, and your routes as a WAR.</p></li><li class="listitem"><p><span class="guilabel">cxf-jaxrs-service</span></p><p>Creates a simple CXF JAX-RS web application service using Spring
+                                configuration.</p></li><li class="listitem"><p><span class="guilabel">cxf-jaxws-javafirst</span></p><p>Creates a project for developing a Web service starting from Java
+                                code.</p></li></ul></div></td></tr></table></div></li><li class="step"><p>Enter a group ID for the project in the <span class="guilabel">Group Id</span> field,
                     or accept the default.</p><p>The tooling uses the group ID to form the first part of the dot-separated
                     package name. For example, if you enter <strong class="userinput"><code>Demo</code></strong> for the
                     group ID, it appears in the <span class="guilabel">Package</span> field as
@@ -75,6 +75,6 @@
             can take some time.</p><p>You can often easily resolve these dependency errors by updating Maven dependencies
             this way:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>In <span class="guilabel">Project Explorer</span>, select the root project just created. </p></li><li class="step"><p>Right-click it to open the context menu.</p></li><li class="step"><p>Select <span class="guimenu">Maven</span> &gt; <span class="guimenuitem">Update Project...</span></p></li><li class="step"><p>In the <span class="guilabel">Update Maven Project</span> wizard, check <span class="guilabel">Force Update of
                         Snapshots/Releases</span>.</p></li><li class="step"><p>Click <span class="guilabel">OK</span>.</p><p>In the bottom, right corner of the workbench, you may see the progress status
-                    bar churning as missing dependencies are downloaded from the Maven repositories. </p></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e880"></a>Related topics</h2></div></div></div><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                    bar churning as missing dependencies are downloaded from the Maven repositories. </p></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e890"></a>Related topics</h2></div></div></div><table border="0" summary="Simple list" class="simplelist"><tr><td>
                 <a class="xref" href="RiderNewProjectRef.html" title="New Fuse Project">New Fuse Project</a>
             </td></tr></table></div></div></body></html>

@@ -19,7 +19,7 @@ jbi:name:endpointName[?options]</pre><p>The separator that should be used in the
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JBI_HSH_Examples"></a>Examples</h2></div></div></div><pre class="programlisting">jbi:service:http://foo.bar.org/MyService
 jbi:endpoint:urn:foo:bar:MyService:MyEndpoint
 jbi:endpoint:http://foo.bar.org/MyService/MyEndpoint
-jbi:name:cheese</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JBI_HSH_URIoptions"></a>URI options</h2></div></div></div><table id="d0e55579"><tr>
+jbi:name:cheese</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JBI_HSH_URIoptions"></a>URI options</h2></div></div></div><table id="d0e55574"><tr>
         <th> Name </th>
         <th> Default value </th>
         <th> Description </th>
@@ -65,7 +65,7 @@ jbi:endpoint:urn:foo:bar:MyService:MyEndpoint?operation={http://www.mycompany.or
                 <code class="literal">temp</code> file using
                 <code class="literal">CachedOutputStream</code>. When you close the input
             stream, the temp file will be deleted.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JBI_HSH_CreatingaJBIServiceUnit"></a>Creating a JBI Service Unit</h2></div></div></div><p>If you have some Apache Camel routes that you want to deploy inside
-            JBI as a Service Unit, you can use the <a href="PLUGINS_ROOT/com.fusesource.rider.help/jbi.html#_IDU_JBIServiceUnitArchetype" class="olink">JBI Service Unit
+            JBI as a Service Unit, you can use the <a class="link" href="http://camel.apache.org/jbi-service-unit-archetype.html" target="_top">JBI Service Unit
                 Archetype</a> to create a new Maven project for the Service
             Unit.</p><p>If you have an existing Maven project that you need to convert into a JBI Service Unit,
       you may want to consult <a class="link" href="http://servicemix.apache.org/maven-jbi-plugin.html" target="_top">ServiceMix Maven JBI Plugins</a> for further help. The key steps are as follows:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Create a Spring XML file at <code class="literal">src/main/resources/camel-context.xml</code> to
@@ -141,5 +141,5 @@ jbi:endpoint:urn:foo:bar:MyService:MyEndpoint?operation={http://www.mycompany.or
   -DarchetypeArtifactId=camel-jbi-service-unit \
   -DarchetypeVersion=1.0-SNAPSHOT              \
   -DgroupId=myGroupId                          \
-  -DartifactId=myArtifactId   </pre><p>This will create a maven project which can be run immediately via the <a class="link" href="Camel Maven Plugin" target="_top">Camel Maven Plugin</a> as follows</p><pre class="programlisting">cd myArtifactId
+  -DartifactId=myArtifactId   </pre><p>This will create a maven project which can be run immediately via the <a class="link" href="http://camel.apache.org/camel-maven-plugin.html" target="_top">Camel Maven Plugin</a> as follows</p><pre class="programlisting">cd myArtifactId
 mvn install</pre><p>The configuration file is in <code class="filename">src/main/resources/camel-context.xml</code>.</p><p>The routing rules lives at <code class="filename">src/main/java/myGroupId/MyRouteBuilder.java</code>.</p></div></div></body></html>

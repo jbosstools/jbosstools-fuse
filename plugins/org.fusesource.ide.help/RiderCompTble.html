@@ -9,12 +9,14 @@
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/ActiveMQJournal.html" class="olink">ActiveMQ
                             Journal</a>
                     </td><td>
-                        <code class="code">activemq.journal:<em class="replaceable"><code>DirectoryName</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
+                        <code class="code">activemq.journal:<em class="replaceable"><code>DirectoryName</code></em>
+                                [?<em class="replaceable"><code>Options</code></em>]</code>
                     </td><td>Uses ActiveMQ's fast disk journaling implementation to store message
                         bodies in a rolling log file.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/amqp.html" class="olink">AMQP</a>
                     </td><td>
-                        <code class="uri">amqp:[queue:|topic:]<em class="replaceable"><code>DestinationName</code></em>[?<em class="replaceable"><code>Options</code></em>]]</code>
+                        <code class="uri">amqp:[queue:|topic:]<em class="replaceable"><code>DestinationName</code></em>
+                                [?<em class="replaceable"><code>Options</code></em>]]</code>
                     </td><td>Connects to messaging systems using the AMQP protocol.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/atom.html" class="olink">Atom</a>
                     </td><td>
@@ -133,7 +135,8 @@
                             <code class="code">ghttp:///<em class="replaceable"><code>Path</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
                         </p>
                         <p>
-                            <code class="code">ghttp://<em class="replaceable"><code>Hostname</code></em>[:<em class="replaceable"><code>Port</code></em>]/<em class="replaceable"><code>Path</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
+                            <code class="code">ghttp://<em class="replaceable"><code>Hostname</code></em>[:<em class="replaceable"><code>Port</code></em>]/<em class="replaceable"><code>Path</code></em>
+                                    [?<em class="replaceable"><code>Options</code></em>]</code>
                         </p>
                         <p>
                             <code class="code">ghttps://<em class="replaceable"><code>Hostname</code></em>[:<em class="replaceable"><code>Port</code></em>]/<em class="replaceable"><code>Path</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
@@ -151,7 +154,8 @@
                             <code class="code">gmail://<em class="replaceable"><code>Username</code></em>@gmail.com[?<em class="replaceable"><code>Options</code></em>]</code>
                         </p>
                         <p>
-                            <code class="code">gmail://<em class="replaceable"><code>Username</code></em>@googlemail.com[?<em class="replaceable"><code>Options</code></em>]</code>
+                            <code class="code">gmail://Username@googlemail.com
+                                    [?<em class="replaceable"><code>Options</code></em>]</code>
                         </p>
                     </td><td>Sends e-mails via the GAE mail service.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/gtask.html" class="olink">GTask</a>
@@ -197,10 +201,11 @@
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/jbi.html" class="olink">JBI</a>
                     </td><td>
                         <p>
-                            <code class="code">jbi:service:serviceNamespace[sep]serviceName</code>
+                            <code class="code">jbi:service:serviceNamespace[sep]      serviceName</code>
                         </p>
                         <p>
-                            <code class="code">jbi:endpoint:serviceNamespace[sep]serviceName[sep]endpointName</code>
+                            <code class="code">jbi:endpoint:serviceNamespace[sep]
+                                serviceName[sep]endpointName</code>
                         </p>
                         <p>
                             <code class="code">jbi:name:endpointName</code>
@@ -245,11 +250,12 @@
                         system.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/language.html" class="olink">Language</a>
                     </td><td>
-                        <code class="uri">language://<em class="replaceable"><code>languageName</code></em>[:<em class="replaceable"><code>script</code></em>][?<em class="replaceable"><code>options</code></em>]</code>
+                        <code class="uri">language://<em class="replaceable"><code>languageName</code></em>:<em class="replaceable"><code>script</code></em>][?<em class="replaceable"><code>options</code></em>]</code>
                     </td><td>Executes Languages scripts.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/ldap.html" class="olink">LDAP</a>
                     </td><td>
-                        <code class="code">ldap:<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>]?base=...[&amp;scope=<em class="replaceable"><code>Scope</code></em>]</code>
+                        <code class="code">ldap:<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>]
+                                ?base=...[&amp;scope=<em class="replaceable"><code>Scope</code></em>]</code>
                     </td><td>Performs searches on LDAP servers.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/list.html" class="olink">List</a>
                     </td><td>
@@ -265,10 +271,12 @@
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/lucene.html" class="olink">Lucene</a>
                     </td><td>
                         <p>
-                            <code class="code">lucene:<em class="replaceable"><code>SearcherName</code></em>:insert[?analyzer=<em class="replaceable"><code>Analyzer</code></em>]</code>
+                            <code class="code">lucene:<em class="replaceable"><code>SearcherName</code></em>:insert
+                                    [?analyzer=<em class="replaceable"><code>Analyzer</code></em>]</code>
                         </p>
                         <p>
-                            <code class="code">lucene:<em class="replaceable"><code>SearcherName</code></em>:query[?analyzer=<em class="replaceable"><code>Analyzer</code></em>]</code>
+                            <code class="code">lucene:<em class="replaceable"><code>SearcherName</code></em>:query
+                                    [?analyzer=<em class="replaceable"><code>Analyzer</code></em>]</code>
                         </p>
                     </td><td>Uses Apache Lucene to perform Java-based indexing and full text based
                         searches using advanced analysis/tokenization capabilities.</td></tr><tr><td>
@@ -305,7 +313,8 @@
                             <code class="code">netty:tcp://localhost:99999[?<em class="replaceable"><code>Options</code></em>]</code>
                         </p>
                         <p>
-                            <code class="code">netty:udp://<em class="replaceable"><code>Remotehost</code></em>:99999/[?<em class="replaceable"><code>Options</code></em>]</code>
+                            <code class="code">netty:udp://<em class="replaceable"><code>Remotehost</code></em>:99999/
+                                    [?<em class="replaceable"><code>Options</code></em>]</code>
                         </p>
                     </td><td>Works with TCP and UDP protocols using Java NIO based capabilities
                         offered by the <a class="link" href="http://www.jboss.org/netty" target="_top">JBoss Netty</a>
@@ -317,15 +326,18 @@
                         the URI of a <a class="link" href="http://servicemix.apache.org/uris.html" target="_top">ServiceMix endpoint</a>.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/mail.html" class="olink">POP</a>
                     </td><td>
-                        <code class="code">pop3://[<em class="replaceable"><code>UserName</code></em>@]<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>][?<em class="replaceable"><code>Options</code></em>]</code>
+                        <code class="code">pop3://[<em class="replaceable"><code>UserName</code></em>@]<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>]
+                                [?<em class="replaceable"><code>Options</code></em>]</code>
                     </td><td>Receives e-mail using POP3 and JavaMail.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/printer.html" class="olink">Printer</a>
                     </td><td>
                         <p>
-                            <code class="code">lpr://localhost[:<em class="replaceable"><code>Port</code></em>]/default[?<em class="replaceable"><code>Options</code></em>]</code>
+                            <code class="code">lpr://localhost[:<em class="replaceable"><code>Port</code></em>]/
+                                    default[?<em class="replaceable"><code>Options</code></em>]</code>
                         </p>
                         <p>
-                            <code class="code">lpr://<em class="replaceable"><code>RemoteHost</code></em>[:<em class="replaceable"><code>Port</code></em>]/path/to/printer[?<em class="replaceable"><code>Options</code></em>]</code>
+                            <code class="code">lpr://<em class="replaceable"><code>RemoteHost</code></em>[:<em class="replaceable"><code>Port</code></em>]
+                                    /path/to/printer[?<em class="replaceable"><code>Options</code></em>]</code>
                         </p>
                     </td><td>Directs payloads on a route to a printer.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/properties.html" class="olink">Properties</a>
@@ -394,13 +406,14 @@
                         <code class="code">servlet://<em class="replaceable"><code>RelativePath</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
                     </td><td>Provides HTTP based endpoints for consuming HTTP requests that arrive at
                         a HTTP endpoint and this endpoint is bound to a published Servlet.</td></tr><tr><td>
-                        <span class="olink">SFTP</span>
+                        <a href="PLUGINS_ROOT/com.fusesource.rider.help/FTP2.html" class="olink">SFTP</a>
                     </td><td>
                         <code class="code">sftp://[<em class="replaceable"><code>Username</code></em>@]<em class="replaceable"><code>Hostname</code></em>[:<em class="replaceable"><code>Port</code></em>]/<em class="replaceable"><code>Directoryname</code></em>[?<em class="replaceable"><code>Options</code></em>]</code>
                     </td><td>Sends and receives files over SFTP.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/sip.html" class="olink">SIP</a>
                     </td><td>
-                        <code class="code">smpp://<em class="replaceable"><code>UserInfo</code></em>@<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>][?<em class="replaceable"><code>Options</code></em>]</code>
+                        <code class="code">smpp://<em class="replaceable"><code>UserInfo</code></em>@<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>]
+                                [?<em class="replaceable"><code>Options</code></em>]</code>
                     </td><td>Sends and receives SMS through Short Messaging Service Center using the
                             <a class="link" href="http://code.google.com/p/jsmpp/" target="_top">JSMPP
                         library</a>.</td></tr><tr><td>
@@ -416,7 +429,8 @@
                         protocol.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/mail.html" class="olink">SMTP</a>
                     </td><td>
-                        <code class="code">smtp://[<em class="replaceable"><code>UserName</code></em>@]<em class="replaceable"><code>Host</code></em>[:<em class="replaceable"><code>Port</code></em>][?<em class="replaceable"><code>Options</code></em>]</code>
+                        <code class="code">smtp://[<em class="replaceable"><code>UserName</code></em>@]<em class="replaceable"><code>Host</code></em>
+                                [:<em class="replaceable"><code>Port</code></em>][?<em class="replaceable"><code>Options</code></em>]</code>
                     </td><td>Sends e-mail using SMTP and JavaMail.</td></tr><tr><td>
                         <a href="PLUGINS_ROOT/com.fusesource.rider.help/snmp.html" class="olink">SNMP</a>
                     </td><td>

@@ -36,95 +36,95 @@ crypto:verify:name[?options]</pre><div class="itemizedlist"><ul class="itemizedl
       examples they appear one after the other. It goes without saying that both sign and verify
       should be configured identically.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_CryptoDigitalSignatures_HSH_Options"></a>Options</h2></div></div></div><p>
       
-    </p><table id="d0e51335"><tr>
-        <th> Name </th>
-        <th> Type </th>
-        <th> Default </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">algorithm</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td><code class="literal">DSA</code>
-        </td>
-        <td> The name of the JCE Signature algorithm that will be used. </td>
-      </tr><tr>
-        <td><code class="literal">alias</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> An alias name that will be used to select a key from the keystore. </td>
-      </tr><tr>
-        <td><code class="literal">bufferSize</code>
-        </td>
-        <td><code class="literal">Integer</code>
-        </td>
-        <td><code class="literal">2048</code>
-        </td>
-        <td> the size of the buffer used in the signature process. </td>
-      </tr><tr>
-        <td><code class="literal">certificate</code>
-        </td>
-        <td><code class="literal">Certificate</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> A Certificate used to verify the signature of the exchange's payload. Either this or a
-          Public Key is required. </td>
-      </tr><tr>
-        <td><code class="literal">keystore</code>
-        </td>
-        <td><code class="literal">KeyStore</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> A reference to a JCE Keystore that stores keys and certificates used to sign and
-          verify. </td>
-      </tr><tr>
-        <td><code class="literal">provider</code>
-        </td>
-        <td><code class="literal">String</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> The name of the JCE Security Provider that should be used. </td>
-      </tr><tr>
-        <td><code class="literal">privateKey</code>
-        </td>
-        <td><code class="literal">PrivatKey</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> The private key used to sign the exchange's payload. </td>
-      </tr><tr>
-        <td><code class="literal">publicKey</code>
-        </td>
-        <td><code class="literal">PublicKey</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> The public key used to verify the signature of the exchange's payload. </td>
-      </tr><tr>
-        <td><code class="literal">secureRandom</code>
-        </td>
-        <td><code class="literal">secureRandom</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> A reference to a <code class="literal">SecureRandom</code> object that wil lbe used to initialize
-          the Signature service. </td>
-      </tr><tr>
-        <td><code class="literal">password</code>
-        </td>
-        <td><code class="literal">char[]</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td> The password for the keystore. </td>
-      </tr></table><p>
+    </p><table width="899" id="d0e51319"><col width="11%"><col width="10%"><col width="5%"><col width="60%"><tr>
+                <th> Name </th>
+                <th> Type </th>
+                <th> Default </th>
+                <th> Description </th>
+            </tr><tr>
+                <td><code class="literal">algorithm</code>
+                </td>
+                <td><code class="literal">String</code>
+                </td>
+                <td><code class="literal">DSA</code>
+                </td>
+                <td>The name of the JCE Signature algorithm that will be used. </td>
+            </tr><tr>
+                <td><code class="literal">alias</code>
+                </td>
+                <td><code class="literal">String</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td>An alias name that will be used to select a key from the keystore. </td>
+            </tr><tr>
+                <td><code class="literal">bufferSize</code>
+                </td>
+                <td><code class="literal">Integer</code>
+                </td>
+                <td><code class="literal">2048</code>
+                </td>
+                <td>The size of the buffer used in the signature process. </td>
+            </tr><tr>
+                <td><code class="literal">certificate</code>
+                </td>
+                <td><code class="literal">Certificate</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td>A Certificate used to verify the signature of the exchange's payload. Either
+                    this or a Public Key is required. </td>
+            </tr><tr>
+                <td><code class="literal">keystore</code>
+                </td>
+                <td><code class="literal">KeyStore</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td>A reference to a JCE Keystore that stores keys and certificates used to sign and
+                    verify. </td>
+            </tr><tr>
+                <td><code class="literal">provider</code>
+                </td>
+                <td><code class="literal">String</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td>The name of the JCE Security Provider that should be used. </td>
+            </tr><tr>
+                <td><code class="literal">privateKey</code>
+                </td>
+                <td><code class="literal">PrivatKey</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td>The private key used to sign the exchange's payload. </td>
+            </tr><tr>
+                <td><code class="literal">publicKey</code>
+                </td>
+                <td><code class="literal">PublicKey</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td>The public key used to verify the signature of the exchange's payload. </td>
+            </tr><tr>
+                <td><code class="literal">secureRandom</code>
+                </td>
+                <td><code class="literal">secureRandom</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td>A reference to a <code class="literal">SecureRandom</code> object that wil lbe used to
+                    initialize the Signature service. </td>
+            </tr><tr>
+                <td><code class="literal">password</code>
+                </td>
+                <td><code class="literal">char[]</code>
+                </td>
+                <td><code class="literal">null</code>
+                </td>
+                <td>The password for the keystore. </td>
+            </tr></table><p>
       
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_CryptoDigitalSignatures_HSH_a1Rawkeys"></a>1) Raw keys</h2></div></div></div><p>The most basic way to way to sign an verify an exchange is with a KeyPair as follows. </p><pre class="programlisting">from("direct:keypair").to("crypto:sign://basic?privateKey=#myPrivateKey", "crypto:verify://basic?publicKey=#myPublicKey", "mock:result");</pre><p>The same can be achieved with the <a class="link" href="Spring XML Extensions" target="_top">Spring XML
         Extensions</a> using references to keys </p><pre class="programlisting">&lt;route&gt;
