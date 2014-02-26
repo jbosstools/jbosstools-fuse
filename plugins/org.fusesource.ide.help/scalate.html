@@ -12,9 +12,9 @@
       file://folder/myfile.ssp).</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Scalate_HSH_ScalateContext"></a>Scalate Context</h2></div></div></div><p>Apache Camel will provide exchange information in the Scalate context (just a
-        <code class="literal">Map</code>). The <code class="literal">Exchange</code> is transfered as:</p><table id="d0e64150"><tr>
-        <th> key </th>
-        <th> value </th>
+        <code class="literal">Map</code>). The <code class="literal">Exchange</code> is transfered as:</p><table id="d0e64365"><tr>
+        <th>key </th>
+        <th>value </th>
       </tr><tr>
         <td><code class="literal">exchange</code>
         </td>
@@ -51,18 +51,18 @@
       resources (expanded jar). </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Scalate_HSH_Dynamictemplates"></a>Dynamic templates</h2></div></div></div><p>Apache Camel provides two headers by which you can define a different resource location
             for a template or the template content itself. If any of these headers is set then
             Apache Camel uses this over the endpoint configured resource. This allows you to provide a
-            dynamic template at runtime.</p><table id="d0e64252"><tr>
-        <th> Header </th>
-        <th> Type </th>
-        <th> Description </th>
+            dynamic template at runtime.</p><table id="d0e64468"><tr>
+        <th>Header </th>
+        <th>Type </th>
+        <th>Description </th>
       </tr><tr>
-        <td> CamelScalateResourceUri </td>
-        <td> String </td>
-        <td> An URI for the template resource to use instead of the endpoint configured. </td>
+        <td>CamelScalateResourceUri </td>
+        <td>String </td>
+        <td>A URI for the template resource to use instead of the endpoint configured. </td>
       </tr><tr>
-        <td> CamelScalateTemplate </td>
-        <td> String </td>
-        <td> The template to use instead of the endpoint configured. </td>
+        <td>CamelScalateTemplate </td>
+        <td>String </td>
+        <td>The template to use instead of the endpoint configured. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Scalate_HSH_Samples"></a>Samples</h2></div></div></div><p>For example you could use something like</p><pre class="programlisting">from("activemq:My.Queue").
   to("scalate:com/acme/MyResponse.ssp");</pre><p>To use a Scalate template to formulate a response to a message for InOut message exchanges
       (where there is a <code class="literal">JMSReplyTo</code> header).</p><p>If you want to use InOnly and consume the message and send it to another destination, you

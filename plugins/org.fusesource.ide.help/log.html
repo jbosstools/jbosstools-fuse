@@ -9,11 +9,11 @@
             Apache Camel also ships with the <code class="literal">Throughput</code> logger, which is used
             whenever the <code class="literal">groupSize</code> option is specified.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>In <span class="bold"><strong>Apache Camel 2.2</strong></span> onwards there is a
                     <code class="literal">log</code> directly in the DSL, but it has a different purpose. Its
-                meant for lightweight and human logs.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Options"></a>Options</h2></div></div></div><table id="d0e58483"><tr>
-                <th> Option </th>
-                <th> Default </th>
-                <th> Type </th>
-                <th> Description </th>
+                meant for lightweight and human logs.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Options"></a>Options</h2></div></div></div><table id="d0e58530"><tr>
+                <th>Option </th>
+                <th>Default </th>
+                <th>Type </th>
+                <th>Description </th>
             </tr><tr>
                 <td>
                     <code class="literal">level</code>
@@ -87,10 +87,10 @@
                     interval, if false, show stats regardless of message traffic </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Formatting"></a>Formatting</h2></div></div></div><p>The log formats the execution of exchanges to log lines. By default, the log uses
                 <code class="literal">LogFormatter</code> to format the log output, where
-                <code class="literal">LogFormatter</code> has the following options:</p><table id="d0e58670"><tr>
-                <th> Option </th>
-                <th> Default </th>
-                <th> Description </th>
+                <code class="literal">LogFormatter</code> has the following options:</p><table id="d0e58718"><tr>
+                <th>Option </th>
+                <th>Default </th>
+                <th>Description </th>
             </tr><tr>
                 <td>
                     <code class="literal">showAll</code>
@@ -175,7 +175,7 @@
                 <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> If the exchange has a caught
                     exception, show the exception message (no stack trace). A caught exception is
                     stored as a property on the exchange and for instance a
-                        <code class="literal">doCatch</code> can catch exceptions. See <a class="link" href="Try Catch Finally" target="_top">Try Catch Finally</a>. </td>
+                        <code class="literal">doCatch</code> can catch exceptions. See <a class="link" href="http://camel.apache.org/try-catch-finally.html" target="_top">Try Catch Finally</a>. </td>
             </tr><tr>
                 <td>
                     <code class="literal">showStackTrace</code>
@@ -216,7 +216,7 @@
                 <td><span class="bold"><strong>Camel 2.8:</strong></span> Whether Camel should show stream
                     bodies or not (eg such as java.io.InputStream). Beware if you enable this option
                     then you may not be able later to access the message body as the stream have
-                    already been read by this logger. To remedy this you will have to use <a class="link" href="Stream Caching" target="_top">Stream Caching</a>. </td>
+                    already been read by this logger. To remedy this you will have to use <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream Caching</a>. </td>
             </tr><tr>
                 <td>
                     <code class="literal">multiline</code>
@@ -236,7 +236,7 @@
                     onwards. </td>
             </tr></table><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>For older versions of Camel that do not support the <span class="property">showFiles</span>
                 or <span class="property">showStreams</span> properties, you can set the following property
-                instead on the <a class="link" href="CamelContext" target="_top">CamelContext</a> to log both stream
+                instead on the <a class="link" href="http://camel.apache.org/camelcontext.html" target="_top">CamelContext</a> to log both stream
                 and file bodies:</p><pre class="programlisting">
  camelContext.getProperties().put(Exchange.LOG_DEBUG_BODY_STREAMS, true);
  
@@ -254,7 +254,7 @@
     .to("log:com.mycompany.order?level=DEBUG&amp;groupInterval=10000&amp;groupDelay=60000&amp;groupActiveOnly=false")
     .to("bean:processOrder");</pre><p>The following will be logged:</p><pre class="programlisting">"Received: 1000 new messages, with total 2000 so far. Last group took: 10000 millis which is: 100 messages per second. average: 100"</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Log_HSH_Fullcustomizationoftheloggingoutput"></a>Full customization of the logging output</h2></div></div></div><p></p><p>
             <span class="bold"><strong>Available as of Camel 2.11</strong></span>
-        </p><p>With the options outlined in the Formatting
+        </p><p>With the options outlined in the <a class="link" href="http://camel.apache.org/log.html" target="_top">Formatting</a>
             section, you can control much of the output of the logger. However, log lines will
             always follow this structure:</p><pre class="programlisting">
 Exchange[Id:ID-machine-local-50656-1234567901234-1-2, ExchangePattern:InOut, 

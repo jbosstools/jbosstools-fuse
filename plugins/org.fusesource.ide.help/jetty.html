@@ -1,17 +1,17 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Jetty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderHTTPEptRef.html" title="HTTP Endpoints"><link rel="prev" href="http4.html" title="HTTP4"><link rel="next" href="restlet.html" title="Restlet"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="jetty"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Jetty &#8212; provides endpoints for consuming HTTP requests</p></div><div class="refsection"><a name="d0e35423"></a><h2>Overview</h2><p>The Jetty component provides HTTP-based endpoints for consuming HTTP requests. That
+   <title>Jetty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderHTTPEptRef.html" title="HTTP Endpoints"><link rel="prev" href="http4.html" title="HTTP4"><link rel="next" href="restlet.html" title="Restlet"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="jetty"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Jetty &#8212; provides endpoints for consuming HTTP requests</p></div><div class="refsection"><a name="d0e35444"></a><h2>Overview</h2><p>The Jetty component provides HTTP-based endpoints for consuming HTTP requests. That
             is, the Jetty component behaves as a simple Web server. Jetty can also be used as a http client which
             mean you can also use it with Camel as a producer.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Jetty is stream based, which means the input it receives is
                 submitted to Camel as a stream. That means you will only be able
                 to read the content of the stream <span class="bold"><strong>once</strong></span>. If you find a situation where the message
                 body appears to be empty or you need to access the data multiple
                 times (eg: doing multicasting, or redelivery error handling) you
-                should use <a class="link" href="Stream Caching" target="_top">Stream Caching</a>
+                should use <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream Caching</a>
                 or convert the message body to a <code class="literal">String</code> which
-                is safe to be re-read multiple times.</p></td></tr></table></div></div><div class="refsection"><a name="d0e35440"></a><h2>URI format</h2><p>The URI format for a Jetty endpoint is:</p><pre class="programlisting">jetty:http(s)://<em class="replaceable"><code>hostname</code></em>[:<em class="replaceable"><code>port</code></em>][/<em class="replaceable"><code>resourceUri</code></em>][?<em class="replaceable"><code>options</code></em>]</pre><p>You can append query options to the URI in the following format:
+                is safe to be re-read multiple times.</p></td></tr></table></div></div><div class="refsection"><a name="d0e35461"></a><h2>URI format</h2><p>The URI format for a Jetty endpoint is:</p><pre class="programlisting">jetty:http(s)://<em class="replaceable"><code>hostname</code></em>[:<em class="replaceable"><code>port</code></em>][/<em class="replaceable"><code>resourceUri</code></em>][?<em class="replaceable"><code>options</code></em>]</pre><p>You can append query options to the URI in the following format:
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="refsection"><a name="d0e35464"></a><h2>Dependencies</h2><p>Maven users will need to add the following dependency to their
+        </p></div><div class="refsection"><a name="d0e35485"></a><h2>Dependencies</h2><p>Maven users will need to add the following dependency to their
             <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -19,7 +19,7 @@
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;
-</pre></div><div class="refsection"><a name="d0e35474"></a><h2>Options</h2><p><a class="xref" href="jetty.html#JettyRefOptsTbl" title="Table&nbsp;29.&nbsp;Jetty options">Table&nbsp;29, &#8220;Jetty options&#8221;</a> lists the options for a Jetty endpoint.</p><div class="table"><a name="JettyRefOptsTbl"></a><p class="title"><b>Table&nbsp;29.&nbsp;Jetty options</b></p><div class="table-contents"><table summary="Jetty options" width="100%" border="1"><colgroup><col width="24%" class="c1"><col width="9%" class="c2"><col width="67%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+</pre></div><div class="refsection"><a name="d0e35495"></a><h2>Options</h2><p><a class="xref" href="jetty.html#JettyRefOptsTbl" title="Table&nbsp;29.&nbsp;Jetty options">Table&nbsp;29, &#8220;Jetty options&#8221;</a> lists the options for a Jetty endpoint.</p><div class="table"><a name="JettyRefOptsTbl"></a><p class="title"><b>Table&nbsp;29.&nbsp;Jetty options</b></p><div class="table-contents"><table summary="Jetty options" width="100%" border="1"><colgroup><col width="24%" class="c1"><col width="9%" class="c2"><col width="67%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                     <code class="literal">sessionSupport</code>
                 </td><td>
                     <code class="literal">false</code>
@@ -59,7 +59,7 @@
                     <code class="literal">null</code>
                 </td><td> Reference to an
                         <code class="literal">org.apache.camel.component.http.HttpBinding</code>
-                    in the <a class="link" href="Registry" target="_top">Registry</a>.
+                    in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>.
                         <code class="literal">HttpBinding</code> can be used to customize
                     how a response should be written for the consumer. </td></tr><tr><td>
                     <code class="literal">jettyHttpBindingRef</code>
@@ -69,7 +69,7 @@
                     <span class="bold"><strong>Camel 2.6.0+:</strong></span> Reference to
                     an
                         <code class="literal">org.apache.camel.component.jetty.JettyHttpBinding</code>
-                    in the <a class="link" href="Registry" target="_top">Registry</a>.
+                    in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>.
                         <code class="literal">JettyHttpBinding</code> can be used to
                     customize how a response should be written for the producer.
                 </td></tr><tr><td>
@@ -78,14 +78,14 @@
                     <code class="literal">false</code>
                 </td><td> Whether or not the <code class="literal">CamelServlet</code> should
                     try to find a target consumer by matching the URI prefix if
-                    no exact match is found. See here <a class="link" href="How do I let Jetty match wildcards" target="_top">How do I
+                    no exact match is found. See here <a class="link" href="http://camel.apache.org/how-do-i-let-jetty-match-wildcards.html" target="_top">How do I
                         let Jetty match wildcards</a>. </td></tr><tr><td>
                     <code class="literal">handlers</code>
                 </td><td>
                     <code class="literal">null</code>
                 </td><td> Specifies a comma-delimited set of
                         <code class="literal">org.mortbay.jetty.Handler</code> instances
-                    in your <a class="link" href="Registry" target="_top">Registry</a> (such as
+                    in your <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a> (such as
                     your Spring <code class="literal">ApplicationContext</code>). These
                     handlers are added to the Jetty servlet context (for
                     example, to add security). </td></tr><tr><td>
@@ -102,41 +102,45 @@
                 </td><td>
                     <span class="bold"><strong>Camel 2.3:</strong></span> If this option
                     is true, Jetty JMX support will be enabled for this
-                    endpoint. See Jetty JMX
-                        support for more details. </td></tr><tr><td>
+                    endpoint. See <a class="link" href="http://camel.apache.org/Jetty_HSH_JettyJMXsupport" target="_top">Jetty JMX
+                        support</a> for more details. </td></tr><tr><td>
                     <code class="literal">disableStreamCache</code>
                 </td><td>
                     <code class="literal">false</code>
                 </td><td>
-                    <span class="bold"><strong>Camel 2.3:</strong></span> Determines
-                    whether or not the raw input stream from Jetty is cached or
-                    not (Camel will read the stream into a in memory/overflow to
-                    file, <a class="link" href="Stream caching" target="_top">Stream caching</a>)
-                    cache. By default Camel will cache the Jetty input stream to
-                    support reading it multiple times to ensure it Camel can
-                    retrieve all data from the stream. However you can set this
-                    option to <code class="literal">true</code> when you for example need
-                    to access the raw stream, such as streaming it directly to a
-                    file or other persistent store. DefaultHttpBinding will copy
-                    the request input stream into a stream cache and put it into
-                    message body if this option is <code class="literal">false</code> to
-                    support reading the stream multiple times. If you use <span class="olink">Jetty</span> to bridge/proxy an
-                    endpoint then consider enabling this option to improve
-                    performance, in case you do not need to read the message
-                    payload multiple times. </td></tr><tr><td>
+                    <p><span class="bold"><strong>Camel 2.3:</strong></span>
+                                Determines whether the raw input stream from
+                                Jetty is cached (Camel reads the stream into an
+                                in-memory/overflow-to-file cache, <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream caching</a>).</p>
+                    <p>By default, Camel caches the Jetty input stream so
+                                that the stream can be read multiple times and
+                                to ensure that Camel can retrieve all data from
+                                the stream. In support of multiple stream reads,
+                                    <code class="literal">DefaultHttpBinding</code> copies
+                                the request input stream into a stream cache and
+                                puts it into the message body.</p>
+                    <p>Set this option to <code class="literal">true</code> to access
+                                the raw stream, if for example, you want to
+                                stream it directly to a file or to another
+                                persistent store.</p>
+                    <p><span class="bold"><strong>Note:</strong></span> If you use
+                                Jetty to bridge/proxy an endpoint, consider
+                                enabling this option to improve performance,
+                                when you do not need to read the message payload
+                                multiple times.</p></td></tr><tr><td>
                     <code class="literal">throwException</code><code class="literal">OnFailure</code>
                 </td><td>
                     <code class="literal">true</code>
-                </td><td> Option to disable throwing the
-                        <code class="literal">HttpOperationFailedException</code> in case
-                    of failed responses from the remote server. This allows you
-                    to get all responses regardles of the HTTP status code.
-                </td></tr><tr><td>
+                </td><td>Option to disable throwing the
+                                <code class="literal">HttpOperationFailedException</code>
+                            in case of failed responses from the remote server.
+                            This allows you to get all responses regardles of
+                            the HTTP status code. </td></tr><tr><td>
                     <code class="literal">transferException</code>
                 </td><td>
                     <code class="literal">false</code>
                 </td><td><span class="bold"><strong>Camel 2.6:</strong></span> If enabled and
-                    an <a class="link" href="Exchange" target="_top">Exchange</a> failed
+                    an <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a> failed
                     processing on the consumer side, and if the caused Exception
                     was send back serialized in the response as a
                         <code class="literal">application/x-java-serialized-object</code>
@@ -183,20 +187,20 @@
                 </td><td>
                     <span class="bold"><strong>Camel 2.9:</strong></span> Allows using a
                     custom filters which is putted into a list and can be find
-                    in the <a class="link" href="Registry" target="_top">Registry</a>
+                    in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>
                 </td></tr><tr><td>
                     <code class="literal">continuationTimeout</code>
                 </td><td>
                     <code class="literal">null</code>
                 </td><td>
                     <span class="bold"><strong>Camel 2.6:</strong></span> Allows to set a
-                    timeout in millis when using <span class="olink">Jetty</span> as consumer (server). By default Jetty
+                    timeout in millis when using Jetty as consumer (server). By default Jetty
                     uses 30000. You can use a value of <code class="literal">&lt;=
                         0</code> to never expire. If a timeout occurs then
                     the request will be expired and Jetty will return back a
                     http error 503 to the client. This option is only in use
-                    when using <span class="olink">Jetty</span> with
-                    the <a class="link" href="Asynchronous Routing Engine" target="_top">Asynchronous
+                    when using Jetty with
+                    the <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous
                         Routing Engine</a>. </td></tr><tr><td>
                     <code class="literal">useContinuation</code>
                 </td><td>
@@ -210,9 +214,9 @@
                 </td><td>
                     <span class="bold"><strong>Camel 2.8:</strong></span> Reference to a
                         <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code>
-                    in the <span class="olink">CAMEL:Registry</span>.This
+                    in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">http://camel.apache.org/registry.html</a>. This
                     reference overrides any configured SSLContextParameters at
-                    the component level.See Using the JSSE Configuration Utility. </td></tr><tr><td>
+                    the component level. See <a class="link" href="jetty.html#Jetty_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE Configuration Utility</a>. </td></tr><tr><td>
                     <code class="literal">traceEnabled</code>
                 </td><td>
                     <code class="literal">false</code>
@@ -224,7 +228,7 @@
                 </td><td><span class="bold"><strong>Camel 2.11:</strong></span> Reference to a
                     instance of
                         <code class="literal">org.apache.camel.spi.HeaderFilterStrategy</code>
-                    in the <a class="link" href="Registry" target="_top">Registry</a>. It will be
+                    in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>. It will be
                     used to apply the custom headerFilterStrategy on the new
                     create HttpJettyEndpoint. </td></tr><tr><td>
                     <code class="literal">urlRewrite</code>
@@ -233,15 +237,17 @@
                 </td><td><span class="bold"><strong>Camel 2.11:</strong></span><span class="bold"><strong>Producer only</strong></span> Refers to a custom
                         <code class="literal">org.apache.camel.component.http.UrlRewrite</code>
                     which allows you to rewrite urls when you bridge/proxy
-                    endpoints. See more details at <span class="olink">UrlRewrite</span> and <a class="link" href="How to use Camel as a HTTP proxy between a client and server" target="_top">How to use Camel as a HTTP proxy between a client and
-                        server</a>. </td></tr><tr><td>
+                    endpoints. See more details at <a class="link" href="http://camel.apache.org/urlrewrite.html" target="_top">URLrewrite</a>
+                    and 
+                    <a class="link" href="http://camel.apache.org/how-to-use-camel-as-a-http-proxy-between-a-client-and-server.html" target="_top">How to use Camel as a HTTP proxy between a
+                        client and server</a>. </td></tr><tr><td>
                     <code class="literal">responseBufferSize</code>
                 </td><td>
                     <code class="literal">null</code>
                 </td><td><span class="bold"><strong>Camel 2.12:</strong></span> To use a custom
                     buffer size on the
-                        <code class="literal">javax.servlet.ServletResponse</code>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e36027"></a><h2>Message Headers</h2><p>Apache Camel uses the same message headers as the <a href="PLUGINS_ROOT/com.fusesource.rider.help/http.html" class="olink">HTTP</a> component. It also uses the
-                <code class="code">Exchange.HTTP_CHUNKED, CamelHttpChunked</code> header to turn on/off the
+                        <code class="literal">javax.servlet.ServletResponse</code>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e36050"></a><h2>Message Headers</h2><p>Apache Camel uses the same message headers as the <a class="link" href="http.html" title="HTTP">HTTP</a> component. 
+            It also uses the <code class="code">Exchange.HTTP_CHUNKED, CamelHttpChunked</code> header to turn on/off the
             chunked encoding on the consumer.</p><p>Apache Camel also populates <span class="bold"><strong>all</strong></span>
             <code class="code">request.parameter</code> and <code class="code">request.headers</code>. For example, given a
             client request with the URL <code class="uri">http://myserver/myserver?orderid=123</code>, the
@@ -253,19 +259,19 @@
             exchange will contain a header named <code class="literal">orderid</code> with
             the value 123. </p><p>Starting with Camel 2.2.0, you can get the request.parameter from
             the message header not only from Get Method, but also other HTTP
-            method.</p></div><div class="refsection"><a name="d0e36073"></a><h2>Usage</h2><p>The <code class="literal">JettyHttpComponent</code> supports both consumer and producer
+            method.</p></div><div class="refsection"><a name="d0e36096"></a><h2>Usage</h2><p>The <code class="literal">JettyHttpComponent</code> supports both consumer and producer
             endpoints. You can also use the HTTP component for producing to other HTTP
             endpoints. From Camel 2.2, it
             also uses (Exchange.HTTP_CHUNKED,CamelHttpChunked) header to turn on
-            or turn off the chuched encoding on the camel-jetty consumer.</p></div><div class="refsection"><a name="d0e36081"></a><h2>Component Options</h2><p>The <code class="literal">JettyHttpComponent</code> provides the following options:</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="35%" class="c1"><col width="10%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+            or turn off the chuched encoding on the camel-jetty consumer.</p></div><div class="refsection"><a name="d0e36104"></a><h2>Component Options</h2><p>The <code class="literal">JettyHttpComponent</code> provides the following options:</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="35%" class="c1"><col width="10%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="literal">enableJmx</code>
                         </td><td>
                             <code class="literal">false</code>
                         </td><td>
                             <span class="bold"><strong>Camel 2.3:</strong></span> If this option
                             is true, Jetty JMX support will be enabled for this
-                            endpoint. See Jetty JMX
-                                support for more details. </td></tr><tr><td>
+                            endpoint. See <a class="link" href="jetty.html#Jetty_HSH_JettyJMXsupport" title="Jetty JMX support">Jetty JMX
+                                Support</a> for more details. </td></tr><tr><td>
                             <code class="literal">sslKeyPassword</code>
                         </td><td>
                             <code class="literal">null</code>
@@ -374,11 +380,10 @@
                             <code class="literal">sslContextParameters</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td><span class="bold"><strong>Camel 2.8:</strong></span> To configure a
-                            custom SSL/TLS configuration options at the component
-                            level.SeeUsing the
-                                JSSE Configuration Utility for more details.
-                        </td></tr><tr><td>
+                        </td><td><span class="bold"><strong>Camel 2.8:</strong></span> To
+                            configure a custom SSL/TLS configuration options at
+                            the component level. See <a class="xref" href="jetty.html#Jetty_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE Configuration Utility</a>
+                            for more details. </td></tr><tr><td>
                             <code class="literal">requestBufferSize</code>
                         </td><td>
                             <code class="literal">null</code>
@@ -446,16 +451,15 @@ from("direct:start").to("jetty://http://www.google.com");
     .when().simple("${header.one}").to("mock:one")
     .otherwise()
     .to("mock:other");
-</pre><p>So if a client sends the HTTP request, <code class="literal">
-                <a class="link" href="http://serverUri?one=hello" target="_top">http://serverUri?one=hello</a></code>, the Jetty
+</pre><p>So if a client sends the HTTP request, <code class="literal"><a class="link" href="http://serverUri?one=hello" target="_top">http://serverUri?one=hello</a></code>, the Jetty
             component will copy the HTTP request parameter,
                 <code class="literal">one</code> to the exchange's
                 <code class="literal">in.header</code>. We can then use the
                 <code class="literal">simple</code> language to route exchanges that
             contain this header to a specific endpoint and all others to
-            another. If we used a language more powerful than <a class="link" href="Simple" target="_top">Simple</a>\-\--such as- <span class="del">
-                <a class="link" href="El" target="_top">El</a></span> or <span class="del">
-                <a class="link" href="OGNL" target="_top">OGNL</a></span>\--we could also test
+            another.</p><p>If we used a language more powerful than <a class="link" href="http://camel.apache.org/simple.html" target="_top">Simple</a>, such as <span class="del">
+                    <a class="link" href="http://camel.apache.org/el.html" target="_top">El</a></span> or <span class="del">
+                        <a class="link" href="http://camel.apache.org/ognl.html" target="_top">OGNL</a></span>, we could also test
             for the parameter value and do routing based on the header value as
             well.</p></div><div class="refsection"><a name="Jetty_HSH_SessionSupport"></a><h2>Session Support</h2><p>The session support option, <code class="literal">sessionSupport</code>, can
             be used to enable a <code class="literal">HttpSession</code> object and access
@@ -466,7 +470,7 @@ from("direct:start").to("jetty://http://www.google.com");
     &lt;processRef ref="myCode"/&gt;
 &lt;route&gt;
 </pre><p>The <code class="literal">myCode</code>
-            <a class="link" href="Processor" target="_top">Processor</a> can be instantiated by a
+            <a class="link" href="http://camel.apache.org/processor.html" target="_top">Processor</a> can be instantiated by a
             Spring <code class="literal">bean</code> element:</p><pre class="programlisting">
 &lt;bean id="myCode"class="com.mycompany.MyCodeProcessor"/&gt;
 </pre><p>Where the processor implementation can access the
@@ -476,10 +480,10 @@ public void process(Exchange exchange) throws Exception {
     ...
 }
 </pre></div><div class="refsection"><a name="Jetty_HSH_UsingtheJSSEConfigurationUtility"></a><h2>Using the JSSE Configuration Utility</h2><p>As of Camel 2.8, the Jetty component supports SSL/TLS
-            configuration through the <span class="olink">Camel JSSE
-                Configuration Utility</span>. This utility greatly
+            configuration through the <a class="link" href="http://camel.apache.org/camel-configuration-utilities.html" target="_top">Camel JSSE
+                Configuration Utility</a>. This utility greatly
             decreases the amount of component specific code you need to write
-            and is configurable at the endpoint and component levels.The
+            and is configurable at the endpoint and component levels. The
             following examples demonstrate how to use the utility with the Jetty
             component.</p></div><div class="refsection"><a name="Jetty_HSH_Programmaticconfigurationofthecomponent"></a><h2>Programmatic configuration of the component</h2><pre class="programlisting">
 KeyStoreParameters ksp = new KeyStoreParameters();
@@ -733,9 +737,9 @@ X509Certificate cert = (X509Certificate) req.getAttribute("javax.servlet.request
 from("jetty:http://0.0.0.0:9080/myservice?handlers=securityHandler")
 </pre><p>If you need more handlers, set the <code class="literal">handlers</code>
             option equal to a comma-separated list of bean IDs.</p></div><div class="refsection"><a name="Jetty_HSH_HowtoreturnacustomHTTP500replymessage"></a><h2>How to return a custom HTTP 500 reply message</h2><p>You may want to return a custom reply message when something goes
-            wrong, instead of the default reply message Camel <span class="olink">Jetty</span> replies with. You could use
+            wrong, instead of the default reply message Camel Jetty replies with. You could use
             a custom <code class="literal">HttpBinding</code> to be in control of the
-            message mapping, but often it may be easier to use Camel's <a class="link" href="Exception Clause" target="_top">Exception Clause</a> to construct
+            message mapping, but often it may be easier to use Camel's <a class="link" href="http://camel.apache.org/exception-clause.html" target="_top">Exception Clause</a> to construct
             the custom reply message. For example as show here, where we return
                 <code class="literal">Dude something went wrong</code> with HTTP error
             code 500:</p><pre class="programlisting">from("jetty://http://localhost:{{port}}/myserver")
@@ -804,12 +808,10 @@ from("jetty://http://localhost:{{port}}/test").process(new Processor() {
             context and sharing the same MBeanServer between the instances, you
             can provide both instances with a reference to the same
             MBeanContainer in order to avoid name collisions when registering
-            Jetty MBeans.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <span class="olink">HTTP</span>
-                </p></li></ul></div></div><div class="refsection"><a name="d0e36872"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
-                <a href="PLUGINS_ROOT/com.fusesource.rider.help/http.html" class="olink">HTTP</a>
+            Jetty MBeans.</p></div><div class="refsection"><a name="d0e36885"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                <a class="link" href="http.html" title="HTTP">HTTP</a>
             </td></tr><tr><td>
-                <a href="PLUGINS_ROOT/com.fusesource.rider.help/http4.html" class="olink">HTTP4</a>
+                <a class="link" href="http4.html" title="HTTP4">HTTP4</a>
             </td></tr><tr><td>
                 <a class="link" href="http://wiki.eclipse.org/Jetty" target="_top">The Jetty Project</a>
             </td></tr></table></div></div></body></html>

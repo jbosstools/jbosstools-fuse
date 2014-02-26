@@ -5,34 +5,36 @@
 db4o:className[?options]
 
 </pre><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Db4o_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e52033"><tr>
-        <th> Name </th>
-        <th> Default Value </th>
-        <th> Description </th>
-      </tr><tr>
-        <td><code class="literal">consumeDelete</code>
-        </td>
-        <td><code class="literal">true</code>
-        </td>
-        <td>	Option for <code class="literal">Db4oConsumer</code> only. Specifies whether or not the entity is deleted after it is consumed.</td>
-      </tr><tr>
-        <td><code class="literal">consumer.delay</code>
-        </td>
-        <td><code class="literal">500</code>
-        </td>
-        <td> Option for HibernateConsumer only. Delay in millis between each poll. </td>
-      </tr><tr>
-        <td><code class="literal">consumer.initialDelay</code>
-        </td>
-        <td><code class="literal">1000</code>
-        </td>
-        <td> Option for HibernateConsumer only. Millis before polling starts. </td>
-      </tr><tr>
-        <td><code class="literal">consumer.userFixedDelay</code>
-        </td>
-        <td><code class="literal">false</code>
-        </td>
-        <td> Option for HibernateConsumer only. Set to <code class="literal">true</code> to use fixed delay between polls, otherwise fixed rate is used. See <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/ScheduledExecutorService.html" target="_top">ScheduledExecutorService</a> in JDK for details. </td>
-      </tr></table><p>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Db4o_HSH_Options"></a>Options</h2></div></div></div><p></p><table width="909" id="d0e52008"><col width="20%"><col width="6%"><col width="74%"><tr>
+                <th>Name </th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr><tr>
+                <td><code class="literal">consumeDelete</code>
+                </td>
+                <td><code class="literal">true</code>
+                </td>
+                <td> Option for <code class="literal">Db4oConsumer</code> only. Specifies whether or not the
+                    entity is deleted after it is consumed.</td>
+            </tr><tr>
+                <td><code class="literal">consumer.delay</code>
+                </td>
+                <td><code class="literal">500</code>
+                </td>
+                <td> Option for HibernateConsumer only. Delay in millis between each poll. </td>
+            </tr><tr>
+                <td><code class="literal">consumer.initialDelay</code>
+                </td>
+                <td><code class="literal">1000</code>
+                </td>
+                <td> Option for HibernateConsumer only. Millis before polling starts. </td>
+            </tr><tr>
+                <td><code class="literal">consumer.userFixedDelay</code>
+                </td>
+                <td><code class="literal">false</code>
+                </td>
+                <td> Option for HibernateConsumer only. Set to <code class="literal">true</code> to use fixed
+                    delay between polls, otherwise fixed rate is used. See <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/ScheduledExecutorService.html" target="_top">ScheduledExecutorService</a> in JDK for details. </td>
+            </tr></table><p>
 
     </p></div></div></body></html>

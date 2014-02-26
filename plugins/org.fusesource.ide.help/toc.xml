@@ -29,7 +29,7 @@
          </topic>
          <topic label="Creating a new Apache Camel JUnit test case" href="newCamelTestCase.html"/>
          <topic label="The Source View" href="RiderEditSource.html"/>
-         <topic label="Running routes inside Red Hat JBoss Fuse Plugins for Eclipse" href="RiderRunning.html">
+         <topic label="Running routes inside Red Hat JBoss Fuse Tooling" href="RiderRunning.html">
             <topic label="Running routes using Maven" href="RiderRunningMaven.html"/>
             <topic label="Running routes as a local Camel context" href="RiderRunningProfile.html"/>
             <topic label="Working with runtime profiles" href="RiderEditRunProfile.html">
