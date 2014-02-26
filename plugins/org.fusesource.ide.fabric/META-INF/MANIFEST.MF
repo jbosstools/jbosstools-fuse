@@ -64,7 +64,7 @@ Require-Bundle: io.fabric8.tooling-jclouds-all,
  jackson-core-asl;bundle-version="1.9.10",
  jackson-mapper-asl;bundle-version="1.9.10",
  org.eclipse.gemini.management,
- com.google.guava;bundle-version="[14.0.0,15.0.0)"
+ com.google.guava;bundle-version="[15.0.0,16.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin
 Bundle-ClassPath: .
