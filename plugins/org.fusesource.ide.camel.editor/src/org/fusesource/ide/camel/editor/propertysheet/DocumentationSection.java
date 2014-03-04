@@ -40,7 +40,6 @@ import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 
-
 /**
  * Shows the documentation for the currently selected node
  */
@@ -68,7 +67,9 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.propertysheet.NodeSectionSupport#onNodeChanged(org.fusesource.ide.camel.model.AbstractNode)
+	 * 
+	 * @see org.fusesource.ide.camel.editor.propertysheet.NodeSectionSupport#
+	 * onNodeChanged(org.fusesource.ide.camel.model.AbstractNode)
 	 */
 	@Override
 	protected void onNodeChanged(AbstractNode node) {
@@ -78,7 +79,10 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#aboutToBeShown()
+	 * 
+	 * @see
+	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#aboutToBeShown
+	 * ()
 	 */
 	@Override
 	public void aboutToBeShown() {
@@ -98,10 +102,13 @@ public class DocumentationSection extends NodeSectionSupport {
 					int idx = uri.indexOf(':');
 					if (idx > 0) {
 						String scheme = uri.substring(0, idx);
-						String contextId = "org.fusesource.ide.camel.editor." + scheme;
-						//Activator.getLogger().debug("Resolving context ID:" + contextId);
+						String contextId = "org.fusesource.ide.camel.editor."
+								+ scheme;
+						// Activator.getLogger().debug("Resolving context ID:" +
+						// contextId);
 						loadedPage = resolvePage(contextId, true);
-						Activator.getLogger().debug("Loaded page " + contextId + " " + loadedPage);
+						Activator.getLogger().debug(
+								"Loaded page " + contextId + " " + loadedPage);
 					}
 				}
 			}
@@ -111,17 +118,15 @@ public class DocumentationSection extends NodeSectionSupport {
 				if (text != null) {
 					uri = "org.fusesource.ide.camel.editor." + text;
 				}
-				//Activator.getLogger().debug("Resolving context ID:" + uri);
+				// Activator.getLogger().debug("Resolving context ID:" + uri);
 				resolvePage(uri, false);
 			}
-			//browser.layout();
+			// browser.layout();
 		} else {
 			// lets zap the old form
 		}
 		/*
-		browser.layout();
-		browser.pack();
-		parent.pack();
+		 * browser.layout(); browser.pack(); parent.pack();
 		 */
 	}
 
@@ -133,17 +138,16 @@ public class DocumentationSection extends NodeSectionSupport {
 				contextName = "org.fusesource.ide.camel.editor.endpoint";
 			} else {
 				contextName = "org.fusesource.ide.camel.editor.allEIPs";
-				context = HelpSystem
-						.getContext("");
+				context = HelpSystem.getContext("");
 			}
-			context = HelpSystem
-					.getContext(contextName);
+			context = HelpSystem.getContext(contextName);
 
 			// Activator.getLogger().debug("Context ID " + contextId +
 			// " is bad using default.");
 		}
 		if (context == null) {
-			Activator.getLogger().warning("Could not find context: " + contextName);
+			Activator.getLogger().warning(
+					"Could not find context: " + contextName);
 			return false;
 		}
 		IHelpResource[] relatedTopics = context.getRelatedTopics();
@@ -157,13 +161,16 @@ public class DocumentationSection extends NodeSectionSupport {
 				return browser.setUrl(url.toExternalForm());
 			}
 		}
-		Activator.getLogger().warning("Could not find resource in context: " + contextName);
+		Activator.getLogger().warning(
+				"Could not find resource in context: " + contextName);
 		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#refresh()
+	 * 
+	 * @see
+	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#refresh()
 	 */
 	@Override
 	public void refresh() {
@@ -176,7 +183,11 @@ public class DocumentationSection extends NodeSectionSupport {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#createControls(org.eclipse.swt.widgets.Composite, org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
+	 * 
+	 * @see
+	 * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#createControls
+	 * (org.eclipse.swt.widgets.Composite,
+	 * org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
 	@Override
 	public void createControls(final Composite parent,
@@ -195,10 +206,11 @@ public class DocumentationSection extends NodeSectionSupport {
 		}
 		form = null;
 
-		if (parent.isDisposed()) return;
+		if (parent.isDisposed())
+			return;
 
 		parent.setLayout(new GridLayout());
-		//parent.setLayout(new GridLayout(1, false));
+		// parent.setLayout(new GridLayout(1, false));
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		form = toolkit.createForm(parent);
@@ -207,19 +219,20 @@ public class DocumentationSection extends NodeSectionSupport {
 		toolkit.decorateFormHeading(form);
 
 		form.getBody().setLayout(new GridLayout(1, false));
-		
+
 		Composite sbody = form.getBody();
-		
+
 		ToolBar navBar = new ToolBar(sbody, SWT.NONE);
 		toolkit.adapt(navBar);
-		navBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_BEGINNING));
+		navBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL
+				| GridData.HORIZONTAL_ALIGN_BEGINNING));
 		final ToolItem back = new ToolItem(navBar, SWT.PUSH);
 		back.setText("<");
 		back.setEnabled(false);
 		final ToolItem forward = new ToolItem(navBar, SWT.PUSH);
 		forward.setText(">");
 		forward.setEnabled(false);
-		
+
 		back.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				browser.back();
@@ -230,25 +243,28 @@ public class DocumentationSection extends NodeSectionSupport {
 				browser.forward();
 			}
 		});
-		
+
 		final LocationListener locationListener = new LocationListener() {
 			public void changed(LocationEvent event) {
-				Browser browser = (Browser)event.widget;
+				Browser browser = (Browser) event.widget;
 				back.setEnabled(browser.isBackEnabled());
 				forward.setEnabled(browser.isForwardEnabled());
 			}
+
 			public void changing(LocationEvent event) {
 			}
 		};
-		
-		browser = new Browser(sbody, SWT.WEBKIT);
+
+		browser = new Browser(sbody, SWT.NONE);
 		GridData data = new GridData(GridData.FILL_BOTH);
 		browser.setLayoutData(data);
-		IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench().getHelpSystem();
-		URL url = helpSystem.resolve("org.fusesource.ide.help/index.html", true);
+		IWorkbenchHelpSystem helpSystem = PlatformUI.getWorkbench()
+				.getHelpSystem();
+		URL url = helpSystem
+				.resolve("org.fusesource.ide.help/index.html", true);
 		browser.setUrl(url.toExternalForm());
 		browser.addLocationListener(locationListener);
-		
+
 		// section.pack();
 		// form.pack();
 		form.layout(true, true);
