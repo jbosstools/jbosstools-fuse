@@ -2368,6 +2368,14 @@ but the session is rolled back
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='rejectedTaskHandler' type='xs:string'/>
+      <xs:attribute name='rmIdFromConnectionId' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            uses the connection id as the resource identity for XAResource.isSameRM
+ensuring join will only occur on a single connection
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='sendAcksAsync' type='xs:boolean'/>
       <xs:attribute name='sendTimeout' type='xs:integer'/>
       <xs:attribute name='sessionTaskRunner' type='xs:string'/>
@@ -9633,6 +9641,14 @@ but the session is rolled back
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='rejectedTaskHandler' type='xs:string'/>
+      <xs:attribute name='rmIdFromConnectionId' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            uses the connection id as the resource identity for XAResource.isSameRM
+ensuring join will only occur on a single connection
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='sendAcksAsync' type='xs:boolean'/>
       <xs:attribute name='sendTimeout' type='xs:integer'/>
       <xs:attribute name='sessionTaskRunner' type='xs:string'/>
