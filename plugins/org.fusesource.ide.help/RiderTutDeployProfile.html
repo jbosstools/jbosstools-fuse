@@ -1,0 +1,90 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>To Deploy a Camel Project to a fabric profile</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="description" content="This tutorial walks you through the process of deploying a camel project into a fabric profile in Fuse Integration perspective. It assumes that you have an instance of Red Hat JBoss Fuse installed on the same machine on which you are running the Red Hat JBoss Fuse Tooling."><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderTutorials.html" title="Tutorials"><link rel="prev" href="RiderTutDeployFESB.html" title="To Deploy a Camel Project to Red Hat JBoss Fuse"><link rel="next" href="RiderEIPRef.html" title="Enterprise Integration Pattern Reference"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="RiderTutDeployProfile"></a>To Deploy a Camel Project to a fabric profile</h1></div><div><div class="abstract"><p>This tutorial walks you through the process of deploying a camel project into a
+                fabric profile in <span class="guilabel">Fuse Integration</span> perspective. It assumes that
+                you have an instance of Red Hat JBoss Fuse installed on the same machine on which
+                you are running <span class="phrase">the Red Hat JBoss Fuse
+                    Tooling</span>.</p></div></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14276"></a>Goals</h2></div></div></div><p>In this tutorial you will:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>create a fabric in Red Hat JBoss Fuse 6.1 Server</p></li><li class="listitem"><p>connect to the fabric</p></li><li class="listitem"><p>create a new fabric profile</p></li><li class="listitem"><p>deploy your project to the new fabric profile</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14294"></a>Prerequisites</h2></div></div></div><p>To complete this tutorial you will need:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>access to Red Hat JBoss Fuse</p></li><li class="listitem"><p>JBoss Fuse 6.1 Server already added to <span class="guilabel">Servers</span> view
+                        (for details, see <a class="xref" href="RiderTutDeployFESB.html" title="To Deploy a Camel Project to Red Hat JBoss Fuse"><i>To Deploy a Camel Project to Red Hat JBoss Fuse</i></a>)</p></li><li class="listitem"><p>the <span class="bold"><strong>simple-route</strong></span> project you updated in
+                            <a class="xref" href="RiderTutorialCBR.html" title="To Add a Content-Based Router"><i>To Add a Content-Based Router</i></a></p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14318"></a>Creating a fabric in Red Hat JBoss Fuse</h2></div></div></div><p>To create a fabric in Red Hat JBoss Fuse:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>If necessary, start up <code class="code">jboss-fuse-6.1.0.redhat-xxx</code> in
+                        <span class="guilabel">Servers</span> view.</p></li><li class="step"><p>Wait a few seconds for the JBoss Fuse 6.1 server to start up, and then switch
+                    to the JBoss Fuse console in <span class="guilabel">Shell</span> view.</p></li><li class="step"><p>At the JBoss Fuse console command line, enter
+                        <strong class="userinput"><code>fabric:create</code></strong> and press <strong class="userinput"><code>Enter</code></strong>
+                    to create a Fuse Fabric.</p></li><li class="step"><p>Enter <strong class="userinput"><code>fabric:container-list</code></strong> and press
+                        <strong class="userinput"><code>Enter</code></strong> to list the new fabric's default container
+                        (<code class="code">root*</code>) and its status.</p><div class="figure"><a name="TutFabCreate"></a><p class="title"><b>Figure&nbsp;21.&nbsp;Creating a fabric and listing its containers</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/FabricContainerList2.png" align="middle" width="362.7" alt="fabric:container-list command results"></div></div></div><br class="figure-break"></li><li class="step"><p>In <span class="guilabel">Fabric Explorer</span>, right-click
+                        <span class="guilabel">Fabrics</span> to open the context menu, and then click
+                        <span class="guilabel">Add Fabric details</span> to open the <span class="guilabel">Fabric
+                        Details</span> wizard.</p><div class="figure"><a name="TutAddFabDetails"></a><p class="title"><b>Figure&nbsp;22.&nbsp;Fabric Details wizard</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/addFabricDetails.png" align="middle" width="222.6" alt="Add fabric details"></div></div></div><br class="figure-break"></li><li class="step"><p>In <span class="guilabel">Name</span>, enter the name of the fabric to which you want
+                    to connect. The name you enter identifies the fabric whose location you specify
+                    in <span class="guilabel">Jolokia URL</span>, and this name will appear in <span class="guilabel">Fabric Explorer</span>.</p><p>The default <span class="guilabel">Name</span> is <span class="italic">Local
+                        Fabric</span>. </p></li><li class="step"><p>In <span class="guilabel">Jolokia URL</span>, enter the url, in the form
+                        <strong class="userinput"><code>http://hostname:port/jolokia/</code></strong>, of the fabric to which
+                    you want to connect. This URL specifies the location of a <em class="firstterm">fabric
+                        registry agent</em>, whose default port is
+                        <em class="replaceable"><code>8181</code></em>. </p><p>The default URL is <span class="italic">http://localhost:8181/jolokia</span>. </p></li><li class="step"><p>In <span class="guilabel">User name</span>, enter the name used to log into the
+                    specified fabric.</p><p>This is the user name specified when the fabric was created, has
+                        <code class="literal">admin</code> privileges, and is stored in Red Hat JBoss Fuse's
+                        <em class="replaceable"><code>installDir</code></em><code class="filename">/etc/users.properties</code>
+                    file. In that file, user information is specified using this format:
+                        <code class="literal">user=password,role</code> (for example,
+                        <code class="literal">admin=admin,admin</code>).</p><p>You can also discover the user name by issuing the command
+                        <code class="code">JBossFuse:karaf@root&gt;jaas:users</code>, if the Jaas realm has been
+                    selected for the fabric.</p></li><li class="step"><p>In <span class="guilabel">Password</span>, enter the password required for
+                        <span class="guilabel">User name</span> to log into the specified fabric.</p><p>This is the password specified for <span class="guilabel">User name</span> when the
+                    fabric was created and is stored in Red Hat JBoss Fuse's
+                        <em class="replaceable"><code>installDir</code></em><code class="filename">/etc/users.properties</code>
+                    file.</p></li><li class="step"><p>In <span class="guilabel">Zookeeper Password</span>, enter the password required for
+                    logging into the specified fabric's zookeeper registry.</p><p>This is the password that was specified when the fabric was created, or it is
+                    the password of the first user defined in Red Hat JBoss Fuse's
+                        <em class="replaceable"><code>installDir</code></em><code class="filename">/etc/users.properties</code>
+                    file. </p><p>You can also discover the Zookeeper password by issuing the command
+                        <code class="code">JBossFuse:karaf@root&gt;fabric:ensemble-password</code>.</p></li><li class="step"><p>Click <span class="guilabel">OK</span>.</p><p>The fabric's name appears in <span class="guilabel">Fabric Explorer</span>
+                    as a node beneath <span class="guilabel">Fabrics</span>.</p></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14511"></a>Connecting to the fabric</h2></div></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>When you create a fabric (<code class="code">JBossFuse:admin@root&gt; fabric:create</code>), some services
+                inside JBoss Fuse are reloaded, which can prevent the tooling from connecting to the
+                newly created fabric. When this happens, you must restart the server in
+                    <span class="guilabel">Servers</span> view, before you can connect to the fabric in
+            <span class="guilabel">Fabric Explorer</span>.</p></td></tr></table></div><p>In <span class="guilabel">Fabric Explorer</span>, right-click <span class="guilabel">Local
+                Fabric</span> to open the context menu, and then click
+                <span class="guilabel">Connect</span> to connect to the new fabric.</p><p>Now you're ready to create a new fabric profile into which you'll deploy your camel
+            project.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14539"></a>Creating a new fabric profile</h2></div></div></div><p>To create a new fabric profile:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>In <span class="guilabel">Fabric Explorer</span>, expand <span class="guimenu">Local Fabric</span> &gt; <span class="guisubmenu">Versions</span> &gt; <span class="guimenuitem">1.0</span> to reveal the fabric's top-level profiles.</p></li><li class="step"><p>Further expand the profiles tree to find the
+                        <code class="code">example-camel-profile</code> profile nested under
+                        <code class="code">default/karaf/feature-camel/feature-camel-jms</code>.</p></li><li class="step"><p>Right-click <code class="code">example-camel-profile</code> to open the context menu, and
+                    then click <span class="guimenuitem">Create a new Profile</span>.</p></li><li class="step"><p>In <span class="guilabel">Profile name</span>, enter
+                        <strong class="userinput"><code>myCamelRoute</code></strong>, and then click
+                    <span class="guilabel">OK</span>.</p><p>The new profile <code class="code">myCamelRoute</code> appears under its parent profile,
+                    <code class="code">example-camel-profile</code>, in <span class="guilabel">Fabric Explorer</span>.</p></li><li class="step"><p>Click the <code class="code">myCamelRoute</code> profile to populate the
+                        <span class="guilabel">Profiles</span> page with its information.</p></li><li class="step"><p>In the <span class="guilabel">Parents</span> pane, you can see that
+                        <code class="code">example-camel-profile</code> is the new profile's immediate parent.
+                    Leave <code class="code">example-camel-profile</code> selected.</p><p>Now you're ready to deploy your camel project to the profile
+                        <code class="code">myCamelRoute</code>.</p></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14626"></a>Deploying your camel project to the new fabric profile</h2></div></div></div><p>To deploy a camel project to the new <code class="filename">myCamelRoute</code> fabric
+            profile:</p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>From <span class="guilabel">Project Explorer</span>, drag the <code class="code">simple-route</code>
+                    root project over to <span class="guilabel">Fabric Explorer</span>
+                    and drop it on <span class="guimenu">Local Fabric</span> &gt; <span class="guisubmenu">Versions</span> &gt; <span class="guisubmenu">1.0</span> &gt; <span class="guisubmenu">default</span> &gt; <span class="guisubmenu">karaf</span> &gt; <span class="guisubmenu">feature-camel</span> &gt; <span class="guisubmenu">feature-camel-jms</span> &gt; <span class="guisubmenu">example-camel-profile</span> &gt; <span class="guimenuitem">myCamelRoute</span>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The <span class="guimenuitem">Deploy to...</span> tool provides an alternative
+                        to the drag and drop method of deployment. For details, see
+                            <em class="citetitle">Deploying a Project to a Fabric Container</em> in
+                            <em class="citetitle">Red Hat JBoss Fuse Tooling: JBoss Fuse
+                            Tooling  User Guide</em>.</p></td></tr></table></div><p><span class="guilabel">Console</span> view chronicles the process as the tooling builds
+                    the <code class="code">simple-route</code> project, runs the tests, installs the project as a
+                    bundle in the <code class="code">myCamelRoute</code> profile, and then uploads the profile to
+                    the fabric's internal Maven repository.</p></li><li class="step"><p>In <span class="guilabel">Fabric Explorer</span>, click the
+                        <code class="code">myCamelRoute</code> profile to populate
+                        <span class="guilabel">Properties</span> view with its properties and profile
+                    information.</p></li><li class="step"><p>On the <span class="guilabel">Profiles</span> page, check that the simple-route bundle
+                    appears in the <span class="guilabel">Fabs</span> field, as shown in <a class="xref" href="RiderTutDeployProfile.html#DeployProfileDone" title="Figure&nbsp;23.&nbsp;simple-route bundle deployed">Figure&nbsp;23, &#8220;simple-route bundle deployed&#8221;</a>.</p><div class="figure"><a name="DeployProfileDone"></a><p class="title"><b>Figure&nbsp;23.&nbsp;simple-route bundle deployed</b></p><div class="figure-contents"><div class="mediaobject" align="center"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="540"><tr><td align="center"><img src="images/projDeployProfile.png" align="middle" width="540" alt="camel project deployed to profile"></td></tr></table></div></div></div><br class="figure-break"><p>Now you can deploy your camel project to the fabric by creating one or more
+                    containers on the fabric and assigning the <code class="code">myCamelRoute</code> profile to
+                    them. Once the containers are started, you can start tracing on the deployed
+                    projects, as described in <a class="xref" href="RiderTutorialTrace.html" title="To Trace a Message Through a Route"><i>To Trace a Message Through a Route</i></a>, but selecting
+                    the route in <span class="guilabel">Fabric Explorer</span> instead of <span class="guilabel">Fuse JMX
+                        Navigator</span>.</p></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e14734"></a>Further reading</h2></div></div></div><p>To learn more about deploying applications to a fabric, see in <em class="citetitle">Deploying a
+                Project to a Fabric Container</em> in <em class="citetitle">Red Hat
+                JBoss Fuse Tooling: JBoss Fuse Tooling User Guide</em> on the <a class="link" href="https://access.redhat.com/site/documentation/JBoss_Fuse/" target="_top">Red Hat Customer
+                Portal</a>:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+                    <em class="citetitle">Deploying Projects to a Container</em>
+                </p></li><li class="listitem"><p>
+                    <em class="citetitle">Working with Fabric Containers</em>
+                </p></li><li class="listitem"><p>
+                    <em class="citetitle">Working with Fabric Profiles</em>
+                </p></li><li class="listitem"><p>
+                    <em class="citetitle">Working with Versions</em>
+                </p></li></ul></div></div></div></body></html>
