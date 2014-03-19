@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Jetty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderHTTPEptRef.html" title="HTTP Endpoints"><link rel="prev" href="http4.html" title="HTTP4"><link rel="next" href="restlet.html" title="Restlet"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="jetty"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Jetty &#8212; provides endpoints for consuming HTTP requests</p></div><div class="refsection"><a name="d0e35444"></a><h2>Overview</h2><p>The Jetty component provides HTTP-based endpoints for consuming HTTP requests. That
+   <title>Jetty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderHTTPEptRef.html" title="HTTP Endpoints"><link rel="prev" href="http4.html" title="HTTP4"><link rel="next" href="restlet.html" title="Restlet"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="jetty"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Jetty &#8212; provides endpoints for consuming HTTP requests</p></div><div class="refsection"><a name="d0e38215"></a><h2>Overview</h2><p>The Jetty component provides HTTP-based endpoints for consuming HTTP requests. That
             is, the Jetty component behaves as a simple Web server. Jetty can also be used as a http client which
             mean you can also use it with Camel as a producer.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Jetty is stream based, which means the input it receives is
                 submitted to Camel as a stream. That means you will only be able
@@ -9,9 +9,9 @@
                 times (eg: doing multicasting, or redelivery error handling) you
                 should use <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream Caching</a>
                 or convert the message body to a <code class="literal">String</code> which
-                is safe to be re-read multiple times.</p></td></tr></table></div></div><div class="refsection"><a name="d0e35461"></a><h2>URI format</h2><p>The URI format for a Jetty endpoint is:</p><pre class="programlisting">jetty:http(s)://<em class="replaceable"><code>hostname</code></em>[:<em class="replaceable"><code>port</code></em>][/<em class="replaceable"><code>resourceUri</code></em>][?<em class="replaceable"><code>options</code></em>]</pre><p>You can append query options to the URI in the following format:
+                is safe to be re-read multiple times.</p></td></tr></table></div></div><div class="refsection"><a name="d0e38232"></a><h2>URI format</h2><p>The URI format for a Jetty endpoint is:</p><pre class="programlisting">jetty:http(s)://<em class="replaceable"><code>hostname</code></em>[:<em class="replaceable"><code>port</code></em>][/<em class="replaceable"><code>resourceUri</code></em>][?<em class="replaceable"><code>options</code></em>]</pre><p>You can append query options to the URI in the following format:
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="refsection"><a name="d0e35485"></a><h2>Dependencies</h2><p>Maven users will need to add the following dependency to their
+        </p></div><div class="refsection"><a name="d0e38256"></a><h2>Dependencies</h2><p>Maven users will need to add the following dependency to their
             <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -19,7 +19,7 @@
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;
-</pre></div><div class="refsection"><a name="d0e35495"></a><h2>Options</h2><p><a class="xref" href="jetty.html#JettyRefOptsTbl" title="Table&nbsp;29.&nbsp;Jetty options">Table&nbsp;29, &#8220;Jetty options&#8221;</a> lists the options for a Jetty endpoint.</p><div class="table"><a name="JettyRefOptsTbl"></a><p class="title"><b>Table&nbsp;29.&nbsp;Jetty options</b></p><div class="table-contents"><table summary="Jetty options" width="100%" border="1"><colgroup><col width="24%" class="c1"><col width="9%" class="c2"><col width="67%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+</pre></div><div class="refsection"><a name="d0e38266"></a><h2>Options</h2><p><a class="xref" href="jetty.html#JettyRefOptsTbl" title="Table&nbsp;29.&nbsp;Jetty options">Table&nbsp;29, &#8220;Jetty options&#8221;</a> lists the options for a Jetty endpoint.</p><div class="table"><a name="JettyRefOptsTbl"></a><p class="title"><b>Table&nbsp;29.&nbsp;Jetty options</b></p><div class="table-contents"><table summary="Jetty options" width="100%" border="1"><colgroup><col width="24%" class="c1"><col width="9%" class="c2"><col width="67%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                     <code class="literal">sessionSupport</code>
                 </td><td>
                     <code class="literal">false</code>
@@ -246,7 +246,7 @@
                     <code class="literal">null</code>
                 </td><td><span class="bold"><strong>Camel 2.12:</strong></span> To use a custom
                     buffer size on the
-                        <code class="literal">javax.servlet.ServletResponse</code>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e36050"></a><h2>Message Headers</h2><p>Apache Camel uses the same message headers as the <a class="link" href="http.html" title="HTTP">HTTP</a> component. 
+                        <code class="literal">javax.servlet.ServletResponse</code>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e38821"></a><h2>Message Headers</h2><p>Apache Camel uses the same message headers as the <a class="link" href="http.html" title="HTTP">HTTP</a> component. 
             It also uses the <code class="code">Exchange.HTTP_CHUNKED, CamelHttpChunked</code> header to turn on/off the
             chunked encoding on the consumer.</p><p>Apache Camel also populates <span class="bold"><strong>all</strong></span>
             <code class="code">request.parameter</code> and <code class="code">request.headers</code>. For example, given a
@@ -259,11 +259,11 @@
             exchange will contain a header named <code class="literal">orderid</code> with
             the value 123. </p><p>Starting with Camel 2.2.0, you can get the request.parameter from
             the message header not only from Get Method, but also other HTTP
-            method.</p></div><div class="refsection"><a name="d0e36096"></a><h2>Usage</h2><p>The <code class="literal">JettyHttpComponent</code> supports both consumer and producer
+            method.</p></div><div class="refsection"><a name="d0e38867"></a><h2>Usage</h2><p>The <code class="literal">JettyHttpComponent</code> supports both consumer and producer
             endpoints. You can also use the HTTP component for producing to other HTTP
             endpoints. From Camel 2.2, it
             also uses (Exchange.HTTP_CHUNKED,CamelHttpChunked) header to turn on
-            or turn off the chuched encoding on the camel-jetty consumer.</p></div><div class="refsection"><a name="d0e36104"></a><h2>Component Options</h2><p>The <code class="literal">JettyHttpComponent</code> provides the following options:</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="35%" class="c1"><col width="10%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+            or turn off the chuched encoding on the camel-jetty consumer.</p></div><div class="refsection"><a name="d0e38875"></a><h2>Component Options</h2><p>The <code class="literal">JettyHttpComponent</code> provides the following options:</p><div class="informaltable"><table width="100%" border="1"><colgroup><col width="35%" class="c1"><col width="10%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="literal">enableJmx</code>
                         </td><td>
                             <code class="literal">false</code>
@@ -808,7 +808,7 @@ from("jetty://http://localhost:{{port}}/test").process(new Processor() {
             context and sharing the same MBeanServer between the instances, you
             can provide both instances with a reference to the same
             MBeanContainer in order to avoid name collisions when registering
-            Jetty MBeans.</p></div><div class="refsection"><a name="d0e36885"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
+            Jetty MBeans.</p></div><div class="refsection"><a name="d0e39656"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
                 <a class="link" href="http.html" title="HTTP">HTTP</a>
             </td></tr><tr><td>
                 <a class="link" href="http4.html" title="HTTP4">HTTP4</a>

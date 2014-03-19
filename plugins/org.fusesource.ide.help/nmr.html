@@ -27,7 +27,7 @@ install -s mvn:org.apache.servicemix.camel/org.apache.servicemix.camel.component
 &lt;/beans&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_NMRconsumerandproducerendpoints"></a>NMR consumer and producer endpoints</h2></div></div></div><p>The following code:</p><pre class="programlisting">from("nmr:MyServiceEndpoint")</pre><p>Automatically exposes a new endpoint to the bus with endpoint name
             <code class="literal">MyServiceEndpoint</code> (see <a class="xref" href="nmr.html#nmrURIFormat" title="URI format">URI format</a>).</p><p>When an NMR endpoint appears at the end of a route, for
             example:</p><pre class="programlisting">to("nmr:MyServiceEndpoint")</pre><p>the messages sent by this producer endpoint are sent to the already deployed NMR
-            endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nmrURIFormat"></a>URI format</h2></div></div></div><p>An NMR endpoint has this format:</p><pre class="programlisting">nmr:endpointName</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_URIOptions"></a>URI Options</h2></div></div></div><p>An NMR endpoint supports these options:</p><table id="d0e62286"><tr>
+            endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nmrURIFormat"></a>URI format</h2></div></div></div><p>An NMR endpoint has this format:</p><pre class="programlisting">nmr:endpointName</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_NMR_HSH_URIOptions"></a>URI Options</h2></div></div></div><p>An NMR endpoint supports these options:</p><table id="d0e65057"><tr>
                 <th>Option </th>
                 <th>Default </th>
                 <th>Description </th>
@@ -91,7 +91,7 @@ from("nmr:MyEndpoint").streamCaching().to("xslt:transform.xsl", "bean:doSomethin
             In <span class="bold"><strong>Apache Camel 2.0</strong></span> big input streams (by default, over
             64K) are stored in a <code class="literal">temp</code> file, using
                 <code class="literal">CachedOutputStream</code>. When you close the input stream, the temp
-            file is deleted.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e62435"></a>Testing</h2></div></div></div><p>NMR camel routes can be tested using the Apache Camel unit test approach, even if they
+            file is deleted.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e65206"></a>Testing</h2></div></div></div><p>NMR camel routes can be tested using the Apache Camel unit test approach, even if they
             will be deployed next in different bundles in an OSGi runtime. With this aim in view,
             you will extend the <code class="code">ServiceMixNMR</code> Mock class,
                 <code class="code">org.apache.servicemix.camel.nmr.AbstractComponentTest</code>, which will

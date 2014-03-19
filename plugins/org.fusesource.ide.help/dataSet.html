@@ -9,7 +9,7 @@
                 <code class="literal">org.apache.camel.component.dataset.DataSetSupport</code> class, that can
             be used as a base for implementing your own DataSet. Apache Camel also ships with a default
             implementation, the <code class="literal">org.apache.camel.component.dataset.SimpleDataSet</code>
-            that can be used for testing.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_DataSet_HSH_Options"></a>Options</h2></div></div></div><table id="d0e51724"><tr>
+            that can be used for testing.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_DataSet_HSH_Options"></a>Options</h2></div></div></div><table id="d0e54495"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -62,7 +62,7 @@ from("activemq:SomeQueue").to("dataset:foo");</pre><p>The above would look in th
                 <span class="bold"><strong>foo</strong></span> DataSet instance which is used to create the
             messages.</p><p>Then you create a DataSet implementation, such as using the
                 <code class="literal">SimpleDataSet</code> as described below, configuring things like how big
-            the data set is and what the messages look like etc.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_DataSet_HSH_PropertiesonSimpleDataSet"></a>Properties on SimpleDataSet</h2></div></div></div><div class="table"><a name="d0e51847"></a><p class="title"><b>Table&nbsp;53.&nbsp;Properties</b></p><div class="table-contents"><table summary="Properties" width="100%" border="1"><colgroup><col width="15%" class="c1"><col width="10%" class="c2"><col width="16%" class="c3"><col width="59%" class="c4"></colgroup><thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+            the data set is and what the messages look like etc.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_DataSet_HSH_PropertiesonSimpleDataSet"></a>Properties on SimpleDataSet</h2></div></div></div><div class="table"><a name="d0e54618"></a><p class="title"><b>Table&nbsp;53.&nbsp;Properties</b></p><div class="table-contents"><table summary="Properties" width="100%" border="1"><colgroup><col width="15%" class="c1"><col width="10%" class="c2"><col width="16%" class="c3"><col width="59%" class="c4"></colgroup><thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                     <code class="literal">defaultBody</code>
                 </td><td>
                     <code class="literal">Object</code>
