@@ -53,115 +53,138 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 import org.fusesource.ide.server.karaf.core.KarafUtils;
 import org.fusesource.ide.server.karaf.ui.Messages;
 
-
 @SuppressWarnings("restriction")
-public abstract class AbstractKarafRuntimeComposite extends Composite implements Listener{
-	
+public abstract class AbstractKarafRuntimeComposite extends Composite implements
+		Listener {
+
 	public static final String SEPARATOR = File.separator;
-	
+
 	protected final Composite parent;
 	protected final IWizardHandle wizardHandle;
 	protected Text txtKarafDir;
 	protected final KarafWizardDataModel model;
 	protected boolean valid = false;
 	protected IInstallableRuntime ir;
-    protected Job installRuntimeJob;
-    protected IJobChangeListener jobListener;
-    protected Button btnBrowseButton;
-    protected Button btnDownloadAndInstallButton;
-    protected Label installLabel;
-    protected IRuntimeWorkingCopy runtimeWC;
-	
-	public AbstractKarafRuntimeComposite(Composite parent, IWizardHandle wizardHandle, KarafWizardDataModel model) {
+	protected Job installRuntimeJob;
+	protected IJobChangeListener jobListener;
+	protected Button btnBrowseButton;
+	protected Button btnDownloadAndInstallButton;
+	protected Label installLabel;
+	protected IRuntimeWorkingCopy runtimeWC;
+
+	public AbstractKarafRuntimeComposite(Composite parent,
+			IWizardHandle wizardHandle, KarafWizardDataModel model) {
 		super(parent, SWT.NONE);
 		this.parent = parent;
 		this.wizardHandle = wizardHandle;
 		this.model = model;
-		wizardHandle.setTitle(Messages.AbstractKarafRuntimeComposite_wizard_tite);
-		wizardHandle.setDescription(Messages.AbstractKarafRuntimeComposite_wizard_desc);
-		wizardHandle.setImageDescriptor(ImageResource.getImageDescriptor(ImageResource.IMG_WIZBAN_NEW_RUNTIME));	
+		wizardHandle
+				.setTitle(Messages.AbstractKarafRuntimeComposite_wizard_tite);
+		wizardHandle
+				.setDescription(Messages.AbstractKarafRuntimeComposite_wizard_desc);
+		wizardHandle.setImageDescriptor(ImageResource
+				.getImageDescriptor(ImageResource.IMG_WIZBAN_NEW_RUNTIME));
 	}
-	
+
 	public void handleEvent(Event event) {
 		boolean valid = false;
-		if (event.type == SWT.FocusIn){
+		if (event.type == SWT.FocusIn) {
 			handleFocusEvent(event);
-		} else{
+		} else {
 			if (event.widget == txtKarafDir) {
 				valid = validate();
-				if (valid){
+				if (valid) {
 					String installDir = txtKarafDir.getText();
 					model.setKarafInstallDir(installDir);
 					model.setKarafPropertiesFileLocation(getKarafPropFileLocation(installDir));
-					model.setKarafVersion(KarafUtils.getVersion(new File(installDir)));
+					model.setKarafVersion(KarafUtils.getVersion(new File(
+							installDir)));
 				}
 			}
 		}
-		
+
 		wizardHandle.update();
+	}
+
+	protected void cancel() {
+		this.installRuntimeJob.cancel();
 	}
 
 	public void handleFocusEvent(Event event) {
 		if (event.widget == txtKarafDir) {
-			wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_txt_info_msg, IMessageProvider.NONE);
+			wizardHandle.setMessage(
+					Messages.AbstractKarafRuntimeComposite_txt_info_msg,
+					IMessageProvider.NONE);
 		}
-		
+
 	}
 
-	protected abstract boolean doClassPathEntiresExist(final String karafInstallDir) ;
+	protected abstract boolean doClassPathEntiresExist(
+			final String karafInstallDir);
 
-	protected abstract String getKarafPropFileLocation(String karafInstallDir) ;
-	
-	public boolean validate(){
+	protected abstract String getKarafPropFileLocation(String karafInstallDir);
+
+	public boolean validate() {
 		valid = false;
 		String dirLocation = txtKarafDir.getText().trim();
-		if (dirLocation != null && !"".equals(dirLocation)) { 
+		if (dirLocation != null && !"".equals(dirLocation)) {
 			File file = new File(dirLocation);
 			if (!file.exists()) {
-				wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_no_dir,
+				wizardHandle.setMessage(
+						Messages.AbstractKarafRuntimeComposite_no_dir,
 						IMessageProvider.ERROR);
 			} else if (!file.isDirectory()) {
-				wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_not_a_dir,
+				wizardHandle.setMessage(
+						Messages.AbstractKarafRuntimeComposite_not_a_dir,
 						IMessageProvider.ERROR);
-			} else{
-				File binKaraf = new File(dirLocation + SEPARATOR + Messages.AbstractKarafRuntimeComposite_bin_karaf); 
-				File binKarafBat = new File(dirLocation + SEPARATOR + Messages.AbstractKarafRuntimeComposite_bin_karaf_bat); 
+			} else {
+				File binKaraf = new File(dirLocation + SEPARATOR
+						+ Messages.AbstractKarafRuntimeComposite_bin_karaf);
+				File binKarafBat = new File(dirLocation + SEPARATOR
+						+ Messages.AbstractKarafRuntimeComposite_bin_karaf_bat);
 				File confFile = new File(getKarafPropFileLocation(dirLocation));
-				if ((binKaraf.exists() || binKarafBat.exists() )&& confFile.exists()
+				if ((binKaraf.exists() || binKarafBat.exists())
+						&& confFile.exists()
 						&& doClassPathEntiresExist(dirLocation)) {
 					valid = true;
 					wizardHandle.setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
 				} else {
-					wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_invalid_dir, IMessageProvider.ERROR); //$NON-NLS-1$
+					wizardHandle.setMessage(
+							Messages.AbstractKarafRuntimeComposite_invalid_dir,
+							IMessageProvider.ERROR); //$NON-NLS-1$
 				}
 			}
 		} else {
-			wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_wizard_help_msg, IMessageProvider.NONE); //$NON-NLS-1$
+			wizardHandle.setMessage(
+					Messages.AbstractKarafRuntimeComposite_wizard_help_msg,
+					IMessageProvider.NONE); //$NON-NLS-1$
 		}
 		return valid;
 	}
-	
-	void createContents(){
-		setLayout( new GridLayout(3,false));
-		Label lblKarafInstallDir = new Label(this,SWT.NONE);
-		lblKarafInstallDir.setText(Messages.AbstractKarafRuntimeComposite_install_dir_label);
-		txtKarafDir = new Text(this,SWT.BORDER);
+
+	void createContents() {
+		setLayout(new GridLayout(3, false));
+		Label lblKarafInstallDir = new Label(this, SWT.NONE);
+		lblKarafInstallDir
+				.setText(Messages.AbstractKarafRuntimeComposite_install_dir_label);
+		txtKarafDir = new Text(this, SWT.BORDER);
 		txtKarafDir.addListener(SWT.Modify, this);
 		txtKarafDir.setText(model.getKarafInstallDir());
 		GridData txtKarafDirGridData = new GridData();
 		txtKarafDirGridData.grabExcessHorizontalSpace = true;
 		txtKarafDirGridData.horizontalAlignment = SWT.FILL;
 		txtKarafDir.setLayoutData(txtKarafDirGridData);
-		
+
 		btnBrowseButton = new Button(this, SWT.PUSH);
-		btnBrowseButton.setText(Messages.AbstractKarafRuntimeComposite_browse_text);
-		btnBrowseButton.addMouseListener(new MouseListener(){
+		btnBrowseButton
+				.setText(Messages.AbstractKarafRuntimeComposite_browse_text);
+		btnBrowseButton.addMouseListener(new MouseListener() {
 
 			public void mouseDoubleClick(MouseEvent e) {
 			}
 
 			public void mouseDown(MouseEvent e) {
-				
+
 			}
 
 			public void mouseUp(MouseEvent e) {
@@ -169,39 +192,44 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 						.getActiveShell(), SWT.OPEN);
 				dd.setFilterPath(txtKarafDir.getText());
 				String dir = dd.open();
-				if (dir != null){
+				if (dir != null) {
 					txtKarafDir.setText(dd.getFilterPath());
 				}
 			}
-			
+
 		});
-		
+
 		installLabel = new Label(this, SWT.NONE);
-		installLabel.setText(Messages.AbstractKarafRuntimeComposite_runtimeinstall_label);
+		installLabel
+				.setText(Messages.AbstractKarafRuntimeComposite_runtimeinstall_label);
 		GridData installLabelGridData = new GridData();
 		installLabelGridData.grabExcessHorizontalSpace = true;
 		installLabelGridData.horizontalAlignment = SWT.FILL;
 		installLabelGridData.horizontalSpan = 2;
 		installLabel.setLayoutData(installLabelGridData);
-		
+
 		btnDownloadAndInstallButton = new Button(this, SWT.PUSH);
-		btnDownloadAndInstallButton.setText(Messages.AbstractKarafRuntimeComposite_downloadAndInstall_text);
-		btnDownloadAndInstallButton.setToolTipText(Messages.AbstractKarafRuntimeComposite_downloadAndInstall_description);
-		btnDownloadAndInstallButton.addMouseListener(new MouseListener(){
+		btnDownloadAndInstallButton
+				.setText(Messages.AbstractKarafRuntimeComposite_downloadAndInstall_text);
+		btnDownloadAndInstallButton
+				.setToolTipText(Messages.AbstractKarafRuntimeComposite_downloadAndInstall_description);
+		btnDownloadAndInstallButton.addMouseListener(new MouseListener() {
 
 			public void mouseDoubleClick(MouseEvent e) {
 			}
 
 			public void mouseDown(MouseEvent e) {
-				
+
 			}
 
 			public void mouseUp(MouseEvent e) {
-				ir = ServerPlugin.findInstallableRuntime(runtimeWC.getRuntimeType().getId());
+				ir = ServerPlugin.findInstallableRuntime(runtimeWC
+						.getRuntimeType().getId());
 				btnDownloadAndInstallButton.setEnabled(ir != null);
 
-				if (ir == null) return;
-				
+				if (ir == null)
+					return;
+
 				String license = null;
 				try {
 					license = ir.getLicense(new NullProgressMonitor());
@@ -211,24 +239,28 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				TaskModel taskModel = new TaskModel();
 				taskModel.putObject(LicenseWizardFragment.LICENSE, license);
 				TaskWizard wizard2 = new TaskWizard(
-					Messages.AbstractKarafRuntimeComposite_jboss_fuse_rt_label, new WizardFragment() {
-						protected void createChildFragments(List<WizardFragment> list) {
-							list.add(new LicenseWizardFragment());
-							list.add(new RTITargetFolderWizardFragment());
-						}
-					}, taskModel);
+						Messages.AbstractKarafRuntimeComposite_jboss_fuse_rt_label,
+						new WizardFragment() {
+							protected void createChildFragments(
+									List<WizardFragment> list) {
+								list.add(new LicenseWizardFragment());
+								list.add(new RTITargetFolderWizardFragment());
+							}
+						}, taskModel);
 
 				WizardDialog dialog2 = new WizardDialog(getShell(), wizard2);
 				if (dialog2.open() == Window.CANCEL)
 					return;
 
-				final String selectedDirectory = (String)taskModel.getObject(RTITargetFolderWizardFragment.FUSE_RT_LOC);
-				
+				final String selectedDirectory = (String) taskModel
+						.getObject(RTITargetFolderWizardFragment.FUSE_RT_LOC);
+
 				if (selectedDirectory != null) {
 					// ir.install(new Path(selectedDirectory));
 					final IPath installPath = new Path(selectedDirectory);
-					installRuntimeJob = new Job("Installing server runtime " + ir.getName() + "...") {
-						
+					installRuntimeJob = new Job("Installing server runtime "
+							+ ir.getName() + "...") {
+
 						public boolean belongsTo(Object family) {
 							return ServerPlugin.PLUGIN_ID.equals(family);
 						}
@@ -239,7 +271,8 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 									public void run() {
 										installLabel.setText(getName());
 										btnBrowseButton.setEnabled(false);
-										btnDownloadAndInstallButton.setEnabled(false);
+										btnDownloadAndInstallButton
+												.setEnabled(false);
 										txtKarafDir.setEnabled(false);
 										parent.update();
 									}
@@ -256,12 +289,17 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 						public void done(IJobChangeEvent event) {
 							Display.getDefault().asyncExec(new Runnable() {
 								public void run() {
-									installLabel.setText("Installation of " + ir.getName() + " completed.");
-									btnBrowseButton.setEnabled(true);
-									btnDownloadAndInstallButton.setEnabled(true);
-									txtKarafDir.setEnabled(true);
-									txtKarafDir.setText(selectedDirectory);
-									parent.update();
+									if (!AbstractKarafRuntimeComposite.this
+											.isDisposed()) {
+										installLabel.setText("Installation of "
+												+ ir.getName() + " completed.");
+										btnBrowseButton.setEnabled(true);
+										btnDownloadAndInstallButton
+												.setEnabled(true);
+										txtKarafDir.setEnabled(true);
+										txtKarafDir.setText(selectedDirectory);
+										parent.update();
+									}
 								}
 							});
 							installRuntimeJob.removeJobChangeListener(this);
@@ -279,11 +317,11 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 					installRuntimeJob.schedule();
 				}
 			}
-			
+
 		});
 		wizardHandle.update();
 	}
-	
+
 	protected void setRuntime(IRuntimeWorkingCopy newRuntime) {
 		if (newRuntime == null) {
 			runtimeWC = null;
@@ -296,27 +334,28 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 			btnDownloadAndInstallButton.setEnabled(false);
 			installLabel.setText("");
 		} else {
-			ir = ServerPlugin.findInstallableRuntime(runtimeWC.getRuntimeType().getId());
+			ir = ServerPlugin.findInstallableRuntime(runtimeWC.getRuntimeType()
+					.getId());
 			if (ir != null) {
 				btnDownloadAndInstallButton.setEnabled(true);
-//				installLabel.setText(ir.getName());
+				// installLabel.setText(ir.getName());
 			}
 		}
 		init();
 		validate();
 	}
-	
+
 	protected void init() {
 		if (runtimeWC.getLocation() != null)
 			txtKarafDir.setText(runtimeWC.getLocation().toOSString());
 		else
 			txtKarafDir.setText("");
 	}
-	
+
 	void performFinish() {
 	}
-	
-	protected boolean isValid(){
+
+	protected boolean isValid() {
 		return valid;
 	}
 }
