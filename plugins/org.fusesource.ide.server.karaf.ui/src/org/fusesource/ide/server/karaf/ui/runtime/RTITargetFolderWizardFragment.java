@@ -18,30 +18,32 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
 import org.fusesource.ide.server.karaf.ui.Messages;
 
-    public class RTITargetFolderWizardFragment extends WizardFragment {
-        public static final String FUSE_RT_LOC = "fuseRTLoc";
+public class RTITargetFolderWizardFragment extends WizardFragment {
+	public static final String FUSE_RT_LOC = "fuseRTLoc";
 
-        protected Composite comp;
+	protected RTIComposite comp;
 
-        public RTITargetFolderWizardFragment() {
-        	// do nothing
-        }
+	public RTITargetFolderWizardFragment() {
+		// do nothing
+	}
 
-        public boolean hasComposite() {
-        	return true;
-        }
+	public boolean hasComposite() {
+		return true;
+	}
 
-        /* (non-Javadoc)
-         * @see org.eclipse.wst.server.ui.internal.task.WizardTask#getWizardPage()
-         */
-        public Composite createComposite(Composite parent, IWizardHandle wizard) {
-        	comp = new RTIComposite(parent, getTaskModel(), wizard);
-        	wizard.setTitle(Messages.AbstractKarafRuntimeComposite_jboss_fuse_rt_label);
-        	wizard.setDescription(Messages.AbstractKarafRuntimeComposite_selectInstallDir);
-        	return comp;
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.wst.server.ui.internal.task.WizardTask#getWizardPage()
+	 */
+	public Composite createComposite(Composite parent, IWizardHandle wizard) {
+		comp = new RTIComposite(parent, getTaskModel(), wizard);
+		wizard.setTitle(Messages.AbstractKarafRuntimeComposite_jboss_fuse_rt_label);
+		wizard.setDescription(Messages.AbstractKarafRuntimeComposite_selectInstallDir);
+		return comp;
+	}
 
-        public boolean isComplete() {
-        	return true;
-        }
-    }
+	public boolean isComplete() {
+		return this.comp.isComplete();
+	}
+}
