@@ -15,7 +15,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.fusesource.ide.server.karaf.ui.l10n.messages"; //$NON-NLS-1$
-	
+
 	public static String ConnectionDetailsEditorSection_no_srv_conn;
 	public static String ConnectionDetailsEditorSection_password_label;
 	public static String ConnectionDetailsEditorSection_password_op;
@@ -27,12 +27,13 @@ public class Messages extends NLS {
 	public static String ConnectionDetailsEditorSection_user_name_op;
 	public static String ConnectionDetailsEditorSection_hostname_label;
 	public static String ConnectionDetailsEditorSection_hostname_op;
-	
+
 	public static String AbstractKarafRuntimeComposite_bin_karaf;
 	public static String AbstractKarafRuntimeComposite_bin_karaf_bat;
 	public static String AbstractKarafRuntimeComposite_browse_text;
 	public static String AbstractKarafRuntimeComposite_downloadAndInstall_text;
 	public static String AbstractKarafRuntimeComposite_downloadAndInstall_description;
+	public static String AbstractKarafRuntimeComposite_jboss_fuse_rt_label;
 	public static String AbstractKarafRuntimeComposite_runtimeinstall_label;
 	public static String AbstractKarafRuntimeComposite_installDialogTitle;
 	public static String AbstractKarafRuntimeComposite_selectInstallDir;
@@ -50,7 +51,7 @@ public class Messages extends NLS {
 	public static String KarafServerPorpertiesComposite_user_name_label;
 	public static String KarafServerPorpertiesComposite_wizard_desc;
 	public static String KarafServerPorpertiesComposite_wizard_title;
-	
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
