@@ -11,18 +11,22 @@
 
 package org.fusesource.ide.fabric.navigator;
 
+import io.fabric8.api.Container;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import io.fabric8.api.Container;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.FabricPlugin;
-
+import org.fusesource.ide.fabric.actions.CreateChildContainerAction;
+import org.fusesource.ide.fabric.actions.CreateSshContainerAction;
+import org.fusesource.ide.fabric.actions.jclouds.CreateJCloudsContainerAction;
 
 public class ContainersNode extends FabricNodeSupport implements ImageProvider {
 	public ContainersNode(Fabric fabric) {
@@ -48,7 +52,8 @@ public class ContainersNode extends FabricNodeSupport implements ImageProvider {
 			for (Container agent : agents) {
 				IdBasedFabricNode agentNode = new ContainerNode(this, agent);
 				addChild(agentNode);
-			}}
+			}
+		}
 	}
 
 	public ContainerNode getContainerNode(String agentName) {
@@ -65,9 +70,9 @@ public class ContainersNode extends FabricNodeSupport implements ImageProvider {
 	}
 
 	@Override
-    public boolean requiresContentsPropertyPage() {
-        return false;
-    }
+	public boolean requiresContentsPropertyPage() {
+		return false;
+	}
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
@@ -79,8 +84,8 @@ public class ContainersNode extends FabricNodeSupport implements ImageProvider {
 		}
 		return super.getAdapter(adapter);
 	}
-	
-    @Override
+
+	@Override
 	protected PropertySourceTableSheetPage createPropertySourceTableSheetPage() {
 		return new ContainerTableSheetPage(getFabric());
 	}
@@ -98,4 +103,17 @@ public class ContainersNode extends FabricNodeSupport implements ImageProvider {
 		return answer;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.fusesource.ide.fabric.navigator.FabricNodeSupport#provideContextMenu
+	 * (org.eclipse.jface.action.IMenuManager)
+	 */
+	@Override
+	public void provideContextMenu(IMenuManager menu) {
+		CreateChildContainerAction.addIfSingleRootContainer(menu, getFabric());
+		menu.add(new CreateJCloudsContainerAction(getFabric()));
+		menu.add(new CreateSshContainerAction(getFabric()));
+	}
 }
