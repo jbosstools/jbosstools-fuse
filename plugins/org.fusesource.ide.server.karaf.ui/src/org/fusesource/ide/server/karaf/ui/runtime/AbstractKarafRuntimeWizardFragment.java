@@ -27,8 +27,7 @@ import org.fusesource.ide.server.karaf.core.KarafUtils;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
 
-
-public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment {
+public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment {
 
 	protected AbstractKarafRuntimeComposite composite = null;
 	protected final KarafWizardDataModel model = new KarafWizardDataModel();
@@ -40,7 +39,7 @@ public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment
 	public Composite createComposite(Composite parent, IWizardHandle handle) {
 		getTaskModel().putObject(KarafWizardDataModel.KARAF_MODEL, model);
 		populateModel();
-		composite = getRuntimeComposite(parent,handle,model);
+		composite = getRuntimeComposite(parent, handle, model);
 		composite.createContents();
 		return composite;
 	}
@@ -49,8 +48,7 @@ public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment
 	public boolean hasComposite() {
 		return true;
 	}
-		
-	
+
 	@Override
 	public void performFinish(IProgressMonitor monitor) throws CoreException {
 		super.performFinish(monitor);
@@ -59,7 +57,19 @@ public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment
 		updateRuntime();
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.wst.server.ui.wizard.WizardFragment#performCancel(org.eclipse
+	 * .core.runtime.IProgressMonitor)
+	 */
+	@Override
+	public void performCancel(IProgressMonitor monitor) throws CoreException {
+		composite.cancel();
+		super.performCancel(monitor);
+	}
+
 	protected IRuntimeWorkingCopy getRuntimeWorkingCopy() {
 		return (IRuntimeWorkingCopy) getTaskModel().getObject(
 				TaskModel.TASK_RUNTIME);
@@ -74,15 +84,15 @@ public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment
 			// workCopy will be instance of ServerDelegate classs.
 			// We need to get the params, so IFuseESBRuntime will be enough.
 			IKarafRuntime karafRuntime = (IKarafRuntime) workingCopy
-					.loadAdapter(IKarafRuntime.class,
-							new NullProgressMonitor());
+					.loadAdapter(IKarafRuntime.class, new NullProgressMonitor());
 			if (karafRuntime != null) {
 				model.setKarafInstallDir(karafRuntime.getKarafInstallDir());
-				model.setKarafVersion(KarafUtils.getVersion(new File(model.getKarafInstallDir())));
+				model.setKarafVersion(KarafUtils.getVersion(new File(model
+						.getKarafInstallDir())));
 			}
 		}
 	}
-	
+
 	/**
 	 * This updates the runtime.
 	 */
@@ -92,14 +102,18 @@ public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment
 			// workCopy will be instance of ServerDelegate classs.
 			// We need to get the params, so IKarafRuntime will be enough.
 			IKarafRuntimeWorkingCopy karafRuntimeWorkingCopy = (IKarafRuntimeWorkingCopy) workingCopy
-					.loadAdapter(IKarafRuntimeWorkingCopy.class, new NullProgressMonitor());
+					.loadAdapter(IKarafRuntimeWorkingCopy.class,
+							new NullProgressMonitor());
 			if (karafRuntimeWorkingCopy != null) {
 				String installDir = model.getKarafInstallDir();
 				IPath path = new Path(installDir);
 				workingCopy.setLocation(path);
-				karafRuntimeWorkingCopy.setKarafInstallDir(path.removeTrailingSeparator().toOSString());
-				karafRuntimeWorkingCopy.setKarafPropertiesFileLocation(model.getKarafPropertiesFileLocation());
-				karafRuntimeWorkingCopy.setKarafVersion(model.getKarafVersion());
+				karafRuntimeWorkingCopy.setKarafInstallDir(path
+						.removeTrailingSeparator().toOSString());
+				karafRuntimeWorkingCopy.setKarafPropertiesFileLocation(model
+						.getKarafPropertiesFileLocation());
+				karafRuntimeWorkingCopy
+						.setKarafVersion(model.getKarafVersion());
 			}
 		}
 		try {
@@ -109,17 +123,19 @@ public abstract class  AbstractKarafRuntimeWizardFragment extends WizardFragment
 		}
 	}
 
-	protected abstract AbstractKarafRuntimeComposite getRuntimeComposite(Composite parent, IWizardHandle handle, KarafWizardDataModel model);
+	protected abstract AbstractKarafRuntimeComposite getRuntimeComposite(
+			Composite parent, IWizardHandle handle, KarafWizardDataModel model);
 
 	@Override
 	public boolean isComplete() {
 		return composite != null ? composite.isValid() : true;
 	}
-	
+
 	public void enter() {
-        if (composite != null) {
-                IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject(TaskModel.TASK_RUNTIME);
-                composite.setRuntime(runtime);
-        }
-}
+		if (composite != null) {
+			IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel()
+					.getObject(TaskModel.TASK_RUNTIME);
+			composite.setRuntime(runtime);
+		}
+	}
 }
