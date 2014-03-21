@@ -11,6 +11,17 @@
 
 package org.fusesource.ide.fabric.navigator;
 
+import io.fabric8.api.Container;
+import io.fabric8.api.CreateChildContainerOptions;
+import io.fabric8.api.CreateContainerMetadata;
+import io.fabric8.api.CreateContainerOptions;
+import io.fabric8.api.FabricService;
+import io.fabric8.api.Profile;
+import io.fabric8.api.Version;
+import io.fabric8.service.ContainerTemplate;
+import io.fabric8.service.Containers;
+import io.fabric8.service.JmxTemplateSupport;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,16 +41,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import io.fabric8.api.Container;
-import io.fabric8.api.CreateChildContainerOptions;
-import io.fabric8.api.CreateContainerMetadata;
-import io.fabric8.api.CreateContainerOptions;
-import io.fabric8.api.FabricService;
-import io.fabric8.api.Profile;
-import io.fabric8.api.Version;
-import io.fabric8.service.ContainerTemplate;
-import io.fabric8.service.Containers;
-import io.fabric8.service.JmxTemplateSupport;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.tree.GraphableNode;
@@ -71,7 +72,9 @@ import scala.actors.threadpool.Arrays;
 
 import com.google.common.base.Joiner;
 
-public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI, ImageProvider, GraphableNode, GraphableNodeConnected, ContextMenuProvider, ITerminalConnectionListener, HasLogBrowser {
+public class ContainerNode extends IdBasedFabricNode implements
+		HasRefreshableUI, ImageProvider, GraphableNode, GraphableNodeConnected,
+		ContextMenuProvider, ITerminalConnectionListener, HasLogBrowser {
 
 	private final Container container;
 	private ILogBrowser logBrowser;
@@ -110,12 +113,15 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		Profile[] profiles = agent.getProfiles();
 		for (Profile profile : profiles) {
 			// TODO throws exception!
-			//Profile overlay = profile.getOverlay();
+			// Profile overlay = profile.getOverlay();
 			Profile overlay = profile;
 			FabricPlugin.getLogger().debug("Profile: " + overlay);
-			FabricPlugin.getLogger().debug("  bundles: " + joiner.join(overlay.getBundles()));
-			FabricPlugin.getLogger().debug("  features: " + joiner.join(overlay.getFeatures()));
-			FabricPlugin.getLogger().debug("  repos:   " + joiner.join(overlay.getRepositories()));
+			FabricPlugin.getLogger().debug(
+					"  bundles: " + joiner.join(overlay.getBundles()));
+			FabricPlugin.getLogger().debug(
+					"  features: " + joiner.join(overlay.getFeatures()));
+			FabricPlugin.getLogger().debug(
+					"  repos:   " + joiner.join(overlay.getRepositories()));
 		}
 	}
 
@@ -131,7 +137,6 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		return getFabric().getVersionNode(container.getVersion().getName());
 	}
 
-
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == IPropertySheetPage.class) {
@@ -145,21 +150,19 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		return super.getAdapter(adapter);
 	}
 
-
 	@Override
 	public List<Node> getChildrenGraph() {
 		// lets add all my children and all my parent profiles...
 		Set<Node> answer = new HashSet<Node>();
 		answer.add(this);
 		Profile[] profiles = getContainer().getProfiles();
-		Collection<ProfileNode> profileNodes = getFabric().getProfileNodes(profiles);
+		Collection<ProfileNode> profileNodes = getFabric().getProfileNodes(
+				profiles);
 		for (ProfileNode profileNode : profileNodes) {
 			profileNode.addAndDescendants(answer);
 		}
 		return new ArrayList<Node>(answer);
 	}
-
-
 
 	@Override
 	public ILogBrowser getLogBrowser() {
@@ -167,7 +170,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 			if (connectionWrapper != null) {
 				logBrowser = Logs.toLogBrowser(connectionWrapper);
 			}
-			if (logBrowser == null){
+			if (logBrowser == null) {
 				logBrowser = new ContainerLogBrowser(this);
 			}
 		}
@@ -182,7 +185,8 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 			List<Node> answer = new ArrayList<Node>();
 			Container[] list = getContainer().getChildren();
 			for (Container container : list) {
-				ContainerNode containerNode = containersNode.getContainerNode(container.getId());
+				ContainerNode containerNode = containersNode
+						.getContainerNode(container.getId());
 				if (containerNode != null) {
 					answer.add(containerNode);
 				}
@@ -191,7 +195,6 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		}
 		return Collections.emptyList();
 	}
-
 
 	@Override
 	public RefreshableUI getRefreshableUI() {
@@ -207,7 +210,6 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		return getContainer().getSshUrl();
 	}
 
-
 	@Override
 	protected void checkLoaded() {
 		if (hasJmxConnector()) {
@@ -217,26 +219,29 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 	@Override
 	protected void refreshUIAfterLazyLoad() {
-		// we typically lazy load after we've been viewed so lets force a refresh
+		// we typically lazy load after we've been viewed so lets force a
+		// refresh
 		refreshUI();
 	}
 
 	@Override
 	protected void loadChildren() {
-// commented out as we currently do not support JMX under a container node
-//		if (hasJmxConnector()) {
-//			connectionWrapper = new FabricConnectionWrapper(this);
-//			addChild(connectionWrapper);
-//		}
+		// commented out as we currently do not support JMX under a container
+		// node
+		// if (hasJmxConnector()) {
+		// connectionWrapper = new FabricConnectionWrapper(this);
+		// addChild(connectionWrapper);
+		// }
 	}
 
 	protected boolean hasJmxConnector() {
 		Container a = getContainer();
 		String jmxUrl = a.getJmxUrl();
 		boolean provisioned = a.isAlive() && a.isProvisioningComplete();
-		return jmxUrl != null && jmxUrl.trim().length()>0 && (provisioned || a.isRoot());
+		return jmxUrl != null && jmxUrl.trim().length() > 0
+				&& (provisioned || a.isRoot());
 	}
-	
+
 	public Container getContainer() {
 		return container;
 	}
@@ -248,13 +253,13 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		return container.getJmxDomains().contains(domain);
 	}
 
-
 	public boolean matches(Profile profile) {
 		Container ag = getContainer();
 		Profile[] profiles = ag.getProfiles();
 		for (Profile prof : profiles) {
 			if (Objects.equal(prof.getId(), profile.getId())) {
-				if (Objects.equal(Fabrics.getVersionName(ag.getVersion()), profile.getVersion())) {
+				if (Objects.equal(Fabrics.getVersionName(ag.getVersion()),
+						profile.getVersion())) {
 					return true;
 				}
 			}
@@ -263,12 +268,17 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 	}
 
 	public boolean matches(Version version) {
-		return Objects.equal(Fabrics.getVersionName(getContainer().getVersion()), Fabrics.getVersionName(version));
+		return Objects.equal(
+				Fabrics.getVersionName(getContainer().getVersion()),
+				Fabrics.getVersionName(version));
 	}
 
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
-		Action openTerminalAction = new ActionSupport(Messages.openTerminalLabel, Messages.openTerminalToolTip, FabricPlugin.getDefault().getImageDescriptor("terminal_view.gif")) {
+		Action openTerminalAction = new ActionSupport(
+				Messages.openTerminalLabel, Messages.openTerminalToolTip,
+				FabricPlugin.getDefault().getImageDescriptor(
+						"terminal_view.gif")) {
 			@Override
 			public void run() {
 				openTerminal();
@@ -276,8 +286,10 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		};
 		menu.add(openTerminalAction);
 
-		final ImageDescriptor versionImage = FabricPlugin.getDefault().getImageDescriptor("version.png");
-		final MenuManager subMenu = new MenuManager("Set Version", versionImage, "org.fusesource.ide.actions.update");
+		final ImageDescriptor versionImage = FabricPlugin.getDefault()
+				.getImageDescriptor("version.png");
+		final MenuManager subMenu = new MenuManager("Set Version",
+				versionImage, "org.fusesource.ide.actions.update");
 		menu.add(subMenu);
 
 		subMenu.setRemoveAllWhenShown(true);
@@ -305,8 +317,6 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 			}
 		});
 
-
-
 		Action startStopAction;
 		if (getContainer().isAlive()) {
 			startStopAction = new Action(Messages.StopAgentAction, SWT.CHECK) {
@@ -317,7 +327,8 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 			};
 			startStopAction.setToolTipText(Messages.StopAgentActionToolTip);
-			startStopAction.setImageDescriptor(FabricPlugin.getDefault().getImageDescriptor("stop_task.gif"));
+			startStopAction.setImageDescriptor(FabricPlugin.getDefault()
+					.getImageDescriptor("stop_task.gif"));
 		} else {
 			startStopAction = new Action(Messages.StartAgentAction, SWT.CHECK) {
 				@Override
@@ -327,9 +338,13 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 			};
 			startStopAction.setToolTipText(Messages.StartAgentActionToolTip);
-			startStopAction.setImageDescriptor(FabricPlugin.getDefault().getImageDescriptor("start_task.gif"));
+			startStopAction.setImageDescriptor(FabricPlugin.getDefault()
+					.getImageDescriptor("start_task.gif"));
 		}
-		menu.add(startStopAction);
+		if (!getContainer().isRoot()) {
+			menu.add(startStopAction);
+		}
+
 		menu.add(new Separator());
 
 		if (getContainer().isRoot()) {
@@ -345,7 +360,8 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		openTerminal(getFabric(), getContainer(), this);
 	}
 
-	public static void openTerminal(Fabric theFabric, Container theContainer, ITerminalConnectionListener listener) {
+	public static void openTerminal(Fabric theFabric, Container theContainer,
+			ITerminalConnectionListener listener) {
 		String url = theContainer.getSshUrl();
 		String user = theFabric.getUserName();
 		String password = theFabric.getPassword();
@@ -357,13 +373,13 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		try {
 			sshUrl = new URL(url);
 		} catch (Exception e) {
-			Activator.getLogger().warning("Failed to parse URI: '" + url + "'. " + e, e);
+			Activator.getLogger().warning(
+					"Failed to parse URI: '" + url + "'. " + e, e);
 			return;
 		}
 
 		String host = sshUrl.getHost();
 		int port = sshUrl.getPort();
-
 
 		// open the terminal view
 		IViewPart vp = FabricPlugin.openTerminalView();
@@ -373,7 +389,7 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		}
 
 		// get the view
-		final SshView connectorView = (SshView)vp;
+		final SshView connectorView = (SshView) vp;
 
 		connectorView.setPartName(theContainer.getId());
 
@@ -384,28 +400,36 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 
 		// create the connection
 		try {
-			FabricPlugin.getLogger().debug("Creating the connection if it doesn't exist for host: " + host + " port " + port + " user " + user + " pwd " + password);
+			FabricPlugin.getLogger().debug(
+					"Creating the connection if it doesn't exist for host: "
+							+ host + " port " + port + " user " + user
+							+ " pwd " + password);
 
-			// TODO set the title? open a new view if there's not one already etc?
-			connectorView.createConnectionIfNotExists(host,
-					port,
-					user,
+			// TODO set the title? open a new view if there's not one already
+			// etc?
+			connectorView.createConnectionIfNotExists(host, port, user,
 					password);
 		} catch (Exception ex) {
 			FabricPlugin.getLogger().error("Unable to connect via SSH", ex);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.view.ITerminalConnectionListener#onConnect()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.fusesource.ide.server.view.ITerminalConnectionListener#onConnect()
 	 */
 	@Override
 	public void onConnect() {
 		FabricPlugin.openTerminalView().setFocus();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.view.ITerminalConnectionListener#onDisconnect()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.fusesource.ide.server.view.ITerminalConnectionListener#onDisconnect()
 	 */
 	@Override
 	public void onDisconnect() {
@@ -417,26 +441,32 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 		}
 
 		// get the view
-		final SshView connectorView = (SshView)vp;
+		final SshView connectorView = (SshView) vp;
 
 		connectorView.setPartName(Messages.shellViewLabel);
 
 		// add a connection listener
 		connectorView.removeConnectionListener(this);
 	}
+
 	/**
 	 * Creates a child container
 	 */
-	public void createContainer(final String name, Profile[] profiles, VersionNode version) {
+	public void createContainer(final String name, Profile[] profiles,
+			VersionNode version) {
 		try {
 			ArrayList<String> profilesList = new ArrayList<String>();
 			for (Profile p : profiles) {
 				profilesList.add(p.getId());
 			}
-			
-			FabricPlugin.getLogger().debug("About to create child container of " + this + " with name: " + name + " and profiles: " + Arrays.asList(profiles));
+
+			FabricPlugin.getLogger().debug(
+					"About to create child container of " + this
+							+ " with name: " + name + " and profiles: "
+							+ Arrays.asList(profiles));
 			FabricService fabricService = getFabricService();
-			CreateContainerOptions options = CreateChildContainerOptions.builder()
+			CreateContainerOptions options = CreateChildContainerOptions
+					.builder()
 					.name(name)
 					.parent(getId())
 					.version(version.getVersionId())
@@ -447,27 +477,32 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 					.jmxPassword(getFabric().getDetails().getPassword())
 					.proxyUri(fabricService.getMavenRepoURI()).build();
 
-			CreateContainerMetadata[] newContainers = fabricService.createContainers(options);
+			CreateContainerMetadata[] newContainers = fabricService
+					.createContainers(options);
 
-//			for(CreateContainerMetadata metadata : newContainers) {
-//				Container newContainer = metadata.getContainer();
-//				getFabric().setContainerProfiles(newContainer, profiles);
-//			}
+			// for(CreateContainerMetadata metadata : newContainers) {
+			// Container newContainer = metadata.getContainer();
+			// getFabric().setContainerProfiles(newContainer, profiles);
+			// }
 			getFabric().refreshCreatedAgent(name);
 			Display.getDefault().syncExec(new Runnable() {
 				@Override
 				public void run() {
-                    getFabric().getContainersNode().refresh();
-                    ViewPropertySheetPage p = getFabric().getContainersNode().getPropertySourceTablePage();
-                    if (p instanceof ContainerTableSheetPage) {
-                    	((ContainerTableSheetPage)p).updateData();
-                    	Viewers.refresh(((ContainerTableSheetPage)p).getTableView().getViewer());
-                    }
-                    refresh();
+					getFabric().getContainersNode().refresh();
+					ViewPropertySheetPage p = getFabric().getContainersNode()
+							.getPropertySourceTablePage();
+					if (p instanceof ContainerTableSheetPage) {
+						((ContainerTableSheetPage) p).updateData();
+						Viewers.refresh(((ContainerTableSheetPage) p)
+								.getTableView().getViewer());
+					}
+					refresh();
 				}
 			});
 		} catch (Exception e) {
-			FabricPlugin.showUserError("Failed to create new child container of " + this, e.getMessage(), e);
+			FabricPlugin.showUserError(
+					"Failed to create new child container of " + this,
+					e.getMessage(), e);
 		}
 	}
 
@@ -480,7 +515,8 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 			getFabric().refresh();
 
 		} catch (Exception e) {
-			FabricPlugin.showUserError("Failed to start container " + this, e.getMessage(), e);
+			FabricPlugin.showUserError("Failed to start container " + this,
+					e.getMessage(), e);
 		}
 	}
 
@@ -493,7 +529,8 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 			getFabric().refresh();
 
 		} catch (Exception e) {
-			FabricPlugin.showUserError("Failed to stop container " + this, e.getMessage(), e);
+			FabricPlugin.showUserError("Failed to stop container " + this,
+					e.getMessage(), e);
 		}
 	}
 
@@ -506,31 +543,33 @@ public class ContainerNode extends IdBasedFabricNode implements HasRefreshableUI
 			getFabric().refresh();
 
 		} catch (Exception e) {
-			FabricPlugin.showUserError("Failed to destroy container " + this, e.getMessage(), e);
+			FabricPlugin.showUserError("Failed to destroy container " + this,
+					e.getMessage(), e);
 		}
 	}
 
 	public ContainerTemplate getContainerTemplate() {
 		if (containerTemplate == null) {
 			Fabric fabric = getFabric();
-			containerTemplate = Containers.newContainerTemplate(container, fabric.getUserName(), fabric.getPassword());
+			containerTemplate = Containers.newContainerTemplate(container,
+					fabric.getUserName(), fabric.getPassword());
 			containerTemplate.setLogin(fabric.getUserName());
 			containerTemplate.setPassword(fabric.getPassword());
 		}
 		return containerTemplate;
 	}
-	
+
 	public void setContainerTemplate(ContainerTemplate agentTemplate) {
 		this.containerTemplate = agentTemplate;
 	}
-	
+
 	public JmxTemplateSupport getJmxTemplate() {
 		if (jmxTemplate == null) {
 			jmxTemplate = getContainerTemplate().getJmxTemplate();
 		}
 		return jmxTemplate;
 	}
-	
+
 	@Override
 	public RefreshableNode getParent() {
 		return (RefreshableNode) super.getParent();
