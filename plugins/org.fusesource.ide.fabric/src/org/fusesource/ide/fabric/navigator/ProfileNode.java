@@ -11,6 +11,9 @@
 
 package org.fusesource.ide.fabric.navigator;
 
+import io.fabric8.api.FabricException;
+import io.fabric8.api.Profile;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -24,13 +27,10 @@ import java.util.Set;
 import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import io.fabric8.api.FabricException;
-import io.fabric8.api.Profile;
 import org.fusesource.ide.commons.properties.PropertySources;
 import org.fusesource.ide.commons.tree.GraphableNode;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
@@ -44,22 +44,20 @@ import org.fusesource.ide.deployment.maven.MavenUtils;
 import org.fusesource.ide.deployment.maven.ProjectDropHandler;
 import org.fusesource.ide.deployment.maven.ProjectDropTarget;
 import org.fusesource.ide.fabric.FabricPlugin;
-import org.fusesource.ide.fabric.actions.CreateChildContainerAction;
-import org.fusesource.ide.fabric.actions.CreateSshContainerAction;
 import org.fusesource.ide.fabric.actions.ProfileAddAction;
 import org.fusesource.ide.fabric.actions.ProfileDeleteAction;
-import org.fusesource.ide.fabric.actions.jclouds.CreateJCloudsContainerAction;
 import org.fusesource.ide.fabric.navigator.maven.FabricDeployAction;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 import org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor;
 import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
 
-
-public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, ImageProvider, GraphableNode, ContextMenuProvider, ProjectDropTarget, DropHandlerFactory {
+public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI,
+		ImageProvider, GraphableNode, ContextMenuProvider, ProjectDropTarget,
+		DropHandlerFactory {
 	private static final String AGENT_PID = "io.fabric8.agent";
 	private static final boolean addContainersToTree = false;
 
-	private Map<String,ProfileNode> map = new HashMap<String, ProfileNode>();
+	private Map<String, ProfileNode> map = new HashMap<String, ProfileNode>();
 	private final Fabric fabric;
 	private final Profile profile;
 	private final VersionNode versionNode;
@@ -95,7 +93,6 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 		return new ArrayList<Node>(answer);
 	}
 
-
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == IPropertySheetPage.class) {
@@ -104,15 +101,14 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 		return super.getAdapter(adapter);
 	}
 
+	@Override
+	public boolean requiresContentsPropertyPage() {
+		checkLoaded();
+		getVersionNode().getChildren();
+		return false;
+	}
 
 	@Override
-    public boolean requiresContentsPropertyPage() {
-        checkLoaded();
-        getVersionNode().getChildren();
-        return false;
-    }
-
-    @Override
 	public RefreshableUI getRefreshableUI() {
 		return super.getRefreshableUI();
 	}
@@ -122,17 +118,17 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 		return FabricPlugin.getDefault().getImage("profile.png");
 	}
 
-
 	@Override
 	protected void loadChildren() {
-		Set<Profile> childProfiles = versionNode.getChildProfiles(getProfileId());
+		Set<Profile> childProfiles = versionNode
+				.getChildProfiles(getProfileId());
 		if (childProfiles != null) {
 			for (Profile profile : childProfiles) {
 				addChild(versionNode.createProfile(this, profile));
 			}
 		}
 
-		if (addContainersToTree ) {
+		if (addContainersToTree) {
 			// lets get all the agents for this profile...
 			List<ContainerNode> list = getContainerNodes();
 			for (ContainerNode agentNode : list) {
@@ -146,10 +142,11 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 		return getFabric().getAgentsFor(getProfile());
 	}
 
-	public static ProfileNode getProfileNode(String profileId, ProfileNode[] children) {
+	public static ProfileNode getProfileNode(String profileId,
+			ProfileNode[] children) {
 		ProfileNode answer = null;
 		for (ProfileNode child : children) {
-			answer  = child.getProfileNode(profileId);
+			answer = child.getProfileNode(profileId);
 			if (answer != null) {
 				return answer;
 			}
@@ -178,21 +175,29 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 
 			// set a post processor
 			action.setPostProcessor(new ExecutePomActionPostProcessor() {
-				/* (non-Javadoc)
-				 * @see org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor#executeOnFailure()
+				/*
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor
+				 * #executeOnFailure()
 				 */
 				@Override
 				public void executeOnFailure() {
 				}
 
-				/* (non-Javadoc)
-				 * @see org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor#executeOnSuccess()
+				/*
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor
+				 * #executeOnSuccess()
 				 */
 				@Override
 				public void executeOnSuccess() {
 					if (profile != null) {
 						String uri = MavenUtils.getBundleURI(mavenModel);
-						if ( uri != null) {
+						if (uri != null) {
 							if (uri.startsWith("fab:")) {
 								uri = uri.substring(4);
 								List<String> list = profile.getFabs();
@@ -210,15 +215,16 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 							}
 						} else {
 							// TODO handle feature file
-							// deduce if there's a feature file created for this project and use that instead!
+							// deduce if there's a feature file created for this
+							// project and use that instead!
 						}
 
 						try {
 							fabric.getFabricService().setConfigurationValue(
-									getVersionNode().getVersionId(), 
-									getProfileId(), 
-									AGENT_PID, 
-									"io.fabric8.buildTime", "" + uri + " at " + new Date());
+									getVersionNode().getVersionId(),
+									getProfileId(), AGENT_PID,
+									"io.fabric8.buildTime",
+									"" + uri + " at " + new Date());
 						} catch (FabricException ex) {
 							ex.printStackTrace();
 						} finally {
@@ -242,28 +248,33 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 			String uriText;
 			boolean addUserPasswordToUrl = false;
 			if (addUserPasswordToUrl) {
-				String userInfo = theFabric.getUserName() + ":" + theFabric.getPassword();
+				String userInfo = theFabric.getUserName() + ":"
+						+ theFabric.getPassword();
 
-				URI mavenRepoURI = new URI(u.getScheme(),
-						userInfo, u.getHost(), u.getPort(),
-						u.getPath(), u.getQuery(),
+				URI mavenRepoURI = new URI(u.getScheme(), userInfo,
+						u.getHost(), u.getPort(), u.getPath(), u.getQuery(),
 						u.getFragment());
 
 				uriText = mavenRepoURI.toString();
 			} else {
 				uriText = u.toString();
 			}
-			FabricPlugin.getLogger().debug("===== deploying to the mavenRepoURL: " + uriText + " based on the URI from Fabric: " + u);
+			FabricPlugin.getLogger().debug(
+					"===== deploying to the mavenRepoURL: " + uriText
+							+ " based on the URI from Fabric: " + u);
 
 			return getFabricNameWithoutSpaces() + "::default::" + uriText;
 		} catch (URISyntaxException e) {
-			FabricPlugin.getLogger().error("Failed to create upload URI from " + u + ". Reason: " + e, e);
+			FabricPlugin.getLogger().error(
+					"Failed to create upload URI from " + u + ". Reason: " + e,
+					e);
 			return null;
 		}
 	}
 
 	/**
-	 * Returns the fabric name without spaces to avoid freaking out maven when doing a deploy
+	 * Returns the fabric name without spaces to avoid freaking out maven when
+	 * doing a deploy
 	 */
 	public String getFabricNameWithoutSpaces() {
 		return getFabric().getName().replace(' ', '_');
@@ -292,14 +303,6 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI, 
 
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
-		menu.add(new CreateChildContainerAction(this));
-		if (CreateJCloudsContainerAction.createLocalAgents) {
-			menu.add(new CreateJCloudsContainerAction(getVersionNode(), null, this));
-		}
-		if (CreateSshContainerAction.createLocalAgents) {
-			menu.add(new CreateSshContainerAction(getVersionNode(), null, this));
-		}
-		menu.add(new Separator());
 		menu.add(new ProfileAddAction(this));
 		menu.add(new ProfileDeleteAction(this));
 	}

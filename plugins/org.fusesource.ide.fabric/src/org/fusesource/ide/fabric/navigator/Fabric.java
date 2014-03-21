@@ -11,6 +11,13 @@
 
 package org.fusesource.ide.fabric.navigator;
 
+import io.fabric8.api.Container;
+import io.fabric8.api.CreateContainerMetadata;
+import io.fabric8.api.CreateContainerOptions;
+import io.fabric8.api.FabricService;
+import io.fabric8.api.Profile;
+import io.fabric8.api.ProfileStatus;
+import io.fabric8.api.Version;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,14 +38,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
-import io.fabric8.api.Container;
-import io.fabric8.api.CreateContainerMetadata;
-import io.fabric8.api.CreateContainerOptions;
-import io.fabric8.api.CreationStateListener;
-import io.fabric8.api.FabricService;
-import io.fabric8.api.Profile;
-import io.fabric8.api.ProfileStatus;
-import io.fabric8.api.Version;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.commons.tree.GraphableNode;
@@ -51,14 +50,11 @@ import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.actions.HasDoubleClickAction;
 import org.fusesource.ide.fabric.FabricConnector;
 import org.fusesource.ide.fabric.FabricPlugin;
-import org.fusesource.ide.fabric.actions.CreateChildContainerAction;
-import org.fusesource.ide.fabric.actions.CreateSshContainerAction;
 import org.fusesource.ide.fabric.actions.FabricConnectAction;
 import org.fusesource.ide.fabric.actions.FabricDetails;
 import org.fusesource.ide.fabric.actions.FabricDetailsDeleteAction;
 import org.fusesource.ide.fabric.actions.FabricDetailsEditAction;
 import org.fusesource.ide.fabric.actions.FabricDisconnectAction;
-import org.fusesource.ide.fabric.actions.jclouds.CreateJCloudsContainerAction;
 import org.fusesource.ide.fabric.views.logs.FabricLogBrowser;
 import org.fusesource.ide.fabric.views.logs.HasLogBrowser;
 import org.fusesource.ide.fabric.views.logs.ILogBrowser;
@@ -66,7 +62,9 @@ import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 
 import com.google.common.base.Objects;
 
-public class Fabric extends RefreshableCollectionNode implements ImageProvider, HasRefreshableUI, GraphableNode, HasLogBrowser, ContextMenuProvider, HasDoubleClickAction {
+public class Fabric extends RefreshableCollectionNode implements ImageProvider,
+		HasRefreshableUI, GraphableNode, HasLogBrowser, ContextMenuProvider,
+		HasDoubleClickAction {
 	public static final String DEFAULT_NAME = "Fabric";
 
 	private static final boolean changeSelectionOnCreate = false;
@@ -121,7 +119,6 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		};
 	}
 
-
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == IPropertySheetPage.class) {
@@ -131,12 +128,11 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 	}
 
 	@Override
-    public boolean requiresContentsPropertyPage() {
-        return false;
-    }
+	public boolean requiresContentsPropertyPage() {
+		return false;
+	}
 
-
-    public FabricService getFabricService() {
+	public FabricService getFabricService() {
 		if (connector != null) {
 			return connector.getFabricService();
 		}
@@ -155,7 +151,9 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 	public void addFabricUpdateRunnable(Runnable runnable) {
 		fabricUpdateTasks.add(runnable);
 
-		FabricPlugin.getLogger().debug("=============== Now have " + fabricUpdateTasks.size() + " runnables");
+		FabricPlugin.getLogger().debug(
+				"=============== Now have " + fabricUpdateTasks.size()
+						+ " runnables");
 	}
 
 	public void removeFabricUpdateRunnable(Runnable runnable) {
@@ -188,7 +186,8 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 
 	@Override
 	protected void loadChildren() {
-		if (!isConnected()) return;
+		if (!isConnected())
+			return;
 
 		containersNode = new ContainersNode(this);
 		versionsNode = new VersionsNode(this);
@@ -197,7 +196,6 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		addChild(versionsNode);
 	}
 
-
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
 		menu.add(new FabricConnectAction(this));
@@ -205,24 +203,17 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		menu.add(new Separator());
 		menu.add(editAction);
 		menu.add(deleteAction);
-		if (isConnected()) {
-			menu.add(new Separator());
-			CreateChildContainerAction.addIfSingleRootContainer(menu, this);
-			menu.add(new CreateJCloudsContainerAction(this));
-			menu.add(new CreateSshContainerAction(this));
-		}
 	}
-
 
 	/*
-	@Override
-	protected PropertySourceTableSheetPage createPropertySourceTableSheetPage() {
-		return new ContainerTableSheetPage(this);
-	}
+	 * @Override protected PropertySourceTableSheetPage
+	 * createPropertySourceTableSheetPage() { return new
+	 * ContainerTableSheetPage(this); }
 	 */
 
 	public VersionNode getDefaultVersionNode() {
-		if (!isConnected() || versionsNode == null) return null;
+		if (!isConnected() || versionsNode == null)
+			return null;
 		return versionsNode.getDefaultVersionNode();
 	}
 
@@ -238,19 +229,15 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 			}
 
 			/*
-			//addChildren(answer, agentsNode);
-			Node[] children = versionsNode.getChildren();
-			if (children.length == 1) {
-				addChildren(answer, children[0], false);
-			} else {
-				addChildren(answer, versionsNode, true);
-			}
+			 * //addChildren(answer, agentsNode); Node[] children =
+			 * versionsNode.getChildren(); if (children.length == 1) {
+			 * addChildren(answer, children[0], false); } else {
+			 * addChildren(answer, versionsNode, true); }
 			 */
 		}
 
 		return new ArrayList<Node>(answer);
 	}
-
 
 	@Override
 	public ILogBrowser getLogBrowser() {
@@ -261,7 +248,6 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		return logBrowser;
 	}
 
-
 	@Override
 	public Action getDoubleClickAction() {
 		return new FabricConnectAction(this);
@@ -271,9 +257,11 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		if (node != null && isConnected()) {
 			List<Node> childrenList = node.getChildrenList();
 			for (Node child : childrenList) {
-				if (child instanceof ProfileNode || child instanceof VersionNode) {
+				if (child instanceof ProfileNode
+						|| child instanceof VersionNode) {
 					addChildren(set, child, showVersions);
-				} else if (!(child instanceof ContainerNode) && (!showVersions && child instanceof VersionNode)) {
+				} else if (!(child instanceof ContainerNode)
+						&& (!showVersions && child instanceof VersionNode)) {
 					continue;
 				}
 				set.add(child);
@@ -310,9 +298,7 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 	}
 
 	/*
-	public void setName(String name) {
-		this.name = name;
-	}
+	 * public void setName(String name) { this.name = name; }
 	 */
 
 	public String getUserName() {
@@ -344,7 +330,8 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 	}
 
 	public boolean isConnected() {
-		if (this.connector == null) return false;
+		if (this.connector == null)
+			return false;
 		return connector.isConnected();
 	}
 
@@ -371,7 +358,6 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		return null;
 	}
 
-
 	public Version getVersion(String versionName) {
 		VersionNode node = getVersionNode(versionName);
 		if (node != null) {
@@ -380,24 +366,27 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		return null;
 	}
 
-	public void createContainer(final Container agent, final Profile[] profiles, final CreateContainerOptions args) {
-		if (!isConnected()) return;
+	public void createContainer(final Container agent,
+			final Profile[] profiles, final CreateContainerOptions args) {
+		if (!isConnected())
+			return;
 		try {
 			if (agent != null) {
-//				args.setParent(agent.getId());
+				// args.setParent(agent.getId());
 			}
 			Jobs.schedule(new Job("Create container") {
 
 				@Override
 				protected IStatus run(final IProgressMonitor monitor) {
 					try {
-//						args.setCreationStateListener(new CreationStateListener() {
-//
-//							@Override
-//							public void onStateChange(String message) {
-//								monitor.subTask(message);
-//							}
-//						});
+						// args.setCreationStateListener(new
+						// CreationStateListener() {
+						//
+						// @Override
+						// public void onStateChange(String message) {
+						// monitor.subTask(message);
+						// }
+						// });
 						FabricService fabricService = getFabricService();
 						final CreateContainerMetadata[] newAgents;
 						if (agent != null) {
@@ -410,10 +399,12 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 
 							@Override
 							public void run() {
-								for(CreateContainerMetadata metadata : newAgents) {
-									Container newContainer = metadata.getContainer();
+								for (CreateContainerMetadata metadata : newAgents) {
+									Container newContainer = metadata
+											.getContainer();
 									if (newContainer != null) {
-										setContainerProfiles(newContainer, profiles);
+										setContainerProfiles(newContainer,
+												profiles);
 										refreshCreatedAgent(args.getName());
 									}
 								}
@@ -422,23 +413,27 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 						});
 						return Status.OK_STATUS;
 					} catch (Throwable e) {
-						return new Status(Status.ERROR, FabricPlugin.PLUGIN_ID, "Failed to create container: " + e, e);
+						return new Status(Status.ERROR, FabricPlugin.PLUGIN_ID,
+								"Failed to create container: " + e, e);
 					}
 				}
 
 			});
 
 		} catch (Exception e) {
-			FabricPlugin.showUserError("Failed to create new child container of " + this, e.getMessage(), e);
+			FabricPlugin.showUserError(
+					"Failed to create new child container of " + this,
+					e.getMessage(), e);
 		}
 	}
 
-
 	/**
-	 * Sets the active profiles on the given container, updating the version if required
+	 * Sets the active profiles on the given container, updating the version if
+	 * required
 	 */
 	public void setContainerProfiles(Container newContainer, Profile[] profiles) {
-		if (!isConnected() || newContainer == null) return;
+		if (!isConnected() || newContainer == null)
+			return;
 		Version version = getProfilesVersion(profiles);
 		if (version != null) {
 			newContainer.setVersion(version);
@@ -446,8 +441,10 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 		newContainer.setProfiles(profiles);
 	}
 
-
-	/** Returns the version for the profiles (assuming they are all part of the same version */
+	/**
+	 * Returns the version for the profiles (assuming they are all part of the
+	 * same version
+	 */
 	public Version getProfilesVersion(Profile[] profiles) {
 		Version version = null;
 		if (isConnected()) {
@@ -463,9 +460,10 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 	}
 
 	public void refreshCreatedAgent(final String agentName) {
-		if (!isConnected()) return;
+		if (!isConnected())
+			return;
 		final Fabric fabric = this;
-		//refresh();
+		// refresh();
 		final ContainersNode containers = getContainersNode();
 		if (containers != null) {
 			containers.refresh();
@@ -481,20 +479,24 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 
 						Display.getDefault().asyncExec(new Runnable() {
 
-
 							@Override
 							public void run() {
-								VersionsNode versionsNode = fabric.getVersionsNode();
-								cv.setExpandedElements(new Object[] { fabric, containers, versionsNode });
+								VersionsNode versionsNode = fabric
+										.getVersionsNode();
+								cv.setExpandedElements(new Object[] { fabric,
+										containers, versionsNode });
 
-
-								ContainerNode newNode = containers.getContainerNode(agentName);
+								ContainerNode newNode = containers
+										.getContainerNode(agentName);
 								if (selectContainersOnCreate || newNode == null) {
-									cv.setSelection(new StructuredSelection(containers));
+									cv.setSelection(new StructuredSelection(
+											containers));
 								} else {
-									cv.setSelection(new StructuredSelection(newNode));
+									cv.setSelection(new StructuredSelection(
+											newNode));
 								}
-							}});
+							}
+						});
 					}
 				}
 			}
@@ -517,18 +519,20 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 
 				Display.getDefault().asyncExec(new Runnable() {
 
-
 					@Override
 					public void run() {
 						ContainersNode containersNode = getContainersNode();
 						VersionsNode versionsNode = getVersionsNode();
 						if (containersNode != null) {
-							cv.setExpandedElements(new Object[] { fabric, containersNode });
+							cv.setExpandedElements(new Object[] { fabric,
+									containersNode });
 							if (changeSelectionOnConnect) {
-								cv.setSelection(new StructuredSelection(containersNode));
+								cv.setSelection(new StructuredSelection(
+										containersNode));
 							}
 						}
-					}});
+					}
+				});
 			}
 		}
 
@@ -553,7 +557,7 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 				}
 			}
 		}
-		return answer ;
+		return answer;
 	}
 
 	/**
@@ -564,8 +568,9 @@ public class Fabric extends RefreshableCollectionNode implements ImageProvider, 
 
 			@Override
 			public void run() {
-				//FabricPlugin.getLogger().info("Refreshing due to ZK change!");
-				FabricPlugin.getLogger().debug("Refreshing Fabric " + this + " due to ZK change!");
+				// FabricPlugin.getLogger().info("Refreshing due to ZK change!");
+				FabricPlugin.getLogger().debug(
+						"Refreshing Fabric " + this + " due to ZK change!");
 
 				getContainersNode().refresh();
 
