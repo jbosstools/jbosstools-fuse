@@ -11,23 +11,23 @@
 
 package org.fusesource.ide.fabric.navigator;
 
+import io.fabric8.api.Version;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.graphics.Image;
-import io.fabric8.api.Version;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.CreateVersionAction;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 
-
-public class VersionsNode extends FabricNodeSupport implements ImageProvider, ContextMenuProvider {
-	private Map<String,VersionNode> map = new HashMap<String, VersionNode>();
+public class VersionsNode extends FabricNodeSupport implements ImageProvider,
+		ContextMenuProvider {
+	private Map<String, VersionNode> map = new HashMap<String, VersionNode>();
 
 	public VersionsNode(Fabric fabric) {
 		super(fabric, fabric);
@@ -76,9 +76,6 @@ public class VersionsNode extends FabricNodeSupport implements ImageProvider, Co
 
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
-		super.provideContextMenu(menu);
-
-		menu.add(new Separator());
 		menu.add(new CreateVersionAction(this));
 	}
 
