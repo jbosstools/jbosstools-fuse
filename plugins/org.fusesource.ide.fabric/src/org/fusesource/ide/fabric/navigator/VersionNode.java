@@ -11,6 +11,9 @@
 
 package org.fusesource.ide.fabric.navigator;
 
+import io.fabric8.api.Profile;
+import io.fabric8.api.Version;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,10 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.graphics.Image;
-import io.fabric8.api.Profile;
-import io.fabric8.api.Version;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
 import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
@@ -32,16 +32,13 @@ import org.fusesource.ide.commons.tree.RefreshableUI;
 import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.FabricPlugin;
-import org.fusesource.ide.fabric.actions.CreateSshContainerAction;
-import org.fusesource.ide.fabric.actions.CreateVersionAction;
 import org.fusesource.ide.fabric.actions.ProfileAddAction;
-import org.fusesource.ide.fabric.actions.jclouds.CreateJCloudsContainerAction;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 
-
-public class VersionNode extends RefreshableCollectionNode implements HasRefreshableUI, ImageProvider, ContextMenuProvider {
-	private Map<String,ProfileNode> map = new HashMap<String, ProfileNode>();
-	private Map<String,Set<Profile>> childrenMap = new HashMap<String,Set<Profile>>();
+public class VersionNode extends RefreshableCollectionNode implements
+		HasRefreshableUI, ImageProvider, ContextMenuProvider {
+	private Map<String, ProfileNode> map = new HashMap<String, ProfileNode>();
+	private Map<String, Set<Profile>> childrenMap = new HashMap<String, Set<Profile>>();
 
 	private final Fabric fabric;
 	private final Version version;
@@ -77,7 +74,7 @@ public class VersionNode extends RefreshableCollectionNode implements HasRefresh
 		map.clear();
 		childrenMap.clear();
 		Profile[] profiles = getVersionProfiles();
-		Map<String,Profile> profileMap = new HashMap<String,Profile>();
+		Map<String, Profile> profileMap = new HashMap<String, Profile>();
 		for (Profile profile : profiles) {
 			String id = profile.getId();
 			profileMap.put(id, profile);
@@ -100,7 +97,7 @@ public class VersionNode extends RefreshableCollectionNode implements HasRefresh
 				ProfileNode node = createProfile(this, profile);
 				addChild(node);
 				/*
-				appendChildren(node);
+				 * appendChildren(node);
 				 */
 			}
 		}
@@ -125,12 +122,12 @@ public class VersionNode extends RefreshableCollectionNode implements HasRefresh
 		Collections.sort(answer);
 		return answer;
 	}
+
 	public ProfileNode createProfile(Node parent, Profile profile) {
 		ProfileNode node = new ProfileNode(this, parent, profile);
 		map.put(node.getProfileId(), node);
 		return node;
 	}
-
 
 	public Fabric getFabric() {
 		return fabric;
@@ -144,7 +141,8 @@ public class VersionNode extends RefreshableCollectionNode implements HasRefresh
 		checkLoaded();
 		ProfileNode answer = map.get(profileId);
 		if (answer == null) {
-			answer = ProfileNode.getProfileNode(profileId, getProfileChildren());
+			answer = ProfileNode
+					.getProfileNode(profileId, getProfileChildren());
 		}
 		return answer;
 	}
@@ -156,7 +154,6 @@ public class VersionNode extends RefreshableCollectionNode implements HasRefresh
 	public ProfileNode[] getProfileChildren() {
 		return Objects.getArrayOf(getChildrenList(), ProfileNode.class);
 	}
-
 
 	public <T extends Node> T[] getChildrenOf(Class<T> aType) {
 		List<Node> list = getChildrenList();
@@ -176,15 +173,7 @@ public class VersionNode extends RefreshableCollectionNode implements HasRefresh
 
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
-		if (CreateJCloudsContainerAction.createLocalAgents) {
-			menu.add(new CreateJCloudsContainerAction(this, null, null));
-		}
-		if (CreateSshContainerAction.createLocalAgents) {
-			menu.add(new CreateSshContainerAction(this, null, null));
-		}
 		menu.add(new ProfileAddAction(this));
-		menu.add(new Separator());
-		menu.add(new CreateVersionAction(this));
 	}
 
 }
