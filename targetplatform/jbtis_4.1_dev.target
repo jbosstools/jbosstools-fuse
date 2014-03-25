@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.6"?>
-<target includeMode="feature" name="fuse-ide-in-jbds7">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.6"?><target includeMode="feature" name="fuse-ide-in-jbds7">
     
     <locations>
         <location path="${project_loc}/../site/target/repository" type="Directory"/>
@@ -129,12 +128,12 @@
 
       <!-- Required by BPEL, ESB, and any projects w/ UI tests -->
       <!-- TODO: consider migrating UI tests to https://github.com/jbosstools/jbosstools-integration-tests/ so they're built downstream instead of within the components' builds -->
-      <unit id="org.jboss.tools.tests" version="3.5.0.Final-v20131204-1734-B141"/>
-      <unit id="org.jboss.tools.as.test.core" version="2.4.101.Final-v20131206-1843-B159"/>
-      <unit id="org.jboss.tools.common.base.test" version="3.5.2.Final-v20131204-1734-B141"/>
-      <unit id="org.jboss.tools.common.test" version="3.5.2.Final-v20131204-1734-B141"/>
-      <unit id="org.jboss.tools.jmx.core.test" version="1.4.1.Final-v20131206-1843-B159"/>
-      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.Final.coretests/"/>
+      <unit id="org.jboss.tools.tests" version="3.5.0.Final-v20140302-2358-B158"/>
+      <unit id="org.jboss.tools.as.test.core" version="2.4.101.Final-v20140318-1509-B179"/>
+      <unit id="org.jboss.tools.common.base.test" version="3.5.2.Final-v20140302-2358-B158"/>
+      <unit id="org.jboss.tools.common.test" version="3.5.2.Final-v20140302-2358-B158"/>
+      <unit id="org.jboss.tools.jmx.core.test" version="1.4.1.Final-v20140318-1509-B179"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.2.Final.coretests/"/>
     </location>
 
   
@@ -191,7 +190,7 @@
       <unit id="org.hibernate.eclipse.feature.feature.group" version="0.0.0"/>
       <unit id="org.mozilla.xulrunner.feature.feature.group" version="0.0.0"/>
 
-      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.1.Final.core/"/>
+      <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.1.2.Final.core/"/>
     </location>
 
   
