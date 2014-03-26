@@ -66,7 +66,8 @@ public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment 
 	 */
 	@Override
 	public void performCancel(IProgressMonitor monitor) throws CoreException {
-		composite.cancel();
+		if (composite != null && !composite.isDisposed())
+			composite.cancel();
 		super.performCancel(monitor);
 	}
 
