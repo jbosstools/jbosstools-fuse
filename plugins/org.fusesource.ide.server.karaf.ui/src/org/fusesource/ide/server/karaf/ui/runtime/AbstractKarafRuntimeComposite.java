@@ -107,7 +107,8 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 	}
 
 	protected void cancel() {
-		this.installRuntimeJob.cancel();
+		if (this.installRuntimeJob != null)
+			this.installRuntimeJob.cancel();
 	}
 
 	public void handleFocusEvent(Event event) {
