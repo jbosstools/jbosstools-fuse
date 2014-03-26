@@ -136,7 +136,7 @@
               class="org.fusesource.ide.fabric.perspective.FabricPerspective"
               icon="icons/fabric_perspective.png"
               id="org.fusesource.ide.fabric.perspective"
-              name="Fuse Fabric">
+              name="Fabric8">
         </perspective>
      </extension>
      
