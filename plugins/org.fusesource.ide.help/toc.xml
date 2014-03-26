@@ -88,7 +88,7 @@
          </topic>
       </topic>
       <topic label="Working with Fabrics" href="RiderFabricPart.html">
-         <topic label="The Fuse Fabric perspective" href="IDEIntroFuseFabric.html"/>
+         <topic label="The Fabric8 perspective" href="IDEIntroFuseFabric.html"/>
          <topic label="Setting up a Fabric Environment" href="RiderFabricTestEnvironment.html"/>
          <topic label="Specifying and Connecting to a Fabric" href="FabricFabrics.html">
             <topic label="Adding fabric details" href="FabricAddDetails.html"/>
