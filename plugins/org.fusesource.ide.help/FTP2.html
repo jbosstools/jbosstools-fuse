@@ -13,7 +13,7 @@ ftps://[username@]hostname[:port]/directoryname[?options]</pre><p>Where <span cl
                 Net</a> while SFTP uses <a class="link" href="http://www.jcraft.com/jsch/" target="_top">JCraft JSCH</a>.</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
         </p></div><div class="refsection"><a name="FTP2URIOptions"></a><h2>URI Options</h2><p>The options below are exclusive to the FTP
-            component:</p><div class="table"><a name="d0e32303"></a><p class="title"><b>Table&nbsp;14.&nbsp;FTP URI options</b></p><div class="table-contents"><table summary="FTP URI options" width="100%" border="1"><colgroup><col width="33%" class="c1"><col width="12%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name </th><th>Default  </th><th>Description </th></tr></thead><tbody><tr><td>
+            component:</p><div class="table"><a name="d0e31794"></a><p class="title"><b>Table&nbsp;14.&nbsp;FTP URI options</b></p><div class="table-contents"><table summary="FTP URI options" width="100%" border="1"><colgroup><col width="33%" class="c1"><col width="12%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name </th><th>Default  </th><th>Description </th></tr></thead><tbody><tr><td>
                     <code class="literal">username</code>
                 </td><td>
                     <code class="literal">null</code>
@@ -461,7 +461,7 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
             written. </p><p>The ftp producer does <span class="bold"><strong>not</strong></span> support
             appending to existing files. Any existing files on the remote server
             will be deleted before the file is written.</p></div><div class="refsection"><a name="FTP2MessageHeaders"></a><h2>Message Headers</h2><p>The following message headers can be used to affect the behavior
-            of the component</p><div class="table"><a name="d0e33460"></a><p class="title"><b>Table&nbsp;15.&nbsp;Component message headers</b></p><div class="table-contents"><table summary="Component message headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
+            of the component</p><div class="table"><a name="d0e32951"></a><p class="title"><b>Table&nbsp;15.&nbsp;Component message headers</b></p><div class="table-contents"><table summary="Component message headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
                     <code class="literal">CamelFileName</code>
                 </td><td> Specifies the output file name (relative to the endpoint
                     directory) to be used for the output message when sending to
@@ -483,7 +483,7 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
                     <code class="literal">CamelFileLocalWorkPath</code>
                 </td><td> Path to the local work file, if local work directory is
                     used. </td></tr></tbody></table></div></div><br class="table-break"><p>In addition, the FTP/FTPS consumer and producer will enrich the
-            Camel <code class="literal">Message</code> with the following headers: </p><div class="table"><a name="d0e33524"></a><p class="title"><b>Table&nbsp;16.&nbsp;Produce and Consumer headers</b></p><div class="table-contents"><table summary="Produce and Consumer headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
+            Camel <code class="literal">Message</code> with the following headers: </p><div class="table"><a name="d0e33015"></a><p class="title"><b>Table&nbsp;16.&nbsp;Produce and Consumer headers</b></p><div class="table-contents"><table summary="Produce and Consumer headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
                     <code class="literal">CamelFtpReplyCode</code>
                 </td><td><span class="bold"><strong>Camel 2.11.1:</strong></span> The FTP
                     client reply code (the type is a integer) </td></tr><tr><td>
