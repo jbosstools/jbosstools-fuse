@@ -1,19 +1,19 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Seda</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderIntEptRef.html" title="Internal Endpoints"><link rel="prev" href="direct.html" title="Direct"><link rel="next" href="vm.html" title="VM"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="seda"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Seda &#8212; provides an asynchronous connection to any consumer in the same <code class="sgmltag-element">camelContext</code> element</p></div><div class="refsection"><a name="d0e38153"></a><h2>Overview</h2><p>Seda endpoints provide asynchronous <a class="link" href="http://www.eecs.harvard.edu/~mdw/proj/seda/" target="_top">SEDA</a> behavior, so that
+   <title>Seda</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderIntEptRef.html" title="Internal Endpoints"><link rel="prev" href="direct.html" title="Direct"><link rel="next" href="vm.html" title="VM"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="seda"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Seda &#8212; provides an asynchronous connection to any consumer in the same <code class="sgmltag-element">camelContext</code> element</p></div><div class="refsection"><a name="d0e40436"></a><h2>Overview</h2><p>Seda endpoints provide asynchronous <a class="link" href="http://www.eecs.harvard.edu/~mdw/proj/seda/" target="_top">SEDA</a> behavior, so that
             messages are exchanged on a <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/concurrent/BlockingQueue.html" target="_top">BlockingQueue</a> and consumers are invoked in a separate thread from the
             producer.</p><p>Queues are visible within a <span class="emphasis"><em>single</em></span>
-            <code class="sgmltag-element">camelContext</code> element. If you want to communicate across <code class="sgmltag-element">camelContext</code> elements, use a <a href="PLUGINS_ROOT/com.fusesource.rider.help/vm.html" class="olink">vm</a> endpoint.</p><p>This component does not implement any kind of persistence or recovery, if the VM
+            <code class="sgmltag-element">camelContext</code> element. If you want to communicate across <code class="sgmltag-element">camelContext</code> elements, use a <a class="link" href="vm.html" title="VM">VM</a> endpoint.</p><p>This component does not implement any kind of persistence or recovery, if the VM
             terminates while messages are yet to be processed. If you need persistence, reliability,
-            or distributed SEDA, try using either the <span class="olink">JMS</span> or
-                <span class="olink">ActiveMQ</span> component.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p><a href="PLUGINS_ROOT/com.fusesource.rider.help/direct.html" class="olink">Direct</a> endpoints
+            or distributed SEDA, try using either the <a class="link" href="jms.html" title="JMS">JMS</a> or
+                <a class="link" href="ActiveMQ.html" title="ActiveMQ">ActiveMQ</a> component.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p><a class="link" href="direct.html" title="Direct">Direct</a> endpoints
                 provide synchronous invocation of any consumers when a producer sends a message
-                exchange.</p></td></tr></table></div></div><div class="refsection"><a name="d0e38191"></a><h2>URI format</h2><p><a class="xref" href="seda.html#sedaURLEx010" title="Example&nbsp;9.&nbsp;Seda URI format">Example&nbsp;9, &#8220;Seda URI format&#8221;</a> shows the syntax for a Seda endpoint URI.</p><div class="example"><a name="sedaURLEx010"></a><p class="title"><b>Example&nbsp;9.&nbsp;Seda URI format</b></p><div class="example-contents"><pre class="programlisting">seda:<em class="replaceable"><code>queueName</code></em>[?<em class="replaceable"><code>option</code></em>=<em class="replaceable"><code>value</code></em>]</pre></div></div><br class="example-break"><p><em class="replaceable"><code>queueName</code></em> can be any string that uniquely identifies the
+                exchange.</p></td></tr></table></div></div><div class="refsection"><a name="d0e40474"></a><h2>URI format</h2><p><a class="xref" href="seda.html#sedaURLEx010" title="Example&nbsp;9.&nbsp;Seda URI format">Example&nbsp;9, &#8220;Seda URI format&#8221;</a> shows the syntax for a Seda endpoint URI.</p><div class="example"><a name="sedaURLEx010"></a><p class="title"><b>Example&nbsp;9.&nbsp;Seda URI format</b></p><div class="example-contents"><pre class="programlisting">seda:<em class="replaceable"><code>queueName</code></em>[?<em class="replaceable"><code>option</code></em>=<em class="replaceable"><code>value</code></em>]</pre></div></div><br class="example-break"><p><em class="replaceable"><code>queueName</code></em> can be any string that uniquely identifies the
             endpoint within the current <code class="sgmltag-element">camelContext</code> elements.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>When matching consumer endpoints to producer endpoints, only the
                 <em class="replaceable"><code>queueName</code></em> is considered. That is, the identity of a consumer endpoint
                 depends only on the <code class="code">queueName</code>. If you want to
                 attach multiple consumers to the same queue, use the approach
-                described in <a class="xref" href="seda.html#_IDU_SEDA_HSH_UsingmultipleConsumers" title="Using multipleConsumers">Using multipleConsumers</a>.</p></td></tr></table></div></div><div class="refsection"><a name="d0e38229"></a><h2>Options</h2><p><a class="xref" href="seda.html#sedaOptionsTBL010" title="Table&nbsp;32.&nbsp;Seda component options">Table&nbsp;32, &#8220;Seda component options&#8221;</a> describes the Seda component's options.</p><div class="table"><a name="sedaOptionsTBL010"></a><p class="title"><b>Table&nbsp;32.&nbsp;Seda component options</b></p><div class="table-contents"><table summary="Seda component options" width="100%" border="1"><colgroup><col width="19%" class="c1"><col width="13%" class="c2"><col width="68%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+                described in <a class="xref" href="seda.html#_IDU_SEDA_HSH_UsingmultipleConsumers" title="Using multipleConsumers">Using multipleConsumers</a>.</p></td></tr></table></div></div><div class="refsection"><a name="d0e40512"></a><h2>Options</h2><p><a class="xref" href="seda.html#sedaOptionsTBL010" title="Table&nbsp;32.&nbsp;Seda component options">Table&nbsp;32, &#8220;Seda component options&#8221;</a> describes the Seda component's options.</p><div class="table"><a name="sedaOptionsTBL010"></a><p class="title"><b>Table&nbsp;32.&nbsp;Seda component options</b></p><div class="table-contents"><table summary="Seda component options" width="100%" border="1"><colgroup><col width="19%" class="c1"><col width="13%" class="c2"><col width="68%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="literal">size</code>
                         </td><td>
                             <span class="emphasis"><em>Unbounded</em></span>
@@ -41,24 +41,24 @@
                             <code class="literal">IfReplyExpected</code>. The first two values
                             are self-explanatory. The last value,
                             <code class="literal">IfReplyExpected</code>, will only wait if
-                            the message is <span class="olink">Request
-                                Reply</span> based. The default option is
+                            the message is <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request
+                                Reply</a> based. The default option is
                             <code class="literal">IfReplyExpected</code>. See more information
-                            about <a class="link" href="Async" target="_top">Async</a> messaging. </td></tr><tr><td>
+                            about <a class="link" href="http://camel.apache.org/async.html" target="_top">Async</a> messaging. </td></tr><tr><td>
                             <code class="literal">timeout</code>
                         </td><td>
                             <code class="literal">30000</code>
                         </td><td><span class="bold"><strong>Apache Camel 2.0:</strong></span> Timeout in
                             millis a seda producer will at most waiting for an async
                             task to complete. See
-                            <code class="literal">waitForTaskToComplete</code> and <a class="link" href="Async" target="_top">Async</a> for more details. In
+                            <code class="literal">waitForTaskToComplete</code> and <a class="link" href="http://camel.apache.org/async.html" target="_top">Async</a> for more details. In
                             <span class="bold"><strong>Camel 2.2</strong></span> you can now
                             disable timeout by using 0 or a negative value. </td></tr><tr><td><code class="literal">multiple</code><code class="literal">Consumers</code>
                         </td><td>
                             <code class="literal">false</code>
                         </td><td><span class="bold"><strong>Camel 2.2:</strong></span> Specifies
                             whether multiple consumers are allowed or not. If enabled,
-                            you can use <span class="olink">SEDA</span> for a
+                            you can use <a class="link" href="seda.html" title="Seda">SEDA</a> for a
                             publish/subscribe style of messaging. Send a message to a
                             SEDA queue and have multiple consumers receive a copy of the
                             message. </td></tr><tr><td><code class="literal">limitConcurrent</code><code class="literal">Consumers</code>
@@ -125,21 +125,21 @@
 &lt;/bean&gt;
 &lt;!-- ... and later --&gt;
 &lt;from&gt;seda:priority?queueFactory=#priorityQueueFactory&amp;size=100&lt;/from&gt;
-</pre></div><div class="refsection"><a name="_IDU_SEDA_HSH_UseofRequestReply"></a><h2>Use of Request Reply</h2><p>The <span class="olink">Seda</span> component supports
-            using <span class="olink">Request
-                Reply</span>, where the caller will wait for the <a class="link" href="Async" target="_top">Async</a> route to complete. For
+</pre></div><div class="refsection"><a name="_IDU_SEDA_HSH_UseofRequestReply"></a><h2>Use of Request Reply</h2><p>The <a class="link" href="seda.html" title="Seda">Seda</a> component supports
+            using <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request
+                Reply</a>, where the caller will wait for the <a class="link" href="http://camel.apache.org/async.html" target="_top">Async</a> route to complete. For
             instance:</p><pre class="programlisting">
 from("mina:tcp://0.0.0.0:9876?textline=true&amp;sync=true").to("seda:input");
 
 from("seda:input").to("bean:processInput").to("bean:createResponse");
 </pre><p>In the route above, we have a TCP listener on port 9876 that
             accepts incoming requests. The request is routed to the
-            <code class="literal">seda:input</code> queue. As it is a <span class="olink">Request
-                Reply</span> message, we wait for the response. When the
+            <code class="literal">seda:input</code> queue. As it is a <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request
+                Reply</a> message, we wait for the response. When the
             consumer on the <code class="literal">seda:input</code> queue is complete, it
-            copies the response to the original message response.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: until 2.2: Works only with 2 endpoints"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">until 2.2: Works only with 2 endpoints</th></tr><tr><td align="left" valign="top"><p>Using <span class="olink">Request
-                Reply</span> over <span class="olink">SEDA</span>
-                or <span class="olink">VM</span> only works with 2
+            copies the response to the original message response.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: until 2.2: Works only with 2 endpoints"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">until 2.2: Works only with 2 endpoints</th></tr><tr><td align="left" valign="top"><p>Using <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request
+                Reply</a> over <a class="link" href="seda.html" title="Seda">SEDA</a>
+                or <a class="link" href="vm.html" title="VM">VM</a> only works with 2
                 endpoints. You <span class="bold"><strong>cannot</strong></span> chain
                 endpoints by sending to A -&gt; B -&gt; C etc. Only between A -&gt; B.
                 The reason is the implementation logic is fairly simple. To
@@ -154,7 +154,7 @@ from("seda:input").to("bean:processInput").to("bean:createResponse");
             something like:</p><pre class="programlisting">from("seda:stageName").thread(5).process(...)</pre><p>Can wind up with two <code class="literal">BlockQueues</code>: one from the
             SEDA endpoint, and one from the workqueue of the thread pool, which
             may not be what you want. Instead, you might want to consider
-            configuring a <span class="olink">Direct</span> endpoint
+            configuring a <a class="link" href="direct.html" title="Direct">Direct</a> endpoint
             with a thread pool, which can process messages both synchronously
             and asynchronously. For example:</p><pre class="programlisting">from("direct:stageName").thread(5).process(...)</pre><p>You can also directly configure number of threads that process
             messages on a SEDA endpoint using the
@@ -205,9 +205,7 @@ assertEquals("OK", out);
     </pre></div><div class="refsection"><a name="_IDU_SEDA_HSH_Extractingqueueinformation"></a><h2>Extracting queue information.</h2><p>If you need it, you can also get information like queue size etc
             without using JMX like this:</p><pre class="programlisting">SedaEndpoint seda = context.getEndpoint("seda:xxxx");
 int size = seda.getExchanges().size()</pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <span class="olink">Disruptor</span>
+                    <a class="link" href="vm.html" title="VM">VM</a>
                 </p></li><li class="listitem"><p>
-                    <span class="olink">VM</span>
-                </p></li><li class="listitem"><p>
-                    <span class="olink">Direct</span>
+                    <a class="link" href="direct.html" title="Direct">Direct</a>
                 </p></li></ul></div></div></div></body></html>

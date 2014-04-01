@@ -16,15 +16,14 @@
                 <code class="literal">?</code> symbol is used to specify options for the endpoint. The
                 <code class="literal">?</code> symbol replacement can be configured on endpoint basis.</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Options"></a>Options</h2></div></div></div><div class="table"><a name="_IDU_SQL_Opts"></a><p class="title"><b>Table&nbsp;72.&nbsp;URI options</b></p><div class="table-contents"><table summary="URI options" width="100%" border="1"><colgroup><col width="32%" class="c1"><col width="8%" class="c2"><col width="60%" class="c3"></colgroup><thead><tr><th> Option </th><th> Type </th><th> Description </th></tr></thead><tbody><tr><td>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Options"></a>Options</h2></div></div></div><div class="table"><a name="_IDU_SQL_Opts"></a><p class="title"><b>Table&nbsp;73.&nbsp;URI options</b></p><div class="table-contents"><table summary="URI options" width="100%" border="1"><colgroup><col width="26%" class="c1"><col width="12%" class="c2"><col width="62%" class="c3"></colgroup><thead><tr><th>Option </th><th>Type </th><th>Description </th></tr></thead><tbody><tr><td>
                             <code class="literal">batch</code>
                         </td><td>
                             <code class="literal">boolean</code>
-                        </td><td><p>
-                            <span class="bold"><strong>Apache Camel 2.7.5, 2.8.4 and 2.9:</strong></span> Execute
-                            SQL batch update statements. See notes below on how the treatment of the
-                            inbound message body changes if this is set to
-                            <code class="literal">true</code>.</p>
+                        </td><td><p><span class="bold"><strong>Apache Camel 2.7.5, 2.8.4 and 2.9:</strong></span> Execute SQL batch update
+                                statements. See notes below on how the treatment of the inbound
+                                message body changes if this is set to
+                                <code class="literal">true</code>.</p>
                             <p>Defaults to <code class="literal">false</code>.</p>
                         </td></tr><tr><td>
                             <code class="literal">dataSourceRef</code>
@@ -108,7 +107,8 @@
                             <code class="literal">java.util.List</code> of data is set as the IN body.</p>
                             <p>Defaults to <code class="literal">true</code>.</p>
                         </td></tr><tr><td>
-                            <code class="literal">consumer.routeEmptyResultSet</code>
+                            <p><code class="literal">consumer.</code></p>
+                            <p><code class="literal">routeEmptyResultSet</code></p>
                         </td><td><code class="literal">boolean</code></td><td><p><span class="bold"><strong>Apache Camel 2.11:</strong></span><span class="bold"><strong>SQL consumer only:</strong></span> Whether to route a single empty <a class="link" href="Exchange" target="_top">Exchange</a> if there was no data to poll.</p>
                             <p>Defaults to <code class="literal">false</code>.</p>
                         </td></tr><tr><td>
@@ -128,14 +128,16 @@
                             failed, for example to mark the row as failed. The query can have
                             parameter.</p>
                             <p>Defaults to <code class="literal">null</code>.</p></td></tr><tr><td>
-                            <code class="literal">consumer.onConsumeBatchComplete</code>
+                            <p><code class="literal">consumer.</code></p>
+                            <p><code class="literal">onConsumeBatchComplete</code></p>
                         </td><td>
                             <code class="literal">String</code>
                         </td><td><p><span class="bold"><strong>Apache Camel 2.11:</strong></span><span class="bold"><strong>SQL consumer only:</strong></span> After processing the entire batch,
                             this query can be executed to bulk update rows etc. The query cannot
                             have parameters.</p>
-                            <p>Defaults to <code class="literal">null</code>.</p></td></tr><tr><td>
-                            <code class="literal">consumer.expectedUpdateCount</code>
+                            <p>Defaults to <code class="literal">null</code>.</p></td></tr><tr><td><p>
+                            <code class="literal">consumer.</code></p>
+                            <p><code class="literal">expectedUpdateCount</code></p>
                         </td><td>
                             <code class="literal">int</code>
                         </td><td><p><span class="bold"><strong>Apache Camel 2.11:</strong></span><span class="bold"><strong>SQL consumer only:</strong></span> If using
@@ -143,7 +145,8 @@
                             to set an expected number of rows being updated. Typically you may set
                             this to <code class="literal">1</code> to expect one row to be updated.</p>
                             <p>Defaults to <code class="literal">\-1</code>.</p></td></tr><tr><td>
-                            <code class="literal">consumer.breakBatchOnConsumeFail</code>
+                            <p><code class="literal">consumer.</code></p>
+                            <p><code class="literal">breakBatchOnConsumeFail</code></p>
                         </td><td>
                             <code class="literal">boolean</code>
                         </td><td><p><span class="bold"><strong>Apache Camel 2.11:</strong></span><span class="bold"><strong>SQL consumer only:</strong></span> If using
@@ -229,7 +232,7 @@
                 <code class="literal">List&lt;Map&lt;String, Object&gt;&gt;</code> type, as returned by the <a class="link" href="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/jdbc/core/JdbcTemplate.html#queryForList(java.lang.String,%20java.lang.Object%91%93)" target="_top">JdbcTemplate.queryForList()</a> method. For <code class="literal">update</code>
             operations, the result is the number of updated rows, returned as an
                 <code class="literal">Integer</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Headervalues"></a>Header values</h2></div></div></div><p>When performing <code class="literal">update</code> operations, the SQL Component stores the
-            update count in the following message headers:</p><div class="table"><a name="_IDU_SQL_Headopts"></a><p class="title"><b>Table&nbsp;73.&nbsp;Message headers</b></p><div class="table-contents"><table summary="Message headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
+            update count in the following message headers:</p><div class="table"><a name="_IDU_SQL_Headopts"></a><p class="title"><b>Table&nbsp;74.&nbsp;Message headers</b></p><div class="table-contents"><table summary="Message headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
                             <code class="literal">CamelSqlUpdateCount</code>
                         </td><td><span class="bold"><strong>Apache Camel 2.0:</strong></span> The number of rows
                             updated for <code class="literal">update</code> operations, returned as an
@@ -327,7 +330,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
 &lt;/camel:camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_CustomizetheJdbcMessageIdRepository"></a>Customize the JdbcMessageIdRepository</h2></div></div></div><p>Starting with <span class="bold"><strong>Camel 2.9.1</strong></span> you have a few options to
             tune the
                 <code class="literal">org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository</code>
-            for your needs:</p><table id="d0e66718"><tr>
+            for your needs:</p><table id="d0e69200"><tr>
                 <th> Parameter </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -338,17 +341,17 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
                     exist. </td>
             </tr><tr>
                 <td> tableExistsString </td>
-                <td> SELECT 1 FROM CAMEL_MESSAGEPROCESSED WHERE 1 = 0 </td>
+                <td>SELECT 1 FROM CAMEL_MESSAGEPROCESSED WHERE 1 = 0 </td>
                 <td> This query is used to figure out whether the table already exists or not. It
                     must throw an exception to indicate the table doesn't exist. </td>
             </tr><tr>
                 <td> createString </td>
-                <td> CREATE TABLE CAMEL_MESSAGEPROCESSED (processorName VARCHAR(255), messageId
+                <td>CREATE TABLE CAMEL_MESSAGEPROCESSED (processorName VARCHAR(255), messageId
                     VARCHAR(100), createdAt TIMESTAMP) </td>
                 <td> The statement which is used to create the table. </td>
             </tr><tr>
                 <td> queryString </td>
-                <td> SELECT COUNT(*) FROM CAMEL_MESSAGEPROCESSED WHERE processorName = ? AND
+                <td>SELECT COUNT(*) FROM CAMEL_MESSAGEPROCESSED WHERE processorName = ? AND
                     messageId = ? </td>
                 <td> The query which is used to figure out whether the message already exists in the
                     repository (the result is not equals to '0'). It takes two parameters. This
@@ -356,7 +359,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
                     is the message id (<code class="literal">String</code>). </td>
             </tr><tr>
                 <td> insertString </td>
-                <td> INSERT INTO CAMEL_MESSAGEPROCESSED (processorName, messageId, createdAt) VALUES
+                <td>INSERT INTO CAMEL_MESSAGEPROCESSED (processorName, messageId, createdAt) VALUES
                     (?, ?, ?) </td>
                 <td> The statement which is used to add the entry into the table. It takes three
                     parameter. The first one is the processor name (<code class="literal">String</code>), the
@@ -365,7 +368,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
                     to the repository. </td>
             </tr><tr>
                 <td> deleteString </td>
-                <td> DELETE FROM CAMEL_MESSAGEPROCESSED WHERE processorName = ? AND messageId = ? </td>
+                <td>DELETE FROM CAMEL_MESSAGEPROCESSED WHERE processorName = ? AND messageId = ? </td>
                 <td> The statement which is used to delete the entry from the database. It takes two
                     parameter. This first one is the processor name (<code class="literal">String</code>) and
                     the second one is the message id (<code class="literal">String</code>). </td>
@@ -382,7 +385,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
 &lt;/bean&gt;
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_UsingtheJDBCbasedaggregationrepository"></a>Using the JDBC based aggregation repository</h2></div></div></div><p>
             <span class="bold"><strong>Available as of Camel 2.6</strong></span>
-        </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Using JdbcAggregationRepository in Camel 2.6"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Using JdbcAggregationRepository in Camel 2.6</th></tr><tr><td align="left" valign="top"><p>In Camel 2.6, the JdbcAggregationRepository is provided in the
+        </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>In Camel 2.6, the JdbcAggregationRepository is provided in the
                     <code class="literal">camel-jdbc-aggregator</code> component. From Camel 2.7 onwards, the
                     <code class="literal">JdbcAggregationRepository</code> is provided in the
                     <code class="literal">camel-sql</code> component.</p></td></tr></table></div><p><code class="literal">JdbcAggregationRepository</code> is an
@@ -390,129 +393,116 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
             messages. This ensures that you will not loose messages, as the default aggregator will
             use an in memory only <code class="literal">AggregationRepository</code>. The
                 <code class="literal">JdbcAggregationRepository</code> allows together with Camel to provide
-            persistent support for the <span class="olink">Aggregator</span>.</p><p>It has the following options:</p><table width="913" id="d0e66864"><col width="214px"><col width="127pt"><col width="564pt"><tr>
-                <th> Option </th>
-                <th> Type </th>
-                <th> Description </th>
+            persistent support for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/aggregate.html" class="olink">Aggregator</a>.</p><p>It has the following options:</p><table id="d0e69345"><tr>
+                <th>Option </th>
+                <th>Type </th>
+                <th>Description </th>
             </tr><tr>
-                <td>
-                    <code class="literal">dataSource</code>
+                <td><code class="literal">dataSource</code>
                 </td>
                 <td>
                     <code class="literal">DataSource</code>
                 </td>
-                <td><span class="bold"><strong>Mandatory:</strong></span> The
+                <td><span class="bold"><strong>Required:</strong></span> The
                         <code class="literal">javax.sql.DataSource</code> to use for accessing the database.
                 </td>
             </tr><tr>
-                <td>
-                    <code class="literal">repositoryName</code>
+                <td><code class="literal">repositoryName</code>
                 </td>
-                <td>
-                    <code class="literal">String</code>
+                <td><code class="literal">String</code>
                 </td>
-                <td><span class="bold"><strong>Mandatory:</strong></span> The name of the repository. </td>
+                <td><span class="bold"><strong>Required:</strong></span> The name of the repository. </td>
             </tr><tr>
-                <td>
-                    <code class="literal">transactionManager</code>
+                <td><code class="literal">transactionManager</code>
                 </td>
                 <td>
-                    <code class="literal">Transaction</code><code class="literal">Manager</code>
+                    <code class="literal">Transaction</code>
+                    <code class="literal">Manager</code>
                 </td>
-                <td><span class="bold"><strong>Mandatory:</strong></span> The
+                <td><span class="bold"><strong>Required:</strong></span> The
                         <code class="literal">org.springframework.transaction.Platform</code><code class="literal">TransactionManager</code>
                     to mange transactions for the database. The TransactionManager must be able to
                     support databases. </td>
             </tr><tr>
-                <td>
-                    <code class="literal">lobHandler</code>
+                <td><code class="literal">lobHandler</code>
                 </td>
-                <td>
-                    <code class="literal">LobHandler</code>
+                <td><code class="literal">LobHandler</code>
                 </td>
-                <td> A <code class="literal">org.springframework.jdbc.support.lob.LobHandler</code> to handle
-                    Lob types in the database. Use this option to use a vendor specific LobHandler,
-                    for example when using Oracle. </td>
+                <td>An <code class="literal">org.springframework.jdbc.support.lob.LobHandler</code> to handle
+                    Lob types in the database. Use this option for a vendor-specific LobHandler, for
+                    example, when using Oracle.</td>
             </tr><tr>
-                <td>
-                    <code class="literal">returnOldExchange</code>
+                <td><code class="literal">returnOldExchange</code>
                 </td>
-                <td> boolean </td>
-                <td> Whether the get operation should return the old existing Exchange if any
-                    existed. By default this option is <code class="literal">false</code> to optimize as we do
-                    not need the old exchange when aggregating. </td>
+                <td>boolean </td>
+                <td>Whether the get operation should return the old, existing Exchange. The default
+                    is <code class="literal">false</code> since we do not need the old exchange when
+                    aggregating. </td>
             </tr><tr>
-                <td>
-                    <code class="literal">useRecovery</code>
+                <td><code class="literal">useRecovery</code>
                 </td>
-                <td> boolean </td>
-                <td> Whether or not recovery is enabled. This option is by default
-                        <code class="literal">true</code>. When enabled the Camel <span class="olink">Aggregator</span> automatic recover failed
-                    aggregated exchange and have them resubmitted. </td>
+                <td>boolean</td>
+                <td>Whether or not recovery is enabled. The default is <code class="literal">true</code>. When
+                    enabled, the Camel <a href="PLUGINS_ROOT/com.fusesource.rider.help/aggregate.html" class="olink">Aggregator</a> automatically recovers failed aggregated exchanges and
+                    resubmitts them. </td>
             </tr><tr>
-                <td>
-                    <code class="literal">recoveryInterval</code>
+                <td><code class="literal">recoveryInterval</code>
                 </td>
-                <td> long </td>
-                <td> If recovery is enabled then a background task is run every x'th time to scan
-                    for failed exchanges to recover and resubmit. By default this interval is 5000
-                    millis. </td>
+                <td>long </td>
+                <td>If recovery is enabled, a background task is run every x'th time to scan for
+                    failed exchanges to recover and resubmit. By default this interval is 5000
+                    milliseconds. </td>
             </tr><tr>
-                <td>
-                    <code class="literal">maximumRedeliveries</code>
+                <td><code class="literal">maximumRedeliveries</code>
                 </td>
-                <td> int </td>
-                <td> Allows you to limit the maximum number of redelivery attempts for a recovered
-                    exchange. If enabled then the Exchange will be moved to the dead letter channel
-                    if all redelivery attempts failed. By default this option is disabled. If this
-                    option is used then the <code class="literal">deadLetterUri</code> option must also be
-                    provided. </td>
+                <td>int</td>
+                <td>Allows you to limit the maximum number of redelivery attempts for a recovered
+                    exchange. If enabled, the exchange is moved to the dead letter channel
+                    if all redelivery attempts failed, if the <code class="literal">deadLetterUri</code> option
+                    is specified. The default is disabled.</td>
             </tr><tr>
-                <td>
-                    <code class="literal">deadLetterUri</code>
+                <td><code class="literal">deadLetterUri</code>
                 </td>
-                <td> String </td>
-                <td> An endpoint uri for a <span class="olink">Dead Letter Channel</span> where exhausted recovered Exchanges will be
-                    moved. If this option is used then the <code class="literal">maximumRedeliveries</code>
-                    option must also be provided. </td>
+                <td>String</td>
+                <td>An endpoint uri for a <a class="link" href="http://camel.apache.org/dead-letter-channel.html" target="_top">Dead Letter
+                        Channel</a> where unrecovered Exchanges are moved. This option requires
+                    the <code class="literal">maximumRedeliveries</code> option to be enabled. </td>
             </tr><tr>
-                <td>
-                    <code class="literal">storeBodyAsText</code>
+                <td><code class="literal">storeBodyAsText</code>
                 </td>
-                <td> boolean </td>
+                <td>boolean</td>
                 <td><span class="bold"><strong>Camel 2.11:</strong></span> Whether to store the message body
-                    as String which is human readable. By default this option is
-                        <code class="literal">false</code> storing the body in binary format. </td>
+                    as String, which is human readable. The default is
+                        <code class="literal">false</code>, and the message body is stored in binary format.</td>
             </tr><tr>
-                <td>
-                    <code class="literal">headersToStoreAsText</code>
+                <td><code class="literal">headersToStoreAsText</code>
                 </td>
                 <td>
-                    <code class="literal">List</code><code class="literal">&lt;String&gt;</code>
+                    <code class="literal">List</code>
+                    <code class="literal">&lt;String&gt;</code>
                 </td>
-                <td><span class="bold"><strong>Camel 2.11:</strong></span> Allows to store headers as String
-                    which is human readable. By default this option is disabled, storing the headers
-                    in binary format. </td>
+                <td><span class="bold"><strong>Camel 2.11:</strong></span> Allows storing headers as String,
+                    which is human readable. The default is disabled, and the headers are stored in
+                    binary format.</td>
             </tr><tr>
-                <td>
-                    <code class="literal">optimisticLocking</code>
+                <td><code class="literal">optimisticLocking</code>
                 </td>
                 <td>
                     <code class="literal">false</code>
                 </td>
-                <td><span class="bold"><strong>Camel 2.12:</strong></span> To turn on optimistic locking,
-                    which often would be needed in clustered environments where multiple Camel
-                    applications shared the same JDBC based aggregation repository. </td>
+                <td><span class="bold"><strong>Camel 2.12:</strong></span> Turns on optimistic locking,
+                    which is often needed in clustered environments where multiple Camel
+                    applications share the same JDBC-based aggregation repository.</td>
             </tr><tr>
-                <td>
-                    <code class="literal">jdbcOptimisticLocking</code><code class="literal">ExceptionMapper</code>
+                <td><code class="literal">jdbcOptimisticLocking</code>
+                    <code class="literal">ExceptionMapper</code>
                 </td>
                 <td></td>
-                <td><span class="bold"><strong>Camel 2.12:</strong></span> Allows to plugin a custom
-                        <code class="literal">org.apache.camel.processor.aggregate.jdbc.JdbcOptimistic</code><code class="literal">LockingExceptionMapper</code>
-                    to map vendor specific error codes to an optimistick locking error, for Camel to
-                    perform a retry. This requires <code class="literal">optimisticLocking</code> to be
-                    enabled. </td>
+                <td><span class="bold"><strong>Camel 2.12:</strong></span> Allows plugging in a custom
+                        <code class="literal">org.apache.camel.processor.aggregate.jdbc.</code>
+                    <code class="literal">JdbcOptimisticLockingExceptionMapper</code> to map vendor-specific
+                    error codes to an optimistick locking error, for Camel to perform a retry. This
+                    option requires <code class="literal">optimisticLocking</code> to be enabled.</td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_Whatispreservedwhenpersisting"></a>What is preserved when persisting</h2></div></div></div><p><code class="literal">JdbcAggregationRepository</code> will only preserve any
                 <code class="literal">Serializable</code> compatible data types. If a data type is not such a
             type its dropped and a <code class="literal">WARN</code> is logged. And it only persists the
@@ -526,7 +516,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
             The recovery works as transactional which ensures that Camel will try to recover and
             redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored
             from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being
-            recovered/redelivered:</p><table id="d0e67193"><tr>
+            recovered/redelivered:</p><table id="d0e69661"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -669,5 +659,5 @@ CREATE TABLE aggregationRepo3_completed (
         &lt;/util:set&gt;
       &lt;/property&gt;
     &lt;/bean&gt;</pre><p>See also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <span class="olink">JDBC</span>
+                    <a href="PLUGINS_ROOT/com.fusesource.rider.help/jdbc.html" class="olink">JDBC</a>
                 </p></li></ul></div></div></div></body></html>

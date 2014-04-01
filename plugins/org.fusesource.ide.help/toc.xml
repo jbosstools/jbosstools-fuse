@@ -29,7 +29,7 @@
          </topic>
          <topic label="Creating a new Apache Camel JUnit test case" href="newCamelTestCase.html"/>
          <topic label="The Source View" href="RiderEditSource.html"/>
-         <topic label="Running routes inside Red Hat JBoss Fuse Plugins for Eclipse" href="RiderRunning.html">
+         <topic label="Running routes inside Red Hat JBoss Fuse Tooling" href="RiderRunning.html">
             <topic label="Running routes using Maven" href="RiderRunningMaven.html"/>
             <topic label="Running routes as a local Camel context" href="RiderRunningProfile.html"/>
             <topic label="Working with runtime profiles" href="RiderEditRunProfile.html">
@@ -165,6 +165,14 @@
       <topic label="SQL" href="SQL.html"/>
       <topic label="XPath" href="XPath.html"/>
       <topic label="XQuery" href="XQuery.html"/>
+   </topic>
+   <topic label="Tutorials" href="RiderTutorials.html">
+      <topic label="To Create a New Route" href="RiderTutorialCreate.html"/>
+      <topic label="To Run a Route" href="RiderTutorialRun.html"/>
+      <topic label="To Add a Content-Based Router" href="RiderTutorialCBR.html"/>
+      <topic label="To Trace a Message Through a Route" href="RiderTutorialTrace.html"/>
+      <topic label="To Test a Route with JUnit" href="RiderTutorialJUnit.html"/>
+      <topic label="To Deploy a Camel Project to Red Hat JBoss Fuse" href="RiderTutDeployFESB.html"/>
    </topic>
    <topic label="Enterprise Integration Pattern Reference" href="RiderEIPRef.html">
       <topic label="Route Editor Patterns" href="RefIntroToEIP.html"/>
