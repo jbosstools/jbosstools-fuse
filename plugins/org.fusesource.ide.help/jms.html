@@ -1,13 +1,14 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>JMS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderMsgEptRef.html" title="Messaging Endpoints"><link rel="prev" href="irc.html" title="IRC"><link rel="next" href="mail.html" title="Mail"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="jms"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>JMS &#8212; allows message to be sent to or consumed from JMS destinations</p></div><div class="refsection"><a name="d0e39219"></a><h2>Overview</h2><p>The JMS component allows messages to be sent to (or consumed from) a <a class="link" href="http://java.sun.com/products/jms/" target="_top">JMS</a> destination. The
+   <title>JMS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderMsgEptRef.html" title="Messaging Endpoints"><link rel="prev" href="irc.html" title="IRC"><link rel="next" href="mail.html" title="Mail"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="jms"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>JMS &#8212; allows message to be sent to or consumed from JMS destinations</p></div><div class="refsection"><a name="d0e41488"></a><h2>Overview</h2><p>The JMS component allows messages to be sent to (or consumed from) a <a class="link" href="http://java.sun.com/products/jms/" target="_top">JMS</a> destination. The
             implementation of the JMS Component uses Spring's JMS support for declarative
             transactions, using Spring's <code class="literal">JmsTemplate</code> for sending and a
-                <code class="literal">MessageListenerContainer</code> for consuming.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If you are using Red Hat JBoss A-MQ, use the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ActiveMQ.html" class="olink">ActiveMQ</a> endpoint; it has been optimized for Red Hat JBoss A-MQ. All of
-                the options and samples on this page are also valid for the <span class="olink">ActiveMQ</span> component.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If using transactions with JMS, see section <a class="xref" href="jms.html#JMS_HSH_TransactionsandCacheLevels" title="Transactions and Cache Levels">Transactions and Cache Levels</a> as it can impact
+                <code class="literal">MessageListenerContainer</code> for consuming.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If you are using Red Hat JBoss A-MQ, use the <a class="link" href="ActiveMQ.html" title="ActiveMQ">ActiveMQ</a> endpoint; 
+                it has been optimized for Red Hat JBoss A-MQ. All of
+                the options and samples on this page are also valid for the <a class="link" href="ActiveMQ.html" title="ActiveMQ">ActiveMQ</a> component.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If using transactions with JMS, see section <a class="xref" href="jms.html#JMS_HSH_TransactionsandCacheLevels" title="Transactions and Cache Levels">Transactions and Cache Levels</a> as it can impact
                 performance.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Be sure to read the section <a class="xref" href="jms.html#JMS_HSH_RequestreplyoverJMS" title="Request-reply over JMS">Request-reply over JMS</a> for
                 important notes about request/reply, as Camel offers a number of options to
-                configure for performance, and clustered environments.</p></td></tr></table></div></div><div class="refsection"><a name="d0e39252"></a><h2>URI format</h2><p>The URI format for a JMS endpoint is:</p><pre class="programlisting">
+                configure for performance, and clustered environments.</p></td></tr></table></div></div><div class="refsection"><a name="d0e41521"></a><h2>URI format</h2><p>The URI format for a JMS endpoint is:</p><pre class="programlisting">
 jms:[queue:|topic:]destinationName[?options]
 </pre><p>Where <code class="literal">destinationName</code> is a JMS queue or topic name. By default,
                 <code class="literal">destinationName</code> is interpreted as a queue name. For example, to
@@ -21,7 +22,7 @@ jms:queue:FOO.BAR
 jms:topic:Stocks.Prices
 </pre><p>You append query options to the URI using the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="refsection"><a name="d0e39297"></a><h2>Dependencies</h2><p>Maven users will need to add the following dependency to their
+        </p></div><div class="refsection"><a name="d0e41566"></a><h2>Dependencies</h2><p>Maven users will need to add the following dependency to their
                 <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -34,7 +35,7 @@ jms:topic:Stocks.Prices
             caching in the JMS provider to avoid <a class="link" href="http://activemq.apache.org/jmstemplate-gotchas.html" target="_top">poor
                 performance</a>.</p><p>If you intend to use <a class="link" href="http://activemq.apache.org/" target="_top">Apache
                 ActiveMQ</a> as your Message Broker - which is a good choice as ActiveMQ rocks
-            :-) , then we recommend that you either:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Use the <span class="olink">ActiveMQ</span> component, which is
+            :-) , then we recommend that you either:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Use the <a class="link" href="ActiveMQ.html" title="ActiveMQ">ActiveMQ</a> component, which is
                     already optimized to use ActiveMQ efficiently</p></li><li class="listitem"><p>Use the <code class="literal">PoolingConnectionFactory</code> in ActiveMQ.</p></li></ul></div></div><div class="refsection"><a name="JMS_HSH_TransactionsandCacheLevels"></a><h2>Transactions and Cache Levels</h2><p><span class="phrase"><a name="JMS_HSH_transactionCacheLevels"></a></span> If you are consuming messages and
             using transactions (<code class="literal">transacted=true</code>) then the default settings for
             cache level can impact performance. If you are using XA transactions then you cannot
@@ -101,7 +102,7 @@ jms:topic:Stocks.Prices
                         <code class="literal">InOnly</code> the producer will not wait for a reply. A consumer
                     with this flag will behave like <code class="literal">InOnly</code>. This feature can be
                     used to bridge <code class="literal">InOut</code> requests to another queue so that a
-                    route on the other queue will send it&#65533;s response directly back to the original
+                    route on the other queue will send its response directly back to the original
                         <code class="literal">JMSReplyTo</code>. </td>
             </tr><tr>
                 <td>
@@ -160,7 +161,7 @@ jms:topic:Stocks.Prices
                     <code class="literal">null</code>
                 </td>
                 <td> Provides an explicit ReplyTo destination, which overrides any incoming value of
-                        <code class="literal">Message.getJMSReplyTo()</code>. If you do <a class="link" href="Request Reply" target="_top">Request Reply</a> over JMS then <span class="bold"><strong>make sure</strong></span> to read the section <span class="emphasis"><em>Request-reply
+                        <code class="literal">Message.getJMSReplyTo()</code>. If you do <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request Reply</a> over JMS then <span class="bold"><strong>make sure</strong></span> to read the section <span class="emphasis"><em>Request-reply
                         over JMS</em></span> further below for more details, and the
                         <code class="literal">replyToType</code> option as well. </td>
             </tr><tr>
@@ -191,7 +192,7 @@ jms:topic:Stocks.Prices
                 </td>
                 <td>
                     <span class="bold"><strong>Producer only:</strong></span> The timeout for waiting for a
-                    reply when using the InOut <a class="link" href="Exchange Pattern" target="_top">Exchange
+                    reply when using the InOut <a class="link" href="http://camel.apache.org/exchange-pattern.html" target="_top">Exchange
                         Pattern</a> (in milliseconds). The default is 20 seconds. See below in
                     section <span class="emphasis"><em>About time to live</em></span> for more details. See also the
                         <span class="emphasis"><em>requestTimeoutCheckerInterval</em></span> option. </td>
@@ -224,7 +225,7 @@ jms:topic:Stocks.Prices
                     <code class="literal">false</code>
                 </td>
                 <td> Specifies whether to use transacted mode for sending/receiving messages using
-                    the InOnly <a class="link" href="Exchange Pattern" target="_top">Exchange Pattern</a>. </td>
+                    the InOnly <a class="link" href="http://camel.apache.org/exchange-pattern.html" target="_top">Exchange Pattern</a>. </td>
             </tr><tr>
                 <td>
                     <code class="literal">testConnectionOnStartup</code>
@@ -239,7 +240,7 @@ jms:topic:Stocks.Prices
                     granted then Camel throws an exception on startup. This ensures that Camel is
                     not started with failed connections. From <span class="bold"><strong>Camel
                         2.8</strong></span> onwards also the JMS producers is tested as well. </td>
-            </tr></table></div><div class="refsection"><a name="JMS_HSH_Alltheotheroptions"></a><h2>All other options</h2><div class="table"><a name="JMSOptsTbl2"></a><p class="title"><b>Table&nbsp;34.&nbsp;Other JMS options</b></p><div class="table-contents"><table summary="Other JMS options" width="100%" border="1"><colgroup><col width="23%" class="c1"><col width="20%" class="c2"><col width="57%" class="c3"></colgroup><thead><tr><th>Option</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+            </tr></table></div><div class="refsection"><a name="JMS_HSH_Alltheotheroptions"></a><h2>All other options</h2><div class="table"><a name="JMSOptsTbl2"></a><p class="title"><b>Table&nbsp;34.&nbsp;Other JMS options</b></p><div class="table-contents"><table summary="Other JMS options" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Option</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="literal">acceptMessages</code>
                             <code class="literal">WhileStopping</code>
                         </td><td>
@@ -247,10 +248,10 @@ jms:topic:Stocks.Prices
                         </td><td>
                             <p>Specifies whether the consumer accept messages while it is
                                 stopping. You might consider enabling this option, if you start and
-                                stop <span class="olink">JMS</span> routes at runtime,
+                                stop <a class="link" href="jms.html" title="JMS">JMS</a> routes at runtime,
                                 while there are still messages enqued on the queue.</p>
                             <p>If this option is <code class="literal">false</code>, and you stop the
-                                    <span class="olink">JMS</span> route, messages may be
+                                <a class="link" href="jms.html" title="JMS">JMS</a> route, messages may be
                                 rejected, and the JMS broker would have to attempt redeliveries,
                                 which may also be rejected. Eventually, the message may be moved to
                                 a dead letter queue on the JMS broker. To avoid this scenario,
@@ -303,14 +304,14 @@ jms:topic:Stocks.Prices
                             <code class="literal">false</code>
                         </td><td>
                             <p><span class="bold"><strong>Camel 2.9:</strong></span> Specifies whether the
-                                    <code class="literal">JmsConsumer</code> processes the <a class="link" href="Exchange" target="_top">Exchange</a>
-                                <a class="link" href="Asynchronous Routing Engine" target="_top">asynchronously</a>.</p>
+                                    <code class="literal">JmsConsumer</code> processes the <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a>
+                                <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">asynchronously</a>.</p>
                             <p>If enabled, the <code class="literal">JmsConsumer</code> may pickup the next
                                 message from the JMS queue, while the previous message is being
-                                processed asynchronously (by the <a class="link" href="Asynchronous Routing Engine" target="_top">Asynchronous Routing
+                                processed asynchronously (by the <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing
                                     Engine</a>). This means that messages may not be processed in
                                 order.</p>
-                            <p>If disabled (as default), the <a class="link" href="Exchange" target="_top">Exchange</a> is fully processed before the
+                            <p>If disabled (as default), the <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a> is fully processed before the
                                     <code class="literal">JmsConsumer</code> picks up the next message from
                                 the JMS queue. Note that if <code class="literal">transacted</code> is
                                 enabled, <code class="literal">asyncConsumer=true</code> does not run
@@ -367,8 +368,7 @@ jms:topic:Stocks.Prices
                             <p><span class="bold"><strong>Camel 2.8 onwards:</strong></span> The default
                                 setting is <code class="literal">CACHE_AUTO</code>. <span class="bold"><strong>Camel 2.7.1 and earlier:</strong></span> The default is
                                     <code class="literal">CACHE_CONSUMER</code>.</p>
-                            <p>For details, see the <a class="link" href="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/jms/listener/DefaultMessageListenerContainer.html" target="_top">Spring documentation</a> and Transactions
-                                    Cache Levels.</p>
+                            <p>For details, see the <a class="link" href="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/jms/listener/DefaultMessageListenerContainer.html" target="_top">Spring documentation</a> and <a class="xref" href="jms.html#JMS_HSH_TransactionsandCacheLevels" title="Transactions and Cache Levels">Transactions and Cache Levels</a>.</p>
                         </td></tr><tr><td>
                             <code class="literal">cacheLevel</code>
                         </td><td>&nbsp;</td><td>Sets the cache level by ID for the underlying JMS resources. See
@@ -557,7 +557,7 @@ jms:topic:Stocks.Prices
                             <p><span class="bold"><strong>Camel 2.10.3:</strong></span> Only applicable
                                 when sending to JMS destination using InOnly (eg fire and
                                 forget).</p>
-                            <p>Enabling this option enriches the Camel <a class="link" href="Exchange" target="_top">Exchange</a> with the actual JMSMessageID that was used by
+                            <p>Enabling this option enriches the Camel <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a> with the actual JMSMessageID that was used by
                                 the JMS client when the message was sent to the JMS
                                 destination.</p>
                         </td></tr><tr><td>
@@ -641,7 +641,7 @@ jms:topic:Stocks.Prices
                         </td><td>
                             <code class="literal">\-1</code>
                         </td><td>Limits the number of messages fetched at most, when browsing
-                            endpoints using <span class="olink">Browse</span> or JMX
+                            endpoints using <a class="link" href="http://camel.apache.org/browse.html" target="_top">Browse</a> or JMX
                             API. </td></tr><tr><td>
                             <code class="literal">messageConverter</code>
                         </td><td>
@@ -746,7 +746,7 @@ jms:topic:Stocks.Prices
                             <code class="literal">1000</code>
                         </td><td>
                             <p><span class="bold"><strong>Camel 2.9.2:</strong></span> Specifies how often
-                                Camel should check for timed out <a class="link" href="Exchange" target="_top">Exchange</a>s when doing request/reply over JMS.</p>
+                                Camel should check for timed out <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a>s when doing request/reply over JMS.</p>
                             <p>By default, Camel checks once per second. But if you must react
                                 faster when a timeout occurs, you can lower this interval to check
                                 more frequently.</p>
@@ -779,9 +779,8 @@ jms:topic:Stocks.Prices
                             <code class="literal">false</code>
                         </td><td>
                             <p><span class="bold"><strong>@deprecated:</strong></span> Specifies whether to
-                                use transacted mode for sending messages using the InOut <a class="link" href="Exchange Pattern" target="_top">Exchange Pattern</a>.</p>
-                            <p>Applies only to producer endpoints. See section Enabling
-                                    Transacted Consumption for more details.</p>
+                                use transacted mode for sending messages using the InOut <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange Pattern</a>.</p>
+                            <p>Applies only to producer endpoints. See section <a class="xref" href="jms.html#JMS_HSH_EnablingTransactedConsumption" title="Enabling Transacted Consumption">Enabling Transacted Consumption</a> for more details.</p>
                         </td></tr><tr><td>
                             <code class="literal">transactionManager</code>
                         </td><td>
@@ -805,14 +804,14 @@ jms:topic:Stocks.Prices
                         </td><td>
                             <code class="literal">false</code>
                         </td><td>
-                            <p>When enabled and you are using <span class="olink">Request
-                                    Reply</span> messaging (<span class="bold"><strong>InOut</strong></span>)
-                                and an <a class="link" href="Exchange" target="_top">Exchange</a> fails on the
+                            <p>When enabled and you are using <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request
+                                    Reply</a> messaging (<span class="bold"><strong>InOut</strong></span>)
+                                and an <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a> fails on the
                                 consumer side, the resulting <code class="literal">Exception</code> is sent
                                 back in response as a
                                 <code class="literal">javax.jms.ObjectMessage</code>.</p>
                             <p>If the client is Camel, the returned <code class="literal">Exception</code>
-                                is rethrown. This allows you to use Camel <span class="olink">JMS</span> as a bridge in your routing;
+                                is rethrown. This allows you to use Camel <a class="link" href="jms.html" title="JMS">JMS</a> as a bridge in your routing;
                                 for example, using persistent queues to enable robust
                                 routing.</p>
                             <p>Note that if you have also enabled <span class="bold"><strong>transferExchange</strong></span>, this option takes
@@ -859,13 +858,13 @@ jms:topic:Stocks.Prices
                                 onwards):</strong></span> Specifies whether the old JMS API should be
                             used.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="JMSMsgMapping"></a><h2>Message mapping</h2><p>Apache Camel automatically maps messages between <code class="literal">javax.jms.Message</code>
             and <code class="literal">org.apache.camel.Message</code>.</p><p>When sending a JMS message, Apache Camel converts the message body to the JMS message
-            types shown in <a class="xref" href="jms.html#RiderJMSRefMsgTbl1" title="Table&nbsp;35.&nbsp;Mapping from Apache Camel to JMS">Table&nbsp;35, &#8220;Mapping from Apache Camel to JMS&#8221;</a> .</p><div class="table"><a name="RiderJMSRefMsgTbl1"></a><p class="title"><b>Table&nbsp;35.&nbsp;Mapping from Apache Camel to JMS</b></p><div class="table-contents"><table summary="Mapping from Apache Camel to JMS" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Body Type</th><th>JMS Message</th></tr></thead><tbody><tr><td>
+            types shown in <a class="xref" href="jms.html#JMSRefMsgTbl1" title="Table&nbsp;35.&nbsp;Mapping from Apache Camel to JMS">Table&nbsp;35</a>.</p><div class="table"><a name="JMSRefMsgTbl1"></a><p class="title"><b>Table&nbsp;35.&nbsp;Mapping from Apache Camel to JMS</b></p><div class="table-contents"><table summary="Mapping from Apache Camel to JMS" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Body Type</th><th>JMS Message</th></tr></thead><tbody><tr><td>
                             <code class="literal">String</code>
                         </td><td>
                             <code class="literal">javax.jms.TextMessage</code>
                         </td></tr><tr><td>
                             <code class="literal">org.w3c.dom.Node</code>
-                            <a href="#ftn.d0e41523" class="footnote"><sup class="footnote"><a name="d0e41523"></a>[a]</sup></a>
+                            <a href="#ftn.d0e43787" class="footnote"><sup class="footnote"><a name="d0e43787"></a>[a]</sup></a>
                         </td><td>
                             <code class="literal">javax.jms.TextMessage</code>
                         </td></tr><tr><td>
@@ -896,8 +895,8 @@ jms:topic:Stocks.Prices
                             <code class="literal">java.nio.ByteBuffer</code>
                         </td><td>
                             <code class="literal">javax.jms.BytesMessage</code>
-                        </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div id="ftn.d0e41523" class="footnote"><p><a href="#d0e41523" class="para"><sup class="para">[a] </sup></a>The DOM will be converted to <code class="literal">String</code></p></div></td></tr></tbody></table></div></div><br class="table-break"><p>When receiving a JMS message, Apache Camel converts the JMS message to body type
-            listed in <a class="xref" href="jms.html#RiderJMSRefMsgTbl2" title="Table&nbsp;36.&nbsp;Mapping from JMS to Apache Camel">Table&nbsp;36, &#8220;Mapping from JMS to Apache Camel&#8221;</a>.</p><div class="table"><a name="RiderJMSRefMsgTbl2"></a><p class="title"><b>Table&nbsp;36.&nbsp;Mapping from JMS to Apache Camel</b></p><div class="table-contents"><table summary="Mapping from JMS to Apache Camel" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>JMS Message</th><th>Body Type</th></tr></thead><tbody><tr><td>
+                        </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div id="ftn.d0e43787" class="footnote"><p><a href="#d0e43787" class="para"><sup class="para">[a] </sup></a>The DOM will be converted to <code class="literal">String</code></p></div></td></tr></tbody></table></div></div><br class="table-break"><p>When receiving a JMS message, Apache Camel converts the JMS message to body type
+            listed in <a class="xref" href="jms.html#JMSRefMsgTbl2" title="Table&nbsp;36.&nbsp;Mapping from JMS to Apache Camel">Table&nbsp;36, &#8220;Mapping from JMS to Apache Camel&#8221;</a>.</p><div class="table"><a name="JMSRefMsgTbl2"></a><p class="title"><b>Table&nbsp;36.&nbsp;Mapping from JMS to Apache Camel</b></p><div class="table-contents"><table summary="Mapping from JMS to Apache Camel" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>JMS Message</th><th>Body Type</th></tr></thead><tbody><tr><td>
                             <code class="literal">javax.jms.TextMessage</code>
                         </td><td>
                             <code class="literal">String</code>
@@ -953,11 +952,12 @@ jms:topic:Stocks.Prices
                     are dropped.</p></li></ul></div><p>Camel will log with category
                 <code class="literal">org.apache.camel.component.jms.JmsBinding</code> at <span class="bold"><strong>DEBUG</strong></span> level if it drops a given header value. For
             example:</p><pre class="programlisting">
+            
 2008-07-09 06:43:04,046 [main           ] DEBUG JmsBinding
   - Ignoring non primitive header: order of class: org.apache.camel.component.jms.issues.DummyOrder with value: DummyOrder{orderId=333, itemId=4444, quantity=2}
 </pre></div><div class="refsection"><a name="JMS_HSH_Messageformatwhenreceiving"></a><h2>Message format when receiving</h2><p>Camel adds the following properties to the <code class="literal">Exchange</code> when it
-            receives a message: 
-        </p><table id="d0e41840"><tr>
+            receives a message:
+        </p><table id="d0e44104"><tr>
                 <th> Property </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -970,7 +970,7 @@ jms:topic:Stocks.Prices
                 </td>
                 <td> The reply destination. </td>
             </tr></table><p>Camel adds the following JMS properties to the In message headers when it receives a
-            JMS message: </p><table id="d0e41871"><tr>
+            JMS message: </p><table id="d0e44135"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -1069,8 +1069,7 @@ jms:topic:Stocks.Prices
                         <code class="literal">disableReplyTo</code>, <code class="literal">preserveMessageQos</code>,
                         <code class="literal">explicitQosEnabled</code>.</p></li></ul></div><p>All this can be a tad complex to understand and configure to support your use
             case.</p></div><div class="refsection"><a name="JMS_HSH_JmsProducer"></a><h2>JmsProducer</h2><p>The <code class="literal">JmsProducer</code> behaves as follows, depending on configuration:
-            
-        </p><table id="d0e42114"><tr>
+        </p><table id="d0e44376"><tr>
                 <th> Exchange Pattern </th>
                 <th> Other options </th>
                 <th> Description </th>
@@ -1112,7 +1111,7 @@ jms:topic:Stocks.Prices
                         <code class="literal">JMSReplyTo</code>. In all situations the
                         <code class="literal">JmsProducer</code> does <span class="bold"><strong>not</strong></span>
                     expect any reply and thus continue after sending the message. </td>
-            </tr></table></div><div class="refsection"><a name="JMS_HSH_JmsConsumer"></a><h2>JmsConsumer</h2><p>The <code class="literal">JmsConsumer</code> behaves as follows, depending on configuration: </p><table id="d0e42233"><tr>
+            </tr></table></div><div class="refsection"><a name="JMS_HSH_JmsConsumer"></a><h2>JmsConsumer</h2><p>The <code class="literal">JmsConsumer</code> behaves as follows, depending on configuration: </p><table id="d0e44496"><tr>
                 <th> Exchange Pattern </th>
                 <th> Other options </th>
                 <th> Description </th>
@@ -1137,7 +1136,7 @@ jms:topic:Stocks.Prices
                 </td>
                 <td> This option suppresses replies. </td>
             </tr></table><p>So pay attention to the message exchange pattern set on your exchanges.</p><p>If you send a message to a JMS destination in the middle of your route you can specify
-            the exchange pattern to use, see more at <a class="link" href="Request Reply" target="_top">Request
+            the exchange pattern to use, see more at <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request
                 Reply</a>. This is useful if you want to send an <code class="literal">InOnly</code>
             message to a JMS topic:</p><pre class="programlisting">
 from("activemq:queue:in")
@@ -1149,8 +1148,7 @@ from("activemq:queue:in")
             Camel to reuse the same endpoint, but send to different destinations. This greatly
             reduces the number of endpoints created and economizes on memory and thread
             resources.</p><p>You can specify the destination in the following headers:
-            
-        </p><table id="d0e42314"><tr>
+        </p><table id="d0e44575"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -1187,7 +1185,7 @@ public void setJmsHeader(Exchange exchange) {
                 <code class="literal">activemq:queue:order:2</code>, assuming the <code class="literal">id</code> value
             was 2.</p><p>If both the <code class="literal">CamelJmsDestination</code> and the
                 <code class="literal">CamelJmsDestinationName</code> headers are set,
-                <code class="literal">CamelJmsDestination</code> takes priority.</p></div><div class="refsection"><a name="JMS_HSH_ConfiguringdifferentJMSproviders"></a><h2>Configuring different JMS providers</h2><p>You can configure your JMS provider in <a class="link" href="Spring" target="_top">Spring</a> XML as
+                <code class="literal">CamelJmsDestination</code> takes priority.</p></div><div class="refsection"><a name="JMS_HSH_ConfiguringdifferentJMSproviders"></a><h2>Configuring different JMS providers</h2><p>You can configure your JMS provider in <a class="link" href="http://camel.apache.org/spring.html" target="_top">Spring</a> XML as
             follows:</p><pre class="programlisting">&lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;jmxAgent id="agent" disabled="true"/&gt;
 &lt;/camelContext&gt;
@@ -1207,8 +1205,8 @@ public void setJmsHeader(Exchange exchange) {
             you can then refer to destinations using the URI format,
                 <code class="literal">activemq:[queue:|topic:]destinationName</code>. You can use the same
             approach for all other JMS providers.</p><p>This works by the SpringCamelContext lazily fetching components from the spring
-            context for the scheme name you use for <a class="link" href="Endpoint" target="_top">Endpoint</a>
-            <a class="link" href="URIs" target="_top">URIs</a> and having the <a class="link" href="Component" target="_top">Component</a> resolve the endpoint URIs.</p></div><div class="refsection"><a name="JMS_HSH_UsingJNDItofindtheConnectionFactory"></a><h2>Using JNDI to find the ConnectionFactory</h2><p>If you are using a J2EE container, you might need to look up JNDI to find the JMS
+            context for the scheme name you use for <a class="link" href="http://camel.apache.org/endpoint.html" target="_top">Endpoint</a>
+            <a class="link" href="http://camel.apache.org/uris.html" target="_top">URIs</a> and having the <a class="link" href="http://camel.apache.org/component.html" target="_top">Component</a> resolve the endpoint URIs.</p></div><div class="refsection"><a name="JMS_HSH_UsingJNDItofindtheConnectionFactory"></a><h2>Using JNDI to find the ConnectionFactory</h2><p>If you are using a J2EE container, you might need to look up JNDI to find the JMS
                 <code class="literal">ConnectionFactory</code> rather than use the usual
                 <code class="literal">&lt;bean&gt;</code> mechanism in Spring. You can do this using Spring's
             factory bean or the new Spring XML namespace. For example:</p><pre class="programlisting">
@@ -1225,14 +1223,14 @@ public void setJmsHeader(Exchange exchange) {
 from("jms:SomeQueue?concurrentConsumers=20").
   bean(MyClass.class);
 </pre><p>You can configure this option in one of the following ways:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>On the <code class="literal">JmsComponent</code>,</p></li><li class="listitem"><p>On the endpoint URI or,</p></li><li class="listitem"><p>By invoking <code class="literal">setConcurrentConsumers()</code> directly on the
-                        <code class="literal">JmsEndpoint</code>.</p></li></ul></div></div><div class="refsection"><a name="JMS_HSH_RequestreplyoverJMS"></a><h2>Request-reply over JMS</h2><p>Camel supports <a class="link" href="Request Reply" target="_top">Request Reply</a> over JMS. In essence
+                        <code class="literal">JmsEndpoint</code>.</p></li></ul></div></div><div class="refsection"><a name="JMS_HSH_RequestreplyoverJMS"></a><h2>Request-reply over JMS</h2><p>Camel supports <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request Reply</a> over JMS. In essence
             the MEP of the Exchange should be <code class="literal">InOut</code> when you send a message to a
             JMS queue.</p><p>Camel offers a number of options to configure request/reply over JMS that influence
-            performance and clustered environments. The table below summaries the options.</p><table width="916" id="d0e42499"><col width="224px"><col width="100px"><col width="63pt"><col width="57%"><tr>
-                <th> Option </th>
+            performance and clustered environments. The table below summaries the options.</p><table width="932" id="d0e44760"><col width="21%"><col width="9%"><col width="5%"><col width="55%"><tr>
+                <th>Option </th>
                 <th>Performance </th>
-                <th> Cluster </th>
-                <th> Description </th>
+                <th>Cluster </th>
+                <th>Description </th>
             </tr><tr>
                 <td>
                     <code class="literal">Temporary</code>
@@ -1321,7 +1319,7 @@ from(xxx)
 .threads(5)
 .to(yyy)
 .to(zzz);
-</pre><p>In this route we instruct Camel to route replies <a class="link" href="Async" target="_top">asynchronously</a> using a thread pool with 5 threads.</p><p>From Camel 2.10.3 onwards you can now configure the listener to use concurrent threads
+</pre><p>In this route we instruct Camel to route replies <a class="link" href="http://camel.apache.org/async.html" target="_top">asynchronously</a> using a thread pool with 5 threads.</p><p>From Camel 2.10.3 onwards you can now configure the listener to use concurrent threads
             using the <code class="literal">concurrentConsumers</code> and
                 <code class="literal">maxConcurrentConsumers</code> options. This allows you to easier
             configure this in Camel as shown below:</p><pre class="programlisting">
@@ -1329,7 +1327,7 @@ from(xxx)
 .inOut().to("activemq:queue:foo?concurrentConsumers=5")
 .to(yyy)
 .to(zzz);
-</pre></div><div class="refsection"><a name="JMS_HSH_RequestreplyoverJMSandusingasharedfixedreplyqueue"></a><h2>Request-reply over JMS and using a shared fixed reply queue</h2><p>If you use a fixed reply queue when doing <a class="link" href="Request Reply" target="_top">Request
+</pre></div><div class="refsection"><a name="JMS_HSH_RequestreplyoverJMSandusingasharedfixedreplyqueue"></a><h2>Request-reply over JMS and using a shared fixed reply queue</h2><p>If you use a fixed reply queue when doing <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request
                 Reply</a> over JMS as shown in the example below, then pay attention.</p><pre class="programlisting">
 from(xxx)
 .inOut().to("activemq:queue:foo?replyTo=bar")
@@ -1377,25 +1375,25 @@ from(aaa)
             must use an unique reply queue name. As otherwise each node in the cluster may pickup
             messages which was intended as a reply on another node. For clustered environments its
             recommended to use shared reply queues instead.</p></div><div class="refsection"><a name="JMS_HSH_Synchronizingclocksbetweensendersandreceivers"></a><h2>Synchronizing clocks between senders and receivers</h2><p>When doing messaging between systems, its desirable that the systems have synchronized
-            clocks. For example when sending a <span class="olink">JMS</span> message, then
+            clocks. For example when sending a <a class="link" href="jms.html" title="JMS">JMS</a> message, then
             you can set a time to live value on the message. Then the receiver can inspect this
             value, and determine if the message is already expired, and thus drop the message
             instead of consume and process it. However this requires that both sender and receiver
             have synchronized clocks. If you are using <a class="link" href="http://activemq.apache.org/" target="_top">ActiveMQ</a> then you can use the <a class="link" href="http://activemq.apache.org/timestampplugin.html" target="_top">timestamp plugin</a> to
-            synchronize clocks.</p></div><div class="refsection"><a name="JMS_HSH_Abouttimetolive"></a><h2>About time to live</h2><p>Read first above about synchronized clocks.</p><p>When you do request/reply (InOut) over <span class="olink">JMS</span> with
+            synchronize clocks.</p></div><div class="refsection"><a name="JMS_HSH_Abouttimetolive"></a><h2>About time to live</h2><p>Read first above about synchronized clocks.</p><p>When you do request/reply (InOut) over <a class="link" href="jms.html" title="JMS">JMS</a> with
             Camel then Camel uses a timeout on the sender side, which is default 20 seconds from the
                 <code class="literal">requestTimeout</code> option. You can control this by setting a
-            higher/lower value. However the time to live value is still set on the <span class="olink">JMS</span> message being send. So that requires the clocks to
+            higher/lower value. However the time to live value is still set on the <a class="link" href="jms.html" title="JMS">JMS</a> message being send. So that requires the clocks to
             be synchronized between the systems. If they are not, then you may want to disable the
             time to live value being set. This is now possible using the
                 <code class="literal">disableTimeToLive</code> option from <span class="bold"><strong>Camel
                 2.8</strong></span> onwards. So if you set this option to
-                <code class="literal">disableTimeToLive=true</code>, then Camel does <span class="bold"><strong>not</strong></span> set any time to live value when sending <span class="olink">JMS</span> messages. <span class="bold"><strong>But</strong></span> the request timeout is
-            still active. So for example if you do request/reply over <span class="olink">JMS</span> and have disabled time to live, then Camel will still use a timeout by
+                <code class="literal">disableTimeToLive=true</code>, then Camel does <span class="bold"><strong>not</strong></span> set any time to live value when sending <a class="link" href="jms.html" title="JMS">JMS</a> messages. <span class="bold"><strong>But</strong></span> the request timeout is
+            still active. So for example if you do request/reply over <a class="link" href="jms.html" title="JMS">JMS</a> and have disabled time to live, then Camel will still use a timeout by
             20 seconds (the <code class="literal">requestTimeout</code> option). That option can of course
             also be configured. So the two options <code class="literal">requestTimeout</code> and
                 <code class="literal">disableTimeToLive</code> gives you fine grained control when doing
-            request/reply.</p><p>When you do fire and forget (InOut) over <span class="olink">JMS</span> with
+            request/reply.</p><p>When you do fire and forget (InOut) over <a class="link" href="jms.html" title="JMS">JMS</a> with
             Camel then Camel by default does <span class="bold"><strong>not</strong></span> set any time to
             live value on the message. You can configure a value by using the
                 <code class="literal">timeToLive</code> option. For example to indicate a 5 sec., you set
@@ -1406,15 +1404,15 @@ from(aaa)
             message using the Camel route. To do this, just ensure that you set the following
             properties on the component/endpoint:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="literal">transacted</code> = true</p></li><li class="listitem"><p><code class="literal">transactionManager</code> = a <span class="emphasis"><em>Transsaction
                         Manager</em></span> \- typically the <code class="literal">JmsTransactionManager</code>
-                </p></li></ul></div><p>See the <a class="link" href="Transactional Client" target="_top">Transactional Client</a> EIP pattern
-            for further details.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Transactions and [Request Reply] over JMS"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Transactions and [Request Reply] over JMS</th></tr><tr><td align="left" valign="top"><p>When using <a class="link" href="Request Reply" target="_top">Request Reply</a> over JMS you cannot
+                </p></li></ul></div><p>See the <a class="link" href="http://camel.apache.org/transactional-client.html" target="_top">Transactional Client</a> EIP pattern
+            for further details.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>When using <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request Reply</a> over JMS you cannot
                 use a single transaction; JMS will not send any messages until a commit is
                 performed, so the server side won't receive anything at all until the transaction
-                commits. Therefore to use <a class="link" href="Request Reply" target="_top">Request Reply</a> you
+                commits. Therefore to use <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request Reply</a> you
                 must commit a transaction after sending the request and then use a separate
                 transaction for receiving the response.</p><p>To address this issue the JMS component uses different properties to specify
-                transaction use for oneway messaging and request reply messaging:</p><p>The <code class="literal">transacted</code> property applies <span class="bold"><strong>only</strong></span> to the InOnly message <a class="link" href="Exchange Pattern" target="_top">Exchange
-                    Pattern</a> (MEP).</p><p>The <code class="literal">transactedInOut</code> property applies to the InOut(<a class="link" href="Request Reply" target="_top">Request Reply</a>) message <a class="link" href="Exchange Pattern" target="_top">Exchange Pattern</a> (MEP).</p><p>If you want to use transactions for <a class="link" href="Request Reply" target="_top">Request
+                transaction use for oneway messaging and request reply messaging:</p><p>The <code class="literal">transacted</code> property applies <span class="bold"><strong>only</strong></span> to the InOnly message <a class="link" href="http://camel.apache.org/exchange-pattern.html" target="_top">Exchange
+                    Pattern</a> (MEP).</p><p>The <code class="literal">transactedInOut</code> property applies to the InOut(<a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request Reply</a>) message <a class="link" href="http://camel.apache.org/exchange-pattern.html" target="_top">Exchange Pattern</a> (MEP).</p><p>If you want to use transactions for <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request
                     Reply</a>(InOut MEP), you <span class="bold"><strong>must</strong></span> set
                     <code class="literal">transactedInOut=true</code>.</p></td></tr></table></div><p>
             <span class="bold"><strong>Available as of Camel 2.10</strong></span>
@@ -1444,8 +1442,8 @@ Destination replyDestination = exchange.getIn().getHeader(JmsConstants.JMS_REPLY
             exchange.getIn().setBody("Here is the late reply.");
         }
     }
-</pre></div><div class="refsection"><a name="JMS_HSH_Usingarequesttimeout"></a><h2>Using a request timeout</h2><p>In the sample below we send a <a class="link" href="Request Reply" target="_top">Request Reply</a> style
-            message <a class="link" href="Exchange" target="_top">Exchange</a> (we use the
+</pre></div><div class="refsection"><a name="JMS_HSH_Usingarequesttimeout"></a><h2>Using a request timeout</h2><p>In the sample below we send a <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request Reply</a> style
+            message <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a> (we use the
                 <code class="literal">requestBody</code> method = <code class="literal">InOut</code>) to the slow queue
             for further processing in Camel and we wait for a return reply:</p><pre class="programlisting">// send a in-out with a timeout for 5 sec
 Object out = template.requestBody("activemq:queue:slow?requestTimeout=5000", "Hello World");
@@ -1466,9 +1464,9 @@ from("jms:topic:OrdersTopic").
 from("file://orders").
   convertBodyTo(String.class).
   to("jms:topic:OrdersTopic");
-</pre></div><div class="refsection"><a name="JMS_HSH_UsingAnnotationsBeanIntegration"></a><h2>Using <a class="link" href="Bean Integration" target="_top">Annotations</a>
-        </h2><p>Camel also has annotations so you can use <a class="link" href="POJO Consuming" target="_top">POJO
-                Consuming</a> and <a class="link" href="POJO Producing" target="_top">POJO Producing</a>.</p></div><div class="refsection"><a name="JMS_HSH_SpringDSLsample"></a><h2>Spring DSL sample</h2><p>The preceding examples use the Java DSL. Camel also supports Spring XML DSL. Here is
+</pre></div><div class="refsection"><a name="JMS_HSH_UsingAnnotationsBeanIntegration"></a><h2>Using <a class="link" href="http://camel.apache.org/bean-integration.html" target="_top">Annotations</a>
+        </h2><p>Camel also has annotations so you can use <a class="link" href="http://camel.apache.org/pojo-consuming.html" target="_top">POJO
+            Consuming</a> and <a class="link" href="http://camel.apache.org/pojo-producing.html" target="_top">POJO Producing</a>.</p></div><div class="refsection"><a name="JMS_HSH_SpringDSLsample"></a><h2>Spring DSL sample</h2><p>The preceding examples use the Java DSL. Camel also supports Spring XML DSL. Here is
             the big spender sample using Spring DSL:</p><pre class="programlisting">
 &lt;route&gt;
   &lt;from uri="jms:topic:OrdersTopic"/&gt;
@@ -1480,11 +1478,12 @@ from("file://orders").
 </pre></div><div class="refsection"><a name="JMS_HSH_Othersamples"></a><h2>Other samples</h2><p>JMS appears in many of the examples for other components and EIP patterns, as well in
             this Camel documentation. So feel free to browse the documentation. If you have time,
             check out the this tutorial that uses JMS but focuses on how well Spring Remoting and
-            Camel works together <a class="link" href="Tutorial-JmsRemoting" target="_top">Tutorial-JmsRemoting</a>.</p></div><div class="refsection"><a name="JMS_HSH_UsingJMSasaDeadLetterQueuestoringExchange"></a><h2>Using JMS as a Dead Letter Queue storing Exchange</h2><p>Normally, when using <span class="olink">JMS</span> as the transport, it only
-            transfers the body and headers as the payload. If you want to use <span class="olink">JMS</span> with a <a class="link" href="Dead Letter Channel" target="_top">Dead
+            Camel works together <a class="link" href="http://camel.apache.org/tutorial-jmsremoting.html" target="_top">Tutorial-JmsRemoting</a>.</p></div><div class="refsection"><a name="JMS_HSH_UsingJMSasaDeadLetterQueuestoringExchange"></a><h2>Using JMS as a Dead Letter Queue storing Exchange</h2><p>Normally, when using <a class="link" href="jms.html" title="JMS">JMS</a> as the transport, it only
+            transfers the body and headers as the payload. If you want to use <a class="link" href="jms.html" title="JMS">JMS</a> 
+            with a <a class="link" href="http://camel.apache.org/dead-letter-channel.html" target="_top">Dead
                 Letter Channel</a>, using a JMS queue as the Dead Letter Queue, then normally the
             caused Exception is not stored in the JMS message. You can, however, use the <span class="bold"><strong>transferExchange</strong></span> option on the JMS dead letter queue to
-            instruct Camel to store the entire <a class="link" href="Exchange" target="_top">Exchange</a> in the queue
+            instruct Camel to store the entire <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a> in the queue
             as a <code class="literal">javax.jms.ObjectMessage</code> that holds a
                 <code class="literal">org.apache.camel.impl.DefaultExchangeHolder</code>. This allows you to
             consume from the Dead Letter Queue and retrieve the caused exception from the Exchange
@@ -1501,8 +1500,8 @@ Exception cause = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.clas
 // the cause message is
 String problem = cause.getMessage();
 </pre></div><div class="refsection"><a name="JMS_HSH_UsingJMSasaDeadLetterChannelstoringerroronly"></a><h2>Using JMS as a Dead Letter Channel storing error only</h2><p>You can use JMS to store the cause error message or to store a custom body, which you
-            can initialize yourself. The following example uses the <a class="link" href="Message Translator" target="_top">Message Translator</a> EIP to do a transformation on
-            the failed exchange before it is moved to the <span class="olink">JMS</span>
+            can initialize yourself. The following example uses the <a class="link" href="http://camel.apache.org/message-translator.html" target="_top">Message Translator</a> EIP to do a transformation on
+            the failed exchange before it is moved to the <a class="link" href="jms.html" title="JMS">JMS</a>
             dead letter queue:</p><pre class="programlisting">
 // we sent it to a seda dead queue first
 errorHandler(deadLetterChannel("seda:dead"));
@@ -1510,8 +1509,8 @@ errorHandler(deadLetterChannel("seda:dead"));
 // and on the seda dead queue we can do the custom transformation before its sent to the JMS queue
 from("seda:dead").transform(exceptionMessage()).to("jms:queue:dead");
 </pre><p>Here we only store the original cause error message in the transform. You can,
-            however, use any <a class="link" href="Expression" target="_top">Expression</a> to send whatever you like.
-            For example, you can invoke a method on a Bean or use a custom processor.</p></div><div class="refsection"><a name="JMS_HSH_SendinganInOnlymessageandkeepingtheJMSReplyToheader"></a><h2>Sending an InOnly message and keeping the JMSReplyTo header</h2><p>When sending to a <span class="olink">JMS</span> destination using <span class="bold"><strong>camel-jms</strong></span> the producer will use the MEP to detect if its
+            however, use any <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a> to send whatever you like.
+            For example, you can invoke a method on a Bean or use a custom processor.</p></div><div class="refsection"><a name="JMS_HSH_SendinganInOnlymessageandkeepingtheJMSReplyToheader"></a><h2>Sending an InOnly message and keeping the JMSReplyTo header</h2><p>When sending to a <a class="link" href="jms.html" title="JMS">JMS</a> destination using <span class="bold"><strong>camel-jms</strong></span> the producer will use the MEP to detect if its
             InOnly or InOut messaging. However there can be times where you want to send an InOnly
             message but keeping the JMSReplyTo header. To do so you have to instruct Camel to keep
             it, otherwise the JMSReplyTo header will be dropped.</p><p>For example to send an InOnly message to the foo queue, but with a JMSReplyTo with bar
@@ -1542,16 +1541,16 @@ wmq.setDestinationResolver(new DestinationResolver(){
     }
 });
 </pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <a class="link" href="Transactional Client" target="_top">Transactional Client</a>
+                    <a class="link" href="http://camel.apache.org/transactional-client.html" target="_top">Transactional Client</a>
                 </p></li><li class="listitem"><p>
-                    <a class="link" href="Bean Integration" target="_top">Bean Integration</a>
+                    <a class="link" href="http://camel.apache.org/bean-integration.html" target="_top">Bean Integration</a>
                 </p></li><li class="listitem"><p>
                     <a class="link" href="Tutorial-JmsRemoting" target="_top">Tutorial-JmsRemoting</a>
                 </p></li><li class="listitem"><p>
                     <a class="link" href="http://activemq.apache.org/jmstemplate-gotchas.html" target="_top">JMSTemplate
                         gotchas</a>
-                </p></li></ul></div></div><div class="refsection"><a name="d0e43176"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
-                <a href="PLUGINS_ROOT/com.fusesource.rider.help/ActiveMQ.html" class="olink">ActiveMQ</a>
+                </p></li></ul></div></div><div class="refsection"><a name="d0e45436"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                <a class="xref" href="ActiveMQ.html" title="ActiveMQ">ActiveMQ</a>
             </td></tr><tr><td>
-                <a href="PLUGINS_ROOT/com.fusesource.rider.help/amqp.html" class="olink">AMQP</a>
+                <a class="xref" href="amqp.html" title="AMQP">AMQP</a>
             </td></tr></table></div></div></body></html>

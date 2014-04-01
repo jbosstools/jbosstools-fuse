@@ -11,14 +11,14 @@
             facilitates both In-Only and In-Out communication on a Apache Camel route.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_URIformat"></a>URI format</h2></div></div></div><p>The URI scheme for a netty component is as follows</p><pre class="programlisting">netty:tcp://localhost:99999[?options]
 netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer and consumer endpoints for both TCP and UDP.</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e60784"></a>Dependencies</h2></div></div></div><p>Maven users need to add the following dependency to their <code class="literal">pom.xml</code>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e63098"></a>Dependencies</h2></div></div></div><p>Maven users need to add the following dependency to their <code class="literal">pom.xml</code>
             for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-netty&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_Options"></a>Options</h2></div></div></div><p><a class="xref" href="netty.html#_IDU_Netty_Opts" title="Table&nbsp;64.&nbsp;URI options">Table&nbsp;64</a> list the Netty uri
-            options:</p><div class="table"><a name="_IDU_Netty_Opts"></a><p class="title"><b>Table&nbsp;64.&nbsp;URI options</b></p><div class="table-contents"><table summary="URI options" width="100%" border="1"><colgroup><col width="24%" class="c1"><col width="8%" class="c2"><col width="68%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_Options"></a>Options</h2></div></div></div><p><a class="xref" href="netty.html#_IDU_Netty_Opts" title="Table&nbsp;65.&nbsp;URI options">Table&nbsp;65</a> list the Netty uri
+            options:</p><div class="table"><a name="_IDU_Netty_Opts"></a><p class="title"><b>Table&nbsp;65.&nbsp;URI options</b></p><div class="table-contents"><table summary="URI options" width="100%" border="1"><colgroup><col width="144" class="c1"><col width="96" class="c2"><col width="384" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <code class="literal">keepAlive</code>
                         </td><td>
                             <code class="literal">true</code>
@@ -56,10 +56,9 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
                         </td><td>
                             <code class="literal">false</code>
                         </td><td>
-                            <span class="bold"><strong>Camel 2.10:</strong></span> Whether <a class="link" href="Asynchronous Routing Engine" target="_top">Asynchronous Routing
-                                Engine</a> is not in use. <code class="literal">false</code> then the <a class="link" href="Asynchronous Routing Engine" target="_top">Asynchronous Routing
-                                Engine</a> is used, <code class="literal">true</code> to force processing
-                            synchronous. </td></tr><tr><td>
+                            <p><span class="bold"><strong>Camel 2.10:</strong></span> Specifies whether <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is not in use.</p>
+                            <p><code class="literal">false</code> then the <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a> is used, <code class="literal">true</code>
+                            to force synchronous processing.</p></td></tr><tr><td>
                             <code class="literal">ssl</code>
                         </td><td>
                             <code class="literal">false</code>
@@ -69,9 +68,9 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
                         </td><td>
                             <code class="literal">false</code>
                         </td><td><span class="bold"><strong>Camel 2.12:</strong></span> When enabled and in SSL
-                            mode, then the Netty consumer will enrich the Camel <span class="olink">Message</span> with
-                            headers having information about the client certificate such as subject
-                            name, issuer name, serial number, and the valid date range. </td></tr><tr><td>
+                            mode, the Netty consumer enrichs the Camel <a class="link" href="http://camel.apache.org/message.html" target="_top">Message</a> with
+                            headers having information about the client certificate&#8212;such as
+                            subject name, issuer name, serial number, and the valid date range. </td></tr><tr><td>
                             <code class="literal">sendBufferSize</code>
                         </td><td>
                             <code class="literal">65536 bytes</code>
@@ -85,140 +84,147 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
                             <code class="literal">option.XXX</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td><span class="bold"><strong>Camel 2.11/2.10.4:</strong></span> Allows to
-                            configure additional netty options using "option." as prefix. For
-                            example "option.child.keepAlive=false" to set the netty option
-                            "child.keepAlive=false". See the Netty documentation for possible
-                            options that can be used. </td></tr><tr><td>
+                        </td><td><p><span class="bold"><strong>Camel 2.11/2.10.4:</strong></span> Allows configuring additional netty
+                                options using <code class="literal">option.</code> as prefix.</p>
+                            <p>For example, <code class="literal">option.child.keepAlive=false</code> to set the netty option
+                            <code class="literal">child.keepAlive=false</code>.</p>
+                            <p>See the Netty documentation for other options.</p></td></tr><tr><td>
                             <code class="literal">corePoolSize</code>
                         </td><td>
                             <code class="literal">10</code>
-                        </td><td> The number of allocated threads at component startup. Defaults to
-                            10. <span class="bold"><strong>Note:</strong></span> This option is removed from
-                            Camel 2.9.2 onwards. As we rely on Nettys default settings. </td></tr><tr><td>
+                        </td><td><p>Specifies the number of allocated threads at component startup. Defaults to 10.</p>
+                            <p><span class="bold"><strong>Note:</strong></span> This option is removed from
+                            Camel 2.9.2 onwards, as we rely on Netty's default settings.</p> </td></tr><tr><td>
                             <code class="literal">maxPoolSize</code>
                         </td><td>
                             <code class="literal">100</code>
-                        </td><td> The maximum number of threads that may be allocated to this
-                            endpoint. Defaults to 100. <span class="bold"><strong>Note:</strong></span> This
-                            option is removed from Camel 2.9.2 onwards. As we rely on Nettys default
-                            settings. </td></tr><tr><td>
+                        </td><td><p>Specifies the maximum number of threads that may be allocated to this endpoint. Defaults to
+                                100.</p>
+                            <p><span class="bold"><strong>Note:</strong></span> This option is
+                                removed from Camel 2.9.2 onwards. As we rely on Nettys default
+                                settings.</p></td></tr><tr><td>
                             <code class="literal">disconnect</code>
                         </td><td>
                             <code class="literal">false</code>
-                        </td><td> Whether or not to disconnect(close) from Netty Channel right after
-                            use. Can be used for both consumer and producer. </td></tr><tr><td>
+                        </td><td><p>Specifies whether to disconnect (close) from Netty Channel right
+                            after use.</p><p> Can be used for both consumer and producer.</p></td></tr><tr><td>
                             <code class="literal">lazyChannelCreation</code>
                         </td><td>
                             <code class="literal">true</code>
-                        </td><td> Channels can be lazily created to avoid exceptions, if the remote
-                            server is not up and running when the Camel producer is started.
-                        </td></tr><tr><td>
+                        </td><td>Channels can be lazily created to avoid exceptions, if the remote
+                            server is not up and running when the Camel producer is started. </td></tr><tr><td>
                             <code class="literal">transferExchange</code>
                         </td><td>
                             <code class="literal">false</code>
-                        </td><td> Only used for TCP. You can transfer the exchange over the wire
-                            instead of just the body. The following fields are transferred: In body,
-                            Out body, fault body, In headers, Out headers, fault headers, exchange
-                            properties, exchange exception. This requires that the objects are
-                            serializable. Camel will exclude any non-serializable objects and log it
-                            at WARN level. </td></tr><tr><td>
+                        </td><td><p>Only used for TCP. You can transfer the exchange over the wire
+                            instead of just the body.</p>
+                            <p>These fields are transferred:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>In body</p></li><li class="listitem"><p>Out body</p></li><li class="listitem"><p>fault body</p></li><li class="listitem"><p>In headers</p></li><li class="listitem"><p>Out headers</p></li><li class="listitem"><p>fault headers</p></li><li class="listitem"><p>exchange properties</p></li><li class="listitem"><p>exchange exception</p></li></ul></div>
+                            <p>This feature requires that the objects be serializable. Camel
+                                excludes any non-serializable object and logs it at WARN
+                                level.</p></td></tr><tr><td>
                             <code class="literal">disconnectOnNoReply</code>
                         </td><td>
                             <code class="literal">true</code>
-                        </td><td> If sync is enabled then this option dictates NettyConsumer if it
-                            should disconnect where there is no reply to send back. </td></tr><tr><td>
+                        </td><td>If sync is enabled, this option dictates whether NettyConsumer should
+                            disconnect when there is no reply. </td></tr><tr><td>
                             <code class="literal">noReplyLogLevel</code>
                         </td><td>
                             <code class="literal">WARN</code>
-                        </td><td> If sync is enabled this option dictates NettyConsumer which logging
-                            level to use when logging a there is no reply to send back. Values are:
-                                <code class="literal">FATAL, ERROR, INFO, DEBUG, OFF</code>. </td></tr><tr><td>
+                        </td><td><p>If sync is enabled, this option dictates which logging level
+                            NettyConsumer should use
+                            for logging when there is no reply.</p>
+                            <p>Values are:
+                                <code class="literal">FATAL</code>, <code class="literal">ERROR</code>,
+                                    <code class="literal">INFO</code>, <code class="literal">DEBUG</code>, <code class="literal">OFF</code>.</p></td></tr><tr><td>
                             <code class="literal">serverExceptionCaught</code><code class="literal">LogLevel</code>
                         </td><td>
                             <code class="literal">WARN</code>
-                        </td><td><span class="bold"><strong>Camel 2.11.1:</strong></span> If the server
-                            (NettyConsumer) catches an exception then its logged using this logging
+                        </td><td><span class="bold"><strong>Camel 2.11.1:</strong></span> When the server
+                            (NettyConsumer) catches an exception, it is logged using this logging
                             level. </td></tr><tr><td>
                             <code class="literal">serverClosedChannel</code><code class="literal">ExceptionCaughtLogLevel</code>
                         </td><td>
                             <code class="literal">DEBUG</code>
-                        </td><td><span class="bold"><strong>Camel 2.11.1:</strong></span> If the server
+                        </td><td><p><span class="bold"><strong>Camel 2.11.1:</strong></span> When the server
                             (NettyConsumer) catches an
-                                <code class="literal">java.nio.channels.ClosedChannelException</code> then its
-                            logged using this logging level. This is used to avoid logging the
-                            closed channel exceptions, as clients can disconnect abruptly and then
-                            cause a flod of closed exceptions in the Netty server. </td></tr><tr><td>
+                                <code class="literal">java.nio.channels.ClosedChannelException</code>, it is
+                            logged using this logging level.</p>
+                            <p>This is used to avoid logging the
+                            closed channel exceptions, as clients can disconnect abruptly, then
+                            cause a flood of closed exceptions in the Netty server.</p></td></tr><tr><td>
                             <code class="literal">allowDefaultCodec</code>
                         </td><td>
                             <code class="literal">true</code>
-                        </td><td>
-                            <span class="bold"><strong>Camel 2.4:</strong></span> The netty component installs
-                            a default codec if both, encoder/deocder is null and textline is false.
-                            Setting allowDefaultCodec to false prevents the netty component from
-                            installing a default codec as the first element in the filter chain.
-                        </td></tr><tr><td>
+                        </td><td><p>
+                                <span class="bold"><strong>Camel 2.4:</strong></span> The netty component
+                                installs a default codec if encoder/decoder is null and
+                                    <code class="literal">textline</code> is false.</p>
+                            <p>Setting <code class="literal">allowDefaultCodec</code> to
+                                <em class="replaceable"><code>false</code></em> prevents the netty component from
+                            installing a default codec as the first element in the filter chain.</p></td></tr><tr><td>
                             <code class="literal">textline</code>
                         </td><td>
                             <code class="literal">false</code>
-                        </td><td>
+                        </td><td><p>
                             <span class="bold"><strong>Camel 2.4:</strong></span> Only used for TCP. If no
                             codec is specified, you can use this flag to indicate a text line based
                             codec; if not specified or the value is false, then Object Serialization
-                            is assumed over TCP. </td></tr><tr><td>
+                            is assumed over TCP.</p></td></tr><tr><td>
                             <code class="literal">delimiter</code>
                         </td><td>
                             <code class="literal">LINE</code>
-                        </td><td>
-                            <span class="bold"><strong>Camel 2.4:</strong></span> The delimiter to use for the
-                            textline codec. Possible values are <code class="literal">LINE</code> and
-                                <code class="literal">NULL</code>. </td></tr><tr><td>
+                        </td><td><p>
+                            <span class="bold"><strong>Camel 2.4:</strong></span> pecifies the delimiter to use for the
+                            textline codec.</p>
+                            <p>Possible values are <code class="literal">LINE</code> and
+                            <code class="literal">NULL</code>.</p></td></tr><tr><td>
                             <code class="literal">decoderMaxLineLength</code>
                         </td><td>
                             <code class="literal">1024</code>
                         </td><td>
-                            <span class="bold"><strong>Camel 2.4:</strong></span> The max line length to use
+                            <span class="bold"><strong>Camel 2.4:</strong></span> Specifies the max line length to use
                             for the textline codec. </td></tr><tr><td>
                             <code class="literal">autoAppendDelimiter</code>
                         </td><td>
                             <code class="literal">true</code>
                         </td><td>
-                            <span class="bold"><strong>Camel 2.4:</strong></span> Whether or not to auto
-                            append missing end delimiter when sending using the textline codec.
+                            <span class="bold"><strong>Camel 2.4:</strong></span> Specifies whether to auto
+                            append a missing end delimiter when sending using the textline codec.
                         </td></tr><tr><td>
                             <code class="literal">encoding</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td>
+                        </td><td><p>
                             <span class="bold"><strong>Camel 2.4:</strong></span> The encoding (a charset
-                            name) to use for the textline codec. If not provided, Camel will use the
-                            JVM default Charset. </td></tr><tr><td>
+                            name) to use for the textline codec.</p>
+                            <p>If not provided, Camel will use the
+                            JVM default Charset.</p></td></tr><tr><td>
                             <code class="literal">workerCount</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td><span class="bold"><strong>Camel 2.9:</strong></span> When netty works on nio
-                            mode, it uses default workerCount parameter from Netty, which is
-                            cpu_core_threads*2. User can use this operation to override the default
-                            workerCount from Netty </td></tr><tr><td>
+                        </td><td><p><span class="bold"><strong>Camel 2.9:</strong></span> When netty works in nio
+                            mode, it uses default <span class="property">workerCount</span> parameter from Netty, which is
+                            <code class="literal">cpu_core_threads*2</code>.</p>
+                            <p>You can use this operation to override Netty's default
+                                    <span class="property">workerCount</span>.</p></td></tr><tr><td>
                             <code class="literal">sslContextParameters</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td><span class="bold"><strong>Camel 2.9:</strong></span> SSL configuration using
+                        </td><td><p><span class="bold"><strong>Camel 2.9:</strong></span> Specifies the SSL configuration using
                             an <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code>
-                            instance. See Using
-                                the JSSE Configuration Utility. </td></tr><tr><td>
+                            instance.</p><p>See <a class="link" href="http://camel.apache.org/camel-configuration-utilities.html" target="_top">Using
+                                the JSSE Configuration Utility</a>.</p></td></tr><tr><td>
                             <code class="literal">receiveBufferSize</code><code class="literal">Predictor</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td><span class="bold"><strong>Camel 2.9:</strong></span> Configures the buffer
-                            size predictor. See details at Jetty documentation and this <a class="link" href="http://lists.jboss.org/pipermail/netty-users/2010-January/001958.html" target="_top">mail thread</a>. </td></tr><tr><td>
+                        </td><td><p><span class="bold"><strong>Camel 2.9:</strong></span> Configures the buffer
+                            size predictor.</p><p>See details at Jetty documentation and this <a class="link" href="http://lists.jboss.org/pipermail/netty-users/2010-January/001958.html" target="_top">mail thread</a>.</p></td></tr><tr><td>
                             <code class="literal">requestTimeout</code>
                         </td><td>
                             <code class="literal">0</code>
-                        </td><td><span class="bold"><strong>Camel 2.11.1:</strong></span> Allows to use a
-                            timeout for the Netty producer when calling a remote server. By default
-                            no timeout is in use. The value is in milli seconds, so eg
-                                <code class="literal">30000</code> is 30 seconds. </td></tr><tr><td>
+                        </td><td><p><span class="bold"><strong>Camel 2.11.1:</strong></span> Allows using a timeout, in milliseconds, for
+                                the Netty producer when calling a remote server. </p>
+                            <p>By default (<code class="literal">0</code>), no timeout is used.</p></td></tr><tr><td>
                             <code class="literal">needClientAuth</code>
                         </td><td>
                             <code class="literal">false</code>
@@ -228,31 +234,32 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
                             <code class="literal">orderedThreadPool</code><code class="literal">Executor</code>
                         </td><td>
                             <code class="literal">true</code>
-                        </td><td>
-                            <span class="bold"><strong>Camel 2.10.2:</strong></span> Whether to use ordered
-                            thread pool, to ensure events are processed orderly on the same channel.
-                            See details at the netty javadoc of
-                                <code class="literal">org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor</code>
-                            for more details. </td></tr><tr><td>
+                        </td><td><p>
+                            <span class="bold"><strong>Camel 2.10.2:</strong></span> Specifies whether to use
+                            ordered thread pool to ensure events are processed orderly on the same
+                            channel.</p>
+                            <p>For more details, see the
+                                <a class="link" href="http://org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor" target="_top">netty javadoc</a>.</p></td></tr><tr><td>
                             <code class="literal">maximumPoolSize</code>
                         </td><td>
                             <code class="literal">16</code>
-                        </td><td><span class="bold"><strong>Camel 2.10.2:</strong></span> The core pool size for
-                            the ordered thread pool, if its in use. </td></tr><tr><td>
+                        </td><td><span class="bold"><strong>Camel 2.10.2:</strong></span> Specifies the core pool size for
+                            the ordered thread pool, when it is used. </td></tr><tr><td>
                             <code class="literal">producerPoolEnabled</code>
                         </td><td>
                             <code class="literal">true</code>
-                        </td><td><span class="bold"><strong>Camel 2.10.4/Camel 2.11:</strong></span> Producer
-                            only. Whether producer pool is enabled or not. <span class="bold"><strong>Important:</strong></span> Do not turn this off, as the pooling is
-                            needed for handling concurrency and reliable request/reply. </td></tr><tr><td>
+                        </td><td><p><span class="bold"><strong>Camel 2.10.4/Camel 2.11:</strong></span> Producer only. Enables/disables the
+                                producer pool.</p>
+                            <p><span class="bold"><strong>Important:</strong></span> Do not turn this off, as pooling is
+                            needed for handling concurrency and reliable request/reply messaging.</p></td></tr><tr><td>
                             <code class="literal">producerPoolMaxActive</code>
                         </td><td>
                             <code class="literal">-1</code>
-                        </td><td>
+                        </td><td><p>
                             <span class="bold"><strong>Camel 2.10.3:</strong></span> Producer only. Sets the
                             cap on the number of objects that can be allocated by the pool (checked
-                            out to clients, or idle awaiting checkout) at a given time. Use a
-                            negative value for no limit. </td></tr><tr><td>
+                            out to clients, or idle awaiting checkout) at a given time.</p>
+                            <p>Use a negative value for no limit.</p></td></tr><tr><td>
                             <code class="literal">producerPoolMinIdle</code>
                         </td><td>
                             <code class="literal">0</code>
@@ -270,41 +277,47 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
                         </td><td>
                             <code class="literal">30000</code>
                         </td><td><span class="bold"><strong>Camel 2.10.3:</strong></span> Producer only. Sets
-                            the minimum amount of time (value in millis) an object may sit idle in
+                            the minimum amount of time (in milliseconds) an object may sit idle in
                             the pool before it is eligible for eviction by the idle object evictor.
                         </td></tr><tr><td>
                             <code class="literal">bootstrapConfiguration</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td><span class="bold"><strong>Camel 2.12:</strong></span> Consumer only. Allows to
-                            configure the Netty ServerBootstrap options using a
-                                <code class="literal">org.apache.camel.component.netty.NettyServerBootstrapConfiguration</code>
-                            instance. This can be used to reuse the same configuration for multiple
-                            consumers, to align their configuration more easily. </td></tr><tr><td>
+                        </td><td><p><span class="bold"><strong>Camel 2.12:</strong></span> Consumer only. Allows
+                            configuring the Netty <span class="property">ServerBootstrap</span> options using a
+                            <a class="link" href="http://org.apache.camel.component.netty.NettyServerBootstrapConfiguration" target="_top">Netty
+                            Server Bootstrap Configuration</a>
+                            instance.</p>
+                            <p>Use this option to reuse the same configuration for multiple
+                            consumers and align their configuration more easily.</p></td></tr><tr><td>
                             <code class="literal">bossPoll</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td><span class="bold"><strong>Camel 2.12:</strong></span> To use a explicit
+                        </td><td><p><span class="bold"><strong>Camel 2.12:</strong></span> Specifies to use an explicit
                                 <code class="literal">org.jboss.netty.channel.socket.nio.BossPool</code> as
-                            the boss thread pool. For example to share a thread pool with multiple
-                            consumers. By default each consumer has their own boss pool with 1 core
-                            thread. </td></tr><tr><td>
+                            the boss thread pool.</p>
+                            <p>By default, each consumer has their own boss pool with one core
+                                thread.</p>
+                            <p>You can use this option, for example, to share a thread pool with multiple
+                                    consumers.</p></td></tr><tr><td>
                             <code class="literal">workerPool</code>
                         </td><td>
                             <code class="literal">null</code>
-                        </td><td><span class="bold"><strong>Camel 2.12:</strong></span> To use a explicit
-                                <code class="literal">org.jboss.netty.channel.socket.nio.WorkerPool</code> as
-                            the worker thread pool. For example to share a thread pool with multiple
-                            consumers. By default each consumer has their own worker pool with 2 x
-                            cpu count core threads. </td></tr><tr><td>
+                        </td><td>
+                            <p><span class="bold"><strong>Camel 2.12:</strong></span> Specifies to use
+                            an explicit <code class="literal">org.jboss.netty.channel.socket.nio.WorkerPool</code> as
+                            the worker thread pool.</p>
+                            <p>By default, each consumer has their own worker pool with 2 <code class="constant">x</code> cpu count core threads.</p>
+                        <p>You can use this option, for example, to share a thread pool with multiple
+                            consumers.</p></td></tr><tr><td>
                             <code class="literal">networkInterface</code>
                         </td><td>
                             <code class="literal">null</code>
                         </td><td><span class="bold"><strong>Camel 2.12:</strong></span> Consumer only. When
-                            using UDP then this option can be used to specify a network interface by
+                            using UDP, this option can be used to specify a network interface by
                             its name, such as <code class="literal">eth0</code> to join a multicast group.
-                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_RegistrybasedOptions"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="Registry" target="_top">Registry</a>, such as in the Spring XML file. The values that could be passed
-            in, are the following:</p><div class="table"><a name="_IDU_Netty_RegOpts"></a><p class="title"><b>Table&nbsp;65.&nbsp;Registry-based options</b></p><div class="table-contents"><table summary="Registry-based options" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Name </th><th> Description </th></tr></thead><tbody><tr><td>
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_RegistrybasedOptions"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>, such as in the Spring XML file. The values that could be passed
+            in, are the following:</p><div class="table"><a name="_IDU_Netty_RegOpts"></a><p class="title"><b>Table&nbsp;66.&nbsp;Registry-based options</b></p><div class="table-contents"><table summary="Registry-based options" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Name </th><th> Description </th></tr></thead><tbody><tr><td>
                             <code class="literal">passphrase</code>
                         </td><td> password setting to use in order to encrypt/decrypt payloads sent
                             using SSH </td></tr><tr><td>
@@ -343,7 +356,7 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
                         </td></tr><tr><td>
                             <code class="literal">encorders</code>
                         </td><td> A list of encoders to be used. You can use a String which have
-                            values separated by comma, and have the values be looked up in the <a class="link" href="Registry" target="_top">Registry</a>. Just remember to prefix the
+                            values separated by comma, and have the values be looked up in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>. Just remember to prefix the
                             value with # so Camel knows it should lookup. </td></tr><tr><td>
                             <code class="literal">decoder</code>
                         </td><td> A custom <code class="literal">ChannelHandler</code> class that can be used to
@@ -352,7 +365,7 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
                         </td></tr><tr><td>
                             <code class="literal">decoders</code>
                         </td><td> A list of decoders to be used. You can use a String which have
-                            values separated by comma, and have the values be looked up in the <a class="link" href="Registry" target="_top">Registry</a>. Just remember to prefix the
+                            values separated by comma, and have the values be looked up in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>. Just remember to prefix the
                             value with # so Camel knows it should lookup. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_nonShare_codesDecodes"></a>Using nonshareable encoders or decoders</h2></div></div></div><p>If your encoders or decoders are not shareable (for example, they do not have the
                 <code class="literal">@Shareable</code> class annotation), they must implement the
                 <code class="filename">org.apache.camel.component.netty.ChannelHandlerFactory</code>
@@ -381,7 +394,8 @@ netty:udp://remotehost:99999/[?options]</pre><p>This component supports producer
            .to("mock:result"); 
   }
 };</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_AnSSLTCPbasedNettyconsumerendpointusingRequestReplycommunication"></a>An SSL/TCP based Netty consumer endpoint using Request-Reply communication </h2></div></div></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>As of Camel 2.9, the Netty component supports SSL/TLS configuration through the
-                    <span class="olink">Camel JSSE Configuration Utility</span>.  This utility
+                <a class="link" href="http://camel.apache.org/camel-configuration-utilities.html" target="_top">Using
+                    the JSSE Configuration Utility</a>. This utility
                 greatly decreases the amount of component specific code you need to write and is
                 configurable at the endpoint and component levels. The following examples
                 demonstrate how to use the utility with the Netty component.</p></td></tr></table></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Using basic SSL/TLS configuration on the Jetty component</p><p>
@@ -439,9 +453,9 @@ nettyComponent.setSslContextParameters(scp);</pre><p>
                 </p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_GettingaccesstoSSLSessionandtheclientcertificate"></a>Getting access to SSLSession and the client certificate</h2></div></div></div><p>
             <span class="bold"><strong>Available as of Camel 2.12</strong></span>
         </p><p>You can get access to the <code class="literal">javax.net.ssl.SSLSession</code> if you eg need
-            to get details about the client certificate. When <code class="literal">ssl=true</code> then the
-                <span class="olink">Netty</span> component will store the
-                <code class="literal">SSLSession</code> as a header on the Camel <span class="olink">Message</span> as shown below:</p><pre class="programlisting">
+            to get details about the client certificate. When <code class="literal">ssl=true</code>, the
+                Netty component stores the
+                <code class="literal">SSLSession</code> as a header on the Camel <a class="link" href="http://camel.apache.org/message.html" target="_top">Message</a> as shown below:</p><pre class="programlisting">
 SSLSession session = exchange.getIn().getHeader(NettyConstants.NETTY_SSL_SESSION, SSLSession.class);
 // get the first certificate which is client certificate
 javax.security.cert.X509Certificate cert = session.getPeerCertificateChain()[0];
@@ -452,7 +466,7 @@ Principal principal = cert.getSubjectDN();
                 <code class="literal">javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</code>.
             You may also get this exception if the client certificate is expired or not valid
             etc.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The option <code class="literal">sslClientCertHeaders</code> can be set to
-                    <code class="literal">true</code> which then enriches the Camel <span class="olink">Message</span> with headers having details about the client certificate. For
+                <code class="literal">true</code> which then enriches the Camel <a class="link" href="http://camel.apache.org/message.html" target="_top">Message</a> with headers having details about the client certificate. For
                 example the subject name is readily available in the header
                     <code class="literal">CamelNettySSLClientCertSubjectName</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Netty_HSH_UsingMultipleCodecs"></a>Using Multiple Codecs</h2></div></div></div><p>In certain cases it may be necessary to add chains of encoders and decoders to the
             netty pipeline. To add multpile codecs to a Apache Camel netty endpoint the 'encoders'
@@ -601,7 +615,7 @@ context.addRoutes(new RouteBuilder() {
         </p><p>Netty has two kind of thread pools: boss and worker. By default each Netty consumer
             and producer has their private thread pools. If you want to reuse these thread pools
             among multiple consumers or producers then the thread pools must be created and enlisted
-            in the <a class="link" href="Registry" target="_top">Registry</a>.</p><p>For example using Spring XML we can create a shared worker thread pool using the
+            in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>.</p><p>For example using Spring XML we can create a shared worker thread pool using the
                 <code class="literal">NettyWorkerPoolBuilder</code> with 2 worker threads as shown
             below:</p><pre class="programlisting">
   &lt;!-- use the worker pool builder to create to help create the shared thread pool --&gt;
@@ -618,7 +632,7 @@ context.addRoutes(new RouteBuilder() {
                 builder for Netty consumers, and a
                     <code class="literal">org.apache.camel.component.netty.NettyClientBossPoolBuilder</code>
                 for the Netty produces.</p></td></tr></table></div><p>Then in the Camel routes we can refer to this worker pools by configuring the
-                <code class="literal">workerPool</code> option in the <a class="link" href="URI" target="_top">URI</a> as shown
+                <code class="literal">workerPool</code> option in the <a class="link" href="http://camel.apache.org/uris.html" target="_top">URI</a> as shown
             below:</p><pre class="programlisting">
     &lt;route&gt;
       &lt;from uri="netty:tcp://localhost:5021?textline=true&amp;ync=true&amp;orkerPool=#sharedPool&amp;rderedThreadPoolExecutor=false"/&gt;
@@ -631,8 +645,6 @@ context.addRoutes(new RouteBuilder() {
       &lt;to uri="log:result"/&gt;
       ...
     &lt;/route&gt;
-</pre><p>... and so forth.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e61980"></a>See also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <span class="olink">Netty HTTP</span>
-                </p></li><li class="listitem"><p>
-                    <span class="olink">Mina</span>
+</pre><p>... and so forth.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e64453"></a>See also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+                    <a href="PLUGINS_ROOT/com.fusesource.rider.help/mina.html" class="olink">Mina</a>
                 </p></li></ul></div></div></div></body></html>

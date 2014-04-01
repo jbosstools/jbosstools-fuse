@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Mock</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderTestEptRef.html" title="Testing Endpoints"><link rel="prev" href="RiderTestEptRef.html" title="Testing Endpoints"><link rel="next" href="test.html" title="Test"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="mock"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Mock &#8212; provides a declarative framework for testing routes</p></div><div class="refsection"><a name="d0e48479"></a><h2>Overview</h2><p>Mock endpoints provide a powerful declarative testing mechanism similar to 
+   <title>Mock</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderTestEptRef.html" title="Testing Endpoints"><link rel="prev" href="RiderTestEptRef.html" title="Testing Endpoints"><link rel="next" href="test.html" title="Test"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="mock"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Mock &#8212; provides a declarative framework for testing routes</p></div><div class="refsection"><a name="d0e50722"></a><h2>Overview</h2><p>Mock endpoints provide a powerful declarative testing mechanism similar to 
       <a class="link" href="http://jmock.org" target="_top">jMock</a>. It allows declarative expectations to be 
       created on any Mock endpoint before a test begins. When the test is run, which typically 
       fires messages to one or more endpoints, the expectations can be asserted in a test case to 
@@ -19,10 +19,10 @@
                 Alternatively, you can use the <code class="literal">retainFirst</code>
                 and <code class="literal">retainLast</code> options together to limit the
                 number of Exchanges that Mock endpoints retain in memory. See
-                    <a class="xref" href="mock.html#MockExchngLimit" title="Limiting the number of Exchanges to keep">Limiting the number of Exchanges to keep</a>.</p></td></tr></table></div></div><div class="refsection"><a name="d0e48541"></a><h2>URI format</h2><p>Mock endpoints have the following URI format:</p><pre class="programlisting">mock:<em class="replaceable"><code>someName</code></em>[?<em class="replaceable"><code>options</code></em>]</pre><p>Where <em class="replaceable"><code>someName</code></em> is any string that uniquely
+                    <a class="xref" href="mock.html#MockExchngLimit" title="Limiting the number of Exchanges to keep">Limiting the number of Exchanges to keep</a>.</p></td></tr></table></div></div><div class="refsection"><a name="d0e50784"></a><h2>URI format</h2><p>Mock endpoints have the following URI format:</p><pre class="programlisting">mock:<em class="replaceable"><code>someName</code></em>[?<em class="replaceable"><code>options</code></em>]</pre><p>Where <em class="replaceable"><code>someName</code></em> is any string that uniquely
             identifies the endpoint.</p><p>You can append query options to the URI in the following format,
-          <code class="literal">?option=value&amp;option=value&amp;...</code></p></div><div class="refsection"><a name="d0e48563"></a><h2>Options</h2><p><a class="xref" href="mock.html#MockRefTbl010" title="Table&nbsp;51.&nbsp;Mock options">Table&nbsp;51, &#8220;Mock options&#8221;</a> lists the options for a mock
-            endpoint.</p><div class="table"><a name="MockRefTbl010"></a><p class="title"><b>Table&nbsp;51.&nbsp;Mock options</b></p><div class="table-contents"><table summary="Mock options" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Option</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="code">retainFirst</code></td><td>&nbsp;</td><td>Specifies the number of first Exchanges to retain in memory.</td></tr><tr><td><code class="code">retainLast</code></td><td>&nbsp;</td><td>Specifies the number of last Exchanges to retain in memory.</td></tr><tr><td><code class="code">reportGroup</code></td><td><code class="code">null</code></td><td>Specifies a size to use for a throughput logger for reporting.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="_IDU_Mock_HSH_SimpleExample"></a><h2>Simple Example</h2><p>Here's a simple example of Mock endpoint in use. First, the
+          <code class="literal">?option=value&amp;option=value&amp;...</code></p></div><div class="refsection"><a name="d0e50806"></a><h2>Options</h2><p><a class="xref" href="mock.html#MockRefTbl010" title="Table&nbsp;51.&nbsp;Mock options">Table&nbsp;51, &#8220;Mock options&#8221;</a> lists the options for a mock
+            endpoint.</p><div class="table"><a name="MockRefTbl010"></a><p class="title"><b>Table&nbsp;51.&nbsp;Mock options</b></p><div class="table-contents"><table summary="Mock options" border="1"><colgroup><col width="14%" class="c1"><col width="7%" class="c2"><col width="79%" class="c3"></colgroup><thead><tr><th>Option</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="code">retainFirst</code></td><td>&nbsp;</td><td>Specifies the number of first Exchanges to retain in memory.</td></tr><tr><td><code class="code">retainLast</code></td><td>&nbsp;</td><td>Specifies the number of last Exchanges to retain in memory.</td></tr><tr><td><code class="code">reportGroup</code></td><td><code class="code">null</code></td><td>Specifies a size to use for a throughput logger for reporting.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="Mock_HSH_SimpleExample"></a><h2>Simple Example</h2><p>Here's a simple example of Mock endpoint in use. First, the
             endpoint is resolved on the context. Then we set an expectation, and
             then, after the test has run, we assert that our expectations have
             been met.</p><pre class="programlisting">MockEndpoint resultEndpoint = context.resolveEndpoint("mock:foo", MockEndpoint.class);
@@ -37,7 +37,7 @@ resultEndpoint.assertIsSatisfied();</pre><p>You typically always call the <a cla
             were met after running a test.</p><p>Apache Camel will by default wait 10 seconds when the
                 <code class="literal">assertIsSatisfied()</code> is invoked. This can be
             configured by setting the
-                <code class="literal">setResultWaitTime(millis)</code> method.</p></div><div class="refsection"><a name="_IDU_Mock_HSH_UsingassertPeriod"></a><h2>Using assertPeriod</h2><p><span class="bold"><strong>Available as of Camel 2.7</strong></span> When
+                <code class="literal">setResultWaitTime(millis)</code> method.</p></div><div class="refsection"><a name="Mock_HSH_UsingassertPeriod"></a><h2>Using assertPeriod</h2><p><span class="bold"><strong>Available as of Camel 2.7</strong></span> When
             the assertion is satisfied then Camel will stop waiting and continue
             from the <code class="literal">assertIsSatisfied</code> method. That means if
             a new message arrives on the mock endpoint, just a bit later, that
@@ -52,8 +52,8 @@ resultEndpoint.expectedMessageCount(2);
 ...
 
 // now lets assert that the mock:foo endpoint received 2 messages
-resultEndpoint.assertIsSatisfied();</pre></div><div class="refsection"><a name="_IDU_Mock_HSH_Settingexpectations"></a><h2>Setting expectations</h2><p>You can see from the javadoc of <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/mock/MockEndpoint.html" target="_top">MockEndpoint</a> the various helper methods you can use to
-            set expectations. The main methods are as follows: </p><table id="d0e48648"><tr>
+resultEndpoint.assertIsSatisfied();</pre></div><div class="refsection"><a name="Mock_HSH_Settingexpectations"></a><h2>Setting expectations</h2><p>You can see from the javadoc of <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/mock/MockEndpoint.html" target="_top">MockEndpoint</a> the various helper methods you can use to
+            set expectations. The main methods are as follows: </p><table id="d0e50894"><tr>
                 <th> Method </th>
                 <th> Description </th>
             </tr><tr>
@@ -83,33 +83,33 @@ resultEndpoint.assertIsSatisfied();</pre></div><div class="refsection"><a name="
                     <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/mock/MockEndpoint.html#expectsAscending(org.apache.camel.Expression)" target="_top">expectsAscending(Expression)</a>
                 </td>
                 <td> To add an expectation that messages are received in order,
-                    using the given <a class="link" href="Expression" target="_top">Expression</a>
+                    using the given <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a>
                     to compare messages. </td>
             </tr><tr>
                 <td>
                     <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/mock/MockEndpoint.html#expectsDescending(org.apache.camel.Expression)" target="_top">expectsDescending(Expression)</a>
                 </td>
                 <td> To add an expectation that messages are received in order,
-                    using the given <a class="link" href="Expression" target="_top">Expression</a>
+                    using the given <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a>
                     to compare messages. </td>
             </tr><tr>
                 <td>
                     <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/mock/MockEndpoint.html#expectsNoDuplicates(org.apache.camel.Expression)" target="_top">expectsNoDuplicates(Expression)</a>
                 </td>
                 <td> To add an expectation that no duplicate messages are
-                    received; using an <a class="link" href="Expression" target="_top">Expression</a> to calculate a unique identifier for
+                    received; using an <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a> to calculate a unique identifier for
                     each message. This could be something like the
                         <code class="literal">JMSMessageID</code> if using JMS, or some
                     unique reference number within the message. </td>
-            </tr></table><p>Here's another example:</p><pre class="programlisting">resultEndpoint.expectedBodiesReceived("firstMessageBody", "secondMessageBody", "thirdMessageBody");</pre></div><div class="refsection"><a name="_IDU_Mock_HSH_Addingexpectationstospecificmessages"></a><h2>Adding expectations to specific messages</h2><p>In addition, you can use the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/mock/MockEndpoint.html#message(int)" target="_top">message(int messageIndex)</a> method to add assertions about
+            </tr></table><p>Here's another example:</p><pre class="programlisting">resultEndpoint.expectedBodiesReceived("firstMessageBody", "secondMessageBody", "thirdMessageBody");</pre></div><div class="refsection"><a name="Mock_HSH_Addingexpectationstospecificmessages"></a><h2>Adding expectations to specific messages</h2><p>In addition, you can use the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/component/mock/MockEndpoint.html#message(int)" target="_top">message(int messageIndex)</a> method to add assertions about
             a specific message that is received.</p><p>For example, to add expectations of the headers or body of the
             first message (using zero-based indexing like
                 <code class="literal">java.util.List</code>), you can use the following
-            code:</p><pre class="programlisting">resultEndpoint.message(0).header("foo").isEqualTo("bar");</pre><p>There are some examples of the Mock endpoint in use in the <a class="link" href="http://svn.apache.org/viewvc/camel/trunk/camel-core/src/test/java/org/apache/camel/processor/" target="_top">camel-core processor tests</a>.</p></div><div class="refsection"><a name="_IDU_Mock_HSH_Mockingexistingendpoints"></a><h2>Mocking existing endpoints</h2><p>
+            code:</p><pre class="programlisting">resultEndpoint.message(0).header("foo").isEqualTo("bar");</pre><p>There are some examples of the Mock endpoint in use in the <a class="link" href="http://svn.apache.org/viewvc/camel/trunk/camel-core/src/test/java/org/apache/camel/processor/" target="_top">camel-core processor tests</a>.</p></div><div class="refsection"><a name="Mock_HSH_Mockingexistingendpoints"></a><h2>Mocking existing endpoints</h2><p>
             <span class="bold"><strong>Available as of Camel 2.7</strong></span>
         </p><p>Camel now allows you to automatic mock existing endpoints in your
             Camel routes.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>The endpoints are
-                still in action, what happens is that a <span class="olink">Mock</span> endpoint is injected and
+                still in action, what happens is that a Mock endpoint is injected and
                 receives the message first, it then delegate the message to the
                 target endpoint. You can view this as a kind of intercept and
                 delegate or endpoint listener.</p></td></tr></table></div><p>Suppose you have the given route below:</p><pre class="programlisting">@Override
@@ -196,11 +196,11 @@ INFO  Adviced endpoint [direct://foo] with mock endpoint [mock:direct:foo]
     assertNull(context.hasEndpoint("mock:direct:start"));
     assertNull(context.hasEndpoint("mock:direct:foo"));
 }</pre><p>The pattern supported can be a wildcard or a regular expression.
-            See more details about this at <a class="link" href="Intercept" target="_top">Intercept</a> as its the same matching function used by
+            See more details about this at <a class="link" href="http://camel.apache.org/intercept.html" target="_top">Intercept</a> as its the same matching function used by
             Camel. </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Mind that mocking endpoints causes the messages to be copied
                 when they arrive on the mock. That means Camel will use more
                 memory. This may not be suitable when you send in a lot of
-                messages.</p></td></tr></table></div></div><div class="refsection"><a name="_IDU_Mock_HSH_Mockingexistingendpointsusingthecameltestcomponent"></a><h2>Mocking existing endpoints using the
+                messages.</p></td></tr></table></div></div><div class="refsection"><a name="Mock_HSH_Mockingexistingendpointsusingthecameltestcomponent"></a><h2>Mocking existing endpoints using the
                 <code class="literal">camel-test</code> component</h2><p>Instead of using the <code class="literal">adviceWith</code> to instruct
             Camel to mock endpoints, you can easily enable this behavior when
             using the <code class="literal">camel-test</code> Test Kit. The same route can
@@ -251,7 +251,7 @@ INFO  Adviced endpoint [direct://foo] with mock endpoint [mock:direct:foo]
             }
         };
     }
-}</pre></div><div class="refsection"><a name="_IDU_Mock_HSH_MockingexistingendpointswithXMLDSL"></a><h2>Mocking existing endpoints with XML DSL</h2><p>If you do not use the <code class="literal">camel-test</code> component for
+}</pre></div><div class="refsection"><a name="Mock_HSH_MockingexistingendpointswithXMLDSL"></a><h2>Mocking existing endpoints with XML DSL</h2><p>If you do not use the <code class="literal">camel-test</code> component for
             unit testing (as shown above) you can use a different approach when
             using XML files for routes. The solution is to create a new XML file
             used by the unit test and then include the intended XML file which
@@ -283,15 +283,15 @@ INFO  Adviced endpoint [direct://foo] with mock endpoint [mock:direct:foo]
 &lt;!-- bean which enables mocking all endpoints --&gt;
 &lt;bean id="mockAllEndpoints" class="org.apache.camel.impl.InterceptSendToMockEndpointStrategy"/&gt;</pre><p>Then in your unit test you load the new XML file
                 (<code class="literal">test-camel-route.xml</code>) instead of
-                <code class="literal">camel-route.xml</code>.</p><p>To only mock all <span class="olink">log</span> endpoints
+                <code class="literal">camel-route.xml</code>.</p><p>To only mock all <a href="PLUGINS_ROOT/com.fusesource.rider.help/log.html" class="olink">log</a> endpoints
             you can define the pattern in the constructor for the bean:</p><pre class="programlisting">&lt;bean id="mockAllEndpoints" class="org.apache.camel.impl.InterceptSendToMockEndpointStrategy"&gt;
     &lt;constructor-arg index="0" value="log*"/&gt;
-&lt;/bean&gt;</pre></div><div class="refsection"><a name="_IDU_Mock_HSH_Mockingendpointsandskipsendingtooriginalendpoint"></a><h2>Mocking endpoints and skip sending to original endpoint</h2><p>
+&lt;/bean&gt;</pre></div><div class="refsection"><a name="Mock_HSH_Mockingendpointsandskipsendingtooriginalendpoint"></a><h2>Mocking endpoints and skip sending to original endpoint</h2><p>
             <span class="bold"><strong>Available as of Camel 2.10</strong></span>
         </p><p>Sometimes you want to easily mock and skip sending to a certain
             endpoints. So the message is detoured and send to the mock endpoint
             only. From Camel 2.10 onwards you can now use the
-                <code class="literal">mockEndpointsAndSkip</code> method using <a class="link" href="AdviceWith" target="_top">AdviceWith</a> or the <a class="link" href="Test Kit" target="_top">Test Kit</a>. The example below will skip
+                <code class="literal">mockEndpointsAndSkip</code> method using <a class="link" href="http://camel.apache.org/advicewith" target="_top">AdviceWith</a> or the <a class="link" href="http://camel.apache.org/camel-test.html" target="_top">Test Kit</a>. The example below will skip
             sending to the two endpoints <code class="literal">"direct:foo"</code>, and
                 <code class="literal">"direct:bar"</code>.</p><pre class="programlisting">public void testAdvisedMockEndpointsWithSkip() throws Exception {
     // advice the first route using the inlined AdviceWith route builder
@@ -315,7 +315,7 @@ INFO  Adviced endpoint [direct://foo] with mock endpoint [mock:direct:foo]
     // the message was not send to the direct:foo route and thus not sent to the seda endpoint
     SedaEndpoint seda = context.getEndpoint("seda:foo", SedaEndpoint.class);
     assertEquals(0, seda.getCurrentQueueSize());
-}</pre><p>The same example using the <a class="link" href="Testing" target="_top">Test Kit</a>
+}</pre><p>The same example using the <a class="link" href="http://camel.apache.org/testing" target="_top">Test Kit</a>
         </p><pre class="programlisting">public class IsMockEndpointsAndSkipJUnit4Test extends CamelTestSupport {
 
     @Override
@@ -370,14 +370,14 @@ mock.assertIsSatisfied();
                 <code class="literal">expected</code><em class="replaceable"><code>XXX</code></em> methods that work on
             message bodies, headers, and so on, work only on retained messages. For our example
             snippet, <code class="literal">expected</code><em class="replaceable"><code>XXX</code></em> methods would test
-            expectations only on the ten retained Exchanges.</p></div><div class="refsection"><a name="_IDU_Mock_HSH_Testingwitharrivaltimes"></a><h2>Testing with arrival times</h2><p>
+            expectations only on the ten retained Exchanges.</p></div><div class="refsection"><a name="Mock_HSH_Testingwitharrivaltimes"></a><h2>Testing with arrival times</h2><p>
             <span class="bold"><strong>Available as of Camel 2.7</strong></span>
-        </p><p>The <span class="olink">Mock</span> endpoint stores the
-            arrival time of the message as a property on the <a class="link" href="Exchange" target="_top">Exchange</a>.</p><pre class="programlisting">Date time = exchange.getProperty(Exchange.RECEIVED_TIMESTAMP, Date.class);</pre><p>You can use this information to discover when the message arrived
+        </p><p>The Mock endpoint stores the
+            arrival time of the message as a property on the <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a>.</p><pre class="programlisting">Date time = exchange.getProperty(Exchange.RECEIVED_TIMESTAMP, Date.class);</pre><p>You can use this information to discover when the message arrived
             on the mock. But it also provides the foundation for discovering the
             time interval between the previous and next message arrived on the
             mock. You can use this information to set expectations using the
-                <code class="literal">arrives</code> DSL on the <span class="olink">Mock</span> endpoint.</p><p>For example, to specify that the first message should arrive
+                <code class="literal">arrives</code> DSL on the Mock endpoint.</p><p>For example, to specify that the first message should arrive
             between 0 and 2 seconds before the next you can do:</p><pre class="programlisting">mock.message(0).arrives().noLaterThan(2).seconds().beforeNext();</pre><p>You can also specify that 2nd message (0 index based) should
             arrive no later than 0-2 seconds after the previous:</p><pre class="programlisting">mock.message(1).arrives().noLaterThan(2).seconds().afterPrevious();</pre><p>You can also use <code class="literal">between</code> to set a lower bound.
             For example, suppose that it should be between 1-4 seconds:</p><pre class="programlisting">mock.message(1).arrives().between(1, 4).seconds().afterPrevious();</pre><p>You can also set the expectation on all messages; for example, to

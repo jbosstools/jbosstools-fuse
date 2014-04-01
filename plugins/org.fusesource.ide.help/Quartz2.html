@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>Quartz2</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="scheduling.html" title="Scheduling Endpoints"><link rel="prev" href="quartz.html" title="Quartz"><link rel="next" href="timer.html" title="Timer"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="Quartz2"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Quartz2 &#8212; provides a scheduled delivery of messages using the Quartz 2.x
-            scheduler</p></div><div class="refsection"><a name="_IDU_Quartz2_HSH_Quartz2Component"></a><h2>Overview</h2><p>
+            scheduler</p></div><div class="refsection"><a name="Quartz2_HSH_Quartz2Component"></a><h2>Overview</h2><p>
             <span class="bold"><strong>Available as of Camel 2.12.0</strong></span>
         </p><p>The <span class="bold"><strong>quartz2</strong></span> component provides scheduled delivery of
             messages using the <a class="link" href="http://www.quartz-scheduler.org/" target="_top">Quartz Scheduler
@@ -9,15 +9,15 @@
                 <code class="literal">SimpleTrigger</code>. If no <code class="literal">cron</code> expression is
             provided, the component uses a simple trigger. If no <code class="literal">groupName</code> is
             provided, the quartz component uses the <code class="literal">Camel</code> group name.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The Quartz 2.x API is incompatible with Quartz 1.x. If you need to continue using
-                Quartz 1.x, use the <span class="olink">Quartz</span> component
-                instead.</p></td></tr></table></div></div><div class="refsection"><a name="_IDU_Quartz2_HSH_URIformat"></a><h2>URI format</h2><pre class="programlisting">
+                Quartz 1.x, use the <a href="PLUGINS_ROOT/com.fusesource.rider.help/quartz.html" class="olink">Quartz</a> component
+                instead.</p></td></tr></table></div></div><div class="refsection"><a name="Quartz2_HSH_URIformat"></a><h2>URI format</h2><pre class="programlisting">
 quartz2://timerName?options
 quartz2://groupName/timerName?options
 quartz2://groupName/timerName?cron=expression
 quartz2://timerName?cron=expression
 </pre><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="refsection"><a name="d0e47303"></a><h2>Dependencies</h2><p>Maven users need to add the following dependency to their <code class="literal">pom.xml</code>
+        </p></div><div class="refsection"><a name="d0e49574"></a><h2>Dependencies</h2><p>Maven users need to add the following dependency to their <code class="literal">pom.xml</code>
             for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -25,8 +25,8 @@ quartz2://timerName?cron=expression
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;
-</pre></div><div class="refsection"><a name="_IDU_Quartz2_HSH_Options"></a><h2>Options</h2><p><a class="xref" href="Quartz2.html#quartz2Tbl1">???</a> lists the options for
-            the Quartz2 component:</p><table id="quartz2Tbl1"><tr>
+</pre></div><div class="refsection"><a name="Quartz2_HSH_Options"></a><h2>Options</h2><p>The OPtions table lists the options for
+            the Quartz2 component:</p><table id="d0e49589"><tr>
                 <th> Parameter </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -127,16 +127,16 @@ quartz2://timerName?cron=expression
                 <code class="literal">mock:results</code> endpoint:</p><pre class="programlisting">
 from("quartz2://myGroup/myTimerName?trigger.repeatInterval=2&amp;trigger.repeatCount=1").routeId("myRoute").to("mock:result");
 </pre><p>When using <code class="literal">stateful=true</code>, the <a class="link" href="http://quartz-scheduler.org/api/2.0.0/org/quartz/JobDataMap.html" target="_top">JobDataMap</a> is re-persisted after every execution of the job, thus preserving
-            state for the next execution.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Running in OSGi and having multiple bundles with quartz routes"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Running in OSGi and having multiple bundles with quartz routes</th></tr><tr><td align="left" valign="top"><p>If you run in OSGi such as Apache ServiceMix, or Apache Karaf, and have multiple
-                bundles with Camel routes that start from <span class="olink">Quartz2</span> endpoints, then make sure if you assign an
+            state for the next execution.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>If you run in OSGi such as Apache ServiceMix, or Apache Karaf, and have multiple
+                bundles with Camel routes that start from Quartz2 endpoints, then make sure if you assign an
                     <code class="literal">id</code> to the &lt;camelContext&gt; that this id is unique, as this
                 is required by the <code class="literal">QuartzScheduler</code> in the OSGi container. If you
                 do not set any <code class="literal">id</code> on &lt;camelContext&gt; then a unique id is auto
-                assigned, and there is no problem.</p></td></tr></table></div></div><div class="refsection"><a name="_IDU_Quartz2_HSH_Configuringquartz.propertiesfile"></a><h2>Configuring quartz.properties file</h2><p>By default, Quartz looks for a <code class="literal">quartz.properties</code> file in the
+                assigned, and there is no problem.</p></td></tr></table></div></div><div class="refsection"><a name="Quartz2_HSH_Configuringquartz.propertiesfile"></a><h2>Configuring quartz.properties file</h2><p>By default, Quartz looks for a <code class="literal">quartz.properties</code> file in the
                 <code class="literal">org/quartz</code> directory of the classpath. If you are using WAR
             deployments, you can drop the quartz.properties in
-                <code class="literal">WEB-INF/classes/org/quartz</code>.</p><p>However the Camel <span class="olink">Quartz2</span> component also
-            allows you to configure properties: </p><table id="d0e47579"><tr>
+                <code class="literal">WEB-INF/classes/org/quartz</code>.</p><p>However the Camel Quartz2 component also
+            allows you to configure properties: </p><table id="d0e49841"><tr>
                 <th> Parameter </th>
                 <th> Default </th>
                 <th> Type </th>
@@ -167,8 +167,8 @@ from("quartz2://myGroup/myTimerName?trigger.repeatInterval=2&amp;trigger.repeatC
 &lt;bean id="quartz" class="org.apache.camel.component.quartz2.QuartzComponent"&gt;
     &lt;property name="propertiesFile" value="com/mycompany/myquartz.properties"/&gt;
 &lt;/bean&gt;
-</pre></div><div class="refsection"><a name="_IDU_Quartz2_HSH_StartingtheQuartzscheduler"></a><h2>Starting the Quartz scheduler</h2><p>The <span class="olink">Quartz2</span> component offers an option to
-            delay the start of the Quartz scheduler or to disable autostart. </p><table id="d0e47655"><tr>
+</pre></div><div class="refsection"><a name="Quartz2_HSH_StartingtheQuartzscheduler"></a><h2>Starting the Quartz scheduler</h2><p>The Quartz2 component offers an option to
+            delay the start of the Quartz scheduler or to disable autostart. </p><table id="d0e49914"><tr>
                 <th> Parameter </th>
                 <th> Default </th>
                 <th> Type </th>
@@ -199,12 +199,12 @@ from("quartz2://myGroup/myTimerName?trigger.repeatInterval=2&amp;trigger.repeatC
 &lt;bean id="quartz" class="org.apache.camel.component.quartz2.QuartzComponent"&gt;
     &lt;property name="startDelayedSeconds" value="5"/&gt;
 &lt;/bean&gt;
-</pre></div><div class="refsection"><a name="_IDU_Quartz2_HSH_Clustering"></a><h2>Clustering</h2><p>If you use Quartz in clustered mode, e.g. the <code class="literal">JobStore</code> is
-            clustered. Then the <span class="olink">Quartz2</span> component will
+</pre></div><div class="refsection"><a name="Quartz2_HSH_Clustering"></a><h2>Clustering</h2><p>If you use Quartz in clustered mode, e.g. the <code class="literal">JobStore</code> is
+            clustered. Then the Quartz2 component will
                 <span class="bold"><strong>not</strong></span> pause/remove triggers when a node is being
             stopped/shutdown. This allows the trigger to keep running on the other nodes in the
             cluster.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>When running in clustered node, no checking is done to ensure unique job
-                name/group for endpoints. </p></td></tr></table></div></div><div class="refsection"><a name="_IDU_Quartz2_HSH_MessageHeaders"></a><h2>Message Headers</h2><p>Camel adds the getters from the Quartz Execution Context as header values. The
+                name/group for endpoints. </p></td></tr></table></div></div><div class="refsection"><a name="Quartz2_HSH_MessageHeaders"></a><h2>Message Headers</h2><p>Camel adds the getters from the Quartz Execution Context as header values. The
             following headers are added: <code class="literal">calendar</code>, <code class="literal">fireTime</code>,
                 <code class="literal">jobDetail</code>, <code class="literal">jobInstance</code>,
                 <code class="literal">jobRuntTime</code>, <code class="literal">mergedJobDataMap</code>,
@@ -213,7 +213,7 @@ from("quartz2://myGroup/myTimerName?trigger.repeatInterval=2&amp;trigger.repeatC
                 <code class="literal">scheduledFireTime</code>, <code class="literal">scheduler</code>,
                 <code class="literal">trigger</code>, <code class="literal">triggerName</code>,
                 <code class="literal">triggerGroup</code>.</p><p>The <code class="literal">fireTime</code> header contains the <code class="literal">java.util.Date</code>
-            of when the exchange was fired.</p></div><div class="refsection"><a name="_IDU_Quartz2_HSH_UsingCronTriggers"></a><h2>Using Cron Triggers</h2><p>Quartz supports <a class="link" href="http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/crontrigger" target="_top">Cron-like expressions</a> for specifying timers in a handy format. You can use
+            of when the exchange was fired.</p></div><div class="refsection"><a name="Quartz2_HSH_UsingCronTriggers"></a><h2>Using Cron Triggers</h2><p>Quartz supports <a class="link" href="http://www.quartz-scheduler.org/documentation/quartz-2.1.x/tutorials/crontrigger" target="_top">Cron-like expressions</a> for specifying timers in a handy format. You can use
             these expressions in the <code class="literal">cron</code> URI parameter; though to preserve valid
             URI encoding we allow + to be used instead of spaces. Quartz provides a <a class="link" href="http://www.quartz-scheduler.org/docs/tutorials/crontrigger.html" target="_top">little
                 tutorial</a> on how to use cron expressions.</p><p>For example, the following will fire a message every five minutes starting at 12pm
@@ -222,8 +222,8 @@ from("quartz2://myGroup/myTimerName?cron=0+0/5+12-18+?+*+MON-FRI").to("activemq:
 </pre><p>which is equivalent to using the cron expression</p><pre class="programlisting">
 0 0/5 12-18 ? * MON-FRI
 </pre><p>The following table shows the URI character encodings we use to preserve valid URI
-            syntax: 
-        </p><table id="d0e47821"><tr>
+            syntax:
+        </p><table id="d0e50075"><tr>
                 <th>URI Character</th>
                 <th>Cron character</th>
             </tr><tr>
@@ -233,20 +233,18 @@ from("quartz2://myGroup/myTimerName?cron=0+0/5+12-18+?+*+MON-FRI").to("activemq:
                 <td>
                     <span class="emphasis"><em>Space</em></span>
                 </td>
-            </tr></table></div><div class="refsection"><a name="_IDU_Quartz2_HSH_Specifyingtimezone"></a><h2>Specifying time zone</h2><p>The Quartz Scheduler allows you to configure time zone per trigger. For example to use
+            </tr></table></div><div class="refsection"><a name="Quartz2_HSH_Specifyingtimezone"></a><h2>Specifying time zone</h2><p>The Quartz Scheduler allows you to configure time zone per trigger. For example to use
             a timezone of your country, then you can do as follows:</p><pre class="programlisting">
 quartz2://groupName/timerName?cron=0+0/5+12-18+?+*+MON-FRI&amp;trigger.timeZone=Europe/Stockholm
 </pre><p>The timeZone value is the values accepted by
-            <code class="literal">java.util.TimeZone</code>.</p></div><div class="refsection"><a name="_IDU_Quartz2_HSH_UsingQuartzScheduledPollConsumerScheduler"></a><h2>Using QuartzScheduledPollConsumerScheduler</h2><p>The <span class="olink">Quartz2</span> component provides a <span class="olink">Polling Consumer</span> scheduler which allows to use cron based scheduling for
-                <a class="link" href="Polling Consumers" target="_top">Polling Consumers</a> such as the <span class="olink">File</span> and <span class="olink">FTP</span>
-            consumers.</p><p>For example to use a cron based expression to poll for files every 2nd second, then a
+            <code class="literal">java.util.TimeZone</code>.</p></div><div class="refsection"><a name="Quartz2_HSH_UsingQuartzScheduledPollConsumerScheduler"></a><h2>Using QuartzScheduledPollConsumerScheduler</h2><p>The Quartz2 component provides a polling consumer scheduler, which allows the use of
+                <code class="literal">cron</code>-based scheduling for polling consumers, such as the <a href="PLUGINS_ROOT/com.fusesource.rider.help/file.html" class="olink">File2</a> and <a href="PLUGINS_ROOT/com.fusesource.rider.help/FTP2.html" class="olink">FTP2</a> consumers.</p><p>For example to use a <code class="literal">cron</code>-based expression to poll for files every 2nd second, then a
             Camel route can be define simply as:</p><pre class="programlisting">
     from("file:inbox?scheduler=quartz2&amp;scheduler.cron=0/2+*+*+*+*+?")
        .to("bean:process");
 </pre><p>Notice we define the <code class="literal">scheduler=quartz2</code> to instruct Camel to use the
-                <span class="olink">Quartz2</span> based scheduler. Then we use
-                <code class="literal">scheduler.xxx</code> options to configure the scheduler. The <span class="olink">Quartz2</span> scheduler requires the cron option to be
-            set. </p><p>The following options is supported:</p><table width="1015" id="d0e47896"><col width="13%"><col width="16%"><col width="71%"><tr>
+            Quartz2-based scheduler. Then we use <code class="literal">scheduler.xxx</code> options to
+            configure the scheduler. The Quartz2 scheduler requires setting the <code class="literal">cron</code> option. </p><p>The following options is supported:</p><table width="919" id="d0e50144"><col width="13%"><col width="16%"><col width="71%"><tr>
                 <th>Parameter</th>
                 <th>Type</th>
                 <th>Description</th>
@@ -259,8 +257,7 @@ quartz2://groupName/timerName?cron=0+0/5+12-18+?+*+MON-FRI&amp;trigger.timeZone=
                 </td>
                 <td>
                     <p>Specifies using a custom Quartz scheduler. If none is configured, uses the
-                        shared scheduler from the <span class="olink">Quartz2</span>
-                        component.</p>
+                        shared scheduler from the Quartz2 component.</p>
                     <p>Defaults to <code class="literal">null</code>.</p>
                 </td>
             </tr><tr>
@@ -310,16 +307,16 @@ quartz2://groupName/timerName?cron=0+0/5+12-18+?+*+MON-FRI&amp;trigger.timeZone=
                     <p>Specifies the time zone to use for the CRON trigger. </p>
                     <p>Defaults to <code class="literal">Default</code>.</p>
                 </td>
-            </tr></table><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Remember configuring these options from the endpoint <a class="link" href="URIs" target="_top">URIs</a> must be prefixed with <code class="literal">scheduler.</code>. For example to
+            </tr></table><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Remember configuring these options from the endpoint <a class="link" href="http://camel.apache.org/uris.html" target="_top">URIs</a> must be prefixed with <code class="literal">scheduler.</code>. For example to
                 configure the trigger id and group:</p></td></tr></table></div><pre class="programlisting">
     from("file:inbox?scheduler=quartz2&amp;scheduler.cron=0/2+*+*+*+*+?&amp;scheduler.triggerId=myId&amp;scheduler.triggerGroup=myGroup")
        .to("bean:process");
-</pre><p>There is also a CRON scheduler in <a class="link" href="Spring" target="_top">Spring</a>, so you can use
+</pre><p>There is also a CRON scheduler in Spring, so you can use
             the following as well:</p><pre class="programlisting">
     from("file:inbox?scheduler=spring&amp;scheduler.cron=0/2+*+*+*+*+?")
        .to("bean:process");
 </pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <span class="olink">Quartz</span>
+                    <a href="PLUGINS_ROOT/com.fusesource.rider.help/quartz.html" class="olink">Quartz</a>
                 </p></li><li class="listitem"><p>
-                    <span class="olink">Timer</span>
+                    <a href="PLUGINS_ROOT/com.fusesource.rider.help/timer.html" class="olink">Timer</a>
                 </p></li></ul></div></div></div></body></html>
