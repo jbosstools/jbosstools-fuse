@@ -1,13 +1,13 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Direct</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderIntEptRef.html" title="Internal Endpoints"><link rel="prev" href="RiderIntEptRef.html" title="Internal Endpoints"><link rel="next" href="seda.html" title="Seda"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="direct"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Direct &#8212; provides a synchronous connection to any consumer in the same <code class="sgmltag-element">camelContext</code> element</p></div><div class="refsection"><a name="d0e40788"></a><h2>Overview</h2><p>The <span class="bold"><strong>direct:</strong></span> component provides
+   <title>Direct</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderIntEptRef.html" title="Internal Endpoints"><link rel="prev" href="RiderIntEptRef.html" title="Internal Endpoints"><link rel="next" href="seda.html" title="Seda"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="direct"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Direct &#8212; provides a synchronous connection to any consumer in the same <code class="sgmltag-element">camelContext</code> element</p></div><div class="refsection"><a name="d0e40279"></a><h2>Overview</h2><p>The <span class="bold"><strong>direct:</strong></span> component provides
             direct, synchronous invocation of any consumers when a producer
             sends a message exchange. This endpoint can be used to connect
             existing routes in the <span class="bold"><strong>same</strong></span> camel
             context.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The Seda component provides asynchronous invocation of any
                 consumers when a producer sends a message exchange.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The VM component provides connections between Camel contexts
-                as long they run in the same <span class="bold"><strong>JVM</strong></span>.</p></td></tr></table></div></div><div class="refsection"><a name="d0e40808"></a><h2>URI format</h2><p>Direct endpoints use the following URI format:</p><pre class="programlisting">direct:<em class="replaceable"><code>someName[?options]</code></em></pre><p>Where <em class="replaceable"><code>someName</code></em> is any string that uniquely identifies the
-            endpoint</p></div><div class="refsection"><a name="d0e40822"></a><h2>Options</h2><table width="921" id="d0e40825"><col width="18%"><col width="8%"><col width="74%"><tr>
+                as long they run in the same <span class="bold"><strong>JVM</strong></span>.</p></td></tr></table></div></div><div class="refsection"><a name="d0e40299"></a><h2>URI format</h2><p>Direct endpoints use the following URI format:</p><pre class="programlisting">direct:<em class="replaceable"><code>someName[?options]</code></em></pre><p>Where <em class="replaceable"><code>someName</code></em> is any string that uniquely identifies the
+            endpoint</p></div><div class="refsection"><a name="d0e40313"></a><h2>Options</h2><table width="921" id="d0e40316"><col width="18%"><col width="8%"><col width="74%"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -43,7 +43,7 @@
                     if block is enabled. </td>
             </tr></table><p>You can append query options to the URI in the following format,
             <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="refsection"><a name="d0e40911"></a><h2>Samples</h2><p>In the route below we use the direct component to link the two
+        </p></div><div class="refsection"><a name="d0e40402"></a><h2>Samples</h2><p>In the route below we use the direct component to link the two
             routes together:</p><pre class="programlisting">from("activemq:queue:order.in")
     .to("bean:orderServer?method=validate")
     .to("direct:processOrder");
@@ -60,6 +60,6 @@ from("direct:processOrder")
      &lt;from uri="direct:processOrder"/&gt;
      &lt;to uri="bean:orderService?method=process"/&gt;
      &lt;to uri="activemq:queue:order.out"/&gt;
-  &lt;/route&gt;    </pre></div><div class="refsection"><a name="d0e40922"></a><h2>Related topics</h2><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  &lt;/route&gt;    </pre></div><div class="refsection"><a name="d0e40413"></a><h2>Related topics</h2><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
                     <a class="link" href="seda.html" title="Seda">SEDA</a></p></li><li class="listitem"><p>
                     <a class="link" href="vm.html" title="VM">VM</a></p></li></ul></div></div></div></body></html>

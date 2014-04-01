@@ -173,7 +173,6 @@
       <topic label="To Trace a Message Through a Route" href="RiderTutorialTrace.html"/>
       <topic label="To Test a Route with JUnit" href="RiderTutorialJUnit.html"/>
       <topic label="To Deploy a Camel Project to Red Hat JBoss Fuse" href="RiderTutDeployFESB.html"/>
-      <topic label="To Deploy a Camel Project to a fabric profile" href="RiderTutDeployProfile.html"/>
    </topic>
    <topic label="Enterprise Integration Pattern Reference" href="RiderEIPRef.html">
       <topic label="Route Editor Patterns" href="RefIntroToEIP.html"/>
