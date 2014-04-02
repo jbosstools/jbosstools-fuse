@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>JMS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderMsgEptRef.html" title="Messaging Endpoints"><link rel="prev" href="irc.html" title="IRC"><link rel="next" href="mail.html" title="Mail"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="jms"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>JMS &#8212; allows message to be sent to or consumed from JMS destinations</p></div><div class="refsection"><a name="d0e41488"></a><h2>Overview</h2><p>The JMS component allows messages to be sent to (or consumed from) a <a class="link" href="http://java.sun.com/products/jms/" target="_top">JMS</a> destination. The
+   <title>JMS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderMsgEptRef.html" title="Messaging Endpoints"><link rel="prev" href="irc.html" title="IRC"><link rel="next" href="mail.html" title="Mail"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="jms"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>JMS &#8212; allows message to be sent to or consumed from JMS destinations</p></div><div class="refsection"><a name="d0e42034"></a><h2>Overview</h2><p>The JMS component allows messages to be sent to (or consumed from) a <a class="link" href="http://java.sun.com/products/jms/" target="_top">JMS</a> destination. The
             implementation of the JMS Component uses Spring's JMS support for declarative
             transactions, using Spring's <code class="literal">JmsTemplate</code> for sending and a
                 <code class="literal">MessageListenerContainer</code> for consuming.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If you are using Red Hat JBoss A-MQ, use the <a class="link" href="ActiveMQ.html" title="ActiveMQ">ActiveMQ</a> endpoint; 
@@ -8,7 +8,7 @@
                 the options and samples on this page are also valid for the <a class="link" href="ActiveMQ.html" title="ActiveMQ">ActiveMQ</a> component.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>If using transactions with JMS, see section <a class="xref" href="jms.html#JMS_HSH_TransactionsandCacheLevels" title="Transactions and Cache Levels">Transactions and Cache Levels</a> as it can impact
                 performance.</p></td></tr></table></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Be sure to read the section <a class="xref" href="jms.html#JMS_HSH_RequestreplyoverJMS" title="Request-reply over JMS">Request-reply over JMS</a> for
                 important notes about request/reply, as Camel offers a number of options to
-                configure for performance, and clustered environments.</p></td></tr></table></div></div><div class="refsection"><a name="d0e41521"></a><h2>URI format</h2><p>The URI format for a JMS endpoint is:</p><pre class="programlisting">
+                configure for performance, and clustered environments.</p></td></tr></table></div></div><div class="refsection"><a name="d0e42067"></a><h2>URI format</h2><p>The URI format for a JMS endpoint is:</p><pre class="programlisting">
 jms:[queue:|topic:]destinationName[?options]
 </pre><p>Where <code class="literal">destinationName</code> is a JMS queue or topic name. By default,
                 <code class="literal">destinationName</code> is interpreted as a queue name. For example, to
@@ -22,7 +22,7 @@ jms:queue:FOO.BAR
 jms:topic:Stocks.Prices
 </pre><p>You append query options to the URI using the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="refsection"><a name="d0e41566"></a><h2>Dependencies</h2><p>Maven users will need to add the following dependency to their
+        </p></div><div class="refsection"><a name="d0e42112"></a><h2>Dependencies</h2><p>Maven users will need to add the following dependency to their
                 <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -864,7 +864,7 @@ jms:topic:Stocks.Prices
                             <code class="literal">javax.jms.TextMessage</code>
                         </td></tr><tr><td>
                             <code class="literal">org.w3c.dom.Node</code>
-                            <a href="#ftn.d0e43787" class="footnote"><sup class="footnote"><a name="d0e43787"></a>[a]</sup></a>
+                            <a href="#ftn.d0e44333" class="footnote"><sup class="footnote"><a name="d0e44333"></a>[a]</sup></a>
                         </td><td>
                             <code class="literal">javax.jms.TextMessage</code>
                         </td></tr><tr><td>
@@ -895,7 +895,7 @@ jms:topic:Stocks.Prices
                             <code class="literal">java.nio.ByteBuffer</code>
                         </td><td>
                             <code class="literal">javax.jms.BytesMessage</code>
-                        </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div id="ftn.d0e43787" class="footnote"><p><a href="#d0e43787" class="para"><sup class="para">[a] </sup></a>The DOM will be converted to <code class="literal">String</code></p></div></td></tr></tbody></table></div></div><br class="table-break"><p>When receiving a JMS message, Apache Camel converts the JMS message to body type
+                        </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div id="ftn.d0e44333" class="footnote"><p><a href="#d0e44333" class="para"><sup class="para">[a] </sup></a>The DOM will be converted to <code class="literal">String</code></p></div></td></tr></tbody></table></div></div><br class="table-break"><p>When receiving a JMS message, Apache Camel converts the JMS message to body type
             listed in <a class="xref" href="jms.html#JMSRefMsgTbl2" title="Table&nbsp;36.&nbsp;Mapping from JMS to Apache Camel">Table&nbsp;36, &#8220;Mapping from JMS to Apache Camel&#8221;</a>.</p><div class="table"><a name="JMSRefMsgTbl2"></a><p class="title"><b>Table&nbsp;36.&nbsp;Mapping from JMS to Apache Camel</b></p><div class="table-contents"><table summary="Mapping from JMS to Apache Camel" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>JMS Message</th><th>Body Type</th></tr></thead><tbody><tr><td>
                             <code class="literal">javax.jms.TextMessage</code>
                         </td><td>
@@ -957,7 +957,7 @@ jms:topic:Stocks.Prices
   - Ignoring non primitive header: order of class: org.apache.camel.component.jms.issues.DummyOrder with value: DummyOrder{orderId=333, itemId=4444, quantity=2}
 </pre></div><div class="refsection"><a name="JMS_HSH_Messageformatwhenreceiving"></a><h2>Message format when receiving</h2><p>Camel adds the following properties to the <code class="literal">Exchange</code> when it
             receives a message:
-        </p><table id="d0e44104"><tr>
+        </p><table id="d0e44650"><tr>
                 <th> Property </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -970,7 +970,7 @@ jms:topic:Stocks.Prices
                 </td>
                 <td> The reply destination. </td>
             </tr></table><p>Camel adds the following JMS properties to the In message headers when it receives a
-            JMS message: </p><table id="d0e44135"><tr>
+            JMS message: </p><table id="d0e44681"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -1069,7 +1069,7 @@ jms:topic:Stocks.Prices
                         <code class="literal">disableReplyTo</code>, <code class="literal">preserveMessageQos</code>,
                         <code class="literal">explicitQosEnabled</code>.</p></li></ul></div><p>All this can be a tad complex to understand and configure to support your use
             case.</p></div><div class="refsection"><a name="JMS_HSH_JmsProducer"></a><h2>JmsProducer</h2><p>The <code class="literal">JmsProducer</code> behaves as follows, depending on configuration:
-        </p><table id="d0e44376"><tr>
+        </p><table id="d0e44922"><tr>
                 <th> Exchange Pattern </th>
                 <th> Other options </th>
                 <th> Description </th>
@@ -1111,7 +1111,7 @@ jms:topic:Stocks.Prices
                         <code class="literal">JMSReplyTo</code>. In all situations the
                         <code class="literal">JmsProducer</code> does <span class="bold"><strong>not</strong></span>
                     expect any reply and thus continue after sending the message. </td>
-            </tr></table></div><div class="refsection"><a name="JMS_HSH_JmsConsumer"></a><h2>JmsConsumer</h2><p>The <code class="literal">JmsConsumer</code> behaves as follows, depending on configuration: </p><table id="d0e44496"><tr>
+            </tr></table></div><div class="refsection"><a name="JMS_HSH_JmsConsumer"></a><h2>JmsConsumer</h2><p>The <code class="literal">JmsConsumer</code> behaves as follows, depending on configuration: </p><table id="d0e45042"><tr>
                 <th> Exchange Pattern </th>
                 <th> Other options </th>
                 <th> Description </th>
@@ -1148,7 +1148,7 @@ from("activemq:queue:in")
             Camel to reuse the same endpoint, but send to different destinations. This greatly
             reduces the number of endpoints created and economizes on memory and thread
             resources.</p><p>You can specify the destination in the following headers:
-        </p><table id="d0e44575"><tr>
+        </p><table id="d0e45121"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>
@@ -1226,7 +1226,7 @@ from("jms:SomeQueue?concurrentConsumers=20").
                         <code class="literal">JmsEndpoint</code>.</p></li></ul></div></div><div class="refsection"><a name="JMS_HSH_RequestreplyoverJMS"></a><h2>Request-reply over JMS</h2><p>Camel supports <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request Reply</a> over JMS. In essence
             the MEP of the Exchange should be <code class="literal">InOut</code> when you send a message to a
             JMS queue.</p><p>Camel offers a number of options to configure request/reply over JMS that influence
-            performance and clustered environments. The table below summaries the options.</p><table width="932" id="d0e44760"><col width="21%"><col width="9%"><col width="5%"><col width="55%"><tr>
+            performance and clustered environments. The table below summaries the options.</p><table width="932" id="d0e45306"><col width="21%"><col width="9%"><col width="5%"><col width="55%"><tr>
                 <th>Option </th>
                 <th>Performance </th>
                 <th>Cluster </th>
@@ -1549,7 +1549,7 @@ wmq.setDestinationResolver(new DestinationResolver(){
                 </p></li><li class="listitem"><p>
                     <a class="link" href="http://activemq.apache.org/jmstemplate-gotchas.html" target="_top">JMSTemplate
                         gotchas</a>
-                </p></li></ul></div></div><div class="refsection"><a name="d0e45436"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                </p></li></ul></div></div><div class="refsection"><a name="d0e45982"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
                 <a class="xref" href="ActiveMQ.html" title="ActiveMQ">ActiveMQ</a>
             </td></tr><tr><td>
                 <a class="xref" href="amqp.html" title="AMQP">AMQP</a>
