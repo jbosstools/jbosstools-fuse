@@ -330,7 +330,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
 &lt;/camel:camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_CustomizetheJdbcMessageIdRepository"></a>Customize the JdbcMessageIdRepository</h2></div></div></div><p>Starting with <span class="bold"><strong>Camel 2.9.1</strong></span> you have a few options to
             tune the
                 <code class="literal">org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository</code>
-            for your needs:</p><table id="d0e69200"><tr>
+            for your needs:</p><table id="d0e69746"><tr>
                 <th> Parameter </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -393,7 +393,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
             messages. This ensures that you will not loose messages, as the default aggregator will
             use an in memory only <code class="literal">AggregationRepository</code>. The
                 <code class="literal">JdbcAggregationRepository</code> allows together with Camel to provide
-            persistent support for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/aggregate.html" class="olink">Aggregator</a>.</p><p>It has the following options:</p><table id="d0e69345"><tr>
+            persistent support for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/aggregate.html" class="olink">Aggregator</a>.</p><p>It has the following options:</p><table id="d0e69891"><tr>
                 <th>Option </th>
                 <th>Type </th>
                 <th>Description </th>
@@ -516,7 +516,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
             The recovery works as transactional which ensures that Camel will try to recover and
             redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored
             from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being
-            recovered/redelivered:</p><table id="d0e69661"><tr>
+            recovered/redelivered:</p><table id="d0e70207"><tr>
                 <th> Header </th>
                 <th> Type </th>
                 <th> Description </th>

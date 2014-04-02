@@ -1,10 +1,10 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>Marshal</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderTransformRef.html" title="Transformation"><link rel="prev" href="inOut.html" title="In Out"><link rel="next" href="pollEnrich.html" title="Poll Enrich"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="marshal"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Marshal &#8212; Marshals data into a specified format for transmission over a transport or
-            component</p></div><div class="refsection"><a name="d0e19392"></a><h2>Usage</h2><p>The Marshal pattern uses Apache Camel's pluggable data format mechanism to convert
+            component</p></div><div class="refsection"><a name="d0e19938"></a><h2>Usage</h2><p>The Marshal pattern uses Apache Camel's pluggable data format mechanism to convert
             messages into a format appropriate for transmission by one of the Apache Camel
             components.</p><p>The Marshal pattern can be placed anywhere in the body of a route. However, it is
-            typically placed before endpoints that transmit the message to another location.</p></div><div class="refsection"><a name="d0e19399"></a><h2>Properties</h2><p><a class="xref" href="marshal.html#RiderMarshalRefTbl1" title="Table&nbsp;52.&nbsp;Marshal Properties">Table&nbsp;52</a> describes the
+            typically placed before endpoints that transmit the message to another location.</p></div><div class="refsection"><a name="d0e19945"></a><h2>Properties</h2><p><a class="xref" href="marshal.html#RiderMarshalRefTbl1" title="Table&nbsp;52.&nbsp;Marshal Properties">Table&nbsp;52</a> describes the
             properties you can specify using the properties editor.</p><div class="table"><a name="RiderMarshalRefTbl1"></a><p class="title"><b>Table&nbsp;52.&nbsp;Marshal Properties</b></p><div class="table-contents"><table summary="Marshal Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Inherit Error Handler</span>
                         </td><td>Specifies whether the node should use the error handler configured
@@ -65,12 +65,12 @@
                             <span class="property">Description</span>
                         </td><td>Specifies a text description for the node. This description is
                             included in the generated XML file, but it is informational only. It is
-                            not used by Apache Camel.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19585"></a><h2>avro</h2><p><a class="xref" href="marshal.html#avroDFTbl" title="Table&nbsp;53.&nbsp;avro Properties">Table&nbsp;53</a> describes the properties
+                            not used by Apache Camel.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20131"></a><h2>avro</h2><p><a class="xref" href="marshal.html#avroDFTbl" title="Table&nbsp;53.&nbsp;avro Properties">Table&nbsp;53</a> describes the properties
             needed to configure the avro marshaller.</p><div class="table"><a name="avroDFTbl"></a><p class="title"><b>Table&nbsp;53.&nbsp;avro Properties</b></p><div class="table-contents"><table summary="avro Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Instance Class Name</span>
                         </td><td>Specifies the name of the instance class to use for marshalling. This
                             is the class defined by your schema
-                                <code class="code">.apache.camel.dataformat.avro.&lt;nameOfInstanceClass&gt;</code>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19613"></a><h2>base64</h2><p><a class="xref" href="marshal.html#base64DFTbl" title="Table&nbsp;54.&nbsp;base64 Properties">Table&nbsp;54</a> describes the
+                                <code class="code">.apache.camel.dataformat.avro.&lt;nameOfInstanceClass&gt;</code>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20159"></a><h2>base64</h2><p><a class="xref" href="marshal.html#base64DFTbl" title="Table&nbsp;54.&nbsp;base64 Properties">Table&nbsp;54</a> describes the
             properties needed to configure the base64 marshaller.</p><div class="table"><a name="base64DFTbl"></a><p class="title"><b>Table&nbsp;54.&nbsp;base64 Properties</b></p><div class="table-contents"><table summary="base64 Properties" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Line Length</span>
                         </td><td>
@@ -89,7 +89,7 @@
                             <em class="replaceable"><code>Disabled</code></em>
                         </td><td>When disabled, encodes <code class="literal">-</code> and <code class="literal">_</code>.
                             When enabled, encodes <code class="literal">+</code> (not <code class="literal">-</code>)
-                            and <code class="literal">/</code> (not <code class="literal">_</code>).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19695"></a><h2>beanio</h2><p><a class="xref" href="marshal.html#beanioDFTbl" title="Table&nbsp;55.&nbsp;beanio Properties">Table&nbsp;55</a> describes the
+                            and <code class="literal">/</code> (not <code class="literal">_</code>).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20241"></a><h2>beanio</h2><p><a class="xref" href="marshal.html#beanioDFTbl" title="Table&nbsp;55.&nbsp;beanio Properties">Table&nbsp;55</a> describes the
             properties needed to configure the beanio marshaller.</p><div class="table"><a name="beanioDFTbl"></a><p class="title"><b>Table&nbsp;55.&nbsp;beanio Properties</b></p><div class="table-contents"><table summary="beanio Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Encoding</span>
                         </td><td>
@@ -114,7 +114,7 @@
                                 <code class="code">classpath:</code>&#8212;to specify the location from which to
                             load this file.</td></tr><tr><td>
                             <span class="property">Stream Name</span>
-                        </td><td>Specifies the name of the stream to use.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19784"></a><h2>bindy</h2><p><a class="xref" href="marshal.html#bindyDFTbl" title="Table&nbsp;56.&nbsp;bindy Properties">Table&nbsp;56</a> describes the properties
+                        </td><td>Specifies the name of the stream to use.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20330"></a><h2>bindy</h2><p><a class="xref" href="marshal.html#bindyDFTbl" title="Table&nbsp;56.&nbsp;bindy Properties">Table&nbsp;56</a> describes the properties
             needed to configure the bindy marshaller.</p><div class="table"><a name="bindyDFTbl"></a><p class="title"><b>Table&nbsp;56.&nbsp;bindy Properties</b></p><div class="table-contents"><table summary="bindy Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Class Type</span>
                         </td><td>
@@ -149,7 +149,7 @@
                         </td><td>Specifies the record type, Select either
                                 <span class="guimenuitem">Csv</span> (comma-separated value fields),
                                 <span class="guimenuitem">Fixed</span> (fixed-length records), or
-                                <span class="guimenuitem">KeyValue</span> (key/value pair fields).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19912"></a><h2>castor</h2><p><a class="xref" href="marshal.html#castorDFTbl" title="Table&nbsp;57.&nbsp;castor Properties">Table&nbsp;57</a> describes the
+                                <span class="guimenuitem">KeyValue</span> (key/value pair fields).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20458"></a><h2>castor</h2><p><a class="xref" href="marshal.html#castorDFTbl" title="Table&nbsp;57.&nbsp;castor Properties">Table&nbsp;57</a> describes the
             properties needed to configure the castor marshaller.</p><div class="table"><a name="castorDFTbl"></a><p class="title"><b>Table&nbsp;57.&nbsp;castor Properties</b></p><div class="table-contents"><table summary="castor Properties" width="100%" border="1"><colgroup><col width="21%" class="c1"><col width="79%" class="c2"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Classes</span>
                         </td><td>Specifies additional classes to add to the Castor XmlContext. Enter
@@ -164,7 +164,7 @@
                             <span class="property">Packages</span>
                         </td><td>Specifies any additional packages to add to the Castor XmlContext.
                             Enter the fully qualified path. When specifying multiple classes,
-                            separate them with a comma (<strong class="userinput"><code>,</code></strong>).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19969"></a><h2>crypto</h2><p><a class="xref" href="marshal.html#cryptoDFTbl" title="Table&nbsp;58.&nbsp;crypto Properties">Table&nbsp;58</a> describes the
+                            separate them with a comma (<strong class="userinput"><code>,</code></strong>).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20515"></a><h2>crypto</h2><p><a class="xref" href="marshal.html#cryptoDFTbl" title="Table&nbsp;58.&nbsp;crypto Properties">Table&nbsp;58</a> describes the
             properties needed to configure the crypto marshaller.</p><div class="table"><a name="cryptoDFTbl"></a><p class="title"><b>Table&nbsp;58.&nbsp;crypto Properties</b></p><div class="table-contents"><table summary="crypto Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Algorithm</span>
                         </td><td>Specifies the name of the JCE cryptographic algorithm to use. Default
@@ -204,7 +204,7 @@
                                 <a class="link" href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/StandardNames.html#Mac" target="_top">Java Standard Names Reference</a>.</td></tr><tr><td>
                             <span class="property">Should Append HMAC</span>
                         </td><td>Enables calculating and appending a Message Authentication Code to
-                            the encrypted data. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20091"></a><h2>csv</h2><p><a class="xref" href="marshal.html#csvDFTbl" title="Table&nbsp;59.&nbsp;csv Properties">Table&nbsp;59</a> describes the properties
+                            the encrypted data. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20637"></a><h2>csv</h2><p><a class="xref" href="marshal.html#csvDFTbl" title="Table&nbsp;59.&nbsp;csv Properties">Table&nbsp;59</a> describes the properties
             needed to configure the csv marshaller.</p><div class="table"><a name="csvDFTbl"></a><p class="title"><b>Table&nbsp;59.&nbsp;csv Properties</b></p><div class="table-contents"><table summary="csv Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Config Ref</span>
                         </td><td>Reference to a custom CSVConfig object.</td></tr><tr><td>
@@ -214,11 +214,11 @@
                             character, such as <span class="bold"><strong><code class="code">.</code></strong></span>,
                                 <span class="bold"><strong><code class="code">|</code></strong></span>, <span class="bold"><strong><code class="code">;</code></strong></span>, <span class="bold"><strong><code class="code">#</code></strong></span>, and so on.</td></tr><tr><td>
                             <span class="property">Strategy Ref</span>
-                        </td><td>Reference to a custom CSVStrategy. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20151"></a><h2>custom</h2><p><a class="xref" href="marshal.html#customDFTbl" title="Table&nbsp;60.&nbsp;custom Properties">Table&nbsp;60</a> describes the
+                        </td><td>Reference to a custom CSVStrategy. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20697"></a><h2>custom</h2><p><a class="xref" href="marshal.html#customDFTbl" title="Table&nbsp;60.&nbsp;custom Properties">Table&nbsp;60</a> describes the
             properties needed to configure the custom marshaller.</p><div class="table"><a name="customDFTbl"></a><p class="title"><b>Table&nbsp;60.&nbsp;custom Properties</b></p><div class="table-contents"><table summary="custom Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Ref</span>
                         </td><td>Reference to file that implements your custom data format using the
-                            DataFormat interface.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20176"></a><h2>jaxb</h2><p><a class="xref" href="marshal.html#jaxbDFTbl" title="Table&nbsp;61.&nbsp;jaxb Properties">Table&nbsp;61</a> describes the properties
+                            DataFormat interface.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20722"></a><h2>jaxb</h2><p><a class="xref" href="marshal.html#jaxbDFTbl" title="Table&nbsp;61.&nbsp;jaxb Properties">Table&nbsp;61</a> describes the properties
             needed to configure the jaxb marshaller.</p><div class="table"><a name="jaxbDFTbl"></a><p class="title"><b>Table&nbsp;61.&nbsp;jaxb Properties</b></p><div class="table-contents"><table summary="jaxb Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Context Path</span>
                         </td><td>Specifies the context path for the jaxb data format. For example,
@@ -254,7 +254,7 @@
                             namespace.</td></tr><tr><td>
                             <span class="property">Pretty Print</span>
                         </td><td>Enables pretty printing, which adds white space as needed to tidy up
-                            the resulting XML for easy reading.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20297"></a><h2>json</h2><p><a class="xref" href="marshal.html#jsonDFTbl" title="Table&nbsp;62.&nbsp;json Properties">Table&nbsp;62</a> describes the properties
+                            the resulting XML for easy reading.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20843"></a><h2>json</h2><p><a class="xref" href="marshal.html#jsonDFTbl" title="Table&nbsp;62.&nbsp;json Properties">Table&nbsp;62</a> describes the properties
             needed to configure the json marshaller.</p><div class="table"><a name="jsonDFTbl"></a><p class="title"><b>Table&nbsp;62.&nbsp;json Properties</b></p><div class="table-contents"><table summary="json Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Json View</span>
                         </td><td>Specifies the marker class to use for including/excluding specific
@@ -267,7 +267,7 @@
                         </td><td>Enables pretty printing, which adds white space as needed to tidy up
                             the resulting XML for easy reading.</td></tr><tr><td>
                             <span class="property">Unmarshal Type Name</span>
-                        </td><td>Not Applicable.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20346"></a><h2>pgp</h2><p><a class="xref" href="marshal.html#pgpDFTbl" title="Table&nbsp;63.&nbsp;pgp Properties">Table&nbsp;63</a> describes the properties
+                        </td><td>Not Applicable.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20892"></a><h2>pgp</h2><p><a class="xref" href="marshal.html#pgpDFTbl" title="Table&nbsp;63.&nbsp;pgp Properties">Table&nbsp;63</a> describes the properties
             needed to configure the pgp marshaller.</p><div class="table"><a name="pgpDFTbl"></a><p class="title"><b>Table&nbsp;63.&nbsp;pgp Properties</b></p><div class="table-contents"><table summary="pgp Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Armored</span>
                         </td><td>Specifies whether to base64 encode the encrypted text, so it can be
@@ -286,14 +286,14 @@
                             encryption.</td></tr><tr><td>
                             <span class="property">Password</span>
                         </td><td>Specifies the password to use for opening the private key. This
-                            password is not used for encryption.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20415"></a><h2>protobuf</h2><p><a class="xref" href="marshal.html#protobufDFTbl" title="Table&nbsp;64.&nbsp;protobuf Properties">Table&nbsp;64</a> describes the
+                            password is not used for encryption.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20961"></a><h2>protobuf</h2><p><a class="xref" href="marshal.html#protobufDFTbl" title="Table&nbsp;64.&nbsp;protobuf Properties">Table&nbsp;64</a> describes the
             properties needed to configure the protobuf marshaller.</p><div class="table"><a name="protobufDFTbl"></a><p class="title"><b>Table&nbsp;64.&nbsp;protobuf Properties</b></p><div class="table-contents"><table summary="protobuf Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Instance Class</span>
                         </td><td>Specifies the name of the instance class to use for marshalling. This
                             is one of the classes generated when you compiled your
                                 <code class="code">.proto</code> file. Include the builder <code class="code">generated</code>
                             in the uri; for example,
-                                <code class="code">org.apache.camel.dataformat.protobuf.generated.&lt;nameOfInstanceClass&gt;</code>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20449"></a><h2>secureXML</h2><p><a class="xref" href="marshal.html#secureXMLDFTbl" title="Table&nbsp;65.&nbsp;secureXML Properties">Table&nbsp;65</a> describes the
+                                <code class="code">org.apache.camel.dataformat.protobuf.generated.&lt;nameOfInstanceClass&gt;</code>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20995"></a><h2>secureXML</h2><p><a class="xref" href="marshal.html#secureXMLDFTbl" title="Table&nbsp;65.&nbsp;secureXML Properties">Table&nbsp;65</a> describes the
             properties needed to configure the secureXML marshaller.</p><div class="table"><a name="secureXMLDFTbl"></a><p class="title"><b>Table&nbsp;65.&nbsp;secureXML Properties</b></p><div class="table-contents"><table summary="secureXML Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Key Cipher Algorithm</span>
                             <a href="#ftn.asyncKeycrypt" class="footnote"><sup class="footnote"><a name="asyncKeycrypt"></a>[a]</sup></a>
@@ -330,7 +330,7 @@
                             <p>Specifies the cipher algorithm to use for encrypting message
                                 content. Valid values include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><strong class="userinput"><code>XMLCipher.TRIPLIDES</code></strong>
                                             [Default]</p></li><li class="listitem"><p><strong class="userinput"><code>XMLCipher.AES_128</code></strong></p></li><li class="listitem"><p><strong class="userinput"><code>XMLCipher.AES_192</code></strong></p></li><li class="listitem"><p><strong class="userinput"><code>XMLCipher.AES_256</code></strong></p></li></ul></div>
-                        </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div id="ftn.asyncKeycrypt" class="footnote"><p><a href="#asyncKeycrypt" class="para"><sup class="para">[a] </sup></a>Used for asymmetric key encryption</p></div></td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20569"></a><h2>soapjaxb</h2><p><a class="xref" href="marshal.html#soapjaxbDFTbl" title="Table&nbsp;66.&nbsp;soapjaxb Properties">Table&nbsp;66</a> describes the
+                        </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div id="ftn.asyncKeycrypt" class="footnote"><p><a href="#asyncKeycrypt" class="para"><sup class="para">[a] </sup></a>Used for asymmetric key encryption</p></div></td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21115"></a><h2>soapjaxb</h2><p><a class="xref" href="marshal.html#soapjaxbDFTbl" title="Table&nbsp;66.&nbsp;soapjaxb Properties">Table&nbsp;66</a> describes the
             properties needed to configure the soapjaxb marshaller.</p><div class="table"><a name="soapjaxbDFTbl"></a><p class="title"><b>Table&nbsp;66.&nbsp;soapjaxb Properties</b></p><div class="table-contents"><table summary="soapjaxb Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Context Path</span>
                         </td><td>Specifies the path of the package to use for initializing the JAXB
@@ -348,18 +348,18 @@
                             <span class="property">Version</span>
                         </td><td>Specifies the version of soap to use. Options are
                                 <em class="replaceable"><code>1.1</code></em> or <em class="replaceable"><code>1.2</code></em>;
-                            the default is <em class="replaceable"><code>1.1</code></em>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20646"></a><h2>string</h2><p><a class="xref" href="marshal.html#stringDFTbl" title="Table&nbsp;67.&nbsp;string Properties">Table&nbsp;67</a> describes the
+                            the default is <em class="replaceable"><code>1.1</code></em>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21192"></a><h2>string</h2><p><a class="xref" href="marshal.html#stringDFTbl" title="Table&nbsp;67.&nbsp;string Properties">Table&nbsp;67</a> describes the
             properties needed to configure the string marshaller.</p><div class="table"><a name="stringDFTbl"></a><p class="title"><b>Table&nbsp;67.&nbsp;string Properties</b></p><div class="table-contents"><table summary="string Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Charset</span>
                         </td><td>
                             <p>Specifies the character set to use for encoding. Valid values include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><strong class="userinput"><code>ISO-8859-1</code></strong></p></li><li class="listitem"><p><strong class="userinput"><code>US-ASCII</code></strong></p></li><li class="listitem"><p><strong class="userinput"><code>UTF-8</code></strong></p></li></ul></div>
                             <p>With no value specified, Red Hat JBoss Fuse Tooling for Eclipse defaults to the encoding used by
                                 the platform.</p>
-                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20690"></a><h2>XmlBeans</h2><p><a class="xref" href="marshal.html#XmlBeansDFTbl" title="Table&nbsp;68.&nbsp;XmlBeans Properties">Table&nbsp;68</a> describes the
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21236"></a><h2>XmlBeans</h2><p><a class="xref" href="marshal.html#XmlBeansDFTbl" title="Table&nbsp;68.&nbsp;XmlBeans Properties">Table&nbsp;68</a> describes the
             properties needed to configure the XmlBeans marshaller.</p><div class="table"><a name="XmlBeansDFTbl"></a><p class="title"><b>Table&nbsp;68.&nbsp;XmlBeans Properties</b></p><div class="table-contents"><table summary="XmlBeans Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Pretty Print</span>
                         </td><td>Enables pretty printing, which adds white space as needed to tidy up
-                            the resulting XML for easy reading.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20715"></a><h2>Xmljson</h2><p><a class="xref" href="marshal.html#xmljsonDFTbl" title="Table&nbsp;69.&nbsp;xmljson Properties">Table&nbsp;69</a> describes the
+                            the resulting XML for easy reading.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21261"></a><h2>Xmljson</h2><p><a class="xref" href="marshal.html#xmljsonDFTbl" title="Table&nbsp;69.&nbsp;xmljson Properties">Table&nbsp;69</a> describes the
             properties needed to configure the xmljson marshaller.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>An asterisk (<span class="bold"><strong>*</strong></span>) to the right of a property name
                 (marshaller properties only) indicates that the default value for that property is
                 set by <code class="filename">json-lib</code>, not by the code of the data format.</p></td></tr></table></div><div class="table"><a name="xmljsonDFTbl"></a><p class="title"><b>Table&nbsp;69.&nbsp;xmljson Properties</b></p><div class="table-contents"><table summary="xmljson Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
@@ -432,12 +432,12 @@
                         </td><td>Specifies whether leading and trailing white spaces are omitted in
                             string values. When disabled (default), they are left untouched.</td></tr><tr><td>
                             <span class="property">Type Hints</span>
-                        </td><td>Applies to unmarshalling only.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20915"></a><h2>Xmlrpc</h2><p><a class="xref" href="marshal.html#XmlRpcDFTbl" title="Table&nbsp;70.&nbsp;Xmlrpc Properties">Table&nbsp;70</a> describes the
+                        </td><td>Applies to unmarshalling only.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21461"></a><h2>Xmlrpc</h2><p><a class="xref" href="marshal.html#XmlRpcDFTbl" title="Table&nbsp;70.&nbsp;Xmlrpc Properties">Table&nbsp;70</a> describes the
             properties needed to configure the Xmlrpc marshaller.</p><div class="table"><a name="XmlRpcDFTbl"></a><p class="title"><b>Table&nbsp;70.&nbsp;Xmlrpc Properties</b></p><div class="table-contents"><table summary="Xmlrpc Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Request</span>
                         </td><td>When enabled, specifies the message is a request. When disabled,
                             specifies the message is a response. The default is
-                                <em class="replaceable"><code>Disabled</code></em>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20943"></a><h2>zip</h2><p><a class="xref" href="marshal.html#zipDFTbl" title="Table&nbsp;71.&nbsp;zip Properties">Table&nbsp;71</a> describes the properties
+                                <em class="replaceable"><code>Disabled</code></em>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21489"></a><h2>zip</h2><p><a class="xref" href="marshal.html#zipDFTbl" title="Table&nbsp;71.&nbsp;zip Properties">Table&nbsp;71</a> describes the properties
             needed to configure the zip marshaller.</p><div class="table"><a name="zipDFTbl"></a><p class="title"><b>Table&nbsp;71.&nbsp;zip Properties</b></p><div class="table-contents"><table summary="zip Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Compression Level</span>
                         </td><td>
@@ -445,12 +445,12 @@
                                 no value is specified, the marshaller uses its default compression
                                 algorithm. Valid values are: </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="code">deflater.BEST_SPEED</code></p><p>Conservative compression, optimized for speed.</p></li><li class="listitem"><p><code class="code">deflater.BEST_COMPRESSION</code></p><p>Aggressive compression, slowest speed.</p></li><li class="listitem"><p><code class="code">deflater.DEFAULT_COMPRESSION</code></p><p>Moderate compression, moderate speed.</p></li></ul></div><p>
                             </p>
-                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20991"></a><h2>zipFile</h2><p><a class="xref" href="marshal.html#zipFileDFTbl" title="Table&nbsp;72.&nbsp;zipFile Properties">Table&nbsp;72</a> describes the
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21537"></a><h2>zipFile</h2><p><a class="xref" href="marshal.html#zipFileDFTbl" title="Table&nbsp;72.&nbsp;zipFile Properties">Table&nbsp;72</a> describes the
             properties needed to configure the zipFile marshaller.</p><div class="table"><a name="zipFileDFTbl"></a><p class="title"><b>Table&nbsp;72.&nbsp;zipFile Properties</b></p><div class="table-contents"><table summary="zipFile Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Using Iterator</span>
                         </td><td>
                             <p>Applies only to Unmarshalling. The default is
                                     <code class="literal">Disabled</code>. </p>
-                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21022"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e21568"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
                 <a href="PLUGINS_ROOT/com.fusesource.rider.help/RiderAddBeans.html" class="olink">Adding beans and configuration</a>
             </td></tr></table></div></div></body></html>
