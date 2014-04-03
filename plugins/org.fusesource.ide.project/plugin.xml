@@ -65,7 +65,8 @@
              </instanceof>
              <test
                    forcePluginActivation="true"
-                   property="org.fusesource.ide.project.CamelContextFilesCountTester.camelContextFileCount">
+                   property="org.eclipse.core.resources.projectNature"
+                   value="org.fusesource.ide.project.RiderProjectNature">
              </test>
           </and>
        </enablement>
@@ -94,12 +95,77 @@
 	   </viewerContentBinding>
 	</extension>
  <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="popup:org.eclipse.ui.popup.any?before=additions">
+       <command
+             commandId="org.fusesource.ide.project.DisableCamelNatureCmd"
+             label="Disable Fuse Camel Nature"
+             style="push">
+          <visibleWhen
+                checkEnabled="false">
+                <with
+                variable="selection">
+                                <iterate
+                                      operator="and">
+                                   <test
+                                         forcePluginActivation="true"
+                                         property="org.fusesource.ide.project.CamelNatureTester.camelNatureEnabled">
+                                   </test>
+                                </iterate>
+          </with>
+          </visibleWhen>
+       </command>
+       <command
+             commandId="org.fusesource.ide.project.EnableCamelNatureCmd"
+             label="Enable Fuse Camel Nature"
+             style="push">
+          <visibleWhen
+                checkEnabled="false">
+                <with
+                variable="selection">
+                <iterate
+                      operator="and">
+                   <test
+                         forcePluginActivation="true"
+                         property="org.fusesource.ide.project.CamelNatureTester.camelNatureDisabled">
+                   </test>
+                </iterate>
+          </with>
+          </visibleWhen>
+       </command>
+    </menuContribution>
+ </extension>
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          id="org.fusesource.ide.project.EnableCamelNatureCmd"
+          name="Enable Fuse Camel Nature">
+    </command>
+    <command
+          id="org.fusesource.ide.project.DisableCamelNatureCmd"
+          name="Disable Fuse Camel Nature">
+    </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+          class="org.fusesource.ide.project.handlers.EnableCamelNatureHandler"
+          commandId="org.fusesource.ide.project.EnableCamelNatureCmd">
+    </handler>
+    <handler
+          class="org.fusesource.ide.project.handlers.DisableCamelNatureHandler"
+          commandId="org.fusesource.ide.project.DisableCamelNatureCmd">
+    </handler>
+ </extension>
+ <extension
        point="org.eclipse.core.expressions.propertyTesters">
     <propertyTester
-          class="org.fusesource.ide.project.CamelContextFilesCountTester"
-          id="org.fusesource.ide.project.CamelContextFilesCountTester"
-          namespace="org.fusesource.ide.project.CamelContextFilesCountTester"
-          properties="camelContextFileCount"
+          class="org.fusesource.ide.project.CamelNatureTester"
+          id="org.fusesource.ide.project.CamelNatureTester"
+          namespace="org.fusesource.ide.project.CamelNatureTester"
+          properties="camelNatureEnabled,camelNatureDisabled"
           type="org.eclipse.core.resources.IProject">
     </propertyTester>
  </extension>
