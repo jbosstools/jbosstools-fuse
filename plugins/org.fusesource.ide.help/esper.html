@@ -6,7 +6,7 @@
             event stream.</p><p>For example</p><pre class="programlisting">from("esper://cheese?pattern=every event=MyEvent(bar=5)").
 	to("activemq:Foo");</pre><p>You can append query options to the URI in the following format,
 	    <code class="literal">?option=value&amp;option=value&amp;...</code>
-	</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_Options"></a>Options</h2></div></div></div><table id="d0e52589"><tr>
+	</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_Options"></a>Options</h2></div></div></div><table id="d0e55381"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -25,7 +25,8 @@
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Esper_HSH_EsperMessage"></a>EsperMessage</h2></div></div></div><p>From <span class="bold"><strong>Camel 2.12</strong></span> onwards the esper consumer stores new
             and old events in the
             <code class="literal">org.apacheextras.camel.component.esper.EsperMessage</code> message as
-            the input <span class="olink">Message</span> on the <a class="link" href="Exchange" target="_top">Exchange</a>. You can get access
+            the input <a class="link" href="http://camel.apache.org/message.html" target="_top">Message</a> on the
+            <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a>. You can get access
             to the esper event beans from java code with:</p><pre class="programlisting">EventBean newEvent = exchange.getIn(EsperMessage.class).getNewEvent();
 EventBean oldEvent = exchange.getIn(EsperMessage.class).getOldEvent();</pre><p>By default if you get the body of
             <code class="literal">org.apacheextras.camel.component.esper.EsperMessage</code> it returns

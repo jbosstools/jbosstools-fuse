@@ -13,7 +13,7 @@ ftps://[username@]hostname[:port]/directoryname[?options]</pre><p>Where <span cl
                 Net</a> while SFTP uses <a class="link" href="http://www.jcraft.com/jsch/" target="_top">JCraft JSCH</a>.</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
         </p></div><div class="refsection"><a name="FTP2URIOptions"></a><h2>URI Options</h2><p>The options below are exclusive to the FTP
-            component:</p><div class="table"><a name="d0e29508"></a><p class="title"><b>Table&nbsp;14.&nbsp;FTP URI options</b></p><div class="table-contents"><table summary="FTP URI options" width="100%" border="1"><colgroup><col width="33%" class="c1"><col width="12%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name </th><th>Default  </th><th>Description </th></tr></thead><tbody><tr><td>
+            component:</p><div class="table"><a name="d0e32340"></a><p class="title"><b>Table&nbsp;14.&nbsp;FTP URI options</b></p><div class="table-contents"><table summary="FTP URI options" width="100%" border="1"><colgroup><col width="33%" class="c1"><col width="12%" class="c2"><col width="55%" class="c3"></colgroup><thead><tr><th>Name </th><th>Default  </th><th>Description </th></tr></thead><tbody><tr><td>
                     <code class="literal">username</code>
                 </td><td>
                     <code class="literal">null</code>
@@ -80,7 +80,7 @@ ftps://[username@]hostname[:port]/directoryname[?options]</pre><p>Where <span cl
                     consumer should download the file. If this option is set to
                         <code class="literal">false</code>, then the message body will be
                         <code class="literal">null</code>, but the consumer will still
-                    trigger a Camel <a class="link" href="Exchange" target="_top">Exchange</a>
+                    trigger a Camel <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a>
                     that has details about the file such as file name, file
                     size, etc. It's just that the file will not be downloaded.
                 </td></tr><tr><td> streamDownload</td><td> false </td><td><span class="bold"><strong>Camel 2.11:</strong></span> Whether the
@@ -88,7 +88,7 @@ ftps://[username@]hostname[:port]/directoryname[?options]</pre><p>Where <span cl
                             the default behavior, or if it should pass an
                             InputStream read from the remote resource rather
                             than an in-memory array as the in body of the Camel
-                                <a class="link" href="Exchange" target="_top">Exchange</a>.  This
+                    <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a>.  This
                             option is ignored if download is false or is
                             localWorkDirectory is provided. This option is
                             useful for working with large remote files. </td></tr><tr><td>
@@ -370,8 +370,8 @@ ftps://[username@]hostname[:port]/directoryname[?options]</pre><p>Where <span cl
                             in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>. This reference overrides any
                             configured SSL related options on ftpClient as well
                             as the securityProtocol (SSL, TLS, etc.) set on
-                            FtpsConfiguration. See <span class="olink">Using the
-                                JSSE Configuration Utility</span>. </td></tr><tr><td>
+                            FtpsConfiguration. See <a href="PLUGINS_ROOT/com.fusesource.rider.help/http.html#HttpUsingtheJSSEConfigurationUtility" class="olink">Using the
+                                JSSE Configuration Utility</a>. </td></tr><tr><td>
                     <code class="literal">proxy</code>
                 </td><td>
                     <code class="literal">null</code>
@@ -418,11 +418,11 @@ ftps://[username@]hostname[:port]/directoryname[?options]</pre><p>Where <span cl
                 <code class="literal">FTPClient</code> to 30 seconds you can do:</p><pre class="programlisting">from("ftp://foo@myserver?password=secret&amp;ftpClient.dataTimeout=30000")
     .to("bean:foo");</pre><p>You can mix and match and have use both prefixes, for example to
             configure date format or timezones.</p><pre class="programlisting">from("ftp://foo@myserver?password=secret&amp;ftpClient.dataTimeout=30000&amp;ftpClientConfig.serverLanguageCode=fr")
-    .to("bean:foo");</pre><p>You can have as many of these options as you like.</p><p>See the documentation of the <a class="link" href="http://commons.apache.org/net/api-2.2/org/apache/commons/net/ftp/FTPClientConfig.html" target="_top">Apache Commons FTP FTPClientConfig</a> for possible options
-            and more details. And as well for <a class="link" href="http://commons.apache.org/net/api-2.2/org/apache/commons/net/ftp/FTPClient.html" target="_top">Apache Commons FTP FTPClient</a>.</p><p>If you do not like having many and long configuration in the url
+    .to("bean:foo");</pre><p>You can have as many of these options as you like.</p><p>See the documentation for the <a class="link" href="http://commons.apache.org/net/api-2.2/org/apache/commons/net/ftp/FTPClientConfig.html" target="_top">Apache Commons FTP FTPClientConfig</a> for possible options
+            and more details. Also see <a class="link" href="http://commons.apache.org/net/api-2.2/org/apache/commons/net/ftp/FTPClient.html" target="_top">Apache Commons FTP FTPClient</a>.</p><p>If you do not like having many and long configuration in the url
             you can refer to the <code class="literal">ftpClient</code> or
                 <code class="literal">ftpClientConfig</code> to use by letting Camel
-            lookup in the <a class="link" href="Registry" target="_top">Registry</a> for
+            lookup in the <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a> for
             it.</p><p>For example:</p><pre class="programlisting">
    &lt;bean id="myConfig" class="org.apache.commons.net.ftp.FTPClientConfig"&gt;
        &lt;property name="lenientFutureDates" value="true"/&gt;
@@ -447,12 +447,11 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
             delete the files or move them to another location. For example, you
             can use <code class="literal">delete=true</code> to delete the files or
                 <code class="literal">move=.done</code> to move the files into a hidden
-                <span class="italic">done</span> subdirectory.</p><p>The regular <span class="olink">File</span> consumer is
-            different as it will by default move files to a
-                <code class="literal">.camel</code> sub directory. The reason Camel does
-                <span class="bold"><strong>not</strong></span> do this by default for the
-            FTP consumer is that it may lack permissions by default to be able
-            to move or delete files.</p></div><div class="refsection"><a name="FTP2limitations"></a><h2>limitations</h2><p>The option <span class="bold"><strong>readLock</strong></span> can be used
+                <span class="italic">done</span> subdirectory.</p><p>The regular File consumer is different as it, by default, moves
+            files to a <code class="literal">.camel</code> sub directory. The reason that
+            Camel, by default, does <span class="bold"><strong>not</strong></span> do this
+            for the FTP consumer is that it may lack permissions to move or to
+            delete files.</p></div><div class="refsection"><a name="FTP2limitations"></a><h2>limitations</h2><p>The option <span class="bold"><strong>readLock</strong></span> can be used
             to force Apache Camel <span class="bold"><strong>not</strong></span> to consume
             files that are currently in the process of being written. However,
             this option is turned off by default, as it requires that the user
@@ -462,7 +461,7 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
             written. </p><p>The ftp producer does <span class="bold"><strong>not</strong></span> support
             appending to existing files. Any existing files on the remote server
             will be deleted before the file is written.</p></div><div class="refsection"><a name="FTP2MessageHeaders"></a><h2>Message Headers</h2><p>The following message headers can be used to affect the behavior
-            of the component</p><div class="table"><a name="d0e30668"></a><p class="title"><b>Table&nbsp;15.&nbsp;Component message headers</b></p><div class="table-contents"><table summary="Component message headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
+            of the component</p><div class="table"><a name="d0e33497"></a><p class="title"><b>Table&nbsp;15.&nbsp;Component message headers</b></p><div class="table-contents"><table summary="Component message headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
                     <code class="literal">CamelFileName</code>
                 </td><td> Specifies the output file name (relative to the endpoint
                     directory) to be used for the output message when sending to
@@ -484,7 +483,7 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
                     <code class="literal">CamelFileLocalWorkPath</code>
                 </td><td> Path to the local work file, if local work directory is
                     used. </td></tr></tbody></table></div></div><br class="table-break"><p>In addition, the FTP/FTPS consumer and producer will enrich the
-            Camel <code class="literal">Message</code> with the following headers: </p><div class="table"><a name="d0e30732"></a><p class="title"><b>Table&nbsp;16.&nbsp;Produce and Consumer headers</b></p><div class="table-contents"><table summary="Produce and Consumer headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
+            Camel <code class="literal">Message</code> with the following headers: </p><div class="table"><a name="d0e33561"></a><p class="title"><b>Table&nbsp;16.&nbsp;Produce and Consumer headers</b></p><div class="table-contents"><table summary="Produce and Consumer headers" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th> Header </th><th> Description </th></tr></thead><tbody><tr><td>
                     <code class="literal">CamelFtpReplyCode</code>
                 </td><td><span class="bold"><strong>Camel 2.11.1:</strong></span> The FTP
                     client reply code (the type is a integer) </td></tr><tr><td>
@@ -509,16 +508,17 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
             remote file, though with <code class="literal">.inprogress</code> as extension
             while the file is being downloaded. Afterwards, the file is renamed
             to remove the <code class="literal">.inprogress</code> suffix. And finally,
-            when the <a class="link" href="FTP2Exchange" target="_top">Exchange</a> is complete the
+            when the Exchange is complete the
             local file is deleted. </p><p>So if you want to download files from a remote FTP server and
             store it as files then you need to route to a file endpoint such
             as:</p><pre class="programlisting">from("ftp://someone@someserver.com?password=secret&amp;localWorkDirectory=/tmp").to("file://inbox");</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>The route above is ultra efficient as it avoids reading the
                 entire file content into memory. It downloads the remote file
                 directly to a local file stream. The
                     <code class="literal">java.io.File</code> handle is then used as the
-                <a class="link" href="FTP2Exchange" target="_top">Exchange</a> body. The file
-                producer leverages this fact and can work directly on the work
-                file <code class="literal">java.io.File</code> handle and perform a
+                Exchange body (for more details, see <a class="link" href="http://camel.apache.org/ftp2.html" target="_top">Using Local Work
+                    Directory</a>). The file producer leverages this fact and
+                can work directly on the work file
+                    <code class="literal">java.io.File</code> handle and perform a
                     <code class="literal">java.io.File.rename</code> to the target
                 filename. As Apache Camel knows it's a local work file, it can
                 optimize and use a rename instead of a file copy, since the work

@@ -23,9 +23,9 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
       must include the session-related fields in the FIX message being sent. If a session is
       specified in the URI then the component will automatically inject the session-related fields
       into the FIX message.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_ExchangeFormat"></a>Exchange Format</h2></div></div></div><p>The exchange headers include information to help with exchange filtering, routing and
-      other processing. The following headers are available:</p><table id="d0e62812"><tr>
-        <th> Header Name </th>
-        <th> Description </th>
+      other processing. The following headers are available:</p><table id="d0e65827"><tr>
+        <th>Header Name </th>
+        <th>Description </th>
       </tr><tr>
         <td>
           <code class="code">EventCategory</code>
@@ -64,9 +64,9 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
         manual</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_CommunicationConnectors"></a>Communication Connectors</h2></div></div></div><p>When the component detects an initiator or acceptor session setting in the QuickFIX/J
       configuration file it will automatically create the corresponding initiator and/or acceptor
       connector. These settings can be in the default or in a specific session section of the
-      configuration file.</p><table id="d0e62912"><tr>
-        <th> Session Setting </th>
-        <th> Component Action </th>
+      configuration file.</p><table id="d0e65928"><tr>
+        <th>Session Setting </th>
+        <th>Component Action </th>
       </tr><tr>
         <td><code class="literal">ConnectionType=initiator</code>
         </td>
@@ -77,9 +77,9 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
         <td> Create an acceptor connector </td>
       </tr></table><p>The threading model for the QuickFIX/J session connectors can also be specified. These
       settings affect all sessions in the configuration file and must be placed in the settings
-      default section.</p><table id="d0e62943"><tr>
-        <th> Default/Global Setting </th>
-        <th> Component Action </th>
+      default section.</p><table id="d0e65960"><tr>
+        <th>Default/Global Setting </th>
+        <th>Component Action </th>
       </tr><tr>
         <td><code class="literal">ThreadModel=ThreadPerConnector</code>
         </td>
@@ -94,9 +94,9 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_Logging"></a>Logging</h2></div></div></div><p>The QuickFIX/J logger implementation can be specified by including the following settings
       in the default section of the configuration file. The <code class="literal">ScreenLog</code> is the
       default if none of the following settings are present in the configuration. It's an error to
-      include settings that imply more than one log implementation.</p><table id="d0e62992"><tr>
-        <th> Default/Global Setting </th>
-        <th> Component Action </th>
+      include settings that imply more than one log implementation.</p><table id="d0e66010"><tr>
+        <th>Default/Global Setting </th>
+        <th>Component Action </th>
       </tr><tr>
         <td><code class="literal">ScreenLogShowEvents</code>
         </td>
@@ -130,7 +130,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_MessageStore"></a>Message Store</h2></div></div></div><p>The QuickFIX/J message store implementation can be specified by including the following
       settings in the default section of the configuration file. The <code class="literal">MemoryStore</code>
       is the default if none of the following settings are present in the configuration. It's an
-      error to include settings that imply more than one message store implementation.</p><table id="d0e63089"><tr>
+      error to include settings that imply more than one message store implementation.</p><table id="d0e66108"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -150,7 +150,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange</pre></d
         </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_MessageFactory"></a>Message Factory</h2></div></div></div><p>A message factory is used to construct domain objects from raw FIX messages. The default
       message factory is <code class="literal">DefaultMessageFactory</code>. However, advanced applications
-      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e63148"><tr>
+      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e66167"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>

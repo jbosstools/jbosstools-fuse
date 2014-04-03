@@ -17,150 +17,138 @@
                 which means that you cannot use the JDBC component in a
                     <code class="literal">from()</code> statement.</p></td></tr></table></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>This component cannot be used as a transactional client. If
                 you need transaction support in your route, use the <a href="PLUGINS_ROOT/com.fusesource.rider.help/sql.html" class="olink">SQL Component</a> component
-                instead.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JDBC_HSH_Options"></a>Options</h2></div></div></div><table id="d0e56119"><tr>
-                <th> Name </th>
-                <th> Default Value </th>
-                <th> Description </th>
+                instead.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_JDBC_HSH_Options"></a>Options</h2></div></div></div><table id="d0e58925"><tr>
+                <th>Name </th>
+                <th>Description </th>
             </tr><tr>
                 <td>
                     <code class="literal">readSize</code>
                 </td>
-                <td>
-                    <code class="literal">0</code>
-                </td>
-                <td> The default maximum number of rows that can be read by a
-                    polling query.</td>
+                <td><p>The default maximum number of rows that can be read by a
+                    polling query.</p>
+                    <p>The defaut is <code class="literal">0</code>.</p></td>
             </tr><tr>
                 <td>
                     <code class="literal">statement.&lt;xxx&gt;</code>
                 </td>
-                <td>
-                    <code class="literal">null</code>
-                </td>
-                <td><span class="bold"><strong>Apache Camel 2.1:</strong></span> Sets
+                <td><p><span class="bold"><strong>Apache Camel 2.1:</strong></span> Sets
                     additional options on the
-                        <code class="literal">java.sql.Statement</code> that is used
-                    behind the scenes to execute the queries. For instance,
-                        <code class="literal">statement.maxRows=10</code>. For detailed
-                    documentation, see the <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/sql/Statement.html" target="_top"><code class="literal">java.sql.Statement</code>
-                        javadoc</a> documentation. </td>
+                    <code class="literal">java.sql.Statement</code>, which is used
+                    behind the scenes to execute the queries. For example,
+                    <code class="literal">statement.maxRows=10</code>.</p>
+                    <p>For details, see the <a class="link" href="http://java.sun.com/j2se/1.5.0/docs/api/java/sql/Statement.html" target="_top"><code class="literal">java.sql.Statement</code>
+                            javadoc</a> documentation.</p>
+                    <p>The default is <code class="literal">null</code>.</p></td>
             </tr><tr>
                 <td>
                     <code class="literal">useJDBC4ColumnNameAndLabel</code>
                     <code class="literal">Semantics</code>
                 </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td>Sets whether to use JDBC 4/3 column label/name semantics.
-                    You can use this option to turn it <code class="literal">false</code>
-                    in case you have issues with your JDBC driver to select
-                    data. This only applies when using <code class="literal">SQL
-                        SELECT</code> using aliases (e.g. <code class="literal">SQL SELECT
-                        id as identifier, name as given_name from
-                        persons</code>). </td>
+                <td><p>Specifies whether to use JDBC 4/3 column label/name semantics. Set this
+                        option to <code class="literal">false</code> if  you have issues
+                        with your JDBC driver selecting data. This only applies
+                        when using <code class="literal">SQL SELECT</code> using aliases
+                        (e.g. <code class="literal">SQL SELECT id as identifier, name as
+                            given_name from persons</code>).</p>
+                    <p>The default is <code class="literal">true</code>.</p></td>
             </tr><tr>
                 <td>
                     <code class="literal">resetAutoCommit</code>
                 </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.9:</strong></span> Camel will set
-                    the autoCommit on the JDBC connection to be false, commit
-                    the change after executed the statement and reset the
-                    autoCommit flag of the connection at the end, if the
-                    resetAutoCommit is true. If the JDBC connection doesn't
-                    support to reset the autoCommit flag, you can set the
-                    resetAutoCommit flag to be false, and Camel will not try to
-                    reset the autoCommit flag.</td>
+                <td><p><span class="bold"><strong>Camel 2.9:</strong></span> Camel sets
+                    the <code class="literal">autoCommit</code> on
+                    the JDBC connection to <code class="literal">false</code>, commits the change after
+                    executing the statement, and resets the
+                    <code class="literal">autoCommit</code> flag
+                    of the connection at the end if <code class="literal">resetAutoCommit</code> is
+                    <code class="literal">true</code>.</p>
+                    <p>If the JDBC connection doesn't
+                    support resetting
+                    the <code class="literal">autoCommit</code> flag, you can set the
+                    <code class="literal">resetAutoCommit</code>
+                    flag to <code class="literal">false</code>, to prevent Camel from
+                    trying to reset the
+                    <code class="literal">autoCommit</code> flag.</p>
+                    <p>The default is <code class="literal">true</code>.</p></td>
             </tr><tr>
                 <td>
                     <code class="literal">allowNamedParameters</code>
                 </td>
-                <td>
-                    <code class="literal">true</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.12:</strong></span> Whether to
-                    allow using named parameters in the queries. </td>
+                <td><p><span class="bold"><strong>Camel 2.12:</strong></span> Whether to
+                    allow using named parameters in the queries.</p>
+                    <p>The default is <code class="literal">true</code>.</p></td>
             </tr><tr>
-                <td>
-                    <code class="literal">prepareStatementStrategy</code>
-                </td>
                 <td></td>
-                <td><span class="bold"><strong>Camel 2.12:</strong></span> Allows to
+                <td><p><span class="bold"><strong>Camel 2.12:</strong></span> Allows to
                     plugin to use a custom
                         <code class="literal">org.apache.camel.component.jdbc.JdbcPrepareStatementStrategy</code>
-                    to control preparation of the query and prepared statement.
+                    to control preparation of the query and prepared
+                    statement.</p>
+                    <p>The default is <code class="literal">prepareStatementStrategy</code>.</p>
                 </td>
             </tr><tr>
                 <td>
                     <code class="literal">useHeadersAsParameters</code>
                 </td>
-                <td>
-                    <code class="literal">false</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.12:</strong></span> Set this option
+                <td><p><span class="bold"><strong>Camel 2.12:</strong></span> Set this option
                     to <code class="literal">true</code> to use the
                         <code class="literal">prepareStatementStrategy</code> with named
                     parameters. This allows to define queries with named
                     placeholders, and use headers with the dynamic values for
-                    the query placeholders. </td>
+                    the query placeholders.</p>
+                    <p>The default is <code class="literal">false</code>.</p></td>
             </tr><tr>
                 <td>
                     <code class="literal">outputType</code>
                 </td>
                 <td>
-                    <code class="literal">SelectList</code>
-                </td>
-                <td>
                     <p><span class="bold"><strong>Camel 2.12.1:</strong></span> Make
-                        the output of the producer to SelectList as List of Map,
-                        or SelectOne as single Java object in the following way:
-                        a) If the query has only single column, then that JDBC
-                        Column object is returned. (such as SELECT COUNT( * )
-                        FROM PROJECT will return a Long object. b) If the query
-                        has more than one column, then it will return a Map of
-                        that result. c) If the outputClass is set, then it will
-                        convert the query result into an Java bean object by
+                        the output of the producer to <code class="literal">SelectList</code> as List of Map,
+                        or <code class="literal">SelectOne</code> as single Java object in
+                        the following way:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>If the query has only a single column,  that JDBC Column object is
+                                    returned (like <code class="literal">SELECT COUNT( * )
+                                        FROM PROJECT</code> returns a Long
+                                    object.</p></li><li class="listitem"><p>If the query
+                        has more than one column, it returns a Map of
+                        that result.</p></li><li class="listitem"><p>If the <code class="literal">outputClass</code> is set, it 
+                        converts the query result to an Java bean object by
                         calling all the setters that match the column names. It
-                        will assume your class has a default constructor to
-                        create instance with. d) If the query resulted in more
-                        than one rows, it throws an non-unique result
-                        exception.</p>
+                        assumes your class has a default constructor with which to
+                        create instance.</p></li><li class="listitem"><p>If the query resulted in more
+                        than one row, it throws an non unique result
+                        exception.</p></li></ul></div>
+                    <p>The default is <code class="literal">SelectList</code>.</p>
                 </td>
             </tr><tr>
                 <td>
                     <code class="literal">outputClass</code>
                 </td>
-                <td>
-                    <code class="literal">null</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.12.1:</strong></span> Specify the
+                <td><p><span class="bold"><strong>Camel 2.12.1:</strong></span> Specify the
                     full package and class name to use as conversion when
-                    outputType=SelectOne. </td>
+                    <code class="literal">outputType=SelectOne</code>.</p>
+                    <p>The default is <code class="literal">null</code>.</p></td>
             </tr><tr>
                 <td>
                     <code class="literal">beanRowMapper</code>
                 </td>
-                <td></td>
-                <td><span class="bold"><strong>Camel 2.12.1:</strong></span> To use a
+                <td><p><span class="bold"><strong>Camel 2.12.1:</strong></span> To use a
                     custom
                         <code class="literal">org.apache.camel.component.jdbc.BeanRowMapper</code>
                     when using <code class="literal">outputClass</code>. The default
                     implementation will lower case the row names and skip
                     underscores, and dashes. For example
                         <code class="literal">"CUST_ID"</code> is mapped as
-                        <code class="literal">"custId"</code>. </td>
+                    <code class="literal">"custId"</code>.</p>
+                </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="JDBC_HSH_Result"></a>Result</h2></div></div></div><p>By default, the result is returned in the OUT body as an
                 <code class="literal">ArrayList&lt;HashMap&lt;String, Object&gt;&gt;</code>. The
                 <code class="literal">List</code> object contains the list of rows and the
                 <code class="literal">Map</code> objects contain each row with the
                 <code class="literal">String</code> key as the column name.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>This component fetches <code class="literal">ResultSetMetaData</code> to
                 be able to return the column name as the key in the
-                    <code class="literal">Map</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="JDBC_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table width="1129" id="d0e56385"><col width="26%"><col width="74%"><tr>
-                <th> Header </th>
-                <th> Description </th>
+                    <code class="literal">Map</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="JDBC_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table width="920" id="d0e59259"><col width="24%"><col width="76%"><tr>
+                <th>Header </th>
+                <th>Description </th>
             </tr><tr>
                 <td>
                     <code class="literal">CamelJdbcRowCount</code>
