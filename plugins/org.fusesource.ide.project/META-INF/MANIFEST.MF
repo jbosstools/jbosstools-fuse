@@ -17,5 +17,4 @@ Require-Bundle: org.fusesource.ide.commons,
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.project.Activator
 Export-Package: org.fusesource.ide.project,
- org.fusesource.ide.project.actions,
  org.fusesource.ide.project.providers
