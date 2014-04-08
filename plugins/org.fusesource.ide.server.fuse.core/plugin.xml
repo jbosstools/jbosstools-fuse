@@ -103,15 +103,15 @@
           os="linux">
     </runtime>
     <runtime
-          archivePath="jboss-fuse-6.1.0.redhat-376"
-          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.1.0.redhat-376/jboss-fuse-full-6.1.0.redhat-376.zip"
+          archivePath="jboss-fuse-6.1.0.redhat-379"
+          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.1.0.redhat-379/jboss-fuse-full-6.1.0.redhat-379.zip"
           id="org.fusesource.ide.fuseesb.runtime.61"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="win32">
     </runtime>
     <runtime
-          archivePath="jboss-fuse-6.1.0.redhat-376"
-          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.1.0.redhat-376/jboss-fuse-full-6.1.0.redhat-376.zip"
+          archivePath="jboss-fuse-6.1.0.redhat-379"
+          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.1.0.redhat-379/jboss-fuse-full-6.1.0.redhat-379.zip"
           id="org.fusesource.ide.fuseesb.runtime.61"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="linux">
