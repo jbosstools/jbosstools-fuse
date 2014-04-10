@@ -169,6 +169,7 @@ public class CamelVirtualFolder {
 				// camel virtual folder too
 				try {
 					if (resource != null
+							&& resource instanceof IFile
 							&& ((IFile) resource).getContentDescription() != null
 							&& ((IFile) resource)
 									.getContentDescription()
