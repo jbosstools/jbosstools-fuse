@@ -32,23 +32,27 @@ public class CamelNatureTester extends PropertyTester {
 				return enabled == true;
 			} else if (property.equals("camelNatureDisabled")) {
 				return enabled == false;
+			} else if (property.equals("projectOpen")) {
+				return project.isOpen() == true;
 			}
 		}
 		return false;
 	}
 
 	private boolean isCamelNatureDefined(IProject project) {
-		try {
-			IProjectDescription description = project.getDescription();
-			String[] natures = description.getNatureIds();
+		if (project.isOpen()) {
+			try {
+				IProjectDescription description = project.getDescription();
+				String[] natures = description.getNatureIds();
 
-			for (int i = 0; i < natures.length; ++i) {
-				if (RiderProjectNature.NATURE_ID.equals(natures[i])) {
-					return true;
+				for (int i = 0; i < natures.length; ++i) {
+					if (RiderProjectNature.NATURE_ID.equals(natures[i])) {
+						return true;
+					}
 				}
+			} catch (CoreException e) {
+				RiderLogFacade.getLog(Activator.getDefault().getLog()).error(e);
 			}
-		} catch (CoreException e) {
-			RiderLogFacade.getLog(Activator.getDefault().getLog()).error(e);
 		}
 		return false;
 	}
