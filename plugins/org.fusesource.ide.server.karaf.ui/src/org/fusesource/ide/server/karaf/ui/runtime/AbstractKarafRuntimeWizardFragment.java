@@ -133,7 +133,7 @@ public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment 
 	}
 
 	public void enter() {
-		if (composite != null) {
+		if (composite != null && composite.isDisposed() == false) {
 			IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel()
 					.getObject(TaskModel.TASK_RUNTIME);
 			composite.setRuntime(runtime);
