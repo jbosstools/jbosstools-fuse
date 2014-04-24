@@ -50,7 +50,7 @@ import org.eclipse.wst.server.ui.internal.wizard.TaskWizard;
 import org.eclipse.wst.server.ui.internal.wizard.fragment.LicenseWizardFragment;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
-import org.fusesource.ide.server.karaf.core.KarafUtils;
+import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.fusesource.ide.server.karaf.ui.Messages;
 
 @SuppressWarnings("restriction")
@@ -96,9 +96,6 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				if (valid) {
 					String installDir = txtKarafDir.getText();
 					model.setKarafInstallDir(installDir);
-					model.setKarafPropertiesFileLocation(getKarafPropFileLocation(installDir));
-					model.setKarafVersion(KarafUtils.getVersion(new File(
-							installDir)));
 				}
 			}
 		}

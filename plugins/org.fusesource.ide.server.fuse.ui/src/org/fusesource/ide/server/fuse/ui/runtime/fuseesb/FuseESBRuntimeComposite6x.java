@@ -18,7 +18,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
-import org.fusesource.ide.server.fuse.core.FuseESBUtils;
 import org.fusesource.ide.server.fuse.ui.Messages;
 import org.fusesource.ide.server.karaf.ui.runtime.KarafWizardDataModel;
 import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeComposite2x;
@@ -29,16 +28,8 @@ import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeComposite2x;
  */
 public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 
-	protected static final String CONF_FOLDER = "etc";
-	protected static final String CONF_FILE_NAME = "org.apache.karaf.shell.cfg";
-	public static final String CONF_FILE = String.format("%s%s%s", CONF_FOLDER, SEPARATOR, CONF_FILE_NAME);
-	protected static final String LIB_FOLDER = "lib";
-	protected static final String LIB_BIN_FOLDER = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "bin");
-	protected static final String LIB_KARAF_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "karaf.jar");
-	protected static final String LIB_KARAF_JAAS_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "karaf-jaas-boot.jar");
-	protected static final String LIB_KARAF_CLIENT_JAR = String.format("%s%s%s", LIB_BIN_FOLDER, SEPARATOR, "karaf-client.jar");
-	private static final String LIB_ESB_VERSION_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "esb-version.jar");
-
+	private static final String LIB_FUSE_VERSION_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "servicemix-version.jar");
+	
 	/**
 	 * constructor 
 	 * 
@@ -51,51 +42,51 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 		wizardHandle.setTitle(Messages.FuseESBRuntimeComposite_wizard_tite);
 		wizardHandle.setDescription(Messages.FuseESBRuntimeComposite_wizard_desc);
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.ui.runtime.AbstractKarafRuntimeComposite#doClassPathEntiresExist(java.lang.String)
+	 * @see org.fusesource.ide.server.servicemix.ui.runtime.AbstractKarafRuntimeComposite#doClassPathEntiresExist(java.lang.String)
 	 */
 	@Override
 	protected boolean doClassPathEntiresExist(String karafInstallDir) {
-		File libESBVersionJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_ESB_VERSION_JAR));
-		return super.doClassPathEntiresExist(karafInstallDir) && libESBVersionJar.exists();
+		File libServiceMixVersionJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_FUSE_VERSION_JAR));
+		return super.doClassPathEntiresExist(karafInstallDir) && libServiceMixVersionJar.exists();
 	}
-
+	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.ui.runtime.AbstractKarafRuntimeComposite#validate()
+	 * @see org.fusesource.ide.server.servicemix.ui.runtime.AbstractKarafRuntimeComposite#validate()
 	 */
 	@Override
 	public boolean validate() {
-		valid = false;
-
-		String dirLocation = txtKarafDir.getText().trim();
-		if (dirLocation != null && !"".equals(dirLocation)) { 
-			File file = new File(dirLocation);
-			if (!file.exists()) {
-				wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_no_dir,
-						IMessageProvider.ERROR);
-			} else if (!file.isDirectory()) {
-				wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_not_a_dir,
-						IMessageProvider.ERROR);
-			} else {
-				File binFuseESB = new File(dirLocation + SEPARATOR + Messages.FuseESBRuntimeComposite_bin_fuseesb); 
-				File binFuseESBBat = new File(dirLocation + SEPARATOR + Messages.FuseESBRuntimeComposite_bin_fuseesb_bat); 
-				File confFile = new File(getKarafPropFileLocation(dirLocation));
-				if ((binFuseESB.exists() || binFuseESBBat.exists() )&& confFile.exists()
-						&& doClassPathEntiresExist(dirLocation)) {
-					valid = true;
-					wizardHandle.setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
-				} else {
-					wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_invalid_dir, IMessageProvider.ERROR); //$NON-NLS-1$
+		valid = super.validate();
+		
+		if (valid) {
+			String dirLocation = txtKarafDir.getText().trim();
+			if (dirLocation != null && !"".equals(dirLocation)) { 
+				File file = new File(dirLocation);
+				if (!file.exists()) {
+					wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_no_dir,
+							IMessageProvider.ERROR);
+				} else if (!file.isDirectory()) {
+					wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_not_a_dir,
+							IMessageProvider.ERROR);
+				} else{
+					File binFuse = new File(dirLocation + SEPARATOR + Messages.FuseESBRuntimeComposite_bin_fuseesb); 
+					File binFuseBat = new File(dirLocation + SEPARATOR + Messages.FuseESBRuntimeComposite_bin_fuseesb_bat); 
+					if (binFuse.exists() || binFuseBat.exists() ) {
+						valid = true;
+						wizardHandle.setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
+					} else {
+						wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_invalid_dir, IMessageProvider.ERROR); //$NON-NLS-1$
+					}
 				}
-			}
-		} else {
-			wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_wizard_help_msg, IMessageProvider.NONE); //$NON-NLS-1$
+			} else {
+				wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_wizard_help_msg, IMessageProvider.NONE); //$NON-NLS-1$
+			}	
 		}
-
+		
 		return valid;
 	}
-
+	
 	public void handleEvent(Event event) {
 		boolean valid = false;
 		if (event.type == SWT.FocusIn){
@@ -106,12 +97,10 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 				if (valid){
 					String installDir = txtKarafDir.getText();
 					model.setKarafInstallDir(installDir);
-					model.setKarafPropertiesFileLocation(getKarafPropFileLocation(installDir));
-					model.setKarafVersion(FuseESBUtils.getVersion(new File(installDir)));
 				}
 			}
 		}
-
+		
 		wizardHandle.update();
 	}
 }

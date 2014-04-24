@@ -23,9 +23,9 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
-import org.fusesource.ide.server.karaf.core.KarafUtils;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
+import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 
 public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment {
 
@@ -87,9 +87,8 @@ public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment 
 			IKarafRuntime karafRuntime = (IKarafRuntime) workingCopy
 					.loadAdapter(IKarafRuntime.class, new NullProgressMonitor());
 			if (karafRuntime != null) {
-				model.setKarafInstallDir(karafRuntime.getKarafInstallDir());
-				model.setKarafVersion(KarafUtils.getVersion(new File(model
-						.getKarafInstallDir())));
+				IPath loc = karafRuntime.getLocation();
+				model.setKarafInstallDir(loc == null ? null : loc.toOSString());
 			}
 		}
 	}
@@ -109,12 +108,6 @@ public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment 
 				String installDir = model.getKarafInstallDir();
 				IPath path = new Path(installDir);
 				workingCopy.setLocation(path);
-				karafRuntimeWorkingCopy.setKarafInstallDir(path
-						.removeTrailingSeparator().toOSString());
-				karafRuntimeWorkingCopy.setKarafPropertiesFileLocation(model
-						.getKarafPropertiesFileLocation());
-				karafRuntimeWorkingCopy
-						.setKarafVersion(model.getKarafVersion());
 			}
 		}
 		try {

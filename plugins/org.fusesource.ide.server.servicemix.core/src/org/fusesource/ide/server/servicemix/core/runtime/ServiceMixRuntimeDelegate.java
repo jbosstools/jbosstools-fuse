@@ -29,17 +29,11 @@ public class ServiceMixRuntimeDelegate extends KarafRuntimeDelegate {
 	@Override
 	public IStatus validate() {
 		String id = getRuntime().getRuntimeType().getId();
-		String version = getKarafVersion();
-		if (version != null && version.trim().startsWith("4.0")) {
-			if (!id.toLowerCase().endsWith("smx.runtime.40")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("4.2")) {
-			if (!id.toLowerCase().endsWith("smx.runtime.42")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("4.3")) {
-			if (!id.toLowerCase().endsWith("smx.runtime.43")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("4.4")) {
-			if (!id.toLowerCase().endsWith("smx.runtime.44")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("4.5")) {
-			if (!id.toLowerCase().endsWith("smx.runtime.45")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+		String version = getVersion();
+		if (version != null && version.trim().startsWith("4.5")) {
+			if (!id.toLowerCase().endsWith("servicemix.runtime.45")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+		} else if (version != null && version.trim().startsWith("5.0")) {
+			if (!id.toLowerCase().endsWith("servicemix.runtime.50")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
 		}

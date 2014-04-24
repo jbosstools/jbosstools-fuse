@@ -17,15 +17,15 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegateWorkingCopy;
 
 
 public class PortNumberChangeOperation extends AbstractOperation {
 
-	private final IServerConfigurationWorkingCopy copy;
+	private final IKarafServerDelegateWorkingCopy copy;
 	private final int newPort;
 	private final int oldPort;
-	public PortNumberChangeOperation(IServerConfigurationWorkingCopy copy, int newPort,String label) {
+	public PortNumberChangeOperation(IKarafServerDelegateWorkingCopy copy, int newPort,String label) {
 		super(label);
 		this.copy = copy;
 		oldPort = copy.getPortNumber();

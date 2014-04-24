@@ -18,10 +18,7 @@ import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 public interface IServiceMixRuntime extends IKarafRuntime{
 	
 	static final String[] SMX_RUNTIME_TYPES_SUPPORTED = new String[] {
-		  "org.fusesource.ide.smx.runtime.40"
-		, "org.fusesource.ide.smx.runtime.42"
-		, "org.fusesource.ide.smx.runtime.43"
-		, "org.fusesource.ide.smx.runtime.44"
-		, "org.fusesource.ide.smx.runtime.45"
+		  "org.fusesource.ide.servicemix.runtime.45"
+		, "org.fusesource.ide.servicemix.runtime.50"
 	};
 }

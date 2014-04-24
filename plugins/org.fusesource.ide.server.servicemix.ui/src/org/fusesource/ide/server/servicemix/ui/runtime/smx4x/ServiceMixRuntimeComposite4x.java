@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.fusesource.ide.server.karaf.ui.runtime.KarafWizardDataModel;
 import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeComposite2x;
-import org.fusesource.ide.server.servicemix.core.ServiceMixUtils;
 import org.fusesource.ide.server.servicemix.ui.Messages;
 
 
@@ -71,8 +70,8 @@ public class ServiceMixRuntimeComposite4x extends KarafRuntimeComposite2x {
 					wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_not_a_dir,
 							IMessageProvider.ERROR);
 				} else{
-					File binSMX = new File(dirLocation + SEPARATOR + Messages.AbstractKarafRuntimeComposite_bin_karaf); 
-					File binSMXBat = new File(dirLocation + SEPARATOR + Messages.AbstractKarafRuntimeComposite_bin_karaf_bat); 
+					File binSMX = new File(dirLocation + SEPARATOR + Messages.ServiceMix4xRuntimeComposite_bin_servicemix); 
+					File binSMXBat = new File(dirLocation + SEPARATOR + Messages.ServiceMix4xRuntimeComposite_bin_servicemix_bat); 
 					if (binSMX.exists() || binSMXBat.exists() ) {
 						valid = true;
 						wizardHandle.setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
@@ -98,8 +97,6 @@ public class ServiceMixRuntimeComposite4x extends KarafRuntimeComposite2x {
 				if (valid){
 					String installDir = txtKarafDir.getText();
 					model.setKarafInstallDir(installDir);
-					model.setKarafPropertiesFileLocation(getKarafPropFileLocation(installDir));
-					model.setKarafVersion(ServiceMixUtils.getVersion(new File(installDir)));
 				}
 			}
 		}

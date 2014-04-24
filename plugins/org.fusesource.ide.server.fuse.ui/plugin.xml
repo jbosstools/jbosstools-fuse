@@ -4,12 +4,12 @@
    <extension
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
-            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBRuntimeWizardFragment6x"
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBRuntimeFragment"
             id="org.fusesource.ide.server.fuse.ui.runtime.fragment.60"
             typeIds="org.fusesource.ide.fuseesb.runtime.60">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBRuntimeWizardFragment6x"
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBRuntimeFragment"
             id="org.fusesource.ide.server.fuse.ui.runtime.fragment.61"
             typeIds="org.fusesource.ide.fuseesb.runtime.61">
       </fragment>
@@ -47,15 +47,39 @@
             typeIds="org.fusesource.ide.fuseesb.runtime.61">
       </image>
    </extension>
+   
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.server.karaf.ui.launch.KarafLaunchConfigTabGroup"
+            id="org.fusesource.ide.server.fuse.ui.launch.tab"
+            type="org.fusesource.ide.server.fuseesb.launch">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.server.karaf.ui.launch.KarafLaunchConfigTabGroup"
+            id="org.fusesource.ide.server.fuse6x.launch.tab"
+            type="org.fusesource.ide.server.fuseesb6x.launch">
+      </launchConfigurationTabGroup>
+   </extension>
+   
    <extension
          point="org.eclipse.wst.server.ui.editorPageSections">
       <section
             class="org.fusesource.ide.server.fuse.ui.editor.FuseESBConnectionDetailsEditorSection"
-            id="org.fusesource.ide.server.fuseesb.ui.connection.details"
+            id="org.fusesource.ide.server.fuse.ui.connection.details"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
             typeIds="org.fusesource.ide.fuseesb.server.*">
       </section>
    </extension>
-
+   
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.fusesource.ide.server.fuseesb.launch"
+            icon="icons/run_fuse_server.png"
+            id="org.fusesource.ide.server.fuse.ui.launch.image">
+      </launchConfigurationTypeImage>
+   </extension>
+   
 </plugin>

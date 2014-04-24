@@ -39,14 +39,14 @@
 
   <extension point="org.eclipse.wst.server.core.serverTypes">
      <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           behaviourClass="org.fusesource.ide.server.fuse.core.server.ControllableFuseServerBehaviour"
            class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
            description="%fuseESBServerDescription_60"
            hasConfiguration="true"
            id="org.fusesource.ide.fuseesb.server.60"
            initialState="stopped"
            launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           launchConfigId="org.fusesource.ide.server.fuseesb6x.launch"
            name="%fuseESBServerType_60"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.60"
@@ -55,13 +55,13 @@
            supportsRemoteHosts="false">
      </serverType>
      <serverType
-           behaviourClass="org.fusesource.ide.server.fuse.core.server.FuseESBServerBehaviourDelegate"
+           behaviourClass="org.fusesource.ide.server.fuse.core.server.ControllableFuseServerBehaviour"
            class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
            description="%fuseESBServerDescription_61"
            hasConfiguration="true"
            id="org.fusesource.ide.fuseesb.server.61"
            initialState="stopped"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           launchConfigId="org.fusesource.ide.server.fuseesb6x.launch"
            launchModes="run"
            name="%fuseESBServerType_61"
            runtime="true"
@@ -87,35 +87,78 @@
        class="org.fusesource.ide.server.fuse.core.server.FuseESBServerLocator"/>
   </extension>
 
-  <extension point="org.eclipse.wst.server.core.installableRuntimes">
-    <runtime
-          archivePath="jboss-fuse-6.0.0.redhat-059"
-          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.0.0.redhat-059/jboss-fuse-full-6.0.0.redhat-059.zip"
-          id="org.fusesource.ide.fuseesb.runtime.60"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="win32">
-    </runtime>
-    <runtime
-          archivePath="jboss-fuse-6.0.0.redhat-059"
-          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.0.0.redhat-059/jboss-fuse-full-6.0.0.redhat-059.zip"
-          id="org.fusesource.ide.fuseesb.runtime.60"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="linux">
-    </runtime>
-    <runtime
-          archivePath="jboss-fuse-6.1.0.redhat-312"
-          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.1.0.redhat-312/jboss-fuse-full-6.1.0.redhat-312.zip"
-          id="org.fusesource.ide.fuseesb.runtime.61"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="win32">
-    </runtime>
-    <runtime
-          archivePath="jboss-fuse-6.1.0.redhat-312"
-          archiveUrl="https://repository.jboss.org/nexus/content/groups/ea/org/jboss/fuse/jboss-fuse-full/6.1.0.redhat-312/jboss-fuse-full-6.1.0.redhat-312.zip"
-          id="org.fusesource.ide.fuseesb.runtime.61"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="linux">
-    </runtime>
+    <!-- new stuff -->
+  <extension
+        point="org.eclipse.debug.core.launchConfigurationTypes">
+     <launchConfigurationType
+           delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
+           id="org.fusesource.ide.server.fuseesb6x.launch"
+           modes="run"
+           name="%fuseesb.launch.name"
+           public="true">
+     </launchConfigurationType>
+  </extension>
+  
+  <extension
+        point="org.jboss.ide.eclipse.as.wtp.core.serverBeanTypeProvider">
+     <serverBeanTypeProvider
+           class="org.fusesource.ide.server.fuse.core.bean.FuseBeanProvider"
+           weight="5">
+     </serverBeanTypeProvider>
+  </extension>
+  <extension
+        point="org.jboss.tools.runtime.core.downloadRuntimeProvider">
+     <provider
+           class="org.fusesource.ide.server.fuse.core.runtime.integration.FuseDownloadRuntimesProvider">
+     </provider>
+  </extension>
+  <extension
+        point="org.jboss.tools.runtime.core.runtimeDetectors">
+     <runtimeDetector
+           class="org.fusesource.ide.server.fuse.core.runtime.integration.FuseRuntimeDetector"
+           enabled="true"
+           id="org.fusesource.ide.server.fuse.core.runtime.integration.FuseRuntimeDetection"
+           name="JBoss Fuse">
+     </runtimeDetector>
+  </extension>
+  
+  <extension
+         point="org.jboss.ide.eclipse.as.wtp.core.serverSubsystem">
+         <subsystem
+            system="launch"
+            id="launch.fuse.local.default"
+            name="Local JBoss Fuse Launch Controller"
+            class="org.fusesource.ide.server.fuse.core.server.subsystems.Fuse6xLaunchController">
+         </subsystem>
+         <subsystemMapping
+            id="launch.fuse.local.default"
+            mappedId="launch.fuse.local"
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+         </subsystemMapping>
+         
+         <subsystem
+            system="shutdown"
+            id="shutdown.fuse.local.default"
+            name="Local JBoss Fuse Shutdown Controller"
+            class="org.fusesource.ide.server.fuse.core.server.subsystems.Fuse6xShutdownController">
+         </subsystem>
+         <subsystemMapping
+            id="shutdown.fuse.local.default"
+            mappedId="shutdown.fuse.local"
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+         </subsystemMapping>
+         
+         <subsystem
+            system="port"
+            id="port.fuse.local.default"
+            name="Local JBoss Fuse Port Controller"
+            class="org.fusesource.ide.server.fuse.core.server.subsystems.Fuse6xPortController">
+         </subsystem>
+         <subsystemMapping
+            id="port.fuse.local.default"
+            mappedId="port.fuse.local"
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+         </subsystemMapping>
   </extension>
   
 </plugin>

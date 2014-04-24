@@ -4,118 +4,85 @@
    <extension
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.40"
-            typeIds="org.fusesource.ide.smx.runtime.40">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.42"
-            typeIds="org.fusesource.ide.smx.runtime.42">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.43"
-            typeIds="org.fusesource.ide.smx.runtime.43">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.44"
-            typeIds="org.fusesource.ide.smx.runtime.44">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeWizardFragment4x"
+            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeFragment"
             id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.45"
-            typeIds="org.fusesource.ide.smx.runtime.45">
+            typeIds="org.fusesource.ide.servicemix.runtime.45">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.server.fragment.40"
-            typeIds="org.fusesource.ide.smx.server.40">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.server.fragment.42"
-            typeIds="org.fusesource.ide.smx.server.42">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.server.fragment.43"
-            typeIds="org.fusesource.ide.smx.server.43">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.server.fragment.44"
-            typeIds="org.fusesource.ide.smx.server.44">
+            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeFragment"
+            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.50"
+            typeIds="org.fusesource.ide.servicemix.runtime.50">
       </fragment>
       <fragment
             class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
             id="org.fusesource.ide.server.servicemix.ui.server.fragment.45"
-            typeIds="org.fusesource.ide.smx.server.45">
+            typeIds="org.fusesource.ide.servicemix.server.45">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
+            id="org.fusesource.ide.server.servicemix.ui.server.fragment.50"
+            typeIds="org.fusesource.ide.servicemix.server.50">
       </fragment>
    </extension>
    <extension
          point="org.eclipse.wst.server.ui.serverImages">
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.server.image.40"
-            typeIds="org.fusesource.ide.smx.server.40">
+            id="org.fusesource.ide.server.servicemix.ui.server.image.45"
+            typeIds="org.fusesource.ide.servicemix.server.45">
       </image>
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.server.image.42"
-            typeIds="org.fusesource.ide.smx.server.42">
+            id="org.fusesource.ide.server.servicemix.ui.server.image.50"
+            typeIds="org.fusesource.ide.servicemix.server.50">
       </image>
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.server.image.43"
-            typeIds="org.fusesource.ide.smx.server.43">
+            id="org.fusesource.ide.server.servicemix.ui.runtime.image.45"
+            typeIds="org.fusesource.ide.servicemix.runtime.45">
       </image>
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.server.image.44"
-            typeIds="org.fusesource.ide.smx.server.44">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.server.image.45"
-            typeIds="org.fusesource.ide.smx.server.45">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.runtime.image.40"
-            typeIds="org.fusesource.ide.smx.runtime.40">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.runtime.image.42"
-            typeIds="org.fusesource.ide.smx.runtime.42">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.runtime.image.43"
-            typeIds="org.fusesource.ide.smx.runtime.43">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.runtime.image.44"
-            typeIds="org.fusesource.ide.smx.runtime.44">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.smx.ui.runtime.image.45"
-            typeIds="org.fusesource.ide.smx.runtime.45">
+            id="org.fusesource.ide.server.servicemix.ui.runtime.image.50"
+            typeIds="org.fusesource.ide.servicemix.runtime.50">
       </image>
    </extension>
+   
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.server.karaf.ui.launch.KarafLaunchConfigTabGroup"
+            id="org.fusesource.ide.server.servicemix.ui.launch.tab"
+            type="org.fusesource.ide.server.servicemix.launch">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.server.karaf.ui.launch.KarafLaunchConfigTabGroup"
+            id="org.fusesource.ide.server.servicemix4x.launch.tab"
+            type="org.fusesource.ide.server.servicemix4x.launch">
+      </launchConfigurationTabGroup>
+   </extension>
+   
+   
    <extension
          point="org.eclipse.wst.server.ui.editorPageSections">
       <section
             class="org.fusesource.ide.server.servicemix.ui.editor.SmxConnectionDetailsEditorSection"
-            id="org.fusesource.ide.server.smx.ui.connection.details"
+            id="org.fusesource.ide.server.servicemix.ui.connection.details"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
-            typeIds="org.fusesource.ide.smx.server.*">
+            typeIds="org.fusesource.ide.servicemix.server.*">
       </section>
    </extension>
 
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.fusesource.ide.server.servicemix.launch"
+            icon="icons/run_fuse_server.png"
+            id="org.fusesource.ide.server.servicemix.ui.launch.image">
+      </launchConfigurationTypeImage>
+   </extension>
+
+
+   
 </plugin>

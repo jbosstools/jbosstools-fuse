@@ -17,15 +17,15 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegateWorkingCopy;
 
 
 public class UserNameChangeOperation extends AbstractOperation {
 
-	private final IServerConfigurationWorkingCopy copy;
+	private final IKarafServerDelegateWorkingCopy copy;
 	private final String newUserName;
 	private final String oldUserName;
-	public UserNameChangeOperation(IServerConfigurationWorkingCopy copy, String newUserName,String label) {
+	public UserNameChangeOperation(IKarafServerDelegateWorkingCopy copy, String newUserName,String label) {
 		super(label);
 		this.copy = copy;
 		oldUserName = copy.getUserName();

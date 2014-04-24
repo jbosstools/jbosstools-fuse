@@ -11,14 +11,10 @@
 
 package org.fusesource.ide.server.servicemix.ui.runtime.smx4x;
 
-import java.io.File;
-
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.ui.internal.ImageResource;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
-import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x;
-import org.fusesource.ide.server.servicemix.core.ServiceMixUtils;
 import org.fusesource.ide.server.servicemix.ui.Messages;
 
 
@@ -38,24 +34,5 @@ public class ServiceMixServerWizardFragment4x extends
 		handle.setDescription(Messages.ServiceMixServerPorpertiesComposite_wizard_desc);
 		handle.setImageDescriptor(ImageResource.getImageDescriptor(ImageResource.IMG_WIZBAN_NEW_RUNTIME));
 		return c;
-	}
-	
-	/**
-	 * determines the version of the karaf installation from the manifest of the main bundle
-	 * 
-	 * @param runtime	the runtime to use for grabbing the install location
-	 * @return	the version as string or null on errors
-	 */
-	protected String determineVersion(IKarafRuntime runtime) {
-		String version = null;
-		
-		if (runtime != null && runtime.getKarafInstallDir() != null) {
-			File folder = new File(runtime.getKarafInstallDir());
-			if (folder.exists() && folder.isDirectory()) {
-				version = ServiceMixUtils.getVersion(folder);
-			}
-		}
-		
-		return version;
 	}
 }

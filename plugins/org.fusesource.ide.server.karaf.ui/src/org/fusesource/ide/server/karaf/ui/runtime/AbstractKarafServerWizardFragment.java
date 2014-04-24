@@ -24,10 +24,10 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
-import org.fusesource.ide.server.karaf.core.KarafUtils;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
-import org.fusesource.ide.server.karaf.core.server.IServerConfiguration;
-import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegateWorkingCopy;
+import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 
 
 public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
@@ -84,7 +84,7 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 		if (model != null && workingCopy != null) {
 			// workCopy will be instance of ServerDelegate classs.
 			// We need to get the params, so IFuseESBRuntime will be enough.
-			IServerConfiguration karafServerWorkingCopy = (IServerConfiguration) workingCopy.loadAdapter(IServerConfiguration.class, new NullProgressMonitor());
+			IKarafServerDelegate karafServerWorkingCopy = (IKarafServerDelegate) workingCopy.loadAdapter(IKarafServerDelegate.class, new NullProgressMonitor());
 			if (karafServerWorkingCopy != null) {
 				model.setUserName(karafServerWorkingCopy.getUserName());
 				model.setPassword(karafServerWorkingCopy.getPassword());
@@ -95,27 +95,11 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 				IKarafRuntime karafRuntime = (IKarafRuntime)runtime.loadAdapter(IKarafRuntime.class, null);
 				if (karafRuntime != null ) {
 					if("".equals(model.getKarafInstallDir()) || model.getKarafInstallDir() == null){
-						model.setKarafInstallDir(karafRuntime.getKarafInstallDir());
-						model.setKarafPropertiesFileLocation(karafRuntime.getKarafPropertiesFileLocation());
-						model.setKarafVersion(determineVersion(karafRuntime));
-					}
-					File confFile = new File(model.getKarafPropertiesFileLocation());
-					if (confFile != null && confFile.exists()) {
-						try {
-							readFromPropertiesFile(confFile);
-							readFromConfFile = true;
-						} catch (FileNotFoundException e) {
-							//ignore.
-						} catch (IOException e) {
-							//ignore
-						} catch(NumberFormatException e){
-							//ignore.
-						}
+						model.setKarafInstallDir(karafRuntime.getLocation().toOSString());
 					}
 				}
 			}
 			if (!readFromConfFile && karafServerWorkingCopy != null) {
-				model.setHostName(karafServerWorkingCopy.getHostName());
 				model.setPortNumber(karafServerWorkingCopy.getPortNumber());
 			}
 		}
@@ -129,11 +113,10 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 		if (workingCopy != null) {
 			// workCopy will be instance of ServerDelegate classs.
 			// We need to get the params, so IFuseESBRuntime will be enough.
-			IServerConfigurationWorkingCopy karafServerWorkingCopy = (IServerConfigurationWorkingCopy) workingCopy
-					.loadAdapter(IServerConfigurationWorkingCopy.class,
+			IKarafServerDelegateWorkingCopy karafServerWorkingCopy = (IKarafServerDelegateWorkingCopy) workingCopy
+					.loadAdapter(IKarafServerDelegateWorkingCopy.class,
 							new NullProgressMonitor());
 			if (karafServerWorkingCopy != null) {
-				karafServerWorkingCopy.setHostName(model.getHostName());
 				karafServerWorkingCopy.setPortNumber(model.getPortNumber());
 				karafServerWorkingCopy.setUserName(model.getUserName());
 				karafServerWorkingCopy.setPassword(model.getPassword());
@@ -158,14 +141,10 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 	 */
 	protected String determineVersion(IKarafRuntime runtime) {
 		String version = null;
-		
-		if (runtime != null && runtime.getKarafInstallDir() != null) {
-			File folder = new File(runtime.getKarafInstallDir());
-			if (folder.exists() && folder.isDirectory()) {
-				version = KarafUtils.getVersion(folder);
-			}
+		if (runtime != null && runtime.getLocation() != null) {
+			File folder = runtime.getLocation().toFile();
+			version = KarafUtils.getVersion(folder);
 		}
-		
 		return version;
 	}
 	
