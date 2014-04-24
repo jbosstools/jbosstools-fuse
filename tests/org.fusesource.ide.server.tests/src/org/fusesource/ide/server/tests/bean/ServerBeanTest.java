@@ -31,7 +31,6 @@ public class ServerBeanTest extends TestCase {
 		MockRuntimeCreationUtil.createRuntimeMock(
 				MockRuntimeCreationUtil.KARAF_20, dest);
 		ServerBeanLoader l = new ServerBeanLoader(dest.toFile());
-System.err.println("############ " + dest.toOSString() + " ######################");
 		ServerBean b = l.getServerBean();
 		assertTrue(b.getBeanType() == KarafBeanProvider.KARAF_2x);
 		assertEquals(b.getVersion(), "2.0");
