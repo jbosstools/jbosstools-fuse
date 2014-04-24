@@ -9,47 +9,40 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.server.tests.bean;
+package org.fusesource.ide.server.tests.locator;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 import junit.framework.TestCase;
 
 import org.eclipse.core.runtime.IPath;
-import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
+import org.eclipse.wst.server.core.model.RuntimeLocatorDelegate;
+import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeLocator;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
 import org.fusesource.ide.server.tests.util.MockRuntimeCreationUtil;
 import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
-import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
-import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-@RunWith(value = Parameterized.class)
-public class ServerBeanTest extends TestCase {
 
-	public static final HashMap<String, String> typeToVersion;
-	static {
-		typeToVersion = new HashMap<String,String>();
-		typeToVersion.put(MockRuntimeCreationUtil.KARAF_20, "2.0.0");
-		typeToVersion.put(MockRuntimeCreationUtil.KARAF_21, "2.1.6");
-		typeToVersion.put(MockRuntimeCreationUtil.KARAF_22, "2.2.11");
-		typeToVersion.put(MockRuntimeCreationUtil.KARAF_23, "2.3.5");
-	}
-	
+@RunWith(value = Parameterized.class)
+public class RuntimeLocatorTest extends TestCase {
 	@Parameters
 	public static Collection<Object[]> data() {
 		return ParametizedTestUtil.asCollection(MockRuntimeCreationUtil.SUPPORTED_RUNTIMES);
 	}
 	
 	private String fRuntimeType;
-	public ServerBeanTest(String runtimeType) {
+	public RuntimeLocatorTest(String runtimeType) {
 		fRuntimeType = runtimeType;
 	}
-
+	
 	
 	@Test
 	public void testKaraf() throws Exception {
@@ -57,10 +50,24 @@ public class ServerBeanTest extends TestCase {
 				.getStateLocation().append(fRuntimeType);
 		MockRuntimeCreationUtil.createRuntimeMock(
 				fRuntimeType, dest);
-		ServerBeanLoader l = new ServerBeanLoader(dest.toFile());
-		ServerBean b = l.getServerBean();
-		assertTrue(b.getBeanType() == KarafBeanProvider.KARAF_2x);
-		assertEquals(b.getFullVersion(), typeToVersion.get(fRuntimeType));
-		assertEquals(b.getVersion(), ServerBeanLoader.getMajorMinorVersion(typeToVersion.get(fRuntimeType)));
+		
+		KarafRuntimeLocator locator = new KarafRuntimeLocator();
+		MockListener listener = new MockListener();
+		locator.searchForRuntimes(dest, 
+				listener, new NullProgressMonitor());
+		assertTrue(listener.found != null);
 	}
+	
+	@After
+	public void cleanup() {
+		FuseServerTestActivator.cleanup();
+	}
+	
+	private class MockListener implements RuntimeLocatorDelegate.IRuntimeSearchListener {
+		private IRuntimeWorkingCopy found;
+		public void runtimeFound(IRuntimeWorkingCopy arg0) {
+			found = arg0;
+		}
+	}
+	
 }

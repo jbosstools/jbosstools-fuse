@@ -1,4 +1,4 @@
-Manifest-Version: 1.0
+Manifest-Version: 1.0 
 Bundle-ManifestVersion: 2
 Bundle-Activator: org.fusesource.ide.server.tests.FuseServerTestActivator
 Bundle-Name: Fuse Plugins for Eclipse Server Plugin Tests
@@ -19,5 +19,5 @@ Require-Bundle: org.junit,
  org.fusesource.ide.server.view;bundle-version="7.3.0",
  org.jboss.tools.as.test.core,
  org.eclipse.core.runtime,
- org.jboss.ide.eclipse.as.core;bundle-version="3.0.0"
-
+ org.jboss.ide.eclipse.as.core,
+ org.eclipse.wst.server.core

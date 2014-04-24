@@ -30,7 +30,7 @@ public final class MockRuntimeCreationUtil {
 		
 	
 	public static final String[] SUPPORTED_RUNTIMES = new String[] {
-		KARAF_20, KARAF_21, KARAF_22, KARAF_23, KARAF_2x, 
+		KARAF_20, KARAF_21, KARAF_22, KARAF_23, 
 	};
 	
 	public static boolean createRuntimeMock(String runtimeId, IPath runtimePath) {

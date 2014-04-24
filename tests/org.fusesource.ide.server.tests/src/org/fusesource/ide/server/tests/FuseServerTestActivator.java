@@ -70,7 +70,8 @@ public class FuseServerTestActivator extends Plugin {
 			}
 		}
 	}
-	public static void cleanup() throws Exception {
-		// TODO
+	
+	public static void cleanup() {
+		clearStateLocation();
 	}
 }
