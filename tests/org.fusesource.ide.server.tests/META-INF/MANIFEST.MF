@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Plugins for Eclipse Server Plugin Tests
-Bundle-SymbolicName: org.fusesource.ide.server.tests;singleton:=true
+Bundle-SymbolicName: org.fusesource.ide.server.tests.util.tests;singleton:=true
 Bundle-Version: 7.3.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

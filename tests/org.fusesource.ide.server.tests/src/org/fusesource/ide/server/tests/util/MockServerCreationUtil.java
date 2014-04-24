@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.server;
+package org.fusesource.ide.server.tests.util;
 
 import org.eclipse.core.runtime.IPath;
 
