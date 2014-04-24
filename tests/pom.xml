@@ -19,6 +19,7 @@
     <module>org.fusesource.ide.camel.model.tests</module>
     <module>org.fusesource.ide.fabric.tests</module>
     <module>org.fusesource.ide.maven.tests</module>
+    <module>org.fusesource.ide.server.tests</module>
   </modules>
 
 </project>
