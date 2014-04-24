@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.fusesource.ide.commons;singleton:=true
 Bundle-Version: 7.3.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: io.fabric8.camel-tooling-util,
+Require-Bundle: io.fabric8.camel-tooling-util;resolution:=optional,
  org.fusesource.ide.preferences,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,

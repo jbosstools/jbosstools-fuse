@@ -217,5 +217,12 @@
           os="win32">
     </runtime>
   </extension>
+  <extension
+        point="org.jboss.ide.eclipse.as.wtp.core.serverBeanTypeProvider">
+     <serverBeanTypeProvider
+           class="org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider"
+           weight="5">
+     </serverBeanTypeProvider>
+  </extension>
   
 </plugin>

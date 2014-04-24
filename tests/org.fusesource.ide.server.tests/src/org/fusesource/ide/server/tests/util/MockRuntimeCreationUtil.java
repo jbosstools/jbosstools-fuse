@@ -22,12 +22,15 @@ import org.jboss.tools.as.test.core.internal.utils.BundleUtils;
  */
 public final class MockRuntimeCreationUtil {
 	
+	public static final String KARAF_20 = "org.fusesource.ide.karaf.runtime.20";
+	public static final String KARAF_21 = "org.fusesource.ide.karaf.runtime.21";
+	public static final String KARAF_22 = "org.fusesource.ide.karaf.runtime.22";
+	public static final String KARAF_23 = "org.fusesource.ide.karaf.runtime.23";
+	public static final String KARAF_2x = "org.fusesource.ide.karaf.runtime.2x";
+		
+	
 	public static final String[] SUPPORTED_RUNTIMES = new String[] {
-		 "org.fusesource.ide.karaf.runtime.20"
-		,"org.fusesource.ide.karaf.runtime.21"
-		,"org.fusesource.ide.karaf.runtime.22"
-		,"org.fusesource.ide.karaf.runtime.23"
-		,"org.fusesource.ide.karaf.runtime.2x"
+		KARAF_20, KARAF_21, KARAF_22, KARAF_23, KARAF_2x, 
 	};
 	
 	public static boolean createRuntimeMock(String runtimeId, IPath runtimePath) {
@@ -98,7 +101,9 @@ public final class MockRuntimeCreationUtil {
 			fileName = "karaf_2.3.jar";
 		}
 		
-		File serverJarLoc = BundleUtils.getFileLocation("mockData" + File.separator + fileName);
+		File serverJarLoc = BundleUtils.getFileLocation(
+				"org.fusesource.ide.server.tests",
+				"mockData" + File.separator + fileName);
 		FileUtil.fileSafeCopy(serverJarLoc, libFolder.append("karaf.jar").toFile());
 	}
 }
