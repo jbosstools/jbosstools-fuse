@@ -11,6 +11,7 @@
 package org.fusesource.ide.server.karaf.core.bean;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
@@ -47,7 +48,26 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.JBossServerType.Condition#isServerRoot(java.io.File)
 		 */
 		public boolean isServerRoot(File location) {
-			return checkKarafVersion(location, KARAF2x_RELEASE_VERSION, V2_x); //$NON-NLS-1$
+			return checkKarafVersion(location, KARAF2x_RELEASE_VERSION, V2_x) && !isIntegratedKaraf(location); //$NON-NLS-1$
+		}
+		
+		/**
+		 * 
+		 * @param location
+		 * @return
+		 */
+		protected static boolean isIntegratedKaraf(File location) {
+			File libFolder = new File(location + File.separator + "lib");
+			File[] files = libFolder.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					if (name.toLowerCase().endsWith("-version.jar")) {
+						return true;
+					}
+					return false;
+				}
+			});
+			return files.length>0;
 		}
 		
 		/**
