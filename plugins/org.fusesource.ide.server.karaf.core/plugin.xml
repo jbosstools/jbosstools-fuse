@@ -237,5 +237,14 @@
            class="org.fusesource.ide.server.karaf.core.runtime.integration.KarafDownloadRuntimesProvider">
      </provider>
   </extension>
+  <extension
+        point="org.jboss.tools.runtime.core.runtimeDetectors">
+     <runtimeDetector
+           class="org.fusesource.ide.server.karaf.core.runtime.integration.KarafRuntimeDetector"
+           enabled="true"
+           id="org.fusesource.ide.server.karaf.core.runtime.integration.KarafRuntimeDetection"
+           name="Apache Karaf">
+     </runtimeDetector>
+  </extension>
   
 </plugin>

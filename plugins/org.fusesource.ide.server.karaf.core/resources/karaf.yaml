@@ -15,8 +15,7 @@
 
 
 licenses:
- - &lgpl http://www.gnu.org/copyleft/lesser.txt
- - &lgpl21 http://www.gnu.org/licenses/lgpl-2.1.txt
+ - &apache20 http://www.apache.org/licenses/LICENSE-2.0.txt
 
 
 ##########################################################################
@@ -35,13 +34,17 @@ availableRuntimes:
    id: karaf232
    name: Apache Karaf 2.3.2
    version: 2.3.2
-   license: *lgpl21
+   license: *apache20
    url: http://karaf.apache.org
-   downloadUrl: https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.zip
    labels: {
         requiresCredentials: false,
         runtime-category: OSGI_SERVER,
         runtime-type: KARAF,
         runtime-size: 10226533,
+        additionalDownloadURLs: {
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.tar.gz",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.tar.gz",
+        },
         wtp-runtime-type: org.fusesource.ide.karaf.runtime.23
    }

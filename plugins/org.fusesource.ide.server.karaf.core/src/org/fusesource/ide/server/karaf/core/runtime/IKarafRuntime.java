@@ -14,19 +14,19 @@ package org.fusesource.ide.server.karaf.core.runtime;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_20;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_21;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_22;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.RUNTIME_KARAF_23;
 
 
 /**
  * @author lhein
  */
 public interface IKarafRuntime {
-	public static final String KARAF_20 = "org.fusesource.ide.karaf.runtime.20";
-	public static final String KARAF_21 = "org.fusesource.ide.karaf.runtime.21";
-	public static final String KARAF_22 = "org.fusesource.ide.karaf.runtime.22";
-	public static final String KARAF_23 = "org.fusesource.ide.karaf.runtime.23";
 
 	static final String[] KARAF_RUNTIME_TYPES_SUPPORTED = new String[] {
-		KARAF_20, KARAF_21, KARAF_22, KARAF_23
+		RUNTIME_KARAF_20, RUNTIME_KARAF_21, RUNTIME_KARAF_22, RUNTIME_KARAF_23
 	};
 	
 	/**

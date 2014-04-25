@@ -14,6 +14,10 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.SERVER_KARAF_20;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.SERVER_KARAF_21;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.SERVER_KARAF_22;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.SERVER_KARAF_23;
 
 /**
  * @author lhein
@@ -27,13 +31,6 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 	public static final String V2_2 = "2.2";
 	public static final String V2_3 = "2.3";
 	public static final String V2_x = "2.";
-
-	public static final String SERVER_KARAF_20 = "org.fusesource.ide.karaf.server.20";
-	public static final String SERVER_KARAF_21 = "org.fusesource.ide.karaf.server.21";
-	public static final String SERVER_KARAF_22 = "org.fusesource.ide.karaf.server.22";
-	public static final String SERVER_KARAF_23 = "org.fusesource.ide.karaf.server.23";
-	public static final String SERVER_KARAF_2x = SERVER_KARAF_23;
-
 	protected ServerBeanTypeKaraf2x() {
 		super(	"KARAF2x", //$NON-NLS-1$
 				"Apache Karaf 2.x", //$NON-NLS-1$
@@ -80,11 +77,9 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 		 * @param propPrefix
 		 * @return
 		 */
-		protected static boolean checkKarafVersion(File location,
-				String property, String propPrefix) {
+		protected static boolean checkKarafVersion(File location, String property, String propPrefix) {
 			String mainFolder = new ServerBeanTypeKaraf2x().getSystemJarPath();
-			String value = getJarProperty(new File(location + File.separator
-					+ mainFolder), property);
+			String value = getJarProperty(new File(location + File.separator + mainFolder), property);
 			return value != null && value.startsWith(propPrefix);
 		}
 
@@ -93,16 +88,12 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.ICondition#getServerTypeId(java.lang.String)
 		 */
 		public String getServerTypeId(String version) {
-			if (version.equals(V2_0))
-				return SERVER_KARAF_20;
-			if (version.equals(V2_1))
-				return SERVER_KARAF_21;
-			if (version.equals(V2_2))
-				return SERVER_KARAF_22;
-			if (version.equals(V2_3))
-				return SERVER_KARAF_23;
-			if (version.equals(V2_x))
-				return SERVER_KARAF_2x;
+			if( version.equals(V2_0)) return SERVER_KARAF_20;
+			if( version.equals(V2_1)) return SERVER_KARAF_21;
+			if( version.equals(V2_2)) return SERVER_KARAF_22;
+			if( version.equals(V2_3)) return SERVER_KARAF_23;
+			// In case a 2.4 comes out, it should work on 2.3 until fixed
+			if( version.startsWith(V2_x)) return SERVER_KARAF_23;
 			return null;
 		}
 	}
