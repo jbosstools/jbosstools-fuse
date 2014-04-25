@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 Red Hat, Inc.
+ * Copyright (c) 2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -8,10 +8,8 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.server.tests.locator;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import junit.framework.TestCase;
@@ -30,20 +28,33 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-
 @RunWith(value = Parameterized.class)
 public class RuntimeLocatorTest extends TestCase {
+	
+	private String fRuntimeType;
+	
+	/**
+	 * create a runtime locator test for the given runtime type id
+	 * 
+	 * @param runtimeType	the runtime type id to test
+	 */
+	public RuntimeLocatorTest(String runtimeType) {
+		this.fRuntimeType = runtimeType;
+	}
+	
+	/**
+	 * returns all runtime types to test in this test case
+	 * @return
+	 */
 	@Parameters
 	public static Collection<Object[]> data() {
 		return ParametizedTestUtil.asCollection(MockRuntimeCreationUtil.SUPPORTED_RUNTIMES);
 	}
-	
-	private String fRuntimeType;
-	public RuntimeLocatorTest(String runtimeType) {
-		fRuntimeType = runtimeType;
-	}
-	
-	
+			
+	/**
+	 * tests the runtime locator for the given runtime type id
+	 * @throws Exception
+	 */
 	@Test
 	public void testKaraf() throws Exception {
 		IPath dest = FuseServerTestActivator.getDefault()
@@ -55,19 +66,39 @@ public class RuntimeLocatorTest extends TestCase {
 		MockListener listener = new MockListener();
 		locator.searchForRuntimes(dest, 
 				listener, new NullProgressMonitor());
-		assertTrue(listener.found != null);
+		assertTrue(listener.getFoundRuntime() != null);
 	}
 	
+	/**
+	 * clean up created files after test finished
+	 */
 	@After
 	public void cleanup() {
 		FuseServerTestActivator.cleanup();
 	}
 	
+	/**
+	 * listener which looks for found runtimes
+	 */
 	private class MockListener implements RuntimeLocatorDelegate.IRuntimeSearchListener {
-		private IRuntimeWorkingCopy found;
+		
+		private IRuntimeWorkingCopy foundRuntime;
+		
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.wst.server.core.model.RuntimeLocatorDelegate.IRuntimeSearchListener#runtimeFound(org.eclipse.wst.server.core.IRuntimeWorkingCopy)
+		 */
+		@Override
 		public void runtimeFound(IRuntimeWorkingCopy arg0) {
-			found = arg0;
+			this.foundRuntime = arg0;
 		}
-	}
-	
+		
+		/**
+		 * returns the found runtime or null if nothing found
+		 * @return
+		 */
+		public IRuntimeWorkingCopy getFoundRuntime() {
+			return this.foundRuntime;
+		}
+	}	
 }

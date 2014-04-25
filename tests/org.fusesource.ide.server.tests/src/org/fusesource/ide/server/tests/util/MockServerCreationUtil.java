@@ -17,6 +17,13 @@ import org.eclipse.core.runtime.IPath;
  */
 public final class MockServerCreationUtil {
 	
+	/**
+	 * creates a mock server structure and configures it
+	 * 
+	 * @param runtimeId		the id of the runtime type
+	 * @param runtimePath	the path where to create the server
+	 * @return	true on success
+	 */
 	public static boolean createServerMock(String runtimeId, IPath runtimePath) {
 		boolean serverCreated = false;
 		

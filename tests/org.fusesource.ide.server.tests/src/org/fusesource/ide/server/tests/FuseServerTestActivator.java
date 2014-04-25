@@ -38,6 +38,7 @@ public class FuseServerTestActivator extends Plugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
@@ -47,6 +48,7 @@ public class FuseServerTestActivator extends Plugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -61,7 +63,10 @@ public class FuseServerTestActivator extends Plugin {
 		return plugin;
 	}
 
-	public static void clearStateLocation() {
+	/**
+	 * clears the location where the mock structures are generated
+	 */
+	private static void clearStateLocation() {
 		IPath state = FuseServerTestActivator.getDefault().getStateLocation();
 		if( state.toFile().exists()) {
 			File[] children = state.toFile().listFiles();
@@ -71,6 +76,9 @@ public class FuseServerTestActivator extends Plugin {
 		}
 	}
 	
+	/**
+	 * clears the location where the mock structures are generated
+	 */
 	public static void cleanup() {
 		clearStateLocation();
 	}

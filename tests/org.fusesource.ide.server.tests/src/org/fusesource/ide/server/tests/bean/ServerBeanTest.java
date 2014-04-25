@@ -31,36 +31,50 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value = Parameterized.class)
 public class ServerBeanTest extends TestCase {
 
-	public static final HashMap<String, String> typeToVersion;
+	public static final HashMap<String, String> TYPE_TO_VERSION;
 	static {
-		typeToVersion = new HashMap<String,String>();
-		typeToVersion.put(MockRuntimeCreationUtil.KARAF_20, "2.0.0");
-		typeToVersion.put(MockRuntimeCreationUtil.KARAF_21, "2.1.6");
-		typeToVersion.put(MockRuntimeCreationUtil.KARAF_22, "2.2.11");
-		typeToVersion.put(MockRuntimeCreationUtil.KARAF_23, "2.3.5");
+		TYPE_TO_VERSION = new HashMap<String,String>();
+		TYPE_TO_VERSION.put(MockRuntimeCreationUtil.KARAF_20, "2.0.0");
+		TYPE_TO_VERSION.put(MockRuntimeCreationUtil.KARAF_21, "2.1.6");
+		TYPE_TO_VERSION.put(MockRuntimeCreationUtil.KARAF_22, "2.2.11");
+		TYPE_TO_VERSION.put(MockRuntimeCreationUtil.KARAF_23, "2.3.5");
 	}
 	
+	private String fRuntimeType;
+
+	/**
+	 * creates a server bean loader test for the given runtime type id
+	 * @param runtimeType
+	 */
+	public ServerBeanTest(String runtimeType) {
+		this.fRuntimeType = runtimeType;
+	}
+	
+	/**
+	 * returns the runtime types to test
+	 * @return
+	 */
 	@Parameters
 	public static Collection<Object[]> data() {
 		return ParametizedTestUtil.asCollection(MockRuntimeCreationUtil.SUPPORTED_RUNTIMES);
 	}
-	
-	private String fRuntimeType;
-	public ServerBeanTest(String runtimeType) {
-		fRuntimeType = runtimeType;
-	}
 
-	
+	/**
+	 * creates a mock server directory structure and tests if the 
+	 * server bean loader can handle that folder structure
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void testKaraf() throws Exception {
 		IPath dest = FuseServerTestActivator.getDefault()
-				.getStateLocation().append(fRuntimeType);
+				.getStateLocation().append(this.fRuntimeType);
 		MockRuntimeCreationUtil.createRuntimeMock(
-				fRuntimeType, dest);
+				this.fRuntimeType, dest);
 		ServerBeanLoader l = new ServerBeanLoader(dest.toFile());
 		ServerBean b = l.getServerBean();
 		assertTrue(b.getBeanType() == KarafBeanProvider.KARAF_2x);
-		assertEquals(b.getFullVersion(), typeToVersion.get(fRuntimeType));
-		assertEquals(b.getVersion(), ServerBeanLoader.getMajorMinorVersion(typeToVersion.get(fRuntimeType)));
+		assertEquals(b.getFullVersion(), TYPE_TO_VERSION.get(this.fRuntimeType));
+		assertEquals(b.getVersion(), ServerBeanLoader.getMajorMinorVersion(TYPE_TO_VERSION.get(this.fRuntimeType)));
 	}
 }

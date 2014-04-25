@@ -15,15 +15,20 @@ import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
 public class KarafBeanProvider implements IServerBeanTypeProvider {
 
-	public KarafBeanProvider() {
-	}
-	
 	public static final ServerBeanTypeKaraf2x KARAF_2x = new ServerBeanTypeKaraf2x();
 
+	public KarafBeanProvider() {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jboss.ide.eclipse.as.core.server.bean.IServerBeanTypeProvider#
+	 * getServerBeanTypes()
+	 */
+	@Override
 	public ServerBeanType[] getServerBeanTypes() {
-		return new ServerBeanType[]{
-				KARAF_2x
-		};
+		return new ServerBeanType[] { KARAF_2x };
 	}
 
 }

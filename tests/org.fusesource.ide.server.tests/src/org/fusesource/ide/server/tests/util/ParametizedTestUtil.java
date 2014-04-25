@@ -14,6 +14,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ParametizedTestUtil {
+	
+	/**
+	 * converts an object array into a collection of object arrays
+	 * 
+	 * @param items
+	 * @return
+	 */
 	public static Collection<Object[]> asCollection(Object[] items) {
 		ArrayList<Object[]> ret = new ArrayList<Object[]>();
 		for( int i = 0; i < items.length; i++ ) {

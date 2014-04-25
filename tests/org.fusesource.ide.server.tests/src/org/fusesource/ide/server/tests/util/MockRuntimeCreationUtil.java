@@ -33,6 +33,13 @@ public final class MockRuntimeCreationUtil {
 		KARAF_20, KARAF_21, KARAF_22, KARAF_23, 
 	};
 	
+	/**
+	 * creates a mock runtime folder structure 
+	 * 
+	 * @param runtimeId		the runtime type id to use
+	 * @param runtimePath	the path where to create the structure
+	 * @return	true on success
+	 */
 	public static boolean createRuntimeMock(String runtimeId, IPath runtimePath) {
 		boolean runtimeCreated = true;
 		
