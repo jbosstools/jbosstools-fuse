@@ -99,7 +99,7 @@ public class KarafServerPorpertiesComposite extends Composite implements
 		Label lblHostName = new Label(this, SWT.NONE);
 		lblHostName.setText(Messages.KarafServerPorpertiesComposite_host_name_label);
 		txtHostName = new Text(this, SWT.BORDER);
-		txtHostName.setText(model.getHostName());
+		txtHostName.setText("" + model.getHostName());
 		txtHostName.setEnabled(false);
 		txtHostName.setLayoutData(gd);
 		txtHostName.addListener(SWT.Modify, this);
