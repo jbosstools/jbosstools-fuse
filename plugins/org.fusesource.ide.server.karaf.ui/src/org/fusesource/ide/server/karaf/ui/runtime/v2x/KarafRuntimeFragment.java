@@ -29,6 +29,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
+import org.fusesource.ide.server.karaf.ui.KarafSharedImages;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.ui.wizards.AbstractJBTRuntimeWizardFragment;
 import org.jboss.ide.eclipse.as.ui.wizards.composite.JREComposite;
@@ -49,6 +50,11 @@ public class KarafRuntimeFragment extends AbstractJBTRuntimeWizardFragment {
 		initiateHelp(parent);
 	}
 	
+	protected ImageDescriptor getImageDescriptor() {
+		String imageKey = KarafSharedImages.IMG_KARAF_LOGO_LARGE;
+		return KarafSharedImages.getImageDescriptor(imageKey);
+	}
+
 	protected void createJREComposite(Composite main) {
 		// Create our composite
 		jreComposite = new JREComposite(main, SWT.NONE, getTaskModel()) {
@@ -89,7 +95,7 @@ public class KarafRuntimeFragment extends AbstractJBTRuntimeWizardFragment {
 	}
 	
 	protected String getExplanationText() {
-		return "Please point to a karaf installation";
+		return "Please point to a karaf installation.";
 	}
 
 	protected void initiateHelp(Composite parent) {
