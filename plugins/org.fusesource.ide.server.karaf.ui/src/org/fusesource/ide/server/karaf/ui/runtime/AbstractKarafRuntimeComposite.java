@@ -96,9 +96,6 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				if (valid) {
 					String installDir = txtKarafDir.getText();
 					model.setKarafInstallDir(installDir);
-					model.setKarafPropertiesFileLocation(getKarafPropFileLocation(installDir));
-					model.setKarafVersion(KarafUtils.getVersion(new File(
-							installDir)));
 				}
 			}
 		}

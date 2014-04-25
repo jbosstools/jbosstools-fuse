@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
-import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeLocator;
 import org.fusesource.ide.server.servicemix.core.ServiceMixUtils;
 
@@ -54,11 +53,6 @@ public class ServiceMix4xRuntimeLocator extends KarafRuntimeLocator {
 // commented out the naming of the runtime as it seems to break server to runtime links
 					runtime.setName(dir.getName());
 					runtime.setLocation(new Path(absolutePath));
-					IKarafRuntimeWorkingCopy wc = (IKarafRuntimeWorkingCopy) runtime.loadAdapter(IKarafRuntimeWorkingCopy.class, null);
-					wc.setKarafInstallDir(absolutePath);
-					wc.setKarafVersion(ServiceMixUtils.getVersion(dir));
-					wc.setKarafPropertiesFileLocation("");
-//					runtime.save(true, monitor);
 					IStatus status = runtime.validate(monitor);
 					if (status == null || status.getSeverity() != IStatus.ERROR) {
 						return runtime;

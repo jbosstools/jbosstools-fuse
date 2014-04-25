@@ -15,7 +15,10 @@ Require-Bundle: org.fusesource.ide.server.karaf.core,
  org.eclipse.jdt.debug.ui,
  org.eclipse.tm.terminal;bundle-version="3.1.1",
  org.eclipse.tm.terminal.ssh;bundle-version="2.1.0",
- org.eclipse.tm.terminal.view;bundle-version="2.2.0"
+ org.eclipse.tm.terminal.view;bundle-version="2.2.0",
+ org.eclipse.jdt.launching;bundle-version="3.7.100",
+ org.jboss.ide.eclipse.as.ui;bundle-version="3.0.0",
+ org.jboss.ide.eclipse.as.wtp.core;bundle-version="3.0.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.server.karaf.ui.editor,

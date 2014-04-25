@@ -7,7 +7,7 @@
           class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
           description="%runtimeTypeKarafDescription_20"
           id="org.fusesource.ide.karaf.runtime.20"
-          name="%runtimeTypeKarafDescription_20"
+          name="%runtimeTypeKarafLabel_20"
           vendor="%fusesource"
           vendorId="%fusesource"
           version="2.0">
@@ -22,7 +22,7 @@
           class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
           description="%runtimeTypeKarafDescription_21"
           id="org.fusesource.ide.karaf.runtime.21"
-          name="%runtimeTypeKarafDescription_21"
+          name="%runtimeTypeKarafLabel_21"
           vendor="%fusesource"
           vendorId="%fusesource"
           version="2.1">
@@ -37,7 +37,7 @@
           class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
           description="%runtimeTypeKarafDescription_22"
           id="org.fusesource.ide.karaf.runtime.22"
-          name="%runtimeTypeKarafDescription_22"
+          name="%runtimeTypeKarafLabel_22"
           vendor="%fusesource"
           vendorId="%fusesource"
           version="2.2">
@@ -54,7 +54,7 @@
           class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
           description="%runtimeTypeKarafDescription_23"
           id="org.fusesource.ide.karaf.runtime.23"
-          name="%runtimeTypeKarafDescription_23"
+          name="%runtimeTypeKarafLabel_23"
           vendor="%fusesource"
           vendorId="%fusesource"
           version="2.3">

@@ -11,13 +11,10 @@
 
 package org.fusesource.ide.server.fuse.ui.runtime.fuseesb;
 
-import java.io.File;
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
-import org.fusesource.ide.server.fuse.core.FuseESBUtils;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.ui.runtime.AbstractKarafRuntimeComposite;
 import org.fusesource.ide.server.karaf.ui.runtime.KarafWizardDataModel;
@@ -51,8 +48,7 @@ public class FuseESBRuntimeWizardFragment6x extends
 					.loadAdapter(IKarafRuntime.class,
 							new NullProgressMonitor());
 			if (karafRuntime != null) {
-				model.setKarafInstallDir(karafRuntime.getKarafInstallDir());
-				model.setKarafVersion(FuseESBUtils.getVersion(new File(model.getKarafInstallDir())));
+				model.setKarafInstallDir(karafRuntime.getLocation().toOSString());
 			}
 		}
 	}

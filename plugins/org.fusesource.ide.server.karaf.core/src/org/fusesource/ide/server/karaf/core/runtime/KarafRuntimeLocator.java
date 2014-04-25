@@ -152,10 +152,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 								// commented out the naming of the runtime as it seems to break server to runtime links
 								runtime.setName(dir.getName());
 								runtime.setLocation(new Path(absolutePath));
-								IKarafRuntimeWorkingCopy wc = (IKarafRuntimeWorkingCopy) runtime.loadAdapter(IKarafRuntimeWorkingCopy.class, null);
-								wc.setKarafInstallDir(absolutePath);
-								wc.setKarafVersion(sb.getFullVersion());
-								wc.setKarafPropertiesFileLocation("");
+								runtime.setLocation(new Path(absolutePath));
 								IStatus status = runtime.validate(monitor);
 								if (status == null || status.getSeverity() != IStatus.ERROR) {
 									return runtime;

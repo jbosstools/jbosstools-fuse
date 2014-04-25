@@ -95,22 +95,7 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 				IKarafRuntime karafRuntime = (IKarafRuntime)runtime.loadAdapter(IKarafRuntime.class, null);
 				if (karafRuntime != null ) {
 					if("".equals(model.getKarafInstallDir()) || model.getKarafInstallDir() == null){
-						model.setKarafInstallDir(karafRuntime.getKarafInstallDir());
-						model.setKarafPropertiesFileLocation(karafRuntime.getKarafPropertiesFileLocation());
-						model.setKarafVersion(determineVersion(karafRuntime));
-					}
-					File confFile = new File(model.getKarafPropertiesFileLocation());
-					if (confFile != null && confFile.exists()) {
-						try {
-							readFromPropertiesFile(confFile);
-							readFromConfFile = true;
-						} catch (FileNotFoundException e) {
-							//ignore.
-						} catch (IOException e) {
-							//ignore
-						} catch(NumberFormatException e){
-							//ignore.
-						}
+						model.setKarafInstallDir(karafRuntime.getLocation().toOSString());
 					}
 				}
 			}
@@ -158,14 +143,10 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 	 */
 	protected String determineVersion(IKarafRuntime runtime) {
 		String version = null;
-		
-		if (runtime != null && runtime.getKarafInstallDir() != null) {
-			File folder = new File(runtime.getKarafInstallDir());
-			if (folder.exists() && folder.isDirectory()) {
-				version = KarafUtils.getVersion(folder);
-			}
+		if (runtime != null && runtime.getLocation() != null) {
+			File folder = runtime.getLocation().toFile();
+			version = KarafUtils.getVersion(folder);
 		}
-		
 		return version;
 	}
 	

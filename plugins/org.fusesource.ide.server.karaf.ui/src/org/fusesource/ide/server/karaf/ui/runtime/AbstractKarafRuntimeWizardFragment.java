@@ -87,9 +87,8 @@ public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment 
 			IKarafRuntime karafRuntime = (IKarafRuntime) workingCopy
 					.loadAdapter(IKarafRuntime.class, new NullProgressMonitor());
 			if (karafRuntime != null) {
-				model.setKarafInstallDir(karafRuntime.getKarafInstallDir());
-				model.setKarafVersion(KarafUtils.getVersion(new File(model
-						.getKarafInstallDir())));
+				IPath loc = karafRuntime.getLocation();
+				model.setKarafInstallDir(loc == null ? null : loc.toOSString());
 			}
 		}
 	}
@@ -109,12 +108,6 @@ public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment 
 				String installDir = model.getKarafInstallDir();
 				IPath path = new Path(installDir);
 				workingCopy.setLocation(path);
-				karafRuntimeWorkingCopy.setKarafInstallDir(path
-						.removeTrailingSeparator().toOSString());
-				karafRuntimeWorkingCopy.setKarafPropertiesFileLocation(model
-						.getKarafPropertiesFileLocation());
-				karafRuntimeWorkingCopy
-						.setKarafVersion(model.getKarafVersion());
 			}
 		}
 		try {

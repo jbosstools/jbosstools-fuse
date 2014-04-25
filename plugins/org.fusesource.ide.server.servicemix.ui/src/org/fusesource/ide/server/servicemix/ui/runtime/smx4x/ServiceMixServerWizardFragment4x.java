@@ -49,8 +49,8 @@ public class ServiceMixServerWizardFragment4x extends
 	protected String determineVersion(IKarafRuntime runtime) {
 		String version = null;
 		
-		if (runtime != null && runtime.getKarafInstallDir() != null) {
-			File folder = new File(runtime.getKarafInstallDir());
+		if (runtime != null && runtime.getLocation() != null) {
+			File folder = runtime.getLocation().toFile();
 			if (folder.exists() && folder.isDirectory()) {
 				version = ServiceMixUtils.getVersion(folder);
 			}

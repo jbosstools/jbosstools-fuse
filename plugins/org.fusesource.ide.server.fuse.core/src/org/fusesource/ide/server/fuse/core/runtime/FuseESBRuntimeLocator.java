@@ -20,7 +20,6 @@ import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.fusesource.ide.server.fuse.core.FuseESBUtils;
-import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeLocator;
 
 
@@ -54,11 +53,6 @@ public class FuseESBRuntimeLocator extends KarafRuntimeLocator {
 // commented out the naming of the runtime as it seems to break server to runtime links
 					runtime.setName(dir.getName());
 					runtime.setLocation(new Path(absolutePath));
-					IKarafRuntimeWorkingCopy wc = (IKarafRuntimeWorkingCopy) runtime.loadAdapter(IKarafRuntimeWorkingCopy.class, null);
-					wc.setKarafInstallDir(absolutePath);
-					wc.setKarafVersion(FuseESBUtils.getVersion(dir));
-					wc.setKarafPropertiesFileLocation("");
-//					runtime.save(true, monitor);
 					IStatus status = runtime.validate(monitor);
 					if (status == null || status.getSeverity() != IStatus.ERROR) {
 						return runtime;

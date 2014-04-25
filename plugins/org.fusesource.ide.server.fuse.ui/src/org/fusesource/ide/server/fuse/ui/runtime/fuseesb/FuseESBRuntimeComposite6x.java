@@ -18,7 +18,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
-import org.fusesource.ide.server.fuse.core.FuseESBUtils;
 import org.fusesource.ide.server.fuse.ui.Messages;
 import org.fusesource.ide.server.karaf.ui.runtime.KarafWizardDataModel;
 import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeComposite2x;
@@ -106,8 +105,6 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 				if (valid){
 					String installDir = txtKarafDir.getText();
 					model.setKarafInstallDir(installDir);
-					model.setKarafPropertiesFileLocation(getKarafPropFileLocation(installDir));
-					model.setKarafVersion(FuseESBUtils.getVersion(new File(installDir)));
 				}
 			}
 		}

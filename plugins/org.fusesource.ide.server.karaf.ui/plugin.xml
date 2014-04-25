@@ -4,22 +4,22 @@
    <extension
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
-            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x"
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment"
             id="org.fusesource.ide.server.karaf.ui.runtime.fragment.20"
             typeIds="org.fusesource.ide.karaf.runtime.20">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x"
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment"
             id="org.fusesource.ide.server.karaf.ui.runtime.fragment.21"
             typeIds="org.fusesource.ide.karaf.runtime.21">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x"
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment"
             id="org.fusesource.ide.server.karaf.ui.runtime.fragment.22"
             typeIds="org.fusesource.ide.karaf.runtime.22">
       </fragment>
       <fragment
-            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x"
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment"
             id="org.fusesource.ide.server.karaf.ui.runtime.fragment.23"
             typeIds="org.fusesource.ide.karaf.runtime.23">
       </fragment>

@@ -122,7 +122,7 @@ public class KarafServerBehaviourDelegate extends ServerBehaviourDelegate {
 		}
 		
 		if (runtime != null) {
-			String karafInstallDir = runtime.getKarafInstallDir();
+			String karafInstallDir = runtime.getLocation().toOSString();
 			String vmArguments = getVMArguments(karafInstallDir);
 			String mainProgram = getMainProgram();
 			// For java tabs
@@ -299,7 +299,7 @@ public class KarafServerBehaviourDelegate extends ServerBehaviourDelegate {
 	protected String getDeployDir() {
 		IKarafRuntime runtime = (IKarafRuntime)getServer().getRuntime().loadAdapter(IKarafRuntime.class, null);
 		if (runtime != null) {
-			String karafInstallDir = runtime.getKarafInstallDir();
+			String karafInstallDir = runtime.getLocation().toOSString();
 			return karafInstallDir + SEPARATOR + "deploy";
 		}
 		return ""; //$NON-NLS-1$

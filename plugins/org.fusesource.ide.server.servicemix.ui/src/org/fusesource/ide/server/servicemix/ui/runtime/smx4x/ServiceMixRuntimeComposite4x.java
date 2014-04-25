@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.fusesource.ide.server.karaf.ui.runtime.KarafWizardDataModel;
 import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeComposite2x;
-import org.fusesource.ide.server.servicemix.core.ServiceMixUtils;
 import org.fusesource.ide.server.servicemix.ui.Messages;
 
 
@@ -98,8 +97,6 @@ public class ServiceMixRuntimeComposite4x extends KarafRuntimeComposite2x {
 				if (valid){
 					String installDir = txtKarafDir.getText();
 					model.setKarafInstallDir(installDir);
-					model.setKarafPropertiesFileLocation(getKarafPropFileLocation(installDir));
-					model.setKarafVersion(ServiceMixUtils.getVersion(new File(installDir)));
 				}
 			}
 		}
