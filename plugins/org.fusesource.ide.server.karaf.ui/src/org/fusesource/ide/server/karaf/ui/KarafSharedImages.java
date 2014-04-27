@@ -33,6 +33,10 @@ public class KarafSharedImages {
 		instance = this;
 		images = new Hashtable<String, Object>();
 		descriptors = new Hashtable<String, Object>();
+		
+		if( KarafUIPlugin.getDefault() == null || KarafUIPlugin.getDefault().getBundle() == null ) 
+			return;
+		
 		Bundle pluginBundle = KarafUIPlugin.getDefault().getBundle();
 		
 		descriptors.put(IMG_KARAF_LOGO_LARGE, createImageDescriptor(pluginBundle, "/icons/karaf-logo_lg.png")); //$NON-NLS-1$

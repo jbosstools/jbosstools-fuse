@@ -34,10 +34,7 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
-import org.fusesource.ide.server.karaf.core.SshConnector;
-import org.fusesource.ide.server.karaf.core.server.IServerConfiguration;
 import org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate;
-import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
 
 
 /**
@@ -49,8 +46,6 @@ public class KarafLaunchDelegate implements ILaunchConfigurationDelegate {
 	private static final String EMPTY_STRING = "";
 	
 	public static final String ATTR_SERVER_ID = "server-id";
-	
-	private SshConnector connector; 
 	
 	/**
 	 * empty constructor
@@ -75,33 +70,6 @@ public class KarafLaunchDelegate implements ILaunchConfigurationDelegate {
 		IProcess prs = launchUsingJavaLaunchConfig(behaviorDelegate, configuration, mode, launch,	monitor);
 		behaviorDelegate.setKarafProcess(prs, monitor);
 		monitor.done();
-		
-		KarafServerDelegate serverDelegate = (KarafServerDelegate)server.getAdapter(KarafServerDelegate.class);
-		String host = serverDelegate.getHostName() != null ? serverDelegate.getHostName() : KarafServerDelegate.DEFAULT_KARAF_SSH_HOSTNAME;
-		int port = serverDelegate.getPortNumber();
-		
-		String user = null;
-		String pass = null;
-		if (serverDelegate.getServer().getServerType().getId().indexOf(IServerConfiguration.SERVER_TYPE_PREFIX_SMX) != -1) {
-			// smx4
-			user = serverDelegate.getUserName() != null ? serverDelegate.getUserName() : KarafServerDelegate.DEFAULT_SMX_SSH_USER;
-			pass = serverDelegate.getPassword() != null ? serverDelegate.getPassword() : KarafServerDelegate.DEFAULT_SMX_SSH_PASSWORD;
-		} else if (serverDelegate.getServer().getServerType().getId().indexOf(IServerConfiguration.SERVER_TYPE_PREFIX_KARAF) != -1) {
-			// karaf
-			user = serverDelegate.getUserName() != null ? serverDelegate.getUserName() : KarafServerDelegate.DEFAULT_KARAF_SSH_USER;
-			pass = serverDelegate.getPassword() != null ? serverDelegate.getPassword() : KarafServerDelegate.DEFAULT_KARAF_SSH_PASSWORD;
-		} else if (serverDelegate.getServer().getServerType().getId().indexOf(IServerConfiguration.SERVER_TYPE_PREFIX_FUSEESB) != -1) {
-			// fuse-esb
-			user = serverDelegate.getUserName() != null ? serverDelegate.getUserName() : KarafServerDelegate.DEFAULT_FUSEESB_SSH_USER;
-			pass = serverDelegate.getPassword() != null ? serverDelegate.getPassword() : KarafServerDelegate.DEFAULT_FUSEESB_SSH_PASSWORD;
-		} else {
-			// unknown
-			user = serverDelegate.getUserName() != null ? serverDelegate.getUserName() : "";
-			pass = serverDelegate.getPassword() != null ? serverDelegate.getPassword() : "";
-		}
-		
-		this.connector = new SshConnector(server, behaviorDelegate, host, port, user, pass);
-		this.connector.start();
 	}
 	
 	/**

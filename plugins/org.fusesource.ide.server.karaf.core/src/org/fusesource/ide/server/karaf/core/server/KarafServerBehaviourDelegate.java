@@ -29,7 +29,6 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
@@ -186,16 +185,8 @@ public class KarafServerBehaviourDelegate extends ServerBehaviourDelegate {
 			return;
 		}
 		
-		Display.getDefault().syncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
-			public void run() {
-				setServerState(IServer.STATE_STOPPING);
-			}
-		});
-		
+		setServerState(IServer.STATE_STOPPING);
+
 		if (process != null && wc != null) {
 			try {
 				String workingDir = wc.getAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, "");

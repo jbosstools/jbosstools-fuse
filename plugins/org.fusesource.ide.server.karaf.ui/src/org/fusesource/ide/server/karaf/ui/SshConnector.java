@@ -9,10 +9,13 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.server.karaf.core;
+package org.fusesource.ide.server.karaf.ui;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.Messages;
+import org.fusesource.ide.server.karaf.core.server.IServerConfiguration;
 import org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate;
 import org.fusesource.ide.server.view.ITerminalConnectionListener;
 import org.fusesource.ide.server.view.SshView;
@@ -30,7 +33,17 @@ public class SshConnector implements ITerminalConnectionListener {
 	private IServer server;
 	private KarafServerBehaviourDelegate behaviorDelegate;
 	private static final String TERMINAL_VIEW_LABEL = Messages.shellViewLabel;
-
+	
+	public SshConnector(IServer server) {
+		super();
+		this.server = server;
+		this.behaviorDelegate = (KarafServerBehaviourDelegate)server.loadAdapter(KarafServerBehaviourDelegate.class, new NullProgressMonitor());
+		IServerConfiguration config = (IServerConfiguration)server.loadAdapter(IServerConfiguration.class, new NullProgressMonitor());
+		this.host = server.getHost();
+		this.port = config.getPortNumber();
+		this.userName = config.getUserName();
+		this.passwd = config.getPassword();
+	}
 	/**
 	 * creates/establishes a SSH connection with the provided connection data
 	 * 
@@ -56,9 +69,9 @@ public class SshConnector implements ITerminalConnectionListener {
 	 */
 	public void start() {
 		// open the terminal view
-		IViewPart vp = Activator.openTerminalView();
+		IViewPart vp = KarafUIPlugin.openTerminalView();
 		if (vp == null || vp instanceof SshView == false) {
-			Activator.getLogger().error("Unable to open the terminal view!");
+			KarafUIPlugin.getLogger().error("Unable to open the terminal view!");
 			return;
 		}
 		
@@ -70,18 +83,11 @@ public class SshConnector implements ITerminalConnectionListener {
 		// add a connection listener
 		connectorView.addConnectionListener(this);
 		
-		// we do wait a moment to avoid those ugly error messages in the shell view
-		try {
-			Thread.sleep(7000);
-		} catch (InterruptedException ie) {
-			
-		}
-		
 		// create the connection
 		try {
 			connectorView.createConnectionIfNotExists(host, port, userName, passwd);
 		} catch (Exception ex) {
-			Activator.getLogger().error("Unable to connect via SSH", ex);
+			KarafUIPlugin.getLogger().error("Unable to connect via SSH", ex);
 		}
 	}
 
@@ -91,7 +97,7 @@ public class SshConnector implements ITerminalConnectionListener {
 	@Override
 	public void onConnect() {
 		this.behaviorDelegate.setLaunched();
-		Activator.openTerminalView().setFocus();
+		KarafUIPlugin.openTerminalView().setFocus();
 	}
 
 	/* (non-Javadoc)
@@ -102,9 +108,9 @@ public class SshConnector implements ITerminalConnectionListener {
 		this.behaviorDelegate.stop(false);
 		
 		// open the terminal view
-		IViewPart vp = Activator.openTerminalView();
+		IViewPart vp = KarafUIPlugin.openTerminalView();
 		if (vp == null || vp instanceof SshView == false) {
-			Activator.getLogger().error("Unable to open the terminal view!");
+			KarafUIPlugin.getLogger().error("Unable to open the terminal view!");
 			return;
 		}
 		
