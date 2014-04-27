@@ -35,6 +35,7 @@ public class PasswordChangeOperation extends AbstractOperation {
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
+		// DO nothing on the execute, since the editor may not be saved yet
 		copy.setPassword(newPassword);
 		return Status.OK_STATUS;
 	}

@@ -11,16 +11,19 @@
 
 package org.fusesource.ide.server.karaf.core.server;
 
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 import org.fusesource.ide.server.karaf.core.Activator;
-
+import org.fusesource.ide.server.karaf.core.util.ServerNamingUtil;
+import org.jboss.ide.eclipse.as.wtp.core.util.ServerSecureStorageUtil;
 
 /**
  * @author lhein
@@ -37,20 +40,27 @@ public class KarafServerDelegate extends ServerDelegate implements
 	public static final String DEFAULT_FUSEESB_SSH_USER = "admin";
 	public static final String DEFAULT_FUSEESB_SSH_PASSWORD = "admin";
 	
-	private static final String DEFAULT_DUMMY = null;
+	public void setDefaults(IProgressMonitor monitor) {
+		super.setDefaults(monitor);
+		IRuntime rt = getServer().getRuntime();
+		getServerWorkingCopy().setName(ServerNamingUtil.getDefaultServerName(getServer(), rt));
+		setAttribute(IServerConfiguration.USER_ID, getDefaultUsername());
+		// do not set password, will be in secure storage
+	}
+	
+	protected String getDefaultUsername() {
+		return DEFAULT_KARAF_SSH_USER;
+	}
+	
+	protected String getDefaultPassword() {
+		return DEFAULT_KARAF_SSH_PASSWORD;
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfiguration#getHostName()
 	 */
 	public String getHostName() {
-		return getAttribute(IServerConfiguration.HOST_NAME,	DEFAULT_DUMMY);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfiguration#getPassword()
-	 */
-	public String getPassword() {
-		return getAttribute(IServerConfiguration.PASSWORD, DEFAULT_DUMMY);
+		return getAttribute(IServerConfiguration.HOST_NAME,	getServer().getHost());
 	}
 
 	/* (non-Javadoc)
@@ -64,7 +74,7 @@ public class KarafServerDelegate extends ServerDelegate implements
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfiguration#getUserName()
 	 */
 	public String getUserName() {
-		return getAttribute(IServerConfiguration.USER_ID, DEFAULT_DUMMY);
+		return getAttribute(IServerConfiguration.USER_ID, getDefaultUsername());
 	}
 
 	/* (non-Javadoc)
@@ -73,13 +83,27 @@ public class KarafServerDelegate extends ServerDelegate implements
 	public void setHostName(String hostName) {
 		setAttribute(IServerConfiguration.HOST_NAME, hostName);
 	}
-
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy#setPassword(java.lang.String)
-	 */
-	public void setPassword(String password) {
-		setAttribute(IServerConfiguration.PASSWORD, password);
+	
+	@Override
+	public String getPassword() {
+		String s = ServerSecureStorageUtil.getFromSecureStorage(Activator.PLUGIN_ID, 
+				getServer(), IServerConfiguration.PASSWORD);
+		if( s == null )
+			return getAttribute(IServerConfiguration.PASSWORD, getDefaultPassword());
+		return s;
 	}
+	
+	public void setPassword(String pass) {
+		try {
+			ServerSecureStorageUtil.storeInSecureStorage(Activator.PLUGIN_ID, 
+					getServer(), IServerConfiguration.PASSWORD, pass);
+        } catch (StorageException e) {
+        	Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Could not save password for server in secure storage.", e)); //$NON-NLS-1$
+        } catch (UnsupportedEncodingException e) {
+        	Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Could not save password for server in secure storage.", e)); //$NON-NLS-1$	
+        }
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy#setPortNumber(int)
@@ -125,38 +149,6 @@ public class KarafServerDelegate extends ServerDelegate implements
 	@Override
 	public void modifyModules(IModule[] add, IModule[] remove,
 			IProgressMonitor monitor) throws CoreException {
-		if (remove != null && remove.length > 0) {
-			for (IModule mod : remove) {
-				try {
-					removeModule(mod);
-				} catch (IOException e) {
-					throw new CoreException(new Status(IStatus.ERROR,
-							Activator.PLUGIN_ID,
-							"IOException for module " + mod.getName(), e));
-				}
-			}
-		}
-	}
-	
-	private void removeModule(IModule mod) throws CoreException, IOException {
-		Activator.getLogger().debug("Remove Module: " + mod.getId());
-//		IFuseESBModule esbModule = (IFuseESBModule) mod.loadAdapter(
-//				IFuseESBModule.class, null);
-//		if (esbModule != null) {
-//			if (esbModule.isPublishedUsingAnt()) {
-//				removeAntPublishedContent(esbModule);
-//			} else {
-//				removeUsingProjectName(mod);
-//				// removeUsingJMX(mod);
-//			}
-//			esbModule.clearModuleProperties();
-//		} else {
-//			removeUsingProjectName(mod);
-//		}
-//		try{
-//			getServerConfiguration().getDeployManager().removeDeployArtifact(mod.getProject());
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		// Do nothing
 	}
 }

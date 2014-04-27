@@ -31,7 +31,6 @@ public class KarafServerPorpertiesComposite extends Composite implements
 	private final IWizardHandle wizardHandle;
 	private final KarafWizardDataModel model;
 	private Text txtUserName;
-	private Text txtHostName;
 	private Text txtPortNumber;
 	private Text txtPassword;
 	private boolean valid = true;
@@ -54,9 +53,7 @@ public class KarafServerPorpertiesComposite extends Composite implements
 		if (event.type == SWT.FocusIn) {
 			handleFocusEvent(event);
 		} else {
-			if (event.widget == txtHostName) {
-				model.setHostName(txtHostName.getText());
-			} else if (event.widget == txtPortNumber) {
+			if (event.widget == txtPortNumber) {
 				val = validate();
 				if (val) {
 					try {
@@ -96,13 +93,6 @@ public class KarafServerPorpertiesComposite extends Composite implements
 		GridData gd = new GridData();
 		gd.grabExcessHorizontalSpace = true;
 		gd.horizontalAlignment = SWT.FILL;
-		Label lblHostName = new Label(this, SWT.NONE);
-		lblHostName.setText(Messages.KarafServerPorpertiesComposite_host_name_label);
-		txtHostName = new Text(this, SWT.BORDER);
-		txtHostName.setText("" + model.getHostName());
-		txtHostName.setEnabled(false);
-		txtHostName.setLayoutData(gd);
-		txtHostName.addListener(SWT.Modify, this);
 
 		Label lblPortNumber = new Label(this, SWT.NONE);
 		lblPortNumber.setText(Messages.KarafServerPorpertiesComposite_port_number_label);

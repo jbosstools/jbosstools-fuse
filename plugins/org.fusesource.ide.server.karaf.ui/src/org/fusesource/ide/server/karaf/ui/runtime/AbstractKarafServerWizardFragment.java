@@ -100,7 +100,6 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 				}
 			}
 			if (!readFromConfFile && karafServerWorkingCopy != null) {
-				model.setHostName(karafServerWorkingCopy.getHostName());
 				model.setPortNumber(karafServerWorkingCopy.getPortNumber());
 			}
 		}
@@ -118,7 +117,6 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 					.loadAdapter(IServerConfigurationWorkingCopy.class,
 							new NullProgressMonitor());
 			if (karafServerWorkingCopy != null) {
-				karafServerWorkingCopy.setHostName(model.getHostName());
 				karafServerWorkingCopy.setPortNumber(model.getPortNumber());
 				karafServerWorkingCopy.setUserName(model.getUserName());
 				karafServerWorkingCopy.setPassword(model.getPassword());

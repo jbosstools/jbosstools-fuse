@@ -17,13 +17,6 @@ package org.fusesource.ide.server.karaf.core.server;
 public interface IServerConfigurationWorkingCopy extends IServerConfiguration {
 	
 	/**
-	 * sets the host name
-	 * 
-	 * @param hostName
-	 */
-	void setHostName(String hostName);
-
-	/**
 	 * sets the password
 	 * 
 	 * @param password

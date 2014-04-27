@@ -47,13 +47,6 @@ public interface IServerConfiguration {
 		
 	   // more server type id's to be added here!
 	};
-	
-	/**
-	 * returns the host name
-	 * 
-	 * @return
-	 */
-	String getHostName();
 
 	/**
 	 * returns the password

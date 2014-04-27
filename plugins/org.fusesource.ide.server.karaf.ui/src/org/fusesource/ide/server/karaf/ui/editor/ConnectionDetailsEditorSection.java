@@ -11,6 +11,10 @@
 
 package org.fusesource.ide.server.karaf.ui.editor;
 
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -24,14 +28,25 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.ui.editor.ServerEditorSection;
 import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
 import org.fusesource.ide.server.karaf.ui.Messages;
+import org.jboss.ide.eclipse.as.wtp.ui.editor.ServerWorkingCopyPropertyCommand;
 
 
 public class ConnectionDetailsEditorSection extends ServerEditorSection {
 
 	IServerConfigurationWorkingCopy configuration = null;
+	// a dummy string to represent that we did not look up the password
+	// in secure storage yet.  This is done to avoid secure storage 
+	// popping up as soon as a user opens eclipse.
+	private static String PASSWORD_NOT_LOADED = "***fuseide****"; //$NON-NLS-1$
+	private String passwordString = PASSWORD_NOT_LOADED;
+	private boolean passwordChanged = false;
+	private Text sshPasswordText;
+	private ModifyListener sshPasswordListener;
+	
 	
 	public ConnectionDetailsEditorSection() {
 	}
@@ -69,17 +84,6 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 			return;
 		}
 		
-		Label hostName = toolkit.createLabel(composite, Messages.ConnectionDetailsEditorSection_hostname_label);
-		hostName.setLayoutData(leftData);
-		final Text hostNameText = toolkit.createText(composite, configuration.getHostName(), SWT.BORDER);
-		hostNameText.setLayoutData(filldata);
-		hostNameText.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e) {
-				String hostNameValue = hostNameText.getText().trim();
-				execute( new HostNameChangeOperation(configuration, hostNameValue, Messages.ConnectionDetailsEditorSection_hostname_op));
-			}
-		});
-		
 		Label portNumber = toolkit.createLabel(composite, Messages.ConnectionDetailsEditorSection_port_num_label);
 		portNumber.setLayoutData(leftData);
 		final Text portNumberText = toolkit.createText(composite, ""+configuration.getPortNumber(),SWT.BORDER);
@@ -107,13 +111,57 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 		
 		Label sshPasswordLabel = toolkit.createLabel(composite, Messages.ConnectionDetailsEditorSection_password_label);
 		sshPasswordLabel.setLayoutData(leftData);
-		final Text sshPasswordText = toolkit.createText(composite, ""+configuration.getPassword(),SWT.BORDER|SWT.PASSWORD); //$NON-NLS-1$
+		sshPasswordText = toolkit.createText(composite, ""+configuration.getPassword(),SWT.BORDER|SWT.PASSWORD); //$NON-NLS-1$
 		sshPasswordText.setLayoutData(filldata);
-		sshPasswordText.addModifyListener(new ModifyListener(){
+		sshPasswordListener = new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
-				execute(new PasswordChangeOperation(configuration,sshPasswordText.getText(),Messages.ConnectionDetailsEditorSection_password_op));
+				execute(new SetPassCommand(server));
 			}
-		});
+		};
+		sshPasswordText.addModifyListener(sshPasswordListener);
 	}
 	
+	/**
+	 * Because the implementation of setPassword accesses the secure storage,
+	 * we should only do this on a save of the editor, not on every change
+	 * to the text control.  For this reason, we cache changes to 
+	 * this field, and only persist them on a doSave() call. 
+	 */
+	public class SetPassCommand extends ServerWorkingCopyPropertyCommand {
+		public SetPassCommand(IServerWorkingCopy server) {
+			super(server, Messages.ConnectionDetailsEditorSection_password_op,
+					sshPasswordText, sshPasswordText.getText(), 
+					null, sshPasswordListener);
+			oldVal = passwordString;
+		}
+		
+		public void execute() {
+			passwordString = newVal;
+			passwordChanged = !PASSWORD_NOT_LOADED.equals(passwordString);
+		}
+		
+		public void undo() {
+			passwordString = oldVal;
+			text.removeModifyListener(listener);
+			text.setText(oldVal);
+			text.addModifyListener(listener);
+			passwordChanged = !PASSWORD_NOT_LOADED.equals(passwordString);
+		}
+		public IStatus redo(IProgressMonitor monitor, IAdaptable adapt) {
+			execute();
+			return Status.OK_STATUS;
+		}
+	}
+
+	/**
+	 * Allow a section an opportunity to respond to a doSave request on the editor.
+	 * @param monitor the progress monitor for the save operation.
+	 */
+	public void doSave(IProgressMonitor monitor) {
+		if( passwordChanged ) {
+			configuration.setPassword(passwordString);
+			monitor.worked(100);
+			passwordChanged = false;
+		}
+	}
 }
