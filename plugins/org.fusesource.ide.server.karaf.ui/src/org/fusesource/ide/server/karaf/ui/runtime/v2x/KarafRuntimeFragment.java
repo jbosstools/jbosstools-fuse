@@ -129,9 +129,4 @@ public class KarafRuntimeFragment extends AbstractJBTRuntimeWizardFragment {
 				srt.setVM(null);
 		}
 	}
-	
-	protected ImageDescriptor getImageDescriptor() {
-		// TODO: return an icon for the runtime
-		return null;
-	}
 }

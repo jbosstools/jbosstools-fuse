@@ -19,9 +19,7 @@ public class KarafBeanProvider implements IServerBeanTypeProvider {
 
 	public KarafBeanProvider() {
 	}
-		
-	public static final ServerBeanTypeKaraf2x KARAF_2x = new ServerBeanTypeKaraf2x();
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
