@@ -69,14 +69,14 @@
 
   <extension point="org.eclipse.wst.server.core.serverTypes">
      <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
            class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
            description="%karafServerDescription_20"
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.20"
            initialState="stopped"
            launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           launchConfigId="org.fusesource.ide.server.karaf2x.launch"
            name="%karafServerType_20"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.karaf.runtime.20"
@@ -85,14 +85,14 @@
            supportsRemoteHosts="false">
      </serverType>
      <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
            class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
            description="%karafServerDescription_21"
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.21"
            initialState="stopped"
            launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           launchConfigId="org.fusesource.ide.server.karaf2x.launch"
            name="%karafServerType_21"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.karaf.runtime.21"
@@ -101,14 +101,14 @@
            supportsRemoteHosts="false">
      </serverType>
      <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
            class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
            description="%karafServerDescription_22"
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.22"
            initialState="stopped"
            launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           launchConfigId="org.fusesource.ide.server.karaf2x.launch"
            name="%karafServerType_22"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.karaf.runtime.22"
@@ -117,14 +117,14 @@
            supportsRemoteHosts="false">
      </serverType>
      <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
            class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
            description="%karafServerDescription_23"
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.23"
            initialState="stopped"
            launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           launchConfigId="org.fusesource.ide.server.karaf2x.launch"
            name="%karafServerType_23"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.karaf.runtime.23"
@@ -133,11 +133,25 @@
            supportsRemoteHosts="false">
      </serverType>
   </extension>
+  
+  <!-- delete this, old -->
   <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType
            delegate="org.fusesource.ide.server.karaf.core.launch.KarafLaunchDelegate"
            id="org.fusesource.ide.server.karaf.launch"
+           modes="run"
+           name="%karaf.launch.name"
+           public="true">
+     </launchConfigurationType>
+  </extension>
+
+  <!-- delete this, old -->
+  <extension
+        point="org.eclipse.debug.core.launchConfigurationTypes">
+     <launchConfigurationType
+           delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
+           id="org.fusesource.ide.server.karaf2x.launch"
            modes="run"
            name="%karaf.launch.name"
            public="true">
@@ -247,4 +261,32 @@
      </runtimeDetector>
   </extension>
   
+  <extension
+         point="org.jboss.ide.eclipse.as.wtp.core.serverSubsystem">
+         <subsystem
+            system="launch"
+            id="launch.karaf.local.default"
+            name="Local Karaf Launch Controller"
+            class="org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xLaunchController">
+         </subsystem>
+         <subsystemMapping
+            id="launch.karaf.local.default"
+            mappedId="launch.karaf.local"
+            serverTypes="org.fusesource.ide.karaf.server.20,org.fusesource.ide.karaf.server.21,org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23">
+         </subsystemMapping>
+         
+         
+         <subsystem
+            system="shutdown"
+            id="shutdown.karaf.local.default"
+            name="Local Karaf Shutdown Controller"
+            class="org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xShutdownController">
+         </subsystem>
+         <subsystemMapping
+            id="shutdown.karaf.local.default"
+            mappedId="shutdown.karaf.local"
+            serverTypes="org.fusesource.ide.karaf.server.20,org.fusesource.ide.karaf.server.21,org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23">
+         </subsystemMapping>
+
+  </extension>
 </plugin>

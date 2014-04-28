@@ -40,6 +40,7 @@ import org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate;
 /**
  * @author lhein
  */
+@Deprecated
 public class KarafLaunchDelegate implements ILaunchConfigurationDelegate {
 
 	private static final String QUOTE = "\"";

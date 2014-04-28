@@ -111,7 +111,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 		
 		Label sshPasswordLabel = toolkit.createLabel(composite, Messages.ConnectionDetailsEditorSection_password_label);
 		sshPasswordLabel.setLayoutData(leftData);
-		sshPasswordText = toolkit.createText(composite, ""+configuration.getPassword(),SWT.BORDER|SWT.PASSWORD); //$NON-NLS-1$
+		sshPasswordText = toolkit.createText(composite, PASSWORD_NOT_LOADED,SWT.BORDER|SWT.PASSWORD); //$NON-NLS-1$
 		sshPasswordText.setLayoutData(filldata);
 		sshPasswordListener = new ModifyListener(){
 			public void modifyText(ModifyEvent e) {

@@ -71,7 +71,18 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 		plugin = this;
 		// Add a server listener to respond to the server being marked as 'starting'
 		serverStartingListener = getServerStartingListener();
-		UnitedServerListenerManager.getDefault().addListener(serverStartingListener);
+		
+		// Temporary workaround... under recent tests, if the listener is added 
+		// too early, the server never ever fires events (ie the listener is ignored
+		// or clobbered or something).  Will test again asap. 
+		new Thread() {
+			public void run() {
+				try{
+					Thread.sleep(1000);
+				} catch(InterruptedException ie){}
+				UnitedServerListenerManager.getDefault().addListener(serverStartingListener);
+			}
+		}.start();
 	}
 
 	private UnitedServerListener getServerStartingListener() {

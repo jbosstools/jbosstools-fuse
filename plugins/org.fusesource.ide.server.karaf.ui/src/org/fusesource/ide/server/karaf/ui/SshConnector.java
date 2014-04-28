@@ -16,9 +16,10 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Messages;
 import org.fusesource.ide.server.karaf.core.server.IServerConfiguration;
-import org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate;
 import org.fusesource.ide.server.view.ITerminalConnectionListener;
 import org.fusesource.ide.server.view.SshView;
+import org.jboss.ide.eclipse.as.wtp.core.server.behavior.ControllableServerBehavior;
+import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IControllableServerBehavior;
 
 
 /**
@@ -31,13 +32,13 @@ public class SshConnector implements ITerminalConnectionListener {
 	private String userName;
 	private String passwd;
 	private IServer server;
-	private KarafServerBehaviourDelegate behaviorDelegate;
+	private IControllableServerBehavior behaviorDelegate;
 	private static final String TERMINAL_VIEW_LABEL = Messages.shellViewLabel;
 	
 	public SshConnector(IServer server) {
 		super();
 		this.server = server;
-		this.behaviorDelegate = (KarafServerBehaviourDelegate)server.loadAdapter(KarafServerBehaviourDelegate.class, new NullProgressMonitor());
+		this.behaviorDelegate = (IControllableServerBehavior)server.loadAdapter(IControllableServerBehavior.class, new NullProgressMonitor());
 		IServerConfiguration config = (IServerConfiguration)server.loadAdapter(IServerConfiguration.class, new NullProgressMonitor());
 		this.host = server.getHost();
 		this.port = config.getPortNumber();
@@ -54,7 +55,7 @@ public class SshConnector implements ITerminalConnectionListener {
 	 * @param user					the user name
 	 * @param pass					the user password
 	 */
-	public SshConnector(IServer server, KarafServerBehaviourDelegate behaviorDelegate, String host, int port, String user, String pass) {
+	public SshConnector(IServer server, IControllableServerBehavior behaviorDelegate, String host, int port, String user, String pass) {
 		super();
 		this.server = server;
 		this.behaviorDelegate = behaviorDelegate;
@@ -96,7 +97,7 @@ public class SshConnector implements ITerminalConnectionListener {
 	 */
 	@Override
 	public void onConnect() {
-		this.behaviorDelegate.setLaunched();
+		((ControllableServerBehavior)this.behaviorDelegate).setServerStarted();
 		KarafUIPlugin.openTerminalView().setFocus();
 	}
 
@@ -105,7 +106,7 @@ public class SshConnector implements ITerminalConnectionListener {
 	 */
 	@Override
 	public void onDisconnect() {
-		this.behaviorDelegate.stop(false);
+		((ControllableServerBehavior)this.behaviorDelegate).stop(false);
 		
 		// open the terminal view
 		IViewPart vp = KarafUIPlugin.openTerminalView();
