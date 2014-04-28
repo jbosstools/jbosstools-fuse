@@ -82,7 +82,7 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 		 */
 		protected static boolean checkKarafVersion(File location,
 				String property, String propPrefix) {
-			String mainFolder = new ServerBeanTypeKaraf2x().jbossSystemJarPath;
+			String mainFolder = new ServerBeanTypeKaraf2x().getSystemJarPath();
 			String value = getJarProperty(new File(location + File.separator
 					+ mainFolder), property);
 			return value != null && value.startsWith(propPrefix);

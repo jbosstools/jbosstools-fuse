@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
@@ -123,5 +124,8 @@ public class KarafRuntimeFragment extends AbstractJBTRuntimeWizardFragment {
 		}
 	}
 	
-	
+	protected ImageDescriptor getImageDescriptor() {
+		// TODO: return an icon for the runtime
+		return null;
+	}
 }
