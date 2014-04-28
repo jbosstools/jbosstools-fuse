@@ -146,7 +146,6 @@
      </launchConfigurationType>
   </extension>
 
-  <!-- delete this, old -->
   <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType

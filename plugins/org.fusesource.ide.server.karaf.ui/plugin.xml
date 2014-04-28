@@ -94,6 +94,11 @@
             id="org.fusesource.ide.server.karaf.ui.launch.tab"
             type="org.fusesource.ide.server.karaf.launch">
       </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="org.fusesource.ide.server.karaf.ui.launch.KarafLaunchConfigTabGroup"
+            id="org.fusesource.ide.server.karaf2x.launch.tab"
+            type="org.fusesource.ide.server.karaf2x.launch">
+      </launchConfigurationTabGroup>
    </extension>
    <extension
          point="org.eclipse.wst.server.ui.editorPageSections">
