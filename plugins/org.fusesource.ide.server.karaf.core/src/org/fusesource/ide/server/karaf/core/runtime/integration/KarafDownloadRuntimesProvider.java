@@ -32,12 +32,23 @@ import org.osgi.framework.Bundle;
  * Pull runtimes from a stacks file and return them to runtimes framework
  */
 public class KarafDownloadRuntimesProvider extends AbstractStacksDownloadRuntimesProvider {
+	
 	private class CustomStacksManager extends StacksManager {
+		/*
+		 * (non-Javadoc)
+		 * @see org.jboss.tools.stacks.core.model.StacksManager#getStacksFromFile(java.io.File)
+		 */
+		@Override
 		public Stacks getStacksFromFile(File f) throws IOException {
 			return super.getStacksFromFile(f);
 		}
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider#getStacks(org.eclipse.core.runtime.IProgressMonitor)
+	 */
+	@Override
 	protected Stacks[] getStacks(IProgressMonitor monitor) {
 		try {
 			File f = getFileLocation(Activator.PLUGIN_ID, "resources/karaf.yaml");
@@ -51,10 +62,6 @@ public class KarafDownloadRuntimesProvider extends AbstractStacksDownloadRuntime
 		}
 		return new Stacks[0];
 	}
-	
-	
-	
-	
 	
 	// TODO move to util class
 	public static File getFileLocation(String bundleId, String path) throws CoreException {

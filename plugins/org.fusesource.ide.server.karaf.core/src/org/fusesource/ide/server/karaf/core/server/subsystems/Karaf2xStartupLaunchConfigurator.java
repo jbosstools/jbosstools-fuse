@@ -15,12 +15,12 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
+import org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants;
 import org.jboss.ide.eclipse.as.wtp.core.server.launch.LaunchConfiguratorWithOverrides;
 
 public class Karaf2xStartupLaunchConfigurator extends
 		LaunchConfiguratorWithOverrides {
 	
-
 	public static final String QUOTE = "\"";
 	public static final String SPACE = " ";
 	public static final String SEPARATOR = File.separator;
@@ -45,8 +45,27 @@ public class Karaf2xStartupLaunchConfigurator extends
 		
 		if (runtime != null) {
 			String karafInstallDir = runtime.getLocation().toOSString();
-			String vmArguments = getVMArguments(karafInstallDir);
-			String mainProgram = getMainProgram();
+			String mainProgram = null;
+			String vmArguments = null;
+			
+			String version = runtime.getKarafVersion();
+			if (version != null) {
+				if (version.startsWith(IKarafToolingConstants.KARAF_VERSION_2x)) {
+					// handle 2x specific program arguments
+					vmArguments = get2xVMArguments(karafInstallDir);
+					mainProgram = get2xMainProgram();
+				} else if (version.startsWith(IKarafToolingConstants.KARAF_VERSION_3x)) {
+					// handle 3x specific program arguments
+					vmArguments = get3xVMArguments(karafInstallDir);
+					mainProgram = get3xMainProgram();
+				} else {
+					System.err.println("Unhandled Karaf Version (" + version + ")!");
+				}
+			}
+			
+			System.err.println("SERVER MODE: " + server.getMode());
+			System.err.println("exec java " + vmArguments + SPACE + mainProgram);
+
 			// For java tabs
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, karafInstallDir);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainProgram);
@@ -117,17 +136,29 @@ public class Karaf2xStartupLaunchConfigurator extends
 		return ""; //$NON-NLS-1$
 	}
 
+	protected String get2xMainProgram() {
+		return getMainProgram();
+	}
+
+	protected String get3xMainProgram() {
+		return getMainProgram();
+	}
+	
 	protected String getMainProgram() {
 		return KARAF_MAIN_CLASS;
 	}
 
-	protected String getVMArguments(String karafInstallDir) {
+	protected String get2xVMArguments(String karafInstallDir) {
 		StringBuilder vmArguments = new StringBuilder();
 
-		vmArguments.append("-Xms128M  -Xmx512M -XX:+UnlockDiagnosticVMOptions -XX:+UnsyncloadClass ");
+		vmArguments.append("-Xms128M");
+		vmArguments.append(SPACE + "-Xmx512M");
+		vmArguments.append(SPACE + "-XX:+UnlockDiagnosticVMOptions");
+		vmArguments.append(SPACE + "-XX:+UnsyncloadClass");
 		vmArguments.append(SPACE + "-Dderby.system.home=" + QUOTE + karafInstallDir + SEPARATOR + "data" + SEPARATOR + "derby" + QUOTE); 
 		vmArguments.append(SPACE + "-Dderby.storage.fileSyncTransactionLog=true");
-		//vmArguments.append(SPACE + "-Dcom.sun.management.jmxremote");
+		vmArguments.append(SPACE + "-server");
+		vmArguments.append(SPACE + "-Dcom.sun.management.jmxremote");
 		vmArguments.append(SPACE + "-Dkaraf.startLocalConsole=false");
 		vmArguments.append(SPACE + "-Dkaraf.startRemoteShell=true");
 		vmArguments.append(SPACE + "-Dkaraf.home=" + QUOTE + karafInstallDir + QUOTE); 
@@ -136,6 +167,29 @@ public class Karaf2xStartupLaunchConfigurator extends
 		vmArguments.append(SPACE + "-Dkaraf.data=" + QUOTE + karafInstallDir + SEPARATOR + "data" + QUOTE);
 		vmArguments.append(SPACE + "-Djava.util.logging.config.file=" + QUOTE + karafInstallDir + SEPARATOR + "etc" + SEPARATOR + "java.util.logging.properties" + QUOTE);
 			
+		return vmArguments.toString();
+	}
+	
+	protected String get3xVMArguments(String karafInstallDir) {
+		StringBuilder vmArguments = new StringBuilder();
+
+		vmArguments.append("-Xms128M");
+		vmArguments.append(SPACE + "-Xmx512M");
+		vmArguments.append(SPACE + "-XX:+UnlockDiagnosticVMOptions");
+		vmArguments.append(SPACE + "-XX:+UnsyncloadClass");
+		vmArguments.append(SPACE + "-server ");
+		vmArguments.append(SPACE + "-Dcom.sun.management.jmxremote");
+		vmArguments.append(SPACE + "-Dkaraf.startLocalConsole=false");
+		vmArguments.append(SPACE + "-Dkaraf.startRemoteShell=true");
+		vmArguments.append(SPACE + "-Dkaraf.home=" + QUOTE + karafInstallDir + QUOTE); 
+		vmArguments.append(SPACE + "-Dkaraf.base=" + QUOTE + karafInstallDir + QUOTE);
+		vmArguments.append(SPACE + "-Dkaraf.instances=" + QUOTE + karafInstallDir + SEPARATOR + "instances" + QUOTE);
+		vmArguments.append(SPACE + "-Dkaraf.data=" + QUOTE + karafInstallDir + SEPARATOR + "data" + QUOTE);
+		vmArguments.append(SPACE + "-Dkaraf.etc=" + QUOTE + karafInstallDir + SEPARATOR + "etc" + QUOTE);
+		vmArguments.append(SPACE + "-Djava.io.tmpdir=" + QUOTE + karafInstallDir + SEPARATOR + "tmp" + QUOTE);
+		vmArguments.append(SPACE + "-Djava.util.logging.config.file=" + QUOTE + karafInstallDir + SEPARATOR + "etc" + SEPARATOR + "java.util.logging.properties" + QUOTE);
+		vmArguments.append(SPACE + "-Djavax.management.builder.initial=org.apache.karaf.management.boot.KarafMBeanServerBuilder" + QUOTE);
+		
 		return vmArguments.toString();
 	}
 

@@ -47,7 +47,8 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 		ServerBeanLoader loader = new ServerBeanLoader(root);
 		ServerBean serverBean = loader.getServerBean();
 		ServerBeanType type = serverBean.getBeanType();
-		if( KarafBeanProvider.KARAF_2x.equals(type)) {
+		if( KarafBeanProvider.KARAF_2x.equals(type) ||
+			KarafBeanProvider.KARAF_3x.equals(type) ) {
 			RuntimeDefinition runtimeDefinition = new RuntimeDefinition(serverBean.getName(), 
 					serverBean.getVersion(), type.getId(), new File(serverBean.getLocation()));
 			return runtimeDefinition;

@@ -78,7 +78,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 		new Thread() {
 			public void run() {
 				try{
-					Thread.sleep(1000);
+					Thread.sleep(10000);
 				} catch(InterruptedException ie){}
 				UnitedServerListenerManager.getDefault().addListener(serverStartingListener);
 			}

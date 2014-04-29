@@ -65,6 +65,21 @@
          types="jst.utility"
          versions="1.0"/>
     </runtimeType>
+    <runtimeType
+          class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
+          description="%runtimeTypeKarafDescription_30"
+          id="org.fusesource.ide.karaf.runtime.30"
+          name="%runtimeTypeKarafLabel_30"
+          vendor="%fusesource"
+          vendorId="%fusesource"
+          version="3.0">
+       <moduleType
+         types="jst.web"
+         versions="2.2, 2.3, 2.4, 2.5, 3.0"/>
+       <moduleType
+         types="jst.utility"
+         versions="1.0"/>
+    </runtimeType>
   </extension>
 
   <extension point="org.eclipse.wst.server.core.serverTypes">
@@ -132,20 +147,24 @@
            stopTimeout="45000"
            supportsRemoteHosts="false">
      </serverType>
+     <serverType
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
+           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
+           description="%karafServerDescription_30"
+           hasConfiguration="true"
+           id="org.fusesource.ide.karaf.server.30"
+           initialState="stopped"
+           launchModes="run"
+           launchConfigId="org.fusesource.ide.server.karaf2x.launch"
+           name="%karafServerType_30"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.karaf.runtime.30"
+           startTimeout="90000"
+           stopTimeout="45000"
+           supportsRemoteHosts="false">
+     </serverType>
   </extension>
   
-  <!-- delete this, old -->
-  <extension
-        point="org.eclipse.debug.core.launchConfigurationTypes">
-     <launchConfigurationType
-           delegate="org.fusesource.ide.server.karaf.core.launch.KarafLaunchDelegate"
-           id="org.fusesource.ide.server.karaf.launch"
-           modes="run"
-           name="%karaf.launch.name"
-           public="true">
-     </launchConfigurationType>
-  </extension>
-
   <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType
@@ -174,15 +193,29 @@
 
   <extension point="org.eclipse.wst.server.core.installableRuntimes">
     <runtime
-          archivePath="apache-karaf-2.3.2"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.zip"
+          archivePath="apache-karaf-3.0.1"
+          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/3.0.1/apache-karaf-3.0.1.zip"
+          id="org.fusesource.ide.karaf.runtime.30"
+          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
+          os="win32">
+    </runtime>
+    <runtime
+          archivePath="apache-karaf-3.0.1"
+          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/3.0.1/apache-karaf-3.0.1.tar.gz"
+          id="org.fusesource.ide.karaf.runtime.30"
+          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
+          os="linux">
+    </runtime>
+    <runtime
+          archivePath="apache-karaf-2.3.5"
+          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.5/apache-karaf-2.3.5.zip"
           id="org.fusesource.ide.karaf.runtime.23"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="win32">
     </runtime>
     <runtime
-          archivePath="apache-karaf-2.3.2"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.tar.gz"
+          archivePath="apache-karaf-2.3.5"
+          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.5/apache-karaf-2.3.5.tar.gz"
           id="org.fusesource.ide.karaf.runtime.23"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="linux">
@@ -231,11 +264,7 @@
     </runtime>
   </extension>
   
-  
-  
-  
   <!-- new stuff -->
-  
   
   <extension
         point="org.jboss.ide.eclipse.as.wtp.core.serverBeanTypeProvider">
@@ -271,9 +300,8 @@
          <subsystemMapping
             id="launch.karaf.local.default"
             mappedId="launch.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.20,org.fusesource.ide.karaf.server.21,org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23">
+            serverTypes="org.fusesource.ide.karaf.server.20,org.fusesource.ide.karaf.server.21,org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.30">
          </subsystemMapping>
-         
          
          <subsystem
             system="shutdown"
@@ -284,8 +312,21 @@
          <subsystemMapping
             id="shutdown.karaf.local.default"
             mappedId="shutdown.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.20,org.fusesource.ide.karaf.server.21,org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23">
+            serverTypes="org.fusesource.ide.karaf.server.20,org.fusesource.ide.karaf.server.21,org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.30">
          </subsystemMapping>
-
   </extension>
+
+
+  <!-- delete this, old -->
+  <extension
+        point="org.eclipse.debug.core.launchConfigurationTypes">
+     <launchConfigurationType
+           delegate="org.fusesource.ide.server.karaf.core.launch.KarafLaunchDelegate"
+           id="org.fusesource.ide.server.karaf.launch"
+           modes="run"
+           name="%karaf.launch.name"
+           public="true">
+     </launchConfigurationType>
+  </extension>
+
 </plugin>

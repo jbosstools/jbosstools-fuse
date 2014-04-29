@@ -27,13 +27,83 @@ licenses:
 availableRuntimes:
 
    ###############
+   #   Karaf2.0  #
+   ###############
+
+ - &karaf200
+   id: karaf200
+   name: Apache Karaf 2.0.0
+   version: 2.0.0
+   license: *apache20
+   url: http://karaf.apache.org
+   labels: {
+        requiresCredentials: false,
+        runtime-category: OSGI_SERVER,
+        runtime-type: KARAF,
+        runtime-size: 5721336,
+        additionalDownloadURLs: {
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.0.0/apache-karaf-2.0.0.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.0.0/apache-karaf-2.0.0.tar.gz",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.0.0/apache-karaf-2.0.0.tar.gz",
+        },
+        wtp-runtime-type: org.fusesource.ide.karaf.runtime.20
+   }
+
+   ###############
+   #   Karaf2.1  #
+   ###############
+
+ - &karaf216
+   id: karaf216
+   name: Apache Karaf 2.1.6
+   version: 2.1.6
+   license: *apache20
+   url: http://karaf.apache.org
+   labels: {
+        requiresCredentials: false,
+        runtime-category: OSGI_SERVER,
+        runtime-type: KARAF,
+        runtime-size: 5110130,
+        additionalDownloadURLs: {
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.1.6/apache-karaf-2.1.6.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.1.6/apache-karaf-2.1.6.tar.gz",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.1.6/apache-karaf-2.1.6.tar.gz",
+        },
+        wtp-runtime-type: org.fusesource.ide.karaf.runtime.21
+   }
+
+   ###############
+   #   Karaf2.2  #
+   ###############
+
+ - &karaf2211
+   id: karaf2211
+   name: Apache Karaf 2.2.11
+   version: 2.2.11
+   license: *apache20
+   url: http://karaf.apache.org
+   labels: {
+        requiresCredentials: false,
+        runtime-category: OSGI_SERVER,
+        runtime-type: KARAF,
+        runtime-size: 7468174,
+        additionalDownloadURLs: {
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.2.11/apache-karaf-2.2.11.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.2.11/apache-karaf-2.2.11.tar.gz",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.2.11/apache-karaf-2.2.11.tar.gz",
+        },
+        wtp-runtime-type: org.fusesource.ide.karaf.runtime.22
+   }
+
+
+   ###############
    #   Karaf2.3  #
    ###############
 
- - &karaf232
-   id: karaf232
-   name: Apache Karaf 2.3.2
-   version: 2.3.2
+ - &karaf235
+   id: karaf235
+   name: Apache Karaf 2.3.5
+   version: 2.3.5
    license: *apache20
    url: http://karaf.apache.org
    labels: {
@@ -42,9 +112,32 @@ availableRuntimes:
         runtime-type: KARAF,
         runtime-size: 10226533,
         additionalDownloadURLs: {
-            "win32": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.zip",
-            "linux": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.tar.gz",
-            "macosx": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.2/apache-karaf-2.3.2.tar.gz",
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.5/apache-karaf-2.3.5.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.5/apache-karaf-2.3.5.tar.gz",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/2.3.5/apache-karaf-2.3.5.tar.gz",
         },
         wtp-runtime-type: org.fusesource.ide.karaf.runtime.23
+   }
+ 
+   ###############
+   #   Karaf3.0  #
+   ###############
+
+ - &karaf301
+   id: karaf301
+   name: Apache Karaf 3.0.1
+   version: 3.0.1
+   license: *apache20
+   url: http://karaf.apache.org
+   labels: {
+        requiresCredentials: false,
+        runtime-category: OSGI_SERVER,
+        runtime-type: KARAF,
+        runtime-size: 15559355,
+        additionalDownloadURLs: {
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/3.0.1/apache-karaf-3.0.1.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/3.0.1/apache-karaf-3.0.1.tar.gz",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/karaf/apache-karaf/3.0.1/apache-karaf-3.0.1.tar.gz",
+        },
+        wtp-runtime-type: org.fusesource.ide.karaf.runtime.30
    }

@@ -30,6 +30,7 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
 import org.fusesource.ide.server.karaf.ui.KarafSharedImages;
+import org.fusesource.ide.server.karaf.ui.Messages;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.ui.wizards.AbstractJBTRuntimeWizardFragment;
 import org.jboss.ide.eclipse.as.ui.wizards.composite.JREComposite;
@@ -43,7 +44,7 @@ public class KarafRuntimeFragment extends AbstractJBTRuntimeWizardFragment {
 	protected void updateWizardHandle(Composite parent) {
 		// make modifications to parent
 		IRuntime r = getRuntimeFromTaskModel();
-		handle.setTitle( "Karaf Runtime" );
+		handle.setTitle(Messages.AbstractKarafRuntimeComposite_wizard_tite);
 		String descript = r.getRuntimeType().getDescription();
 		handle.setDescription(descript);
 		handle.setImageDescriptor(getImageDescriptor());
