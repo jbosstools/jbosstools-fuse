@@ -17,6 +17,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.2.0,4.0.0)",
  org.eclipse.wst.common.modulecore;bundle-version="[1.1.0,2.0.0)",
  org.eclipse.emf.common;bundle-version="[2.2.0,3.0.0)",
  org.eclipse.wst.common.project.facet.core;bundle-version="[1.1.0,2.0.0)",
+ org.fusesource.ide.commons,
  org.jboss.ide.eclipse.as.wtp.core;bundle-version="3.0.0",
  org.jboss.tools.runtime.core;bundle-version="3.0.0",
  org.jboss.tools.stacks.core;bundle-version="1.1.0",
@@ -26,6 +27,5 @@ Bundle-Activator: org.fusesource.ide.server.karaf.core.Activator
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.server.karaf.core,
  org.fusesource.ide.server.karaf.core.bean;x-friends:="org.fusesource.ide.server.tests",
- org.fusesource.ide.server.karaf.core.launch,
  org.fusesource.ide.server.karaf.core.runtime,
  org.fusesource.ide.server.karaf.core.server

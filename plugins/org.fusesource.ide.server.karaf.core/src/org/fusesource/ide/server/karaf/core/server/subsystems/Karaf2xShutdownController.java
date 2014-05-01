@@ -1,6 +1,7 @@
 package org.fusesource.ide.server.karaf.core.server.subsystems;
 
-import java.io.File;
+import java.io.IOException;
+import java.net.Socket;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -11,6 +12,8 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Activator;
+import org.fusesource.ide.server.karaf.core.server.BaseKarafConfigPropertyProvider;
+import org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior;
 import org.jboss.ide.eclipse.as.core.util.LaunchCommandPreferences;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.ControllableServerBehavior;
@@ -20,14 +23,28 @@ import org.jboss.ide.eclipse.as.wtp.core.server.launch.AbstractStartJavaServerLa
 public class Karaf2xShutdownController extends AbstractSubsystemController
 		implements IServerShutdownController {
 
+	private static final String DEFAULT_SHUTDOWN_COMMAND = "SHUTDOWN";
+	private static final String SHUTDOWN_COMMAND_PROPERTY = "karaf.shutdown.command"; 
+	public static final String SHUTDOWN_PORT_PROPERTY = "karaf.shutdown.port";
+	public static final String SHUTDOWN_PORT_FILE_PROPERTY = "karaf.shutdown.port.file";
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.ide.eclipse.as.wtp.core.server.behavior.IServerShutdownController#canStop()
+	 */
 	@Override
 	public IStatus canStop() {
+		// we allow to stop servers which are started only
 		if( getServer().getServerState() == IServer.STATE_STARTED) {
 			return Status.OK_STATUS;
 		}
 		return Status.CANCEL_STATUS;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.ide.eclipse.as.wtp.core.server.behavior.IServerShutdownController#stop(boolean)
+	 */
 	@Override
 	public void stop(boolean force) {
 		boolean ignoreLaunch = false;
@@ -43,18 +60,24 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 			return;
 		}
 		stopImpl(force);
-
 	}
 	
-	public void stopImpl(boolean force) {
+	/**
+	 * decides how to best stop the server
+	 * 
+	 * @param force use force?
+	 */
+	protected void stopImpl(boolean force) {
 		int state = getServer().getServerState();
+		
+		// if we use force we don't look for the state and stop 
 		if (force || shouldUseForce()) {
 			forceStop();
 		} else if (state == IServer.STATE_STARTING
 				|| state == IServer.STATE_STOPPING) {
 			// if we're starting up or shutting down and they've tried again,
 			// then force it to stop.
-			//cancelPolling(null);   No polling yet
+			cancelPolling();
 			forceStop();
 		} else {
 			((ControllableServerBehavior)getControllableBehavior()).setServerStopping();
@@ -66,45 +89,60 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 		}
 	}
 	
+	/**
+	 * try to do a graceful stop of the server
+	 * 
+	 * @return
+	 */
 	protected IStatus gracefullStop() {
-		// TODO um... refactor this... a lot
-		// This should ideally be done via another java launch config, 
-		
-		String workingDir = getServer().getRuntime().getLocation().toOSString();
-		File workDirFile = new File(workingDir + File.separator + "bin");
-		ProcessBuilder pb = new ProcessBuilder();
-		boolean isWindows = System.getProperty("os.name" ).toLowerCase().indexOf("windows") != -1;
-		if (isWindows) {
-			pb.command("cmd", "/C", "stop.bat");
-		} else {
-			pb.command("./stop");
-		}
-		pb.directory(workDirFile);
 		try {
-			Process karafStopProcess = pb.start();
-			while (true) {
-				try {
-					karafStopProcess.exitValue();
-					break;
-				} catch (IllegalThreadStateException ex) {
-					// still running
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException ie) {
-						
-					}
-				}
-			}
-		} catch(Exception e) {
-			Status fail = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to stop server", e);
-			Activator.getDefault().getLog().log(fail);
-			return fail;
+			IServerPortController ctrl = (IServerPortController)((ControllableKarafServerBehavior)getControllableBehavior()).getController("port");
+			int port = ctrl.findPort(IServerPortController.KEY_MANAGEMENT_PORT, -1);
+			if (port != -1) {
+				// now open the port and send the shutdown command
+				return shutdownKarafInstance(port);
+			}			
+		} catch (CoreException ex) {
+			ex.printStackTrace();
 		}
-		return Status.OK_STATUS;
+		return Status.CANCEL_STATUS;
+	}
+
+	/**
+	 * open a stream to the given port and send the shutdown command
+	 * 
+	 * @param managementPort
+	 * @return
+	 */
+	protected IStatus shutdownKarafInstance(int managementPort) {
+		Socket s = null;
+		// we need to obtain the shutdown command
+		String shutdownCommand = getShutdownCommand();
+        try {
+            s = new Socket(getServer().getHost(), managementPort);
+            s.getOutputStream().write(shutdownCommand.getBytes());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return Status.CANCEL_STATUS;
+        } finally {
+            if (s != null) {
+            	try {
+            		s.close();
+            	} catch (IOException e) {
+            		// can't close the socket
+            	}
+            }
+        }
+        return Status.OK_STATUS;
 	}
 	
+	protected String getShutdownCommand() {
+		BaseKarafConfigPropertyProvider provider = new BaseKarafConfigPropertyProvider();
+		String cmd = provider.getConfigurationProperty(SHUTDOWN_COMMAND_PROPERTY, getServer().getRuntime().getLocation().append("etc").append("config.properties").toFile());
+		if (cmd == null) cmd = DEFAULT_SHUTDOWN_COMMAND;
+		return cmd;
+	}
 	
-
 	protected boolean shouldUseForce() {
 		int state = getServer().getServerState();
 		boolean useForce = !isProcessRunning() || state == IServer.STATE_STOPPED || getRequiresForce(); 
@@ -151,5 +189,12 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 
 	protected void setNextStopRequiresForce(boolean val) {
 		getControllableBehavior().putSharedData(AbstractStartJavaServerLaunchDelegate.NEXT_STOP_REQUIRES_FORCE, val);
+	}
+	
+	/**
+	 * cancels the polling for the server state
+	 */
+	protected void cancelPolling() {
+		// TODO: cancel the polling when there finally is one
 	}
 }

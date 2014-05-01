@@ -24,11 +24,30 @@ public final class MockServerCreationUtil {
 	 * @param runtimePath	the path where to create the server
 	 * @return	true on success
 	 */
-	public static boolean createServerMock(String runtimeId, IPath runtimePath) {
+	public static boolean create2xServerMock(String runtimeId, IPath runtimePath) {
 		boolean serverCreated = false;
 		
 		// create the runtime mock structure
-		if (MockRuntimeCreationUtil.createRuntimeMock(runtimeId, runtimePath)) {
+		if (MockRuntimeCreationUtil.create2xRuntimeMock(runtimeId, runtimePath)) {
+			// configure the runtime mock
+			serverCreated = configureMockRuntime(runtimeId, runtimePath);
+		}
+		
+		return serverCreated;
+	}
+	
+	/**
+	 * creates a mock server structure and configures it
+	 * 
+	 * @param runtimeId		the id of the runtime type
+	 * @param runtimePath	the path where to create the server
+	 * @return	true on success
+	 */
+	public static boolean create3xServerMock(String runtimeId, IPath runtimePath) {
+		boolean serverCreated = false;
+		
+		// create the runtime mock structure
+		if (MockRuntimeCreationUtil.create3xRuntimeMock(runtimeId, runtimePath)) {
 			// configure the runtime mock
 			serverCreated = configureMockRuntime(runtimeId, runtimePath);
 		}

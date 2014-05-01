@@ -63,9 +63,6 @@ public class Karaf2xStartupLaunchConfigurator extends
 				}
 			}
 			
-			System.err.println("SERVER MODE: " + server.getMode());
-			System.err.println("exec java " + vmArguments + SPACE + mainProgram);
-
 			// For java tabs
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, karafInstallDir);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainProgram);

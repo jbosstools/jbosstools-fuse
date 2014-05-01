@@ -109,5 +109,4 @@ public class KarafWizardDataModel implements
 		// TODO Auto-generated method stub
 		
 	}
-
 }

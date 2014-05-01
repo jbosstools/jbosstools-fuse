@@ -29,7 +29,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(value = Parameterized.class)
-public class RuntimeLocatorTest extends TestCase {
+public class Runtime3xLocatorTest extends TestCase {
 	
 	private String fRuntimeType;
 	
@@ -38,7 +38,7 @@ public class RuntimeLocatorTest extends TestCase {
 	 * 
 	 * @param runtimeType	the runtime type id to test
 	 */
-	public RuntimeLocatorTest(String runtimeType) {
+	public Runtime3xLocatorTest(String runtimeType) {
 		this.fRuntimeType = runtimeType;
 	}
 	
@@ -48,7 +48,7 @@ public class RuntimeLocatorTest extends TestCase {
 	 */
 	@Parameters
 	public static Collection<Object[]> data() {
-		return ParametizedTestUtil.asCollection(MockRuntimeCreationUtil.SUPPORTED_RUNTIMES);
+		return ParametizedTestUtil.asCollection(MockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES);
 	}
 			
 	/**
@@ -59,7 +59,7 @@ public class RuntimeLocatorTest extends TestCase {
 	public void testKaraf() throws Exception {
 		IPath dest = FuseServerTestActivator.getDefault()
 				.getStateLocation().append(fRuntimeType);
-		MockRuntimeCreationUtil.createRuntimeMock(
+		MockRuntimeCreationUtil.create3xRuntimeMock(
 				fRuntimeType, dest);
 		
 		KarafRuntimeLocator locator = new KarafRuntimeLocator();

@@ -30,9 +30,7 @@ public interface IServerConfiguration {
 	 */
 	static final String[] SERVER_IDS_SUPPORTED = new String[] {
 	   // KARAF VERSIONS
-		 SERVER_TYPE_PREFIX_KARAF   + "20"
-	   , SERVER_TYPE_PREFIX_KARAF   + "21"
-	   , SERVER_TYPE_PREFIX_KARAF   + "22"
+	     SERVER_TYPE_PREFIX_KARAF   + "22"
 	   , SERVER_TYPE_PREFIX_KARAF   + "23"
 	   
 	   // SERVICEMIX VERSIONS

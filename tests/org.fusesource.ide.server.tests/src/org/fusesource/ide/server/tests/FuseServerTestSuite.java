@@ -10,13 +10,20 @@
  ******************************************************************************/
 package org.fusesource.ide.server.tests;
 
-import org.fusesource.ide.server.tests.bean.ServerBeanTest;
-import org.fusesource.ide.server.tests.locator.RuntimeLocatorTest;
+import org.fusesource.ide.server.tests.bean.ServerBean2xTest;
+import org.fusesource.ide.server.tests.bean.ServerBean3xTest;
+import org.fusesource.ide.server.tests.locator.Runtime2xLocatorTest;
+import org.fusesource.ide.server.tests.locator.Runtime3xLocatorTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ServerBeanTest.class, RuntimeLocatorTest.class, })
+@SuiteClasses({ 
+					ServerBean2xTest.class, 
+					ServerBean3xTest.class, 
+					Runtime2xLocatorTest.class, 
+					Runtime3xLocatorTest.class
+			 })
 public class FuseServerTestSuite {
 }

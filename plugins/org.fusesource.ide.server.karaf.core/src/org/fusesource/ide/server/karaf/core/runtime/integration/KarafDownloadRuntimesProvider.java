@@ -12,21 +12,16 @@ package org.fusesource.ide.server.karaf.core.runtime.integration;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
+import org.fusesource.ide.commons.util.BundleResourceUtils;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.jboss.jdf.stacks.model.Stacks;
 import org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider;
 import org.jboss.tools.runtime.core.model.DownloadRuntime;
 import org.jboss.tools.stacks.core.model.StacksManager;
-import org.osgi.framework.Bundle;
 
 /**
  * Pull runtimes from a stacks file and return them to runtimes framework
@@ -51,7 +46,7 @@ public class KarafDownloadRuntimesProvider extends AbstractStacksDownloadRuntime
 	@Override
 	protected Stacks[] getStacks(IProgressMonitor monitor) {
 		try {
-			File f = getFileLocation(Activator.PLUGIN_ID, "resources/karaf.yaml");
+			File f = BundleResourceUtils.getFileFromBundle(Activator.PLUGIN_ID, "resources/karaf.yaml");
 			CustomStacksManager csm = new CustomStacksManager();
 			Stacks s = csm.getStacksFromFile(f);
 			return new Stacks[]{s};
@@ -62,29 +57,21 @@ public class KarafDownloadRuntimesProvider extends AbstractStacksDownloadRuntime
 		}
 		return new Stacks[0];
 	}
-	
-	// TODO move to util class
-	public static File getFileLocation(String bundleId, String path) throws CoreException {
-		Bundle bundle = Platform.getBundle(bundleId);
-		URL url = null;
-		try {
-			url = FileLocator.resolve(bundle.getEntry(path));
-		} catch (IOException e) {
-			String msg = "Cannot find file " + path + " in " + Activator.PLUGIN_ID;
-			IStatus status = new Status(IStatus.ERROR, Activator.PLUGIN_ID, msg, e);
-			throw new CoreException(status);
-		}
-		String location = url.getFile();
-		return new File(location);
-	}
-	
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider#traverseStacks(org.jboss.jdf.stacks.model.Stacks, java.util.ArrayList, org.eclipse.core.runtime.IProgressMonitor)
+	 */
 	@Override
 	protected void traverseStacks(Stacks stacks,
 			ArrayList<DownloadRuntime> list, IProgressMonitor monitor) {
 		traverseStacks(stacks, list, "OSGI_SERVER", monitor);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider#getLegacyId(java.lang.String)
+	 */
 	@Override
 	protected String getLegacyId(String id) {
 		// TODO Auto-generated method stub

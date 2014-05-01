@@ -81,14 +81,12 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 
 		String id = getRuntime().getRuntimeType().getId();
 		String version = getKarafVersion();
-		if (version != null && version.trim().startsWith("2.0")) {
-			if (!id.toLowerCase().endsWith("karaf.runtime.20")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("2.1")) {
-			if (!id.toLowerCase().endsWith("karaf.runtime.21")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("2.2")) {
+		if (version != null && version.trim().startsWith("2.2")) {
 			if (!id.toLowerCase().endsWith("karaf.runtime.22")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else if (version != null && version.trim().startsWith("2.3")) {
 			if (!id.toLowerCase().endsWith("karaf.runtime.23")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+		} else if (version != null && version.trim().startsWith("3.0")) {
+			if (!id.toLowerCase().endsWith("karaf.runtime.30")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
 		}
@@ -102,7 +100,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	private static String PROPERTY_VM_TYPE_ID = "PROPERTY_VM_TYPE_ID"; //$NON-NLS-1$
 
 	public IExecutionEnvironment getExecutionEnvironment() {
-		return EnvironmentsManager.getDefault().getEnvironment("J2SE-1.4"); //$NON-NLS-1$
+		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.6"); //$NON-NLS-1$
 	}
 	
 	private IVMInstall getHardVM() {
