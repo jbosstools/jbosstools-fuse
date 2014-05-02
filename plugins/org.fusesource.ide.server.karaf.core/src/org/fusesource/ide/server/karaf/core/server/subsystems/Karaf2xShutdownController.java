@@ -12,7 +12,6 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Activator;
-import org.fusesource.ide.server.karaf.core.server.BaseKarafConfigPropertyProvider;
 import org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior;
 import org.jboss.ide.eclipse.as.core.util.LaunchCommandPreferences;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
@@ -23,11 +22,6 @@ import org.jboss.ide.eclipse.as.wtp.core.server.launch.AbstractStartJavaServerLa
 public class Karaf2xShutdownController extends AbstractSubsystemController
 		implements IServerShutdownController {
 
-	private static final String DEFAULT_SHUTDOWN_COMMAND = "SHUTDOWN";
-	private static final String SHUTDOWN_COMMAND_PROPERTY = "karaf.shutdown.command"; 
-	public static final String SHUTDOWN_PORT_PROPERTY = "karaf.shutdown.port";
-	public static final String SHUTDOWN_PORT_FILE_PROPERTY = "karaf.shutdown.port.file";
-	
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.ide.eclipse.as.wtp.core.server.behavior.IServerShutdownController#canStop()
@@ -116,11 +110,15 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 	 */
 	protected IStatus shutdownKarafInstance(int managementPort) {
 		Socket s = null;
-		// we need to obtain the shutdown command
-		String shutdownCommand = getShutdownCommand();
-        try {
+		try {
+			Karaf2xPortController ctrl = (Karaf2xPortController)((ControllableKarafServerBehavior)getControllableBehavior()).getController("port");
+			// we need to obtain the shutdown command
+			String shutdownCommand = ctrl.getShutdownCommand();
             s = new Socket(getServer().getHost(), managementPort);
             s.getOutputStream().write(shutdownCommand.getBytes());
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return Status.CANCEL_STATUS;
         } catch (IOException ex) {
             ex.printStackTrace();
             return Status.CANCEL_STATUS;
@@ -134,13 +132,6 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
             }
         }
         return Status.OK_STATUS;
-	}
-	
-	protected String getShutdownCommand() {
-		BaseKarafConfigPropertyProvider provider = new BaseKarafConfigPropertyProvider();
-		String cmd = provider.getConfigurationProperty(SHUTDOWN_COMMAND_PROPERTY, getServer().getRuntime().getLocation().append("etc").append("config.properties").toFile());
-		if (cmd == null) cmd = DEFAULT_SHUTDOWN_COMMAND;
-		return cmd;
 	}
 	
 	protected boolean shouldUseForce() {

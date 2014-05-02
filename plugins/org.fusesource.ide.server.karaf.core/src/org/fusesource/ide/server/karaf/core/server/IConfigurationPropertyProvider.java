@@ -10,19 +10,26 @@
  ******************************************************************************/
 package org.fusesource.ide.server.karaf.core.server;
 
-import java.io.File;
-
 /**
  * @author lhein
  */
-public interface IKarafConfigurationPropertyProvider {
+public interface IConfigurationPropertyProvider {
 	
 	/**
 	 * retrieves a property from a config file and returns it
 	 * 
 	 * @param propertyName			the name of the property
-	 * @param configPropertyFile	the config property file
 	 * @return	the value of that property from the file or null if not found
 	 */
-	public String getConfigurationProperty(String propertyName, File configPropertyFile);
+	public String getConfigurationProperty(String propertyName);
+	
+	/**
+	 * retrieves a property from a config file and returns it if found, otherwise
+	 * the defaultValue will be returned
+	 * 
+	 * @param propertyName			the name of the property
+	 * @param defaultValue			the default value to return if not found
+	 * @return	the value of that property if found, otherwise the defaultValue
+	 */
+	public String getConfigurationProperty(String propertyName, String defaultValue);
 }

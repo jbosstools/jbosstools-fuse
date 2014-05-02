@@ -19,30 +19,47 @@ import java.util.Properties;
 /**
  * @author lhein
  */
-public class BaseKarafConfigPropertyProvider implements
-		IKarafConfigurationPropertyProvider {
+public class BaseConfigPropertyProvider implements
+		IConfigurationPropertyProvider {
 
 	private Properties configProps = new Properties();
+	private File propertyFile = null;
+	
+	/**
+	 * 
+	 */
+	public BaseConfigPropertyProvider(File propertyFile) {
+		this.propertyFile = propertyFile;
+		loadPropertiesFromFile();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.server.karaf.core.server.IKarafConfigurationPropertyProvider#getConfigurationProperty(java.lang.String)
+	 */
+	@Override
+	public String getConfigurationProperty(String propertyName) {
+		return getConfigurationProperty(propertyName, null);
+	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.karaf.core.server.IKarafConfigurationPropertyProvider#getConfigurationProperty(java.lang.String, java.io.File)
+	 * @see org.fusesource.ide.server.karaf.core.server.IKarafConfigurationPropertyProvider#getConfigurationProperty(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public String getConfigurationProperty(String propertyName,
-			File configPropertyFile) {
-		
-		if (configProps.isEmpty()) {
-			loadPropertiesFromFile(configPropertyFile);
-		}
-		
-		return configProps.getProperty(propertyName, null);
+			String defaultValue) {
+		return configProps.getProperty(propertyName, defaultValue);
 	}
 
-	private void loadPropertiesFromFile(File configPropertyFile) {
+	/**
+	 * loads the properties from the given file
+	 */
+	private void loadPropertiesFromFile() {
+		this.configProps.clear();
 		BufferedInputStream bis = null;
 		try {
-			bis = new BufferedInputStream(new FileInputStream(configPropertyFile));
-			configProps.load(bis);	
+			bis = new BufferedInputStream(new FileInputStream(this.propertyFile));
+			this.configProps.load(bis);	
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -54,5 +71,12 @@ public class BaseKarafConfigPropertyProvider implements
 				}
 			}
 		}
+	}
+	
+	/**
+	 * reloads the contents of the properties file
+	 */
+	public void reload() {
+		loadPropertiesFromFile();
 	}
 }

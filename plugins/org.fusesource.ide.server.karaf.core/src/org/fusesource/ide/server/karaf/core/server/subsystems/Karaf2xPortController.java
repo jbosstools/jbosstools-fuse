@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.fusesource.ide.server.karaf.core.server.BaseKarafConfigPropertyProvider;
+import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
 
 /**
@@ -25,6 +25,10 @@ public class Karaf2xPortController extends AbstractSubsystemController
 		implements IServerPortController {
 
 	private static final String KARAF_DATA_PLACEHOLDER = "${karaf.data}";
+	private static final String DEFAULT_SHUTDOWN_COMMAND = "SHUTDOWN";
+	private static final String SHUTDOWN_COMMAND_PROPERTY = "karaf.shutdown.command";
+	public static final String SHUTDOWN_PORT_PROPERTY = "karaf.shutdown.port";
+	public static final String SHUTDOWN_PORT_FILE_PROPERTY = "karaf.shutdown.port.file";
 
 	/*
 	 * (non-Javadoc)
@@ -62,43 +66,42 @@ public class Karaf2xPortController extends AbstractSubsystemController
 		return port;
 	}
 
-	private int findJNDIPort(int defaultValue) {
+	protected int findJNDIPort(int defaultValue) {
 		// no JNDI support here
 		return defaultValue;
 	}
 
-	private int findPortOffset(int defaultValue) {
+	protected int findPortOffset(int defaultValue) {
 		// no Port offset
 		return defaultValue;
 	}
 
-	private int findWebPort(int defaultValue) {
+	protected int findWebPort(int defaultValue) {
 		// no web port
 		return defaultValue;
 	}
 
-	private int findJMXRMIPort(int defaultValue) {
+	protected int findJMXRMIPort(int defaultValue) {
 		// TODO: look for that port in etc/*.karaf.management.cfg
 		return defaultValue;
 	}
 
-	private int findSSHPort(int defaultValue) {
+	protected int findSSHPort(int defaultValue) {
 		// TODO: look for that port in etc/*.karaf.shell.cfg
 		return defaultValue;
 	}
 
-	private int findManagementPort(int defaultValue) {
-		BaseKarafConfigPropertyProvider provider = new BaseKarafConfigPropertyProvider();
-		File configFile = getServer().getRuntime().getLocation().append("etc")
-				.append("config.properties").toFile();
-		String sPort = provider.getConfigurationProperty(
-				Karaf2xShutdownController.SHUTDOWN_PORT_PROPERTY, configFile);
-		String sPortFile = provider.getConfigurationProperty(
-				Karaf2xShutdownController.SHUTDOWN_PORT_FILE_PROPERTY,
-				configFile);
+	protected int findManagementPort(int defaultValue) {
+		BaseConfigPropertyProvider provider = new BaseConfigPropertyProvider(
+				getServer().getRuntime().getLocation().append("etc")
+						.append("config.properties").toFile());
+		String sPort = provider
+				.getConfigurationProperty(SHUTDOWN_PORT_PROPERTY);
+		String sPortFile = provider
+				.getConfigurationProperty(SHUTDOWN_PORT_FILE_PROPERTY);
 		if (sPort == null) {
 			sPortFile = substitutePlaceHolders(sPortFile);
-			sPort = readPortFromFile(sPortFile);
+			sPort = readKarafShutdownPortFromFile(sPortFile);
 		}
 		try {
 			return Integer.parseInt(sPort);
@@ -106,21 +109,51 @@ public class Karaf2xPortController extends AbstractSubsystemController
 			return defaultValue;
 		}
 	}
-	
-	private String substitutePlaceHolders(String value) {
+
+	protected String substitutePlaceHolders(String value) {
 		int idx = value.indexOf(KARAF_DATA_PLACEHOLDER);
 		if (idx != -1) {
 			// the port file value contains place holder....substitute known
 			// values
-			return getServer().getRuntime().getLocation()
-					.append("data").toOSString()
-					+ value.substring(idx
-							+ KARAF_DATA_PLACEHOLDER.length());
+			return getServer().getRuntime().getLocation().append("data")
+					.toOSString()
+					+ value.substring(idx + KARAF_DATA_PLACEHOLDER.length());
 		}
 		return value;
 	}
 
-	private String readPortFromFile(String portFile) {
+	protected String getShutdownCommand() {
+		BaseConfigPropertyProvider provider = new BaseConfigPropertyProvider(
+				getServer().getRuntime().getLocation().append("etc")
+						.append("config.properties").toFile());
+		String cmd = provider
+				.getConfigurationProperty(getShutdownCommandPropertyKey());
+		if (cmd == null)
+			cmd = getDefaultKarafShutdownCommand();
+		return cmd;
+	}
+
+	protected String getKarafDataPlaceholder() {
+		return KARAF_DATA_PLACEHOLDER;
+	}
+
+	protected String getDefaultKarafShutdownCommand() {
+		return DEFAULT_SHUTDOWN_COMMAND;
+	}
+
+	protected String getShutdownCommandPropertyKey() {
+		return SHUTDOWN_COMMAND_PROPERTY;
+	}
+
+	protected String getShutdownPortPropertyKey() {
+		return SHUTDOWN_PORT_PROPERTY;
+	}
+
+	protected String getShutdownPortFile() {
+		return SHUTDOWN_PORT_FILE_PROPERTY;
+	}
+
+	private String readKarafShutdownPortFromFile(String portFile) {
 		// no port defined, so look it up from the ports file
 		BufferedReader br = null;
 		try {
