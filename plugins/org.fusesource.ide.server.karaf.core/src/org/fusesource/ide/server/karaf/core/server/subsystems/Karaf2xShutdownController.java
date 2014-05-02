@@ -12,6 +12,8 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Activator;
+import org.fusesource.ide.server.karaf.core.poller.BaseKarafPoller;
+import org.fusesource.ide.server.karaf.core.poller.PollThread;
 import org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior;
 import org.jboss.ide.eclipse.as.core.util.LaunchCommandPreferences;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
@@ -186,6 +188,10 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 	 * cancels the polling for the server state
 	 */
 	protected void cancelPolling() {
-		// TODO: cancel the polling when there finally is one
+		Object o = getControllableBehavior().getSharedData(BaseKarafPoller.KEY_POLLER);
+		if (o instanceof PollThread) {
+			PollThread pollThread = (PollThread)o;
+			pollThread.cancel();
+		}	
 	}
 }

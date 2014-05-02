@@ -10,8 +10,15 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate2;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Activator;
+import org.fusesource.ide.server.karaf.core.poller.BaseKarafPoller;
+import org.fusesource.ide.server.karaf.core.poller.PollThread;
+import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
 import org.jboss.ide.eclipse.as.core.server.ILaunchConfigConfigurator;
+import org.jboss.ide.eclipse.as.core.server.IPollResultListener;
+import org.jboss.ide.eclipse.as.core.server.IServerStatePoller2;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
+import org.jboss.ide.eclipse.as.wtp.core.server.behavior.ControllableServerBehavior;
+import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IControllableServerBehavior;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.ILaunchServerController;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IServerShutdownController;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IShutdownControllerDelegate;
@@ -22,6 +29,20 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 		IShutdownControllerDelegate {
 
 	private AbstractStartJavaServerLaunchDelegate launchDelegate;
+	private PollThread pollThread;
+	private IPollResultListener pollListener = new IPollResultListener() {
+		@Override
+		public void stateNotAsserted(boolean expectedState, boolean currentState) {
+			// server is not up...something went wrong on startup
+			((ControllableServerBehavior)getControllableBehavior()).setServerStopped();
+		}
+		
+		@Override
+		public void stateAsserted(boolean expectedState, boolean currentState) {
+			// server is up and running, so set the server state accordingly
+			((ControllableServerBehavior)getControllableBehavior()).setServerStarted();
+		}
+	};
 
 	private AbstractStartJavaServerLaunchDelegate getLaunchDelegate() {
 		if (launchDelegate == null) {
@@ -29,12 +50,18 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 
 				@Override
 				protected void initiatePolling(IServer server) {
-					// skip for now
+					pollThread = new PollThread(true, getPoller(), pollListener, server);
+					getControllableBehavior().putSharedData(BaseKarafPoller.KEY_POLLER, pollThread);
+					pollThread.start();
 				}
 
 				@Override
 				protected void cancelPolling(IServer server) {
-					// skip for now
+					Object o = getControllableBehavior().getSharedData(BaseKarafPoller.KEY_POLLER);
+					if (o instanceof PollThread) {
+						pollThread = (PollThread)o;
+						pollThread.cancel();
+					}							
 				}
 
 				@Override
@@ -45,8 +72,7 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 
 				@Override
 				protected IStatus isServerStarted(IServer server) {
-					// We should be polling here... but polling isn't set up yet for karaf
-					return Status.CANCEL_STATUS;
+					return getPoller().getCurrentStateSynchronous(getServer());
 				}
 
 				@Override
@@ -57,10 +83,15 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 		}
 		return launchDelegate;
 	}
+	
+	private IServerStatePoller2 getPoller() {
+		return new BaseKarafPoller();
+	}
 
 	@Override
 	public IStatus canStart(String launchMode) {
-		return Status.OK_STATUS;
+		KarafServerDelegate d = ((KarafServerDelegate)getServer().loadAdapter(KarafServerDelegate.class, null));
+		return d == null ? Status.CANCEL_STATUS : d.validate();
 	}
 
 	@Override
@@ -94,12 +125,12 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 		// which checks things like if a server is up already, or
 		// provides profiling integration with wtp's profiling for servers
 		getLaunchDelegate().launch(configuration, mode, launch, monitor);
+		getControllableBehavior().putSharedData(BaseKarafPoller.KEY_POLLER, new PollThread(true, new BaseKarafPoller(), pollListener, getServer()));
 	}
 
 	@Override
 	public ILaunch getLaunch(ILaunchConfiguration configuration, String mode)
 			throws CoreException {
-		// TODO Auto-generated method stub
 		return getLaunchDelegate().getLaunch(configuration, mode);
 	}
 
@@ -123,8 +154,11 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 
 	@Override
 	public IServerShutdownController getShutdownController() {
-		// TODO
+		try {
+			return (IServerShutdownController)((IControllableServerBehavior)getServer()).getController(ControllableServerBehavior.SYSTEM_SHUTDOWN);
+		} catch (CoreException ex) {
+			ex.printStackTrace();
+		}
 		return null;
 	}
-
 }

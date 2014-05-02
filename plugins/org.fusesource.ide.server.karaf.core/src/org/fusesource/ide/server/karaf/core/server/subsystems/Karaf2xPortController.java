@@ -93,8 +93,7 @@ public class Karaf2xPortController extends AbstractSubsystemController
 
 	protected int findManagementPort(int defaultValue) {
 		BaseConfigPropertyProvider provider = new BaseConfigPropertyProvider(
-				getServer().getRuntime().getLocation().append("etc")
-						.append("config.properties").toFile());
+				getServerConfigPropertyFile());
 		String sPort = provider
 				.getConfigurationProperty(SHUTDOWN_PORT_PROPERTY);
 		String sPortFile = provider
@@ -124,13 +123,17 @@ public class Karaf2xPortController extends AbstractSubsystemController
 
 	protected String getShutdownCommand() {
 		BaseConfigPropertyProvider provider = new BaseConfigPropertyProvider(
-				getServer().getRuntime().getLocation().append("etc")
-						.append("config.properties").toFile());
+				getServerConfigPropertyFile());
 		String cmd = provider
 				.getConfigurationProperty(getShutdownCommandPropertyKey());
 		if (cmd == null)
 			cmd = getDefaultKarafShutdownCommand();
 		return cmd;
+	}
+
+	protected File getServerConfigPropertyFile() {
+		return getServer().getRuntime().getLocation().append("etc")
+				.append("config.properties").toFile();
 	}
 
 	protected String getKarafDataPlaceholder() {

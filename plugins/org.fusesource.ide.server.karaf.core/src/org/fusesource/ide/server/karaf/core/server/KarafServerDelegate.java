@@ -14,6 +14,7 @@ package org.fusesource.ide.server.karaf.core.server;
 import java.io.UnsupportedEncodingException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -150,5 +151,20 @@ public class KarafServerDelegate extends ServerDelegate implements
 	public void modifyModules(IModule[] add, IModule[] remove,
 			IProgressMonitor monitor) throws CoreException {
 		// Do nothing
+	}
+	
+	/**
+	 * validates the server
+	 * 
+	 * @return
+	 */
+	public IStatus validate() {
+		// check if the folder exists and the karaf.jar is in place
+		IPath rtLoc = getServer().getRuntime().getLocation();
+		IPath karafJar = rtLoc.append("lib").append("karaf.jar");
+		if (rtLoc.toFile().exists() && rtLoc.toFile().isDirectory() && karafJar.toFile().exists() && karafJar.toFile().isFile()) {
+			return Status.OK_STATUS;	
+		}
+		return Status.CANCEL_STATUS;
 	}
 }

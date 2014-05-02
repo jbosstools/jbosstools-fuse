@@ -21,6 +21,24 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.fusesource.ide.server.karaf.core.l10n.messages";
 
 	public static String shellViewLabel;
+	public static String KarafPollerServerFound;
+	public static String KarafPollerServerNotFound;
+	
+	/**
+	 * the below keys belong the PollThread class which will be moved back to JBT asap
+	 */
+	public static String ServerPollerThreadName;
+	public static String ServerStatePollerUnexpectedError;
+	public static String PollingStarting;
+	public static String PollingShuttingDown;
+	public static String PollerFailure;
+	public static String PollerAborted;
+	public static String PollingStartupFailed;
+	public static String PollingShutdownFailed;
+	public static String PollingStartupSuccess;
+	public static String PollingShutdownSuccess;
+	public static String StartupPollerNotFound;
+	public static String ShutdownPollerNotFound;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
