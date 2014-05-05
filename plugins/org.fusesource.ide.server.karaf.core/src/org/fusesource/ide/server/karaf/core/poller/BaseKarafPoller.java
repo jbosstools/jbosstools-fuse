@@ -187,7 +187,6 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 	 */
 	private void pollerRun() {
 		done = false;
-		int cnt = 0;
 		while(!canceled && !done) {
 			boolean up = onePing(this.host, this.port);
 			if( up == expectedState ) {
@@ -197,12 +196,6 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 			try {
 				Thread.sleep(100);
 			} catch(InterruptedException ie) {} // ignore
-			cnt++;
-			// after 10 failed tries we re-read the port info
-			if (cnt > 10) {
-				determineServerInfo();
-				cnt = 0;
-			}
 		}
 	}
 	
@@ -211,7 +204,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 	 */
 	private void determineServerInfo() {
 		this.host = getServer().getHost();
-		this.port = getManagementPort();
+		this.port = getPort();
 	}
 	
 	/**
@@ -219,7 +212,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 	 */
 	private URI determineServerInfo(IServer s) {
 		String host = s.getHost();
-		int port = getManagementPort(s);
+		int port = getPort(s);
 		try {
 			return new URI(null, null, host, port, null, null, null);	
 		} catch (URISyntaxException ex) {
@@ -234,7 +227,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 	 * 
 	 * @return	the port to use or -1 if not found
 	 */
-	private int getManagementPort() {
+	private int getPort() {
 		try {
 			ControllableServerBehavior csb = (ControllableServerBehavior)getServer().loadAdapter(ControllableServerBehavior.class, null);
 			if (csb != null) {
@@ -252,7 +245,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 	 * 
 	 * @return	the port to use or -1 if not found
 	 */
-	private int getManagementPort(IServer s) {
+	private int getPort(IServer s) {
 		try {
 			ControllableServerBehavior csb = (ControllableServerBehavior)s.loadAdapter(ControllableServerBehavior.class, null);
 			if (csb != null) {
@@ -280,8 +273,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
                 return false;
             }
         } catch (IOException ex) {
-        	Status status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Failed to establish a connection to the server...");
-			Activator.getDefault().getLog().log(status);
+        	// ignore
         } finally {
             if (s != null) {
             	try {

@@ -29,7 +29,7 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 		IShutdownControllerDelegate {
 
 	private AbstractStartJavaServerLaunchDelegate launchDelegate;
-	private PollThread pollThread;
+
 	private IPollResultListener pollListener = new IPollResultListener() {
 		@Override
 		public void stateNotAsserted(boolean expectedState, boolean currentState) {
@@ -50,7 +50,7 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 
 				@Override
 				protected void initiatePolling(IServer server) {
-					pollThread = new PollThread(true, getPoller(), pollListener, server);
+					PollThread pollThread = new PollThread(true, getPoller(), pollListener, server);
 					getControllableBehavior().putSharedData(BaseKarafPoller.KEY_POLLER, pollThread);
 					pollThread.start();
 				}
@@ -59,7 +59,7 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 				protected void cancelPolling(IServer server) {
 					Object o = getControllableBehavior().getSharedData(BaseKarafPoller.KEY_POLLER);
 					if (o instanceof PollThread) {
-						pollThread = (PollThread)o;
+						PollThread pollThread = (PollThread)o;
 						pollThread.cancel();
 					}							
 				}
@@ -125,7 +125,6 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 		// which checks things like if a server is up already, or
 		// provides profiling integration with wtp's profiling for servers
 		getLaunchDelegate().launch(configuration, mode, launch, monitor);
-		getControllableBehavior().putSharedData(BaseKarafPoller.KEY_POLLER, new PollThread(true, new BaseKarafPoller(), pollListener, getServer()));
 	}
 
 	@Override
