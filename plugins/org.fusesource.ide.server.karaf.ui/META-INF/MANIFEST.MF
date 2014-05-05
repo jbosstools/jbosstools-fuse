@@ -23,7 +23,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.fusesource.ide.commons;bundle-version="7.3.0",
  org.fusesource.ide.preferences,
  org.fusesource.ide.server.view,
- org.fusesource.ide.server.karaf.core
+ org.fusesource.ide.server.karaf.core,
+ org.eclipse.ui.navigator;bundle-version="3.5.400"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.server.karaf.ui.editor,

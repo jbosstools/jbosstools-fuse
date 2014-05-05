@@ -103,4 +103,29 @@
       </launchConfigurationTypeImage>
    </extension>
 
+	<extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+    <actionProvider
+          class="org.fusesource.ide.server.karaf.ui.view.server.editor.ShowInShellActionProvider"
+          id="org.fusesource.ide.server.karaf.ui.showInShell">
+       <enablement>
+          <instanceof
+                value="org.eclipse.wst.server.core.IServer">
+          </instanceof>
+       </enablement>
+    </actionProvider>
+	</extension>
+
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+    <viewerActionBinding
+          viewerId="org.eclipse.wst.server.ui.ServersView">
+       <includes>
+          <actionExtension
+                pattern="org.fusesource.ide.server.karaf.ui.showInShell"/>
+       </includes>
+    </viewerActionBinding>
+	</extension>
+
 </plugin>

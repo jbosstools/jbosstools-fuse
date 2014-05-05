@@ -71,18 +71,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 		plugin = this;
 		// Add a server listener to respond to the server being marked as 'starting'
 		serverStartingListener = getServerStartingListener();
-		
-		// Temporary workaround... under recent tests, if the listener is added 
-		// too early, the server never ever fires events (ie the listener is ignored
-		// or clobbered or something).  Will test again asap. 
-		new Thread() {
-			public void run() {
-				try{
-					Thread.sleep(10000);
-				} catch(InterruptedException ie){}
-				UnitedServerListenerManager.getDefault().addListener(serverStartingListener);
-			}
-		}.start();
+		UnitedServerListenerManager.getDefault().addListener(serverStartingListener);
 	}
 
 	private UnitedServerListener getServerStartingListener() {
@@ -97,7 +86,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 			}
 
 			public void serverChanged(ServerEvent event) {
-				if( serverSwitchesToState(event, IServer.STATE_STARTING)) {
+				if( serverSwitchesToState(event, IServer.STATE_STARTED)) {
 					// We already know it's a karaf server from canHandleServer(IServer)
 					IServer s = event.getServer();
 					fireConnectorJob(s);
@@ -107,14 +96,14 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 			private void fireConnectorJob(final IServer server) {
 				new Job("Connecting to " + server.getName()) {
 					protected IStatus run(IProgressMonitor arg0) {
-						if( server.getServerState() == IServer.STATE_STARTING) {
+						if( server.getServerState() == IServer.STATE_STARTED) {
 							SshConnector c = new SshConnector(server);
 							c.start();
 							return Status.OK_STATUS;
 						}
 						return Status.CANCEL_STATUS;
 					}
-				}.schedule(7000);
+				}.schedule(4000);
 			}
 		};
 	}
