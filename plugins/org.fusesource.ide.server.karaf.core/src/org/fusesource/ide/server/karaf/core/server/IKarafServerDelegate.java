@@ -14,7 +14,7 @@ package org.fusesource.ide.server.karaf.core.server;
 /**
  * @author lhein
  */
-public interface IServerConfiguration {
+public interface IKarafServerDelegate {
 	static final String HOST_NAME = "sshHost";
 	static final String PORT_NUMBER = "sshPort";
 	static final String USER_ID = "userId";

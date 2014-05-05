@@ -14,7 +14,7 @@ package org.fusesource.ide.server.karaf.core.server;
 /**
  * @author lhein
  */
-public interface IServerConfigurationWorkingCopy extends IServerConfiguration {
+public interface IKarafServerDelegateWorkingCopy extends IKarafServerDelegate {
 	
 	/**
 	 * sets the password

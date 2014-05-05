@@ -30,14 +30,14 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.ui.editor.ServerEditorSection;
-import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegateWorkingCopy;
 import org.fusesource.ide.server.karaf.ui.Messages;
 import org.jboss.ide.eclipse.as.wtp.ui.editor.ServerWorkingCopyPropertyCommand;
 
 
 public class ConnectionDetailsEditorSection extends ServerEditorSection {
 
-	IServerConfigurationWorkingCopy configuration = null;
+	IKarafServerDelegateWorkingCopy configuration = null;
 	// a dummy string to represent that we did not look up the password
 	// in secure storage yet.  This is done to avoid secure storage 
 	// popping up as soon as a user opens eclipse.
@@ -54,7 +54,7 @@ public class ConnectionDetailsEditorSection extends ServerEditorSection {
 	@Override
 	public void init(IEditorSite site, IEditorInput input) {
 		super.init(site, input);
-		configuration = (IServerConfigurationWorkingCopy) server.loadAdapter(IServerConfigurationWorkingCopy.class, null);
+		configuration = (IKarafServerDelegateWorkingCopy) server.loadAdapter(IKarafServerDelegateWorkingCopy.class, null);
 	}
 	
 	@Override

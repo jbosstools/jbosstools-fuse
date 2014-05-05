@@ -26,8 +26,8 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
 import org.fusesource.ide.server.karaf.core.KarafUtils;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
-import org.fusesource.ide.server.karaf.core.server.IServerConfiguration;
-import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegateWorkingCopy;
 
 
 public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
@@ -84,7 +84,7 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 		if (model != null && workingCopy != null) {
 			// workCopy will be instance of ServerDelegate classs.
 			// We need to get the params, so IFuseESBRuntime will be enough.
-			IServerConfiguration karafServerWorkingCopy = (IServerConfiguration) workingCopy.loadAdapter(IServerConfiguration.class, new NullProgressMonitor());
+			IKarafServerDelegate karafServerWorkingCopy = (IKarafServerDelegate) workingCopy.loadAdapter(IKarafServerDelegate.class, new NullProgressMonitor());
 			if (karafServerWorkingCopy != null) {
 				model.setUserName(karafServerWorkingCopy.getUserName());
 				model.setPassword(karafServerWorkingCopy.getPassword());
@@ -113,8 +113,8 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 		if (workingCopy != null) {
 			// workCopy will be instance of ServerDelegate classs.
 			// We need to get the params, so IFuseESBRuntime will be enough.
-			IServerConfigurationWorkingCopy karafServerWorkingCopy = (IServerConfigurationWorkingCopy) workingCopy
-					.loadAdapter(IServerConfigurationWorkingCopy.class,
+			IKarafServerDelegateWorkingCopy karafServerWorkingCopy = (IKarafServerDelegateWorkingCopy) workingCopy
+					.loadAdapter(IKarafServerDelegateWorkingCopy.class,
 							new NullProgressMonitor());
 			if (karafServerWorkingCopy != null) {
 				karafServerWorkingCopy.setPortNumber(model.getPortNumber());

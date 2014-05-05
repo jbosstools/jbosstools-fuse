@@ -30,7 +30,7 @@ import org.jboss.ide.eclipse.as.wtp.core.util.ServerSecureStorageUtil;
  * @author lhein
  */
 public class KarafServerDelegate extends ServerDelegate implements
-		IServerConfigurationWorkingCopy {
+		IKarafServerDelegateWorkingCopy {
 
 	public static final int DEFAULT_SSH_PORT = 8101;
 	public static final String DEFAULT_KARAF_SSH_HOSTNAME = "localhost";
@@ -45,7 +45,7 @@ public class KarafServerDelegate extends ServerDelegate implements
 		super.setDefaults(monitor);
 		IRuntime rt = getServer().getRuntime();
 		getServerWorkingCopy().setName(ServerNamingUtil.getDefaultServerName(getServer(), rt));
-		setAttribute(IServerConfiguration.USER_ID, getDefaultUsername());
+		setAttribute(IKarafServerDelegate.USER_ID, getDefaultUsername());
 		// do not set password, will be in secure storage
 	}
 	
@@ -61,43 +61,43 @@ public class KarafServerDelegate extends ServerDelegate implements
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfiguration#getHostName()
 	 */
 	public String getHostName() {
-		return getAttribute(IServerConfiguration.HOST_NAME,	getServer().getHost());
+		return getAttribute(IKarafServerDelegate.HOST_NAME,	getServer().getHost());
 	}
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfiguration#getPortNumber()
 	 */
 	public int getPortNumber() {
-		return getAttribute(IServerConfiguration.PORT_NUMBER, DEFAULT_SSH_PORT);
+		return getAttribute(IKarafServerDelegate.PORT_NUMBER, DEFAULT_SSH_PORT);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfiguration#getUserName()
 	 */
 	public String getUserName() {
-		return getAttribute(IServerConfiguration.USER_ID, getDefaultUsername());
+		return getAttribute(IKarafServerDelegate.USER_ID, getDefaultUsername());
 	}
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy#setHostName(java.lang.String)
 	 */
 	public void setHostName(String hostName) {
-		setAttribute(IServerConfiguration.HOST_NAME, hostName);
+		setAttribute(IKarafServerDelegate.HOST_NAME, hostName);
 	}
 	
 	@Override
 	public String getPassword() {
 		String s = ServerSecureStorageUtil.getFromSecureStorage(Activator.PLUGIN_ID, 
-				getServer(), IServerConfiguration.PASSWORD);
+				getServer(), IKarafServerDelegate.PASSWORD);
 		if( s == null )
-			return getAttribute(IServerConfiguration.PASSWORD, getDefaultPassword());
+			return getAttribute(IKarafServerDelegate.PASSWORD, getDefaultPassword());
 		return s;
 	}
 	
 	public void setPassword(String pass) {
 		try {
 			ServerSecureStorageUtil.storeInSecureStorage(Activator.PLUGIN_ID, 
-					getServer(), IServerConfiguration.PASSWORD, pass);
+					getServer(), IKarafServerDelegate.PASSWORD, pass);
         } catch (StorageException e) {
         	Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Could not save password for server in secure storage.", e)); //$NON-NLS-1$
         } catch (UnsupportedEncodingException e) {
@@ -110,14 +110,14 @@ public class KarafServerDelegate extends ServerDelegate implements
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy#setPortNumber(int)
 	 */
 	public void setPortNumber(int portNo) {
-		setAttribute(IServerConfiguration.PORT_NUMBER, portNo);
+		setAttribute(IKarafServerDelegate.PORT_NUMBER, portNo);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy#setUserName(java.lang.String)
 	 */
 	public void setUserName(String userName) {
-		setAttribute(IServerConfiguration.USER_ID, userName);
+		setAttribute(IKarafServerDelegate.USER_ID, userName);
 	}
 
 	/* (non-Javadoc)

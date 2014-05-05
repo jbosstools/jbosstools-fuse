@@ -15,10 +15,10 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
-import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegateWorkingCopy;
 
 public class KarafWizardDataModel implements
-		IKarafRuntimeWorkingCopy, IServerConfigurationWorkingCopy {
+		IKarafRuntimeWorkingCopy, IKarafServerDelegateWorkingCopy {
 	
 	public static final String KARAF_MODEL = "karaf-model";
 	

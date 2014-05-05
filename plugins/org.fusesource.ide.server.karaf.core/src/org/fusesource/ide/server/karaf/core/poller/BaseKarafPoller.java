@@ -239,7 +239,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 			ControllableServerBehavior csb = (ControllableServerBehavior)getServer().loadAdapter(ControllableServerBehavior.class, null);
 			if (csb != null) {
 				IServerPortController ctrl = (IServerPortController)csb.getController("port");
-				return ctrl.findPort(IServerPortController.KEY_MANAGEMENT_PORT, -1);				
+				return ctrl.findPort(IServerPortController.KEY_SSH_PORT, -1);				
 			}			
 		} catch (CoreException ex) {
 			ex.printStackTrace();
@@ -257,7 +257,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 			ControllableServerBehavior csb = (ControllableServerBehavior)s.loadAdapter(ControllableServerBehavior.class, null);
 			if (csb != null) {
 				IServerPortController ctrl = (IServerPortController)csb.getController("port");
-				return ctrl.findPort(IServerPortController.KEY_MANAGEMENT_PORT, -1);			
+				return ctrl.findPort(IServerPortController.KEY_SSH_PORT, -1);			
 			}
 		} catch (CoreException ex) {
 			ex.printStackTrace();

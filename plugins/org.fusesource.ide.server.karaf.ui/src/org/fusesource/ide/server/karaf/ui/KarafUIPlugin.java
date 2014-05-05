@@ -27,7 +27,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerEvent;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
-import org.fusesource.ide.server.karaf.core.server.IServerConfiguration;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
 import org.jboss.ide.eclipse.as.core.server.UnitedServerListener;
 import org.jboss.ide.eclipse.as.core.server.UnitedServerListenerManager;
 import org.osgi.framework.BundleContext;
@@ -37,15 +37,15 @@ import org.osgi.framework.BundleContext;
  */
 public class KarafUIPlugin extends AbstractUIPlugin {
 
-	public static final String TERMINAL_VIEW_ID = "org.fusesource.ide.server.view.TerminalView";
-
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.fusesource.ide.server.karaf.ui";
 
+	public static final String TERMINAL_VIEW_ID = "org.fusesource.ide.server.view.TerminalView";
+	
 	// The shared instance
 	private static KarafUIPlugin plugin;
 	
-	private UnitedServerListener serverStartingListener;
+	private UnitedServerListener serverListener;
 	
 	/**
 	 * Returns the shared instance
@@ -70,27 +70,27 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		// Add a server listener to respond to the server being marked as 'starting'
-		serverStartingListener = getServerStartingListener();
-		UnitedServerListenerManager.getDefault().addListener(serverStartingListener);
+		serverListener = getServerListener();
+		UnitedServerListenerManager.getDefault().addListener(serverListener);
+	}
+	
+	public boolean isKarafServer(IServer server) {
+		return (IKarafServerDelegate)server.loadAdapter(
+				IKarafServerDelegate.class, new NullProgressMonitor()) != null;
 	}
 
-	private UnitedServerListener getServerStartingListener() {
+	private UnitedServerListener getServerListener() {
 		return new UnitedServerListener(){
 			public boolean canHandleServer(IServer server) {
 				return isKarafServer(server);
 			}
 			
-			public boolean isKarafServer(IServer server) {
-				return (IServerConfiguration)server.loadAdapter(
-						IServerConfiguration.class, new NullProgressMonitor()) != null;
-			}
-
 			public void serverChanged(ServerEvent event) {
 				if( serverSwitchesToState(event, IServer.STATE_STARTED)) {
 					// We already know it's a karaf server from canHandleServer(IServer)
 					IServer s = event.getServer();
 					fireConnectorJob(s);
-				}
+				} 
 			}
 			
 			private void fireConnectorJob(final IServer server) {
@@ -103,7 +103,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 						}
 						return Status.CANCEL_STATUS;
 					}
-				}.schedule(4000);
+				}.schedule();
 			}
 		};
 	}
@@ -116,8 +116,8 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 		plugin = null;
 		super.stop(context);
 		KarafSharedImages.instance().cleanup();
-		if( serverStartingListener != null ) {
-			UnitedServerListenerManager.getDefault().removeListener(serverStartingListener);
+		if( serverListener != null ) {
+			UnitedServerListenerManager.getDefault().removeListener(serverListener);
 		}
 	}
 	/**

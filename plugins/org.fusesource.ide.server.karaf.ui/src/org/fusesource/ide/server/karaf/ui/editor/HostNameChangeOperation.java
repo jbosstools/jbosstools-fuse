@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
-import org.fusesource.ide.server.karaf.core.server.IServerConfigurationWorkingCopy;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegateWorkingCopy;
 
 
 /**
@@ -30,7 +30,7 @@ public class HostNameChangeOperation extends AbstractOperation {
 	private final String newHostName;
 	private final String oldHostName;
 	
-	public HostNameChangeOperation(IServerConfigurationWorkingCopy copy, String newHostName, String label) {
+	public HostNameChangeOperation(IKarafServerDelegateWorkingCopy copy, String newHostName, String label) {
 		super(label);
 		this.copy = (IServerWorkingCopy)copy;
 		oldHostName = copy.getPassword();

@@ -15,7 +15,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
+import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
 
 /**
@@ -87,7 +90,13 @@ public class Karaf2xPortController extends AbstractSubsystemController
 	}
 
 	protected int findSSHPort(int defaultValue) {
-		// TODO: look for that port in etc/*.karaf.shell.cfg
+		IServer s = getServer();
+		if (s != null) {
+			IKarafServerDelegate ksd = (IKarafServerDelegate)s.loadAdapter(IKarafServerDelegate.class, new NullProgressMonitor());
+			if (ksd != null) {
+				return ksd.getPortNumber();
+			}
+		}
 		return defaultValue;
 	}
 

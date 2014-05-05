@@ -11,13 +11,22 @@
 package org.fusesource.ide.server.karaf.ui.view.server.editor;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
+import org.eclipse.ui.views.IViewDescriptor;
+import org.eclipse.ui.views.IViewRegistry;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.ui.internal.view.servers.AbstractServerAction;
+import org.fusesource.ide.server.karaf.ui.KarafUIPlugin;
+import org.fusesource.ide.server.karaf.ui.SshConnector;
 
 public class ShowInShellActionProvider extends CommonActionProvider {
 	private ICommonActionExtensionSite actionSite;
-
+	private ShowInShellAction showInShellAction;
+	
 	public ShowInShellActionProvider() {
 		super();
 	}
@@ -32,44 +41,53 @@ public class ShowInShellActionProvider extends CommonActionProvider {
 		ICommonViewerWorkbenchSite commonViewerWorkbenchSite =
 				CommonActionProviderUtils.getCommonViewerWorkbenchSite(aSite);
 		if (commonViewerWorkbenchSite != null) {
-			// TODO add a show-in shell action
-			//showInServerLogAction = new ShowInServerLogAction(commonViewerWorkbenchSite.getSelectionProvider());
+			showInShellAction = new ShowInShellAction(commonViewerWorkbenchSite.getSelectionProvider());
 		}
 	}
 
 	public void fillContextMenu(IMenuManager menu) {
-		//CommonActionProviderUtils.addToShowInQuickSubMenu(showInServerLogAction, menu, actionSite);
+		CommonActionProviderUtils.addToShowInQuickSubMenu(showInShellAction, menu, actionSite);
 	}
 
-//	public class ShowInServerLogAction extends AbstractServerAction {
-//		public ShowInServerLogAction(ISelectionProvider sp) {
-//			super(sp, null);
-//
-//			IViewRegistry reg = PlatformUI.getWorkbench().getViewRegistry();
-//			IViewDescriptor desc = reg.find(ServerLogView.VIEW_ID);
-//			setText(desc.getLabel());
-//			setImageDescriptor(desc.getImageDescriptor());
-//		}
-//
-//		public boolean accept(IServer server) {
-//			return (server.getServerType() != null && server.loadAdapter(IDeployableServer.class,
-//					new NullProgressMonitor()) != null);
-//		}
-//
-//		public void perform(IServer server) {
-//			try {
-//				IWorkbenchPart part = CommonActionProviderUtils.showView(ServerLogView.VIEW_ID);
-//				if (part != null) {
-//					ServerLogView view = (ServerLogView) part.getAdapter(ServerLogView.class);
-//					if (view != null) {
-//						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(view);
-//						view.setFocus();
-//						view.setServer(server);
-//					}
-//				}
-//			} catch (PartInitException e) {
-//				JBossServerUIPlugin.log("could not show view " + ServerLogView.VIEW_ID, e);
-//			}
-//		}
-//	}
+	/**
+	 * @author lhein
+	 */
+	public class ShowInShellAction extends AbstractServerAction {
+
+		/**
+		 * 
+		 * @param sp
+		 */
+		public ShowInShellAction(ISelectionProvider sp) {
+			super(sp, null);
+			IViewRegistry reg = PlatformUI.getWorkbench().getViewRegistry();
+			IViewDescriptor desc = reg.find(KarafUIPlugin.TERMINAL_VIEW_ID);
+			setText(desc.getLabel());
+			setImageDescriptor(desc.getImageDescriptor());
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.wst.server.ui.internal.view.servers.AbstractServerAction#accept(org.eclipse.wst.server.core.IServer)
+		 */
+		public boolean accept(IServer server) {
+			return 	server != null && 
+					server.getServerState() == IServer.STATE_STARTED && 
+					KarafUIPlugin.getDefault().isKarafServer(server);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.wst.server.ui.internal.view.servers.AbstractServerAction#perform(org.eclipse.wst.server.core.IServer)
+		 */
+		public void perform(IServer server) {
+			SshConnector c = SshConnector.getConnectorForServer(server);
+			if (c == null) {
+				c = new SshConnector(server);
+			} else {
+				c.onDisconnect();
+			}
+			c.start();
+		}
+	}
 }
