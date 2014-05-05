@@ -17,18 +17,18 @@ import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.internal.provisional.ServerLocatorDelegate;
-import org.fusesource.ide.server.servicemix.core.runtime.ServiceMix4xRuntimeLocator;
+import org.fusesource.ide.server.servicemix.core.runtime.ServiceMixRuntimeLocator;
 
 
 /**
  * @author lhein
  */
-public class ServiceMix4xServerLocator extends ServerLocatorDelegate {
+public class ServiceMixServerLocator extends ServerLocatorDelegate {
 
 	/**
 	 * empty default constructor
 	 */
-	public ServiceMix4xServerLocator() {
+	public ServiceMixServerLocator() {
 	}
 
 	/* (non-Javadoc)
@@ -37,7 +37,7 @@ public class ServiceMix4xServerLocator extends ServerLocatorDelegate {
 	@Override
 	public void searchForServers(String host, final IServerSearchListener listener,
 			final IProgressMonitor monitor) {
-		ServiceMix4xRuntimeLocator.IRuntimeSearchListener listener2 = new ServiceMix4xRuntimeLocator.IRuntimeSearchListener() {
+		ServiceMixRuntimeLocator.IRuntimeSearchListener listener2 = new ServiceMixRuntimeLocator.IRuntimeSearchListener() {
 			/*
 			 * (non-Javadoc)
 			 * @see org.eclipse.wst.server.core.model.RuntimeLocatorDelegate.IRuntimeSearchListener#runtimeFound(org.eclipse.wst.server.core.IRuntimeWorkingCopy)
@@ -54,6 +54,6 @@ public class ServiceMix4xServerLocator extends ServerLocatorDelegate {
 				}
 			}
 		};
-		new ServiceMix4xRuntimeLocator().search(null, listener2, monitor);
+		new ServiceMixRuntimeLocator().search(null, listener2, monitor);
 	}
 }

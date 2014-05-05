@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.server.karaf.core;
+package org.fusesource.ide.server.karaf.core.util;
 
 import java.io.File;
 

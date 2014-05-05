@@ -29,7 +29,7 @@ public class FuseESBRuntimeDelegate extends KarafRuntimeDelegate {
 	@Override
 	public IStatus validate() {
 		String id = getRuntime().getRuntimeType().getId();
-		String version = getKarafVersion();
+		String version = getVersion();
 		if (version != null && version.trim().startsWith("6.0")) {
 			if (!id.toLowerCase().endsWith("fuseesb.runtime.60")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else if (version != null && version.trim().startsWith("6.1")) {

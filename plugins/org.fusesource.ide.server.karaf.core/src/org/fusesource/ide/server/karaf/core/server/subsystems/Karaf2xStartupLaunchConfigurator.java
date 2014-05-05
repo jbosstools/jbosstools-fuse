@@ -48,7 +48,7 @@ public class Karaf2xStartupLaunchConfigurator extends
 			String mainProgram = null;
 			String vmArguments = null;
 			
-			String version = runtime.getKarafVersion();
+			String version = runtime.getVersion();
 			if (version != null) {
 				if (version.startsWith(IKarafToolingConstants.KARAF_VERSION_2x)) {
 					// handle 2x specific program arguments

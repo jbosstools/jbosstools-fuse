@@ -50,11 +50,27 @@ public class KarafServerDelegate extends ServerDelegate implements
 	}
 	
 	protected String getDefaultUsername() {
-		return DEFAULT_KARAF_SSH_USER;
+		if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_KARAF)) {
+			return DEFAULT_KARAF_SSH_USER;	
+		} else if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_SMX)) {
+			return DEFAULT_SMX_SSH_USER;	
+		} else if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_FUSEESB)) {
+			return DEFAULT_FUSEESB_SSH_USER;	
+		} else {
+			return DEFAULT_KARAF_SSH_USER;
+		}		
 	}
 	
 	protected String getDefaultPassword() {
-		return DEFAULT_KARAF_SSH_PASSWORD;
+		if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_KARAF)) {
+			return DEFAULT_KARAF_SSH_PASSWORD;	
+		} else if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_SMX)) {
+			return DEFAULT_SMX_SSH_PASSWORD;	
+		} else if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_FUSEESB)) {
+			return DEFAULT_FUSEESB_SSH_PASSWORD;	
+		} else {
+			return DEFAULT_KARAF_SSH_PASSWORD;
+		}
 	}
 	
 	/* (non-Javadoc)

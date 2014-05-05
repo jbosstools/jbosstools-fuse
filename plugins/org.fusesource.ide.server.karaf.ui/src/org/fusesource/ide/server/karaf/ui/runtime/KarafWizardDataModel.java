@@ -69,7 +69,7 @@ public class KarafWizardDataModel implements
 	}
 
 	@Override
-	public String getKarafVersion() {
+	public String getVersion() {
 		// TODO Auto-generated method stub
 		return null;
 	}

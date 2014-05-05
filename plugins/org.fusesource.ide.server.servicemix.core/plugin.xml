@@ -5,68 +5,8 @@
   <extension point="org.eclipse.wst.server.core.runtimeTypes">
     <runtimeType
           class="org.fusesource.ide.server.servicemix.core.runtime.ServiceMixRuntimeDelegate"
-          description="%runtimeTypeServiceMixDescription_40"
-          id="org.fusesource.ide.smx.runtime.40"
-          name="%runtimeTypeServiceMixLabel_40"
-          vendor="%fusesource"
-          vendorId="%fusesource"
-          version="4.0">
-       <moduleType
-         types="jst.web"
-         versions="2.2, 2.3, 2.4, 2.5, 3.0"/>
-       <moduleType
-         types="jst.utility"
-         versions="1.0"/>
-    </runtimeType>
-    <runtimeType
-          class="org.fusesource.ide.server.servicemix.core.runtime.ServiceMixRuntimeDelegate"
-          description="%runtimeTypeServiceMixDescription_42"
-          id="org.fusesource.ide.smx.runtime.42"
-          name="%runtimeTypeServiceMixLabel_42"
-          vendor="%fusesource"
-          vendorId="%fusesource"
-          version="4.2">
-       <moduleType
-         types="jst.web"
-         versions="2.2, 2.3, 2.4, 2.5, 3.0"/>
-       <moduleType
-         types="jst.utility"
-         versions="1.0"/>
-    </runtimeType>
-    <runtimeType
-          class="org.fusesource.ide.server.servicemix.core.runtime.ServiceMixRuntimeDelegate"
-          description="%runtimeTypeServiceMixDescription_43"
-          id="org.fusesource.ide.smx.runtime.43"
-          name="%runtimeTypeServiceMixLabel_43"
-          vendor="%fusesource"
-          vendorId="%fusesource"
-          version="4.3">
-       <moduleType
-         types="jst.web"
-         versions="2.2, 2.3, 2.4, 2.5, 3.0"/>
-       <moduleType
-         types="jst.utility"
-         versions="1.0"/>
-    </runtimeType>
-    <runtimeType
-          class="org.fusesource.ide.server.servicemix.core.runtime.ServiceMixRuntimeDelegate"
-          description="%runtimeTypeServiceMixDescription_44"
-          id="org.fusesource.ide.smx.runtime.44"
-          name="%runtimeTypeServiceMixLabel_44"
-          vendor="%fusesource"
-          vendorId="%fusesource"
-          version="4.4">
-       <moduleType
-         types="jst.web"
-         versions="2.2, 2.3, 2.4, 2.5, 3.0"/>
-       <moduleType
-         types="jst.utility"
-         versions="1.0"/>
-    </runtimeType>
-    <runtimeType
-          class="org.fusesource.ide.server.servicemix.core.runtime.ServiceMixRuntimeDelegate"
           description="%runtimeTypeServiceMixDescription_45"
-          id="org.fusesource.ide.smx.runtime.45"
+          id="org.fusesource.ide.servicemix.runtime.45"
           name="%runtimeTypeServiceMixLabel_45"
           vendor="%fusesource"
           vendorId="%fusesource"
@@ -78,85 +18,54 @@
          types="jst.utility"
          versions="1.0"/>
     </runtimeType>
+    <runtimeType
+          class="org.fusesource.ide.server.servicemix.core.runtime.ServiceMixRuntimeDelegate"
+          description="%runtimeTypeServiceMixDescription_50"
+          id="org.fusesource.ide.servicemix.runtime.50"
+          name="%runtimeTypeServiceMixLabel_50"
+          vendor="%fusesource"
+          vendorId="%fusesource"
+          version="5.0">
+       <moduleType
+             types="jst.web"
+             versions="2.2, 2.3, 2.4, 2.5, 3.0">
+       </moduleType>
+       <moduleType
+             types="jst.utility"
+             versions="1.0">
+       </moduleType>
+    </runtimeType>
   </extension>
 
   <extension point="org.eclipse.wst.server.core.serverTypes">
      <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
-           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
-           description="%serviceMixServerDescription_40"
-           hasConfiguration="true"
-           id="org.fusesource.ide.smx.server.40"
-           initialState="stopped"
-           launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
-           name="%serviceMixServerType_40"
-           runtime="true"
-           runtimeTypeId="org.fusesource.ide.smx.runtime.40"
-           startTimeout="90000"
-           stopTimeout="45000"
-           supportsRemoteHosts="false">
-     </serverType>
-     <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
-           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
-           description="%serviceMixServerDescription_42"
-           hasConfiguration="true"
-           id="org.fusesource.ide.smx.server.42"
-           initialState="stopped"
-           launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
-           name="%serviceMixServerType_42"
-           runtime="true"
-           runtimeTypeId="org.fusesource.ide.smx.runtime.42"
-           startTimeout="90000"
-           stopTimeout="45000"
-           supportsRemoteHosts="false">
-     </serverType>
-     <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
-           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
-           description="%serviceMixServerDescription_43"
-           hasConfiguration="true"
-           id="org.fusesource.ide.smx.server.43"
-           initialState="stopped"
-           launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
-           name="%serviceMixServerType_43"
-           runtime="true"
-           runtimeTypeId="org.fusesource.ide.smx.runtime.43"
-           startTimeout="90000"
-           stopTimeout="45000"
-           supportsRemoteHosts="false">
-     </serverType>
-     <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
-           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
-           description="%serviceMixServerDescription_44"
-           hasConfiguration="true"
-           id="org.fusesource.ide.smx.server.44"
-           initialState="stopped"
-           launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
-           name="%serviceMixServerType_44"
-           runtime="true"
-           runtimeTypeId="org.fusesource.ide.smx.runtime.44"
-           startTimeout="90000"
-           stopTimeout="45000"
-           supportsRemoteHosts="false">
-     </serverType>
-     <serverType
-           behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
+           behaviourClass="org.fusesource.ide.server.servicemix.core.server.ControllableServiceMixServerBehaviour"
            class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
            description="%serviceMixServerDescription_45"
            hasConfiguration="true"
-           id="org.fusesource.ide.smx.server.45"
+           id="org.fusesource.ide.servicemix.server.45"
            initialState="stopped"
            launchModes="run"
-           launchConfigId="org.fusesource.ide.server.karaf.launch"
+           launchConfigId="org.fusesource.ide.server.servicemix4x.launch"
            name="%serviceMixServerType_45"
            runtime="true"
-           runtimeTypeId="org.fusesource.ide.smx.runtime.45"
+           runtimeTypeId="org.fusesource.ide.servicemix.runtime.45"
+           startTimeout="90000"
+           stopTimeout="45000"
+           supportsRemoteHosts="false">
+     </serverType>
+     <serverType
+           behaviourClass="org.fusesource.ide.server.servicemix.core.server.ControllableServiceMixServerBehaviour"
+           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
+           description="%serviceMixServerDescription_50"
+           hasConfiguration="true"
+           id="org.fusesource.ide.servicemix.server.50"
+           initialState="stopped"
+           launchConfigId="org.fusesource.ide.server.servicemix4x.launch"
+           launchModes="run"
+           name="%serviceMixServerType_50"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.servicemix.runtime.50"
            startTimeout="90000"
            stopTimeout="45000"
            supportsRemoteHosts="false">
@@ -165,90 +74,121 @@
 
   <extension point="org.eclipse.wst.server.core.runtimeLocators">
     <runtimeLocator
-       id="org.fusesource.ide.server.smx.runtime.locator"
-       typeIds="org.fusesource.ide.smx.runtime.*"
+       id="org.fusesource.ide.server.servicemix.runtime.locator"
+       typeIds="org.fusesource.ide.servicemix.runtime.*"
        class="org.fusesource.ide.server.servicemix.core.runtime.ServiceMix4xRuntimeLocator"/>
   </extension>
 
   <extension point="org.eclipse.wst.server.core.serverLocators">
     <serverLocator
-       id="org.fusesource.ide.server.smx.server.locator"
+       id="org.fusesource.ide.server.servicemix.server.locator"
        supportsRemoteHosts="false"
-       typeIds="org.fusesource.ide.smx.server.*"
-       class="org.fusesource.ide.server.servicemix.core.server.ServiceMix4xServerLocator"/>
+       typeIds="org.fusesource.ide.servicemix.server.*"
+       class="org.fusesource.ide.server.servicemix.core.server.ServiceMixServerLocator"/>
   </extension>
 
   <extension point="org.eclipse.wst.server.core.installableRuntimes">
     <runtime
-          archivePath="apache-servicemix-4.0.0"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.0.0/apache-servicemix-4.0.0.zip"
-          id="org.fusesource.ide.smx.runtime.40"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="win32">
-    </runtime>
-    <runtime
-          archivePath="apache-servicemix-4.0.0"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.0.0/apache-servicemix-4.0.0.tar.gz"
-          id="org.fusesource.ide.smx.runtime.40"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="linux">
-    </runtime>
-    <runtime
-          archivePath="apache-servicemix-4.2.0"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.2.0/apache-servicemix-4.2.0.zip"
-          id="org.fusesource.ide.smx.runtime.42"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="win32">
-    </runtime>
-    <runtime
-          archivePath="apache-servicemix-4.2.0"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.2.0/apache-servicemix-4.2.0.tar.gz"
-          id="org.fusesource.ide.smx.runtime.42"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="linux">
-    </runtime>
-    <runtime
-          archivePath="apache-servicemix-4.3.0"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.3.0/apache-servicemix-4.3.0.zip"
-          id="org.fusesource.ide.smx.runtime.43"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="win32">
-    </runtime>
-    <runtime
-          archivePath="apache-servicemix-4.3.0"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.3.0/apache-servicemix-4.3.0.tar.gz"
-          id="org.fusesource.ide.smx.runtime.43"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="linux">
-    </runtime>
-    <runtime
-          archivePath="apache-servicemix-4.4.2"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.4.2/apache-servicemix-4.4.2.zip"
-          id="org.fusesource.ide.smx.runtime.44"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="win32">
-    </runtime>
-    <runtime
-          archivePath="apache-servicemix-4.4.2"
-          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.4.2/apache-servicemix-4.4.2.tar.gz"
-          id="org.fusesource.ide.smx.runtime.44"
-          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
-          os="linux">
-    </runtime>
-    <runtime
           archivePath="apache-servicemix-4.5.2"
           archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.5.2/apache-servicemix-4.5.2.zip"
-          id="org.fusesource.ide.smx.runtime.45"
+          id="org.fusesource.ide.servicemix.runtime.45"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="win32">
     </runtime>
     <runtime
           archivePath="apache-servicemix-4.5.2"
           archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/4.5.2/apache-servicemix-4.5.2.tar.gz"
-          id="org.fusesource.ide.smx.runtime.45"
+          id="org.fusesource.ide.servicemix.runtime.45"
+          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
+          os="linux">
+    </runtime>
+    <runtime
+          archivePath="apache-servicemix-5.0.0"
+          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.0.0/apache-servicemix-5.0.0.zip"
+          id="org.fusesource.ide.servicemix.runtime.50"
+          licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
+          os="win32">
+    </runtime>
+    <runtime
+          archivePath="apache-servicemix-5.0.0"
+          archiveUrl="https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.0.0/apache-servicemix-5.0.0.zip"
+          id="org.fusesource.ide.servicemix.runtime.50"
           licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.txt"
           os="linux">
     </runtime>
   </extension>
   
+  <!-- new stuff -->
+  <extension
+        point="org.eclipse.debug.core.launchConfigurationTypes">
+     <launchConfigurationType
+           delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
+           id="org.fusesource.ide.server.servicemix4x.launch"
+           modes="run"
+           name="%servicemix.launch.name"
+           public="true">
+     </launchConfigurationType>
+  </extension>
+  
+  <extension
+        point="org.jboss.ide.eclipse.as.wtp.core.serverBeanTypeProvider">
+     <serverBeanTypeProvider
+           class="org.fusesource.ide.server.servicemix.core.bean.ServiceMixBeanProvider"
+           weight="5">
+     </serverBeanTypeProvider>
+  </extension>
+  <extension
+        point="org.jboss.tools.runtime.core.downloadRuntimeProvider">
+     <provider
+           class="org.fusesource.ide.server.servicemix.core.runtime.integration.ServiceMixDownloadRuntimesProvider">
+     </provider>
+  </extension>
+  <extension
+        point="org.jboss.tools.runtime.core.runtimeDetectors">
+     <runtimeDetector
+           class="org.fusesource.ide.server.servicemix.core.runtime.integration.ServiceMixRuntimeDetector"
+           enabled="true"
+           id="org.fusesource.ide.server.servicemix.core.runtime.integration.ServiceMixRuntimeDetection"
+           name="Apache ServiceMix">
+     </runtimeDetector>
+  </extension>
+  
+  <extension
+         point="org.jboss.ide.eclipse.as.wtp.core.serverSubsystem">
+         <subsystem
+            system="launch"
+            id="launch.servicemix.local.default"
+            name="Local ServiceMix Launch Controller"
+            class="org.fusesource.ide.server.servicemix.core.server.subsystems.ServiceMix4xLaunchController">
+         </subsystem>
+         <subsystemMapping
+            id="launch.servicemix.local.default"
+            mappedId="launch.servicemix.local"
+            serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
+         </subsystemMapping>
+         
+         <subsystem
+            system="shutdown"
+            id="shutdown.servicemix.local.default"
+            name="Local ServiceMix Shutdown Controller"
+            class="org.fusesource.ide.server.servicemix.core.server.subsystems.ServiceMix4xShutdownController">
+         </subsystem>
+         <subsystemMapping
+            id="shutdown.servicemix.local.default"
+            mappedId="shutdown.servicemix.local"
+            serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
+         </subsystemMapping>
+         
+         <subsystem
+            system="port"
+            id="port.servicemix.local.default"
+            name="Local ServiceMix Port Controller"
+            class="org.fusesource.ide.server.servicemix.core.server.subsystems.ServiceMix4xPortController">
+         </subsystem>
+         <subsystemMapping
+            id="port.servicemix.local.default"
+            mappedId="port.servicemix.local"
+            serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
+         </subsystemMapping>
+  </extension>
 </plugin>

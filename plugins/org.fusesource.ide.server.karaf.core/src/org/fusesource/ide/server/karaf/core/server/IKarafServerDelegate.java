@@ -21,7 +21,7 @@ public interface IKarafServerDelegate {
 	static final String PASSWORD = "password";
 	
 	static final String SERVER_TYPE_PREFIX_KARAF   = "org.fusesource.ide.karaf.server.";
-	static final String SERVER_TYPE_PREFIX_SMX     = "org.fusesource.ide.smx.server.";
+	static final String SERVER_TYPE_PREFIX_SMX     = "org.fusesource.ide.servicemix.server.";
 	static final String SERVER_TYPE_PREFIX_FUSEESB = "org.fusesource.ide.fuseesb.server.";
 	
 	/**
@@ -34,14 +34,14 @@ public interface IKarafServerDelegate {
 	   , SERVER_TYPE_PREFIX_KARAF   + "23"
 	   
 	   // SERVICEMIX VERSIONS
-	   , SERVER_TYPE_PREFIX_SMX     + "40"
 	   , SERVER_TYPE_PREFIX_SMX     + "42"
 	   , SERVER_TYPE_PREFIX_SMX     + "43"
 	   , SERVER_TYPE_PREFIX_SMX     + "44"
 	   , SERVER_TYPE_PREFIX_SMX     + "45"
+	   , SERVER_TYPE_PREFIX_SMX     + "50"
 	   
 	   // FUSE ESB VERSIONS
-	   , SERVER_TYPE_PREFIX_FUSEESB + "7x"
+	   , SERVER_TYPE_PREFIX_FUSEESB + "6x"
 		
 	   // more server type id's to be added here!
 	};

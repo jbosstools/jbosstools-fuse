@@ -104,7 +104,7 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 		}
 	}
 
-	private ILaunchConfigConfigurator getConfigurator() throws CoreException {
+	protected ILaunchConfigConfigurator getConfigurator() throws CoreException {
 		return new Karaf2xStartupLaunchConfigurator(getServer());
 	}
 

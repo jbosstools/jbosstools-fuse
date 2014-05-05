@@ -65,7 +65,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	}
 
 	@Override
-	public String getKarafVersion() {
+	public String getVersion() {
 		IPath loc = getRuntime().getLocation();
 		ServerBean sb = new ServerBeanLoader(loc.toFile()).getServerBean();
 		if( sb != null )
@@ -80,7 +80,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 			return status;
 
 		String id = getRuntime().getRuntimeType().getId();
-		String version = getKarafVersion();
+		String version = getVersion();
 		if (version != null && version.trim().startsWith("2.2")) {
 			if (!id.toLowerCase().endsWith("karaf.runtime.22")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else if (version != null && version.trim().startsWith("2.3")) {
