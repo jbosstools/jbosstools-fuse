@@ -5,16 +5,6 @@
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
             class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeFragment"
-            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.43"
-            typeIds="org.fusesource.ide.servicemix.runtime.43">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeFragment"
-            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.44"
-            typeIds="org.fusesource.ide.servicemix.runtime.44">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeFragment"
             id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.45"
             typeIds="org.fusesource.ide.servicemix.runtime.45">
       </fragment>
@@ -22,16 +12,6 @@
             class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeFragment"
             id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.50"
             typeIds="org.fusesource.ide.servicemix.runtime.50">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.server.fragment.43"
-            typeIds="org.fusesource.ide.servicemix.server.43">
-      </fragment>
-      <fragment
-            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
-            id="org.fusesource.ide.server.servicemix.ui.server.fragment.44"
-            typeIds="org.fusesource.ide.servicemix.server.44">
       </fragment>
       <fragment
             class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
@@ -48,16 +28,6 @@
          point="org.eclipse.wst.server.ui.serverImages">
       <image
             icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.servicemix.ui.server.image.43"
-            typeIds="org.fusesource.ide.servicemix.server.43">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.servicemix.ui.server.image.44"
-            typeIds="org.fusesource.ide.servicemix.server.44">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
             id="org.fusesource.ide.server.servicemix.ui.server.image.45"
             typeIds="org.fusesource.ide.servicemix.server.45">
       </image>
@@ -65,16 +35,6 @@
             icon="icons/fuse_server.png"
             id="org.fusesource.ide.server.servicemix.ui.server.image.50"
             typeIds="org.fusesource.ide.servicemix.server.50">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.servicemix.ui.runtime.image.43"
-            typeIds="org.fusesource.ide.servicemix.runtime.43">
-      </image>
-      <image
-            icon="icons/fuse_server.png"
-            id="org.fusesource.ide.server.servicemix.ui.runtime.image.44"
-            typeIds="org.fusesource.ide.servicemix.runtime.44">
       </image>
       <image
             icon="icons/fuse_server.png"

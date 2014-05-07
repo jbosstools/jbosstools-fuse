@@ -70,8 +70,8 @@ public class ServiceMixRuntimeComposite4x extends KarafRuntimeComposite2x {
 					wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_not_a_dir,
 							IMessageProvider.ERROR);
 				} else{
-					File binSMX = new File(dirLocation + SEPARATOR + Messages.AbstractKarafRuntimeComposite_bin_karaf); 
-					File binSMXBat = new File(dirLocation + SEPARATOR + Messages.AbstractKarafRuntimeComposite_bin_karaf_bat); 
+					File binSMX = new File(dirLocation + SEPARATOR + Messages.ServiceMix4xRuntimeComposite_bin_servicemix); 
+					File binSMXBat = new File(dirLocation + SEPARATOR + Messages.ServiceMix4xRuntimeComposite_bin_servicemix_bat); 
 					if (binSMX.exists() || binSMXBat.exists() ) {
 						valid = true;
 						wizardHandle.setMessage("", IMessageProvider.NONE); //$NON-NLS-1$

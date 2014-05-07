@@ -17,7 +17,6 @@ import org.fusesource.ide.server.karaf.ui.runtime.AbstractKarafRuntimeComposite;
 import org.fusesource.ide.server.karaf.ui.runtime.KarafWizardDataModel;
 import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeWizardFragment2x;
 
-
 /**
  * @author lhein
  */

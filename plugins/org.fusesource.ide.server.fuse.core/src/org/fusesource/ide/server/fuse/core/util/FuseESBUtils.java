@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.server.fuse.core;
+package org.fusesource.ide.server.fuse.core.util;
 
 import java.io.File;
 import java.io.FileFilter;
