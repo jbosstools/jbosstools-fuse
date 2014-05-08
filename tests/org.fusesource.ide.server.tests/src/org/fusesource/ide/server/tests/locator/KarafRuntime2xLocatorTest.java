@@ -20,7 +20,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.model.RuntimeLocatorDelegate;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeLocator;
 import org.fusesource.ide.server.tests.FuseServerTestActivator;
-import org.fusesource.ide.server.tests.util.MockRuntimeCreationUtil;
+import org.fusesource.ide.server.tests.util.KarafMockRuntimeCreationUtil;
 import org.fusesource.ide.server.tests.util.ParametizedTestUtil;
 import org.junit.After;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(value = Parameterized.class)
-public class Runtime3xLocatorTest extends TestCase {
+public class KarafRuntime2xLocatorTest extends TestCase {
 	
 	private String fRuntimeType;
 	
@@ -38,7 +38,7 @@ public class Runtime3xLocatorTest extends TestCase {
 	 * 
 	 * @param runtimeType	the runtime type id to test
 	 */
-	public Runtime3xLocatorTest(String runtimeType) {
+	public KarafRuntime2xLocatorTest(String runtimeType) {
 		this.fRuntimeType = runtimeType;
 	}
 	
@@ -48,7 +48,7 @@ public class Runtime3xLocatorTest extends TestCase {
 	 */
 	@Parameters
 	public static Collection<Object[]> data() {
-		return ParametizedTestUtil.asCollection(MockRuntimeCreationUtil.SUPPORTED_3X_RUNTIMES);
+		return ParametizedTestUtil.asCollection(KarafMockRuntimeCreationUtil.SUPPORTED_2X_RUNTIMES);
 	}
 			
 	/**
@@ -59,7 +59,7 @@ public class Runtime3xLocatorTest extends TestCase {
 	public void testKaraf() throws Exception {
 		IPath dest = FuseServerTestActivator.getDefault()
 				.getStateLocation().append(fRuntimeType);
-		MockRuntimeCreationUtil.create3xRuntimeMock(
+		KarafMockRuntimeCreationUtil.create2xRuntimeMock(
 				fRuntimeType, dest);
 		
 		KarafRuntimeLocator locator = new KarafRuntimeLocator();

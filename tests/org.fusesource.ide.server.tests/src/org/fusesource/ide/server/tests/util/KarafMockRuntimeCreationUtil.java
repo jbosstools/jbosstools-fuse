@@ -20,7 +20,7 @@ import org.jboss.tools.as.test.core.internal.utils.BundleUtils;
 /**
  * @author lhein
  */
-public final class MockRuntimeCreationUtil {
+public final class KarafMockRuntimeCreationUtil {
 	
 	public static final String KARAF_22 = "org.fusesource.ide.karaf.runtime.22";
 	public static final String KARAF_23 = "org.fusesource.ide.karaf.runtime.23";

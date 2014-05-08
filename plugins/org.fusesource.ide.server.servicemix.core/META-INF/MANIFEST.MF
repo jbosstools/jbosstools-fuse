@@ -30,6 +30,9 @@ Require-Bundle: org.fusesource.ide.commons,
 Bundle-Activator: org.fusesource.ide.server.servicemix.core.Activator
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.server.servicemix.core,
+ org.fusesource.ide.server.servicemix.core.bean,
  org.fusesource.ide.server.servicemix.core.runtime,
+ org.fusesource.ide.server.servicemix.core.runtime.integration,
  org.fusesource.ide.server.servicemix.core.server,
+ org.fusesource.ide.server.servicemix.core.server.subsystems,
  org.fusesource.ide.server.servicemix.core.util

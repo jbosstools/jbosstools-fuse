@@ -30,6 +30,9 @@ Require-Bundle: org.fusesource.ide.commons,
 Bundle-Activator: org.fusesource.ide.server.fuse.core.Activator
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.server.fuse.core,
+ org.fusesource.ide.server.fuse.core.bean,
  org.fusesource.ide.server.fuse.core.runtime,
+ org.fusesource.ide.server.fuse.core.runtime.integration,
  org.fusesource.ide.server.fuse.core.server,
+ org.fusesource.ide.server.fuse.core.server.subsystems,
  org.fusesource.ide.server.fuse.core.util
