@@ -177,4 +177,22 @@
           type="org.eclipse.core.resources.IProject">
     </propertyTester>
  </extension>
+ <extension
+       point="org.eclipse.wst.server.core.moduleFactories">
+    <moduleFactory
+          class="org.fusesource.ide.project.integration.CamelModuleFactory"
+          id="org.fusesource.ide.project.fuseModuleFactory">
+       <moduleType
+             types="fuse.camel"
+             versions="1.0">
+       </moduleType>
+    </moduleFactory>
+ </extension>
+ <extension
+       point="org.eclipse.wst.server.core.moduleTypes">
+    <moduleType
+          id="fuse.camel"
+          name="Apache Camel Context">
+    </moduleType>
+ </extension>
 </plugin>

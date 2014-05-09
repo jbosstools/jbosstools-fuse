@@ -11,7 +11,6 @@
 package org.fusesource.ide.server.karaf.core.server;
 
 import org.eclipse.core.runtime.CoreException;
-import org.fusesource.ide.server.karaf.core.server.subsystems.NullPublishController;
 import org.fusesource.ide.server.karaf.core.server.subsystems.NullStateController;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.ControllableServerBehavior;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.ILaunchServerController;
@@ -22,7 +21,7 @@ import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IServerShutdownControll
 public class ControllableKarafServerBehavior extends ControllableServerBehavior {
 	// Delete this method after impl completed
 	protected IPublishController getPublishController() throws CoreException {
-		return new NullPublishController();
+		return (IPublishController)getController(SYSTEM_PUBLISH, null);
 	}
 	
 	protected IModuleStateController getModuleStateController() throws CoreException {
