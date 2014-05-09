@@ -33,9 +33,11 @@
 	    <configuration>
 	      <artifacts>
 		<artifact>
-		  <file>jbtis_4.1_dev.target</file>
+<!--		  <file>jbtis_4.1_dev.target</file>  -->
+		  <file>jbtis_4.2_dev.target</file>
 		  <type>target</type>
-		  <classifier>jbtis_4.1_dev</classifier>
+<!--		  <classifier>jbtis_4.1_dev</classifier>  -->
+		  <classifier>jbtis_4.2_dev</classifier>
 		</artifact>
 	      </artifacts>
 	    </configuration>
@@ -55,7 +57,8 @@
 	    </goals>
 	    <configuration>
 	      <targetFiles>
-		<param>jbtis_4.1_dev.target</param>
+<!--		<param>jbtis_4.1_dev.target</param>  -->
+		<param>jbtis_4.2_dev.target</param>
 	      </targetFiles>
 	      <failOnError>false</failOnError>
 	    </configuration>
@@ -128,8 +131,8 @@
 
     <profile>
 
-      <!-- Default - Kepler -->
-      <id>generate-target</id>
+      <!-- Should be called explicitly in order to (re)create the Kepler output target file -->
+      <id>generate-target-kepler</id>
       <build>
 	<plugins>
 
@@ -174,6 +177,64 @@
 		<configuration>
 		  <targetFiles>
 		    <param>jbtis_4.1_dev.target</param>
+		  </targetFiles>
+		  <failOnError>false</failOnError>
+		</configuration>
+	      </execution>
+	    </executions>
+	  </plugin>
+
+	</plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <!-- Default - Luna -->
+      <id>generate-target</id>
+      <build>
+	<plugins>
+
+	  <plugin>
+	    <groupId>org.jboss.tools.tycho-plugins</groupId>
+	    <artifactId>target-platform-utils</artifactId>
+	    <version>${jboss-tycho-version}</version>
+	    <executions>
+	      <execution>
+		<phase>generate-resources</phase>
+		<goals>
+		  <goal>merge-targets</goal>
+		</goals>
+		<configuration>
+		  <sourceTargetArtifacts>
+		    <item>
+		      <groupId>org.jboss.tools.integration-stack</groupId>
+		      <artifactId>target-platform</artifactId>
+		      <version>4.2.0.Alpha3</version>
+		      <classifier>base</classifier>
+		    </item>
+		  </sourceTargetArtifacts>
+		  <sourceTargetFiles>
+		    <item>luna_dev.target</item>
+		  </sourceTargetFiles>
+		  <outputFile>jbtis_4.2_dev.target</outputFile>
+		</configuration>
+	      </execution>
+	    </executions>
+	  </plugin>
+
+	  <plugin>
+	    <groupId>org.eclipse.tycho.extras</groupId>
+	    <artifactId>target-platform-validation-plugin</artifactId>
+	    <version>${tycho-version}</version>
+	    <executions>
+	      <execution>
+		<phase>generate-resources</phase>
+		<goals>
+		  <goal>validate-target-platform</goal>
+		</goals>
+		<configuration>
+		  <targetFiles>
+		    <param>jbtis_4.2_dev.target</param>
 		  </targetFiles>
 		  <failOnError>false</failOnError>
 		</configuration>

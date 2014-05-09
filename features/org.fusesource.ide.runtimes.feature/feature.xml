@@ -33,6 +33,7 @@ Raleigh NC 27606 USA.
       <discovery label="Eclipse Indigo" url="http://download.eclipse.org/releases/indigo"/>
       <discovery label="Eclipse Juno" url="http://download.eclipse.org/releases/juno"/>
       <discovery label="Eclipse Kepler" url="http://download.eclipse.org/releases/kepler"/>
+      <discovery label="Eclipse Luna" url="http://download.eclipse.org/releases/luna"/>
    </url>
 
    <requires>

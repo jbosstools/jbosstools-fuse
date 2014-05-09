@@ -307,7 +307,8 @@
               <groupId>org.fusesource.ide</groupId>
               <artifactId>org.fusesource.ide.targetplatform</artifactId>
               <version>${project.version}</version>
-              <classifier>jbtis_4.1_dev</classifier>
+<!--              <classifier>jbtis_4.1_dev</classifier>  -->
+              <classifier>jbtis_4.2_dev</classifier>
             </artifact>
           </target>
           <ignoreTychoRepositories>false</ignoreTychoRepositories>
