@@ -13,6 +13,9 @@ package org.fusesource.ide.server.karaf.core.util;
 
 import java.io.File;
 
+import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
@@ -20,6 +23,40 @@ import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
  * @author lhein
  */
 public class KarafUtils {
+	
+	/**
+	 * A constant representing that no publish is required. 
+	 * This constant is different from the wtp constants in that
+	 * this constant is used after taking into account 
+	 * the server flags of kind and deltaKind, as well as the module restart state,
+	 * to come to a conclusion of what a publisher needs to do.
+	 */
+	public static final int NO_PUBLISH = 0;
+	/**
+	 * A constant representing that an incremental publish is required. 
+	 * This constant is different from the wtp constants in that
+	 * this constant is used after taking into account 
+	 * the server flags of kind and deltaKind, as well as the module restart state,
+	 * to come to a conclusion of what a publisher needs to do.
+	 */
+	public static final int INCREMENTAL_PUBLISH = 1;
+	/**
+	 * A constant representing that a full publish is required. 
+	 * This constant is different from the wtp constants in that
+	 * this constant is used after taking into account 
+	 * the server flags of kind and deltaKind, as well as the module restart state,
+	 * to come to a conclusion of what a publisher needs to do.
+	 */
+	public static final int FULL_PUBLISH = 2;
+	
+	/**
+	 * A constant representing that a removal-type publish is required. 
+	 * This constant is different from the wtp constants in that
+	 * this constant is used after taking into account 
+	 * the server flags of kind and deltaKind, as well as the module restart state,
+	 * to come to a conclusion of what a publisher needs to do.
+	 */
+	public static final int REMOVE_PUBLISH = 3;
 	
 	/**
 	 * retrieves the version of the installation
@@ -33,6 +70,37 @@ public class KarafUtils {
 			return loader.getFullServerVersion();
 		}
 		return null;
+	}
+	
+	/**
+	 * Given the various flags, return which of the following options 
+	 * our publishers should perform:
+	 *    1) A full publish
+	 *    2) A removed publish (remove the module)
+	 *    3) An incremental publish, or
+	 *    4) No publish at all. 
+	 * @param module
+	 * @param kind
+	 * @param deltaKind
+	 * @return
+	 */
+	public static int getPublishType(IServer server, IModule[] module, int kind, int deltaKind) {
+		int modulePublishState = server.getModulePublishState(module);
+		if( deltaKind == ServerBehaviourDelegate.ADDED ) 
+			return FULL_PUBLISH;
+		else if (deltaKind == ServerBehaviourDelegate.REMOVED) {
+			return REMOVE_PUBLISH;
+		} else if (kind == IServer.PUBLISH_FULL 
+				|| modulePublishState == IServer.PUBLISH_STATE_FULL 
+				|| kind == IServer.PUBLISH_CLEAN ) {
+			return FULL_PUBLISH;
+		} else if (kind == IServer.PUBLISH_INCREMENTAL 
+				|| modulePublishState == IServer.PUBLISH_STATE_INCREMENTAL 
+				|| kind == IServer.PUBLISH_AUTO) {
+			if( ServerBehaviourDelegate.CHANGED == deltaKind ) 
+				return INCREMENTAL_PUBLISH;
+		} 
+		return NO_PUBLISH;
 	}
 	
 	

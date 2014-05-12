@@ -10,6 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.project.integration;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.jar.Manifest;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -19,6 +24,7 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.ModuleDelegate;
 import org.eclipse.wst.server.core.util.ProjectModuleFactoryDelegate;
+import org.fusesource.ide.project.RiderProjectNature;
 
 /**
  * @author lhein
@@ -73,8 +79,17 @@ public class CamelModuleFactory extends ProjectModuleFactoryDelegate {
 	 */
 	@Override
 	protected IModule[] createModules(final IProject project) {
-		IModule module = createModule(project.getName(), project.getName(), 
-				MODULE_TYPE, VERSION, project);
+		// check for the correct project nature
+		try {
+			if (!project.hasNature(RiderProjectNature.NATURE_ID)) {
+				// no fuse nature - so skip it
+				return new IModule[0];
+			}
+		} catch (CoreException ex) {
+			return new IModule[0];
+		}		
+		
+		IModule module = createModule(getBundleId(project), project.getName(), MODULE_TYPE, VERSION, project);
 		return new IModule[] { module };
 	}
 	
@@ -91,5 +106,25 @@ public class CamelModuleFactory extends ProjectModuleFactoryDelegate {
 				new Path("OSGI-INF/blueprint/"), // blueprint contexts //$NON-NLS-1$
 				new Path(".settings/org.eclipse.pde.core.prefs") // pde prefs //$NON-NLS-1$
 		};
+	}
+	
+	protected String getBundleId(final IProject project) {
+		String symbolicName = null;
+		IFile manifest = project.getFile("target/classes/META-INF/MANIFEST.MF");
+		if (!manifest.exists()) {
+			manifest = project.getFile("META-INF/MANIFEST.MF");
+		}
+		if (manifest.exists()) {
+			try {
+				Manifest mf = new Manifest(new FileInputStream(manifest.getLocation().toFile()));
+				symbolicName = mf.getMainAttributes().getValue("Bundle-SymbolicName");
+			} catch (IOException ex) {
+				symbolicName = project.getName();
+			}
+		} else {
+			// no OSGi bundle - lets take the project name instead
+			symbolicName = project.getName();
+		}
+		return symbolicName;
 	}
 }

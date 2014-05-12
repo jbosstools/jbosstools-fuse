@@ -14,6 +14,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Properties;
 
 /**
@@ -51,6 +52,15 @@ public class BaseConfigPropertyProvider implements
 		return configProps.getProperty(propertyName, defaultValue);
 	}
 
+	/**
+	 * retrieves the keys of all available properties
+	 * 
+	 * @return
+	 */
+	public Enumeration<Object> getPropertyKeys() {
+		return this.configProps.keys();
+	}
+	
 	/**
 	 * loads the properties from the given file
 	 */
