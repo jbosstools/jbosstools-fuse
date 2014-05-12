@@ -34,8 +34,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
 import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
 import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
+import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
+import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
+import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
 /**
  * this publisher can be used for deploying a local bundle / jar file to a local running karaf 2.x instance
@@ -246,11 +250,46 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	
 	/**
 	 * looks for an existing bundle with that SymbolicName
-	 * @param tabData
+	 * @param server
 	 * @param bundleSymbolicName
 	 * @return	the bundle id or -1 if not found
 	 */
 	private long findModuleInBundleList(String bundleSymbolicName) throws Exception {
+		long bundleId = -1;
+		ServerBeanType type = getServerBeanType();
+		if( KarafBeanProvider.KARAF_2x.equals(type)) {
+			// karaf 2.x -> use the operation "list()"
+			bundleId = findModuleInBundleListOperation(bundleSymbolicName);
+		} else if (KarafBeanProvider.KARAF_3x.equals(type)) {
+			// karaf 3.x -> use the attribute "Bundles"
+			bundleId = findModuleInBundlesAttribute(bundleSymbolicName);
+		} else {
+			// unsupported Karaf runtime
+		}
+		return bundleId;
+	}
+	
+	private long findModuleInBundlesAttribute(String bundleSymbolicName) throws Exception {
+		TabularData tabData = (TabularData)this.mbsc.getAttribute(this.karafBundlesMBeanName, "Bundles"); 
+		final Collection<?> rows = tabData.values();
+		for (Object row : rows) {
+			if (row instanceof CompositeData) {
+				CompositeData cd = (CompositeData) row;
+				String bsn = cd.get("Name").toString();
+				String id = cd.get("ID").toString();
+				if (bsn.equals(bundleSymbolicName)) {
+					try {
+						return Long.parseLong(id);
+					} catch (NumberFormatException ex) {
+						return -1;
+					}
+				}
+			}
+		}
+		return -1;
+	}
+	
+	private long findModuleInBundleListOperation(String bundleSymbolicName) throws Exception {
 		TabularData tabData = (TabularData)this.mbsc.invoke(this.karafBundlesMBeanName, "list", null, null); 
 		final Collection<?> rows = tabData.values();
 		for (Object row : rows) {
@@ -279,11 +318,23 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	private boolean determineMBeanNames() throws IOException {
 		ObjectName objNameFramework = null;
 		
-		try {
-			objNameFramework = new ObjectName("org.apache.karaf:type=bundles,*");
-		} catch (MalformedObjectNameException ex) {
-			ex.printStackTrace();
+		ServerBeanType type = getServerBeanType();
+		if( KarafBeanProvider.KARAF_2x.equals(type)) {
+			try {
+				objNameFramework = new ObjectName("org.apache.karaf:type=bundles,*");
+			} catch (MalformedObjectNameException ex) {
+				ex.printStackTrace();
+			}
+		} else if (KarafBeanProvider.KARAF_3x.equals(type)) {
+			try {
+				objNameFramework = new ObjectName("org.apache.karaf:type=bundle,*");
+			} catch (MalformedObjectNameException ex) {
+				ex.printStackTrace();
+			}
+		} else {
+			// unsupported Karaf runtime
 		}
+		
 		Set mbeans = mbsc.queryMBeans(objNameFramework, null); 
 	    if (mbeans.size() != 1) {
 	    	// no mbean for the osgi framework found - can't publish anything
@@ -327,5 +378,11 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			}
 		}
 		return retVal;
+	}
+	
+	private ServerBeanType getServerBeanType() {
+		ServerBeanLoader loader = new ServerBeanLoader(server.getRuntime().getLocation().toFile());
+		ServerBean serverBean = loader.getServerBean();
+		return serverBean.getBeanType();
 	}
 }

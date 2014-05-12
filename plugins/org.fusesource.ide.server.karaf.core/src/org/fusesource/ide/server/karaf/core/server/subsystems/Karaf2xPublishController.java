@@ -35,6 +35,8 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 		}
 		// TODO: we should also check if the JMX port is already bound before using it
 				
+		// TODO: we should invoke a build so we have the artifact to deploy
+		
 		return Status.CANCEL_STATUS;
 	}
 
