@@ -108,6 +108,7 @@
                 <with
                 variable="selection">
                                 <iterate
+                                      ifEmpty="false"
                                       operator="and">
                                    <test
                                          forcePluginActivation="true"
@@ -130,6 +131,7 @@
                 <with
                 variable="selection">
                 <iterate
+                      ifEmpty="false"
                       operator="and">
                    <test
                          forcePluginActivation="true"
