@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.fusesource.ide.importwizards"
+            name="%rider.importwizard.category.label">
+      </category>
+      <wizard
+            category="org.fusesource.ide.importwizards"
+            class="org.fusesource.ide.sap.imports.SAPImportWizard"
+            icon="icons/fuse_icon_16c.png"
+            id="org.fusesource.ide.sap.imports.JCoImportWizard"
+            name="%fuse.import.sap.libs.name">
+         <description>
+            Imports SAP Libraries into Eclipse Environment
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>
