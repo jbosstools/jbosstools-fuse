@@ -112,7 +112,7 @@ public class IDoc3ArchiveSelectionPage extends WizardPage {
 		textSelectIDoc3Archive = new Text(top, SWT.BORDER | SWT.READ_ONLY);
 		textSelectIDoc3Archive.setMessage(Messages.IDoc3ArchiveSelectionPage_IDoc3ArchivePath);
 		textSelectIDoc3Archive.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		binding = context.bindValue(SWTObservables.observeText(textSelectIDoc3Archive, SWT.Modify), BeansObservables.observeValue(idoc3ImportSettings, IDoc3ImportSettings.IDOC3_ARCHIVE), new UpdateValueStrategy().setAfterConvertValidator(new ArchiveNameValidator())	, new UpdateValueStrategy());
+		binding = context.bindValue(SWTObservables.observeText(textSelectIDoc3Archive, SWT.Modify), BeansObservables.observeValue(idoc3ImportSettings, IDoc3ImportSettings.IDOC3_ARCHIVE_FILENAME), new UpdateValueStrategy().setAfterConvertValidator(new ArchiveNameValidator())	, new UpdateValueStrategy());
 		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT);
 		
 		
