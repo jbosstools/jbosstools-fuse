@@ -27,17 +27,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PlatformUI;
 
-/**
- *
- */
 public class DownloadPage extends WizardPage {
 
 	private static final String DOWNLOAD_LINK_URL = "http://service.sap.com/connectors"; //$NON-NLS-1$
 	private static final String DOWNLOAD_LINK_TEXT = "<a>http://service.sap.com/connectors</a>"; //$NON-NLS-1$
 
-	/**
-	 * 
-	 */
 	protected DownloadPage() {
 		super(Messages.DownloadPage_DownloadSAPArchiveFiles);
 		setDescription(Messages.DownloadPage_DownloadTheSAPJavaConnectorAndSAPJavaIDocClassLibraryArchiveFiles);
@@ -45,10 +39,6 @@ public class DownloadPage extends WizardPage {
 		setPageComplete(true);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		GridData gridData;
@@ -98,8 +88,7 @@ public class DownloadPage extends WizardPage {
 		lblIDocVersionNote.setText(Messages.DownloadPage_DownloadIDocVersionNote);
 		
 		link.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
+			/* (non-Javadoc)
 			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 			 */
 			@Override

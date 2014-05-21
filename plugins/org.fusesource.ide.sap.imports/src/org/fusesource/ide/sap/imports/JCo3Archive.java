@@ -41,12 +41,10 @@ import java.util.jar.JarOutputStream;
 
 import org.eclipse.core.runtime.Platform;
 
-/**
- * 
- */
 public class JCo3Archive extends SAPArchive {
 
 	private static final String SAPJCO_RELEASE_DELIMITER = "."; //$NON-NLS-1$
+
 	private static final String MANIFEST_LINE_DELIMITER = ":"; //$NON-NLS-1$
 
 	/**
@@ -96,9 +94,6 @@ public class JCo3Archive extends SAPArchive {
 	 */
 	public static final String FRAGMENT_DARWIN_64 = "com.sap.conn.jco.osx.x86_64"; //$NON-NLS-1$
 
-	/**
-	 * 
-	 */
 	public enum JCoArchiveType {
 		JCO_INVALID_ARCHIVE("Invalid JCo 3 Archive", "", "", "", "", "", ""),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 		JCO_WIN32_X86_ARCHIVE("Microsoft Windows (x86 32 bit)", "NTintel", "sapjco3.dll", FRAGMENT_WINDOWS_32, "(& (osgi.os=win32) (osgi.arch=x86))", Platform.OS_WIN32, Platform.ARCH_X86),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -118,16 +113,6 @@ public class JCo3Archive extends SAPArchive {
 		private String eclipseOS;
 		private String eclipseOSArch;
 	
-		/**
-		 * 
-		 * @param description
-		 * @param sapjcoOs
-		 * @param nativeArchiveName
-		 * @param fragmentName
-		 * @param platformFilter
-		 * @param eclipseOS
-		 * @param eclipseOSArch
-		 */
 		JCoArchiveType(String description, String sapjcoOs, String nativeArchiveName, String fragmentName, String platformFilter, String eclipseOS, String eclipseOSArch) {
 			this.description = description;
 			this.nativeArchiveName = nativeArchiveName;
@@ -138,75 +123,38 @@ public class JCo3Archive extends SAPArchive {
 			this.eclipseOSArch = eclipseOSArch;
 		}
 	
-		/**
-		 * 
-		 * @return
-		 */
 		public String getDescription() {
-			return this.description;
-		}
-		
-		/**
-		 * 
-		 * @return
-		 */
-		public String getSapjcoOs() {
-			return this.sapjcoOs;
+			return description;
 		}
 	
-		/**
-		 * 
-		 * @return
-		 */
+		public String getSapjcoOs() {
+			return sapjcoOs;
+		}
+	
 		public String getNativeArchiveName() {
-			return this.nativeArchiveName;
+			return nativeArchiveName;
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
 		public String getPluginName() {
 			return PLUGIN_JCO;
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
 		public String getFragmentName() {
-			return this.fragmentName;
+			return fragmentName;
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
 		public String getPlatformFilter() {
-			return this.platformFilter;
+			return platformFilter;
 		}
 	
-		/**
-		 * 
-		 * @return
-		 */
 		public String getEclipseOS() {
-			return this.eclipseOS;
+			return eclipseOS;
 		}
 
-		/**
-		 * 
-		 * @return
-		 */
 		public String getEclipseOSArch() {
-			return this.eclipseOSArch;
+			return eclipseOSArch;
 		}
 
-		/**
-		 * 
-		 * @param sapjcoOsCode
-		 * @return
-		 */
 		public static JCoArchiveType getType(String sapjcoOsCode) {
 			sapjcoOsCode = sapjcoOsCode.trim();
 			if (sapjcoOsCode.equals(JCO_WIN32_X86_ARCHIVE.getSapjcoOs())) {
@@ -230,10 +178,6 @@ public class JCo3Archive extends SAPArchive {
 			}
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
 		public static JCoArchiveType getTypeForCurrentPlatform() {
 			String os = Platform.getOS();
 			String arch = Platform.getOSArch();
@@ -320,33 +264,28 @@ public class JCo3Archive extends SAPArchive {
 
 	private byte[] nativelib;
 
-	/**
-	 * 
-	 * @param filename
-	 * @throws IOException
-	 */
 	public JCo3Archive(String filename) throws IOException {
-		this.name = filename;
+		name = filename;
 		InputStream is = null;
 		ByteArrayOutputStream os = null;
 		try {
 			File file = new File(filename);
-			this.lastModified = file.lastModified();
+			lastModified = file.lastModified();
 			is = new FileInputStream(file);
 			os = new ByteArrayOutputStream();
 			while (true) {
-				int numRead = is.read(this.buf, 0, this.buf.length);
+				int numRead = is.read(buf, 0, buf.length);
 				if (numRead == -1) {
 					break;
 				}
-				os.write(this.buf, 0, numRead);
+				os.write(buf, 0, numRead);
 			}
 			readArchiveFile(filename, os.toByteArray());
 			readArchiveType();
 			readJCo3JarFile();
 			readNativeLibraryFile();
 		} catch (IOException e) {
-			this.type = JCoArchiveType.JCO_INVALID_ARCHIVE;
+			type = JCoArchiveType.JCO_INVALID_ARCHIVE;
 			throw e;
 		} finally {
 			if (is != null)
@@ -357,102 +296,58 @@ public class JCo3Archive extends SAPArchive {
 		}
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public JCoArchiveType getType() {
-		return this.type;
+		return type;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Map<String, byte[]> getContents() {
-		return this.contents;
+		return contents;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Map<String, String> getManifest() {
-		return this.manifest;
+		return manifest;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public byte[] getJCo3JarFile() {
-		return this.sapjco3jar;
+		return sapjco3jar;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public byte[] getNativeLibraryFile() {
-		return this.nativelib;
+		return nativelib;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public String getVersion() {
-		if (this.version == null) {
+		if (version == null) {
 			StringBuffer buf = new StringBuffer();
 
-			String sapjcoRelease = this.manifest.get(SAPJCO_RELEASE).trim();
-			String sapjcoPatchLevel = this.manifest.get(SAPJCO_PATCH_LEVEL).trim();
+			String sapjcoRelease = manifest.get(SAPJCO_RELEASE).trim();
+			String sapjcoPatchLevel = manifest.get(SAPJCO_PATCH_LEVEL).trim();
 			if (sapjcoRelease != null && sapjcoRelease.length() > 0) {
 				buf.append(sapjcoRelease);
 				buf.append(SAPJCO_RELEASE_DELIMITER); //$NON-NLS-1$
 				buf.append(sapjcoPatchLevel);
-				this.version = buf.toString();
+				version = buf.toString();
 			}
 		}
-		return this.version;
+		return version;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
 	public String getBundleName() {
-		return this.type.getPluginName();
+		return type.getPluginName();
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public byte[] getSapjco3jar() {
-		return this.sapjco3jar;
+		return sapjco3jar;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public byte[] getNativelib() {
-		return this.nativelib;
+		return nativelib;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
 	public boolean supportsCurrentPlatform() {
 		if (Platform.getOS().equals(getType().getEclipseOS()) && Platform.getOSArch().equals(getType().getEclipseOSArch())) {
 			return true;
@@ -460,11 +355,6 @@ public class JCo3Archive extends SAPArchive {
 		return false;
 	}
 
-	/**
-	 * 
-	 * @param settings
-	 * @throws IOException
-	 */
 	public void buildJCoPlugin(JCo3ImportSettings settings) throws IOException {
 		InputStream is = null;
 		JarOutputStream target = null;
@@ -478,7 +368,7 @@ public class JCo3Archive extends SAPArchive {
 			// Create and populate manifest file.
 			byte[] manifest = createBundleManifestFile(settings);
 			JarEntry manifestEntry = new JarEntry(settings.getBundleManifestEntry());
-			manifestEntry.setTime(this.lastModified);
+			manifestEntry.setTime(lastModified);
 			target.putNextEntry(manifestEntry);
 			is = new ByteArrayInputStream(manifest);
 			while (true) {
@@ -492,12 +382,12 @@ public class JCo3Archive extends SAPArchive {
 
 			// create native library folder in jar
 			JarEntry nativeDirEntry = new JarEntry(settings.getBundleNativeDirEntry());
-			nativeDirEntry.setTime(this.lastModified);
+			nativeDirEntry.setTime(lastModified);
 			target.putNextEntry(nativeDirEntry);
 
 			// Populate JCo3 jar into root of jar
 			JarEntry jco3JarEntry = new JarEntry(settings.getBundleJCoJarEntry());
-			jco3JarEntry.setTime(this.lastModified);
+			jco3JarEntry.setTime(lastModified);
 			target.putNextEntry(jco3JarEntry);
 			is = new ByteArrayInputStream(sapjco3jar);
 			while (true) {
@@ -521,11 +411,6 @@ public class JCo3Archive extends SAPArchive {
 
 	}
 
-	/**
-	 * 
-	 * @param settings
-	 * @throws IOException
-	 */
 	public void buildJCoNativePlugin(JCo3ImportSettings settings) throws IOException {
 		InputStream is = null;
 		JarOutputStream target = null;
@@ -539,7 +424,7 @@ public class JCo3Archive extends SAPArchive {
 			// Create and populate manifest file.
 			byte[] manifest = createFragmentManifestFile(settings);
 			JarEntry manifestEntry = new JarEntry(settings.getBundleManifestEntry());
-			manifestEntry.setTime(this.lastModified);
+			manifestEntry.setTime(lastModified);
 			target.putNextEntry(manifestEntry);
 			is = new ByteArrayInputStream(manifest);
 			while (true) {
@@ -553,14 +438,14 @@ public class JCo3Archive extends SAPArchive {
 
 			// create native library folder in jar
 			JarEntry nativeDirEntry = new JarEntry(settings.getBundleNativeDirEntry());
-			nativeDirEntry.setTime(this.lastModified);
+			nativeDirEntry.setTime(lastModified);
 			target.putNextEntry(nativeDirEntry);
 
 			// Populate native library into jni folder.
 			JarEntry jco3NativeLibEntry = new JarEntry(settings.getBundleNativeLibraryEntry());
-			jco3NativeLibEntry.setTime(this.lastModified);
+			jco3NativeLibEntry.setTime(lastModified);
 			target.putNextEntry(jco3NativeLibEntry);
-			is = new ByteArrayInputStream(this.nativelib);
+			is = new ByteArrayInputStream(nativelib);
 			while (true) {
 				int numRead = is.read(buf, 0, buf.length);
 				if (numRead == -1) {
@@ -582,83 +467,59 @@ public class JCo3Archive extends SAPArchive {
 
 	}
 
-	/**
-	 * 
-	 * @throws IOException
-	 */
 	private void readArchiveType() throws IOException {
-		byte[] file = this.contents.get(SAPJCOMANIFEST_MF);
+		byte[] file = contents.get(SAPJCOMANIFEST_MF);
 		if (file == null) {
-			this.type = JCoArchiveType.JCO_INVALID_ARCHIVE;
+			type = JCoArchiveType.JCO_INVALID_ARCHIVE;
 			throw new IOException(MessageFormat.format(Messages.JCo3Archive_FileMissingFromArchive, SAPJCOMANIFEST_MF));
 		}
 		try {
-			this.manifest = parseManifest(file);
+			manifest = parseManifest(file);
 		} catch (IOException e) {
-			this.type = JCoArchiveType.JCO_INVALID_ARCHIVE;
+			type = JCoArchiveType.JCO_INVALID_ARCHIVE;
 			throw new IOException(Messages.JCo3Archive_UnableToParseArchiveManifestFile);
 		}
 		String sapjcoos = manifest.get(SAPJCO_OS);
 		if (sapjcoos == null) {
-			this.type = JCoArchiveType.JCO_INVALID_ARCHIVE;
+			type = JCoArchiveType.JCO_INVALID_ARCHIVE;
 			throw new IOException(MessageFormat.format(Messages.JCo3Archive_HeaderisMissingFromManifestFile,
 					SAPJCO_OS));
 		}
-		this.type = JCoArchiveType.getType(sapjcoos);
-		if (this.type == JCoArchiveType.JCO_INVALID_ARCHIVE) {
+		type = JCoArchiveType.getType(sapjcoos);
+		if (type == JCoArchiveType.JCO_INVALID_ARCHIVE) {
 			throw new IOException(MessageFormat.format(Messages.JCo3Archive_OSPlatformIsNotSupported, sapjcoos));
 		}
 	}
 
-	/**
-	 * 
-	 * @throws IOException
-	 */
 	private void readJCo3JarFile() throws IOException {
-		byte[] sapjco3jar = this.contents.get(SAPJCO3_JAR);
+		byte[] sapjco3jar = contents.get(SAPJCO3_JAR);
 		if (sapjco3jar == null) {
 			throw new IOException(MessageFormat.format(Messages.JCo3Archive_FileMissingFromArchive, SAPJCO3_JAR)); //$NON-NLS-1$
 		}
 		this.sapjco3jar = sapjco3jar;
 	}
 
-	/**
-	 * 
-	 * @throws IOException
-	 */
 	private void readNativeLibraryFile() throws IOException {
-		byte[] nativelib = this.contents.get(this.type.getNativeArchiveName());
+		byte[] nativelib = contents.get(type.getNativeArchiveName());
 		if (nativelib == null) {
 			throw new IOException(MessageFormat.format(Messages.JCo3Archive_FileMissingFromArchive, type.getNativeArchiveName()));
 		}
 		this.nativelib = nativelib;
 	}
 
-	/**
-	 * 
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
 	private Map<String, String> parseManifest(byte[] file) throws IOException {
-		this.manifest.clear();
+		manifest.clear();
 		BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(file)));
 		String line;
 		while ((line = br.readLine()) != null) {
 			String[] elements = line.split(MANIFEST_LINE_DELIMITER);
 			if (elements.length >= 2) {
-				this.manifest.put(elements[0], elements[1]);
+				manifest.put(elements[0], elements[1]);
 			}
 		}
-		return this.manifest;
+		return manifest;
 	}
 
-	/**
-	 * 
-	 * @param settings
-	 * @return
-	 * @throws IOException
-	 */
 	@SuppressWarnings("deprecation")
 	private byte[] createBundleManifestFile(JCo3ImportSettings settings) throws IOException {
 		StringBuilder manifest = new StringBuilder();
@@ -676,12 +537,6 @@ public class JCo3Archive extends SAPArchive {
 		return manifest.toString().getBytes(MANIFEST_ENCODING);
 	}
 
-	/**
-	 * 
-	 * @param settings
-	 * @return
-	 * @throws IOException
-	 */
 	@SuppressWarnings("deprecation")
 	private byte[] createFragmentManifestFile(JCo3ImportSettings settings) throws IOException {
 		StringBuilder manifest = new StringBuilder();

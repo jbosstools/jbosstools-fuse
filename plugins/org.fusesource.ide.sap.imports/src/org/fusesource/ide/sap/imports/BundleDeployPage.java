@@ -36,18 +36,12 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-/**
- * 
- */
 public class BundleDeployPage extends WizardPage {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	public class BundleLocationValidator implements IValidator {
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-		 */
+
 		@Override
 		public IStatus validate(Object value) {
 			try {
@@ -75,11 +69,6 @@ public class BundleDeployPage extends WizardPage {
 	private Button btnSelectJCo3Archive;
 	private boolean isJCo3BundleExportLocationValid;
 
-	/**
-	 * 
-	 * @param context
-	 * @param importSettings
-	 */
 	protected BundleDeployPage(DataBindingContext context, SAPImportSettings importSettings) {
 		super(Messages.BundleDeployPage_SelectLocationToExportJCo3Bundles);
 		setTitle(Messages.BundleDeployPage_ExportJCo3Bundles);
@@ -88,10 +77,6 @@ public class BundleDeployPage extends WizardPage {
 		setPageComplete(false);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Binding binding;
@@ -114,66 +99,53 @@ public class BundleDeployPage extends WizardPage {
 		Label lblSelectJCo3Archive = new Label(top, SWT.NONE);
 		lblSelectJCo3Archive.setText(Messages.BundleDeployPage_SelectJCo3BundlesExportLocationColon);
 		
-		this.textSelectJCo3BundleExportLocation = new Text(top, SWT.BORDER | SWT.READ_ONLY);
-		this.textSelectJCo3BundleExportLocation.setMessage(Messages.ArchiveSelectionPage_JCo3ArchivePath_text_message);
-		this.textSelectJCo3BundleExportLocation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		binding = context.bindValue(SWTObservables.observeText(this.textSelectJCo3BundleExportLocation, SWT.Modify), BeansObservables.observeValue(this.jcoImportSettings, "jco3BundlesExportLocation"), new UpdateValueStrategy().setAfterConvertValidator(new BundleLocationValidator())	, new UpdateValueStrategy());
+		textSelectJCo3BundleExportLocation = new Text(top, SWT.BORDER | SWT.READ_ONLY);
+		textSelectJCo3BundleExportLocation.setMessage(Messages.ArchiveSelectionPage_JCo3ArchivePath_text_message);
+		textSelectJCo3BundleExportLocation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		binding = context.bindValue(SWTObservables.observeText(textSelectJCo3BundleExportLocation, SWT.Modify), BeansObservables.observeValue(jcoImportSettings, "jco3BundlesExportLocation"), new UpdateValueStrategy().setAfterConvertValidator(new BundleLocationValidator())	, new UpdateValueStrategy());
 		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT);
-		this.textSelectJCo3BundleExportLocation.setText(ImportUtils.getDefaultDeployLocation());
+		textSelectJCo3BundleExportLocation.setText(ImportUtils.getDefaultDeployLocation());
 		
-		this.btnSelectJCo3Archive = new Button(top, SWT.NONE);
-		this.btnSelectJCo3Archive.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
+		
+		btnSelectJCo3Archive = new Button(top, SWT.NONE);
+		btnSelectJCo3Archive.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				getJCo3BundlesExportLocation();
 			}
 		});
-		this.btnSelectJCo3Archive.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		this.btnSelectJCo3Archive.setText(Messages.ArchiveSelectionPage_Browse_text);
+		btnSelectJCo3Archive.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		btnSelectJCo3Archive.setText(Messages.ArchiveSelectionPage_Browse_text);
 
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	private boolean checkPageComplete() {
 		return isJCo3BundleExportLocationValid;
 	}
 	
-	/**
-	 * 
-	 */
 	protected void getJCo3BundlesExportLocation() {
-		String directory = getDirectory(this.textSelectJCo3BundleExportLocation.getText());
+		String directory = getDirectory(textSelectJCo3BundleExportLocation.getText());
 		if (directory != null) {
 			directory = directory.trim();
 			if (directory.length() > 0) {
 				File dir = new File(directory);
 				if (!dir.exists()) {
 					setErrorMessage(Messages.BundleDeployPage_DirectoryDoesNotExist);
-					this.textSelectJCo3BundleExportLocation.setText(EMPTY_STRING);
+					textSelectJCo3BundleExportLocation.setText(EMPTY_STRING);
 					return;
 				}
+				
 				if (!dir.canWrite()) {
 					setErrorMessage(Messages.BundleDeployPage_CanNotWriteDirectory);
-					this.textSelectJCo3BundleExportLocation.setText(EMPTY_STRING);
+					textSelectJCo3BundleExportLocation.setText(EMPTY_STRING);
 					return;
 				}
-				this.textSelectJCo3BundleExportLocation.setText(directory);
+				
+				textSelectJCo3BundleExportLocation.setText(directory);
 			}
 		}
 	}
 
-	/**
-	 * 
-	 * @param startingDirectory
-	 * @return
-	 */
 	protected String getDirectory(String startingDirectory) {
 		setErrorMessage(null);
         DirectoryDialog dialog = new DirectoryDialog(getShell(), SWT.OPEN | SWT.SHEET);

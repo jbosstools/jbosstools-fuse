@@ -17,46 +17,34 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-/**
- * 
- */
 public class SAPPluginsBuilder implements IRunnableWithProgress {
 
 	private JCo3ImportSettings jco3ImportSettings;
 	private IDoc3ImportSettings idoc3ImportSettings;
 
-	/**
-	 * 
-	 * @param jco3ImportSettings
-	 * @param idoc3ImportSettings
-	 */
 	public SAPPluginsBuilder(JCo3ImportSettings jco3ImportSettings, IDoc3ImportSettings idoc3ImportSettings) {
 		this.jco3ImportSettings = jco3ImportSettings;
 		this.idoc3ImportSettings = idoc3ImportSettings;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		monitor.beginTask(Messages.SAPPluginsBuilder_ImportingSAPPLibraries, 3);
 		try {
 			// Deploy JCo3 Jar Bundle
-			this.jco3ImportSettings.getJco3Archive().buildJCoPlugin(this.jco3ImportSettings);
+			jco3ImportSettings.getJco3Archive().buildJCoPlugin(jco3ImportSettings);
 			monitor.worked(1);
 			if (monitor.isCanceled())
 				throw new InterruptedException();
 
 			// Deploy JCo3 Native Library Bundle
-			this.jco3ImportSettings.getJco3Archive().buildJCoNativePlugin(this.jco3ImportSettings);
+			jco3ImportSettings.getJco3Archive().buildJCoNativePlugin(jco3ImportSettings);
 			monitor.worked(1);
 			if (monitor.isCanceled())
 				throw new InterruptedException();
 			
 			// Deploy IDoc3 Jar Bundle
-			this.idoc3ImportSettings.getIdoc3Archive().buildIDoc3Plugin(this.idoc3ImportSettings);
+			idoc3ImportSettings.getIdoc3Archive().buildIDoc3Plugin(idoc3ImportSettings);
 			monitor.worked(1);
 			if (monitor.isCanceled()) 
 				throw new InterruptedException();
@@ -66,4 +54,5 @@ public class SAPPluginsBuilder implements IRunnableWithProgress {
 			monitor.done();
 		}
 	}
+
 }

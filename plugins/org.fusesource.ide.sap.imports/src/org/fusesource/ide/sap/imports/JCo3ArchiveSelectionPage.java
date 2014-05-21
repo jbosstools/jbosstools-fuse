@@ -40,22 +40,13 @@ import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.sap.imports.ImportUtils.UnsupportedVersionException;
 import org.fusesource.ide.sap.imports.JCo3Archive.JCoArchiveType;
 
-/**
- * 
- */
 public class JCo3ArchiveSelectionPage extends WizardPage {
 
 	private static final String BLANK_STRING = ""; //$NON-NLS-1$
-	private static final String[] FILE_EXTS = new String[] { "*.zip", "*.tgz", ".tar.gz", ".tar", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
-	/**
-	 * 
-	 */
+	private static final String[] FILE_EXTS = new String[] { "*.zip", "*.tgz", ".tar.gz", ".tar", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	
 	private class ArchiveNameValidator implements IValidator {
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-		 */
 		@Override
 		public IStatus validate(Object value) {
 			try {
@@ -90,11 +81,6 @@ public class JCo3ArchiveSelectionPage extends WizardPage {
 	
 	private boolean isJCo3ArchiveValid;
 
-	/**
-	 * 
-	 * @param context
-	 * @param importSettings
-	 */
 	protected JCo3ArchiveSelectionPage(DataBindingContext context, JCo3ImportSettings importSettings) {
 		super(Messages.ArchiveSelectionPage_PageName);
 		setDescription(Messages.ArchiveSelectionPage_this_description);
@@ -104,10 +90,6 @@ public class JCo3ArchiveSelectionPage extends WizardPage {
 		setPageComplete(false);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Binding binding;
@@ -130,64 +112,53 @@ public class JCo3ArchiveSelectionPage extends WizardPage {
 		Label lblSelectJCo3Archive = new Label(top, SWT.NONE);
 		lblSelectJCo3Archive.setText(Messages.ArchiveSelectionPage_JCo3SelectLable);
 		
-		this.textSelectJCo3Archive = new Text(top, SWT.BORDER | SWT.READ_ONLY);
-		this.textSelectJCo3Archive.setMessage(Messages.ArchiveSelectionPage_JCo3ArchivePath_text_message);
-		this.textSelectJCo3Archive.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		binding = this.context.bindValue(SWTObservables.observeText(this.textSelectJCo3Archive, SWT.Modify), BeansObservables.observeValue(this.jcoImportSettings, JCo3ImportSettings.JCO3_ARCHIVE_FILENAME), new UpdateValueStrategy().setAfterConvertValidator(new ArchiveNameValidator())	, new UpdateValueStrategy());
+		textSelectJCo3Archive = new Text(top, SWT.BORDER | SWT.READ_ONLY);
+		textSelectJCo3Archive.setMessage(Messages.ArchiveSelectionPage_JCo3ArchivePath_text_message);
+		textSelectJCo3Archive.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		binding = context.bindValue(SWTObservables.observeText(textSelectJCo3Archive, SWT.Modify), BeansObservables.observeValue(jcoImportSettings, JCo3ImportSettings.JCO3_ARCHIVE_FILENAME), new UpdateValueStrategy().setAfterConvertValidator(new ArchiveNameValidator())	, new UpdateValueStrategy());
 		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT);
 		
 		
-		this.btnSelectJCo3Archive = new Button(top, SWT.NONE);
-		this.btnSelectJCo3Archive.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
+		btnSelectJCo3Archive = new Button(top, SWT.NONE);
+		btnSelectJCo3Archive.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				getJCo3ArchiveFile();
 			}
 		});
-		this.btnSelectJCo3Archive.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		this.btnSelectJCo3Archive.setText(Messages.ArchiveSelectionPage_Browse_text);
+		btnSelectJCo3Archive.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		btnSelectJCo3Archive.setText(Messages.ArchiveSelectionPage_Browse_text);
 		
-		this.lblArchiveOsPlatform = new Label(top, SWT.NONE);
+		lblArchiveOsPlatform = new Label(top, SWT.NONE);
 		GridData gd_lblArchiveOsPlatform = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_lblArchiveOsPlatform.horizontalIndent = 10;
-		this.lblArchiveOsPlatform.setLayoutData(gd_lblArchiveOsPlatform);
-		this.lblArchiveOsPlatform.setText(Messages.ArchiveSelectionPage_lblArchiveOsPlatform_text);
+		lblArchiveOsPlatform.setLayoutData(gd_lblArchiveOsPlatform);
+		lblArchiveOsPlatform.setText(Messages.ArchiveSelectionPage_lblArchiveOsPlatform_text);
 		
-		this.textArchiveOs = new Text(top, SWT.BORDER | SWT.READ_ONLY);
-		this.textArchiveOs.setEnabled(false);
-		this.textArchiveOs.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		this.context.bindValue(SWTObservables.observeText(this.textArchiveOs, SWT.Modify), BeansObservables.observeValue(this.jcoImportSettings, JCo3ImportSettings.ARCHIVE_OS), new UpdateValueStrategy(), new UpdateValueStrategy());
+		textArchiveOs = new Text(top, SWT.BORDER | SWT.READ_ONLY);
+		textArchiveOs.setEnabled(false);
+		textArchiveOs.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+		context.bindValue(SWTObservables.observeText(textArchiveOs, SWT.Modify), BeansObservables.observeValue(jcoImportSettings, JCo3ImportSettings.ARCHIVE_OS), new UpdateValueStrategy(), new UpdateValueStrategy());
 		
-		this.lblArchiveVersion = new Label(top, SWT.NONE);
+		lblArchiveVersion = new Label(top, SWT.NONE);
 		GridData gd_lblArchiveVersion = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_lblArchiveVersion.horizontalIndent = 10;
-		this.lblArchiveVersion.setLayoutData(gd_lblArchiveVersion);
-		this.lblArchiveVersion.setText(Messages.ArchiveSelectionPage_lblArchiveVersion_text);
+		lblArchiveVersion.setLayoutData(gd_lblArchiveVersion);
+		lblArchiveVersion.setText(Messages.ArchiveSelectionPage_lblArchiveVersion_text);
 		
-		this.textArchiveVersion = new Text(top, SWT.BORDER | SWT.READ_ONLY);
-		this.textArchiveVersion.setEnabled(false);
-		this.textArchiveVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		this.context.bindValue(SWTObservables.observeText(this.textArchiveVersion, SWT.Modify), BeansObservables.observeValue(this.jcoImportSettings, JCo3ImportSettings.ARCHIVE_VERSION), new UpdateValueStrategy(), new UpdateValueStrategy());
+		textArchiveVersion = new Text(top, SWT.BORDER | SWT.READ_ONLY);
+		textArchiveVersion.setEnabled(false);
+		textArchiveVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+		context.bindValue(SWTObservables.observeText(textArchiveVersion, SWT.Modify), BeansObservables.observeValue(jcoImportSettings, JCo3ImportSettings.ARCHIVE_VERSION), new UpdateValueStrategy(), new UpdateValueStrategy());
 		
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
 	public boolean checkPageComplete() {
-		return this.isJCo3ArchiveValid;
+		return isJCo3ArchiveValid;
 	}
 	
-	/**
-	 * 
-	 */
 	protected void getJCo3ArchiveFile() {
-		String filename = getFile(this.textSelectJCo3Archive.getText());
+		String filename = getFile(textSelectJCo3Archive.getText());
         if (filename != null) {
             filename = filename.trim();
             if (filename.length() > 0) {
@@ -210,8 +181,8 @@ public class JCo3ArchiveSelectionPage extends WizardPage {
 						setErrorMessage(MessageFormat.format(Messages.JCo3ArchiveSelectionPage_IncompatibleJCo3ArchiveFileVersion, e.getMessage()));
 						return;
 					}
-					this.jcoImportSettings.setJco3Archive(jcoArchive);
-					this.textSelectJCo3Archive.setText(filename);
+					jcoImportSettings.setJco3Archive(jcoArchive);
+					textSelectJCo3Archive.setText(filename);
 				} catch (IOException e) {
 					clearInput();
 					setErrorMessage(MessageFormat.format(Messages.JCo3ArchiveSelectionPage_UnsupportedJCo3ArchiveFileFilename, e.getMessage()));
@@ -220,11 +191,6 @@ public class JCo3ArchiveSelectionPage extends WizardPage {
         }
 	}
 	
-	/**
-	 * 
-	 * @param startingFilename
-	 * @return
-	 */
 	protected String getFile(String startingFilename) {
 		setErrorMessage(null);
         FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.SHEET);
@@ -245,12 +211,10 @@ public class JCo3ArchiveSelectionPage extends WizardPage {
         return null;
 	}
 	
-	/**
-	 * 
-	 */
 	protected void clearInput() {
-		this.textSelectJCo3Archive.setText(BLANK_STRING);
-		this.textArchiveOs.setText(BLANK_STRING);
-		this.textArchiveVersion.setText(BLANK_STRING);
-	}	
+		textSelectJCo3Archive.setText(BLANK_STRING);
+		textArchiveOs.setText(BLANK_STRING);
+		textArchiveVersion.setText(BLANK_STRING);
+	}
+	
 }

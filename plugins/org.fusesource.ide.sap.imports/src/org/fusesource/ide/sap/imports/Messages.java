@@ -14,8 +14,7 @@ package org.fusesource.ide.sap.imports;
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.fusesource.ide.sap.imports.l10n.messages"; //$NON-NLS-1$
-	
+	private static final String BUNDLE_NAME = "org.fusesource.ide.sap.imports.messages"; //$NON-NLS-1$
 	public static String ArchiveSelectionPage_ArchiveFileIsNotASupportedType;
 	public static String ArchiveSelectionPage_ArchiveFileIsNotASupportedTypeColon;
 	public static String ArchiveSelectionPage_JCo3SelectLable;

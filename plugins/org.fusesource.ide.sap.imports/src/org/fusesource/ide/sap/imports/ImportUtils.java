@@ -20,9 +20,6 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironmentsManager;
 
-/**
- * 
- */
 public class ImportUtils {
 
 	private static final String VERSION_STRING_DELIMITER = "\\."; //$NON-NLS-1$
@@ -31,6 +28,7 @@ public class ImportUtils {
 	private static final int JCO_MIN_SUPPORTED_MAJOR_VERSION = 3;
 	private static final int JCO_MIN_SUPPORTED_MINOR_VERSION = 0;
 	private static final int JCO_MIN_SUPPORTED_MICRO_VERSION = 11;
+	
 	private static final String IDOC_MIN_SUPPORTED_VERSION = "3.0.10"; //$NON-NLS-1$
 	private static final int IDOC_MIN_SUPPORTED_MAJOR_VERSION = 3;
 	private static final int IDOC_MIN_SUPPORTED_MINOR_VERSION = 0;
@@ -41,50 +39,27 @@ public class ImportUtils {
 	 */
 	public static final String DEFAULT_EXECUTION_ENVIRONMENT = "JavaSE-1.6"; //$NON-NLS-1$
 	
-	/**
-	 * 
-	 */
 	public static class UnsupportedVersionException extends Exception {
 
 		private static final long serialVersionUID = 1L;
 		
-		/**
-		 * 
-		 */
 		public UnsupportedVersionException() {
 			super();
 		}
 
-		/**
-		 * 
-		 * @param arg0
-		 * @param arg1
-		 */
 		public UnsupportedVersionException(String arg0, Throwable arg1) {
 			super(arg0, arg1);
 		}
 
-		/**
-		 * 
-		 * @param arg0
-		 */
 		public UnsupportedVersionException(String arg0) {
 			super(arg0);
 		}
 
-		/**
-		 * 
-		 * @param arg0
-		 */
 		public UnsupportedVersionException(Throwable arg0) {
 			super(arg0);
 		}
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public static String[] getExecutionEnvironments() {
 		List<String> result = new ArrayList<String>();
 		IExecutionEnvironmentsManager manager = JavaRuntime.getExecutionEnvironmentsManager();
@@ -95,11 +70,6 @@ public class ImportUtils {
 		return result.toArray(new String[0]);
 	}
 	
-	/**
-	 * 
-	 * @param index
-	 * @return
-	 */
 	public static String getExecutionEnvironment(int index) {
 		String[] environments = getExecutionEnvironments();
 		if (index < environments.length) {
@@ -108,11 +78,6 @@ public class ImportUtils {
 		return null;
 	}
 	
-	/**
-	 * 
-	 * @param executionEnvironment
-	 * @return
-	 */
 	public static int getExecutionEnvironmentIndex(String executionEnvironment) {
 		int result = -1;
 		String[] environments = getExecutionEnvironments();
@@ -126,41 +91,18 @@ public class ImportUtils {
 		return result;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public static String getDefaultDeployLocation() {
 		return Platform.getInstallLocation().getURL().getFile() + DROPINS_FOLDER_NAME;
 	}
 	
-	/**
-	 * 
-	 * @param archiveVersion
-	 * @throws UnsupportedVersionException
-	 */
 	public static void isJCoArchiveVersionSupported(String archiveVersion) throws UnsupportedVersionException {
 		isArchiveVersionSupported(archiveVersion, JCO_MIN_SUPPORTED_VERSION, JCO_MIN_SUPPORTED_MAJOR_VERSION, JCO_MIN_SUPPORTED_MINOR_VERSION, JCO_MIN_SUPPORTED_MICRO_VERSION);
 	}
 
-	/**
-	 * 
-	 * @param archiveVersion
-	 * @throws UnsupportedVersionException
-	 */
 	public static void isIDocArchiveVersionSupported(String archiveVersion) throws UnsupportedVersionException {
 		isArchiveVersionSupported(archiveVersion, IDOC_MIN_SUPPORTED_VERSION, IDOC_MIN_SUPPORTED_MAJOR_VERSION, IDOC_MIN_SUPPORTED_MINOR_VERSION, IDOC_MIN_SUPPORTED_MICRO_VERSION);
 	}
 
-	/**
-	 * 
-	 * @param archiveVersion
-	 * @param supportedVersion
-	 * @param supportedMajorVersion
-	 * @param supportedMinorVersion
-	 * @param supportedMicroVersion
-	 * @throws UnsupportedVersionException
-	 */
 	public static void isArchiveVersionSupported(String archiveVersion, String supportedVersion, int supportedMajorVersion, int supportedMinorVersion, int supportedMicroVersion) throws UnsupportedVersionException {
 		try {
 			if (archiveVersion == null) {

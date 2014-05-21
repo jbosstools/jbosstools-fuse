@@ -39,19 +39,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.sap.imports.ImportUtils.UnsupportedVersionException;
 
-/**
- * 
- */
 public class IDoc3ArchiveSelectionPage extends WizardPage {
 	
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
 	private static final String[] FILE_EXTS = new String[] { "*.zip", "*.tgz", ".tar.gz", ".tar", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	
 	private class ArchiveNameValidator implements IValidator {
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-		 */
 		@Override
 		public IStatus validate(Object value) {
 			try {
@@ -84,11 +78,6 @@ public class IDoc3ArchiveSelectionPage extends WizardPage {
 	
 	private boolean isIDoc3ArchiveValid;
 
-	/**
-	 * 
-	 * @param context
-	 * @param importSettings
-	 */
 	protected IDoc3ArchiveSelectionPage(DataBindingContext context, IDoc3ImportSettings importSettings) {
 		super(Messages.IDoc3ArchiveSelectionPage_SelectIDoc3ArchiveFile);
 		setDescription(Messages.IDoc3ArchiveSelectionPage_SelectTheIDoc3ArchiveToImport);
@@ -98,10 +87,6 @@ public class IDoc3ArchiveSelectionPage extends WizardPage {
 		setPageComplete(false);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl(Composite parent) {
 		Binding binding;
@@ -124,51 +109,42 @@ public class IDoc3ArchiveSelectionPage extends WizardPage {
 		Label lblSelectJCo3Archive = new Label(top, SWT.NONE);
 		lblSelectJCo3Archive.setText(Messages.IDoc3ArchiveSelectionPage_SelectIDoc3Archive);
 		
-		this.textSelectIDoc3Archive = new Text(top, SWT.BORDER | SWT.READ_ONLY);
-		this.textSelectIDoc3Archive.setMessage(Messages.IDoc3ArchiveSelectionPage_IDoc3ArchivePath);
-		this.textSelectIDoc3Archive.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		binding = context.bindValue(SWTObservables.observeText(this.textSelectIDoc3Archive, SWT.Modify), BeansObservables.observeValue(this.idoc3ImportSettings, IDoc3ImportSettings.IDOC3_ARCHIVE), new UpdateValueStrategy().setAfterConvertValidator(new ArchiveNameValidator())	, new UpdateValueStrategy());
+		textSelectIDoc3Archive = new Text(top, SWT.BORDER | SWT.READ_ONLY);
+		textSelectIDoc3Archive.setMessage(Messages.IDoc3ArchiveSelectionPage_IDoc3ArchivePath);
+		textSelectIDoc3Archive.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		binding = context.bindValue(SWTObservables.observeText(textSelectIDoc3Archive, SWT.Modify), BeansObservables.observeValue(idoc3ImportSettings, IDoc3ImportSettings.IDOC3_ARCHIVE), new UpdateValueStrategy().setAfterConvertValidator(new ArchiveNameValidator())	, new UpdateValueStrategy());
 		ControlDecorationSupport.create(binding, SWT.TOP | SWT.LEFT);
-				
-		this.btnSelectIDoc3Archive = new Button(top, SWT.NONE);
-		this.btnSelectIDoc3Archive.addSelectionListener(new SelectionAdapter() {
-			/*
-			 * (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
+		
+		
+		btnSelectIDoc3Archive = new Button(top, SWT.NONE);
+		btnSelectIDoc3Archive.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				getJCo3ArchiveFile();
 			}
 		});
-		this.btnSelectIDoc3Archive.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		this.btnSelectIDoc3Archive.setText(Messages.ArchiveSelectionPage_Browse_text);
+		btnSelectIDoc3Archive.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		btnSelectIDoc3Archive.setText(Messages.ArchiveSelectionPage_Browse_text);
 		
-		this.lblArchiveVersion = new Label(top, SWT.NONE);
+		lblArchiveVersion = new Label(top, SWT.NONE);
 		GridData gd_lblArchiveVersion = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_lblArchiveVersion.horizontalIndent = 10;
-		this.lblArchiveVersion.setLayoutData(gd_lblArchiveVersion);
-		this.lblArchiveVersion.setText(Messages.ArchiveSelectionPage_lblArchiveVersion_text);
+		lblArchiveVersion.setLayoutData(gd_lblArchiveVersion);
+		lblArchiveVersion.setText(Messages.ArchiveSelectionPage_lblArchiveVersion_text);
 		
-		this.textArchiveVersion = new Text(top, SWT.BORDER | SWT.READ_ONLY);
-		this.textArchiveVersion.setEnabled(false);
-		this.textArchiveVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		this.context.bindValue(SWTObservables.observeText(this.textArchiveVersion, SWT.Modify), BeansObservables.observeValue(this.idoc3ImportSettings, IDoc3ImportSettings.ARCHIVE_VERSION), new UpdateValueStrategy(), new UpdateValueStrategy());
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean checkPageComplete() {
-		return this.isIDoc3ArchiveValid;
+		textArchiveVersion = new Text(top, SWT.BORDER | SWT.READ_ONLY);
+		textArchiveVersion.setEnabled(false);
+		textArchiveVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+		context.bindValue(SWTObservables.observeText(textArchiveVersion, SWT.Modify), BeansObservables.observeValue(idoc3ImportSettings, IDoc3ImportSettings.ARCHIVE_VERSION), new UpdateValueStrategy(), new UpdateValueStrategy());
+		
 	}
 	
-	/**
-	 * 
-	 */
+	public boolean checkPageComplete() {
+		return isIDoc3ArchiveValid;
+	}
+	
 	protected void getJCo3ArchiveFile() {
-		String filename = getFile(this.textSelectIDoc3Archive.getText());
+		String filename = getFile(textSelectIDoc3Archive.getText());
         if (filename != null) {
             filename = filename.trim();
             if (filename.length() > 0) {
@@ -186,8 +162,8 @@ public class IDoc3ArchiveSelectionPage extends WizardPage {
 						setErrorMessage(MessageFormat.format(Messages.IDoc3ArchiveSelectionPage_IncompatibleIDoc3ArchibeFileVersion, e.getMessage()));
 						return;
 					}
-					this.idoc3ImportSettings.setIdoc3Archive(idocArchive);
-					this.textSelectIDoc3Archive.setText(filename);
+					idoc3ImportSettings.setIdoc3Archive(idocArchive);
+					textSelectIDoc3Archive.setText(filename);
 				} catch (IOException e) {
 					clearInput();
 					setErrorMessage(MessageFormat.format(Messages.IDoc3ArchiveSelectionPage_UnsupportedIDoc3ArchiveFileFilename, e.getMessage()));
@@ -196,11 +172,6 @@ public class IDoc3ArchiveSelectionPage extends WizardPage {
         }
 	}
 	
-	/**
-	 * 
-	 * @param startingFilename
-	 * @return
-	 */
 	protected String getFile(String startingFilename) {
 		setErrorMessage(null);
         FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.SHEET);
@@ -221,11 +192,8 @@ public class IDoc3ArchiveSelectionPage extends WizardPage {
         return null;
 	}
 	
-	/**
-	 * 
-	 */
 	protected void clearInput() {
-		this.textSelectIDoc3Archive.setText(EMPTY_STRING);
-		this.textArchiveVersion.setText(EMPTY_STRING);
+		textSelectIDoc3Archive.setText(EMPTY_STRING);
+		textArchiveVersion.setText(EMPTY_STRING);
 	}
 }

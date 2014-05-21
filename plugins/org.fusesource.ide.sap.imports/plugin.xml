@@ -4,17 +4,17 @@
    <extension
          point="org.eclipse.ui.importWizards">
       <category
-            id="org.fusesource.ide.importwizards"
-            name="%rider.importwizard.category.label">
+            id="org.fusesource.ide.JBossFuseCategory"
+            name="JBoss Fuse">
       </category>
       <wizard
-            category="org.fusesource.ide.importwizards"
+            category="org.fusesource.ide.JBossFuseCategory"
             class="org.fusesource.ide.sap.imports.SAPImportWizard"
             icon="icons/fuse_icon_16c.png"
             id="org.fusesource.ide.sap.imports.JCoImportWizard"
-            name="%fuse.import.sap.libs.name">
+            name="SAP Libraries">
          <description>
-            Imports SAP Libraries into Eclipse Environment
+            Import SAP Libraries into Eclipse Environment
          </description>
       </wizard>
    </extension>

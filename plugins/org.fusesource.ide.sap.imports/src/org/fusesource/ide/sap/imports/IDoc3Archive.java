@@ -43,12 +43,10 @@ import org.eclipse.jdt.core.util.IConstantPoolEntry;
 import org.eclipse.jdt.core.util.IConstantValueAttribute;
 import org.eclipse.jdt.core.util.IFieldInfo;
 
-/**
- * 
- */
 public class IDoc3Archive extends SAPArchive {
 
 	private static final String JCOIDOC_VERSION_STRING_DELIMITER = " "; //$NON-NLS-1$
+
 	private static final String JCOIDOC_CLASSFILE_ENTRY = "com/sap/conn/idoc/jco/JCoIDoc.class"; //$NON-NLS-1$
 
 	/**
@@ -93,33 +91,28 @@ public class IDoc3Archive extends SAPArchive {
 
 	private boolean isValid;
 
-	/**
-	 * 
-	 * @param filename
-	 * @throws IOException
-	 */
 	public IDoc3Archive(String filename) throws IOException {
-		this.name = filename;
+		name = filename;
 		InputStream is = null;
 		ByteArrayOutputStream os = null;
 		try {
 			File file = new File(filename);
-			this.lastModified = file.lastModified();
+			lastModified = file.lastModified();
 			is = new FileInputStream(file);
 			os = new ByteArrayOutputStream();
 			while (true) {
-				int numRead = is.read(this.buf, 0, this.buf.length);
+				int numRead = is.read(buf, 0, buf.length);
 				if (numRead == -1) {
 					break;
 				}
-				os.write(this.buf, 0, numRead);
+				os.write(buf, 0, numRead);
 			}
 			readArchiveFile(filename, os.toByteArray());
 			readIDoc3JarFile();
 			readVersion();
-			this.isValid = true;
+			isValid = true;
 		} catch (IOException e) {
-			this.isValid = false;
+			isValid = false;
 			throw e;
 		} finally {
 			if (is != null)
@@ -130,75 +123,38 @@ public class IDoc3Archive extends SAPArchive {
 		}
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public boolean isValid() {
-		return this.isValid;
+		return isValid;
 	}
-	
-	/**
-	 * 
-	 * @return
-	 */
+
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Map<String, byte[]> getContents() {
-		return this.contents;
+		return contents;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Map<String, String> getManifest() {
-		return this.manifest;
+		return manifest;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public byte[] getIDoc3JarFile() {
-		return this.sapidoc3jar;
+		return sapidoc3jar;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public String getVersion() {
-		return this.version;
+		return version;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public String getBundleName() {
 		return PLUGIN_IDOC;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public byte[] getSapidoc3jar() {
-		return this.sapidoc3jar;
+		return sapidoc3jar;
 	}
 	
-	/**
-	 * 
-	 * @param settings
-	 * @throws IOException
-	 */
 	public void buildIDoc3Plugin(IDoc3ImportSettings settings) throws IOException {
 		InputStream is = null;
 		JarOutputStream target = null;
@@ -212,7 +168,7 @@ public class IDoc3Archive extends SAPArchive {
 			// Create and populate manifest file.
 			byte[] manifest = createBundleManifestFile(settings);
 			JarEntry manifestEntry = new JarEntry(settings.getBundleManifestEntry());
-			manifestEntry.setTime(this.lastModified);
+			manifestEntry.setTime(lastModified);
 			target.putNextEntry(manifestEntry);
 			is = new ByteArrayInputStream(manifest);
 			while (true) {
@@ -226,9 +182,9 @@ public class IDoc3Archive extends SAPArchive {
 			
 			// Populate IDoc3 jar into root of jar
 			JarEntry jco3JarEntry = new JarEntry(settings.getBundleIDoc3JarEntry());
-			jco3JarEntry.setTime(this.lastModified);
+			jco3JarEntry.setTime(lastModified);
 			target.putNextEntry(jco3JarEntry);
-			is = new ByteArrayInputStream(this.sapidoc3jar);
+			is = new ByteArrayInputStream(sapidoc3jar);
 			while (true) {
 				int numRead = is.read(buf, 0, buf.length);
 				if (numRead == -1) {
@@ -250,25 +206,17 @@ public class IDoc3Archive extends SAPArchive {
 		
 	}
 
-	/**
-	 * 
-	 * @throws IOException
-	 */
 	private void readIDoc3JarFile() throws IOException {
-		byte[] sapidoc3jar = this.contents.get(SAPIDOC3_JAR);
+		byte[] sapidoc3jar = contents.get(SAPIDOC3_JAR);
 		if (sapidoc3jar == null) {
 			throw new IOException(MessageFormat.format(Messages.IDoc3Archive_FileIsMissingFromArchive, SAPIDOC3_JAR));
 		}
 		this.sapidoc3jar = sapidoc3jar;
 	}
 
-	/**
-	 * 
-	 * @throws IOException
-	 */
 	private void readVersion() throws IOException {
 		Map<String, byte[]> idoc3Contents = new HashMap<String, byte[]>();
-		readJARFile(this.sapidoc3jar, idoc3Contents);
+		readJARFile(sapidoc3jar, idoc3Contents);
 		byte[] jco3IdocContents = idoc3Contents.get(JCOIDOC_CLASSFILE_ENTRY);
 		ByteArrayInputStream bais = new ByteArrayInputStream(jco3IdocContents);
 		IClassFileReader classfileReader = ToolFactory.createDefaultClassFileReader(bais, IClassFileReader.ALL);
@@ -279,9 +227,9 @@ public class IDoc3Archive extends SAPArchive {
 				if (constantValueAttribute != null) {
 					IConstantPoolEntry constantPoolEntry = constantValueAttribute.getConstantValue();
 					if (constantPoolEntry.getKind() == IConstantPoolConstant.CONSTANT_String) {
-						this.version = constantPoolEntry.getStringValue();
-						if (this.version != null) {
-							this.version = this.version.split(JCOIDOC_VERSION_STRING_DELIMITER)[0];
+						version = constantPoolEntry.getStringValue();
+						if (version != null) {
+							version = version.split(JCOIDOC_VERSION_STRING_DELIMITER)[0];
 						}
 						break;
 					}
@@ -290,12 +238,6 @@ public class IDoc3Archive extends SAPArchive {
 		}
 	}
 
-	/**
-	 * 
-	 * @param settings
-	 * @return
-	 * @throws IOException
-	 */
 	@SuppressWarnings("deprecation")
 	private byte[] createBundleManifestFile(IDoc3ImportSettings settings) throws IOException {
 		StringBuilder manifest = new StringBuilder();
