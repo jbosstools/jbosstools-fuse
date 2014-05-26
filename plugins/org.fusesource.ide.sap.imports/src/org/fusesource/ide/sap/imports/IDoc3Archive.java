@@ -52,7 +52,7 @@ public class IDoc3Archive extends SAPArchive {
 	/**
 	 * The plug-in name for SAP IDoc library.
 	 */
-	public static final String PLUGIN_IDOC = "com.sap.conn.jco.idoc"; //$NON-NLS-1$
+	public static final String PLUGIN_IDOC = "com.sap.conn.idoc"; //$NON-NLS-1$
 
 	// /////////////////////////////////
 	// Bundle Manifest Values

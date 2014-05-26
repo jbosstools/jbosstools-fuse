@@ -5,16 +5,16 @@
          point="org.eclipse.ui.importWizards">
       <category
             id="org.fusesource.ide.JBossFuseCategory"
-            name="JBoss Fuse">
+            name="%category.name">
       </category>
       <wizard
             category="org.fusesource.ide.JBossFuseCategory"
             class="org.fusesource.ide.sap.imports.SAPImportWizard"
             icon="icons/fuse_icon_16c.png"
             id="org.fusesource.ide.sap.imports.JCoImportWizard"
-            name="SAP Libraries">
+            name="%wizard.name">
          <description>
-            Import SAP Libraries into Eclipse Environment
+            %wizard.description
          </description>
       </wizard>
    </extension>
