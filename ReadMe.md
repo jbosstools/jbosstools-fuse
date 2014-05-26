@@ -13,7 +13,7 @@ Join channel "#fusetools" at FreeNode
 
 Issues
 ----------------
-http://fusesource.com/issues/browse/ECLIPSE
+http://fusesource.com/issues/browse/FUSETOOLS
 
 Forums
 ----------------
@@ -41,15 +41,16 @@ you can now try building it...
 
 Tycho downloads all the eclipse/p2 stuff to: ~/.m2/repository/p2/
 
-Then to open in Eclipse. Before you start make sure you are on 3.6.x or later of Eclipse.
-3.6.x Eclipse PDE generates some compile errors which are not really errors - these are fixed in 3.7.x of Eclipse.
-Notice Claus had problem with Eclipse Helios 3.6.2 so he downloaded Eclipse 3.7 M7 which worked. James is currently on 3.7 RC4 without issues.
+Then to open in Eclipse. Before you start make sure you are on Kepler or later Eclipse.
 
 Here's how to setup eclipse...
 
 * create a new workspace for working on Fuse Tooling
-* import the project into eclipse from directory "fuseide" (import... -> general -> existing project)
-* open the Target Platform: org.fusesource.ide.targetplatform/jbtis_4.1_dev.target
+* import the project into Eclipse from directory "fuseide" (Import... -> General -> Existing Project)
+* open the module Target Platform: org.fusesource.ide.targetplatform/
+* open jbtis_4.1_dev.target for Kepler
+* OR
+* open jbtis_4.2_dev.target for Luna
 * wait until all is resolved and then click the "Set as Target Platform" link in the top right
 
 
@@ -68,8 +69,12 @@ Running Fuse Tooling
 Before trying to run the Fuse Tooling you should have built the project (see above) and also imported it sucessfully into Eclipse (see above). 
 In Eclipse, select all your resources and refresh (F5).
 
-To run open the org.fusesource.ide.targetplatform module in the tree and right click on the file "Rider in JBTIS.launch". Then choose the menu entry "Run as -> Rider in JBTIS".
-It may be possible that you have to adapt the launch configuration to fit your environment using the Run toolbar submenu item.
+To run open the Run Configurations dialog and select one of the following "Eclipse Applications":
+
+    Kepler: JBTIS Kepler Linux.launch
+    Luna:   JBTIS Luna Linux.launch
+
+It may be possible that you have to adapt the launch configuration to fit your environment using the Run toolbar submenu item. If your OS doesn't have a launch configuration already just create one by copying one of the Linux configurations and then inside the plugins tab make sure to hit the "Add required" button. That should fix most of the issues.
 
 
 Testing the Update Site
@@ -77,7 +82,7 @@ Testing the Update Site
 
 To test the update site contents has everything you need here's what to do:
 
-* download and install a plain vanilla Eclipse Kepler for instance
+* download and install a plain vanilla Eclipse Kepler or Luna 
 * run this vanilla Eclipse
 * in Eclipse choose "Install new software", then "Add" to add a new update site
 * choose "Local" in the following dialog and set the location to file://<your path to fuseide>/site/target/repository
@@ -108,8 +113,10 @@ The quick fix is to trash your folder:
     
      ~/.m2/repository/p2
 
+Be careful deleting that folder as with the next build it will download lots of bundles from the internet.
 
-Code Generation (NO NEED FOR THIS STEP UNLESS CAMEL VERSION CHANGED)
+
+Code Generation (NO NEED FOR THIS STEP UNLESS CAMEL VERSION USED BY FUSE TOOLING CHANGED)
 ----------------
 
 NOTE this step is only required to be done if the Camel model changes or the documentation changes!
@@ -142,4 +149,20 @@ which should contain the credentials for the FuseSource Nexus EA repository like
     password=<your password>
 
 Without this file the build will not work!
+
+
+Changing versions before / after a release
+----------------
+
+There is a bash script called "changeVersion.sh" in the root folder of the project you can use for changing the bundle and maven versions in an easy way.
+
+Invocation:
+
+    ./changeVersion.sh <oldVersion> <newVersion>
+    
+
+Example:
+
+    ./changeVersion.sh 7.3.0-SNAPSHOT 7.3.0
+    
 
