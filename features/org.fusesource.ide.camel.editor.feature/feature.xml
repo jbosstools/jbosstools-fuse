@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.camel.editor.feature"
       label="JBoss Fuse Camel Editor Feature"
-      version="7.2.0.qualifier"
+      version="7.2.1.qualifier"
       provider-name="JBoss by Red Hat"
       plugin="org.fusesource.ide.tooling">
 
