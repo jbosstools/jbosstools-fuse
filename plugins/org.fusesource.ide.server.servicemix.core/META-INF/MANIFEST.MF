@@ -34,5 +34,4 @@ Export-Package: org.fusesource.ide.server.servicemix.core,
  org.fusesource.ide.server.servicemix.core.runtime,
  org.fusesource.ide.server.servicemix.core.runtime.integration,
  org.fusesource.ide.server.servicemix.core.server,
- org.fusesource.ide.server.servicemix.core.server.subsystems,
  org.fusesource.ide.server.servicemix.core.util

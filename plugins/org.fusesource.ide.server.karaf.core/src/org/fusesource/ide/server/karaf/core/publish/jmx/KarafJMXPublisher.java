@@ -8,24 +8,18 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.server.karaf.core.publish;
+package org.fusesource.ide.server.karaf.core.publish.jmx;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.jar.Manifest;
 
 import javax.management.MBeanServerConnection;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectInstance;
-import javax.management.ObjectName;
-import javax.management.openmbean.CompositeData;
-import javax.management.openmbean.TabularData;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
@@ -34,26 +28,33 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
-import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
+import org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour;
 import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
 import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
-import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
-import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
-import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
 /**
- * this publisher can be used for deploying a local bundle / jar file to a local running karaf 2.x instance
- * 3.x fails due to some security reasons -> TODO: investigate
+ * this publisher can be used for deploying a local bundle / jar file to a local running karaf instance
  * 
  * @author lhein
  */
 public class KarafJMXPublisher implements IPublishBehaviour {
-
+	
+	protected static final String PROTOCOL_WRAP = "wrap:";
+	
+	// the list of known JMX publish behaviours
+	private static final ArrayList<IJMXPublishBehaviour> KNOWN_JMX_BEHAVIOURS;
+	static {
+		KNOWN_JMX_BEHAVIOURS = new ArrayList<IJMXPublishBehaviour>();
+		KNOWN_JMX_BEHAVIOURS.add(new KarafBundleMBeanPublishBehaviour());
+		KNOWN_JMX_BEHAVIOURS.add(new KarafBundlesMBeanPublishBehaviour());
+		KNOWN_JMX_BEHAVIOURS.add(new OSGIMBeanPublishBehaviour());
+	}
+	
 	protected JMXServiceURL url;
 	protected JMXConnector jmxc;
 	protected MBeanServerConnection mbsc;
-	protected ObjectName karafBundlesMBeanName;
 	protected IServer server;
+	protected IJMXPublishBehaviour jmxPublisher;
 	
 	/**
 	 * connect to the given server via JMX
@@ -73,7 +74,13 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			this.jmxc = JMXConnectorFactory.connect(this.url, envMap); 
 			this.mbsc = this.jmxc.getMBeanServerConnection(); 	
 			
-			if (determineMBeanNames()) return true;
+			for (IJMXPublishBehaviour pb : KNOWN_JMX_BEHAVIOURS) {
+				if (pb.canHandle(mbsc)) {
+					this.jmxPublisher = pb;
+					break;
+				}
+			}
+			return this.jmxPublisher != null;
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -112,8 +119,9 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 
 		boolean published = false;
 		try {
+			String version = getBundleVersion(module[0], null);
 			// first check if there is a bundle installed with that name already
-			long bundleId = findModuleInBundleList(module[0].getProject().getName());
+			long bundleId = this.jmxPublisher.getBundleId(mbsc, module[0].getProject().getName(), version);
 			if (bundleId != -1) {
 				// if yes - reinstall / update the bundle
 				published = reinstallBundle(server, module[0], bundleId);
@@ -123,7 +131,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			}			
 			if (published) {
 				// a final check if the bundle is really installed
-				long bid = findModuleInBundleList(module[0].getProject().getName());
+				long bid = this.jmxPublisher.getBundleId(mbsc, module[0].getProject().getName(), version);
 				published = bid != -1;
 			}
 		} catch (Exception ex) {
@@ -142,14 +150,12 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		if (this.jmxc == null) connect(server);
 		boolean unpublished = false;
 		try {
+			String version = getBundleVersion(module[0], null);
 			// first check if there is a bundle installed with that name already
-			long bundleId = findModuleInBundleList(module[0].getProject().getName());
+			long bundleId = this.jmxPublisher.getBundleId(mbsc, module[0].getProject().getName(), version);
 			if (bundleId != -1) {
-				this.mbsc.invoke(this.karafBundlesMBeanName, "uninstall", new Object[] { ""+bundleId } , new String[] {String.class.getName() }); 
-				unpublished = true;
+				unpublished = this.jmxPublisher.uninstallBundle(mbsc, bundleId);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		} finally {
 			disconnect(server);
 		}
@@ -164,14 +170,9 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 * @return
 	 */
 	private boolean reinstallBundle(IServer server, IModule module, long bundleId) {
-		try {
-			String fileUrl = getBundleFilePath(module);
-			if (fileUrl != null) {
-				this.mbsc.invoke(this.karafBundlesMBeanName, "update", new Object[] { ""+bundleId, fileUrl } , new String[] {String.class.getName(), String.class.getName() }); 
-				return true;
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		String fileUrl = getBundleFilePath(module);
+		if (fileUrl != null) {
+			return this.jmxPublisher.updateBundle(mbsc, bundleId, fileUrl);
 		}
 		return false;
 	}
@@ -183,19 +184,20 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 * @return
 	 */
 	private boolean installBundle(IServer server, IModule module) {
-		try {
-			String fileUrl = getBundleFilePath(module);
-			if (fileUrl != null) {
-				this.mbsc.invoke(this.karafBundlesMBeanName, "install", new Object[] { fileUrl, Boolean.TRUE } , new String[] {String.class.getName(), "boolean" }); 
-				return true;
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		String fileUrl = getBundleFilePath(module);
+		if (fileUrl != null) {
+			long bundleId = this.jmxPublisher.installBundle(mbsc, fileUrl);
+			return bundleId != -1;
 		}
 		return false;
 	}
 
-	private String getBundleFilePath(IModule module) {
+	/**
+	 * 
+	 * @param module
+	 * @return
+	 */
+	private String getBundleFilePath(final IModule module) {
 		File projectTargetPath = module.getProject().getLocation().append("target").toFile();
 		File[] jars = projectTargetPath.listFiles(new FileFilter() {
 			/*
@@ -204,15 +206,21 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			 */
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.exists() && pathname.isFile() && pathname.getName().toLowerCase().endsWith(".jar");
+				return pathname.exists() && pathname.isFile() && pathname.getName().toLowerCase().startsWith(module.getProject().getName()) && pathname.getName().toLowerCase().endsWith(".jar");
 			}
 		});
 		if (jars.length>0) {
-			return String.format("wrap:file:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", jars[0].getPath(), module.getProject().getName(), getBundleVersion(module, jars[0]));
+			return String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", PROTOCOL_WRAP, jars[0].getPath(), module.getProject().getName(), getBundleVersion(module, jars[0]));
 		}
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param module
+	 * @param f
+	 * @return
+	 */
 	private String getBundleVersion(IModule module, File f) {
 		String version = null;
 		IFile manifest = module.getProject().getFile("target/classes/META-INF/MANIFEST.MF");
@@ -232,124 +240,28 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		}
 
 		// no manifest - so grab it from the file name
-		if (version == null) {
-			version = "";
-			String[] parts = f.getName().split("-");
-			for (String part : parts) {
-				if (!Character.isDigit(part.charAt(0))) {
-					if (version.length()==0) continue;
-					version += "." + part;
+		if (f != null) {
+			if (version == null) {
+				version = "";
+				String[] parts = f.getName().split("-");
+				for (String part : parts) {
+					if (!Character.isDigit(part.charAt(0))) {
+						if (version.length()==0) continue;
+						version += "." + part;
+					}
+					version += part.trim();
 				}
-				version += part.trim();
+				version = version.substring(0, version.indexOf(".jar"));
 			}
-			version = version.substring(0, version.indexOf(".jar"));
+		} else {
+			// no file...parse it from the bundle url
+			String uri = getBundleFilePath(module);
+			version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
 		}
 		
 		return version;
 	}
-	
-	/**
-	 * looks for an existing bundle with that SymbolicName
-	 * @param server
-	 * @param bundleSymbolicName
-	 * @return	the bundle id or -1 if not found
-	 */
-	private long findModuleInBundleList(String bundleSymbolicName) throws Exception {
-		long bundleId = -1;
-		ServerBeanType type = getServerBeanType();
-		if( KarafBeanProvider.KARAF_2x.equals(type)) {
-			// karaf 2.x -> use the operation "list()"
-			bundleId = findModuleInBundleListOperation(bundleSymbolicName);
-		} else if (KarafBeanProvider.KARAF_3x.equals(type)) {
-			// karaf 3.x -> use the attribute "Bundles"
-			bundleId = findModuleInBundlesAttribute(bundleSymbolicName);
-		} else {
-			// unsupported Karaf runtime
-		}
-		return bundleId;
-	}
-	
-	private long findModuleInBundlesAttribute(String bundleSymbolicName) throws Exception {
-		TabularData tabData = (TabularData)this.mbsc.getAttribute(this.karafBundlesMBeanName, "Bundles"); 
-		final Collection<?> rows = tabData.values();
-		for (Object row : rows) {
-			if (row instanceof CompositeData) {
-				CompositeData cd = (CompositeData) row;
-				String bsn = cd.get("Name").toString();
-				String id = cd.get("ID").toString();
-				if (bsn.equals(bundleSymbolicName)) {
-					try {
-						return Long.parseLong(id);
-					} catch (NumberFormatException ex) {
-						return -1;
-					}
-				}
-			}
-		}
-		return -1;
-	}
-	
-	private long findModuleInBundleListOperation(String bundleSymbolicName) throws Exception {
-		TabularData tabData = (TabularData)this.mbsc.invoke(this.karafBundlesMBeanName, "list", null, null); 
-		final Collection<?> rows = tabData.values();
-		for (Object row : rows) {
-			if (row instanceof CompositeData) {
-				CompositeData cd = (CompositeData) row;
-				String bsn = cd.get("Name").toString();
-				String id = cd.get("ID").toString();
-				if (bsn.equals(bundleSymbolicName)) {
-					try {
-						return Long.parseLong(id);
-					} catch (NumberFormatException ex) {
-						return -1;
-					}
-				}
-			}
-		}
-		return -1;
-	}
-	
-	/**
-	 * checks the mbeans
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	private boolean determineMBeanNames() throws IOException {
-		ObjectName objNameFramework = null;
-		
-		ServerBeanType type = getServerBeanType();
-		if( KarafBeanProvider.KARAF_2x.equals(type)) {
-			try {
-				objNameFramework = new ObjectName("org.apache.karaf:type=bundles,*");
-			} catch (MalformedObjectNameException ex) {
-				ex.printStackTrace();
-			}
-		} else if (KarafBeanProvider.KARAF_3x.equals(type)) {
-			try {
-				objNameFramework = new ObjectName("org.apache.karaf:type=bundle,*");
-			} catch (MalformedObjectNameException ex) {
-				ex.printStackTrace();
-			}
-		} else {
-			// unsupported Karaf runtime
-		}
-		
-		Set mbeans = mbsc.queryMBeans(objNameFramework, null); 
-	    if (mbeans.size() != 1) {
-	    	// no mbean for the osgi framework found - can't publish anything
-	    	return false;
-	    }
-	    
-	    Object oMbean = mbeans.iterator().next();
-    	if (oMbean instanceof ObjectInstance) {
-    		ObjectInstance oi = (ObjectInstance)oMbean;
-    		this.karafBundlesMBeanName = oi.getObjectName();
-    	}
-    	
-    	return true;
-	}
-	
+
 	/**
 	 * retrieve all needed information to connect to JMX server
 	 * @return
@@ -378,11 +290,5 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			}
 		}
 		return retVal;
-	}
-	
-	private ServerBeanType getServerBeanType() {
-		ServerBeanLoader loader = new ServerBeanLoader(server.getRuntime().getLocation().toFile());
-		ServerBean serverBean = loader.getServerBean();
-		return serverBean.getBeanType();
 	}
 }

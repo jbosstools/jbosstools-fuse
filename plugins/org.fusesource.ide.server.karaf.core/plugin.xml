@@ -15,10 +15,6 @@
              types="fuse.camel"
              versions="1.0">
        </moduleType>
-       <moduleType
-         	 types="jst.ear"
-         	 versions="1.2, 1.3, 1.4">
-       </moduleType>
     </runtimeType>
     <runtimeType
           class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
@@ -32,10 +28,6 @@
              types="fuse.camel"
              versions="1.0">
        </moduleType>
-       <moduleType
-         	 types="jst.ear"
-         	 versions="1.2, 1.3, 1.4">
-       </moduleType>
     </runtimeType>
     <runtimeType
           class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
@@ -48,10 +40,6 @@
        <moduleType
              types="fuse.camel"
              versions="1.0">
-       </moduleType>
-       <moduleType
-         	 types="jst.ear"
-         	 versions="1.2, 1.3, 1.4">
        </moduleType>
     </runtimeType>
   </extension>
@@ -71,6 +59,7 @@
            runtimeTypeId="org.fusesource.ide.karaf.runtime.22"
            startTimeout="90000"
            stopTimeout="45000"
+           startBeforePublish="true" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -87,6 +76,7 @@
            runtimeTypeId="org.fusesource.ide.karaf.runtime.23"
            startTimeout="90000"
            stopTimeout="45000"
+           startBeforePublish="true" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -103,6 +93,7 @@
            runtimeTypeId="org.fusesource.ide.karaf.runtime.30"
            startTimeout="90000"
            stopTimeout="45000"
+           startBeforePublish="true" 
            supportsRemoteHosts="false">
      </serverType>
   </extension>

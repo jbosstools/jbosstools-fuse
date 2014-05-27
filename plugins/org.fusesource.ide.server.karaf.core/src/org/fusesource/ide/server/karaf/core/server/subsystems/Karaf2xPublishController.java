@@ -19,7 +19,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour;
-import org.fusesource.ide.server.karaf.core.publish.KarafJMXPublisher;
+import org.fusesource.ide.server.karaf.core.publish.jmx.KarafJMXPublisher;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IPublishController;
@@ -38,15 +38,7 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	 */
 	@Override
 	public IStatus canPublish() {
-		// we only allow publish to started servers
-		if (getServer().getServerState() == IServer.STATE_STARTED) {
-			return Status.OK_STATUS;
-		}
-		// TODO: we should also check if the JMX port is already bound before using it
-				
-		// TODO: we should invoke a build so we have the artifact to deploy
-		
-		return Status.CANCEL_STATUS;
+		return Status.OK_STATUS;
 	}
 
 	/*
@@ -55,8 +47,6 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	 */
 	@Override
 	public boolean canPublishModule(IModule[] module) {
-		// TODO: check for a publish behaviour fitting the module and server
-		
 		for (IModule m : module) {
 			if (!m.getModuleType().getId().equals("fuse.camel") && !m.getModuleType().getVersion().equals("1.0")) {
 				return false;
@@ -71,7 +61,6 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	 */
 	@Override
 	public void publishStart(IProgressMonitor monitor) throws CoreException {
-		// TODO: we need to create the connection and cache it
 	}
 
 	/*
@@ -80,7 +69,6 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	 */
 	@Override
 	public void publishFinish(IProgressMonitor monitor) throws CoreException {
-		// TODO: we need to cleanup the connection
 	}
 
 	/*
@@ -92,9 +80,6 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 			IProgressMonitor monitor) throws CoreException {
 		monitor = monitor == null ? new NullProgressMonitor() : monitor; // nullsafe
 		validate();
-		
-		// TODO: we somehow need to have some logic for determinng the correct IPublishBehaviour for the module and server selection
-		// maybe that could be also checked in canPublish / canPublishModule if there is a fitting publishBehaviour		
 		
 		int publishType = KarafUtils.getPublishType(getServer(), module, kind, deltaKind);
 		switch (publishType) {
@@ -142,7 +127,14 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 			throws CoreException {
 		validate();
 	}
-	
+
+	/**
+	 * runs the maven build to create the jar file for the module
+	 * @param module
+	 * @param monitor
+	 * @return
+	 * @throws CoreException
+	 */
 	private boolean runBuild(IModule module, IProgressMonitor monitor)  throws CoreException {
 		File pomFile = module.getProject().getLocation().append(IMavenConstants.POM_FILE_NAME).toFile();
 		IMaven maven = MavenPlugin.getMaven();
