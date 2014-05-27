@@ -3,6 +3,7 @@ package org.fusesource.ide.server.karaf.core.server.subsystems;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -105,6 +106,11 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 	}
 
 	protected ILaunchConfigConfigurator getConfigurator() throws CoreException {
+		KarafServerDelegate serverDel = (KarafServerDelegate)getServer().loadAdapter(KarafServerDelegate.class, new NullProgressMonitor());
+		if (serverDel != null) {
+			return serverDel.getLaunchConfigurator();
+		}
+			
 		return new Karaf2xStartupLaunchConfigurator(getServer());
 	}
 

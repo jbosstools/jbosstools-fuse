@@ -26,8 +26,6 @@ import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -37,8 +35,6 @@ import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.UIConstants;
 import org.fusesource.ide.commons.ui.drop.DelegateDropListener;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
-import org.fusesource.ide.deployment.maven.ProjectDropHandler;
-import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.navigator.cloud.CloudsNode;
 import org.fusesource.ide.jmx.ui.internal.actions.RefreshAction;
 import org.fusesource.ide.jmx.ui.internal.views.navigator.Navigator;
@@ -136,40 +132,40 @@ public class FabricNavigator extends Navigator {
 								List<ProfileNode> profiles = versionNode.getAllProfileNodes();
 								for (ProfileNode profileNode : profiles) {
 									DropHandler handler = profileNode.createDropHandler(null);
-									if (handler instanceof ProjectDropHandler) {
-										final ProjectDropHandler projectHandler = (ProjectDropHandler) handler;
-										if (fabricMenu == null) {
-											fabricMenu = new Menu(menu);
-											MenuItem fabricMenuItem = new MenuItem(menu, SWT.CASCADE);
-											fabricMenuItem.setMenu(fabricMenu);
-											fabricMenuItem.setText(fabric.getName());
-											fabricMenuItem.setImage(FabricPlugin.getDefault().getImage("fabric.png"));
-										}
-										if (versionMenu == null) {
-											versionMenu = new Menu(fabricMenu);
-											MenuItem versionMenuItem = new MenuItem(fabricMenu, SWT.CASCADE);
-											versionMenuItem.setMenu(versionMenu);
-											versionMenuItem.setText(versionNode.getVersionId());
-											versionMenuItem.setImage(FabricPlugin.getDefault().getImage("version_folder.png"));
-										}
-										final MenuItem profileItem = new MenuItem(versionMenu, SWT.PUSH);
-										profileItem.setText(profileNode.getId());
-										profileItem.setImage(FabricPlugin.getDefault().getImage("profile.png"));
-										profileItem.setData(profileNode);
-										profileItem.addSelectionListener(new SelectionAdapter() {
-											@Override
-											public void widgetSelected(SelectionEvent e) {
-												FabricPlugin.getLogger().debug("================= profile: widgetSelected " + profileItem);
-												projectHandler.dropProject(project);
-											}
-
-											@Override
-											public void widgetDefaultSelected(SelectionEvent e) {
-												FabricPlugin.getLogger().debug("================= profile: widgetDefaultSelected " + profileItem);
-											}
-										});
-										added = true;
-									}
+//									if (handler instanceof ProjectDropHandler) {
+//										final ProjectDropHandler projectHandler = (ProjectDropHandler) handler;
+//										if (fabricMenu == null) {
+//											fabricMenu = new Menu(menu);
+//											MenuItem fabricMenuItem = new MenuItem(menu, SWT.CASCADE);
+//											fabricMenuItem.setMenu(fabricMenu);
+//											fabricMenuItem.setText(fabric.getName());
+//											fabricMenuItem.setImage(FabricPlugin.getDefault().getImage("fabric.png"));
+//										}
+//										if (versionMenu == null) {
+//											versionMenu = new Menu(fabricMenu);
+//											MenuItem versionMenuItem = new MenuItem(fabricMenu, SWT.CASCADE);
+//											versionMenuItem.setMenu(versionMenu);
+//											versionMenuItem.setText(versionNode.getVersionId());
+//											versionMenuItem.setImage(FabricPlugin.getDefault().getImage("version_folder.png"));
+//										}
+//										final MenuItem profileItem = new MenuItem(versionMenu, SWT.PUSH);
+//										profileItem.setText(profileNode.getId());
+//										profileItem.setImage(FabricPlugin.getDefault().getImage("profile.png"));
+//										profileItem.setData(profileNode);
+//										profileItem.addSelectionListener(new SelectionAdapter() {
+//											@Override
+//											public void widgetSelected(SelectionEvent e) {
+//												FabricPlugin.getLogger().debug("================= profile: widgetSelected " + profileItem);
+//												projectHandler.dropProject(project);
+//											}
+//
+//											@Override
+//											public void widgetDefaultSelected(SelectionEvent e) {
+//												FabricPlugin.getLogger().debug("================= profile: widgetDefaultSelected " + profileItem);
+//											}
+//										});
+//										added = true;
+//									}
 
 								}
 							}

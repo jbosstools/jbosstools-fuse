@@ -40,9 +40,6 @@ import org.fusesource.ide.commons.ui.Workbenches;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
 import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
-import org.fusesource.ide.deployment.maven.MavenUtils;
-import org.fusesource.ide.deployment.maven.ProjectDropHandler;
-import org.fusesource.ide.deployment.maven.ProjectDropTarget;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.navigator.maven.FabricInstallAction;
 import org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor;
@@ -50,7 +47,7 @@ import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
 
 import com.google.common.base.Objects;
 
-public class BundlesNode extends RefreshableCollectionNode implements ImageProvider, ProjectDropTarget, DropHandlerFactory {
+public class BundlesNode extends RefreshableCollectionNode implements ImageProvider, /** ProjectDropTarget **/ DropHandlerFactory {
 	private final OsgiFacade facade;
 	private String bundlefilterText;
 	private boolean startOnDeploy = true;
@@ -105,109 +102,110 @@ public class BundlesNode extends RefreshableCollectionNode implements ImageProvi
 
 	@Override
 	public DropHandler createDropHandler(DropTargetEvent event) {
-		return new ProjectDropHandler(this);
+		return null;
+		//return new ProjectDropHandler(this);
 	}
 
-	@Override
-	public void dropProject(IProject project, final Model mavenModel) {
-		if (mavenModel != null) {
-
-			ExecutePomActionSupport action = new FabricInstallAction();
-
-			// set a post processor
-			action.setPostProcessor(new ExecutePomActionPostProcessor() {
-				/* (non-Javadoc)
-				 * @see org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor#executeOnFailure()
-				 */
-				@Override
-				public void executeOnFailure() {
-				}
-
-				/* (non-Javadoc)
-				 * @see org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor#executeOnSuccess()
-				 */
-				@Override
-				public void executeOnSuccess() {
-					String uri = MavenUtils.getBundleURI(mavenModel);
-					if ( uri != null) {
-						try {
-							Long foundId = null;
-							List<IPropertySource> bundleList = getPropertySourceList();
-							for (IPropertySource propertySource : bundleList) {
-								BundleStateFacade bundleState = new BundleStateFacade(propertySource);
-								String location = bundleState.getLocation();
-								if (Objects.equal(location, uri)) {
-									foundId = bundleState.getId();
-								}
-							}
-
-
-
-							final Long id;
-							if (foundId == null) {
-								id = getFacade().installBundle(uri, startOnDeploy);
-							} else {
-								id = foundId;
-								getFacade().updateBundleFromURL(foundId, uri);
-							}
-							Viewers.async(new Runnable() {
-
-								@Override
-								public void run() {
-									refresh();
-									IPage page = Workbenches.getPropertySheetPage();
-									if (id != null && page instanceof BundlesTableSheetPage) {
-										BundlesTableSheetPage bundlePage = (BundlesTableSheetPage) page;
-										bundlePage.setSelectedBundleIds(Collections.singleton(id));
-									}
-								}});
-						} catch (Exception e) {
-							boolean done = false;
-							ConsolePlugin plugin = ConsolePlugin.getDefault();
-							if (plugin != null) {
-								IConsoleManager conMan = plugin.getConsoleManager();
-								IConsole[] consoles = conMan.getConsoles();
-								for (int i = 0; i < consoles.length; i++) {
-									IConsole console = consoles[i];
-									if (console instanceof ProcessConsole) {
-										ProcessConsole messageConsole = (ProcessConsole) console;
-										IOConsoleOutputStream ios = messageConsole.newOutputStream();
-										PrintWriter out = new PrintWriter(ios);
-										out.println();
-										out.println("FAILED to install into OSGi: " + uri);
-										out.println(e.getMessage());
-										e.printStackTrace(out);
-										Set<Throwable> exceptions = new HashSet<Throwable>();
-										Throwable t = e;
-										boolean showAllCauses = false;
-										while (true) {
-											exceptions.add(t);
-											Throwable c = t.getCause();
-											if (c == null || c == t && exceptions.contains(c) || !showAllCauses) {
-												break;
-											} else {
-												out.println("Caused by: " + c);
-												c.printStackTrace(out);
-												t = c;
-											}
-										}
-										out.flush();
-										done = true;
-									}
-								}
-							}
-
-							if (!done) {
-								FabricPlugin.getLogger().warning("Failed to update bundle " + uri + ". " + e, e);
-							}
-						}
-					}
-				}
-			});
-
-			MavenUtils.launch(action);
-		}
-	}
+//	@Override
+//	public void dropProject(IProject project, final Model mavenModel) {
+//		if (mavenModel != null) {
+//
+//			ExecutePomActionSupport action = new FabricInstallAction();
+//
+//			// set a post processor
+//			action.setPostProcessor(new ExecutePomActionPostProcessor() {
+//				/* (non-Javadoc)
+//				 * @see org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor#executeOnFailure()
+//				 */
+//				@Override
+//				public void executeOnFailure() {
+//				}
+//
+//				/* (non-Javadoc)
+//				 * @see org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor#executeOnSuccess()
+//				 */
+//				@Override
+//				public void executeOnSuccess() {
+//					String uri = MavenUtils.getBundleURI(mavenModel);
+//					if ( uri != null) {
+//						try {
+//							Long foundId = null;
+//							List<IPropertySource> bundleList = getPropertySourceList();
+//							for (IPropertySource propertySource : bundleList) {
+//								BundleStateFacade bundleState = new BundleStateFacade(propertySource);
+//								String location = bundleState.getLocation();
+//								if (Objects.equal(location, uri)) {
+//									foundId = bundleState.getId();
+//								}
+//							}
+//
+//
+//
+//							final Long id;
+//							if (foundId == null) {
+//								id = getFacade().installBundle(uri, startOnDeploy);
+//							} else {
+//								id = foundId;
+//								getFacade().updateBundleFromURL(foundId, uri);
+//							}
+//							Viewers.async(new Runnable() {
+//
+//								@Override
+//								public void run() {
+//									refresh();
+//									IPage page = Workbenches.getPropertySheetPage();
+//									if (id != null && page instanceof BundlesTableSheetPage) {
+//										BundlesTableSheetPage bundlePage = (BundlesTableSheetPage) page;
+//										bundlePage.setSelectedBundleIds(Collections.singleton(id));
+//									}
+//								}});
+//						} catch (Exception e) {
+//							boolean done = false;
+//							ConsolePlugin plugin = ConsolePlugin.getDefault();
+//							if (plugin != null) {
+//								IConsoleManager conMan = plugin.getConsoleManager();
+//								IConsole[] consoles = conMan.getConsoles();
+//								for (int i = 0; i < consoles.length; i++) {
+//									IConsole console = consoles[i];
+//									if (console instanceof ProcessConsole) {
+//										ProcessConsole messageConsole = (ProcessConsole) console;
+//										IOConsoleOutputStream ios = messageConsole.newOutputStream();
+//										PrintWriter out = new PrintWriter(ios);
+//										out.println();
+//										out.println("FAILED to install into OSGi: " + uri);
+//										out.println(e.getMessage());
+//										e.printStackTrace(out);
+//										Set<Throwable> exceptions = new HashSet<Throwable>();
+//										Throwable t = e;
+//										boolean showAllCauses = false;
+//										while (true) {
+//											exceptions.add(t);
+//											Throwable c = t.getCause();
+//											if (c == null || c == t && exceptions.contains(c) || !showAllCauses) {
+//												break;
+//											} else {
+//												out.println("Caused by: " + c);
+//												c.printStackTrace(out);
+//												t = c;
+//											}
+//										}
+//										out.flush();
+//										done = true;
+//									}
+//								}
+//							}
+//
+//							if (!done) {
+//								FabricPlugin.getLogger().warning("Failed to update bundle " + uri + ". " + e, e);
+//							}
+//						}
+//					}
+//				}
+//			});
+//
+//			MavenUtils.launch(action);
+//		}
+//	}
 
 	@Override
 	public void refresh() {

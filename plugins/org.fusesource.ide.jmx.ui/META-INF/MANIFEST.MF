@@ -5,8 +5,7 @@ Bundle-SymbolicName: org.fusesource.ide.jmx.ui;singleton:=true
 Bundle-Version: 7.3.0.qualifier
 Bundle-Activator: org.fusesource.ide.jmx.ui.JMXUIActivator
 Bundle-Vendor: JBoss by Red Hat
-Require-Bundle: org.fusesource.ide.deployment,
- org.fusesource.ide.commons,
+Require-Bundle: org.fusesource.ide.commons,
  org.fusesource.ide.jmx.core,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,

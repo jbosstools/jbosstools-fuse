@@ -23,7 +23,9 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 import org.fusesource.ide.server.karaf.core.Activator;
+import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator;
 import org.fusesource.ide.server.karaf.core.util.ServerNamingUtil;
+import org.jboss.ide.eclipse.as.core.server.ILaunchConfigConfigurator;
 import org.jboss.ide.eclipse.as.wtp.core.util.ServerSecureStorageUtil;
 
 /**
@@ -32,15 +34,13 @@ import org.jboss.ide.eclipse.as.wtp.core.util.ServerSecureStorageUtil;
 public class KarafServerDelegate extends ServerDelegate implements
 		IKarafServerDelegateWorkingCopy {
 
-	public static final int DEFAULT_SSH_PORT = 8101;
+	public static final int    DEFAULT_SSH_PORT = 8101;
+	
 	public static final String DEFAULT_KARAF_SSH_HOSTNAME = "localhost";
 	public static final String DEFAULT_KARAF_SSH_USER = "karaf";
 	public static final String DEFAULT_KARAF_SSH_PASSWORD = "karaf";
-	public static final String DEFAULT_SMX_SSH_USER = "smx";
-	public static final String DEFAULT_SMX_SSH_PASSWORD = "smx";
-	public static final String DEFAULT_FUSEESB_SSH_USER = "admin";
-	public static final String DEFAULT_FUSEESB_SSH_PASSWORD = "admin";
 	
+	@Override
 	public void setDefaults(IProgressMonitor monitor) {
 		super.setDefaults(monitor);
 		IRuntime rt = getServer().getRuntime();
@@ -50,27 +50,11 @@ public class KarafServerDelegate extends ServerDelegate implements
 	}
 	
 	protected String getDefaultUsername() {
-		if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_KARAF)) {
-			return DEFAULT_KARAF_SSH_USER;	
-		} else if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_SMX)) {
-			return DEFAULT_SMX_SSH_USER;	
-		} else if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_FUSEESB)) {
-			return DEFAULT_FUSEESB_SSH_USER;	
-		} else {
-			return DEFAULT_KARAF_SSH_USER;
-		}		
+		return DEFAULT_KARAF_SSH_USER;	
 	}
 	
 	protected String getDefaultPassword() {
-		if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_KARAF)) {
-			return DEFAULT_KARAF_SSH_PASSWORD;	
-		} else if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_SMX)) {
-			return DEFAULT_SMX_SSH_PASSWORD;	
-		} else if (getServer().getServerType().getId().startsWith(IKarafServerDelegate.SERVER_TYPE_PREFIX_FUSEESB)) {
-			return DEFAULT_FUSEESB_SSH_PASSWORD;	
-		} else {
-			return DEFAULT_KARAF_SSH_PASSWORD;
-		}
+		return DEFAULT_KARAF_SSH_PASSWORD;	
 	}
 	
 	/* (non-Javadoc)
@@ -167,6 +151,15 @@ public class KarafServerDelegate extends ServerDelegate implements
 	public void modifyModules(IModule[] add, IModule[] remove,
 			IProgressMonitor monitor) throws CoreException {
 		// Do nothing
+	}
+	
+	/**
+	 * returns the launch configurator for the server
+	 * @return	the launch configurator
+	 * @throws CoreException
+	 */
+	public ILaunchConfigConfigurator getLaunchConfigurator() throws CoreException {
+		return new Karaf2xStartupLaunchConfigurator(getServer());
 	}
 	
 	/**

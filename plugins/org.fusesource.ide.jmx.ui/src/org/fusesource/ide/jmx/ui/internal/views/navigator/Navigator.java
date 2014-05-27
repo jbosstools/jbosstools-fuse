@@ -40,8 +40,6 @@ import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -71,9 +69,6 @@ import org.fusesource.ide.commons.ui.drop.DelegateDropListener;
 import org.fusesource.ide.commons.ui.drop.DeployMenuProvider;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
 import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
-import org.fusesource.ide.deployment.DeployPlugin;
-import org.fusesource.ide.deployment.DeployViews;
-import org.fusesource.ide.deployment.maven.ProjectDropHandler;
 import org.fusesource.ide.jmx.core.ExtensionManager;
 import org.fusesource.ide.jmx.core.IConnectionWrapper;
 import org.fusesource.ide.jmx.core.JMXActivator;
@@ -277,22 +272,22 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider, IT
 						if (child instanceof DropHandlerFactory) {
 							DropHandlerFactory factory = (DropHandlerFactory) child;
 							final DropHandler handler = factory.createDropHandler(null);
-							if (handler instanceof ProjectDropHandler) {
-								final ProjectDropHandler projectHandler = (ProjectDropHandler) handler;
-								//dropHandler.dropProject((IProject) resource);
-
-								MenuItem i = new MenuItem(menu, SWT.PUSH);
-								i.setText(child.toString());
-								i.setImage(DeployPlugin.getDefault().getImage("container.png"));
-								i.setData(child);
-								i.addSelectionListener(new SelectionAdapter() {
-									@Override
-									public void widgetSelected(SelectionEvent e) {
-										projectHandler.dropProject((IProject) resource);
-									}
-								});
-								added = true;
-							}
+//							if (handler instanceof ProjectDropHandler) {
+//								final ProjectDropHandler projectHandler = (ProjectDropHandler) handler;
+//								//dropHandler.dropProject((IProject) resource);
+//
+//								MenuItem i = new MenuItem(menu, SWT.PUSH);
+//								i.setText(child.toString());
+//								i.setImage(DeployPlugin.getDefault().getImage("container.png"));
+//								i.setData(child);
+//								i.addSelectionListener(new SelectionAdapter() {
+//									@Override
+//									public void widgetSelected(SelectionEvent e) {
+//										projectHandler.dropProject((IProject) resource);
+//									}
+//								});
+//								added = true;
+//							}
 						}
 					}
 				}
@@ -335,7 +330,7 @@ public class Navigator extends CommonNavigator implements DeployMenuProvider, IT
 
 	protected void ensureDeployViewRegistered() {
 		if (!registered) {
-			DeployViews.registerView(getViewId(), this);
+//			DeployViews.registerView(getViewId(), this);
 			registered = true;
 		}
 	}

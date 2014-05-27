@@ -197,4 +197,11 @@
           name="Apache Camel Context">
     </moduleType>
  </extension>
+ <extension
+       point="org.eclipse.wst.server.ui.serverImages">
+    <image
+          icon="icons/fuse_icon_16c.png"
+          id="org.fusesource.ide.project.image"
+          typeIds="fuse.camel"/>
+ </extension>
 </plugin>

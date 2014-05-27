@@ -12,11 +12,9 @@
           vendorId="%fusesource"
           version="4.5">
        <moduleType
-         types="jst.web"
-         versions="2.2, 2.3, 2.4, 2.5, 3.0"/>
-       <moduleType
-         types="jst.utility"
-         versions="1.0"/>
+             types="fuse.camel"
+             versions="1.0">
+       </moduleType>
     </runtimeType>
     <runtimeType
           class="org.fusesource.ide.server.servicemix.core.runtime.ServiceMixRuntimeDelegate"
@@ -27,11 +25,7 @@
           vendorId="%fusesource"
           version="5.0">
        <moduleType
-             types="jst.web"
-             versions="2.2, 2.3, 2.4, 2.5, 3.0">
-       </moduleType>
-       <moduleType
-             types="jst.utility"
+             types="fuse.camel"
              versions="1.0">
        </moduleType>
     </runtimeType>
@@ -39,8 +33,8 @@
 
   <extension point="org.eclipse.wst.server.core.serverTypes">
      <serverType
-           behaviourClass="org.fusesource.ide.server.servicemix.core.server.ControllableServiceMixServerBehaviour"
-           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
+           class="org.fusesource.ide.server.servicemix.core.server.ServiceMixServerDelegate"
            description="%serviceMixServerDescription_45"
            hasConfiguration="true"
            id="org.fusesource.ide.servicemix.server.45"
@@ -52,11 +46,12 @@
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.45"
            startTimeout="90000"
            stopTimeout="45000"
+           startBeforePublish="true" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
-           behaviourClass="org.fusesource.ide.server.servicemix.core.server.ControllableServiceMixServerBehaviour"
-           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
+           class="org.fusesource.ide.server.servicemix.core.server.ServiceMixServerDelegate"
            description="%serviceMixServerDescription_50"
            hasConfiguration="true"
            id="org.fusesource.ide.servicemix.server.50"
@@ -68,6 +63,7 @@
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.50"
            startTimeout="90000"
            stopTimeout="45000"
+           startBeforePublish="true" 
            supportsRemoteHosts="false">
      </serverType>
   </extension>
@@ -155,38 +151,26 @@
   
   <extension
          point="org.jboss.ide.eclipse.as.wtp.core.serverSubsystem">
-         <subsystem
-            system="launch"
-            id="launch.servicemix.local.default"
-            name="Local ServiceMix Launch Controller"
-            class="org.fusesource.ide.server.servicemix.core.server.subsystems.ServiceMix4xLaunchController">
-         </subsystem>
          <subsystemMapping
-            id="launch.servicemix.local.default"
-            mappedId="launch.servicemix.local"
+            id="launch.karaf.local.default"
+            mappedId="launch.smx.local"
             serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
          </subsystemMapping>
          
-         <subsystem
-            system="shutdown"
-            id="shutdown.servicemix.local.default"
-            name="Local ServiceMix Shutdown Controller"
-            class="org.fusesource.ide.server.servicemix.core.server.subsystems.ServiceMix4xShutdownController">
-         </subsystem>
          <subsystemMapping
-            id="shutdown.servicemix.local.default"
+            id="shutdown.karaf.local.default"
             mappedId="shutdown.servicemix.local"
             serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
          </subsystemMapping>
          
-         <subsystem
-            system="port"
-            id="port.servicemix.local.default"
-            name="Local ServiceMix Port Controller"
-            class="org.fusesource.ide.server.servicemix.core.server.subsystems.ServiceMix4xPortController">
-         </subsystem>
          <subsystemMapping
-            id="port.servicemix.local.default"
+            id="publish.karaf.local.default"
+            mappedId="publish.smx.local"
+            serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
+         </subsystemMapping>
+         
+         <subsystemMapping
+            id="port.karaf.local.default"
             mappedId="port.servicemix.local"
             serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
          </subsystemMapping>
