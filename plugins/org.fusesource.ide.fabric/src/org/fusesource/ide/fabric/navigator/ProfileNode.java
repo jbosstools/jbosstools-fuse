@@ -40,9 +40,6 @@ import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
 import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
 import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.deployment.maven.MavenUtils;
-import org.fusesource.ide.deployment.maven.ProjectDropHandler;
-import org.fusesource.ide.deployment.maven.ProjectDropTarget;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.ProfileAddAction;
 import org.fusesource.ide.fabric.actions.ProfileDeleteAction;
@@ -52,7 +49,7 @@ import org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor;
 import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
 
 public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI,
-		ImageProvider, GraphableNode, ContextMenuProvider, ProjectDropTarget,
+		ImageProvider, GraphableNode, ContextMenuProvider, /**ProjectDropTarget**/
 		DropHandlerFactory {
 	private static final String AGENT_PID = "io.fabric8.agent";
 	private static final boolean addContainersToTree = false;
@@ -160,7 +157,8 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI,
 
 	@Override
 	public DropHandler createDropHandler(DropTargetEvent event) {
-		return new ProjectDropHandler(this);
+		return null;
+		//		return new ProjectDropHandler(this);
 	}
 
 	@Override
@@ -168,77 +166,77 @@ public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI,
 		return fabric;
 	}
 
-	@Override
-	public void dropProject(IProject project, final Model mavenModel) {
-		if (mavenModel != null) {
-			ExecutePomActionSupport action = new FabricDeployAction(this);
-
-			// set a post processor
-			action.setPostProcessor(new ExecutePomActionPostProcessor() {
-				/*
-				 * (non-Javadoc)
-				 * 
-				 * @see
-				 * org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor
-				 * #executeOnFailure()
-				 */
-				@Override
-				public void executeOnFailure() {
-				}
-
-				/*
-				 * (non-Javadoc)
-				 * 
-				 * @see
-				 * org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor
-				 * #executeOnSuccess()
-				 */
-				@Override
-				public void executeOnSuccess() {
-					if (profile != null) {
-						String uri = MavenUtils.getBundleURI(mavenModel);
-						if (uri != null) {
-							if (uri.startsWith("fab:")) {
-								uri = uri.substring(4);
-								List<String> list = profile.getFabs();
-								if (list != null && !list.contains(uri)) {
-									list.add(uri);
-									profile.setFabs(list);
-								}
-
-							} else {
-								List<String> list = profile.getBundles();
-								if (list != null && !list.contains(uri)) {
-									list.add(uri);
-									profile.setBundles(list);
-								}
-							}
-						} else {
-							// TODO handle feature file
-							// deduce if there's a feature file created for this
-							// project and use that instead!
-						}
-
-						try {
-							fabric.getFabricService().setConfigurationValue(
-									getVersionNode().getVersionId(),
-									getProfileId(), AGENT_PID,
-									"io.fabric8.buildTime",
-									"" + uri + " at " + new Date());
-						} catch (FabricException ex) {
-							ex.printStackTrace();
-						} finally {
-							refresh();
-						}
-					}
-				}
-
-			});
-
-			MavenUtils.launch(action);
-
-		}
-	}
+//	@Override
+//	public void dropProject(IProject project, final Model mavenModel) {
+//		if (mavenModel != null) {
+//			ExecutePomActionSupport action = new FabricDeployAction(this);
+//
+//			// set a post processor
+//			action.setPostProcessor(new ExecutePomActionPostProcessor() {
+//				/*
+//				 * (non-Javadoc)
+//				 * 
+//				 * @see
+//				 * org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor
+//				 * #executeOnFailure()
+//				 */
+//				@Override
+//				public void executeOnFailure() {
+//				}
+//
+//				/*
+//				 * (non-Javadoc)
+//				 * 
+//				 * @see
+//				 * org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor
+//				 * #executeOnSuccess()
+//				 */
+//				@Override
+//				public void executeOnSuccess() {
+//					if (profile != null) {
+//						String uri = MavenUtils.getBundleURI(mavenModel);
+//						if (uri != null) {
+//							if (uri.startsWith("fab:")) {
+//								uri = uri.substring(4);
+//								List<String> list = profile.getFabs();
+//								if (list != null && !list.contains(uri)) {
+//									list.add(uri);
+//									profile.setFabs(list);
+//								}
+//
+//							} else {
+//								List<String> list = profile.getBundles();
+//								if (list != null && !list.contains(uri)) {
+//									list.add(uri);
+//									profile.setBundles(list);
+//								}
+//							}
+//						} else {
+//							// TODO handle feature file
+//							// deduce if there's a feature file created for this
+//							// project and use that instead!
+//						}
+//
+//						try {
+//							fabric.getFabricService().setConfigurationValue(
+//									getVersionNode().getVersionId(),
+//									getProfileId(), AGENT_PID,
+//									"io.fabric8.buildTime",
+//									"" + uri + " at " + new Date());
+//						} catch (FabricException ex) {
+//							ex.printStackTrace();
+//						} finally {
+//							refresh();
+//						}
+//					}
+//				}
+//
+//			});
+//
+//			MavenUtils.launch(action);
+//
+//		}
+//	}
 
 	public String getMavenDeployParameter() {
 		final Fabric theFabric = getFabric();
