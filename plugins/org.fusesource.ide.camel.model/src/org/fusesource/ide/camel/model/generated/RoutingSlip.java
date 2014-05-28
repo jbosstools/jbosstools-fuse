@@ -38,10 +38,12 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class RoutingSlip extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "RoutingSlip.InheritErrorHandler";
 	public static final String PROPERTY_EXPRESSION = "RoutingSlip.Expression";
 	public static final String PROPERTY_URIDELIMITER = "RoutingSlip.UriDelimiter";
 	public static final String PROPERTY_IGNOREINVALIDENDPOINTS = "RoutingSlip.IgnoreInvalidEndpoints";
 	
+	private Boolean inheritErrorHandler;
 	private ExpressionDefinition expression;
 	private String uriDelimiter;
 	private Boolean ignoreInvalidEndpoints;
@@ -77,6 +79,24 @@ public class RoutingSlip extends AbstractNode {
 
 
 	
+
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
 
 	/**
 	 * @return the expression
@@ -142,11 +162,13 @@ public class RoutingSlip extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRoutingSlipInheritErrorHandler);
+    
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelRoutingSlipExpression);
     		PropertyDescriptor descUriDelimiter = new TextPropertyDescriptor(PROPERTY_URIDELIMITER, Messages.propertyLabelRoutingSlipUriDelimiter);
       	PropertyDescriptor descIgnoreInvalidEndpoints = new BooleanPropertyDescriptor(PROPERTY_IGNOREINVALIDENDPOINTS, Messages.propertyLabelRoutingSlipIgnoreInvalidEndpoints);
-  		descriptors.put(PROPERTY_EXPRESSION, descExpression);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXPRESSION, descExpression);
 		descriptors.put(PROPERTY_URIDELIMITER, descUriDelimiter);
 		descriptors.put(PROPERTY_IGNOREINVALIDENDPOINTS, descIgnoreInvalidEndpoints);
 	}
@@ -156,7 +178,9 @@ public class RoutingSlip extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			setExpression(Objects.convertTo(value, ExpressionDefinition.class));
 		}		else if (PROPERTY_URIDELIMITER.equals(id)) {
 			setUriDelimiter(Objects.convertTo(value, String.class));
@@ -172,7 +196,9 @@ public class RoutingSlip extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			return this.getExpression();
 		}		else if (PROPERTY_URIDELIMITER.equals(id)) {
 			return this.getUriDelimiter();
@@ -187,6 +213,7 @@ public class RoutingSlip extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		RoutingSlipDefinition answer = new RoutingSlipDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
     answer.setUriDelimiter(toXmlPropertyValue(PROPERTY_URIDELIMITER, this.getUriDelimiter()));
     answer.setIgnoreInvalidEndpoints(toXmlPropertyValue(PROPERTY_IGNOREINVALIDENDPOINTS, this.getIgnoreInvalidEndpoints()));
@@ -207,6 +234,7 @@ public class RoutingSlip extends AbstractNode {
     
     if (processor instanceof RoutingSlipDefinition) {
       RoutingSlipDefinition node = (RoutingSlipDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExpression(node.getExpression());
       this.setUriDelimiter(node.getUriDelimiter());
       this.setIgnoreInvalidEndpoints(node.getIgnoreInvalidEndpoints());

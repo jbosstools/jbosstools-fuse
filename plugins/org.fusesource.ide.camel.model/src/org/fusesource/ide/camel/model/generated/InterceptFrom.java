@@ -38,8 +38,10 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class InterceptFrom extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "InterceptFrom.InheritErrorHandler";
 	public static final String PROPERTY_URI = "InterceptFrom.Uri";
 	
+	private Boolean inheritErrorHandler;
 	private String uri;
 	
     public InterceptFrom() {
@@ -75,6 +77,24 @@ public class InterceptFrom extends AbstractNode {
 	
 
 	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
+
+	/**
 	 * @return the uri
 	 */
 	public String getUri() {
@@ -102,8 +122,10 @@ public class InterceptFrom extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  		PropertyDescriptor descUri = new TextPropertyDescriptor(PROPERTY_URI, Messages.propertyLabelInterceptFromUri);
-  		descriptors.put(PROPERTY_URI, descUri);
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelInterceptFromInheritErrorHandler);
+    		PropertyDescriptor descUri = new TextPropertyDescriptor(PROPERTY_URI, Messages.propertyLabelInterceptFromUri);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_URI, descUri);
 	}
 	
 	/* (non-Javadoc)
@@ -111,7 +133,9 @@ public class InterceptFrom extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_URI.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_URI.equals(id)) {
 			setUri(Objects.convertTo(value, String.class));
 		}    else {
 			super.setPropertyValue(id, value);
@@ -123,7 +147,9 @@ public class InterceptFrom extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_URI.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_URI.equals(id)) {
 			return this.getUri();
 		}    else {
 			return super.getPropertyValue(id);
@@ -134,6 +160,7 @@ public class InterceptFrom extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		InterceptFromDefinition answer = new InterceptFromDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setUri(toXmlPropertyValue(PROPERTY_URI, this.getUri()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
@@ -152,6 +179,7 @@ public class InterceptFrom extends AbstractNode {
     
     if (processor instanceof InterceptFromDefinition) {
       InterceptFromDefinition node = (InterceptFromDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setUri(node.getUri());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof InterceptFromDefinition. Was " + processor.getClass().getName());

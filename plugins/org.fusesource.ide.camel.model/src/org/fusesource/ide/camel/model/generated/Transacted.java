@@ -38,8 +38,10 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Transacted extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Transacted.InheritErrorHandler";
 	public static final String PROPERTY_REF = "Transacted.Ref";
 	
+	private Boolean inheritErrorHandler;
 	private String ref;
 	
     public Transacted() {
@@ -75,6 +77,24 @@ public class Transacted extends AbstractNode {
 	
 
 	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
+
+	/**
 	 * @return the ref
 	 */
 	public String getRef() {
@@ -102,8 +122,10 @@ public class Transacted extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  		PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelTransactedRef);
-  		descriptors.put(PROPERTY_REF, descRef);
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelTransactedInheritErrorHandler);
+    		PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelTransactedRef);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_REF, descRef);
 	}
 	
 	/* (non-Javadoc)
@@ -111,7 +133,9 @@ public class Transacted extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_REF.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_REF.equals(id)) {
 			setRef(Objects.convertTo(value, String.class));
 		}    else {
 			super.setPropertyValue(id, value);
@@ -123,7 +147,9 @@ public class Transacted extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_REF.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_REF.equals(id)) {
 			return this.getRef();
 		}    else {
 			return super.getPropertyValue(id);
@@ -134,6 +160,7 @@ public class Transacted extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		TransactedDefinition answer = new TransactedDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setRef(toXmlPropertyValue(PROPERTY_REF, this.getRef()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
@@ -152,6 +179,7 @@ public class Transacted extends AbstractNode {
     
     if (processor instanceof TransactedDefinition) {
       TransactedDefinition node = (TransactedDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setRef(node.getRef());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof TransactedDefinition. Was " + processor.getClass().getName());

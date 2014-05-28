@@ -38,28 +38,30 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Split extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Split.InheritErrorHandler";
 	public static final String PROPERTY_EXPRESSION = "Split.Expression";
+	public static final String PROPERTY_PARALLELPROCESSING = "Split.ParallelProcessing";
 	public static final String PROPERTY_STRATEGYREF = "Split.StrategyRef";
 	public static final String PROPERTY_STRATEGYMETHODNAME = "Split.StrategyMethodName";
-	public static final String PROPERTY_EXECUTORSERVICEREF = "Split.ExecutorServiceRef";
-	public static final String PROPERTY_ONPREPAREREF = "Split.OnPrepareRef";
-	public static final String PROPERTY_PARALLELPROCESSING = "Split.ParallelProcessing";
 	public static final String PROPERTY_STRATEGYMETHODALLOWNULL = "Split.StrategyMethodAllowNull";
+	public static final String PROPERTY_EXECUTORSERVICEREF = "Split.ExecutorServiceRef";
 	public static final String PROPERTY_STREAMING = "Split.Streaming";
 	public static final String PROPERTY_STOPONEXCEPTION = "Split.StopOnException";
 	public static final String PROPERTY_TIMEOUT = "Split.Timeout";
+	public static final String PROPERTY_ONPREPAREREF = "Split.OnPrepareRef";
 	public static final String PROPERTY_SHAREUNITOFWORK = "Split.ShareUnitOfWork";
 	
+	private Boolean inheritErrorHandler;
 	private ExpressionDefinition expression;
+	private Boolean parallelProcessing;
 	private String strategyRef;
 	private String strategyMethodName;
-	private String executorServiceRef;
-	private String onPrepareRef;
-	private Boolean parallelProcessing;
 	private Boolean strategyMethodAllowNull;
+	private String executorServiceRef;
 	private Boolean streaming;
 	private Boolean stopOnException;
 	private Long timeout;
+	private String onPrepareRef;
 	private Boolean shareUnitOfWork;
 	
     public Split() {
@@ -95,6 +97,24 @@ public class Split extends AbstractNode {
 	
 
 	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
+
+	/**
 	 * @return the expression
 	 */
 	public ExpressionDefinition getExpression() {
@@ -109,6 +129,24 @@ public class Split extends AbstractNode {
 		this.expression = expression;
 		if (!isSame(oldValue, expression)) {
 		    firePropertyChange(PROPERTY_EXPRESSION, oldValue, expression);
+		}
+	}
+
+	/**
+	 * @return the parallelProcessing
+	 */
+	public Boolean getParallelProcessing() {
+		return this.parallelProcessing;
+	}
+	
+	/**
+	 * @param parallelProcessing the parallelProcessing to set
+	 */
+	public void setParallelProcessing(Boolean parallelProcessing) {
+		Boolean oldValue = this.parallelProcessing;
+		this.parallelProcessing = parallelProcessing;
+		if (!isSame(oldValue, parallelProcessing)) {
+		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
 		}
 	}
 
@@ -149,60 +187,6 @@ public class Split extends AbstractNode {
 	}
 
 	/**
-	 * @return the executorServiceRef
-	 */
-	public String getExecutorServiceRef() {
-		return this.executorServiceRef;
-	}
-	
-	/**
-	 * @param executorServiceRef the executorServiceRef to set
-	 */
-	public void setExecutorServiceRef(String executorServiceRef) {
-		String oldValue = this.executorServiceRef;
-		this.executorServiceRef = executorServiceRef;
-		if (!isSame(oldValue, executorServiceRef)) {
-		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
-		}
-	}
-
-	/**
-	 * @return the onPrepareRef
-	 */
-	public String getOnPrepareRef() {
-		return this.onPrepareRef;
-	}
-	
-	/**
-	 * @param onPrepareRef the onPrepareRef to set
-	 */
-	public void setOnPrepareRef(String onPrepareRef) {
-		String oldValue = this.onPrepareRef;
-		this.onPrepareRef = onPrepareRef;
-		if (!isSame(oldValue, onPrepareRef)) {
-		    firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
-		}
-	}
-
-	/**
-	 * @return the parallelProcessing
-	 */
-	public Boolean getParallelProcessing() {
-		return this.parallelProcessing;
-	}
-	
-	/**
-	 * @param parallelProcessing the parallelProcessing to set
-	 */
-	public void setParallelProcessing(Boolean parallelProcessing) {
-		Boolean oldValue = this.parallelProcessing;
-		this.parallelProcessing = parallelProcessing;
-		if (!isSame(oldValue, parallelProcessing)) {
-		    firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
-		}
-	}
-
-	/**
 	 * @return the strategyMethodAllowNull
 	 */
 	public Boolean getStrategyMethodAllowNull() {
@@ -217,6 +201,24 @@ public class Split extends AbstractNode {
 		this.strategyMethodAllowNull = strategyMethodAllowNull;
 		if (!isSame(oldValue, strategyMethodAllowNull)) {
 		    firePropertyChange(PROPERTY_STRATEGYMETHODALLOWNULL, oldValue, strategyMethodAllowNull);
+		}
+	}
+
+	/**
+	 * @return the executorServiceRef
+	 */
+	public String getExecutorServiceRef() {
+		return this.executorServiceRef;
+	}
+	
+	/**
+	 * @param executorServiceRef the executorServiceRef to set
+	 */
+	public void setExecutorServiceRef(String executorServiceRef) {
+		String oldValue = this.executorServiceRef;
+		this.executorServiceRef = executorServiceRef;
+		if (!isSame(oldValue, executorServiceRef)) {
+		    firePropertyChange(PROPERTY_EXECUTORSERVICEREF, oldValue, executorServiceRef);
 		}
 	}
 
@@ -275,6 +277,24 @@ public class Split extends AbstractNode {
 	}
 
 	/**
+	 * @return the onPrepareRef
+	 */
+	public String getOnPrepareRef() {
+		return this.onPrepareRef;
+	}
+	
+	/**
+	 * @param onPrepareRef the onPrepareRef to set
+	 */
+	public void setOnPrepareRef(String onPrepareRef) {
+		String oldValue = this.onPrepareRef;
+		this.onPrepareRef = onPrepareRef;
+		if (!isSame(oldValue, onPrepareRef)) {
+		    firePropertyChange(PROPERTY_ONPREPAREREF, oldValue, onPrepareRef);
+		}
+	}
+
+	/**
 	 * @return the shareUnitOfWork
 	 */
 	public Boolean getShareUnitOfWork() {
@@ -302,28 +322,30 @@ public class Split extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSplitInheritErrorHandler);
+    
   	PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelSplitExpression);
+      	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelSplitParallelProcessing);
     		PropertyDescriptor descStrategyRef = new TextPropertyDescriptor(PROPERTY_STRATEGYREF, Messages.propertyLabelSplitStrategyRef);
     		PropertyDescriptor descStrategyMethodName = new TextPropertyDescriptor(PROPERTY_STRATEGYMETHODNAME, Messages.propertyLabelSplitStrategyMethodName);
-    		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelSplitExecutorServiceRef);
-    		PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelSplitOnPrepareRef);
-      	PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelSplitParallelProcessing);
       	PropertyDescriptor descStrategyMethodAllowNull = new BooleanPropertyDescriptor(PROPERTY_STRATEGYMETHODALLOWNULL, Messages.propertyLabelSplitStrategyMethodAllowNull);
+    		PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelSplitExecutorServiceRef);
       	PropertyDescriptor descStreaming = new BooleanPropertyDescriptor(PROPERTY_STREAMING, Messages.propertyLabelSplitStreaming);
       	PropertyDescriptor descStopOnException = new BooleanPropertyDescriptor(PROPERTY_STOPONEXCEPTION, Messages.propertyLabelSplitStopOnException);
     		PropertyDescriptor descTimeout = new TextPropertyDescriptor(PROPERTY_TIMEOUT, Messages.propertyLabelSplitTimeout);
+    		PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelSplitOnPrepareRef);
       	PropertyDescriptor descShareUnitOfWork = new BooleanPropertyDescriptor(PROPERTY_SHAREUNITOFWORK, Messages.propertyLabelSplitShareUnitOfWork);
-  		descriptors.put(PROPERTY_EXPRESSION, descExpression);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_EXPRESSION, descExpression);
+		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
 		descriptors.put(PROPERTY_STRATEGYREF, descStrategyRef);
 		descriptors.put(PROPERTY_STRATEGYMETHODNAME, descStrategyMethodName);
-		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
-		descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
-		descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
 		descriptors.put(PROPERTY_STRATEGYMETHODALLOWNULL, descStrategyMethodAllowNull);
+		descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
 		descriptors.put(PROPERTY_STREAMING, descStreaming);
 		descriptors.put(PROPERTY_STOPONEXCEPTION, descStopOnException);
 		descriptors.put(PROPERTY_TIMEOUT, descTimeout);
+		descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
 		descriptors.put(PROPERTY_SHAREUNITOFWORK, descShareUnitOfWork);
 	}
 	
@@ -332,26 +354,28 @@ public class Split extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			setExpression(Objects.convertTo(value, ExpressionDefinition.class));
+		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
+			setParallelProcessing(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			setStrategyRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
 			setStrategyMethodName(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
-			setExecutorServiceRef(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
-			setOnPrepareRef(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
-			setParallelProcessing(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
 			setStrategyMethodAllowNull(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
+			setExecutorServiceRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_STREAMING.equals(id)) {
 			setStreaming(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_STOPONEXCEPTION.equals(id)) {
 			setStopOnException(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_TIMEOUT.equals(id)) {
 			setTimeout(Objects.convertTo(value, Long.class));
+		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
+			setOnPrepareRef(Objects.convertTo(value, String.class));
 		}		else if (PROPERTY_SHAREUNITOFWORK.equals(id)) {
 			setShareUnitOfWork(Objects.convertTo(value, Boolean.class));
 		}    else {
@@ -364,26 +388,28 @@ public class Split extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_EXPRESSION.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_EXPRESSION.equals(id)) {
 			return this.getExpression();
+		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
+			return this.getParallelProcessing();
 		}		else if (PROPERTY_STRATEGYREF.equals(id)) {
 			return this.getStrategyRef();
 		}		else if (PROPERTY_STRATEGYMETHODNAME.equals(id)) {
 			return this.getStrategyMethodName();
-		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
-			return this.getExecutorServiceRef();
-		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
-			return this.getOnPrepareRef();
-		}		else if (PROPERTY_PARALLELPROCESSING.equals(id)) {
-			return this.getParallelProcessing();
 		}		else if (PROPERTY_STRATEGYMETHODALLOWNULL.equals(id)) {
 			return this.getStrategyMethodAllowNull();
+		}		else if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
+			return this.getExecutorServiceRef();
 		}		else if (PROPERTY_STREAMING.equals(id)) {
 			return this.getStreaming();
 		}		else if (PROPERTY_STOPONEXCEPTION.equals(id)) {
 			return this.getStopOnException();
 		}		else if (PROPERTY_TIMEOUT.equals(id)) {
 			return this.getTimeout();
+		}		else if (PROPERTY_ONPREPAREREF.equals(id)) {
+			return this.getOnPrepareRef();
 		}		else if (PROPERTY_SHAREUNITOFWORK.equals(id)) {
 			return this.getShareUnitOfWork();
 		}    else {
@@ -395,16 +421,17 @@ public class Split extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		SplitDefinition answer = new SplitDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
+    answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
     answer.setStrategyRef(toXmlPropertyValue(PROPERTY_STRATEGYREF, this.getStrategyRef()));
     answer.setStrategyMethodName(toXmlPropertyValue(PROPERTY_STRATEGYMETHODNAME, this.getStrategyMethodName()));
-    answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
-    answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
-    answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
     answer.setStrategyMethodAllowNull(toXmlPropertyValue(PROPERTY_STRATEGYMETHODALLOWNULL, this.getStrategyMethodAllowNull()));
+    answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
     answer.setStreaming(toXmlPropertyValue(PROPERTY_STREAMING, this.getStreaming()));
     answer.setStopOnException(toXmlPropertyValue(PROPERTY_STOPONEXCEPTION, this.getStopOnException()));
     answer.setTimeout(toXmlPropertyValue(PROPERTY_TIMEOUT, this.getTimeout()));
+    answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
     answer.setShareUnitOfWork(toXmlPropertyValue(PROPERTY_SHAREUNITOFWORK, this.getShareUnitOfWork()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
@@ -423,16 +450,17 @@ public class Split extends AbstractNode {
     
     if (processor instanceof SplitDefinition) {
       SplitDefinition node = (SplitDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setExpression(node.getExpression());
+      this.setParallelProcessing(node.getParallelProcessing());
       this.setStrategyRef(node.getStrategyRef());
       this.setStrategyMethodName(node.getStrategyMethodName());
-      this.setExecutorServiceRef(node.getExecutorServiceRef());
-      this.setOnPrepareRef(node.getOnPrepareRef());
-      this.setParallelProcessing(node.getParallelProcessing());
       this.setStrategyMethodAllowNull(node.getStrategyMethodAllowNull());
+      this.setExecutorServiceRef(node.getExecutorServiceRef());
       this.setStreaming(node.getStreaming());
       this.setStopOnException(node.getStopOnException());
       this.setTimeout(node.getTimeout());
+      this.setOnPrepareRef(node.getOnPrepareRef());
       this.setShareUnitOfWork(node.getShareUnitOfWork());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof SplitDefinition. Was " + processor.getClass().getName());

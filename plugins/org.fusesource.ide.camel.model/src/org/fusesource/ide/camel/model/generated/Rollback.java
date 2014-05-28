@@ -38,13 +38,13 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Rollback extends AbstractNode {
 
-	public static final String PROPERTY_MESSAGE = "Rollback.Message";
 	public static final String PROPERTY_MARKROLLBACKONLY = "Rollback.MarkRollbackOnly";
 	public static final String PROPERTY_MARKROLLBACKONLYLAST = "Rollback.MarkRollbackOnlyLast";
+	public static final String PROPERTY_MESSAGE = "Rollback.Message";
 	
-	private String message;
 	private Boolean markRollbackOnly;
 	private Boolean markRollbackOnlyLast;
+	private String message;
 	
     public Rollback() {
     }		
@@ -77,24 +77,6 @@ public class Rollback extends AbstractNode {
 
 
 	
-
-	/**
-	 * @return the message
-	 */
-	public String getMessage() {
-		return this.message;
-	}
-	
-	/**
-	 * @param message the message to set
-	 */
-	public void setMessage(String message) {
-		String oldValue = this.message;
-		this.message = message;
-		if (!isSame(oldValue, message)) {
-		    firePropertyChange(PROPERTY_MESSAGE, oldValue, message);
-		}
-	}
 
 	/**
 	 * @return the markRollbackOnly
@@ -132,6 +114,24 @@ public class Rollback extends AbstractNode {
 		}
 	}
 
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return this.message;
+	}
+	
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		String oldValue = this.message;
+		this.message = message;
+		if (!isSame(oldValue, message)) {
+		    firePropertyChange(PROPERTY_MESSAGE, oldValue, message);
+		}
+	}
+
 
 	
 	/*
@@ -142,12 +142,12 @@ public class Rollback extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  		PropertyDescriptor descMessage = new TextPropertyDescriptor(PROPERTY_MESSAGE, Messages.propertyLabelRollbackMessage);
-      	PropertyDescriptor descMarkRollbackOnly = new BooleanPropertyDescriptor(PROPERTY_MARKROLLBACKONLY, Messages.propertyLabelRollbackMarkRollbackOnly);
+    	PropertyDescriptor descMarkRollbackOnly = new BooleanPropertyDescriptor(PROPERTY_MARKROLLBACKONLY, Messages.propertyLabelRollbackMarkRollbackOnly);
       	PropertyDescriptor descMarkRollbackOnlyLast = new BooleanPropertyDescriptor(PROPERTY_MARKROLLBACKONLYLAST, Messages.propertyLabelRollbackMarkRollbackOnlyLast);
-  		descriptors.put(PROPERTY_MESSAGE, descMessage);
-		descriptors.put(PROPERTY_MARKROLLBACKONLY, descMarkRollbackOnly);
+    		PropertyDescriptor descMessage = new TextPropertyDescriptor(PROPERTY_MESSAGE, Messages.propertyLabelRollbackMessage);
+  		descriptors.put(PROPERTY_MARKROLLBACKONLY, descMarkRollbackOnly);
 		descriptors.put(PROPERTY_MARKROLLBACKONLYLAST, descMarkRollbackOnlyLast);
+		descriptors.put(PROPERTY_MESSAGE, descMessage);
 	}
 	
 	/* (non-Javadoc)
@@ -155,12 +155,12 @@ public class Rollback extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_MESSAGE.equals(id)) {
-			setMessage(Objects.convertTo(value, String.class));
-		}		else if (PROPERTY_MARKROLLBACKONLY.equals(id)) {
+		if (PROPERTY_MARKROLLBACKONLY.equals(id)) {
 			setMarkRollbackOnly(Objects.convertTo(value, Boolean.class));
 		}		else if (PROPERTY_MARKROLLBACKONLYLAST.equals(id)) {
 			setMarkRollbackOnlyLast(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_MESSAGE.equals(id)) {
+			setMessage(Objects.convertTo(value, String.class));
 		}    else {
 			super.setPropertyValue(id, value);
 		}
@@ -171,12 +171,12 @@ public class Rollback extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_MESSAGE.equals(id)) {
-			return this.getMessage();
-		}		else if (PROPERTY_MARKROLLBACKONLY.equals(id)) {
+		if (PROPERTY_MARKROLLBACKONLY.equals(id)) {
 			return this.getMarkRollbackOnly();
 		}		else if (PROPERTY_MARKROLLBACKONLYLAST.equals(id)) {
 			return this.getMarkRollbackOnlyLast();
+		}		else if (PROPERTY_MESSAGE.equals(id)) {
+			return this.getMessage();
 		}    else {
 			return super.getPropertyValue(id);
 		}
@@ -186,9 +186,9 @@ public class Rollback extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		RollbackDefinition answer = new RollbackDefinition();
-    answer.setMessage(toXmlPropertyValue(PROPERTY_MESSAGE, this.getMessage()));
     answer.setMarkRollbackOnly(toXmlPropertyValue(PROPERTY_MARKROLLBACKONLY, this.getMarkRollbackOnly()));
     answer.setMarkRollbackOnlyLast(toXmlPropertyValue(PROPERTY_MARKROLLBACKONLYLAST, this.getMarkRollbackOnlyLast()));
+    answer.setMessage(toXmlPropertyValue(PROPERTY_MESSAGE, this.getMessage()));
         super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
@@ -206,9 +206,9 @@ public class Rollback extends AbstractNode {
     
     if (processor instanceof RollbackDefinition) {
       RollbackDefinition node = (RollbackDefinition) processor;
-      this.setMessage(node.getMessage());
       this.setMarkRollbackOnly(node.getMarkRollbackOnly());
       this.setMarkRollbackOnlyLast(node.getMarkRollbackOnlyLast());
+      this.setMessage(node.getMessage());
     } else {
       throw new IllegalArgumentException("ProcessorDefinition not an instanceof RollbackDefinition. Was " + processor.getClass().getName());
     }

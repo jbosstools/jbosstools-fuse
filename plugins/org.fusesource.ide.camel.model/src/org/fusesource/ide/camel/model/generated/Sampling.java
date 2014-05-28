@@ -39,10 +39,12 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Sampling extends AbstractNode {
 
+	public static final String PROPERTY_INHERITERRORHANDLER = "Sampling.InheritErrorHandler";
 	public static final String PROPERTY_SAMPLEPERIOD = "Sampling.SamplePeriod";
 	public static final String PROPERTY_MESSAGEFREQUENCY = "Sampling.MessageFrequency";
 	public static final String PROPERTY_UNITS = "Sampling.Units";
 	
+	private Boolean inheritErrorHandler;
 	private Long samplePeriod;
 	private Long messageFrequency;
 	private TimeUnit units;
@@ -78,6 +80,24 @@ public class Sampling extends AbstractNode {
 
 
 	
+
+	/**
+	 * @return the inheritErrorHandler
+	 */
+	public Boolean getInheritErrorHandler() {
+		return this.inheritErrorHandler;
+	}
+	
+	/**
+	 * @param inheritErrorHandler the inheritErrorHandler to set
+	 */
+	public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+		Boolean oldValue = this.inheritErrorHandler;
+		this.inheritErrorHandler = inheritErrorHandler;
+		if (!isSame(oldValue, inheritErrorHandler)) {
+		    firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+		}
+	}
 
 	/**
 	 * @return the samplePeriod
@@ -143,10 +163,12 @@ public class Sampling extends AbstractNode {
 	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
 		super.addCustomProperties(descriptors);
 		
-  		PropertyDescriptor descSamplePeriod = new TextPropertyDescriptor(PROPERTY_SAMPLEPERIOD, Messages.propertyLabelSamplingSamplePeriod);
+    	PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSamplingInheritErrorHandler);
+    		PropertyDescriptor descSamplePeriod = new TextPropertyDescriptor(PROPERTY_SAMPLEPERIOD, Messages.propertyLabelSamplingSamplePeriod);
     		PropertyDescriptor descMessageFrequency = new TextPropertyDescriptor(PROPERTY_MESSAGEFREQUENCY, Messages.propertyLabelSamplingMessageFrequency);
       	PropertyDescriptor descUnits = new EnumPropertyDescriptor(PROPERTY_UNITS, Messages.propertyLabelSamplingUnits, TimeUnit.class);
-  		descriptors.put(PROPERTY_SAMPLEPERIOD, descSamplePeriod);
+  		descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+		descriptors.put(PROPERTY_SAMPLEPERIOD, descSamplePeriod);
 		descriptors.put(PROPERTY_MESSAGEFREQUENCY, descMessageFrequency);
 		descriptors.put(PROPERTY_UNITS, descUnits);
 	}
@@ -156,7 +178,9 @@ public class Sampling extends AbstractNode {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (PROPERTY_SAMPLEPERIOD.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+		}		else if (PROPERTY_SAMPLEPERIOD.equals(id)) {
 			setSamplePeriod(Objects.convertTo(value, Long.class));
 		}		else if (PROPERTY_MESSAGEFREQUENCY.equals(id)) {
 			setMessageFrequency(Objects.convertTo(value, Long.class));
@@ -172,7 +196,9 @@ public class Sampling extends AbstractNode {
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (PROPERTY_SAMPLEPERIOD.equals(id)) {
+		if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+			return Objects.<Boolean>getField(this, "inheritErrorHandler");
+		}		else if (PROPERTY_SAMPLEPERIOD.equals(id)) {
 			return this.getSamplePeriod();
 		}		else if (PROPERTY_MESSAGEFREQUENCY.equals(id)) {
 			return this.getMessageFrequency();
@@ -187,6 +213,7 @@ public class Sampling extends AbstractNode {
 	@Override
 	public ProcessorDefinition createCamelDefinition() {
 		SamplingDefinition answer = new SamplingDefinition();
+    answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
     answer.setSamplePeriod(toXmlPropertyValue(PROPERTY_SAMPLEPERIOD, this.getSamplePeriod()));
     answer.setMessageFrequency(toXmlPropertyValue(PROPERTY_MESSAGEFREQUENCY, this.getMessageFrequency()));
     answer.setUnits(toXmlPropertyValue(PROPERTY_UNITS, this.getUnits()));
@@ -207,6 +234,7 @@ public class Sampling extends AbstractNode {
     
     if (processor instanceof SamplingDefinition) {
       SamplingDefinition node = (SamplingDefinition) processor;
+      this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
       this.setSamplePeriod(node.getSamplePeriod());
       this.setMessageFrequency(node.getMessageFrequency());
       this.setUnits(node.getUnits());
