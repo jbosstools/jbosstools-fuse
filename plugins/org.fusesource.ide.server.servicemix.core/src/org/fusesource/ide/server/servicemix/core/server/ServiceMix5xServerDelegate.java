@@ -8,28 +8,19 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.server.servicemix.core.server.subsystems;
+package org.fusesource.ide.server.servicemix.core.server;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.wst.server.core.IServer;
-import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator;
+import org.fusesource.ide.server.servicemix.core.server.subsystems.ServiceMix5xStartupLaunchConfigurator;
+import org.jboss.ide.eclipse.as.core.server.ILaunchConfigConfigurator;
 
 /**
  * @author lhein
  */
-public class ServiceMix4xStartupLaunchConfigurator extends
-		Karaf2xStartupLaunchConfigurator {
+public class ServiceMix5xServerDelegate extends ServiceMixServerDelegate {
 	
-	public ServiceMix4xStartupLaunchConfigurator(IServer server)
-			throws CoreException {
-		super(server);
-	}
-
-	protected String getMainProgram() {
-		return super.getMainProgram();
-	}
-
-	protected String getVMArguments(String karafInstallDir) {
-		return super.getVMArguments(karafInstallDir);
+	@Override
+	public ILaunchConfigConfigurator getLaunchConfigurator() throws CoreException {
+		return new ServiceMix5xStartupLaunchConfigurator(getServer());
 	}
 }

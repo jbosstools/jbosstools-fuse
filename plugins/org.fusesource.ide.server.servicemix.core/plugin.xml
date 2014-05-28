@@ -51,7 +51,7 @@
      </serverType>
      <serverType
            behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
-           class="org.fusesource.ide.server.servicemix.core.server.ServiceMixServerDelegate"
+           class="org.fusesource.ide.server.servicemix.core.server.ServiceMix5xServerDelegate"
            description="%serviceMixServerDescription_50"
            hasConfiguration="true"
            id="org.fusesource.ide.servicemix.server.50"

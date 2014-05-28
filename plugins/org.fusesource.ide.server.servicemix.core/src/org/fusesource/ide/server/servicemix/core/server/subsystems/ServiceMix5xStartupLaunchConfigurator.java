@@ -17,10 +17,10 @@ import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaun
 /**
  * @author lhein
  */
-public class ServiceMix4xStartupLaunchConfigurator extends
+public class ServiceMix5xStartupLaunchConfigurator extends
 		Karaf2xStartupLaunchConfigurator {
 	
-	public ServiceMix4xStartupLaunchConfigurator(IServer server)
+	public ServiceMix5xStartupLaunchConfigurator(IServer server)
 			throws CoreException {
 		super(server);
 	}

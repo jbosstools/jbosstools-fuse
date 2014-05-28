@@ -81,7 +81,7 @@
      </serverType>
      <serverType
            behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
-           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
+           class="org.fusesource.ide.server.karaf.core.server.Karaf3xServerDelegate"
            description="%karafServerDescription_30"
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.30"
