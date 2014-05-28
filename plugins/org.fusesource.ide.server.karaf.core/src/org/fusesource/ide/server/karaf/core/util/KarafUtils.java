@@ -12,10 +12,16 @@
 package org.fusesource.ide.server.karaf.core.util;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.jar.Manifest;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
+import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
 
@@ -59,7 +65,12 @@ public class KarafUtils {
 	public static final int REMOVE_PUBLISH = 3;
 	
 	/**
-	 * retrieves the version of the installation
+	 * the protocol prefix for deployments
+	 */
+	public static final String PROTOCOL_WRAP = "wrap:";
+	
+	/**
+	 * retrieves the version of the runtime installation
 	 * 
 	 * @param installFolder	the installation folder
 	 * @return	the version string or null on errors
@@ -103,96 +114,104 @@ public class KarafUtils {
 		return NO_PUBLISH;
 	}
 	
-	
-	/*
-	 * The following methods appear to be unused. 
+	/**
+	 * 
+	 * @param module
+	 * @return
 	 */
-//	
-//	/**
-//	 * checks if the version required is matched
-//	 * 
-//	 * @param installFolder	the installation folder
-//	 * @param version		the required version or null
-//	 * @return	true if version is null or matched
-//	 */
-//	public static boolean checkVersion(File installFolder, String version) {
-//		boolean match = false;
-//		
-//		if (version != null) {
-//			// we will check for correct version string (. is appended if not there)
-//			String checkVersion = (version.trim().endsWith(".") ? version : version + ".");
-//			String jarVersion = getVersion(installFolder);
-//			if (jarVersion != null && jarVersion.trim().startsWith(checkVersion)) {
-//				// bundle name and version matches
-//				match = true;
-//			}
-//		} else {
-//			// no version specified so always true
-//			match = true;
-//		}
-//		
-//		return match;
-//	}
-//	
-//	/**
-//	 * checks if the given folder contains a valid karaf version with the given
-//	 * version (must match version to return true)
-//	 * 
-//	 * @param path		the path to the installation
-//	 * @param version	the version to match or null if version doesn't matter
-//	 * @return	true if karaf install folder and version matches
-//	 */
-//	public static boolean isValidKarafInstallation(File path, String version) {
-//		boolean valid = false;
-//		
-//		if (path != null && path.isDirectory()) {
-//			File[] folders = path.listFiles(new FileFilter() {
-//				/*
-//				 * (non-Javadoc)
-//				 * @see java.io.FileFilter#accept(java.io.File)
-//				 */
-//				public boolean accept(File checkFile) {
-//					return checkFile.isDirectory() && 
-//						(checkFile.getName().equalsIgnoreCase("bin") ||
-//						 checkFile.getName().equalsIgnoreCase("etc") ||
-//					     checkFile.getName().equalsIgnoreCase("deploy") ||
-//						 checkFile.getName().equalsIgnoreCase("system"));
-//				}
-//			});
-//			// all folders must be there
-//			if (folders.length == 4) {
-//				// now check if the version matches
-//				valid = checkVersion(path, version);
-//			}
-//		}
-//				
-//		return valid;
-//	}
-//	
-//
-//	/**
-//	 * we check for jar files like servicemix-version.jar or activemq-version.jar etc. as they indicate
-//	 * that Karaf is here used as a basement for another product
-//	 * 
-//	 * @param path
-//	 * @return
-//	 */
-//	public static boolean isUsedAsFramework(File path) {
-//		boolean karafUsedAsFramework = false;
-//		
-//		File[] files = new File(path, "lib").listFiles(new FileFilter() {
-//			/*
-//			 * (non-Javadoc)
-//			 * @see java.io.FileFilter#accept(java.io.File)
-//			 */
-//			@Override
-//			public boolean accept(File checkFile) {
-//				return checkFile.getName().toLowerCase().endsWith("-version.jar");
-//			}
-//		});
-//		
-//		karafUsedAsFramework = files.length > 0;
-//		
-//		return karafUsedAsFramework;
-//	}
+	public static String getBundleFilePath(final IModule module) {
+		File projectTargetPath = module.getProject().getLocation().append("target").toFile();
+		File[] jars = projectTargetPath.listFiles(new FileFilter() {
+			/*
+			 * (non-Javadoc)
+			 * @see java.io.FileFilter#accept(java.io.File)
+			 */
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.exists() && pathname.isFile() && pathname.getName().toLowerCase().startsWith(module.getProject().getName()) && pathname.getName().toLowerCase().endsWith(".jar");
+			}
+		});
+		if (jars.length>0) {
+			return String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", PROTOCOL_WRAP, jars[0].getPath(), module.getProject().getName(), getBundleVersion(module, jars[0]));
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param module
+	 * @param f
+	 * @return
+	 */
+	public static String getBundleVersion(IModule module, File f) {
+		String version = null;
+		IFile manifest = module.getProject().getFile("target/classes/META-INF/MANIFEST.MF");
+		if (!manifest.exists()) {
+			manifest = module.getProject().getFile("META-INF/MANIFEST.MF");
+		}
+		if (manifest.exists()) {
+			try {
+				Manifest mf = new Manifest(new FileInputStream(manifest.getLocation().toFile()));
+				version = mf.getMainAttributes().getValue("Bundle-Version");
+			} catch (IOException ex) {
+				version = null;
+			}
+		} else {
+			// no OSGi bundle - lets take the project name instead
+			version = null;
+		}
+
+		// no manifest - so grab it from the file name
+		if (f != null) {
+			if (version == null) {
+				version = "";
+				String[] parts = f.getName().split("-");
+				for (String part : parts) {
+					if (!Character.isDigit(part.charAt(0))) {
+						if (version.length()==0) continue;
+						version += "." + part;
+					}
+					version += part.trim();
+				}
+				version = version.substring(0, version.indexOf(".jar"));
+			}
+		} else {
+			// no file...parse it from the bundle url
+			String uri = getBundleFilePath(module);
+			version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
+		}
+		
+		return version;
+	}
+
+	/**
+	 * retrieve all needed information to connect to JMX server
+	 * @param server
+	 * @return
+	 */
+	public static String getJMXConnectionURL(IServer server) {
+		String retVal = "";
+		BaseConfigPropertyProvider manProv = new BaseConfigPropertyProvider(server.getRuntime().getLocation().append("etc").append("org.apache.karaf.management.cfg").toFile());
+		BaseConfigPropertyProvider sysProv = new BaseConfigPropertyProvider(server.getRuntime().getLocation().append("etc").append("system.properties").toFile());
+		
+		String url = manProv.getConfigurationProperty("serviceUrl");
+		if (url == null) return null;
+		url = url.trim();
+		int pos = -1;
+		while ((pos = url.indexOf("${")) != -1) {
+			retVal += url.substring(0, pos);
+			String placeHolder = url.substring(url.indexOf("${")+2, url.indexOf("}")).trim();
+			String replacement = manProv.getConfigurationProperty(placeHolder);
+			if (replacement == null) {
+				replacement = sysProv.getConfigurationProperty(placeHolder);
+			}
+			if (replacement == null) {
+				return null;
+			} else {
+				retVal += replacement.trim();
+				url = url.substring(pos + placeHolder.length() + 3);
+			}
+		}
+		return retVal;
+	}
 }

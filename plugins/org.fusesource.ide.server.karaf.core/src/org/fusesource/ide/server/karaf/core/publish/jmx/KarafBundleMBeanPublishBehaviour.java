@@ -97,28 +97,6 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	}
 	
 	@Override
-	public String getBundleStatus(MBeanServerConnection mbsc, long bundleId) {
-		try {
-			TabularData	tabData = (TabularData)mbsc.getAttribute(this.objectName, "Bundles"); 
-			final Collection<?> rows = tabData.values();
-			for (Object row : rows) {
-				if (row instanceof CompositeData) {
-					CompositeData cd = (CompositeData) row;
-					String id = cd.get("ID").toString();
-					String state = cd.get("State").toString();
-					long longID = Long.parseLong(id); 
-					if (bundleId == longID) {
-						return state;
-					}	
-				}
-			}
-		} catch (Exception ex) {
-			// ignore
-		}
-		return null;
-	}
-	
-	@Override
 	public boolean canHandle(MBeanServerConnection mbsc) {
 		try {
 			this.objectName = new ObjectName(KARAF_BUNDLE_MBEAN);

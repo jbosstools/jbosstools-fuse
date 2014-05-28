@@ -102,28 +102,6 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	}
 	
 	@Override
-	public String getBundleStatus(MBeanServerConnection mbsc, long bundleId) {
-		try {
-			TabularData tabData = (TabularData)mbsc.invoke(this.objectNameBundleState, "listBundles", null, null);
-			final Collection<?> rows = tabData.values();
-			for (Object row : rows) {
-				if (row instanceof CompositeData) {
-					CompositeData cd = (CompositeData) row;
-					String id = cd.get("Identifier").toString();
-					String state = cd.get("State").toString();
-					long longID = Long.parseLong(id); 
-					if (bundleId == longID) {
-						return state;
-					}	
-				}
-			}
-		} catch (Exception ex) {
-			// ignore
-		}
-		return null;
-	}
-	
-	@Override
 	public boolean canHandle(MBeanServerConnection mbsc) {
 		try {
 	    	this.objectNameBundleState = new ObjectName(OSGI_BUNDLESTATE_MBEAN);

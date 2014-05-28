@@ -108,10 +108,12 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 	protected ILaunchConfigConfigurator getConfigurator() throws CoreException {
 		KarafServerDelegate serverDel = (KarafServerDelegate)getServer().loadAdapter(KarafServerDelegate.class, new NullProgressMonitor());
 		if (serverDel != null) {
-			return serverDel.getLaunchConfigurator();
+			ILaunchConfigConfigurator cfg = serverDel.getLaunchConfigurator();
+			if (cfg != null) {
+				return cfg;
+			}
 		}
-		// TODO does this make sense?
-		return new Karaf2xStartupLaunchConfigurator(getServer());
+		throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to retrieve a launch configuration for server type " + getServer().getServerType().getId()));
 	}
 
 	/*

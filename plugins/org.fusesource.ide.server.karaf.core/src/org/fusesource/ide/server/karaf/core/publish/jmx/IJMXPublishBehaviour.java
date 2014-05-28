@@ -60,15 +60,6 @@ public interface IJMXPublishBehaviour {
 	public boolean uninstallBundle(MBeanServerConnection mbsc, long bundleId);
 	
 	/**
-	 * determines the status of the bundle on the server
-	 * 
-	 * @param mbsc
-	 * @param bundleId
-	 * @return	the bundles status (ACTIVE, RESOLVED, INSTALLED, etc) or null if not found
-	 */
-	public String getBundleStatus(MBeanServerConnection mbsc, long bundleId);
-	
-	/**
 	 * checks if the behaviour class can handle a given jmx connection
 	 * 
 	 * @param mbsc

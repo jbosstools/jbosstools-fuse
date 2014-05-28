@@ -233,6 +233,18 @@
          </subsystemMapping>
          
          <subsystem
+            system="modules"
+            id="modules.karaf.local.default"
+            name="Local Karaf Module State Controller"
+            class="org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleStateController">
+         </subsystem>
+         <subsystemMapping
+            id="modules.karaf.local.default"
+            mappedId="modules.karaf.local"
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.30">
+         </subsystemMapping>
+         
+         <subsystem
             system="port"
             id="port.karaf.local.default"
             name="Local Karaf Port Controller"
