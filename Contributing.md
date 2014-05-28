@@ -17,7 +17,7 @@ At any time, you can pull changes from the upstream and merge them onto your mas
 The general idea is to keep your 'master' branch in-sync with the 'upstream/master'.
 
 ## Building JBoss Fuse Tooling
-To build _JBoss Fuse Tooling_ requires specific versions of Java (1.6+) and +Maven (3.0+). See this [link](https://github.com/fusesource/fuseide/blob/master/ReadMe.md) for more information on how to setup, run and configure build.
+To build _JBoss Fuse Tooling_ requires specific versions of Java (1.6+) and +Maven (3.0+). See this [link](https://github.com/fusesource/fuseide/blob/master/Build.md) for more information on how to setup, run and configure build.
 
 This command will run the build:
 
