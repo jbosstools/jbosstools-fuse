@@ -55,20 +55,20 @@ And then [generate a pull-request](http://help.github.com/pull-requests/) where 
 ## Testing the Update Site
 If you introduced new dependencies or changed versions it is always a good idea to check if the update site still contains everything needed to install successfully. To test the update site contents here's what to do:
 
-	- download and install a plain vanilla Eclipse Kepler, Luna or whatever version used currently  
-	- run this vanilla Eclipse
-	- in Eclipse choose _Install new software_, then _Add_ to add a new update site
-	- choose _Local_ in the following dialog and set the location to file://<your path to fuseide>/site/target/repository
-	- close the dialog with _OK_ and then select the new added update site from the drop down box
-	- then in the tree below check all the _JBoss Fuse Tooling_ entries
-	- hit _Next_ to install the software
-	- if all is fine it should install without errors, otherwise it will point you to the problem when you examine the details
+- download and install a plain vanilla Eclipse Kepler, Luna or whatever version used currently  
+- run this vanilla Eclipse
+- in Eclipse choose _Install new software_, then _Add_ to add a new update site
+- choose _Local_ in the following dialog and set the location to file://<your path to fuseide>/site/target/repository
+- close the dialog with _OK_ and then select the new added update site from the drop down box
+- then in the tree below check all the _JBoss Fuse Tooling_ entries
+- hit _Next_ to install the software
+- if all is fine it should install without errors, otherwise it will point you to the problem when you examine the details
 
 ## Code generation
-_IMPORTANT:_
- 
-	This step is only required if the Apache Camel model, the documentation or used archetypes and xml catalogs changed! 
-	Usually thats the case if the underlying Apache Camel version changed.
+__IMPORTANT:__
+
+_This step is only required if the Apache Camel model, the documentation or used archetypes and xml catalogs changed! 
+Usually thats the case if the underlying Apache Camel version changed._
 
 ### How to generate	model classes
 From the _fuseide_ directory type:
