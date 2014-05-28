@@ -40,6 +40,8 @@ public class Messages extends NLS {
 	public static String StartupPollerNotFound;
 	public static String ShutdownPollerNotFound;
 
+	public static String CreateDownloadRuntimes;
+	public static String LoadRemoteRuntimes;
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}

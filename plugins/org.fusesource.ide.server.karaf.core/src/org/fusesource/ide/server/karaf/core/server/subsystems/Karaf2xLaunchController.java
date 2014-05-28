@@ -110,7 +110,7 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 		if (serverDel != null) {
 			return serverDel.getLaunchConfigurator();
 		}
-			
+		// TODO does this make sense?
 		return new Karaf2xStartupLaunchConfigurator(getServer());
 	}
 

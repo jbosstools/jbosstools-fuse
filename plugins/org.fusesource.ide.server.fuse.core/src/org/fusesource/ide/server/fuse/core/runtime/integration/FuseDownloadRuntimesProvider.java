@@ -18,8 +18,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.fusesource.ide.commons.util.BundleResourceUtils;
 import org.fusesource.ide.server.fuse.core.Activator;
+import org.fusesource.ide.server.karaf.core.runtime.integration.AbstractStacksDownloadRuntimesProvider;
 import org.jboss.jdf.stacks.model.Stacks;
-import org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider;
 import org.jboss.tools.runtime.core.model.DownloadRuntime;
 import org.jboss.tools.stacks.core.model.StacksManager;
 
@@ -30,20 +30,12 @@ import org.jboss.tools.stacks.core.model.StacksManager;
 public class FuseDownloadRuntimesProvider extends AbstractStacksDownloadRuntimesProvider {
 	
 	private class CustomStacksManager extends StacksManager {
-		/*
-		 * (non-Javadoc)
-		 * @see org.jboss.tools.stacks.core.model.StacksManager#getStacksFromFile(java.io.File)
-		 */
 		@Override
 		public Stacks getStacksFromFile(File f) throws IOException {
 			return super.getStacksFromFile(f);
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider#getStacks(org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	protected Stacks[] getStacks(IProgressMonitor monitor) {
 		try {
@@ -59,20 +51,12 @@ public class FuseDownloadRuntimesProvider extends AbstractStacksDownloadRuntimes
 		return new Stacks[0];
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider#traverseStacks(org.jboss.jdf.stacks.model.Stacks, java.util.ArrayList, org.eclipse.core.runtime.IProgressMonitor)
-	 */
 	@Override
 	protected void traverseStacks(Stacks stacks,
 			ArrayList<DownloadRuntime> list, IProgressMonitor monitor) {
 		traverseStacks(stacks, list, "OSGI_SERVER", monitor);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider#getLegacyId(java.lang.String)
-	 */
 	@Override
 	protected String getLegacyId(String id) {
 		// TODO Auto-generated method stub

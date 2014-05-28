@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate;
 import org.fusesource.ide.server.servicemix.core.Activator;
+import org.fusesource.ide.server.servicemix.core.util.IServiceMixToolingConstants;
 
 /**
  * @author lhein
@@ -31,9 +32,11 @@ public class ServiceMixRuntimeDelegate extends KarafRuntimeDelegate {
 		String id = getRuntime().getRuntimeType().getId();
 		String version = getVersion();
 		if (version != null && version.trim().startsWith("4.5")) {
-			if (!id.toLowerCase().endsWith("servicemix.runtime.45")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+			if (!id.toLowerCase().equals(IServiceMixToolingConstants.RUNTIME_SMX_45)) 
+				return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else if (version != null && version.trim().startsWith("5.0")) {
-			if (!id.toLowerCase().endsWith("servicemix.runtime.50")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+			if (!id.toLowerCase().equals(IServiceMixToolingConstants.RUNTIME_SMX_50)) 
+				return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
 		}
