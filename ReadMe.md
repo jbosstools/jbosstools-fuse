@@ -166,3 +166,8 @@ Example:
     ./changeVersion.sh 7.3.0-SNAPSHOT 7.3.0
     
 
+Contributing
+================
+
+If you want to contribute to Fuse Tooling make sure you read the [contribution guide](https://github.com/fusesource/fuseide/blob/master/Contributing.md "Contribution Guide").
+
