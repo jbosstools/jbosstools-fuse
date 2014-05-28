@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.fusesource.ide.commons.util.BundleResourceUtils;
+import org.fusesource.ide.server.karaf.core.runtime.integration.AbstractStacksDownloadRuntimesProvider;
 import org.fusesource.ide.server.servicemix.core.Activator;
 import org.jboss.jdf.stacks.model.Stacks;
-import org.jboss.tools.as.runtimes.integration.util.AbstractStacksDownloadRuntimesProvider;
 import org.jboss.tools.runtime.core.model.DownloadRuntime;
 import org.jboss.tools.stacks.core.model.StacksManager;
 
