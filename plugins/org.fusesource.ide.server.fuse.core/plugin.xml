@@ -138,6 +138,12 @@
             mappedId="publish.fuse.local"
             serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
          </subsystemMapping>
+         
+         <subsystemMapping
+            id="modules.karaf.local.default"
+            mappedId="modules.fuse.local"
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+         </subsystemMapping>
                   
          <subsystemMapping
             id="port.karaf.local.default"

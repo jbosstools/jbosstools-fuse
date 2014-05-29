@@ -170,6 +170,12 @@
          </subsystemMapping>
          
          <subsystemMapping
+            id="modules.karaf.local.default"
+            mappedId="modules.smx.local"
+            serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
+         </subsystemMapping>
+         
+         <subsystemMapping
             id="port.karaf.local.default"
             mappedId="port.servicemix.local"
             serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">

@@ -18,7 +18,7 @@ import org.eclipse.wst.server.core.IServer;
  * 
  * @author lhein
  */
-public enum OSGiBundleStates {
+public enum OSGiBundleState {
 	
 	UNKNOWN		("UNKNOWN", 	IServer.STATE_UNKNOWN),		// dummy unknown
 	UNINSTALLED	("UNINSTALLED", IServer.STATE_UNKNOWN),		// uninstalled means removed from framework
@@ -36,7 +36,7 @@ public enum OSGiBundleStates {
 	 * @param stateInFramework
 	 * @param mappedState
 	 */
-	private OSGiBundleStates(String stateInFramework, int mappedState) {
+	private OSGiBundleState(String stateInFramework, int mappedState) {
 		this.stateInFramework = stateInFramework;
 		this.mappedState = mappedState;
 	}
@@ -48,7 +48,7 @@ public enum OSGiBundleStates {
 	 * @return	the mapped server state or IServer.STATE_UNKNOWN if no match
 	 */
 	public static int getStatusForString(String statusString) {
-		for (OSGiBundleStates state : values()) {
+		for (OSGiBundleState state : values()) {
 			if (state.stateInFramework.equalsIgnoreCase(statusString.trim())) {
 				return state.mappedState;
 			}

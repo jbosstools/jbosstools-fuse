@@ -35,6 +35,11 @@ import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IModuleStateController;
 
+/**
+ * this module state controller uses the osgi.core framework mbean to query bundle states
+ * 
+ * @author lhein
+ */
 public class OSGiBundleStateController extends AbstractSubsystemController implements IModuleStateController{
 
 	private static final String OSGI_FRAMEWORK_MBEAN = "osgi.core:type=framework,*";
@@ -164,7 +169,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 					String state = cd.get("State").toString();
 					long longID = Long.parseLong(id); 
 					if (bundleId == longID) {
-						return OSGiBundleStates.getStatusForString(state);
+						return OSGiBundleState.getStatusForString(state);
 					}	
 				}
 			}
@@ -299,7 +304,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
-				while (getBundleStatus(id) != IServer.STATE_STARTED) {
+				while (getBundleStatus(id) != IServer.STATE_STARTED && !monitor.isCanceled()) {
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException ex) {
