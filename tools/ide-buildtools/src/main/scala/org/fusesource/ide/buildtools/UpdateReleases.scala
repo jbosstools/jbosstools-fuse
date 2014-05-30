@@ -11,17 +11,16 @@ import org.fusesource.insight.maven.aether.Authentications
  */
 object UpdateReleases {
 
-  val fuseArchetypeVersion = System.getProperty("fabric-version", "7.2.0.redhat-010")
-  val activemqVersion = System.getProperty("activemq-version", "5.7.0.redhat-010")
-  val camelVersion = System.getProperty("camel-version", "2.10.0.redhat-010")
+  val fuseArchetypeVersion = System.getProperty("fabric-version", "7.2.0.redhat-060")
+  val activemqVersion = System.getProperty("activemq-version", "5.9.0.redhat-610379")
+  val camelVersion = System.getProperty("camel-version", "2.12.0.redhat-610379")
 
   val fuseVersion = "redhat-" + fuseArchetypeVersion.split("-").last
 
   val releaseRepo = if (true)
-    "nexus/content/groups/ea"
-    //"nexus/content/groups/m2-release-proxy"
+    "nexus/content/groups/fs-public"
   else
-    "nexus/content/repositories/releases"
+    "nexus/content/groups/ea"
 
   val fuseAuthenticator = new FuseRepoAuthenticator()
 }
