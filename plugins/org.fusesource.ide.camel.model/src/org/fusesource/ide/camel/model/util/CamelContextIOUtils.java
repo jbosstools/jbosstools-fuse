@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.camel.editor.editor.io;
+package org.fusesource.ide.camel.model.util;
  
 import org.eclipse.core.resources.IFile;
 import org.fusesource.camel.tooling.util.ValidationHandler;

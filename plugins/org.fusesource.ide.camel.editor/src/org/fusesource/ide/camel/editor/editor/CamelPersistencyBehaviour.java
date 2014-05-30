@@ -24,8 +24,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.fusesource.camel.tooling.util.ValidationHandler;
 import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.io.CamelContextIOUtils;
 import org.fusesource.ide.camel.model.io.IRemoteCamelEditorInput;
+import org.fusesource.ide.camel.model.util.CamelContextIOUtils;
 
 /**
  * @author lhein

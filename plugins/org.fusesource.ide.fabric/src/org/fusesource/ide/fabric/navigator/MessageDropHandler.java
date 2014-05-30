@@ -29,9 +29,9 @@ import org.fusesource.ide.commons.ui.Workbenches;
 import org.fusesource.ide.commons.ui.drop.DropHandlerSupport;
 import org.fusesource.ide.commons.ui.views.ColumnViewSupport;
 import org.fusesource.ide.commons.util.IFiles;
+import org.fusesource.ide.commons.util.IOUtils;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.views.MessagesView;
-import org.fusesource.scalate.util.IOUtil;
 
 
 public class MessageDropHandler extends DropHandlerSupport {
@@ -90,9 +90,9 @@ public class MessageDropHandler extends DropHandlerSupport {
 		Object body = null;
 		if (binary) {
 			// TODO XML encode???
-			body = IOUtil.loadBinaryFile(file);
+			body = IOUtils.loadBinaryFile(file);
 		} else {
-			String text = IOUtil.loadTextFile(file, "UTF-8");
+			String text = IOUtils.loadTextFile(file, "UTF-8");
 			// TODO no need to escape as we do it in the Body class!
 			//text = XmlHelper.escape(text);
 			body = text;

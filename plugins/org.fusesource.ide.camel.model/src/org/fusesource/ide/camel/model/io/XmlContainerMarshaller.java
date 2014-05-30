@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.camel.model.RouteDefinition;
@@ -23,7 +24,7 @@ import org.fusesource.camel.tooling.util.RouteXml;
 import org.fusesource.camel.tooling.util.XmlModel;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.scalate.util.IOUtil;
+import org.fusesource.ide.commons.util.IOUtils;
 
 
 public class XmlContainerMarshaller extends ContainerMarshallerSupport {
@@ -78,9 +79,13 @@ public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 		RouteXml helper = createXmlHelper();
 		List<RouteDefinition> list = model.createRouteDefinitions();
 
-		String text = IOUtil.loadText(ifile.getContents(), ifile.getCharset());
-		String newText = helper.marshalToText(text, list);
-		ifile.setContents(new ByteArrayInputStream(newText.getBytes()), true, true, monitor);
+		try {
+			String text = IOUtils.loadText(ifile.getContents(), ifile.getCharset());
+			String newText = helper.marshalToText(text, list);
+			ifile.setContents(new ByteArrayInputStream(newText.getBytes()), true, true, monitor);
+		} catch (IOException ex) {
+			Activator.getLogger().error("Unable to load text from stream", ex);
+		}
 	}
 
 	@Override

@@ -89,10 +89,10 @@ import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.camel.model.io.ICamelEditorInput;
 import org.fusesource.ide.camel.model.io.IRemoteCamelEditorInput;
 import org.fusesource.ide.commons.ui.Selections;
+import org.fusesource.ide.commons.util.IOUtils;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
-import org.fusesource.scalate.util.IOUtil;
 
 /**
  * @author lhein
@@ -382,7 +382,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
 				@Override
 				public String getXml() throws IOException {
-					return IOUtil.loadText(uriInput.getURI().toURL().openStream(), "UTF-8");
+					return IOUtils.loadText(uriInput.getURI().toURL().openStream(), "UTF-8");
 				}
 			};
         } else if (input instanceof DiagramEditorInput) {
@@ -397,7 +397,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
                 @Override
                 public String getXml() throws IOException {
                     try {
-                        return IOUtil.loadText(new URI(uriInput.getUri().toString()).toURL().openStream(), "UTF-8");
+                        return IOUtils.loadText(new URI(uriInput.getUri().toString()).toURL().openStream(), "UTF-8");
                     } catch (URISyntaxException e) {
                         throw new IOException("Unable to resolve resource.", e);
                     }
@@ -967,7 +967,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 				if (url == null) {
 					Activator.getLogger().warning("Unsupported URI type " + uri);
 				} else {
-					String xml = IOUtil.loadText(url.openStream(), "UTF-8");
+					String xml = IOUtils.loadText(url.openStream(), "UTF-8");
 					this.setModel(data.marshaller.loadRoutesFromText(xml));
 				}
 			} else {

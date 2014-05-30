@@ -29,10 +29,10 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.io.ICamelEditorInput;
+import org.fusesource.ide.commons.util.IOUtils;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.camel.Messages;
 import org.fusesource.ide.fabric.camel.navigator.CamelContextNode;
-import org.fusesource.scalate.util.IOUtil;
 
 
 public class CamelContextNodeEditorInput implements ICamelEditorInput {
@@ -126,7 +126,7 @@ public class CamelContextNodeEditorInput implements ICamelEditorInput {
 				IFileStore fileStore = fileSystem.fromLocalFile(tempFile);
 
 				String xml = contextNode.getXmlString();
-				IOUtil.writeText(tempFile, xml);
+				IOUtils.writeText(tempFile, xml);
 
 				return new CamelFileStoreEditorInput(fileStore, contextNode);
 			} catch (Exception e) {
