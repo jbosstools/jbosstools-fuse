@@ -19,6 +19,9 @@ import javax.management.ObjectName;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
+import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleState;
+
 /**
  * publisher using the org.apache.karaf:type=bundles mbean
  * 
@@ -59,6 +62,28 @@ public class KarafBundlesMBeanPublishBehaviour extends
 		return -1;
 	}
 
+	@Override
+	public int getBundleStatus(MBeanServerConnection mbsc, long bundleId) {
+		try {
+			TabularData	tabData = (TabularData)mbsc.invoke(this.objectName, "list", null, null);
+			final Collection<?> rows = tabData.values();
+			for (Object row : rows) {
+				if (row instanceof CompositeData) {
+					CompositeData cd = (CompositeData) row;
+					String id = cd.get("ID").toString();
+					String state = cd.get("State").toString();
+					long longID = Long.parseLong(id); 
+					if (bundleId == longID) {
+						return OSGiBundleState.getStatusForString(state);
+					}	
+				}
+			}
+		} catch (Exception ex) {
+			// ignore
+		}
+		return IServer.STATE_UNKNOWN;
+	}
+	
 	@Override
 	public boolean canHandle(MBeanServerConnection mbsc) {
 		try {

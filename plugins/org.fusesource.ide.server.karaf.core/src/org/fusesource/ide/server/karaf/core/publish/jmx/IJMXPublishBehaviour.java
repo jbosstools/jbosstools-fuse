@@ -66,4 +66,13 @@ public interface IJMXPublishBehaviour {
 	 * @return	true if the behaviour can be used
 	 */
 	public boolean canHandle(MBeanServerConnection mbsc);
+	
+	/**
+	 * returns the bundle status of the bundle with the given id
+	 * 
+	 * @param mbsc
+	 * @param bundleId	the bundle id
+	 * @return	the status as IServer.STATE_xxx
+	 */
+	public int getBundleStatus(MBeanServerConnection mbsc, long bundleId);
 }

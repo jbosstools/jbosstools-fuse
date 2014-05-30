@@ -22,9 +22,9 @@ public interface IPublishBehaviour {
 	 * 
 	 * @param server	the server to publish to
 	 * @param module	the module to publish
-	 * @return	true on success
+	 * @return	the module state after publish
 	 */
-	public boolean publish(IServer server, IModule[] module);
+	public int publish(IServer server, IModule[] module);
 	
 	/**
 	 * uninstalls the given module from the server
