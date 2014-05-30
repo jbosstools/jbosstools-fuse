@@ -27,9 +27,13 @@ import javax.management.remote.JMXServiceURL;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
@@ -182,20 +186,19 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	@Override
 	public boolean canRestartModule(IModule[] module) {
 		try {
-			connect();
+			if (this.mbsc == null) connect();
 			String symbolicName = module[0].getProject().getName();
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
 				int status = getBundleStatus(id);
-				// restart is working for states STARTED and STOPPED
 				return  status == IServer.STATE_STARTED ||
 					    status == IServer.STATE_STOPPED;
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			disconnect();
+			//disconnect();
 		}
 		return false;
 	}
@@ -204,7 +207,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	public int startModule(IModule[] module, IProgressMonitor monitor)
 			throws CoreException {
 		try {
-			connect();
+			if (this.mbsc == null) connect();
 			String symbolicName = module[0].getProject().getName();
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
@@ -215,7 +218,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			disconnect();
+//			disconnect();
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -224,7 +227,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	public int stopModule(IModule[] module, IProgressMonitor monitor)
 			throws CoreException {
 		try {
-			connect();
+			if (this.mbsc == null) connect();
 			String symbolicName = module[0].getProject().getName();
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
@@ -235,7 +238,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			disconnect();
+//			disconnect();
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -244,7 +247,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	public int restartModule(IModule[] module, IProgressMonitor monitor)
 			throws CoreException {
 		try {
-			connect();
+			if (this.mbsc == null) connect();
 			String symbolicName = module[0].getProject().getName();
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
@@ -255,7 +258,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			disconnect();
+//			disconnect();
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -263,7 +266,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	@Override
 	public int getModuleState(IModule[] module, IProgressMonitor monitor) {
 		try {
-			connect();
+			if (this.mbsc == null) connect();
 			String symbolicName = module[0].getProject().getName();
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
@@ -273,7 +276,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			disconnect();
+//			disconnect();
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -281,7 +284,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	@Override
 	public boolean isModuleStarted(IModule[] module, IProgressMonitor monitor) {
 		try {
-			connect();
+			if (this.mbsc == null) connect();
 			String symbolicName = module[0].getProject().getName();
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
@@ -291,7 +294,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			disconnect();
+//			disconnect();
 		}
 		return false;
 	}
@@ -299,50 +302,111 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	@Override
 	public void waitModuleStarted(IModule[] module, IProgressMonitor monitor) {
 		try {
-			connect();
+			if (this.mbsc == null) connect();
 			String symbolicName = module[0].getProject().getName();
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
-				while (getBundleStatus(id) != IServer.STATE_STARTED && !monitor.isCanceled()) {
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException ex) {
-						break;
-					}
-				}
+				waitModuleStarted(symbolicName, version, id, monitor);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			disconnect();
+//			disconnect();
 		}		
 	}
 
 	@Override
-	public void waitModuleStarted(IModule[] module, int maxDelay) {
+	public void waitModuleStarted(IModule[] module, final int maxDelay) {
 		try {
-			connect();
+			if (this.mbsc == null) connect();
 			String symbolicName = module[0].getProject().getName();
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
-				long timeWaited = 0L;
-				// we take maxDelay as seconds 
-				long sleepTime = Math.min(500L, maxDelay * 1000L); // convert to millis
-				while (getBundleStatus(id) != IServer.STATE_STARTED && timeWaited <= maxDelay) {
-					try {
-						Thread.sleep(sleepTime);
-						timeWaited += sleepTime;
-					} catch (InterruptedException ex) {
-						break;
-					}
-				}
+				waitModuleStarted(symbolicName, version, id, maxDelay);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			disconnect();
+//			disconnect();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param server
+	 * @param module
+	 * @param monitor
+	 */
+	protected void waitModuleStarted(String bundleSymbolicName, String version, long bundleId, IProgressMonitor monitor) {
+		try {
+			boolean waitedOnce = false;
+
+			while (!monitor.isCanceled()) {
+				boolean done = getBundleStatus(bundleId) == IServer.STATE_STARTED;
+				if (done) {
+					return;
+				}
+				if(!waitedOnce) {
+					String info = "Module {0} on {1} not yet fully deployed. Waiting..."; //$NON-NLS-1$
+					IStatus s = new Status(IStatus.INFO, Activator.PLUGIN_ID, 
+						NLS.bind(info, bundleSymbolicName, getServer().getName()),null);
+					Activator.getDefault().getLog().log(s);
+				}
+				waitedOnce = true;
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException ie) {
+					// Ignore, intentional
+				}
+			}
+
+			String warning = "Module {0} on {1} still not ready. Aborting delay."; //$NON-NLS-1$
+			IStatus s = new Status(
+					IStatus.WARNING, Activator.PLUGIN_ID, 
+					NLS.bind(warning, bundleSymbolicName, getServer().getName()), null);
+			Activator.getDefault().getLog().log(s);
+		} catch (Exception e) {
+			String er = "Error occurred while waiting for {0} to start on server {1}"; //$NON-NLS-1$
+			IStatus s = new Status(
+					IStatus.WARNING, Activator.PLUGIN_ID,
+					NLS.bind(er, bundleSymbolicName, getServer().getName()), e);
+			Activator.getDefault().getLog().log(s);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param bundleSymbolicName
+	 * @param version
+	 * @param bundleId
+	 * @param maxDelay
+	 */
+	protected void waitModuleStarted(String bundleSymbolicName, String version, long bundleId, final long maxDelay) {
+		final NullProgressMonitor monitor = new NullProgressMonitor();
+		Thread t = new Thread(){
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(maxDelay);
+				} catch(InterruptedException ie) {
+					return;
+				}
+				synchronized(monitor) {
+					monitor.setCanceled(true);
+				}
+			}
+		};
+		t.start();
+
+		// synchronous call to wait
+		waitModuleStarted(bundleSymbolicName, version, bundleId, monitor);
+
+		// call is over, can notify the thread to go finish itself
+		synchronized(monitor) {
+			if( !monitor.isCanceled() )
+				t.interrupt();
 		}
 	}
 }

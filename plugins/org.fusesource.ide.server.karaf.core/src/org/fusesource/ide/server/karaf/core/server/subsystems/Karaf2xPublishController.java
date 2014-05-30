@@ -96,29 +96,25 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 		case KarafUtils.FULL_PUBLISH:
 			// do a build
 			boolean built = runBuild(module[0], monitor);
-			boolean done = this.publisher.publish(getServer(), module);
-			if (done) {
-				 ((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
-				 ((Server)getServer()).setModuleState(module, IServer.PUBLISH_STATE_NONE);
-			}
+			int status = this.publisher.publish(getServer(), module);
+			 ((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
+			 ((Server)getServer()).setModuleState(module, status);
 			break;
 		case KarafUtils.INCREMENTAL_PUBLISH:
 			// do a build
 			built = runBuild(module[0], monitor);
-			done = this.publisher.publish(getServer(), module);
-			if (done) {
-				 ((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
-				 ((Server)getServer()).setModuleState(module, IServer.PUBLISH_STATE_NONE);
-			}
+			status = this.publisher.publish(getServer(), module);
+			 ((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
+			 ((Server)getServer()).setModuleState(module, status);
 			break;
 		case KarafUtils.NO_PUBLISH:
 			// we can skip this
 			break;
 		case KarafUtils.REMOVE_PUBLISH:
-			done = this.publisher.uninstall(getServer(), module);
+			boolean done = this.publisher.uninstall(getServer(), module);
 			if (done) {
 				 ((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
-				 ((Server)getServer()).setModuleState(module, IServer.PUBLISH_STATE_NONE);
+				 ((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
 			}
 			break;
 		default:

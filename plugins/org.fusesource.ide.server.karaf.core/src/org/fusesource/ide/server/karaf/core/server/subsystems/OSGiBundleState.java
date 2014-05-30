@@ -22,7 +22,7 @@ public enum OSGiBundleState {
 	
 	UNKNOWN		("UNKNOWN", 	IServer.STATE_UNKNOWN),		// dummy unknown
 	UNINSTALLED	("UNINSTALLED", IServer.STATE_UNKNOWN),		// uninstalled means removed from framework
-	INSTALLED	("INSTALLED", 	IServer.STATE_UNKNOWN),		// installed means not resolved and unable to start
+	INSTALLED	("INSTALLED", 	IServer.STATE_STOPPED),		// installed means not resolved but able to try a start
 	RESOLVED	("RESOLVED", 	IServer.STATE_STOPPED),		// resolved means able to start
 	STARTING	("STARTING", 	IServer.STATE_STARTING),	// starting
 	STOPPING	("STOPPING", 	IServer.STATE_STOPPING),	// stopping
@@ -54,5 +54,14 @@ public enum OSGiBundleState {
 			}
 		}
 		return IServer.STATE_UNKNOWN;
+	}
+	
+	public static String getStatusText(String status) {
+		for (OSGiBundleState state : values()) {
+			if (state.stateInFramework.equalsIgnoreCase(status.trim())) {
+				return state.name();
+			}
+		}
+		return UNKNOWN.name();
 	}
 }

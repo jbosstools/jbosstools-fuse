@@ -107,33 +107,31 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 * @see org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour#publish(org.eclipse.wst.server.core.IServer, org.eclipse.wst.server.core.IModule)
 	 */
 	@Override
-	public boolean publish(IServer server, IModule[] module) {
+	public int publish(IServer server, IModule[] module) {
 		// TODO: for now we do the connect each time...very inefficient...try to cache it
 		if (this.jmxc == null) connect(server);
 
-		boolean published = false;
 		try {
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			// first check if there is a bundle installed with that name already
 			long bundleId = this.jmxPublisher.getBundleId(mbsc, module[0].getProject().getName(), version);
 			if (bundleId != -1) {
 				// if yes - reinstall / update the bundle
-				published = reinstallBundle(server, module[0], bundleId);
+				reinstallBundle(server, module[0], bundleId);
 			} else {
 				// if no  - fresh install
-				published = installBundle(server, module[0]);
+				bundleId = installBundle(server, module[0]);
 			}			
-			if (published) {
+			if (bundleId != -1) {
 				// a final check if the bundle is really installed
-				long bid = this.jmxPublisher.getBundleId(mbsc, module[0].getProject().getName(), version);
-				published = bid != -1;
+				return this.jmxPublisher.getBundleStatus(mbsc, bundleId);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
 			disconnect(server);
 		}
-		return published;
+		return IServer.STATE_UNKNOWN;
 	}
 
 	/* (non-Javadoc)
@@ -177,12 +175,12 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 * @param module
 	 * @return
 	 */
-	private boolean installBundle(IServer server, IModule module) {
+	private long installBundle(IServer server, IModule module) {
 		String fileUrl = KarafUtils.getBundleFilePath(module);
 		if (fileUrl != null) {
 			long bundleId = this.jmxPublisher.installBundle(mbsc, fileUrl);
-			return bundleId != -1;
+			return bundleId;
 		}
-		return false;
+		return -1;
 	}
 }
