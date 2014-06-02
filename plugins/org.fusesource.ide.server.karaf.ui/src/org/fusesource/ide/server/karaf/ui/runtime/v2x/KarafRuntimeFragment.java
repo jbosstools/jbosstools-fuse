@@ -20,26 +20,27 @@ import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.TaskModel;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
+import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate;
 import org.fusesource.ide.server.karaf.ui.KarafSharedImages;
 import org.fusesource.ide.server.karaf.ui.Messages;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
-import org.jboss.ide.eclipse.as.ui.wizards.AbstractJBTRuntimeWizardFragment;
-import org.jboss.ide.eclipse.as.ui.wizards.composite.JREComposite;
-import org.jboss.ide.eclipse.as.ui.wizards.composite.JREComposite.IJRECompositeListener;
+import org.jboss.ide.eclipse.as.wtp.ui.composites.AbstractJREComposite;
+import org.jboss.ide.eclipse.as.wtp.ui.composites.RuntimeHomeComposite;
+import org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment;
+import org.jboss.tools.as.runtimes.integration.ui.composites.DownloadRuntimeHomeComposite;
 
 /**
  * @author Stryker
  */
-public class KarafRuntimeFragment extends AbstractJBTRuntimeWizardFragment {
+public class KarafRuntimeFragment extends RuntimeWizardFragment {
 
 	protected void updateWizardHandle(Composite parent) {
 		// make modifications to parent
@@ -56,43 +57,59 @@ public class KarafRuntimeFragment extends AbstractJBTRuntimeWizardFragment {
 		return KarafSharedImages.getImageDescriptor(imageKey);
 	}
 
-	protected void createJREComposite(Composite main) {
-		// Create our composite
-		jreComposite = new JREComposite(main, SWT.NONE, getTaskModel()) {
-			public IExecutionEnvironment getExecutionEnvironment() {
-				IRuntime r = getRuntimeFromTaskModel();
-				IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
-				return jbsrt.getExecutionEnvironment();
-			}
-			
-			protected boolean isUsingDefaultJRE(IRuntime rt) {
-				IRuntime r = getRuntimeFromTaskModel();
-				IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
-				return jbsrt.isUsingDefaultJRE();
-			}
-			
-			protected IVMInstall getStoredJRE(IRuntime rt) {
-				IRuntime r = getRuntimeFromTaskModel();
-				IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
-				return jbsrt.isUsingDefaultJRE() ? null : jbsrt.getVM();
-			}
+	protected class KarafJREComposite extends AbstractJREComposite {
 
-			public List<IVMInstall> getValidJREs() {
-				IRuntime r = getRuntimeFromTaskModel();
-				IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
-				return Arrays.asList(jbsrt.getValidJREs());
-			}
-		};
-		FormData cData = new FormData();
-		cData.left = new FormAttachment(0, 5);
-		cData.right = new FormAttachment(100, -5);
-		cData.top = new FormAttachment(homeDirComposite, 10);
-		jreComposite.setLayoutData(cData);
-		jreComposite.setListener(new IJRECompositeListener(){
-			public void vmChanged(JREComposite comp) {
-				updatePage();
-			}
-		});
+		public KarafJREComposite(Composite parent, int style, TaskModel tm) {
+			super(parent, style, tm);
+		}
+		public IExecutionEnvironment getExecutionEnvironment() {
+			IRuntime r = getRuntimeFromTaskModel();
+			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
+			return jbsrt.getExecutionEnvironment();
+		}
+		
+		protected boolean isUsingDefaultJRE(IRuntime rt) {
+			IRuntime r = getRuntimeFromTaskModel();
+			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
+			return jbsrt.isUsingDefaultJRE();
+		}
+		
+		protected IVMInstall getStoredJRE(IRuntime rt) {
+			IRuntime r = getRuntimeFromTaskModel();
+			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
+			return jbsrt.isUsingDefaultJRE() ? null : jbsrt.getVM();
+		}
+
+		public List<IVMInstall> getValidJREs() {
+			IRuntime r = getRuntimeFromTaskModel();
+			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
+			return Arrays.asList(jbsrt.getValidJREs());
+		}
+		@Override
+		protected IRuntime getRuntimeFromTaskModel() {
+			return (IRuntime) getTaskModel().getObject(TaskModel.TASK_RUNTIME);
+		}
+		@Override	
+		protected String getExecutionEnvironmentId() {
+			IExecutionEnvironment env = getExecutionEnvironment();
+			return env == null ? null : env.getId();
+		}	
+		protected boolean isUsingDefaultJRE() {
+			IRuntime r = getRuntimeFromTaskModel();
+			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
+			return jbsrt.isUsingDefaultJRE();
+		}
+		
+		protected IVMInstall getStoredJRE() {
+			IRuntime r = getRuntimeFromTaskModel();
+			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
+			return ((KarafRuntimeDelegate)jbsrt).getHardVM();
+		}
+	}
+	
+	protected AbstractJREComposite createJRECompositeWidget(Composite main) {
+		// Create our composite
+		return new KarafJREComposite(main, SWT.NONE, getTaskModel());
 	}
 	
 	protected String getExplanationText() {
@@ -129,5 +146,15 @@ public class KarafRuntimeFragment extends AbstractJBTRuntimeWizardFragment {
 			else
 				srt.setVM(null);
 		}
+	}
+
+	@Override
+	protected RuntimeHomeComposite createHomeCompositeWidget(Composite main) {
+		return new DownloadRuntimeHomeComposite(main, SWT.NONE, handle, getTaskModel());
+	}
+
+	@Override
+	protected void saveRuntimeLocationInPreferences(IRuntime runtime) {
+		// Do nothing
 	}
 }

@@ -103,7 +103,8 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.6"); //$NON-NLS-1$
 	}
 	
-	private IVMInstall getHardVM() {
+	// Non-interface method for internal use
+	public IVMInstall getHardVM() {
 		if (getAttribute(PROPERTY_VM_TYPE_ID, (String)null) != null) {
 			String id = getAttribute(PROPERTY_VM_ID, (String)null);
 			String type = getAttribute(PROPERTY_VM_TYPE_ID, (String)null);
