@@ -10,20 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.server.karaf.core.server.subsystems;
 
-import java.io.File;
-import java.util.Arrays;
-
-import org.apache.maven.execution.MavenExecutionRequest;
-import org.apache.maven.execution.MavenExecutionResult;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.IMaven;
-import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
-import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
@@ -90,22 +81,22 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 			IProgressMonitor monitor) throws CoreException {
 		monitor = monitor == null ? new NullProgressMonitor() : monitor; // nullsafe
 		validate();
-		
+		int status = IServer.STATE_UNKNOWN;
 		int publishType = KarafUtils.getPublishType(getServer(), module, kind, deltaKind);
 		switch (publishType) {
 		case KarafUtils.FULL_PUBLISH:
 			// do a build
-			boolean built = runBuild(module[0], monitor);
-			int status = this.publisher.publish(getServer(), module);
-			 ((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
-			 ((Server)getServer()).setModuleState(module, status);
+			boolean built = KarafUtils.runBuild(module[0], monitor);
+			status = this.publisher.publish(getServer(), module);
+			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
+			((Server)getServer()).setModuleState(module, status);
 			break;
 		case KarafUtils.INCREMENTAL_PUBLISH:
 			// do a build
-			built = runBuild(module[0], monitor);
+			built = KarafUtils.runBuild(module[0], monitor);
 			status = this.publisher.publish(getServer(), module);
-			 ((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
-			 ((Server)getServer()).setModuleState(module, status);
+			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
+			((Server)getServer()).setModuleState(module, status);
 			break;
 		case KarafUtils.NO_PUBLISH:
 			// we can skip this
@@ -121,7 +112,7 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 			Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Unknown publish type " + publishType));
 		}
 		
-		return IServer.PUBLISH_STATE_NONE;
+		return status;
 	}
 
 	/*
@@ -134,21 +125,5 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 		validate();
 	}
 
-	/**
-	 * runs the maven build to create the jar file for the module
-	 * @param module
-	 * @param monitor
-	 * @return
-	 * @throws CoreException
-	 */
-	private boolean runBuild(IModule module, IProgressMonitor monitor)  throws CoreException {
-		File pomFile = module.getProject().getLocation().append(IMavenConstants.POM_FILE_NAME).toFile();
-		IMaven maven = MavenPlugin.getMaven();
-		IMavenExecutionContext executionContext = maven.createExecutionContext();
-		MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
-		executionRequest.setPom(pomFile);
-		executionRequest.setGoals(Arrays.asList("clean", "package"));
-		MavenExecutionResult result = maven.execute(executionRequest, monitor);
-		return !result.hasExceptions();
-	}
+
 }

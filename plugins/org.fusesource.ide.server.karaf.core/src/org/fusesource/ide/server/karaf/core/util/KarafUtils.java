@@ -15,12 +15,23 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.jar.Manifest;
 
+import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenExecutionResult;
+import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.IMaven;
+import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
+import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
@@ -67,7 +78,18 @@ public class KarafUtils {
 	/**
 	 * the protocol prefix for deployments
 	 */
-	public static final String PROTOCOL_WRAP = "wrap:";
+	public static final String PROTOCOL_PREFIX_JAR 		= "wrap:";
+	public static final String PROTOCOL_PREFIX_MAVEN 	= "mvn:";
+	public static final String PROTOCOL_PREFIX_OSGI 	= "";
+	public static final String PROTOCOL_PREFIX_WEB 		= "war:";
+	
+	/**
+	 * packaging types
+	 */
+	public static final String PACKAGING_JAR			= "jar";
+	public static final String PACKAGING_BUNDLE			= "bundle";
+	public static final String PACKAGING_WAR			= "war";
+	
 	
 	/**
 	 * retrieves the version of the runtime installation
@@ -119,7 +141,8 @@ public class KarafUtils {
 	 * @param module
 	 * @return
 	 */
-	public static String getBundleFilePath(final IModule module) {
+	public static String getBundleFilePath(final IModule module) throws CoreException {
+		final String packaging = getPackaging(module);
 		File projectTargetPath = module.getProject().getLocation().append("target").toFile();
 		File[] jars = projectTargetPath.listFiles(new FileFilter() {
 			/*
@@ -128,13 +151,92 @@ public class KarafUtils {
 			 */
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.exists() && pathname.isFile() && pathname.getName().toLowerCase().startsWith(module.getProject().getName()) && pathname.getName().toLowerCase().endsWith(".jar");
+				return pathname.exists() && pathname.isFile() && pathname.getName().toLowerCase().startsWith(module.getProject().getName()) && pathname.getName().toLowerCase().endsWith(getFileExtensionForPackaging(packaging));
 			}
 		});
 		if (jars.length>0) {
-			return String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", PROTOCOL_WRAP, jars[0].getPath(), module.getProject().getName(), getBundleVersion(module, jars[0]));
+			if (packaging.equalsIgnoreCase(PACKAGING_BUNDLE)) {
+				return String.format("%sfile:%s", getProtocolPrefixForModule(module), jars[0].getPath());
+			} else if (packaging.equalsIgnoreCase(PACKAGING_JAR)) {
+				return String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), jars[0].getPath(), module.getProject().getName(), getBundleVersion(module, jars[0]));
+			} else if (packaging.equalsIgnoreCase(PACKAGING_WAR)) {
+				return String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), jars[0].getPath(), module.getProject().getName(), getBundleVersion(module, jars[0]));	
+			}			
 		}
 		return null;
+	}
+
+	/**
+	 * returns the default file extension for the built artifact of a given packaging type
+	 * 
+	 * @param packaging
+	 * @return
+	 */
+	private static String getFileExtensionForPackaging(String packaging) {
+		if (packaging.equalsIgnoreCase(PACKAGING_BUNDLE) || packaging.equalsIgnoreCase(PACKAGING_JAR)) {
+			return ".jar";
+		} else if (packaging.equalsIgnoreCase(PACKAGING_WAR)) {
+			return ".war";
+		} else {
+			return ".jar";
+		}
+	}
+	
+	/**
+	 * returns the protocol prefix for deployments like WRAP: or WAR:
+	 * 
+	 * @param module
+	 * @return
+	 */
+	private static String getProtocolPrefixForModule(IModule module) throws CoreException {	
+		String packaging = getPackaging(module);
+		if (Strings.isBlank(packaging) || packaging.equalsIgnoreCase(PACKAGING_JAR)) {
+			return PROTOCOL_PREFIX_JAR;
+		} else if (packaging.equalsIgnoreCase(PACKAGING_BUNDLE)) {
+			return PROTOCOL_PREFIX_OSGI;
+		} else if (packaging.equalsIgnoreCase(PACKAGING_WAR)) {
+			return PROTOCOL_PREFIX_WEB;
+		} else {
+			return PROTOCOL_PREFIX_JAR;
+		}
+	}
+	
+	/**
+	 * returns the packaging of the maven project
+	 * 
+	 * @param module
+	 * @return
+	 * @throws CoreException
+	 */
+	private static String getPackaging(IModule module) throws CoreException {
+		Model model = MavenPlugin.getMavenModelManager().readMavenModel(getModelFile(module));
+		return model.getPackaging();
+	}
+	
+	/**
+	 * returns a file reference to the maven pom file of the module
+	 * @param module
+	 * @return
+	 */
+	public static File getModelFile(IModule module) {
+		return module.getProject().getLocation().append(IMavenConstants.POM_FILE_NAME).toFile();
+	}
+	
+	/**
+	 * runs the maven build to create the jar file for the module
+	 * @param module
+	 * @param monitor
+	 * @return
+	 * @throws CoreException
+	 */
+	public static boolean runBuild(IModule module, IProgressMonitor monitor)  throws CoreException {
+		IMaven maven = MavenPlugin.getMaven();
+		IMavenExecutionContext executionContext = maven.createExecutionContext();
+		MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
+		executionRequest.setPom(getModelFile(module));
+		executionRequest.setGoals(Arrays.asList("clean", "package"));
+		MavenExecutionResult result = maven.execute(executionRequest, monitor);
+		return !result.hasExceptions();
 	}
 
 	/**
@@ -143,8 +245,9 @@ public class KarafUtils {
 	 * @param f
 	 * @return
 	 */
-	public static String getBundleVersion(IModule module, File f) {
+	public static String getBundleVersion(IModule module, File f) throws CoreException {
 		String version = null;
+		String packaging = getPackaging(module);
 		IFile manifest = module.getProject().getFile("target/classes/META-INF/MANIFEST.MF");
 		if (!manifest.exists()) {
 			manifest = module.getProject().getFile("META-INF/MANIFEST.MF");
@@ -161,24 +264,28 @@ public class KarafUtils {
 			version = null;
 		}
 
-		// no manifest - so grab it from the file name
-		if (f != null) {
-			if (version == null) {
-				version = "";
-				String[] parts = f.getName().split("-");
-				for (String part : parts) {
-					if (!Character.isDigit(part.charAt(0))) {
-						if (version.length()==0) continue;
-						version += "." + part;
+		if (version == null) {
+			// no manifest - so grab it from the file name
+			if (f != null) {
+				if (version == null) {
+					version = "";
+					String[] parts = f.getName().split("-");
+					for (String part : parts) {
+						if (!Character.isDigit(part.charAt(0))) {
+							if (version.length()==0) continue;
+							version += "." + part;
+						}
+						version += part.trim();
 					}
-					version += part.trim();
+					version = version.substring(0, version.indexOf(getFileExtensionForPackaging(packaging)));
 				}
-				version = version.substring(0, version.indexOf(".jar"));
+			} else {
+				// no file...parse it from the bundle url
+				String uri = getBundleFilePath(module);
+				if (uri.indexOf("Bundle-Version=") != -1) {
+					version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
+				}
 			}
-		} else {
-			// no file...parse it from the bundle url
-			String uri = getBundleFilePath(module);
-			version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
 		}
 		
 		return version;

@@ -20,6 +20,7 @@ import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleState;
 
 /**
@@ -60,7 +61,7 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 				}
 			}
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return -1;
 	}
@@ -74,9 +75,11 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 				// also start the bundle
 				mbsc.invoke(this.objectNameFramework, "startBundle", new Object[] { bid }, new String[] { "long" });
 				return bid;
+			} else {
+				Activator.getLogger().error(retVal.toString());
 			}
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return -1;
 	}
@@ -88,7 +91,7 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			mbsc.invoke(this.objectNameFramework, "updateBundleFromURL", new Object[] { bundleId, bundlePath } , new String[] {"long", String.class.getName() }); 
 			return true;
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return false;
 	}
@@ -99,7 +102,7 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			mbsc.invoke(this.objectNameFramework, "uninstallBundle", new Object[] { bundleId } , new String[] { "long" }); 
 			return true;
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return false;
 	}
@@ -121,7 +124,7 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 				}
 			}
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -158,7 +161,7 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		    }
 	    	return true;
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 	    return false;
 	}
