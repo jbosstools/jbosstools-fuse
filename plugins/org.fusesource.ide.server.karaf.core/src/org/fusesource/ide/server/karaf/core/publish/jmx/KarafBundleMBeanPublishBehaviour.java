@@ -20,6 +20,7 @@ import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleState;
 
 /**
@@ -58,7 +59,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 				}
 			}
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return -1;
 	}
@@ -69,9 +70,11 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			Object retVal = mbsc.invoke(this.objectName, "install", new Object[] { bundlePath, Boolean.TRUE } , new String[] {String.class.getName(), "boolean" }); 
 			if (retVal instanceof Long) {
 				return (Long)retVal;
+			} else {
+				Activator.getLogger().error(retVal.toString());
 			}
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return -1;
 	}
@@ -83,7 +86,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			mbsc.invoke(this.objectName, "update", new Object[] { ""+bundleId, bundlePath } , new String[] {String.class.getName(), String.class.getName() }); 
 			return true;
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return false;
 	}
@@ -94,7 +97,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 			mbsc.invoke(this.objectName, "uninstall", new Object[] { ""+bundleId } , new String[] {String.class.getName() }); 
 			return true;
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return false;
 	}
@@ -116,7 +119,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 				}
 			}
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -137,7 +140,7 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 		    	}
 		    }
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 
 	    return false;

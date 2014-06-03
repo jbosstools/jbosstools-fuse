@@ -20,6 +20,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -148,6 +149,8 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			if (bundleId != -1) {
 				unpublished = this.jmxPublisher.uninstallBundle(mbsc, bundleId);
 			}
+		} catch (CoreException ex) {
+			ex.printStackTrace();
 		} finally {
 			disconnect(server);
 		}
@@ -161,7 +164,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 * @param bundleId
 	 * @return
 	 */
-	private boolean reinstallBundle(IServer server, IModule module, long bundleId) {
+	private boolean reinstallBundle(IServer server, IModule module, long bundleId) throws CoreException {
 		String fileUrl = KarafUtils.getBundleFilePath(module);
 		if (fileUrl != null) {
 			return this.jmxPublisher.updateBundle(mbsc, bundleId, fileUrl);
@@ -175,7 +178,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 	 * @param module
 	 * @return
 	 */
-	private long installBundle(IServer server, IModule module) {
+	private long installBundle(IServer server, IModule module) throws CoreException {
 		String fileUrl = KarafUtils.getBundleFilePath(module);
 		if (fileUrl != null) {
 			long bundleId = this.jmxPublisher.installBundle(mbsc, fileUrl);

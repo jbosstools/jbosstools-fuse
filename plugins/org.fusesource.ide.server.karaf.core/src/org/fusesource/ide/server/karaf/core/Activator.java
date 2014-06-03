@@ -12,6 +12,7 @@
 package org.fusesource.ide.server.karaf.core;
 
 import org.eclipse.core.runtime.Plugin;
+import org.fusesource.ide.commons.logging.RiderLogFacade;
 
 
 /**
@@ -36,5 +37,9 @@ public class Activator extends Plugin {
 	 */
 	public static Activator getDefault() {
 		return instance;
+	}
+	
+	public static RiderLogFacade getLogger() {
+		return RiderLogFacade.getLog(getDefault().getLog());
 	}
 }

@@ -20,6 +20,7 @@ import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleState;
 
 /**
@@ -57,7 +58,7 @@ public class KarafBundlesMBeanPublishBehaviour extends
 				}
 			}
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return -1;
 	}
@@ -79,7 +80,7 @@ public class KarafBundlesMBeanPublishBehaviour extends
 				}
 			}
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -100,7 +101,7 @@ public class KarafBundlesMBeanPublishBehaviour extends
 		    	}
 		    }
 		} catch (Exception ex) {
-			// ignore
+			Activator.getLogger().error(ex);
 		}
 
 	    return false;
