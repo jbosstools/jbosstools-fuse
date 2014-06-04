@@ -35,6 +35,8 @@
     <module>org.fusesource.ide.server.karaf.ui</module>
     <module>org.fusesource.ide.server.servicemix.core</module>
     <module>org.fusesource.ide.server.servicemix.ui</module>
+    <module>org.fusesource.ide.server.fabric8.core</module>
+    <module>org.fusesource.ide.server.fabric8.ui</module>
     <module>org.fusesource.ide.server.fuse.core</module>
     <module>org.fusesource.ide.server.fuse.ui</module>
 

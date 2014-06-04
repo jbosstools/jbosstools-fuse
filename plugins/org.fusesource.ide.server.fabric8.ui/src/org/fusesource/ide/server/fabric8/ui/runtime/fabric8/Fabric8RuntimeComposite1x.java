@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.server.fuse.ui.runtime.fuseesb;
+package org.fusesource.ide.server.fabric8.ui.runtime.fabric8;
 
 import java.io.File;
 
@@ -18,7 +18,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
-import org.fusesource.ide.server.fuse.ui.Messages;
+import org.fusesource.ide.server.fabric8.ui.Messages;
 import org.fusesource.ide.server.karaf.ui.runtime.KarafWizardDataModel;
 import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeComposite2x;
 
@@ -26,9 +26,9 @@ import org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeComposite2x;
 /**
  * @author lhein
  */
-public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
+public class Fabric8RuntimeComposite1x extends KarafRuntimeComposite2x {
 
-	private static final String LIB_FUSE_VERSION_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "esb-version.jar");
+	private static final String LIB_FABRIC8_VERSION_JAR = String.format("%s%s%s", LIB_FOLDER, SEPARATOR, "fabric-version.jar");
 	
 	/**
 	 * constructor 
@@ -37,10 +37,10 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 	 * @param wizardHandle
 	 * @param model
 	 */
-	public FuseESBRuntimeComposite6x(Composite parent, IWizardHandle wizardHandle, KarafWizardDataModel model) {
+	public Fabric8RuntimeComposite1x(Composite parent, IWizardHandle wizardHandle, KarafWizardDataModel model) {
 		super(parent, wizardHandle, model);
-		wizardHandle.setTitle(Messages.FuseESBRuntimeComposite_wizard_tite);
-		wizardHandle.setDescription(Messages.FuseESBRuntimeComposite_wizard_desc);
+		wizardHandle.setTitle(Messages.Fabric8RuntimeComposite_wizard_tite);
+		wizardHandle.setDescription(Messages.Fabric8RuntimeComposite_wizard_desc);
 	}
 	
 	/* (non-Javadoc)
@@ -48,7 +48,7 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 	 */
 	@Override
 	protected boolean doClassPathEntiresExist(String karafInstallDir) {
-		File libServiceMixVersionJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_FUSE_VERSION_JAR));
+		File libServiceMixVersionJar = new File(String.format("%s%s%s", karafInstallDir, SEPARATOR, LIB_FABRIC8_VERSION_JAR));
 		return super.doClassPathEntiresExist(karafInstallDir) && libServiceMixVersionJar.exists();
 	}
 	
@@ -70,8 +70,8 @@ public class FuseESBRuntimeComposite6x extends KarafRuntimeComposite2x {
 					wizardHandle.setMessage(Messages.AbstractKarafRuntimeComposite_not_a_dir,
 							IMessageProvider.ERROR);
 				} else{
-					File binFuse = new File(dirLocation + SEPARATOR + Messages.FuseESBRuntimeComposite_bin_fuseesb); 
-					File binFuseBat = new File(dirLocation + SEPARATOR + Messages.FuseESBRuntimeComposite_bin_fuseesb_bat); 
+					File binFuse = new File(dirLocation + SEPARATOR + Messages.Fabric8RuntimeComposite_bin_fabric8); 
+					File binFuseBat = new File(dirLocation + SEPARATOR + Messages.Fabric8RuntimeComposite_bin_fabric8_bat); 
 					if (binFuse.exists() || binFuseBat.exists() ) {
 						valid = true;
 						wizardHandle.setMessage("", IMessageProvider.NONE); //$NON-NLS-1$
