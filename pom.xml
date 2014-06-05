@@ -62,7 +62,7 @@
     <spring-osgi-version>2.0.0.M2-SNAPSHOT</spring-osgi-version>
 -->
 
-    <tycho-version>0.18.1</tycho-version>
+    <tycho-version>0.20.0</tycho-version>
     <m2e.group.id>org.eclipse.tycho</m2e.group.id>
     <forge-project-id>ide</forge-project-id>
 <!--
@@ -75,7 +75,7 @@
     <fabric-api-version>${fabric-version}</fabric-api-version>
     <fabric-client-version>${fabric-version}</fabric-client-version>
     <fmc-version>${fabric-version}</fmc-version>
-    <jboss-tycho-version>0.16.0.CR2</jboss-tycho-version>
+    <jboss-tycho-version>0.19.0-SNAPSHOT</jboss-tycho-version>
   </properties>
 
   <modules>
@@ -613,6 +613,11 @@
       </exclusions>
     </dependency>
 
+	<dependency>
+      <groupId>org.fusesource.scalate</groupId>
+      <artifactId>scalate-util</artifactId>
+      <version>${scalate-version}</version>
+    </dependency>
     <dependency>
       <groupId>com.weiglewilczek.scala-lang-osgi</groupId>
       <artifactId>scala-library</artifactId>
