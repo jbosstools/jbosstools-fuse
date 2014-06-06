@@ -159,7 +159,8 @@
   
 
     <!-- JBoss Tools Core Base Dependencies
-         ref: <repository loc>/site.properties 
+         ref: <repository loc>/site.properties --> 
+<!--         
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
       <unit id="org.hibernate.eclipse.feature.feature.group" version="0.0.0"/>
       <unit id="org.jboss.ide.eclipse.archives.feature.feature.group" version="0.0.0"/>
@@ -214,8 +215,7 @@
 
       <repository location="http://download.jboss.org/jbosstools/updates/JBossTools-4.2.0.Alpha2.core/"/>
     </location>
-    -->
-
+-->
     <!-- JBoss Tools Core Base Dependencies
          ref: <repository loc>/site.properties -->
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -272,7 +272,6 @@
 	  <unit id="org.mozilla.xulrunner.feature.feature.group" version="0.0.0"/>
       <repository location="http://download.jboss.org/jbosstools/updates/nightly/core/master/"/>
     </location>
-
   
     <!-- JBIDE-12815 JBoss Tools Locus bundles: not quite ready to be included -->
     <!-- <location includeAllPlatforms="false" includeMode="slicer" type="InstallableUnit" includeSource="true">

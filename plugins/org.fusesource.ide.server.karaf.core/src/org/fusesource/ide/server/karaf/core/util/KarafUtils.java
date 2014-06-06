@@ -15,12 +15,14 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.jar.Manifest;
 
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.model.Model;
+import org.apache.maven.settings.Server;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -32,6 +34,7 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanType;
@@ -90,6 +93,12 @@ public class KarafUtils {
 	public static final String PACKAGING_BUNDLE			= "bundle";
 	public static final String PACKAGING_WAR			= "war";
 	
+	/**
+	 * property keys
+	 */
+	public static final String SERVER_ID				= "fabric8-server-id";
+	public static final String SERVER_USER				= "fabric8-server-user";
+	public static final String SERVER_PASSWORD			= "fabric8-server-password";
 	
 	/**
 	 * retrieves the version of the runtime installation
@@ -223,19 +232,44 @@ public class KarafUtils {
 	}
 	
 	/**
-	 * runs the maven build to create the jar file for the module
+	 * 
+	 * @param goals
 	 * @param module
 	 * @param monitor
 	 * @return
 	 * @throws CoreException
 	 */
-	public static boolean runBuild(IModule module, IProgressMonitor monitor)  throws CoreException {
+	public static boolean runBuild(List<String> goals, IModule module, IProgressMonitor monitor)  throws CoreException {
+		return runBuild(goals, null, module, monitor);
+	}
+	
+	/**
+	 * 
+	 * @param goals
+	 * @param serverProperties
+	 * @param module
+	 * @param monitor
+	 * @return
+	 * @throws CoreException
+	 */
+	public static boolean runBuild(List<String> goals, Properties serverProperties, IModule module, IProgressMonitor monitor)  throws CoreException {
 		IMaven maven = MavenPlugin.getMaven();
 		IMavenExecutionContext executionContext = maven.createExecutionContext();
 		MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
 		executionRequest.setPom(getModelFile(module));
-		executionRequest.setGoals(Arrays.asList("clean", "package"));
+		if (serverProperties != null && serverProperties.isEmpty() == false) {
+			Server fabric8Server = new Server();
+			fabric8Server.setId(serverProperties.getProperty(SERVER_ID));
+			fabric8Server.setUsername(serverProperties.getProperty(SERVER_USER));
+			fabric8Server.setPassword(serverProperties.getProperty(SERVER_PASSWORD));
+			executionRequest.addServer(fabric8Server);
+		}
+		executionRequest.setGoals(goals);
+		
 		MavenExecutionResult result = maven.execute(executionRequest, monitor);
+		for (Throwable t : result.getExceptions()) {
+			Activator.getLogger().error(t);
+		}
 		return !result.hasExceptions();
 	}
 

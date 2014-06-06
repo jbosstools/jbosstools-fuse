@@ -23,7 +23,7 @@ public class Activator extends Plugin {
 	protected static Activator instance;
 
 	public static final String PLUGIN_ID = "org.fusesource.ide.server.fabric8.core";
-		
+
 	/**
 	 * constructor
 	 */

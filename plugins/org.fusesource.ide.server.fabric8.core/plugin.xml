@@ -103,12 +103,18 @@
             serverTypes="org.fusesource.ide.fabric8.server.11">
          </subsystemMapping>
 
+         <subsystem
+            system="publish"
+            id="publish.fabric8.local.default"
+            name="Local Fabric8 Publish Controller"
+            class="org.fusesource.ide.server.fabric8.core.server.subsystems.Fabric81xPublishController">
+         </subsystem>
          <subsystemMapping
-            id="publish.karaf.local.default"
+            id="publish.fabric8.local.default"
             mappedId="publish.fabric8.local"
             serverTypes="org.fusesource.ide.fabric8.server.11">
          </subsystemMapping>
-         
+
          <subsystemMapping
             id="modules.karaf.local.default"
             mappedId="modules.fabric8.local"
