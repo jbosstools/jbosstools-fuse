@@ -36,7 +36,7 @@ public class Fabric81xStartupLaunchConfigurator extends
 			throws CoreException {
 		super(server);
 	}
-	
+		
 	/*
 	 * (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator#doConfigure(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
@@ -59,8 +59,8 @@ public class Fabric81xStartupLaunchConfigurator extends
 			if (version != null) {
 				if (version.startsWith(IFabric8ToolingConstants.FABRIC8_VERSION_1x)) {
 					// handle 4x specific program arguments
-					vmArguments = get6xVMArguments(karafInstallDir);
-					mainProgram = get6xMainProgram();
+					vmArguments = getVMArguments(karafInstallDir);
+					mainProgram = getMainProgram();
 				} else {
 					System.err.println("Unhandled JBoss Fuse Version (" + version + ")!");
 				}
@@ -70,7 +70,7 @@ public class Fabric81xStartupLaunchConfigurator extends
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, karafInstallDir);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainProgram);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArguments);
-
+			
 			List<String> classPathList = new LinkedList<String>();
 			String[] classPathEntries = getClassPathEntries(karafInstallDir);
 			if (classPathEntries != null && classPathEntries.length > 0) {
@@ -86,12 +86,12 @@ public class Fabric81xStartupLaunchConfigurator extends
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classPathList);
 		}
 	}
-	
-	protected String get6xMainProgram() {
-		return getMainProgram();
-	}
 
-	protected String get6xVMArguments(String karafInstallDir) {
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator#getVMArguments(java.lang.String)
+	 */
+	@Override
+	protected String getVMArguments(String karafInstallDir) {
 		StringBuilder vmArguments = new StringBuilder();
 
 		String endorsedDirs = System.getProperty("java.endorsed.dirs");
@@ -111,12 +111,14 @@ public class Fabric81xStartupLaunchConfigurator extends
 		vmArguments.append(SPACE + "-Djava.util.logging.config.file=" + QUOTE + karafInstallDir + SEPARATOR + "etc" + SEPARATOR + "java.util.logging.properties" + QUOTE);
 		vmArguments.append(SPACE + "-Dkaraf.startLocalConsole=false");
 		vmArguments.append(SPACE + "-Dkaraf.startRemoteShell=true");
-		vmArguments.append(SPACE + "-DFABRIC8_ENSEMBLE_AUTO_START=true");
-		vmArguments.append(SPACE + "-DFABRIC8_AGENT_AUTO_START=true");
+		vmArguments.append(SPACE + "-Densemble.auto.start=true");
+		vmArguments.append(SPACE + "-Dagent.auto.start=true");
 		
 		return vmArguments.toString();
-	}
+	}	
 
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator#doOverrides(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
