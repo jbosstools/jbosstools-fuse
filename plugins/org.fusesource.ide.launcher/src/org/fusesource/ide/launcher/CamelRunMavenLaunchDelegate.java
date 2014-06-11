@@ -16,7 +16,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.fusesource.ide.commons.util.CamelUtils;
 
 
-public class CamelRunMavenLaunchDelegate extends MavenLaunchDelegate {
+public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 	
 	public CamelRunMavenLaunchDelegate() {
 		super(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS);
