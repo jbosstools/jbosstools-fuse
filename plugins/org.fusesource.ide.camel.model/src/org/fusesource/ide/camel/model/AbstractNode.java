@@ -172,8 +172,6 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 				Messages.propertyLabelDescription));
 		this.descriptors.get(PROPERTY_DESCRIPTION).setValidator(DEFAULT_STRING_VALIDATOR);
 
-		this.descriptors.put(PROPERTY_INHERITERRORHANDLER, new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelInheritErrorHandler));
-
 		// now let the subclasses add stuff
 		addCustomProperties(this.descriptors);
 	}
