@@ -11,16 +11,17 @@
 
 package org.fusesource.ide.fabric.activemq.navigator;
 
+import io.fabric8.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.ConnectionViewFacade;
+
 import java.util.Collection;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
-import io.fabric8.activemq.facade.BrokerFacade;
-import io.fabric8.activemq.facade.ConnectionViewFacade;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class ConnectionsNode extends RefreshableCollectionNode implements ImageProvider, ContextMenuProvider {

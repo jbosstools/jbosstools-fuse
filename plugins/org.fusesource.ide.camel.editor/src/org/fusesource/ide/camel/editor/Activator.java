@@ -24,7 +24,7 @@ import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.editor.RiderEditor;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
-import org.fusesource.ide.commons.ui.UIConstants;
+import org.fusesource.ide.commons.ui.UIHelper;
 import org.osgi.framework.BundleContext;
 
 
@@ -93,8 +93,8 @@ public class Activator extends ImagesActivatorSupport {
 				IWorkbenchPage page = wbw.getActivePage();
 				if (page != null) {
 					try {
-						if (page.findView(UIConstants.PROPERTIES_VIEW_ID) == null) {
-							IViewPart propView = page.showView(UIConstants.PROPERTIES_VIEW_ID);
+						if (page.findView(UIHelper.ID_PROPERTIES_VIEW) == null) {
+							IViewPart propView = page.showView(UIHelper.ID_PROPERTIES_VIEW);
 							IWorkbenchHelpSystem helpSystem = propView.getSite().getWorkbenchWindow().getWorkbench().getHelpSystem();
 							//Activator.getLogger().debug(propView.getClass().getName());
 							//helpSystem.setHelp(propView, PLUGIN_ID);

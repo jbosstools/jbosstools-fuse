@@ -13,6 +13,8 @@ package org.fusesource.ide.commons.tree;
 
 import java.util.Collection;
 
+import org.jboss.tools.jmx.core.tree.Node;
+
 public interface GraphableNodeConnected {
 
 	public Collection<Node> getGraphConnectedTo();

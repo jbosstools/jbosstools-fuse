@@ -24,10 +24,10 @@ import org.fusesource.fon.util.messages.InvocationStatistics;
 import org.fusesource.fon.util.messages.NodeStatisticsContainer;
 import org.fusesource.ide.camel.model.AbstractNodeFacade;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public abstract class ProcessorNodeSupport extends RefreshableCollectionNode implements AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider {

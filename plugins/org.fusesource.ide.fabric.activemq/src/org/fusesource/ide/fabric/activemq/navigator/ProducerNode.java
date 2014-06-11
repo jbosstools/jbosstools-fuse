@@ -16,8 +16,10 @@ import java.util.List;
 
 import org.apache.activemq.broker.jmx.ProducerViewMBean;
 import org.fusesource.ide.commons.tree.ConnectedNode;
-import org.fusesource.ide.commons.tree.Node;
+import org.fusesource.ide.commons.tree.HasRefreshableUI;
 import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.commons.tree.RefreshableUI;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 
@@ -46,7 +48,15 @@ public class ProducerNode extends NodeSupport implements ConnectedNode {
 			return "";
 		}
 	}
-
+	
+	public RefreshableUI getRefreshableUI() {
+		if (this instanceof RefreshableUI) {
+			return (RefreshableUI) this;
+		} else if (parent != null && parent instanceof HasRefreshableUI) {
+			return ((HasRefreshableUI)parent).getRefreshableUI();
+		}
+		return null;
+	}
 	@Override
 	public List<Node> getConnectedTo() {
 		return Collections.singletonList(getDestinationNode());

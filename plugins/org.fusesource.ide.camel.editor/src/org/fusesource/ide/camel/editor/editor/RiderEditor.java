@@ -60,7 +60,7 @@ import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.io.ICamelEditorInput;
 import org.fusesource.ide.camel.model.util.Objects;
-import org.fusesource.ide.commons.ui.UIConstants;
+import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 import org.fusesource.ide.project.providers.CamelVirtualFile;
@@ -468,8 +468,8 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 						IWorkbenchPage page = wbw.getActivePage();
 						if (page != null) {
 							try {
-								if (page.findView(UIConstants.PROPERTIES_VIEW_ID) == null) {
-									page.showView(UIConstants.PROPERTIES_VIEW_ID);
+								if (page.findView(UIHelper.ID_PROPERTIES_VIEW) == null) {
+									page.showView(UIHelper.ID_PROPERTIES_VIEW);
 								}
 							} catch (PartInitException ex) {
 								Activator.getLogger().error(ex);

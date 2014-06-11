@@ -14,13 +14,16 @@ package org.fusesource.ide.fabric.servicemix.navigator;
 import java.util.List;
 
 
+
 import org.apache.servicemix.nmr.management.ManagedEndpointMBean;
 import org.eclipse.swt.graphics.Image;
+
 import io.fabric8.servicemix.facade.ServiceMixFacade;
+
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.servicemix.FabricServiceMixPlugin;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class EndpointsNode extends RefreshableCollectionNode implements ImageProvider {

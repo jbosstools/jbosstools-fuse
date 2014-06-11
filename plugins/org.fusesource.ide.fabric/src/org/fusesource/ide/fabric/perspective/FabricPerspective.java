@@ -13,10 +13,11 @@ package org.fusesource.ide.fabric.perspective;
 
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
-import org.fusesource.ide.commons.ui.PerspectiveSupport;
+import org.eclipse.ui.IPerspectiveFactory;
+import org.fusesource.ide.commons.ui.UIHelper;
 
 
-public class FabricPerspective extends PerspectiveSupport {
+public class FabricPerspective implements UIHelper, IPerspectiveFactory {
 
 	@Override
 	public void createInitialLayout(IPageLayout layout) {

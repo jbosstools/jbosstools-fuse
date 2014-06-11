@@ -16,8 +16,7 @@ import java.util.List;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.commons.tree.Node;
-import org.fusesource.ide.fabric.camel.FabricCamelPlugin;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 public class ProcessorNode extends ProcessorNodeSupport {

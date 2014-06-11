@@ -14,8 +14,8 @@ package org.fusesource.ide.fabric.navigator;
 import java.util.Collections;
 import java.util.List;
 
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.fabric.actions.ProfilesContentProvider;
+import org.jboss.tools.jmx.core.tree.Node;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;

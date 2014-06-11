@@ -11,21 +11,21 @@
 
 package org.fusesource.ide.fabric.navigator;
 
-import java.util.Arrays;
+//import io.fabric8.monitor.api.FetchMonitoredViewDTO;
+import io.fabric8.service.JmxTemplateSupport;
+
 import java.util.List;
 
 import javax.management.MalformedObjectNameException;
 
-//import io.fabric8.monitor.api.FetchMonitoredViewDTO;
-import io.fabric8.service.JmxTemplateSupport;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.fabric.navigator.osgi.BundlesNode;
 import org.fusesource.ide.fabric.navigator.osgi.OsgiFacade;
-import org.fusesource.ide.jmx.core.tree.Root;
+import org.jboss.tools.jmx.core.tree.Root;
 
 
-public class FabricNodeProvider implements NodeProvider, org.fusesource.ide.jmx.core.tree.NodeProvider {
+public class FabricNodeProvider implements NodeProvider, org.jboss.tools.jmx.core.tree.NodeProvider {
 
 	@Override
 	public void provide(ContainerNode agentNode) {
@@ -43,7 +43,7 @@ public class FabricNodeProvider implements NodeProvider, org.fusesource.ide.jmx.
 	public void provide(final Root root) {
 		if (root.containsDomain("org.fusesource.fabric")) {
 			JmxTemplateSupport jmxTemplate = new JmxPluginJmxTemplate(root.getConnection());
-			//Object list = MonitorFacade.list(jmxTemplate);
+//			Object list = MonitorFacade.list(jmxTemplate);
 
 //			FetchMonitoredViewDTO view = new FetchMonitoredViewDTO();
 //
@@ -56,7 +56,7 @@ public class FabricNodeProvider implements NodeProvider, org.fusesource.ide.jmx.
 //			view.monitored_set = "jvm-default";
 
 			//FabricPlugin.getLogger().debug("======== doing Fabric Monitor call with: " + view);
-			//MonitoredViewDTO answer = MonitorFacade.fetch(jmxTemplate, view);
+//			MonitoredViewDTO answer = MonitorFacade.fetch(jmxTemplate, view);
 			//FabricPlugin.getLogger().debug("Got: " + answer);
 		}
 
@@ -77,7 +77,7 @@ public class FabricNodeProvider implements NodeProvider, org.fusesource.ide.jmx.
 	}
 
 	@Override
-	public void provideRootNodes(List<org.fusesource.ide.jmx.core.tree.NodeProvider> list) {
+	public void provideRootNodes(List<org.jboss.tools.jmx.core.tree.NodeProvider> list) {
 	}
 
 }

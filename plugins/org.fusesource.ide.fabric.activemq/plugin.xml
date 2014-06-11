@@ -14,4 +14,79 @@
       </initializer>
    </extension>
   
+   
+   <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+       <navigatorContent
+             id="org.fusesource.ide.fabric.amq.jmx.content"
+             name="ActiveMQ Brokers"
+             activeByDefault="true"
+             icon="icons/queue.png"
+             priority="normal"
+             contentProvider="org.fusesource.ide.fabric.activemq.jmx.content.navigator.providers.ActiveMQNodeContentProvider"
+             labelProvider="org.fusesource.ide.fabric.activemq.jmx.content.navigator.providers.ActiveMQNodeLabelProvider">
+          <triggerPoints>
+             <instanceof
+                   value="org.jboss.tools.jmx.core.IConnectionWrapper">
+             </instanceof>
+          </triggerPoints>
+          <possibleChildren>
+             <or>
+                <instanceof
+                      value="java.lang.Object">
+                </instanceof>
+              </or>
+          </possibleChildren>
+       </navigatorContent>
+	</extension>
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	         viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+	      <includes>
+             <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric.amq.jmx.content">
+             </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+	</extension>
+
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewer
+            viewerId="org.fusesource.ide.fabric.navigator">
+      </viewer>
+      <viewerContentBinding
+            viewerId="org.fusesource.ide.fabric.navigator">
+         <includes>
+            <contentExtension
+                  isRoot="true"
+                  pattern="org.fusesource.ide.fabric.navigator.root">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.root">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.queryFilter">
+            </contentExtension>
+            <contentExtension
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.JMXLinkHelper">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+      <viewerActionBinding
+            viewerId="org.fusesource.ide.fabric.navigator">
+         <includes>
+            <actionExtension
+                  pattern="org.fusesource.ide.fabric.navigator.actionProvider">
+            </actionExtension>
+            <actionExtension
+                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.actionProvider">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+  
 </plugin>

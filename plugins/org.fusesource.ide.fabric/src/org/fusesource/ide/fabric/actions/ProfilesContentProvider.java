@@ -11,17 +11,18 @@
 
 package org.fusesource.ide.fabric.actions;
 
+import io.fabric8.api.Container;
+
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import io.fabric8.api.Container;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
 import org.fusesource.ide.fabric.navigator.ProfileNode;
 import org.fusesource.ide.fabric.navigator.Profiles;
 import org.fusesource.ide.fabric.navigator.VersionNode;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 public class ProfilesContentProvider implements ITreeContentProvider {
@@ -75,7 +76,7 @@ public class ProfilesContentProvider implements ITreeContentProvider {
 	}
 
 	protected List<Node> getChildrenList(Node node) {
-		return node.getChildrenList();
+		return node.getChildrenList();	
 	}
 
 	@Override

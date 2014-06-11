@@ -14,11 +14,13 @@ package org.fusesource.ide.fabric.activemq.navigator;
 import java.util.Collection;
 
 import org.eclipse.swt.graphics.Image;
+
 import io.fabric8.activemq.facade.BrokerFacade;
 import io.fabric8.activemq.facade.SubscriptionViewFacade;
+
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class TopicConsumersNode extends RefreshableCollectionNode implements ImageProvider {

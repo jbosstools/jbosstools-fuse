@@ -22,27 +22,31 @@
 package org.fusesource.ide.fabric.navigator.jmx;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.management.MBeanServerConnection;
 import javax.management.remote.JMXConnector;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableNode;
 import org.fusesource.ide.commons.tree.RefreshableUI;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
-import org.fusesource.ide.jmx.core.ExtensionManager;
-import org.fusesource.ide.jmx.core.IConnectionProvider;
-import org.fusesource.ide.jmx.core.IConnectionWrapper;
-import org.fusesource.ide.jmx.core.IJMXRunnable;
-import org.fusesource.ide.jmx.core.providers.DefaultConnectionProvider;
-import org.fusesource.ide.jmx.core.tree.NodeUtils;
-import org.fusesource.ide.jmx.core.tree.Root;
+import org.jboss.tools.jmx.core.ExtensionManager;
+import org.jboss.tools.jmx.core.IConnectionProvider;
+import org.jboss.tools.jmx.core.IConnectionWrapper;
+import org.jboss.tools.jmx.core.IJMXRunnable;
+import org.jboss.tools.jmx.core.JMXException;
+import org.jboss.tools.jmx.core.providers.DefaultConnectionProvider;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.core.tree.NodeUtils;
+import org.jboss.tools.jmx.core.tree.Root;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class FabricConnectionWrapper extends RefreshableNode implements ImageProvider, IConnectionWrapper, HasRefreshableUI {
@@ -127,11 +131,10 @@ public class FabricConnectionWrapper extends RefreshableNode implements ImagePro
 		return FabricPlugin.getDefault().getImage("releng_gears.gif");
 	}
 
-	@Override
 	public void loadRoot() {
 		if (isConnected && root == null) {
 			try {
-				root = NodeUtils.createObjectNameTree(this);
+				root = NodeUtils.createObjectNameTree(this, new NullProgressMonitor());
 			} catch (CoreException ce) {
 				// lets create an empty root for now
 				root = new Root(this);
@@ -168,18 +171,24 @@ public class FabricConnectionWrapper extends RefreshableNode implements ImagePro
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.fusesource.ide.jmx.core.IConnectionWrapper#getConnector()
-	 */
-	@Override
-	public JMXConnector getConnector() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.fusesource.ide.jmx.core.IConnectionWrapper#run(org.fusesource.ide.jmx.core.IJMXRunnable)
 	 */
 	@Override
-	public void run(IJMXRunnable runnable) throws CoreException {
+	public void run(IJMXRunnable runnable) throws JMXException {
+	}
+
+
+	@Override
+	public void loadRoot(IProgressMonitor monitor) throws CoreException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void run(IJMXRunnable runnable, HashMap<String, String> prefs)
+			throws JMXException {
+		// TODO Auto-generated method stub
+		
 	}
 }

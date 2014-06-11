@@ -20,8 +20,6 @@ Require-Bundle: org.fusesource.ide.fabric,
  org.apache.aries.util;resolution:=optional,
  org.apache.aries.proxy.api;resolution:=optional,
  scala-library;bundle-version="2.9.0",
- org.fusesource.ide.jmx.ui,
- org.fusesource.ide.jmx.core,
  org.eclipse.core.filesystem,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
@@ -43,7 +41,9 @@ Require-Bundle: org.fusesource.ide.fabric,
  org.eclipse.ui.navigator.resources,
  org.eclipse.ui.views,
  org.eclipse.ui.views.properties.tabbed,
- org.apache.commons.logging;bundle-version="[1.1.1,2)"
+ org.apache.commons.logging;bundle-version="[1.1.1,2)",
+ org.jboss.tools.jmx.core;bundle-version="1.6.0",
+ org.jboss.tools.jmx.ui;bundle-version="1.6.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.camel.FabricCamelPlugin
 Bundle-ClassPath: .

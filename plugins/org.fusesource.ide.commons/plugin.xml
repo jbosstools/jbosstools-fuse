@@ -20,4 +20,55 @@
             </propertyContributor>
          </extension>
    
+   
+   
+	<extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+    <actionProvider
+          class="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider"
+          id="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider">
+       <enablement>
+          <instanceof
+                value="org.fusesource.ide.commons.ui.ContextMenuProvider">
+    <viewerActionBinding
+          viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+       <includes>
+          <actionExtension
+                pattern="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider">
+          </actionExtension>
+       </includes>
+    </viewerActionBinding>
+    <viewerActionBinding
+          viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+    </viewerActionBinding>
+          </instanceof>
+       </enablement>
+    </actionProvider>
+	</extension>
+
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	 viewerId="jmx.ui.internal.views.navigator.MBeanExplorer">
+	      <includes>
+             <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric.camel.jmx.content">
+             </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+	</extension>
+
+    <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.fusesource.ide.commons.tree.NodeSupport"
+            class="org.fusesource.ide.commons.tree.NodeSupportPropertiesSourceAdapterFactory">
+         <adapter
+               type="org.eclipse.ui.views.properties.IPropertySource">
+         </adapter>
+      </factory>
+   </extension>
+   
 </plugin>

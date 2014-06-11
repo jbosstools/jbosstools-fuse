@@ -23,19 +23,21 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+
 import io.fabric8.camel.facade.CamelFacade;
 import io.fabric8.camel.facade.mbean.CamelContextMBean;
 import io.fabric8.camel.facade.mbean.CamelEndpointMBean;
+
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.tree.RefreshableUI;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.commons.util.URIs;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.camel.FabricCamelPlugin;
 import org.fusesource.ide.fabric.camel.Messages;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class EndpointsNode extends RefreshableCollectionNode implements ImageProvider, ContextMenuProvider {

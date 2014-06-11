@@ -14,13 +14,13 @@ package org.fusesource.ide.fabric.views.logs;
 import javax.management.ObjectName;
 
 import org.eclipse.jface.viewers.ISelection;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.fabric.FabricPlugin;
-import org.fusesource.ide.jmx.core.IConnectionWrapper;
-import org.fusesource.ide.jmx.core.tree.DomainNode;
-import org.fusesource.ide.jmx.core.tree.ObjectNameNode;
-import org.fusesource.ide.jmx.core.tree.Root;
+import org.jboss.tools.jmx.core.IConnectionWrapper;
+import org.jboss.tools.jmx.core.tree.DomainNode;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.core.tree.ObjectNameNode;
+import org.jboss.tools.jmx.core.tree.Root;
 
 
 public class Logs {

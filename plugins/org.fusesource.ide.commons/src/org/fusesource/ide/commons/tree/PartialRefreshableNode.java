@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.fusesource.ide.commons.Activator;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 /**

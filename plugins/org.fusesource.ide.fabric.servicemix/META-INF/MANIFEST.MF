@@ -8,8 +8,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.fusesource.ide.fabric,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
- org.fusesource.ide.jmx.ui,
- org.fusesource.ide.jmx.core,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.core.variables,
@@ -30,7 +28,9 @@ Require-Bundle: org.fusesource.ide.fabric,
  org.apache.servicemix.nmr.api;bundle-version="1.5.0",
  org.apache.servicemix.nmr.management;bundle-version="1.5.0",
  io.fabric8.tooling-fabric-all,
- io.fabric8.tooling-servicemix-facade
+ io.fabric8.tooling-servicemix-facade,
+ org.jboss.tools.jmx.core;bundle-version="1.6.0",
+ org.jboss.tools.jmx.ui;bundle-version="1.6.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.servicemix.FabricServiceMixPlugin
 Bundle-ClassPath: .

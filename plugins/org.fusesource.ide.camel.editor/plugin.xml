@@ -20,7 +20,7 @@
             point="org.eclipse.ui.views">
          <category
                id="org.fusesource.ide"
-               name="Fuse">
+               name="JBoss Fuse">
          </category>
          <view
                category="org.fusesource.ide"
@@ -98,14 +98,7 @@
                afterTab="DocumentationTab"
                category="sample"
                id="DocumentationTab"
-               label="Documentation"/>
-        <!--
-         <propertyTab
-               afterTab="DetailsTab"
-               category="sample"
-               id="AdvancedTab"
-               label="Advanced"/>
-		-->               
+               label="Documentation"/> 
       </propertyTabs>
    </extension>
    <extension
@@ -136,21 +129,6 @@
                   type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
             </input>
          </propertySection>
-
-<!--
-         <propertySection
-               class="org.eclipse.ui.views.properties.tabbed.AdvancedPropertySection"
-               id="AdvancedSection"
-               tab="AdvancedTab">
-            <input type="org.fusesource.ide.camel.model.AbstractNode"/>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
-            </input>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
-            </input>
-         </propertySection>
--->         
       </propertySections>
    </extension>
    <extension

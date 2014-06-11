@@ -13,8 +13,7 @@ package org.fusesource.ide.fabric.views.logs;
 
 import javax.management.ObjectName;
 
-import org.fusesource.ide.fabric.FabricPlugin;
-import org.fusesource.ide.jmx.core.IConnectionWrapper;
+import org.jboss.tools.jmx.core.IConnectionWrapper;
 
 
 public class JmxFabricLogBrowser extends LogBrowserSupport {

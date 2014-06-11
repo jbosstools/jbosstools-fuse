@@ -18,9 +18,16 @@ Require-Bundle: io.fabric8.camel-tooling-util;resolution:=optional,
  org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.ui.views,
- org.eclipse.ui.views.properties.tabbed
-Export-Package: org.fusesource.ide.commons,
+ org.eclipse.ui.views.properties.tabbed,
+ org.jboss.tools.jmx.core;bundle-version="1.6.0",
+ org.jboss.tools.jmx.ui;bundle-version="1.6.0",
+ org.eclipse.ui.navigator;bundle-version="3.5.400"
+Export-Package: org.fusesource.fon.util.messages,
+ org.fusesource.fon.util.messages.contenttype,
+ org.fusesource.fon.util.messages.support,
+ org.fusesource.ide.commons,
  org.fusesource.ide.commons.contenttype,
+ org.fusesource.ide.commons.jmx,
  org.fusesource.ide.commons.jobs,
  org.fusesource.ide.commons.logging,
  org.fusesource.ide.commons.properties,
@@ -37,8 +44,6 @@ Export-Package: org.fusesource.ide.commons,
  org.fusesource.ide.commons.ui.propsrc,
  org.fusesource.ide.commons.ui.views,
  org.fusesource.ide.commons.util,
- org.fusesource.fon.util.messages,
- org.fusesource.fon.util.messages.contenttype,
- org.fusesource.fon.util.messages.support
+ org.fusesource.ide.commons.views.jmx
 Bundle-Activator: org.fusesource.ide.commons.Activator
 Bundle-ActivationPolicy: lazy

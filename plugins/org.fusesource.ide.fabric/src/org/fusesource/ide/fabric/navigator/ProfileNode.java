@@ -11,21 +11,17 @@
 
 package org.fusesource.ide.fabric.navigator;
 
-import io.fabric8.api.FabricException;
 import io.fabric8.api.Profile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.maven.model.Model;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.graphics.Image;
@@ -34,19 +30,16 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.ide.commons.properties.PropertySources;
 import org.fusesource.ide.commons.tree.GraphableNode;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableUI;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
 import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.ProfileAddAction;
 import org.fusesource.ide.fabric.actions.ProfileDeleteAction;
-import org.fusesource.ide.fabric.navigator.maven.FabricDeployAction;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
-import org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor;
-import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 public class ProfileNode extends IdBasedFabricNode implements HasRefreshableUI,
 		ImageProvider, GraphableNode, ContextMenuProvider, /**ProjectDropTarget**/

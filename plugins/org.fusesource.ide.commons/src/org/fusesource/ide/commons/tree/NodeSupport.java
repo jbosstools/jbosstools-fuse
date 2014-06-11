@@ -13,22 +13,37 @@ package org.fusesource.ide.commons.tree;
 
 import java.beans.IntrospectionException;
 
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.fusesource.ide.commons.Activator;
+import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.commons.ui.propsrc.BeanPropertySource;
 import org.fusesource.ide.commons.util.Nodes;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.internal.actions.RefreshAction;
 
 
-public abstract class NodeSupport extends Node implements IPropertySourceProvider {
+public abstract class NodeSupport extends Node implements IAdaptable, RefreshableUI, HasRefreshableUI, IPropertySourceProvider {
 
 	private IPropertySource propertySource;
 	private Object propertyBean;
 
-	public NodeSupport(org.fusesource.ide.commons.tree.Node parent) {
+	public NodeSupport(Node parent) {
 		super(parent);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
+	 */
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (this instanceof NodeSupport) return Platform.getAdapterManager().getAdapter(this, adapter);
+		return null;
+	}
+	
 	@Override
 	public int compareTo(Object o) {
 		String thatString = o.toString();
@@ -43,7 +58,7 @@ public abstract class NodeSupport extends Node implements IPropertySourceProvide
 		 */
 		return toString().compareTo(thatString);
 	}
-
+	
 	@Override
 	public IPropertySource getPropertySource(Object object) {
 		// avoid infinite recursion!
@@ -112,5 +127,42 @@ public abstract class NodeSupport extends Node implements IPropertySourceProvide
 
 	protected void refreshParent() {
 		Nodes.refreshParent(this);
+	}
+	
+	@Override
+	public RefreshableUI getRefreshableUI() {
+		if (this instanceof RefreshableUI) {
+			return (RefreshableUI) this;
+		} else if (parent != null) {
+			// return parent.getRefreshableUI();
+// TODO: reworkd refresh logic -->			System.err.println("refreshing node?!?");
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.tree.RefreshableUI#fireRefresh()
+	 */
+	@Override
+	public void fireRefresh() {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				RefreshAction ra = new RefreshAction(UIHelper.ID_JMX_EXPORER);
+				ra.run();
+			}
+		});
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.tree.RefreshableUI#fireRefresh(java.lang.Object, boolean)
+	 */
+	@Override
+	public void fireRefresh(Object node, boolean full) {
+		if (node instanceof Node) {
+			((Node) node).getParent().clearChildren();
+			((Node) node).getParent().getChildren();
+			fireRefresh();
+		}
 	}
 }

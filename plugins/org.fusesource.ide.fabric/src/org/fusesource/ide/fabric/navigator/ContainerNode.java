@@ -47,10 +47,9 @@ import org.fusesource.ide.commons.tree.GraphableNode;
 import org.fusesource.ide.commons.tree.GraphableNodeConnected;
 import org.fusesource.ide.commons.tree.HasOwner;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableNode;
 import org.fusesource.ide.commons.tree.RefreshableUI;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.actions.ActionSupport;
 import org.fusesource.ide.commons.ui.views.ViewPropertySheetPage;
 import org.fusesource.ide.commons.util.Objects;
@@ -64,9 +63,10 @@ import org.fusesource.ide.fabric.views.logs.ContainerLogBrowser;
 import org.fusesource.ide.fabric.views.logs.HasLogBrowser;
 import org.fusesource.ide.fabric.views.logs.ILogBrowser;
 import org.fusesource.ide.fabric.views.logs.Logs;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
 import org.fusesource.ide.server.view.ITerminalConnectionListener;
 import org.fusesource.ide.server.view.SshView;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 import scala.actors.threadpool.Arrays;
 

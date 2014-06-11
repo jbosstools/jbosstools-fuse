@@ -11,6 +11,9 @@
 
 package org.fusesource.ide.fabric.navigator;
 
+import io.fabric8.api.FabricService;
+import io.fabric8.api.Version;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -21,21 +24,19 @@ import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
-import io.fabric8.api.FabricService;
-import io.fabric8.api.Version;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
 import org.fusesource.ide.commons.tree.HasViewer;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.tree.RefreshableUI;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.FabricDetails;
 import org.fusesource.ide.fabric.actions.FabricDetailsAddAction;
 import org.fusesource.ide.fabric.actions.jclouds.CreateJCloudsFabricAction;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class Fabrics extends RefreshableCollectionNode implements ImageProvider, HasRefreshableUI, HasViewer, ContextMenuProvider {

@@ -34,12 +34,11 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.commons.Bundles;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
-import org.fusesource.ide.commons.ui.UIConstants;
+import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.fabric.navigator.FabricNavigator;
 import org.fusesource.ide.fabric.navigator.FabricNodeProvider;
 import org.fusesource.ide.fabric.navigator.FabricPreferenceInitializer;
 import org.fusesource.ide.fabric.navigator.NodeProvider;
-import org.fusesource.ide.jmx.core.JMXActivator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
@@ -51,7 +50,6 @@ import org.osgi.framework.BundleContext;
 public class FabricPlugin extends ImagesActivatorSupport {
 
 	public static final String PLUGIN_ID = "org.fusesource.ide.fabric";
-	public static final String TERMINAL_VIEW_ID = "org.fusesource.ide.server.view.TerminalView";
 
 	private static IViewPart part;
 	private static FabricPlugin plugin;
@@ -202,13 +200,11 @@ public class FabricPlugin extends ImagesActivatorSupport {
 			new FabricPreferenceInitializer().initializeDefaultPreferences();
 			nodeProvider = new FabricNodeProvider();
 			FabricPlugin.addNodeProvider(nodeProvider);
-			JMXActivator.addNodeProvider(nodeProvider);
 		}
 	}
 
 	public static void unregisterPlugins() {
 		if (nodeProvider != null) {
-			JMXActivator.removeNodeProvider(nodeProvider);
 			FabricPlugin.removeNodeProvider(nodeProvider);
 		}
 		started.set(false);
@@ -228,7 +224,7 @@ public class FabricPlugin extends ImagesActivatorSupport {
 						IWorkbenchPage activePage = activeWindow.getActivePage();
 						if (activePage != null) {
 							try {
-								part = activePage.showView(TERMINAL_VIEW_ID);
+								part = activePage.showView(UIHelper.ID_TERMINAL_VIEW);
 							} catch (CoreException ex) {
 								getLogger().error("Unable to create the terminal view!", ex);
 							}
@@ -252,7 +248,7 @@ public class FabricPlugin extends ImagesActivatorSupport {
 			if (wbw != null) {
 				IWorkbenchPage page = wbw.getActivePage();
 				if (page != null) {
-					IViewPart part = page.findView(UIConstants.FABRIC_EXPLORER_VIEW_ID);
+					IViewPart part = page.findView(UIHelper.ID_FABRIC_EXPORER);
 					if (part != null) {
 						// ok, we found the view
 						FabricNavigator nav = (FabricNavigator)part;

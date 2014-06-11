@@ -15,8 +15,8 @@ package org.fusesource.ide.fabric.servicemix.navigator;
 import org.apache.servicemix.nmr.management.ManagedEndpointMBean;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.NodeSupport;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class EndpointNode extends NodeSupport implements ImageProvider {

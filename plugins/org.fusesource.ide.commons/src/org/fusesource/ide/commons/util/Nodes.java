@@ -22,10 +22,10 @@ import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.tree.HasRefreshableUI;
 import org.fusesource.ide.commons.tree.HasViewer;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.Refreshable;
 import org.fusesource.ide.commons.tree.RefreshableUI;
 import org.fusesource.ide.commons.ui.Selections;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 public class Nodes {
@@ -182,13 +182,13 @@ public class Nodes {
 
 	public static Viewer getViewer(Node node) {
 		HasViewer hv = null;
-		if (node instanceof HasRefreshableUI) {
-			HasRefreshableUI hr = node;
-			RefreshableUI refreshableUI = hr.getRefreshableUI();
-			if (refreshableUI instanceof HasViewer) {
-				hv = (HasViewer) refreshableUI;
-			}
-		}
+//		if (node instanceof HasRefreshableUI) {
+//			HasRefreshableUI hr = node;
+//			RefreshableUI refreshableUI = hr.getRefreshableUI();
+//			if (refreshableUI instanceof HasViewer) {
+//				hv = (HasViewer) refreshableUI;
+//			}
+//		}
 		if (hv == null && node instanceof HasViewer) {
 			hv = (HasViewer) node;
 		}

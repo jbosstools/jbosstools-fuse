@@ -11,19 +11,19 @@
 
 package org.fusesource.ide.fabric.camel.navigator;
 
-import java.util.List;
-
-
 import io.fabric8.camel.facade.CamelFacade;
 import io.fabric8.camel.facade.JmxTemplateCamelFacade;
+
+import java.util.List;
+
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.fabric.camel.FabricCamelPlugin;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
 import org.fusesource.ide.fabric.navigator.NodeProvider;
-import org.fusesource.ide.jmx.core.tree.Root;
+import org.jboss.tools.jmx.core.tree.Root;
 
 
-public class CamelNodeProvider implements NodeProvider, org.fusesource.ide.jmx.core.tree.NodeProvider {
+public class CamelNodeProvider implements NodeProvider, org.jboss.tools.jmx.core.tree.NodeProvider {
 
 	public void provide(ContainerNode agentNode) {
 		try {
@@ -45,7 +45,7 @@ public class CamelNodeProvider implements NodeProvider, org.fusesource.ide.jmx.c
 	}
 
 	@Override
-	public void provideRootNodes(List<org.fusesource.ide.jmx.core.tree.NodeProvider> list) {
+	public void provideRootNodes(List<org.jboss.tools.jmx.core.tree.NodeProvider> list) {
 	}
 	
 }

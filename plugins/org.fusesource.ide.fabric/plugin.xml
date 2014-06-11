@@ -6,9 +6,9 @@
       <view
             category="org.fusesource.ide"
             class="org.fusesource.ide.fabric.navigator.FabricNavigator"
-            icon="icons/fabric_explorer.png"
+            icon="icons/fabric8.png"
             id="org.fusesource.ide.fabric.navigator"
-            name="Fabric Explorer"
+            name="Fabric8 Explorer"
             restorable="true">
          <description>
             Displays the Fuse Fabric outline view showing containers and their features and properties
@@ -16,7 +16,7 @@
       </view>
       <category
             id="org.fusesource.ide"
-            name="Fuse">
+            name="JBoss Fuse">
       </category>
       <view
             category="org.fusesource.ide"
@@ -52,13 +52,13 @@
                   pattern="org.fusesource.ide.fabric.navigator.root">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.root">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.root">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.queryFilter">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.queryFilter">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.JMXLinkHelper">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.JMXLinkHelper">
             </contentExtension>
          </includes>
       </viewerContentBinding>
@@ -69,22 +69,22 @@
                   pattern="org.fusesource.ide.fabric.navigator.actionProvider">
             </actionExtension>
             <actionExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.actionProvider">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.actionProvider">
             </actionExtension>
          </includes>
       </viewerActionBinding>
-      
    </extension>
+
    <extension
          id="org.fusesource.ide.fabric.navigatorContent"
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
             activeByDefault="true"
             contentProvider="org.fusesource.ide.fabric.navigator.FabricsContentProvider"
-            icon="icons/fabric_folder.png"
+            icon="icons/fabric8.png"
             id="org.fusesource.ide.fabric.navigator.root"
             labelProvider="org.fusesource.ide.fabric.navigator.FabricsContentProvider"
-            name="Fabrics"
+            name="Fabric8"
             priority="normal">
          <triggerPoints>
             <instanceof
@@ -102,21 +102,22 @@
                <instanceof
                      value="org.fusesource.ide.fabric.navigator.FabricNavigator">
                </instanceof>
-               
-               <!-- JMX -->
+
+			   <!-- JMX -->
                <instanceof
-                     value="org.fusesource.ide.jmx.core.tree.Node">
+                     value="org.jboss.tools.jmx.core.tree.Node">
                </instanceof>
                <instanceof
-                     value="org.fusesource.ide.jmx.core.IConnectionProvider">
+                     value="org.jboss.tools.jmx.core.IConnectionProvider">
                </instanceof>
                <instanceof
-                     value="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorerContentProvider$DelayProxy">
+                     value="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorerContentProvider$DelayProxy">
                </instanceof>
             </or>
          </possibleChildren>
       </navigatorContent>
    </extension>
+
    <extension
          point="org.eclipse.help.contexts">
       <contexts
@@ -134,7 +135,7 @@
            point="org.eclipse.ui.perspectives">
         <perspective
               class="org.fusesource.ide.fabric.perspective.FabricPerspective"
-              icon="icons/fabric_perspective.png"
+              icon="icons/fabric8.png"
               id="org.fusesource.ide.fabric.perspective"
               name="Fabric8">
         </perspective>
@@ -254,40 +255,40 @@
      
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
-      <propertyTabs contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
+      <propertyTabs contributorId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
          <propertyTab
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.BundlesTab"
                label="Bundles"/>
          <propertyTab
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ContainersTab"
                label="Containers"/>
          <propertyTab
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.FabricStatusTab"
                label="Status"/>
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.PropertiesTab"
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ContainerProfilesTab"
                label="Profiles"/>
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.ContainerProfilesTab"
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ContainerProfileDetailsTab"
                label="Profile Details"/>
          <propertyTab
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ProfileDetailsTab"
                label="Details"/>
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.PropertiesTab"
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ProfileRequirementsTab"
                label="Requirements"/>
          <propertyTab
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.NodesTab"
                label="Nodes">
          </propertyTab>
@@ -295,7 +296,7 @@
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
-      <propertySections contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
+      <propertySections contributorId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
          <propertySection
                class="org.fusesource.ide.fabric.navigator.osgi.BundlesTabSection"
                id="BundlesSection"
@@ -370,4 +371,43 @@
          </propertySection>
       </propertySections>
    </extension>
+   
+   
+   <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+       <navigatorContent
+             id="org.fusesource.ide.fabric.osgi.jmx.content"
+             name="OSGi Bundles"
+             activeByDefault="true"
+             icon="icons/bundle.png"
+             priority="normal"
+             contentProvider="org.fusesource.ide.fabric.jmx.content.navigator.providers.BundlesNodeContentProvider"
+             labelProvider="org.fusesource.ide.fabric.jmx.content.navigator.providers.BundlesNodeLabelProvider">
+          <triggerPoints>
+             <instanceof
+                   value="org.jboss.tools.jmx.core.IConnectionWrapper">
+             </instanceof>
+          </triggerPoints>
+          <possibleChildren>
+             <or>
+                <instanceof
+                      value="java.lang.Object">
+                </instanceof>
+              </or>
+          </possibleChildren>
+       </navigatorContent>
+	</extension>
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	         viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+	      <includes>
+             <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric.osgi.jmx.content">
+             </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+	</extension>
 </plugin>

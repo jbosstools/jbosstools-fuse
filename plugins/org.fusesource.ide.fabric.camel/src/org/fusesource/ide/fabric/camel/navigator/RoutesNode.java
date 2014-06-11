@@ -11,6 +11,9 @@
 
 package org.fusesource.ide.fabric.camel.navigator;
 
+import io.fabric8.camel.facade.CamelFacade;
+import io.fabric8.camel.facade.mbean.CamelRouteMBean;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,8 +24,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import io.fabric8.camel.facade.CamelFacade;
-import io.fabric8.camel.facade.mbean.CamelRouteMBean;
 import org.fusesource.fon.util.messages.IExchange;
 import org.fusesource.fon.util.messages.IInvocationStatistics;
 import org.fusesource.fon.util.messages.ITraceExchangeBrowser;
@@ -33,14 +34,14 @@ import org.fusesource.ide.camel.model.AbstractNodeFacade;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.HasTotalStatistics;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.IProcessorStatistics;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.IProcessorStatisticsContainer;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class RoutesNode extends RefreshableCollectionNode implements AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider, HasTotalStatistics {

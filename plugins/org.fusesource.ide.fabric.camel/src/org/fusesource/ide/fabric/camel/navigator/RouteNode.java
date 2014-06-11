@@ -17,15 +17,17 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+
 import io.fabric8.camel.facade.mbean.CamelRouteMBean;
+
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.util.Function1;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.camel.Messages;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class RouteNode extends ProcessorNodeSupport implements ImageProvider {

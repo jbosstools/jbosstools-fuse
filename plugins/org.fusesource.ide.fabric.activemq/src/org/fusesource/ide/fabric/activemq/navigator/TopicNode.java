@@ -11,10 +11,11 @@
 
 package org.fusesource.ide.fabric.activemq.navigator;
 
+import io.fabric8.activemq.facade.BrokerFacade;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 import org.apache.activemq.broker.jmx.TopicViewMBean;
 import org.eclipse.jface.action.Action;
@@ -22,15 +23,14 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import io.fabric8.activemq.facade.BrokerFacade;
 import org.fusesource.ide.commons.tree.ConnectedNode;
 import org.fusesource.ide.commons.tree.GraphableNode;
-import org.fusesource.ide.commons.tree.Node;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.activemq.Messages;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class TopicNode extends DestinationNodeSupport  implements ImageProvider, ContextMenuProvider, GraphableNode, ConnectedNode {

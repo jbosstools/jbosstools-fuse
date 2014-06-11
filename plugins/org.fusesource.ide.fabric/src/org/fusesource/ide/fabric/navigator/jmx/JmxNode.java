@@ -13,9 +13,9 @@ package org.fusesource.ide.fabric.navigator.jmx;
 
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.RefreshableNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 

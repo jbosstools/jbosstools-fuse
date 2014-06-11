@@ -11,41 +11,24 @@
 
 package org.fusesource.ide.fabric.navigator.osgi;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.management.openmbean.TabularData;
 
-import org.apache.maven.model.Model;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.debug.internal.ui.views.console.ProcessConsole;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.ide.commons.Viewers;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.tree.Refreshables;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.Workbenches;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
 import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
 import org.fusesource.ide.fabric.FabricPlugin;
-import org.fusesource.ide.fabric.navigator.maven.FabricInstallAction;
-import org.fusesource.ide.launcher.ui.ExecutePomActionPostProcessor;
-import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
-
-import com.google.common.base.Objects;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 public class BundlesNode extends RefreshableCollectionNode implements ImageProvider, /** ProjectDropTarget **/ DropHandlerFactory {
 	private final OsgiFacade facade;

@@ -11,6 +11,8 @@
 
 package org.fusesource.ide.fabric.activemq.navigator;
 
+import io.fabric8.activemq.facade.BrokerFacade;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,19 +26,18 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
-import io.fabric8.activemq.facade.BrokerFacade;
 import org.fusesource.fon.util.messages.IExchange;
 import org.fusesource.fon.util.messages.IExchangeBrowser;
 import org.fusesource.ide.commons.tree.ConnectedNode;
 import org.fusesource.ide.commons.tree.GraphableNode;
-import org.fusesource.ide.commons.tree.Node;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.activemq.ActiveMQConverter;
 import org.fusesource.ide.fabric.activemq.FabricActiveMQPlugin;
 import org.fusesource.ide.fabric.activemq.Messages;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class QueueNode extends DestinationNodeSupport implements IExchangeBrowser, ImageProvider, ContextMenuProvider, IPropertySourceProvider, GraphableNode, ConnectedNode {

@@ -11,13 +11,14 @@
 
 package org.fusesource.ide.fabric.actions;
 
+import io.fabric8.api.Profile;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
-import io.fabric8.api.Profile;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.navigator.ProfileNode;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 public class ProfileDeleteAction extends Action {

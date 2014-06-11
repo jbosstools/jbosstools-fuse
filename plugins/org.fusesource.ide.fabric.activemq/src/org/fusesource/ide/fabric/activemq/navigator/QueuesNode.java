@@ -22,13 +22,14 @@ import org.eclipse.swt.graphics.Image;
 
 import io.fabric8.activemq.facade.BrokerFacade;
 import io.fabric8.activemq.facade.QueueViewFacade;
+
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.activemq.Messages;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class QueuesNode extends RefreshableCollectionNode implements ImageProvider, ContextMenuProvider {

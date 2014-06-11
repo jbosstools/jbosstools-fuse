@@ -14,13 +14,13 @@ package org.fusesource.ide.branding.perspective;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
-import org.fusesource.ide.commons.ui.PerspectiveSupport;
+import org.fusesource.ide.commons.ui.UIHelper;
 
 
 /**
  * @author lhein
  */
-public class FusePerspective extends PerspectiveSupport implements IPerspectiveFactory {
+public class FusePerspective implements IPerspectiveFactory, UIHelper {
 
 	/*
 	 * (non-Javadoc)

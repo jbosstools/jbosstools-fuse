@@ -11,20 +11,21 @@
 
 package org.fusesource.ide.fabric.activemq.navigator;
 
+import io.fabric8.activemq.facade.BrokerFacade;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import io.fabric8.activemq.facade.BrokerFacade;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.activemq.Messages;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class ConsumersNode extends RefreshableCollectionNode implements ImageProvider, ContextMenuProvider {

@@ -20,7 +20,6 @@ import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.camel.navigator.CamelNodeProvider;
 import org.fusesource.ide.fabric.camel.navigator.CamelPreferenceInitializer;
-import org.fusesource.ide.jmx.core.JMXActivator;
 import org.osgi.framework.BundleContext;
 
 
@@ -74,13 +73,11 @@ public class FabricCamelPlugin extends ImagesActivatorSupport {
 				Platform.getAdapterManager().registerAdapters(adapterFactory, clazz);
 			}
 			FabricPlugin.addNodeProvider(nodeProvider);
-			JMXActivator.addNodeProvider(nodeProvider);
 		}
 	}
 
 	public static void unregisterPlugins() {
 		if (nodeProvider != null) {
-			JMXActivator.removeNodeProvider(nodeProvider);
 			FabricPlugin.removeNodeProvider(nodeProvider);
 		}
 		Class<?>[] classses = adapterFactory.getAdapterList();

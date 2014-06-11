@@ -11,24 +11,24 @@
 
 package org.fusesource.ide.fabric.activemq.navigator;
 
+import io.fabric8.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.JmxTemplateBrokerFacade;
+import io.fabric8.activemq.facade.RemoteBrokerFacade;
+
 import java.util.List;
 
 import javax.management.MBeanServerConnection;
 
-
 import org.eclipse.core.runtime.CoreException;
-import io.fabric8.activemq.facade.BrokerFacade;
-import io.fabric8.activemq.facade.JmxTemplateBrokerFacade;
-import io.fabric8.activemq.facade.RemoteBrokerFacade;
 import org.fusesource.ide.fabric.activemq.FabricActiveMQPlugin;
 import org.fusesource.ide.fabric.navigator.ContainerNode;
 import org.fusesource.ide.fabric.navigator.NodeProvider;
-import org.fusesource.ide.jmx.core.IJMXRunnable;
-import org.fusesource.ide.jmx.core.JMXException;
-import org.fusesource.ide.jmx.core.tree.Root;
+import org.jboss.tools.jmx.core.IJMXRunnable;
+import org.jboss.tools.jmx.core.JMXException;
+import org.jboss.tools.jmx.core.tree.Root;
 
 
-public class ActiveMQNodeProvider implements NodeProvider, org.fusesource.ide.jmx.core.tree.NodeProvider {
+public class ActiveMQNodeProvider implements NodeProvider, org.jboss.tools.jmx.core.tree.NodeProvider {
 
 	public void provide(ContainerNode agentNode) {
 		BrokerFacade facade = new JmxTemplateBrokerFacade(agentNode.getJmxTemplate());
@@ -67,8 +67,7 @@ public class ActiveMQNodeProvider implements NodeProvider, org.fusesource.ide.jm
 		
 	}
 
-	@Override
-	public void provideRootNodes(List<org.fusesource.ide.jmx.core.tree.NodeProvider> list) {
+	public void provideRootNodes(List<org.jboss.tools.jmx.core.tree.NodeProvider> list) {
 	}
 	
 }

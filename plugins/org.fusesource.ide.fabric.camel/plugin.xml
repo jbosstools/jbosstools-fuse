@@ -1,6 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.fusesource.ide.fabric.camel.Startup">
+      </startup>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.fusesource.ide.fabric.camel.navigator.CamelPreferenceInitializer">
+      </initializer>
+   </extension>
+
+   <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+       <navigatorContent
+             id="org.fusesource.ide.fabric.camel.jmx.content"
+             name="Camel Contexts"
+             activeByDefault="true"
+             icon="icons/camel.png"
+             priority="normal"
+             contentProvider="org.fusesource.ide.fabric.camel.jmx.content.navigator.providers.CamelNodeContentProvider"
+             labelProvider="org.fusesource.ide.fabric.camel.jmx.content.navigator.providers.CamelNodeLabelProvider">
+          <triggerPoints>
+             <instanceof
+                   value="org.jboss.tools.jmx.core.IConnectionWrapper">
+             </instanceof>
+          </triggerPoints>
+          <possibleChildren>
+             <or>
+                <instanceof
+                      value="java.lang.Object">
+                </instanceof>
+              </or>
+          </possibleChildren>
+          <actionProvider
+                class="org.fusesource.ide.fabric.camel.CamelNodesActionProvider"
+                id="org.fusesource.ide.jmx.ui.internal.views.navigator.actionProvider">
+	         <enablement>
+	            <or>
+	               <adapt
+	                     type="java.util.Collection">
+	                  <count
+	                        value="0">
+	                  </count>
+	               </adapt>
+	               <instanceof
+	                     value="org.jboss.tools.jmx.core.IConnectionWrapper">
+	               </instanceof>
+	               <instanceof
+	                     value="org.jboss.tools.jmx.core.tree.Node">
+	               </instanceof>
+	            </or>
+	         </enablement>
+	      </actionProvider>
+          <dropAssistant
+                class="org.fusesource.ide.fabric.camel.CamelMessageDropAssistant"
+                id="org.fusesource.ide.fabric.camel.messages.drop">
+             <possibleDropTargets></possibleDropTargets>
+          </dropAssistant>
+       </navigatorContent>
+	</extension>
+
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	         viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+	      <includes>
+             <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric.camel.jmx.content">
+             </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+	</extension>
+
+
+
+
    <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewer
@@ -14,13 +95,13 @@
                   pattern="org.fusesource.ide.fabric.navigator.root">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.root">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.root">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.queryFilter">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.queryFilter">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.JMXLinkHelper">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.JMXLinkHelper">
             </contentExtension>
          </includes>
       </viewerContentBinding>
@@ -37,37 +118,40 @@
       </viewerActionBinding>
       
    </extension>
-   <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.fusesource.ide.fabric.camel.Startup">
-      </startup>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.fusesource.ide.fabric.camel.navigator.CamelPreferenceInitializer">
-      </initializer>
-   </extension>
   
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
-      <propertyTabs contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
+      <propertyTabs contributorId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.ContentsTab"
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ProcessorsTab"
                label="Processors"/>
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.ProcessorsTab"
-               category="org.fusesource.ide.jmx.ui.views"
+               category="org.jboss.tools.jmx.ui.views"
                id="org.fusesource.ide.jmx.ui.views.ProfileTab"
                label="Profile"/>
+         <propertyTab
+               afterTab="org.jboss.tools.jmx.ui.views.PropertiesTab"
+               category="org.jboss.tools.jmx.ui.views"
+               id="org.fusesource.ide.jmx.ui.views.ContentsTab"
+               label="Contents"/>
+         <propertyTab
+               category="org.jboss.tools.jmx.ui.views"
+               id="org.jboss.tools.jmx.ui.views.PropertiesTab"
+               label="Properties"/>
       </propertyTabs>
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
-      <propertySections contributorId="org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorer">
+      <propertySections contributorId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+         <propertySection
+               class="org.fusesource.ide.commons.jmx.ContentsTabSection"
+               filter="org.fusesource.ide.commons.jmx.ContentsSectionFilter"
+               id="ContentsSection"
+               tab="org.fusesource.ide.jmx.ui.views.ContentsTab">
+         </propertySection>
          <propertySection
                class="org.fusesource.ide.fabric.camel.navigator.RoutesProcessorsTabSection"
                id="RoutesProcessorsSection"
@@ -90,4 +174,5 @@
          </propertySection>
       </propertySections>
    </extension>
+
 </plugin>

@@ -39,10 +39,10 @@ import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.commons.tree.HasName;
-import org.fusesource.ide.commons.tree.Node;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class DiagramGraphLabelProvider extends GraphLabelProviderSupport implements ILabelProvider,

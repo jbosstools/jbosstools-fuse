@@ -19,7 +19,6 @@ import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.activemq.navigator.ActiveMQNodeProvider;
 import org.fusesource.ide.fabric.activemq.navigator.ActiveMQPreferenceInitializer;
-import org.fusesource.ide.jmx.core.JMXActivator;
 import org.osgi.framework.BundleContext;
 
 
@@ -51,7 +50,6 @@ public class FabricActiveMQPlugin extends ImagesActivatorSupport {
 			new ActiveMQPreferenceInitializer().initializeDefaultPreferences();
 			nodeProvider = new ActiveMQNodeProvider();
 			FabricPlugin.addNodeProvider(nodeProvider);
-			JMXActivator.addNodeProvider(nodeProvider);
 		}
 	}
 
@@ -61,7 +59,6 @@ public class FabricActiveMQPlugin extends ImagesActivatorSupport {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		JMXActivator.removeNodeProvider(nodeProvider);
 		FabricPlugin.removeNodeProvider(nodeProvider);
 
 		plugin = null;

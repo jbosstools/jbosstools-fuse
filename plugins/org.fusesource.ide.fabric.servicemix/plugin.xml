@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.fusesource.ide.fabric.servicemix.Startup">
+      </startup>
+   </extension>
+
+   <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+       <navigatorContent
+             id="org.fusesource.ide.fabric.smx.jmx.content"
+             name="ServiceMix Endpoints"
+             activeByDefault="true"
+             icon="icons/smx_server.png"
+             priority="normal"
+             contentProvider="org.fusesource.ide.fabric.servicemix.jmx.content.navigator.providers.SMXNodeContentProvider"
+             labelProvider="org.fusesource.ide.fabric.servicemix.jmx.content.navigator.providers.SMXNodeLabelProvider">
+          <triggerPoints>
+             <instanceof
+                   value="org.jboss.tools.jmx.core.IConnectionWrapper">
+             </instanceof>
+          </triggerPoints>
+          <possibleChildren>
+             <or>
+                <instanceof
+                      value="java.lang.Object">
+                </instanceof>
+              </or>
+          </possibleChildren>
+       </navigatorContent>
+	</extension>
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	         viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+	      <includes>
+             <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric.smx.jmx.content">
+             </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+	</extension>
+
    <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewer
@@ -14,13 +60,13 @@
                   pattern="org.fusesource.ide.fabric.navigator.root">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.root">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.root">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.queryFilter">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.queryFilter">
             </contentExtension>
             <contentExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.JMXLinkHelper">
+                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.JMXLinkHelper">
             </contentExtension>
          </includes>
       </viewerContentBinding>
@@ -35,12 +81,6 @@
             </actionExtension>
          </includes>
       </viewerActionBinding>
-      
    </extension>
-   <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.fusesource.ide.fabric.servicemix.Startup">
-      </startup>
-   </extension>
+   
 </plugin>

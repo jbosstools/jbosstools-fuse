@@ -20,8 +20,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
 import org.fusesource.ide.commons.ui.views.ViewPropertySheetPage;
-
-
+import org.jboss.tools.jmx.core.tree.Node;
 
 /**
  * Represents a refreshable collection which has no properties of itself but it just

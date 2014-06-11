@@ -12,16 +12,16 @@
 package org.fusesource.ide.fabric.activemq.navigator;
 
 
-import org.eclipse.swt.graphics.Image;
-
 import io.fabric8.activemq.facade.BrokerFacade;
+
+import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.commons.tree.Refreshable;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.activemq.FabricActiveMQPlugin;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class BrokerNode extends NodeSupport implements ImageProvider, Refreshable {
@@ -32,7 +32,7 @@ public class BrokerNode extends NodeSupport implements ImageProvider, Refreshabl
 	private String userName;
 	private String password;
 
-	public BrokerNode(org.fusesource.ide.commons.tree.Node parent, BrokerFacade facade, String brokerName) {
+	public BrokerNode(Node parent, BrokerFacade facade, String brokerName) {
 		super(parent);
 		this.facade = facade;
 		this.brokerName = brokerName;

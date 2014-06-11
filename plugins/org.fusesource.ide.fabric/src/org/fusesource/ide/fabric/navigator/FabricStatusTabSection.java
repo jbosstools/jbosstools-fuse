@@ -11,6 +11,9 @@
  ******************************************************************************/
 package org.fusesource.ide.fabric.navigator;
 
+import io.fabric8.api.ProfileStatus;
+import io.fabric8.api.Version;
+
 import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,10 +30,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
-import io.fabric8.api.ProfileStatus;
-import io.fabric8.api.Version;
 import org.fusesource.ide.commons.Viewers;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.Refreshables;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.ui.actions.SeparatorFactory;
@@ -44,6 +44,7 @@ import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.CreateChildContainerAction;
 import org.fusesource.ide.fabric.actions.CreateSshContainerAction;
 import org.fusesource.ide.fabric.actions.jclouds.CreateJCloudsContainerAction;
+import org.jboss.tools.jmx.core.tree.Node;
 
 public class FabricStatusTabSection extends TableViewSupport {
 

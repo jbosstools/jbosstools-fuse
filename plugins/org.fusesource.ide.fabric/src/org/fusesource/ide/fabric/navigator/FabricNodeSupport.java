@@ -15,9 +15,9 @@ import java.util.List;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.fusesource.ide.commons.tree.GraphableNode;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
+import org.jboss.tools.jmx.core.tree.Node;
 
 public abstract class FabricNodeSupport extends RefreshableCollectionNode
 		implements GraphableNode, ContextMenuProvider {

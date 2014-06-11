@@ -24,12 +24,12 @@ import org.fusesource.ide.commons.tree.HasRefreshableUI;
 import org.fusesource.ide.commons.tree.HasViewer;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.tree.RefreshableUI;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.ui.config.ConfigurationDetails;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.actions.jclouds.CloudDetails;
 import org.fusesource.ide.fabric.actions.jclouds.CloudDetailsAddAction;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class CloudsNode extends RefreshableCollectionNode implements ImageProvider, HasRefreshableUI, ContextMenuProvider {

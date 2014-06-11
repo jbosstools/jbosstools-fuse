@@ -11,6 +11,11 @@
 
 package org.fusesource.ide.fabric.camel.navigator;
 
+import io.fabric8.camel.facade.CamelFacade;
+import io.fabric8.camel.facade.mbean.CamelContextMBean;
+import io.fabric8.camel.facade.mbean.CamelFabricTracerMBean;
+import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +33,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-
-import io.fabric8.camel.facade.CamelFacade;
-import io.fabric8.camel.facade.mbean.CamelContextMBean;
-import io.fabric8.camel.facade.mbean.CamelFabricTracerMBean;
-import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
-
 import org.fusesource.fon.util.messages.IExchange;
 import org.fusesource.fon.util.messages.IMessage;
 import org.fusesource.fon.util.messages.ITraceExchangeBrowser;
@@ -46,7 +45,7 @@ import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.io.XmlContainerMarshaller;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.commons.tree.Refreshable;
-import org.fusesource.ide.commons.ui.ImageProvider;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.Workbenches;
 import org.fusesource.ide.commons.util.Function1;
 import org.fusesource.ide.commons.util.Nodes;
@@ -54,8 +53,7 @@ import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.camel.Messages;
 import org.fusesource.ide.fabric.camel.editor.CamelContextNodeEditorInput;
-import org.fusesource.ide.jmx.core.tree.Root;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.ContextMenuProvider;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class CamelContextNode extends NodeSupport implements Refreshable, AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser,

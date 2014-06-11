@@ -10,8 +10,6 @@ Require-Bundle: io.fabric8.tooling-jclouds-all,
  org.fusesource.ide.preferences,
  org.fusesource.ide.commons,
  org.fusesource.ide.server.view,
- org.fusesource.ide.jmx.ui,
- org.fusesource.ide.jmx.core,
  org.fusesource.ide.launcher,
  org.fusesource.ide.launcher.ui,
  org.fusesource.insight.insight-log,
@@ -62,7 +60,9 @@ Require-Bundle: io.fabric8.tooling-jclouds-all,
  jackson-core-asl;bundle-version="1.9.10",
  jackson-mapper-asl;bundle-version="1.9.10",
  org.eclipse.gemini.management,
- com.google.guava;bundle-version="[15.0.0,16.0.0)"
+ com.google.guava;bundle-version="[15.0.0,16.0.0)",
+ org.jboss.tools.jmx.core;bundle-version="1.6.0",
+ org.jboss.tools.jmx.ui;bundle-version="1.6.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.FabricPlugin
 Bundle-ClassPath: .

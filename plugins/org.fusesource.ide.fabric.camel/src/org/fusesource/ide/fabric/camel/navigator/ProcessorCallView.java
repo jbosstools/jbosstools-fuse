@@ -15,12 +15,12 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.fusesource.fon.util.messages.IInvocationStatistics;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.ui.views.TreeViewSupport;
 import org.fusesource.ide.commons.util.Function1;
 import org.fusesource.ide.commons.util.Function1Adapter;
 import org.fusesource.ide.commons.util.FunctionLong;
 import org.fusesource.ide.fabric.camel.navigator.stats.model.HasTotalStatistics;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 public class ProcessorCallView extends TreeViewSupport implements IPropertySheetPage {
@@ -30,7 +30,7 @@ public class ProcessorCallView extends TreeViewSupport implements IPropertySheet
 
 	public ProcessorCallView(Node input) {
 		this.input = input;
-	}
+	}	
 
 	@Override
 	public String getColumnConfigurationId() {

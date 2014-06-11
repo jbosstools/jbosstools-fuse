@@ -13,11 +13,11 @@ package org.fusesource.ide.commons.ui.label;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.commons.util.Function1;
 import org.fusesource.ide.commons.util.Function1WithReturnType;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.Strings;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class FunctionColumnLabelProvider extends ColumnLabelProvider implements Function1WithReturnType {

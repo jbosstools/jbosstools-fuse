@@ -11,14 +11,15 @@
 
 package org.fusesource.ide.fabric.activemq.navigator;
 
+import io.fabric8.activemq.facade.BrokerFacade;
+import io.fabric8.activemq.facade.ProducerViewFacade;
+
 import java.util.Collection;
 
 import org.eclipse.swt.graphics.Image;
-import io.fabric8.activemq.facade.BrokerFacade;
-import io.fabric8.activemq.facade.ProducerViewFacade;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class QueueProducersNode extends RefreshableCollectionNode implements ImageProvider {

@@ -160,10 +160,9 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 		boolean process = false;
 
 		// we filter for specific selection sources...
-		if (part.getClass().getName().equals("org.fusesource.ide.jmx.ui.internal.views.navigator.Navigator") ||
-				part.getClass().getName().equals("org.fusesource.ide.fabric.navigator.FabricNavigator") ||
-				part.getClass().getName().equals("org.fusesource.ide.camel.editor.views.DiagramView")
-				) {
+		if (part.getClass().getName().equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator") ||
+			part.getClass().getName().equals("org.fusesource.ide.fabric.navigator.FabricNavigator") ||
+			part.getClass().getName().equals("org.fusesource.ide.camel.editor.views.DiagramView") ) {
 			process = true;
 		}
 

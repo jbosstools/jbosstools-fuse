@@ -11,12 +11,13 @@
 
 package org.fusesource.ide.fabric.servicemix.navigator;
 
-import org.eclipse.swt.graphics.Image;
 import io.fabric8.servicemix.facade.ServiceMixFacade;
-import org.fusesource.ide.commons.tree.Node;
+
+import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.NodeSupport;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 

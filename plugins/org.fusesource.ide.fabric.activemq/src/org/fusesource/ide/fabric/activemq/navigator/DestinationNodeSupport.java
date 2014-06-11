@@ -22,7 +22,6 @@ import org.apache.activemq.broker.jmx.DestinationViewMBean;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.fusesource.fon.util.messages.IExchange;
 import org.fusesource.fon.util.messages.IMessage;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
 import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
@@ -32,6 +31,7 @@ import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.activemq.FabricActiveMQPlugin;
 import org.fusesource.ide.fabric.navigator.MessageDropHandler;
 import org.fusesource.ide.fabric.navigator.MessageDropTarget;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 

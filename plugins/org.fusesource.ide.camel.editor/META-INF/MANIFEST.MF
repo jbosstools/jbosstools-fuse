@@ -9,7 +9,6 @@ Require-Bundle: org.fusesource.ide.camel.model,
  org.fusesource.ide.commons,
  org.fusesource.ide.graph,
  org.fusesource.ide.preferences,
- org.fusesource.ide.jmx.core,
  org.fusesource.ide.project,
  io.fabric8.camel-tooling-util,
  org.apache.camel.camel-core;bundle-version="[2.7,3)",
@@ -44,7 +43,9 @@ Require-Bundle: org.fusesource.ide.camel.model,
  org.eclipse.graphiti.pattern,
  org.eclipse.graphiti.ui,
  org.junit,
- com.google.guava;bundle-version="[15.0.0,16.0.0)"
+ com.google.guava;bundle-version="[15.0.0,16.0.0)",
+ org.jboss.tools.jmx.core;bundle-version="1.6.0",
+ org.jboss.tools.jmx.ui;bundle-version="1.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.fusesource.ide.camel.editor
 Bundle-ActivationPolicy: lazy

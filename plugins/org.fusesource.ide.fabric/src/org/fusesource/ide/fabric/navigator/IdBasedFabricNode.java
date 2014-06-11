@@ -11,8 +11,8 @@
 
 package org.fusesource.ide.fabric.navigator;
 
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
+import org.jboss.tools.jmx.core.tree.Node;
 
 public abstract class IdBasedFabricNode extends RefreshableCollectionNode {
 

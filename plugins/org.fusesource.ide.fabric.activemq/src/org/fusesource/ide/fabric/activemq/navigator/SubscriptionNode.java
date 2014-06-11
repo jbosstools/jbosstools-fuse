@@ -12,8 +12,8 @@
 package org.fusesource.ide.fabric.activemq.navigator;
 
 import org.apache.activemq.broker.jmx.SubscriptionViewMBean;
-import org.fusesource.ide.commons.tree.Node;
 import org.fusesource.ide.commons.tree.NodeSupport;
+import org.jboss.tools.jmx.core.tree.Node;
 
 
 

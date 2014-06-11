@@ -9,8 +9,10 @@
    <feature url="features/org.fusesource.ide.server.extensions.feature_0.0.0.jar" id="org.fusesource.ide.server.extensions.feature" version="0.0.0">
       <category name="org.fusesource.ide"/>
    </feature>
+<!--
    <feature url="features/org.fusesource.ide.runtimes.feature_0.0.0.jar" id="org.fusesource.ide.runtimes.feature" version="0.0.0">
       <category name="org.fusesource.ide"/>
    </feature>
+-->
    <category-def name="org.fusesource.ide" label="JBoss Fuse Tooling"/>
 </site>

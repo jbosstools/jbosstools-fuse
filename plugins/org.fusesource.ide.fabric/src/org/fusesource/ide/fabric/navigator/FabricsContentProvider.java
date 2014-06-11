@@ -23,12 +23,12 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.commons.Viewers;
-import org.fusesource.ide.commons.tree.Node;
-import org.fusesource.ide.commons.ui.ImageProvider;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.navigator.jmx.FabricConnectionWrapper;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorerContentProvider;
-import org.fusesource.ide.jmx.ui.internal.views.navigator.MBeanExplorerLabelProvider;
+import org.jboss.tools.jmx.core.tree.Node;
+import org.jboss.tools.jmx.ui.ImageProvider;
+import org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorerContentProvider;
+import org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorerLabelProvider;
 
 
 public class FabricsContentProvider implements ITreeContentProvider,
