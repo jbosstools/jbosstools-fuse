@@ -218,7 +218,7 @@ public class JCo3Archive extends SAPArchive {
 	//
 
 	public static final String BUNDLE_CLASS_PATH_VALUE = "bin/,\n sapjco3.jar,\n jni/"; //$NON-NLS-1$
-	public static final String EXPORT_PACKAGE_VALUE = "com.sap.conn.jco, com.sap.conn.jco.ext, com.sap.conn.jco.monitor, com.sap.conn.jco.rt, com.sap.conn.jco.server"; //$NON-NLS-1$
+	public static final String EXPORT_PACKAGE_VALUE = "com.sap.conn.jco, com.sap.conn.jco.ext, com.sap.conn.jco.monitor, com.sap.conn.jco.rt, com.sap.conn.jco.rt.json,  com.sap.conn.jco.server, com.sap.conn.jco.session, com.sap.conn.jco.support, com.sap.conn.jco.util";
 	
 
 	//
