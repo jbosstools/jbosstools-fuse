@@ -311,15 +311,15 @@ ImageProvider {
 				suspendContextAction.setImageDescriptor(FabricPlugin.getDefault().getImageDescriptor("pause_camel.png"));
 				menu.add(suspendContextAction);
 			}
-			Action stopContextAction = new Action(Messages.StopCamelContextAction, SWT.CHECK) {
-				@Override
-				public void run() {
-					stopMBean();
-				}
-			};
-			stopContextAction.setToolTipText(Messages.StopCamelContextActionToolTip);
-			stopContextAction.setImageDescriptor(FabricPlugin.getDefault().getImageDescriptor("stop_camel.png"));
-			menu.add(stopContextAction);
+//			Action stopContextAction = new Action(Messages.StopCamelContextAction, SWT.CHECK) {
+//				@Override
+//				public void run() {
+//					stopMBean();
+//				}
+//			};
+//			stopContextAction.setToolTipText(Messages.StopCamelContextActionToolTip);
+//			stopContextAction.setImageDescriptor(FabricPlugin.getDefault().getImageDescriptor("stop_camel.png"));
+//			menu.add(stopContextAction);
 		}
 
 		if (canTrace()) {
