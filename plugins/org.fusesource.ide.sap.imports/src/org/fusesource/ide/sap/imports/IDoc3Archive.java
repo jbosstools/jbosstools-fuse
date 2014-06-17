@@ -20,6 +20,7 @@ import static org.osgi.framework.Constants.BUNDLE_SYMBOLICNAME;
 import static org.osgi.framework.Constants.BUNDLE_VENDOR;
 import static org.osgi.framework.Constants.BUNDLE_VERSION;
 import static org.osgi.framework.Constants.EXPORT_PACKAGE;
+import static org.osgi.framework.Constants.IMPORT_PACKAGE;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -59,7 +60,8 @@ public class IDoc3Archive extends SAPArchive {
 	//
 
 	public static final String BUNDLE_CLASS_PATH_VALUE = "bin/,\n sapidoc3.jar"; //$NON-NLS-1$
-	public static final String EXPORT_PACKAGE_VALUE = "com.sap.conn.idoc,com.sap.conn.idoc.jco,com.sap.conn.idoc.rt.cp,com.sap.conn.idoc.rt.record,com.sap.conn.idoc.rt.record.impl,com.sap.conn.idoc.rt.trace,com.sap.conn.idoc.rt.util,com.sap.conn.idoc.rt.xml"; //$NON-NLS-1$
+	public static final String EXPORT_PACKAGE_VALUE = "com.sap.conn.idoc, com.sap.conn.idoc.jco, com.sap.conn.idoc.jco.rt, com.sap.conn.idoc.monitory, com.sap.conn.idoc.rt, com.sap.conn.idoc.rt.cp, com.sap.conn.idoc.rt.record, com.sap.conn.idoc.rt.record.impl, com.sap.conn.idoc.rt.trace, com.sap.conn.idoc.rt.util, com.sap.conn.idoc.rt.xml"; //$NON-NLS-1$
+	public static final String IMPORT_PACKAGE_VALUE = "com.sap.conn.jco, com.sap.conn.jco.ext, com.sap.conn.jco.monitor, com.sap.conn.jco.rt, com.sap.conn.jco.rt.json,  com.sap.conn.jco.server, com.sap.conn.jco.session, com.sap.conn.jco.support, com.sap.conn.jco.util";
 	
 
 	//
@@ -251,6 +253,7 @@ public class IDoc3Archive extends SAPArchive {
 		writeAttribute(manifest, BUNDLE_REQUIREDEXECUTIONENVIRONMENT,
 				ImportUtils.getExecutionEnvironment(settings.getRequiredExecutionEnvironmentIndex()));
 		writeAttribute(manifest, EXPORT_PACKAGE, EXPORT_PACKAGE_VALUE);
+		writeAttribute(manifest, IMPORT_PACKAGE, IMPORT_PACKAGE_VALUE);
 		writeAttribute(manifest, BUNDLE_ACTIVATIONPOLICY, BUNDLE_ACTIVATION_POLICY_VALUE);
 		return manifest.toString().getBytes(MANIFEST_ENCODING);
 	}
