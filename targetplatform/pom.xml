@@ -254,7 +254,8 @@
 	         <!-- Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=389052  -->
 		 <groupId>org.jboss.tools.tycho-plugins</groupId>
 		 <artifactId>target-platform-utils</artifactId>
-		 <executions>
+		 <version>${jboss-tycho-version}</version>
+		   <executions>
 		    <execution>
 		       <phase>package</phase>
 		       <goals>
