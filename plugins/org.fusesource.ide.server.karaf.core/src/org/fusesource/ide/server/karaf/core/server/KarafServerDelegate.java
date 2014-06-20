@@ -23,16 +23,19 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 import org.fusesource.ide.server.karaf.core.Activator;
+import org.fusesource.ide.server.karaf.core.jmx.KarafJMXModel;
 import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator;
 import org.fusesource.ide.server.karaf.core.util.ServerNamingUtil;
 import org.jboss.ide.eclipse.as.core.server.ILaunchConfigConfigurator;
 import org.jboss.ide.eclipse.as.wtp.core.util.ServerSecureStorageUtil;
+import org.jboss.tools.jmx.core.IConnectionFacade;
+import org.jboss.tools.jmx.core.IConnectionWrapper;
 
 /**
  * @author lhein
  */
 public class KarafServerDelegate extends ServerDelegate implements
-		IKarafServerDelegateWorkingCopy {
+		IKarafServerDelegateWorkingCopy, IConnectionFacade {
 
 	public static final int    DEFAULT_SSH_PORT = 8101;
 	
@@ -175,5 +178,10 @@ public class KarafServerDelegate extends ServerDelegate implements
 			return Status.OK_STATUS;	
 		}
 		return Status.CANCEL_STATUS;
+	}
+
+	@Override
+	public IConnectionWrapper getJMXConnection() {
+		return KarafJMXModel.getDefault().findConnectionWrapper(getServer());
 	}
 }
