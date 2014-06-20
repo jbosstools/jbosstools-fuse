@@ -39,8 +39,28 @@ public interface IKarafRuntime {
 	
 	public IPath getLocation();
 	
+	/**
+	 * Get the current execution environment, or the minimum if none is set
+	 * @return
+	 */
 	public IExecutionEnvironment getExecutionEnvironment();
+	
+	/**
+	 * Get the minimum execution environment for this runtime type
+	 * @return
+	 */
+	public IExecutionEnvironment getMinimumExecutionEnvironment();
+	
+	/**
+	 * Get the VM to use to launch this runtime
+	 * @return
+	 */
 	public IVMInstall getVM();
 	public boolean isUsingDefaultJRE();
+	
+	/**
+	 * Get a list of all valid java vms that are compatible with this runtime type. 
+	 * @return
+	 */
 	public IVMInstall[] getValidJREs();
 }

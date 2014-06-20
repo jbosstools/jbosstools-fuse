@@ -107,6 +107,18 @@ public class KarafWizardDataModel implements
 	@Override
 	public void setVM(IVMInstall selectedVM) {
 		// TODO Auto-generated method stub
+		//dfsdfads
+	}
+
+	@Override
+	public IExecutionEnvironment getMinimumExecutionEnvironment() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setExecutionEnvironment(IExecutionEnvironment environment) {
+		// TODO Auto-generated method stub
 		
 	}
 }

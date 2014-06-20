@@ -22,7 +22,6 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
 import org.fusesource.ide.server.karaf.core.Activator;
-import org.jboss.ide.eclipse.as.core.server.IJBossServerRuntime;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
 import org.jboss.ide.eclipse.as.wtp.core.util.VMInstallUtil;
@@ -98,11 +97,23 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 
 	private static String PROPERTY_VM_ID = "PROPERTY_VM_ID"; //$NON-NLS-1$
 	private static String PROPERTY_VM_TYPE_ID = "PROPERTY_VM_TYPE_ID"; //$NON-NLS-1$
+	private static String PROPERTY_EXECUTION_ENVIRONMENT = "PROPERTY_EXEC_ENVIRONMENT"; //$NON-NLS-1$
 
 	public IExecutionEnvironment getExecutionEnvironment() {
+		String id = getAttribute(PROPERTY_EXECUTION_ENVIRONMENT, (String)null);
+		return id == null ? getMinimumExecutionEnvironment() : EnvironmentsManager.getDefault().getEnvironment(id);
+	}
+
+	@Override
+	public IExecutionEnvironment getMinimumExecutionEnvironment() {
 		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.6"); //$NON-NLS-1$
 	}
 	
+
+	public void setExecutionEnvironment(IExecutionEnvironment environment) {
+		setAttribute(PROPERTY_EXECUTION_ENVIRONMENT, environment == null ? null : environment.getId());
+	}
+
 	// Non-interface method for internal use
 	public IVMInstall getHardVM() {
 		if (getAttribute(PROPERTY_VM_TYPE_ID, (String)null) != null) {
@@ -122,11 +133,11 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	
 	public void setVM(IVMInstall selectedVM) {
 		if (selectedVM == null) {
-			setAttribute(IJBossServerRuntime.PROPERTY_VM_ID, (String) null);
-			setAttribute(IJBossServerRuntime.PROPERTY_VM_TYPE_ID, (String) null);
+			setAttribute(PROPERTY_VM_ID, (String) null);
+			setAttribute(PROPERTY_VM_TYPE_ID, (String) null);
 		} else {
-			setAttribute(IJBossServerRuntime.PROPERTY_VM_ID, selectedVM.getId());
-			setAttribute(IJBossServerRuntime.PROPERTY_VM_TYPE_ID, 
+			setAttribute(PROPERTY_VM_ID, selectedVM.getId());
+			setAttribute(PROPERTY_VM_TYPE_ID, 
 					selectedVM.getVMInstallType().getId());
 		}
 	}
@@ -145,4 +156,5 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 	public IPath getLocation() {
 		return getRuntime().getLocation();
 	}
+
 }

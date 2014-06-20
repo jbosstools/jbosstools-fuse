@@ -12,6 +12,7 @@
 package org.fusesource.ide.server.karaf.core.runtime;
 
 import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 
 
 /**
@@ -19,5 +20,15 @@ import org.eclipse.jdt.launching.IVMInstall;
  */
 public interface IKarafRuntimeWorkingCopy extends IKarafRuntime {
 	
+	/**
+	 * Set the VM to use
+	 * @param selectedVM
+	 */
 	public void setVM(IVMInstall selectedVM);
+	
+	/**
+	 * Set the execution environment to use
+	 * @param environment
+	 */
+	public void setExecutionEnvironment(IExecutionEnvironment environment);
 }

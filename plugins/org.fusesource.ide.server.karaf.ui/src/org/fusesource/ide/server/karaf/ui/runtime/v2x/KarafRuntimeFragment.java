@@ -61,13 +61,7 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 
 		public KarafJREComposite(Composite parent, int style, TaskModel tm) {
 			super(parent, style, tm);
-		}
-		public IExecutionEnvironment getExecutionEnvironment() {
-			IRuntime r = getRuntimeFromTaskModel();
-			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
-			return jbsrt.getExecutionEnvironment();
-		}
-		
+		}		
 		protected boolean isUsingDefaultJRE(IRuntime rt) {
 			IRuntime r = getRuntimeFromTaskModel();
 			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
@@ -89,11 +83,6 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		protected IRuntime getRuntimeFromTaskModel() {
 			return (IRuntime) getTaskModel().getObject(TaskModel.TASK_RUNTIME);
 		}
-		@Override	
-		protected String getExecutionEnvironmentId() {
-			IExecutionEnvironment env = getExecutionEnvironment();
-			return env == null ? null : env.getId();
-		}	
 		protected boolean isUsingDefaultJRE() {
 			IRuntime r = getRuntimeFromTaskModel();
 			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
@@ -104,6 +93,18 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 			IRuntime r = getRuntimeFromTaskModel();
 			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
 			return ((KarafRuntimeDelegate)jbsrt).getHardVM();
+		}
+		@Override
+		public IExecutionEnvironment getMinimumExecutionEnvironment() {
+			IRuntime r = getRuntimeFromTaskModel();
+			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
+			return jbsrt.getMinimumExecutionEnvironment();
+		}
+		@Override
+		public IExecutionEnvironment getStoredExecutionEnvironment() {
+			IRuntime r = getRuntimeFromTaskModel();
+			IKarafRuntime jbsrt = (IKarafRuntime)r.loadAdapter(IKarafRuntime.class, null);
+			return jbsrt.getExecutionEnvironment();
 		}
 	}
 	
@@ -141,10 +142,10 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		IKarafRuntimeWorkingCopy srt = (IKarafRuntimeWorkingCopy) wc.loadAdapter(
 				IKarafRuntimeWorkingCopy.class, new NullProgressMonitor());
 		if( srt != null ) {
-			if( jreComposite.getSelectedVM() != null )
-				srt.setVM(jreComposite.getSelectedVM());
-			else
-				srt.setVM(null);
+			IExecutionEnvironment selectedEnv = jreComposite.getSelectedExecutionEnvironment();
+			IVMInstall selectedVM = jreComposite.getSelectedVM();
+			srt.setVM(selectedVM);
+			srt.setExecutionEnvironment(selectedEnv);
 		}
 	}
 

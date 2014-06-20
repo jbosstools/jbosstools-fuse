@@ -12,6 +12,7 @@ package org.fusesource.ide.fabric.servicemix.jmx.content.navigator.providers;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.fusesource.ide.commons.tree.NodeSupport;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 public class SMXNodeLabelProvider extends LabelProvider {
@@ -27,7 +28,10 @@ public class SMXNodeLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		return element == null ? "null" : element.toString();
+		if( element instanceof NodeSupport ) {
+			return element == null ? "null" : element.toString();
+		}
+		return null;
 	}
 
 }
