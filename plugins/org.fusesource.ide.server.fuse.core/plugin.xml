@@ -39,7 +39,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.fuseesb.server.60"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.fuseesb6x.launch"
            name="%fuseESBServerType_60"
            runtime="true"
@@ -57,7 +57,7 @@
            id="org.fusesource.ide.fuseesb.server.61"
            initialState="stopped"
            launchConfigId="org.fusesource.ide.server.fuseesb6x.launch"
-           launchModes="run"
+           launchModes="run,debug"
            name="%fuseESBServerType_61"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.61"
@@ -89,7 +89,7 @@
      <launchConfigurationType
            delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
            id="org.fusesource.ide.server.fuseesb6x.launch"
-           modes="run"
+           modes="run,debug"
            name="%fuseesb.launch.name"
            public="true">
      </launchConfigurationType>
@@ -152,4 +152,4 @@
          </subsystemMapping>
   </extension>
   
-</plugin>
+</plugin>

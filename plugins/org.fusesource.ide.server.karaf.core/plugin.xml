@@ -52,7 +52,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.22"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf2x.launch"
            name="%karafServerType_22"
            runtime="true"
@@ -69,7 +69,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.23"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf2x.launch"
            name="%karafServerType_23"
            runtime="true"
@@ -86,7 +86,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.30"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf2x.launch"
            name="%karafServerType_30"
            runtime="true"
@@ -103,7 +103,7 @@
      <launchConfigurationType
            delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
            id="org.fusesource.ide.server.karaf2x.launch"
-           modes="run"
+           modes="run,debug"
            name="%karaf.launch.name"
            public="true">
      </launchConfigurationType>

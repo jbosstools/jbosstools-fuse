@@ -39,7 +39,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.servicemix.server.45"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.servicemix4x.launch"
            name="%serviceMixServerType_45"
            runtime="true"
@@ -57,7 +57,7 @@
            id="org.fusesource.ide.servicemix.server.50"
            initialState="stopped"
            launchConfigId="org.fusesource.ide.server.servicemix4x.launch"
-           launchModes="run"
+           launchModes="run,debug"
            name="%serviceMixServerType_50"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.50"
@@ -120,7 +120,7 @@
      <launchConfigurationType
            delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
            id="org.fusesource.ide.server.servicemix4x.launch"
-           modes="run"
+           modes="run,debug"
            name="%servicemix.launch.name"
            public="true">
      </launchConfigurationType>
@@ -181,4 +181,4 @@
             serverTypes="org.fusesource.ide.servicemix.server.45,org.fusesource.ide.servicemix.server.50">
          </subsystemMapping>
   </extension>
-</plugin>
+</plugin>

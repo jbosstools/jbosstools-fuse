@@ -27,7 +27,7 @@
            id="org.fusesource.ide.fabric8.server.11"
            initialState="stopped"
            launchConfigId="org.fusesource.ide.server.fabric81x.launch"
-           launchModes="run"
+           launchModes="run,debug"
            name="%fabric8ServerType_11"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.fabric8.runtime.11"
@@ -59,7 +59,7 @@
      <launchConfigurationType
            delegate="org.jboss.ide.eclipse.as.wtp.core.server.launch.ControllableServerLaunchConfiguration"
            id="org.fusesource.ide.server.fabric81x.launch"
-           modes="run"
+           modes="run,debug"
            name="%fabric8.launch.name"
            public="true">
      </launchConfigurationType>
@@ -128,4 +128,4 @@
          </subsystemMapping>
   </extension>
   
-</plugin>
+</plugin>
