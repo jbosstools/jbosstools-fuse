@@ -26,6 +26,9 @@ import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.commons.util.IOUtils;
 
+import de.pdark.decentxml.Attribute;
+import de.pdark.decentxml.Element;
+
 
 public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 
@@ -61,8 +64,16 @@ public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 	protected RouteContainer toContainer(XmlModel model) {
 		List<RouteDefinition> routes = model.getRouteDefinitionList();
 		RouteContainer answer = new RouteContainer();
+		String id = null;
+		if (model.contextElement() != null && model.contextElement().getId() != null) {
+			id = model.contextElement().getId();
+		} else {
+			Element e = (Element)model.node().get();
+			Attribute a = e.getAttribute("id");
+			if (a != null) id = a.getValue();
+		}
+		answer.setId(id);
 		answer.addRoutes(routes);
-
 		answer.setBeans(model.beanMap());
 		answer.setCamelContextEndpointUris(model.endpointUriSet());
 		answer.setModel(model);

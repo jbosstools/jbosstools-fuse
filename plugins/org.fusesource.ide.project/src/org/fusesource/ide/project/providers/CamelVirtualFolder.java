@@ -23,22 +23,19 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 public class CamelVirtualFolder {
+	
 	private IProject project;
 	private ArrayList<IResource> camelFiles = new ArrayList<IResource>();
-
-	private IResourceChangeListener listener = null;
 
 	/**
 	 * 
 	 */
 	public CamelVirtualFolder(IProject prj) {
 		this.project = prj;
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(
-				new CamelVirtualFolderListener(project),
-				IResourceChangeEvent.POST_CHANGE
-						| IResourceChangeEvent.PRE_REFRESH);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(new CamelVirtualFolderListener(project), IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_REFRESH);
 	}
 
 	/**
@@ -66,9 +63,7 @@ public class CamelVirtualFolder {
 	}
 
 	public void populateChildren() {
-		IPath p = project.getRawLocation() != null ? project.getRawLocation()
-				: ResourcesPlugin.getWorkspace().getRoot().getRawLocation()
-						.append(project.getFullPath());
+		IPath p = project.getLocation();
 		try {
 			findFiles(p.toFile());
 		} catch (CoreException ex) {
@@ -88,18 +83,14 @@ public class CamelVirtualFolder {
 						continue;
 					findFiles(f);
 				} else {
-					IFile[] mappedFiles = ResourcesPlugin.getWorkspace()
-							.getRoot().findFilesForLocationURI(f.toURI());
-					IFile ifile = mappedFiles.length > 0 ? mappedFiles[0]
-							: null;
+					IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(f.getPath()));
 					if (ifile != null
 							&& ifile.getContentDescription() != null
 							&& ifile.getContentDescription()
 									.getContentType()
 									.getId()
 									.equals("org.fusesource.ide.camel.editor.camelContentType")) {
-						addCamelFile(new CamelVirtualFile(
-								(org.eclipse.core.internal.resources.File) ifile));
+						addCamelFile(ifile);
 					}
 				}
 			}
@@ -176,8 +167,7 @@ public class CamelVirtualFolder {
 									.getContentType()
 									.getId()
 									.equals("org.fusesource.ide.camel.editor.camelContentType")) {
-						addCamelFile(new CamelVirtualFile(
-								(org.eclipse.core.internal.resources.File) resource));
+						addCamelFile(resource);
 					}
 				} catch (CoreException ex) {
 					// ignore file

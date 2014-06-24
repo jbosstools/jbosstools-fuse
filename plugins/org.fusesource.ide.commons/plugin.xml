@@ -24,13 +24,8 @@
    
 	<extension
       point="org.eclipse.ui.navigator.navigatorContent">
-    <actionProvider
-          class="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider"
-          id="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider">
-       <enablement>
-          <instanceof
-                value="org.fusesource.ide.commons.ui.ContextMenuProvider">
-    <viewerActionBinding
+      <!--
+      <viewerActionBinding
           viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
        <includes>
           <actionExtension
@@ -41,6 +36,13 @@
     <viewerActionBinding
           viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
     </viewerActionBinding>
+    -->
+    <actionProvider
+          class="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider"
+          id="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider">
+       <enablement>
+          <instanceof
+                value="org.fusesource.ide.commons.ui.ContextMenuProvider">
           </instanceof>
        </enablement>
     </actionProvider>
@@ -50,7 +52,7 @@
 	<extension
 	      point="org.eclipse.ui.navigator.viewer">
 	   <viewerContentBinding
-	 viewerId="jmx.ui.internal.views.navigator.MBeanExplorer">
+	 viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
 	      <includes>
              <contentExtension
                 isRoot="false"

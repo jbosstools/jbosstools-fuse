@@ -13,6 +13,7 @@ package org.fusesource.ide.commons.util;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.fusesource.ide.commons.contenttype.BlueprintXmlMatchingStrategy;
 import org.fusesource.ide.commons.contenttype.CamelXmlMatchingStrategy;
@@ -34,25 +35,24 @@ public class CamelUtils {
 	 * @return
 	 */
 	public static boolean isCamelContextFile(String filePath) {
-		boolean isBlueprint = false;
+		boolean isCamelContext = false;
 		
 		if (filePath != null && filePath.trim().length()>0) {
 			String rawPath = null;
 			if (filePath.startsWith("file:")) {
-				rawPath = filePath.substring(5);
+				rawPath = filePath.substring("file:".length());
 			} else {
 				rawPath = filePath;
 			}
-			Path f = new Path(rawPath);
-			java.io.File nf = new java.io.File(f.toOSString());
-			if (nf.exists() && nf.isFile()) {
+			IPath f = Path.fromOSString(rawPath);
+			if (f.toFile().exists() && f.toFile().isFile()) {
 				// file exists, now check if its blueprint or spring
-				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(f.makeRelativeTo(ResourcesPlugin.getWorkspace().getRoot().getLocation()));
-				isBlueprint = camelXmlMatcher.matches(file);
+				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(f);
+				if (file != null) isCamelContext = camelXmlMatcher.matches(file);
 			}
 		}
 		
-		return isBlueprint;
+		return isCamelContext;
 	}
 	
 	/**
@@ -70,12 +70,11 @@ public class CamelUtils {
 			} else {
 				rawPath = filePath;
 			}
-			Path f = new Path(rawPath);
-			java.io.File nf = new java.io.File(f.toOSString());
-			if (nf.exists() && nf.isFile()) {
+			IPath f = Path.fromOSString(rawPath);
+			if (f.toFile().exists() && f.toFile().isFile()) {
 				// file exists, now check if its blueprint or spring
-				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(f.makeRelativeTo(ResourcesPlugin.getWorkspace().getRoot().getLocation()));
-				isBlueprint = blueprintXmlMatcher.matches(file);
+				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(f);
+				if (file != null) isBlueprint = blueprintXmlMatcher.matches(file);
 			}
 		}
 		
@@ -97,12 +96,11 @@ public class CamelUtils {
 			} else {
 				rawPath = filePath;
 			}
-			Path f = new Path(rawPath);
-			java.io.File nf = new java.io.File(f.toOSString());
-			if (nf.exists() && nf.isFile()) {
+			IPath f = Path.fromOSString(rawPath);
+			if (f.toFile().exists() && f.toFile().isFile()) {
 				// file exists, now check if its blueprint or spring
-				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(f.makeRelativeTo(ResourcesPlugin.getWorkspace().getRoot().getLocation()));
-				isSpring = springXmlMatcher.matches(file);
+				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(f);
+				if (file != null) isSpring = springXmlMatcher.matches(file);
 			}
 		}
 		

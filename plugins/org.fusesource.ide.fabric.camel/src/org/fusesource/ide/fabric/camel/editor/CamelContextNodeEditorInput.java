@@ -54,7 +54,7 @@ public class CamelContextNodeEditorInput implements ICamelEditorInput {
 		if (adapter.equals(IFile.class)) {
 			getFileEditorInput();
 			IPath p = Path.fromOSString(tempFile.getPath());
-			IFile file= ResourcesPlugin.getWorkspace().getRoot().getFile(p);
+			IFile file= ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(p);
 			return file;
 		}
 		return null;

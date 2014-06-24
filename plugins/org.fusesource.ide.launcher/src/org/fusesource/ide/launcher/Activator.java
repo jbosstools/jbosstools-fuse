@@ -12,6 +12,7 @@
 package org.fusesource.ide.launcher;
 
 import org.eclipse.core.runtime.Plugin;
+import org.fusesource.ide.commons.logging.RiderLogFacade;
 
 /**
  * @author lhein
@@ -33,5 +34,9 @@ public class Activator extends Plugin {
 	
 	public static Activator getInstance() {
 		return instance;
+	}
+	
+	public static RiderLogFacade getLogger() {
+		return RiderLogFacade.getLog(instance.getLog());
 	}
 }

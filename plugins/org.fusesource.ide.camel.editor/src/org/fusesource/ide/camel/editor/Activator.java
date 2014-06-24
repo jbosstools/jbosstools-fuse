@@ -12,6 +12,9 @@
 package org.fusesource.ide.camel.editor;
 
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -25,6 +28,7 @@ import org.fusesource.ide.camel.editor.editor.RiderEditor;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
 import org.fusesource.ide.commons.ui.UIHelper;
+import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.osgi.framework.BundleContext;
 
 
@@ -57,6 +61,7 @@ public class Activator extends ImagesActivatorSupport {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+//		removeOldBreakpoints();
 		//redirectContextSensitiveHelp();
 		perspectiveListener = new PreferredPerspectivePartListener();
 		perspectiveListener.earlyStartup();
@@ -136,5 +141,17 @@ public class Activator extends ImagesActivatorSupport {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * trashes all breakpoints with camel debug type
+	 */
+	private void removeOldBreakpoints() {
+		IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL);
+		try {
+			DebugPlugin.getDefault().getBreakpointManager().removeBreakpoints(breakpoints, true);
+		} catch (CoreException ex) {
+			getLogger().error(ex);
+		}
 	}
 }

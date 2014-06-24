@@ -74,6 +74,7 @@ public class CamelPersistencyBehaviour extends DefaultPersistencyBehavior {
 			if (editor.getModel() == null) {
 				try {
 					editor.setModel(CamelContextIOUtils.loadModelFromFile(camelContextFile));
+					editor.setCamelContextFile(camelContextFile);
 					ValidationHandler status = CamelContextIOUtils.validateModel(editor.getModel());
 					if (status.hasErrors()) {
 						Activator.getLogger().error("Unable to validate the model. Invalid input!");

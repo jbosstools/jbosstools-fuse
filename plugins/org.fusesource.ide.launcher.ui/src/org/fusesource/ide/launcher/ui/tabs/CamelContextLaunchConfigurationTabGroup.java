@@ -17,6 +17,8 @@ import org.eclipse.debug.ui.EnvironmentTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.debug.ui.RefreshTab;
+import org.eclipse.m2e.ui.internal.launch.MavenJRETab;
+import org.eclipse.m2e.ui.internal.launch.MavenLaunchMainTab;
 
 /**
  * @author lhein
@@ -36,9 +38,9 @@ public class CamelContextLaunchConfigurationTabGroup extends
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
-				new MavenLaunchMainTab(false),
-                new MavenJRETab(), 
-                new RefreshTab(), 
+				new MavenLaunchMainTab(),
+				new MavenJRETab(),
+				new RefreshTab(), 
                 new EnvironmentTab(), 
                 new CommonTab()
 			};

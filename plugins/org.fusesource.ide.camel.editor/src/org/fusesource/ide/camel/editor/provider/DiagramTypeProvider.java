@@ -61,4 +61,28 @@ public class DiagramTypeProvider extends AbstractDiagramTypeProvider {
 	public boolean isAutoUpdateAtStartup() {
 		return true;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.dt.AbstractDiagramTypeProvider#isAutoUpdateAtRuntimeWhenEditorIsSaved()
+	 */
+	@Override
+	public boolean isAutoUpdateAtRuntimeWhenEditorIsSaved() {
+		return true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.dt.AbstractDiagramTypeProvider#isAutoUpdateAtReset()
+	 */
+	@Override
+	public boolean isAutoUpdateAtReset() {
+		return true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.dt.AbstractDiagramTypeProvider#isAutoUpdateAtRuntime()
+	 */
+	@Override
+	public boolean isAutoUpdateAtRuntime() {
+		return true;
+	}
 }

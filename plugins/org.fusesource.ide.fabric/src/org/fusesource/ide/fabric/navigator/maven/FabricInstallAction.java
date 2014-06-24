@@ -12,7 +12,7 @@
 package org.fusesource.ide.fabric.navigator.maven;
 
 
-import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
+import org.fusesource.ide.launcher.ui.launch.ExecutePomActionSupport;
 
 
 /**

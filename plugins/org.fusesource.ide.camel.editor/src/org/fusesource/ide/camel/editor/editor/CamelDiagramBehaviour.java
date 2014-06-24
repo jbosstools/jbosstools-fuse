@@ -14,13 +14,11 @@ package org.fusesource.ide.camel.editor.editor;
 
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.ContextMenuProvider;
-import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.ui.editor.DefaultPaletteBehavior;
 import org.eclipse.graphiti.ui.editor.DefaultPersistencyBehavior;
 import org.eclipse.graphiti.ui.editor.DefaultUpdateBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramBehavior;
 import org.eclipse.graphiti.ui.editor.IDiagramContainerUI;
-import org.eclipse.graphiti.ui.internal.config.ConfigurationProvider;
 import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
 import org.fusesource.ide.camel.editor.CamelModelChangeListener;
 
@@ -82,7 +80,7 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	 */
 	@Override
 	public TransactionalEditingDomain getEditingDomain() {
-		return this.camelUpdateBehaviour.getEditingDomain();
+		return (this.camelUpdateBehaviour != null ? this.camelUpdateBehaviour.getEditingDomain() : null);
 	}	
 	
 	/* (non-Javadoc)

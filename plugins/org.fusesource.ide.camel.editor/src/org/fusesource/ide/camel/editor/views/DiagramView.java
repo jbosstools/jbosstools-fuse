@@ -171,7 +171,8 @@ public class DiagramView extends GraphViewSupport {
 		if (part.getClass().getName().equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator") ||
 			part.getClass().getName().equals("org.fusesource.ide.fabric.navigator.FabricNavigator") || 
 			part.getClass().getName().equals("org.fusesource.ide.fabric.views.MessagesView") ||
-			part.getClass().getName().equals("org.eclipse.ui.views.properties.PropertySheet")
+			part.getClass().getName().equals("org.eclipse.ui.views.properties.PropertySheet") ||
+			part.getClass().getName().equals("org.eclipse.wst.server.ui.ServersView")
 		   ) {
 			process = true;
 		}

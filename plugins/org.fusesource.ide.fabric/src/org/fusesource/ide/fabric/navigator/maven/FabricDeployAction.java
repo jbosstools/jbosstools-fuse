@@ -32,7 +32,7 @@ import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.navigator.ProfileNode;
-import org.fusesource.ide.launcher.ui.ExecutePomActionSupport;
+import org.fusesource.ide.launcher.ui.launch.ExecutePomActionSupport;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

@@ -11,8 +11,8 @@
 
 package org.fusesource.ide.project.providers;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.project.Activator;
@@ -48,15 +48,12 @@ public class CamelFilesLabelProvider extends LabelProvider {
 		if( element instanceof CamelVirtualFolder ) {
 			CamelVirtualFolder vFolder = (CamelVirtualFolder)element;
 			return vFolder.getName();
-		} else if (element instanceof CamelVirtualFile) {
-			IFile ifile = (IFile)element;
-			return ifile.getProjectRelativePath().toString();
 		} else if (element instanceof IProject) {
 			IProject prj = (IProject)element;
 			return prj.getName();
-		} else if (element instanceof IFile) {
-			IFile ifile = (IFile)element;
-			return ifile.getName();
+		} else if (element instanceof IResource) {
+			IResource ifile = (IResource)element;
+			return ifile.getProjectRelativePath().toString();
 		}
 		return super.getText(element);
 	}

@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -63,7 +64,6 @@ import org.fusesource.ide.camel.model.util.Objects;
 import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
-import org.fusesource.ide.project.providers.CamelVirtualFile;
 
 
 /**
@@ -653,8 +653,8 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	}
 
 	public void onFileLoading(IFile file) {
-		if (file instanceof CamelVirtualFile) {
-			setPartName(((CamelVirtualFile)file).getLocation().lastSegment());
+		if (file instanceof IResource) {
+			setPartName(((IResource)file).getLocation().lastSegment());
 		} else {
 			setPartName(file.getName());			
 		}
@@ -665,6 +665,19 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 		setPartName(input.getName());
 	}
 
+	public void switchToDesignEditor() {
+		// lets switch async just in case we've not created the page yet
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				updatedDesignPage();
+				setActiveEditor(getDesignEditor());
+				setActivePage(DESIGN_PAGE_INDEX);
+				getDesignEditor().setFocus();
+			}
+		});
+	}
+	
 	public void switchToSourceEditor() {
 		// lets switch async just in case we've not created the page yet
 		Display.getDefault().asyncExec(new Runnable() {

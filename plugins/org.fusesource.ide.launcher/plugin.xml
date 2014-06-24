@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="org.fusesource.ide.launcher.CamelRunMavenLaunchDelegate"
+            delegate="org.fusesource.ide.launcher.run.launching.CamelRunMavenLaunchDelegate"
             id="org.fusesource.ide.launcher.camelContext"
-            modes="run"
+            modes="run,debug"
             name="%launcher.camelcontext.name"
             public="true"
-            sourceLocatorId="org.eclipse.m2e.launching.MavenSourceLocator"
-            sourcePathComputerId="org.eclipse.m2e.launching.MavenSourceComputer">
+            sourceLocatorId="org.fusesource.ide.launcher.debug.sourceLookupDirector.camel"
+            sourcePathComputerId="org.fusesource.ide.launcher.debug.sourcePathComputer.camel">
       </launchConfigurationType>
-      <launchConfigurationType
-            delegate="org.fusesource.ide.launcher.CamelRunNoTestsMavenLaunchDelegate"
-            id="org.fusesource.ide.launcher.camelContextNoTests"
-            modes="run"
-            name="%launcher.camelcontext.notests.name"
-            public="true"
-            sourceLocatorId="org.eclipse.m2e.launching.MavenSourceLocator"
-            sourcePathComputerId="org.eclipse.m2e.launching.MavenSourceComputer">
-      </launchConfigurationType>
+   </extension>
+
+   <extension
+         point="org.eclipse.debug.core.sourceLocators">
+      <sourceLocator
+            name="Camel Context Source Lookup Director"
+            class="org.fusesource.ide.launcher.debug.launching.CamelSourceLookupDirector"
+            id="org.fusesource.ide.launcher.debug.sourceLookupDirector.camel">
+      </sourceLocator>
+   </extension>
+   
+   <extension
+         point="org.eclipse.debug.core.sourcePathComputers">
+      <sourcePathComputer
+            class="org.fusesource.ide.launcher.debug.launching.CamelSourcePathComputerDelegate"
+            id="org.fusesource.ide.launcher.debug.sourcePathComputer.camel">
+      </sourcePathComputer>
+   </extension>
+   
+   <extension
+         point="org.eclipse.debug.core.breakpoints">
+      <breakpoint
+            markerType="org.fusesource.ide.launcher.debug.camel.breakpoint.marker"
+            class="org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint"
+            id="org.fusesource.ide.launcher.debug.camel.endpointBreakpoint">
+      </breakpoint>
+   </extension>
+   
+   <extension
+         id="org.fusesource.ide.launcher.debug.camel.breakpoint.marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.debug.core.breakpointMarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
    </extension>
    
 </plugin>

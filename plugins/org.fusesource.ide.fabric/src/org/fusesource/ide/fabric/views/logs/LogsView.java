@@ -150,7 +150,7 @@ public class LogsView extends TableViewSupport implements LogContext { // implem
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == IPropertySheetPage.class) {
-			ISelection selection = viewer.getSelection();
+//			ISelection selection = viewer.getSelection();
 			//TabbedPropertySheetPage answer = new TabbedPropertySheetPage(this);
 			return new FormPropertySheetPage(new LogDetailForm());
 		}

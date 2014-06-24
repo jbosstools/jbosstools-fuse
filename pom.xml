@@ -39,7 +39,6 @@
 
   <properties>
     <commons-net.version>3.2</commons-net.version>
-  <!--  <slf4j-version>1.7.0</slf4j-version> -->
     <drools.updatesite.version>6.0.0.201304021236</drools.updatesite.version>
     
     <spring3-version>3.1.4.RELEASE</spring3-version>
@@ -254,7 +253,7 @@
                           <supplementalModel>notice-supplements.xml</supplementalModel>
                       </supplementalModels>
                       <properties>
-                          <projectName>Fuse Plugins for Eclipse</projectName>
+                          <projectName>JBoss Fuse Plugins for Eclipse</projectName>
                       </properties>
                   </configuration>
               </execution>
@@ -262,23 +261,23 @@
   </plugin>
       <plugin>
         <groupId>${m2e.group.id}</groupId>
-           <artifactId>tycho-versions-plugin</artifactId>
+        <artifactId>tycho-versions-plugin</artifactId>
         <version>${tycho-version}</version>
       </plugin>
       <plugin>
-    <groupId>${m2e.group.id}</groupId>
-    <artifactId>tycho-surefire-plugin</artifactId>
-    <version>${tycho-version}</version>
-    <configuration>
-      <useUIThread>true</useUIThread>
-      <bundleStartLevel>
-        <bundle>
-          <id>org.eclipse.equinox.ds</id>
-          <level>1</level>
-          <autoStart>true</autoStart>
-        </bundle>
-      </bundleStartLevel>
-    </configuration>
+        <groupId>${m2e.group.id}</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <useUIThread>true</useUIThread>
+          <bundleStartLevel>
+            <bundle>
+              <id>org.eclipse.equinox.ds</id>
+              <level>1</level>
+              <autoStart>true</autoStart>
+            </bundle>
+          </bundleStartLevel>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>${m2e.group.id}</groupId>
@@ -291,8 +290,8 @@
         <artifactId>tycho-compiler-plugin</artifactId>
         <version>${tycho-version}</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
       <plugin>
@@ -784,7 +783,7 @@
         <dependency>
           <groupId>com.sun</groupId>
           <artifactId>tools</artifactId>
-          <version>1.6</version>
+          <version>1.7</version>
           <scope>system</scope>
           <!-- assumes JAVA_HOME is set to the JDK dir? -->
           <systemPath>${java.home}/../lib/tools.jar</systemPath>

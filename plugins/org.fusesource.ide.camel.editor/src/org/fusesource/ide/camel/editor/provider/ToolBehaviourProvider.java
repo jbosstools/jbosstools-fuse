@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.ICreateConnectionFeature;
@@ -44,6 +47,7 @@ import org.eclipse.graphiti.tb.ImageDecorator;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.Messages;
+import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.custom.AddRouteFeature;
 import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationFactory;
@@ -51,6 +55,8 @@ import org.fusesource.ide.camel.editor.validation.ValidationResult;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
+import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 
 /**
@@ -287,10 +293,17 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 	@Override
 	public IDecorator[] getDecorators(PictogramElement pe) {
 		List<IDecorator> decorators = new LinkedList<IDecorator>();
+		
+		// first we add super decorators
+		IDecorator[] superDecorators = super.getDecorators(pe);
+		for (IDecorator d : superDecorators) decorators.add(d);
+		
+		// and then our own
 		IFeatureProvider featureProvider = getFeatureProvider();
 		Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
 		if (bo instanceof AbstractNode) {
 			AbstractNode node = (AbstractNode) bo;
+
 			ValidationResult res = ValidationFactory.getInstance().validate(node);
 			if (res.getInformationCount() > 0) {
 				for (String message : res.getInformations()) {
@@ -313,9 +326,39 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 					decorators.add(imageRenderingDecorator);
 				}
 			}
+			
+			// decorate breakpoints on endpoints
+			if (getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() != null && getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() instanceof RiderDesignEditor) {
+				RiderDesignEditor editor = (RiderDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
+				IFile activeFile = editor.asFileEditorInput(editor.getEditorInput()).getFile();
+				IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(node.getId(), activeFile.getName());
+				if (bp != null && bp instanceof CamelEndpointBreakpoint) {
+					CamelEndpointBreakpoint cep = (CamelEndpointBreakpoint)bp;
+
+					// we only want to decorate breakpoints which belong to this project
+					if (cep.getProjectName().equals(activeFile.getProject().getName())) {
+						try {
+							if (cep.isEnabled()) {
+								// show enabled breakpoint decorator
+								IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_REDDOT);
+								imageRenderingDecorator.setMessage("");
+								decorators.add(imageRenderingDecorator);
+							} else {
+								// show disabled breakpoint decorator
+								IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_GRAYDOT);
+								imageRenderingDecorator.setMessage("");
+								decorators.add(imageRenderingDecorator);
+							}	
+						} catch (CoreException e) {
+							Activator.getLogger().error(e);
+						}					
+					}
+				}
+			}
+					
 			return decorators.toArray(new IDecorator[decorators.size()]);
 		}
-
+		
 		return super.getDecorators(pe);
 	}
 

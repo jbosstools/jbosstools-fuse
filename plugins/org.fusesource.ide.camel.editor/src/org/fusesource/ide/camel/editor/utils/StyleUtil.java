@@ -31,19 +31,19 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  * @author lhein
  */
 public class StyleUtil {
-	private static final IColorConstant E_CLASS_TEXT_FOREGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_TEXT_COLOR));
-	private static final IColorConstant E_CLASS_FOREGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_FIGURE_FG_COLOR));
-	private static final IColorConstant E_CLASS_BACKGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_FIGURE_BG_COLOR));
-	private static final IColorConstant E_CLASS_SHADOW_FOREGROUND = getColorConstant("128,128,128");
-	private static final IColorConstant E_CLASS_SHADOW_BACKGROUND = getColorConstant("128,128,128");
-	private static final AdaptedGradientColoredAreas E_CLASS_GRADIENT = PredefinedColoredAreas.getBlueWhiteGlossAdaptions();
+	public static final IColorConstant E_CLASS_TEXT_FOREGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_TEXT_COLOR));
+	public static final IColorConstant E_CLASS_FOREGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_FIGURE_FG_COLOR));
+	public static final IColorConstant E_CLASS_BACKGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_FIGURE_BG_COLOR));
+	public static final IColorConstant E_CLASS_SHADOW_FOREGROUND = getColorConstant("128,128,128");
+	public static final IColorConstant E_CLASS_SHADOW_BACKGROUND = getColorConstant("128,128,128");
+	public static final AdaptedGradientColoredAreas E_CLASS_GRADIENT = PredefinedColoredAreas.getBlueWhiteGlossAdaptions();
 
-	private static final String DEFAULT_FONT = Display.getDefault().getSystemFont().getFontData()[0].getName();
-	private static final int DEFAULT_FONT_SIZE = 10;
+	public static final String DEFAULT_FONT = Display.getDefault().getSystemFont().getFontData()[0].getName();
+	public static final int DEFAULT_FONT_SIZE = 10;
 
 	// use this flag to enable gradients (true) or use the predefined solid background color set in E_CLASS_BACKGROUND (false)
 	// TODO - setting this to true breaks round tripping and switching between routes using the outline view!!!
-	private static final boolean USE_GRADIENT_BACKGROUND = false;
+	public static final boolean USE_GRADIENT_BACKGROUND = false;
 
 	public static Style getStyleForEClass(Diagram diagram) {
 		final String styleId = "E-CLASS"; //$NON-NLS-1$

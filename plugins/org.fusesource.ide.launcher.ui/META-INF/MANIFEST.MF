@@ -26,10 +26,12 @@ Require-Bundle: org.fusesource.ide.commons,
  org.eclipse.m2e.editor.xml,
  org.eclipse.m2e.jdt,
  org.eclipse.m2e.launching;bundle-version="1.4.0",
- org.slf4j.api;bundle-version="[1.6.1,2.0.0)"
+ org.eclipse.equinox.security;bundle-version="1.2.0",
+ org.eclipse.ui.views;bundle-version="3.7.0",
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.9.0",
+ org.eclipse.jface.text;bundle-version="3.9.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.ui.Activator
 Bundle-ClassPath: .
-Export-Package: org.fusesource.ide.launcher.ui,
- org.fusesource.ide.launcher.ui.tabs
 Import-Package: org.eclipse.core.externaltools.internal
+Export-Package: org.fusesource.ide.launcher.ui.launch

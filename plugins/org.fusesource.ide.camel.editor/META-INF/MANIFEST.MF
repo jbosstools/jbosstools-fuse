@@ -7,6 +7,7 @@ Bundle-Activator: org.fusesource.ide.camel.editor.Activator
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.fusesource.ide.camel.model,
  org.fusesource.ide.commons,
+ org.fusesource.ide.launcher,
  org.fusesource.ide.graph,
  org.fusesource.ide.preferences,
  org.fusesource.ide.project,
@@ -45,7 +46,8 @@ Require-Bundle: org.fusesource.ide.camel.model,
  org.junit,
  com.google.guava;bundle-version="[15.0.0,16.0.0)",
  org.jboss.tools.jmx.core;bundle-version="1.6.0",
- org.jboss.tools.jmx.ui;bundle-version="1.6.0"
+ org.jboss.tools.jmx.ui;bundle-version="1.6.0",
+ org.eclipse.debug.core;bundle-version="3.9.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.fusesource.ide.camel.editor
 Bundle-ActivationPolicy: lazy

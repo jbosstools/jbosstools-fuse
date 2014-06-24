@@ -9,6 +9,7 @@
             id="org.fusesource.ide.launcher.ui.launchConfigurationTypeImage.camelContext">
       </launchConfigurationTypeImage>
    </extension>
+   
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
@@ -18,6 +19,7 @@
             type="org.fusesource.ide.launcher.camelContext">
       </launchConfigurationTabGroup>
    </extension>
+   
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabs">
       <tab
@@ -26,15 +28,22 @@
             id="org.fusesource.ide.launcher.ui.tab.CamelContext"
             name="%launcher.tab.camelcontext.name">
       </tab>
+      <tab
+            class="org.fusesource.ide.launcher.ui.tabs.DebugJmxTab"
+            group="org.fusesource.ide.launcher.ui.launchConfigurationTabGroup.camelContext"
+            id="org.fusesource.ide.launcher.ui.tab.Debug"
+            name="%launcher.tab.debug.name">
+      </tab>
    </extension>
+   
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.fusesource.ide.launcher.ui.ExecutePomAction:clean package camel:run"
+            class="org.fusesource.ide.launcher.ui.launch.ExecutePomAction:clean package camel:run"
             icon="icons/run_camel_context.png"
             id="org.fusesource.ide.launcher.ui.shortcut.camelContext"
             label="%launchShortCut.camelContext.label"
-            modes="run">
+            modes="run,debug">
             
             <contextualLaunch>
                <enablement>
@@ -56,12 +65,13 @@
                   id="org.fusesource.ide.launcher.camelContext">
             </configurationType>
       </shortcut>
+
       <shortcut
-            class="org.fusesource.ide.launcher.ui.ExecutePomActionNoTests:clean package camel:run -Dmaven.test.skip=true"
+            class="org.fusesource.ide.launcher.ui.launch.ExecutePomActionNoTests:clean package camel:run" 
             icon="icons/run_camel_context.png"
             id="org.fusesource.ide.launcher.ui.shortcut.camelContextNoTests"
             label="%launchShortCut.camelContext.notests.label"
-            modes="run">
+            modes="run,debug">
             
             <contextualLaunch>
                <enablement>
@@ -80,8 +90,93 @@
              </enablement>
             </contextualLaunch>
             <configurationType
-                  id="org.fusesource.ide.launcher.camelContextNoTests">
+                  id="org.fusesource.ide.launcher.camelContext"> 
             </configurationType>
       </shortcut>
    </extension>
+   
+   
+      <extension
+         point="org.eclipse.debug.ui.debugModelPresentations">
+      <debugModelPresentation
+            class="org.fusesource.ide.launcher.ui.debug.model.CamelModelPresentation"
+            id="org.fusesource.ide.launcher.debug.camel">
+      </debugModelPresentation>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.contexts">
+      <context
+            name="%camel.debug.context.name"
+            description="%camel.debug.context.description"
+            id="org.fusesource.ide.launcher.camel.debugging"
+            parentId="org.eclipse.debug.ui.debugging">
+      </context>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.debugModelContextBindings">
+      <modelContextBinding
+            debugModelId="org.fusesource.ide.launcher.debug.camel"
+            contextId="org.fusesource.ide.launcher.camel.debugging">
+      </modelContextBinding>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.variableValueEditors">
+      <variableValueEditor
+            class="org.fusesource.ide.launcher.ui.debug.editors.VariableValueEditor"
+            modelId="org.fusesource.ide.launcher.debug.camel">
+      </variableValueEditor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.debug.ui.VariableView">
+         <command
+               commandId="org.fusesource.ide.launcher.ui.resetDebugCounterCommand"
+               label="%command.variables.resetdebugcounter.name"
+               style="push"
+               tooltip="%command.variables.resetdebugcounter.description">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.debug.ui.VariableView">
+         <command
+               commandId="org.fusesource.ide.launcher.ui.resetDebugCounterCommand"
+               label="%command.variables.resetdebugcounter.name"
+               style="push"
+               tooltip="%command.variables.resetdebugcounter.description">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="%command.variables.resetdebugcounter.description"
+            id="org.fusesource.ide.launcher.ui.resetDebugCounterCommand"
+            name="%command.variables.resetdebugcounter.name">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.fusesource.ide.launcher.ui.debug.handlers.ResetDebugCounterHandler"
+            commandId="org.fusesource.ide.launcher.ui.resetDebugCounterCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.fusesource.ide.launcher.ui.resetDebugCounterCommand"
+            icon="icons/variable.png">
+      </image>
+   </extension>
+   
 </plugin>

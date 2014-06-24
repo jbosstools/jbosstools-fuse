@@ -1,0 +1,88 @@
+/*******************************************************************************
+ * Copyright (c) 2014 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
+package org.fusesource.ide.launcher.debug.model.variables;
+
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IValue;
+import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
+import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
+import org.fusesource.ide.launcher.debug.model.exchange.Header;
+import org.fusesource.ide.launcher.debug.model.values.CamelHeaderValue;
+
+/**
+ * @author lhein
+ */
+public class CamelHeaderVariable extends BaseCamelVariable {
+
+	/**
+	 * 
+	 * @param thread
+	 * @param name
+	 * @param type
+	 */
+	public CamelHeaderVariable(CamelDebugTarget debugTarget, String name, Class type) {
+		super(debugTarget, name, type);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable#supportsValueModification()
+	 */
+	@Override
+	public boolean supportsValueModification() {
+		return true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable#setValue(java.lang.String)
+	 */
+	@Override
+	public void setValue(String expression) throws DebugException {
+		Header oldHeader = ((CamelHeaderValue)getValue()).getHeader();
+		super.setValue(new CamelHeaderValue(fTarget, new Header(oldHeader.getKey(), expression , oldHeader.getType()), Header.class));
+		markChanged();
+		fireChangeEvent(DebugEvent.CONTENT);
+		updateValueOnRuntime(((CamelDebugTarget)getDebugTarget()).getDebugger());
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable#verifyValue(org.eclipse.debug.core.model.IValue)
+	 */
+	@Override
+	public boolean verifyValue(IValue value) throws DebugException {
+		return true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable#verifyValue(java.lang.String)
+	 */
+	@Override
+	public boolean verifyValue(String expression) throws DebugException {
+		return true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable#updateValueOnRuntime(org.fusesource.ide.launcher.debug.model.CamelDebugFacade)
+	 */
+	@Override
+	protected void updateValueOnRuntime(CamelDebugFacade debugger)
+			throws DebugException {
+		Header h = ((CamelHeaderValue)getValue()).getHeader();
+		if (Strings.isBlank(h.getValue())) {
+			// remove value
+			debugger.removeMessageHeaderOnBreakpoint(getCurrentEndpointNodeId(), h.getKey());
+		} else {
+			// change value
+			debugger.setMessageHeaderOnBreakpoint(getCurrentEndpointNodeId(), h.getKey(), h.getValue(), h.getType());
+		}
+	}
+}

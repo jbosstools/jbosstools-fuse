@@ -11,17 +11,21 @@
 
 package org.fusesource.ide.fabric.navigator.maven;
 
-import org.fusesource.ide.launcher.ui.tabs.MavenLaunchMainTab;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.m2e.ui.internal.launch.MavenLaunchMainTab;
 
 public class InstallMavenLaunchMainTab extends MavenLaunchMainTab {
 
 	public InstallMavenLaunchMainTab(boolean isBuilder) {
-		super(isBuilder);
+		super();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.m2e.ui.internal.launch.MavenLaunchMainTab#setDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
+	 */
 	@Override
-	protected String getDefaultGoals() {
-		return "install";
+	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+		configuration.setAttribute(ATTR_GOALS, "install");
+		super.setDefaults(configuration);
 	}
-
 }

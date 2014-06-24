@@ -53,7 +53,7 @@ public class RouteContainer extends AbstractNode {
 	private boolean autoLayout;
 
 	private XmlModel model;
-
+	
 	private boolean failedToParseXml;
 
 	public RouteContainer() {
@@ -226,6 +226,7 @@ public class RouteContainer extends AbstractNode {
 
 		// lets clone everything in our model apart from EMF stuff and children
 		RouteContainer answer = new RouteContainer();
+		answer.setId(getId());
 		answer.beans = beans;
 		answer.camelContextEndpointUris = camelContextEndpointUris;
 		answer.autoLayout = autoLayout;
@@ -384,6 +385,17 @@ public class RouteContainer extends AbstractNode {
 
 	public void setFailedToParseXml(boolean failedToParseXml) {
 		this.failedToParseXml = failedToParseXml;
+	}
+	
+	public String getContextId() {
+		return getId();
+	}
+	
+	/**
+	 * @param contextId the contextId to set
+	 */
+	public void setContextId(String contextId) {
+		setId(contextId);
 	}
 
 }

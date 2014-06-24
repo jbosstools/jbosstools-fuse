@@ -21,11 +21,16 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditDomain;
@@ -69,9 +74,12 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.fusesource.camel.tooling.util.ValidationHandler;
@@ -91,13 +99,18 @@ import org.fusesource.ide.camel.model.io.IRemoteCamelEditorInput;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.util.IOUtils;
 import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
+import org.fusesource.ide.launcher.debug.model.CamelThread;
+import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
+import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
+import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
 /**
  * @author lhein
  */
-public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
+public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDebugEventSetListener, ISelectionListener {
 
 	private final RiderDesignEditorData data;
 
@@ -127,6 +140,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	private DesignerCache activeConfig;
 	private Map<RouteSupport, DesignerCache> cache = new HashMap<RouteSupport, DesignerCache>();
 
+	private AbstractNode highlightedNodeInDebugger;
+	
 	public class DesignerCache {
 		public Diagram diagram;
 		public DiagramEditorInput input;
@@ -196,6 +211,11 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		this.data = parent.getDesignEditorData();
 		this.activeConfig = new DesignerCache();
 		this.editor = parent;
+		DebugPlugin.getDefault().addDebugEventListener(this);
+		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() != null) {
+			ISelectionService sel = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
+			if (sel != null) sel.addSelectionListener(ICamelDebugConstants.DEBUG_VIEW_ID, this);			
+		}
 	}
 	
 	@Override
@@ -226,6 +246,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 		return this.camelDiagramBehaviour.getConfigurationProvider();
 	}
 	
+	public RiderEditor getMultiPageEditor() {
+		return this.editor;
+	}
+	
 	@Override
 	protected void setInput(IEditorInput input) {
 		
@@ -239,6 +263,32 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 
         initializeDiagram(activeConfig.diagram);
 		
+        /**
+         * the following is needed because we miss the first debug events and the first breakpoint wouldn't be highlighted otherwise
+         */
+        try {
+	        for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
+	        	if (entry.getEditorInput().getFile().getFullPath().toFile().getPath().equals(asFileEditorInput(input).getFile().getFullPath().toFile().getPath())) {
+	        		String endpointId = null;
+	        		
+	        		// first highligth the suspended node
+	        		Set<String> ids = entry.getDebugTarget().getDebugger().getSuspendedBreakpointNodeIds();
+	        		if (ids != null && ids.size()>0) {
+	        			endpointId = ids.iterator().next();
+	        		}
+	        		highlightBreakpointNodeWithID(endpointId);
+	        		
+	        		// and then mark all breakpoints
+	        		
+	        	}
+	        }
+        } catch (Exception ex) {
+        	Activator.getLogger().error(ex);
+        }
+        /**
+         * End of the highlighting code
+         */
+        
 		getEditingDomain().getCommandStack().flush();
 	}
 
@@ -510,6 +560,19 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 					}
 					if (selectedEditPart != null) {
 						lastSelectedEditPart = selectedEditPart;
+					}
+				} else if (firstElement instanceof CamelStackFrame) {
+					CamelStackFrame stackFrame = (CamelStackFrame)firstElement;
+					highlightBreakpointNodeWithID(stackFrame.getEndpointId());
+				} else if (firstElement instanceof CamelThread) {
+					CamelThread t = (CamelThread)firstElement;
+					try {
+						CamelStackFrame stackFrame = (CamelStackFrame)t.getTopStackFrame();
+						if (stackFrame != null) {
+							highlightBreakpointNodeWithID(stackFrame.getEndpointId());	
+						}
+					} catch (DebugException e) {
+						Activator.getLogger().error(e);
 					}
 				}
 			}
@@ -935,6 +998,13 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	 */
 	@Override
 	public void dispose() {
+		DebugPlugin.getDefault().removeDebugEventListener(this);
+		
+		if (PlatformUI.getWorkbench().getActiveWorkbenchWindow() != null) {
+			ISelectionService sel = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
+			if (sel != null) sel.removeSelectionListener(ICamelDebugConstants.DEBUG_VIEW_ID, this);			
+		}
+		
 		this.editorInput = null;
 		this.activeConfig = null;
 
@@ -1147,9 +1217,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 			Throwable cause = e.getCause();
 			if (cause != null) {
 				text = cause.getMessage();
-				cause.printStackTrace();
+				Activator.getLogger().error(e);
 			} else {
-				e.printStackTrace();
+				Activator.getLogger().error(e);
 			}
 		}
 		showXmlValidationError(text);
@@ -1218,5 +1288,81 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer {
 	
 	public DesignerCache getActiveConfig() {
 		return this.activeConfig;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.debug.core.IDebugEventSetListener#handleDebugEvents(org.eclipse.debug.core.DebugEvent[])
+	 */
+	@Override
+	public void handleDebugEvents(DebugEvent[] events) {
+		for (DebugEvent ev : events) {
+			if (ev.getSource() instanceof CamelThread == false && ev.getSource() instanceof CamelStackFrame == false) continue;
+			if (ev.getSource() instanceof CamelThread && ev.getKind() == DebugEvent.TERMINATE) {
+				// we are only interested in hit camel breakpoints
+				resetHighlightBreakpointNode();
+			} else {
+				if (ev.getSource() instanceof CamelThread) {
+					CamelThread thread = (CamelThread)ev.getSource();
+					if (ev.getKind() == DebugEvent.SUSPEND && ev.getDetail() == DebugEvent.BREAKPOINT) {
+						// a breakpoint was hit and thread is on suspend -> stack should be selected in tree now
+						try {
+							CamelStackFrame stackFrame = (CamelStackFrame)thread.getTopStackFrame();
+							if (stackFrame != null) highlightBreakpointNodeWithID(stackFrame.getEndpointId());
+						} catch (DebugException ex) {
+							Activator.getLogger().error(ex);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * @return the highlightedNodeInDebugger
+	 */
+	public AbstractNode getHighlightedNodeInDebugger() {
+		return this.highlightedNodeInDebugger;
+	}
+	
+	/**
+	 * highlights the node currently in breakpoint
+	 * 
+	 * @param endpointNodeId	the node id
+	 */
+	private void highlightBreakpointNodeWithID(String endpointNodeId) {
+		// get the correct node for the id
+		final AbstractNode node = getModel().getNode(endpointNodeId);
+		
+		if (node == null) return;
+		if (this.highlightedNodeInDebugger != null && node.getId() != null && node.getId().equals(highlightedNodeInDebugger.getId())) return;
+
+		// reset old highlight
+		resetHighlightBreakpointNode();
+		
+		// add highlight to new node
+		setDebugHighLight(node, true);
+				
+		// remember the new highlighted node
+		this.highlightedNodeInDebugger = node;
+	}
+	
+	/**
+	 * resets the highlight from the highlighted node
+	 */
+	private void resetHighlightBreakpointNode() {
+		setDebugHighLight(this.highlightedNodeInDebugger, false);
+	}
+	
+	/**
+	 * switches the debug highlight for a given node on or off
+	 * 
+	 * @param bo			the node
+	 * @param highlight		the highlight status
+	 */
+	private void setDebugHighLight(AbstractNode bo, boolean highlight) {
+		if (bo == null) return;
+		
+		// delegate to an operation command for async transacted diagram update
+		DiagramOperations.highlightNode(this, bo, highlight);
 	}
 }

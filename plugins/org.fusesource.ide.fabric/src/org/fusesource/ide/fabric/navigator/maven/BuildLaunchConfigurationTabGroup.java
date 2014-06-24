@@ -17,8 +17,7 @@ import org.eclipse.debug.ui.EnvironmentTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.debug.ui.RefreshTab;
-import org.fusesource.ide.launcher.ui.tabs.MavenJRETab;
-
+import org.eclipse.m2e.ui.internal.launch.MavenJRETab;
 
 /**
  * @author lhein

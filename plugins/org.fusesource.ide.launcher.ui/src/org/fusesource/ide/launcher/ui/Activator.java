@@ -11,16 +11,14 @@
 
 package org.fusesource.ide.launcher.ui;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
+import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
 
 
 /**
  * @author lhein
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends ImagesActivatorSupport {
 
 	private static Activator instance;
 	
@@ -35,15 +33,7 @@ public class Activator extends AbstractUIPlugin {
 		return instance;
 	}
 	
-	public static void error(String message, Exception ex)  {
-		RiderLogFacade.getLog(instance.getLog()).log(getStatus(message, ex));
-	}
-	
-	public static void error(Exception ex) {
-		error(null, ex);
-	}
-	
-	private static IStatus getStatus(String msg, Exception ex) {
-		return new Status(IStatus.ERROR, instance.getBundle().getSymbolicName(), msg == null ? ex.getMessage() : msg, ex);
+	public static RiderLogFacade getLogger() {
+		return RiderLogFacade.getLog(instance.getLog());
 	}
 }

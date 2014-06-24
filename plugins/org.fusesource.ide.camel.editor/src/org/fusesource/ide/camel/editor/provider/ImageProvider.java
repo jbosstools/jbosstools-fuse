@@ -31,6 +31,9 @@ public class ImageProvider extends AbstractImageProvider {
 	protected static final String POSTFIX_LARGE = "_large"; //$NON-NLS-1$
 
 	public static final String IMG_FLOW = PREFIX + "flow"; //$NON-NLS-1$
+	public static final String IMG_REDDOT = PREFIX + "reddot"; //$NON-NLS-1$
+	public static final String IMG_GREENDOT = PREFIX + "greendot"; //$NON-NLS-1$
+	public static final String IMG_GRAYDOT = PREFIX + "graydot"; //$NON-NLS-1$
 
 	// outline
 	/**
@@ -48,6 +51,13 @@ public class ImageProvider extends AbstractImageProvider {
 	 */
 	@Override
 	protected void addAvailableImages() {
+		addImage(IMG_REDDOT, ROOT_FOLDER_FOR_IMG + "red-dot.png"); //$NON-NLS-1$
+		addToImageRegistry(IMG_REDDOT, ROOT_FOLDER_FOR_IMG + "red-dot.png"); //$NON-NLS-1$
+		addImage(IMG_GRAYDOT, ROOT_FOLDER_FOR_IMG + "gray-dot.png"); //$NON-NLS-1$
+		addToImageRegistry(IMG_GRAYDOT, ROOT_FOLDER_FOR_IMG + "gray-dot.png"); //$NON-NLS-1$
+		addImage(IMG_GREENDOT, ROOT_FOLDER_FOR_IMG + "green-dot.png"); //$NON-NLS-1$
+		addToImageRegistry(IMG_GREENDOT, ROOT_FOLDER_FOR_IMG + "green-dot.png"); //$NON-NLS-1$
+		
 		addImage(IMG_FLOW, ROOT_FOLDER_FOR_IMG + "flow16.png"); //$NON-NLS-1$
 		addToImageRegistry(IMG_FLOW, ROOT_FOLDER_FOR_IMG + "flow16.png"); //$NON-NLS-1$
 		addImage(IMG_OUTLINE_THUMBNAIL, ROOT_FOLDER_FOR_IMG + "thumbnail.gif"); //$NON-NLS-1$

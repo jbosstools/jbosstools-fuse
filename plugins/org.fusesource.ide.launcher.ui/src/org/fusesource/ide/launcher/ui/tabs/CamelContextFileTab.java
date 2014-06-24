@@ -29,20 +29,21 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
-import org.eclipse.m2e.actions.MavenLaunchConstants;
-import org.fusesource.ide.launcher.CamelContextLaunchConfigConstants;
+import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
+import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.ui.Activator;
-
 
 /**
  * @author lhein
@@ -51,6 +52,14 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 	
 	private FilteredResourcesSelectionDialog browseDialog;
 	private Text camelContextFileText;
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#getImage()
+	 */
+	@Override
+	public Image getImage() {
+		return Activator.getDefault().getImage("camel.png");
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#createControl(org.eclipse.swt.widgets.Composite)
@@ -109,13 +118,13 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 												contentProvider.add(item, filter);
 											}
 										} catch (Exception ex) {
-											Activator.error(ex);
+											Activator.getLogger().error(ex);
 										} finally {
 											if (stream != null) {
 												try {
 													stream.close();
 												} catch (IOException ex) {
-													Activator.error(ex);
+													Activator.getLogger().error(ex);
 												}
 											}
 										}										
@@ -164,11 +173,9 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 	 */
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
-		try {
-			camelContextFileText.setText(configuration.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, CamelContextLaunchConfigConstants.DEFAULT_CONTEXT_NAME));
-		} catch (CoreException ce) {
-			camelContextFileText.setText(CamelContextLaunchConfigConstants.DEFAULT_CONTEXT_NAME);
-		}
+		String fileName = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(configuration);
+		if (fileName == null) fileName = CamelContextLaunchConfigConstants.DEFAULT_CONTEXT_NAME;
+		camelContextFileText.setText(fileName);
 		updateLaunchConfigurationDialog();
 	}
 
@@ -186,7 +193,7 @@ public class CamelContextFileTab extends AbstractLaunchConfigurationTab {
 	 */
 	@Override
 	public String getName() {
-		return "Camel Context File";
+		return "Camel";
 	}
 	
 	/* (non-Javadoc)

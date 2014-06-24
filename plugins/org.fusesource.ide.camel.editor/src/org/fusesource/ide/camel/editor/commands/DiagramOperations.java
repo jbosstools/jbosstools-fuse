@@ -20,6 +20,7 @@ import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.platform.IDiagramBehavior;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
+import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
@@ -90,6 +91,9 @@ public class DiagramOperations {
 	protected static synchronized TransactionalEditingDomain createEditingDomain(RiderDesignEditor designEditor) {
 		TransactionalEditingDomain editingDomain = designEditor.getEditingDomain();
 		Diagram diagram = designEditor.getDiagram();
+		if (diagram == null) {
+			return null;
+		}
 		if (editingDomain == null) {
 			IDiagramBehavior diagramBehavior = designEditor.getDiagramTypeProvider().getDiagramBehavior();
 			if (diagramBehavior != null) {
@@ -125,5 +129,18 @@ public class DiagramOperations {
 		execute(editingDomain, operation, false);
 
 		return operation;
+	}
+	
+	public static void highlightNode(final RiderDesignEditor designEditor, final AbstractNode node,  final boolean highlight) {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
+				if (editingDomain != null) {
+					HighlightNodeCommand operation = new HighlightNodeCommand(designEditor, editingDomain, node, highlight);
+					execute(editingDomain, operation, false);
+				}
+			}
+		});
 	}
 }

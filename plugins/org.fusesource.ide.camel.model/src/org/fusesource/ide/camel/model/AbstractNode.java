@@ -30,6 +30,7 @@ import org.apache.camel.model.ChoiceDefinition;
 import org.apache.camel.model.DescriptionDefinition;
 import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.LoadBalanceDefinition;
+import org.apache.camel.model.OptionalIdentifiedDefinition;
 import org.apache.camel.model.OtherwiseDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
@@ -85,7 +86,6 @@ import org.fusesource.ide.camel.model.generated.Try;
 import org.fusesource.ide.camel.model.generated.Unmarshal;
 import org.fusesource.ide.camel.model.generated.When;
 import org.fusesource.ide.camel.model.util.Expressions;
-import org.fusesource.ide.commons.properties.BooleanPropertyDescriptor;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.Predicate;
 import org.fusesource.ide.commons.util.Strings;
@@ -195,6 +195,22 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		return false;
 	}
 
+	public String getCamelContextId() {
+		RouteContainer rc = null;
+		if (getParent() == null) {
+			rc = (RouteContainer)this;
+		} else {
+			rc = getParent();
+			if (rc.getParent() != null) {
+				rc = rc.getParent();
+			}	
+		}		
+		if (rc != null) {
+			return rc.getContextId();
+		}
+		return null;
+	}
+	
 	/**
 	 * Clears any EMF / diagram related resources
 	 */
@@ -1210,6 +1226,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		}
 		if (id != null && id.trim().length() > 0) {
 			processor.setId(id);
+			resetCustomId(processor);
 		}
 	}
 
@@ -1324,6 +1341,29 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		}
 
 		return true;
+	}
+	
+	/**
+	 * checks if the node is the from node and therefore
+	 * the first node in my route
+	 * 
+	 * @return
+	 */
+	public boolean isFirstNodeInRoute() {
+		return getInputs().isEmpty();
+	}
+	
+	/**
+	 * checks if the node is an expression node
+	 * 
+	 * @return
+	 */
+	public boolean supportsBreakpoint() {
+		return !isFirstNodeInRoute() && 				// not working on the From node
+				this instanceof When == false &&		// not working for When nodes
+				this instanceof Otherwise == false &&	// not working for Otherwise nodes
+				Strings.isBlank(getCamelContextId()) == false && // not working if no Camel Context Id is set
+				Strings.isBlank(getId()) == false;		// not working if no ID is set
 	}
 
 	/**
@@ -1689,5 +1729,17 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		}
 
 		return true;
+	}
+	
+	/**
+	 * this is a workaround for a bug in Camel 2.12 and will be
+	 * most likely removed when the bug has been fixed
+	 * (see https://issues.apache.org/jira/browse/CAMEL-7544)
+	 * 
+	 * @param def definition 
+	 */
+	@Deprecated
+	protected void resetCustomId(OptionalIdentifiedDefinition def) {
+		def.setCustomId(null);
 	}
 }
