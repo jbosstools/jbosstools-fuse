@@ -34,7 +34,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="false">
+           supportsRemoteHosts="true">
      </serverType>
   </extension>
 
@@ -48,7 +48,7 @@
   <extension point="org.eclipse.wst.server.core.serverLocators">
     <serverLocator
        id="org.fusesource.ide.server.fabric8.server.locator"
-       supportsRemoteHosts="false"
+       supportsRemoteHosts="true"
        typeIds="org.fusesource.ide.fabric8.server.*"
        class="org.fusesource.ide.server.fabric8.core.server.Fabric8ServerLocator"/>
   </extension>

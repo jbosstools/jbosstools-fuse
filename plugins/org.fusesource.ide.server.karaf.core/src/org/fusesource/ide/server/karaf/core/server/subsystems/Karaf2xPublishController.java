@@ -90,6 +90,8 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 		int publishType = KarafUtils.getPublishType(getServer(), module, kind, deltaKind);
 		switch (publishType) {
 		case KarafUtils.FULL_PUBLISH:
+			if (!module[0].exists())
+				break;
 			// do a build
 			boolean built = KarafUtils.runBuild(GOALS, module[0], monitor);
 			status = this.publisher.publish(getServer(), module);
@@ -97,6 +99,8 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 			((Server)getServer()).setModuleState(module, status);
 			break;
 		case KarafUtils.INCREMENTAL_PUBLISH:
+			if (!module[0].exists())
+				break;
 			// do a build
 			built = KarafUtils.runBuild(GOALS, module[0], monitor);
 			status = this.publisher.publish(getServer(), module);
