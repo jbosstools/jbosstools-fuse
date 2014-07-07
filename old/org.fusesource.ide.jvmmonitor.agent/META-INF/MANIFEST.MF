@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Premain-Class: org.fusesource.ide.jvmmonitor.internal.agent.Agent
-Agent-Class: org.fusesource.ide.jvmmonitor.internal.agent.Agent
-Can-Retransform-Classes: true
