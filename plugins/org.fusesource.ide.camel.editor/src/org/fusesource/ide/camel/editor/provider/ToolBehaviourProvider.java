@@ -330,7 +330,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 			// decorate breakpoints on endpoints
 			if (getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() != null && getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() instanceof RiderDesignEditor) {
 				RiderDesignEditor editor = (RiderDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-				IFile activeFile = editor.asFileEditorInput(editor.getEditorInput()).getFile();
+				IFile activeFile = editor.getCamelContextFile();
 				IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(node.getId(), activeFile.getName());
 				if (bp != null && bp instanceof CamelEndpointBreakpoint) {
 					CamelEndpointBreakpoint cep = (CamelEndpointBreakpoint)bp;

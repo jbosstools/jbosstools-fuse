@@ -80,6 +80,7 @@ import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.fusesource.camel.tooling.util.ValidationHandler;
@@ -402,6 +403,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 			IEditorInput fileEditorInput = camelEditorInput.getFileEditorInput();
 			if (fileEditorInput instanceof IFileEditorInput) {
 				return (IFileEditorInput) fileEditorInput;
+			} else if (fileEditorInput instanceof FileStoreEditorInput) {
+				FileStoreEditorInput fsei = (FileStoreEditorInput)fileEditorInput;
+				return new FileEditorInput((IFile)input.getAdapter(IFile.class));
 			}
 		} else if (input instanceof IDiagramEditorInput) {
 		    org.eclipse.emf.common.util.URI uri = ((IDiagramEditorInput)input).getUri();

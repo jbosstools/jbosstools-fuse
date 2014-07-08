@@ -54,7 +54,7 @@ public class CamelContextNodeEditorInput implements ICamelEditorInput {
 		if (adapter.equals(IFile.class)) {
 			getFileEditorInput();
 			IPath p = Path.fromOSString(tempFile.getPath());
-			IFile file= ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(p);
+			IFile file= ResourcesPlugin.getWorkspace().getRoot().getFile(p);
 			return file;
 		}
 		return null;
@@ -110,9 +110,9 @@ public class CamelContextNodeEditorInput implements ICamelEditorInput {
 	@Override
 	public IEditorInput getFileEditorInput() {
 		if (lastSaveAsFile != null) {
-			return new FileEditorInput(lastSaveAsFile);
+			this.fileEditorInput = new FileEditorInput(lastSaveAsFile);
 		}
-		if (fileEditorInput == null) {
+		if (this.fileEditorInput == null) {
 			try {
 				// lets create a temporary file...
 				File tempDir = File.createTempFile("FuseIDE-camel-context-" + contextNode.getContextId() + "-", "");
