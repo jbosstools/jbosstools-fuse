@@ -10,9 +10,14 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.features.custom;
 
+import java.util.UUID;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
@@ -27,7 +32,10 @@ import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.RouteContainer;
+import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
+import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 
 /**
  * @author lhein
@@ -56,10 +64,44 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
         if (bo instanceof AbstractNode) {
         	AbstractNode _ep = (AbstractNode) bo;
             try {
+            	Boolean userWantsUpdate = null;
             	IFile contextFile = getContextFile();
             	String fileName = contextFile.getName();
             	String projectName = contextFile.getProject().getName();
-                CamelDebugUtils.createAndRegisterEndpointBreakpoint(resource, _ep, projectName, fileName);
+            	if (Strings.isBlank(_ep.getCamelContextId()) ||
+            		Strings.isBlank(_ep.getId()) ) {
+            		// important ID fields are not yet set - ask the user if we
+            		// can update those fields for him
+            		userWantsUpdate = askForIDUpdate(_ep);
+            		if (userWantsUpdate) {
+            			
+            			// update the context id if needed
+            			if (Strings.isBlank(_ep.getCamelContextId())) {
+            				String newContextId = ICamelDebugConstants.PREFIX_CONTEXT_ID + UUID.randomUUID().toString();
+            				((RouteContainer)_ep.getParent().getParent()).setContextId(newContextId);
+            			}
+            			
+            			// update the node id if blank
+            			if (Strings.isBlank(_ep.getId())) {
+            				String newNodeId = ICamelDebugConstants.PREFIX_NODE_ID + _ep.getNewID();
+            				_ep.setId(newNodeId);
+            			}
+            			
+            			// then do a save
+            			final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
+                        RiderDesignEditor editor = null;
+            			if (container instanceof RiderDesignEditor) {
+                            editor = (RiderDesignEditor) container;
+                        } else {
+                            throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Can't find the editor to set the breakpoint!"));
+                        }
+            			editor.getEditor().doSave(new NullProgressMonitor());
+            		}
+            	}
+            	if (userWantsUpdate == null || userWantsUpdate == true) {
+	            	// finally create the endpoint
+	    			CamelDebugUtils.createAndRegisterEndpointBreakpoint(resource, _ep, projectName, fileName);  
+            	}
             } catch (CoreException e) {
                 final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
                 final Shell shell;
@@ -113,7 +155,8 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
         	AbstractNode _ep = (AbstractNode) bo;
         	IFile contextFile = getContextFile();
         	String fileName = contextFile.getName();
-            return _ep.supportsBreakpoint() && CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName) == null;
+        	String projectName = contextFile.getProject().getName();
+            return _ep.supportsBreakpoint() && CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName, projectName) == null;
         }
         return false;
 	}
@@ -141,6 +184,23 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 	
 	protected IFile getContextFile() {
 		return Activator.getDiagramEditor().asFileEditorInput(Activator.getDiagramEditor().getEditorInput()).getFile();
+	}
+	
+	/**
+	 * ask the user if we can update some id fields
+	 * 
+	 * @param node
+	 * @return
+	 */
+	private boolean askForIDUpdate(AbstractNode node) {
+		final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
+        final Shell shell;
+        if (container instanceof RiderDesignEditor) {
+            shell = ((RiderDesignEditor) container).getEditorSite().getShell();
+        } else {
+            shell = Display.getCurrent().getActiveShell();
+        }
+        return MessageDialog.openConfirm(shell, "Please confirm...", "Debugging is only possible if the context and the nodes which have breakpoints have a unique ID set. Do you want to generate the ID values now?");
 	}
 	
 	/* (non-Javadoc)

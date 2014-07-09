@@ -55,7 +55,8 @@ public class DeleteEndpointBreakpointFeature extends SetEndpointBreakpointFeatur
             try {
             	IFile contextFile = getContextFile();
             	String fileName = contextFile.getName();
-                IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName);
+            	String projectName = contextFile.getProject().getName();
+                IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName, projectName);
                 if (bp != null) {
                 	bp.delete();
                 }
@@ -113,7 +114,8 @@ public class DeleteEndpointBreakpointFeature extends SetEndpointBreakpointFeatur
         	AbstractNode _ep = (AbstractNode)bo;
         	IFile contextFile = getContextFile();
         	String fileName = contextFile.getName();
-        	return CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName) != null;
+        	String projectName = contextFile.getProject().getName();
+        	return CamelDebugUtils.getBreakpointForSelection(_ep.getId(), fileName, projectName) != null;
         }
         return false;
 	}

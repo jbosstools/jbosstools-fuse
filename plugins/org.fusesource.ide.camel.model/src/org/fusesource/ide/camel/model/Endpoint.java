@@ -92,11 +92,11 @@ public class Endpoint extends AbstractNode {
 		}		
 	}
 
-	@Override
-	protected String getNewID() {
-		// lets not create a new ID by default
-		return "";
-	}
+//	@Override
+//	public String getNewID() {
+//		// lets not create a new ID by default
+//		return "";
+//	}
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.model.AbstractNode#getIconName()

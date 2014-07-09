@@ -170,4 +170,12 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 	public void setContextId(String contextId) {
 		this.contextId = contextId;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format("CamelEndpointBreakpoint[project=%s, fileName=%s, contextId=%s, endpointId=%s]", getProjectName(), getFileName(), getContextId(), getEndpointNodeId());
+	}
 }

@@ -25,6 +25,7 @@ import org.fusesource.camel.tooling.util.XmlModel;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.commons.util.IOUtils;
+import org.fusesource.ide.commons.util.Strings;
 
 import de.pdark.decentxml.Attribute;
 import de.pdark.decentxml.Element;
@@ -124,14 +125,43 @@ public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 		List<RouteDefinition> list = model.createRouteDefinitions();
 		RouteXml helper = createXmlHelper();
 		
+		String newXMLText = xmlText;
+		
 		// we check if there is a single route without any content and if this route
 		// got added after loading or not
 		if (list.size() == 1 && list.get(0).getInputs().size() < 1 && list.get(0).getOutputs().size() < 1 && isNoRoutesOnLoad()) {
 			// seems we added that route inside ide automatically as there was no route initially - so we again delete it
 			list.clear();
 		}
+		
+		// WE NEED TO SET THE CONTEXT ID MANUALLY WHEN SET IN THE MODEL BUT NOT IN XML YET
+		// THAT IS A WORKAROUND DUE TO THE MODEL LACKS POSSIBILITIES TO SET THE ID AND SAVE IT AUTOMATICALLY
+		
+		// check if the context id needs to be set
+		if (!Strings.isBlank(model.getContextId())) {
+			int pos = xmlText.indexOf("<camelContext ");
+			if (pos == -1) {
+				pos = xmlText.indexOf(":camelContext ");
+				if (pos == -1) {
+					// there is no camel context element it seems - ignore it
+				}
+			}
+			
+			if (pos != -1) {
+				int endPos = xmlText.indexOf(">", pos+1);
+				if (endPos != -1) {
+					// now check if we have an ID in the text
+					if (xmlText.indexOf(" id=", pos) == -1 || xmlText.indexOf(" id=", pos) >= endPos) {
+						// no id found - set one
+						newXMLText = xmlText.substring(0, pos + ":camelContext ".length());
+						newXMLText += "id=\"" + model.getCamelContextId() + "\" ";
+						newXMLText += xmlText.substring(pos + ":camelContext ".length());
+					}
+				}
+			}
+		}
 
-		return helper.marshalToText(xmlText, list);
+		return helper.marshalToText(newXMLText, list);
 	}
 
 	/* (non-Javadoc)

@@ -484,7 +484,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	public void setId(String id) {
 		String oldId = this.id;
 		this.id = id;
-		if (!Objects.equal(description, oldId)) {
+		if (!Objects.equal(this.id, oldId)) {
 			firePropertyChange(PROPERTY_ID, oldId, this.id);
 		}
 	}
@@ -506,7 +506,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 * 
 	 * @return a random id
 	 */
-	protected String getNewID() {
+	public String getNewID() {
 		String answer = null;
 		if (useCamelIds) {
 			ProcessorDefinition definition = createCamelDefinition();
@@ -1361,9 +1361,9 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	public boolean supportsBreakpoint() {
 		return !isFirstNodeInRoute() && 				// not working on the From node
 				this instanceof When == false &&		// not working for When nodes
-				this instanceof Otherwise == false &&	// not working for Otherwise nodes
+				this instanceof Otherwise == false; /**&&	// not working for Otherwise nodes
 				Strings.isBlank(getCamelContextId()) == false && // not working if no Camel Context Id is set
-				Strings.isBlank(getId()) == false;		// not working if no ID is set
+				Strings.isBlank(getId()) == false;		// not working if no ID is set **/
 	}
 
 	/**

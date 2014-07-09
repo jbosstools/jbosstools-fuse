@@ -11,6 +11,7 @@
 package org.fusesource.ide.launcher.debug.util;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -39,14 +40,41 @@ import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 public class CamelDebugUtils {
 	
 	/**
+	 * returns all breakpoints fitting the given project and file name
+	 * 
+	 * @param fileName		the context file name
+	 * @param projectName	the project name
+	 * @return	a list of breakpoints which might be empty but never null
+	 */
+	public static IBreakpoint[] getBreakpointsForContext(String fileName, String projectName) {
+		ArrayList<IBreakpoint> breakpointsFound = new ArrayList<IBreakpoint>();
+		final IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL);
+		for (IBreakpoint breakpoint : breakpoints) {
+			CamelEndpointBreakpoint ceb = (CamelEndpointBreakpoint)breakpoint;
+			if (fileName != null &&
+        		projectName != null &&
+        		ceb != null &&
+				ceb.getFileName() != null &&
+				ceb.getFileName().equals(fileName) &&
+				ceb.getProjectName() != null &&
+				ceb.getProjectName().equals(projectName)) {
+				// match - add to found breakpoints
+				breakpointsFound.add(breakpoint);
+			}
+        }
+		return breakpointsFound.toArray(new IBreakpoint[breakpointsFound.size()]);
+	}
+	
+	/**
 	 * looks up a breakpoint which fits to the selected endpoint. current matching
 	 * logic will be to look for equal ContextId and EndpointId
 	 * 
 	 * @param endpointId	the endpoint id
 	 * @param fileName		the file name
+	 * @param projectName	the project name
 	 * @return				the breakpoint which matches
 	 */
-	public static IBreakpoint getBreakpointForSelection(String endpointId, String fileName) {
+	public static IBreakpoint getBreakpointForSelection(String endpointId, String fileName, String projectName) {
 		final IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL);
         for (IBreakpoint breakpoint : breakpoints) {
             final IMarker marker = breakpoint.getMarker();
@@ -57,12 +85,11 @@ public class CamelDebugUtils {
             	Activator.getLogger().error(ex);
             }
             
-            if (marker == null || endpointId == null || fileName == null || 
-        		!ICamelDebugConstants.ID_CAMEL_MARKER_TYPE.equals(markerType) ||
-        		!breakpointMatchesSelection((CamelEndpointBreakpoint) breakpoint, fileName, endpointId)) {
+            if (marker == null || 
+            	!ICamelDebugConstants.ID_CAMEL_MARKER_TYPE.equals(markerType) ||
+        		!breakpointMatchesSelection((CamelEndpointBreakpoint) breakpoint, fileName, endpointId, projectName)) {
             	continue;
             }
-            
             return breakpoint;
         }
         return null;
@@ -74,16 +101,20 @@ public class CamelDebugUtils {
 	 * @param breakpoint	the breakpoint to check
 	 * @param fileName		the file name to check for
 	 * @param endpointId	the endpoint id to check for
+	 * @param projectName	the project name
 	 * @return				true if matched
 	 */
-	private static boolean breakpointMatchesSelection(final CamelEndpointBreakpoint breakpoint, final String fileName, final String endpointId) {
+	private static boolean breakpointMatchesSelection(final CamelEndpointBreakpoint breakpoint, final String fileName, final String endpointId, final String projectName) {
         return  fileName != null &&
         		endpointId != null &&
+        		projectName != null &&
         		breakpoint != null &&
         		breakpoint.getEndpointNodeId() != null && 
         		breakpoint.getEndpointNodeId().equalsIgnoreCase(endpointId) && 
         		breakpoint.getFileName() != null &&
-        		breakpoint.getFileName().equals(fileName);
+        		breakpoint.getFileName().equals(fileName) &&
+        		breakpoint.getProjectName() != null &&
+        		breakpoint.getProjectName().equals(projectName);
     }
 	
 	/**

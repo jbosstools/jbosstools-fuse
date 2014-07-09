@@ -58,6 +58,7 @@ import org.fusesource.ide.camel.editor.features.add.AddNodeFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateBeanFigureFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
+import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
 import org.fusesource.ide.camel.editor.features.custom.DeleteEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
@@ -243,6 +244,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 				new LayoutDiagramFeature(this),
 				new SetEndpointBreakpointFeature(this),
 				new DeleteEndpointBreakpointFeature(this),
+				new DeleteAllEndpointBreakpointsFeature(this),
 				//				, new CollapseDummyFeature(this)
 				//				, new SetGridVisibilityFeature(this)
 				/*
