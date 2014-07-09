@@ -19,6 +19,21 @@ import java.util.Set;
  * @author lhein
  */
 public interface ICamelDebuggerMBeanFacade {
+	
+	/**
+	 * returns the camel context id
+	 * 
+	 * @return
+	 */
+	String getContextId();
+	
+	/**
+	 * updates the runtime with the new context
+	 * 
+	 * @param xmlDump
+	 */
+	void updateContext(String xmlDump);
+	
 	/**
 	 * Logging Level
 	 * 

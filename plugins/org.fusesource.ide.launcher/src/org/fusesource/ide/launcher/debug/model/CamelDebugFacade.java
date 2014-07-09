@@ -38,6 +38,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	private ObjectName objectNameDebugger = null;
 	private ObjectName objectNameContext = null;
 	
+	private CamelDebugTarget debugTarget;
 	private String contextId;
 	private String contentType;
 	
@@ -57,6 +58,7 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	 */
 	public CamelDebugFacade(CamelDebugTarget debugTarget, MBeanServerConnection mbsc, String contextId, String contextType) throws Exception {
 		this.mbsc = mbsc;
+		this.debugTarget = debugTarget;
 		this.contextId = contextId;
 		this.contentType = contextType;
 		long startTime = System.currentTimeMillis();
@@ -120,6 +122,44 @@ public class CamelDebugFacade implements ICamelDebuggerMBeanFacade {
 	    	}
 	    }
     	return null;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.ICamelDebuggerMBeanFacade#getContextId()
+	 */
+	@Override
+	public String getContextId() {
+		return this.contextId;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.ICamelDebuggerMBeanFacade#updateContext(java.lang.String)
+	 */
+	@Override
+	public void updateContext(String xmlDump) {
+		log("updateContext(" + xmlDump + ")");
+		
+		try {
+			// first we need to leave the debug mode otherwise the update will block forever
+			// disable the debugger
+			disableDebugger();
+			// resume all breakpoints
+			resumeAll();
+			// resume all threads
+			this.debugTarget.resumeAllThreads();
+			// then invoke the update
+			mbsc.invoke(this.objectNameContext, "addOrUpdateRoutesFromXml", new Object[] { xmlDump } , new String[] { String.class.getName() }); 
+		} catch (Exception ex) {
+			Activator.getLogger().error(ex);
+		} finally {
+//			// update the editor input
+//			this.debugTarget.updateEditorInput();
+			// finally enable the debugger again
+			enableDebugger();
+			// and install the breakpoints again
+			this.debugTarget.started(false);
+		}
 	}
 	
 	/* (non-Javadoc)

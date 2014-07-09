@@ -21,14 +21,13 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
@@ -46,11 +45,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.io.XmlContainerMarshaller;
 import org.fusesource.ide.commons.util.CamelUtils;
-import org.fusesource.ide.commons.util.IOUtils;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.exchange.BacklogTracerEventMessage;
@@ -59,6 +56,7 @@ import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.launcher.util.CamelDebugContextEditorInput;
 
 /**
  * Camel Debug Target
@@ -443,12 +441,31 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	/**
 	 * Notification we have connected to the VM and it has started.
 	 * Resume the VM.
+	 * 
+	 * @param createEditorInput	flag if the editor input should be created
 	 */
-	private void started() {
+	public void started(boolean createEditorInput) {
 		fireCreationEvent();
 		installDeferredBreakpoints();
+		if (createEditorInput) {
+			createRemoteDebugContextEditorInput();
+		}
 		try {
 			resume();
+		} catch (DebugException ex) {
+			Activator.getLogger().error(ex);
+		}
+	}
+	
+	/**
+	 * resumes all threads
+	 */
+	public void resumeAllThreads() {
+		try {
+			for (CamelThread t : threads.values()) {
+				t.resume();
+			} 
+			this.resume();
 		} catch (DebugException ex) {
 			Activator.getLogger().error(ex);
 		}
@@ -473,7 +490,6 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 				}				
 			}
 		}
-		createRemoteDebugContextEditorInput();
 	}
 	
 	/**
@@ -539,7 +555,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		if (getLaunch() == null || getLaunch().getLaunchConfiguration() == null) return;
 		CamelDebugRegistryEntry entry = CamelDebugRegistry.getInstance().getEntry(getLaunch().getLaunchConfiguration());
 		if (entry == null) return;
-		FileEditorInput input = entry.getEditorInput();
+		CamelDebugContextEditorInput input = entry.getEditorInput();
 		CamelDebugRegistry.getInstance().removeEntry(getLaunch().getLaunchConfiguration());
 		IWorkbench wb = PlatformUI.getWorkbench();
 		if (wb != null) {
@@ -548,9 +564,11 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 				final IWorkbenchPage page = wbw[0].getActivePage();
 				if (page != null) {
 					final IEditorPart ep = page.getActiveEditor();
-					if (ep != null && ep.getEditorInput() instanceof FileEditorInput) {
-						FileEditorInput ip = (FileEditorInput)ep.getEditorInput();
-						if (ip.getFile().getFullPath().toFile().getPath().equals(input.getFile().getFullPath().toFile().getPath())) {
+					if (ep != null && ep.getEditorInput() instanceof CamelDebugContextEditorInput) {
+						CamelDebugContextEditorInput ip = (CamelDebugContextEditorInput)ep.getEditorInput();
+						IFile f = (IFile)input.getAdapter(IFile.class);
+						IFile fIp = (IFile)ip.getAdapter(IFile.class);
+						if (fIp.getFullPath().toFile().getPath().equals(f.getFullPath().toFile().getPath())) {
 							Display.getDefault().asyncExec(new Runnable() {
 								@Override
 								public void run() {
@@ -571,31 +589,26 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	private void createRemoteDebugContextEditorInput() {
 		try {
-			// first get the file path from the launch config
-			String fileUnderDebug = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(getLaunch().getLaunchConfiguration());
-			// then get the project for the file
-			IProject p = CamelDebugUtils.getProjectForFilePath(fileUnderDebug);
-			// lets create the temporary file under target
-			File targetFolder = p.getLocation().append("target").toFile();
-			// create the target folder if not existing
-			if (!targetFolder.exists()) targetFolder.mkdirs();
-			// create a unique temp folder inside target
-			File tempDir = File.createTempFile(".CamelContextInDebug_", "_temp", targetFolder);
-			tempDir.delete();
-			tempDir.mkdirs();
-			// now create the file which will hold the camel context
-			File tempFile = new File(tempDir, fileUnderDebug.substring(fileUnderDebug.lastIndexOf(File.separatorChar)+1));
-			// retrieve the contents from the debugger
-			String xml = debugger.getContextXmlDump();
-			// and write the contents to the file
-			IOUtils.writeText(tempFile, xml);
-			// finally create the editor input
-			FileEditorInput input = new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(tempFile.getPath())));
+			// create the editor input
+			CamelDebugContextEditorInput input = new CamelDebugContextEditorInput(debugger, getLaunch().getLaunchConfiguration());
 			// and save it in the registry
 			CamelDebugRegistry.getInstance().createEntry(this, this.camelContextId, input, getLaunch().getLaunchConfiguration());
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
+	}
+
+	/**
+	 * update the editor input to contain latest changes
+	 */
+	public void updateEditorInput() {
+		CamelDebugRegistryEntry entry = CamelDebugRegistry.getInstance().getEntry(getLaunch().getLaunchConfiguration());
+		if (entry != null) {
+			CamelDebugContextEditorInput input = entry.getEditorInput();
+			input.refresh();
+		}
+		
+//		closeRemoteContextEditor();
 	}
 	
 	/**
@@ -627,7 +640,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 						// connected to the camel vm
 						CamelDebugTarget.this.debugger = new CamelDebugFacade(CamelDebugTarget.this, mbsc, camelContextId, contentType);
 						connected = true;
-						started();
+						started(true);
 						if (CamelDebugTarget.this.debugger.isEnabled() == false) CamelDebugTarget.this.debugger.enableDebugger();
 					}
 				} catch (Exception ex) {

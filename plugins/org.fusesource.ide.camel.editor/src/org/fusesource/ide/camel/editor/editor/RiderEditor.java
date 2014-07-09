@@ -490,6 +490,7 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 		if (newPageIndex == SOURCE_PAGE_INDEX) {
+			if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
 			updatedDesignPage();
 		} else {
 			updatedTextPage();

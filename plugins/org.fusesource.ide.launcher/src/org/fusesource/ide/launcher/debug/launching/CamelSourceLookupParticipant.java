@@ -10,8 +10,10 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.debug.launching;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupParticipant;
+import org.eclipse.ui.IEditorInput;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
@@ -33,7 +35,9 @@ public class CamelSourceLookupParticipant extends
 		if (object instanceof CamelStackFrame) {
 			CamelStackFrame stackFrame = (CamelStackFrame)object;
 			CamelDebugTarget dt = (CamelDebugTarget) stackFrame.getDebugTarget();
-			return CamelDebugRegistry.getInstance().getEntry(dt.getLaunch().getLaunchConfiguration()).getEditorInput().getFile().getName();
+			IEditorInput input = CamelDebugRegistry.getInstance().getEntry(dt.getLaunch().getLaunchConfiguration()).getEditorInput();
+			IFile f = (IFile)input.getAdapter(IFile.class);
+			return f.getName();
 		}
 		return null;
 	}

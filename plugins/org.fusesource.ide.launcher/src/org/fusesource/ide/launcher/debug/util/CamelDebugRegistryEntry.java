@@ -11,8 +11,8 @@
 package org.fusesource.ide.launcher.debug.util;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
+import org.fusesource.ide.launcher.util.CamelDebugContextEditorInput;
 
 /**
  * @author lhein
@@ -21,7 +21,7 @@ public class CamelDebugRegistryEntry {
 	
 	private String fileName;
 	private CamelDebugTarget debugTarget;
-	private FileEditorInput editorInput;
+	private CamelDebugContextEditorInput editorInput;
 	private ILaunchConfiguration launchConfig;
 	
 	/**
@@ -31,7 +31,7 @@ public class CamelDebugRegistryEntry {
 	 * @param editorInput
 	 * @param launchConfig
 	 */
-	public CamelDebugRegistryEntry(CamelDebugTarget debugTarget, String fileName, FileEditorInput editorInput, ILaunchConfiguration launchConfig) {
+	public CamelDebugRegistryEntry(CamelDebugTarget debugTarget, String fileName, CamelDebugContextEditorInput editorInput, ILaunchConfiguration launchConfig) {
 		this.fileName = fileName;
 		this.debugTarget = debugTarget;
 		this.editorInput = editorInput;
@@ -69,14 +69,14 @@ public class CamelDebugRegistryEntry {
 	/**
 	 * @return the editorInput
 	 */
-	public FileEditorInput getEditorInput() {
+	public CamelDebugContextEditorInput getEditorInput() {
 		return this.editorInput;
 	}
 
 	/**
 	 * @param editorInput the editorInput to set
 	 */
-	public void setEditorInput(FileEditorInput editorInput) {
+	public void setEditorInput(CamelDebugContextEditorInput editorInput) {
 		this.editorInput = editorInput;
 	}
 

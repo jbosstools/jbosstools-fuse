@@ -18,6 +18,7 @@ import org.eclipse.debug.core.sourcelookup.ISourceContainer;
 import org.eclipse.debug.core.sourcelookup.ISourcePathComputerDelegate;
 import org.eclipse.debug.core.sourcelookup.containers.DirectorySourceContainer;
 import org.eclipse.debug.core.sourcelookup.containers.WorkspaceSourceContainer;
+import org.eclipse.ui.IEditorInput;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 
 /**
@@ -39,8 +40,11 @@ public class CamelSourcePathComputerDelegate implements
 			ILaunchConfiguration configuration, IProgressMonitor monitor)
 			throws CoreException {
 		
+		IEditorInput input = CamelDebugRegistry.getInstance().getEntry(configuration).getEditorInput();
+		IFile file = (IFile)input.getAdapter(IFile.class);
+		
 		// we store the context file to run in the ATTR_FILE
-		IFile file = CamelDebugRegistry.getInstance().getEntry(configuration).getEditorInput().getFile();
+//		IFile file = CamelDebugRegistry.getInstance().getEntry(configuration).getEditorInput().getFile();
 				
 		ISourceContainer sourceContainer = null;
 		if (file != null) {

@@ -10,14 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.debug.launching;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupDirector;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 import org.eclipse.debug.core.sourcelookup.containers.LocalFileStorage;
 import org.eclipse.debug.ui.ISourcePresentation;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
@@ -45,14 +43,14 @@ public class CamelSourceLookupDirector extends AbstractSourceLookupDirector impl
 	public IEditorInput getEditorInput(Object element) {
 		if (element instanceof LocalFileStorage) {
 			LocalFileStorage lfs = (LocalFileStorage)element;
-			FileEditorInput input = null;
+			IEditorInput input = null;
 			for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
-				if (entry.getEditorInput().getFile().getLocation().toFile().getPath().equals(lfs.getFile().getPath())) {
+				IFile f = (IFile)entry.getEditorInput().getAdapter(IFile.class);
+				if (f.getLocation().toFile().getPath().equals(lfs.getFile().getPath())) {
 					input = entry.getEditorInput();
 					break;
 				}
 			}
-			if (input == null) input = new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(lfs.getFile().getPath())));
 			return input;
 		}
 		return null;

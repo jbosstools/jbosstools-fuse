@@ -269,7 +269,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
          */
         try {
 	        for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
-	        	if (entry.getEditorInput().getFile().getFullPath().toFile().getPath().equals(asFileEditorInput(input).getFile().getFullPath().toFile().getPath())) {
+	        	IEditorInput ips = entry.getEditorInput();
+				IFile f = (IFile)ips.getAdapter(IFile.class);
+	        	if (f.getFullPath().toFile().getPath().equals(asFileEditorInput(input).getFile().getFullPath().toFile().getPath())) {
 	        		String endpointId = null;
 	        		
 	        		// first highligth the suspended node
@@ -1301,7 +1303,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (DebugEvent ev : events) {
 			if (ev.getSource() instanceof CamelThread == false && ev.getSource() instanceof CamelStackFrame == false) continue;
-			if (ev.getSource() instanceof CamelThread && ev.getKind() == DebugEvent.TERMINATE) {
+			if (ev.getSource() instanceof CamelThread && (ev.getKind() == DebugEvent.TERMINATE || ev.getKind() == DebugEvent.RESUME)) {
 				// we are only interested in hit camel breakpoints
 				resetHighlightBreakpointNode();
 			} else {
@@ -1355,6 +1357,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	 */
 	private void resetHighlightBreakpointNode() {
 		setDebugHighLight(this.highlightedNodeInDebugger, false);
+		this.highlightedNodeInDebugger = null;
 	}
 	
 	/**

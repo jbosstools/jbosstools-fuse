@@ -54,14 +54,9 @@ public class HighlightNodeCommand extends RecordingCommand {
 		}
 		
 		// check if we need to switch to another route for highlighting
-		if (this.designEditor.getHighlightedNodeInDebugger() != null && 
-			this.node != null && 
+		if (this.node != null && 
 			highlight) {
-			
-			if (node.getParent() != null && 
-				this.designEditor.getHighlightedNodeInDebugger().getParent() != null && 
-				node.getParent().getId() != this.designEditor.getHighlightedNodeInDebugger().getParent().getId()) {
-			
+			if (node.getParent() != null) {
 				// seems the next breakpoint is in a different route and we need to switch to that route now
 				if (node.getParent() instanceof RouteSupport) {
 					// switch the route
