@@ -10,14 +10,24 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.debug.model;
 
+import java.io.File;
+import java.util.Iterator;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.Breakpoint;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
+import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
+import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 
 /**
@@ -56,7 +66,19 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 		this.contextId = endpoint.getCamelContextId();
 		this.projectName = projectName;
 		this.fileName = fileName;
-		this.resource = resource;
+		if (resource.getLocation().toFile().getPath().indexOf(String.format("%s%s%starget%s", File.separatorChar, projectName, File.separatorChar, File.separatorChar)) != -1) {
+			// seems to be a running context - replace the resource with the correct one
+			Iterator<ILaunchConfiguration> launchConfigIterator = CamelDebugRegistry.getInstance().getEntries().keySet().iterator();
+			while (launchConfigIterator.hasNext()) {
+				ILaunchConfiguration lc = launchConfigIterator.next();
+				CamelDebugRegistryEntry entry = CamelDebugRegistry.getInstance().getEntry(lc);
+				if (((IFile)entry.getEditorInput().getAdapter(IFile.class)).getFullPath().toFile().getPath().equals(resource.getFullPath().toFile().getPath())) {
+					this.resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(lc)));
+				}
+			}
+		} else {
+			this.resource = resource;
+		}
 		
 		IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
 			/*
@@ -65,19 +87,19 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 			 */
 			@Override
 			public void run(IProgressMonitor monitor) throws CoreException {
-				IMarker marker = resource.createMarker(ICamelDebugConstants.ID_CAMEL_MARKER_TYPE);
+				IMarker marker = CamelEndpointBreakpoint.this.resource.createMarker(ICamelDebugConstants.ID_CAMEL_MARKER_TYPE);
 				marker.setAttribute(IBreakpoint.ENABLED, Boolean.TRUE);
 				marker.setAttribute(IBreakpoint.PERSISTED, Boolean.TRUE);
 				marker.setAttribute(IBreakpoint.ID, getModelIdentifier());
-				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONTEXTID, contextId);
-				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_ENDPOINTID, endpointNodeId);
-				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_PROJECTNAME, projectName);
-				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_FILENAME, fileName);
-				marker.setAttribute(IMarker.MESSAGE, "Camel Breakpoint: " + resource.getName() + " [Endpoint: " + endpointNodeId + "]");
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONTEXTID, CamelEndpointBreakpoint.this.contextId);
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_ENDPOINTID, CamelEndpointBreakpoint.this.endpointNodeId);
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_PROJECTNAME, CamelEndpointBreakpoint.this.projectName);
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_FILENAME, CamelEndpointBreakpoint.this.fileName);
+				marker.setAttribute(IMarker.MESSAGE, "Camel Breakpoint: " + CamelEndpointBreakpoint.this.resource.getName() + " [Endpoint: " + CamelEndpointBreakpoint.this.endpointNodeId + "]");
 				setMarker(marker);
 			}
 		};
-		run(getMarkerRule(resource), runnable);
+		run(getMarkerRule(this.resource), runnable);
 		setPersisted(true);
 	}
 	
@@ -87,10 +109,10 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 	@Override
 	public void setMarker(IMarker marker) throws CoreException {
 		super.setMarker(marker);
-		this.projectName = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_PROJECTNAME, projectName);
-		this.endpointNodeId = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_ENDPOINTID, endpointNodeId);
-		this.fileName = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_FILENAME, fileName);
-		this.contextId = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONTEXTID, contextId);
+		this.projectName = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_PROJECTNAME, this.projectName);
+		this.endpointNodeId = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_ENDPOINTID, this.endpointNodeId);
+		this.fileName = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_FILENAME, this.fileName);
+		this.contextId = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONTEXTID, this.contextId);
 		this.resource = marker.getResource();
 	}
 	

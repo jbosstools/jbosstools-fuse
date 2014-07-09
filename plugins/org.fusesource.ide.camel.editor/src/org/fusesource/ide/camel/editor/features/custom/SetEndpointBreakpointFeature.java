@@ -200,7 +200,7 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
         } else {
             shell = Display.getCurrent().getActiveShell();
         }
-        return MessageDialog.openConfirm(shell, "Please confirm...", "Debugging is only possible if the context and the nodes which have breakpoints have a unique ID set. Do you want to generate the ID values now?");
+        return MessageDialog.openConfirm(shell, "Please confirm...", "Debugging is only possible if the context and the nodes which have breakpoints have a unique ID set. Do you want to generate the ID values now?\n\n(Warning: All changes in the editor will be written to the context file!)");
 	}
 	
 	/* (non-Javadoc)
