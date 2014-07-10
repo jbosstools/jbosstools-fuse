@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour;
 import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
@@ -77,7 +78,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			}
 			return this.jmxPublisher != null;
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 		return false;
 	}
@@ -95,7 +96,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 			}
 			return true;
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 			this.jmxc = null;
 			this.mbsc = null;
@@ -128,7 +129,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 				return this.jmxPublisher.getBundleStatus(mbsc, bundleId);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 			disconnect(server);
 		}
@@ -150,7 +151,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 				unpublished = this.jmxPublisher.uninstallBundle(mbsc, bundleId);
 			}
 		} catch (CoreException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 			disconnect(server);
 		}

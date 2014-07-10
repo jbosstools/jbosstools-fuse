@@ -14,10 +14,12 @@ import java.util.ArrayList;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.exchange.Message;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelBodyVariable;
+import org.fusesource.ide.launcher.debug.model.variables.CamelHeadersVariable;
 
 /**
  * @author lhein
@@ -42,7 +44,7 @@ public class CamelMessageValue extends BaseCamelValue {
 		try {
 			initMessage();
 		} catch (DebugException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 	}
 	
@@ -60,7 +62,7 @@ public class CamelMessageValue extends BaseCamelValue {
 		this.fVariables.add(var);
 		
 		// HEADERS
-		var = new BaseCamelVariable(this.debugTarget, VARIABLE_NAME_MESSAGEHEADERS, ArrayList.class);
+		var = new CamelHeadersVariable(this.debugTarget, VARIABLE_NAME_MESSAGEHEADERS, ArrayList.class);
 		val = new CamelHeadersValue(this.fTarget, this.message.getHeaders(), var.getReferenceType());
 		var.setValue(val);
 		this.fVariables.add(var);

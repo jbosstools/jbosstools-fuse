@@ -287,7 +287,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 					try {
 						enforceNatures(project, new NullProgressMonitor());
 					} catch (CoreException ex) {
-						ex.printStackTrace();
+						Activator.getLogger().error(ex);
 					}
 				}
 			}

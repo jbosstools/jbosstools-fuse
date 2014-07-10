@@ -85,4 +85,16 @@ public class CamelHeaderVariable extends BaseCamelVariable {
 			debugger.setMessageHeaderOnBreakpoint(getCurrentEndpointNodeId(), h.getKey(), h.getValue(), h.getType());
 		}
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		try {
+			return String.format("%s = %s", getName(), getValue().getValueString());
+		} catch (DebugException ex) {
+			return super.toString();
+		}
+	}
 }

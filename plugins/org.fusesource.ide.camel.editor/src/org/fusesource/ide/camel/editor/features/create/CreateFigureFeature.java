@@ -133,24 +133,6 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 			Activator.getLogger().warning("Warning! Could not find currently selectedNode, so can't associate this node with the route!: " + node);
 		}
 
-		// Add model element to resource.
-		// We add the model element to the resource of the diagram for
-		// simplicity's sake. Normally, a customer would use its own
-		// model persistence layer for storing the business model separately.
-//		diagram.eResource().getContents().add(node);
-
-		//		Use the following instead of the above line to store the model
-		//		data in a seperate file parallel to the diagram file
-		//		try {
-		//			try {
-		//				TutorialUtil.saveToModelFile(newClass, getDiagram());
-		//			} catch (IOException e) {
-		//				e.printStackTrace();
-		//			}
-		//		} catch (CoreException e) {
-		//			e.printStackTrace();
-		//		}
-
 		// do the add
 		PictogramElement pe = addGraphicalRepresentation(context, node);
 

@@ -50,6 +50,7 @@ import org.eclipse.wst.server.ui.internal.wizard.TaskWizard;
 import org.eclipse.wst.server.ui.internal.wizard.fragment.LicenseWizardFragment;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.fusesource.ide.server.karaf.ui.Messages;
 
@@ -232,7 +233,7 @@ public abstract class AbstractKarafRuntimeComposite extends Composite implements
 				try {
 					license = ir.getLicense(new NullProgressMonitor());
 				} catch (CoreException ex) {
-					ex.printStackTrace();
+					Activator.getLogger().error(ex);
 				}
 				TaskModel taskModel = new TaskModel();
 				taskModel.putObject(LicenseWizardFragment.LICENSE, license);

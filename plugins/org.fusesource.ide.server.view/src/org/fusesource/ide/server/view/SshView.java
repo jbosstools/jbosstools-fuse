@@ -114,7 +114,7 @@ public class SshView extends TerminalView {
 										try {
 											Thread.sleep(DELAY);
 										} catch (InterruptedException e) {
-											e.printStackTrace();
+											ServerViewPlugin.getLogger().error(e);
 										} finally {
 											cnt++;
 										}
@@ -122,13 +122,13 @@ public class SshView extends TerminalView {
 								}
 
 							} catch (Exception ex) {
-								ex.printStackTrace();
+								ServerViewPlugin.getLogger().error(ex);
 							}
 						}
 					});
 
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					ServerViewPlugin.getLogger().error(ex);
 				}
 			}
 		}

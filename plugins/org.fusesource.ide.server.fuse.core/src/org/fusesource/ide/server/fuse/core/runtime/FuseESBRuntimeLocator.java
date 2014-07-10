@@ -20,6 +20,7 @@ import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.ServerCore;
+import org.fusesource.ide.server.fuse.core.Activator;
 import org.fusesource.ide.server.fuse.core.bean.FuseBeanProvider;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeLocator;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
@@ -68,7 +69,7 @@ public class FuseESBRuntimeLocator extends KarafRuntimeLocator {
 									return runtime;
 								}
 							} catch (Exception e) {
-								e.printStackTrace();
+								Activator.getLogger().error(e);
 							}
 						}
 					}

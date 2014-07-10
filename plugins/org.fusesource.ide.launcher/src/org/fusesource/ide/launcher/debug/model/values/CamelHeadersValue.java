@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.exchange.Header;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
@@ -36,14 +37,14 @@ public class CamelHeadersValue extends BaseCamelValue {
 	 * @param msg
 	 */
 	public CamelHeadersValue(CamelDebugTarget debugTarget, ArrayList<Header> headers, Class type) {
-		super(debugTarget, headers.toString(), type);
+		super(debugTarget, "" + headers.hashCode(), type);
 		this.debugTarget = debugTarget;
 		this.headers = headers;
 		if (this.headers == null) this.headers = new ArrayList<Header>();
 		try {
 			initHeaders();
 		} catch (DebugException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 	}
 	
@@ -84,6 +85,19 @@ public class CamelHeadersValue extends BaseCamelValue {
 	 */
 	@Override
 	protected String getVariableDisplayString() {
-		return "MessageHeader";
+		return "MessageHeaders";
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getValueString()
+	 */
+	@Override
+	public String getValueString() throws DebugException {
+		StringBuffer sb = new StringBuffer();
+		for (IVariable v : this.fVariables) {
+			sb.append(v.toString());
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 }

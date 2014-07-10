@@ -13,6 +13,7 @@ package org.fusesource.ide.project;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -67,5 +68,9 @@ public class Activator extends AbstractUIPlugin {
 
 		reg.put("camelFileIcon", imageDescriptorFromPlugin(getDefault().getBundle().getSymbolicName(), "icons/camel_context_icon.png"));
 		reg.put("camelFolderIcon", imageDescriptorFromPlugin(getDefault().getBundle().getSymbolicName(), "icons/camel_route_folder.png"));
+	}
+	
+	public static RiderLogFacade getLogger() {
+		return RiderLogFacade.getLog(plugin.getLog());
 	}
 }

@@ -216,7 +216,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 		try {
 			return new URI(null, null, host, port, null, null, null);	
 		} catch (URISyntaxException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 		return null;
 	}
@@ -235,7 +235,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 				return ctrl.findPort(IServerPortController.KEY_SSH_PORT, -1);				
 			}			
 		} catch (CoreException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 		return -1;
 	}
@@ -253,7 +253,7 @@ public class BaseKarafPoller implements IServerStatePoller2 {
 				return ctrl.findPort(IServerPortController.KEY_SSH_PORT, -1);			
 			}
 		} catch (CoreException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 		return -1;
 	}

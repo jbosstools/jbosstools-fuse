@@ -80,61 +80,6 @@ public class KarafEditorPart extends ServerEditorPart {
 	}
 
 	private MBeanServerConnection getKarafConnection() {
-//		IServerWorkingCopy copy = getServer();
-//		IFuseESBJMXProvider bdel = (IFuseESBJMXProvider) copy.loadAdapter( IFuseESBJMXProvider.class, null);
-//		if (bdel != null)
-//			return bdel.getMBeanServerConnection();
-//
 		return null;
 	}
-
-	/*private String[] getServiceAssemblies() {
-		MBeanServerConnection FuseESBServerConnection = getFuseESBConnection();
-		java.util.List<String> serviceAssemblies = new LinkedList<String>();
-		try {
-			if (FuseESBServerConnection != null
-					&& isFuseESBDomainPresent(FuseESBServerConnection)) {
-				ObjectName name = new ObjectName(
-						IFuseESBJMXProvider.ORG_APACHE_SERVICEMIX + ":*");
-				Set<?> beans = FuseESBServerConnection.queryMBeans(name,
-						null);
-				for (Object obj : beans) {
-					if (obj instanceof ObjectInstance) {
-						ObjectInstance oi = (ObjectInstance) obj;
-						ObjectName objectName = oi.getObjectName();
-						if ("ServiceAssembly".equals(objectName .getKeyProperty("Type"))) { 
-							serviceAssemblies.add(objectName .getKeyProperty("Name"));
-						}
-					}
-				}
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (MalformedObjectNameException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-		return serviceAssemblies.toArray(new String[serviceAssemblies.size()]);
-	}
-
-	private boolean isFuseESBDomainPresent(MBeanServerConnection conn) {
-		if (conn != null) {
-			try {
-				String[] domains = conn.getDomains();
-				if (domains != null) {
-					for (String domain : domains) {
-						if (domain.equals(IFuseESBJMXProvider.ORG_APACHE_SERVICEMIX)) {
-							return true;
-						}
-					}
-				}
-			} catch (IOException o) {
-			}
-		}
-		return false;
-
-	}*/
-
 }

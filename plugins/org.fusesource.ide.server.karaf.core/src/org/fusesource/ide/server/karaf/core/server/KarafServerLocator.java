@@ -17,6 +17,7 @@ import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.internal.provisional.ServerLocatorDelegate;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeLocator;
 
 
@@ -49,8 +50,8 @@ public class KarafServerLocator extends ServerLocatorDelegate {
 				try {
 					IServerWorkingCopy server = serverType.createServer(serverTypeId, null, runtime, monitor);
 					listener.serverFound(server);
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (Exception ex) {
+					Activator.getLogger().error(ex);
 				}
 			}
 		};

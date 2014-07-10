@@ -164,7 +164,7 @@ public class Karaf2xLaunchController extends AbstractSubsystemController
 		try {
 			return (IServerShutdownController)((IControllableServerBehavior)getServer()).getController(ControllableServerBehavior.SYSTEM_SHUTDOWN);
 		} catch (CoreException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 		return null;
 	}

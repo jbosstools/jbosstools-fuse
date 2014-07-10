@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
 import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
@@ -172,7 +173,7 @@ public class Karaf2xPortController extends AbstractSubsystemController
 			br = new BufferedReader(new FileReader(new File(portFile)));
 			return br.readLine();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 			return null;
 		} finally {
 			if (br != null) {

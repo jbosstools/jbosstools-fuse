@@ -109,7 +109,7 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
 				return shutdownKarafInstance(port);
 			}			
 		} catch (CoreException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 		return Status.CANCEL_STATUS;
 	}
@@ -129,10 +129,10 @@ public class Karaf2xShutdownController extends AbstractSubsystemController
             s = new Socket(getServer().getHost(), managementPort);
             s.getOutputStream().write(shutdownCommand.getBytes());
 		} catch (CoreException e) {
-			e.printStackTrace();
+			Activator.getLogger().error(e);
 			return Status.CANCEL_STATUS;
         } catch (IOException ex) {
-            ex.printStackTrace();
+        	Activator.getLogger().error(ex);
             return Status.CANCEL_STATUS;
         } finally {
             if (s != null) {

@@ -15,6 +15,7 @@ import java.util.Date;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.exchange.BacklogTracerEventMessage;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
@@ -42,7 +43,7 @@ public class CamelExchangeValue extends BaseCamelValue {
 		try {
 			initExchange();
 		} catch (DebugException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 	}
 	

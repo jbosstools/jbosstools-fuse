@@ -24,6 +24,7 @@ import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.ServerCore;
+import org.fusesource.ide.server.fuse.core.Activator;
 import org.fusesource.ide.server.fuse.core.bean.FuseBeanProvider;
 import org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
@@ -115,7 +116,7 @@ public class FuseRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 			rt.save(true, new NullProgressMonitor());
 			// TODO create the server also
 		} catch(CoreException ce) {
-			ce.printStackTrace();
+			Activator.getLogger().error(ce);
 		}
 	}
 	

@@ -24,6 +24,7 @@ import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.ServerCore;
+import org.fusesource.ide.server.servicemix.core.Activator;
 import org.fusesource.ide.server.servicemix.core.bean.ServiceMixBeanProvider;
 import org.fusesource.ide.server.servicemix.core.util.IServiceMixToolingConstants;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
@@ -116,7 +117,7 @@ public class ServiceMixRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 			rt.save(true, new NullProgressMonitor());
 			// TODO create the server also
 		} catch(CoreException ce) {
-			ce.printStackTrace();
+			Activator.getLogger().error(ce);
 		}
 	}
 	

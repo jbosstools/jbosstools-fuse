@@ -1643,7 +1643,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 					f_original.setAccessible(true);
 					xp_b = (XPathExpression)f_original.get(e_b);
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					Activator.getLogger().error(ex);
 				}
 			}
 
@@ -1662,7 +1662,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 					f_original.setAccessible(true);
 					xp_a = (XPathExpression)f_original.get(e_a);
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					Activator.getLogger().error(ex);
 				}
 			}
 
@@ -1702,8 +1702,8 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 						if (valB != null && valA != null && !valB.equals(valA)) {
 							return false;
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
+					} catch (Exception ex) {
+						Activator.getLogger().error(ex);
 					}
 				}
 			}

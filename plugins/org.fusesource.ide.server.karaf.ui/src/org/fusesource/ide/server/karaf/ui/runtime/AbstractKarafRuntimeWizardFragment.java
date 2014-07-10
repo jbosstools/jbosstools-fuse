@@ -23,6 +23,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntimeWorkingCopy;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
@@ -113,7 +114,7 @@ public abstract class AbstractKarafRuntimeWizardFragment extends WizardFragment 
 		try {
 			workingCopy.save(true, new NullProgressMonitor());
 		} catch (CoreException e) {
-			e.printStackTrace();
+			Activator.getLogger().error(e);
 		}
 	}
 

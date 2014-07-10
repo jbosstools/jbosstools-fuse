@@ -64,7 +64,7 @@ public class DeleteProfileRequirementAction extends AbstractHandler {
 			try {
 				fabricNode.getFabricService().setRequirements(reqs);
 			} catch (IOException ex) {
-				ex.printStackTrace();
+				FabricPlugin.getLogger().error(ex);
 			} finally {
 				IWorkbenchPart wp = HandlerUtil.getActivePart(event);
 				if (wp instanceof PropertySheet) {

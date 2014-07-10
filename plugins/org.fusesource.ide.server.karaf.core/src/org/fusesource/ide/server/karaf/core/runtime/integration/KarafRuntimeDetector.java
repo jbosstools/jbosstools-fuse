@@ -24,6 +24,7 @@ import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.ServerCore;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
 import org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
@@ -114,7 +115,7 @@ public class KarafRuntimeDetector extends AbstractRuntimeDetectorDelegate {
 			
 			// TODO create the server also
 		} catch(CoreException ce) {
-			ce.printStackTrace();
+			Activator.getLogger().error(ce);
 		}
 		
 	}

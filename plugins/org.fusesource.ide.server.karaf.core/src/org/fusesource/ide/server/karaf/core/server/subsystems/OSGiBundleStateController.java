@@ -99,7 +99,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		    	}
 		    }
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 		
 		return false;
@@ -118,7 +118,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 			}
 			return true;
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 			this.jmxc = null;
 			this.mbsc = null;
@@ -196,7 +196,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 					    status == IServer.STATE_STOPPED;
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 			//disconnect();
 		}
@@ -216,7 +216,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				return getBundleStatus(id);
 			}			
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 //			disconnect();
 		}
@@ -236,7 +236,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				return getBundleStatus(id);
 			}			
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 //			disconnect();
 		}
@@ -256,7 +256,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				return getBundleStatus(id);
 			}			
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 //			disconnect();
 		}
@@ -274,7 +274,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				return getBundleStatus(id);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 //			disconnect();
 		}
@@ -292,7 +292,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				return getBundleStatus(id) == IServer.STATE_STARTED;
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 //			disconnect();
 		}
@@ -310,7 +310,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				waitModuleStarted(symbolicName, version, id, monitor);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 //			disconnect();
 		}		
@@ -327,7 +327,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 				waitModuleStarted(symbolicName, version, id, maxDelay);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 //			disconnect();
 		}

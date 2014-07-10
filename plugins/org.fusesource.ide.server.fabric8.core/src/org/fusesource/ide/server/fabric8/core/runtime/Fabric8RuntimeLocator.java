@@ -20,6 +20,7 @@ import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.ServerCore;
+import org.fusesource.ide.server.fabric8.core.Activator;
 import org.fusesource.ide.server.fabric8.core.bean.Fabric8BeanProvider;
 import org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeLocator;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
@@ -68,7 +69,7 @@ public class Fabric8RuntimeLocator extends KarafRuntimeLocator {
 									return runtime;
 								}
 							} catch (Exception e) {
-								e.printStackTrace();
+								Activator.getLogger().error(e);
 							}
 						}
 					}

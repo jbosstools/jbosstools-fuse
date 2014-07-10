@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
@@ -45,7 +46,7 @@ public class CamelProcessorValue extends BaseCamelValue {
 		try {
 			init();
 		} catch (DebugException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		}
 	}
 	
@@ -207,5 +208,13 @@ public class CamelProcessorValue extends BaseCamelValue {
 
 	private long getTotalProcessingTime() {
 		return this.stackFrame.getDebugger().getTotalProcessingTime(this.processorId);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.launcher.debug.model.values.BaseCamelValue#getVariableDisplayString()
+	 */
+	@Override
+	protected String getVariableDisplayString() {
+		return "CamelProcessor";
 	}
 }

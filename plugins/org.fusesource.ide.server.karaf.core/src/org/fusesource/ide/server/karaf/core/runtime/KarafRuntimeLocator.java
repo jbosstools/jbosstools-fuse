@@ -23,6 +23,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.RuntimeLocatorDelegate;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.bean.KarafBeanProvider;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBean;
 import org.jboss.ide.eclipse.as.core.server.bean.ServerBeanLoader;
@@ -158,7 +159,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 									return runtime;
 								}
 							} catch (Exception e) {
-								e.printStackTrace();
+								Activator.getLogger().error(e);
 							}
 						}
 					}

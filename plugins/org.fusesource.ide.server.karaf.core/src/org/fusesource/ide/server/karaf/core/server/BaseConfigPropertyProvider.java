@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.fusesource.ide.server.karaf.core.Activator;
+
 /**
  * @author lhein
  */
@@ -71,7 +73,7 @@ public class BaseConfigPropertyProvider implements
 			bis = new BufferedInputStream(new FileInputStream(this.propertyFile));
 			this.configProps.load(bis);	
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			Activator.getLogger().error(ex);
 		} finally {
 			if (bis != null) {
 				try {

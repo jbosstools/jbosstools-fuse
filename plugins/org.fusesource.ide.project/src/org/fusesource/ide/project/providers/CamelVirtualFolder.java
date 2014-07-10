@@ -24,6 +24,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.fusesource.ide.project.Activator;
 
 public class CamelVirtualFolder {
 	
@@ -118,7 +119,7 @@ public class CamelVirtualFolder {
 				try {
 					event.getDelta().accept(new DeltaPrinter(_project));
 				} catch (CoreException ex) {
-					ex.printStackTrace();
+					Activator.getLogger().error(ex);
 				}
 			}
 		}

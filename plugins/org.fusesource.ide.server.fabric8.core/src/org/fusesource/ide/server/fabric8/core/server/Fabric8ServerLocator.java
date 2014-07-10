@@ -17,6 +17,7 @@ import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.internal.provisional.ServerLocatorDelegate;
+import org.fusesource.ide.server.fabric8.core.Activator;
 import org.fusesource.ide.server.fabric8.core.runtime.Fabric8RuntimeLocator;
 
 
@@ -50,7 +51,7 @@ public class Fabric8ServerLocator extends ServerLocatorDelegate {
 					IServerWorkingCopy server = serverType.createServer(serverTypeId, null, runtime, monitor);
 					listener.serverFound(server);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Activator.getLogger().error(e);
 				}
 			}
 		};
