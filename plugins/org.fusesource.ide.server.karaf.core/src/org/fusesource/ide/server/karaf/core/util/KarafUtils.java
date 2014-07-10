@@ -163,7 +163,7 @@ public class KarafUtils {
 				return pathname.exists() && pathname.isFile() && pathname.getName().toLowerCase().startsWith(module.getProject().getName()) && pathname.getName().toLowerCase().endsWith(getFileExtensionForPackaging(packaging));
 			}
 		});
-		if (jars.length>0) {
+		if (jars != null && jars.length>0) {
 			if (packaging.equalsIgnoreCase(PACKAGING_BUNDLE)) {
 				return String.format("%sfile:%s", getProtocolPrefixForModule(module), jars[0].getPath());
 			} else if (packaging.equalsIgnoreCase(PACKAGING_JAR)) {
@@ -316,7 +316,7 @@ public class KarafUtils {
 			} else {
 				// no file...parse it from the bundle url
 				String uri = getBundleFilePath(module);
-				if (uri.indexOf("Bundle-Version=") != -1) {
+				if (uri != null && uri.indexOf("Bundle-Version=") != -1) {
 					version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
 				}
 			}

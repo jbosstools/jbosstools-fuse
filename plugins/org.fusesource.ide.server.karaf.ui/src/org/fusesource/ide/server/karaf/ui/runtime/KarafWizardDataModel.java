@@ -68,55 +68,46 @@ public class KarafWizardDataModel implements
 		this.userName = userName;
 	}
 
-	@Override
 	public String getVersion() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public IPath getLocation() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public IExecutionEnvironment getExecutionEnvironment() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public IVMInstall getVM() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public boolean isUsingDefaultJRE() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public IVMInstall[] getValidJREs() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void setVM(IVMInstall selectedVM) {
 		// TODO Auto-generated method stub
 		//dfsdfads
 	}
 
-	@Override
 	public IExecutionEnvironment getMinimumExecutionEnvironment() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void setExecutionEnvironment(IExecutionEnvironment environment) {
 		// TODO Auto-generated method stub
 		

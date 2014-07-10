@@ -127,7 +127,6 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 		final IViewPart[] ret = new IViewPart[1];
 		ret[0] = null;
 		Display.getDefault().syncExec(new Runnable() {
-			@Override
 			public void run() {
 				IWorkbench wb = PlatformUI.getWorkbench();
 				if (wb != null) {

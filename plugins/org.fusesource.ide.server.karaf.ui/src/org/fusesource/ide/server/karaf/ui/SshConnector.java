@@ -98,7 +98,6 @@ public class SshConnector implements ITerminalConnectionListener {
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.view.ITerminalConnectionListener#onConnect()
 	 */
-	@Override
 	public void onConnect() {
 		// store the active connector
 		connectors.put(server, this);
@@ -109,7 +108,6 @@ public class SshConnector implements ITerminalConnectionListener {
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.server.view.ITerminalConnectionListener#onDisconnect()
 	 */
-	@Override
 	public void onDisconnect() {
 		// open the terminal view
 		IViewPart vp = KarafUIPlugin.openTerminalView();
