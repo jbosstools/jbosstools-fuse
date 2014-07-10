@@ -34,7 +34,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="true">
+           supportsRemoteHosts="false">
      </serverType>
   </extension>
 
@@ -48,7 +48,7 @@
   <extension point="org.eclipse.wst.server.core.serverLocators">
     <serverLocator
        id="org.fusesource.ide.server.fabric8.server.locator"
-       supportsRemoteHosts="true"
+       supportsRemoteHosts="false"
        typeIds="org.fusesource.ide.fabric8.server.*"
        class="org.fusesource.ide.server.fabric8.core.server.Fabric8ServerLocator"/>
   </extension>
@@ -61,7 +61,9 @@
            id="org.fusesource.ide.server.fabric81x.launch"
            modes="run,debug"
            name="%fabric8.launch.name"
-           public="true">
+           public="true"
+           sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+	   sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
      </launchConfigurationType>
   </extension>
   

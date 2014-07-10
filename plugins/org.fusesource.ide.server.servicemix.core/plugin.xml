@@ -47,7 +47,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="true">
+           supportsRemoteHosts="false">
      </serverType>
      <serverType
            behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
@@ -64,7 +64,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="true">
+           supportsRemoteHosts="false">
      </serverType>
   </extension>
 
@@ -78,7 +78,7 @@
   <extension point="org.eclipse.wst.server.core.serverLocators">
     <serverLocator
        id="org.fusesource.ide.server.servicemix.server.locator"
-       supportsRemoteHosts="true"
+       supportsRemoteHosts="false"
        typeIds="org.fusesource.ide.servicemix.server.*"
        class="org.fusesource.ide.server.servicemix.core.server.ServiceMixServerLocator"/>
   </extension>
@@ -122,7 +122,9 @@
            id="org.fusesource.ide.server.servicemix4x.launch"
            modes="run,debug"
            name="%servicemix.launch.name"
-           public="true">
+           public="true"
+	   sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+	   sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
      </launchConfigurationType>
   </extension>
   

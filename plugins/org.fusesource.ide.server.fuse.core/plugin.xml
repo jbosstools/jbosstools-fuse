@@ -47,7 +47,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="true">
+           supportsRemoteHosts="false">
      </serverType>
      <serverType
            behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
@@ -64,7 +64,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="true">
+           supportsRemoteHosts="false">
      </serverType>
   </extension>
 
@@ -78,7 +78,7 @@
   <extension point="org.eclipse.wst.server.core.serverLocators">
     <serverLocator
        id="org.fusesource.ide.server.fuseesb.server.locator"
-       supportsRemoteHosts="true"
+       supportsRemoteHosts="false"
        typeIds="org.fusesource.ide.fuseesb.server.*"
        class="org.fusesource.ide.server.fuse.core.server.FuseESBServerLocator"/>
   </extension>
@@ -91,10 +91,12 @@
            id="org.fusesource.ide.server.fuseesb6x.launch"
            modes="run,debug"
            name="%fuseesb.launch.name"
-           public="true">
+           public="true"
+	   sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+	   sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
      </launchConfigurationType>
   </extension>
-  
+
   <extension
         point="org.jboss.ide.eclipse.as.wtp.core.serverBeanTypeProvider">
      <serverBeanTypeProvider

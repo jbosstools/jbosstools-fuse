@@ -44,6 +44,21 @@
     </runtimeType>
   </extension>
 
+  <extension point="org.eclipse.debug.core.sourceLocators">
+    <sourceLocator
+        name="sourceLocator"
+	id="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+        class="org.fusesource.ide.server.karaf.core.server.SourceLocator">
+    </sourceLocator>
+  </extension>
+
+  <extension point="org.eclipse.debug.core.sourcePathComputers">
+    <sourcePathComputer
+	id="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate"
+        class="org.fusesource.ide.server.karaf.core.server.SourcePathComputerDelegate">
+    </sourcePathComputer>
+  </extension>
+
   <extension point="org.eclipse.wst.server.core.serverTypes">
      <serverType
            behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
@@ -60,7 +75,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="true">
+           supportsRemoteHosts="false">
      </serverType>
      <serverType
            behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
@@ -77,7 +92,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="true">
+           supportsRemoteHosts="false">
      </serverType>
      <serverType
            behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
@@ -94,7 +109,7 @@
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
-           supportsRemoteHosts="true">
+           supportsRemoteHosts="false">
      </serverType>
   </extension>
   
@@ -106,7 +121,8 @@
            modes="run,debug"
            name="%karaf.launch.name"
            public="true"
-           sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector">
+	   sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+	   sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
      </launchConfigurationType>
   </extension>
 
@@ -120,7 +136,7 @@
   <extension point="org.eclipse.wst.server.core.serverLocators">
     <serverLocator
        id="org.fusesource.ide.server.karaf.server.locator"
-       supportsRemoteHosts="true"
+       supportsRemoteHosts="false"
        typeIds="org.fusesource.ide.karaf.server.*"
        class="org.fusesource.ide.server.karaf.core.server.KarafServerLocator"/>
   </extension>
