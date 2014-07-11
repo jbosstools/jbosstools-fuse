@@ -1,30 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet
-      title="Create Camel Project">
+      title="Create a Fuse Camel Project">
 
    <intro>
       <description>
-         This cheat sheet walks you through creating a new <b>Camel</b> project using Spring and ActiveMQ
+         This cheat sheet walks you through the steps to create a new <b>Fuse Camel</b> project using the Spring archetype.
 	</description>
    </intro>
 
-<item title="Open the Java Perspective">
+<item title="Open the Fuse Integration Perspective">
   <action pluginId="org.eclipse.ui.cheatsheets" 
-class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
-param1="org.eclipse.jdt.ui.JavaPerspective"/>
-  <description>Select Window > Open Perspective > Java in the menubar at the top 
-of the workbench. This step changes the perspective to set up the Eclipse 
-workbench for Java development.
-  </description> 
+          class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
+          param1="org.fusesource.ide.branding.perspective"/>
+  <description>Select <b>Window &gt; Open Perspective &gt; Fuse Integration</b> in the menu bar at the top of the workbench. This step changes the perspective to set up the Eclipse workbench for development of your Apache Camel routes.</description> 
 </item>
-
-   <item
-         title="Open the New Fuse Project wizard">
-      <description>
-         To start creating a new project you need to open the wizard to be able to create a new project
-      </description>
-      <command
-            required="true"
-            serialization="org.eclipse.ui.newWizard(newWizardId=org.fusesource.ide.branding.wizards.FuseProjectWizard)"/>
-   </item> 
+<item title="Open the New Fuse Project wizard">
+  <description>To create your new project you now need to open the <b>New Fuse Project</b> wizard. You can do that by selecting <b>File &gt; New &gt; Fuse Project</b> from the top menu bar.<br/><br/> Once its open you can specify the location your project should live in and then on the <b>next</b> page you can select from a list of available archetypes. Please select the archetype <b>camel-archetype-spring</b> from the list. If you want you can change the values for the Maven coordinates and the default package name.<br/><br/>Click on <b>Finish</b> to finally create your new project.</description>
+  <command required="true"
+           serialization="org.eclipse.ui.newWizard(newWizardId=org.fusesource.ide.branding.wizards.FuseProjectWizard)"/>
+</item> 
 </cheatsheet>
