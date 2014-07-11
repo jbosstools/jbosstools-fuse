@@ -21,6 +21,8 @@ public interface CamelContextLaunchConfigConstants {
 	static final String ATTR_CONTEXT_FILE = "camel.fileApplicationContextUri";
 	static final String ATTR_FILE = "rider.file";
 	static final String DEFAULT_CONTEXT_NAME = "camelContext.xml";
-	static final String DEFAULT_MAVEN_GOALS = "clean package org.apache.camel:camel-maven-plugin:run";
+	static final String DEFAULT_MAVEN_GOALS_ALL = "clean package";
+	static final String DEFAULT_MAVEN_GOALS_JAR = DEFAULT_MAVEN_GOALS_ALL + " org.apache.camel:camel-maven-plugin:run ";
+	static final String DEFAULT_MAVEN_GOALS_WAR = DEFAULT_MAVEN_GOALS_ALL + " org.eclipse.jetty:jetty-maven-plugin:run ";
 	static final String BLUEPRINT_CONTEXT = "camel.blueprint=true";
 }

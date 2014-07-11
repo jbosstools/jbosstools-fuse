@@ -73,6 +73,15 @@ public abstract class FuseMavenLaunchDelegate extends MavenLaunchDelegate {
 	}
 	
 	/**
+	 * sets the new goals
+	 * 
+	 * @param newGoals
+	 */
+	protected void setGoals(String newGoals) {
+		this.goals = newGoals;
+	}
+	
+	/**
 	 * enables / disables tests
 	 * 
 	 * @param skipTests

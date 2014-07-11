@@ -39,7 +39,7 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.fusesource.ide.launcher.ui.launch.ExecutePomAction:clean package camel:run"
+            class="org.fusesource.ide.launcher.ui.launch.ExecutePomAction:clean package"
             icon="icons/run_camel_context.png"
             id="org.fusesource.ide.launcher.ui.shortcut.camelContext"
             label="%launchShortCut.camelContext.label"
@@ -67,7 +67,7 @@
       </shortcut>
 
       <shortcut
-            class="org.fusesource.ide.launcher.ui.launch.ExecutePomActionNoTests:clean package camel:run" 
+            class="org.fusesource.ide.launcher.ui.launch.ExecutePomActionNoTests:clean package" 
             icon="icons/run_camel_context.png"
             id="org.fusesource.ide.launcher.ui.shortcut.camelContextNoTests"
             label="%launchShortCut.camelContext.notests.label"

@@ -19,8 +19,15 @@
 
 package org.fusesource.ide.launcher.run.util;
 
+import org.apache.maven.model.Model;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.variables.VariablesPlugin;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.launcher.Activator;
 
 /**
@@ -44,5 +51,29 @@ public class MavenLaunchUtils {
 			Activator.getLogger().error("Could not substitute variable {}.", e);
 			return null;
 		}
+	}
+	
+	/**
+	 * checks if the packaging type is WAR
+	 * 
+	 * @param pathToPomXML
+	 * @return
+	 * @throws CoreException
+	 */
+	public static boolean isPackagingTypeWAR(String pathToPomXML) throws CoreException {
+		return isPackagingTypeWAR(ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(pathToPomXML)));
+	}
+	
+	/**
+	 * checks if the packaging type is WAR
+	 * 
+	 * @param pomFile
+	 * @return
+	 * @throws CoreException
+	 */
+	public static boolean isPackagingTypeWAR(IFile pomFile) throws CoreException {
+		if (pomFile == null || !pomFile.exists()) throw new CoreException(new Status(IStatus.ERROR, Activator.getBundleID(), "Can't determine packaging type because given pom file reference is null!"));
+		Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
+		return "war".equalsIgnoreCase(model.getPackaging());
 	}
 }

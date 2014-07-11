@@ -44,10 +44,12 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -60,9 +62,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.run.util.MavenLaunchUtils;
 import org.fusesource.ide.launcher.ui.Activator;
 
@@ -171,13 +175,39 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 			return;
 		}
 
+		boolean isWARPackaging = false;
+		try {
+			isWARPackaging = MavenLaunchUtils.isPackagingTypeWAR(basedir.getFile(Path.fromOSString("pom.xml")));
+		} catch (CoreException ex) {
+			Activator.getLogger().error(ex);
+		}
+		
+		ILaunchConfigurationWorkingCopy lc = null;
+		try {
+			lc = launchConfiguration.getWorkingCopy();
+		} catch (CoreException ex) {
+			Activator.getLogger().error(ex);
+			MessageDialog.openError(getShell(), "Unable to launch...", "An error occured when trying to launch the project. Message: " + ex.getMessage());
+			return;
+		}
 		boolean openDialog = showDialog;
 		if (!openDialog) {
 			try {
 				// if no goals specified
-				String goals = launchConfiguration.getAttribute(
-						MavenLaunchConstants.ATTR_GOALS, (String) null);
+				String goals = lc.getAttribute(MavenLaunchConstants.ATTR_GOALS, (String) null);
+				if (Strings.isBlank(goals)) {
+					goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
+				} else {
+					if (goals.indexOf(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL) != -1) {
+						// replace
+						goals = goals.replaceAll(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_ALL, isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
+					} else {
+						// add
+						goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
+					}
+				}
 				openDialog = Strings.isBlank(goals);
+				lc.setAttribute(MavenLaunchConstants.ATTR_GOALS, goals);
 			} catch (CoreException ex) {
 				Activator.getLogger().error("Error getting the maven goals from the configuration.", ex);
 			}
@@ -188,13 +218,13 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 			if (mode == ILaunchManager.DEBUG_MODE) {
 				category = "org.fusesource.ide.launcher.ui.debugCamelLaunchGroup";
 			}
-			if (DebugUITools.openLaunchConfigurationPropertiesDialog(getShell(), launchConfiguration, category, null) == Window.CANCEL) {
+			if (DebugUITools.openLaunchConfigurationPropertiesDialog(getShell(), lc, category, null) == Window.CANCEL) {
 				return;
 			}
 		} 
 		
 		try {
-			final ILaunch launch = launchConfiguration.launch(mode, null);
+			final ILaunch launch = lc.launch(mode, new NullProgressMonitor());
 			if (postProcessor != null) {
 
 				// TODO would be nice to avoid the thread here but I guess there's no other way?
@@ -232,7 +262,7 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 				t.start();
 			}
 		} catch (CoreException ex) {
-			DebugUITools.launch(launchConfiguration, mode);
+			DebugUITools.launch(lc, mode);
 		}
 	}
 
@@ -548,4 +578,30 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 		return null;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	protected String getSelectedFilePath() {
+		ISelectionService selService = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
+		ISelection isel = selService.getSelection();
+		if (isel != null && isel instanceof StructuredSelection) {
+			StructuredSelection ssel = (StructuredSelection)isel;
+			Object elem = ssel.getFirstElement();
+			if (elem != null && elem instanceof IFile) {
+				IFile f = (IFile)elem;
+				return f.getLocationURI().toString();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param basedir
+	 * @return
+	 */
+	protected IFile getPomFile(IContainer basedir) {
+		return basedir.getFile(Path.fromOSString("pom.xml"));		
+	}
 }
