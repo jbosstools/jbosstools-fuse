@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.jar.Manifest;
 
+import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -26,11 +27,13 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.ModuleDelegate;
 import org.eclipse.wst.server.core.util.ModuleFile;
 import org.eclipse.wst.server.core.util.ProjectModuleFactoryDelegate;
+import org.fusesource.ide.project.Activator;
 import org.fusesource.ide.project.RiderProjectNature;
 
 /**
@@ -94,7 +97,7 @@ public class CamelModuleFactory extends ProjectModuleFactoryDelegate {
 	protected IModule[] createModules(final IProject project) {
 		// check for the correct project nature
 		try {
-			if (!project.hasNature(RiderProjectNature.NATURE_ID)) {
+			if (!project.hasNature(RiderProjectNature.NATURE_ID) || supportsDeployment(project) == false) {
 				// no fuse nature - so skip it
 				return new IModule[0];
 			}
@@ -122,6 +125,49 @@ public class CamelModuleFactory extends ProjectModuleFactoryDelegate {
 	}
 	
 	/**
+	 * returns the manifest 
+	 * 
+	 * @param project
+	 * @return	the manifest or null if not available
+	 */
+	protected Manifest getManifest(IProject project) {
+		IFile manifest = project.getFile("target/classes/META-INF/MANIFEST.MF");
+		if (!manifest.exists()) {
+			manifest = project.getFile("META-INF/MANIFEST.MF");
+		}
+		if (manifest.exists()) {
+			try {
+				return new Manifest(new FileInputStream(manifest.getLocation().toFile()));
+			} catch (IOException ex) {
+				Activator.getLogger().error(ex);
+			}
+		} 
+		return null;
+	}
+	
+	/**
+	 * checks wether the project can be deployed to a server or not
+	 * 
+	 * @param project
+	 * @return
+	 */
+	protected boolean supportsDeployment(IProject project) {
+		IFile pomFile = project.getFile("pom.xml");
+		if (pomFile != null) {
+			try {
+				Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
+				if (model != null && (model.getPackaging().equalsIgnoreCase("war") || model.getPackaging().equalsIgnoreCase("bundle"))) {
+					// deployment is only supported for WAR and BUNDLE, not JAR
+					return true;
+				}
+			} catch (CoreException ex) {
+				Activator.getLogger().error(ex);
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * gathers the bundle id from the meta inf manifest. if that fails it will take
 	 * the project name
 	 * @param project
@@ -129,19 +175,10 @@ public class CamelModuleFactory extends ProjectModuleFactoryDelegate {
 	 */
 	protected String getBundleSymbolicName(final IProject project) {
 		String symbolicName = null;
-		IFile manifest = project.getFile("target/classes/META-INF/MANIFEST.MF");
-		if (!manifest.exists()) {
-			manifest = project.getFile("META-INF/MANIFEST.MF");
-		}
-		if (manifest.exists()) {
-			try {
-				Manifest mf = new Manifest(new FileInputStream(manifest.getLocation().toFile()));
-				symbolicName = mf.getMainAttributes().getValue("Bundle-SymbolicName");
-			} catch (IOException ex) {
-				symbolicName = project.getName();
-			}
+		Manifest mf = getManifest(project);
+		if (mf != null) {
+			symbolicName = mf.getMainAttributes().getValue("Bundle-SymbolicName");
 		} else {
-			// no OSGi bundle - lets take the project name instead
 			symbolicName = project.getName();
 		}
 		return symbolicName;
