@@ -11,6 +11,7 @@
 package org.fusesource.ide.launcher.ui.debug.model;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.ui.IDebugModelPresentation;
@@ -47,6 +48,8 @@ public class CamelModelPresentation extends LabelProvider implements IDebugModel
 	private static final String IMG_CAMEL_MESSAGE	   			= "message.png";
 	private static final String IMG_CAMEL_VARIABLE 	   			= "variable.png";
 	private static final String IMG_CAMEL_PROCESSOR  		 	= "endpoint_node.png";
+	private static final String IMG_CAMEL_BREAKPOINT_ENABLED	= "red-dot.png";
+	private static final String IMG_CAMEL_BREAKPOINT_DISABLED	= "gray-dot.png";
 	
 	/*
 	 * (non-Javadoc)
@@ -73,6 +76,17 @@ public class CamelModelPresentation extends LabelProvider implements IDebugModel
 			}
 		} else if (element instanceof CamelStackFrame) {
 			return Activator.getDefault().getImage(IMG_CAMEL_STACK_FRAME);
+		} else if (element instanceof CamelEndpointBreakpoint) {
+			CamelEndpointBreakpoint bp = (CamelEndpointBreakpoint)element;
+			try {
+				if (bp.isEnabled()) {
+					return Activator.getDefault().getImage(IMG_CAMEL_BREAKPOINT_ENABLED);
+				} else {
+					return Activator.getDefault().getImage(IMG_CAMEL_BREAKPOINT_DISABLED);
+				}
+			} catch (CoreException ex) {
+				Activator.getLogger().error(ex);
+			}
 		} else if (element instanceof CamelDebuggerVariable) {
 			return Activator.getDefault().getImage(IMG_CAMEL_DEBUGGER);
 		} else if (element instanceof CamelExchangeVariable) {
@@ -94,6 +108,10 @@ public class CamelModelPresentation extends LabelProvider implements IDebugModel
 	 */
 	@Override
 	public String getText(Object element) {
+		// responsible for the text in the breakpoints view
+		if (element instanceof CamelEndpointBreakpoint) {
+			return element.toString();
+		}
 		return null;
 	}
 	
