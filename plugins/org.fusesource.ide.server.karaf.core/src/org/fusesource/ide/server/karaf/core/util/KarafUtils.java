@@ -152,6 +152,7 @@ public class KarafUtils {
 	 */
 	public static String getBundleFilePath(final IModule module) throws CoreException {
 		final String packaging = getPackaging(module);
+		final String artifactId = getArtifactId(module);
 		File projectTargetPath = module.getProject().getLocation().append("target").toFile();
 		File[] jars = projectTargetPath.listFiles(new FileFilter() {
 			/*
@@ -160,16 +161,16 @@ public class KarafUtils {
 			 */
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.exists() && pathname.isFile() && pathname.getName().toLowerCase().startsWith(module.getProject().getName()) && pathname.getName().toLowerCase().endsWith(getFileExtensionForPackaging(packaging));
+				return pathname.exists() && pathname.isFile() && (pathname.getName().toLowerCase().startsWith(module.getProject().getName().toLowerCase()) || pathname.getName().toLowerCase().startsWith(artifactId.toLowerCase())) && pathname.getName().toLowerCase().endsWith(getFileExtensionForPackaging(packaging));
 			}
 		});
 		if (jars != null && jars.length>0) {
 			if (packaging.equalsIgnoreCase(PACKAGING_BUNDLE)) {
 				return String.format("%sfile:%s", getProtocolPrefixForModule(module), jars[0].getPath());
 			} else if (packaging.equalsIgnoreCase(PACKAGING_JAR)) {
-				return String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), jars[0].getPath(), module.getProject().getName(), getBundleVersion(module, jars[0]));
+				return String.format("%sfile:%s$Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), jars[0].getPath(), KarafUtils.getBundleSymbolicName(module), getBundleVersion(module, jars[0]));
 			} else if (packaging.equalsIgnoreCase(PACKAGING_WAR)) {
-				return String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), jars[0].getPath(), module.getProject().getName(), getBundleVersion(module, jars[0]));	
+				return String.format("%sfile:%s?Bundle-SymbolicName=%s&Bundle-Version=%s", getProtocolPrefixForModule(module), jars[0].getPath(), KarafUtils.getBundleSymbolicName(module), getBundleVersion(module, jars[0]));	
 			}			
 		}
 		return null;
@@ -220,6 +221,11 @@ public class KarafUtils {
 	private static String getPackaging(IModule module) throws CoreException {
 		Model model = MavenPlugin.getMavenModelManager().readMavenModel(getModelFile(module));
 		return model.getPackaging();
+	}
+	
+	private static String getArtifactId(IModule module) throws CoreException {
+		Model model = MavenPlugin.getMavenModelManager().readMavenModel(getModelFile(module));
+		return model.getArtifactId();
 	}
 	
 	/**
@@ -273,6 +279,36 @@ public class KarafUtils {
 		return !result.hasExceptions();
 	}
 
+	public static String getBundleSymbolicName(IModule module) throws CoreException {
+		String symbolicName = null;
+		IFile manifest = module.getProject().getFile("target/classes/META-INF/MANIFEST.MF");
+		if (!manifest.exists()) {
+			manifest = module.getProject().getFile("META-INF/MANIFEST.MF");
+		}
+		if (manifest.exists()) {
+			try {
+				Manifest mf = new Manifest(new FileInputStream(manifest.getLocation().toFile()));
+				symbolicName = mf.getMainAttributes().getValue("Bundle-SymbolicName");
+			} catch (IOException ex) {
+				symbolicName = null;
+			}
+		} else {
+			// no OSGi bundle - lets take the project name instead
+			symbolicName = null;
+		}
+		
+		if (symbolicName == null) {
+			// no manifest - so grab the artifactId
+			symbolicName = getArtifactId(module);
+		}
+		
+		if (symbolicName == null) {
+			symbolicName = module.getId();
+		}
+		
+		return symbolicName;
+	}
+	
 	/**
 	 * 
 	 * @param module
@@ -318,6 +354,28 @@ public class KarafUtils {
 				String uri = getBundleFilePath(module);
 				if (uri != null && uri.indexOf("Bundle-Version=") != -1) {
 					version = uri.substring(uri.indexOf("Bundle-Version=") + "Bundle-Version=".length());
+				} else if (uri != null && uri.endsWith(KarafUtils.getFileExtensionForPackaging(KarafUtils.getPackaging(module)))) {
+					String s = uri.substring(uri.lastIndexOf(File.separatorChar)+1);
+					String pack = KarafUtils.getFileExtensionForPackaging(KarafUtils.getPackaging(module));
+					boolean versionDigitsFound = false;
+					int pointCount = 0;
+					version = "";
+					for (int i=s.length()-pack.length()-1; i>=0; i--) {
+						char c = s.charAt(i);
+						if (Character.isAlphabetic(c)) {
+							if (versionDigitsFound) break;
+						} else if (Character.isDigit(c)) {
+							versionDigitsFound = true;
+						} else if (c == '-') {
+							if (versionDigitsFound) break;
+						} else if (c == '.') {
+							pointCount++;
+							if (pointCount>2) break;
+						}
+						version = c + version;
+					}
+					// finally replace a possible - with a . to be OSGi compliant
+					if (version.indexOf("-") != -1) version = version.replaceAll("-", ".");
 				}
 			}
 		}

@@ -21,11 +21,6 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.Unmarshaller;
 
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -636,14 +631,6 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 			}
 		}
 
-		// validate project name
-		IStatus nameStatus = validateProjectName();
-		if (!nameStatus.isOK()) {
-			return NLS
-					.bind(WizardMessages.wizardProjectPageMaven2ValidatorProjectNameInvalid,
-							nameStatus.getMessage());
-		}
-
 		/*
 		 * if (getArchetype() == null) { return
 		 * WizardMessages.wizardProjectPageMaven2ValidatorRequiredArchetype; }
@@ -755,29 +742,5 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 
 	public String getVersion() {
 		return versionCombo.getText();
-	}
-
-	public String getProjectName() {
-		return getArtifactId();
-	}
-
-	public IStatus validateProjectName() {
-		String projectName = getProjectName();
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-		// check if the project name is valid
-		IStatus nameStatus = workspace.validateName(projectName,
-				IResource.PROJECT);
-		if (!nameStatus.isOK()) {
-			return nameStatus;
-		}
-
-		// check if project already exists
-		if (workspace.getRoot().getProject(projectName).exists()) {
-			return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, NLS.bind(
-					WizardMessages.importProjectExists, projectName), null);
-		}
-
-		return Status.OK_STATUS;
 	}
 }

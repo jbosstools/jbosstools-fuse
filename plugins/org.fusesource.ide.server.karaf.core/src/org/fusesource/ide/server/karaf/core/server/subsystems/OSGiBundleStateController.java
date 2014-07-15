@@ -187,7 +187,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	public boolean canRestartModule(IModule[] module) {
 		try {
 			if (this.mbsc == null) connect();
-			String symbolicName = module[0].getProject().getName();
+			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
@@ -208,7 +208,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 			throws CoreException {
 		try {
 			if (this.mbsc == null) connect();
-			String symbolicName = module[0].getProject().getName();
+			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
@@ -228,7 +228,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 			throws CoreException {
 		try {
 			if (this.mbsc == null) connect();
-			String symbolicName = module[0].getProject().getName();
+			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
@@ -248,7 +248,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 			throws CoreException {
 		try {
 			if (this.mbsc == null) connect();
-			String symbolicName = module[0].getProject().getName();
+			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
@@ -267,7 +267,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	public int getModuleState(IModule[] module, IProgressMonitor monitor) {
 		try {
 			if (this.mbsc == null) connect();
-			String symbolicName = module[0].getProject().getName();
+			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
@@ -285,7 +285,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	public boolean isModuleStarted(IModule[] module, IProgressMonitor monitor) {
 		try {
 			if (this.mbsc == null) connect();
-			String symbolicName = module[0].getProject().getName();
+			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
@@ -303,7 +303,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	public void waitModuleStarted(IModule[] module, IProgressMonitor monitor) {
 		try {
 			if (this.mbsc == null) connect();
-			String symbolicName = module[0].getProject().getName();
+			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {
@@ -320,7 +320,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	public void waitModuleStarted(IModule[] module, final int maxDelay) {
 		try {
 			if (this.mbsc == null) connect();
-			String symbolicName = module[0].getProject().getName();
+			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			long id = getBundleId(symbolicName, version);
 			if (id != -1) {

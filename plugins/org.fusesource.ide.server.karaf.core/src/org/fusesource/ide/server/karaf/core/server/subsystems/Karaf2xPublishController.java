@@ -95,8 +95,10 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 			// do a build
 			boolean built = KarafUtils.runBuild(GOALS, module[0], monitor);
 			status = this.publisher.publish(getServer(), module);
-			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
 			((Server)getServer()).setModuleState(module, status);
+			((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
+			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
+			status = IServer.PUBLISH_STATE_NONE;
 			break;
 		case KarafUtils.INCREMENTAL_PUBLISH:
 			if (!module[0].exists())
@@ -104,8 +106,10 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 			// do a build
 			built = KarafUtils.runBuild(GOALS, module[0], monitor);
 			status = this.publisher.publish(getServer(), module);
-			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
 			((Server)getServer()).setModuleState(module, status);
+			((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
+			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
+			status = IServer.PUBLISH_STATE_NONE;
 			break;
 		case KarafUtils.NO_PUBLISH:
 			// we can skip this
@@ -113,8 +117,10 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 		case KarafUtils.REMOVE_PUBLISH:
 			boolean done = this.publisher.uninstall(getServer(), module);
 			if (done) {
-				 ((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
-				 ((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
+				((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
+				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
+				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
+				status = IServer.PUBLISH_STATE_NONE;
 			}
 			break;
 		default:
@@ -133,6 +139,4 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 			throws CoreException {
 		validate();
 	}
-
-
 }

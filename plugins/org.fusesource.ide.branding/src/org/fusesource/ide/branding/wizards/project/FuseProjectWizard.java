@@ -38,6 +38,10 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.m2e.core.project.IProjectConfigurationManager;
+import org.eclipse.m2e.core.project.MavenUpdateRequest;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -189,28 +193,14 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		/*
 		 * final Model model = getModel();
 		 */
-		final String projectName = archetypePage.getProjectName();
-		IStatus nameStatus = archetypePage.validateProjectName();
-		if (!nameStatus.isOK()) {
-			MessageDialog.openError(getShell(), NLS.bind(
-					WizardMessages.wizardProjectJobFailed, projectName),
-					nameStatus.getMessage()); //$NON-NLS-1$
-			return false;
-		}
-
-		// final String projectName = archetypePage.getProjectName();
-
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-		final IPath location = locationPage.isInWorkspace() ? null
-				: locationPage.getLocationPath();
+		final String projectName = getProjectName();
+		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		final IPath location = locationPage.isInWorkspace() ? null : locationPage.getLocationPath();
 		final IWorkspaceRoot root = workspace.getRoot();
-
-		final IPath rootPath = locationPage.isInWorkspace() ? root
-				.getLocation().append(projectName) : location;
-
+		final IPath rootPath = locationPage.isInWorkspace() ? root.getLocation().append(projectName) : location;
 		final File pomFile = rootPath.append("pom.xml").toFile();
 		boolean pomExists = pomFile.exists();
+
 		if (pomExists) {
 			MessageDialog.openError(getShell(), NLS.bind(
 					WizardMessages.wizardProjectJobFailed, projectName),
@@ -232,10 +222,8 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 						+ archetype + " for " + groupId + ": " + artifactId
 						+ ":" + version + " at " + rootPath);
 
-		String jobName = NLS.bind(WizardMessages.wizardProjectJobCreating,
-				projectName);
+		String jobName = NLS.bind(WizardMessages.wizardProjectJobCreating, projectName);
 		final Job job = new AbstractCreateProjectJob(jobName, workingSets) {
-
 			@Override
 			protected List<IProject> doCreateMavenProjects(
 					IProgressMonitor monitor) throws CoreException {
@@ -308,37 +296,55 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	private void enforceNatures(IProject project, IProgressMonitor monitor)
+	private void enforceNatures(final IProject project, final IProgressMonitor monitor)
 			throws CoreException {
-		IProjectDescription projectDescription = project.getDescription();
-		String[] ids = projectDescription.getNatureIds();
-		boolean camelNatureFound = false;
-		boolean javaNatureFound = false;
-		for (String id : ids) {
-			if (id.equals(JavaCore.NATURE_ID)) {
-				javaNatureFound = true;
-			} else if (id.equals(Activator.CAMEL_NATURE_ID)) {
-				camelNatureFound = true;
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				try {
+					IProjectDescription projectDescription = project.getDescription();
+					String[] ids = projectDescription.getNatureIds();
+					boolean camelNatureFound = false;
+					boolean javaNatureFound = false;
+					for (String id : ids) {
+						if (id.equals(JavaCore.NATURE_ID)) {
+							javaNatureFound = true;
+						} else if (id.equals(Activator.CAMEL_NATURE_ID)) {
+							camelNatureFound = true;
+						}
+					}
+					int toAdd = 0;
+					if (!camelNatureFound) {
+						toAdd++;
+					}
+					if (!javaNatureFound) {
+						toAdd++;
+					}
+					String[] newIds = new String[ids.length + toAdd];
+					System.arraycopy(ids, 0, newIds, 0, ids.length);
+					if (!camelNatureFound && !javaNatureFound) {
+						newIds[ids.length] = Activator.CAMEL_NATURE_ID;
+						newIds[newIds.length - 1] = JavaCore.NATURE_ID;
+					} else if (!camelNatureFound) {
+						newIds[ids.length] = Activator.CAMEL_NATURE_ID;
+					} else if (!javaNatureFound) {
+						newIds[ids.length] = JavaCore.NATURE_ID;
+					}
+					projectDescription.setNatureIds(newIds);
+					project.setDescription(projectDescription, monitor);
+					
+					IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
+				    IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
+					MavenUpdateRequest request = new MavenUpdateRequest(false, true);
+					request.addPomFile(project.getFile("pom.xml"));
+					configurationManager.updateProjectConfiguration(request, monitor);
+				} catch (CoreException ex) {
+					Activator.getLogger().error(ex);
+				}
 			}
-		}
-		int toAdd = 0;
-		if (!camelNatureFound) {
-			toAdd++;
-		}
-		if (!javaNatureFound) {
-			toAdd++;
-		}
-		String[] newIds = new String[ids.length + toAdd];
-		System.arraycopy(ids, 0, newIds, 0, ids.length);
-		if (!camelNatureFound && !javaNatureFound) {
-			newIds[ids.length] = Activator.CAMEL_NATURE_ID;
-			newIds[newIds.length - 1] = JavaCore.NATURE_ID;
-		} else if (!camelNatureFound) {
-			newIds[ids.length] = Activator.CAMEL_NATURE_ID;
-		} else if (!javaNatureFound) {
-			newIds[ids.length] = JavaCore.NATURE_ID;
-		}
-		projectDescription.setNatureIds(newIds);
-		project.setDescription(projectDescription, monitor);
+		});
+	}
+	
+	public String getProjectName() {
+		return locationPage != null ? locationPage.getProjectName() : null;
 	}
 }

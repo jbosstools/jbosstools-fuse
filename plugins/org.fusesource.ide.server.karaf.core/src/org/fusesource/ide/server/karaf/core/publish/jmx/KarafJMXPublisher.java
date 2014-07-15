@@ -116,7 +116,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		try {
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			// first check if there is a bundle installed with that name already
-			long bundleId = this.jmxPublisher.getBundleId(mbsc, module[0].getProject().getName(), version);
+			long bundleId = this.jmxPublisher.getBundleId(mbsc, KarafUtils.getBundleSymbolicName(module[0]), version);
 			if (bundleId != -1) {
 				// if yes - reinstall / update the bundle
 				reinstallBundle(server, module[0], bundleId);
@@ -146,7 +146,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		try {
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			// first check if there is a bundle installed with that name already
-			long bundleId = this.jmxPublisher.getBundleId(mbsc, module[0].getProject().getName(), version);
+			long bundleId = this.jmxPublisher.getBundleId(mbsc, KarafUtils.getBundleSymbolicName(module[0]), version);
 			if (bundleId != -1) {
 				unpublished = this.jmxPublisher.uninstallBundle(mbsc, bundleId);
 			}
