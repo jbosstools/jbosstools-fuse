@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.IBreakpoint;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.ICreateConnectionFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -373,7 +372,13 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
 		if (bo instanceof AbstractNode && !(bo instanceof Flow)) {
 			GraphicsAlgorithm invisible = pe.getGraphicsAlgorithm();
-			GraphicsAlgorithm rectangle = invisible.getGraphicsAlgorithmChildren().get(0);
+			GraphicsAlgorithm rectangle = invisible;
+			if (invisible.getGraphicsAlgorithmChildren().size() > 0) {
+				rectangle = invisible.getGraphicsAlgorithmChildren().get(0);
+				if (invisible.getGraphicsAlgorithmChildren().size()>1) {
+					rectangle = invisible.getGraphicsAlgorithmChildren().get(1);
+				}
+			}
 			return new GraphicsAlgorithm[] { rectangle };
 		}
 		return super.getClickArea(pe);
@@ -389,10 +394,14 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
 		if (bo instanceof AbstractNode) {
 			GraphicsAlgorithm invisible = pe.getGraphicsAlgorithm();
-			EList<GraphicsAlgorithm> graphicsAlgorithmChildren = invisible.getGraphicsAlgorithmChildren();
-			if (!graphicsAlgorithmChildren.isEmpty()) {
-				return graphicsAlgorithmChildren.get(0);
+			GraphicsAlgorithm rectangle = invisible;
+			if (invisible.getGraphicsAlgorithmChildren().size() > 0) {
+				rectangle = invisible.getGraphicsAlgorithmChildren().get(0);
+				if (invisible.getGraphicsAlgorithmChildren().size()>1) {
+					rectangle = invisible.getGraphicsAlgorithmChildren().get(1);
+				}
 			}
+			return rectangle;
 		}
 		return super.getSelectionBorder(pe);
 	}

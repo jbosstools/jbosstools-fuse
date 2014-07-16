@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.commands;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.mm.algorithms.Text;
+import org.eclipse.graphiti.mm.algorithms.styles.LineStyle;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
@@ -76,6 +77,18 @@ public class HighlightNodeCommand extends RecordingCommand {
 		try {
 			if (pe instanceof ContainerShape) {
 				ContainerShape cs = (ContainerShape) pe;
+				if (highlight) {
+					cs.getGraphicsAlgorithm().setLineVisible(true);
+					cs.getGraphicsAlgorithm().setLineStyle(LineStyle.DASH);
+					cs.getGraphicsAlgorithm().setLineWidth(cs.getGraphicsAlgorithm().getLineWidth() + 3);
+					cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagram(), StyleUtil.getColorConstant("255,0,0")));
+				} else {
+					cs.getGraphicsAlgorithm().setLineVisible(false);
+					cs.getGraphicsAlgorithm().setLineStyle(LineStyle.SOLID);
+					cs.getGraphicsAlgorithm().setLineWidth(cs.getGraphicsAlgorithm().getLineWidth() - 3);
+					cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagram(), StyleUtil.E_CLASS_FOREGROUND));
+				}
+				
 				for (Shape shape : cs.getChildren()) {
 					if (shape.getGraphicsAlgorithm() instanceof Text) {
 						Text text = (Text) shape.getGraphicsAlgorithm();

@@ -74,7 +74,7 @@ public class LayoutNodeFeature extends AbstractLayoutFeature {
 		}
 
 		// width of visible rectangle (smaller than invisible rectangle)
-		int rectangleWidth = containerGa.getWidth() - AddNodeFeature.INVISIBLE_RECT_RIGHT;
+		int rectangleWidth = containerGa.getWidth() - AddNodeFeature.INVISIBLE_RIGHT_SPACE;
 		if (rectangle.getWidth() != rectangleWidth) {
 			rectangle.setWidth(rectangleWidth);
 			anythingChanged = true;
