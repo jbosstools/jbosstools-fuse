@@ -132,7 +132,7 @@ public class DiagramOperations {
 	}
 	
 	public static void highlightNode(final RiderDesignEditor designEditor, final AbstractNode node,  final boolean highlight) {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);

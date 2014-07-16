@@ -35,9 +35,10 @@
    <extension
          point="org.eclipse.debug.core.breakpoints">
       <breakpoint
-            markerType="org.fusesource.ide.launcher.debug.camel.breakpoint.marker"
             class="org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint"
-            id="org.fusesource.ide.launcher.debug.camel.endpointBreakpoint">
+            id="org.fusesource.ide.launcher.debug.camel.endpointBreakpoint"
+            markerType="org.fusesource.ide.launcher.debug.camel.breakpoint.marker"
+            name="Camel Endpoint Breakpoint">
       </breakpoint>
    </extension>
    
@@ -50,6 +51,13 @@
       <persistent
             value="true">
       </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.watchExpressionDelegates">
+      <watchExpressionDelegate
+            debugModel="org.fusesource.ide.launcher.debug.camel"
+            delegateClass="org.fusesource.ide.launcher.debug.model.WatchExpressionDelegate">
+      </watchExpressionDelegate>
    </extension>
    
 </plugin>

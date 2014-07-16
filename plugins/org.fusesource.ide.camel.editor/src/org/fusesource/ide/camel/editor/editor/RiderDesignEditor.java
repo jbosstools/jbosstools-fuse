@@ -1326,7 +1326,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	/**
 	 * @return the highlightedNodeInDebugger
 	 */
-	public AbstractNode getHighlightedNodeInDebugger() {
+	public synchronized AbstractNode getHighlightedNodeInDebugger() {
 		return this.highlightedNodeInDebugger;
 	}
 	
@@ -1335,7 +1335,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	 * 
 	 * @param endpointNodeId	the node id
 	 */
-	private void highlightBreakpointNodeWithID(String endpointNodeId) {
+	private synchronized void highlightBreakpointNodeWithID(String endpointNodeId) {
 		// get the correct node for the id
 		final AbstractNode node = getModel().getNode(endpointNodeId);
 		
@@ -1355,7 +1355,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	/**
 	 * resets the highlight from the highlighted node
 	 */
-	private void resetHighlightBreakpointNode() {
+	private synchronized void resetHighlightBreakpointNode() {
 		setDebugHighLight(this.highlightedNodeInDebugger, false);
 		this.highlightedNodeInDebugger = null;
 	}
@@ -1366,7 +1366,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	 * @param bo			the node
 	 * @param highlight		the highlight status
 	 */
-	private void setDebugHighLight(AbstractNode bo, boolean highlight) {
+	private synchronized void setDebugHighLight(AbstractNode bo, boolean highlight) {
 		if (bo == null) return;
 		
 		// delegate to an operation command for async transacted diagram update

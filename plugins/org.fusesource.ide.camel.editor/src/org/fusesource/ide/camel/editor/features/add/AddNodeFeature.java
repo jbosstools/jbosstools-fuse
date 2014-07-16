@@ -206,4 +206,12 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 
 		return containerShape;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#hasDoneChanges()
+	 */
+	@Override
+	public boolean hasDoneChanges() {
+		return true;
+	}
 }
