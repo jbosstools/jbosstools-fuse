@@ -31,7 +31,7 @@ public interface IVariableConstants {
 	public static final String VARIABLE_NAME_BODYMAXCHARS = "BodyMaxChars";
 	public static final String VARIABLE_NAME_BODYINCLUDEFILES = "BodyIncludeFiles";
 	public static final String VARIABLE_NAME_BODYINCLUDESTREAMS = "BodyIncludeStreams";	
-	public static final String VARIABLE_NAME_DEBUGGER = "Camel";
+	public static final String VARIABLE_NAME_DEBUGGER = "CamelDebugger";
 	
 	public static final String VARIABLE_NAME_PROCESSOR = "Processor";
 	public static final String VARIABLE_NAME_PROCESSOR_ID = "ProcessorId";

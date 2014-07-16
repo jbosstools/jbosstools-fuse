@@ -109,7 +109,7 @@ public class CamelDebuggerValue extends BaseCamelValue {
 	 */
 	@Override
 	protected String getVariableDisplayString() {
-		return "CamelSettings";
+		return "CamelDebuggerSettings";
 	}
 	
 	private String getLogLevel() {

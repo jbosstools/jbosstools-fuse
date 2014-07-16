@@ -33,6 +33,6 @@ public class CamelDebuggerVariable extends BaseCamelVariable {
 	 */
 	@Override
 	protected String getVariableDisplayString() {
-		return "Camel";
+		return "CamelDebuggerSettings";
 	}
 }
