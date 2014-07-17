@@ -21,14 +21,15 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
-import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.platform.IDiagramContainer;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.fusesource.ide.camel.editor.Activator;
+import org.fusesource.ide.camel.editor.editor.ConditionalBreakpointEditorDialog;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
@@ -40,14 +41,14 @@ import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 /**
  * @author lhein
  */
-public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
-
+public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeature {
+	
 	/**
 	 * creates the feature
 	 * 
 	 * @param fp
 	 */
-	public SetEndpointBreakpointFeature(IFeatureProvider fp) {
+	public SetConditionalBreakpointFeature(IFeatureProvider fp) {
 		super(fp);
 	}
 	
@@ -99,8 +100,16 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
             		}
             	}
             	if (userWantsUpdate == null || userWantsUpdate == true) {
-	            	// finally create the endpoint
-	    			CamelDebugUtils.createAndRegisterEndpointBreakpoint(resource, _ep, projectName, fileName);  
+            		// now ask the user to define a condition using a language
+            		// TODO: open a dialog for the user to select language and enter the condition - maybe provide a helper for predefined variables
+            		ConditionalBreakpointEditorDialog dlg = new ConditionalBreakpointEditorDialog(Display.getDefault().getActiveShell(), _ep);
+            		dlg.setBlockOnOpen(true);
+            		if (Window.OK == dlg.open()) {
+            			String language = dlg.getLanguage();
+            			String condition = dlg.getCondition();
+		            	// finally create the endpoint
+		    			CamelDebugUtils.createAndRegisterConditionalBreakpoint(resource, _ep, projectName, fileName, language, condition);  
+            		}
             	}
             } catch (CoreException e) {
                 final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
@@ -122,7 +131,7 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 	 */
 	@Override
 	public String getName() {
-		return "Set Breakpoint";
+		return "Set Conditional Breakpoint";
 	}
 	
 	/* (non-Javadoc)
@@ -130,7 +139,7 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 	 */
 	@Override
 	public String getDescription() {
-		return "Sets a breakpoint on the selected endpoint node";
+		return "Sets a conditional breakpoint on the selected endpoint node";
 	}
 	
 	/* (non-Javadoc)
@@ -138,7 +147,7 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 	 */
 	@Override
 	public String getImageId() {
-		return ImageProvider.IMG_REDDOT;
+		return ImageProvider.IMG_YELLOWDOT;
 	}
 	
 	/* (non-Javadoc)
@@ -167,47 +176,5 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 	@Override
 	public boolean canExecute(ICustomContext context) {
 		return isAvailable(context);
-	}
-	
-	protected IResource getResource() {
-        final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
-        if (container instanceof RiderDesignEditor) {
-            return ((RiderDesignEditor) container).getCamelContextFile();
-        }
-        return null;
-    }
-	
-	protected PictogramElement getPEFromContext(ICustomContext context) {
-		return context.getPictogramElements()[0] instanceof Connection ? ((Connection) context.getPictogramElements()[0])
-                .getStart().getParent() : context.getPictogramElements()[0];
-	}
-	
-	protected IFile getContextFile() {
-		return Activator.getDiagramEditor().asFileEditorInput(Activator.getDiagramEditor().getEditorInput()).getFile();
-	}
-	
-	/**
-	 * ask the user if we can update some id fields
-	 * 
-	 * @param node
-	 * @return
-	 */
-	protected boolean askForIDUpdate(AbstractNode node) {
-		final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
-        final Shell shell;
-        if (container instanceof RiderDesignEditor) {
-            shell = ((RiderDesignEditor) container).getEditorSite().getShell();
-        } else {
-            shell = Display.getCurrent().getActiveShell();
-        }
-        return MessageDialog.openConfirm(shell, "Please confirm...", "Debugging is only possible if the context and the nodes which have breakpoints have a unique ID set. Do you want to generate the ID values now?\n\n(Warning: All changes in the editor will be written to the context file!)");
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#hasDoneChanges()
-	 */
-	@Override
-	public boolean hasDoneChanges() {
-		return false;
 	}
 }

@@ -30,6 +30,7 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.launcher.Activator;
+import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
 import org.fusesource.ide.launcher.debug.model.exchange.BacklogTracerEventMessage;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
@@ -86,7 +87,7 @@ public class CamelDebugUtils {
             }
             
             if (marker == null || 
-            	!ICamelDebugConstants.ID_CAMEL_MARKER_TYPE.equals(markerType) ||
+            	!(ICamelDebugConstants.ID_CAMEL_BREAKPOINT_MARKER_TYPE.equals(markerType) || ICamelDebugConstants.ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE.equals(markerType)) ||
         		!breakpointMatchesSelection((CamelEndpointBreakpoint) breakpoint, fileName, endpointId, projectName)) {
             	continue;
             }
@@ -134,6 +135,24 @@ public class CamelDebugUtils {
     }
 	
 	/**
+	 * creates and registers a breakpoint for the given resource and endpoint
+	 * 
+	 * @param resource		the camel context file resource
+	 * @param endpoint		the endpoint id
+	 * @param projectName	the name of the project
+	 * @param fileName		the name of the camel context file
+	 * @param language		the language of the condition
+	 * @param condition		the condition
+	 * @return				the created breakpoint
+	 * @throws CoreException
+	 */
+	public static IBreakpoint createAndRegisterConditionalBreakpoint(IResource resource, AbstractNode endpoint, String projectName, String fileName, String language, String condition) throws CoreException {
+    	CamelConditionalBreakpoint epb = new CamelConditionalBreakpoint(resource, endpoint, projectName, fileName, language, condition);
+    	DebugPlugin.getDefault().getBreakpointManager().addBreakpoint(epb);
+    	return epb;
+    }
+	
+	/**
 	 * extracts the endpoints node id from a breakpoint
 	 * 
 	 * @param breakpoint	the breakpoint
@@ -142,6 +161,32 @@ public class CamelDebugUtils {
 	public static String getEndpointNodeId(IBreakpoint breakpoint) {
 		if (breakpoint instanceof CamelEndpointBreakpoint) {
 			return ((CamelEndpointBreakpoint)breakpoint).getEndpointNodeId();	
+		}
+		return null;
+	}
+	
+	/**
+	 * extracts the language from a conditional breakpoint
+	 * 
+	 * @param breakpoint	the breakpoint
+	 * @return	the language or null if not set or unsupported breakpoint type
+	 */
+	public static String getLanguage(IBreakpoint breakpoint) {
+		if (breakpoint instanceof CamelConditionalBreakpoint) {
+			return ((CamelConditionalBreakpoint)breakpoint).getLanguage();	
+		}
+		return null;
+	}
+	
+	/**
+	 * extracts the condition from a conditional breakpoint
+	 * 
+	 * @param breakpoint	the breakpoint
+	 * @return	the condition or null if not set or unsupported breakpoint type
+	 */
+	public static String getCondition(IBreakpoint breakpoint) {
+		if (breakpoint instanceof CamelConditionalBreakpoint) {
+			return ((CamelConditionalBreakpoint)breakpoint).getConditionPredicate();	
 		}
 		return null;
 	}

@@ -40,6 +40,12 @@
             markerType="org.fusesource.ide.launcher.debug.camel.breakpoint.marker"
             name="Camel Endpoint Breakpoint">
       </breakpoint>
+      <breakpoint
+            class="org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint"
+            id="org.fusesource.ide.launcher.debug.camel.conditionalEndpointBreakpoint"
+            markerType="org.fusesource.ide.launcher.debug.camel.conditionalbreakpoint.marker"
+            name="Camel Conditional Breakpoint">
+      </breakpoint>
    </extension>
    
    <extension
@@ -58,6 +64,16 @@
             debugModel="org.fusesource.ide.launcher.debug.camel"
             delegateClass="org.fusesource.ide.launcher.debug.model.WatchExpressionDelegate">
       </watchExpressionDelegate>
+   </extension>
+   <extension
+         id="org.fusesource.ide.launcher.debug.camel.conditionalbreakpoint.marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.debug.core.breakpointMarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
    </extension>
    
 </plugin>

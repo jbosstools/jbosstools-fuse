@@ -366,7 +366,11 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 		if (supportsBreakpoint(breakpoint)) {
 			try {
 				if (breakpoint.isEnabled() && this.debugger != null) {
-					this.debugger.addBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint));
+					if (breakpoint.getMarker().getType().equals(ICamelDebugConstants.ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE)) {
+						this.debugger.addConditionalBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint), CamelDebugUtils.getLanguage(breakpoint), CamelDebugUtils.getCondition(breakpoint));
+					} else if (breakpoint.getMarker().getType().equals(ICamelDebugConstants.ID_CAMEL_BREAKPOINT_MARKER_TYPE)) {
+						this.debugger.addBreakpoint(CamelDebugUtils.getEndpointNodeId(breakpoint));						
+					}
 				}
 			} catch (CoreException e) {
 			}

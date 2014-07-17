@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.model.Breakpoint;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
@@ -31,17 +30,12 @@ import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 
 /**
- * Camel Endpoint Breakpoint
- * 
  * @author lhein
  */
-public class CamelEndpointBreakpoint extends Breakpoint {
+public class CamelConditionalBreakpoint extends CamelEndpointBreakpoint {
 	
-	protected String projectName;
-	protected String fileName;
-	protected String endpointNodeId;
-	protected String contextId;
-	protected IResource resource;
+	protected String language;
+	protected String conditionPredicate;
 	
 	/**
 	 * Default constructor is required for the breakpoint manager
@@ -49,23 +43,27 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 	 * the <code>setMarker(...)</code> method is called to restore
 	 * this breakpoint's attributes.
 	 */
-	public CamelEndpointBreakpoint() {
+	public CamelConditionalBreakpoint() {
 	}
 	
 	/**
-	 * Constructs a breakpoint on the given resource at the given
-	 * camel endpoint.
 	 * 
-	 * @param resource file on which to set the breakpoint
-	 * @param endpoint the endpoint
-	 * @throws CoreException if unable to create the breakpoint
+	 * @param resource
+	 * @param endpoint
+	 * @param projectName
+	 * @param fileName
+	 * @param language
+	 * @param conditionPredicate
+	 * @throws CoreException
 	 */
-	public CamelEndpointBreakpoint(final IResource resource, final AbstractNode endpoint, final String projectName, final String fileName)
+	public CamelConditionalBreakpoint(final IResource resource, final AbstractNode endpoint, final String projectName, final String fileName, String language, String conditionPredicate)
 			throws CoreException {
 		this.endpointNodeId = endpoint.getId();
 		this.contextId = endpoint.getCamelContextId();
 		this.projectName = projectName;
 		this.fileName = fileName;
+		this.language = language;
+		this.conditionPredicate = conditionPredicate;
 		if (resource.getLocation().toFile().getPath().indexOf(String.format("%s%s%starget%s", File.separatorChar, projectName, File.separatorChar, File.separatorChar)) != -1) {
 			// seems to be a running context - replace the resource with the correct one
 			Iterator<ILaunchConfiguration> launchConfigIterator = CamelDebugRegistry.getInstance().getEntries().keySet().iterator();
@@ -87,15 +85,17 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 			 */
 			@Override
 			public void run(IProgressMonitor monitor) throws CoreException {
-				IMarker marker = CamelEndpointBreakpoint.this.resource.createMarker(ICamelDebugConstants.ID_CAMEL_BREAKPOINT_MARKER_TYPE);
+				IMarker marker = CamelConditionalBreakpoint.this.resource.createMarker(ICamelDebugConstants.ID_CAMEL_CONDITIONALBREAKPOINT_MARKER_TYPE);
 				marker.setAttribute(IBreakpoint.ENABLED, Boolean.TRUE);
 				marker.setAttribute(IBreakpoint.PERSISTED, Boolean.TRUE);
 				marker.setAttribute(IBreakpoint.ID, getModelIdentifier());
-				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONTEXTID, CamelEndpointBreakpoint.this.contextId);
-				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_ENDPOINTID, CamelEndpointBreakpoint.this.endpointNodeId);
-				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_PROJECTNAME, CamelEndpointBreakpoint.this.projectName);
-				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_FILENAME, CamelEndpointBreakpoint.this.fileName);
-				marker.setAttribute(IMarker.MESSAGE, "Camel Breakpoint: " + CamelEndpointBreakpoint.this.resource.getName() + " [Endpoint: " + CamelEndpointBreakpoint.this.endpointNodeId + "]");
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONTEXTID, CamelConditionalBreakpoint.this.contextId);
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_ENDPOINTID, CamelConditionalBreakpoint.this.endpointNodeId);
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_PROJECTNAME, CamelConditionalBreakpoint.this.projectName);
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_FILENAME, CamelConditionalBreakpoint.this.fileName);
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_LANGUAGE, CamelConditionalBreakpoint.this.language);
+				marker.setAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONDITION, CamelConditionalBreakpoint.this.conditionPredicate);
+				marker.setAttribute(IMarker.MESSAGE, "Camel Breakpoint: " + CamelConditionalBreakpoint.this.resource.getName() + " [Endpoint: " + CamelConditionalBreakpoint.this.endpointNodeId + "]");
 				setMarker(marker);
 			}
 		};
@@ -113,84 +113,37 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 		this.endpointNodeId = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_ENDPOINTID, this.endpointNodeId);
 		this.fileName = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_FILENAME, this.fileName);
 		this.contextId = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONTEXTID, this.contextId);
+		this.language = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_LANGUAGE, this.language);
+		this.conditionPredicate = marker.getAttribute(ICamelDebugConstants.MARKER_ATTRIBUTE_CONDITION, this.conditionPredicate);
 		this.resource = marker.getResource();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.debug.core.model.IBreakpoint#getModelIdentifier()
+	/**
+	 * @return the language
 	 */
-	public String getModelIdentifier() {
-		return ICamelDebugConstants.ID_CAMEL_DEBUG_MODEL;
+	public String getLanguage() {
+		return this.language;
 	}
 	
 	/**
-	 * @param endpointNodeId the endpointNodeId to set
+	 * @param language the language to set
 	 */
-	public void setEndpointNodeId(String endpointNodeId) {
-		this.endpointNodeId = endpointNodeId;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 	
 	/**
-	 * @return the endpointNodeId
+	 * @return the conditionPredicate
 	 */
-	public String getEndpointNodeId() {
-		return this.endpointNodeId;
+	public String getConditionPredicate() {
+		return this.conditionPredicate;
 	}
 	
 	/**
-	 * @return the fileName
+	 * @param conditionPredicate the conditionPredicate to set
 	 */
-	public String getFileName() {
-		return this.fileName;
-	}
-	
-	/**
-	 * @param fileName the fileName to set
-	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	
-	/**
-	 * @return the projectName
-	 */
-	public String getProjectName() {
-		return this.projectName;
-	}
-	
-	/**
-	 * @param projectName the projectName to set
-	 */
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	
-	/**
-	 * @param resource the resource to set
-	 */
-	public void setResource(IResource resource) {
-		this.resource = resource;
-	}
-	
-	/**
-	 * @return the resource
-	 */
-	public IResource getResource() {
-		return this.resource;
-	}
-	
-	/**
-	 * @return the contextId
-	 */
-	public String getContextId() {
-		return this.contextId;
-	}
-	
-	/**
-	 * @param contextId the contextId to set
-	 */
-	public void setContextId(String contextId) {
-		this.contextId = contextId;
+	public void setConditionPredicate(String conditionPredicate) {
+		this.conditionPredicate = conditionPredicate;
 	}
 	
 	/* (non-Javadoc)
@@ -198,6 +151,6 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 	 */
 	@Override
 	public String toString() {
-		return String.format("Camel Breakpoint [project=%s, fileName=%s, contextId=%s, endpointId=%s]", getProjectName(), getFileName(), getContextId(), getEndpointNodeId());
+		return String.format("Camel Conditional Breakpoint [project=%s, fileName=%s, contextId=%s, endpointId=%s, language=%s, condition=%s]", getProjectName(), getFileName(), getContextId(), getEndpointNodeId(), getLanguage(), getConditionPredicate());
 	}
 }

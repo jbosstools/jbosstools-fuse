@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
+import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
@@ -39,17 +40,18 @@ import org.fusesource.ide.launcher.ui.Activator;
  */
 public class CamelModelPresentation extends LabelProvider implements IDebugModelPresentation {
 	
-	private static final String IMG_CAMEL_DEBUG_TARGET         	= "camel.png";
-	private static final String IMG_CAMEL_THREAD_RUN   			= "run_camel_context.png";
-	private static final String IMG_CAMEL_THREAD_PAUSE 			= "pause_camel_context.png";
-	private static final String IMG_CAMEL_STACK_FRAME  		 	= "endpoint_node.png";
-	private static final String IMG_CAMEL_DEBUGGER	   			= "camel.png";
-	private static final String IMG_CAMEL_EXCHANGE     			= "message.png";
-	private static final String IMG_CAMEL_MESSAGE	   			= "message.png";
-	private static final String IMG_CAMEL_VARIABLE 	   			= "variable.png";
-	private static final String IMG_CAMEL_PROCESSOR  		 	= "endpoint_node.png";
-	private static final String IMG_CAMEL_BREAKPOINT_ENABLED	= "red-dot.png";
-	private static final String IMG_CAMEL_BREAKPOINT_DISABLED	= "gray-dot.png";
+	private static final String IMG_CAMEL_DEBUG_TARGET         				= "camel.png";
+	private static final String IMG_CAMEL_THREAD_RUN   						= "run_camel_context.png";
+	private static final String IMG_CAMEL_THREAD_PAUSE 						= "pause_camel_context.png";
+	private static final String IMG_CAMEL_STACK_FRAME  		 				= "endpoint_node.png";
+	private static final String IMG_CAMEL_DEBUGGER	   						= "camel.png";
+	private static final String IMG_CAMEL_EXCHANGE     						= "message.png";
+	private static final String IMG_CAMEL_MESSAGE	   						= "message.png";
+	private static final String IMG_CAMEL_VARIABLE 	   						= "variable.png";
+	private static final String IMG_CAMEL_PROCESSOR  		 				= "endpoint_node.png";
+	private static final String IMG_CAMEL_BREAKPOINT_ENABLED				= "red-dot.png";
+	private static final String IMG_CAMEL_CONDITIONAL_BREAKPOINT_ENABLED	= "yellow-dot.png";
+	private static final String IMG_CAMEL_BREAKPOINT_DISABLED				= "gray-dot.png";
 	
 	/*
 	 * (non-Javadoc)
@@ -79,7 +81,9 @@ public class CamelModelPresentation extends LabelProvider implements IDebugModel
 		} else if (element instanceof CamelEndpointBreakpoint) {
 			CamelEndpointBreakpoint bp = (CamelEndpointBreakpoint)element;
 			try {
-				if (bp.isEnabled()) {
+				if (bp.isEnabled() && element instanceof CamelConditionalBreakpoint) {
+					return Activator.getDefault().getImage(IMG_CAMEL_CONDITIONAL_BREAKPOINT_ENABLED);
+				} else if (bp.isEnabled() && element instanceof CamelEndpointBreakpoint) {
 					return Activator.getDefault().getImage(IMG_CAMEL_BREAKPOINT_ENABLED);
 				} else {
 					return Activator.getDefault().getImage(IMG_CAMEL_BREAKPOINT_DISABLED);

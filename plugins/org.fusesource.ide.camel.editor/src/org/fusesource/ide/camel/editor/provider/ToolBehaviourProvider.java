@@ -54,6 +54,7 @@ import org.fusesource.ide.camel.editor.validation.ValidationResult;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
@@ -338,7 +339,12 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 					// we only want to decorate breakpoints which belong to this project
 					if (cep.getProjectName().equals(activeFile.getProject().getName())) {
 						try {
-							if (cep.isEnabled()) {
+							if (cep.isEnabled() && bp instanceof CamelConditionalBreakpoint) {
+								// show enabled breakpoint decorator
+								IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_YELLOWDOT);
+								imageRenderingDecorator.setMessage("");
+								decorators.add(imageRenderingDecorator);
+							} else if (cep.isEnabled() && bp instanceof CamelEndpointBreakpoint) {
 								// show enabled breakpoint decorator
 								IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_REDDOT);
 								imageRenderingDecorator.setMessage("");
