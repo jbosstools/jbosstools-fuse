@@ -4,4 +4,4 @@ Bundle-SymbolicName: org.fusesource.ide.help;singleton:=true
 Bundle-Vendor: JBoss by Red Hat
 Bundle-ManifestVersion: 2
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

@@ -4,7 +4,7 @@ Bundle-Name: Fuse Preferences Plugin
 Bundle-SymbolicName: org.fusesource.ide.preferences;singleton:=true
 Bundle-Version: 7.3.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
