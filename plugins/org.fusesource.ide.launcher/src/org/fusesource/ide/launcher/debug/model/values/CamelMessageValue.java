@@ -20,12 +20,14 @@ import org.fusesource.ide.launcher.debug.model.exchange.Message;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelBodyVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelHeadersVariable;
+import org.fusesource.ide.launcher.debug.model.variables.CamelMessageVariable;
 
 /**
  * @author lhein
  */
 public class CamelMessageValue extends BaseCamelValue {
 	
+	private CamelMessageVariable parent;
 	private Message message;
 	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
 	private CamelDebugTarget debugTarget;
@@ -37,8 +39,9 @@ public class CamelMessageValue extends BaseCamelValue {
 	 * @param message
 	 * @param type
 	 */
-	public CamelMessageValue(CamelDebugTarget target, Message message, Class type) {
+	public CamelMessageValue(CamelDebugTarget target, Message message, Class type, CamelMessageVariable parent) {
 		super(target, message.getExchangeId(), type);
+		this.parent = parent;
 		this.debugTarget = target;
 		this.message = message;
 		try {
@@ -56,14 +59,14 @@ public class CamelMessageValue extends BaseCamelValue {
 		BaseCamelValue val = null;
 		
 		// BODY
-		var = new CamelBodyVariable(this.debugTarget, VARIABLE_NAME_MESSAGEBODY, String.class);
+		var = new CamelBodyVariable(this.debugTarget, VARIABLE_NAME_MESSAGEBODY, String.class, parent);
 		val = new BaseCamelValue(this.fTarget, this.message.getBody(), var.getReferenceType());
 		var.setValue(val);
 		this.fVariables.add(var);
 		
 		// HEADERS
 		var = new CamelHeadersVariable(this.debugTarget, VARIABLE_NAME_MESSAGEHEADERS, ArrayList.class);
-		val = new CamelHeadersValue(this.fTarget, this.message.getHeaders(), var.getReferenceType());
+		val = new CamelHeadersValue(this.fTarget, this.message.getHeaders(), var.getReferenceType(), (CamelHeadersVariable)var);
 		var.setValue(val);
 		this.fVariables.add(var);
 		

@@ -139,15 +139,43 @@
             allPopups="false"
             locationURI="popup:org.eclipse.debug.ui.VariableView">
          <command
+               commandId="org.fusesource.ide.launcher.ui.InjectHeaderCommand"
+               label="%command.variables.injectheader.name"
+               style="push"
+               tooltip="%command.variables.injectheader.description">
+         </command>
+         <command
+               commandId="org.fusesource.ide.launcher.ui.DeleteCommand"
+               label="%command.variables.delete.name"
+               style="push"
+               tooltip="%command.variables.delete.description">
+         </command>
+         <command
                commandId="org.fusesource.ide.launcher.ui.resetDebugCounterCommand"
                label="%command.variables.resetdebugcounter.name"
                style="push"
                tooltip="%command.variables.resetdebugcounter.description">
          </command>
+         <separator
+               name="org.fusesource.ide.launcher.ui.separator1"
+               visible="true">
+         </separator>
       </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="toolbar:org.eclipse.debug.ui.VariableView">
+         <command
+               commandId="org.fusesource.ide.launcher.ui.InjectHeaderCommand"
+               label="%command.variables.injectheader.name"
+               style="push"
+               tooltip="%command.variables.injectheader.description">
+         </command>
+         <command
+               commandId="org.fusesource.ide.launcher.ui.DeleteCommand"
+               label="%command.variables.delete.name"
+               style="push"
+               tooltip="%command.variables.delete.description">
+         </command>
          <command
                commandId="org.fusesource.ide.launcher.ui.resetDebugCounterCommand"
                label="%command.variables.resetdebugcounter.name"
@@ -159,16 +187,61 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
+            description="%command.variables.injectheader.description"
+            id="org.fusesource.ide.launcher.ui.InjectHeaderCommand"
+            name="%command.variables.injectheader.name">
+      </command>
+      <command
             description="%command.variables.resetdebugcounter.description"
             id="org.fusesource.ide.launcher.ui.resetDebugCounterCommand"
             name="%command.variables.resetdebugcounter.name">
+      </command>
+      <command
+            description="%command.variables.delete.description"
+            id="org.fusesource.ide.launcher.ui.DeleteCommand"
+            name="%command.variables.delete.name">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
+            class="org.fusesource.ide.launcher.ui.debug.handlers.InjectHeaderHander"
+            commandId="org.fusesource.ide.launcher.ui.InjectHeaderCommand">
+         <activeWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     operator="and">
+                  <instanceof
+                        value="org.fusesource.ide.launcher.debug.model.variables.CamelHeadersVariable">
+                  </instanceof>
+               </iterate>
+            </with>
+         </activeWhen>
+      </handler>
+      <handler
             class="org.fusesource.ide.launcher.ui.debug.handlers.ResetDebugCounterHandler"
             commandId="org.fusesource.ide.launcher.ui.resetDebugCounterCommand">
+      </handler>
+      <handler
+            class="org.fusesource.ide.launcher.ui.debug.handlers.DeleteHandler"
+            commandId="org.fusesource.ide.launcher.ui.DeleteCommand">
+         <activeWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     operator="and">
+                  <or>
+                     <instanceof
+                           value="org.fusesource.ide.launcher.debug.model.variables.CamelBodyVariable">
+                     </instanceof>
+                     <instanceof
+                           value="org.fusesource.ide.launcher.debug.model.variables.CamelHeaderVariable">
+                     </instanceof>
+                  </or>
+               </iterate>
+            </with>
+         </activeWhen>
       </handler>
    </extension>
    <extension
@@ -176,6 +249,14 @@
       <image
             commandId="org.fusesource.ide.launcher.ui.resetDebugCounterCommand"
             icon="icons/variable.png">
+      </image>
+      <image
+            commandId="org.fusesource.ide.launcher.ui.InjectHeaderCommand"
+            icon="icons/add.gif">
+      </image>
+      <image
+            commandId="org.fusesource.ide.launcher.ui.DeleteCommand"
+            icon="icons/delete.gif">
       </image>
    </extension>
    

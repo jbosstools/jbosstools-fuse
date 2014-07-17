@@ -17,14 +17,15 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
+import org.fusesource.ide.launcher.debug.model.variables.CamelBodyVariable;
+import org.fusesource.ide.launcher.debug.model.variables.CamelHeaderVariable;
 
 /**
  * @author lhein
+ *
  */
-public class ResetDebugCounterHandler extends AbstractHandler {
-
+public class DeleteHandler extends AbstractHandler {
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.ExecutionEvent)
 	 */
@@ -32,14 +33,16 @@ public class ResetDebugCounterHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection sel = HandlerUtil.getCurrentSelection(event);
 		Object o = Selections.getFirstSelection(sel);
-		if (o instanceof BaseCamelVariable) {
-			BaseCamelVariable var = (BaseCamelVariable)o;
-			CamelDebugTarget cdt = (CamelDebugTarget)var.getDebugTarget();
-			if (MessageDialog.openQuestion(HandlerUtil.getActiveShell(event), "Reset Debug Counter", "Do you really want to reset the debug counter?")) {
-				cdt.getDebugger().resetDebugCounter();	
-			}			
+		
+		if (o instanceof CamelHeaderVariable) {
+			if (MessageDialog.openQuestion(HandlerUtil.getActiveShell(event), "Delete Header Variable", "Do you really want to delete the header variable?")) {
+				((CamelHeaderVariable) o).delete();
+			}						
+		} else if (o instanceof CamelBodyVariable) {
+			if (MessageDialog.openQuestion(HandlerUtil.getActiveShell(event), "Delete Message Body", "Do you really want to delete the message body?")) {
+				((CamelBodyVariable) o).delete();
+			}
 		}
 		return null;
 	}
-
 }

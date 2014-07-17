@@ -12,6 +12,7 @@ package org.fusesource.ide.launcher.debug.model.values;
 
 import java.util.ArrayList;
 
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IVariable;
 import org.fusesource.ide.launcher.Activator;
@@ -19,12 +20,14 @@ import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.exchange.Header;
 import org.fusesource.ide.launcher.debug.model.variables.BaseCamelVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelHeaderVariable;
+import org.fusesource.ide.launcher.debug.model.variables.CamelHeadersVariable;
 
 /**
  * @author lhein
  */
 public class CamelHeadersValue extends BaseCamelValue {
 	
+	private CamelHeadersVariable parent;
 	private ArrayList<IVariable> fVariables = new ArrayList<IVariable>();
 	private ArrayList<Header> headers;
 	private CamelDebugTarget debugTarget;
@@ -36,8 +39,9 @@ public class CamelHeadersValue extends BaseCamelValue {
 	 * @param type
 	 * @param msg
 	 */
-	public CamelHeadersValue(CamelDebugTarget debugTarget, ArrayList<Header> headers, Class type) {
+	public CamelHeadersValue(CamelDebugTarget debugTarget, ArrayList<Header> headers, Class type, CamelHeadersVariable parent) {
 		super(debugTarget, "" + headers.hashCode(), type);
+		this.parent = parent;
 		this.debugTarget = debugTarget;
 		this.headers = headers;
 		if (this.headers == null) this.headers = new ArrayList<Header>();
@@ -56,11 +60,54 @@ public class CamelHeadersValue extends BaseCamelValue {
 		BaseCamelValue val = null;
 
 		for (Header h : this.headers) {
-			// MESSAGE ID
-			var = new CamelHeaderVariable(this.debugTarget, h.getKey(), String.class);
+			var = new CamelHeaderVariable(this.debugTarget, h.getKey(), String.class, parent);
 			val = new CamelHeaderValue(this.fTarget, h, var.getReferenceType());
 			var.setValue(val);
 			this.fVariables.add(var);
+		}
+	}
+
+	/**
+	 * adds a new header to the message
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public void addHeader(String key, String value) {
+		try {
+			this.debugTarget.getDebugger().setMessageHeaderOnBreakpoint(this.debugTarget.getSuspendedNodeId(), key, value);
+			CamelHeaderVariable newVar = new CamelHeaderVariable(debugTarget, key, String.class, parent);
+			CamelHeaderValue newVal = new CamelHeaderValue(debugTarget, new Header(key, value, String.class.getName()), String.class);
+			newVar.setValue(newVal);
+			newVar.markChanged();
+			this.fVariables.add(newVar);
+		} catch (DebugException ex) {
+			Activator.getLogger().error(ex);
+		} finally {
+			fireCreationEvent();
+		}
+	}
+	
+	/**
+	 * deletes the header variable with the given key
+	 * 
+	 * @param key
+	 */
+	public void deleteHeader(String key) {
+		try {
+			IVariable v = null;
+			this.debugTarget.getDebugger().removeMessageHeaderOnBreakpoint(this.debugTarget.getSuspendedNodeId(), key);
+			for (IVariable var : fVariables) {
+				if (((CamelHeaderValue)var.getValue()).getHeader().getKey().equals(key)) {
+					v = var;
+					break;
+				}
+			}
+			this.fVariables.remove(v);
+		} catch (DebugException ex) {
+			Activator.getLogger().error(ex);
+		} finally {
+			fireChangeEvent(DebugEvent.CONTENT);
 		}
 	}
 	

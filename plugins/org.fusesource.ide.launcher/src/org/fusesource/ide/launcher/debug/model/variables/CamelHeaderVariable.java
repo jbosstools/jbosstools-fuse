@@ -14,6 +14,7 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.exchange.Header;
@@ -24,14 +25,17 @@ import org.fusesource.ide.launcher.debug.model.values.CamelHeaderValue;
  */
 public class CamelHeaderVariable extends BaseCamelVariable {
 
+	private CamelHeadersVariable parent;
+	
 	/**
 	 * 
 	 * @param thread
 	 * @param name
 	 * @param type
 	 */
-	public CamelHeaderVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelHeaderVariable(CamelDebugTarget debugTarget, String name, Class type, CamelHeadersVariable parent) {
 		super(debugTarget, name, type);
+		this.parent = parent;
 	}
 	
 	/* (non-Javadoc)
@@ -79,7 +83,7 @@ public class CamelHeaderVariable extends BaseCamelVariable {
 		Header h = ((CamelHeaderValue)getValue()).getHeader();
 		if (Strings.isBlank(h.getValue())) {
 			// remove value
-			debugger.removeMessageHeaderOnBreakpoint(getCurrentEndpointNodeId(), h.getKey());
+			delete();
 		} else {
 			// change value
 			debugger.setMessageHeaderOnBreakpoint(getCurrentEndpointNodeId(), h.getKey(), h.getValue(), h.getType());
@@ -95,6 +99,17 @@ public class CamelHeaderVariable extends BaseCamelVariable {
 			return String.format("%s = %s", getName(), getValue().getValueString());
 		} catch (DebugException ex) {
 			return super.toString();
+		}
+	}
+	
+	/**
+	 * deletes the value
+	 */
+	public void delete() {
+		try {
+			parent.deleteHeader(((CamelHeaderValue)getValue()).getHeader().getKey());
+		} catch (DebugException ex) {
+			Activator.getLogger().error(ex);
 		}
 	}
 }

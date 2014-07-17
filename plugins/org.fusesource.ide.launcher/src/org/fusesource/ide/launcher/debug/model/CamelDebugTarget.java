@@ -93,6 +93,9 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	private String camelContextId;
 	private String contentType;
 	
+	// the currently suspended node's id
+	private String suspendedNodeId;
+	
 	// threads
 	private HashMap<String, CamelThread> threads = new HashMap<String, CamelThread>(); 
 	
@@ -156,6 +159,15 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			threads.put(uniqueId, t);
 		}
 		return t;
+	}
+	
+	/**
+	 * returns the id of the node which is currently suspended
+	 * 
+	 * @return
+	 */
+	public String getSuspendedNodeId() {
+		return this.suspendedNodeId;
 	}
 	
 	/**
@@ -536,6 +548,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 					if (bp.getEndpointNodeId().equals(nodeId)) {
 						t.setBreakpoints(new IBreakpoint[]{breakpoint});
 						t.breakpointHit(nodeId, msg);
+						this.suspendedNodeId = nodeId;
 						bpFound = true;
 						break;
 					}

@@ -14,6 +14,7 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.values.BaseCamelValue;
@@ -24,14 +25,17 @@ import org.fusesource.ide.launcher.debug.model.values.BaseCamelValue;
  */
 public class CamelBodyVariable extends BaseCamelVariable {
 	
+	private CamelMessageVariable parent;
+	
 	/**
 	 * 
 	 * @param thread
 	 * @param name
 	 * @param type
 	 */
-	public CamelBodyVariable(CamelDebugTarget debugTarget, String name, Class type) {
+	public CamelBodyVariable(CamelDebugTarget debugTarget, String name, Class type, CamelMessageVariable parent) {
 		super(debugTarget, name, type);
+		this.parent = parent;
 	}
 	
 	/* (non-Javadoc)
@@ -77,10 +81,28 @@ public class CamelBodyVariable extends BaseCamelVariable {
 			throws DebugException {
 		if (Strings.isBlank(getValue().getValueString())) {
 			// remove value
-			debugger.removeMessageBodyOnBreakpoint(getCurrentEndpointNodeId());
+			delete();
 		} else {
 			// change value
 			debugger.setMessageBodyOnBreakpoint(getCurrentEndpointNodeId(), getValue().getValueString());
+		}
+	}
+	
+	/**
+	 * deletes the value
+	 */
+	public void delete() {
+		try {
+			CamelDebugFacade debugger = ((CamelDebugTarget)getDebugTarget()).getDebugger();
+			debugger.removeMessageBodyOnBreakpoint(getCurrentEndpointNodeId());
+			if (Strings.isBlank(getValue().getValueString()) == false) {
+				super.setValue(new BaseCamelValue(fTarget, "[Body is null]", String.class));
+				markChanged();
+			}
+		} catch (DebugException ex) {
+			Activator.getLogger().error(ex);
+		} finally {
+			fireChangeEvent(DebugEvent.CONTENT);
 		}
 	}
 }

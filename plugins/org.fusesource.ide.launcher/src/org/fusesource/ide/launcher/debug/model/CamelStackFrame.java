@@ -107,7 +107,7 @@ public class CamelStackFrame extends CamelDebugElement implements IStackFrame, I
 		
 		// MESSAGE
 		var = new CamelMessageVariable(this.debugTarget, VARIABLE_NAME_MESSAGE, Message.class);
-		val = new CamelMessageValue(this.fTarget, this.backlogTracerEventMessage.getMessage(), var.getReferenceType());
+		val = new CamelMessageValue(this.fTarget, this.backlogTracerEventMessage.getMessage(), var.getReferenceType(), (CamelMessageVariable)var);
 		var.setValue(val);
 		this.fVariables.add(var);
 	}
