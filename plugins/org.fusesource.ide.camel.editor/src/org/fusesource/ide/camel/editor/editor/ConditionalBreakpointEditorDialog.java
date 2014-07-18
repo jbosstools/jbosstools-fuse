@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.editor;
 
+import org.apache.camel.impl.DefaultCamelContext;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -528,6 +529,22 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 			if (getButton(OK) != null) getButton(OK).setEnabled(false);
 			return false;
 		}
+		
+		// TODO: this is a temporary workaround until validation is provided by the JMX API - please replace after next Camel Release
+		DefaultCamelContext ctx = new DefaultCamelContext();
+		try {
+			ctx.resolveLanguage(combo_language.getText().trim()).createPredicate(text_condition.getText().replaceAll("\n", "").replaceAll("\r", "").trim());
+			ctx.shutdown();
+		} catch (Exception ex) {
+			if (!ex.getMessage().contains("No language could be found for:")) {
+				setErrorMessage("Condition Error: " + ex.getMessage());
+				if (getButton(OK) != null) getButton(OK).setEnabled(false);
+				return false;
+			}
+		} finally {
+			ctx = null;
+		}
+		
 		if (getButton(OK) != null) getButton(OK).setEnabled(true);
 		setErrorMessage(null);
 		return true;
