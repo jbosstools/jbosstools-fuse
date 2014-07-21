@@ -73,9 +73,6 @@
             name="%rider.preferences.deployment.page.label">
       </page>
    </extension>
-    
- 
-   
    
   <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
@@ -85,16 +82,10 @@
             modes="run"
             name="%deployer.name"
             public="true"
-            sourceLocatorId="org.eclipse.m2e.launching.MavenSourceLocator"
-            sourcePathComputerId="org.eclipse.m2e.launching.MavenSourceComputer">
+            sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+            sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
       </launchConfigurationType>
    </extension>
-   
-   
-   
-   
-   
-   
    
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">

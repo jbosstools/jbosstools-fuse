@@ -88,7 +88,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.smx.server.40"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%serviceMixServerType_40"
            runtime="true"
@@ -104,7 +104,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.smx.server.42"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%serviceMixServerType_42"
            runtime="true"
@@ -120,7 +120,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.smx.server.43"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%serviceMixServerType_43"
            runtime="true"
@@ -136,7 +136,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.smx.server.44"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%serviceMixServerType_44"
            runtime="true"
@@ -152,7 +152,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.smx.server.45"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%serviceMixServerType_45"
            runtime="true"
@@ -251,4 +251,4 @@
     </runtime>
   </extension>
   
-</plugin>
+</plugin>
