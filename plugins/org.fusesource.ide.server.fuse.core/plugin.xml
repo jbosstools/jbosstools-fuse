@@ -45,7 +45,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.fuseesb.server.60"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%fuseESBServerType_60"
            runtime="true"
@@ -62,7 +62,7 @@
            id="org.fusesource.ide.fuseesb.server.61"
            initialState="stopped"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
-           launchModes="run"
+           launchModes="run,debug"
            name="%fuseESBServerType_61"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.61"
@@ -85,6 +85,19 @@
        supportsRemoteHosts="false"
        typeIds="org.fusesource.ide.fuseesb.server.*"
        class="org.fusesource.ide.server.fuse.core.server.FuseESBServerLocator"/>
+  </extension>
+
+  <extension
+        point="org.eclipse.debug.core.launchConfigurationTypes">
+     <launchConfigurationType    
+           delegate="org.fusesource.ide.server.karaf.core.launch.KarafLaunchDelegate"
+           id="org.fusesource.ide.server.fuseesb6x.launch"
+           modes="run,debug"
+           name="%fuseesb.launch.name"
+           public="true"
+	       sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+	       sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
+     </launchConfigurationType>
   </extension>
 
   <extension point="org.eclipse.wst.server.core.installableRuntimes">

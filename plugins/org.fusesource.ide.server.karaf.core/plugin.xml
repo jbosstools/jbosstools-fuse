@@ -67,6 +67,21 @@
     </runtimeType>
   </extension>
 
+  <extension point="org.eclipse.debug.core.sourceLocators">
+    <sourceLocator
+	name="sourceLocator"
+	id="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+	class="org.fusesource.ide.server.karaf.core.server.SourceLocator">
+    </sourceLocator>
+  </extension>
+
+  <extension point="org.eclipse.debug.core.sourcePathComputers">
+    <sourcePathComputer
+	id="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate"
+	class="org.fusesource.ide.server.karaf.core.server.SourcePathComputerDelegate">
+    </sourcePathComputer>
+  </extension>
+
   <extension point="org.eclipse.wst.server.core.serverTypes">
      <serverType
            behaviourClass="org.fusesource.ide.server.karaf.core.server.KarafServerBehaviourDelegate"
@@ -75,7 +90,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.20"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%karafServerType_20"
            runtime="true"
@@ -91,7 +106,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.21"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%karafServerType_21"
            runtime="true"
@@ -107,7 +122,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.22"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%karafServerType_22"
            runtime="true"
@@ -123,7 +138,7 @@
            hasConfiguration="true"
            id="org.fusesource.ide.karaf.server.23"
            initialState="stopped"
-           launchModes="run"
+           launchModes="run,debug"
            launchConfigId="org.fusesource.ide.server.karaf.launch"
            name="%karafServerType_23"
            runtime="true"
@@ -133,14 +148,17 @@
            supportsRemoteHosts="false">
      </serverType>
   </extension>
+
   <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType
            delegate="org.fusesource.ide.server.karaf.core.launch.KarafLaunchDelegate"
            id="org.fusesource.ide.server.karaf.launch"
-           modes="run"
+           modes="run,debug"
            name="%karaf.launch.name"
-           public="true">
+           public="true"
+	   sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+	   sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
      </launchConfigurationType>
   </extension>
 

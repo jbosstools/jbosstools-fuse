@@ -3,24 +3,27 @@
 <plugin>
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
+         
       <launchConfigurationType
             delegate="org.fusesource.ide.launcher.CamelRunMavenLaunchDelegate"
             id="org.fusesource.ide.launcher.camelContext"
-            modes="run"
+            modes="run,debug"
             name="%launcher.camelcontext.name"
             public="true"
-            sourceLocatorId="org.eclipse.m2e.launching.MavenSourceLocator"
-            sourcePathComputerId="org.eclipse.m2e.launching.MavenSourceComputer">
+            sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+            sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
       </launchConfigurationType>
+      
       <launchConfigurationType
             delegate="org.fusesource.ide.launcher.CamelRunNoTestsMavenLaunchDelegate"
             id="org.fusesource.ide.launcher.camelContextNoTests"
-            modes="run"
+            modes="run,debug"
             name="%launcher.camelcontext.notests.name"
             public="true"
-            sourceLocatorId="org.eclipse.m2e.launching.MavenSourceLocator"
-            sourcePathComputerId="org.eclipse.m2e.launching.MavenSourceComputer">
+            sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
+            sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
       </launchConfigurationType>
+      
    </extension>
    
 </plugin>
