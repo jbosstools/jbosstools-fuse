@@ -320,10 +320,12 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 	 */
 	public void terminate() throws DebugException {
 		fTerminated = true;
-		disconnect();
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
 		try {
-			if (fProcess != null) fProcess.terminate();
+			if (fProcess != null && !fProcess.isTerminated()) {
+				disconnect();
+				fProcess.terminate();
+			}
 		} catch (DebugException ex) {
 //			Activator.getLogger().error(ex);
 		}
