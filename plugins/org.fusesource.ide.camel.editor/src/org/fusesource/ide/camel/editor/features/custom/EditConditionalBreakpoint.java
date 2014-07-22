@@ -98,7 +98,7 @@ public class EditConditionalBreakpoint extends SetConditionalBreakpointFeature {
 	 */
 	@Override
 	public String getImageId() {
-		return ImageProvider.IMG_YELLOWDOT;
+		return ImageProvider.IMG_PROPERTIES_BP;
 	}
 	
 	/* (non-Javadoc)

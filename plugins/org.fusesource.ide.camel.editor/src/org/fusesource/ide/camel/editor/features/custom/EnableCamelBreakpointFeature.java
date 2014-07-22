@@ -98,7 +98,7 @@ public class EnableCamelBreakpointFeature extends SetEndpointBreakpointFeature {
 	 */
 	@Override
 	public String getImageId() {
-		return ImageProvider.IMG_REDDOT;
+		return ImageProvider.IMG_GREENDOT;
 	}
 	
 	/* (non-Javadoc)

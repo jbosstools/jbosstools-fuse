@@ -35,7 +35,9 @@ public class ImageProvider extends AbstractImageProvider {
 	public static final String IMG_GREENDOT = PREFIX + "greendot"; //$NON-NLS-1$
 	public static final String IMG_GRAYDOT = PREFIX + "graydot"; //$NON-NLS-1$
 	public static final String IMG_YELLOWDOT = PREFIX + "yellowdot"; //$NON-NLS-1$
-
+	public static final String IMG_DELETE_BP = PREFIX + "delete_bp"; //$NON-NLS-1$
+	public static final String IMG_PROPERTIES_BP = PREFIX + "properties_bp"; //$NON-NLS-1$
+	
 	// outline
 	/**
 	 * The Constant IMG_OUTLINE_TREE.
@@ -60,6 +62,10 @@ public class ImageProvider extends AbstractImageProvider {
 		addToImageRegistry(IMG_GREENDOT, ROOT_FOLDER_FOR_IMG + "green-dot.png"); //$NON-NLS-1$
 		addImage(IMG_YELLOWDOT, ROOT_FOLDER_FOR_IMG + "yellow-dot.png"); //$NON-NLS-1$
 		addToImageRegistry(IMG_YELLOWDOT, ROOT_FOLDER_FOR_IMG + "yellow-dot.png"); //$NON-NLS-1$
+		addImage(IMG_DELETE_BP, ROOT_FOLDER_FOR_IMG + "delete_bp.gif"); //$NON-NLS-1$
+		addToImageRegistry(IMG_DELETE_BP, ROOT_FOLDER_FOR_IMG + "delete_bp.gif"); //$NON-NLS-1$
+		addImage(IMG_PROPERTIES_BP, ROOT_FOLDER_FOR_IMG + "properties_bp.gif"); //$NON-NLS-1$
+		addToImageRegistry(IMG_PROPERTIES_BP, ROOT_FOLDER_FOR_IMG + "properties_bp.gif"); //$NON-NLS-1$
 		
 		addImage(IMG_FLOW, ROOT_FOLDER_FOR_IMG + "flow16.png"); //$NON-NLS-1$
 		addToImageRegistry(IMG_FLOW, ROOT_FOLDER_FOR_IMG + "flow16.png"); //$NON-NLS-1$

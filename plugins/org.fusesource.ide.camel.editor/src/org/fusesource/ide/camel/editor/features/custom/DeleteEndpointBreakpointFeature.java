@@ -97,7 +97,7 @@ public class DeleteEndpointBreakpointFeature extends SetEndpointBreakpointFeatur
 	 */
 	@Override
 	public String getImageId() {
-		return ImageProvider.IMG_GRAYDOT;
+		return ImageProvider.IMG_DELETE_BP;
 	}
 	
 	/* (non-Javadoc)

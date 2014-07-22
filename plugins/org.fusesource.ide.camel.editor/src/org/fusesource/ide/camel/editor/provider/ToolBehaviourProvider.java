@@ -25,6 +25,7 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.context.IPictogramElementContext;
 import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
+import org.eclipse.graphiti.features.context.impl.CustomContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
@@ -39,6 +40,7 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.tb.ContextButtonEntry;
 import org.eclipse.graphiti.tb.ContextMenuEntry;
 import org.eclipse.graphiti.tb.DefaultToolBehaviorProvider;
+import org.eclipse.graphiti.tb.IContextButtonEntry;
 import org.eclipse.graphiti.tb.IContextButtonPadData;
 import org.eclipse.graphiti.tb.IContextMenuEntry;
 import org.eclipse.graphiti.tb.IDecorator;
@@ -48,6 +50,8 @@ import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.Messages;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.custom.AddRouteFeature;
+import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
+import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationResult;
@@ -183,6 +187,20 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		}
 		 * 
 		 */
+		
+		// add buttons for breakpoint manipulation
+		CustomContext cc = new CustomContext(new PictogramElement[] { pe });
+		ICustomFeature[] cf = getFeatureProvider().getCustomFeatures(cc);
+		for (ICustomFeature f : cf) {
+			if (f instanceof DeleteAllEndpointBreakpointsFeature) continue;
+			if (f instanceof SetEndpointBreakpointFeature) {
+				if (f.isAvailable(cc)) {
+					IContextButtonEntry button = new ContextButtonEntry(f, cc);
+					data.getDomainSpecificContextButtons().add(button);
+		
+				}
+			}
+		}
 
 		return data;
 	}
