@@ -20,7 +20,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IPath;
@@ -104,7 +103,7 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 		if (editor != null) {
 			IEditorInput editorInput = editor.getEditorInput();
 			if (editorInput instanceof IFileEditorInput) {
-				launch(((IFileEditorInput) editorInput).getFile().getParent(), mode);
+				launchCamelContext(((IFileEditorInput) editorInput).getFile(), mode);
 			}
 		}
 	}
@@ -126,40 +125,19 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			Object object = structuredSelection.getFirstElement();
 
-			IContainer basedir = null;
-			if (object instanceof IProject || object instanceof IFolder) {
-				basedir = (IContainer) object;
-			} else if (object instanceof IFile) {
-				basedir = ((IFile) object).getParent();
-			} else if (object instanceof IAdaptable) {
-				IAdaptable adaptable = (IAdaptable) object;
-				Object adapter = adaptable.getAdapter(IProject.class);
-				if (adapter != null) {
-					basedir = (IContainer) adapter;
-				} else {
-					adapter = adaptable.getAdapter(IFolder.class);
-					if (adapter != null) {
-						basedir = (IContainer) adapter;
-					} else {
-						adapter = adaptable.getAdapter(IFile.class);
-						if (adapter != null) {
-							basedir = ((IFile) object).getParent();
-						}
-					}
-				}
+			if (object instanceof IFile) {
+				launchCamelContext((IFile)object, mode);
 			}
-
-			launch(basedir, mode);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	private void launch(IContainer basecon, String mode) {
-		if (basecon == null) {
+	private void launchCamelContext(IFile file, String mode) {
+		if (file == null) {
 			return;
 		}
 
-		IContainer basedir = findPomXmlBasedir(basecon);
+		IContainer basedir = findPomXmlBasedir(file.getParent());
 
 		ILaunchConfiguration launchConfiguration;
 		try {
@@ -206,7 +184,11 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 						goals = isWARPackaging ? CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR : CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR;
 					}
 				}
-				openDialog = Strings.isBlank(goals);
+				// no rider file selection
+				if (Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, ""))) {
+					lc.setAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, file.getLocation().toOSString());
+				}
+				openDialog = Strings.isBlank(goals) || Strings.isBlank(lc.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, ""));
 				lc.setAttribute(MavenLaunchConstants.ATTR_GOALS, goals);
 			} catch (CoreException ex) {
 				Activator.getLogger().error("Error getting the maven goals from the configuration.", ex);
