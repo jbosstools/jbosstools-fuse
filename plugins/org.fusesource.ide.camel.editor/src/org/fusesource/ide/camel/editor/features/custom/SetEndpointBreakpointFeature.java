@@ -74,7 +74,6 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
             		// can update those fields for him
             		userWantsUpdate = askForIDUpdate(_ep);
             		if (userWantsUpdate) {
-            			
             			// update the context id if needed
             			if (Strings.isBlank(_ep.getCamelContextId())) {
             				String newContextId = ICamelDebugConstants.PREFIX_CONTEXT_ID + UUID.randomUUID().toString();
@@ -82,20 +81,25 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
             			}
             			
             			// update the node id if blank
+            			boolean foundUniqueId = false;
             			if (Strings.isBlank(_ep.getId())) {
-            				String newNodeId = ICamelDebugConstants.PREFIX_NODE_ID + _ep.getNewID();
-            				_ep.setId(newNodeId);
+            				String newNodeId = null;
+            				while (!foundUniqueId) {
+            					newNodeId = ICamelDebugConstants.PREFIX_NODE_ID + _ep.getNewID();
+            					// we need to check if the id is really unique in our context
+            					if (((RiderDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel().getNode(newNodeId) == null) {
+            						foundUniqueId = true;
+            					}
+            				}
+            				if (Strings.isBlank(newNodeId) == false) {
+            					_ep.setId(newNodeId);
+            				} else {
+            					throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to determine a unique ID for node " + _ep));
+            				}
             			}
             			
             			// then do a save
-            			final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
-                        RiderDesignEditor editor = null;
-            			if (container instanceof RiderDesignEditor) {
-                            editor = (RiderDesignEditor) container;
-                        } else {
-                            throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Can't find the editor to set the breakpoint!"));
-                        }
-            			editor.getEditor().doSave(new NullProgressMonitor());
+            			saveEditor();
             		}
             	}
             	if (userWantsUpdate == null || userWantsUpdate == true) {
@@ -209,5 +213,16 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 	@Override
 	public boolean hasDoneChanges() {
 		return false;
+	}
+	
+	protected void saveEditor() throws CoreException {
+		final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
+        RiderDesignEditor editor = null;
+		if (container instanceof RiderDesignEditor) {
+            editor = (RiderDesignEditor) container;
+        } else {
+            throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Can't find the editor to set the breakpoint!"));
+        }
+		editor.getEditor().doSave(new NullProgressMonitor());
 	}
 }

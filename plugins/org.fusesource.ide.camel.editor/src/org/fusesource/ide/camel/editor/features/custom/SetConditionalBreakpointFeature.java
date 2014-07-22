@@ -16,7 +16,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
@@ -69,48 +68,53 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
             	IFile contextFile = getContextFile();
             	String fileName = contextFile.getName();
             	String projectName = contextFile.getProject().getName();
-            	if (Strings.isBlank(_ep.getCamelContextId()) ||
-            		Strings.isBlank(_ep.getId()) ) {
-            		// important ID fields are not yet set - ask the user if we
-            		// can update those fields for him
-            		userWantsUpdate = askForIDUpdate(_ep);
-            		if (userWantsUpdate) {
-            			
-            			// update the context id if needed
-            			if (Strings.isBlank(_ep.getCamelContextId())) {
-            				String newContextId = ICamelDebugConstants.PREFIX_CONTEXT_ID + UUID.randomUUID().toString();
-            				((RouteContainer)_ep.getParent().getParent()).setContextId(newContextId);
-            			}
-            			
-            			// update the node id if blank
-            			if (Strings.isBlank(_ep.getId())) {
-            				String newNodeId = ICamelDebugConstants.PREFIX_NODE_ID + _ep.getNewID();
-            				_ep.setId(newNodeId);
-            			}
-            			
-            			// then do a save
-            			final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
-                        RiderDesignEditor editor = null;
-            			if (container instanceof RiderDesignEditor) {
-                            editor = (RiderDesignEditor) container;
-                        } else {
-                            throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Can't find the editor to set the breakpoint!"));
-                        }
-            			editor.getEditor().doSave(new NullProgressMonitor());
+            	
+            	ConditionalBreakpointEditorDialog dlg = new ConditionalBreakpointEditorDialog(Display.getDefault().getActiveShell(), _ep);
+        		dlg.setBlockOnOpen(true);
+        		if (Window.OK == dlg.open()) {
+        			String language = dlg.getLanguage();
+        			String condition = dlg.getCondition();
+        		
+	            	if (Strings.isBlank(_ep.getCamelContextId()) ||
+	            		Strings.isBlank(_ep.getId()) ) {
+	            		// important ID fields are not yet set - ask the user if we
+	            		// can update those fields for him
+	            		userWantsUpdate = askForIDUpdate(_ep);
+
+	            		if (userWantsUpdate) {
+	            			// update the context id if needed
+	            			if (Strings.isBlank(_ep.getCamelContextId())) {
+	            				String newContextId = ICamelDebugConstants.PREFIX_CONTEXT_ID + UUID.randomUUID().toString();
+	            				((RouteContainer)_ep.getParent().getParent()).setContextId(newContextId);
+	            			}
+	            			
+	            			// update the node id if blank
+	            			boolean foundUniqueId = false;
+	            			if (Strings.isBlank(_ep.getId())) {
+	            				String newNodeId = null;
+	            				while (!foundUniqueId) {
+	            					newNodeId = ICamelDebugConstants.PREFIX_NODE_ID + _ep.getNewID();
+	            					// we need to check if the id is really unique in our context
+	            					if (((RiderDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel().getNode(newNodeId) == null) {
+	            						foundUniqueId = true;
+	            					}
+	            				}
+	            				if (Strings.isBlank(newNodeId) == false) {
+	            					_ep.setId(newNodeId);
+	            				} else {
+	            					throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to determine a unique ID for node " + _ep));
+	            				}
+	            			}
+	            			
+	            			// then do a save
+	            			saveEditor();
+                		}
             		}
-            	}
-            	if (userWantsUpdate == null || userWantsUpdate == true) {
-            		// now ask the user to define a condition using a language
-            		// TODO: open a dialog for the user to select language and enter the condition - maybe provide a helper for predefined variables
-            		ConditionalBreakpointEditorDialog dlg = new ConditionalBreakpointEditorDialog(Display.getDefault().getActiveShell(), _ep);
-            		dlg.setBlockOnOpen(true);
-            		if (Window.OK == dlg.open()) {
-            			String language = dlg.getLanguage();
-            			String condition = dlg.getCondition();
+	            	if (userWantsUpdate == null || userWantsUpdate == true) {
 		            	// finally create the endpoint
 		    			CamelDebugUtils.createAndRegisterConditionalBreakpoint(resource, _ep, projectName, fileName, language, condition);  
-            		}
-            	}
+	            	}
+        		}
             } catch (CoreException e) {
                 final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
                 final Shell shell;
