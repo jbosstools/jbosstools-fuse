@@ -226,6 +226,7 @@ public class RouteContainer extends AbstractNode {
 
 		// lets clone everything in our model apart from EMF stuff and children
 		RouteContainer answer = new RouteContainer();
+		answer.setId(getId());
 		answer.beans = beans;
 		answer.camelContextEndpointUris = camelContextEndpointUris;
 		answer.autoLayout = autoLayout;
@@ -386,4 +387,19 @@ public class RouteContainer extends AbstractNode {
 		this.failedToParseXml = failedToParseXml;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public String getContextId() {
+		return getId();
+	}
+
+	/**
+	 * 
+	 * @param contextId
+	 */
+	public void setContextId(String contextId) {
+		setId(contextId);
+ 	}
 }

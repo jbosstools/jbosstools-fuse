@@ -117,6 +117,7 @@ public abstract class RouteSupport extends RouteContainer {
 				CamelModelHelper.setUri(from, endpoint);
 				CamelModelHelper.setId(from, endpoint);
 				CamelModelHelper.setDescription(from, endpoint);
+				resetCustomId(from);
 
 				answer.getInputs().add(from);
 
