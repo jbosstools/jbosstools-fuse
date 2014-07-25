@@ -23,7 +23,8 @@ Require-Bundle: org.fusesource.ide.commons,
  org.eclipse.ui,
  org.eclipse.equinox.security;bundle-version="1.2.0",
  org.eclipse.ui.ide,
- org.eclipse.core.filesystem;bundle-version="1.4.100"
+ org.eclipse.core.filesystem;bundle-version="1.4.100",
+ org.eclipse.jdt.core
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.Activator
 Export-Package: org.fusesource.ide.launcher;uses:="org.eclipse.osgi.util,org.eclipse.core.runtime",
@@ -41,4 +42,6 @@ Export-Package: org.fusesource.ide.launcher;uses:="org.eclipse.osgi.util,org.ecl
  org.fusesource.ide.launcher.debug.util;uses:="org.fusesource.ide.launcher.debug.model,org.eclipse.core.resources,org.eclipse.debug.core.model",
  org.fusesource.ide.launcher.run.util,
  org.fusesource.ide.launcher.util;uses:="org.eclipse.debug.core"
-Import-Package: org.apache.maven.artifact
+Import-Package: org.apache.maven.artifact,
+ org.eclipse.jdt.ui,
+ org.fusesource.ide.server.karaf.core.server
