@@ -44,7 +44,14 @@ public class SourcePathComputerDelegate implements ISourcePathComputerDelegate  
 		List<FolderSourceContainer> sourcefolderList = new ArrayList<FolderSourceContainer>();
 		
 		IServer server =  ServerUtil.getServer(configuration);
+		
+		if (server == null)
+			return null;
+		
 		IModule[] modules = server.getModules();
+
+		if (modules == null)
+			return null;
 		
 		List<IJavaProject> javaProjectList = new ArrayList<IJavaProject>();
 		
