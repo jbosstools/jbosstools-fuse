@@ -234,6 +234,8 @@ public class KarafUtils {
 	 * @return
 	 */
 	public static File getModelFile(IModule module) {
+		if (module == null)
+			return null;
 		return module.getProject().getLocation().append(IMavenConstants.POM_FILE_NAME).toFile();
 	}
 	
@@ -281,6 +283,10 @@ public class KarafUtils {
 
 	public static String getBundleSymbolicName(IModule module) throws CoreException {
 		String symbolicName = null;
+		
+		if (module == null || module.getProject() == null)
+			return "";
+		
 		IFile manifest = module.getProject().getFile("target/classes/META-INF/MANIFEST.MF");
 		if (!manifest.exists()) {
 			manifest = module.getProject().getFile("META-INF/MANIFEST.MF");
@@ -316,6 +322,10 @@ public class KarafUtils {
 	 * @return
 	 */
 	public static String getBundleVersion(IModule module, File f) throws CoreException {
+		
+		if (module == null)
+			return "";
+		
 		String version = null;
 		String packaging = getPackaging(module);
 		IFile manifest = module.getProject().getFile("target/classes/META-INF/MANIFEST.MF");
