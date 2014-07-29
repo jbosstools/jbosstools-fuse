@@ -16,8 +16,11 @@ import java.beans.IntrospectionException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
+import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.commons.ui.propsrc.BeanPropertySource;
@@ -26,7 +29,7 @@ import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.internal.actions.RefreshAction;
 
 
-public abstract class NodeSupport extends Node implements IAdaptable, RefreshableUI, HasRefreshableUI, IPropertySourceProvider {
+public abstract class NodeSupport extends Node implements IAdaptable, RefreshableUI, HasRefreshableUI, IPropertySourceProvider, ITabbedPropertySheetPageContributor {
 
 	private IPropertySource propertySource;
 	private Object propertyBean;
@@ -36,10 +39,19 @@ public abstract class NodeSupport extends Node implements IAdaptable, Refreshabl
 	}
 
 	/* (non-Javadoc)
+	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor#getContributorId()
+	 */
+	@Override
+	public String getContributorId() {
+		return "org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer";
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
 	@Override
 	public Object getAdapter(Class adapter) {
+		 if (adapter == IPropertySheetPage.class) return new TabbedPropertySheetPage(this);
 		if (this instanceof NodeSupport) return Platform.getAdapterManager().getAdapter(this, adapter);
 		return null;
 	}

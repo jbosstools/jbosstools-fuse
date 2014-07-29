@@ -14,6 +14,7 @@ import javax.management.MalformedObjectNameException;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.fabric.FabricPlugin;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.fabric.navigator.osgi.BundlesNode;
@@ -58,7 +59,10 @@ public class BundlesNodeContentProvider implements ITreeContentProvider {
 					}
 				}
 			}
-		}
+		} else if (parentElement instanceof NodeSupport) {
+			NodeSupport contexts = (NodeSupport)parentElement;
+			return contexts.getChildren();
+		} 
 		return new Object[0];
 	}
 
