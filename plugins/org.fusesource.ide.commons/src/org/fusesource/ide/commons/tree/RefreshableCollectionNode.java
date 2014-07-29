@@ -38,7 +38,7 @@ public abstract class RefreshableCollectionNode extends RefreshableNode implemen
 		if (adapter == IPropertySheetPage.class) {
 			return getPropertySourceTablePage();
 		}
-		return null;
+		return super.getAdapter(adapter);
 	}
 
 	public boolean requiresContentsPropertyPage() {

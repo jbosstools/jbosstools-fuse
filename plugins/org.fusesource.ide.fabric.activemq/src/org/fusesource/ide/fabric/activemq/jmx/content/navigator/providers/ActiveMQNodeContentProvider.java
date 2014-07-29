@@ -15,6 +15,7 @@ import io.fabric8.activemq.facade.JmxTemplateBrokerFacade;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.fabric.activemq.FabricActiveMQPlugin;
 import org.fusesource.ide.fabric.activemq.navigator.BrokerNode;
@@ -62,7 +63,10 @@ public class ActiveMQNodeContentProvider implements ITreeContentProvider {
 					return new Object[]{broker};
 				}
 			}
-		}
+		} else if (parentElement instanceof NodeSupport) {
+			NodeSupport contexts = (NodeSupport)parentElement;
+			return contexts.getChildren();
+		} 
 		return new Object[0];
 	}
 
