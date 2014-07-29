@@ -30,7 +30,8 @@ Require-Bundle: org.fusesource.ide.fabric,
  io.fabric8.tooling-fabric-all,
  io.fabric8.tooling-servicemix-facade,
  org.jboss.tools.jmx.core;bundle-version="1.6.0",
- org.jboss.tools.jmx.ui;bundle-version="1.6.0"
+ org.jboss.tools.jmx.ui;bundle-version="1.6.0",
+ org.eclipse.ui.views.properties.tabbed;bundle-version="3.6.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.fabric.servicemix.FabricServiceMixPlugin
 Bundle-ClassPath: .

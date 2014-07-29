@@ -15,6 +15,7 @@ import io.fabric8.camel.facade.JmxTemplateCamelFacade;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.fabric.JmxPluginJmxTemplate;
 import org.fusesource.ide.fabric.camel.navigator.CamelContextsNode;
 import org.jboss.tools.jmx.core.IConnectionWrapper;
@@ -52,7 +53,10 @@ public class CamelNodeContentProvider implements ITreeContentProvider {
 					return new Object[]{camel};
 				}
 			}
-		}
+		} else if (parentElement instanceof NodeSupport) {
+			NodeSupport contexts = (NodeSupport)parentElement;
+			return contexts.getChildren();
+		} 
 		return new Object[0];
 	}
 

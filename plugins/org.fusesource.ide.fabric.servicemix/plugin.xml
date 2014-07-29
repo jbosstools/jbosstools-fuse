@@ -45,42 +45,18 @@
              </contentExtension>
 	      </includes>
 	   </viewerContentBinding>
+<!-- COMMENTED OUT AS THE TABBED PROPERTIES DON'T WORK FOR THE SERVERS VIEW ATM	   
+    <viewerContentBinding
+          viewerId="org.eclipse.wst.server.ui.ServersView">
+       <includes>
+          <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric.smx.jmx.content">
+          </contentExtension>
+       </includes>
+    </viewerContentBinding>
+-->
 	</extension>
 
-   <extension
-         point="org.eclipse.ui.navigator.viewer">
-      <viewer
-            viewerId="org.fusesource.ide.fabric.navigator">
-      </viewer>
-      <viewerContentBinding
-            viewerId="org.fusesource.ide.fabric.navigator">
-         <includes>
-            <contentExtension
-                  isRoot="true"
-                  pattern="org.fusesource.ide.fabric.navigator.root">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.root">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.queryFilter">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.jboss.tools.jmx.ui.internal.views.navigator.JMXLinkHelper">
-            </contentExtension>
-         </includes>
-      </viewerContentBinding>
-      <viewerActionBinding
-            viewerId="org.fusesource.ide.fabric.navigator">
-         <includes>
-            <actionExtension
-                  pattern="org.fusesource.ide.fabric.navigator.actionProvider">
-            </actionExtension>
-            <actionExtension
-                  pattern="org.fusesource.ide.jmx.ui.internal.views.navigator.actionProvider">
-            </actionExtension>
-         </includes>
-      </viewerActionBinding>
-   </extension>
    
 </plugin>

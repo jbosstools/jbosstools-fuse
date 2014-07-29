@@ -372,7 +372,6 @@
       </propertySections>
    </extension>
    
-   
    <extension
       point="org.eclipse.ui.navigator.navigatorContent">
        <navigatorContent
@@ -409,5 +408,17 @@
              </contentExtension>
 	      </includes>
 	   </viewerContentBinding>
+<!-- COMMENTED OUT AS THE TABBED PROPERTIES DON'T WORK FOR THE SERVERS VIEW ATM
+    <viewerContentBinding
+          viewerId="org.eclipse.wst.server.ui.ServersView">
+       <includes>
+          <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric.osgi.jmx.content">
+          </contentExtension>
+       </includes>
+    </viewerContentBinding>
+-->
 	</extension>
+
 </plugin>
