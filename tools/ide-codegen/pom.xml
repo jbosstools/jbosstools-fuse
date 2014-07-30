@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>ide-codegen</artifactId>
-  <name>Fuse :: Tools :: IDE Code Generator</name>
+  <name>JBoss Fuse Tooling :: Tools :: IDE Code Generator</name>
   <description>IDE Code Generator</description>
 
   <prerequisites>

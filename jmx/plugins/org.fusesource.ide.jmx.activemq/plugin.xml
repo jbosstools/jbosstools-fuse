@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.fusesource.ide.jmx.activemq.navigator.ActiveMQPreferenceInitializer">
+      </initializer>
+   </extension>
+  
+   
+   <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+       <navigatorContent
+             id="org.fusesource.ide.amq.jmx.content"
+             name="ActiveMQ Brokers"
+             activeByDefault="true"
+             icon="icons/queue.png"
+             priority="normal"
+             contentProvider="org.fusesource.ide.jmx.activemq.jmx.content.navigator.providers.ActiveMQNodeContentProvider"
+             labelProvider="org.fusesource.ide.jmx.activemq.jmx.content.navigator.providers.ActiveMQNodeLabelProvider">
+          <triggerPoints>
+             <instanceof
+                   value="org.jboss.tools.jmx.core.IConnectionWrapper">
+             </instanceof>
+          </triggerPoints>
+          <possibleChildren>
+             <or>
+                <instanceof
+                      value="java.lang.Object">
+                </instanceof>
+              </or>
+          </possibleChildren>
+       </navigatorContent>
+	</extension>
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	         viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+	      <includes>
+             <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.amq.jmx.content">
+             </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+    <viewerContentBinding
+          viewerId="org.eclipse.wst.server.ui.ServersView">
+       <includes>
+          <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.amq.jmx.content">
+          </contentExtension>
+       </includes>
+    </viewerContentBinding>
+	</extension>
+
+  
+</plugin>

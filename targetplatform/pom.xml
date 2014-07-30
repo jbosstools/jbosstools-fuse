@@ -13,7 +13,7 @@
 
   <artifactId>org.fusesource.ide.targetplatform</artifactId>
   <packaging>pom</packaging>
-  <name>JBoss Fuse :: Development Target Platform</name>
+  <name>JBoss Fuse Tooling :: Target Platform</name>
 
   <build>
     <plugins>
@@ -48,7 +48,7 @@
       <plugin>
 	<groupId>org.eclipse.tycho.extras</groupId>
 	<artifactId>target-platform-validation-plugin</artifactId>
-	<version>${tycho-version}</version>
+	<version>${tychoVersion}</version>
 	<executions>
 	  <execution>
 	    <phase>generate-resources</phase>
@@ -108,7 +108,7 @@
 	  <plugin>
 	    <groupId>org.eclipse.tycho.extras</groupId>
 	    <artifactId>target-platform-validation-plugin</artifactId>
-	    <version>${tycho-version}</version>
+	    <version>${tychoVersion}</version>
 	    <executions>
 	      <execution>
 		<phase>generate-resources</phase>
@@ -167,7 +167,7 @@
 	  <plugin>
 	    <groupId>org.eclipse.tycho.extras</groupId>
 	    <artifactId>target-platform-validation-plugin</artifactId>
-	    <version>${tycho-version}</version>
+	    <version>${tychoVersion}</version>
 	    <executions>
 	      <execution>
 		<phase>generate-resources</phase>
@@ -225,7 +225,7 @@
 	  <plugin>
 	    <groupId>org.eclipse.tycho.extras</groupId>
 	    <artifactId>target-platform-validation-plugin</artifactId>
-	    <version>${tycho-version}</version>
+	    <version>${tychoVersion}</version>
 	    <executions>
 	      <execution>
 		<phase>generate-resources</phase>

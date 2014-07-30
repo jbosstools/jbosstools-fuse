@@ -11,7 +11,7 @@
 
 	<artifactId>org.fusesource.ide.updatesite</artifactId>
 	<packaging>eclipse-repository</packaging>
-	<name>JBoss Fuse :: Update Site</name>
+	<name>JBoss Fuse Tooling :: Update Site</name>
 
 	<properties>
 	  <BUILD_ALIAS>LOCAL</BUILD_ALIAS>

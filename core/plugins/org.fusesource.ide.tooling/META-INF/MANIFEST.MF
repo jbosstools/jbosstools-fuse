@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JBoss Fuse Tooling for Eclipse
+Bundle-SymbolicName: org.fusesource.ide.tooling
+Bundle-Version: 7.3.0.qualifier
+Bundle-Vendor: JBoss by Red Hat
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.jboss.tools.usage;resolution:=optional;x-installation:=greedy
+Bundle-ActivationPolicy: lazy

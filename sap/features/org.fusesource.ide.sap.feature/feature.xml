@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.fusesource.ide.sap.feature"
+      label="%featureName"
+      version="7.3.0.qualifier"
+      provider-name="%providerName"
+      plugin="org.fusesource.ide.tooling">
+
+   <description url="http://tools.jboss.org/features/apachecamel.html">
+       %description
+   </description>
+
+   <copyright url="http://redhat.com/">
+       %copyright
+   </copyright>
+
+   <license url="license.html">
+      Red Hat, Inc. licenses these features and plugins to you under
+certain open source licenses (or aggregations of such licenses),
+which in a particular case may include the Eclipse Public License,
+the GNU Lesser General Public License, and/or certain other open
+source licenses. For precise licensing details, consult the corresponding
+source code, or contact Red Hat Legal Affairs, 1801 Varsity Drive,
+Raleigh NC 27606 USA.
+   </license>
+
+   <url>
+      <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/luna/"/>
+   </url>
+
+   <requires>
+	<import plugin="org.eclipse.ui" version="3.7.0" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.ui.ide" version="3.7.0" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.core.resources" version="3.7.100" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.jface.databinding" version="1.6.200" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.core.databinding.beans" version="1.2.200" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.core.databinding" version="1.4.1" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.core.databinding.property" version="1.4.200" match="greaterOrEqual"/>
+	<import plugin="com.ibm.icu" version="52.1.0" match="greaterOrEqual"/>
+	<import plugin="org.junit" version="4.11.0" match="greaterOrEqual"/>
+	<import plugin="org.apache.ant" version="1.9.2" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.jdt.launching" version="3.7.100" match="greaterOrEqual"/>
+	<import plugin="org.eclipse.jdt.core" version="3.7.0" match="greaterOrEqual"/>
+	
+	<import feature="org.fusesource.ide.core.feature" version="7.3.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.fusesource.ide.sap.imports"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

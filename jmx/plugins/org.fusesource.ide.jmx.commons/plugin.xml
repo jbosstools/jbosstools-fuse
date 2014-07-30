@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.fusesource.ide"
+            name="JBoss Fuse">
+      </category>
+      <view
+            category="org.fusesource.ide"
+            class="org.fusesource.ide.jmx.commons.views.messages.MessagesView"
+            icon="icons/messages_view.png"
+            id="org.fusesource.ide.jmx.views.MessageView"
+            name="Messages View">
+         <description>
+            Displays a table of messages from an endpoint, a traced Camel route or an XML file
+         </description>
+      </view>
+      <view
+           category="org.fusesource.ide"
+           class="org.fusesource.ide.jmx.commons.views.diagram.DiagramView"
+           icon="icons/diagram_view.gif"
+           id="org.fusesource.ide.jmx.views.DiagramView"
+           name="Diagram View">
+        <description>
+           This view shows a graphical diagram view of the current selection for example to show a Camel Route or set of ActiveMQ destinations
+        </description>
+      </view>
+   </extension>
+    
+    <extension point="org.eclipse.core.contenttype.contentTypes"> 
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            describer="org.fusesource.ide.jmx.commons.messages.contenttype.MessagesNamespaceXmlContentDescriber"
+            file-extensions="xml"
+            id="org.fusesource.ide.commmons.messagesContentType"
+            name="Messages XML"
+            priority="high">
+      </content-type> 
+      </extension>
+         <extension
+               point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+            <propertyContributor
+                  contributorId="org.fusesource.ide.commons.propertyContributor">
+               <propertyCategory></propertyCategory>
+            </propertyContributor>
+         </extension>
+   
+   
+   
+	<extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+      <!--
+      <viewerActionBinding
+          viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+       <includes>
+          <actionExtension
+                pattern="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider">
+          </actionExtension>
+       </includes>
+    </viewerActionBinding>
+    <viewerActionBinding
+          viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+    </viewerActionBinding>
+    -->
+    <actionProvider
+          class="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider"
+          id="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider">
+       <enablement>
+          <instanceof
+                value="org.fusesource.ide.commons.ui.ContextMenuProvider">
+          </instanceof>
+       </enablement>
+    </actionProvider>
+	</extension>
+
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	 viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+	      <includes>
+             <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric.camel.jmx.content">
+             </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+	</extension>
+
+    <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.fusesource.ide.commons.tree.NodeSupport"
+            class="org.fusesource.ide.commons.tree.NodeSupportPropertiesSourceAdapterFactory">
+         <adapter
+               type="org.eclipse.ui.views.properties.IPropertySource">
+         </adapter>
+      </factory>
+   </extension>
+   
+</plugin>

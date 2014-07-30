@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>ide-buildtools</artifactId>
-  <name>Fuse :: Tools :: IDE Build Tools</name>
+  <name>JBoss Fuse Tooling :: Tools :: IDE Build Tools</name>
   <description>IDE build tools</description>
 
   <prerequisites>

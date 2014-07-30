@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="Fuse Plugins for Eclipse Update Site">
-      Fuse Plugins for Eclipse Update Site
+   <description>
+      To install these features, point Eclipse at this site.
    </description>
-   <feature url="features/org.fusesource.ide.camel.editor.feature_0.0.0.jar" id="org.fusesource.ide.camel.editor.feature" version="0.0.0">
-      <category name="org.fusesource.ide"/>
+
+   <category-def label="JBoss Fuse Tooling Nightly Build Update Site" name="AllFeatures">
+      <description>JBoss Fuse Tooling Nightly Build Update Site: contains all features in this build.</description>
+   </category-def>
+   <category-def label="JBoss Fuse Tooling Nightly Build Update Site" name="AllSources">
+      <description>JBoss Fuse Tooling Nightly Build Update Site: contains all source features in this build.</description>
+   </category-def>
+
+<!-- Core -->
+   <feature id="org.fusesource.ide.core.feature">
+      <category name="AllFeatures"/>
    </feature>
-   <feature url="features/org.fusesource.ide.server.extensions.feature_0.0.0.jar" id="org.fusesource.ide.server.extensions.feature" version="0.0.0">
-      <category name="org.fusesource.ide"/>
+   <!-- sources -->
+   <feature id="org.fusesource.ide.core.feature.source">
+      <category name="AllSources"/>
    </feature>
-   <feature url="features/org.fusesource.ide.runtimes.feature_0.0.0.jar" id="org.fusesource.ide.runtimes.feature" version="0.0.0">
-      <category name="org.fusesource.ide"/>
+
+<!-- Editor -->
+   <feature id="org.fusesource.ide.camel.editor.feature">
+      <category name="AllFeatures"/>
    </feature>
-   <category-def name="org.fusesource.ide" label="JBoss Fuse Tooling"/>
+   <!-- sources -->
+   <feature id="org.fusesource.ide.camel.editor.feature.source">
+      <category name="AllSources"/>
+   </feature>
+
+<!-- JMX -->
+   <feature id="org.fusesource.ide.jmx.feature">
+      <category name="AllFeatures"/>
+   </feature>
+   <!-- sources -->
+   <feature id="org.fusesource.ide.jmx.feature.source">
+      <category name="AllSources"/>
+   </feature>
+
+<!-- SAP -->
+   <feature id="org.fusesource.ide.sap.feature">
+      <category name="AllFeatures"/>
+   </feature>
+   <!-- sources -->
+   <feature id="org.fusesource.ide.sap.feature.source">
+      <category name="AllSources"/>
+   </feature>
+
+<!-- Servers -->
+   <feature id="org.fusesource.ide.server.extensions.feature">
+      <category name="AllFeatures"/>
+   </feature>
+   <!-- sources -->
+   <feature id="org.fusesource.ide.server.extensions.feature.source">
+      <category name="AllSources"/>
+   </feature>
+
 </site>
