@@ -38,9 +38,6 @@ public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 	@Override
 	public RouteContainer loadRoutes(File file) {
 		try {
-			if (file.getName().contentEquals("switchyard.xml"))
-				throw new Exception("SwitchYard XML file detected.");
-			
 			RouteXml helper = createXmlHelper();
 			Activator.getLogger().debug("Loading file: " + file);
 			XmlModel model = helper.unmarshal(file);
@@ -72,11 +69,11 @@ public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 		if (model.contextElement() != null && model.contextElement().getId() != null) {
 			id = model.contextElement().getId();
 		} else {
-			if (model.node().isEmpty()) {
-				Exception e = new Exception("Unable to determine route container, no node detected.");
-				Activator.getLogger().warning(e);
-				throw new RuntimeException(e);
-			}
+            if (model.node().isEmpty()) {
+               Exception e = new Exception("Unable to determine route container, no node detected.");
+               Activator.getLogger().warning(e);
+               throw new RuntimeException(e);
+            }			
 			Element e = (Element)model.node().get();
 			Attribute a = e.getAttribute("id");
 			if (a != null) id = a.getValue();

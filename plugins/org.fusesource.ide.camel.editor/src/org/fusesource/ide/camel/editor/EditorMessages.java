@@ -80,7 +80,9 @@ public class EditorMessages extends NLS {
 
 	public static String camelMenuLabel;
 	public static String camelMenuAddLabel;
-
+	
+	public static String switchyardFoundTitle;
+	public static String switchyardFoundText;
 
 	static {
 		// initialize resource bundle
