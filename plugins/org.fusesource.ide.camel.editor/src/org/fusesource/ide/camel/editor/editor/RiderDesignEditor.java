@@ -1078,6 +1078,11 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	public void loadModelFromFile(IFile file) throws IOException, PartInitException {
 		editor.onFileLoading(file);
 		this.setModel(data.marshaller.loadRoutes(file));
+		if (file.getName().contentEquals("switchyard.xml")) {
+			MessageDialog.openWarning(getSite().getShell(), EditorMessages.switchyardFoundTitle,
+					EditorMessages.switchyardFoundText);
+			switchToSourceEditor();
+		}
 		ValidationHandler status = this.getModel().validate();
 		if (status.hasErrors()) {
 			switchToSourceEditor();
