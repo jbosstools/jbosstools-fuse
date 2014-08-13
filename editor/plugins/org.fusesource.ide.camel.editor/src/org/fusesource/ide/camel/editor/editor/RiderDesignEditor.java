@@ -1374,3 +1374,4 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 		DiagramOperations.highlightNode(this, bo, highlight);
 	}
 }
+
