@@ -68,6 +68,12 @@ public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 		if (model.getContextElement() != null && model.getContextElement().getId() != null) {
 			id = model.getContextElement().getId();
 		} else {
+			if (model.getNode() == null) {
+				Exception e = new Exception("Unable to determine route container, no node detected.");
+				Activator.getLogger().warning(e);
+				throw new RuntimeException(e);
+			}	
+			 
 			Element e = (Element)model.getNode();
 			Attribute a = e.getAttribute("id");
 			if (a != null) id = a.getValue();
