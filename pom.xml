@@ -74,7 +74,7 @@
     <fabric-api-version>${fabric-version}</fabric-api-version>
     <fabric-client-version>${fabric-version}</fabric-client-version>
     <fmc-version>${fabric-version}</fmc-version>
-    <jboss-tycho-version>0.19.0-SNAPSHOT</jboss-tycho-version>
+    <jboss-tycho-version>0.21.0</jboss-tycho-version>
   </properties>
 
   <modules>
