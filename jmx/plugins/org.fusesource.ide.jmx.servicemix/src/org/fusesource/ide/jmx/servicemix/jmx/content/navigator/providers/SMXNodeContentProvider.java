@@ -75,3 +75,4 @@ public class SMXNodeContentProvider implements ITreeContentProvider {
 		return false;
 	}
 }
+

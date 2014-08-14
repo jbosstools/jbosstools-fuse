@@ -75,3 +75,4 @@ public class CamelNodeContentProvider implements ITreeContentProvider {
 		return false;
 	}
 }
+

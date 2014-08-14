@@ -86,5 +86,5 @@ public abstract class RefreshableCollectionNode extends RefreshableNode implemen
 		}
 		return 0;
 	}
-
 }
+

@@ -81,3 +81,4 @@ public class BundlesNodeContentProvider implements ITreeContentProvider {
 		return false;
 	}
 }
+

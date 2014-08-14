@@ -178,3 +178,4 @@ public abstract class NodeSupport extends Node implements IAdaptable, Refreshabl
 		}
 	}
 }
+

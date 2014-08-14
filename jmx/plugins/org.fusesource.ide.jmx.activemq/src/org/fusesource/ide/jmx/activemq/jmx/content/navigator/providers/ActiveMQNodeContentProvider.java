@@ -85,3 +85,4 @@ public class ActiveMQNodeContentProvider implements ITreeContentProvider {
 		return false;
 	}
 }
+
