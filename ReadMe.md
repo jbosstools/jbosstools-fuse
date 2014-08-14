@@ -1,5 +1,5 @@
 # JBoss Fuse Tooling for Eclipse
-Please visit our [project site](http://tools.jboss.org/features/apachecamel.html JBoss Fuse Tooling Website) to learn more about _JBoss Fuse Tooling_.
+Please visit our [project site](http://tools.jboss.org/features/apachecamel.html) to learn more about _JBoss Fuse Tooling_.
 
 ## Summary
 JBoss Fuse Tooling contains a set of plugins / features for Eclipse which allows you to create [Apache Camel](http://camel.apache.org Apache Camel Website) routes in a graphical editor, launch them locally and deploy them to runtimes like [Apache Karaf](http://karaf.apache.org Apache Karaf Website), [Apache ServiceMix](http://servicemix.apache.org Apache ServiceMix Website), [Fabric8](http://fabric8.io Fabric8 Website) and [JBoss Fuse](http://www.jboss.org/products/fuse/overview/ JBoss Fuse Website).
