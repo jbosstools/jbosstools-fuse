@@ -35,7 +35,7 @@
   </prerequisites>
 
   <properties>
-    <jboss-tycho-version>0.21.0-SNAPSHOT</jboss-tycho-version>
+    <jboss-tycho-version>0.21.0</jboss-tycho-version>
     <tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-server.git</tycho.scmUrl>
     <forge-project-id>ide</forge-project-id>
     <ide-version>${project.version}</ide-version>
