@@ -224,12 +224,12 @@ public class DetailsSection extends NodeSectionSupport {
 	protected void layoutForm() {
 		// section.pack();
 		// form.pack();
-		if (form != null && !form.isDisposed()) {
-			form.layout(true, true);
-		}
-		if (parent != null && !parent.isDisposed()) {
-			parent.layout(true, true);
-		}
+//		if (form != null && !form.isDisposed()) {
+//			form.layout(true, true);
+//		}
+//		if (parent != null && !parent.isDisposed()) {
+//			parent.layout(true, true);
+//		}
 
 		// in case of timing issues, lets do another layout just in case...
 		Display.getCurrent().asyncExec(new Runnable() {
