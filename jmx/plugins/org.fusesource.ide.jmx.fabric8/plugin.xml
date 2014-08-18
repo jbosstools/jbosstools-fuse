@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.fusesource.ide.jmx.karaf.Fabric8PreferenceInitializer">
+      </initializer>
+   </extension>
+
+   <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+       <navigatorContent
+             id="org.fusesource.ide.fabric8.jmx.content"
+             name="Fabric8 Content"
+             activeByDefault="true"
+             icon="icons/fabric8.png"
+             priority="normal"
+             contentProvider="org.fusesource.ide.jmx.karaf.jmx.content.navigator.providers.Fabric8NodeContentProvider"
+             labelProvider="org.fusesource.ide.jmx.karaf.jmx.content.navigator.providers.Fabric8NodeLabelProvider">
+          <triggerPoints>
+             <instanceof
+                   value="org.jboss.tools.jmx.core.IConnectionWrapper">
+             </instanceof>
+          </triggerPoints>
+          <possibleChildren>
+             <or>
+                <instanceof
+                      value="java.lang.Object">
+                </instanceof>
+              </or>
+          </possibleChildren>
+       </navigatorContent>
+	</extension>
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+	   <viewerContentBinding
+	         viewerId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+	      <includes>
+             <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric8.jmx.content">
+             </contentExtension>
+	      </includes>
+	   </viewerContentBinding>
+    <viewerContentBinding
+          viewerId="org.eclipse.wst.server.ui.ServersView">
+       <includes>
+          <contentExtension
+                isRoot="false"
+                pattern="org.fusesource.ide.fabric8.jmx.content">
+          </contentExtension>
+       </includes>
+    </viewerContentBinding>
+	</extension>
+
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs contributorId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+         <propertyTab
+               category="org.jboss.tools.jmx.ui.views"
+               id="org.fusesource.ide.jmx.ui.views.BundlesTab"
+               label="Bundles"/>
+      </propertyTabs>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections contributorId="org.jboss.tools.jmx.ui.internal.views.navigator.MBeanExplorer">
+         <propertySection
+               class="org.fusesource.ide.jmx.karaf.navigator.fabric8.BundlesTabSection"
+               id="BundlesSection"
+               tab="org.fusesource.ide.jmx.ui.views.BundlesTab">
+            <input
+                  type="org.fusesource.ide.jmx.karaf.navigator.fabric8.BundlesNode">
+            </input>
+         </propertySection>
+      </propertySections>
+      <propertySections contributorId="org.eclipse.wst.server.ui.ServersView">
+         <propertySection
+               class="org.fusesource.ide.jmx.karaf.navigator.fabric8.BundlesTabSection"
+               id="BundlesSection"
+               tab="org.fusesource.ide.jmx.ui.views.BundlesTab">
+            <input
+                  type="org.fusesource.ide.jmx.karaf.navigator.fabric8.BundlesNode">
+            </input>
+         </propertySection>
+      </propertySections>
+   </extension>
+   
+</plugin>
