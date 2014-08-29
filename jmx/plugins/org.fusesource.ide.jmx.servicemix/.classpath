@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="libs/org.apache.servicemix.nmr.management-1.6.0.redhat-610-20140722.052342-19.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/org.apache.servicemix.nmr.management-1.6.0.redhat-610-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/tooling-servicemix-facade-1.1.0.CR5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>

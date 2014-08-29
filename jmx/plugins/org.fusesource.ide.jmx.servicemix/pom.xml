@@ -43,6 +43,7 @@
 						</artifactItem>
 					</artifactItems>
 					<skip>false</skip>
+					<useBaseVersion>true</useBaseVersion>
 					<outputDirectory>${basedir}/libs/</outputDirectory>
 				</configuration>
 			</plugin>

@@ -20,5 +20,5 @@ Bundle-Activator: org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin
 Bundle-ClassPath: .,
  libs/geronimo-jms_1.1_spec-1.1.1.jar,
  libs/tooling-activemq-facade-1.1.0.CR5.jar,
- libs/activemq-osgi-5.9.0.redhat-610-20140815.055311-96.jar
+ libs/activemq-osgi-5.9.0.redhat-610-SNAPSHOT.jar
 Bundle-ActivationPolicy: lazy
