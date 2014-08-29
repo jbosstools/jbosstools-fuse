@@ -28,5 +28,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.jmx.fabric8.Fabric8JMXPlugin
 Bundle-ClassPath: .,
  libs/fabric-api-1.1.0-SNAPSHOT.jar,
- libs/insight-log-core-1.1.0-SNAPSHOT.jar
+ libs/insight-log-core-1.1.0-SNAPSHOT.jar,
+ libs/fabric-core-1.1.0-SNAPSHOT.jar
 

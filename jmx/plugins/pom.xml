@@ -14,7 +14,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <module>org.fusesource.ide.jmx.commons</module>
                 <module>org.fusesource.ide.jmx.activemq</module>
                 <module>org.fusesource.ide.jmx.camel</module>
+<!--
 		<module>org.fusesource.ide.jmx.fabric8</module>
+-->
 		<module>org.fusesource.ide.jmx.karaf</module>
                 <module>org.fusesource.ide.jmx.servicemix</module>
 	</modules>
