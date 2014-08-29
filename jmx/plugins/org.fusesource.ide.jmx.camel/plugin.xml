@@ -105,6 +105,9 @@
                id="org.jboss.tools.jmx.ui.views.PropertiesTab"
                label="Properties"/>
       </propertyTabs>
+  </extension>
+  <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
       <propertyTabs contributorId="org.eclipse.wst.server.ui.ServersView">
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.ContentsTab"
@@ -157,6 +160,9 @@
                tab="org.fusesource.ide.jmx.ui.views.ProfileTab">
          </propertySection>
       </propertySections>
+  </extension>
+  <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections contributorId="org.eclipse.wst.server.ui.ServersView">
          <propertySection
                class="org.fusesource.ide.commons.jmx.ContentsTabSection"

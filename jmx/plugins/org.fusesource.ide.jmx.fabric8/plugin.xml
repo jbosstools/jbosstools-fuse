@@ -164,13 +164,82 @@
 			<input
 				type="org.fusesource.ide.jmx.fabric8.navigator.ContainerNode">
 			</input>
-   <input
-         type="org.fusesource.ide.jmx.fabric8.navigator.Fabric8Node">
-   </input>
+   			<input
+         		type="org.fusesource.ide.jmx.fabric8.navigator.Fabric8Node">
+   			</input>
 		</propertySection>
       </propertySections>
-
+  </extension>
+  <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections contributorId="org.eclipse.wst.server.ui.ServersView">
+      <propertySection
+			class="org.fusesource.ide.jmx.fabric8.navigator.properties.ContainersTabSection"
+			id="ContainersSection"
+			tab="org.fusesource.ide.jmx.ui.views.ContainersTab">
+			<input
+				type="org.fusesource.ide.jmx.fabric8.navigator.ContainersNode">
+			</input>
+		</propertySection>
+		<propertySection
+			class="org.fusesource.ide.jmx.fabric8.navigator.fabric8.ProfileContainersTabSection"
+			id="ProfileContainersSection"
+			tab="org.fusesource.ide.jmx.ui.views.ContainersTab">
+			<input
+				type="org.fusesource.ide.jmx.fabric8.navigator.ProfileNode">
+			</input>
+		</propertySection>
+		<propertySection
+			class="org.fusesource.ide.jmx.fabric8.navigator.properties.FabricStatusTabSection"
+			id="FabricStatusSection"
+			tab="org.fusesource.ide.jmx.ui.views.FabricStatusTab">
+			<input
+				type="org.fusesource.ide.jmx.fabric8.navigator.Fabric8Node">
+			</input>
+		</propertySection>
+		<propertySection
+			class="org.fusesource.ide.jmx.fabric8.navigator.fabric8.ProfileTreeTabSection"
+			id="ContainerProfilesSection"
+			tab="org.fusesource.ide.jmx.ui.views.ContainerProfilesTab">
+			<input
+				type="org.fusesource.ide.jmx.fabric8.navigator.ContainerNode">
+			</input>
+		</propertySection>
+		<propertySection
+			class="org.fusesource.ide.jmx.fabric8.navigator.fabric8.ProfilesTabSection"
+			id="ContainerProfileDetailsSection"
+			tab="org.fusesource.ide.jmx.ui.views.ContainerProfileDetailsTab">
+			<input
+				type="org.fusesource.ide.jmx.fabric8.navigator.ContainerNode">
+			</input>
+		</propertySection>
+		<propertySection
+			class="org.fusesource.ide.jmx.fabric8.navigator.fabric8.ProfileDetailsTabSection"
+			id="ProfileDetailsSection"
+			tab="org.fusesource.ide.jmx.ui.views.ProfileDetailsTab">
+			<input
+				type="org.fusesource.ide.jmx.fabric8.navigator.ProfileNode">
+			</input>
+		</propertySection>
+		<propertySection
+			class="org.fusesource.ide.jmx.fabric8.navigator.fabric8.ProfileRequirementsTabSection"
+			id="ProfileRequirementsSection"
+			tab="org.fusesource.ide.jmx.ui.views.ProfileRequirementsTab">
+			<input
+				type="org.fusesource.ide.jmx.fabric8.navigator.ProfileNode">
+			</input>
+		</propertySection>
+		<propertySection
+			class="org.fusesource.ide.jmx.fabric8.navigator.properties.LogViewTabSection"
+			id="ContainerLogsSection"
+			tab="org.fusesource.ide.jmx.ui.views.ContainerLogTab">
+			<input
+				type="org.fusesource.ide.jmx.fabric8.navigator.ContainerNode">
+			</input>
+   			<input
+         		type="org.fusesource.ide.jmx.fabric8.navigator.Fabric8Node">
+   			</input>
+		</propertySection>
       </propertySections>
    </extension>
    
