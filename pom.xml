@@ -35,8 +35,8 @@
   </prerequisites>
 
   <properties>
-    <jboss-tycho-version>0.21.0</jboss-tycho-version>
-    <tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-server.git</tycho.scmUrl>
+    <jboss-tycho-version>${tychoVersion}</jboss-tycho-version>
+    <tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
     <forge-project-id>ide</forge-project-id>
     <ide-version>${project.version}</ide-version>
     
@@ -319,7 +319,7 @@
           <plugin>
             <groupId>org.eclipse.tycho</groupId>
             <artifactId>tycho-packaging-plugin</artifactId>
-            <version>${tycho-version}</version>
+            <version>${jboss-tycho-version}</version>
             <configuration>
               <format>'v'yyyyMMdd-HHmm'-H${BUILD_NUMBER}-${BUILD_ALIAS}'</format>
               <archiveSite>true</archiveSite>
