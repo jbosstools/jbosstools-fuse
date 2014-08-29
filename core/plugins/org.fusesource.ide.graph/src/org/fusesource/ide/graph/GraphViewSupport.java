@@ -187,7 +187,7 @@ public abstract class GraphViewSupport extends ViewPart implements IZoomableWork
 			parent.setLayout(layout);
 		}
 
-		viewer = new MyGraphViewer(parent, SWT.NONE);
+		viewer = new MyGraphViewer(parent, SWT.BORDER);
 
 		IContentProvider graphContentProvider = createGraphContentProvider();
 		GraphLabelProviderSupport graphLabelProvider = createGraphLabelProvider();
@@ -211,8 +211,9 @@ public abstract class GraphViewSupport extends ViewPart implements IZoomableWork
 		viewer.setConnectionStyle(ZestStyles.CONNECTIONS_DIRECTED);
 		// switch off the animation
 		viewer.setNodeStyle(ZestStyles.NODES_NO_ANIMATION);
-
-		viewer.setLayoutAlgorithm(new DirectedDiagramViewLayoutAlgorithm(SWT.VERTICAL | LayoutStyles.NO_LAYOUT_NODE_RESIZING | LayoutStyles.ENFORCE_BOUNDS));
+		
+		LayoutAlgorithm layout = new DirectedDiagramViewLayoutAlgorithm(SWT.VERTICAL | LayoutStyles.NO_LAYOUT_NODE_RESIZING | LayoutStyles.ENFORCE_BOUNDS);
+		viewer.setLayoutAlgorithm(layout);
 		
 //		viewer.setLayoutAlgorithm(new CompositeLayoutAlgorithm(SWT.VERTICAL | LayoutStyles.NO_LAYOUT_NODE_RESIZING | LayoutStyles.ENFORCE_BOUNDS, 
 //				new LayoutAlgorithm[] { 
@@ -370,8 +371,7 @@ public abstract class GraphViewSupport extends ViewPart implements IZoomableWork
 	private void makeActions() {
 		toolbarZoomContributionViewItem = new ZoomContributionViewItem(this);
 
-		directedLayout = createLayoutMenuAction("Directed", new DirectedGraphLayoutAlgorithm(
-				LayoutStyles.NO_LAYOUT_NODE_RESIZING));
+		directedLayout = createLayoutMenuAction("Directed", new DirectedDiagramViewLayoutAlgorithm(SWT.VERTICAL | LayoutStyles.NO_LAYOUT_NODE_RESIZING | LayoutStyles.ENFORCE_BOUNDS));
 		directedLayout.setChecked(true);
 
 		// createLayoutMenuAction("Grid", new

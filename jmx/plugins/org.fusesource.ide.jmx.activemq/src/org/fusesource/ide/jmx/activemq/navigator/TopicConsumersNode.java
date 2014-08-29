@@ -66,7 +66,7 @@ public class TopicConsumersNode extends RefreshableCollectionNode implements Ima
 
 	@Override
 	public Image getImage() {
-		return ActiveMQJMXPlugin.getDefault().getImage("jms/listeners.gif");
+		return ActiveMQJMXPlugin.getDefault().getImage("listeners.gif");
 	}
 
 	protected BrokerFacade getFacade() {

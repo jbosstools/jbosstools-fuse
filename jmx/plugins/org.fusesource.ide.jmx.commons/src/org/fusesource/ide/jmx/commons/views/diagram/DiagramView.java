@@ -32,6 +32,7 @@ import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.graph.GraphFilter;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
 import org.fusesource.ide.graph.GraphViewSupport;
+import org.eclipse.zest.core.widgets.GraphConnection;
 import org.fusesource.ide.jmx.commons.messages.Exchanges;
 import org.fusesource.ide.jmx.commons.messages.HasNodeStatisticsContainer;
 import org.fusesource.ide.jmx.commons.messages.IMessage;
@@ -167,8 +168,7 @@ public class DiagramView extends GraphViewSupport {
 		boolean process = false;
 		
 		// we filter for specific selection sources...
-		if (part.getClass().getName().equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator") ||
-			part.getClass().getName().equals("org.fusesource.ide.fabric.navigator.FabricNavigator") || 
+		if (part.getClass().getName().equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator") || 
 			part.getClass().getName().equals("org.fusesource.ide.jmx.commons.views.messages.MessagesView") ||
 			part.getClass().getName().equals("org.eclipse.ui.views.properties.PropertySheet") ||
 			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.view.servers.ServersView") ||

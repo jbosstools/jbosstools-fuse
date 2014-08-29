@@ -357,8 +357,6 @@ ISelectionChangedListener {
 	 */
 	@Override
 	public int getConnectionStyle(Object rel) {
-		if (isRouteNode(rel)) {
-		}
 		return ZestStyles.CONNECTIONS_DOT | ZestStyles.CONNECTIONS_DIRECTED;
 	}
 }

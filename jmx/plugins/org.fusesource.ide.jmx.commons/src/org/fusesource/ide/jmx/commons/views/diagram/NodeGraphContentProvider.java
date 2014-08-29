@@ -37,7 +37,6 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 	 */
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 	}
 
 	/*
@@ -46,28 +45,8 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 	 */
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
 	}
-
-	/*
-	@Override
-	public Object getSource(Object rel) {
-		if (rel instanceof Flow) {
-			Flow flow = (Flow) rel;
-			return flow.getSource();
-		}
-		return null;
-	}
-
-	public Object getDestination(Object rel) {
-		if (rel instanceof Flow) {
-			Flow flow = (Flow) rel;
-			return flow.getTarget();
-		}
-		return null;
-	}
-	 */
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.zest.core.viewers.IGraphContentProvider#getElements(java.lang.Object)
@@ -91,26 +70,6 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 				set.addAll(parent.getDescendents());
 			}
 			return set.toArray();
-
-			/*
-
-			Set<Flow> set = new HashSet<Flow>();
-			RouteContainer parent;
-			if (node instanceof RouteContainer) {
-				parent = (RouteContainer) node;
-			} else {
-				parent = node.getParent();
-			}
-			if (parent == null) {
-				set = node.getAllConnections();
-			} else {
-				Set<AbstractNode> descendents = parent.getDescendents();
-				for (AbstractNode child : descendents) {
-					set.addAll(child.getAllConnections());
-				}
-			}
-			return set.toArray();
-			 */
 		} else {
 			List<Object> answer = new ArrayList<Object>();
 			if (input instanceof GraphableNode) {
@@ -143,22 +102,6 @@ public class NodeGraphContentProvider implements  IStructuredContentProvider, IG
 			AbstractNode node = (AbstractNode) entity;
 			node.getOutputs().toArray();
 		}
-		/*
-		if (entity instanceof Flow) {
-			Flow flow = (Flow) entity;
-			return new Object[] { flow.getSource() };
-		} else if (entity instanceof AbstractNode) {
-			AbstractNode node = (AbstractNode) entity;
-			List<AbstractNode> outputs;
-			if (node instanceof RouteContainer) {
-				outputs = ((RouteContainer) node).getSourceNodes();
-			} else {
-				outputs = node.getTargetNodes();
-			}
-			outputs.toArray();
-
-		}
-		 */
 		else if (entity instanceof ConnectedNode) {
 			ConnectedNode node = (ConnectedNode) entity;
 			return node.getConnectedTo().toArray();

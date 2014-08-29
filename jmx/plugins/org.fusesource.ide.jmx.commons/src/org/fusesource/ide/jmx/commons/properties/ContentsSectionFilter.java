@@ -25,14 +25,15 @@ public class ContentsSectionFilter implements IFilter {
 
 	// we want to skip the contents tab in properties view for the following node types
 	static {
-		noContentsTab.add("org.fusesource.ide.fabric.camel.navigator.RoutesNode");
-		noContentsTab.add("org.fusesource.ide.fabric.navigator.osgi.BundlesNode");
-		noContentsTab.add("org.fusesource.ide.fabric.camel.navigator.RouteNode");
-		noContentsTab.add("org.fusesource.ide.fabric.camel.navigator.ProcessorNode");
-		noContentsTab.add("org.fusesource.ide.fabric.navigator.Fabric");
-		noContentsTab.add("org.fusesource.ide.fabric.navigator.ContainersNode");
-		noContentsTab.add("org.fusesource.ide.fabric.navigator.ProfileNode");
-		noContentsTab.add("org.fusesource.ide.fabric.navigator.ContainerNode");
+		noContentsTab.add("org.fusesource.ide.jmx.camel.navigator.RoutesNode");
+		noContentsTab.add("org.fusesource.ide.jmx.camel.navigator.RouteNode");
+		noContentsTab.add("org.fusesource.ide.jmx.camel.navigator.ProcessorNode");
+		noContentsTab.add("org.fusesource.ide.jmx.karaf.navigator.osgi.BundlesNode");
+		noContentsTab.add("org.fusesource.ide.jmx.fabric8.navigator.Fabric8Node");
+		noContentsTab.add("org.fusesource.ide.jmx.fabric8.navigator.ContainersNode");
+		noContentsTab.add("org.fusesource.ide.jmx.fabric8.navigator.ProfileNode");
+		noContentsTab.add("org.fusesource.ide.jmx.fabric8.navigator.ContainerNode");
+		noContentsTab.add("org.fusesource.ide.jmx.fabric8.navigator.VersionNode");
 	}
 
     @Override

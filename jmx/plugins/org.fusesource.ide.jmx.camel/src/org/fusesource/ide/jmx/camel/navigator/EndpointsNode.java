@@ -99,7 +99,7 @@ public class EndpointsNode extends RefreshableCollectionNode implements ImagePro
 
 		};
 		createEndpointAction.setToolTipText(Messages.CreateEndpointActionToolTip);
-		createEndpointAction.setImageDescriptor(CamelJMXPlugin.getDefault().getImageDescriptor("new_queue.gif"));
+		createEndpointAction.setImageDescriptor(CamelJMXPlugin.getDefault().getImageDescriptor("new_queue.png"));
 		menu.add(createEndpointAction);
 	}
 
