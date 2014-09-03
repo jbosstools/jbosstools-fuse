@@ -117,13 +117,6 @@ Raleigh NC 27606 USA.
          unpack="false"/>
 
    <plugin
-         id="org.fusesource.ide.camel.model"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.fusesource.ide.catalogs"
          download-size="0"
          install-size="0"

@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>org.fusesource.ide.editor</groupId>
+    <groupId>org.fusesource.ide.core</groupId>
     <artifactId>plugins</artifactId>
     <version>7.3.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
@@ -12,5 +12,5 @@
 
   <artifactId>org.fusesource.ide.camel.model</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Plugins :: Camel Model</name>
+  <name>JBoss Fuse Tooling :: Core :: Plugins :: Camel Model</name>
 </project>
