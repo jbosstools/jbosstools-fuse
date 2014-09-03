@@ -6,7 +6,7 @@ The easiest way to get started with the code is to [create your own fork](http:/
 
 	$ git clone git@github.com:<you>/fuseide.git
 	$ cd fuseide
-	$ git remote add upstream git://github.com/fusesource/fuseide.git
+	$ git remote add upstream https://github.com/fusesource/fuseide.git
 
 At any time, you can pull changes from the upstream and merge them onto your master:
 
@@ -27,6 +27,16 @@ If you just want to check if things compiles/builds you can run:
 
     $ mvn clean package -Dmaven.test.skip=true
 
+## Generating the target platform
+If you want to do development in Eclipse for Fuse Tooling you need to have our target platform mirrored to your local machine so Eclipse can resolve used bundles. Creating the mirror takes quite a while and should only be done if the version of upstream bundles changed. (or the used JBoss Tools Integration Stack version)
+
+Here's how to generate the mirror...
+
+    $ cd fuseide/targetplatform
+    $ mvn -Pmultiple2repo
+
+Once the download is done you end up with a target platform folder inside the *target* subfolder. Now copy this folder to a place you want to keep the target platform mirror and remember the location for the Eclipse Setup below...
+
 ## Eclipse Setup
 At _master_ branch we always try to use the latest Eclipse version. Please refer to the target platform plugin to see which versions of Eclipse are supported. The _master_ branch was using *Eclipse Luna* when this document was created.
 
@@ -36,9 +46,15 @@ Here's how to setup Eclipse...
 
 - create a new workspace for working on _JBoss Fuse Tooling_
 - import the project into Eclipse from directory "fuseide" (_Import... -> General -> Existing Project_)
-- open the target platform module called "org.fusesource.ide.targetplatform"
-- open *jbtis_4.1_dev.target* for Kepler _OR_ open *jbtis_4.2_dev.target* for Luna
-- wait until all is resolved (see progress in the bottom right) and then click the "Set as Target Platform" link in the top right
+- open the Eclipse preferences and select *Plug-in Development / Target Platform* in the list.
+- now click the *Add* button and select *Nothing: Start with an empty target platform*
+- click *Next* and give that target platform a name and click the button *Add* in the *Locations* tab
+- choose *Directory* and click *Next*
+- in the location browse dialog click on *Browse* and navigate to your platform mirror folder
+- click *OK* to close the file browser
+- validate that the location in the text field is correct and click *Finish"
+- click *Finish* to close the dialog and then the Eclipse preferences
+- make sure you checked the checkbox in front of your new target platform definition to activate it
 
 Now your Eclipse has set the target platform you need for running _JBoss Fuse Tooling_. A rebuild of all imported projects is done directly after setting the target platform. Make sure there are no more errors displayed in any of the projects.
 
@@ -55,7 +71,7 @@ Before trying to run the Fuse Tooling you should have built the project, importe
 To run open the Run Configurations dialog and select one of the following *Eclipse Applications*:
 
     JBTIS Kepler Linux.launch			# Eclipse Kepler based
-    JBTIS Luna Linux.launch				# Eclipse Luna based
+    JBTIS Luna Linux.launch			# Eclipse Luna based
 
 It may be possible that you have to adapt the launch configuration to fit your environment. If your OS doesn't have a launch configuration yet just create one by copying one of the Linux configurations and then inside the _Plugins_ tab make sure to hit the _Add required_ button. That should fix most of the problems.
 
