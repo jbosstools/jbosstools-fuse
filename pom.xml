@@ -35,18 +35,23 @@
   </prerequisites>
 
   <properties>
+    <!-- JBoss Tools Integration Stack version -->
+    <jbtis.version>4.2.0.Alpha8</jbtis.version>
+    
+    <!-- Tycho version -->
     <jboss-tycho-version>${tychoVersion}</jboss-tycho-version>
+    
+    <!-- fuse tooling related versions -->
     <tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
     <forge-project-id>ide</forge-project-id>
     <ide-version>${project.version}</ide-version>
     
+    <!-- dependency versions -->
     <fabric-version>1.1.0.CR5</fabric-version>
     <camel-version>2.13.2</camel-version>
     <spring-version>3.2.9.RELEASE</spring-version>
     <slf4j-version>1.7.5</slf4j-version>
-    <jackson-version>1.9.2</jackson-version>
     <guava-version>15.0</guava-version>
-    
     <snapshot-build>redhat-610-SNAPSHOT</snapshot-build>    
     <activemq-version>5.9.0.${snapshot-build}</activemq-version>
     <servicemix-nmr-version>1.6.0.${snapshot-build}</servicemix-nmr-version>
@@ -59,7 +64,9 @@
     <module>sap</module>
     <module>servers</module>
     <module>site</module>
+<!-- taken out as its now only used to create the tp mirror for eclipse development
     <module>targetplatform</module>
+-->
   </modules>
 
   <repositories>
@@ -196,17 +203,17 @@
 
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
-	<artifactId>target-platform-configuration</artifactId>
-	<version>${tychoVersion}</version>
+		<artifactId>target-platform-configuration</artifactId>
+		<version>${tychoVersion}</version>
         <configuration>
           <resolver>p2</resolver>
           <pomDependencies>consider</pomDependencies>
           <target>
             <artifact>
-              <groupId>org.fusesource.ide</groupId>
-              <artifactId>org.fusesource.ide.targetplatform</artifactId>
-              <version>${project.version}</version>
-              <classifier>jbtis_4.2_dev</classifier>
+ 		      <groupId>org.jboss.tools.integration-stack</groupId>
+		      <artifactId>target-platform</artifactId>
+              <version>${jbtis.version}</version>
+              <classifier>base</classifier>
             </artifact>
           </target>
           <ignoreTychoRepositories>false</ignoreTychoRepositories>
