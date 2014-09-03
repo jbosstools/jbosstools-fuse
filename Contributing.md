@@ -6,7 +6,7 @@ The easiest way to get started with the code is to [create your own fork](http:/
 
 	$ git clone git@github.com:<you>/fuseide.git
 	$ cd fuseide
-	$ git remote add upstream git://github.com/fusesource/fuseide.git
+	$ git remote add upstream https://github.com/fusesource/fuseide.git
 
 At any time, you can pull changes from the upstream and merge them onto your master:
 
