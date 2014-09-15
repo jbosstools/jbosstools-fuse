@@ -34,7 +34,7 @@
 						<artifactItem>
 				            <groupId>io.fabric8</groupId>
 				            <artifactId>tooling-camel-facade</artifactId>
-				            <version>${fabric-version}</version>
+				            <version>${fabric.version}</version>
 						</artifactItem>
 					</artifactItems>
 					<skip>false</skip>

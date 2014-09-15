@@ -19,5 +19,5 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.jmx.servicemix.ServiceMixJMXPlugin
 Bundle-ClassPath: .,
- libs/tooling-servicemix-facade-1.1.0.CR5.jar,
- libs/org.apache.servicemix.nmr.management-1.6.0.redhat-610-SNAPSHOT.jar
+ libs/org.apache.servicemix.nmr.management-1.6.0.redhat-610-SNAPSHOT.jar,
+ libs/tooling-servicemix-facade-1.2.0.Beta4.jar

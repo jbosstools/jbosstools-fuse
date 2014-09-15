@@ -15,7 +15,7 @@
   <parent>
     <groupId>org.jboss.tools</groupId>
     <artifactId>parent</artifactId>
-    <version>4.2.0.CR1-SNAPSHOT</version>
+    <version>4.2.0.CR2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.fusesource.ide</groupId>
@@ -36,7 +36,7 @@
 
   <properties>
     <!-- JBoss Tools Integration Stack version -->
-    <jbtis.version>4.2.0.Alpha8</jbtis.version>
+    <jbtis.version>4.2.0.Beta1</jbtis.version>
     
     <!-- Tycho version -->
     <jboss-tycho-version>${tychoVersion}</jboss-tycho-version>
@@ -47,19 +47,25 @@
     <ide-version>${project.version}</ide-version>
     
     <!-- dependency versions -->
-    <fabric-version>1.1.0.CR5</fabric-version>
-    <camel-version>2.13.2</camel-version>
-    <spring-version>3.2.9.RELEASE</spring-version>
-    <slf4j-version>1.7.5</slf4j-version>
-    <guava-version>15.0</guava-version>
+    <fabric.version>1.2.0.Beta4</fabric.version>
+    <camel.version>2.13.2</camel.version>
+    <spring.version>3.2.9.RELEASE</spring.version>
+    <jclouds.version>1.8.0</jclouds.version>
+    <slf4j.version>1.7.5</slf4j.version>
+    <guava.version>15.0</guava.version>
+    <jolokia.version>1.2.2</jolokia.version>
+    <json-simple.version>1.1.1</json-simple.version>
+	<apache.http.version>4.3.3</apache.http.version>
+	<apache.httpcore.version>4.3.2</apache.httpcore.version>
     <snapshot-build>redhat-610-SNAPSHOT</snapshot-build>    
-    <activemq-version>5.9.0.${snapshot-build}</activemq-version>
-    <servicemix-nmr-version>1.6.0.${snapshot-build}</servicemix-nmr-version>
+    <activemq.version>5.9.0.${snapshot-build}</activemq.version>
+    <servicemix-nmr.version>1.6.0.${snapshot-build}</servicemix-nmr.version>
   </properties>
 
   <modules>
     <module>core</module>
     <module>editor</module>
+    <module>fabric8</module>
     <module>jmx</module>
     <module>sap</module>
     <module>servers</module>

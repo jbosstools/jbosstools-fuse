@@ -192,6 +192,12 @@
          </propertySection>
       </propertySections>
    </extension>
-
+   <extension
+         point="org.jboss.tools.jmx.local.jvmConnectionLabelProvider">
+      <labelProvider
+            class="org.fusesource.ide.jmx.camel.local.CamelContextLabelProvider"
+            weight="5">
+      </labelProvider>
+    </extension>
 </plugin>
 

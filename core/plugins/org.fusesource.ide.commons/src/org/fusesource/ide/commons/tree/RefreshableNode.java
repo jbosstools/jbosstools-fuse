@@ -78,17 +78,20 @@ public abstract class RefreshableNode extends NodeSupport implements Refreshable
 		return super.getChildrenList();
 	}
 
-	protected void checkLoaded() {
-		if (loaded.compareAndSet(false, true)) {
+	protected synchronized void checkLoaded() {
+		if (loaded.get() == false) {
 			loading = true;
 			try {
 				loadChildren();
 				refreshUIAfterLazyLoad();
 			} catch (Exception e) {
 				Activator.getLogger().warning("Failed to load children of " + this + ". " + e, e);
+				loaded.compareAndSet(false, false);
+				return;
 			} finally {
 				loading = false;
 			}
+			loaded.compareAndSet(false, true);
 		}
 	}
 
@@ -98,6 +101,10 @@ public abstract class RefreshableNode extends NodeSupport implements Refreshable
 		// refreshUI();
 	}
 
+	public boolean isLoaded() {
+		return this.loaded.get();
+	}
+	
 	/**
 	 * Is the node loading its children (so we don't want to fire change events at this point).
 	 */

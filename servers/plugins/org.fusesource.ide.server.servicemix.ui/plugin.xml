@@ -27,22 +27,22 @@
    <extension
          point="org.eclipse.wst.server.ui.serverImages">
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/service_mix_server.png"
             id="org.fusesource.ide.server.servicemix.ui.server.image.45"
             typeIds="org.fusesource.ide.servicemix.server.45">
       </image>
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/service_mix_server.png"
             id="org.fusesource.ide.server.servicemix.ui.server.image.50"
             typeIds="org.fusesource.ide.servicemix.server.50">
       </image>
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/service_mix_server.png"
             id="org.fusesource.ide.server.servicemix.ui.runtime.image.45"
             typeIds="org.fusesource.ide.servicemix.runtime.45">
       </image>
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/service_mix_server.png"
             id="org.fusesource.ide.server.servicemix.ui.runtime.image.50"
             typeIds="org.fusesource.ide.servicemix.runtime.50">
       </image>
@@ -78,7 +78,7 @@
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             configTypeID="org.fusesource.ide.server.servicemix.launch"
-            icon="icons/run_fuse_server.png"
+            icon="icons/run_servicemix.png"
             id="org.fusesource.ide.server.servicemix.ui.launch.image">
       </launchConfigurationTypeImage>
    </extension>

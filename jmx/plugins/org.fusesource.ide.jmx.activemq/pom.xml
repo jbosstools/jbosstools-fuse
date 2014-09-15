@@ -34,12 +34,12 @@
 						<artifactItem>
 				            <groupId>io.fabric8</groupId>
 				            <artifactId>tooling-activemq-facade</artifactId>
-				            <version>${fabric-version}</version>
+				            <version>${fabric.version}</version>
 						</artifactItem>
 						<artifactItem>
 				            <groupId>org.apache.activemq</groupId>
 				            <artifactId>activemq-osgi</artifactId>
-				            <version>${activemq-version}</version>
+				            <version>${activemq.version}</version>
 						</artifactItem>
 						<artifactItem>
 				            <groupId>org.apache.geronimo.specs</groupId>

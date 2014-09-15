@@ -17,12 +17,12 @@
    <extension
          point="org.eclipse.wst.server.ui.serverImages">
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/fabric8_server.png"
             id="org.fusesource.ide.server.fabric8.ui.server.image.11"
             typeIds="org.fusesource.ide.fabric8.server.11">
       </image>
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/fabric8_server.png"
             id="org.fusesource.ide.server.fabric8.ui.runtime.image.11"
             typeIds="org.fusesource.ide.fabric8.runtime.11">
       </image>
@@ -57,7 +57,7 @@
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             configTypeID="org.fusesource.ide.server.fabric8.launch"
-            icon="icons/run_fuse_server.png"
+            icon="icons/run_fabric8_server.png"
             id="org.fusesource.ide.server.fabric8.ui.launch.image">
       </launchConfigurationTypeImage>
    </extension>

@@ -159,7 +159,7 @@ public class MessagesView extends TableViewSupport { // implements ITabbedProper
 
 		// we filter for specific selection sources...
 		if (part.getClass().getName().equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator") ||
-			part.getClass().getName().equals("org.fusesource.ide.fabric.navigator.FabricNavigator") ||
+			part.getClass().getName().equals("org.fusesource.ide.fabric8.ui.navigator.FabricNavigator") ||
 			part.getClass().getName().equals("org.fusesource.ide.jmx.commons.views.diagram.DiagramView") ||
 			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.view.servers.ServersView") ||
 			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.cnf.ServersView2")

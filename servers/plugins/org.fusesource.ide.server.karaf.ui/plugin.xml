@@ -39,33 +39,33 @@
    <extension
          point="org.eclipse.wst.server.ui.serverImages">
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.server.image.22"
             typeIds="org.fusesource.ide.karaf.server.22">
       </image>
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.server.image.23"
             typeIds="org.fusesource.ide.karaf.server.23">
       </image>
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.server.image.30"
             typeIds="org.fusesource.ide.karaf.server.30">
       </image>
 
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.runtime.image.22"
             typeIds="org.fusesource.ide.karaf.runtime.22">
       </image>
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.runtime.image.23"
             typeIds="org.fusesource.ide.karaf.runtime.23">
       </image>
       <image
-            icon="icons/fuse_server.png"
+            icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.runtime.image.30"
             typeIds="org.fusesource.ide.karaf.runtime.30">
       </image>
@@ -98,7 +98,7 @@
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             configTypeID="org.fusesource.ide.server.karaf.launch"
-            icon="icons/run_fuse_server.png"
+            icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.launch.image">
       </launchConfigurationTypeImage>
    </extension>

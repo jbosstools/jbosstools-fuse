@@ -34,12 +34,12 @@
 						<artifactItem>
 				            <groupId>io.fabric8</groupId>
 				            <artifactId>tooling-servicemix-facade</artifactId>
-				            <version>${fabric-version}</version>
+				            <version>${fabric.version}</version>
 						</artifactItem>
 						<artifactItem>
 							<groupId>org.apache.servicemix.nmr</groupId>
     						<artifactId>org.apache.servicemix.nmr.management</artifactId>
-							<version>${servicemix-nmr-version}</version>
+							<version>${servicemix-nmr.version}</version>
 						</artifactItem>
 					</artifactItems>
 					<skip>false</skip>

@@ -60,7 +60,6 @@ public class KarafJVMFacadeUtility {
 				String command = jvm.getLaunchCommand();
 				System.out.println(command);
 				if( command.equals(target)) {
-					System.out.println("FOUND");
 					return jvm;
 				}
 			}

@@ -40,47 +40,47 @@
 						<artifactItem>
 							<groupId>org.apache.camel</groupId>
             				<artifactId>camel-core</artifactId>
-							<version>${camel-version}</version>
+							<version>${camel.version}</version>
 						</artifactItem>
 						<artifactItem>
 							<groupId>org.apache.camel</groupId>
             				<artifactId>camel-spring</artifactId>
-							<version>${camel-version}</version>
+							<version>${camel.version}</version>
 						</artifactItem>
 						<artifactItem>
 							<groupId>org.apache.camel</groupId>
             				<artifactId>camel-blueprint</artifactId>
-							<version>${camel-version}</version>
+							<version>${camel.version}</version>
 						</artifactItem>
 						<artifactItem>
 				            <groupId>org.springframework</groupId>
 				            <artifactId>spring-context</artifactId>
-				            <version>${spring-version}</version>
+				            <version>${spring.version}</version>
 				        </artifactItem>
 				        <artifactItem>
 				            <groupId>org.springframework</groupId>
 				            <artifactId>spring-core</artifactId>
-				            <version>${spring-version}</version>
+				            <version>${spring.version}</version>
 				        </artifactItem>
 				        <artifactItem>
 				            <groupId>org.springframework</groupId>
 				            <artifactId>spring-beans</artifactId>
-				            <version>${spring-version}</version>
+				            <version>${spring.version}</version>
 				        </artifactItem>
 				        <artifactItem>
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-api</artifactId>
-							<version>${slf4j-version}</version>
+							<version>${slf4j.version}</version>
 					    </artifactItem>
 					    <artifactItem>
 							<groupId>org.slf4j</groupId>
 							<artifactId>log4j-over-slf4j</artifactId>
-							<version>${slf4j-version}</version>
+							<version>${slf4j.version}</version>
 					    </artifactItem>
 					    <artifactItem>
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-simple</artifactId>
-							<version>${slf4j-version}</version>
+							<version>${slf4j.version}</version>
 					    </artifactItem>
 					</artifactItems>
 					<skip>false</skip>

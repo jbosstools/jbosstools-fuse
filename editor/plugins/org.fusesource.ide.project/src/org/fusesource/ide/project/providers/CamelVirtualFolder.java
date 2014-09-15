@@ -65,10 +65,12 @@ public class CamelVirtualFolder {
 
 	public void populateChildren() {
 		IPath p = project.getLocation();
-		try {
-			findFiles(p.toFile());
-		} catch (CoreException ex) {
-			// ignore
+		if (p != null) {
+			try {
+				findFiles(p.toFile());
+			} catch (CoreException ex) {
+				// ignore
+			}
 		}
 	}
 

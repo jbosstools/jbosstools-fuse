@@ -92,5 +92,29 @@
          </propertySection>
       </propertySections>
    </extension>
-   
+  <extension
+        point="org.jboss.tools.jmx.core.MBeanServerConnectionProvider">
+     <connectionProvider
+           class="org.fusesource.ide.jmx.karaf.connection.KarafConnectionProvider">
+     </connectionProvider>
+  </extension>
+  <extension
+        point="org.jboss.tools.jmx.ui.providerUI">
+     <providerUI
+           editable="false"
+           icon="icons/bundle.png"
+           id="org.fusesource.ide.jmx.karaf.connection.KarafConnectionProvider"
+           name="Karaf-based server">
+        <connectionLabelProvider
+              class="org.fusesource.ide.jmx.karaf.connection.ui.KarafJMXLabelProvider">
+        </connectionLabelProvider>
+     </providerUI>
+  </extension>
+  <extension
+         point="org.jboss.tools.jmx.local.jvmConnectionLabelProvider">
+      <labelProvider
+            class="org.fusesource.ide.jmx.karaf.connection.ui.AutodetectedKarafLabelProvider"
+            weight="5">
+      </labelProvider>
+   </extension>
 </plugin>

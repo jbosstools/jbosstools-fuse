@@ -35,7 +35,7 @@
 						<artifactItem>
 				            <groupId>io.fabric8</groupId>
 				            <artifactId>tooling-fabric-all</artifactId>
-				            <version>${fabric-version}</version>
+				            <version>${fabric.version}</version>
 						</artifactItem>
 					</artifactItems>
 					<skip>false</skip>

@@ -170,6 +170,7 @@ public class DiagramView extends GraphViewSupport {
 		// we filter for specific selection sources...
 		if (part.getClass().getName().equals("org.jboss.tools.jmx.ui.internal.views.navigator.JMXNavigator") || 
 			part.getClass().getName().equals("org.fusesource.ide.jmx.commons.views.messages.MessagesView") ||
+			part.getClass().getName().equals("org.fusesource.ide.fabric8.ui.navigator.FabricNavigator") || 
 			part.getClass().getName().equals("org.eclipse.ui.views.properties.PropertySheet") ||
 			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.view.servers.ServersView") ||
 			part.getClass().getName().equals("org.eclipse.wst.server.ui.internal.cnf.ServersView2")

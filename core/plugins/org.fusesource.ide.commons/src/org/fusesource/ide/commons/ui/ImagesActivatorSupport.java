@@ -22,6 +22,7 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
@@ -32,14 +33,19 @@ import org.fusesource.ide.commons.logging.RiderLogFacade;
  */
 public abstract class ImagesActivatorSupport extends AbstractUIPlugin {
 
-	protected static void showUserError(String pluginId, RiderLogFacade logger, String title, String message, Exception e) {
+	protected static void showUserError(final String pluginId, final RiderLogFacade logger, final String title, final String message, final Exception e) {
 		Throwable t = unwrapException(e);
 		String text = t.getMessage();
-		IStatus errorStatus = new Status(IStatus.ERROR, pluginId, IStatus.ERROR, text, e);
-		ErrorDialog.openError(
-				Shells.getShell(),
-				title,
-				message, errorStatus);
+		final IStatus errorStatus = new Status(IStatus.ERROR, pluginId, IStatus.ERROR, text, e);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				ErrorDialog.openError(
+						Shells.getShell(),
+						title,
+						message, errorStatus);
+			}
+		});
 		logger.error(message + ". Exception: " + text, e);
 	}
 

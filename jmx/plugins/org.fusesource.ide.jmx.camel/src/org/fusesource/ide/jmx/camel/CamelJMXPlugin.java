@@ -30,7 +30,10 @@ public class CamelJMXPlugin extends ImagesActivatorSupport {
 	private static CamelJMXPlugin plugin;
 	private static CamelNodeProvider nodeProvider;
 	private static IAdapterFactory adapterFactory;
-
+	
+	private static CamelJMXSharedImages sharedImages;
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -81,5 +84,14 @@ public class CamelJMXPlugin extends ImagesActivatorSupport {
 	 */
 	public static void showUserError(String title, String message, Exception e) {
 		showUserError(PLUGIN_ID, getLogger(), title, message, e);
+	}
+	
+	public CamelJMXSharedImages getSharedImages() {
+		if( sharedImages == null ) {
+			if( getBundle() != null ) {
+				sharedImages = new CamelJMXSharedImages(getBundle());
+			}
+		}
+		return sharedImages;
 	}
 }

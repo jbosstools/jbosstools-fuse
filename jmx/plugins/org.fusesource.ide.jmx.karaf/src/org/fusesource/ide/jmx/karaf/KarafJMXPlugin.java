@@ -20,8 +20,12 @@ import org.osgi.framework.BundleContext;
  */
 public class KarafJMXPlugin extends ImagesActivatorSupport {
 
+	public static final String PLUGIN_ID = "org.fusesource.ide.jmx.karaf";
+	
 	private static KarafJMXPlugin plugin;
 
+	private KarafJMXSharedImages sharedImages;
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -52,5 +56,14 @@ public class KarafJMXPlugin extends ImagesActivatorSupport {
 
 	public static RiderLogFacade getLogger() {
 		return RiderLogFacade.getLog(getDefault().getLog());
+	}
+	
+	public KarafJMXSharedImages getSharedImages() {
+		if( sharedImages == null ) {
+			if( getBundle() != null ) {
+				sharedImages = new KarafJMXSharedImages(getBundle());
+			}
+		}
+		return sharedImages;
 	}
 }
