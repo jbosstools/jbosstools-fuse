@@ -34,6 +34,8 @@ Here's how to generate the mirror...
 
     $ cd fuseide/targetplatform
     $ mvn -Pmultiple2repo
+       OR
+    $ mvn -Pmultiple2repo -Dmirror-target-to-repo.includeSources=true  (that will include SDKs)
 
 Once the download is done you end up with a target platform folder inside the *target* subfolder. Now copy this folder to a place you want to keep the target platform mirror and remember the location for the Eclipse Setup below...
 
