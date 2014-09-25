@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.fusesource.ide.sap</groupId>
+    <artifactId>plugins</artifactId>
+    <version>7.3.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  
+  <artifactId>org.fusesource.ide.sap.ui</artifactId>
+  <packaging>eclipse-plugin</packaging>
+  <name>JBoss Fuse Tooling :: SAP :: Plugins :: SAP Tool Suite UI</name>
+  
+  <dependencies>
+  	<dependency>
+		<groupId>org.fusesource</groupId>
+		<artifactId>org.fusesource.camel.component.sap</artifactId>
+		<version>1.0.0.redhat-396</version>
+	</dependency>
+  	<dependency>
+		<groupId>org.fusesource</groupId>
+		<artifactId>org.fusesource.camel.component.sap.model</artifactId>
+		<version>1.0.0.redhat-396</version>
+	</dependency>
+  	<dependency>
+		<groupId>org.fusesource</groupId>
+		<artifactId>org.fusesource.camel.component.sap.model.edit</artifactId>
+		<version>1.0.0.redhat-396</version>
+	</dependency>
+  	<dependency>
+		<groupId>com.sap.conn.jco</groupId>
+		<artifactId>com.sap.conn.jco</artifactId>
+		<version>3.0.11.redhat_1</version>
+	</dependency>
+  	<dependency>
+		<groupId>com.sap.conn.idoc</groupId>
+		<artifactId>com.sap.conn.idoc</artifactId>
+		<version>3.0.10.redhat_1</version>
+	</dependency>
+  </dependencies>
+  <repositories>
+  	<repository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>jboss-fuse-thirdparty-internal</id>
+      <name>jboss-fuse-thirdparty-internal</name>
+      <url>https://repository.jboss.org/nexus/content/repositories/fs-maven2-all</url>
+  	</repository>
+  </repositories>
+</project>

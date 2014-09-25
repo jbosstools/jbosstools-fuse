@@ -82,7 +82,7 @@ public class JCo3ArchiveSelectionPage extends WizardPage {
 	private boolean isJCo3ArchiveValid;
 
 	protected JCo3ArchiveSelectionPage(DataBindingContext context, JCo3ImportSettings importSettings) {
-		super(Messages.ArchiveSelectionPage_PageName);
+		super(Messages.ArchiveSelectionPage_PageName, Messages.ArchiveSelectionPage_PageName, Activator.getDefault().getImageRegistry().getDescriptor(Activator.FUSE_RS_IMAGE));
 		setDescription(Messages.ArchiveSelectionPage_this_description);
 		setTitle(Messages.ArchiveSelectionPage_PageTitle);
 		this.context = context;

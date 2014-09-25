@@ -1,0 +1,52 @@
+/*******************************************************************************
+* Copyright (c) 2014 Red Hat, Inc.
+* Distributed under license by Red Hat, Inc. All rights reserved.
+* This program is made available under the terms of the
+* Eclipse Public License v1.0 which accompanies this distribution,
+* and is available at http://www.eclipse.org/legal/epl-v10.html
+*
+* Contributors:
+* Red Hat, Inc. - initial API and implementation
+* William Collins punkhornsw@gmail.com
+******************************************************************************/ 
+package org.fusesource.ide.sap.ui.jaxb;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="property")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class DestinationDataStore {
+
+	@XmlAttribute(name="name")
+	private static final String name = "destinationDataStore";
+	
+	@XmlElementWrapper(name="map")
+	@XmlElements(
+			@XmlElement(name="entry")
+	)
+	private List<DestinationDataStoreEntry> entries = new ArrayList<DestinationDataStoreEntry>();
+	
+	public DestinationData add(String name) {
+		DestinationDataStoreEntry entry = new DestinationDataStoreEntry();
+		DestinationData destinationData = new DestinationData();
+		
+		entry.setName(name);
+		entry.setValue(destinationData);
+		entries.add(entry);
+		
+		return destinationData;
+	}
+	
+	public List<DestinationDataStoreEntry> getEntries() {
+		return entries;
+	}
+}

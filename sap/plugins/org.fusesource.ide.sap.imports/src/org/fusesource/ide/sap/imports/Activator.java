@@ -11,14 +11,22 @@
 ******************************************************************************/ 
 package org.fusesource.ide.sap.imports;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
+
+	public static final String FUSE_RS_IMAGE = "icons/fuse_rs.jpg"; //$NON-NLS-1$
+	public static final String FUSE_ICON_16C_IMAGE = "icons/fuse_icon_16c.jpg"; //$NON-NLS-1$
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.fusesource.ide.sap.imports"; //$NON-NLS-1$
@@ -61,14 +69,16 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	/**
-	 * Returns an image descriptor for the image file at the given
-	 * plug-in relative path
-	 *
-	 * @param path the path
-	 * @return the image descriptor
-	 */
-	public static ImageDescriptor getImageDescriptor(String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	@Override
+	protected void initializeImageRegistry(ImageRegistry reg) {
+		super.initializeImageRegistry(reg);
+		ImageDescriptor image;
+		Bundle bundle = Platform.getBundle(PLUGIN_ID);
+		
+		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(FUSE_RS_IMAGE), null));
+		getImageRegistry().put(FUSE_RS_IMAGE, image);
+		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(FUSE_ICON_16C_IMAGE), null));
+		getImageRegistry().put(FUSE_ICON_16C_IMAGE, image);
 	}
+
 }
