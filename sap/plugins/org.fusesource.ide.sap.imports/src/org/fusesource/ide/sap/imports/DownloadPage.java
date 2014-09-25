@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PlatformUI;
+import org.fusesource.ide.sap.imports.Activator;
 
 public class DownloadPage extends WizardPage {
 
@@ -33,7 +34,7 @@ public class DownloadPage extends WizardPage {
 	private static final String DOWNLOAD_LINK_TEXT = "<a>http://service.sap.com/connectors</a>"; //$NON-NLS-1$
 
 	protected DownloadPage() {
-		super(Messages.DownloadPage_DownloadSAPArchiveFiles);
+		super(Messages.DownloadPage_DownloadSAPArchiveFiles, Messages.DownloadPage_DownloadSAPArchiveFiles, Activator.getDefault().getImageRegistry().getDescriptor(Activator.FUSE_RS_IMAGE));
 		setDescription(Messages.DownloadPage_DownloadTheSAPJavaConnectorAndSAPJavaIDocClassLibraryArchiveFiles);
 		setTitle(Messages.DownloadPage_DownloadPageTitle);
 		setPageComplete(true);

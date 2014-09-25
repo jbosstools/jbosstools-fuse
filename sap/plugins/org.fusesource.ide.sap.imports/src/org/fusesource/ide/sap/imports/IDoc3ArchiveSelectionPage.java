@@ -79,7 +79,7 @@ public class IDoc3ArchiveSelectionPage extends WizardPage {
 	private boolean isIDoc3ArchiveValid;
 
 	protected IDoc3ArchiveSelectionPage(DataBindingContext context, IDoc3ImportSettings importSettings) {
-		super(Messages.IDoc3ArchiveSelectionPage_SelectIDoc3ArchiveFile);
+		super(Messages.IDoc3ArchiveSelectionPage_SelectIDoc3ArchiveFile, Messages.IDoc3ArchiveSelectionPage_SelectIDoc3ArchiveFile, Activator.getDefault().getImageRegistry().getDescriptor(Activator.FUSE_RS_IMAGE));
 		setDescription(Messages.IDoc3ArchiveSelectionPage_SelectTheIDoc3ArchiveToImport);
 		setTitle(Messages.IDoc3ArchiveSelectionPage_SelectIDoc3ArchiveToImport);
 		this.context = context;
