@@ -255,23 +255,28 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		// the folder for endpoint types
 		PaletteCompartmentEntry compartmentEntryEndpoints = new PaletteCompartmentEntry(Messages.endpointsDrawerTitle, null);
 		ret.add(compartmentEntryEndpoints);
+		compartmentEntryEndpoints.setInitiallyOpen(true);
 
 		// the folder for routing types
 		PaletteCompartmentEntry compartmentEntryRouting = new PaletteCompartmentEntry(Messages.routingDrawerTitle, null);
 		ret.add(compartmentEntryRouting);
-
+		compartmentEntryRouting.setInitiallyOpen(false);
+		
 		// the folder for control flow types
 		PaletteCompartmentEntry compartmentEntryControlFlow = new PaletteCompartmentEntry(Messages.controlFlowDrawerTitle, null);
 		ret.add(compartmentEntryControlFlow);
-
+		compartmentEntryControlFlow.setInitiallyOpen(false);
+		
 		// the folder for transformation types
 		PaletteCompartmentEntry compartmentEntryTransformation = new PaletteCompartmentEntry(Messages.transformationDrawerTitle, null);
 		ret.add(compartmentEntryTransformation);
+		compartmentEntryTransformation.setInitiallyOpen(false);
 
 		// the folder for other types
 		PaletteCompartmentEntry compartmentEntryMisc = new PaletteCompartmentEntry(Messages.miscellaneousDrawerTitle, null);
 		ret.add(compartmentEntryMisc);
-
+		compartmentEntryMisc.setInitiallyOpen(false);
+		
 		// add compartments from super class and skip first as its the connection menu
 		IPaletteCompartmentEntry[] superCompartments = super.getPalette();
 		for (int i = 1; i < superCompartments.length; i++) {
@@ -300,7 +305,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 				}
 			}
 		}
-
+		
 		return ret.toArray(new IPaletteCompartmentEntry[ret.size()]);
 	}
 
