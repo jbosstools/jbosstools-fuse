@@ -17,11 +17,13 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
+import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
@@ -93,10 +95,18 @@ public class DeleteAllEndpointBreakpointsFeature extends DeleteEndpointBreakpoin
 	 */
 	@Override
 	public boolean isAvailable(IContext context) {
-		ICustomContext cc = (ICustomContext)context;
-    	IFile contextFile = getContextFile();
+		IFile contextFile = getContextFile();
     	String fileName = contextFile.getName();
     	String projectName = contextFile.getProject().getName();
-    	return CamelDebugUtils.getBreakpointsForContext(fileName, projectName).length>0;
+    	return CamelDebugUtils.getBreakpointsForContext(fileName, projectName).length>0 && isRouteSelected(context);
+	}
+	
+	private boolean isRouteSelected(IContext context) {
+		ICustomContext cc = (ICustomContext) context;
+		PictogramElement _pe = cc.getPictogramElements()[0] instanceof Connection ? ((Connection) cc.getPictogramElements()[0])
+                .getStart().getParent() : cc.getPictogramElements()[0];
+        final Object bo = getBusinessObjectForPictogramElement(_pe);
+       
+        return bo == null || bo instanceof RouteSupport;
 	}
 }

@@ -23,13 +23,16 @@ import org.eclipse.draw2d.graph.Node;
 import org.eclipse.draw2d.graph.NodeList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.AnchorContainer;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
+import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -128,5 +131,17 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 		dg.nodes = nodeList;
 		dg.edges = edgeList;
 		return dg;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#isAvailable(org.eclipse.graphiti.features.context.IContext)
+	 */
+	@Override
+	public boolean isAvailable(IContext context) {
+		ICustomContext cc = (ICustomContext)context;
+		PictogramElement _pe = cc.getPictogramElements()[0] instanceof Connection ? ((Connection) cc.getPictogramElements()[0])
+                .getStart().getParent() : cc.getPictogramElements()[0];
+        final Object bo = getBusinessObjectForPictogramElement(_pe);
+        return (bo == null || bo instanceof RouteSupport);
 	}
 }
