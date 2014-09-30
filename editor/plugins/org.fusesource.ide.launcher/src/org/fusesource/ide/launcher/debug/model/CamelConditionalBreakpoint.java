@@ -151,6 +151,6 @@ public class CamelConditionalBreakpoint extends CamelEndpointBreakpoint {
 	 */
 	@Override
 	public String toString() {
-		return String.format("Camel Conditional Breakpoint [project=%s, fileName=%s, contextId=%s, endpointId=%s, language=%s, condition=%s]", getProjectName(), getFileName(), getContextId(), getEndpointNodeId(), getLanguage(), getConditionPredicate());
+		return String.format("Camel Conditional Breakpoint [endpointId=%s, project=%s, fileName=%s, contextId=%s, language=%s, condition=%s]", getEndpointNodeId(), getProjectName(), getFileName(), getContextId(), getLanguage(), getConditionPredicate());
 	}
 }

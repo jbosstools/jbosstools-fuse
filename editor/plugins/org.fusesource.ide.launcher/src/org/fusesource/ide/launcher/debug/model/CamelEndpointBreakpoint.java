@@ -198,6 +198,6 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 	 */
 	@Override
 	public String toString() {
-		return String.format("Camel Breakpoint [project=%s, fileName=%s, contextId=%s, endpointId=%s]", getProjectName(), getFileName(), getContextId(), getEndpointNodeId());
+		return String.format("Camel Breakpoint [endpointId=%s, project=%s, fileName=%s, contextId=%s]", getEndpointNodeId(), getProjectName(), getFileName(), getContextId());
 	}
 }
