@@ -38,6 +38,15 @@
       <category name="AllSources"/>
    </feature>
 
+<!-- Fabric8 -->
+   <feature id="org.fusesource.ide.fabric8.feature">
+      <category name="AllFeatures"/>
+   </feature>
+   <!-- sources -->
+   <feature id="org.fusesource.ide.fabric8.feature.source">
+      <category name="AllSources"/>
+   </feature>
+
 <!-- SAP -->
    <feature id="org.fusesource.ide.sap.feature">
       <category name="AllFeatures"/>
