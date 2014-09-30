@@ -24,13 +24,16 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointsListener;
 import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditDomain;
@@ -111,7 +114,7 @@ import org.fusesource.ide.preferences.PreferencesConstants;
 /**
  * @author lhein
  */
-public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDebugEventSetListener, ISelectionListener {
+public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDebugEventSetListener, ISelectionListener, IBreakpointsListener {
 
 	private final RiderDesignEditorData data;
 
@@ -217,6 +220,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 			ISelectionService sel = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
 			if (sel != null) sel.addSelectionListener(ICamelDebugConstants.DEBUG_VIEW_ID, this);			
 		}
+		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
 	}
 	
 	@Override
@@ -1296,6 +1300,47 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	public DesignerCache getActiveConfig() {
 		return this.activeConfig;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.debug.core.IBreakpointsListener#breakpointsAdded(org.eclipse.debug.core.model.IBreakpoint[])
+	 */
+	@Override
+	public void breakpointsAdded(IBreakpoint[] breakpoints) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				refreshDiagramContents();				
+			}
+		});
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.debug.core.IBreakpointsListener#breakpointsChanged(org.eclipse.debug.core.model.IBreakpoint[], org.eclipse.core.resources.IMarkerDelta[])
+	 */
+	@Override
+	public void breakpointsChanged(IBreakpoint[] breakpoints,
+			IMarkerDelta[] deltas) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				refreshDiagramContents();				
+			}
+		});
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.debug.core.IBreakpointsListener#breakpointsRemoved(org.eclipse.debug.core.model.IBreakpoint[], org.eclipse.core.resources.IMarkerDelta[])
+	 */
+	@Override
+	public void breakpointsRemoved(IBreakpoint[] breakpoints,
+			IMarkerDelta[] deltas) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				refreshDiagramContents();				
+			}
+		});
+	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.debug.core.IDebugEventSetListener#handleDebugEvents(org.eclipse.debug.core.DebugEvent[])
@@ -1303,6 +1348,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	@Override
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (DebugEvent ev : events) {
+			System.err.println(ev);
 			if (ev.getSource() instanceof CamelThread == false && ev.getSource() instanceof CamelStackFrame == false) continue;
 			if (ev.getSource() instanceof CamelThread && (ev.getKind() == DebugEvent.TERMINATE || ev.getKind() == DebugEvent.RESUME)) {
 				// we are only interested in hit camel breakpoints
