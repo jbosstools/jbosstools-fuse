@@ -1348,7 +1348,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	@Override
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (DebugEvent ev : events) {
-			System.err.println(ev);
 			if (ev.getSource() instanceof CamelThread == false && ev.getSource() instanceof CamelStackFrame == false) continue;
 			if (ev.getSource() instanceof CamelThread && (ev.getKind() == DebugEvent.TERMINATE || ev.getKind() == DebugEvent.RESUME)) {
 				// we are only interested in hit camel breakpoints

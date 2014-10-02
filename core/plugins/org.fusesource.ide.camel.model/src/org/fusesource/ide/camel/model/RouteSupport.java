@@ -23,6 +23,7 @@ import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.ToDefinition;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.fusesource.ide.camel.model.generated.NodeFactory;
+import org.fusesource.ide.commons.camel.tools.BeanDef;
 
 /**
  * @author lhein
@@ -60,7 +61,7 @@ public abstract class RouteSupport extends RouteContainer {
 	}
 
 	@Override
-	public Map<String, String> getBeans() {
+	public Map<String, BeanDef> getBeans() {
 		RouteContainer parent = getParent();
 		if (parent != null) {
 			return parent.getBeans();

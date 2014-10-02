@@ -459,7 +459,7 @@ public class NodeDefinition<T> {
 
     public String group() {
         if (isDefinitionName("bean", "log", "process", "to", "from", "endpoint")) {
-            return "Endpoints";
+            return "Components";
         }
         else if (isDefinitionName("aggregate", "choice", "dynamicRouter", "filter", "idempotentConsumer", "loadBalance", "multicast", "otherwise", "pipeline", "recipient", "resequence", "routing", "split", "sort", "when", "wireTap")) {
             return "Routing";

@@ -25,6 +25,8 @@ public class Messages extends NLS {
 
     public static String editorSourcePageTitle;
     public static String editorDesignPageTitle;
+    public static String editorGlobalConfigurationPageTitle;
+    public static String connectorsDrawerTitle;
     public static String endpointsDrawerTitle;
     public static String routingDrawerTitle;
     public static String controlFlowDrawerTitle;

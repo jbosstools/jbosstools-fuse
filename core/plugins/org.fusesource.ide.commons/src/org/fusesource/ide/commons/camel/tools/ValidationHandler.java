@@ -103,7 +103,8 @@ public class ValidationHandler implements ErrorHandler {
             String text = nodeWithNamespacesToText(e, e);
             validator.validate(new StreamSource(new StringReader(text)));
         } else {
-            for (Node node: e.getNodes()) {
+            List<Node> nodes = e.getNodes();
+            for (Node node: nodes) {
                 if (node instanceof Element) {
                     validate(validator, (Element) node);
                 }

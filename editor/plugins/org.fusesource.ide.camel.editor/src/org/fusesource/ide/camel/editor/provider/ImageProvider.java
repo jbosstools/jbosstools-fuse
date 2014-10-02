@@ -11,6 +11,9 @@
 
 package org.fusesource.ide.camel.editor.provider;
 
+import java.net.URL;
+import java.util.Enumeration;
+
 import org.eclipse.graphiti.ui.platform.AbstractImageProvider;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
@@ -26,7 +29,7 @@ public class ImageProvider extends AbstractImageProvider {
 	private static final String ROOT_FOLDER_FOR_IMG = "icons/"; //$NON-NLS-1$
 
 	// The prefix for all identifiers of this image provider
-	protected static final String PREFIX = "org.fusesource.demo.icons."; //$NON-NLS-1$
+	public static final String PREFIX = "org.fusesource.demo.icons."; //$NON-NLS-1$
 	protected static final String POSTFIX_SMALL = "_small"; //$NON-NLS-1$
 	protected static final String POSTFIX_LARGE = "_large"; //$NON-NLS-1$
 
@@ -79,8 +82,19 @@ public class ImageProvider extends AbstractImageProvider {
 
 		addIconsForClass(new Route(), "route16.png", "route.png");
 
-		// lets add some custom images
-		addIconCustomImages("endpointDrools.png", "endpointQueue.png", "endpointFile.png", "endpointFolder.png", "endpointTimer.png", "endpointRepository.png");
+		// add all images from the activator too
+        String prefix = "/icons/";
+        Enumeration<URL> enu = Activator.getDefault().getBundle().findEntries(prefix, "*", true);
+        while (enu.hasMoreElements()) {
+            URL u = enu.nextElement();
+            String file = u.getFile();
+            String fileName = file;
+            if (!file.startsWith(prefix)) {
+                Activator.getLogger().warning("Warning: image: " + fileName + " does not start with prefix: " + prefix);
+            }
+            fileName = fileName.substring(prefix.length());
+            addIconCustomImages(fileName);
+        }
 	}
 
 	private void addIconCustomImages(String... iconNames) {
@@ -129,10 +143,16 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 
 	public static String getKeyForSmallIcon(String iconName) {
-		return String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL);
+	    if (isImageAvailable(iconName)) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL);
+	    return String.format("%s%s%s", PREFIX, "endpoint.png", POSTFIX_SMALL);
 	}
 
 	public static String getKeyForLargeIcon(String iconName) {
-		return String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE);
+	    if (isImageAvailable(iconName)) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE);
+		return String.format("%s%s%s", PREFIX, "endpoint", POSTFIX_LARGE);
+	}
+	
+	protected static boolean isImageAvailable(String iconName) {
+	    return Activator.getDefault().getBundle().getEntry(String.format("%s%s", ROOT_FOLDER_FOR_IMG, iconName)) != null;
 	}
 }

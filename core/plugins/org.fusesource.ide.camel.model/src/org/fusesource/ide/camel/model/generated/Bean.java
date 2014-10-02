@@ -68,7 +68,7 @@ public class Bean extends AbstractNode {
 
     @Override
     public String getCategoryName() {
-        return "Endpoints";
+        return "Components";
     }
 
     /**

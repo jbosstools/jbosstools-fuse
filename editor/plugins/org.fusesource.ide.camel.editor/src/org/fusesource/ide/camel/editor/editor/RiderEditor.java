@@ -76,13 +76,16 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	
 	public static final int DESIGN_PAGE_INDEX = 0;
 	public static final int SOURCE_PAGE_INDEX = 1;
+//	public static final int GLOBAL_CONF_INDEX = 2;
 	
 	/** The text editor used in source page */
 	private StructuredTextEditor sourceEditor;
 
 	/** The graphical editor used in design page */
-	private RiderDesignEditor designEditor;
+	private RiderDesignEditor designEditor;	
 	
+	/** The global configuration elements editor */
+//	private GlobalConfigEditor globalConfigEditor;
 
 	/** stores the last selection before saving and restores it after saving **/
 	private ISelection savedSelection;
@@ -98,6 +101,10 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 		PreferenceManager.getInstance().getUnderlyingStorage().addPropertyChangeListener(this);
+	}
+	
+	public void markDirty() {
+		designEditor.setDirty(true);
 	}
 	
 	/*
@@ -180,6 +187,7 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	protected void createPages() {
 		createDesignPage(DESIGN_PAGE_INDEX);
 		createSourcePage(SOURCE_PAGE_INDEX);
+//		createGlobalConfPage(GLOBAL_CONF_INDEX);
 
 		IDocument document = getDocument();
 		if (document == null) {
@@ -263,6 +271,25 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 					"Error creating nested design editor", null, e.getStatus());
 		}
 	}
+	
+	/**
+	 * creates the global configuration page
+	 * 
+	 * @param index
+	 * 			  the page index
+	 */
+//	private void createGlobalConfPage(int index) {
+//		try {
+//			// TODO: code me
+//			globalConfigEditor = new GlobalConfigEditor(this);
+//			IEditorInput editorInput = getEditorInput();
+//			addPage(index, globalConfigEditor, editorInput);
+//			setPageText(index, Messages.editorGlobalConfigurationPageTitle);
+//		} catch (PartInitException e) {
+//			ErrorDialog.openError(getSite().getShell(),
+//					"Error creating nested global configuration page", null, e.getStatus());
+//		}
+//	}
 
 
 	private Object getField(Object owner, String name, Class<?> aClass) {
@@ -488,12 +515,18 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	 */
 	@Override
 	protected void pageChange(int newPageIndex) {
+		int oldIndex = super.getActivePage();
 		super.pageChange(newPageIndex);
 		if (newPageIndex == SOURCE_PAGE_INDEX) {
 			if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
-			updatedDesignPage();
+			if (oldIndex == DESIGN_PAGE_INDEX) updatedDesignPage();
+		} else if (newPageIndex == DESIGN_PAGE_INDEX){
+			if (oldIndex == SOURCE_PAGE_INDEX) updatedTextPage();
 		} else {
-			updatedTextPage();
+//			// must be global config page
+//			if (oldIndex == DESIGN_PAGE_INDEX) updatedDesignPage();
+//			if (oldIndex == SOURCE_PAGE_INDEX) updatedTextPage();
+//			globalConfigEditor.reload();
 		}
 	}
 
@@ -517,6 +550,10 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 		updatedDesignPage(true);
 	}
 
+	/**
+	 * 
+	 * @param async
+	 */
 	void updatedDesignPage(boolean async) {
 		// we are switching to the source page so lets update the text editor's
 		// model with the latest diagram...
@@ -606,7 +643,11 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	public RiderDesignEditor getDesignEditor() {
 		return designEditor;
 	}
-
+//
+//	public GlobalConfigEditor getGlobalConfigEditor() {
+//		return globalConfigEditor;
+//	}
+	
 	public AbstractNode getSelectedNode() {
 		return designEditor.getSelectedNode();
 	}
@@ -691,6 +732,18 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 			}
 		});
 	}
+	
+//	public void switchToGlobalConfigEditor() {
+//		// lets switch async just in case we've not created the page yet
+//		Display.getDefault().asyncExec(new Runnable() {
+//			@Override
+//			public void run() {
+//				setActiveEditor(getGlobalConfigEditor());
+//				setActivePage(GLOBAL_CONF_INDEX);
+//				getGlobalConfigEditor().setFocus();
+//			}
+//		});
+//	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)

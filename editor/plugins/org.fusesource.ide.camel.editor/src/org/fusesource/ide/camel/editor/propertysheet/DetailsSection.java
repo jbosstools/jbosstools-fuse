@@ -87,6 +87,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.EditorMessages;
+import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.CamelModelHelper;
 import org.fusesource.ide.camel.model.ExpressionPropertyDescriptor;
@@ -168,7 +169,7 @@ public class DetailsSection extends NodeSectionSupport {
 
 		form = toolkit.createForm(parent);
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
-		form.setText(EditorMessages.propertiesDetailsTitle);
+		form.setText(node != null ? String.format("%s - %s", EditorMessages.propertiesDetailsTitle, DiagramUtils.filterFigureLabel(node.getDisplayText())) : EditorMessages.propertiesDetailsTitle);
 		toolkit.decorateFormHeading(form);
 
 		form.getBody().setLayout(new GridLayout(2, false));
@@ -177,8 +178,6 @@ public class DetailsSection extends NodeSectionSupport {
 
 		if (node != null) {
 			final IMessageManager mmng = form.getMessageManager();
-
-			form.setText(node.getPatternName());
 
 			IPropertyDescriptor idDescriptor = null;
 			IPropertyDescriptor descriptionDescriptor = null;
@@ -214,9 +213,7 @@ public class DetailsSection extends NodeSectionSupport {
 
 			    // ref ECLIPSE-1012: unsaved nodes may be disposed
 			    // mmng.update();
-		} else {
-			form.setText(EditorMessages.propertiesDetailsTitle);
-		}
+		} 
 
 		layoutForm();
 	}

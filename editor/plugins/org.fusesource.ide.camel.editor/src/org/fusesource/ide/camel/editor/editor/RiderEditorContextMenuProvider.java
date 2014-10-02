@@ -11,9 +11,14 @@
 
 package org.fusesource.ide.camel.editor.editor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -22,6 +27,7 @@ import org.eclipse.jface.action.Separator;
 import org.fusesource.ide.camel.editor.handlers.AutoLayoutAction;
 import org.fusesource.ide.camel.editor.handlers.DeleteNodeAction;
 import org.fusesource.ide.camel.editor.handlers.DeleteRouteAction;
+import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
@@ -109,7 +115,23 @@ public class RiderEditorContextMenuProvider extends ContextMenuProvider {
 				boolean enabled = node != null;
 				subMenu.setVisible(enabled);
 
-				factory.fillMenu(editor, subMenu, node);
+				ToolBehaviourProvider tbp = (ToolBehaviourProvider)editor.getDiagramTypeProvider().getCurrentToolBehaviorProvider();
+				ArrayList<IToolEntry> additionalEndpoints = new ArrayList<IToolEntry>();
+				additionalEndpoints.addAll(tbp.getConnectorsToolEntries());
+				additionalEndpoints.addAll(tbp.getExtensionPointToolEntries());
+				
+				// sort the palette entries
+		        Collections.sort(additionalEndpoints, new Comparator<IToolEntry>() {
+		            /* (non-Javadoc)
+		             * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		             */
+		            @Override
+		            public int compare(IToolEntry o1, IToolEntry o2) {
+		                return o1.getLabel().compareToIgnoreCase(o2.getLabel());
+		            }
+		        });
+				
+				factory.fillMenu(editor, subMenu, node, additionalEndpoints);
 			}
 		});
 		// add the delete item

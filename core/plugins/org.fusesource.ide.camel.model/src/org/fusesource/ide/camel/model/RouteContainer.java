@@ -23,6 +23,7 @@ import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.fusesource.ide.camel.model.generated.Route;
+import org.fusesource.ide.commons.camel.tools.BeanDef;
 import org.fusesource.ide.commons.camel.tools.ValidationHandler;
 import org.fusesource.ide.commons.camel.tools.XmlModel;
 import org.fusesource.ide.commons.util.Objects;
@@ -41,7 +42,7 @@ public class RouteContainer extends AbstractNode {
 
 	private List<AbstractNode> children = new ArrayList<AbstractNode>();
 
-	private Map<String,String> beans = new HashMap<String,String>();
+	private Map<String,BeanDef> beans = new HashMap<String,BeanDef>();
 
 	private Set<String> camelContextEndpointUris = new TreeSet<String>();
 
@@ -91,11 +92,11 @@ public class RouteContainer extends AbstractNode {
 		this.camelContextEndpointUris = camelContextEndpointUris;
 	}
 
-	public Map<String, String> getBeans() {
+	public Map<String, BeanDef> getBeans() {
 		return beans;
 	}
 
-	public void setBeans(Map<String, String> beans) {
+	public void setBeans(Map<String, BeanDef> beans) {
 		this.beans = beans;
 	}
 

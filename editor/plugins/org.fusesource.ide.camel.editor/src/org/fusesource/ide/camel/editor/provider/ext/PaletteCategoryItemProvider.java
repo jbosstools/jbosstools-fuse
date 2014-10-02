@@ -9,26 +9,25 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.camel.editor.provider;
+package org.fusesource.ide.camel.editor.provider.ext;
 
-import org.fusesource.ide.camel.editor.Activator;
 
 /**
  * @author lhein
  */
 public interface PaletteCategoryItemProvider {
 	static enum CATEGORY_TYPE {
-		ENDPOINTS, ROUTING, CONTROL_FLOW, TRANSFORMATION, MISCELLANEOUS, NONE;
+		COMPONENTS, ENDPOINTS, ROUTING, CONTROL_FLOW, TRANSFORMATION, MISCELLANEOUS, NONE, USER_DEFINED;
 
 		public static CATEGORY_TYPE getCategoryType(String name) {
 			if (name != null) {
 				String enumName = name.toUpperCase().replace(' ', '_');
-				CATEGORY_TYPE answer = PaletteCategoryItemProvider.CATEGORY_TYPE.valueOf(enumName);
-				if (answer != null) {
-					return answer;
-				} else {
-					Activator.getLogger().warning("Could not find CATEGORY_TYPE for " + enumName + " from caetgory name: " + name);
+				for (CATEGORY_TYPE t : CATEGORY_TYPE.values()) {
+					if (t.name().equalsIgnoreCase(enumName)) {
+						return t;
+					}
 				}
+				return USER_DEFINED;
 			}
 			return CATEGORY_TYPE.NONE;
 		}

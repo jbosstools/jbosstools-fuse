@@ -10,6 +10,7 @@ Export-Package: org.fusesource.ide.camel.model;
    org.eclipse.ui.views.properties,
    org.eclipse.jface.viewers,
    org.eclipse.draw2d.geometry",
+ org.fusesource.ide.camel.model.connectors,
  org.fusesource.ide.camel.model.generated;uses:="org.eclipse.osgi.util,org.fusesource.ide.camel.model",
  org.fusesource.ide.camel.model.io,
  org.fusesource.ide.camel.model.util

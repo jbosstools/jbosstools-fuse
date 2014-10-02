@@ -21,7 +21,6 @@
     <!-- versions aligned with Fabric8 1.2.0.Beta4 -->
     <activemq.version>5.10.0</activemq.version>
     <cxf.version>2.7.11</cxf.version>
-    <camel.version>2.13.2</camel.version>
   </properties>
 
   <dependencies>

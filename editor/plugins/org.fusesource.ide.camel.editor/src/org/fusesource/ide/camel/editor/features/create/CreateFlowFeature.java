@@ -20,7 +20,7 @@ import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.editor.provider.PaletteCategoryItemProvider;
+import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.camel.model.RouteSupport;

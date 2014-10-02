@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<component>
+	<class>org.apache.camel.component.jms.JmsComponent</class>
+	<componentproperties />
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jms</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+      		<artifactId>geronimo-jms_1.1_spec</artifactId>
+      		<version>1.1.1</version>
+		</dependency>
+	</dependencies>
+	<prefixes>
+		<prefix>jms</prefix>
+	</prefixes>
+	<uriparameters>
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="selector" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="cacheLevelName" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="idleTaskExecutionLimit" type="int" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="recoveryInterval" type="long" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="errorHandlerLogStackTrace" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="forceSendOriginalMessage" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="headerFilterStrategy" type="org.apache.camel.spi.HeaderFilterStrategy" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="transactionTimeout" type="int" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="includeSentJMSMessageID" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="priority" type="int" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="transactedInOut" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="mapJmsMessage" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="synchronous" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="acceptMessagesWhileStopping" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="allowNullBody" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="replyToDeliveryPersistent" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="maxMessagesPerTask" type="int" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="preserveMessageQos" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="deliveryMode" type="java.lang.Integer" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="receiveTimeout" type="long" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="transacted" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="autoStartup" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="replyToDestination" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="asyncStartListener" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="clientId" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="maxConcurrentConsumers" type="int" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="alwaysCopyMessage" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="asyncStopListener" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="includeAllJMSXProperties" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="requestTimeout" type="long" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="lazyCreateTransactionManager" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="idleConsumerLimit" type="int" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="asyncConsumer" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="transferException" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="deliveryPersistent" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="concurrentConsumers" type="int" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="exposeListenerSession" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="disableTimeToLive" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="messageIdEnabled" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="pubSubNoLocal" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="requestTimeoutCheckerInterval" type="long" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="timeToLive" type="long" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="eagerLoadingOfProperties" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="replyToDestinationSelectorName" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="disableReplyTo" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="replyToCacheLevelName" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="messageTimestampEnabled" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="consumerType" type="choice[Simple,Default,Custom]" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="explicitQosEnabled" type="java.lang.Boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="acknowledgementModeName" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="transactionName" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="transferExchange" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="useMessageIDAsCorrelationID" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="durableSubscriptionName" type="java.lang.String" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="testConnectionOnStartup" type="boolean" />
+		<parameter description="" kind="BOTH" label="" mandatory="false" name="exchangePattern"	type="choice[InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn]" />
+	</uriparameters>
+</component>

@@ -30,6 +30,7 @@ import org.fusesource.ide.camel.model.AbstractNodeFacade;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.commons.camel.tools.BeanDef;
 import org.fusesource.ide.commons.tree.HasOwner;
 import org.fusesource.ide.commons.util.Objects;
 
@@ -134,12 +135,12 @@ public class AbstractNodes {
 			}});
 	}
 
-	public static SortedMap<String, String> getAllBeans(AbstractNode node) {
-		SortedMap<String,String> answer = new TreeMap<String,String>();
+	public static SortedMap<String, BeanDef> getAllBeans(AbstractNode node) {
+		SortedMap<String,BeanDef> answer = new TreeMap<String,BeanDef>();
 		if (node != null) {
 			RouteSupport route = AbstractNodes.getRoute(node);
 			if (route != null) {
-				Map<String, String> map = route.getBeans();
+				Map<String, BeanDef> map = route.getBeans();
 				if (map != null) {
 					answer.putAll(map);
 				}

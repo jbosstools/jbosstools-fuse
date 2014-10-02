@@ -25,6 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.editor.RiderEditor;
+import org.fusesource.ide.camel.model.connectors.ConnectorModelFactory;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
 import org.fusesource.ide.commons.ui.UIHelper;
@@ -37,6 +38,9 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends ImagesActivatorSupport {
 
+    private BundleContext context;
+    private String camelVersion;
+    
 	// The shared instance
 	private static Activator plugin;
 	public  static final String PLUGIN_ID = "org.fusesource.ide.camel.editor";
@@ -60,6 +64,7 @@ public class Activator extends ImagesActivatorSupport {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		this.context = context;
 		plugin = this;
 //		removeOldBreakpoints();
 		//redirectContextSensitiveHelp();
@@ -76,6 +81,7 @@ public class Activator extends ImagesActivatorSupport {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		this.context = null;
 		super.stop(context);
 	}
 
@@ -153,5 +159,19 @@ public class Activator extends ImagesActivatorSupport {
 		} catch (CoreException ex) {
 			getLogger().error(ex);
 		}
+	}
+	
+	/**
+	 * returns the set camel version for the opened project (for now we do
+	 * not support that - so we return the current camel version)
+	 * 
+	 * @return
+	 */
+	public synchronized String getCamelVersion() {
+	    if (this.camelVersion == null) {
+	        // TODO: read the set camel version from project settings in future
+	        this.camelVersion = ConnectorModelFactory.getSupportedCamelVersions().get(0);
+	    }
+	    return this.camelVersion;
 	}
 }

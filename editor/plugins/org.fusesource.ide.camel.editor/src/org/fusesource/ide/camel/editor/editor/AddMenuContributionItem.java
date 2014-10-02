@@ -11,10 +11,16 @@
 
 package org.fusesource.ide.camel.editor.editor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.fusesource.ide.camel.editor.Activator;
+import org.fusesource.ide.camel.editor.provider.ToolBehaviourProvider;
 import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
 
 /**
@@ -57,7 +63,23 @@ public class AddMenuContributionItem extends ContributionItem {
     		item.dispose();
     	}
     	
+    	ToolBehaviourProvider tbp = (ToolBehaviourProvider)editor.getDiagramTypeProvider().getCurrentToolBehaviorProvider();
+        ArrayList<IToolEntry> additionalEndpoints = new ArrayList<IToolEntry>();
+        additionalEndpoints.addAll(tbp.getConnectorsToolEntries());
+        additionalEndpoints.addAll(tbp.getExtensionPointToolEntries());
+    	
+        // sort the palette entries
+        Collections.sort(additionalEndpoints, new Comparator<IToolEntry>() {
+            /* (non-Javadoc)
+             * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+             */
+            @Override
+            public int compare(IToolEntry o1, IToolEntry o2) {
+                return o1.getLabel().compareToIgnoreCase(o2.getLabel());
+            }
+        });
+        
     	AddNodeMenuFactory factory = new AddNodeMenuFactory();
-		factory.fillMenu(editor, menu);
+		factory.fillMenu(editor, menu, additionalEndpoints);
     }
 }

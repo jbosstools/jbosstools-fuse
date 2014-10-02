@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.camel.editor.features.create;
+package org.fusesource.ide.camel.editor.features.create.ext;
 
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
@@ -18,7 +18,7 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.editor.provider.PaletteCategoryItemProvider;
+import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
 
@@ -39,8 +39,7 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 
 	@Override
 	public CATEGORY_TYPE getCategoryType() {
-		String name = getCategoryName();
-		return CATEGORY_TYPE.getCategoryType(name);
+		return CATEGORY_TYPE.getCategoryType(getCategoryName());
 	}
 
 
@@ -89,7 +88,7 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 	 * 
 	 * @return	the icon name or null
 	 */
-	private String getIconName() {
+	protected String getIconName() {
 		AbstractNode node = getExemplar();
 		if (node != null) {
 			return node.getIconName();
@@ -97,6 +96,13 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 		return null;
 	}
 
+	/**
+     * @return the clazz
+     */
+    public Class<E> getClazz() {
+        return this.clazz;
+    }
+	
 	/**
 	 * Returns the singleton exemplar node we can use to access things like icons and category names etc
 	 */

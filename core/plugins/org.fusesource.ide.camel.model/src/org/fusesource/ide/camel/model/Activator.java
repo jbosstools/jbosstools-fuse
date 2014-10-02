@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model;
 
 import java.net.URL;
 
+import org.fusesource.ide.camel.model.connectors.ConnectorModelFactory;
 import org.fusesource.ide.commons.camel.tools.CamelNamespaces;
 import org.fusesource.ide.commons.camel.tools.SchemaFinder;
 import org.fusesource.ide.commons.camel.tools.XsdDetails;
@@ -44,6 +45,10 @@ public class Activator extends ImagesActivatorSupport {
 		super.start(context);
 		plugin = this;
 
+		// initialize the connector models
+		ConnectorModelFactory.initializeModels();
+	
+		// 
 		CamelNamespaces.loadSchemasWith(new SchemaFinder() {
 
 			@Override

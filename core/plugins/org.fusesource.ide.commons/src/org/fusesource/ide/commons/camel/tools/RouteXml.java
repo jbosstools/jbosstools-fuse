@@ -15,6 +15,16 @@
  */
 package org.fusesource.ide.commons.camel.tools;
 
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.blueprintNS;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.findResource;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.getNamespaceURI;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.nodeWithNamespacesToText;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.nodesByNamespace;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.replaceChild;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.springNS;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.springNamespace;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.xmlToText;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,17 +47,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerFactory;
 
-import de.pdark.decentxml.Attribute;
-import de.pdark.decentxml.Document;
-import de.pdark.decentxml.Element;
-import de.pdark.decentxml.Namespace;
-import de.pdark.decentxml.Node;
-import de.pdark.decentxml.NodeWithChildren;
-import de.pdark.decentxml.XMLIOSource;
-import de.pdark.decentxml.XMLSource;
-import de.pdark.decentxml.XMLStringSource;
-import de.pdark.decentxml.XMLWriter;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.model.Constants;
 import org.apache.camel.model.ModelCamelContext;
@@ -59,7 +58,16 @@ import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.camel.tools.parser.PatchedXMLParser;
 import org.xml.sax.ErrorHandler;
 
-import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.*;
+import de.pdark.decentxml.Attribute;
+import de.pdark.decentxml.Document;
+import de.pdark.decentxml.Element;
+import de.pdark.decentxml.Namespace;
+import de.pdark.decentxml.Node;
+import de.pdark.decentxml.NodeWithChildren;
+import de.pdark.decentxml.XMLIOSource;
+import de.pdark.decentxml.XMLSource;
+import de.pdark.decentxml.XMLStringSource;
+import de.pdark.decentxml.XMLWriter;
 
 /**
  * Helper class for loading and saving XML for use at design time
@@ -151,7 +159,7 @@ public class RouteXml {
         Unmarshaller unmarshaller = jaxbContext().createUnmarshaller();
 
         // ("bean", springNamespace)
-        Map<String, String> beans = new HashMap<String, String>();
+        Map<String, BeanDef> beans = new HashMap<String, BeanDef>();
 
         // lets pull out the spring beans...
         // TODO: shouldn't we use http://www.springframework.org/schema/beans namespace instead??
@@ -162,11 +170,18 @@ public class RouteXml {
                 String id = ((Element) n).getAttributeValue("id");
                 String cn = ((Element) n).getAttributeValue("class");
                 if (id != null && cn != null) {
-                    beans.put(id, cn);
+                	BeanDef bd = new BeanDef("bean", id, cn);
+                	for (Element c : ((Element) n).getChildren()) {
+                        String pName = ((Element) c).getAttributeValue("name");
+                        String pValue = ((Element) c).getAttributeValue("value");
+                        String pRef = ((Element) c).getAttributeValue("ref");
+                        bd.addProperty(new BeanProp(pName, pValue, pRef));
+                	}
+                    beans.put(id, bd);
                 }
             }
         }
-
+        
         // now lets pull out the jaxb routes...
         List<String[]> search = Arrays.asList(
             new String[] { springNS, "routeContext" },

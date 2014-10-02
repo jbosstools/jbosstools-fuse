@@ -71,7 +71,7 @@ public class Log extends AbstractNode {
 
     @Override
     public String getCategoryName() {
-        return "Endpoints";
+        return "Components";
     }
 
     /**

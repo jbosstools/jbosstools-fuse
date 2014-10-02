@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="org.fusesource.ide.editor.paletteContributor" name="Fuse Camel Editor Palette Contributor" schema="schema/org.fusesource.ide.editor.paletteContributor.exsd"/>
    <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -94,12 +95,32 @@
       <propertyTabs contributorId="org.fusesource.ide.camel.editor">
          <propertyTab
                category="sample"
-               id="DetailsTab"
-               label="Details"/>
+               id="FileBindingTab"
+               label="File Binding">
+         </propertyTab>
          <propertyTab
-               afterTab="DocumentationTab"
+               category="sample"
+               id="JMSBindingTab"
+               label="Destination">
+         </propertyTab>
+         <propertyTab
+               afterTab="DetailsTab"
+               category="sample"
+               id="AdvancedEndpointPropertiesSectionTab"
+               indented="false"
+               label="Advanced">
+         </propertyTab>
+         <propertyTab
+               afterTab="FileBindingTab"
+               category="sample"
+               id="DetailsTab"
+               indented="false"
+               label="Generic"/>
+         <propertyTab
+               afterTab="AdvancedEndpointPropertiesSectionTab"
                category="sample"
                id="DocumentationTab"
+               indented="false"
                label="Documentation"/> 
       </propertyTabs>
    </extension>
@@ -107,6 +128,26 @@
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections contributorId="org.fusesource.ide.camel.editor">
          <propertySection
+               class="org.fusesource.ide.camel.editor.propertysheet.FileBindingSection"
+               filter="org.fusesource.ide.camel.editor.propertysheet.FileConnectorFilter"
+               id="org.fusesource.ide.camel.editor.propertysheet.FileBindingSection"
+               tab="FileBindingTab">
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.camel.editor.propertysheet.JMSBindingSection"
+               filter="org.fusesource.ide.camel.editor.propertysheet.JMSConnectorFilter"
+               id="org.fusesource.ide.camel.editor.propertysheet.JMSBindingSection"
+               tab="JMSBindingTab">
+         </propertySection>
+         <propertySection
+               afterSection="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
+               class="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
+               filter="org.fusesource.ide.camel.editor.propertysheet.AdvancedPropertiesFilter"
+               id="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
+               tab="AdvancedEndpointPropertiesSectionTab">
+         </propertySection>
+         <propertySection
+               afterSection="org.fusesource.ide.camel.editor.propertysheet.FileBindingSection"
                class="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
                id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
                tab="DetailsTab">
@@ -120,6 +161,7 @@
          </propertySection>
 
          <propertySection
+               afterSection="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
                class="org.fusesource.ide.camel.editor.propertysheet.DocumentationSection"
                id="org.fusesource.ide.camel.editor.propertysheet.DocumentationSection"
                tab="DocumentationTab">
@@ -263,5 +305,11 @@
             </instanceof>
          </enabledWhen>
       </page>
+   </extension>
+   <extension
+         point="org.fusesource.ide.editor.paletteContributor">
+      <PaletteContribution
+            class="org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry">
+      </PaletteContribution>
    </extension>
 </plugin>

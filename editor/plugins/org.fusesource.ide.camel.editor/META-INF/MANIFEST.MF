@@ -8,6 +8,8 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.fusesource.ide.camel.editor,
  org.fusesource.ide.camel.editor.editor,
+ org.fusesource.ide.camel.editor.features.create.ext,
+ org.fusesource.ide.camel.editor.provider.ext,
  org.fusesource.ide.camel.editor.utils
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
@@ -22,20 +24,27 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
  org.eclipse.graphiti.mm;bundle-version="0.10.2",
  org.eclipse.graphiti.ui;bundle-version="0.10.2",
  org.eclipse.help;bundle-version="3.6.0",
+ org.eclipse.jdt.core;bundle-version="3.10.0",
  org.eclipse.jface;bundle-version="3.10.0",
  org.eclipse.jface.databinding;bundle-version="1.6.200",
  org.eclipse.jface.text;bundle-version="3.9.0",
+ org.eclipse.m2e.core;bundle-version="1.5.0",
  org.eclipse.ui.editors;bundle-version="3.8.200",
  org.eclipse.ui.views;bundle-version="3.7.0",
  org.eclipse.ui.views.properties.tabbed;bundle-version="3.6.0",
  org.eclipse.wst.sse.ui;bundle-version="1.3.300",
  org.eclipse.zest.core;bundle-version="1.5.100",
+ org.eclipse.pde.ui;bundle-version="3.8.100",
  org.eclipse.zest.layouts;bundle-version="1.1.100",
+ org.eclipse.jdt.ui;bundle-version="3.10.0",
  org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.jboss.tools.jmx.ui;bundle-version="1.6.0",
+ org.jboss.ide.eclipse.as.dmr;bundle-version="3.0.0",
  org.fusesource.ide.preferences;bundle-version="7.3.0",
  org.fusesource.ide.camel.model;bundle-version="7.3.0",
  org.fusesource.ide.launcher;bundle-version="7.3.0",
  org.fusesource.ide.commons;bundle-version="7.3.0",
  org.fusesource.ide.jmx.commons;bundle-version="7.3.0",
- org.fusesource.ide.graph;bundle-version="7.3.0"
+ org.fusesource.ide.graph;bundle-version="7.3.0",
+ org.eclipse.m2e.maven.runtime
+Import-Package: org.apache.maven.model

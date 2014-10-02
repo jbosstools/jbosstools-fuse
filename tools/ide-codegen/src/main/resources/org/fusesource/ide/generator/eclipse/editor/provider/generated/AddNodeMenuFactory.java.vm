@@ -48,7 +48,7 @@ public class AddNodeMenuFactory extends AbstractAddNodeMenuFactory {
     protected void fillEndpointsContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
         addMenuItem(menu, Messages.paletteEndpointTitle, Messages.paletteEndpointDescription, Endpoint.class, context, fp);
 
-#fillPalette("Endpoints", ", context, fp")
+#fillPalette("Connectors", ", context, fp")
     }
 
     @Override
@@ -77,7 +77,7 @@ public class AddNodeMenuFactory extends AbstractAddNodeMenuFactory {
     protected void fillEndpointsMenu(IMenuManager menu) {
         addMenuItem(menu, Messages.paletteEndpointTitle, Messages.paletteEndpointDescription, Endpoint.class);
 
-#fillPalette("Endpoints", "")
+#fillPalette("Connectors", "")
     }
 
     @Override

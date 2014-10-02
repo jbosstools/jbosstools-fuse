@@ -55,8 +55,8 @@ import org.fusesource.ide.camel.editor.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
 import org.fusesource.ide.camel.editor.features.add.AddNodeFeature;
-import org.fusesource.ide.camel.editor.features.create.CreateBeanFigureFeature;
-import org.fusesource.ide.camel.editor.features.create.CreateEndpointFigureFeature;
+import org.fusesource.ide.camel.editor.features.create.CreateDefinedBeanFigureFeature;
+import org.fusesource.ide.camel.editor.features.create.CreateDefinedEndpointFigureFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
 import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
 import org.fusesource.ide.camel.editor.features.custom.DeleteEndpointBreakpointFeature;
@@ -80,6 +80,7 @@ import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.commons.camel.tools.BeanDef;
 import org.fusesource.ide.commons.util.Strings;
 
 
@@ -129,7 +130,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 			featureList.addAll(Arrays.asList(features));
 
 			Set<Endpoint> endpoints = AbstractNodes.getAllEndpoints(selectedNode);
-			Map<String, String> beans = AbstractNodes.getAllBeans(selectedNode);
+			Map<String, BeanDef> beans = AbstractNodes.getAllBeans(selectedNode);
 			addEndpointInstances(featureList, endpoints);
 			addBeanInstances(featureList, beans);
 
@@ -138,14 +139,14 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 		return features;
 	}
 
-	private void addBeanInstances(List<ICreateFeature> featureList, Map<String, String> beans) {
+	private void addBeanInstances(List<ICreateFeature> featureList, Map<String, BeanDef> beans) {
 		ArrayList<String> processedBeans = new ArrayList<String>();
-		Set<Entry<String, String>> entrySet = beans.entrySet();
-		for (Entry<String, String> entry : entrySet) {
+		Set<Entry<String, BeanDef>> entrySet = beans.entrySet();
+		for (Entry<String, BeanDef> entry : entrySet) {
 			String name = entry.getKey();
-			String aClass = entry.getValue();
+			String aClass = entry.getValue().getClassName();
 
-			if (Strings.isBlank(name) && Strings.isBlank(aClass)) {
+			if ((Strings.isBlank(name) && Strings.isBlank(aClass)) || !entry.getValue().getBeanType().equalsIgnoreCase("bean")) {
 				continue;
 			}
 
@@ -160,7 +161,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 			String title = bean.getDisplayText();
 			String description = "bean '" + name + "' of type " + aClass;
 
-			featureList.add(new CreateBeanFigureFeature(this, title, description, bean));
+			featureList.add(new CreateDefinedBeanFigureFeature(this, title, description, bean));
 		}
 	}
 
@@ -176,7 +177,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 			processedURIs.add(url);
 			String description = endpoint.getDescription();
 			String title = endpoint.getDisplayText();
-			featureList.add(new CreateEndpointFigureFeature(this, title, description, endpoint));
+			featureList.add(new CreateDefinedEndpointFigureFeature(this, title, description, endpoint));
 		}
 
 	}

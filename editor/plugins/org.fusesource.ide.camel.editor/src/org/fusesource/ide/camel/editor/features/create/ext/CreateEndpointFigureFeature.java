@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.camel.editor.features.create;
+package org.fusesource.ide.camel.editor.features.create.ext;
 
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.model.AbstractNode;

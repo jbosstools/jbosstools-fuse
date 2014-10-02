@@ -16,7 +16,8 @@
 #
 editorSourcePageTitle=Source
 editorDesignPageTitle=Design
-endpointsDrawerTitle=Endpoints
+connectorsDrawerTitle=Components
+endpointsDrawerTitle=Defined Endpoints
 routingDrawerTitle=Routing
 controlFlowDrawerTitle=Control Flow
 transformationDrawerTitle=Transformation
@@ -28,8 +29,8 @@ deleteFlowCommandLabel=Disconnect
 moveConnectionStartpointCommandLabel=Move connection startpoint
 moveConnectionEndpointCommandLabel=Move connection endpoint
 createFlowCommandLabel=Create Flow
-paletteEndpointTitle=Endpoint
-paletteEndpointDescription=Creates an endpoint
+paletteEndpointTitle=Generic
+paletteEndpointDescription=Creates a generic endpoint
 #foreach($n in $generator.nodeDefinitions())
 palette${n.capitalize($n.getDefinitionName())}Title       = ${n.capitalize($n.getDefinitionName())}
 palette${n.capitalize($n.getDefinitionName())}Description = Creates#if (${n.getDefinitionName().toLowerCase().matches("(a|e|i|o|u).*")}) an#else a#end ${n.getDefinitionName()}

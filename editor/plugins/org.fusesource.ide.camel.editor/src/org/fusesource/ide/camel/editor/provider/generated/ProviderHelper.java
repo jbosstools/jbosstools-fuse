@@ -12,12 +12,10 @@ package org.fusesource.ide.camel.editor.provider.generated;
 
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
-
 import org.fusesource.ide.camel.editor.Messages;
-import org.fusesource.ide.camel.editor.features.create.CreateFigureFeature;
+import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.model.Endpoint;
-
 import org.fusesource.ide.camel.model.generated.Aggregate;
 import org.fusesource.ide.camel.model.generated.AOP;
 import org.fusesource.ide.camel.model.generated.Bean;

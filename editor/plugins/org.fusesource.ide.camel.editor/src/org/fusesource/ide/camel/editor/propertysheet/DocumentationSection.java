@@ -37,6 +37,7 @@ import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.EditorMessages;
+import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 
@@ -74,6 +75,7 @@ public class DocumentationSection extends NodeSectionSupport {
 	@Override
 	protected void onNodeChanged(AbstractNode node) {
 		this.node = node;
+		form.setText(node != null ? String.format("%s - %s", EditorMessages.propertiesDocumentationTitle, node.getPatternName()) : EditorMessages.propertiesDocumentationTitle);
 		showDocumentationPage();
 	}
 

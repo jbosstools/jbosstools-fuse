@@ -44,13 +44,13 @@ public class XmlModel {
 
     private CamelContextFactoryBean contextElement;
     private Document doc;
-    private Map<String, String> beans;
+    private Map<String, BeanDef> beans;
     private Node node;
     private String ns;
     private boolean justRoutes;
     private boolean routesContext;
 
-    public XmlModel(CamelContextFactoryBean contextElement, Document doc, Map<String, String> beans, Node node, String ns, boolean justRoutes, boolean routesContext) {
+    public XmlModel(CamelContextFactoryBean contextElement, Document doc, Map<String, BeanDef> beans, Node node, String ns, boolean justRoutes, boolean routesContext) {
         this.contextElement = contextElement;
         this.doc = doc;
         this.beans = beans;
@@ -68,7 +68,7 @@ public class XmlModel {
         return doc;
     }
 
-    public Map<String, String> getBeans() {
+    public Map<String, BeanDef> getBeans() {
         return beans;
     }
 
@@ -193,7 +193,7 @@ public class XmlModel {
      *
      * @return
      */
-    public Map<String, String> beanMap() {
+    public Map<String, BeanDef> beanMap() {
         return beans;
     }
 

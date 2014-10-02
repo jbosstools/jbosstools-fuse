@@ -59,6 +59,7 @@ public class CamelNamespaces {
 
     public static final Namespace springNamespace = new Namespace("", "http://www.springframework.org/schema/beans");
     public static final Namespace droolsNamespace = new Namespace("drools", "http://drools.org/schema/drools-spring");
+    public static final Namespace amqNamespace    = new Namespace("", "http://activemq.apache.org/schema/core");
 
     private static Schema _schema;
 
