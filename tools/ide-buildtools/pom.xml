@@ -57,6 +57,7 @@
         <version>1.2.1</version>
         <executions>
           <execution>
+            <phase>prepare-package</phase>
             <goals>
               <goal>java</goal>
             </goals>
@@ -66,9 +67,9 @@
           <mainClass>org.fusesource.ide.buildtools.Downloader</mainClass>
           <cleanupDaemonThreads>false</cleanupDaemonThreads>
           <!--
-                      <arguments>
-                        <argument></argument>
-                      </arguments>
+          <arguments>
+            <argument></argument>
+          </arguments>
           -->
           <systemProperties>
             <systemProperty>
