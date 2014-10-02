@@ -8,25 +8,22 @@
  */
 package org.fusesource.ide.buildtools;
 
+import io.fabric8.insight.maven.aether.Aether;
+import io.fabric8.insight.maven.aether.AetherResult;
 import io.hawt.maven.indexer.ArtifactDTO;
 import io.hawt.maven.indexer.MavenIndexerFacade;
-import org.fusesource.insight.maven.aether.Aether;
-import org.fusesource.insight.maven.aether.AetherResult;
 import org.fusesource.scalate.util.IOUtil;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.String;
-import java.lang.System;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class Downloader {
     private MavenIndexerFacade indexer;
     private Aether aether;
     private File archetypeDir = new File("fuse-ide-archetypes");
+    private File camelComponentMetaData = new File("camel-metadata");
     private File xsdDir = new File("fuse-ide-xsds");
     private boolean delete = true;
 
@@ -42,25 +39,34 @@ public class Downloader {
     public static void main(String[] args) {
         try {
             // lets find the eclipse plugins directory
-            File rs = new File("../../plugins");
+            File rs_editor = new File("../../editor/plugins");
+            File rs_core = new File("../../core/plugins");
             if (args.length > 1) {
-                rs = new File(args[0]);
-            } else if (!rs.exists()) {
-                rs = new File("../../plugins");
-            }
-            System.out.println("Using IDE directory: " + rs.getAbsolutePath());
-
-            if (!rs.exists()) {
-                fail("IDE directory does not exist!");
-            }
-            if (!rs.isDirectory()) {
-                fail("IDE directory is a file, not a directory!");
+                rs_editor = new File(args[0]);
+                rs_core = new File(args[1]);
             }
 
-            File archetypesDir = new File(rs, "org.fusesource.ide.branding/archetypes");
-            File xsdsDir = new File(rs, "org.fusesource.ide.catalogs");
+            System.out.println("Using editor plugins directory: " + rs_editor.getAbsolutePath());
+            System.out.println("Using core plugins directory: " + rs_core.getAbsolutePath());
 
-            Downloader app = new Downloader(archetypesDir, xsdsDir);
+            if (!rs_editor.exists()) {
+                fail("IDE editor plugins directory does not exist!");
+            }
+            if (!rs_editor.isDirectory()) {
+                fail("IDE editor plugins directory is a file, not a directory!");
+            }
+            if (!rs_core.exists()) {
+                fail("IDE core plugins directory does not exist!");
+            }
+            if (!rs_core.isDirectory()) {
+                fail("IDE core plugins directory is a file, not a directory!");
+            }
+
+            File archetypesDir = new File(rs_editor, "org.fusesource.ide.branding/archetypes");
+            File xsdsDir = new File(rs_editor, "org.fusesource.ide.catalogs");
+            File compDir = new File(rs_core, "org.fusesource.ide.camel.model/components");
+
+            Downloader app = new Downloader(archetypesDir, xsdsDir, compDir);
             app.start();
             System.out.println("Indexer has started, now trying to find stuff");
             app.run();
@@ -79,9 +85,10 @@ public class Downloader {
     public Downloader() {
     }
 
-    public Downloader(File archetypeDir, File xsdDir) {
+    public Downloader(File archetypeDir, File xsdDir, File camelComponentMetaData) {
         this.archetypeDir = archetypeDir;
         this.xsdDir = xsdDir;
+        this.camelComponentMetaData = camelComponentMetaData;
     }
 
     public static File targetDir() {
@@ -91,12 +98,12 @@ public class Downloader {
 
     public void start() throws Exception {
         indexer = new MavenIndexerFacade();
-        String[] repositories = {"http://repository.jboss.org/nexus/content/groups/ea/"};
+        String[] repositories = {"http://repository.jboss.org/nexus/content/groups/ea/", "http://repo1.maven.org/maven2"};
         indexer.setRepositories(repositories);
         indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
         indexer.start();
 
-        aether = new Aether(Aether.userRepository(), Aether.defaultRepositories());
+        aether = new Aether(System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository", Aether.defaultRepositories());
     }
 
     public void stop() throws Exception {
@@ -106,6 +113,7 @@ public class Downloader {
     public void run() throws Exception {
         downloadArchetypes();
         downloadXsds();
+        downloadCamelComponentData();
     }
 
     public void downloadArchetypes() throws IOException {
@@ -118,10 +126,9 @@ public class Downloader {
         out.println("<archetypes>");
 
 	    try {
-            downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel-version"));
-            downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf-version"));
-//            downloadArchetypesForGroup(out, "org.fusesource.fabric", System.getProperty("fabric-version"));
-            downloadArchetypesForGroup(out, "io.fabric8", System.getProperty("fabric-version"));
+            downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel.version"));
+            downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf.version"));
+            downloadArchetypesForGroup(out, "io.fabric8", System.getProperty("fabric.version"));
 	    } catch (Exception ex) {
 			ex.printStackTrace();
 	    } finally {
@@ -171,6 +178,55 @@ public class Downloader {
 */
     }
 
+    public void downloadCamelComponentData() throws IOException {
+        if (delete) {
+            IOUtil.recursiveDelete(camelComponentMetaData);
+            camelComponentMetaData.mkdirs();
+        }
+
+        String version = System.getProperty("camel.version");
+
+        PrintWriter out = new PrintWriter(new FileWriter(new File(camelComponentMetaData, "components-" + version + ".xml")));
+        out.println("<connectors>");
+
+        try {
+            List<ArtifactDTO> answer = indexer.search("org.apache.camel", "", version, "jar", "", null);
+
+            for (ArtifactDTO artifact : answer) {
+                if (!artifact.getArtifactId().startsWith("camel-")) {
+                    System.out.println("Ignored: " + artifact.getArtifactId());
+                    continue;
+                }
+
+                String[] components = downloadProperties(artifact, artifact.getVersion());
+                if (components.length>0) {
+                    out.println("   <connector id='" + artifact.getArtifactId().substring(artifact.getArtifactId().indexOf("-")+1) + "'>");
+                    out.println("       <protocols>");
+                    for (String component : components) {
+                        out.println("           <protocol>" + component + "</protocol>");
+                    }
+                    out.println("      </protocols>");
+                    out.println("       <dependency>");
+                    out.println(String.format("         <groupId>%s</groupId>", artifact.getGroupId()));
+                    out.println(String.format("         <artifactId>%s</artifactId>", artifact.getArtifactId()));
+                    out.println(String.format("         <version>%s</version>", artifact.getVersion()));
+                    out.println("       </dependency>");
+                    out.println("   </connector>");
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            out.println("</connectors>");
+            out.close();
+        }
+
+        System.out.println("Running git add...");
+        ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
+        pb.directory(camelComponentMetaData);
+        pb.start();
+    }
+
     public boolean isDelete() {
         return delete;
     }
@@ -212,16 +268,40 @@ public class Downloader {
     }
 
     protected void downloadArtifact(ArtifactDTO artifact, String version) {
-        AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(),version, "jar", null);
-        if (result != null) {
-            List<File> files = result.resolvedFiles();
-            if (files != null && files.size() > 0) {
-                File file = files.get(0);
-                //for (File file : files) {
-                File newFile = new File(archetypeDir, file.getName());
-                IOUtil.copy(file, newFile);
-                System.out.println("Copied " + newFile.getPath());
+        try {
+            AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(),version, "jar", null);
+            if (result != null) {
+                List<File> files = result.getResolvedFiles();
+                if (files != null && files.size() > 0) {
+                    File file = files.get(0);
+                    //for (File file : files) {
+                    File newFile = new File(archetypeDir, file.getName());
+                    IOUtil.copy(file, newFile);
+                    System.out.println("Copied " + newFile.getPath());
+                }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
+
+    protected String[] downloadProperties(ArtifactDTO artifact, String version) {
+        try {
+            AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(), version, "properties", "camelComponent");
+            if (result != null) {
+                List<File> files = result.getResolvedFiles();
+                if (files != null && files.size() > 0) {
+                    File file = files.get(0);
+                    Properties p = new Properties();
+                    p.load(new FileInputStream(file));
+                    String comps = p.getProperty("components", "");
+                    return comps.split(" ");
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new String[0];
+    }
+
 }

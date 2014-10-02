@@ -22,9 +22,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.fusesource.insight</groupId>
+      <groupId>io.fabric8.insight</groupId>
       <artifactId>insight-maven</artifactId>
-      <version>${fabric-version}</version>
+      <version>${fabric.version}</version>
     </dependency>
     <dependency>
       <groupId>io.hawt</groupId>

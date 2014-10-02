@@ -4,7 +4,7 @@ import java.net.{PasswordAuthentication, Authenticator}
 import java.util.Properties
 import java.io.{FileInputStream, File}
 import org.sonatype.aether.repository.Authentication
-import org.fusesource.insight.maven.aether.Authentications
+import io.fabric8.insight.maven.aether.Authentications
 
 /**
  * Downloads the latest XSDs and archetypes into the IDE build

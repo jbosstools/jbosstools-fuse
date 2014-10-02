@@ -31,6 +31,7 @@
 
   <properties>
     <slf4j-version>1.7.5</slf4j-version>
+    <scala-version>2.11.2</scala-version>
     <scalate-version>1.5.3</scalate-version>
   </properties>
 
@@ -59,7 +60,7 @@
               <!-- arg>-unchecked</arg -->
               <arg>-deprecation</arg>
             </args>
-            <scalaVersion>2.11.2</scalaVersion>
+            <scalaVersion>${scala-version}</scalaVersion>
           </configuration>
         </plugin>
       </plugins>
