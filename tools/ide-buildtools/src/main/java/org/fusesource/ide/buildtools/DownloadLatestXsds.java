@@ -16,6 +16,7 @@
 package org.fusesource.ide.buildtools;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -89,8 +90,14 @@ public class DownloadLatestXsds implements Runnable {
                 String fileName = n + "-" + version + postfix + ".xsd";
                 String xsd = "http://repository.jboss.org/" + UpdateReleases.releaseRepo + "/org/apache/" + group + "/" + n + "/" + version + "/" + fileName;
                 File outFile = new File(outputDir, fileName);
-                LOG.info("Downloading xsd: " + xsd + " to " + outFile);
-                IOUtils.copy(new URL(xsd).openStream(), new FileOutputStream(outFile));
+                try {
+                    LOG.info("Downloading xsd: " + xsd + " to " + outFile);
+                    IOUtils.copy(new URL(xsd).openStream(), new FileOutputStream(outFile));
+                } catch (FileNotFoundException e) {
+                    xsd = "https://repo1.maven.org/maven2/org/apache/" + group + "/" + n + "/" + version + "/" + fileName;
+                    LOG.info("Downloading xsd: " + xsd + " to " + outFile);
+                    IOUtils.copy(new URL(xsd).openStream(), new FileOutputStream(outFile));
+                }
 
                 pluginXmlBuffer.append("      <uri\n");
                 pluginXmlBuffer.append("          id=\"org.fusesource.xml.catalog.uri." + n + "\"\n");

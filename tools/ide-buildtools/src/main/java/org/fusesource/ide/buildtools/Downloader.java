@@ -15,17 +15,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 import io.fabric8.insight.maven.aether.Aether;
 import io.fabric8.insight.maven.aether.AetherResult;
+import io.fabric8.insight.maven.aether.Repository;
 import io.hawt.maven.indexer.ArtifactDTO;
 import io.hawt.maven.indexer.MavenIndexerFacade;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Downloader {
+    public static Logger LOG = LoggerFactory.getLogger(Downloader.class);
+
     private MavenIndexerFacade indexer;
     private Aether aether;
     private File archetypeDir = new File("fuse-ide-archetypes");
@@ -52,8 +58,8 @@ public class Downloader {
                 rs_editor = new File(args[0]);
                 rs_core = new File(args[1]);
             }
-            System.out.println("Using editor plugins directory: " + rs_editor.getAbsolutePath());
-            System.out.println("Using core plugins directory: " + rs_core.getAbsolutePath());
+            LOG.info("Using editor plugins directory: {}", rs_editor.getAbsolutePath());
+            LOG.info("Using core plugins directory: {}", rs_core.getAbsolutePath());
 
             if (!rs_editor.exists()) {
                 fail("IDE editor plugins directory does not exist!");
@@ -74,17 +80,16 @@ public class Downloader {
 
             Downloader app = new Downloader(archetypesDir, xsdsDir, compDir);
             app.start();
-            System.out.println("Indexer has started, now trying to find stuff");
+            LOG.info("Indexer has started, now trying to find stuff");
             app.run();
             app.stop();
         } catch (Exception e) {
-            System.out.println("Caught " + e);
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
     }
 
     protected static void fail(String message) {
-        System.out.println(message);
+        LOG.error(message);
         System.exit(1);
     }
 
@@ -109,8 +114,9 @@ public class Downloader {
         indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
         indexer.start();
 
-        aether = new Aether(Aether.USER_REPOSITORY, Aether.defaultRepositories());
-        aether = new Aether(System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository", Aether.defaultRepositories());
+        List<Repository> repos = Aether.defaultRepositories();
+        repos.add(new Repository("ea.repository.jboss.org", "http://repository.jboss.org/nexus/content/groups/ea"));
+        aether = new Aether(Aether.USER_REPOSITORY, repos);
     }
 
     public void stop() throws Exception {
@@ -133,9 +139,9 @@ public class Downloader {
         out.println("<archetypes>");
 
         try {
-            downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel.version"));
-            downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf.version"));
-            downloadArchetypesForGroup(out, "io.fabric8", System.getProperty("fabric.version"));
+            downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel-version"));
+            downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf-version"));
+            downloadArchetypesForGroup(out, "io.fabric8", System.getProperty("fabric-version"));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -143,7 +149,7 @@ public class Downloader {
             out.close();
         }
 
-        System.out.println("Running git add...");
+        LOG.info("Running git add...");
         ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
         pb.directory(archetypeDir);
         pb.start();
@@ -157,13 +163,13 @@ public class Downloader {
         List<ArtifactDTO> answer = indexer.search(groupId, "", "", packaging, classifier, null);
         for (ArtifactDTO artifact : answer) {
             if (ignoredArtifacts.contains(artifact.getArtifactId())) {
-                System.out.println("Ignored: " + artifact.getArtifactId());
+                LOG.debug("Ignored: {}", artifact.getArtifactId());
                 continue;
             }
             out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + version + "'>" + artifact.getDescription() + "</archetype>");
             downloadArtifact(artifact, version);
         }
-        System.out.println("Found " + answer.size() + " results for groupId " + groupId + " version " + version);
+        LOG.debug("Found " + answer.size() + " results for groupId " + groupId + ", version " + version);
     }
 
     public void downloadXsds() throws Exception {
@@ -191,7 +197,7 @@ public class Downloader {
             camelComponentMetaData.mkdirs();
         }
 
-        String version = System.getProperty("camel.version");
+        String version = System.getProperty("camel-version");
 
         PrintWriter out = new PrintWriter(new FileWriter(new File(camelComponentMetaData, "components-" + version + ".xml")));
         out.println("<connectors>");
@@ -201,7 +207,7 @@ public class Downloader {
 
             for (ArtifactDTO artifact : answer) {
                 if (!artifact.getArtifactId().startsWith("camel-")) {
-                    System.out.println("Ignored: " + artifact.getArtifactId());
+                    LOG.debug("Ignored: {}", artifact.getArtifactId());
                     continue;
                 }
 
@@ -228,7 +234,7 @@ public class Downloader {
             out.close();
         }
 
-        System.out.println("Running git add...");
+        LOG.info("Running git add...");
         ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
         pb.directory(camelComponentMetaData);
         pb.start();
@@ -284,7 +290,7 @@ public class Downloader {
                     //for (File file : files) {
                     File newFile = new File(archetypeDir, file.getName());
                     IOUtils.copy(new FileInputStream(file), new FileOutputStream(newFile));
-                    System.out.println("Copied " + newFile.getPath());
+                    LOG.info("Copied " + newFile.getPath());
                 }
             }
         } catch (Exception ex) {
