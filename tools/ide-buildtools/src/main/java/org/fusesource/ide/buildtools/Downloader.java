@@ -10,11 +10,14 @@ package org.fusesource.ide.buildtools;
 
 import io.hawt.maven.indexer.ArtifactDTO;
 import io.hawt.maven.indexer.MavenIndexerFacade;
-import org.fusesource.insight.maven.aether.Aether;
-import org.fusesource.insight.maven.aether.AetherResult;
-import org.fusesource.scalate.util.IOUtil;
+import io.fabric8.insight.maven.aether.Aether;
+import io.fabric8.insight.maven.aether.AetherResult;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -96,7 +99,7 @@ public class Downloader {
         indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
         indexer.start();
 
-        aether = new Aether(Aether.userRepository(), Aether.defaultRepositories());
+        aether = new Aether(Aether.USER_REPOSITORY, Aether.defaultRepositories());
     }
 
     public void stop() throws Exception {
@@ -110,7 +113,7 @@ public class Downloader {
 
     public void downloadArchetypes() throws IOException {
         if (delete) {
-          IOUtil.recursiveDelete(archetypeDir);
+          FileUtils.deleteDirectory(archetypeDir);
           archetypeDir.mkdirs();
         }
 
@@ -136,7 +139,7 @@ public class Downloader {
     }
 
     protected void downloadArchetypesForGroup(PrintWriter out, String groupId, String version)
-            throws IOException {
+            throws Exception {
         String classifier = null;
         String packaging = "maven-archetype";
 
@@ -211,15 +214,15 @@ public class Downloader {
         this.xsdDir = xsdDir;
     }
 
-    protected void downloadArtifact(ArtifactDTO artifact, String version) {
+    protected void downloadArtifact(ArtifactDTO artifact, String version) throws Exception {
         AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(),version, "jar", null);
         if (result != null) {
-            List<File> files = result.resolvedFiles();
+            List<File> files = result.getResolvedFiles();
             if (files != null && files.size() > 0) {
                 File file = files.get(0);
                 //for (File file : files) {
                 File newFile = new File(archetypeDir, file.getName());
-                IOUtil.copy(file, newFile);
+                IOUtils.copy(new FileInputStream(file), new FileOutputStream(newFile));
                 System.out.println("Copied " + newFile.getPath());
             }
         }

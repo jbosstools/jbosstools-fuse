@@ -36,34 +36,6 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
-
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.scala-tools</groupId>
-          <artifactId>maven-scala-plugin</artifactId>
-          <version>2.15.2</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>compile</goal>
-                <goal>testCompile</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <jvmArgs>
-              <jvmArg>-Xmx1024m</jvmArg>
-            </jvmArgs>
-            <args>
-              <!-- arg>-unchecked</arg -->
-              <arg>-deprecation</arg>
-            </args>
-            <scalaVersion>2.11.2</scalaVersion>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
 </project>
