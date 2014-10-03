@@ -8,18 +8,30 @@
  */
 package org.fusesource.ide.buildtools;
 
-import io.fabric8.insight.maven.aether.Aether;
-import io.fabric8.insight.maven.aether.AetherResult;
-import io.hawt.maven.indexer.ArtifactDTO;
-import io.hawt.maven.indexer.MavenIndexerFacade;
-import org.fusesource.scalate.util.IOUtil;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import io.fabric8.insight.maven.aether.Aether;
+import io.fabric8.insight.maven.aether.AetherResult;
+import io.fabric8.insight.maven.aether.Repository;
+import io.hawt.maven.indexer.ArtifactDTO;
+import io.hawt.maven.indexer.MavenIndexerFacade;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Downloader {
+
+    public static Logger LOG = LoggerFactory.getLogger(Downloader.class);
+
     private MavenIndexerFacade indexer;
     private Aether aether;
     private File archetypeDir = new File("fuse-ide-archetypes");
@@ -29,10 +41,11 @@ public class Downloader {
 
     // setup an ignore list for unwanted archetypes
     private static ArrayList<String> ignoredArtifacts = new ArrayList<String>();
+
     static {
         ignoredArtifacts.add("camel-archetype-component-scala");
         ignoredArtifacts.add("camel-archetype-scala");
-	    ignoredArtifacts.add("camel-web-osgi-archetype");
+        ignoredArtifacts.add("camel-web-osgi-archetype");
         ignoredArtifacts.add("camel-archetype-groovy");
     }
 
@@ -46,8 +59,8 @@ public class Downloader {
                 rs_core = new File(args[1]);
             }
 
-            System.out.println("Using editor plugins directory: " + rs_editor.getAbsolutePath());
-            System.out.println("Using core plugins directory: " + rs_core.getAbsolutePath());
+            LOG.info("Using editor plugins directory: {}", rs_editor.getAbsolutePath());
+            LOG.info("Using core plugins directory: {}", rs_core.getAbsolutePath());
 
             if (!rs_editor.exists()) {
                 fail("IDE editor plugins directory does not exist!");
@@ -68,17 +81,16 @@ public class Downloader {
 
             Downloader app = new Downloader(archetypesDir, xsdsDir, compDir);
             app.start();
-            System.out.println("Indexer has started, now trying to find stuff");
+            LOG.info("Indexer has started, now trying to find stuff");
             app.run();
             app.stop();
         } catch (Exception e) {
-            System.out.println("Caught " + e);
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
     }
 
     protected static void fail(String message) {
-        System.out.println(message);
+        LOG.info(message);
         System.exit(1);
     }
 
@@ -98,12 +110,14 @@ public class Downloader {
 
     public void start() throws Exception {
         indexer = new MavenIndexerFacade();
-        String[] repositories = {"http://repository.jboss.org/nexus/content/groups/ea/", "http://repo1.maven.org/maven2"};
+        String[] repositories = { "http://repository.jboss.org/nexus/content/groups/ea/", "http://repo1.maven.org/maven2" };
         indexer.setRepositories(repositories);
         indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
         indexer.start();
 
-        aether = new Aether(System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository", Aether.defaultRepositories());
+        List<Repository> repos = Aether.defaultRepositories();
+        repos.add(new Repository("ea.repository.jboss.org", "http://repository.jboss.org/nexus/content/groups/ea"));
+        aether = new Aether(Aether.USER_REPOSITORY, repos);
     }
 
     public void stop() throws Exception {
@@ -118,45 +132,45 @@ public class Downloader {
 
     public void downloadArchetypes() throws IOException {
         if (delete) {
-          IOUtil.recursiveDelete(archetypeDir);
-          archetypeDir.mkdirs();
+            FileUtils.deleteDirectory(archetypeDir);
+            archetypeDir.mkdirs();
         }
 
         PrintWriter out = new PrintWriter(new FileWriter(new File(archetypeDir, "archetypes.xml")));
         out.println("<archetypes>");
 
-	    try {
-            downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel.version"));
-            downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf.version"));
-            downloadArchetypesForGroup(out, "io.fabric8", System.getProperty("fabric.version"));
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-	    } finally {
-		    out.println("</archetypes>");
-		    out.close();
-	    }
+        try {
+            downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel-version"));
+            downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf-version"));
+            downloadArchetypesForGroup(out, "io.fabric8", System.getProperty("fabric-version"));
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+        } finally {
+            out.println("</archetypes>");
+            out.close();
+        }
 
-        System.out.println("Running git add...");
+        LOG.info("Running git add...");
         ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
         pb.directory(archetypeDir);
         pb.start();
     }
 
     protected void downloadArchetypesForGroup(PrintWriter out, String groupId, String version)
-            throws IOException {
+            throws Exception {
         String classifier = null;
         String packaging = "maven-archetype";
 
         List<ArtifactDTO> answer = indexer.search(groupId, "", "", packaging, classifier, null);
         for (ArtifactDTO artifact : answer) {
             if (ignoredArtifacts.contains(artifact.getArtifactId())) {
-                System.out.println("Ignored: " + artifact.getArtifactId());
+                LOG.debug("Ignored: {}", artifact.getArtifactId());
                 continue;
             }
             out.println("<archetype groupId='" + artifact.getGroupId() + "' artifactId='" + artifact.getArtifactId() + "' version='" + version + "'>" + artifact.getDescription() + "</archetype>");
             downloadArtifact(artifact, version);
         }
-        System.out.println("Found " + answer.size() + " results for groupId " + groupId + " version " + version);
+        LOG.debug("Found " + answer.size() + " results for groupId " + groupId + ", version " + version);
     }
 
     public void downloadXsds() throws Exception {
@@ -172,21 +186,22 @@ public class Downloader {
         String artifactId = "camel-spring";
         List<ArtifactDTO> answer = indexer.search(groupId, artifactId, null, packaging, classifier);
         for (ArtifactDTO artifact : answer) {
-            System.out.println("Found: " + artifact);
+            LOG.info("Found: " + artifact);
         }
-        System.out.println("Found " + answer.size() + " results for groupId " + groupId);
+        LOG.info("Found " + answer.size() + " results for groupId " + groupId);
 */
     }
 
     public void downloadCamelComponentData() throws IOException {
         if (delete) {
-            IOUtil.recursiveDelete(camelComponentMetaData);
+            FileUtils.deleteDirectory(camelComponentMetaData);
             camelComponentMetaData.mkdirs();
         }
 
-        String version = System.getProperty("camel.version");
+        String version = System.getProperty("camel-version");
 
         PrintWriter out = new PrintWriter(new FileWriter(new File(camelComponentMetaData, "components-" + version + ".xml")));
+        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.println("<connectors>");
 
         try {
@@ -194,34 +209,34 @@ public class Downloader {
 
             for (ArtifactDTO artifact : answer) {
                 if (!artifact.getArtifactId().startsWith("camel-")) {
-                    System.out.println("Ignored: " + artifact.getArtifactId());
+                    LOG.debug("Ignored: {}", artifact.getArtifactId());
                     continue;
                 }
 
                 String[] components = downloadProperties(artifact, artifact.getVersion());
-                if (components.length>0) {
-                    out.println("   <connector id='" + artifact.getArtifactId().substring(artifact.getArtifactId().indexOf("-")+1) + "'>");
-                    out.println("       <protocols>");
+                if (components.length > 0) {
+                    out.println("  <connector id='" + artifact.getArtifactId().substring(artifact.getArtifactId().indexOf("-") + 1) + "'>");
+                    out.println("    <protocols>");
                     for (String component : components) {
-                        out.println("           <protocol>" + component + "</protocol>");
+                        out.println("      <protocol>" + component + "</protocol>");
                     }
-                    out.println("      </protocols>");
-                    out.println("       <dependency>");
-                    out.println(String.format("         <groupId>%s</groupId>", artifact.getGroupId()));
-                    out.println(String.format("         <artifactId>%s</artifactId>", artifact.getArtifactId()));
-                    out.println(String.format("         <version>%s</version>", artifact.getVersion()));
-                    out.println("       </dependency>");
-                    out.println("   </connector>");
+                    out.println("    </protocols>");
+                    out.println("    <dependency>");
+                    out.println(String.format("      <groupId>%s</groupId>", artifact.getGroupId()));
+                    out.println(String.format("      <artifactId>%s</artifactId>", artifact.getArtifactId()));
+                    out.println(String.format("      <version>%s</version>", artifact.getVersion()));
+                    out.println("    </dependency>");
+                    out.println("  </connector>");
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOG.error(ex.getMessage());
         } finally {
             out.println("</connectors>");
             out.close();
         }
 
-        System.out.println("Running git add...");
+        LOG.info("Running git add...");
         ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
         pb.directory(camelComponentMetaData);
         pb.start();
@@ -269,19 +284,23 @@ public class Downloader {
 
     protected void downloadArtifact(ArtifactDTO artifact, String version) {
         try {
-            AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(),version, "jar", null);
+            AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(), version, "jar", null);
             if (result != null) {
                 List<File> files = result.getResolvedFiles();
                 if (files != null && files.size() > 0) {
                     File file = files.get(0);
                     //for (File file : files) {
                     File newFile = new File(archetypeDir, file.getName());
-                    IOUtil.copy(file, newFile);
-                    System.out.println("Copied " + newFile.getPath());
+                    FileInputStream input = new FileInputStream(file);
+                    FileOutputStream output = new FileOutputStream(newFile);
+                    IOUtils.copy(input, output);
+                    IOUtils.closeQuietly(input);
+                    IOUtils.closeQuietly(output);
+                    LOG.info("Copied {}", newFile.getPath());
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOG.error(ex.getMessage());
         }
     }
 
@@ -299,7 +318,7 @@ public class Downloader {
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOG.error(ex.getMessage());
         }
         return new String[0];
     }
