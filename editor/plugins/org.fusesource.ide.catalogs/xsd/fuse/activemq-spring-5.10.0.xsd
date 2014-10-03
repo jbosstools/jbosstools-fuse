@@ -355,7 +355,20 @@ Axion does not seem to support ALTER statements or sub-selects.  This means:
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -400,7 +413,20 @@ The databases/JDBC drivers that use this adapter are:
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -1664,7 +1690,20 @@ adapter are:
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -1695,6 +1734,7 @@ policy.
       <xs:attribute name='connectionProtocol' type='xs:string'/>
       <xs:attribute name='connectionURL' type='xs:string'/>
       <xs:attribute name='connectionUsername' type='xs:string'/>
+      <xs:attribute name='groupClass' type='xs:string'/>
       <xs:attribute name='groupNameAttribute' type='xs:string'/>
       <xs:attribute name='groupObjectClass' type='xs:string'/>
       <xs:attribute name='legacyGroupMapping' type='xs:boolean'/>
@@ -1854,6 +1894,13 @@ a single Transport could be communicating with multiple remote brokers
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
+      <xs:attribute name='concurrentSend' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            when true, sends are done in parallel with the broker executor
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='copyMessage' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -1906,6 +1953,13 @@ queue with the same name).
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
+      <xs:attribute name='concurrentSend' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            when true, sends are done in parallel with the broker executor
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='copyMessage' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -2552,7 +2606,20 @@ against the same logical database.
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -2622,7 +2689,20 @@ The databases/JDBC drivers that use this adapter are:
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -3325,7 +3405,20 @@ messages.
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -3367,7 +3460,20 @@ The databases/JDBC drivers that use this adapter are:
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -3651,7 +3757,20 @@ Therefore be sure not to use longer names for container name and subscription id
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -4394,6 +4513,7 @@ other long term persistent storage.
       </xs:choice></xs:choice>
       <xs:attribute name='brokerName' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
+      <xs:attribute name='checkpointInterval' type='xs:long'/>
       <xs:attribute name='directory' type='xs:string'/>
       <xs:attribute name='journal' type='xs:string'/>
       <xs:attribute name='longTermPersistence' type='xs:string'/>
@@ -4499,6 +4619,7 @@ other long term persistent storage.
       </xs:choice></xs:choice>
       <xs:attribute name='adapter' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
+      <xs:attribute name='checkpointInterval' type='xs:long'/>
       <xs:attribute name='createTablesOnStartup' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -4661,6 +4782,7 @@ false so that messages actually reside long term in the JDBC database.
       </xs:choice></xs:choice>
       <xs:attribute name='adapter' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
+      <xs:attribute name='checkpointInterval' type='xs:long'/>
       <xs:attribute name='createTablesOnStartup' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -4878,14 +5000,6 @@ batch)
         <xs:annotation>
           <xs:documentation><![CDATA[
             Set the max number of producers (LRU cache) to track for duplicate sends
-          ]]></xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name='rewriteOnRedelivery' type='xs:boolean'>
-        <xs:annotation>
-          <xs:documentation><![CDATA[
-            When true, persist the redelivery status such that the message redelivery flag can survive a broker failure
-used with org.apache.activemq.ActiveMQConnectionFactory#setTransactedIndividualAck(boolean)  true
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -5174,6 +5288,7 @@ against the same logical database.
       <xs:attribute name='createTablesOnStartup' type='xs:boolean'/>
       <xs:attribute name='dataSource' type='xs:string'/>
       <xs:attribute name='failIfLocked' type='xs:boolean'/>
+      <xs:attribute name='handleStartException' type='xs:boolean'/>
       <xs:attribute name='leaseHolderId' type='xs:string'/>
       <xs:attribute name='lockAcquireSleepInterval' type='xs:long'/>
       <xs:attribute name='lockable' type='xs:string'/>
@@ -5543,7 +5658,20 @@ if the broker name was not set.
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -5934,7 +6062,20 @@ socket.
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='engineType' type='xs:string'/>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
@@ -6151,7 +6292,20 @@ The databases/JDBC drivers that use this adapter are:
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -6192,7 +6346,20 @@ in JDBC Driver implementations.
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -6598,6 +6765,7 @@ oldest first.
               <xs:element ref='tns:lastImageSubscriptionRecoveryPolicy'/>
               <xs:element ref='tns:noSubscriptionRecoveryPolicy'/>
               <xs:element ref='tns:queryBasedSubscriptionRecoveryPolicy'/>
+              <xs:element ref='tns:retainedMessageSubscriptionRecoveryPolicy'/>
               <xs:element ref='tns:timedSubscriptionRecoveryPolicy'/>
               <xs:any namespace='##other'/>
             </xs:choice>
@@ -6699,6 +6867,7 @@ oldest first.
       </xs:attribute>
       <xs:attribute name='pendingQueuePolicy' type='xs:string'/>
       <xs:attribute name='pendingSubscriberPolicy' type='xs:string'/>
+      <xs:attribute name='persistJMSRedelivered' type='xs:boolean'/>
       <xs:attribute name='prioritizedMessages' type='xs:boolean'/>
       <xs:attribute name='producerFlowControl' type='xs:boolean'/>
       <xs:attribute name='queue' type='xs:string'>
@@ -6893,7 +7062,20 @@ The databases/JDBC drivers that use this adapter are:
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='acksPkName' type='xs:string'/>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -7520,6 +7702,55 @@ LevelDB - Embedded Lightweight Non-Relational Database
   </xs:element>
 
 
+  <!-- element for type: org.apache.activemq.broker.region.policy.RetainedMessageSubscriptionRecoveryPolicy -->
+  <xs:element name='retainedMessageSubscriptionRecoveryPolicy'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        This implementation of {@link org.apache.activemq.broker.region.policy.SubscriptionRecoveryPolicy} will only keep the
+last non-zero length message with the {@link org.apache.activemq.command.ActiveMQMessage}.RETAIN_PROPERTY.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='broker' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:forcePersistencyModeBroker'/>
+              <xs:element ref='tns:loggingBrokerPlugin'/>
+              <xs:element ref='tns:multicastTraceBrokerPlugin'/>
+              <xs:element ref='tns:redeliveryPlugin'/>
+              <xs:element ref='tns:timeStampingBrokerPlugin'/>
+              <xs:element ref='tns:traceBrokerPathPlugin'/>
+              <xs:element ref='tns:udpTraceBrokerPlugin'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='wrapped' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:fixedCountSubscriptionRecoveryPolicy'/>
+              <xs:element ref='tns:fixedSizedSubscriptionRecoveryPolicy'/>
+              <xs:element ref='tns:lastImageSubscriptionRecoveryPolicy'/>
+              <xs:element ref='tns:noSubscriptionRecoveryPolicy'/>
+              <xs:element ref='tns:queryBasedSubscriptionRecoveryPolicy'/>
+              <xs:element ref='tns:retainedMessageSubscriptionRecoveryPolicy'/>
+              <xs:element ref='tns:timedSubscriptionRecoveryPolicy'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='broker' type='xs:string'/>
+      <xs:attribute name='wrapped' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
   <!-- element for type: org.apache.activemq.broker.region.policy.RoundRobinDispatchPolicy -->
   <xs:element name='roundRobinDispatchPolicy'>
     <xs:annotation>
@@ -8127,7 +8358,20 @@ The databases/JDBC drivers that use this adapter are:
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -8177,7 +8421,20 @@ order.
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -8870,7 +9127,20 @@ against the same logical database.
         </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
-      <xs:attribute name='batchStatments' type='xs:boolean'/>
+      <xs:attribute name='batchStatements' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Set the number of statements to process as a single batch DB update
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='batchStatments' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            This value batchStatments is deprecated and will be removed in a future release.  Use batchStatements instead (Note the 'e' in Statement)"
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxRows' type='xs:integer'>
         <xs:annotation>
           <xs:documentation><![CDATA[

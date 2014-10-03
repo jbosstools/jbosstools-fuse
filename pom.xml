@@ -63,6 +63,7 @@
   </properties>
 
   <modules>
+    <module>tools</module>
     <module>core</module>
     <module>editor</module>
     <module>fabric8</module>

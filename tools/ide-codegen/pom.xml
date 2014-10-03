@@ -28,7 +28,7 @@
     <dependency>
       <groupId>io.fabric8</groupId>
       <artifactId>camel-tooling-util</artifactId>
-      <version>${fabric-version}</version>
+      <version>${fabric.version}</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
