@@ -54,8 +54,8 @@ public class Downloader {
     public static void main(String[] args) {
         try {
             // lets find the eclipse plugins directory
-            File rs_editor = new File("../../editor/plugins");
-            File rs_core = new File("../../core/plugins");
+            File rs_editor = new File("editor/plugins");
+            File rs_core = new File("core/plugins");
             if (args.length > 1) {
                 rs_editor = new File(args[0]);
                 rs_core = new File(args[1]);
@@ -65,16 +65,16 @@ public class Downloader {
             LOG.info("Using core plugins directory: {}", rs_core.getAbsolutePath());
 
             if (!rs_editor.exists()) {
-                fail("IDE editor plugins directory does not exist!");
+                fail("IDE editor plugins directory does not exist! " + rs_editor.getAbsolutePath());
             }
             if (!rs_editor.isDirectory()) {
-                fail("IDE editor plugins directory is a file, not a directory!");
+                fail("IDE editor plugins directory is a file, not a directory! " + rs_editor.getAbsolutePath());
             }
             if (!rs_core.exists()) {
-                fail("IDE core plugins directory does not exist!");
+                fail("IDE core plugins directory does not exist! " + rs_core.getAbsolutePath());
             }
             if (!rs_core.isDirectory()) {
-                fail("IDE core plugins directory is a file, not a directory!");
+                fail("IDE core plugins directory is a file, not a directory! "  + rs_core.getAbsolutePath());
             }
 
             File archetypesDir = new File(rs_editor, "org.fusesource.ide.branding/archetypes");
@@ -180,14 +180,12 @@ public class Downloader {
     }
 
     public void downloadCamelComponentData() throws IOException {
-        if (delete) {
-            FileUtils.deleteDirectory(camelComponentMetaData);
-            camelComponentMetaData.mkdirs();
-        }
-
         String version = System.getProperty("camel.version");
 
-        PrintWriter out = new PrintWriter(new FileWriter(new File(camelComponentMetaData, "components-" + version + ".xml")));
+        File outputFile = new File(camelComponentMetaData, "components-" + version + ".xml");
+        if (outputFile.exists() && outputFile.isFile()) outputFile.delete(); 
+        
+        PrintWriter out = new PrintWriter(new FileWriter(outputFile));
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.println("<connectors>");
 
