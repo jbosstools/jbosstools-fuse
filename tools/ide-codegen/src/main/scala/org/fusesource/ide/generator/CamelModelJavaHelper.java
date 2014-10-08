@@ -8,9 +8,9 @@
  */
 package org.fusesource.ide.generator;
 
+import io.fabric8.camel.tooling.util.CamelModelUtils;
 import org.apache.camel.CamelContext;
 import org.apache.camel.model.ProcessorDefinition;
-import org.fusesource.camel.tooling.util.CamelModelUtils;
 
 /**
  * Work around Scala casting woes :)
@@ -18,7 +18,7 @@ import org.fusesource.camel.tooling.util.CamelModelUtils;
 public class CamelModelJavaHelper {
     public static boolean canAcceptOutput(CamelContext camelContext, Class<?> clazz) {
         Object bean = camelContext.getInjector().newInstance(clazz);
-        return CamelModelUtils.canAcceptOutput(clazz, (ProcessorDefinition)bean);
+        return CamelModelUtils.canAcceptOutput(clazz, (ProcessorDefinition) bean);
     }
 
     public static boolean isNextSiblingStepAddedAsNodeChild(CamelContext camelContext, Class<?> clazz) {

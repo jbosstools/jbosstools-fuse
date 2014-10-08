@@ -15,10 +15,12 @@ import config.{BatchResequencerConfig, StreamResequencerConfig}
 import org.apache.camel.model.language.{LanguageExpression, ExpressionDefinition}
 import org.apache.camel.spi.Required
 
-import org.fusesource.camel.tooling.util.Strings._
-import org.fusesource.camel.tooling.util.XmlHelper._
-import org.fusesource.camel.tooling.util.Objects._
-import org.fusesource.camel.tooling.util.CamelModelUtils
+import io.fabric8.camel.tooling.util.Strings
+import io.fabric8.camel.tooling.util.Strings._
+import io.fabric8.camel.tooling.util.XmlHelper._
+import io.fabric8.camel.tooling.util.Objects
+import io.fabric8.camel.tooling.util.Objects._
+import io.fabric8.camel.tooling.util.CamelModelUtils
 
 import org.fusesource.scalate.{RenderContext, CompilerException, TemplateEngine}
 import org.fusesource.scalate.introspector.{BeanProperty, Property, Introspector}
@@ -339,7 +341,7 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
   def toId(name: String): String = {
     val idx = name.lastIndexOf("Definition")
     val definitionName = if (idx > 0) name.substring(0, idx) else name
-    return decapitalize(definitionName)
+    return (new Strings()).decapitalize(definitionName)
   }
 
   def isProcessor(clazz: Class[_]) = !Modifier.isAbstract(clazz.getModifiers) &&
@@ -487,6 +489,22 @@ class Generator(val outputDir: String = Generator.defaultOutputDir, val sourceDi
     XML.load(in)
   }
 
+        /**
+         * Returns the double value of the given attribute or return the default value if none is provided
+         */
+        def attributeDoubleValue(e: Node, name: String, defaultValue: Double = -1): Double = {
+        e.attribute(name) match {
+    case Some(s) =>
+        if (s.isEmpty) {
+            defaultValue
+        }
+        else {
+            s.head.text.toDouble
+        }
+    case _ => defaultValue
+        }
+        }
+
   protected def loadModelTypes: Seq[NodeDefinition[_]] = {
     loadStrings("org/apache/camel/model/jaxb.index").
             map(n => createNodeDefinition(n)).
@@ -547,7 +565,7 @@ case class NodeDefinition[T](name: String, clazz: Class[T], generator: Generator
 
 
   val definitionName = if (idx > 0) name.substring(0, idx) else name
-  val id = decapitalize(definitionName)
+  val id = (new Strings()).decapitalize(definitionName)
 
   lazy val elementName = {
     val ann = clazz.getAnnotation[XmlRootElement](classOf[XmlRootElement])
@@ -687,7 +705,7 @@ case class NodeDefinition[T](name: String, clazz: Class[T], generator: Generator
 	}
 
   def title: String = {
-    splitCamelCase(definitionName)
+    (new Strings())splitCamelCase(definitionName)
   }
 
   /**
@@ -720,7 +738,7 @@ case class NodeDefinition[T](name: String, clazz: Class[T], generator: Generator
    * Split the string using CamelCase, then lower case each word
    *
    */
-  protected def createDefaultLabel(text: String) = splitCamelCase(text).capitalize
+  protected def createDefaultLabel(text: String) = (new Strings()).splitCamelCase(text).capitalize
 
   protected lazy val modelNode = findElemById(generator.xmlModel.child, id)
 
@@ -800,7 +818,7 @@ case class NodeDefinition[T](name: String, clazz: Class[T], generator: Generator
             case _ =>
               debug("    setting property: " + p + " to: " + v)
               val convertedValue = if (classOf[ExpressionDefinition].isAssignableFrom(p.propertyType)) {
-                var lang = getOrElse(properties.get("language").asInstanceOf[String], "XPath").toLowerCase
+                var lang = (new Objects()).getOrElse(properties.get("language").asInstanceOf[String], "XPath").toLowerCase
                 println("====== attempt to set an expression to: " + v + " for lang: " + lang)
                 new LanguageExpression(lang, v.toString)
               } else {
