@@ -43,9 +43,9 @@ ejb:ejbName[?options]
                     body should be an array of parameters. </td>
             </tr></table><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p><p>The <a href="PLUGINS_ROOT/com.fusesource.rider.help/ejb.html" class="olink">EJB</a> component extends the
-                <a href="PLUGINS_ROOT/com.fusesource.rider.help/bean.html" class="olink">Bean</a> component, by which most of
-            the details from the <a href="PLUGINS_ROOT/com.fusesource.rider.help/bean.html" class="olink">Bean</a> component
+        </p><p>The <a href="PLUGINS_ROOT/org.fusesource.ide.help/ejb.html" class="olink">EJB</a> component extends the
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/bean.html" class="olink">Bean</a> component, by which most of
+            the details from the <a href="PLUGINS_ROOT/org.fusesource.ide.help/bean.html" class="olink">Bean</a> component
             also apply to this component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_EJB_HSH_BeanBinding"></a>Bean Binding</h2></div></div></div><p></p><p>How bean methods to be invoked are chosen (when not specified
             explicitly through the <span class="bold"><strong>method</strong></span>
             parameter) and how parameter values are constructed from the
@@ -73,7 +73,7 @@ public class GreaterImpl implements GreaterLocal {
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_EJB_HSH_UsingJavaDSL"></a>Using Java DSL</h2></div></div></div><p></p><p>In this example we want to invoke the <code class="literal">hello</code>
             method on the EJB. Since this example is based on an unit test using
             Apache OpenEJB we have to set a <code class="literal">JndiContext</code> on
-            the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ejb.html" class="olink">EJB</a> component with the OpenEJB
+            the <a href="PLUGINS_ROOT/org.fusesource.ide.help/ejb.html" class="olink">EJB</a> component with the OpenEJB
             settings.</p><pre class="programlisting">@Override
 protected CamelContext createCamelContext() throws Exception {
     CamelContext answer = new DefaultCamelContext();
@@ -97,13 +97,13 @@ private static Context createEjbContext() throws NamingException {
     .to("ejb:GreaterImplLocal?method=hello")
     .to("mock:result");
 </pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>On a real application server, you'll likely not need to setup
-                a <code class="literal">JndiContext</code> on the <a href="PLUGINS_ROOT/com.fusesource.rider.help/ejb.html" class="olink">EJB</a> component, as the EJB component will create a
+                a <code class="literal">JndiContext</code> on the <a href="PLUGINS_ROOT/org.fusesource.ide.help/ejb.html" class="olink">EJB</a> component, as the EJB component will create a
                 default <code class="literal">JndiContext</code> on the same JVM as the
                 application server. This scheme typically allows the EJB
                 component to access the JNDI registry and lookup the EJBs.
                 However, if you need to access an application server on a remote
                 JVM, you need to prepare the properties beforehand.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_EJB_HSH_UsingSpringXML"></a>Using XML</h2></div></div></div><p>And this is the same example using XML instead:</p><p>Again since this is based on an unit test we need to setup the
-                <a href="PLUGINS_ROOT/com.fusesource.rider.help/ejb.html" class="olink">EJB</a> component:</p><pre class="programlisting">&lt;!-- setup Camel EJB component --&gt;
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/ejb.html" class="olink">EJB</a> component:</p><pre class="programlisting">&lt;!-- setup Camel EJB component --&gt;
 &lt;bean id="ejb" class="org.apache.camel.component.ejb.EjbComponent"&gt;
     &lt;property name="properties" ref="jndiProperties"/&gt;
 &lt;/bean&gt;
@@ -112,7 +112,7 @@ private static Context createEjbContext() throws NamingException {
 &lt;p:properties id="jndiProperties"&gt;
     &lt;prop key="java.naming.factory.initial"&gt;org.apache.openejb.client.LocalInitialContextFactory&lt;/prop&gt;
 &lt;/p:properties&gt;
-</pre><p>Before we are ready to use <a href="PLUGINS_ROOT/com.fusesource.rider.help/ejb.html" class="olink">EJB</a> in
+</pre><p>Before we are ready to use <a href="PLUGINS_ROOT/org.fusesource.ide.help/ejb.html" class="olink">EJB</a> in
             the Apache Camel routes:</p><pre class="programlisting">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;route&gt;
         &lt;from uri="direct:start"/&gt;
@@ -123,7 +123,7 @@ private static Context createEjbContext() throws NamingException {
 </pre><p>
             
         </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <a href="PLUGINS_ROOT/com.fusesource.rider.help/bean.html" class="olink">Bean</a>
+                    <a href="PLUGINS_ROOT/org.fusesource.ide.help/bean.html" class="olink">Bean</a>
                 </p></li><li class="listitem"><p>
                     <a class="link" href="Bean Binding" target="_top">Bean Binding</a>
                 </p></li><li class="listitem"><p>

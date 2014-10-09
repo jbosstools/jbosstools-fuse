@@ -70,7 +70,7 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
                             <code class="literal">true</code>
                         </td><td><span class="bold"><strong>Camel 2.9</strong></span>: whether to fallback and do a copy
                             and delete file, in case the file could not be renamed directly. This option is
-                            not available for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/FTP2.html" class="olink">FTP</a> component. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e30074"></a><h2>Consumer options</h2><p><a class="xref" href="file.html#FileRefConOptsTbl" title="Table&nbsp;9.&nbsp;File consumer options">Table&nbsp;9, &#8220;File consumer options&#8221;</a> list the options that can be set on a file
+                            not available for the <a href="PLUGINS_ROOT/org.fusesource.ide.help/FTP2.html" class="olink">FTP</a> component. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e30074"></a><h2>Consumer options</h2><p><a class="xref" href="file.html#FileRefConOptsTbl" title="Table&nbsp;9.&nbsp;File consumer options">Table&nbsp;9, &#8220;File consumer options&#8221;</a> list the options that can be set on a file
             consuming endpoint.</p><div class="table"><a name="FileRefConOptsTbl"></a><p class="title"><b>Table&nbsp;9.&nbsp;File consumer options</b></p><div class="table-contents"><table summary="File consumer options" width="100%" border="1"><colgroup><col width="23%" class="c1"><col width="16%" class="c2"><col width="61%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                     <code class="literal">initialDelay</code>
                 </td><td>
@@ -163,7 +163,7 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
                     <code class="literal">idempotent</code>
                 </td><td>
                     <code class="literal">false</code>
-                </td><td> Option to use the <a href="PLUGINS_ROOT/com.fusesource.rider.help/idempotentConsumer.html" class="olink">Idempotent
+                </td><td> Option to use the <a href="PLUGINS_ROOT/org.fusesource.ide.help/idempotentConsumer.html" class="olink">Idempotent
                     Consumer</a> EIP pattern to let Apache Camel skip already processed
                             files. By default, uses a memory- based LRUCache that holds 1000
                             entries. If <code class="literal">noop=true</code>, idempotent will be enabled to
@@ -268,12 +268,12 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
                     processing when recursively processing a directory. Using
                         <code class="literal">minDepth=1</code> means the base directory. Using
                         <code class="literal">minDepth=2</code> means the first sub directory. This option is
-                        <span class="bold"><strong>not</strong></span> supported by <a href="PLUGINS_ROOT/com.fusesource.rider.help/FTP2.html" class="olink">FTP2</a> consumer. </td></tr><tr><td>
+                        <span class="bold"><strong>not</strong></span> supported by <a href="PLUGINS_ROOT/org.fusesource.ide.help/FTP2.html" class="olink">FTP2</a> consumer. </td></tr><tr><td>
                     <code class="literal">maxDepth</code>
                 </td><td>
                     <code class="literal">Integer.MAX_VALUE</code>
                 </td><td><span class="bold"><strong>Camel 2.8:</strong></span> The maximum depth to traverse when
-                    recursively processing a directory. This option is <span class="bold"><strong>not</strong></span> supported by <a href="PLUGINS_ROOT/com.fusesource.rider.help/FTP2.html" class="olink">FTP2</a>
+                    recursively processing a directory. This option is <span class="bold"><strong>not</strong></span> supported by <a href="PLUGINS_ROOT/org.fusesource.ide.help/FTP2.html" class="olink">FTP2</a>
                     consumer. </td></tr><tr><td>
                     <code class="literal">doneFileName</code>
                 </td><td>
@@ -317,8 +317,8 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
                 </td><td>
                     <code class="literal">null</code>
                 </td><td><span class="bold"><strong>Camel 2.12:</strong></span> To use a custom scheduler to
-                            trigger the consumer to run. See more details at <a href="PLUGINS_ROOT/com.fusesource.rider.help/pollEnrich.html" class="olink">Poll
-                                Enrich</a>. For example, there is a <a href="PLUGINS_ROOT/com.fusesource.rider.help/Quartz2.html" class="olink">Quartz2</a> scheduler and a <a href="PLUGINS_ROOT/com.fusesource.rider.help/timer.html" class="olink">Spring</a>-based scheduler, both of which support CRON
+                            trigger the consumer to run. See more details at <a href="PLUGINS_ROOT/org.fusesource.ide.help/pollEnrich.html" class="olink">Poll
+                                Enrich</a>. For example, there is a <a href="PLUGINS_ROOT/org.fusesource.ide.help/Quartz2.html" class="olink">Quartz2</a> scheduler and a <a href="PLUGINS_ROOT/org.fusesource.ide.help/timer.html" class="olink">Spring</a>-based scheduler, both of which support CRON
                             expressions. </td></tr><tr><td>
                     <code class="literal">backoffMultiplier</code>
                 </td><td>
@@ -329,7 +329,7 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
                             skipped before the next actual attempt is happening again. When this
                             option is in use then <code class="literal">backoffIdleThreshold</code> and/or
                                 <code class="literal">backoffErrorThreshold</code> must also be configured.
-                            See more details at <a href="PLUGINS_ROOT/com.fusesource.rider.help/pollEnrich.html" class="olink">Poll Enrich</a>. </td></tr><tr><td>
+                            See more details at <a href="PLUGINS_ROOT/org.fusesource.ide.help/pollEnrich.html" class="olink">Poll Enrich</a>. </td></tr><tr><td>
                     <code class="literal">backoffIdleThreshold</code>
                 </td><td>
                     <code class="literal">0</code>
@@ -383,7 +383,7 @@ file://<em class="replaceable"><code>directoryName</code></em>[?<em class="repla
                         </td><td>This option is used to write the file using a temporary name and
                             then, after the write is complete, rename it to the real name. Can be
                             used to identify files being written and also avoid consumers (not using
-                            exclusive read locks) reading in progress files. Is often used by <a href="PLUGINS_ROOT/com.fusesource.rider.help/FTP2.html" class="olink">FTP2</a> when uploading big files. </td></tr><tr><td>
+                            exclusive read locks) reading in progress files. Is often used by <a href="PLUGINS_ROOT/org.fusesource.ide.help/FTP2.html" class="olink">FTP2</a> when uploading big files. </td></tr><tr><td>
                             <code class="literal">tempFileName</code>
                         </td><td>
                             <code class="literal">null</code>
@@ -665,7 +665,7 @@ private static class ProcessReport implements Processor {
   &lt;/route&gt; </pre><p>You can have <code class="literal">myBean</code> set the header
                 <code class="literal">Exchange.FILE_NAME</code> to values such as:</p><pre class="programlisting">Exchange.FILE_NAME = hello.txt =&gt; /rootDirectory/hello.txt
 Exchange.FILE_NAME = foo/bye.txt =&gt; /rootDirectory/foo/bye.txt </pre><p>This allows you to have a single route to write files to multiple destinations.</p></div><div class="refsection"><a name="_IDU_File2_HSH_Usingexpressionforfilenames"></a><h2>Using expression for filenames</h2><p>In this sample we want to move consumed files to a backup folder using today's date as
-            a sub-folder name:</p><pre class="programlisting">from("file://inbox?move=backup/${date:now:yyyyMMdd}/${file:name}").to("...");</pre><p>See <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> for more samples.</p></div><div class="refsection"><a name="_IDU_File2_HSH_Avoidingreadingthesamefilemorethanonceidempotentconsumer"></a><h2>Avoiding reading the same file more than once (idempotent consumer)</h2><p>Apache Camel supports <a href="PLUGINS_ROOT/com.fusesource.rider.help/idempotentConsumer.html" class="olink">Idempotent
+            a sub-folder name:</p><pre class="programlisting">from("file://inbox?move=backup/${date:now:yyyyMMdd}/${file:name}").to("...");</pre><p>See <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> for more samples.</p></div><div class="refsection"><a name="_IDU_File2_HSH_Avoidingreadingthesamefilemorethanonceidempotentconsumer"></a><h2>Avoiding reading the same file more than once (idempotent consumer)</h2><p>Apache Camel supports <a href="PLUGINS_ROOT/org.fusesource.ide.help/idempotentConsumer.html" class="olink">Idempotent
             Consumer</a> directly within the component so it will skip already
             processed files. This feature can be enabled by setting the
                 <code class="literal">idempotent=true</code> option.</p><pre class="programlisting">from("file://inbox?idempotent=true").to("...");</pre><p>Camel uses the absolute file name as the idempotent key, to detect duplicate files.
@@ -832,7 +832,7 @@ Exchange.FILE_NAME = foo/bye.txt =&gt; /rootDirectory/foo/bye.txt </pre><p>This 
             See also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
                     <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a>
                 </p></li><li class="listitem"><p>
-                    <a href="PLUGINS_ROOT/com.fusesource.rider.help/FTP2.html" class="olink">FTP2</a>
+                    <a href="PLUGINS_ROOT/org.fusesource.ide.help/FTP2.html" class="olink">FTP2</a>
                 </p></li></ul></div></div><div class="refsection"><a name="d0e32287"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
-                <a href="PLUGINS_ROOT/com.fusesource.rider.help/RiderExLang.html" class="olink">Expression and Predicates Languages</a>
+                <a href="PLUGINS_ROOT/org.fusesource.ide.help/RiderExLang.html" class="olink">Expression and Predicates Languages</a>
             </td></tr></table></div></div></body></html>

@@ -141,8 +141,8 @@
     .to("mock:result");
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_iBATIS_HSH_Scheduledpollingexample"></a>Scheduled polling example</h2></div></div></div><p>Since this component does not support scheduled polling, you need
             to use another mechanism for triggering the scheduled polls, such as
-            the <a href="PLUGINS_ROOT/com.fusesource.rider.help/timer.html" class="olink">Timer</a> or <a href="PLUGINS_ROOT/com.fusesource.rider.help/quartz.html" class="olink">Quartz</a> components.</p><p>In the sample below we poll the database, every 30 seconds using
-            the <a href="PLUGINS_ROOT/com.fusesource.rider.help/timer.html" class="olink">Timer</a> component and send the
+            the <a href="PLUGINS_ROOT/org.fusesource.ide.help/timer.html" class="olink">Timer</a> or <a href="PLUGINS_ROOT/org.fusesource.ide.help/quartz.html" class="olink">Quartz</a> components.</p><p>In the sample below we poll the database, every 30 seconds using
+            the <a href="PLUGINS_ROOT/org.fusesource.ide.help/timer.html" class="olink">Timer</a> component and send the
             data to the JMS queue:</p><pre class="programlisting">from("timer://pollTheDatabase?delay=30000").to("ibatis:selectAllAccounts?statementType=QueryForList").to("activemq:queue:allAccounts");</pre><p>And the iBatis SQL map file used:</p><pre class="programlisting">  &lt;!-- Select with no parameters using the result map for Account class. --&gt;
   &lt;select id="selectAllAccounts" resultMap="AccountResult"&gt;
     select * from ACCOUNT

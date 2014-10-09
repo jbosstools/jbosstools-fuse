@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>SQL Component</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="springWS.html" title="Spring Web Services"><link rel="next" href="stream.html" title="Stream"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="sql"></a>SQL Component</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="_IDU_SQLComponent_HSH_SQLComponent"></a>SQL Component</h2></div></div></div><p>The <span class="bold"><strong>sql:</strong></span> component allows you to work with databases
-            using JDBC queries. The difference between this component and <a href="PLUGINS_ROOT/com.fusesource.rider.help/jdbc.html" class="olink">JDBC</a> component is that in case of SQL the query is a property of the
+            using JDBC queries. The difference between this component and <a href="PLUGINS_ROOT/org.fusesource.ide.help/jdbc.html" class="olink">JDBC</a> component is that in case of SQL the query is a property of the
             endpoint and it uses message payload as parameters passed to the query.</p><p>This component uses <code class="literal">spring-jdbc</code> behind the scenes for the actual
             SQL handling.</p><p>The SQL component also supports:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>a JDBC based repository for the Idempotent Consumer EIP pattern. See further
                     below.</p></li><li class="listitem"><p>a JDBC based repository for the Aggregator EIP pattern. See further
@@ -393,7 +393,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
             messages. This ensures that you will not loose messages, as the default aggregator will
             use an in memory only <code class="literal">AggregationRepository</code>. The
                 <code class="literal">JdbcAggregationRepository</code> allows together with Camel to provide
-            persistent support for the <a href="PLUGINS_ROOT/com.fusesource.rider.help/aggregate.html" class="olink">Aggregator</a>.</p><p>It has the following options:</p><table id="d0e69891"><tr>
+            persistent support for the <a href="PLUGINS_ROOT/org.fusesource.ide.help/aggregate.html" class="olink">Aggregator</a>.</p><p>It has the following options:</p><table id="d0e69891"><tr>
                 <th>Option </th>
                 <th>Type </th>
                 <th>Description </th>
@@ -443,7 +443,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
                 </td>
                 <td>boolean</td>
                 <td>Whether or not recovery is enabled. The default is <code class="literal">true</code>. When
-                    enabled, the Camel <a href="PLUGINS_ROOT/com.fusesource.rider.help/aggregate.html" class="olink">Aggregator</a> automatically recovers failed aggregated exchanges and
+                    enabled, the Camel <a href="PLUGINS_ROOT/org.fusesource.ide.help/aggregate.html" class="olink">Aggregator</a> automatically recovers failed aggregated exchanges and
                     resubmitts them. </td>
             </tr><tr>
                 <td><code class="literal">recoveryInterval</code>
@@ -659,5 +659,5 @@ CREATE TABLE aggregationRepo3_completed (
         &lt;/util:set&gt;
       &lt;/property&gt;
     &lt;/bean&gt;</pre><p>See also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <a href="PLUGINS_ROOT/com.fusesource.rider.help/jdbc.html" class="olink">JDBC</a>
+                    <a href="PLUGINS_ROOT/org.fusesource.ide.help/jdbc.html" class="olink">JDBC</a>
                 </p></li></ul></div></div></div></body></html>
