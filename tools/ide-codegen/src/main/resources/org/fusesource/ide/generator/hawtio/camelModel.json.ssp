@@ -1,7 +1,7 @@
 <%@ import val generator: org.fusesource.ide.generator.Generator %>
 <%
-  import org.fusesource.camel.tooling.util.Languages
-  import org.fusesource.camel.tooling.util.Strings._
+  import io.fabric8.camel.tooling.util.Languages
+  import io.fabric8.camel.tooling.util.Strings._
 
   val langTool = new Languages()
 %>

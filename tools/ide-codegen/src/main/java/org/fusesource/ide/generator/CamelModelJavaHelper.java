@@ -1,11 +1,13 @@
-/**
- * Copyright (C) 2010, FuseSource Corp.  All rights reserved.
- * http://fusesource.com
+/*******************************************************************************
+ * Copyright (c) 2014 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
- * The software in this package is published under the terms of the
- * AGPL license a copy of which has been included with this distribution
- * in the license.txt file.
- */
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 package org.fusesource.ide.generator;
 
 import io.fabric8.camel.tooling.util.CamelModelUtils;
