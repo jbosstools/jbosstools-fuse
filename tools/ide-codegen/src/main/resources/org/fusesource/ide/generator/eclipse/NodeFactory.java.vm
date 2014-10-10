@@ -1,0 +1,48 @@
+#* @vtlvariable name="generator" type="org.fusesource.ide.generator.Generator" *#
+/**
+ *  Copyright 2005-2014 Red Hat, Inc.
+ *
+ *  Red Hat licenses this file to you under the Apache License, version
+ *  2.0 (the "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *  implied.  See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
+package org.fusesource.ide.camel.model.generated;
+
+import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.RouteContainer;
+
+import org.apache.camel.model.*;
+
+/**
+ * Provides a factory method to create the Eclipse model for a given Camel node
+ *
+ * NOTE - this file is auto-generated using Velocity.
+ *
+ * DO NOT EDIT!
+ */
+public class NodeFactory {
+
+    public static AbstractNode createNode(ProcessorDefinition processor, RouteContainer parent) {
+        if (processor instanceof ToDefinition) {
+            return Endpoint.newInstance((ToDefinition) processor, parent);
+        }
+#foreach($n in $generator.nodeDefinitions())
+        else if (processor instanceof ${n.getName()}) {
+            return new ${n.getDefinitionName()}((${n.getName()})processor, parent);
+        }
+#end
+        else {
+            throw new IllegalArgumentException("Camel node not supported: " + processor);
+        }
+    }
+
+}

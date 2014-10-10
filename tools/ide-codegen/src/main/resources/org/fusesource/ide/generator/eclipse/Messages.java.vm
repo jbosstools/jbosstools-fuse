@@ -1,0 +1,65 @@
+#* @vtlvariable name="generator" type="org.fusesource.ide.generator.Generator" *#
+/**
+ *  Copyright 2005-2014 Red Hat, Inc.
+ *
+ *  Red Hat licenses this file to you under the Apache License, version
+ *  2.0 (the "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *  implied.  See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
+package org.fusesource.ide.camel.model.generated;
+
+import org.eclipse.osgi.util.NLS;
+import java.util.*;
+
+/**
+ * NOTE - this file is auto-generated using Velocity.
+ *
+ * DO NOT EDIT!
+ */
+public class Messages extends NLS {
+
+    private static final String BUNDLE_NAME = "org.fusesource.ide.camel.model.l10n.messages";
+    private static final Map<String,String> map = new HashMap<String,String>();
+
+    public static String invalidValidatorValueLabel;
+    public static String invalidValidatorUniqueValueLabel;
+
+    public static String propertyLabelId;
+    public static String propertyLabelDescription;
+    public static String propertyLabelEndpointUri;
+    public static String propertyLabelInheritErrorHandler;
+
+#foreach($n in $generator.nodeDefinitions())
+#foreach($p in $n.beanProperties())
+    public static String propertyLabel${n.capitalize($n.getDefinitionName())}${n.capitalize($p.name())};
+#end
+
+#end
+
+    /**
+     * Takes a key of the form Pattern.PropertyName and returns the label
+     */
+    public static String propertyLabel(String key) {
+        return map.get("propertyLabel" + key);
+    }
+
+    static {
+        // initialize resource bundle
+        NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+
+#foreach($n in $generator.nodeDefinitions())
+#foreach($p in $n.beanProperties())
+        map.put("propertyLabel${n.capitalize($n.getDefinitionName())}${n.capitalize($p.name())}", propertyLabel${n.capitalize($n.getDefinitionName())}${n.capitalize($p.name())});
+#end
+#end
+    }
+
+}

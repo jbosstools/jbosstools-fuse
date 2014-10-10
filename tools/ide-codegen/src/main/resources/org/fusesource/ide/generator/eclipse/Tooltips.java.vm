@@ -1,0 +1,75 @@
+#* @vtlvariable name="generator" type="org.fusesource.ide.generator.Generator" *#
+/**
+ *  Copyright 2005-2014 Red Hat, Inc.
+ *
+ *  Red Hat licenses this file to you under the Apache License, version
+ *  2.0 (the "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *  implied.  See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
+package org.fusesource.ide.camel.model.generated;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.osgi.util.NLS;
+
+/**
+ * NOTE - this file is auto-generated using Velocity.
+ *
+ * DO NOT EDIT!
+ */
+public class Tooltips extends NLS {
+
+    private static final String BUNDLE_NAME = "org.fusesource.ide.camel.model.l10n.tooltips";
+    private static final Map<String,String> map = new HashMap<String,String>();
+
+    public static String tooltipAbstractNode;
+    public static String tooltipAbstractNodeId;
+    public static String tooltipAbstractNodeDescription;
+
+    public static String tooltipEndpoint;
+    public static String tooltipEndpointUrl;
+
+#foreach($node in $generator.nodeDefinitions())
+    public static String tooltip${node.capitalize($node.getDefinitionName())};
+#foreach($p in $node.beanProperties())
+    public static String tooltip${node.capitalize($node.getDefinitionName())}${node.capitalize($p.name())};
+#end
+
+#end
+
+    public static String tooltip(String key) {
+        return map.get("tooltip" + key);
+    }
+
+    static {
+        // initialize resource bundle
+        NLS.initializeMessages(BUNDLE_NAME, Tooltips.class);
+
+        map.put("AbstractNode", tooltipAbstractNode);
+        map.put("AbstractNode.Id", tooltipAbstractNodeId);
+        map.put("AbstractNode.Description", tooltipAbstractNodeDescription);
+
+        map.put("Endpoint", tooltipEndpoint);
+        map.put("Endpoint.Url", tooltipEndpointUrl);
+
+        map.put("Route", tooltipRoute);
+
+#foreach($node in $generator.nodeDefinitions())
+        map.put("tooltip${node.capitalize($node.getDefinitionName())}", tooltip${node.capitalize($node.getDefinitionName())});
+#foreach($p in $node.beanProperties())
+        map.put("tooltip${node.capitalize($node.getDefinitionName())}${node.capitalize($p.name())}", tooltip${node.capitalize($node.getDefinitionName())}${node.capitalize($p.name())});
+#end
+
+#end
+    }
+
+}

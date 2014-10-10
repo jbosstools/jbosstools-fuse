@@ -1,0 +1,241 @@
+<%@ import val generator: org.fusesource.ide.generator.Generator %>
+<%@ import val node: org.fusesource.ide.generator.NodeDefinition[_] %>
+<% 
+  import scala.collection.immutable.TreeSet
+  
+  val isRoute = name == "RouteDefinition"
+  var baseClass = if (isRoute) {
+    "RouteSupport"
+  } else "AbstractNode"
+
+  val propertyTypes = beanProperties.map(p => p.propertyType.getCanonicalName).filter(n => !n.startsWith("java.lang") && n.contains('.')).toSet
+
+  var imports = TreeSet("org.apache.camel.model." + name,
+    "org.fusesource.ide.camel.model." + baseClass,
+    "java.util.Map",
+    "org.apache.camel.model.ProcessorDefinition",
+    "org.apache.camel.model.language.ExpressionDefinition",
+    "org.eclipse.ui.views.properties.PropertyDescriptor",
+    "org.eclipse.ui.views.properties.TextPropertyDescriptor",
+    "org.fusesource.ide.commons.properties.BooleanPropertyDescriptor",
+    "org.fusesource.ide.commons.properties.ComplexPropertyDescriptor",
+    "org.fusesource.ide.commons.properties.ComplexUnionPropertyDescriptor",
+    "org.fusesource.ide.commons.properties.EnumPropertyDescriptor",
+    "org.fusesource.ide.commons.properties.ListPropertyDescriptor",
+    "org.fusesource.ide.commons.properties.UnionTypeValue",
+    "org.fusesource.ide.camel.model.RouteContainer",
+    "org.fusesource.ide.camel.model.ExpressionPropertyDescriptor",
+    "org.fusesource.ide.camel.model.util.Objects") ++ propertyTypes
+
+%> 
+/*******************************************************************************
+ * Copyright (c) 2013 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
+
+/**
+ * NOTE - this file is auto-generated using Scalate. 
+ * 
+ * DO NOT EDIT!
+ */
+package org.fusesource.ide.camel.model.generated;
+
+#for(i <- imports)
+import ${i};
+#end
+
+/**
+ * The Node class for Camel's ${name}
+ */
+public class ${definitionName} extends ${baseClass} {
+
+#for (p <- beanProperties)	
+	public static final String PROPERTY_${p.name.toUpperCase} = "${definitionName}.${p.name.capitalize}";
+#end	
+	
+#for (p <- beanProperties)	
+	private ${propertyType(p)} ${p.name};
+#end	
+	
+    public ${definitionName}() {
+    }		
+	
+    public ${definitionName}(${name} definition, RouteContainer parent) {
+#if(isRoute)
+      super(definition, parent);
+#else
+      super(parent);
+    	loadPropertiesFromCamelDefinition(definition);
+    	loadChildrenFromCamelDefinition(definition);
+#end
+    }
+
+#if(!isRoute)
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.model.AbstractNode#getIconName()
+     */
+    @Override
+    public String getIconName() {
+    	return "${findIconFileOrElse(eclipseIconDir, node.id, node.defaultImageName + ".png")}";
+    }
+    
+  	@Override
+  	public String getDocumentationFileName() {
+  		return "${documentationFile}";
+  	}
+  	
+  	@Override
+  	public String getCategoryName() {
+  		return "${node.group}";
+  	}
+#end
+
+<%-- 
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.AbstractNode#getDisplayText()
+	 */
+	@Override
+	public String getDisplayText() {
+		return getRef();
+	}
+
+--%>
+	
+#for (p <- beanProperties)	
+
+	/**
+	 * @return the ${p.name}
+	 */
+	public ${propertyType(p)} ${getOrIsMethodPrefix(p)}${p.name.capitalize}() {
+		return this.${p.name};
+	}
+	
+	/**
+	 * @param ${p.name} the ${p.name} to set
+	 */
+	public void set${p.name.capitalize}(${propertyType(p)} ${p.name}) {
+		${propertyType(p)} oldValue = this.${p.name};
+		this.${p.name} = ${p.name};
+		if (!isSame(oldValue, ${p.name})) {
+		    firePropertyChange(PROPERTY_${p.name.toUpperCase}, oldValue, ${p.name});
+		}
+	}
+#end	
+
+
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.AbstractNode#addCustomProperties(java.util.Map)
+	 */
+	@Override
+	protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
+		super.addCustomProperties(descriptors);
+		
+#for (p <- beanProperties)
+  #if (node.isExpression(p))
+  	PropertyDescriptor desc${p.name.capitalize} = new ExpressionPropertyDescriptor(PROPERTY_${p.name.toUpperCase}, Messages.propertyLabel${definitionName}${p.name.capitalize});
+  #elif (node.isBooleanPropertyType(p))
+  	PropertyDescriptor desc${p.name.capitalize} = new BooleanPropertyDescriptor(PROPERTY_${p.name.toUpperCase}, Messages.propertyLabel${definitionName}${p.name.capitalize});
+  #elif (node.isEnumPropertyType(p))
+  	PropertyDescriptor desc${p.name.capitalize} = new EnumPropertyDescriptor(PROPERTY_${p.name.toUpperCase}, Messages.propertyLabel${definitionName}${p.name.capitalize}, ${p.propertyType.getSimpleName}.class);
+  #elif (node.isListPropertyType(p))
+  	PropertyDescriptor desc${p.name.capitalize} = new ListPropertyDescriptor(PROPERTY_${p.name.toUpperCase}, Messages.propertyLabel${definitionName}${p.name.capitalize});
+  #elif (node.isSimplePropertyType(p))
+		PropertyDescriptor desc${p.name.capitalize} = new TextPropertyDescriptor(PROPERTY_${p.name.toUpperCase}, Messages.propertyLabel${definitionName}${p.name.capitalize});
+  #else
+  <% val xmlElements = node.xmlElements(p) %>
+    #if (xmlElements.isEmpty)
+		PropertyDescriptor desc${p.name.capitalize} = new ComplexPropertyDescriptor(PROPERTY_${p.name.toUpperCase}, Messages.propertyLabel${definitionName}${p.name.capitalize}, ${p.propertyType.getSimpleName}.class);
+  	#else
+		PropertyDescriptor desc${p.name.capitalize} = new ComplexUnionPropertyDescriptor(PROPERTY_${p.name.toUpperCase}, Messages.propertyLabel${definitionName}${p.name.capitalize}, ${p.propertyType.getSimpleName}.class, new UnionTypeValue[]{
+		  #for (xe <- xmlElements)
+      new UnionTypeValue("${xe.name()}", ${xe.`type`().getName}.class),
+		  #end
+		});
+  	#end
+  #end	
+#end	
+#for (p <- beanProperties)  
+#end  
+#for (p <- beanProperties)  
+		descriptors.put(PROPERTY_${p.name.toUpperCase}, desc${p.name.capitalize});
+#end  
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public void setPropertyValue(Object id, Object value) {
+<%
+  var prefix = ""
+%>	  
+#for (p <- beanProperties)	
+		${prefix}if (PROPERTY_${p.name.toUpperCase}.equals(id)) {
+			set${p.name.capitalize}(Objects.convertTo(value, ${propertyType(p)}.class));
+		}<% prefix = "else " %>
+#end
+    ${prefix}{
+			super.setPropertyValue(id, value);
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.AbstractNode#getPropertyValue(java.lang.Object)
+	 */
+	@Override
+	public Object getPropertyValue(Object id) {
+<%
+  prefix = ""
+%>	  
+#for (p <- beanProperties)	
+		${prefix}if (PROPERTY_${p.name.toUpperCase}.equals(id)) {
+			return ${getterExpression("this", p)};
+		}<% prefix = "else " %>
+#end
+    ${prefix}{
+			return super.getPropertyValue(id);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public ProcessorDefinition createCamelDefinition() {
+		${name} answer = new ${name}();
+#for (p <- beanProperties)
+    ${setterExpression("answer", p, "toXmlPropertyValue(PROPERTY_" + p.name.toUpperCase + ", " + getterExpression("this", p) + ")")};
+#end
+        super.savePropertiesToCamelDefinition(answer);
+		return answer;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Class<?> getCamelDefinitionClass() {
+	  return ${name}.class;
+  }
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected void loadPropertiesFromCamelDefinition(ProcessorDefinition processor) {
+    super.loadPropertiesFromCamelDefinition(processor);
+    
+    if (processor instanceof ${name}) {
+      ${name} node = (${name}) processor;
+#for (p <- beanProperties)
+      ${setterExpression("this", p, getterExpression("node", p))};
+#end
+    } else {
+      throw new IllegalArgumentException("ProcessorDefinition not an instanceof ${name}. Was " + processor.getClass().getName());
+    }
+	}
+}
+ 
+      
