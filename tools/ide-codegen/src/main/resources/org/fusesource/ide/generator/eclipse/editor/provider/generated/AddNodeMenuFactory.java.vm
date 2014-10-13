@@ -34,6 +34,7 @@ import org.fusesource.ide.camel.editor.Messages;
 import org.fusesource.ide.camel.editor.provider.AbstractAddNodeMenuFactory;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.generated.*;
+import org.fusesource.ide.camel.model.generated.Process;
 
 /**
  * A helper class for creating a popup menu to allow the addition of new nodes in a context menu.
