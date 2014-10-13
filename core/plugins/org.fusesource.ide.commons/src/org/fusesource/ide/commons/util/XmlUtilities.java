@@ -24,6 +24,7 @@ public class XmlUtilities {
 		unescape.put("&lt;", "<");
 		unescape.put("&gt;", ">");
 		unescape.put("&amp;", "&");
+		unescape.put("&quot;", "\"");
 	}
 	
 	public static String unescape(String text) {
