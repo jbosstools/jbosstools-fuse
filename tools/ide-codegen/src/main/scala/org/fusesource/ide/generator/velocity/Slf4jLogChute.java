@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class Slf4jLogChute implements LogChute {
 
-    public static Logger log = LoggerFactory.getLogger(Slf4jLogChute.class);
+    public static Logger log = LoggerFactory.getLogger(Slf4jLogChute.class.getPackage().getName());
 
     @Override
     public void init(RuntimeServices rs) throws Exception {

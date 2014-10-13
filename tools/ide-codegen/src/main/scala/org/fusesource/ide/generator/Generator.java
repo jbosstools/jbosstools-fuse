@@ -104,7 +104,7 @@ public class Generator {
 
     private String[] imageExtensions = new String[] { "png", "gif", "jpg", "jpeg" };
 
-    private String eclipseIconDir = "../../../../../../../plugins/org.fusesource.ide.camel.model/icons/";
+    private String eclipseIconDir = "../../../../../../../core/plugins/org.fusesource.ide.camel.model/icons/";
 
     private Nodeset xmlModel;
 
@@ -157,39 +157,56 @@ public class Generator {
         render("NodeFactory.java", outputDir, srcDir);
 
         // lets load our templates up first to test any errors
-        LOG.warn("ModelBean.java.vm is not ready yet!");
-//        String uri = srcDir + "/ModelBean.java.vm";
-//        engine.getTemplate(uri);
+        String uri = srcDir + "/ModelBean.java.vm";
+        engine.getTemplate(uri);
 
         List<String> errors = new LinkedList<>();
 
-//        for (NodeDefinition<?> n: nodeDefinitions) {
-//            if (debug) {
-//                LOG.info(n.getDefinitionName());
-//                for (Property<?> p: n.simpleProperties()) {
-//                    LOG.info("  simple:  " + p.label() + " " + javaScriptType(p));
-//                }
-//                for (Property<?> p: n.complexProperties()) {
-//                    LOG.info("  complex: " + p.label() + " " + p.propertyType().getName());
-//                }
-//            }
-//
-//            try {
-//                VelocityContext context = new VelocityContext();
-//                context.put("generator", this);
-//                context.put("node", n);
-//
-//                StringWriter sw = new StringWriter();
-//                engine.getTemplate(uri).merge(context, sw);
-//                String answer = sw.toString();
-//                String outFile = outputDir + "/" + n.getDefinitionName() + ".java";
-//                LOG.info("Generating file: {}", outFile);
-//                writeText(outFile, answer);
-//            }
-//            catch (Exception e) {
-//                LOG.error("Failed to compile " + uri + ": " + e.getMessage(), e);
-//            }
-//        }
+        for (NodeDefinition<?> node: nodeDefinitions) {
+            if (debug) {
+                LOG.info(node.getDefinitionName());
+                for (Property<?> p: node.simpleProperties()) {
+                    LOG.info("  simple:  " + p.label() + " " + javaScriptType(p));
+                }
+                for (Property<?> p: node.complexProperties()) {
+                    LOG.info("  complex: " + p.label() + " " + p.propertyType().getName());
+                }
+            }
+
+            try {
+                VelocityContext context = new VelocityContext();
+                context.put("generator", this);
+                context.put("node", node);
+                if (node.getName().equals("RouteDefinition")) {
+                    context.put("isRoute", Boolean.TRUE);
+                    context.put("baseClass", "RouteSupport");
+                } else {
+                    context.put("isRoute", Boolean.FALSE);
+                    context.put("baseClass", "AbstractNode");
+                }
+
+                Set<String> propertyTypes = new LinkedHashSet<>();
+                for (Property<?> p : node.beanProperties()) {
+                    String pn = p.propertyType().getCanonicalName();
+                    if (!pn.startsWith("java.lang") && pn.contains(".")) {
+                        propertyTypes.add(pn);
+                    }
+                }
+                propertyTypes.add("org.apache.camel.model." + node.getName());
+                propertyTypes.add("org.apache.camel.model.language.ExpressionDefinition");
+                context.put("importedTypes", propertyTypes);
+
+                StringWriter sw = new StringWriter();
+                engine.getTemplate(uri).merge(context, sw);
+                String answer = sw.toString();
+                String outFile = outputDir + "/" + node.getDefinitionName() + ".java";
+                LOG.info("Generating file: {}", outFile);
+                writeText(outFile, answer);
+            }
+            catch (Exception e) {
+                LOG.error("Failed to compile " + uri + ": " + e.getMessage(), e);
+            }
+        }
 
         if (!errors.isEmpty()) {
             LOG.warn("add to NodeDefinition.documentationFile method:");
@@ -200,25 +217,24 @@ public class Generator {
     }
 
     public void generateEclipseEditor(String outputDir) {
-        LOG.warn("Generating Eclipse Editor classes: Velocity templates are not ready yet");
-//        eclipseMode = true;
-//        Thread.currentThread().setContextClassLoader(classLoader());
-//
-//        LOG.info("Generating files to {}", outputDir);
-//        new File(outputDir).mkdirs();
-//
-//        String srcDir = "src/main/resources/org/fusesource/ide/generator/eclipse/editor";
-//
-//        String[] templates = new String[] {
-//                "provider/generated/ProviderHelper.java",
-//                "provider/generated/AddNodeMenuFactory.java",
-//                "l10n/messages.properties",
-//                "Messages.java"
-//        };
-//
-//        for (String t: templates) {
-//            render(t, outputDir, srcDir);
-//        }
+        eclipseMode = true;
+        Thread.currentThread().setContextClassLoader(classLoader());
+
+        LOG.info("Generating files to {}", outputDir);
+        new File(outputDir).mkdirs();
+
+        String srcDir = "org/fusesource/ide/generator/eclipse/editor";
+
+        String[] templates = new String[] {
+                "provider/generated/ProviderHelper.java",
+                "provider/generated/AddNodeMenuFactory.java",
+                "l10n/messages.properties",
+                "Messages.java"
+        };
+
+        for (String t: templates) {
+            render(t, outputDir, srcDir);
+        }
     }
 
     public void run() {
@@ -552,6 +568,36 @@ public class Generator {
         return null;
     }
 
+    public String findIconFileOrElse(String childDir, String name, String elseName) throws IOException {
+        return findIconFileOrElse(childDir, name, imageExtensions, elseName);
+    }
+
+    /**
+     * Returns the name if the file exists inside the childDir directory of the outputDir otherwise
+     * return the elseName
+     * @param childDir
+     * @param name
+     * @param extensions
+     * @param elseName
+     * @return
+     */
+    public String findIconFileOrElse(String childDir, String name, String[] extensions, String elseName) throws IOException {
+        File subDir = new File(new File(srcDir, childDir).getCanonicalPath());
+        if (!subDir.exists()) {
+            LOG.warn("Icon dir " + subDir.getCanonicalPath() + " does not exist!");
+        }
+        for (String e : extensions) {
+            File f = new File(subDir, name + "." + e);
+            if (f.exists()) {
+                return f.getName();
+            }
+        }
+        return elseName;
+    }
+
+    public String getEclipseIconDir() {
+        return eclipseIconDir;
+    }
 }
 /*
 
@@ -649,21 +695,6 @@ class Generator() extends Logging {
 
   def wrapLines(prop: Property[_]) = prop.name == "description"
 
-  def findIconFileOrElse(childDir: String, name: String, elseName: => String): String =
-    findIconFileOrElse(childDir, name, imageExtensions, elseName)
-
-  / * *
-   * Returns the name if the file exists inside the childDir directory of the outputDir otherwise
-   * return the elseName
-   * /
-  def findIconFileOrElse(childDir: String, name: String, extensions: List[String], elseName: => String): String = {
-    val subDir = new File(new File(srcDir, childDir).getCanonicalPath)
-    if (!subDir.exists) println("Icon dir " + subDir.getCanonicalPath + " does not exist!")
-    extensions.map(e => new File(subDir, name + "." + e)).find(_.exists) match {
-      case Some(file) => file.getName
-      case _ => elseName
-    }
-  }
 
   def findNodeDimensions: Seq[Dimension] = {
     new File(srcDir, "view").listFiles.filter(_.getName.matches("""node\..+\.svg""")).map{
