@@ -78,7 +78,7 @@ public class Main {
         String hawtioLibDir = basedir + "/../../../hawtio/hawtio-web/src/main/webapp/lib";
         File imageDir = new File(editorProjectDir + "/icons");
 
-        File camelDescriptionElementsFile = new File(basedir + "/../../../fuse/tooling/camel-tooling-util/src/main/resources/camelDescriptionElements.txt");
+        File camelDescriptionElementsFile = new File(basedir + "/../../../fabric8/tooling/camel-tooling-util/src/main/resources/camelDescriptionElements.txt");
 
         File camelDescriotionElementsDir = camelDescriptionElementsFile.getParentFile();
         if (!camelDescriotionElementsDir.exists()) {

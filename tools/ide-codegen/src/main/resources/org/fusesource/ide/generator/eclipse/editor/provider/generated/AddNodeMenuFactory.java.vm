@@ -1,0 +1,107 @@
+#macro(fillPalette $group $params)
+#foreach($n in $generator.nodeDefinitions())
+#if($n.group() == $group)
+##val smallIcon = findIconFileOrElse(eclipseIconDir, n.id + "16", n.defaultImageName + "16.png")
+##val bigIcon = findIconFileOrElse(eclipseIconDir, n.id + "24", n.defaultImageName + "24.png")
+#if($n.capitalize($n.getDefinitionName()) != "Route")
+        addMenuItem(menu, Messages.palette${n.capitalize($n.getDefinitionName())}Title, Messages.palette${n.capitalize($n.getDefinitionName())}Description, ${n.capitalize($n.getDefinitionName())}.class${params});
+#end
+#end
+#end
+#end
+/**
+ *  Copyright 2005-2014 Red Hat, Inc.
+ *
+ *  Red Hat licenses this file to you under the Apache License, version
+ *  2.0 (the "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *  implied.  See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
+package org.fusesource.ide.camel.editor.provider.generated;
+
+import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.ICustomContext;
+import org.eclipse.graphiti.tb.ContextMenuEntry;
+import org.eclipse.jface.action.IMenuManager;
+import org.fusesource.ide.camel.editor.Messages;
+import org.fusesource.ide.camel.editor.provider.AbstractAddNodeMenuFactory;
+import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.generated.*;
+
+/**
+ * A helper class for creating a popup menu to allow the addition of new nodes in a context menu.
+ *
+ * NOTE - this file is auto-generated using Velocity.
+ *
+ * DO NOT EDIT!
+ *
+ * @author lhein
+ */
+public class AddNodeMenuFactory extends AbstractAddNodeMenuFactory {
+
+    // Fill Graphiti context menus
+
+    @Override
+    protected void fillEndpointsContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+        addMenuItem(menu, Messages.paletteEndpointTitle, Messages.paletteEndpointDescription, Endpoint.class, context, fp);
+
+#fillPalette("Endpoints", ", context, fp")
+    }
+
+    @Override
+    protected void fillRoutingContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+#fillPalette("Routing", ", context, fp")
+    }
+
+    @Override
+    protected void fillControlFlowContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+#fillPalette("Control Flow", ", context, fp")
+    }
+
+    @Override
+    protected void fillTransformationContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+#fillPalette("Transformation", ", context, fp")
+    }
+
+    @Override
+    protected void fillMiscellaneousContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
+#fillPalette("Miscellaneous", ", context, fp")
+    }
+
+    // Fill IMenuManager
+
+    @Override
+    protected void fillEndpointsMenu(IMenuManager menu) {
+        addMenuItem(menu, Messages.paletteEndpointTitle, Messages.paletteEndpointDescription, Endpoint.class);
+
+#fillPalette("Endpoints", "")
+    }
+
+    @Override
+    protected void fillRoutingMenu(IMenuManager menu) {
+#fillPalette("Routing", "")
+    }
+
+    @Override
+    protected void fillControlFlowMenu(IMenuManager menu) {
+#fillPalette("Control Flow", "")
+    }
+
+    @Override
+    protected void fillTransformationMenu(IMenuManager menu) {
+#fillPalette("Transformation", "")
+    }
+
+    @Override
+    protected void fillMiscellaneousMenu(IMenuManager menu) {
+#fillPalette("Miscellaneous", "")
+    }
+
+}

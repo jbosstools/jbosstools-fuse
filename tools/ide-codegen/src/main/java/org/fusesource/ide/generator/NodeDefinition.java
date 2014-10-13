@@ -342,7 +342,7 @@ public class NodeDefinition<T> {
         return null;
     }
 
-    private boolean isExpression(Property<?> p) {
+    public boolean isExpression(Property<?> p) {
         return ExpressionDefinition.class.isAssignableFrom(p.propertyType());
     }
 
@@ -439,6 +439,130 @@ public class NodeDefinition<T> {
         return capitalize(splitCamelCase(text));
     }
 
+    public String propertyType(Property<?> p) {
+        String name = p.propertyType().getSimpleName();
+        if (name.startsWith("java.lang.")) {
+            return name.substring("java.lang.".length());
+        } else {
+            return name;
+        }
+    }
+
+    protected boolean isDefinitionName(String ... prefixes) {
+        for (String p : prefixes) {
+            if (getId().startsWith(p)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String group() {
+        if (isDefinitionName("bean", "log", "process", "to", "from", "endpoint")) {
+            return "Endpoints";
+        }
+        else if (isDefinitionName("aggregate", "choice", "dynamicRouter", "filter", "idempotentConsumer", "loadBalance", "multicast", "otherwise", "pipeline", "recipient", "resequence", "routing", "split", "sort", "when", "wireTap")) {
+            return "Routing";
+        }
+        else if (isDefinitionName("aOP", "catch", "delay", "finally", "intercept", "loop", "on", "rollback", "throttle", "throw", "transacted", "try")) {
+            return "Control Flow";
+        }
+        else if (isDefinitionName("convert", "enrich", "inO", "marshal", "pollEnrich", "remove", "set", "transform", "unmarshal")) {
+            return "Transformation";
+        }
+        else {
+            return "Miscellaneous";
+        }
+    }
+
+    public String defaultImageName() {
+        switch (group()) {
+            case "Transformation":
+                return "transform";
+            case "Endpoints":
+                return "endpoint";
+            default:
+                return "generic";
+        }
+    }
+
+    /**
+     * Returns the contextId for the nodes
+     * @return
+     */
+    public String documentationFile() {
+        return modelNode == null || modelNode.contextId == null ? "allEIPs" : modelNode.contextId;
+    }
+
+    public boolean isPrimitiveBooleanPropertyType(Property<?> p) {
+        return p.propertyType().getSimpleName().equals("boolean");
+    }
+
+    public String getOrIsMethodPrefix(Property<?> p) {
+        return isPrimitiveBooleanPropertyType(p) ? "is" : "get";
+    }
+
+    public boolean isBooleanPropertyType(Property<?> p) {
+        return isPrimitiveBooleanPropertyType(p) || p.propertyType().getCanonicalName().equals("java.lang.Boolean");
+    }
+
+    public boolean isEnumPropertyType(Property<?> p) {
+        return Enum.class.isAssignableFrom(p.propertyType());
+    }
+
+    public boolean isListPropertyType(Property<?> p) {
+        return List.class.isAssignableFrom(p.propertyType());
+    }
+
+    public String getterExpression(String source, Property<?> p) {
+        String prefix = isPrimitiveBooleanPropertyType(p) ? "is" : "get";
+        String method = prefix + capitalize(p.name());
+        try {
+            Method m = clazz.getMethod(method);
+            return source + "." + method + "()";
+        } catch (Exception e) {
+            // lets use reflection if no method
+            String pn;
+            switch (propertyType(p)) {
+                case "boolean":
+                    pn = "Boolean";
+                    break;
+                case "byte":
+                    pn = "Byte";
+                    break;
+                case "short":
+                    pn = "Short";
+                    break;
+                case "long":
+                    pn = "Long";
+                    break;
+                case "int":
+                    pn = "Integer";
+                    break;
+                case "float":
+                    pn = "Float";
+                    break;
+                case "double":
+                    pn = "Double";
+                    break;
+                default:
+                    pn = propertyType(p);
+            }
+            return "Objects.<" + pn + ">getField(" + source + ", \"" + p.name() + "\")";
+        }
+    }
+
+    public String setterExpression(String source, Property<?> p, String value) {
+        String method = "set" + capitalize(p.name());
+        try {
+            clazz.getMethod(method, p.propertyType());
+            return source + "." + method + "(" + value + ")";
+        } catch (Exception e) {
+            // lets use reflection if no method
+            return "Objects.setField(" + source + ", \"" + p.name() + "\", " + value + ")";
+        }
+    }
+
 }
 
 /*
@@ -473,10 +597,6 @@ public class NodeDefinition<T> {
     }
 
 
-    / * *
-     * Returns the contextId for the nodes
-     * /
-    def documentationFile: String = childElemText(modelNode, "contextId", "allEIPs")
 
 
     // TODO extract from annotation on the definition?
@@ -489,23 +609,6 @@ public class NodeDefinition<T> {
 
 
 
-    def group: String = {
-        if (isDefinitionName("bean", "log", "process", "to", "from", "endpoint")) {
-            "Endpoints"
-        }
-        else if (isDefinitionName("aggregate", "choice", "dynamicRouter", "filter", "idempotentConsumer", "loadBalance", "multicast", "otherwise", "pipeline", "recipient", "resequence", "routing", "split", "sort", "when", "wireTap")) {
-            "Routing"
-        }
-        else if (isDefinitionName("aOP", "catch", "delay", "finally", "intercept", "loop", "on", "rollback", "throttle", "throw", "transacted", "try")) {
-            "Control Flow"
-        }
-        else if (isDefinitionName("convert", "enrich", "inO", "marshal", "pollEnrich", "remove", "set", "transform", "unmarshal")) {
-            "Transformation"
-        }
-        else {
-            "Miscellaneous"
-        }
-    }
 
     def role = id match {
         //case "choice" => "\"choice\", \"interaction\""
@@ -533,11 +636,6 @@ public class NodeDefinition<T> {
         "node.generic.svg"
     })
 
-    def defaultImageName = group match {
-        case "Transformation" => "transform"
-        case "Endpoints" => "endpoint"
-        case _ => "generic"
-    }
 
     def icon = generator.findIconFileOrElse("icons/", "node." + id, "node.generic.gif")
 
@@ -578,89 +676,6 @@ public class NodeDefinition<T> {
         bean
 
     }
-
-    def propertyType[T](p: Property[_]): String = {
-        val name = p.propertyType.getSimpleName
-        if (name.startsWith("java.lang.")) {
-            name.substring("java.lang.".length)
-        } else {
-            name
-        }
-    }
-
-    def getterExpression[T](source: String, p: Property[_]): String = {
-        val prefix = if (isPrimitiveBooleanPropertyType(p)) "is" else "get"
-        val method = prefix + p.name.capitalize
-        try {
-            clazz.getMethod(method)
-
-            p match {
-                case cp: ConvertedProperty[_] =>
-                    source + "." + method + "()"
-                case _ =>
-                    source + "." + method + "()"
-            }
-        }
-        catch {
-            case e =>
-                // lets use reflection if no method
-                val pn = propertyType(p) match {
-                case "boolean" => "Boolean"
-                case "byte" => "Byte"
-                case "short" => "Short"
-                case "int" => "Integer"
-                case "long" => "Long"
-                case "float" => "Float"
-                case "double" => "Double"
-                case s => s
-            }
-            "Objects.<" + pn + ">getField(" + source + ", \"" + p.name + "\")"
-        }
-    }
-
-    def setterExpression[T](source: String, p: Property[_], value: String): String = {
-        val method = "set" + p.name.capitalize
-        try {
-            clazz.getMethod(method, p.propertyType)
-
-            p match {
-                case cp: ConvertedProperty[_] =>
-                    source + "." + method + "(" + value + ")"
-                case _ =>
-                    source + "." + method + "(" + value + ")"
-            }
-        }
-        catch {
-            case e =>
-                // lets use reflection if no method
-                "Objects.setField(" + source + ", \"" + p.name + "\", " + value + ")"
-        }
-    }
-
-
-    def getOrIsMethodPrefix[T](p: Property[_]): String =
-            if (isPrimitiveBooleanPropertyType(p)) "is" else "get"
-
-    def isPrimitiveBooleanPropertyType(p: Property[_]): Boolean =
-    p.propertyType.getSimpleName == "boolean"
-
-    def isEnumPropertyType(p: Property[_]): Boolean =
-    classOf[Enum[_]].isAssignableFrom(p.propertyType)
-
-
-
-
-    def isListPropertyType(p: Property[_]): Boolean =
-    classOf[ju.List[_]].isAssignableFrom(p.propertyType)
-
-    def isBooleanPropertyType(p: Property[_]): Boolean =
-    isPrimitiveBooleanPropertyType(p) || p.propertyType.getCanonicalName == "java.lang.Boolean"
-
-
-
-    protected def isDefinitionName(prefixes: String*): Boolean =
-            prefixes.find(p => id.startsWith(p)).isDefined
-
 }
 
 */

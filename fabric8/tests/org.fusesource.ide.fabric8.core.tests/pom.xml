@@ -14,4 +14,8 @@
 	<artifactId>org.fusesource.ide.fabric8.core.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 	<name>JBoss Fuse Tooling :: Fabric8 :: Tests :: Core Tests</name>
+	
+	<properties>
+		<localFabric>false</localFabric>
+	</properties>
 </project>

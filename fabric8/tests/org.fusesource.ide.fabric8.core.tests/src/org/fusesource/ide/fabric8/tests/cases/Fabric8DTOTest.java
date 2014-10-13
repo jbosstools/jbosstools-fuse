@@ -29,8 +29,23 @@ import org.junit.Test;
  */
 public class Fabric8DTOTest extends TestCase {
 	
+    private boolean doTests = false;
+    
+    /* (non-Javadoc)
+     * @see junit.framework.TestCase#setUp()
+     */
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        String s = System.getProperty("localFabric", "false");
+        if (s != null || s.trim().length()>0) {
+            this.doTests = Boolean.parseBoolean(s);
+        }
+    }
+    
 	@Test
 	public void testGetContainers() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -58,6 +73,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testGetRootContainer() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -82,6 +98,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerProvisionStatus() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -106,6 +123,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerParentId() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -130,6 +148,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerChildrenIds() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -154,6 +173,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerProcessId() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -179,6 +199,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerVersionId() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -204,7 +225,8 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerProfileIds() throws Exception {
-		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
+	    if (!this.doTests) return;
+	    Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
 			assertNotNull("Connector is null!", con);
@@ -228,6 +250,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerEnsembleServer() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -252,6 +275,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerJMXUrl() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -277,6 +301,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerWebUrl() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -302,6 +327,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerDebugPort() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -326,6 +352,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testRootContainerManaged() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -350,6 +377,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testGetCurrentContainer() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -372,6 +400,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testStartContainer() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -397,6 +426,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testStopContainer() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -422,11 +452,13 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testDestroyContainer() throws Exception {
+	    if (!this.doTests) return;
 		// TODO: create dummy container, check alive, destroy dummy container, try to get the container to check if its deleted
 	}
 	
 	@Test
 	public void testGetWebUrl() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -449,6 +481,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testGetGitUrl() {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -471,6 +504,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testGetMavenUploadProxyUrl() {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -493,6 +527,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testGetMavenDownloadProxyUrl() {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -515,6 +550,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testGetDefaultVersion() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -537,6 +573,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testSetDefaultVersion() throws Exception {
+	    if (!this.doTests) return;
 		// TODO: FIX TEST
 //		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 //		Fabric8Connector con = new Fabric8Connector(connectorType);
@@ -579,6 +616,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testGetVersions() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -601,6 +639,7 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
 	public void testDeleteVersion() throws Exception {
+	    if (!this.doTests) return;
 		// TODO: FIX TEST
 //		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 //		Fabric8Connector con = new Fabric8Connector(connectorType);
@@ -646,7 +685,8 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testCreateVersion() throws Exception {
-		// TODO: FIX TEST
+	    if (!this.doTests) return;
+	    // TODO: FIX TEST
 //		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 //		Fabric8Connector con = new Fabric8Connector(connectorType);
 //		try {
@@ -680,6 +720,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testCreateSubVersion() throws Exception {
+	    if (!this.doTests) return;
 		// TODO: FIX TEST
 //		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 //		Fabric8Connector con = new Fabric8Connector(connectorType);
@@ -718,6 +759,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testGetProfiles() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -743,6 +785,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testGetProfile() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -768,6 +811,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testCreateProfile() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -798,6 +842,7 @@ public class Fabric8DTOTest extends TestCase {
 
 	@Test
 	public void testDeleteProfile() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
@@ -831,51 +876,61 @@ public class Fabric8DTOTest extends TestCase {
 	
 	@Test
     public void testSetProfilesForContainer() throws Exception {
+	    if (!this.doTests) return;
 		// TODO: implement
 	}
 
 	@Test
     public void testAddProfilesToContainer() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
     }
 
 	@Test
     public void testRemoveProfiles() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
     }
     
 	@Test
 	public void testSetProfileBundles() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
 	}
 	
 	@Test
 	public void testSetProfileFabs() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
 	}
 	
 	@Test
 	public void testSetProfileFeatures() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
 	}
 	
 	@Test
 	public void testSetProfileOptionals() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
 	}
 	
 	@Test
 	public void testSetProfileOverrides() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
 	}
 	
 	@Test
 	public void testSetProfileParentIds() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
 	}
 	
 	@Test
 	public void testSetProfileRepositories() throws Exception {
+	    if (!this.doTests) return;
         // TODO: implement
 	}
 }

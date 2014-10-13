@@ -23,9 +23,24 @@ import org.junit.Test;
  * @author lhein
  */
 public class Fabric8ConnectorTest extends TestCase {
-	
+    
+    private boolean doTests = false;
+    
+    /* (non-Javadoc)
+     * @see junit.framework.TestCase#setUp()
+     */
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        String s = System.getProperty("localFabric", "false");
+        if (s != null || s.trim().length()>0) {
+            this.doTests = Boolean.parseBoolean(s);
+        }
+    }
+    
 	@Test
 	public void testConnection() throws Exception {
+	    if (!this.doTests) return;
 		Fabric8ConnectorType connectorType = Fabric8TestHelpers.getJolokiaConnector();
 		Fabric8Connector con = new Fabric8Connector(connectorType);
 		try {
