@@ -25,15 +25,14 @@ import org.fusesource.ide.commons.util.Strings;
 /**
  * @author lhein
  */
-public class BasicNodeValidator {
+public class BasicNodeValidator implements ValidationSupport {
 
-	/**
-	 * does the validation
-	 * 
-	 * @param node
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see org.fusesource.ide.camel.editor.validation.ValidationSupport#validate(org.fusesource.ide.camel.model.AbstractNode)
 	 */
-	protected ValidationResult validate(AbstractNode node) {
+    @Override
+    public ValidationResult validate(AbstractNode node) {
 		ValidationResult result = new ValidationResult();
 
 		// we check if all mandatory fields are filled

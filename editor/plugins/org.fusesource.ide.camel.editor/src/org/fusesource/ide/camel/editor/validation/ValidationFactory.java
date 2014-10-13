@@ -12,6 +12,7 @@
 package org.fusesource.ide.camel.editor.validation;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.fusesource.ide.camel.model.AbstractNode;
@@ -22,7 +23,7 @@ import org.fusesource.ide.camel.model.AbstractNode;
  */
 public final class ValidationFactory {
 	
-	private static Map<Class<? extends AbstractNode>, BasicNodeValidator> registeredValidators = new HashMap<Class<? extends AbstractNode>, BasicNodeValidator>();
+	private static Map<Class<? extends AbstractNode>, ValidationSupport> registeredValidators = new HashMap<Class<? extends AbstractNode>, ValidationSupport>();
 	private static ValidationFactory instance;
 	
 	static {
@@ -30,6 +31,7 @@ public final class ValidationFactory {
 		registeredValidators.put(AbstractNode.class, new BasicNodeValidator());
 		// you may register special validators for specific model classes here but they all need to inherit from BasicNodeValidator
 		// ...
+        //registeredValidators.put(Endpoint.class, new BasicUriValidator());
 	}
 	
 	/**
@@ -54,11 +56,18 @@ public final class ValidationFactory {
     public ValidationResult validate(AbstractNode node) {
     	ValidationResult result = null;
     	
-    	BasicNodeValidator validator = registeredValidators.get(node.getClass());
-    	if (validator == null) {
-    		validator = registeredValidators.get(AbstractNode.class);
-    	} 
-    	result = validator.validate(node);
+    	Iterator<Class<? extends AbstractNode>> it = registeredValidators.keySet().iterator();
+    	while (it.hasNext()) {
+    	    Class c = it.next();
+    	    
+    	    if (c.isInstance(node)) {
+                ValidationSupport validator = registeredValidators.get(c);
+                if (validator == null) {
+                    validator = registeredValidators.get(AbstractNode.class);
+                } 
+                result = validator.validate(node);
+    	    }
+    	}
     	    	
     	return result;
     }
