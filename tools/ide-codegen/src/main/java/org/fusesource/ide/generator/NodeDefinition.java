@@ -126,7 +126,7 @@ public class NodeDefinition<T> {
     }
 
     public boolean isProcessor() {
-        return Modifier.isAbstract(clazz.getModifiers()) &&
+        return !Modifier.isAbstract(clazz.getModifiers()) &&
                 ProcessorDefinition.class.isAssignableFrom(clazz) &&
                 !ignoreClasses.contains(clazz);
     }

@@ -386,9 +386,9 @@ public class Generator {
         try {
             for (String className : classNames) {
                 NodeDefinition<?> n = createNodeDefinition(className);
-//                if (!n.isProcessor()) {
+                if (n.isProcessor()) {
                     set.add(n);
-//                }
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
