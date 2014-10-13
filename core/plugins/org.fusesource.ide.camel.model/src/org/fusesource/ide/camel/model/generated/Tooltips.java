@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 Red Hat, Inc.
+ * Copyright (c) 2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -8,19 +8,20 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
- /**
- * NOTE - this file is auto-generated using Scalate. 
- * 
- * DO NOT EDIT!
- */
 package org.fusesource.ide.camel.model.generated;
 
-import org.eclipse.osgi.util.NLS;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.eclipse.osgi.util.NLS;
+
+/**
+ * NOTE - this file is auto-generated using Velocity.
+ *
+ * DO NOT EDIT!
+ */
 public class Tooltips extends NLS {
-	
+
     private static final String BUNDLE_NAME = "org.fusesource.ide.camel.model.l10n.tooltips";
     private static final Map<String,String> map = new HashMap<String,String>();
 
@@ -143,6 +144,7 @@ public class Tooltips extends NLS {
     public static String tooltipLogLoggingLevel;
     public static String tooltipLogLogName;
     public static String tooltipLogMarker;
+    public static String tooltipLogLoggerRef;
 
     public static String tooltipLoop;
     public static String tooltipLoopInheritErrorHandler;
@@ -219,6 +221,7 @@ public class Tooltips extends NLS {
     public static String tooltipRecipientListTimeout;
     public static String tooltipRecipientListOnPrepareRef;
     public static String tooltipRecipientListShareUnitOfWork;
+    public static String tooltipRecipientListCacheSize;
 
     public static String tooltipRemoveHeader;
     public static String tooltipRemoveHeaderHeaderName;
@@ -259,6 +262,7 @@ public class Tooltips extends NLS {
     public static String tooltipRoutingSlipExpression;
     public static String tooltipRoutingSlipUriDelimiter;
     public static String tooltipRoutingSlipIgnoreInvalidEndpoints;
+    public static String tooltipRoutingSlipCacheSize;
 
     public static String tooltipSampling;
     public static String tooltipSamplingInheritErrorHandler;
@@ -370,9 +374,9 @@ public class Tooltips extends NLS {
 
 
     public static String tooltip(String key) {
-        return map.get("tooltip" + key);  
+        return map.get("tooltip" + key);
     }
-    
+
     static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, Tooltips.class);
@@ -385,286 +389,347 @@ public class Tooltips extends NLS {
         map.put("Endpoint.Url", tooltipEndpointUrl);
 
         map.put("Route", tooltipRoute);
-        
-    map.put("tooltipAggregate", tooltipAggregate);
-    map.put("tooltipAggregate.InheritErrorHandler", tooltipAggregateInheritErrorHandler);
-    map.put("tooltipAggregate.CorrelationExpression", tooltipAggregateCorrelationExpression);
-    map.put("tooltipAggregate.CompletionPredicate", tooltipAggregateCompletionPredicate);
-    map.put("tooltipAggregate.CompletionTimeoutExpression", tooltipAggregateCompletionTimeoutExpression);
-    map.put("tooltipAggregate.CompletionSizeExpression", tooltipAggregateCompletionSizeExpression);
-    map.put("tooltipAggregate.ParallelProcessing", tooltipAggregateParallelProcessing);
-    map.put("tooltipAggregate.OptimisticLocking", tooltipAggregateOptimisticLocking);
-    map.put("tooltipAggregate.ExecutorServiceRef", tooltipAggregateExecutorServiceRef);
-    map.put("tooltipAggregate.TimeoutCheckerExecutorServiceRef", tooltipAggregateTimeoutCheckerExecutorServiceRef);
-    map.put("tooltipAggregate.AggregationRepositoryRef", tooltipAggregateAggregationRepositoryRef);
-    map.put("tooltipAggregate.StrategyRef", tooltipAggregateStrategyRef);
-    map.put("tooltipAggregate.StrategyMethodName", tooltipAggregateStrategyMethodName);
-    map.put("tooltipAggregate.StrategyMethodAllowNull", tooltipAggregateStrategyMethodAllowNull);
-    map.put("tooltipAggregate.CompletionSize", tooltipAggregateCompletionSize);
-    map.put("tooltipAggregate.CompletionInterval", tooltipAggregateCompletionInterval);
-    map.put("tooltipAggregate.CompletionTimeout", tooltipAggregateCompletionTimeout);
-    map.put("tooltipAggregate.CompletionFromBatchConsumer", tooltipAggregateCompletionFromBatchConsumer);
-    map.put("tooltipAggregate.GroupExchanges", tooltipAggregateGroupExchanges);
-    map.put("tooltipAggregate.EagerCheckCompletion", tooltipAggregateEagerCheckCompletion);
-    map.put("tooltipAggregate.IgnoreInvalidCorrelationKeys", tooltipAggregateIgnoreInvalidCorrelationKeys);
-    map.put("tooltipAggregate.CloseCorrelationKeyOnCompletion", tooltipAggregateCloseCorrelationKeyOnCompletion);
-    map.put("tooltipAggregate.DiscardOnCompletionTimeout", tooltipAggregateDiscardOnCompletionTimeout);
-    map.put("tooltipAggregate.ForceCompletionOnStop", tooltipAggregateForceCompletionOnStop);
-    map.put("tooltipAggregate.OptimisticLockRetryPolicyDefinition", tooltipAggregateOptimisticLockRetryPolicyDefinition);
-    map.put("tooltipAOP", tooltipAOP);
-    map.put("tooltipAOP.InheritErrorHandler", tooltipAOPInheritErrorHandler);
-    map.put("tooltipAOP.BeforeUri", tooltipAOPBeforeUri);
-    map.put("tooltipAOP.AfterUri", tooltipAOPAfterUri);
-    map.put("tooltipAOP.AfterFinallyUri", tooltipAOPAfterFinallyUri);
-    map.put("tooltipBean", tooltipBean);
-    map.put("tooltipBean.Ref", tooltipBeanRef);
-    map.put("tooltipBean.Method", tooltipBeanMethod);
-    map.put("tooltipBean.BeanType", tooltipBeanBeanType);
-    map.put("tooltipBean.Cache", tooltipBeanCache);
-    map.put("tooltipCatch", tooltipCatch);
-    map.put("tooltipCatch.InheritErrorHandler", tooltipCatchInheritErrorHandler);
-    map.put("tooltipCatch.Exceptions", tooltipCatchExceptions);
-    map.put("tooltipCatch.Handled", tooltipCatchHandled);
-    map.put("tooltipChoice", tooltipChoice);
-    map.put("tooltipChoice.InheritErrorHandler", tooltipChoiceInheritErrorHandler);
-    map.put("tooltipConvertBody", tooltipConvertBody);
-    map.put("tooltipConvertBody.Type", tooltipConvertBodyType);
-    map.put("tooltipConvertBody.Charset", tooltipConvertBodyCharset);
-    map.put("tooltipDelay", tooltipDelay);
-    map.put("tooltipDelay.InheritErrorHandler", tooltipDelayInheritErrorHandler);
-    map.put("tooltipDelay.Expression", tooltipDelayExpression);
-    map.put("tooltipDelay.ExecutorServiceRef", tooltipDelayExecutorServiceRef);
-    map.put("tooltipDelay.AsyncDelayed", tooltipDelayAsyncDelayed);
-    map.put("tooltipDelay.CallerRunsWhenRejected", tooltipDelayCallerRunsWhenRejected);
-    map.put("tooltipDynamicRouter", tooltipDynamicRouter);
-    map.put("tooltipDynamicRouter.InheritErrorHandler", tooltipDynamicRouterInheritErrorHandler);
-    map.put("tooltipDynamicRouter.Expression", tooltipDynamicRouterExpression);
-    map.put("tooltipDynamicRouter.UriDelimiter", tooltipDynamicRouterUriDelimiter);
-    map.put("tooltipDynamicRouter.IgnoreInvalidEndpoints", tooltipDynamicRouterIgnoreInvalidEndpoints);
-    map.put("tooltipEnrich", tooltipEnrich);
-    map.put("tooltipEnrich.ResourceUri", tooltipEnrichResourceUri);
-    map.put("tooltipEnrich.AggregationStrategyRef", tooltipEnrichAggregationStrategyRef);
-    map.put("tooltipEnrich.AggregationStrategyMethodName", tooltipEnrichAggregationStrategyMethodName);
-    map.put("tooltipEnrich.AggregationStrategyMethodAllowNull", tooltipEnrichAggregationStrategyMethodAllowNull);
-    map.put("tooltipFilter", tooltipFilter);
-    map.put("tooltipFilter.InheritErrorHandler", tooltipFilterInheritErrorHandler);
-    map.put("tooltipFilter.Expression", tooltipFilterExpression);
-    map.put("tooltipFinally", tooltipFinally);
-    map.put("tooltipFinally.InheritErrorHandler", tooltipFinallyInheritErrorHandler);
-    map.put("tooltipIdempotentConsumer", tooltipIdempotentConsumer);
-    map.put("tooltipIdempotentConsumer.InheritErrorHandler", tooltipIdempotentConsumerInheritErrorHandler);
-    map.put("tooltipIdempotentConsumer.Expression", tooltipIdempotentConsumerExpression);
-    map.put("tooltipIdempotentConsumer.MessageIdRepositoryRef", tooltipIdempotentConsumerMessageIdRepositoryRef);
-    map.put("tooltipIdempotentConsumer.Eager", tooltipIdempotentConsumerEager);
-    map.put("tooltipIdempotentConsumer.SkipDuplicate", tooltipIdempotentConsumerSkipDuplicate);
-    map.put("tooltipIdempotentConsumer.RemoveOnFailure", tooltipIdempotentConsumerRemoveOnFailure);
-    map.put("tooltipInOnly", tooltipInOnly);
-    map.put("tooltipInOnly.Uri", tooltipInOnlyUri);
-    map.put("tooltipInOut", tooltipInOut);
-    map.put("tooltipInOut.Uri", tooltipInOutUri);
-    map.put("tooltipIntercept", tooltipIntercept);
-    map.put("tooltipIntercept.InheritErrorHandler", tooltipInterceptInheritErrorHandler);
-    map.put("tooltipInterceptFrom", tooltipInterceptFrom);
-    map.put("tooltipInterceptFrom.InheritErrorHandler", tooltipInterceptFromInheritErrorHandler);
-    map.put("tooltipInterceptFrom.Uri", tooltipInterceptFromUri);
-    map.put("tooltipInterceptSendToEndpoint", tooltipInterceptSendToEndpoint);
-    map.put("tooltipInterceptSendToEndpoint.InheritErrorHandler", tooltipInterceptSendToEndpointInheritErrorHandler);
-    map.put("tooltipInterceptSendToEndpoint.Uri", tooltipInterceptSendToEndpointUri);
-    map.put("tooltipInterceptSendToEndpoint.SkipSendToOriginalEndpoint", tooltipInterceptSendToEndpointSkipSendToOriginalEndpoint);
-    map.put("tooltipLoadBalance", tooltipLoadBalance);
-    map.put("tooltipLoadBalance.InheritErrorHandler", tooltipLoadBalanceInheritErrorHandler);
-    map.put("tooltipLoadBalance.Ref", tooltipLoadBalanceRef);
-    map.put("tooltipLoadBalance.LoadBalancerType", tooltipLoadBalanceLoadBalancerType);
-    map.put("tooltipLog", tooltipLog);
-    map.put("tooltipLog.Message", tooltipLogMessage);
-    map.put("tooltipLog.LoggingLevel", tooltipLogLoggingLevel);
-    map.put("tooltipLog.LogName", tooltipLogLogName);
-    map.put("tooltipLog.Marker", tooltipLogMarker);
-    map.put("tooltipLoop", tooltipLoop);
-    map.put("tooltipLoop.InheritErrorHandler", tooltipLoopInheritErrorHandler);
-    map.put("tooltipLoop.Expression", tooltipLoopExpression);
-    map.put("tooltipLoop.Copy", tooltipLoopCopy);
-    map.put("tooltipMarshal", tooltipMarshal);
-    map.put("tooltipMarshal.Ref", tooltipMarshalRef);
-    map.put("tooltipMarshal.DataFormatType", tooltipMarshalDataFormatType);
-    map.put("tooltipMulticast", tooltipMulticast);
-    map.put("tooltipMulticast.InheritErrorHandler", tooltipMulticastInheritErrorHandler);
-    map.put("tooltipMulticast.ParallelProcessing", tooltipMulticastParallelProcessing);
-    map.put("tooltipMulticast.StrategyRef", tooltipMulticastStrategyRef);
-    map.put("tooltipMulticast.StrategyMethodName", tooltipMulticastStrategyMethodName);
-    map.put("tooltipMulticast.StrategyMethodAllowNull", tooltipMulticastStrategyMethodAllowNull);
-    map.put("tooltipMulticast.ExecutorServiceRef", tooltipMulticastExecutorServiceRef);
-    map.put("tooltipMulticast.Streaming", tooltipMulticastStreaming);
-    map.put("tooltipMulticast.StopOnException", tooltipMulticastStopOnException);
-    map.put("tooltipMulticast.Timeout", tooltipMulticastTimeout);
-    map.put("tooltipMulticast.OnPrepareRef", tooltipMulticastOnPrepareRef);
-    map.put("tooltipMulticast.ShareUnitOfWork", tooltipMulticastShareUnitOfWork);
-    map.put("tooltipOnCompletion", tooltipOnCompletion);
-    map.put("tooltipOnCompletion.InheritErrorHandler", tooltipOnCompletionInheritErrorHandler);
-    map.put("tooltipOnCompletion.OnCompleteOnly", tooltipOnCompletionOnCompleteOnly);
-    map.put("tooltipOnCompletion.OnFailureOnly", tooltipOnCompletionOnFailureOnly);
-    map.put("tooltipOnCompletion.ExecutorServiceRef", tooltipOnCompletionExecutorServiceRef);
-    map.put("tooltipOnCompletion.UseOriginalMessagePolicy", tooltipOnCompletionUseOriginalMessagePolicy);
-    map.put("tooltipOnException", tooltipOnException);
-    map.put("tooltipOnException.InheritErrorHandler", tooltipOnExceptionInheritErrorHandler);
-    map.put("tooltipOnException.Exceptions", tooltipOnExceptionExceptions);
-    map.put("tooltipOnException.RetryWhile", tooltipOnExceptionRetryWhile);
-    map.put("tooltipOnException.RedeliveryPolicyRef", tooltipOnExceptionRedeliveryPolicyRef);
-    map.put("tooltipOnException.Handled", tooltipOnExceptionHandled);
-    map.put("tooltipOnException.Continued", tooltipOnExceptionContinued);
-    map.put("tooltipOnException.OnRedeliveryRef", tooltipOnExceptionOnRedeliveryRef);
-    map.put("tooltipOnException.UseOriginalMessagePolicy", tooltipOnExceptionUseOriginalMessagePolicy);
-    map.put("tooltipOnException.RedeliveryPolicy", tooltipOnExceptionRedeliveryPolicy);
-    map.put("tooltipOtherwise", tooltipOtherwise);
-    map.put("tooltipOtherwise.InheritErrorHandler", tooltipOtherwiseInheritErrorHandler);
-    map.put("tooltipPipeline", tooltipPipeline);
-    map.put("tooltipPipeline.InheritErrorHandler", tooltipPipelineInheritErrorHandler);
-    map.put("tooltipPolicy", tooltipPolicy);
-    map.put("tooltipPolicy.InheritErrorHandler", tooltipPolicyInheritErrorHandler);
-    map.put("tooltipPolicy.Ref", tooltipPolicyRef);
-    map.put("tooltipPollEnrich", tooltipPollEnrich);
-    map.put("tooltipPollEnrich.ResourceUri", tooltipPollEnrichResourceUri);
-    map.put("tooltipPollEnrich.Timeout", tooltipPollEnrichTimeout);
-    map.put("tooltipPollEnrich.AggregationStrategyRef", tooltipPollEnrichAggregationStrategyRef);
-    map.put("tooltipPollEnrich.AggregationStrategyMethodName", tooltipPollEnrichAggregationStrategyMethodName);
-    map.put("tooltipPollEnrich.AggregationStrategyMethodAllowNull", tooltipPollEnrichAggregationStrategyMethodAllowNull);
-    map.put("tooltipProcess", tooltipProcess);
-    map.put("tooltipProcess.Ref", tooltipProcessRef);
-    map.put("tooltipRecipientList", tooltipRecipientList);
-    map.put("tooltipRecipientList.InheritErrorHandler", tooltipRecipientListInheritErrorHandler);
-    map.put("tooltipRecipientList.Expression", tooltipRecipientListExpression);
-    map.put("tooltipRecipientList.Delimiter", tooltipRecipientListDelimiter);
-    map.put("tooltipRecipientList.ParallelProcessing", tooltipRecipientListParallelProcessing);
-    map.put("tooltipRecipientList.StrategyRef", tooltipRecipientListStrategyRef);
-    map.put("tooltipRecipientList.StrategyMethodName", tooltipRecipientListStrategyMethodName);
-    map.put("tooltipRecipientList.StrategyMethodAllowNull", tooltipRecipientListStrategyMethodAllowNull);
-    map.put("tooltipRecipientList.ExecutorServiceRef", tooltipRecipientListExecutorServiceRef);
-    map.put("tooltipRecipientList.StopOnException", tooltipRecipientListStopOnException);
-    map.put("tooltipRecipientList.IgnoreInvalidEndpoints", tooltipRecipientListIgnoreInvalidEndpoints);
-    map.put("tooltipRecipientList.Streaming", tooltipRecipientListStreaming);
-    map.put("tooltipRecipientList.Timeout", tooltipRecipientListTimeout);
-    map.put("tooltipRecipientList.OnPrepareRef", tooltipRecipientListOnPrepareRef);
-    map.put("tooltipRecipientList.ShareUnitOfWork", tooltipRecipientListShareUnitOfWork);
-    map.put("tooltipRemoveHeader", tooltipRemoveHeader);
-    map.put("tooltipRemoveHeader.HeaderName", tooltipRemoveHeaderHeaderName);
-    map.put("tooltipRemoveHeaders", tooltipRemoveHeaders);
-    map.put("tooltipRemoveHeaders.Pattern", tooltipRemoveHeadersPattern);
-    map.put("tooltipRemoveHeaders.ExcludePattern", tooltipRemoveHeadersExcludePattern);
-    map.put("tooltipRemoveProperty", tooltipRemoveProperty);
-    map.put("tooltipRemoveProperty.PropertyName", tooltipRemovePropertyPropertyName);
-    map.put("tooltipResequence", tooltipResequence);
-    map.put("tooltipResequence.InheritErrorHandler", tooltipResequenceInheritErrorHandler);
-    map.put("tooltipResequence.Expression", tooltipResequenceExpression);
-    map.put("tooltipResequence.ResequencerConfig", tooltipResequenceResequencerConfig);
-    map.put("tooltipRollback", tooltipRollback);
-    map.put("tooltipRollback.MarkRollbackOnly", tooltipRollbackMarkRollbackOnly);
-    map.put("tooltipRollback.MarkRollbackOnlyLast", tooltipRollbackMarkRollbackOnlyLast);
-    map.put("tooltipRollback.Message", tooltipRollbackMessage);
-    map.put("tooltipRoute", tooltipRoute);
-    map.put("tooltipRoute.AutoStartup", tooltipRouteAutoStartup);
-    map.put("tooltipRoute.Delayer", tooltipRouteDelayer);
-    map.put("tooltipRoute.ErrorHandlerRef", tooltipRouteErrorHandlerRef);
-    map.put("tooltipRoute.Group", tooltipRouteGroup);
-    map.put("tooltipRoute.HandleFault", tooltipRouteHandleFault);
-    map.put("tooltipRoute.MessageHistory", tooltipRouteMessageHistory);
-    map.put("tooltipRoute.RoutePolicyRef", tooltipRouteRoutePolicyRef);
-    map.put("tooltipRoute.ShutdownRoute", tooltipRouteShutdownRoute);
-    map.put("tooltipRoute.ShutdownRunningTask", tooltipRouteShutdownRunningTask);
-    map.put("tooltipRoute.StartupOrder", tooltipRouteStartupOrder);
-    map.put("tooltipRoute.StreamCache", tooltipRouteStreamCache);
-    map.put("tooltipRoute.Trace", tooltipRouteTrace);
-    map.put("tooltipRoutingSlip", tooltipRoutingSlip);
-    map.put("tooltipRoutingSlip.InheritErrorHandler", tooltipRoutingSlipInheritErrorHandler);
-    map.put("tooltipRoutingSlip.Expression", tooltipRoutingSlipExpression);
-    map.put("tooltipRoutingSlip.UriDelimiter", tooltipRoutingSlipUriDelimiter);
-    map.put("tooltipRoutingSlip.IgnoreInvalidEndpoints", tooltipRoutingSlipIgnoreInvalidEndpoints);
-    map.put("tooltipSampling", tooltipSampling);
-    map.put("tooltipSampling.InheritErrorHandler", tooltipSamplingInheritErrorHandler);
-    map.put("tooltipSampling.SamplePeriod", tooltipSamplingSamplePeriod);
-    map.put("tooltipSampling.MessageFrequency", tooltipSamplingMessageFrequency);
-    map.put("tooltipSampling.Units", tooltipSamplingUnits);
-    map.put("tooltipSetBody", tooltipSetBody);
-    map.put("tooltipSetBody.InheritErrorHandler", tooltipSetBodyInheritErrorHandler);
-    map.put("tooltipSetBody.Expression", tooltipSetBodyExpression);
-    map.put("tooltipSetExchangePattern", tooltipSetExchangePattern);
-    map.put("tooltipSetExchangePattern.Pattern", tooltipSetExchangePatternPattern);
-    map.put("tooltipSetFaultBody", tooltipSetFaultBody);
-    map.put("tooltipSetFaultBody.InheritErrorHandler", tooltipSetFaultBodyInheritErrorHandler);
-    map.put("tooltipSetFaultBody.Expression", tooltipSetFaultBodyExpression);
-    map.put("tooltipSetHeader", tooltipSetHeader);
-    map.put("tooltipSetHeader.InheritErrorHandler", tooltipSetHeaderInheritErrorHandler);
-    map.put("tooltipSetHeader.Expression", tooltipSetHeaderExpression);
-    map.put("tooltipSetHeader.HeaderName", tooltipSetHeaderHeaderName);
-    map.put("tooltipSetOutHeader", tooltipSetOutHeader);
-    map.put("tooltipSetOutHeader.InheritErrorHandler", tooltipSetOutHeaderInheritErrorHandler);
-    map.put("tooltipSetOutHeader.Expression", tooltipSetOutHeaderExpression);
-    map.put("tooltipSetOutHeader.HeaderName", tooltipSetOutHeaderHeaderName);
-    map.put("tooltipSetProperty", tooltipSetProperty);
-    map.put("tooltipSetProperty.InheritErrorHandler", tooltipSetPropertyInheritErrorHandler);
-    map.put("tooltipSetProperty.Expression", tooltipSetPropertyExpression);
-    map.put("tooltipSetProperty.PropertyName", tooltipSetPropertyPropertyName);
-    map.put("tooltipSort", tooltipSort);
-    map.put("tooltipSort.InheritErrorHandler", tooltipSortInheritErrorHandler);
-    map.put("tooltipSort.Expression", tooltipSortExpression);
-    map.put("tooltipSort.ComparatorRef", tooltipSortComparatorRef);
-    map.put("tooltipSplit", tooltipSplit);
-    map.put("tooltipSplit.InheritErrorHandler", tooltipSplitInheritErrorHandler);
-    map.put("tooltipSplit.Expression", tooltipSplitExpression);
-    map.put("tooltipSplit.ParallelProcessing", tooltipSplitParallelProcessing);
-    map.put("tooltipSplit.StrategyRef", tooltipSplitStrategyRef);
-    map.put("tooltipSplit.StrategyMethodName", tooltipSplitStrategyMethodName);
-    map.put("tooltipSplit.StrategyMethodAllowNull", tooltipSplitStrategyMethodAllowNull);
-    map.put("tooltipSplit.ExecutorServiceRef", tooltipSplitExecutorServiceRef);
-    map.put("tooltipSplit.Streaming", tooltipSplitStreaming);
-    map.put("tooltipSplit.StopOnException", tooltipSplitStopOnException);
-    map.put("tooltipSplit.Timeout", tooltipSplitTimeout);
-    map.put("tooltipSplit.OnPrepareRef", tooltipSplitOnPrepareRef);
-    map.put("tooltipSplit.ShareUnitOfWork", tooltipSplitShareUnitOfWork);
-    map.put("tooltipStop", tooltipStop);
-    map.put("tooltipThreads", tooltipThreads);
-    map.put("tooltipThreads.InheritErrorHandler", tooltipThreadsInheritErrorHandler);
-    map.put("tooltipThreads.ExecutorServiceRef", tooltipThreadsExecutorServiceRef);
-    map.put("tooltipThreads.PoolSize", tooltipThreadsPoolSize);
-    map.put("tooltipThreads.MaxPoolSize", tooltipThreadsMaxPoolSize);
-    map.put("tooltipThreads.KeepAliveTime", tooltipThreadsKeepAliveTime);
-    map.put("tooltipThreads.TimeUnit", tooltipThreadsTimeUnit);
-    map.put("tooltipThreads.MaxQueueSize", tooltipThreadsMaxQueueSize);
-    map.put("tooltipThreads.ThreadName", tooltipThreadsThreadName);
-    map.put("tooltipThreads.RejectedPolicy", tooltipThreadsRejectedPolicy);
-    map.put("tooltipThreads.CallerRunsWhenRejected", tooltipThreadsCallerRunsWhenRejected);
-    map.put("tooltipThrottle", tooltipThrottle);
-    map.put("tooltipThrottle.InheritErrorHandler", tooltipThrottleInheritErrorHandler);
-    map.put("tooltipThrottle.Expression", tooltipThrottleExpression);
-    map.put("tooltipThrottle.ExecutorServiceRef", tooltipThrottleExecutorServiceRef);
-    map.put("tooltipThrottle.TimePeriodMillis", tooltipThrottleTimePeriodMillis);
-    map.put("tooltipThrottle.AsyncDelayed", tooltipThrottleAsyncDelayed);
-    map.put("tooltipThrottle.CallerRunsWhenRejected", tooltipThrottleCallerRunsWhenRejected);
-    map.put("tooltipThrowException", tooltipThrowException);
-    map.put("tooltipThrowException.Ref", tooltipThrowExceptionRef);
-    map.put("tooltipTransacted", tooltipTransacted);
-    map.put("tooltipTransacted.InheritErrorHandler", tooltipTransactedInheritErrorHandler);
-    map.put("tooltipTransacted.Ref", tooltipTransactedRef);
-    map.put("tooltipTransform", tooltipTransform);
-    map.put("tooltipTransform.InheritErrorHandler", tooltipTransformInheritErrorHandler);
-    map.put("tooltipTransform.Expression", tooltipTransformExpression);
-    map.put("tooltipTry", tooltipTry);
-    map.put("tooltipTry.InheritErrorHandler", tooltipTryInheritErrorHandler);
-    map.put("tooltipUnmarshal", tooltipUnmarshal);
-    map.put("tooltipUnmarshal.Ref", tooltipUnmarshalRef);
-    map.put("tooltipUnmarshal.DataFormatType", tooltipUnmarshalDataFormatType);
-    map.put("tooltipValidate", tooltipValidate);
-    map.put("tooltipValidate.InheritErrorHandler", tooltipValidateInheritErrorHandler);
-    map.put("tooltipValidate.Expression", tooltipValidateExpression);
-    map.put("tooltipWhen", tooltipWhen);
-    map.put("tooltipWhen.InheritErrorHandler", tooltipWhenInheritErrorHandler);
-    map.put("tooltipWhen.Expression", tooltipWhenExpression);
-    map.put("tooltipWireTap", tooltipWireTap);
-    map.put("tooltipWireTap.Uri", tooltipWireTapUri);
-    map.put("tooltipWireTap.NewExchangeProcessorRef", tooltipWireTapNewExchangeProcessorRef);
-    map.put("tooltipWireTap.NewExchangeExpression", tooltipWireTapNewExchangeExpression);
-    map.put("tooltipWireTap.Headers", tooltipWireTapHeaders);
-    map.put("tooltipWireTap.ExecutorServiceRef", tooltipWireTapExecutorServiceRef);
-    map.put("tooltipWireTap.Copy", tooltipWireTapCopy);
-    map.put("tooltipWireTap.OnPrepareRef", tooltipWireTapOnPrepareRef);
+
+        map.put("tooltipAggregate", tooltipAggregate);
+        map.put("tooltipAggregateInheritErrorHandler", tooltipAggregateInheritErrorHandler);
+        map.put("tooltipAggregateCorrelationExpression", tooltipAggregateCorrelationExpression);
+        map.put("tooltipAggregateCompletionPredicate", tooltipAggregateCompletionPredicate);
+        map.put("tooltipAggregateCompletionTimeoutExpression", tooltipAggregateCompletionTimeoutExpression);
+        map.put("tooltipAggregateCompletionSizeExpression", tooltipAggregateCompletionSizeExpression);
+        map.put("tooltipAggregateParallelProcessing", tooltipAggregateParallelProcessing);
+        map.put("tooltipAggregateOptimisticLocking", tooltipAggregateOptimisticLocking);
+        map.put("tooltipAggregateExecutorServiceRef", tooltipAggregateExecutorServiceRef);
+        map.put("tooltipAggregateTimeoutCheckerExecutorServiceRef", tooltipAggregateTimeoutCheckerExecutorServiceRef);
+        map.put("tooltipAggregateAggregationRepositoryRef", tooltipAggregateAggregationRepositoryRef);
+        map.put("tooltipAggregateStrategyRef", tooltipAggregateStrategyRef);
+        map.put("tooltipAggregateStrategyMethodName", tooltipAggregateStrategyMethodName);
+        map.put("tooltipAggregateStrategyMethodAllowNull", tooltipAggregateStrategyMethodAllowNull);
+        map.put("tooltipAggregateCompletionSize", tooltipAggregateCompletionSize);
+        map.put("tooltipAggregateCompletionInterval", tooltipAggregateCompletionInterval);
+        map.put("tooltipAggregateCompletionTimeout", tooltipAggregateCompletionTimeout);
+        map.put("tooltipAggregateCompletionFromBatchConsumer", tooltipAggregateCompletionFromBatchConsumer);
+        map.put("tooltipAggregateGroupExchanges", tooltipAggregateGroupExchanges);
+        map.put("tooltipAggregateEagerCheckCompletion", tooltipAggregateEagerCheckCompletion);
+        map.put("tooltipAggregateIgnoreInvalidCorrelationKeys", tooltipAggregateIgnoreInvalidCorrelationKeys);
+        map.put("tooltipAggregateCloseCorrelationKeyOnCompletion", tooltipAggregateCloseCorrelationKeyOnCompletion);
+        map.put("tooltipAggregateDiscardOnCompletionTimeout", tooltipAggregateDiscardOnCompletionTimeout);
+        map.put("tooltipAggregateForceCompletionOnStop", tooltipAggregateForceCompletionOnStop);
+        map.put("tooltipAggregateOptimisticLockRetryPolicyDefinition", tooltipAggregateOptimisticLockRetryPolicyDefinition);
+
+        map.put("tooltipAOP", tooltipAOP);
+        map.put("tooltipAOPInheritErrorHandler", tooltipAOPInheritErrorHandler);
+        map.put("tooltipAOPBeforeUri", tooltipAOPBeforeUri);
+        map.put("tooltipAOPAfterUri", tooltipAOPAfterUri);
+        map.put("tooltipAOPAfterFinallyUri", tooltipAOPAfterFinallyUri);
+
+        map.put("tooltipBean", tooltipBean);
+        map.put("tooltipBeanRef", tooltipBeanRef);
+        map.put("tooltipBeanMethod", tooltipBeanMethod);
+        map.put("tooltipBeanBeanType", tooltipBeanBeanType);
+        map.put("tooltipBeanCache", tooltipBeanCache);
+
+        map.put("tooltipCatch", tooltipCatch);
+        map.put("tooltipCatchInheritErrorHandler", tooltipCatchInheritErrorHandler);
+        map.put("tooltipCatchExceptions", tooltipCatchExceptions);
+        map.put("tooltipCatchHandled", tooltipCatchHandled);
+
+        map.put("tooltipChoice", tooltipChoice);
+        map.put("tooltipChoiceInheritErrorHandler", tooltipChoiceInheritErrorHandler);
+
+        map.put("tooltipConvertBody", tooltipConvertBody);
+        map.put("tooltipConvertBodyType", tooltipConvertBodyType);
+        map.put("tooltipConvertBodyCharset", tooltipConvertBodyCharset);
+
+        map.put("tooltipDelay", tooltipDelay);
+        map.put("tooltipDelayInheritErrorHandler", tooltipDelayInheritErrorHandler);
+        map.put("tooltipDelayExpression", tooltipDelayExpression);
+        map.put("tooltipDelayExecutorServiceRef", tooltipDelayExecutorServiceRef);
+        map.put("tooltipDelayAsyncDelayed", tooltipDelayAsyncDelayed);
+        map.put("tooltipDelayCallerRunsWhenRejected", tooltipDelayCallerRunsWhenRejected);
+
+        map.put("tooltipDynamicRouter", tooltipDynamicRouter);
+        map.put("tooltipDynamicRouterInheritErrorHandler", tooltipDynamicRouterInheritErrorHandler);
+        map.put("tooltipDynamicRouterExpression", tooltipDynamicRouterExpression);
+        map.put("tooltipDynamicRouterUriDelimiter", tooltipDynamicRouterUriDelimiter);
+        map.put("tooltipDynamicRouterIgnoreInvalidEndpoints", tooltipDynamicRouterIgnoreInvalidEndpoints);
+
+        map.put("tooltipEnrich", tooltipEnrich);
+        map.put("tooltipEnrichResourceUri", tooltipEnrichResourceUri);
+        map.put("tooltipEnrichAggregationStrategyRef", tooltipEnrichAggregationStrategyRef);
+        map.put("tooltipEnrichAggregationStrategyMethodName", tooltipEnrichAggregationStrategyMethodName);
+        map.put("tooltipEnrichAggregationStrategyMethodAllowNull", tooltipEnrichAggregationStrategyMethodAllowNull);
+
+        map.put("tooltipFilter", tooltipFilter);
+        map.put("tooltipFilterInheritErrorHandler", tooltipFilterInheritErrorHandler);
+        map.put("tooltipFilterExpression", tooltipFilterExpression);
+
+        map.put("tooltipFinally", tooltipFinally);
+        map.put("tooltipFinallyInheritErrorHandler", tooltipFinallyInheritErrorHandler);
+
+        map.put("tooltipIdempotentConsumer", tooltipIdempotentConsumer);
+        map.put("tooltipIdempotentConsumerInheritErrorHandler", tooltipIdempotentConsumerInheritErrorHandler);
+        map.put("tooltipIdempotentConsumerExpression", tooltipIdempotentConsumerExpression);
+        map.put("tooltipIdempotentConsumerMessageIdRepositoryRef", tooltipIdempotentConsumerMessageIdRepositoryRef);
+        map.put("tooltipIdempotentConsumerEager", tooltipIdempotentConsumerEager);
+        map.put("tooltipIdempotentConsumerSkipDuplicate", tooltipIdempotentConsumerSkipDuplicate);
+        map.put("tooltipIdempotentConsumerRemoveOnFailure", tooltipIdempotentConsumerRemoveOnFailure);
+
+        map.put("tooltipInOnly", tooltipInOnly);
+        map.put("tooltipInOnlyUri", tooltipInOnlyUri);
+
+        map.put("tooltipInOut", tooltipInOut);
+        map.put("tooltipInOutUri", tooltipInOutUri);
+
+        map.put("tooltipIntercept", tooltipIntercept);
+        map.put("tooltipInterceptInheritErrorHandler", tooltipInterceptInheritErrorHandler);
+
+        map.put("tooltipInterceptFrom", tooltipInterceptFrom);
+        map.put("tooltipInterceptFromInheritErrorHandler", tooltipInterceptFromInheritErrorHandler);
+        map.put("tooltipInterceptFromUri", tooltipInterceptFromUri);
+
+        map.put("tooltipInterceptSendToEndpoint", tooltipInterceptSendToEndpoint);
+        map.put("tooltipInterceptSendToEndpointInheritErrorHandler", tooltipInterceptSendToEndpointInheritErrorHandler);
+        map.put("tooltipInterceptSendToEndpointUri", tooltipInterceptSendToEndpointUri);
+        map.put("tooltipInterceptSendToEndpointSkipSendToOriginalEndpoint", tooltipInterceptSendToEndpointSkipSendToOriginalEndpoint);
+
+        map.put("tooltipLoadBalance", tooltipLoadBalance);
+        map.put("tooltipLoadBalanceInheritErrorHandler", tooltipLoadBalanceInheritErrorHandler);
+        map.put("tooltipLoadBalanceRef", tooltipLoadBalanceRef);
+        map.put("tooltipLoadBalanceLoadBalancerType", tooltipLoadBalanceLoadBalancerType);
+
+        map.put("tooltipLog", tooltipLog);
+        map.put("tooltipLogMessage", tooltipLogMessage);
+        map.put("tooltipLogLoggingLevel", tooltipLogLoggingLevel);
+        map.put("tooltipLogLogName", tooltipLogLogName);
+        map.put("tooltipLogMarker", tooltipLogMarker);
+        map.put("tooltipLogLoggerRef", tooltipLogLoggerRef);
+
+        map.put("tooltipLoop", tooltipLoop);
+        map.put("tooltipLoopInheritErrorHandler", tooltipLoopInheritErrorHandler);
+        map.put("tooltipLoopExpression", tooltipLoopExpression);
+        map.put("tooltipLoopCopy", tooltipLoopCopy);
+
+        map.put("tooltipMarshal", tooltipMarshal);
+        map.put("tooltipMarshalRef", tooltipMarshalRef);
+        map.put("tooltipMarshalDataFormatType", tooltipMarshalDataFormatType);
+
+        map.put("tooltipMulticast", tooltipMulticast);
+        map.put("tooltipMulticastInheritErrorHandler", tooltipMulticastInheritErrorHandler);
+        map.put("tooltipMulticastParallelProcessing", tooltipMulticastParallelProcessing);
+        map.put("tooltipMulticastStrategyRef", tooltipMulticastStrategyRef);
+        map.put("tooltipMulticastStrategyMethodName", tooltipMulticastStrategyMethodName);
+        map.put("tooltipMulticastStrategyMethodAllowNull", tooltipMulticastStrategyMethodAllowNull);
+        map.put("tooltipMulticastExecutorServiceRef", tooltipMulticastExecutorServiceRef);
+        map.put("tooltipMulticastStreaming", tooltipMulticastStreaming);
+        map.put("tooltipMulticastStopOnException", tooltipMulticastStopOnException);
+        map.put("tooltipMulticastTimeout", tooltipMulticastTimeout);
+        map.put("tooltipMulticastOnPrepareRef", tooltipMulticastOnPrepareRef);
+        map.put("tooltipMulticastShareUnitOfWork", tooltipMulticastShareUnitOfWork);
+
+        map.put("tooltipOnCompletion", tooltipOnCompletion);
+        map.put("tooltipOnCompletionInheritErrorHandler", tooltipOnCompletionInheritErrorHandler);
+        map.put("tooltipOnCompletionOnCompleteOnly", tooltipOnCompletionOnCompleteOnly);
+        map.put("tooltipOnCompletionOnFailureOnly", tooltipOnCompletionOnFailureOnly);
+        map.put("tooltipOnCompletionExecutorServiceRef", tooltipOnCompletionExecutorServiceRef);
+        map.put("tooltipOnCompletionUseOriginalMessagePolicy", tooltipOnCompletionUseOriginalMessagePolicy);
+
+        map.put("tooltipOnException", tooltipOnException);
+        map.put("tooltipOnExceptionInheritErrorHandler", tooltipOnExceptionInheritErrorHandler);
+        map.put("tooltipOnExceptionExceptions", tooltipOnExceptionExceptions);
+        map.put("tooltipOnExceptionRetryWhile", tooltipOnExceptionRetryWhile);
+        map.put("tooltipOnExceptionRedeliveryPolicyRef", tooltipOnExceptionRedeliveryPolicyRef);
+        map.put("tooltipOnExceptionHandled", tooltipOnExceptionHandled);
+        map.put("tooltipOnExceptionContinued", tooltipOnExceptionContinued);
+        map.put("tooltipOnExceptionOnRedeliveryRef", tooltipOnExceptionOnRedeliveryRef);
+        map.put("tooltipOnExceptionUseOriginalMessagePolicy", tooltipOnExceptionUseOriginalMessagePolicy);
+        map.put("tooltipOnExceptionRedeliveryPolicy", tooltipOnExceptionRedeliveryPolicy);
+
+        map.put("tooltipOtherwise", tooltipOtherwise);
+        map.put("tooltipOtherwiseInheritErrorHandler", tooltipOtherwiseInheritErrorHandler);
+
+        map.put("tooltipPipeline", tooltipPipeline);
+        map.put("tooltipPipelineInheritErrorHandler", tooltipPipelineInheritErrorHandler);
+
+        map.put("tooltipPolicy", tooltipPolicy);
+        map.put("tooltipPolicyInheritErrorHandler", tooltipPolicyInheritErrorHandler);
+        map.put("tooltipPolicyRef", tooltipPolicyRef);
+
+        map.put("tooltipPollEnrich", tooltipPollEnrich);
+        map.put("tooltipPollEnrichResourceUri", tooltipPollEnrichResourceUri);
+        map.put("tooltipPollEnrichTimeout", tooltipPollEnrichTimeout);
+        map.put("tooltipPollEnrichAggregationStrategyRef", tooltipPollEnrichAggregationStrategyRef);
+        map.put("tooltipPollEnrichAggregationStrategyMethodName", tooltipPollEnrichAggregationStrategyMethodName);
+        map.put("tooltipPollEnrichAggregationStrategyMethodAllowNull", tooltipPollEnrichAggregationStrategyMethodAllowNull);
+
+        map.put("tooltipProcess", tooltipProcess);
+        map.put("tooltipProcessRef", tooltipProcessRef);
+
+        map.put("tooltipRecipientList", tooltipRecipientList);
+        map.put("tooltipRecipientListInheritErrorHandler", tooltipRecipientListInheritErrorHandler);
+        map.put("tooltipRecipientListExpression", tooltipRecipientListExpression);
+        map.put("tooltipRecipientListDelimiter", tooltipRecipientListDelimiter);
+        map.put("tooltipRecipientListParallelProcessing", tooltipRecipientListParallelProcessing);
+        map.put("tooltipRecipientListStrategyRef", tooltipRecipientListStrategyRef);
+        map.put("tooltipRecipientListStrategyMethodName", tooltipRecipientListStrategyMethodName);
+        map.put("tooltipRecipientListStrategyMethodAllowNull", tooltipRecipientListStrategyMethodAllowNull);
+        map.put("tooltipRecipientListExecutorServiceRef", tooltipRecipientListExecutorServiceRef);
+        map.put("tooltipRecipientListStopOnException", tooltipRecipientListStopOnException);
+        map.put("tooltipRecipientListIgnoreInvalidEndpoints", tooltipRecipientListIgnoreInvalidEndpoints);
+        map.put("tooltipRecipientListStreaming", tooltipRecipientListStreaming);
+        map.put("tooltipRecipientListTimeout", tooltipRecipientListTimeout);
+        map.put("tooltipRecipientListOnPrepareRef", tooltipRecipientListOnPrepareRef);
+        map.put("tooltipRecipientListShareUnitOfWork", tooltipRecipientListShareUnitOfWork);
+        map.put("tooltipRecipientListCacheSize", tooltipRecipientListCacheSize);
+
+        map.put("tooltipRemoveHeader", tooltipRemoveHeader);
+        map.put("tooltipRemoveHeaderHeaderName", tooltipRemoveHeaderHeaderName);
+
+        map.put("tooltipRemoveHeaders", tooltipRemoveHeaders);
+        map.put("tooltipRemoveHeadersPattern", tooltipRemoveHeadersPattern);
+        map.put("tooltipRemoveHeadersExcludePattern", tooltipRemoveHeadersExcludePattern);
+
+        map.put("tooltipRemoveProperty", tooltipRemoveProperty);
+        map.put("tooltipRemovePropertyPropertyName", tooltipRemovePropertyPropertyName);
+
+        map.put("tooltipResequence", tooltipResequence);
+        map.put("tooltipResequenceInheritErrorHandler", tooltipResequenceInheritErrorHandler);
+        map.put("tooltipResequenceExpression", tooltipResequenceExpression);
+        map.put("tooltipResequenceResequencerConfig", tooltipResequenceResequencerConfig);
+
+        map.put("tooltipRollback", tooltipRollback);
+        map.put("tooltipRollbackMarkRollbackOnly", tooltipRollbackMarkRollbackOnly);
+        map.put("tooltipRollbackMarkRollbackOnlyLast", tooltipRollbackMarkRollbackOnlyLast);
+        map.put("tooltipRollbackMessage", tooltipRollbackMessage);
+
+        map.put("tooltipRoute", tooltipRoute);
+        map.put("tooltipRouteAutoStartup", tooltipRouteAutoStartup);
+        map.put("tooltipRouteDelayer", tooltipRouteDelayer);
+        map.put("tooltipRouteErrorHandlerRef", tooltipRouteErrorHandlerRef);
+        map.put("tooltipRouteGroup", tooltipRouteGroup);
+        map.put("tooltipRouteHandleFault", tooltipRouteHandleFault);
+        map.put("tooltipRouteMessageHistory", tooltipRouteMessageHistory);
+        map.put("tooltipRouteRoutePolicyRef", tooltipRouteRoutePolicyRef);
+        map.put("tooltipRouteShutdownRoute", tooltipRouteShutdownRoute);
+        map.put("tooltipRouteShutdownRunningTask", tooltipRouteShutdownRunningTask);
+        map.put("tooltipRouteStartupOrder", tooltipRouteStartupOrder);
+        map.put("tooltipRouteStreamCache", tooltipRouteStreamCache);
+        map.put("tooltipRouteTrace", tooltipRouteTrace);
+
+        map.put("tooltipRoutingSlip", tooltipRoutingSlip);
+        map.put("tooltipRoutingSlipInheritErrorHandler", tooltipRoutingSlipInheritErrorHandler);
+        map.put("tooltipRoutingSlipExpression", tooltipRoutingSlipExpression);
+        map.put("tooltipRoutingSlipUriDelimiter", tooltipRoutingSlipUriDelimiter);
+        map.put("tooltipRoutingSlipIgnoreInvalidEndpoints", tooltipRoutingSlipIgnoreInvalidEndpoints);
+        map.put("tooltipRoutingSlipCacheSize", tooltipRoutingSlipCacheSize);
+
+        map.put("tooltipSampling", tooltipSampling);
+        map.put("tooltipSamplingInheritErrorHandler", tooltipSamplingInheritErrorHandler);
+        map.put("tooltipSamplingSamplePeriod", tooltipSamplingSamplePeriod);
+        map.put("tooltipSamplingMessageFrequency", tooltipSamplingMessageFrequency);
+        map.put("tooltipSamplingUnits", tooltipSamplingUnits);
+
+        map.put("tooltipSetBody", tooltipSetBody);
+        map.put("tooltipSetBodyInheritErrorHandler", tooltipSetBodyInheritErrorHandler);
+        map.put("tooltipSetBodyExpression", tooltipSetBodyExpression);
+
+        map.put("tooltipSetExchangePattern", tooltipSetExchangePattern);
+        map.put("tooltipSetExchangePatternPattern", tooltipSetExchangePatternPattern);
+
+        map.put("tooltipSetFaultBody", tooltipSetFaultBody);
+        map.put("tooltipSetFaultBodyInheritErrorHandler", tooltipSetFaultBodyInheritErrorHandler);
+        map.put("tooltipSetFaultBodyExpression", tooltipSetFaultBodyExpression);
+
+        map.put("tooltipSetHeader", tooltipSetHeader);
+        map.put("tooltipSetHeaderInheritErrorHandler", tooltipSetHeaderInheritErrorHandler);
+        map.put("tooltipSetHeaderExpression", tooltipSetHeaderExpression);
+        map.put("tooltipSetHeaderHeaderName", tooltipSetHeaderHeaderName);
+
+        map.put("tooltipSetOutHeader", tooltipSetOutHeader);
+        map.put("tooltipSetOutHeaderInheritErrorHandler", tooltipSetOutHeaderInheritErrorHandler);
+        map.put("tooltipSetOutHeaderExpression", tooltipSetOutHeaderExpression);
+        map.put("tooltipSetOutHeaderHeaderName", tooltipSetOutHeaderHeaderName);
+
+        map.put("tooltipSetProperty", tooltipSetProperty);
+        map.put("tooltipSetPropertyInheritErrorHandler", tooltipSetPropertyInheritErrorHandler);
+        map.put("tooltipSetPropertyExpression", tooltipSetPropertyExpression);
+        map.put("tooltipSetPropertyPropertyName", tooltipSetPropertyPropertyName);
+
+        map.put("tooltipSort", tooltipSort);
+        map.put("tooltipSortInheritErrorHandler", tooltipSortInheritErrorHandler);
+        map.put("tooltipSortExpression", tooltipSortExpression);
+        map.put("tooltipSortComparatorRef", tooltipSortComparatorRef);
+
+        map.put("tooltipSplit", tooltipSplit);
+        map.put("tooltipSplitInheritErrorHandler", tooltipSplitInheritErrorHandler);
+        map.put("tooltipSplitExpression", tooltipSplitExpression);
+        map.put("tooltipSplitParallelProcessing", tooltipSplitParallelProcessing);
+        map.put("tooltipSplitStrategyRef", tooltipSplitStrategyRef);
+        map.put("tooltipSplitStrategyMethodName", tooltipSplitStrategyMethodName);
+        map.put("tooltipSplitStrategyMethodAllowNull", tooltipSplitStrategyMethodAllowNull);
+        map.put("tooltipSplitExecutorServiceRef", tooltipSplitExecutorServiceRef);
+        map.put("tooltipSplitStreaming", tooltipSplitStreaming);
+        map.put("tooltipSplitStopOnException", tooltipSplitStopOnException);
+        map.put("tooltipSplitTimeout", tooltipSplitTimeout);
+        map.put("tooltipSplitOnPrepareRef", tooltipSplitOnPrepareRef);
+        map.put("tooltipSplitShareUnitOfWork", tooltipSplitShareUnitOfWork);
+
+        map.put("tooltipStop", tooltipStop);
+
+        map.put("tooltipThreads", tooltipThreads);
+        map.put("tooltipThreadsInheritErrorHandler", tooltipThreadsInheritErrorHandler);
+        map.put("tooltipThreadsExecutorServiceRef", tooltipThreadsExecutorServiceRef);
+        map.put("tooltipThreadsPoolSize", tooltipThreadsPoolSize);
+        map.put("tooltipThreadsMaxPoolSize", tooltipThreadsMaxPoolSize);
+        map.put("tooltipThreadsKeepAliveTime", tooltipThreadsKeepAliveTime);
+        map.put("tooltipThreadsTimeUnit", tooltipThreadsTimeUnit);
+        map.put("tooltipThreadsMaxQueueSize", tooltipThreadsMaxQueueSize);
+        map.put("tooltipThreadsThreadName", tooltipThreadsThreadName);
+        map.put("tooltipThreadsRejectedPolicy", tooltipThreadsRejectedPolicy);
+        map.put("tooltipThreadsCallerRunsWhenRejected", tooltipThreadsCallerRunsWhenRejected);
+
+        map.put("tooltipThrottle", tooltipThrottle);
+        map.put("tooltipThrottleInheritErrorHandler", tooltipThrottleInheritErrorHandler);
+        map.put("tooltipThrottleExpression", tooltipThrottleExpression);
+        map.put("tooltipThrottleExecutorServiceRef", tooltipThrottleExecutorServiceRef);
+        map.put("tooltipThrottleTimePeriodMillis", tooltipThrottleTimePeriodMillis);
+        map.put("tooltipThrottleAsyncDelayed", tooltipThrottleAsyncDelayed);
+        map.put("tooltipThrottleCallerRunsWhenRejected", tooltipThrottleCallerRunsWhenRejected);
+
+        map.put("tooltipThrowException", tooltipThrowException);
+        map.put("tooltipThrowExceptionRef", tooltipThrowExceptionRef);
+
+        map.put("tooltipTransacted", tooltipTransacted);
+        map.put("tooltipTransactedInheritErrorHandler", tooltipTransactedInheritErrorHandler);
+        map.put("tooltipTransactedRef", tooltipTransactedRef);
+
+        map.put("tooltipTransform", tooltipTransform);
+        map.put("tooltipTransformInheritErrorHandler", tooltipTransformInheritErrorHandler);
+        map.put("tooltipTransformExpression", tooltipTransformExpression);
+
+        map.put("tooltipTry", tooltipTry);
+        map.put("tooltipTryInheritErrorHandler", tooltipTryInheritErrorHandler);
+
+        map.put("tooltipUnmarshal", tooltipUnmarshal);
+        map.put("tooltipUnmarshalRef", tooltipUnmarshalRef);
+        map.put("tooltipUnmarshalDataFormatType", tooltipUnmarshalDataFormatType);
+
+        map.put("tooltipValidate", tooltipValidate);
+        map.put("tooltipValidateInheritErrorHandler", tooltipValidateInheritErrorHandler);
+        map.put("tooltipValidateExpression", tooltipValidateExpression);
+
+        map.put("tooltipWhen", tooltipWhen);
+        map.put("tooltipWhenInheritErrorHandler", tooltipWhenInheritErrorHandler);
+        map.put("tooltipWhenExpression", tooltipWhenExpression);
+
+        map.put("tooltipWireTap", tooltipWireTap);
+        map.put("tooltipWireTapUri", tooltipWireTapUri);
+        map.put("tooltipWireTapNewExchangeProcessorRef", tooltipWireTapNewExchangeProcessorRef);
+        map.put("tooltipWireTapNewExchangeExpression", tooltipWireTapNewExchangeExpression);
+        map.put("tooltipWireTapHeaders", tooltipWireTapHeaders);
+        map.put("tooltipWireTapExecutorServiceRef", tooltipWireTapExecutorServiceRef);
+        map.put("tooltipWireTapCopy", tooltipWireTapCopy);
+        map.put("tooltipWireTapOnPrepareRef", tooltipWireTapOnPrepareRef);
+
     }
+
 }

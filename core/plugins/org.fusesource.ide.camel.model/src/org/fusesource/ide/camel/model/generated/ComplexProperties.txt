@@ -1,133 +1,71 @@
-###############################################################################
-# Copyright (c) 2013 Red Hat, Inc. and others.
-# All rights reserved. This program and the accompanying materials 
-# are made available under the terms of the Eclipse Public License v1.0
-# which accompanies this distribution, and is available at
-# http://www.eclipse.org/legal/epl-v10.html
-# 
+# Copyright (c) 2014 Red Hat, Inc.
+# Distributed under license by Red Hat, Inc. All rights reserved.
+# This program is made available under the terms of the
+# Eclipse Public License v1.0 which accompanies this distribution,
+# and is available at http://www.eclipse.org/legal/epl-v10.html
+#
 # Contributors:
-#     JBoss by Red Hat - Initial implementation.
-##############################################################################
+#     Red Hat, Inc. - initial API and implementation
 
 #
-# NOTE - this file is auto-generated using Scalate. 
+# NOTE - this file is auto-generated using Velocity.
 #
 # DO NOT EDIT!
 #
-
-
-    
 Aggregate otherAttributes
-          
 AOP otherAttributes
-      
 Bean otherAttributes
-      
 Catch otherAttributes
-          
 Choice otherAttributes
-          
 ConvertBody otherAttributes
-      
 Delay otherAttributes
-      
 DynamicRouter otherAttributes
-      
 Enrich otherAttributes
-      
 Filter otherAttributes
-      
 Finally otherAttributes
-      
 IdempotentConsumer otherAttributes
-      
 InOnly otherAttributes
-      
 InOut otherAttributes
-      
 Intercept otherAttributes
-      
 InterceptFrom otherAttributes
-      
 InterceptSendToEndpoint otherAttributes
-      
 LoadBalance otherAttributes
-          
 Log otherAttributes
-      
 Loop otherAttributes
-      
 Marshal otherAttributes
-          
 Multicast otherAttributes
-      
 OnCompletion otherAttributes
-          
 OnException otherAttributes
-              
 Otherwise otherAttributes
-      
 Pipeline otherAttributes
-      
 Policy otherAttributes
-      
 PollEnrich otherAttributes
-      
 Process otherAttributes
-      
 RecipientList otherAttributes
-      
 RemoveHeader otherAttributes
-      
 RemoveHeaders otherAttributes
-      
 RemoveProperty otherAttributes
-      
 Resequence otherAttributes
-          
 Rollback otherAttributes
-      
 Route otherAttributes
-      
 RoutingSlip otherAttributes
-      
 Sampling otherAttributes
-      
 SetBody otherAttributes
-      
 SetExchangePattern otherAttributes
-      
 SetFaultBody otherAttributes
-      
 SetHeader otherAttributes
-      
 SetOutHeader otherAttributes
-      
 SetProperty otherAttributes
-      
 Sort otherAttributes
-      
 Split otherAttributes
-      
 Stop otherAttributes
-      
 Threads otherAttributes
-      
 Throttle otherAttributes
-      
 ThrowException otherAttributes
-      
 Transacted otherAttributes
-      
 Transform otherAttributes
-      
 Try otherAttributes
-      
 Unmarshal otherAttributes
-          
 Validate otherAttributes
-      
 When otherAttributes
-      
 WireTap otherAttributes
-  

@@ -1,34 +1,25 @@
+###############################################################################
+# Copyright (c) 2014 Red Hat, Inc.
+# Distributed under license by Red Hat, Inc. All rights reserved.
+# This program is made available under the terms of the
+# Eclipse Public License v1.0 which accompanies this distribution,
+# and is available at http://www.eclipse.org/legal/epl-v10.html
 #
-#  Copyright 2005-2014 Red Hat, Inc.
-#
-#  Red Hat licenses this file to you under the Apache License, version
-#  2.0 (the "License"); you may not use this file except in compliance
-#  with the License.  You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-#  implied.  See the License for the specific language governing
-#  permissions and limitations under the License.
-#
+# Contributors:
+#     Red Hat, Inc. - initial API and implementation
+###############################################################################
 
 #
 # NOTE - this file is auto-generated using Velocity.
 #
 # DO NOT EDIT!
 #
-
 tooltipAbstractNode = AbstractNode
 tooltipAbstractNodeId = The unique ID of this pattern
 tooltipAbstractNodeDescription = Your description of this pattern
-
 tooltipEndpoint = A Camel Endpoint you can send messages to or consume messages from
 tooltipEndpointUrl = The URL used to define the Camel Endpoint
-
 tooltipRoute = A collection of Enterprise Integration Patterns
-
 #foreach($node in $generator.nodeDefinitions())
 tooltip${node.capitalize($node.getDefinitionName())} = ${node.tooltip()}
 #foreach($p in $node.beanProperties())

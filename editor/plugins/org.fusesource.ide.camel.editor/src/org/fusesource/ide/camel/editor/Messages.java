@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 Red Hat, Inc.
+ * Copyright (c) 2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -8,22 +8,20 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
-/**
- * NOTE - this file is auto-generated using Scalate. 
- * 
- * DO NOT EDIT!
- */
 package org.fusesource.ide.camel.editor;
 
 import org.eclipse.osgi.util.NLS;
 
 /**
+ * NOTE - this file is auto-generated using Velocity.
+ *
+ * DO NOT EDIT!
+ *
  * @author lhein
  */
 public class Messages extends NLS {
-	
-	private static final String BUNDLE_NAME = "org.fusesource.ide.camel.editor.l10n.messages";
+
+    private static final String BUNDLE_NAME = "org.fusesource.ide.camel.editor.l10n.messages";
 
     public static String editorSourcePageTitle;
     public static String editorDesignPageTitle;
@@ -43,7 +41,6 @@ public class Messages extends NLS {
 
     public static String paletteEndpointTitle;
     public static String paletteEndpointDescription;
-
 
     public static String paletteAggregateTitle;
     public static String paletteAggregateDescription;
@@ -221,4 +218,5 @@ public class Messages extends NLS {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);
     }
+
 }
