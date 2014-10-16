@@ -17,5 +17,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>tests</module>
 		<module>features</module>
 	</modules>
+
+	<repositories>
+		<repository>
+			<id>fuse-sap.mw.lab.eng.bos.redhat.com</id>
+			<name>jboss-fuse-sap-data-layer</name>
+			<url>http://fuse-sap.mw.lab.eng.bos.redhat.com/repositories/fuse-sap-data-layer/updatesite/6.2.0-SNAPSHOT/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+
 </project>
 	
