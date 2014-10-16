@@ -68,7 +68,6 @@
     <module>editor</module>
     <module>fabric8</module>
     <module>jmx</module>
-    <module>sap</module>
     <module>servers</module>
     <module>site</module>
 <!-- taken out as its now only used to create the tp mirror for eclipse development
@@ -342,6 +341,22 @@
         </plugins>
       </build>
     </profile>
+	<profile>
+		<!-- Define the SAP tooling in a separate profile. Requires access to the 
+			proprietary SAP JCO and IDoc libraries at build-time -->
+		<id>sap</id>
+		<modules>
+			<module>sap</module>
+		</modules>
+		<repositories>
+			<repository>
+				<id>fuse-sap.mw.lab.eng.bos.redhat.com</id>
+				<name>jboss-fuse-sap-data-layer</name>
+				<url>http://fuse-sap.mw.lab.eng.bos.redhat.com/repositories/fuse-sap-data-layer/updatesite/6.2.0-SNAPSHOT/</url>
+				<layout>p2</layout>
+			</repository>
+		</repositories>
+	</profile>
   </profiles>
 </project>
 

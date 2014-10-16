@@ -47,15 +47,6 @@
       <category name="AllSources"/>
    </feature>
 
-<!-- SAP -->
-   <feature id="org.fusesource.ide.sap.feature">
-      <category name="AllFeatures"/>
-   </feature>
-   <!-- sources -->
-   <feature id="org.fusesource.ide.sap.feature.source">
-      <category name="AllSources"/>
-   </feature>
-
 <!-- Servers -->
    <feature id="org.fusesource.ide.server.extensions.feature">
       <category name="AllFeatures"/>

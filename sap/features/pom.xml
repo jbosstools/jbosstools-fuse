@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.fusesource.ide.sap.feature</module>
+		<module>org.fusesource.ide.sap.imports.feature</module>
 	</modules>
 
 	<build>
