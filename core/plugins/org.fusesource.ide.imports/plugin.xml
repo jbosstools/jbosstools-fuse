@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.fusesource.ide"
+            name="%category.name">
+      </category>
+      <wizard
+            category="org.fusesource.ide"
+            class="org.fusesource.ide.imports.SAPImportWizard"
+            icon="icons/SAP16.png"
+            id="org.fusesource.ide.imports.SAPImportWizard"
+            name="%sap.wizard.name">
+         <description>
+            %sap.wizard.description
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>

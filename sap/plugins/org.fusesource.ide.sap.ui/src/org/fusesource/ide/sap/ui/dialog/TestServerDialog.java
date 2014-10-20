@@ -149,7 +149,7 @@ public class TestServerDialog extends TitleAreaDialog {
 	
 	@Override
 	protected void configureShell(Shell newShell) {
-		newShell.setImage(Activator.getDefault().getImageRegistry().get(Activator.FUSE_ICON_16C_IMAGE));
+		newShell.setImage(Activator.getDefault().getImageRegistry().get(Activator.SAP16_IMAGE));
 		super.configureShell(newShell);
 		newShell.setText(Messages.TestServerDialog_TestServerConnection);
 	}
@@ -160,7 +160,7 @@ public class TestServerDialog extends TitleAreaDialog {
 
 		setTitle(NLS.bind(Messages.TestServerDialog_TestServerXConnection, serverName));
 		setMessage(""); //$NON-NLS-1$
-		setTitleImage(Activator.getDefault().getImageRegistry().get(Activator.FUSE_RS_IMAGE));
+		setTitleImage(Activator.getDefault().getImageRegistry().get(Activator.WALDO48_IMAGE));
 
 		return contents;
 	}

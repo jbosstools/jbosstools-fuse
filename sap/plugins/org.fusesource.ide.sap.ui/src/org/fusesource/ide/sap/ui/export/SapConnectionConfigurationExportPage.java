@@ -54,7 +54,7 @@ public class SapConnectionConfigurationExportPage extends WizardPage {
 	private CCombo exportFileTypeCombo;
 
 	public SapConnectionConfigurationExportPage(DataBindingContext context, SapConnectionConfigurationExportSettings exportSettings) {
-		super(Messages.SapConnectionConfigurationExportPage_SelectExportLocation, Messages.SapConnectionConfigurationExportPage_SelectExportLocationAndFileType, Activator.getDefault().getImageRegistry().getDescriptor(Activator.FUSE_RS_IMAGE));
+		super(Messages.SapConnectionConfigurationExportPage_SelectExportLocation, Messages.SapConnectionConfigurationExportPage_SelectExportLocationAndFileType, Activator.getDefault().getImageRegistry().getDescriptor(Activator.WALDO48_IMAGE));
 		setDescription(Messages.SapConnectionConfigurationExportPage_BrowseToExportLocationAndSelectExportFileType);
 		this.context = context;
 		this.exportSettings = exportSettings;

@@ -62,15 +62,15 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
-            category="org.fusesource.ide.JBossFuseCategory"
+            category="org.fusesource.ide.sap"
             class="org.fusesource.ide.sap.ui.view.SapConnectionsView"
-            icon="icons/fuse_icon_16c.png"
+            icon="icons/SAP16.png"
             id="org.fusesource.ide.sap.ui.view.SapConnectionsView"
             name="%view.name"
             restorable="true">
       </view>
       <category
-            id="org.fusesource.ide.JBossFuseCategory"
+            id="org.fusesource.ide.sap"
             name="%category.name">
       </category>
    </extension>
@@ -526,7 +526,7 @@
          	id="org.fusesource.ide.sap.ui.SapConnectionConfigurationExportWizard"
             category="org.fusesource.ide.JBossFuseCategory"
          	name="%wizard.name"
-            icon="icons/fuse_icon_16c.png"
+            icon="icons/SAP16.png"
          	class="org.fusesource.ide.sap.ui.export.SapConnectionConfigurationExportWizard">
          	<description>
          		%wizard.description

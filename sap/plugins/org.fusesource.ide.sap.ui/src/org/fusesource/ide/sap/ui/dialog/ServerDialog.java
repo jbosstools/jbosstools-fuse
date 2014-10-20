@@ -58,7 +58,7 @@ public class ServerDialog extends TitleAreaDialog {
 	 */
 	public ServerDialog(Shell parentShell, Type type, EditingDomain editingDomain, ServerDataStore serverDataStore, ServerDataStoreEntryImpl serverDataStoreEntry) {
 		super(parentShell);
-		setShellStyle(SWT.RESIZE | SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL);
 		this.type = type;
 		this.editingDomain = editingDomain;
 		this.serverDataStore = serverDataStore;
@@ -85,7 +85,7 @@ public class ServerDialog extends TitleAreaDialog {
 			setTitle(Messages.ServerDialog_dialogPasteTitle);
 			setMessage(""); //$NON-NLS-1$
 		}
-		setTitleImage(Activator.getDefault().getImageRegistry().get(Activator.FUSE_RS_IMAGE));
+		setTitleImage(Activator.getDefault().getImageRegistry().get(Activator.WALDO48_IMAGE));
 
 		return contents;
 	}

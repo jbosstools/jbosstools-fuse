@@ -9,7 +9,7 @@
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
 ******************************************************************************/ 
-package org.fusesource.ide.sap.ui;
+package org.fusesource.ide.imports;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
@@ -25,17 +24,12 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-	
-	public static final String DESTINATION_DATA_STORE_IMAGE = "icons/full/obj16/DestinationDataStore.gif"; //$NON-NLS-1$
-	public static final String DESTINATION_DATA_STORE_ENTRY_IMAGE = "icons/full/obj16/DestinationDataStoreEntry.gif"; //$NON-NLS-1$
-	public static final String SAP_CONNECTION_CONFIGURATION = "icons/full/obj16/SapConnectionConfiguration.gif"; //$NON-NLS-1$
-	public static final String SERVER_DATA_STORE_IMAGE = "icons/full/obj16/ServerDataStore.gif"; //$NON-NLS-1$
-	public static final String SERVER_DATA_STORE_ENTRY_IMAGE = "icons/full/obj16/ServerDataStoreEntry.gif"; //$NON-NLS-1$
+
 	public static final String SAP16_IMAGE = "icons/SAP16.png"; //$NON-NLS-1$
 	public static final String WALDO48_IMAGE = "icons/waldo48.png"; //$NON-NLS-1$
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.fusesource.ide.sap.ui"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.fusesource.ide.imports"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
@@ -50,6 +44,7 @@ public class Activator extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
@@ -59,13 +54,10 @@ public class Activator extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-	}
-	
-	public static RiderLogFacade getLogger() {
-		return RiderLogFacade.getLog(getDefault().getLog());
 	}
 
 	/**
@@ -76,23 +68,13 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-	
+
 	@Override
 	protected void initializeImageRegistry(ImageRegistry reg) {
 		super.initializeImageRegistry(reg);
 		ImageDescriptor image;
 		Bundle bundle = Platform.getBundle(PLUGIN_ID);
 		
-		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(DESTINATION_DATA_STORE_IMAGE), null));
-		getImageRegistry().put(DESTINATION_DATA_STORE_IMAGE, image);
-		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(DESTINATION_DATA_STORE_ENTRY_IMAGE), null));
-		getImageRegistry().put(DESTINATION_DATA_STORE_ENTRY_IMAGE, image);
-		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(SAP_CONNECTION_CONFIGURATION), null));
-		getImageRegistry().put(SAP_CONNECTION_CONFIGURATION, image);
-		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(SERVER_DATA_STORE_IMAGE), null));
-		getImageRegistry().put(SERVER_DATA_STORE_IMAGE, image);
-		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(SERVER_DATA_STORE_ENTRY_IMAGE), null));
-		getImageRegistry().put(SERVER_DATA_STORE_ENTRY_IMAGE, image);
 		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(SAP16_IMAGE), null));
 		getImageRegistry().put(SAP16_IMAGE, image);
 		image = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path(WALDO48_IMAGE), null));
