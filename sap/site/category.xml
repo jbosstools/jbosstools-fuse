@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description>
+      To install these features, point Eclipse at this site.
+   </description>
+   <feature id="org.fusesource.ide.sap.feature">
+      <category name="AllFeatures"/>
+   </feature>
+   <feature id="org.fusesource.ide.sap.feature.source">
+      <category name="AllSources"/>
+   </feature>
+   <category-def name="AllFeatures" label="JBoss Fuse SAP Tooling Nightly Build Update Site">
+      <description>
+         JBoss Fuse SAP Tooling Nightly Build Update Site: contains all features in this build.
+      </description>
+   </category-def>
+   <category-def name="AllSources" label="JBoss Fuse SAP Tooling Nightly Build Update Site">
+      <description>
+         JBoss Fuse SAP Tooling Nightly Build Update Site: contains all source features in this build.
+      </description>
+   </category-def>
+</site>
