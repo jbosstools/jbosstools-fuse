@@ -51,7 +51,7 @@ public class TestDestinationDialog extends TitleAreaDialog {
 	
 	@Override
 	protected void configureShell(Shell newShell) {
-		newShell.setImage(Activator.getDefault().getImageRegistry().get(Activator.FUSE_ICON_16C_IMAGE));
+		newShell.setImage(Activator.getDefault().getImageRegistry().get(Activator.SAP16_IMAGE));
 		super.configureShell(newShell);
 		newShell.setText(Messages.TestDestinationDialog_shellTitle);
 	}
@@ -62,7 +62,7 @@ public class TestDestinationDialog extends TitleAreaDialog {
 
 		setTitle(NLS.bind(Messages.TestDestinationDialog_dialogTitle, destinationName));
 		setMessage(""); //$NON-NLS-1$
-		setTitleImage(Activator.getDefault().getImageRegistry().get(Activator.FUSE_RS_IMAGE));
+		setTitleImage(Activator.getDefault().getImageRegistry().get(Activator.WALDO48_IMAGE));
 
 		return contents;
 	}

@@ -58,7 +58,7 @@ public class DestinationDialog extends TitleAreaDialog {
 	 */
 	public DestinationDialog(Shell parentShell, Type type, EditingDomain editingDomain, DestinationDataStore destinationDataStore, DestinationDataStoreEntryImpl destinationDataStoreEntry) {
 		super(parentShell);
-		setShellStyle(SWT.RESIZE | SWT.APPLICATION_MODAL);
+		setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL);
 		this.type = type;
 		this.editingDomain = editingDomain;
 		this.destinationDataStore = destinationDataStore;
@@ -85,7 +85,7 @@ public class DestinationDialog extends TitleAreaDialog {
 			setTitle(Messages.DestinationDialog_dialogPasteTitle);
 			setMessage(""); //$NON-NLS-1$
 		}
-		setTitleImage(Activator.getDefault().getImageRegistry().get(Activator.FUSE_RS_IMAGE));
+		setTitleImage(Activator.getDefault().getImageRegistry().get(Activator.WALDO48_IMAGE));
 
 		return contents;
 	}

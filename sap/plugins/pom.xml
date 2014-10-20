@@ -11,7 +11,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<name>JBoss Fuse Tooling :: SAP :: Plugins</name>
 	<packaging>pom</packaging>
 	<modules>
-                <module>org.fusesource.ide.sap.imports</module>
                 <module>org.fusesource.ide.sap.ui</module>
 	</modules>
 </project>
