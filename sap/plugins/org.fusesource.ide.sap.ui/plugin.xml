@@ -520,7 +520,7 @@
          point="org.eclipse.ui.exportWizards">
 	      <category
 	            id="org.fusesource.ide.JBossFuseCategory"
-	            name="%category.name.0">
+	            name="%category.name">
 	      </category>
          <wizard
          	id="org.fusesource.ide.sap.ui.SapConnectionConfigurationExportWizard"
