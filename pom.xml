@@ -36,10 +36,10 @@
 
   <properties>
     <!-- JBoss Tools Integration Stack version -->
-    <jbtis.version>4.2.0.Beta1</jbtis.version>
+    <jbtis.version>4.2.0.Beta1b</jbtis.version>
     
     <!-- Tycho version -->
-    <jboss-tycho-version>${tychoVersion}</jboss-tycho-version>
+    <jboss-tycho-version>0.21.1</jboss-tycho-version>
     
     <!-- fuse tooling related versions -->
     <tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
