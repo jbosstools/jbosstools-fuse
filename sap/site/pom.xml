@@ -39,9 +39,8 @@
 		  </goals>
 		  <configuration>
 		    <associateSites>
-		      <associateSite>http://download.jboss.org/jbosstools/updates/stable/luna/</associateSite>
+		      <associateSite>http://download.jboss.org/jbosstools/updates/development/luna/</associateSite>
 		      <associateSite>http://download.jboss.org/jbosstools/targetplatforms/jbtistarget/luna/</associateSite>
-		      <associateSite>http://download.jboss.org/jbosstools/updates/requirements/gemini/2.0.0.RELEASE/</associateSite>
 		    </associateSites>
 
 		    <siteTemplateFolder>${siteTemplateFolder}</siteTemplateFolder>
