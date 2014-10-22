@@ -38,8 +38,10 @@
     <!-- JBoss Tools Integration Stack version -->
     <jbtis.version>4.2.0.Beta1b</jbtis.version>
     
-    <!-- Tycho version -->
+    <!-- Tycho versions -->
     <jboss-tycho-version>0.21.1</jboss-tycho-version>
+    <tychoVersion>0.21.0</tychoVersion>
+    <tychoExtrasVersion>${tychoVersion}</tychoExtrasVersion>
     
     <!-- fuse tooling related versions -->
     <tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
@@ -332,7 +334,7 @@
           <plugin>
             <groupId>org.eclipse.tycho</groupId>
             <artifactId>tycho-packaging-plugin</artifactId>
-            <version>${jboss-tycho-version}</version>
+            <version>${tychoVersion}</version>
             <configuration>
               <format>'v'yyyyMMdd-HHmm'-H${BUILD_NUMBER}-${BUILD_ALIAS}'</format>
               <archiveSite>true</archiveSite>
