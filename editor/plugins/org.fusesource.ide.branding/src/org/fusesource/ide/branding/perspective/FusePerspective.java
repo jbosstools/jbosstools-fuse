@@ -27,6 +27,8 @@ import org.fusesource.ide.commons.ui.UIHelper;
  * @author lhein
  */
 public class FusePerspective implements IPerspectiveFactory, UIHelper {
+	
+	public static final String ID = "org.fusesource.ide.branding.perspective";
 
 	/*
 	 * (non-Javadoc)

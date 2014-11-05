@@ -130,4 +130,10 @@ public class VersionBean implements Version, HasId {
 		}
 		return false;
 	}
+
+	@Override
+	public String revision() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

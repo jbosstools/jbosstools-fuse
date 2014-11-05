@@ -35,7 +35,10 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -49,7 +52,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IWorkbenchPreferenceConstants;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
+import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.internal.ide.IDEInternalPreferences;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
+import org.eclipse.ui.internal.util.PrefUtil;
+import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 import org.fusesource.ide.branding.Activator;
+import org.fusesource.ide.branding.perspective.FusePerspective;
 import org.fusesource.ide.branding.wizards.WizardMessages;
 import org.fusesource.ide.maven.MavenFacade;
 
@@ -76,6 +90,7 @@ import org.fusesource.ide.maven.MavenFacade;
  * </ul>
  * </p>
  */
+@SuppressWarnings("restriction")
 public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		INewWizard {
 
@@ -99,6 +114,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 				WizardMessages.wizardProjectPageProjectTitle,
 				WizardMessages.wizardProjectPageProjectDescription, workingSets) { //
 
+			@SuppressWarnings("unused")
 			protected void createAdditionalControls(Composite container) {
 				/*
 				 * simpleProject = new Button(container, SWT.CHECK);
@@ -200,6 +216,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		final IPath rootPath = locationPage.isInWorkspace() ? root.getLocation().append(projectName) : location;
 		final File pomFile = rootPath.append("pom.xml").toFile();
 		boolean pomExists = pomFile.exists();
+		final IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
 		if (pomExists) {
 			MessageDialog.openError(getShell(), NLS.bind(
@@ -215,6 +232,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		final ArchetypeDetails archetype = archetypePage.getArchetype();
 
 		final String javaPackage = archetypePage.getJavaPackage();
+		@SuppressWarnings("unused")
 		final Properties properties = archetypePage.getProperties();
 
 		Activator.getLogger().debug(
@@ -256,6 +274,9 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 				}
 			}
 		};
+		
+		IPerspectiveDescriptor finalPersp = PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(FusePerspective.ID);
+		final boolean switchPerspective = confirmPerspectiveSwitch(workbenchWindow, finalPersp);
 
 		job.addJobChangeListener(new JobChangeAdapter() {
 			public void done(IJobChangeEvent event) {
@@ -273,6 +294,10 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 				} else {
 					final IProject project = root.getProject(projectName);
 					try {
+						if (switchPerspective) {
+							// switch to Fuse perspective if necessary.
+							switchToFusePerspective(workbenchWindow);
+						}
 						enforceNatures(project, new NullProgressMonitor());
 					} catch (CoreException ex) {
 						Activator.getLogger().error(ex);
@@ -333,7 +358,8 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 					project.setDescription(projectDescription, monitor);
 					
 					IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
-				    IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
+				    @SuppressWarnings("unused")
+					IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
 					MavenUpdateRequest request = new MavenUpdateRequest(false, true);
 					request.addPomFile(project.getFile("pom.xml"));
 					configurationManager.updateProjectConfiguration(request, monitor);
@@ -346,5 +372,81 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	
 	public String getProjectName() {
 		return locationPage != null ? locationPage.getProjectName() : null;
+	}
+	
+	/**
+	 * Switches, if necessary, the perspective of active workbench window to Fuse perspective. 
+	 *
+	 * @param workbenchWindow
+	 */
+	private void switchToFusePerspective(final IWorkbenchWindow workbenchWindow) {
+		IPerspectiveDescriptor activePerspective = workbenchWindow.getActivePage().getPerspective();
+		if (activePerspective == null || !activePerspective.getId().equals(FusePerspective.ID)) {
+			workbenchWindow.getShell().getDisplay().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						workbenchWindow.getWorkbench().showPerspective(FusePerspective.ID, workbenchWindow);
+					} catch (WorkbenchException e) {
+						Activator.getLogger().error(e);
+					}
+				}
+			});
+		}
+	}
+	
+	/**
+	 * Prompts the user for whether to switch perspectives.
+	 * 
+	 * @param window
+	 *            The workbench window in which to switch perspectives; must not
+	 *            be <code>null</code>
+	 * @param finalPersp
+	 *            The perspective to switch to; must not be <code>null</code>.
+	 * 
+	 * @return <code>true</code> if it's OK to switch, <code>false</code>
+	 *         otherwise
+	 */
+	private boolean confirmPerspectiveSwitch(IWorkbenchWindow window,
+			IPerspectiveDescriptor finalPersp) {
+		
+		IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
+		String pspm = store
+				.getString(IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE);
+		if (!IDEInternalPreferences.PSPM_PROMPT.equals(pspm)) {
+			// Return whether or not we should always switch
+			return IDEInternalPreferences.PSPM_ALWAYS.equals(pspm);
+		}
+
+		String desc = finalPersp.getDescription();
+		String message;
+		if (desc == null || desc.length() == 0)
+			message = NLS.bind(ResourceMessages.NewProject_perspSwitchMessage, finalPersp.getLabel());
+		else
+			message = NLS.bind(ResourceMessages.NewProject_perspSwitchMessageWithDesc, new String[] { finalPersp.getLabel(), desc });
+
+		MessageDialogWithToggle dialog = MessageDialogWithToggle
+				.openYesNoQuestion(window.getShell(),
+						ResourceMessages.NewProject_perspSwitchTitle, message,
+						null /* use the default message for the toggle */,
+						false /* toggle is initially unchecked */, store,
+						IDEInternalPreferences.PROJECT_SWITCH_PERSP_MODE);
+		int result = dialog.getReturnCode();
+		
+		// If we are not going to prompt anymore propagate the choice.
+		if (dialog.getToggleState()) {
+			String preferenceValue;
+			if (result == IDialogConstants.YES_ID) {
+				// Doesn't matter if it is replace or new window
+				// as we are going to use the open perspective setting
+				preferenceValue = IWorkbenchPreferenceConstants.OPEN_PERSPECTIVE_REPLACE;
+			} else {
+				preferenceValue = IWorkbenchPreferenceConstants.NO_NEW_PERSPECTIVE;
+			}
+
+			// update PROJECT_OPEN_NEW_PERSPECTIVE to correspond
+			PrefUtil.getAPIPreferenceStore().setValue(IDE.Preferences.PROJECT_OPEN_NEW_PERSPECTIVE,	preferenceValue);
+		}
+		return result == IDialogConstants.YES_ID;
 	}
 }
