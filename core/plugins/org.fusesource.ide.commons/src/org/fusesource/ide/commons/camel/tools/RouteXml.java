@@ -376,6 +376,11 @@ public class RouteXml {
             marshaller.setProperty("com.sun.xml.bind.indentString", "  ");
         } catch (PropertyException e) {
         	Activator.getLogger().debug("Property is not supported", e);
+        	try {
+        		marshaller.setProperty("com.sun.xml.internal.bind.indentString", "  ");
+        	} catch (PropertyException e1) {
+            	Activator.getLogger().debug("Property is not supported", e1);
+        	}
         }
 
         Object value = model.marshalRootElement();

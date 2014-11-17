@@ -27,6 +27,8 @@ public class RiderLogFacade {
 	private static Map<String, RiderLogFacade> openLogs = new ConcurrentHashMap<String, RiderLogFacade>();
 	
 	private ILog log;
+	
+	private boolean isDebugEnabled = Boolean.valueOf(System.getProperty("fusesource.debugEnabled"));
 		
 	/**
 	 * creates the log facade for the given plugin log
@@ -37,6 +39,24 @@ public class RiderLogFacade {
 		this.log = log;
 	}
 	
+	/**
+	 * Returns <code>true</code> if logging debug messages; <code>false</code> otherwise.
+	 * 
+	 * @return <code>true</code> if logging debug messages; <code>false</code> otherwise.
+	 */
+	public boolean isDebugEnabled() {
+		return isDebugEnabled;
+	}
+
+	/**
+	 * Set logging of debug messages.
+	 * 
+	 * @param isDebug - if <code>true</code> log debug messages. 
+	 */
+	public void setDebugEnabled(boolean isDebug) {
+		this.isDebugEnabled = isDebug;
+	}
+
 	/**
 	 * creates a new log facade or returns it if its already opened
 	 * 
@@ -176,15 +196,20 @@ public class RiderLogFacade {
 	 * @param status	the status to log
 	 */
 	public void log(IStatus status) {
-		this.log.log(status);
+		if (this.isDebugEnabled) {
+			this.log.log(status);
+		}
 	}
 
 	public void debug(String message) {
-		// TODO only show this if debugging?
-		//this.log.log(createStatus(IStatus.INFO, 0, message, null));
+		if (this.isDebugEnabled) {
+			this.log(createStatus(IStatus.INFO, 0, message, null));
+		}
 	}
 
 	public void debug(String message, Throwable e) {
-		this.log(createStatus(IStatus.ERROR, 0, message, e));
+		if (this.isDebugEnabled) {
+			this.log(createStatus(IStatus.ERROR, 0, message, e));
+		}
 	}
 }
