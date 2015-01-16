@@ -9,9 +9,19 @@
             typeIds="org.fusesource.ide.fabric8.runtime.11">
       </fragment>
       <fragment
+            class="org.fusesource.ide.server.fabric8.ui.runtime.fabric8.Fabric8RuntimeFragment"
+            id="org.fusesource.ide.server.fabric8.ui.runtime.fragment.12"
+            typeIds="org.fusesource.ide.fabric8.runtime.12">
+      </fragment>
+      <fragment
             class="org.fusesource.ide.server.fabric8.ui.runtime.fabric8.Fabric8ServerWizardFragment1x"
             id="org.fusesource.ide.server.fabric8.ui.server.fragment.11"
             typeIds="org.fusesource.ide.fabric8.server.11">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.fabric8.ui.runtime.fabric8.Fabric8ServerWizardFragment1x"
+            id="org.fusesource.ide.server.fabric8.ui.server.fragment.12"
+            typeIds="org.fusesource.ide.fabric8.server.12">
       </fragment>
    </extension>
    <extension
@@ -23,8 +33,18 @@
       </image>
       <image
             icon="icons/fabric8_server.png"
+            id="org.fusesource.ide.server.fabric8.ui.server.image.12"
+            typeIds="org.fusesource.ide.fabric8.server.12">
+      </image>
+      <image
+            icon="icons/fabric8_server.png"
             id="org.fusesource.ide.server.fabric8.ui.runtime.image.11"
             typeIds="org.fusesource.ide.fabric8.runtime.11">
+      </image>
+      <image
+            icon="icons/fabric8_server.png"
+            id="org.fusesource.ide.server.fabric8.ui.runtime.image.12"
+            typeIds="org.fusesource.ide.fabric8.runtime.12">
       </image>
    </extension>
    

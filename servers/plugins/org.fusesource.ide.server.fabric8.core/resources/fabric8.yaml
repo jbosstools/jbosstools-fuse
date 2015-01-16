@@ -32,8 +32,8 @@ availableRuntimes:
 
  - &fabric8110
    id: fabric8110
-   name: Fabric8 1.1.0
-   version: 1.1.0
+   name: Fabric8 1.1.0.CR5
+   version: 1.1.0.CR5
    license: *apache20
    url: http://fabric8.io
    labels: {
@@ -42,10 +42,34 @@ availableRuntimes:
         runtime-type: FABRIC8,
         runtime-size: 92582451,
         additionalDownloadURLs: {
-            "win32": "http://central.maven.org/maven2/io/fabric8/fabric8-karaf/1.1.0.Beta6/fabric8-karaf-1.1.0.Beta6.zip",
-            "linux": "http://central.maven.org/maven2/io/fabric8/fabric8-karaf/1.1.0.Beta6/fabric8-karaf-1.1.0.Beta6.zip",
-            "macosx": "http://central.maven.org/maven2/io/fabric8/fabric8-karaf/1.1.0.Beta6/fabric8-karaf-1.1.0.Beta6.zip",
+            "win32": "http://repo1.maven.org/maven2/io/fabric8/fabric8-karaf/1.1.0.CR5/fabric8-karaf-1.1.0.CR5.zip",
+            "linux": "http://repo1.maven.org/maven2/io/fabric8/fabric8-karaf/1.1.0.CR5/fabric8-karaf-1.1.0.CR5.zip",
+            "macosx": "http://repo1.maven.org/maven2/io/fabric8/fabric8-karaf/1.1.0.CR5/fabric8-karaf-1.1.0.CR5.zip",
         },
         wtp-runtime-type: org.fusesource.ide.fabric8.runtime.11
+   }
+   
+   
+   ##################
+   #  Fabric8 1.2.0 #
+   ##################
+
+ - &fabric8120
+   id: fabric8120
+   name: Fabric8 1.2.0.Beta4
+   version: 1.2.0.Beta4
+   license: *apache20
+   url: http://fabric8.io
+   labels: {
+        requiresCredentials: false,
+        runtime-category: OSGI_SERVER,
+        runtime-type: FABRIC8,
+        runtime-size: 92582451,
+        additionalDownloadURLs: {
+            "win32": "http://repo1.maven.org/maven2/io/fabric8/fabric8-karaf/1.2.0.Beta4/fabric8-karaf-1.2.0.Beta4.zip",
+            "linux": "http://repo1.maven.org/maven2/io/fabric8/fabric8-karaf/1.2.0.Beta4/fabric8-karaf-1.2.0.Beta4.zip",
+            "macosx": "http://repo1.maven.org/maven2/io/fabric8/fabric8-karaf/1.2.0.Beta4/fabric8-karaf-1.2.0.Beta4.zip",
+        },
+        wtp-runtime-type: org.fusesource.ide.fabric8.runtime.12
    }
    

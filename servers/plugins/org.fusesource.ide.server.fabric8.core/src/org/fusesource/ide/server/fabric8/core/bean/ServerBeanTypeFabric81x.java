@@ -11,6 +11,7 @@
 package org.fusesource.ide.server.fabric8.core.bean;
 
 import static org.fusesource.ide.server.fabric8.core.util.IFabric8ToolingConstants.SERVER_FABRIC8_11;
+import static org.fusesource.ide.server.fabric8.core.util.IFabric8ToolingConstants.SERVER_FABRIC8_12;
 
 import java.io.File;
 
@@ -23,7 +24,8 @@ public class ServerBeanTypeFabric81x extends ServerBeanType {
 	
 	protected static final String FABRIC81x_RELEASE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 
-	public static final String V1_1 = "1.1";
+    public static final String V1_1 = "1.1";
+    public static final String V1_2 = "1.2";
 	public static final String V1_x = "1.";
 	
 	protected ServerBeanTypeFabric81x() {
@@ -62,9 +64,10 @@ public class ServerBeanTypeFabric81x extends ServerBeanType {
 		 * @see org.jboss.ide.eclipse.as.core.server.bean.ICondition#getServerTypeId(java.lang.String)
 		 */
 		public String getServerTypeId(String version) {
-			if( version.equals(V1_1)) return SERVER_FABRIC8_11;
-			// In case a 1.2 comes out, it should work on 1.1 until fixed
-			if( version.startsWith(V1_x)) return SERVER_FABRIC8_11;
+		    if( version.equals(V1_1)) return SERVER_FABRIC8_11;
+		    if( version.equals(V1_2)) return SERVER_FABRIC8_12;
+			// In case a 1.3 comes out, it should work on 1.2 until fixed
+			if( version.startsWith(V1_x)) return SERVER_FABRIC8_12;
 			return null;
 		}
 	}

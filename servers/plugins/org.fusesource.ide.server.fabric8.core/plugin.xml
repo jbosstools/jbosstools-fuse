@@ -16,6 +16,19 @@
              versions="1.0">
        </moduleType>
     </runtimeType>
+    <runtimeType
+          class="org.fusesource.ide.server.fabric8.core.runtime.Fabric8RuntimeDelegate"
+          description="%runtimeTypeFabric8Description_12"
+          id="org.fusesource.ide.fabric8.runtime.12"
+          name="%runtimeTypeFabric8Label_12"
+          vendor="%fusesource"
+          vendorId="%fusesource"
+          version="1.2">
+       <moduleType
+             types="fuse.camel"
+             versions="1.0">
+       </moduleType>
+    </runtimeType>
   </extension>
 
   <extension point="org.eclipse.wst.server.core.serverTypes">
@@ -31,6 +44,23 @@
            name="%fabric8ServerType_11"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.fabric8.runtime.11"
+           startTimeout="90000"
+           stopTimeout="45000"
+           startBeforePublish="true" 
+           supportsRemoteHosts="false">
+     </serverType>
+     <serverType
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
+           class="org.fusesource.ide.server.fabric8.core.server.Fabric8ServerDelegate"
+           description="%fabric8ServerDescription_12"
+           hasConfiguration="true"
+           id="org.fusesource.ide.fabric8.server.12"
+           initialState="stopped"
+           launchConfigId="org.fusesource.ide.server.fabric81x.launch"
+           launchModes="run,debug"
+           name="%fabric8ServerType_12"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.fabric8.runtime.12"
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
@@ -96,13 +126,13 @@
          <subsystemMapping
             id="launch.karaf.local.default"
             mappedId="launch.fabric8.local"
-            serverTypes="org.fusesource.ide.fabric8.server.11">
+            serverTypes="org.fusesource.ide.fabric8.server.11,org.fusesource.ide.fabric8.server.12">
          </subsystemMapping>
          
          <subsystemMapping
             id="shutdown.karaf.local.default"
             mappedId="shutdown.fabric8.local"
-            serverTypes="org.fusesource.ide.fabric8.server.11">
+            serverTypes="org.fusesource.ide.fabric8.server.11,org.fusesource.ide.fabric8.server.12">
          </subsystemMapping>
 
          <subsystem
@@ -114,19 +144,19 @@
          <subsystemMapping
             id="publish.fabric8.local.default"
             mappedId="publish.fabric8.local"
-            serverTypes="org.fusesource.ide.fabric8.server.11">
+            serverTypes="org.fusesource.ide.fabric8.server.11,org.fusesource.ide.fabric8.server.12">
          </subsystemMapping>
 
          <subsystemMapping
             id="modules.karaf.local.default"
             mappedId="modules.fabric8.local"
-            serverTypes="org.fusesource.ide.fabric8.server.11">
+            serverTypes="org.fusesource.ide.fabric8.server.11,org.fusesource.ide.fabric8.server.12">
          </subsystemMapping>
                   
          <subsystemMapping
             id="port.karaf.local.default"
             mappedId="port.fabric8.local"
-            serverTypes="org.fusesource.ide.fabric8.server.11">
+            serverTypes="org.fusesource.ide.fabric8.server.11,org.fusesource.ide.fabric8.server.12">
          </subsystemMapping>
   </extension>
   

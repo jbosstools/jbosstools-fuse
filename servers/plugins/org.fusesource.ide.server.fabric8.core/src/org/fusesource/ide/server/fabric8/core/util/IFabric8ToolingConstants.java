@@ -16,15 +16,17 @@ package org.fusesource.ide.server.fabric8.core.util;
 public interface IFabric8ToolingConstants {
 	public static final String FABRIC8_VERSION_1x = "1.";
 
-	public static final String RUNTIME_FABRIC8_11 = "org.fusesource.ide.fabric8.runtime.11";
+    public static final String RUNTIME_FABRIC8_11 = "org.fusesource.ide.fabric8.runtime.11";
+    public static final String RUNTIME_FABRIC8_12 = "org.fusesource.ide.fabric8.runtime.12";
 		
 	public static final String[] ALL_FABRIC8_RUNTIME_TYPES = new String[]{
-		RUNTIME_FABRIC8_11
+		RUNTIME_FABRIC8_11, RUNTIME_FABRIC8_12
 	};	
 
-	public static final String SERVER_FABRIC8_11 = "org.fusesource.ide.fabric8.server.11";
+    public static final String SERVER_FABRIC8_11 = "org.fusesource.ide.fabric8.server.11";
+    public static final String SERVER_FABRIC8_12 = "org.fusesource.ide.fabric8.server.12";
 	
 	public static final String[] ALL_FABRIC8_SERVER_TYPES = new String[]{
-		SERVER_FABRIC8_11
+		SERVER_FABRIC8_11, SERVER_FABRIC8_12
 	};
 }

@@ -34,7 +34,10 @@ public class Fabric8RuntimeDelegate extends KarafRuntimeDelegate {
 		if (version != null && version.trim().startsWith("1.1")) {
 			if (!id.toLowerCase().equals(IFabric8ToolingConstants.RUNTIME_FABRIC8_11)) 
 				return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else {
+		} else if (version != null && version.trim().startsWith("1.2")) {
+            if (!id.toLowerCase().equals(IFabric8ToolingConstants.RUNTIME_FABRIC8_12)) 
+                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+        } else {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
 		}
 		

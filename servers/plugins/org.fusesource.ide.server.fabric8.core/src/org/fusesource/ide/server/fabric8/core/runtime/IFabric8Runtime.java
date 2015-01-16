@@ -19,6 +19,7 @@ import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 public interface IFabric8Runtime extends IKarafRuntime{
 	
 	static final String[] FABRIC8_RUNTIME_TYPES_SUPPORTED = new String[] {
-		IFabric8ToolingConstants.RUNTIME_FABRIC8_11
+		IFabric8ToolingConstants.RUNTIME_FABRIC8_11,
+		IFabric8ToolingConstants.RUNTIME_FABRIC8_12
 	};
 }
