@@ -14,6 +14,16 @@
             typeIds="org.fusesource.ide.servicemix.runtime.50">
       </fragment>
       <fragment
+            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeFragment"
+            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.51"
+            typeIds="org.fusesource.ide.servicemix.runtime.51">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixRuntimeFragment"
+            id="org.fusesource.ide.server.servicemix.ui.runtime.fragment.52"
+            typeIds="org.fusesource.ide.servicemix.runtime.52">
+      </fragment>
+      <fragment
             class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
             id="org.fusesource.ide.server.servicemix.ui.server.fragment.45"
             typeIds="org.fusesource.ide.servicemix.server.45">
@@ -22,6 +32,16 @@
             class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
             id="org.fusesource.ide.server.servicemix.ui.server.fragment.50"
             typeIds="org.fusesource.ide.servicemix.server.50">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
+            id="org.fusesource.ide.server.servicemix.ui.server.fragment.51"
+            typeIds="org.fusesource.ide.servicemix.server.51">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.servicemix.ui.runtime.smx4x.ServiceMixServerWizardFragment4x"
+            id="org.fusesource.ide.server.servicemix.ui.server.fragment.52"
+            typeIds="org.fusesource.ide.servicemix.server.52">
       </fragment>
    </extension>
    <extension
@@ -38,6 +58,16 @@
       </image>
       <image
             icon="icons/service_mix_server.png"
+            id="org.fusesource.ide.server.servicemix.ui.server.image.51"
+            typeIds="org.fusesource.ide.servicemix.server.51">
+      </image>
+      <image
+            icon="icons/service_mix_server.png"
+            id="org.fusesource.ide.server.servicemix.ui.server.image.52"
+            typeIds="org.fusesource.ide.servicemix.server.52">
+      </image>
+      <image
+            icon="icons/service_mix_server.png"
             id="org.fusesource.ide.server.servicemix.ui.runtime.image.45"
             typeIds="org.fusesource.ide.servicemix.runtime.45">
       </image>
@@ -45,6 +75,16 @@
             icon="icons/service_mix_server.png"
             id="org.fusesource.ide.server.servicemix.ui.runtime.image.50"
             typeIds="org.fusesource.ide.servicemix.runtime.50">
+      </image>
+      <image
+            icon="icons/service_mix_server.png"
+            id="org.fusesource.ide.server.servicemix.ui.runtime.image.51"
+            typeIds="org.fusesource.ide.servicemix.runtime.51">
+      </image>
+      <image
+            icon="icons/service_mix_server.png"
+            id="org.fusesource.ide.server.servicemix.ui.runtime.image.52"
+            typeIds="org.fusesource.ide.servicemix.runtime.52">
       </image>
    </extension>
    

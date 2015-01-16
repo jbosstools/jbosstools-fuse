@@ -11,6 +11,8 @@
 package org.fusesource.ide.server.servicemix.core.bean;
 
 import static org.fusesource.ide.server.servicemix.core.util.IServiceMixToolingConstants.SERVER_SMX_50;
+import static org.fusesource.ide.server.servicemix.core.util.IServiceMixToolingConstants.SERVER_SMX_51;
+import static org.fusesource.ide.server.servicemix.core.util.IServiceMixToolingConstants.SERVER_SMX_52;
 
 import java.io.File;
 
@@ -25,7 +27,9 @@ public class ServerBeanTypeServiceMix5x  extends ServerBeanType {
 	protected static final String SMX5x_RELEASE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 
 	public static final String V5_0 = "5.0";
-	public static final String V5_x = "5.";
+	public static final String V5_1 = "5.1";
+	public static final String V5_2 = "5.2";
+    public static final String V5_x = "5.";
 	
 	protected ServerBeanTypeServiceMix5x() {
 		super(	"SMX5x", //$NON-NLS-1$
@@ -64,8 +68,10 @@ public class ServerBeanTypeServiceMix5x  extends ServerBeanType {
 		 */
 		public String getServerTypeId(String version) {
 			if( version.equals(V5_0)) return SERVER_SMX_50;
-			// In case a 5.1 comes out, it should work on 5.0 until fixed
-			if( version.startsWith(V5_x)) return SERVER_SMX_50;
+			if( version.equals(V5_1)) return SERVER_SMX_51;
+			if( version.equals(V5_2)) return SERVER_SMX_52;
+			// In case a 5.3 comes out, it should work on 5.2 until fixed
+			if( version.startsWith(V5_x)) return SERVER_SMX_52;
 			return null;
 		}
 	}
