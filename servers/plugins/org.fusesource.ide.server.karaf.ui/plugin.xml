@@ -15,6 +15,11 @@
       </fragment>
       <fragment
             class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment"
+            id="org.fusesource.ide.server.karaf.ui.runtime.fragment.24"
+            typeIds="org.fusesource.ide.karaf.runtime.24">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafRuntimeFragment"
             id="org.fusesource.ide.server.karaf.ui.runtime.fragment.30"
             typeIds="org.fusesource.ide.karaf.runtime.30">
       </fragment>
@@ -28,6 +33,11 @@
             class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
             id="org.fusesource.ide.server.karaf.ui.server.fragment.23"
             typeIds="org.fusesource.ide.karaf.server.23">
+      </fragment>
+	  <fragment
+            class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
+            id="org.fusesource.ide.server.karaf.ui.server.fragment.24"
+            typeIds="org.fusesource.ide.karaf.server.24">
       </fragment>
       <fragment
             class="org.fusesource.ide.server.karaf.ui.runtime.v2x.KarafServerWizardFragment2x"
@@ -50,6 +60,11 @@
       </image>
       <image
             icon="icons/karaf.png"
+            id="org.fusesource.ide.server.karaf.ui.server.image.24"
+            typeIds="org.fusesource.ide.karaf.server.24">
+      </image>
+      <image
+            icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.server.image.30"
             typeIds="org.fusesource.ide.karaf.server.30">
       </image>
@@ -63,6 +78,11 @@
             icon="icons/karaf.png"
             id="org.fusesource.ide.server.karaf.ui.runtime.image.23"
             typeIds="org.fusesource.ide.karaf.runtime.23">
+      </image>
+      <image
+            icon="icons/karaf.png"
+            id="org.fusesource.ide.server.karaf.ui.runtime.image.24"
+            typeIds="org.fusesource.ide.karaf.runtime.24">
       </image>
       <image
             icon="icons/karaf.png"

@@ -31,6 +31,19 @@
     </runtimeType>
     <runtimeType
           class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
+          description="%runtimeTypeKarafDescription_24"
+          id="org.fusesource.ide.karaf.runtime.24"
+          name="%runtimeTypeKarafLabel_24"
+          vendor="%fusesource"
+          vendorId="%fusesource"
+          version="2.4">
+       <moduleType
+             types="fuse.camel"
+             versions="1.0">
+       </moduleType>
+    </runtimeType>
+    <runtimeType
+          class="org.fusesource.ide.server.karaf.core.runtime.KarafRuntimeDelegate"
           description="%runtimeTypeKarafDescription_30"
           id="org.fusesource.ide.karaf.runtime.30"
           name="%runtimeTypeKarafLabel_30"
@@ -89,6 +102,23 @@
            name="%karafServerType_23"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.karaf.runtime.23"
+           startTimeout="90000"
+           stopTimeout="45000"
+           startBeforePublish="true" 
+           supportsRemoteHosts="false">
+     </serverType>
+     <serverType
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
+           class="org.fusesource.ide.server.karaf.core.server.KarafServerDelegate"
+           description="%karafServerDescription_24"
+           hasConfiguration="true"
+           id="org.fusesource.ide.karaf.server.24"
+           initialState="stopped"
+           launchModes="run,debug"
+           launchConfigId="org.fusesource.ide.server.karaf2x.launch"
+           name="%karafServerType_24"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.karaf.runtime.24"
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
@@ -175,7 +205,7 @@
          <subsystemMapping
             id="launch.karaf.local.default"
             mappedId="launch.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
          </subsystemMapping>
          
          <subsystem
@@ -187,7 +217,7 @@
          <subsystemMapping
             id="shutdown.karaf.local.default"
             mappedId="shutdown.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
          </subsystemMapping>
          
          <subsystem
@@ -199,7 +229,7 @@
          <subsystemMapping
             id="publish.karaf.local.default"
             mappedId="publish.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
          </subsystemMapping>
          
          <subsystem
@@ -211,7 +241,7 @@
          <subsystemMapping
             id="modules.karaf.local.default"
             mappedId="modules.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
          </subsystemMapping>
          
          <subsystem
@@ -223,7 +253,7 @@
          <subsystemMapping
             id="port.karaf.local.default"
             mappedId="port.karaf.local"
-            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.30">
+            serverTypes="org.fusesource.ide.karaf.server.22,org.fusesource.ide.karaf.server.23,org.fusesource.ide.karaf.server.24,org.fusesource.ide.karaf.server.30">
          </subsystemMapping>
   </extension>
 </plugin>

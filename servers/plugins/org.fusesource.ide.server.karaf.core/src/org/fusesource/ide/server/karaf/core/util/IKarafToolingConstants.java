@@ -21,19 +21,21 @@ public interface IKarafToolingConstants {
 	
 	public static final String RUNTIME_KARAF_22 = RUNTIME_KARAF_PREFIX + "22";
 	public static final String RUNTIME_KARAF_23 = RUNTIME_KARAF_PREFIX + "23";
+	public static final String RUNTIME_KARAF_24 = RUNTIME_KARAF_PREFIX + "24";
 	public static final String RUNTIME_KARAF_30 = RUNTIME_KARAF_PREFIX + "30";
 		
 	public static final String[] ALL_KARAF_RUNTIME_TYPES = new String[]{
-		RUNTIME_KARAF_22, RUNTIME_KARAF_23, RUNTIME_KARAF_30
+		RUNTIME_KARAF_22, RUNTIME_KARAF_23, RUNTIME_KARAF_24, RUNTIME_KARAF_30
 	};	
 
 	public static final String SERVER_KARAF_PREFIX = "org.fusesource.ide.karaf.server.";
 		
 	public static final String SERVER_KARAF_22 = SERVER_KARAF_PREFIX + "22";
-	public static final String SERVER_KARAF_23 = SERVER_KARAF_PREFIX + "23";
+    public static final String SERVER_KARAF_23 = SERVER_KARAF_PREFIX + "23";
+    public static final String SERVER_KARAF_24 = SERVER_KARAF_PREFIX + "24";
 	public static final String SERVER_KARAF_30 = SERVER_KARAF_PREFIX + "30";
 	
 	public static final String[] ALL_KARAF_SERVER_TYPES = new String[]{
-		SERVER_KARAF_22, SERVER_KARAF_23, SERVER_KARAF_30
+		SERVER_KARAF_22, SERVER_KARAF_23, SERVER_KARAF_24, SERVER_KARAF_30
 	};
 }

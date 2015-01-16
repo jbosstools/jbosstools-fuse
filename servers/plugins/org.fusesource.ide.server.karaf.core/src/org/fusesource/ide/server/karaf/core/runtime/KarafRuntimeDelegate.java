@@ -84,8 +84,10 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 			if (!id.toLowerCase().endsWith("karaf.runtime.22")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else if (version != null && version.trim().startsWith("2.3")) {
 			if (!id.toLowerCase().endsWith("karaf.runtime.23")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else if (version != null && version.trim().startsWith("3.0")) {
-			if (!id.toLowerCase().endsWith("karaf.runtime.30")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+		} else if (version != null && version.trim().startsWith("2.4")) {
+			if (!id.toLowerCase().endsWith("karaf.runtime.24")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+        } else if (version != null && version.trim().startsWith("3.0")) {
+            if (!id.toLowerCase().endsWith("karaf.runtime.30")) return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
 		}

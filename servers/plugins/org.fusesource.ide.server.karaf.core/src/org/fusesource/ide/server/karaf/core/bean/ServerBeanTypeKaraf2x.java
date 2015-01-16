@@ -12,6 +12,7 @@ package org.fusesource.ide.server.karaf.core.bean;
 
 import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.SERVER_KARAF_22;
 import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.SERVER_KARAF_23;
+import static org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants.SERVER_KARAF_24;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -27,7 +28,8 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 
 	public static final String V2_2 = "2.2";
 	public static final String V2_3 = "2.3";
-	public static final String V2_x = "2.";
+	public static final String V2_4 = "2.4";
+    public static final String V2_x = "2.";
 	
 	protected ServerBeanTypeKaraf2x() {
 		super(	"KARAF2x", //$NON-NLS-1$
@@ -88,8 +90,9 @@ public class ServerBeanTypeKaraf2x extends ServerBeanType {
 		public String getServerTypeId(String version) {
 			if( version.equals(V2_2)) return SERVER_KARAF_22;
 			if( version.equals(V2_3)) return SERVER_KARAF_23;
-			// In case a 2.4 comes out, it should work on 2.3 until fixed
-			if( version.startsWith(V2_x)) return SERVER_KARAF_23;
+			if( version.equals(V2_4)) return SERVER_KARAF_24;
+			// In case a 2.5 comes out, it should work on 2.4 until fixed
+			if( version.startsWith(V2_x)) return SERVER_KARAF_24;
 			return null;
 		}
 	}
