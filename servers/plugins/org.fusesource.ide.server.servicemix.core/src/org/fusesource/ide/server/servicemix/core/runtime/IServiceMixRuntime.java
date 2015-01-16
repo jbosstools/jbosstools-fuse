@@ -20,6 +20,8 @@ public interface IServiceMixRuntime extends IKarafRuntime{
 	
 	static final String[] SMX_RUNTIME_TYPES_SUPPORTED = new String[] {
 		IServiceMixToolingConstants.RUNTIME_SMX_45,
-		IServiceMixToolingConstants.RUNTIME_SMX_50
+		IServiceMixToolingConstants.RUNTIME_SMX_50,
+		IServiceMixToolingConstants.RUNTIME_SMX_51,
+		IServiceMixToolingConstants.RUNTIME_SMX_52
 	};
 }
