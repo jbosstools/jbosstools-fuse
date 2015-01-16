@@ -14,6 +14,11 @@
             typeIds="org.fusesource.ide.fuseesb.runtime.61">
       </fragment>
       <fragment
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBRuntimeFragment"
+            id="org.fusesource.ide.server.fuse.ui.runtime.fragment.62"
+            typeIds="org.fusesource.ide.fuseesb.runtime.62">
+      </fragment>
+      <fragment
             class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment6x"
             id="org.fusesource.ide.server.fuse.ui.server.fragment.60"
             typeIds="org.fusesource.ide.fuseesb.server.60">
@@ -22,6 +27,11 @@
             class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment6x"
             id="org.fusesource.ide.server.fuse.ui.server.fragment.61"
             typeIds="org.fusesource.ide.fuseesb.server.61">
+      </fragment>
+      <fragment
+            class="org.fusesource.ide.server.fuse.ui.runtime.fuseesb.FuseESBServerWizardFragment6x"
+            id="org.fusesource.ide.server.fuse.ui.server.fragment.62"
+            typeIds="org.fusesource.ide.fuseesb.server.62">
       </fragment>
    </extension>
    <extension
@@ -38,6 +48,11 @@
       </image>
       <image
             icon="icons/fuse_server.png"
+            id="org.fusesource.ide.server.fuseesb.ui.server.image.62"
+            typeIds="org.fusesource.ide.fuseesb.server.62">
+      </image>
+      <image
+            icon="icons/fuse_server.png"
             id="org.fusesource.ide.server.fuseesb.ui.runtime.image.60"
             typeIds="org.fusesource.ide.fuseesb.runtime.60">
       </image>
@@ -45,6 +60,11 @@
             icon="icons/fuse_server.png"
             id="org.fusesource.ide.server.fuseesb.ui.runtime.image.61"
             typeIds="org.fusesource.ide.fuseesb.runtime.61">
+      </image>
+      <image
+            icon="icons/fuse_server.png"
+            id="org.fusesource.ide.server.fuseesb.ui.runtime.image.62"
+            typeIds="org.fusesource.ide.fuseesb.runtime.62">
       </image>
    </extension>
    

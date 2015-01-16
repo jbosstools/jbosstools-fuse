@@ -73,3 +73,27 @@ availableRuntimes:
         wtp-runtime-type: org.fusesource.ide.fuseesb.runtime.61
    }
    
+   
+   #############
+   #   Fuse6.2 #
+   #############
+# ----------------------------------UPDATE NEEDED WHEN 6.2 WENT GA------------------------------------------
+# - &fuse620
+#   id: fuse620
+#   name: JBoss Fuse 6.2.0
+#   version: 6.2.0
+#   license: *apache20
+#   url: https://www.jboss.org/products/fuse.html
+#   labels: {
+#        requiresCredentials: true,
+#        runtime-category: OSGI_SERVER,
+#        runtime-type: FUSE,
+#        runtime-size: 630068816,
+#        additionalDownloadURLs: {
+#            "win32": "https://www.jboss.org/download-manager/jdf/content/origin/files/sha256/d4/d4222f5ed50d5d465bd105f5f2dbaee3ad0adda672bba7a18b0e262ef57458a5/jboss-fuse-full-6.2.0.redhat-379.zip",
+#            "linux": "https://www.jboss.org/download-manager/jdf/content/origin/files/sha256/d4/d4222f5ed50d5d465bd105f5f2dbaee3ad0adda672bba7a18b0e262ef57458a5/jboss-fuse-full-6.2.0.redhat-379.zip",
+#            "macosx": "https://www.jboss.org/download-manager/jdf/content/origin/files/sha256/d4/d4222f5ed50d5d465bd105f5f2dbaee3ad0adda672bba7a18b0e262ef57458a5/jboss-fuse-full-6.2.0.redhat-379.zip",
+#        },
+#        wtp-runtime-type: org.fusesource.ide.fuseesb.runtime.62
+#   }
+   

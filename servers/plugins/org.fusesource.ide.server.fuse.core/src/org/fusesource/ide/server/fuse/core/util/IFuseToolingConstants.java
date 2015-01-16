@@ -18,15 +18,17 @@ public interface IFuseToolingConstants {
 
 	public static final String RUNTIME_FUSE_60 = "org.fusesource.ide.fuseesb.runtime.60";
 	public static final String RUNTIME_FUSE_61 = "org.fusesource.ide.fuseesb.runtime.61";
+    public static final String RUNTIME_FUSE_62 = "org.fusesource.ide.fuseesb.runtime.62";
 		
 	public static final String[] ALL_FUSE_RUNTIME_TYPES = new String[]{
-		RUNTIME_FUSE_60, RUNTIME_FUSE_61
+		RUNTIME_FUSE_60, RUNTIME_FUSE_61, RUNTIME_FUSE_62
 	};	
 
 	public static final String SERVER_FUSE_60 = "org.fusesource.ide.fuseesb.server.60";
 	public static final String SERVER_FUSE_61 = "org.fusesource.ide.fuseesb.server.61";
+    public static final String SERVER_FUSE_62 = "org.fusesource.ide.fuseesb.server.62";
 	
 	public static final String[] ALL_FUSE_SERVER_TYPES = new String[]{
-		SERVER_FUSE_60, SERVER_FUSE_61
+		SERVER_FUSE_60, SERVER_FUSE_61, SERVER_FUSE_62
 	};
 }

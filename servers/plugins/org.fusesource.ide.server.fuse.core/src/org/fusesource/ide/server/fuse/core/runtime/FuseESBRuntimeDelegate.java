@@ -35,9 +35,12 @@ public class FuseESBRuntimeDelegate extends KarafRuntimeDelegate {
 			if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_60)) 
 				return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
 		} else if (version != null && version.trim().startsWith("6.1")) {
-			if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_61)) 
-				return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
-		} else {
+            if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_61)) 
+                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+		} else if (version != null && version.trim().startsWith("6.2")) {
+            if (!id.toLowerCase().equals(IFuseToolingConstants.RUNTIME_FUSE_62)) 
+                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+        } else {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
 		}
 		

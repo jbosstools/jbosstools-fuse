@@ -29,6 +29,19 @@
              versions="1.0">
        </moduleType>
     </runtimeType>
+    <runtimeType
+          class="org.fusesource.ide.server.fuse.core.runtime.FuseESBRuntimeDelegate"
+          description="%runtimeTypeFuseESBDescription_62"
+          id="org.fusesource.ide.fuseesb.runtime.62"
+          name="%runtimeTypeFuseESBLabel_62"
+          vendor="%fusesource"
+          vendorId="%fusesource"
+          version="6.2">
+       <moduleType
+             types="fuse.camel"
+             versions="1.0">
+       </moduleType>
+    </runtimeType>
   </extension>
 
   <extension point="org.eclipse.wst.server.core.serverTypes">
@@ -61,6 +74,23 @@
            name="%fuseESBServerType_61"
            runtime="true"
            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.61"
+           startTimeout="90000"
+           stopTimeout="45000"
+           startBeforePublish="true" 
+           supportsRemoteHosts="false">
+     </serverType>
+     <serverType
+           behaviourClass="org.fusesource.ide.server.karaf.core.server.ControllableKarafServerBehavior"
+           class="org.fusesource.ide.server.fuse.core.server.FuseESBServerDelegate"
+           description="%fuseESBServerDescription_62"
+           hasConfiguration="true"
+           id="org.fusesource.ide.fuseesb.server.62"
+           initialState="stopped"
+           launchConfigId="org.fusesource.ide.server.fuseesb6x.launch"
+           launchModes="run,debug"
+           name="%fuseESBServerType_62"
+           runtime="true"
+           runtimeTypeId="org.fusesource.ide.fuseesb.runtime.62"
            startTimeout="90000"
            stopTimeout="45000"
            startBeforePublish="true" 
@@ -126,31 +156,31 @@
          <subsystemMapping
             id="launch.karaf.local.default"
             mappedId="launch.fuse.local"
-            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61,org.fusesource.ide.fuseesb.server.62">
          </subsystemMapping>
          
          <subsystemMapping
             id="shutdown.karaf.local.default"
             mappedId="shutdown.fuse.local"
-            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61,org.fusesource.ide.fuseesb.server.62">
          </subsystemMapping>
 
          <subsystemMapping
             id="publish.karaf.local.default"
             mappedId="publish.fuse.local"
-            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61,org.fusesource.ide.fuseesb.server.62">
          </subsystemMapping>
          
          <subsystemMapping
             id="modules.karaf.local.default"
             mappedId="modules.fuse.local"
-            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61,org.fusesource.ide.fuseesb.server.62">
          </subsystemMapping>
                   
          <subsystemMapping
             id="port.karaf.local.default"
             mappedId="port.fuse.local"
-            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61">
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61,org.fusesource.ide.fuseesb.server.62">
          </subsystemMapping>
   </extension>
   

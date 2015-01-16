@@ -12,6 +12,7 @@ package org.fusesource.ide.server.fuse.core.bean;
 
 import static org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants.SERVER_FUSE_60;
 import static org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants.SERVER_FUSE_61;
+import static org.fusesource.ide.server.fuse.core.util.IFuseToolingConstants.SERVER_FUSE_62;
 
 import java.io.File;
 
@@ -26,6 +27,7 @@ public class ServerBeanTypeFuse6x extends ServerBeanType {
 
 	public static final String V6_0 = "6.0";
 	public static final String V6_1 = "6.1";
+	public static final String V6_2 = "6.2";
 	public static final String V6_x = "6.";
 	
 	protected ServerBeanTypeFuse6x() {
@@ -66,8 +68,9 @@ public class ServerBeanTypeFuse6x extends ServerBeanType {
 		public String getServerTypeId(String version) {
 			if( version.equals(V6_0)) return SERVER_FUSE_60;
 			if( version.equals(V6_1)) return SERVER_FUSE_61;
-			// In case a 6.2 comes out, it should work on 6.1 until fixed
-			if( version.startsWith(V6_x)) return SERVER_FUSE_61;
+			if( version.equals(V6_2)) return SERVER_FUSE_62;
+			// In case a 6.3 comes out, it should work on 6.2 until fixed
+			if( version.startsWith(V6_x)) return SERVER_FUSE_62;
 			return null;
 		}
 	}
