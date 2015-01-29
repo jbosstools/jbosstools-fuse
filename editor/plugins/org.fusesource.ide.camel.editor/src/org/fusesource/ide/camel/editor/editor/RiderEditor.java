@@ -93,7 +93,8 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	private RiderDesignEditorData designEditorData = new RiderDesignEditorData();
 	@SuppressWarnings("unused")
 	private int designPageIndex;
-
+	private int lastActivePageIdx = DESIGN_PAGE_INDEX;
+	
 	/**
 	 * creates a new editor instance
 	 */
@@ -515,18 +516,21 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	 */
 	@Override
 	protected void pageChange(int newPageIndex) {
-		int oldIndex = super.getActivePage();
 		super.pageChange(newPageIndex);
-		if (newPageIndex == SOURCE_PAGE_INDEX) {
-			if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
-			if (oldIndex == DESIGN_PAGE_INDEX) updatedDesignPage();
-		} else if (newPageIndex == DESIGN_PAGE_INDEX){
-			if (oldIndex == SOURCE_PAGE_INDEX) updatedTextPage();
-		} else {
-//			// must be global config page
-//			if (oldIndex == DESIGN_PAGE_INDEX) updatedDesignPage();
-//			if (oldIndex == SOURCE_PAGE_INDEX) updatedTextPage();
-//			globalConfigEditor.reload();
+		try {
+			if (newPageIndex == SOURCE_PAGE_INDEX) {
+				if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
+				if (lastActivePageIdx == DESIGN_PAGE_INDEX) updatedDesignPage();
+			} else if (newPageIndex == DESIGN_PAGE_INDEX){
+				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updatedTextPage();
+			} else {
+	//			// must be global config page
+	//			if (lastActivePageIdx == DESIGN_PAGE_INDEX) updatedDesignPage();
+	//			if (lastActivePageIdx == SOURCE_PAGE_INDEX) updatedTextPage();
+	//			globalConfigEditor.reload();
+			}
+		} finally {
+			this.lastActivePageIdx = newPageIndex;
 		}
 	}
 
