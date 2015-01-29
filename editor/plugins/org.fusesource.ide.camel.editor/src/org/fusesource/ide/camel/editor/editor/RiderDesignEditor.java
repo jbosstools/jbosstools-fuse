@@ -854,6 +854,10 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 			this.data.selectedRoute = null;
 
 			setInitialRoute();
+			
+			if (data.selectedRouteIndex != data.indexOfRoute(data.selectedRoute) && data.selectedRouteIndex < data.model.getChildren().size()) {
+				setSelectedRouteIndex(data.selectedRouteIndex);
+			}
 		}
 	}
 
@@ -940,7 +944,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	}
 
 	public void setSelectedRouteIndex(int index) {
-		if (this.data.selectedRouteIndex != index && index >= 0) {
+//		if (this.data.selectedRouteIndex != index && index >= 0) {
 			this.data.selectedRouteIndex = index;
 			this.data.selectedRoute = (RouteSupport) getModel().getChildren().get(index);
 
@@ -948,7 +952,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 			//data.recreateModel();
 
 			switchRoute(data.selectedRoute);
-		}
+//		}
 	}
 
 	public void setupGridVisibilityAsync() {
