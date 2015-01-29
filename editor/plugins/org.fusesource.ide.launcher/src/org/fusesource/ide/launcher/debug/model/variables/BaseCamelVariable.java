@@ -16,7 +16,6 @@ import org.eclipse.debug.core.model.IVariable;
 import org.fusesource.ide.launcher.debug.model.CamelDebugElement;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
 import org.fusesource.ide.launcher.debug.model.values.BaseCamelValue;
 
 /**
@@ -154,7 +153,8 @@ public class BaseCamelVariable extends CamelDebugElement implements IVariable {
 	 * @return
 	 */
 	protected String getCurrentEndpointNodeId() throws DebugException {
-		return ((CamelStackFrame)getDebugTarget().getThreads()[0].getTopStackFrame()).getEndpointId();
+		CamelDebugTarget cdt = (CamelDebugTarget)getDebugTarget();
+		return cdt.getSuspendedNodeId();
 	}
 	
 	/**
