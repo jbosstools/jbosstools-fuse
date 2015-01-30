@@ -44,6 +44,6 @@ public class RTITargetFolderWizardFragment extends WizardFragment {
 	}
 
 	public boolean isComplete() {
-		return this.comp.isComplete();
+		return this.comp == null || this.comp.isDisposed() ? false : this.comp.isComplete();
 	}
 }

@@ -56,6 +56,15 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		String imageKey = KarafSharedImages.IMG_KARAF_LOGO_LARGE;
 		return KarafSharedImages.getImageDescriptor(imageKey);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.jboss.ide.eclipse.as.wtp.ui.wizard.RuntimeWizardFragment#exit()
+	 */
+	@Override
+	public void exit() {
+		super.exit();
+		beenEntered = false;
+	}
 
 	protected class KarafJREComposite extends AbstractJREComposite {
 
@@ -114,7 +123,7 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 	}
 	
 	protected String getExplanationText() {
-		return "Please point to a karaf installation.";
+		return "Please point to a Karaf installation.";
 	}
 
 	protected void initiateHelp(Composite parent) {
@@ -130,7 +139,7 @@ public class KarafRuntimeFragment extends RuntimeWizardFragment {
 		IRuntime adapterRt = getRuntimeFromTaskModel();
 		String adapterRuntimeId = adapterRt.getRuntimeType().getId();
 		if( !adapterRuntimeId.equals(rtId)) {
-			return NLS.bind("Incorrect Version Error{0} {1}", 
+			return NLS.bind("Incorrect Version Error {0} {1}", 
 					adapterRt.getRuntimeType().getVersion(), 
 					getVersionString(loc));
 		}

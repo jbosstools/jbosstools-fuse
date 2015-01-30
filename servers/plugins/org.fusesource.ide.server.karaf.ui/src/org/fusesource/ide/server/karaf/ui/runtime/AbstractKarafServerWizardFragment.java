@@ -151,7 +151,7 @@ public abstract class AbstractKarafServerWizardFragment extends WizardFragment {
 	
 	@Override
 	public boolean isComplete() {
-		if (composite == null)
+		if (composite == null || composite.isDisposed())
 			return false;
 		else
 			return composite.isValid();
