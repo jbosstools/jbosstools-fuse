@@ -31,6 +31,7 @@ Raleigh NC 27606 USA.
 
    <requires>
       <import feature="org.fusesource.ide.core.feature" version="7.3.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.server.extensions.feature" version="7.3.0" match="greaterOrEqual"/>
       
       <import plugin="org.jboss.tools.jmx.core" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.jboss.tools.jmx.ui" version="1.6.0" match="greaterOrEqual"/>
