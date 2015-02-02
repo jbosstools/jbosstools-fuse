@@ -91,7 +91,7 @@
            id="org.fusesource.ide.server.fabric81x.launch"
            modes="run,debug"
            name="%fabric8.launch.name"
-           public="true"
+           public="false"
            sourceLocatorId="org.fusesource.ide.server.karaf.core.server.sourceLocator"
 	   sourcePathComputerId="org.fusesource.ide.server.karaf.core.server.sourcePathComputerDelegate">
      </launchConfigurationType>
