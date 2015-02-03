@@ -29,5 +29,6 @@ Require-Bundle:
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.server.karaf.ui.editor,
+ org.fusesource.ide.server.karaf.ui.launch,
  org.fusesource.ide.server.karaf.ui.runtime,
  org.fusesource.ide.server.karaf.ui.runtime.v2x

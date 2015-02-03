@@ -84,6 +84,7 @@ public class Fabric81xStartupLaunchConfigurator extends
 			}
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classPathList);
+			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH, getJreContainerPath(runtime));
 		}
 	}
 
@@ -96,12 +97,33 @@ public class Fabric81xStartupLaunchConfigurator extends
 
 		String endorsedDirs = System.getProperty("java.endorsed.dirs");
 		String extDirs = System.getProperty("java.ext.dirs");
-
+		
+		IKarafRuntime runtime = null;
+		if (server.getRuntime() != null) {
+			runtime = (IKarafRuntime)server.getRuntime().loadAdapter(IKarafRuntime.class, null);
+			File vmLoc = runtime.getVM().getInstallLocation();
+			
+//			JAVA_ENDORSED_DIRS="${JAVA_HOME}/jre/lib/endorsed:${JAVA_HOME}/lib/endorsed:${KARAF_HOME}/lib/endorsed"
+			endorsedDirs = String.format("%s%sjre%slib%sendorsed%s%s%slib%sendorsed%s%s%slib%sendorsed", 
+										vmLoc.getPath(), SEPARATOR, SEPARATOR, SEPARATOR,
+										File.pathSeparator, 
+										vmLoc.getPath(), SEPARATOR, SEPARATOR,
+										File.pathSeparator,
+										karafInstallDir, SEPARATOR, SEPARATOR);
+//		    JAVA_EXT_DIRS="${JAVA_HOME}/jre/lib/ext:${JAVA_HOME}/lib/ext:${KARAF_HOME}/lib/ext"
+			extDirs = String.format("%s%sjre%slib%sext%s%s%slib%sext%s%s%slib%sext", 
+					vmLoc.getPath(), SEPARATOR, SEPARATOR, SEPARATOR,
+					File.pathSeparator, 
+					vmLoc.getPath(), SEPARATOR, SEPARATOR,
+					File.pathSeparator,
+					karafInstallDir, SEPARATOR, SEPARATOR);
+		}
+		
 		vmArguments.append("-server -Xms128M  -Xmx512M -XX:+UnlockDiagnosticVMOptions -XX:+UnsyncloadClass ");
 		vmArguments.append(SPACE + "-XX:PermSize=16M -XX:MaxPermSize=128M ");
 		vmArguments.append(SPACE + "-Dcom.sun.management.jmxremote ");
-		vmArguments.append(SPACE + "-Djava.endorsed.dirs=" + QUOTE + endorsedDirs + File.pathSeparatorChar + karafInstallDir + SEPARATOR + "lib" + SEPARATOR + "endorsed" + QUOTE);
-		vmArguments.append(SPACE + "-Djava.ext.dirs=" + QUOTE + extDirs + File.pathSeparatorChar + karafInstallDir + SEPARATOR + "lib" + SEPARATOR + "ext" + QUOTE);
+		vmArguments.append(SPACE + "-Djava.endorsed.dirs=" + QUOTE + endorsedDirs + QUOTE);
+		vmArguments.append(SPACE + "-Djava.ext.dirs=" + QUOTE + extDirs + QUOTE);
 		vmArguments.append(SPACE + "-Dkaraf.instances=" + QUOTE + karafInstallDir + SEPARATOR + "instances" + QUOTE);
 		vmArguments.append(SPACE + "-Dkaraf.home=" + QUOTE + karafInstallDir + QUOTE); 
 		vmArguments.append(SPACE + "-Dkaraf.base=" + QUOTE + karafInstallDir + QUOTE);

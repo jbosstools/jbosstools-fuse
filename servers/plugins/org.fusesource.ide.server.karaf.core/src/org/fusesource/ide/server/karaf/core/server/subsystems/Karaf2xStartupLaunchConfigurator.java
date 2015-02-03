@@ -22,10 +22,10 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
+import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
-import org.fusesource.ide.server.karaf.core.util.IKarafToolingConstants;
 import org.jboss.ide.eclipse.as.wtp.core.server.launch.LaunchConfiguratorWithOverrides;
 
 public class Karaf2xStartupLaunchConfigurator extends
@@ -79,8 +79,16 @@ public class Karaf2xStartupLaunchConfigurator extends
 			}
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classPathList);
+			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH, getJreContainerPath(runtime));
 		}
-		
+	}
+
+	protected String getJreContainerPath(IKarafRuntime runtime) {
+		IVMInstall vmInstall = runtime.getVM();
+		if (vmInstall == null) {
+			return null;
+		}
+		return JavaRuntime.newJREContainerPath(vmInstall).toPortableString();
 	}
 	
 	protected String[] getClassPathEntries(String installPath) {
@@ -115,7 +123,7 @@ public class Karaf2xStartupLaunchConfigurator extends
 		for (File lib : libs) {
 			IPath p = path.append(lib.getName());
 			if (lib.isFile()) {
-				cp.add(JavaRuntime.newArchiveRuntimeClasspathEntry(p));
+				if (lib.getName().toLowerCase().startsWith("karaf")) cp.add(JavaRuntime.newArchiveRuntimeClasspathEntry(p));
 			} else {
 				findJars(p, cp);
 			}
@@ -138,6 +146,30 @@ public class Karaf2xStartupLaunchConfigurator extends
 	protected String getVMArguments(String karafInstallDir) {
 		StringBuilder vmArguments = new StringBuilder();
 
+		String endorsedDirs = System.getProperty("java.endorsed.dirs");
+		String extDirs = System.getProperty("java.ext.dirs");
+		
+		IKarafRuntime runtime = null;
+		if (server.getRuntime() != null) {
+			runtime = (IKarafRuntime)server.getRuntime().loadAdapter(IKarafRuntime.class, null);
+			File vmLoc = runtime.getVM().getInstallLocation();
+			
+//			JAVA_ENDORSED_DIRS="${JAVA_HOME}/jre/lib/endorsed:${JAVA_HOME}/lib/endorsed:${KARAF_HOME}/lib/endorsed"
+			endorsedDirs = String.format("%s%sjre%slib%sendorsed%s%s%slib%sendorsed%s%s%slib%sendorsed", 
+										vmLoc.getPath(), SEPARATOR, SEPARATOR, SEPARATOR,
+										File.pathSeparator, 
+										vmLoc.getPath(), SEPARATOR, SEPARATOR,
+										File.pathSeparator,
+										karafInstallDir, SEPARATOR, SEPARATOR);
+//		    JAVA_EXT_DIRS="${JAVA_HOME}/jre/lib/ext:${JAVA_HOME}/lib/ext:${KARAF_HOME}/lib/ext"
+			extDirs = String.format("%s%sjre%slib%sext%s%s%slib%sext%s%s%slib%sext", 
+					vmLoc.getPath(), SEPARATOR, SEPARATOR, SEPARATOR,
+					File.pathSeparator, 
+					vmLoc.getPath(), SEPARATOR, SEPARATOR,
+					File.pathSeparator,
+					karafInstallDir, SEPARATOR, SEPARATOR);
+		}
+				
 		vmArguments.append("-Xms128M");
 		vmArguments.append(SPACE + "-Xmx512M");
 		vmArguments.append(SPACE + "-XX:+UnlockDiagnosticVMOptions");
@@ -146,6 +178,8 @@ public class Karaf2xStartupLaunchConfigurator extends
 		vmArguments.append(SPACE + "-Dderby.storage.fileSyncTransactionLog=true");
 		vmArguments.append(SPACE + "-server");
 		vmArguments.append(SPACE + "-Dcom.sun.management.jmxremote");
+		vmArguments.append(SPACE + "-Djava.endorsed.dirs=" + QUOTE + endorsedDirs + QUOTE);
+		vmArguments.append(SPACE + "-Djava.ext.dirs=" + QUOTE + extDirs + QUOTE);
 		vmArguments.append(SPACE + "-Dkaraf.startLocalConsole=false");
 		vmArguments.append(SPACE + "-Dkaraf.startRemoteShell=true");
 		vmArguments.append(SPACE + "-Dkaraf.home=" + QUOTE + karafInstallDir + QUOTE); 
