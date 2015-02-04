@@ -107,15 +107,10 @@
             id="org.fusesource.ide.camel.editor.wizards.NewMessageWizard"
             project="false">
          <class class="org.fusesource.ide.branding.wizards.NewMessageWizard">
-         	<parameter
-                  name="javatype"
-                  value="true">
-            </parameter>
          </class>
          <description>
             %rider.newmessage.wizard.description
          </description>
-         <keywordReference id="org.eclipse.jdt.ui.wizards.java"/>
       </wizard>
       
       
