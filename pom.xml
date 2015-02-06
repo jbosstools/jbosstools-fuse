@@ -221,7 +221,7 @@
  		      <groupId>org.jboss.tools.integration-stack</groupId>
 		      <artifactId>target-platform</artifactId>
               <version>${jbtis.version}</version>
-              <classifier>base</classifier>
+              <classifier>base-ea</classifier>
             </artifact>
           </target>
           <ignoreTychoRepositories>false</ignoreTychoRepositories>
