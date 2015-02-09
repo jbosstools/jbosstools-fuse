@@ -33,7 +33,8 @@
                point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
             <propertyContributor
                   contributorId="org.fusesource.ide.commons.propertyContributor">
-               <propertyCategory></propertyCategory>
+               <propertyCategory
+                     category="org.jboss.tools.jmx.ui.views"></propertyCategory>
             </propertyContributor>
          </extension>
    

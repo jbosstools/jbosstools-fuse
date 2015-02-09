@@ -165,8 +165,8 @@
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections contributorId="org.eclipse.wst.server.ui.ServersView">
          <propertySection
-               class="org.fusesource.ide.commons.jmx.ContentsTabSection"
-               filter="org.fusesource.ide.commons.jmx.ContentsSectionFilter"
+               class="org.fusesource.ide.jmx.commons.properties.ContentsTabSection"
+               filter="org.fusesource.ide.jmx.commons.properties.ContentsSectionFilter"
                id="ContentsSection"
                tab="org.fusesource.ide.jmx.ui.views.ContentsTab">
          </propertySection>
