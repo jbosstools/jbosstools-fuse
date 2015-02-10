@@ -11,14 +11,10 @@
 
 package org.fusesource.ide.branding.perspective;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.commons.ui.UIHelper;
 
@@ -47,20 +43,18 @@ public class FusePerspective implements IPerspectiveFactory, UIHelper {
 		layout.addView(IPageLayout.ID_PROJECT_EXPLORER, IPageLayout.LEFT, 0.20f, editorArea);
 
 		// bottom
-		layout.addView(IPageLayout.ID_PROP_SHEET, IPageLayout.BOTTOM, 0.70f, editorArea);
+		layout.addView(IPageLayout.ID_PROP_SHEET, IPageLayout.BOTTOM, 0.60f, editorArea);
 
-		IFolderLayout messages = layout.createFolder("messages", IPageLayout.RIGHT, 0.50f, IPageLayout.ID_PROP_SHEET);
+		IFolderLayout messages = layout.createFolder("messages", IPageLayout.RIGHT, 0.60f, IPageLayout.ID_PROP_SHEET);
 		if (existView(ID_MESSAGE_TABLE)) messages.addView(ID_MESSAGE_TABLE);
 		if (existView(ID_SERVERS_VIEW)) messages.addView(ID_SERVERS_VIEW);
-		messages.addView(ID_CONSOLE_VIEW);
+		if (existView(ID_CONSOLE_VIEW)) messages.addView(ID_CONSOLE_VIEW);
 
-		// right
-		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, 0.25f, editorArea);
+		// right	
+		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, 0.60f, editorArea);
 		if (existView(ID_JMX_EXPORER)) right.addView(ID_JMX_EXPORER);
-
-		IFolderLayout views = layout.createFolder("views",  IPageLayout.LEFT, 0.60f, "right");
-		if (existView(ID_DIAGRAM_VIEW)) views.addView(ID_DIAGRAM_VIEW);
-		if (existView(ID_TERMINAL_VIEW)) views.addView(ID_TERMINAL_VIEW);
+		if (existView(ID_DIAGRAM_VIEW)) right.addView(ID_DIAGRAM_VIEW);
+		if (existView(ID_TERMINAL_VIEW)) right.addView(ID_TERMINAL_VIEW);
 	}
 
 	private boolean existView(String viewId) {
