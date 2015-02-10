@@ -225,17 +225,21 @@ public class RouteXml {
                 if (object instanceof CamelContextFactoryBean) {
                 	Activator.getLogger().debug("Found a valid CamelContextFactoryBean! " + object);
                     sc = (CamelContextFactoryBean) object;
+                    sc.setId(((CamelContextFactoryBean) object).getId());
                 } else if (object instanceof RoutesDefinition) {
                     justRoutes = true;
                     sc = new CamelContextFactoryBean();
+                    sc.setId(((RoutesDefinition) object).getId());
                     sc.setRoutes(((RoutesDefinition) object).getRoutes());
                 } else if (object instanceof CamelRouteContextFactoryBean) {
                     routesContext = true;
                     sc = new CamelContextFactoryBean();
+                    sc.setId(((CamelRouteContextFactoryBean) object).getId());
                     sc.setRoutes(((CamelRouteContextFactoryBean) object).getRoutes());
                 } else if (object instanceof org.apache.camel.blueprint.CamelRouteContextFactoryBean) {
                     routesContext = true;
                     sc = new CamelContextFactoryBean();
+                    sc.setId(((CamelRouteContextFactoryBean) object).getId());
                     sc.setRoutes(((org.apache.camel.blueprint.CamelRouteContextFactoryBean) object).getRoutes());
                 } else {
                     Activator.getLogger().warning("Unmarshalled not a CamelContext: " + object);
