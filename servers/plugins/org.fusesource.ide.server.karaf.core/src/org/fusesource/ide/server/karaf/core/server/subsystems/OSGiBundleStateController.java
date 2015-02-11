@@ -37,6 +37,7 @@ import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
 import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.AbstractSubsystemController;
+import org.jboss.ide.eclipse.as.wtp.core.server.behavior.ControllableServerBehavior;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IModuleStateController;
 
 /**
@@ -46,6 +47,7 @@ import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IModuleStateController;
  */
 public class OSGiBundleStateController extends AbstractSubsystemController implements IModuleStateController{
 
+	private static final String BUNDLE_STATE_PREFIX = "karaf_module_state:";
 	private static final String OSGI_FRAMEWORK_MBEAN = "osgi.core:type=framework,*";
 	private static final String OSGI_BUNDLESTATE_MBEAN = "osgi.core:type=bundleState,*";
 
@@ -54,6 +56,10 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	protected MBeanServerConnection mbsc;
 	protected ObjectName objectNameBundleState;
 	protected ObjectName objectNameFramework;
+	
+	protected ControllableServerBehavior getServerBehavior(IServer server) {
+		return (ControllableServerBehavior)server.loadAdapter(ControllableServerBehavior.class, new NullProgressMonitor());
+	}
 	
 	/**
 	 * connect to the given server via JMX
@@ -186,23 +192,48 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 	@Override
 	public boolean canRestartModule(IModule[] module) {
 		try {
-			if (this.mbsc == null) connect();
-			String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
-			String version = KarafUtils.getBundleVersion(module[0], null);
-			long id = getBundleId(symbolicName, version);
-			if (id != -1) {
-				int status = getBundleStatus(id);
+			String key = BUNDLE_STATE_PREFIX + module.toString();
+			Integer status = (Integer)getServerBehavior(getServer()).getSharedData(key);
+			if (status == null) {
+				// we have no cached value - return false but invoke request
+				return false;
+			} else {
+				// we have a cached value - return it but invoke another request
 				return  status == IServer.STATE_STARTED ||
 					    status == IServer.STATE_STOPPED;
 			}
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-			//disconnect();
+			executeModuleStateRequest(module);
 		}
 		return false;
 	}
 
+	private void executeModuleStateRequest(final IModule[] module) {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (mbsc == null) connect();
+					String symbolicName = KarafUtils.getBundleSymbolicName(module[0]);
+					String version = KarafUtils.getBundleVersion(module[0], null);
+					long id = getBundleId(symbolicName, version);
+					if (id != -1) {
+						Integer status = getBundleStatus(id);
+						String key = BUNDLE_STATE_PREFIX + module.toString();
+						getServerBehavior(getServer()).putSharedData(key, status);
+					}
+				} catch (Exception ex) {
+					Activator.getLogger().error(ex);
+				} finally {
+					disconnect();
+				}
+			}
+		});
+		t.start();
+	}
+	
 	@Override
 	public int startModule(IModule[] module, IProgressMonitor monitor)
 			throws CoreException {
@@ -218,7 +249,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-//			disconnect();
+			disconnect();
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -238,7 +269,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-//			disconnect();
+			disconnect();
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -258,7 +289,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-//			disconnect();
+			disconnect();
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -276,7 +307,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-//			disconnect();
+			disconnect();
 		}
 		return IServer.STATE_UNKNOWN;
 	}
@@ -294,7 +325,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-//			disconnect();
+			disconnect();
 		}
 		return false;
 	}
@@ -312,7 +343,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-//			disconnect();
+			disconnect();
 		}		
 	}
 
@@ -329,7 +360,7 @@ public class OSGiBundleStateController extends AbstractSubsystemController imple
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		} finally {
-//			disconnect();
+			disconnect();
 		}
 	}
 	
