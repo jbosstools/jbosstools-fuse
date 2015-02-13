@@ -79,6 +79,9 @@ public class EditorMessages extends NLS {
 	public static String switchyardFoundTitle;
 	public static String switchyardFoundText;
 
+	public static String unconnectedNodeFoundTitle;
+	public static String unconnectedNodeFoundText;
+	
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, EditorMessages.class);

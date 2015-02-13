@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.editor;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -26,6 +27,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -53,12 +55,14 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.ide.camel.editor.Activator;
+import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.IPrefersPerspective;
 import org.fusesource.ide.camel.editor.Messages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.camel.model.io.ICamelEditorInput;
 import org.fusesource.ide.camel.model.util.Objects;
 import org.fusesource.ide.commons.ui.UIHelper;
@@ -94,6 +98,8 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	@SuppressWarnings("unused")
 	private int designPageIndex;
 	private int lastActivePageIdx = DESIGN_PAGE_INDEX;
+	private boolean processEvent = true;
+
 	
 	/**
 	 * creates a new editor instance
@@ -331,6 +337,9 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	public void doSave(IProgressMonitor monitor) {
 		if (getActiveEditor() == null)	return;
 		
+		boolean doSave = continueWithUnconnectedFigures();
+		if (doSave == false) return;
+		
 		// first check which page is active
 		if (getActiveEditor().equals(designEditor)) {
 			// if the design editor is active we need to update the xml with
@@ -384,6 +393,9 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	public void doSaveAs() {
 		if (getActiveEditor() == null)	return;
 				
+		boolean doSave = continueWithUnconnectedFigures();
+		if (doSave == false) return;
+		
 		// first check which page is active
 		if (getActiveEditor().equals(designEditor)) {
 			// if the design editor is active we need to update the xml with
@@ -516,11 +528,16 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	 */
 	@Override
 	protected void pageChange(int newPageIndex) {
-		super.pageChange(newPageIndex);
 		try {
 			if (newPageIndex == SOURCE_PAGE_INDEX) {
-				if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
-				if (lastActivePageIdx == DESIGN_PAGE_INDEX) updatedDesignPage();
+				boolean doPageChange = continueWithUnconnectedFigures();
+				if (doPageChange) {
+					if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
+					if (lastActivePageIdx == DESIGN_PAGE_INDEX) updatedDesignPage();
+				} else {
+					setActivePage(DESIGN_PAGE_INDEX);
+					newPageIndex = DESIGN_PAGE_INDEX;
+				}
 			} else if (newPageIndex == DESIGN_PAGE_INDEX){
 				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updatedTextPage();
 			} else {
@@ -531,7 +548,40 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 			}
 		} finally {
 			this.lastActivePageIdx = newPageIndex;
+			super.pageChange(newPageIndex);
 		}
+	}
+	
+	/**
+	 * checks if there are unconnected figures and shows a warning in that case.
+	 * if users ignore the warning the unconnected endpoints are lost
+	 *  
+	 * @return	true if user wants to preserve unconnected figures, otherwise (or if no unconnected figures) returns false
+	 */
+	private boolean continueWithUnconnectedFigures() {
+		// search for figures which have no connections - those would be lost when
+		// saving or switching the tabs
+		boolean unconnectedNodeFound = false;
+
+		unconnectedNodeFound = findUnconnectedNode(designEditor.getModel().getChildren());
+		
+		if (!unconnectedNodeFound) return true;
+		
+		return MessageDialog.openQuestion(Display.getDefault().getActiveShell(), EditorMessages.unconnectedNodeFoundTitle, EditorMessages.unconnectedNodeFoundText);
+	}
+	
+	/**
+	 * searches for unconnected nodes
+	 * 
+	 * @param nodes
+	 * @return
+	 */
+	private boolean findUnconnectedNode(List<AbstractNode> nodes) {
+		for (AbstractNode node : nodes) {
+			if (node instanceof Route == false && node.getAllConnections().isEmpty()) return true;
+			if (!node.getChildren().isEmpty()) return findUnconnectedNode(node.getChildren());
+		}
+		return false;
 	}
 
 	/*
