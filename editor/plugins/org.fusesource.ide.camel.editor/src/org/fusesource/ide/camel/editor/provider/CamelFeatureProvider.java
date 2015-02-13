@@ -29,6 +29,7 @@ import org.eclipse.graphiti.features.IFeature;
 import org.eclipse.graphiti.features.ILayoutFeature;
 import org.eclipse.graphiti.features.IMoveShapeFeature;
 import org.eclipse.graphiti.features.IPasteFeature;
+import org.eclipse.graphiti.features.IReconnectionFeature;
 import org.eclipse.graphiti.features.IRemoveFeature;
 import org.eclipse.graphiti.features.IResizeShapeFeature;
 import org.eclipse.graphiti.features.IUpdateFeature;
@@ -41,6 +42,7 @@ import org.eclipse.graphiti.features.context.ILayoutContext;
 import org.eclipse.graphiti.features.context.IMoveShapeContext;
 import org.eclipse.graphiti.features.context.IPasteContext;
 import org.eclipse.graphiti.features.context.IPictogramElementContext;
+import org.eclipse.graphiti.features.context.IReconnectionContext;
 import org.eclipse.graphiti.features.context.IRemoveContext;
 import org.eclipse.graphiti.features.context.IResizeShapeContext;
 import org.eclipse.graphiti.features.context.IUpdateContext;
@@ -72,6 +74,7 @@ import org.fusesource.ide.camel.editor.features.other.CopyNodeFeature;
 import org.fusesource.ide.camel.editor.features.other.LayoutNodeFeature;
 import org.fusesource.ide.camel.editor.features.other.MoveNodeFeature;
 import org.fusesource.ide.camel.editor.features.other.PasteNodeFeature;
+import org.fusesource.ide.camel.editor.features.other.ReconnectNodesFeature;
 import org.fusesource.ide.camel.editor.features.other.ResizeNodeFeature;
 import org.fusesource.ide.camel.editor.features.other.UpdateNodeFeature;
 import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
@@ -228,6 +231,15 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 			return new ResizeNodeFeature(this);
 		}
 		return super.getResizeShapeFeature(context);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getReconnectionFeature(org.eclipse.graphiti.features.context.IReconnectionContext)
+	 */
+	@Override
+	public IReconnectionFeature getReconnectionFeature(
+			IReconnectionContext context) {
+		return new ReconnectNodesFeature(this);
 	}
 
 	@Override
