@@ -95,6 +95,7 @@ Raleigh NC 27606 USA.
          version="0.0.0"
          unpack="false"/>
 
+<!-- won't be part of the 6.2 release
    <plugin
          id="org.fusesource.ide.server.fabric8.core"
          download-size="0"
@@ -108,6 +109,7 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+-->
 
    <plugin
          id="org.fusesource.ide.server.fuse.core"
