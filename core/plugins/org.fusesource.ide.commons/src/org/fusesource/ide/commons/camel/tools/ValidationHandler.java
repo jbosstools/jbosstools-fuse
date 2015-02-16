@@ -15,9 +15,15 @@
  */
 package org.fusesource.ide.commons.camel.tools;
 
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.camelNamespaces;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.camelSchemas;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.getNamespaceURI;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.nodeWithNamespacesToText;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,15 +31,13 @@ import java.util.List;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Validator;
 
-import de.pdark.decentxml.Document;
-import de.pdark.decentxml.Element;
-import de.pdark.decentxml.Node;
-
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.*;
+import de.pdark.decentxml.Document;
+import de.pdark.decentxml.Element;
+import de.pdark.decentxml.Node;
 
 public class ValidationHandler implements ErrorHandler {
 
@@ -94,19 +98,21 @@ public class ValidationHandler implements ErrorHandler {
         Validator validator = camelSchemas().newValidator();
         validator.setErrorHandler(this);
 
-        validate(validator, doc.getRootElement());
+        validate(validator, doc.getRootElement().copy());
     }
 
     private void validate(Validator validator, Element e) throws IOException, SAXException {
-        String uri = getNamespaceURI(e);
+    	String uri = getNamespaceURI(e);
         if (uri != null && Arrays.asList(camelNamespaces).contains(uri)) {
             String text = nodeWithNamespacesToText(e, e);
             validator.validate(new StreamSource(new StringReader(text)));
         } else {
-            List<Node> nodes = e.getNodes();
+        	List<Node> nodes = new ArrayList<Node>();
+        	nodes.addAll(e.getNodes());
+//        	List<Node> nodes = e.getNodes();
             for (Node node: nodes) {
                 if (node instanceof Element) {
-                    validate(validator, (Element) node);
+                    validate(validator, (Element) node.copy());
                 }
             }
         }

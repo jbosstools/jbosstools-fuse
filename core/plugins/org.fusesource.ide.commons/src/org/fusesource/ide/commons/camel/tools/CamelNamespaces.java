@@ -240,12 +240,13 @@ public class CamelNamespaces {
         if (parent instanceof Element) {
             for (Attribute attr : ((Element) parent).getAttributes()) {
                 String name = attr.getName();
-                if (name.startsWith("xmlns") && element.getAttributeValue(name) == null) {
+                if (name.startsWith("xmlns") && element.getAttribute(name) == null) {
                     element.setAttribute(name, attr.getValue());
                 }
             }
             addParentNamespaces(element, ((Element) parent).getParent());
         }
+        if (parent == null && !Strings.isEmpty(element.getAttribute("xmlns").getValue()) && element.getBeginName().indexOf(":") != -1) element.setAttribute("xmlns:" + element.getBeginName().substring(0, element.getBeginName().indexOf(":")), element.getAttribute("xmlns").getValue());
     }
 
     public static Document getOwnerDocument(Node node) {
