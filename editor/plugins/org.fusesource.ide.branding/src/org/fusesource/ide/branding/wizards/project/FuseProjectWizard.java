@@ -300,6 +300,9 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 							switchToFusePerspective(workbenchWindow);
 						}
 						enforceNatures(project, new NullProgressMonitor());
+						MavenUpdateRequest mur = new MavenUpdateRequest(false, true);
+						mur.addPomFile(project);
+						MavenPlugin.getMavenProjectRegistry().refresh(mur);
 					} catch (CoreException ex) {
 						Activator.getLogger().error(ex);
 					}
