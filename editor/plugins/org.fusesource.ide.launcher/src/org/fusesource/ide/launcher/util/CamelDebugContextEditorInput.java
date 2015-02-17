@@ -18,6 +18,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -59,7 +60,7 @@ public class CamelDebugContextEditorInput  implements ICamelEditorInput {
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		// the following code is needed otherwise you can't edit remote routes
-		if (adapter.equals(IFile.class)) {
+		if (adapter.equals(IFile.class) || adapter.equals(IResource.class)) {
 			getFileEditorInput();
 			IPath p = Path.fromOSString(tempFile.getPath());
 			IFile file= ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(p);
@@ -90,7 +91,7 @@ public class CamelDebugContextEditorInput  implements ICamelEditorInput {
 
 	@Override
 	public String getToolTipText() {
-		return null;
+		return getName();
 	}
 
 	@Override
