@@ -25,16 +25,16 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerEvent;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.fusesource.ide.server.karaf.core.server.KarafServerDelegate;
+import org.fusesource.ide.server.karaf.core.server.internal.IServerConnectionProvider;
 import org.jboss.ide.eclipse.as.core.server.UnitedServerListener;
 import org.jboss.ide.eclipse.as.core.server.UnitedServerListenerManager;
 import org.jboss.tools.jmx.core.AbstractConnectionProvider;
 import org.jboss.tools.jmx.core.IConnectionCategory;
-import org.jboss.tools.jmx.core.IConnectionProvider;
 import org.jboss.tools.jmx.core.IConnectionProviderEventEmitter;
 import org.jboss.tools.jmx.core.IConnectionWrapper;
 
 public abstract class AbstractKarafJMXConnectionProvider extends AbstractConnectionProvider 
-	implements IConnectionProvider, IConnectionProviderEventEmitter, IConnectionCategory {
+	implements IServerConnectionProvider, IConnectionProviderEventEmitter, IConnectionCategory {
 
 	private HashMap<String, IConnectionWrapper> idToConnection;
 	public AbstractKarafJMXConnectionProvider() {

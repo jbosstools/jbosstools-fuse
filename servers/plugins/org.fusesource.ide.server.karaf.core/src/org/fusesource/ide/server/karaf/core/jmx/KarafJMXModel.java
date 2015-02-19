@@ -33,6 +33,7 @@ import org.jboss.tools.jmx.local.JVMConnectionUtility;
  * but will provide either a dummy JMX connection (if the server is stopped)
  * that cannot be connected to, or, a JVMConnectionWrapper if a matching one is found.
  */
+@Deprecated
 public class KarafJMXModel {
 	public static KarafJMXModel instance;
 	public synchronized static KarafJMXModel getDefault() {

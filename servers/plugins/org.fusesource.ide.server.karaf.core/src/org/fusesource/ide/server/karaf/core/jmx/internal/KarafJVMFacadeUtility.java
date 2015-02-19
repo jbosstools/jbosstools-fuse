@@ -49,7 +49,7 @@ public class KarafJVMFacadeUtility {
 		
 		String target = main + (progArgs == null ? "" : (" " + progArgs));
 		target = target.replaceAll("\"", "").trim();
-		System.out.println(target);
+//		System.out.println(target);
 		JvmModel model = JvmModel.getInstance();
 		List<IHost> hosts = model.getHosts();
 		for (IHost host : hosts) {
@@ -58,7 +58,7 @@ public class KarafJVMFacadeUtility {
 			for (IActiveJvm jvm : jvms) {
 				int pid = jvm.getPid();
 				String command = jvm.getLaunchCommand();
-				System.out.println(command);
+//				System.out.println(command);
 				if( command.equals(target)) {
 					return jvm;
 				}

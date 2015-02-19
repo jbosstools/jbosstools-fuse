@@ -23,11 +23,12 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 import org.fusesource.ide.server.karaf.core.Activator;
-import org.fusesource.ide.server.karaf.core.jmx.KarafJMXModel;
+import org.fusesource.ide.server.karaf.core.server.internal.IServerConnectionProvider;
 import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator;
 import org.fusesource.ide.server.karaf.core.util.ServerNamingUtil;
 import org.jboss.ide.eclipse.as.core.server.ILaunchConfigConfigurator;
 import org.jboss.ide.eclipse.as.wtp.core.util.ServerSecureStorageUtil;
+import org.jboss.tools.jmx.core.ExtensionManager;
 import org.jboss.tools.jmx.core.IConnectionFacade;
 import org.jboss.tools.jmx.core.IConnectionWrapper;
 
@@ -37,6 +38,8 @@ import org.jboss.tools.jmx.core.IConnectionWrapper;
 public class KarafServerDelegate extends ServerDelegate implements
 		IKarafServerDelegateWorkingCopy, IConnectionFacade {
 
+	public static final String KARAF_JMX_CONNECTION_PROVIDER_ID = "org.fusesource.ide.jmx.karaf.connection.KarafConnectionProvider";
+	
 	public static final int    DEFAULT_SSH_PORT = 8101;
 	
 	public static final String DEFAULT_KARAF_SSH_HOSTNAME = "localhost";
@@ -182,6 +185,13 @@ public class KarafServerDelegate extends ServerDelegate implements
 
 	@Override
 	public IConnectionWrapper getJMXConnection() {
-		return KarafJMXModel.getDefault().findConnectionWrapper(getServer());
+		IConnectionWrapper wrapper = null;
+		
+		IServerConnectionProvider provider = (IServerConnectionProvider)ExtensionManager.getProvider(KARAF_JMX_CONNECTION_PROVIDER_ID);
+		if (provider != null) {
+			wrapper = provider.findConnection(getServer());
+		}
+		
+		return wrapper;
 	}
 }

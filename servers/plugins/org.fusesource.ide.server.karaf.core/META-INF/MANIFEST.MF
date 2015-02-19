@@ -35,5 +35,6 @@ Export-Package: org.fusesource.ide.server.karaf.core,
  org.fusesource.ide.server.karaf.core.runtime,
  org.fusesource.ide.server.karaf.core.runtime.integration,
  org.fusesource.ide.server.karaf.core.server,
+ org.fusesource.ide.server.karaf.core.server.internal;x-friends:="org.fusesource.ide.jmx.karaf",
  org.fusesource.ide.server.karaf.core.server.subsystems,
  org.fusesource.ide.server.karaf.core.util
