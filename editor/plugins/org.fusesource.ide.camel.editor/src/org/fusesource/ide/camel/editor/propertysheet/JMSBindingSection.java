@@ -85,7 +85,6 @@ public class JMSBindingSection extends AbstractPropertySection {
         AbstractNode n = AbstractNodes.toAbstractNode(o);
         if (n instanceof Endpoint) {
             this.selectedEP = (Endpoint)n;
-            txtName.setText(getTopicOrQueue(this.selectedEP.getUri()));
             if (isTopic(this.selectedEP.getUri())) {
             	btnTopic.setSelection(true);
             	btnQueue.setSelection(false);
@@ -93,6 +92,7 @@ public class JMSBindingSection extends AbstractPropertySection {
             	btnTopic.setSelection(false);
             	btnQueue.setSelection(true);
             }
+            txtName.setText(getTopicOrQueue(this.selectedEP.getUri()));
             form.setText("JMS Configuration - " + DiagramUtils.filterFigureLabel(selectedEP.getDisplayText()));
         } else {
             this.selectedEP = null;
@@ -213,6 +213,7 @@ public class JMSBindingSection extends AbstractPropertySection {
         		newUri = String.format("%s:%s", parts[0], newDestination);
         	}
         }
+        System.err.println("EP URI: " + newUri);
         selectedEP.setUri(newUri);
     }
 
@@ -235,13 +236,9 @@ public class JMSBindingSection extends AbstractPropertySection {
     protected String getTopicOrQueue(String uri) {
         String[] parts = uri.split(":");
         if (parts.length>=2) {
-        	// 2 possible notations
-        	if (parts.length>2) {
-            	// a) JMS : QUEUE | TOPIC : NAME
-        		return parts[2].substring(0, parts[2].indexOf("?") != -1 ? parts[2].indexOf("?") : parts[2].length());
-        	} else {
-            	// b) JMS : NAME  (here its automatically a queue
-        		return parts[1].substring(0, parts[1].indexOf("?") != -1 ? parts[1].indexOf("?") : parts[1].length());
+        	String destName = parts[parts.length-1];
+        	if (!destName.equalsIgnoreCase(TYPE_QUEUE) && !destName.equalsIgnoreCase(TYPE_TOPIC)) {
+        		return destName;
         	}
         }
         return "";
@@ -254,7 +251,7 @@ public class JMSBindingSection extends AbstractPropertySection {
      */
     protected boolean isTopic(String uri) {
     	String[] parts = uri.split(":");
-        if (parts.length>2) {
+        if (parts.length>=2) {
 			return parts[1].equalsIgnoreCase(TYPE_TOPIC);
         }
         return false;
