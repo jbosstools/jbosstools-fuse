@@ -122,7 +122,7 @@ public class CamelDebugContextEditorInput  implements ICamelEditorInput {
 				tempDir.mkdirs();
 				
 				// now create the file which will hold the camel context
-				tempFile = new File(tempDir, fileUnderDebug.substring(fileUnderDebug.lastIndexOf(File.separatorChar)+1));
+				tempFile = new File(tempDir, fileUnderDebug.substring(fileUnderDebug.lastIndexOf("/")+1));
 				
 				// lets create the IFile from it...
 				IFileSystem fileSystem = EFS.getLocalFileSystem();
