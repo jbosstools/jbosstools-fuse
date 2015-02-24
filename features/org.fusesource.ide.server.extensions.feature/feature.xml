@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.server.extensions.feature"
       label="JBoss Fuse Server Extension Feature"
-      version="7.2.2.qualifier"
+      version="7.2.3.qualifier"
       provider-name="JBoss by Red Hat"
       plugin="org.fusesource.ide.tooling">
 

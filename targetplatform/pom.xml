@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.fusesource.ide</groupId>
     <artifactId>project</artifactId>
-    <version>7.2.2-SNAPSHOT</version>
+    <version>7.2.3-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -148,7 +148,7 @@
 		    <item>
 		      <groupId>org.jboss.tools.integration-stack</groupId>
 		      <artifactId>target-platform</artifactId>
-		      <version>4.1.8.Final</version>
+		      <version>4.1.9.Final</version>
 		      <classifier>base</classifier>
 		    </item>
 		  </sourceTargetArtifacts>
