@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor.propertysheet;
 
 import java.io.File;
+import java.net.URI;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.viewers.ISelection;
@@ -127,9 +128,9 @@ public class FileBindingSection extends AbstractPropertySection {
             @Override
             public void modifyText(ModifyEvent e) {
                 String path = txtPath.getText();
-                File f = new File(path);
                 if (selectedEP != null) {
-                    updateUri(path.length() < 1 ? "" : f.toURI().toString());
+                  if (!path.trim().toLowerCase().startsWith("file:")) path = "file:" + path;
+                  updateUri(path.length() < 1 ? "" :URI.create(path).toString());
                 }
             }
         });
@@ -144,7 +145,11 @@ public class FileBindingSection extends AbstractPropertySection {
             public void widgetSelected(SelectionEvent e) {
                 String path = new DirectoryDialog(Display.getDefault().getActiveShell()).open();
                 if (path != null) {
-                    txtPath.setText(path);
+                  File f = new File(path);
+                  if (selectedEP != null) {
+                      updateUri(path.length() < 1 ? "" : f.toURI().toString());
+                      txtPath.setText(path);
+                  }
                 }
             }
         });
