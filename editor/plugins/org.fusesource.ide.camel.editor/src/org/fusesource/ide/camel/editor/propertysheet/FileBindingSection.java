@@ -130,7 +130,7 @@ public class FileBindingSection extends AbstractPropertySection {
                 String path = txtPath.getText();
                 if (selectedEP != null) {
                   if (!path.trim().toLowerCase().startsWith("file:")) path = "file:" + path;
-                  updateUri(path.length() < 1 ? "" :URI.create(path).toString());
+                  updateUri(path.length() < 1 || path.trim().equalsIgnoreCase("file:") ? "" : URI.create(path).toString());
                 }
             }
         });
