@@ -291,8 +291,9 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         addNodesMenu.setSubmenu(true);
 
         ArrayList<IToolEntry> additionalToolEntries = new ArrayList<IToolEntry>();
-        additionalToolEntries.addAll(getConnectorsToolEntries());
-        additionalToolEntries.addAll(getExtensionPointToolEntries());
+        additionalToolEntries.addAll(getAggregatedToolEntries());
+//        additionalToolEntries.addAll(getConnectorsToolEntries());
+//        additionalToolEntries.addAll(getExtensionPointToolEntries());
         
         // new use a factory for building the menu structure
         AddNodeMenuFactory f = new AddNodeMenuFactory();

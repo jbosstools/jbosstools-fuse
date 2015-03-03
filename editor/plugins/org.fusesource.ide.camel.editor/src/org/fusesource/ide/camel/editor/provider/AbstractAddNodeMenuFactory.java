@@ -42,6 +42,7 @@ import org.fusesource.ide.camel.editor.Messages;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.custom.CreateNodeConnectionFeature;
+import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
@@ -76,6 +77,10 @@ public abstract class AbstractAddNodeMenuFactory {
 			onlyEndpoints = true;
 		}
 
+		ContextMenuEntry connectorsEntry = new ContextMenuEntry(null, null);
+		connectorsEntry.setText(Messages.connectorsDrawerTitle);
+		connectorsEntry.setSubmenu(true);
+
 		ContextMenuEntry endpointsEntry = new ContextMenuEntry(null, null);
 		endpointsEntry.setText(Messages.endpointsDrawerTitle);
 		endpointsEntry.setSubmenu(true);
@@ -98,8 +103,8 @@ public abstract class AbstractAddNodeMenuFactory {
 
 		// then we need to fill the shelves menus
 		fillEndpointsContextMenu(endpointsEntry, context, fp);
-		// now add additional entries to endpoints category
-		fillAdditionalEndpointsContextMenu(endpointsEntry, context, fp, toolEntries);
+		// now add additional entries to connectors category
+		fillAdditionalEndpointsContextMenu(connectorsEntry, context, fp, toolEntries);
 		
 		if (!onlyEndpoints) {
 			fillRoutingContextMenu(routingEntry, context, fp);
@@ -149,18 +154,13 @@ public abstract class AbstractAddNodeMenuFactory {
 			}
 		}
 
+		// sort connectors
+		sortMenuByItemName(connectorsEntry);
 		// sort endpoints
-		Arrays.sort(endpointsEntry.getChildren(), new Comparator<IContextMenuEntry>() {
-		    /* (non-Javadoc)
-		     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-		     */
-		    @Override
-		    public int compare(IContextMenuEntry o1, IContextMenuEntry o2) {
-		        return o1.getText().compareToIgnoreCase(o2.getText());
-		    }
-		});
+		sortMenuByItemName(endpointsEntry);
 		
 		// and finally we add the shelves entries to the parent menu
+		rootMenu.add(connectorsEntry);
 		rootMenu.add(endpointsEntry);
 		rootMenu.add(routingEntry);
 		rootMenu.add(controlFlowEntry);
@@ -169,6 +169,19 @@ public abstract class AbstractAddNodeMenuFactory {
 	}
 
 
+	private void sortMenuByItemName(ContextMenuEntry menuEntry) {
+	 // sort endpoints
+	    Arrays.sort(menuEntry.getChildren(), new Comparator<IContextMenuEntry>() {
+		/* (non-Javadoc)
+		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public int compare(IContextMenuEntry o1, IContextMenuEntry o2) {
+		    return o1.getText().compareToIgnoreCase(o2.getText());
+		}
+	    });
+	}
+	
 	protected void addBeanInstances(ContextMenuEntry menu, Map<String, BeanDef> beans, ICustomContext context,
 			IFeatureProvider fp) {
 		ArrayList<String> processedBeans = new ArrayList<String>();
@@ -569,7 +582,12 @@ public abstract class AbstractAddNodeMenuFactory {
 	    for (IToolEntry te : toolEntries) {
 	        if (te instanceof ObjectCreationToolEntry) {
 	            ObjectCreationToolEntry octe = (ObjectCreationToolEntry)te;
-	            addMenuItem(menu, octe.getLabel(), octe.getDescription(), Endpoint.class, context, fp);
+	            if (octe.getCreateFeature() instanceof PaletteCategoryItemProvider) {
+	        	PaletteCategoryItemProvider pcip = (PaletteCategoryItemProvider) octe.getCreateFeature();
+	        	if (pcip != null && pcip.getCategoryType() == PaletteCategoryItemProvider.CATEGORY_TYPE.COMPONENTS) {
+	        	    addMenuItem(menu, octe.getLabel(), octe.getDescription(), Endpoint.class, context, fp);
+	        	}
+	            }
 	        }	        
 	    }
 	}	
