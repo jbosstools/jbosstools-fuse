@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	
+	<mapping>
+        <class-a>example.AClass</class-a>
+        <class-b>example.BClass</class-b>
+        <field>
+            <a>A1</a>
+            <b>B1</b>
+        </field>
+    </mapping>
+    <mapping>
+        <class-a>org.jboss.mapper.camel.transform.LiteralMapper</class-a>
+        <class-b>example.BClass</class-b>
+        <field custom-converter-id="_literalMapping" custom-converter-param="123">
+            <a>literal</a>
+            <b>B2</b>
+        </field>
+    </mapping>
+	
+</mappings>

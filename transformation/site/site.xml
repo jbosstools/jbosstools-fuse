@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Data Mapper Tools Update Site">
+      This is the update site for Data Mapper Eclipse tooling.
+   </description>
+   <feature url="features/org.jboss.tools.fuse.transformation.feature_0.0.0.jar" id="org.jboss.tools.fuse.transformation.feature" version="0.0.0">
+      <category name="data.transformation.category"/>
+   </feature>
+   <category-def name="data.transformation.category" label="Data Transformation">
+      <description>
+         Data Transformation Tools
+      </description>
+   </category-def>
+</site>
