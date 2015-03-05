@@ -47,7 +47,7 @@ public final class LiteralsViewer extends Composite {
      * @param parent
      * @param literals
      */
-    public LiteralsViewer(Composite parent,
+    public LiteralsViewer(final Composite parent,
             final List<Literal> literals) {
         super(parent, SWT.NONE);
 
@@ -91,7 +91,7 @@ public final class LiteralsViewer extends Composite {
         addButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(SelectionEvent event) {
+            public void widgetSelected(final SelectionEvent event) {
                 final InputDialog dlg = new InputDialog(getShell(),
                         "Add Literal",
                         "Enter a new literal value",
@@ -99,7 +99,7 @@ public final class LiteralsViewer extends Composite {
                         new IInputValidator() {
 
                             @Override
-                            public String isValid(String text) {
+                            public String isValid(final String text) {
                                 return listViewer.getList().indexOf(text) < 0 ? null
                                         : "Value already exists";
                             }
@@ -112,14 +112,14 @@ public final class LiteralsViewer extends Composite {
         listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             @Override
-            public void selectionChanged(SelectionChangedEvent event) {
+            public void selectionChanged(final SelectionChangedEvent event) {
                 deleteButton.setEnabled(!event.getSelection().isEmpty());
             }
         });
         deleteButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(SelectionEvent event) {
+            public void widgetSelected(final SelectionEvent event) {
                 for (final Iterator<?> iter =
                         ((IStructuredSelection) listViewer.getSelection()).iterator(); iter
                         .hasNext();) {
@@ -129,7 +129,7 @@ public final class LiteralsViewer extends Composite {
         });
 
         // Populate
-        for (Literal literal : literals) {
+        for (final Literal literal : literals) {
             listViewer.add(literal.getValue());
         }
     }

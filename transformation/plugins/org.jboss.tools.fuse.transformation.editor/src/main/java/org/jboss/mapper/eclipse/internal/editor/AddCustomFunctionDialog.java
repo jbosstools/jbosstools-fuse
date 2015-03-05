@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -54,17 +54,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.mapper.eclipse.Activator;
-import org.jboss.mapper.eclipse.internal.editor.MappingsViewer.CustomOperationListener;
+import org.jboss.mapper.eclipse.internal.editor.MappingsViewer.CustomFunctionListener;
 import org.jboss.mapper.eclipse.internal.util.Util;
 
-final class AddCustomOperationDialog extends TitleAreaDialog {
+final class AddCustomFunctionDialog extends TitleAreaDialog {
 
     IProject project;
     String sourceType;
     IType type;
     IMethod method;
 
-    AddCustomOperationDialog(final Shell shell,
+    AddCustomFunctionDialog(final Shell shell,
             final IProject project,
             final String sourceType) {
         super(shell);
@@ -96,7 +96,7 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
         final Button newClassButton = new Button(area, SWT.NONE);
         newClassButton.setImage(new DecorationOverlayIcon(JavaUI.getSharedImages().getImage(
                 ISharedImages.IMG_OBJS_CLASS),
-                Util.ADD_OVERLAY_IMAGE_DESCRIPTOR,
+                Util.Decorations.ADD,
                 IDecoration.TOP_RIGHT).createImage());
         label = new Label(area, SWT.NONE);
         label.setText("Method:");
@@ -227,11 +227,13 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
     }
 
     void methodSelected(final ComboViewer methodComboViewer) {
-        method = (IMethod) ((IStructuredSelection) methodComboViewer.getSelection())
-                .getFirstElement();
+        method =
+                (IMethod) ((IStructuredSelection) methodComboViewer.getSelection())
+                        .getFirstElement();
     }
 
-    void selectClass(final Button classButton, final ComboViewer methodComboViewer) {
+    void selectClass(final Button classButton,
+            final ComboViewer methodComboViewer) {
         final Util.Filter filter = new Util.Filter() {
 
             @Override
@@ -302,7 +304,7 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
         private void createComboPane(final Composite parent,
                 final String initialText,
                 final String labelText,
-                final CustomOperationListener listener) {
+                final CustomFunctionListener listener) {
             final Combo combo = new Combo(parent, SWT.READ_ONLY);
             combo.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER)
                     .grab(true, false).create());
@@ -323,11 +325,11 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
 
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
-                    listener.operationChanged(combo.getText());
+                    listener.functionChanged(combo.getText());
                 }
             });
             combo.select(combo.indexOf(initialText));
-            listener.operationChanged(initialText);
+            listener.functionChanged(initialText);
             final Label label = new Label(parent, SWT.NONE);
             label.setText(labelText);
         }
@@ -363,32 +365,32 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
             group.setLayoutData(GridDataFactory.fillDefaults().span(columns, 1).grab(true, false)
                     .create());
             group.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).numColumns(6).create());
-            group.setText("Custom Operation");
+            group.setText("Custom Function");
             createLabelPane(group, "Return Type");
             createLabelPane(group, "Method Name");
             createLabelPane(group, "Parameter Type");
-            createComboPane(group, sourceType, " ", new CustomOperationListener() {
+            createComboPane(group, sourceType, " ", new CustomFunctionListener() {
 
                 @Override
-                public void operationChanged(final String text) {
+                public void functionChanged(final String text) {
                     returnType = text;
                     returnTypeStatus = typeStatus(returnType, "return");
                     updateStatus();
                 }
             });
-            createTextPane(group, "map", "(", new CustomOperationListener() {
+            createTextPane(group, "map", "(", new CustomFunctionListener() {
 
                 @Override
-                public void operationChanged(final String text) {
+                public void functionChanged(final String text) {
                     methodName = text.trim();
                     methodNameStatus = nameStatus(methodName, "method");
                     updateStatus();
                 }
             });
-            createComboPane(group, sourceType, " input)", new CustomOperationListener() {
+            createComboPane(group, sourceType, " input)", new CustomFunctionListener() {
 
                 @Override
-                public void operationChanged(final String text) {
+                public void functionChanged(final String text) {
                     prmType = text;
                     prmTypeStatus = typeStatus(prmType, "parameter");
                     updateStatus();
@@ -399,7 +401,7 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
         private Text createTextPane(final Composite parent,
                 final String initialText,
                 final String labelText,
-                final CustomOperationListener listener) {
+                final CustomFunctionListener listener) {
             final Text text = new Text(parent, SWT.BORDER);
             text.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER)
                     .grab(true, false).create());
@@ -407,7 +409,7 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
 
                 @Override
                 public void modifyText(final ModifyEvent event) {
-                    listener.operationChanged(text.getText());
+                    listener.functionChanged(text.getText());
                 }
             });
             text.setText(initialText);
@@ -420,11 +422,10 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
                 final String nameName) {
             // TODO I think there is an Apache library that does this along with
             // checking for Java reserved keywords
-            if (name == null || name.isEmpty()) {
+            if (name == null || name.isEmpty())
                 return new Status(IStatus.ERROR,
                         Activator.plugin().getBundle().getSymbolicName(),
                         "A " + nameName + " name for the custom operation must be provided");
-            }
             final char[] chars = name.toCharArray();
             final char firstChar = chars[0];
             if (!Character.isJavaIdentifierStart(firstChar)) {
@@ -438,7 +439,8 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
                     return new Status(
                             IStatus.ERROR,
                             Activator.plugin().getBundle().getSymbolicName(),
-                            "The " + nameName
+                            "The "
+                                    + nameName
                                     + " name for the custom operation contains at least one invalid character");
                 }
             }
@@ -458,11 +460,10 @@ final class AddCustomOperationDialog extends TitleAreaDialog {
 
         IStatus typeStatus(final String type,
                 final String typeName) {
-            if (type == null) {
+            if (type == null)
                 return new Status(IStatus.ERROR,
                         Activator.plugin().getBundle().getSymbolicName(),
                         "A " + typeName + " type for the custom operation must be selected");
-            }
             return Status.OK_STATUS;
         }
 

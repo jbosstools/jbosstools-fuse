@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -28,12 +28,20 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.jboss.mapper.eclipse.Activator;
+import org.jboss.mapper.model.Model;
 
 /**
  *
@@ -51,46 +59,40 @@ public class Util {
     public static final String RESOURCES_PATH = MAIN_PATH + "resources/";
 
     /**
-     *
+     * @param model
+     * @return the fully-qualified name of the supplied model
      */
-    public static final Image ADD_IMAGE = PlatformUI.getWorkbench().getSharedImages()
-            .getImage(ISharedImages.IMG_OBJ_ADD);
+    public static String fullyQualifiedName(final Model model) {
+        return fullyQualifiedName(model, new StringBuilder());
+    }
+
+    private static String fullyQualifiedName(final Model model,
+            final StringBuilder builder) {
+        if (model.getParent() != null) {
+            fullyQualifiedName(model.getParent(), builder);
+            builder.append('.');
+        }
+        builder.append(model.getName());
+        return builder.toString();
+    }
 
     /**
-     *
+     * @return a paint listener that paints a rounded border around a control
      */
-    public static final Image ADD_OPERATION_IMAGE = Activator.imageDescriptor("addOperation16.gif")
-            .createImage();
+    public static final PaintListener ovalBorderPainter() {
+        return new PaintListener() {
 
-    /**
-     *
-     */
-    public static final ImageDescriptor ADD_OVERLAY_IMAGE_DESCRIPTOR = Activator
-            .imageDescriptor("addOverlay.gif");
-
-    /**
-     *
-     */
-    public static final Image CHANGE_IMAGE = Activator.imageDescriptor("change16.gif")
-            .createImage();
-
-    /**
-     *
-     */
-    public static final Image DELETE_IMAGE = PlatformUI.getWorkbench().getSharedImages()
-            .getImage(ISharedImages.IMG_ETOOL_DELETE);
-
-    /**
-     *
-     */
-    public static final Image LITERAL_IMAGE = Activator.imageDescriptor("literal16.gif")
-            .createImage();
-
-    /**
-     *
-     */
-    public static final Image RIGHT_ARROW_IMAGE = Activator.imageDescriptor("rightArrow16.gif")
-            .createImage();
+            @Override
+            public void paintControl(final PaintEvent event) {
+                final Color oldForeground = event.gc.getForeground();
+                event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_GRAY));
+                final Rectangle bounds = ((Control) event.widget).getBounds();
+                event.gc.drawRoundRectangle(0, 0, bounds.width - 1, bounds.height - 1,
+                        bounds.height, bounds.height);
+                event.gc.setForeground(oldForeground);
+            }
+        };
+    }
 
     private static void populateClasses(final Shell shell,
             final IParent parent,
@@ -104,15 +106,13 @@ public class Util {
                             && !type.isLocal()
                             && !Flags.isAbstract(type.getFlags())
                             && Flags.isPublic(type.getFlags())
-                            && (filter == null || filter.accept(type))) {
+                            && (filter == null || filter.accept(type)))
                         types.add(type);
-                    }
                 } else if (element instanceof IParent
                         && !element.getPath().toString().contains("/test/")
                         && (!(element instanceof IPackageFragmentRoot)
-                        || !((IPackageFragmentRoot) element).isExternal())) {
+                        || !((IPackageFragmentRoot) element).isExternal()))
                     populateClasses(shell, (IParent) element, types, filter);
-                }
             }
         } catch (final JavaModelException e) {
             Activator.error(e);
@@ -124,15 +124,41 @@ public class Util {
             final List<IResource> resources) {
         try {
             for (final IResource resource : container.members()) {
-                if (resource instanceof IContainer) {
+                if (resource instanceof IContainer)
                     populateResources(shell, (IContainer) resource, resources);
-                } else {
+                else
                     resources.add(resource);
-                }
             }
         } catch (final Exception e) {
             Activator.error(e);
         }
+    }
+
+    /**
+     * @param model
+     * @return the root model of the supplied model
+     */
+    public static Model root(final Model model) {
+        return model.getParent() == null ? model : root(model.getParent());
+    }
+
+    /**
+     * @param arc
+     * @param background
+     * @return A paint listener that paints a border around a control. Useful
+     *         for borders around labels
+     */
+    public static final PaintListener roundedRectanglePainter(final int arc,
+            final Color background) {
+        return new PaintListener() {
+
+            @Override
+            public void paintControl(final PaintEvent event) {
+                event.gc.setBackground(background);
+                final Rectangle bounds = ((Composite) event.widget).getClientArea();
+                event.gc.fillRoundRectangle(0, 0, bounds.width - 1, bounds.height - 1, arc, arc);
+            }
+        };
     }
 
     /**
@@ -154,9 +180,9 @@ public class Util {
     public static IType selectClass(final Shell shell,
             final IProject project,
             final Filter filter) {
-        final int flags = JavaElementLabelProvider.SHOW_DEFAULT
-                | JavaElementLabelProvider.SHOW_POST_QUALIFIED
-                | JavaElementLabelProvider.SHOW_ROOT;
+        final int flags = JavaElementLabelProvider.SHOW_DEFAULT |
+                JavaElementLabelProvider.SHOW_POST_QUALIFIED |
+                JavaElementLabelProvider.SHOW_ROOT;
         final ElementListSelectionDialog dlg =
                 new ElementListSelectionDialog(shell, new JavaElementLabelProvider(flags));
         dlg.setTitle("Select Custom Operation(s) Class");
@@ -197,9 +223,8 @@ public class Util {
         final List<IResource> resources = new ArrayList<>();
         populateResources(shell, project, resources);
         dlg.setElements(resources.toArray());
-        if (dlg.open() == Window.OK) {
+        if (dlg.open() == Window.OK)
             return ((IFile) dlg.getFirstResult()).getProjectRelativePath().toString();
-        }
         return null;
     }
 
@@ -238,6 +263,29 @@ public class Util {
     private Util() {}
 
     /**
+     *
+     */
+    public static interface Decorations {
+
+        /**
+         *
+         */
+        public static final ImageDescriptor ADD = Activator.imageDescriptor("addOverlay.gif");
+
+        /**
+         *
+         */
+        public static final ImageDescriptor COLLECTION =
+                Activator.imageDescriptor("collectionOverlay.gif");
+
+        /**
+         *
+         */
+        public static final ImageDescriptor MAPPED =
+                Activator.imageDescriptor("mappedOverlay.gif");
+    }
+
+    /**
      * Provides users with the ability to further filter which classes appear in
      * the dialog shown by {@link Util#selectClass(Shell, IProject, Filter)}
      */
@@ -250,5 +298,94 @@ public class Util {
          *         {@link Util#selectClass(Shell, IProject, Filter)}
          */
         boolean accept(IType type);
+    }
+
+    /**
+     *
+     */
+    public static interface Images {
+
+        /**
+         *
+         */
+        public static final Image ADD_FUNCTION =
+                Activator.imageDescriptor("addFunction16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image ADD =
+                PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
+
+        /**
+         *
+         */
+        public static final Image ATTRIBUTE =
+                Activator.imageDescriptor("attribute16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image CHANGE =
+                Activator.imageDescriptor("change16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image CLEAR = Activator.imageDescriptor("clear16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image COLLAPSE_ALL =
+                Activator.imageDescriptor("collapseAll16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image DELETE =
+                PlatformUI.getWorkbench().getSharedImages()
+                        .getImage(ISharedImages.IMG_ETOOL_DELETE);
+
+        /**
+         *
+         */
+        public static final Image ELEMENT =
+                Activator.imageDescriptor("element16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image FILTER =
+                Activator.imageDescriptor("filter16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image HIDE_MAPPED =
+                Activator.imageDescriptor("hideMapped16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image LITERAL =
+                Activator.imageDescriptor("literal16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image MAPPED =
+                Activator.imageDescriptor("mapped16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image SEARCH =
+                Activator.imageDescriptor("search16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image TREE = Activator.imageDescriptor("tree16.gif").createImage();
     }
 }

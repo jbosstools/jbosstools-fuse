@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
+import org.jboss.mapper.Literal;
 import org.jboss.mapper.eclipse.Activator;
 import org.jboss.mapper.eclipse.TransformationEditor;
 import org.jboss.mapper.eclipse.internal.util.Util;
@@ -68,10 +69,9 @@ public class ModelTabFolder extends CTabFolder {
 
         final ToolBar toolBar = new ToolBar(this, SWT.RIGHT);
         setTopRight(toolBar);
-        final ToolItem changeItem = new ToolItem(toolBar, SWT.NONE);
-        changeItem.setText("Change " + title);
-        changeItem.setImage(Util.CHANGE_IMAGE);
-        changeItem.setToolTipText("Change transformation " + title.toLowerCase());
+        final ToolItem changeButton = new ToolItem(toolBar, SWT.NONE);
+        changeButton.setImage(Util.Images.CHANGE);
+        changeButton.setToolTipText("Change transformation " + title.toLowerCase());
 
         final CTabItem tab = new CTabItem(this, SWT.NONE);
         tab.setText(title + (model == null ? "" : ": " + model.getName()));
@@ -81,7 +81,7 @@ public class ModelTabFolder extends CTabFolder {
         modelViewer.layout();
         setSelection(tab);
 
-        changeItem.addSelectionListener(new SelectionAdapter() {
+        changeButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
@@ -195,6 +195,8 @@ public class ModelTabFolder extends CTabFolder {
      * @param object
      */
     public void select(final Object object) {
+        if (object instanceof Literal)
+            return;
         expand(((Model) object).getParent());
         modelViewer.treeViewer.setSelection(new StructuredSelection(object), true);
     }
