@@ -18,11 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.mapper.CustomMapping;
+import org.jboss.mapper.Expression;
+import org.jboss.mapper.ExpressionMapping;
 import org.jboss.mapper.FieldMapping;
-import org.jboss.mapper.Literal;
-import org.jboss.mapper.LiteralMapping;
 import org.jboss.mapper.MappingOperation;
 import org.jboss.mapper.MappingType;
+import org.jboss.mapper.Variable;
+import org.jboss.mapper.VariableMapping;
 import org.jboss.mapper.dozer.config.Field;
 import org.jboss.mapper.dozer.config.Mapping;
 import org.jboss.mapper.model.Model;
@@ -108,29 +110,29 @@ public class DozerMapperConfigurationTest {
     
     @Test
     public void getMappings() throws Exception {
-        DozerMapperConfiguration config = loadConfig("fieldAndLiteralMapping.xml");
+        DozerMapperConfiguration config = loadConfig("fieldAndVariableMapping.xml");
         Assert.assertEquals(2, config.getMappings().size());
         int fieldMappings = 0;
-        int literalMappings = 0;
+        int variableMappings = 0;
         for (MappingOperation<?,?> mapping : config.getMappings()) {
-            if (MappingType.LITERAL.equals(mapping.getType())) {
-                fieldMappings++;
+            if (MappingType.VARIABLE.equals(mapping.getType())) {
+                variableMappings++;
             } else if (MappingType.FIELD.equals(mapping.getType())) {
-                literalMappings++;
+                fieldMappings++;
             }
         }
         Assert.assertEquals(1, fieldMappings);
-        Assert.assertEquals(1, literalMappings);
+        Assert.assertEquals(1, variableMappings);
     }
     
     @Test
-    public void getLiterals() throws Exception {
-        DozerMapperConfiguration config = loadConfig("fieldAndLiteralMapping.xml");
-        Literal acme = new Literal("ACME");
-        config.map(acme, modelB.get("B3"));
-        List<Literal> literals = config.getLiterals();
-        Assert.assertTrue(literals.contains(acme));
-        Assert.assertEquals(2, literals.size());
+    public void getVariables() throws Exception {
+        DozerMapperConfiguration config = loadConfig("fieldAndVariableMapping.xml");
+        Variable var3 = new Variable("VAR3", "XYZ");
+        config.addVariable(var3);
+        List<Variable> variables = config.getVariables();
+        Assert.assertTrue(variables.contains(var3));
+        Assert.assertEquals(3, variables.size());
     }
     
     @Test
@@ -145,14 +147,34 @@ public class DozerMapperConfigurationTest {
     }
     
     @Test
-    public void mapLiteral() throws Exception {
+    public void mapVariable() throws Exception {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model target = modelB.get("B1");
-        Literal literal = new Literal("literally?!");
-        config.map(literal, modelB.get("B1"));
-        LiteralMapping mapping = (LiteralMapping)config.getMappings().get(0);
-        Assert.assertEquals(literal, mapping.getSource());
+        Variable variable = new Variable("VAR1", "ABC-VAL");
+        config.map(variable, modelB.get("B1"));
+        VariableMapping mapping = (VariableMapping)config.getMappings().get(0);
+        Assert.assertEquals(variable, mapping.getSource());
         Assert.assertEquals(target, mapping.getTarget());
+    }
+    
+    @Test
+    public void mapExpression() throws Exception {
+        DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
+        Model target = modelB.get("B1");
+        Expression expr = new Expression("simple", "\\${property.foo}");
+        config.map(expr, modelB.get("B1"));
+        ExpressionMapping mapping = (ExpressionMapping)config.getMappings().get(0);
+        Assert.assertEquals(expr.getLanguage(), mapping.getSource().getLanguage());
+        Assert.assertEquals(expr.getExpression(), mapping.getSource().getExpression());
+        Assert.assertEquals(target, mapping.getTarget());
+    }
+    
+    @Test
+    public void getExpression() throws Exception {
+        DozerMapperConfiguration config = loadConfig("expressionMapping.xml");
+        DozerExpressionMapping expMap = (DozerExpressionMapping)config.getMappings().get(1);
+        Assert.assertEquals("simple", expMap.getSource().getLanguage());
+        Assert.assertEquals("\\${header.customerNumber}", expMap.getSource().getExpression());
     }
     
     @Test

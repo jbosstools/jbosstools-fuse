@@ -14,9 +14,10 @@ package org.jboss.mapper;
 import org.jboss.mapper.model.Model;
 
 /**
- * A LiteralMapping represents a mapping where the source is a string literal,
- * represented by Literal, and the target is a model field.
+ * An ExpressionMapping represents a mapping where the source is a Camel 
+ * language expression which is evaluated at runtime and mapped to a target
+ * field.
  */
-public interface LiteralMapping extends MappingOperation<Literal, Model> {
+public interface ExpressionMapping extends MappingOperation<Expression, Model> {
 
 }

@@ -1,3 +1,14 @@
+/*
+ * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+ * applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+ * OF ANY KIND, either express or implied. See the License for the specific
+ * language governing permissions and limitations under the License.
+ */
 package org.jboss.mapper;
 
 import java.io.OutputStream;
@@ -45,13 +56,39 @@ public interface MapperConfiguration {
      * @return list of mappings
      */
     List<MappingOperation<?,?>> getMappings();
+    
+    /**
+     * Add a variable definition to the mapping configuration. If an existing
+     * mapping exists with the same variable name, the variable value is updated
+     * instead of adding a new variable definition.
+     * 
+     * @param variable variable to add
+     */
+    void addVariable(Variable variable);
 
     /**
-     * Get the list of literal values used as the source for mappings.
+     * Remove the specified variable from the mapping configuration. If no
+     * mapping is defined with the specified variable's name, this method
+     * returns false.
      * 
-     * @return list of literals
+     * @param variable variable to remove
+     * @return true if the variable was removed, false otherwise
      */
-    List<Literal> getLiterals();
+    boolean removeVariable(Variable variable);
+
+    /**
+     * Get the list of variables used as the source for mappings.
+     * 
+     * @return list of variables
+     */
+    List<Variable> getVariables();
+    
+    /**
+     * Retrieve a variable by name.
+     * @param variableName name of the variable
+     * @return variable reference or null if the variable is not defined
+     */
+    Variable getVariable(String variableName);
 
     /**
      * Map a source field to a target field.
@@ -63,13 +100,22 @@ public interface MapperConfiguration {
     FieldMapping map(Model source, Model target);
 
     /**
-     * Map a literal value to a target field.
+     * Map a variable to a target field.
      * 
-     * @param literal literal value
+     * @param variable source variable
      * @param target target field
      * @return mapping created
      */
-    LiteralMapping map(Literal literal, Model target);
+    VariableMapping map(Variable variable, Model target);
+    
+    /**
+     * Map an expression to a target field.
+     * 
+     * @param expression source expression
+     * @param target target field
+     * @return mapping created
+     */
+    ExpressionMapping map(Expression expression, Model target);
 
     /**
      * Write the mapping configuration to the specified output stream.
