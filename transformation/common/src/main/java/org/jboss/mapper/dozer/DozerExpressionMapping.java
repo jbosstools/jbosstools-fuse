@@ -11,35 +11,35 @@
  */
 package org.jboss.mapper.dozer;
 
-import org.jboss.mapper.Literal;
-import org.jboss.mapper.LiteralMapping;
+import org.jboss.mapper.Expression;
+import org.jboss.mapper.ExpressionMapping;
 import org.jboss.mapper.MappingType;
 import org.jboss.mapper.dozer.config.Field;
 import org.jboss.mapper.dozer.config.Mapping;
 import org.jboss.mapper.model.Model;
 
 /**
- * Dozer-specific implementation of LiteralMapping.
+ * Dozer-specific implementation of ExpressionMapping.
  */
-public class DozerLiteralMapping extends BaseDozerMapping implements LiteralMapping {
+public class DozerExpressionMapping extends BaseDozerMapping implements ExpressionMapping {
 
-    private Literal source;
+    private Expression source;
     private Model target;
 
     /**
-     * Create a new LiteralMapping.
+     * Create a new DozerExpressionMapping.
      * 
-     * @param source source literal
+     * @param source source expression
      * @param target target field
      */
-    public DozerLiteralMapping(Literal source, Model target, Mapping mapping, Field field) {
+    public DozerExpressionMapping(Expression source, Model target, Mapping mapping, Field field) {
         super(mapping, field);
         this.source = source;
         this.target = target;
     }
 
     @Override
-    public Literal getSource() {
+    public Expression getSource() {
         return source;
     }
 
@@ -50,6 +50,6 @@ public class DozerLiteralMapping extends BaseDozerMapping implements LiteralMapp
 
     @Override
     public MappingType getType() {
-        return MappingType.LITERAL;
+        return MappingType.EXPRESSION;
     }
 }

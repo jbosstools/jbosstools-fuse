@@ -11,9 +11,12 @@
  */
 package org.jboss.mapper;
 
+import org.jboss.mapper.model.Model;
+
 /**
- * Types of MappingOperation.
+ * A VariableMapping represents a mapping where the source is a variable and 
+ * the target is a model field.
  */
-public enum MappingType {
-    FIELD, VARIABLE, CUSTOM, EXPRESSION;
+public interface VariableMapping extends MappingOperation<Variable, Model> {
+
 }

@@ -12,50 +12,66 @@
 package org.jboss.mapper;
 
 /**
- * A Literal is a String value which can be assigned to a target field in a
- * mapping.
+ * A Variable represents a key and value mapping, where the variable name is 
+ * used as the source in a mapping and is replaced with the variable value.
  */
-public class Literal {
+public class Variable {
 
+    private String name;
     private String value;
 
     /**
-     * Create a new Literal.
+     * Create a new Variable.
      * 
-     * @param value literal value
+     * @param name variable name
+     * @param value variable value
      */
-    public Literal(String value) {
+    public Variable(String name, String value) {
+        this.name = name;
         this.value = value;
     }
 
     /**
-     * Get the value of this Literal.
+     * Get the value of this Variable.
      * 
-     * @return string value of the literal
+     * @return value of the variable
      */
     public String getValue() {
         return value;
     }
+    
+    /**
+     * Get the name of this Variable.
+     * 
+     * @return name of the variable
+     */
+    public String getName() {
+        return name;
+    }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Literal) || obj == null) {
+        if (!(obj instanceof Variable) || obj == null) {
             return false;
         }
         if (obj == this) {
             return true;
         }
 
-        return ((Literal) obj).getValue().equals(value);
+        Variable that = (Variable)obj;
+        return that.getName().equals(name) && that.getValue().equals(value);
     }
 
     @Override
     public int hashCode() {
-        return 37 * 7 + value.hashCode();
+        int hash = 7;
+        hash = hash * 37 + name.hashCode();
+        hash = hash * 37 + value.hashCode();
+        return hash;
     }
 
     @Override
     public String toString() {
-        return "literal: " + value;
+        return "variable[name:" + name + ",value:" + value + "]";
     }
 }

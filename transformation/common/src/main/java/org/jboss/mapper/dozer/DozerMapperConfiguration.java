@@ -13,6 +13,7 @@ package org.jboss.mapper.dozer;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,17 +22,19 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.jboss.mapper.CustomMapping;
+import org.jboss.mapper.Expression;
+import org.jboss.mapper.ExpressionMapping;
 import org.jboss.mapper.FieldMapping;
-import org.jboss.mapper.Literal;
-import org.jboss.mapper.LiteralMapping;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.MappingOperation;
-import org.jboss.mapper.MappingType;
+import org.jboss.mapper.Variable;
+import org.jboss.mapper.dozer.config.Configuration;
 import org.jboss.mapper.dozer.config.Field;
 import org.jboss.mapper.dozer.config.FieldDefinition;
 import org.jboss.mapper.dozer.config.Mapping;
 import org.jboss.mapper.dozer.config.Mappings;
 import org.jboss.mapper.dozer.config.ObjectFactory;
+import org.jboss.mapper.dozer.config.Variables;
 import org.jboss.mapper.model.Model;
 import org.jboss.mapper.model.ModelBuilder;
 
@@ -39,10 +42,13 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
     public static final String DEFAULT_DOZER_CONFIG = "dozerBeanMapping.xml";
 
-    private static final String LITERAL_MAPPER_CLASS =
-            "org.apache.camel.component.dozer.LiteralMapper";
-    private static final String LITERAL_MAPPER_ID = "_literalMapping";
+    private static final String VARIABLE_MAPPER_CLASS =
+            "org.apache.camel.component.dozer.VariableMapper";
+    private static final String EXPRESSION_MAPPER_CLASS =
+            "org.apache.camel.component.dozer.ExpressionMapper";
+    private static final String VARIABLE_MAPPER_ID = "_variableMapping";
     private static final String CUSTOM_MAPPER_ID = "_customMapping";
+    private static final String EXPRESSION_MAPPER_ID = "_expressionMapping";
     private static final String DOZER_SCHEMA_LOC =
             "http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd";
 
@@ -50,9 +56,12 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     private JAXBContext jaxbCtx;
     private ClassLoader loader;
     private final Mappings mapConfig;
-    private final Model literalModel =
-            new Model("literals", LITERAL_MAPPER_CLASS)
+    private final Model variableModel =
+            new Model("variables", VARIABLE_MAPPER_CLASS)
                     .addChild("literal", java.lang.String.class.getName());
+    private final Model expressionModel =
+            new Model("expressions", EXPRESSION_MAPPER_CLASS)
+                    .addChild("expression", java.lang.String.class.getName());
 
     private DozerMapperConfiguration() {
         this(new Mappings());
@@ -111,9 +120,14 @@ public class DozerMapperConfiguration implements MapperConfiguration {
                 Field field = (Field) o;
                 Model targetModel = targetParentModel.get(field.getB().getContent());
 
-                if (LITERAL_MAPPER_ID.equals(field.getCustomConverterId())) {
-                    mappings.add(new DozerLiteralMapping(new Literal(field
-                            .getCustomConverterParam()), targetModel, mapping, field));
+                if (VARIABLE_MAPPER_ID.equals(field.getCustomConverterId())) {
+                    Variable variable = getVariable(DozerVariableMapping.unqualifyName(
+                            field.getCustomConverterParam()));
+                    mappings.add(new DozerVariableMapping(variable, targetModel, mapping, field));
+                } else if (EXPRESSION_MAPPER_ID.equals(field.getCustomConverterId())) {
+                    String[] params = field.getCustomConverterParam().split(":");
+                    Expression expression = new Expression(params[0], params[1]);
+                    mappings.add(new DozerExpressionMapping(expression, targetModel, mapping, field));
                 } else {
                     Model sourceParentModel = loadModel(mapping.getClassA().getContent());
                     Model sourceModel = sourceParentModel.get(field.getA().getContent());
@@ -133,16 +147,76 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         }
         return mappings;
     }
+    
+    @Override
+    public void addVariable(Variable variable) {
+        Variable existing = getVariable(variable.getName());
+        // Remove the variable if it already exists
+        if (existing != null) {
+            removeVariable(variable);
+        }
+        // Add the variable to the dozer config
+        Configuration dozerConfig = mapConfig.getConfiguration();
+        if (dozerConfig == null) {
+            dozerConfig = new Configuration();
+            mapConfig.setConfiguration(dozerConfig);
+        }
+        Variables variables = dozerConfig.getVariables();
+        if (variables == null) {
+            variables = new Variables();
+            dozerConfig.setVariables(variables);
+        }
+        org.jboss.mapper.dozer.config.Variable dozerVar = 
+                new org.jboss.mapper.dozer.config.Variable();
+        dozerVar.setName(variable.getName());
+        dozerVar.setContent(variable.getValue());
+        variables.getVariable().add(dozerVar);
+    }
 
     @Override
-    public List<Literal> getLiterals() {
-        LinkedList<Literal> consts = new LinkedList<Literal>();
-        for (MappingOperation<?, ?> mapping : getMappings()) {
-            if (MappingType.LITERAL.equals(mapping.getType())) {
-                consts.add(((LiteralMapping) mapping).getSource());
+    public boolean removeVariable(Variable variable) {
+        if (mapConfig.getConfiguration() == null 
+                || mapConfig.getConfiguration().getVariables() == null) {
+            return false;
+        }
+        Variables dozerVars = mapConfig.getConfiguration().getVariables();
+        Iterator<org.jboss.mapper.dozer.config.Variable> varIt = 
+                dozerVars.getVariable().iterator();
+        while (varIt.hasNext()) {
+            org.jboss.mapper.dozer.config.Variable dozerVar = varIt.next();
+            if (dozerVar.getName().equals(variable.getName())) {
+                varIt.remove();
+                return true;
             }
         }
-        return consts;
+        
+        return false;
+    }
+
+    @Override
+    public List<Variable> getVariables() {
+        LinkedList<Variable> variableList = new LinkedList<Variable>();
+        if (mapConfig.getConfiguration() == null 
+                || mapConfig.getConfiguration().getVariables() == null) {
+            return variableList;
+        }
+        Variables dozerVars = mapConfig.getConfiguration().getVariables();
+        for (org.jboss.mapper.dozer.config.Variable dozerVar : dozerVars.getVariable()) {
+            variableList.add(new Variable(dozerVar.getName(), dozerVar.getContent()));
+        }
+        return variableList;
+    }
+
+    @Override
+    public Variable getVariable(String variableName) {
+        Variable variable = null;
+        for (Variable var : getVariables()) {
+            if (var.getName().equals(variableName)) {
+                variable = var;
+                break;
+            }
+        }
+        return variable;
     }
 
     @Override
@@ -163,16 +237,32 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     }
 
     @Override
-    public DozerLiteralMapping map(final Literal literal, final Model target) {
-        Mapping mapping = getLiteralMapping(target);
+    public DozerVariableMapping map(final Variable variable, final Model target) {
+        // make sure the specified variable exists
+        addVariable(variable);
+        // create the mapping
+        Mapping mapping = getExtendedMapping(VARIABLE_MAPPER_CLASS, target);
         Field field = new Field();
-        field.setA(createField(literalModel, LITERAL_MAPPER_CLASS));
+        field.setA(createField(variableModel, VARIABLE_MAPPER_CLASS));
         field.setB(createField(target, mapping.getClassB().getContent()));
-        field.setCustomConverterId(LITERAL_MAPPER_ID);
-        field.setCustomConverterParam(literal.getValue());
+        field.setCustomConverterId(VARIABLE_MAPPER_ID);
+        field.setCustomConverterParam(DozerVariableMapping.qualifyName(variable.getName()));
         mapping.getFieldOrFieldExclude().add(field);
 
-        return new DozerLiteralMapping(literal, target, mapping, field);
+        return new DozerVariableMapping(variable, target, mapping, field);
+    }
+
+    @Override
+    public ExpressionMapping map(Expression expression, Model target) {
+        Mapping mapping = getExtendedMapping(EXPRESSION_MAPPER_CLASS, target);
+        Field field = new Field();
+        field.setA(createField(expressionModel, EXPRESSION_MAPPER_CLASS));
+        field.setB(createField(target, mapping.getClassB().getContent()));
+        field.setCustomConverterId(EXPRESSION_MAPPER_ID);
+        field.setCustomConverterParam(expression.getLanguage() + ":" + expression.getExpression());
+        mapping.getFieldOrFieldExclude().add(field);
+        
+        return new DozerExpressionMapping(expression, target, mapping, field);
     }
 
     @Override
@@ -266,12 +356,12 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return map;
     }
 
-    Mapping getLiteralMapping(final Model target) {
+    Mapping getExtendedMapping(String sourceClass, final Model target) {
         Mapping mapping = null;
 
-        // See if the literal mapping class is already setup for the target
+        // See if the variable mapping class is already setup for the target
         for (Mapping m : mapConfig.getMapping()) {
-            if (m.getClassA().getContent().equals(LITERAL_MAPPER_CLASS)
+            if (m.getClassA().getContent().equals(sourceClass)
                     && m.getClassB().getContent().equals(target.getParent().getType())) {
                 mapping = m;
                 break;
@@ -279,7 +369,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         }
         // If not, we need to create it
         if (mapping == null) {
-            mapping = mapClass(LITERAL_MAPPER_CLASS, target.getParent().getType());
+            mapping = mapClass(sourceClass, target.getParent().getType());
         }
 
         return mapping;
