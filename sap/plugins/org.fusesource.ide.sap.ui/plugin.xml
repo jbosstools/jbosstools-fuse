@@ -64,7 +64,7 @@
             allowMultiple="false"
             category="org.fusesource.ide.sap"
             class="org.fusesource.ide.sap.ui.view.SapConnectionsView"
-            icon="icons/SAP16.png"
+            icon="icons/waldo16.png"
             id="org.fusesource.ide.sap.ui.view.SapConnectionsView"
             name="%view.name"
             restorable="true">
@@ -526,11 +526,17 @@
          	id="org.fusesource.ide.sap.ui.SapConnectionConfigurationExportWizard"
             category="org.fusesource.ide.JBossFuseCategory"
          	name="%wizard.name"
-            icon="icons/SAP16.png"
+            icon="icons/waldo16.png"
          	class="org.fusesource.ide.sap.ui.export.SapConnectionConfigurationExportWizard">
          	<description>
          		%wizard.description
          	</description>
          </wizard>
+   </extension>
+   <extension
+         point="org.fusesource.ide.editor.paletteContributor">
+      <PaletteContribution
+            class="org.fusesource.ide.sap.ui.editor.provider.SapPaletteEntry">
+      </PaletteContribution>
    </extension>
 </plugin>

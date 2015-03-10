@@ -12,6 +12,6 @@
   
   <artifactId>org.fusesource.ide.sap.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: SAP :: Plugins :: SAP Tooling Suite UI</name>
+  <name>JBoss Fuse Tooling :: SAP :: Plugins :: SAP Tool Suite UI</name>
   
   </project>

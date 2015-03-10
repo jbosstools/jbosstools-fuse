@@ -9,8 +9,8 @@
       </category>
       <wizard
             category="org.fusesource.ide"
-            class="org.fusesource.ide.imports.SAPImportWizard"
-            icon="icons/SAP16.png"
+            class="org.fusesource.ide.imports.sap.SAPToolSuiteImportWizard"
+            icon="icons/waldo16.png"
             id="org.fusesource.ide.imports.SAPImportWizard"
             name="%sap.wizard.name">
          <description>

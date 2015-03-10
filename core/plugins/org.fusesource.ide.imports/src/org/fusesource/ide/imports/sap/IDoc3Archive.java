@@ -9,7 +9,7 @@
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
 ******************************************************************************/ 
-package org.fusesource.ide.imports;
+package org.fusesource.ide.imports.sap;
 
 import static org.osgi.framework.Constants.BUNDLE_ACTIVATIONPOLICY;
 import static org.osgi.framework.Constants.BUNDLE_CLASSPATH;
@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
 import org.eclipse.jdt.core.ToolFactory;
@@ -157,10 +157,9 @@ public class IDoc3Archive extends SAPArchive {
 		return sapidoc3jar;
 	}
 	
+
 	public void buildIDoc3Plugin(IDoc3ImportSettings settings) throws IOException {
-		InputStream is = null;
 		JarOutputStream target = null;
-		byte[] buf = new byte[32 * 1024];
 
 		try {
 			// Create Jar output stream using manifest file
@@ -169,38 +168,14 @@ public class IDoc3Archive extends SAPArchive {
 			
 			// Create and populate manifest file.
 			byte[] manifest = createBundleManifestFile(settings);
-			JarEntry manifestEntry = new JarEntry(settings.getBundleManifestEntry());
-			manifestEntry.setTime(lastModified);
-			target.putNextEntry(manifestEntry);
-			is = new ByteArrayInputStream(manifest);
-			while (true) {
-				int numRead = is.read(buf, 0, buf.length);
-				if (numRead == -1) {
-					break;
-				}
-				target.write(buf, 0, numRead);
-			}
-			target.closeEntry();
+			addJarEntry(target, JarFile.MANIFEST_NAME, manifest, lastModified);
 			
 			// Populate IDoc3 jar into root of jar
-			JarEntry jco3JarEntry = new JarEntry(settings.getBundleIDoc3JarEntry());
-			jco3JarEntry.setTime(lastModified);
-			target.putNextEntry(jco3JarEntry);
-			is = new ByteArrayInputStream(sapidoc3jar);
-			while (true) {
-				int numRead = is.read(buf, 0, buf.length);
-				if (numRead == -1) {
-					break;
-				}
-				target.write(buf, 0, numRead);
-			}
-			target.closeEntry();
+			addJarEntry(target, settings.getBundleIDoc3JarEntry(), sapidoc3jar, lastModified);
+
 		} catch (Exception e) {
-			throw new IOException(Messages.IDoc3Archive_FailedToBuildJCo3Plugin, e);
+			throw new IOException(Messages.IDoc3Archive_FailedToBuildIDoc3Plugin, e);
 		} finally {
-			if (is != null) {
-				is.close();
-			}
 			if (target != null) {
 				target.close();
 			}

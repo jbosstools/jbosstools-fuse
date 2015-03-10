@@ -9,7 +9,7 @@
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
 ******************************************************************************/ 
-package org.fusesource.ide.imports;
+package org.fusesource.ide.imports.sap;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
+import java.util.jar.JarOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -155,4 +157,20 @@ public class SAPArchive {
 		jis.close();
 	}
 
+	protected void addJarEntry(JarOutputStream target, String jarEntryName, byte[] jarEntryContents, long lastModified) throws IOException {
+		byte[] buf = new byte[32 * 1024];
+
+		JarEntry jarEntry = new JarEntry(jarEntryName);
+		jarEntry.setTime(lastModified);
+		target.putNextEntry(jarEntry);
+		InputStream is = new ByteArrayInputStream(jarEntryContents);
+		while (true) {
+			int numRead = is.read(buf, 0, buf.length);
+			if (numRead == -1) {
+				break;
+			}
+			target.write(buf, 0, numRead);
+		}
+		target.closeEntry();
+	}
 }

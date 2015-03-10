@@ -19,7 +19,11 @@ Require-Bundle: org.eclipse.ui,
  org.fusesource.camel.component.sap.model.edit;bundle-version="6.2.0",
  org.fusesource.ide.commons;bundle-version="7.3.0",
  org.eclipse.core.expressions,
- org.eclipse.ui.views.properties.tabbed
+ org.eclipse.ui.views.properties.tabbed,
+ org.fusesource.ide.camel.editor;bundle-version="7.3.0",
+ org.eclipse.graphiti;bundle-version="0.11.0",
+ org.fusesource.ide.camel.model;bundle-version="7.3.0"
+Export-Package: org.fusesource.ide.sap.ui.editor.provider
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
