@@ -17,18 +17,23 @@ import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.context.impl.AddContext;
 import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
+import org.eclipse.graphiti.features.context.impl.CreateContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.impl.DiagramImpl;
+import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
+import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.ConnectorEndpoint;
 import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.camel.model.connectors.Connector;
 
 
 /**
@@ -37,10 +42,18 @@ import org.fusesource.ide.camel.model.RouteSupport;
 public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 
 	private Class<? extends AbstractNode> clazz;
+	private Connector connector;
+	private CreateConnectorFigureFeature conFeature;
 
 	public CreateNodeConnectionFeature(IFeatureProvider fp, Class<? extends AbstractNode> clazz) {
+		this(fp, clazz, null);
+	}
+	
+	public CreateNodeConnectionFeature(IFeatureProvider fp, Class<? extends AbstractNode> clazz, ObjectCreationToolEntry octe) {
 		super(fp);
 		this.clazz = clazz;
+		this.conFeature = (octe != null && octe.getCreateFeature() instanceof CreateConnectorFigureFeature) ? (CreateConnectorFigureFeature)octe.getCreateFeature() : null; 
+		this.connector = this.conFeature != null ? this.conFeature.getConnector() : null;
 	}
 
 	@Override
@@ -81,7 +94,7 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 		// create the object to add
 		AbstractNode node = null;
 		try {
-			node = createNode();
+			node = createNode(context);
 		} catch (Exception ex) {
 			return;
 		}
@@ -98,24 +111,31 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 		int x = context.getPictogramElements().length > 0 ? context.getPictogramElements()[0].getGraphicsAlgorithm().getX() + 150 : 150;
 		int y = context.getPictogramElements().length > 0 ? context.getPictogramElements()[0].getGraphicsAlgorithm().getY() : 150;
 
-		// create the add context
-		AddContext addContext = new AddContext();
-		addContext.setNewObject(node);
-		addContext.setLocation(x, y);
-		addContext.setTargetContainer(getDiagram());
-
-		// execute the add to diagram action
-		IAddFeature addFeature = getFeatureProvider().getAddFeature(addContext);
-		PictogramElement newNode = null;
-		if (addFeature.canAdd(addContext)) {
-			newNode = addFeature.add(addContext);
+		
+		CreateContext cc = new CreateContext();
+		cc.setTargetContainer(getDiagram());
+		cc.setX(x);
+		cc.setY(y);
+		PictogramElement newNode = addGraphicalRepresentation(cc, node);
+		
+//		// create the add context
+//		AddContext addContext = new AddContext();
+//		addContext.setNewObject(node);
+//		addContext.setLocation(x, y);
+//		addContext.setTargetContainer(getDiagram());
+//		
+//		// execute the add to diagram action
+//		IAddFeature addFeature = getFeatureProvider().getAddFeature(addContext);
+//		PictogramElement newNode = null;
+//		if (addFeature.canAdd(addContext)) {
+//			newNode = addFeature.add(addContext);
 			if (newNode != null) {
 				RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
 				if (selectedRoute != null) {
 					selectedRoute.addChild(node);
 				}
 			}
-		}
+//		}
 
 		PictogramElement srcState  = null;
 		PictogramElement destState = null;
@@ -166,7 +186,12 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 		});
 	}
 
-	protected AbstractNode createNode() throws Exception {
-		return this.clazz.newInstance();
+	protected AbstractNode createNode(ICustomContext context) throws Exception {
+		if (conFeature != null) {
+			conFeature.updateMavenDependencies();
+			return new ConnectorEndpoint(String.format("%s:", connector.getProtocols().get(0).getPrefix()));
+		} else {
+			return this.clazz.newInstance();
+		}
 	}
 }

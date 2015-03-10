@@ -127,7 +127,7 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
      * checks if we need to add a maven dependency for the chosen connector
      * and inserts it into the pom.xml if needed
      */
-    protected void updateMavenDependencies() throws CoreException {
+    public void updateMavenDependencies() throws CoreException {
         RiderDesignEditor editor = Activator.getDiagramEditor();
         if (editor == null) {
             Activator.getLogger().error("Unable to add connector dependencies because Editor instance can't be determined.");
@@ -197,4 +197,11 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
             }
         }
     }
+    
+    /**
+	 * @return the connector
+	 */
+	public Connector getConnector() {
+		return this.connector;
+	}
 }

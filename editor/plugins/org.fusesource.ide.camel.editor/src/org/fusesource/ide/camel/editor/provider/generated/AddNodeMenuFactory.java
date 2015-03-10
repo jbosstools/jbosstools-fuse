@@ -85,8 +85,10 @@ public class AddNodeMenuFactory extends AbstractAddNodeMenuFactory {
 
     @Override
     protected void fillEndpointsContextMenu(ContextMenuEntry menu, ICustomContext context, IFeatureProvider fp) {
-//        addMenuItem(menu, Messages.paletteEndpointTitle, Messages.paletteEndpointDescription, Endpoint.class, context, fp);
-
+//    	addMenuItem(menu, Messages.paletteEndpointTitle, Messages.paletteEndpointDescription, Endpoint.class, context, fp);
+//    	addMenuItem(menu, Messages.paletteBeanTitle, Messages.paletteBeanDescription, Bean.class, context, fp);
+//    	addMenuItem(menu, Messages.paletteLogTitle, Messages.paletteLogDescription, Log.class, context, fp);
+//    	addMenuItem(menu, Messages.paletteProcessTitle, Messages.paletteProcessDescription, Process.class, context, fp); 
     }
 
     @Override

@@ -41,6 +41,7 @@ import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.Messages;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
+import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.features.custom.CreateNodeConnectionFeature;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
@@ -102,7 +103,7 @@ public abstract class AbstractAddNodeMenuFactory {
 		miscEntry.setSubmenu(true);
 
 		// then we need to fill the shelves menus
-		fillEndpointsContextMenu(endpointsEntry, context, fp);
+		fillEndpointsContextMenu(connectorsEntry, context, fp);
 		// now add additional entries to connectors category
 		fillAdditionalEndpointsContextMenu(connectorsEntry, context, fp, toolEntries);
 		
@@ -199,7 +200,7 @@ public abstract class AbstractAddNodeMenuFactory {
 			addMenuItem(menu, name, description, Bean.class, context, fp, new CreateNodeConnectionFeature(fp, Bean.class) {
 
 				@Override
-				protected AbstractNode createNode() throws Exception {
+				protected AbstractNode createNode(ICustomContext ctx) throws Exception {
 					Bean bean = new Bean();
 					bean.setName(name);
 					bean.setRef(name);
@@ -233,7 +234,7 @@ public abstract class AbstractAddNodeMenuFactory {
 			addMenuItem(menu, title, description, Endpoint.class, context, fp, new CreateNodeConnectionFeature(fp, Endpoint.class) {
 
 				@Override
-				protected AbstractNode createNode() throws Exception {
+				protected AbstractNode createNode(ICustomContext ctx) throws Exception {
 					return new Endpoint(endpoint);
 				}
 			});
@@ -241,7 +242,9 @@ public abstract class AbstractAddNodeMenuFactory {
 	}
 
 
-
+	protected void addMenuItem(ContextMenuEntry parent, String label, String description, Class<? extends AbstractNode> clazz, ICustomContext context, IFeatureProvider fp) {
+		addMenuItem(parent, label, description, clazz, context, fp, (ObjectCreationToolEntry)null);
+	}
 
 	/**
 	 * creates a new menu item and adds it to the parent menu
@@ -253,9 +256,9 @@ public abstract class AbstractAddNodeMenuFactory {
 	 * @param context		the custom context
 	 * @param fp			the feature provider
 	 */
-	protected void addMenuItem(ContextMenuEntry parent, String label, String description, Class<? extends AbstractNode> clazz, ICustomContext context, IFeatureProvider fp) {
+	protected void addMenuItem(ContextMenuEntry parent, String label, String description, Class<? extends AbstractNode> clazz, ICustomContext context, IFeatureProvider fp, ObjectCreationToolEntry octe) {
 		// check if we can actually connect to the current selection
-		CreateNodeConnectionFeature feature = new CreateNodeConnectionFeature(fp, clazz);
+		CreateNodeConnectionFeature feature = new CreateNodeConnectionFeature(fp, clazz, octe);
 		addMenuItem(parent, label, description, clazz, context, fp, feature);
 	}
 
@@ -583,10 +586,11 @@ public abstract class AbstractAddNodeMenuFactory {
 	        if (te instanceof ObjectCreationToolEntry) {
 	            ObjectCreationToolEntry octe = (ObjectCreationToolEntry)te;
 	            if (octe.getCreateFeature() instanceof PaletteCategoryItemProvider) {
-	        	PaletteCategoryItemProvider pcip = (PaletteCategoryItemProvider) octe.getCreateFeature();
-	        	if (pcip != null && pcip.getCategoryType() == PaletteCategoryItemProvider.CATEGORY_TYPE.COMPONENTS) {
-	        	    addMenuItem(menu, octe.getLabel(), octe.getDescription(), Endpoint.class, context, fp);
-	        	}
+		        	PaletteCategoryItemProvider pcip = (PaletteCategoryItemProvider) octe.getCreateFeature();
+		        	if (pcip != null && pcip.getCategoryType() == PaletteCategoryItemProvider.CATEGORY_TYPE.COMPONENTS) {
+		        	    CreateFigureFeature cff = (CreateFigureFeature)octe.getCreateFeature();
+		        		addMenuItem(menu, octe.getLabel(), octe.getDescription(), cff.getClazz(), context, fp, octe);
+		        	}
 	            }
 	        }	        
 	    }
