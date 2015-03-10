@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
-import org.jboss.mapper.Literal;
+import org.jboss.mapper.Variable;
 import org.jboss.mapper.eclipse.Activator;
 import org.jboss.mapper.eclipse.TransformationEditor;
 import org.jboss.mapper.eclipse.internal.util.Util;
@@ -195,7 +195,7 @@ public class ModelTabFolder extends CTabFolder {
      * @param object
      */
     public void select(final Object object) {
-        if (object instanceof Literal)
+        if (object instanceof Variable)
             return;
         expand(((Model) object).getParent());
         modelViewer.treeViewer.setSelection(new StructuredSelection(object), true);

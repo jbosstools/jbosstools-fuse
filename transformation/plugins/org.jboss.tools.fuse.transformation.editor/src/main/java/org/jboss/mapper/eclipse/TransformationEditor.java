@@ -44,15 +44,15 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.mapper.CustomMapping;
 import org.jboss.mapper.FieldMapping;
-import org.jboss.mapper.Literal;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.MappingOperation;
+import org.jboss.mapper.Variable;
 import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.camel.CamelEndpoint;
 import org.jboss.mapper.camel.EndpointHelper;
 import org.jboss.mapper.dozer.DozerMapperConfiguration;
 import org.jboss.mapper.eclipse.internal.editor.CamelEndpointSelectionDialog;
-import org.jboss.mapper.eclipse.internal.editor.LiteralsViewer;
+import org.jboss.mapper.eclipse.internal.editor.VariablesViewer;
 import org.jboss.mapper.eclipse.internal.editor.MappingViewer;
 import org.jboss.mapper.eclipse.internal.editor.MappingsViewer;
 import org.jboss.mapper.eclipse.internal.editor.ModelTabFolder;
@@ -177,13 +177,13 @@ public class TransformationEditor extends EditorPart {
         // Create source model tab folder
         sourceModelTabFolder =
                 new ModelTabFolder(this, horizontalSplitter, "Source", config.getSourceModel());
-        // Create literals tab
-        final CTabItem literalsTab = new CTabItem(sourceModelTabFolder, SWT.NONE);
-        literalsTab.setText("Literals");
-        final LiteralsViewer literalsViewer =
-                new LiteralsViewer(sourceModelTabFolder, config.getLiterals());
-        literalsTab.setControl(literalsViewer);
-        literalsTab.setImage(Util.Images.LITERAL);
+        // Create variables tab
+        final CTabItem variablesTab = new CTabItem(sourceModelTabFolder, SWT.NONE);
+        variablesTab.setText("Variables");
+        final VariablesViewer variablesViewer =
+                new VariablesViewer(sourceModelTabFolder, config.getVariables());
+        variablesTab.setControl(variablesViewer);
+        variablesTab.setImage(Util.Images.VARIABLE);
         // Create transformation viewer
         mappingsViewer = new MappingsViewer(this, horizontalSplitter, config);
         // Create target model tab folder
@@ -348,7 +348,7 @@ public class TransformationEditor extends EditorPart {
             final Model targetModel) throws Exception {
         final MappingOperation<?, ?> mapping = source instanceof Model
                 ? config.map((Model) source, targetModel)
-                : config.map(new Literal(source.toString()), targetModel);
+                : config.map(new Variable(source.toString(), source.toString()), targetModel);
         save();
         return mapping;
     }

@@ -36,19 +36,19 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.jboss.mapper.Literal;
+import org.jboss.mapper.Variable;
 
 /**
  *
  */
-public final class LiteralsViewer extends Composite {
+public final class VariablesViewer extends Composite {
 
     /**
      * @param parent
-     * @param literals
+     * @param variables
      */
-    public LiteralsViewer(final Composite parent,
-            final List<Literal> literals) {
+    public VariablesViewer(final Composite parent,
+            final List<Variable> variables) {
         super(parent, SWT.NONE);
 
         setLayout(GridLayoutFactory.fillDefaults().create());
@@ -58,11 +58,11 @@ public final class LiteralsViewer extends Composite {
         final ToolItem addButton = new ToolItem(toolBar, SWT.PUSH);
         addButton.setImage(PlatformUI.getWorkbench().getSharedImages()
                 .getImage(ISharedImages.IMG_OBJ_ADD));
-        addButton.setToolTipText("Add a new literal");
+        addButton.setToolTipText("Add a new variable");
         final ToolItem deleteButton = new ToolItem(toolBar, SWT.PUSH);
         deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages()
                 .getImage(ISharedImages.IMG_ETOOL_DELETE));
-        deleteButton.setToolTipText("Delete the selected literal(s)");
+        deleteButton.setToolTipText("Delete the selected variable(s)");
         deleteButton.setEnabled(false);
 
         final ListViewer listViewer = new ListViewer(this);
@@ -93,19 +93,19 @@ public final class LiteralsViewer extends Composite {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 final InputDialog dlg = new InputDialog(getShell(),
-                        "Add Literal",
-                        "Enter a new literal value",
+                        "Add Variable",
+                        "Enter a new variable name",
                         null,
                         new IInputValidator() {
 
                             @Override
                             public String isValid(final String text) {
                                 return listViewer.getList().indexOf(text) < 0 ? null
-                                        : "Value already exists";
+                                        : "Variable already exists";
                             }
                         });
                 if (dlg.open() == Window.OK) {
-                    listViewer.add(dlg.getValue()); // TODO should be a literal
+                    listViewer.add(dlg.getValue()); // TODO should be a variable
                 }
             }
         });
@@ -129,8 +129,8 @@ public final class LiteralsViewer extends Composite {
         });
 
         // Populate
-        for (final Literal literal : literals) {
-            listViewer.add(literal.getValue());
+        for (final Variable variable : variables) {
+            listViewer.add(variable.getName());
         }
     }
 }

@@ -26,10 +26,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.mapper.CustomMapping;
 import org.jboss.mapper.FieldMapping;
-import org.jboss.mapper.Literal;
-import org.jboss.mapper.LiteralMapping;
 import org.jboss.mapper.MappingOperation;
 import org.jboss.mapper.MappingType;
+import org.jboss.mapper.Variable;
+import org.jboss.mapper.VariableMapping;
 import org.jboss.mapper.eclipse.Activator;
 import org.jboss.mapper.eclipse.TransformationEditor;
 import org.jboss.mapper.eclipse.internal.util.Util;
@@ -180,9 +180,9 @@ public final class MappingViewer {
         addOpLabel.setToolTipText(fieldMapping ? ADD_CUSTOM_OPERATION_TOOL_TIP : null);
         final Text sourceText = createText(pane);
         if (mapping != null) {
-            if (MappingType.LITERAL == mapping.getType()) {
+            if (MappingType.VARIABLE == mapping.getType()) {
                 sourceText.setText("\""
-                        + ((LiteralMapping) mapping).getSource().getValue()
+                        + ((VariableMapping) mapping).getSource().getValue()
                         + "\"");
             } else {
                 final Model model = ((FieldMapping) mapping).getSource();
@@ -209,7 +209,7 @@ public final class MappingViewer {
 
             @Override
             public void mouseUp(final MouseEvent event) {
-                if (mapping instanceof Literal)
+                if (mapping instanceof Variable)
                     return;
                 try {
                     addCustomOperation((FieldMapping) mapping, addOpLabel.getShell());
@@ -239,10 +239,10 @@ public final class MappingViewer {
     MappingOperation<?, ?> dropOnSource(final Object dragSource,
             final Text sourceText) throws Exception {
         MappingOperation<?, ?> newMapping;
-        if (dragSource instanceof Literal) {
-            final Literal literal = (Literal) dragSource;
-            newMapping = editor.map(literal, (Model) mapping.getTarget());
-            sourceText.setText("\"" + literal.getValue() + "\"");
+        if (dragSource instanceof Variable) {
+            final Variable variable = (Variable) dragSource;
+            newMapping = editor.map(variable, (Model) mapping.getTarget());
+            sourceText.setText("\"" + variable.getName() + "\"");
             sourceText.setToolTipText(null);
         } else {
             final Model model = (Model) dragSource;
@@ -346,7 +346,7 @@ public final class MappingViewer {
     }
 
     boolean validSourceDropTarget(final Object dragSource) {
-        return dragSource instanceof Literal && !(mapping instanceof CustomMapping);
+        return dragSource instanceof Variable && !(mapping instanceof CustomMapping);
     }
 
     private abstract class DropListener extends DropTargetAdapter {

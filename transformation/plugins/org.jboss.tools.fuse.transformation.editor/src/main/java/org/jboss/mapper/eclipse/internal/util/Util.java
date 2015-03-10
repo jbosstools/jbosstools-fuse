@@ -368,7 +368,7 @@ public class Util {
         /**
          *
          */
-        public static final Image LITERAL =
+        public static final Image VARIABLE =
                 Activator.imageDescriptor("literal16.gif").createImage();
 
         /**

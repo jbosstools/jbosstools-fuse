@@ -25,10 +25,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.mapper.CustomMapping;
 import org.jboss.mapper.FieldMapping;
-import org.jboss.mapper.Literal;
-import org.jboss.mapper.LiteralMapping;
 import org.jboss.mapper.MappingOperation;
 import org.jboss.mapper.MappingType;
+import org.jboss.mapper.Variable;
+import org.jboss.mapper.VariableMapping;
 import org.jboss.mapper.eclipse.Activator;
 import org.jboss.mapper.eclipse.TransformationEditor;
 import org.jboss.mapper.eclipse.internal.editor.MappingsViewer.TraversalListener;
@@ -170,9 +170,9 @@ final class MappingRow {
         // targetText.addMouseTrackListener( mouseOverListener );
 
         if (mapping != null) {
-            if (MappingType.LITERAL == mapping.getType())
+            if (MappingType.VARIABLE == mapping.getType())
                 sourceText.setText("\""
-                        + ((LiteralMapping) mapping).getSource().getValue()
+                        + ((VariableMapping) mapping).getSource().getValue()
                         + "\"");
             else {
                 final Model model = ((FieldMapping) mapping).getSource();
@@ -315,10 +315,10 @@ final class MappingRow {
 
     MappingOperation<?, ?> dropOnSource(final Object dragSource) throws Exception {
         MappingOperation<?, ?> newMapping;
-        if (dragSource instanceof Literal) {
-            final Literal literal = (Literal) dragSource;
-            newMapping = editor.map(literal, (Model) mapping.getTarget());
-            sourceText.setText("\"" + literal.getValue() + "\"");
+        if (dragSource instanceof Variable) {
+            final Variable variable = (Variable) dragSource;
+            newMapping = editor.map(variable, (Model) mapping.getTarget());
+            sourceText.setText("\"" + variable.getName() + "\"");
             sourceText.setToolTipText(null);
         } else {
             final Model model = (Model) dragSource;
@@ -419,7 +419,7 @@ final class MappingRow {
     }
 
     boolean validSourceDropTarget(final Object dragSource) {
-        return dragSource instanceof Literal && !(mapping instanceof CustomMapping);
+        return dragSource instanceof Variable && !(mapping instanceof CustomMapping);
     }
 
     private abstract class DropListener extends DropTargetAdapter {
