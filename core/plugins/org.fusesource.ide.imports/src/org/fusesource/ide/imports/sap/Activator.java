@@ -9,16 +9,18 @@
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
 ******************************************************************************/ 
-package org.fusesource.ide.imports;
+package org.fusesource.ide.imports.sap;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -34,6 +36,36 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	
+	private static BundleContext context;
+	
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static Activator getDefault() {
+		return plugin;
+	}
+
+	public static BundleContext getContext() {
+		return context;
+	}
+	
+	public static IProvisioningAgent getProvisioningAgent() {
+		return (IProvisioningAgent) getService(context, IProvisioningAgent.SERVICE_NAME);
+	}
+
+	public static Object getService(BundleContext context, String name) {
+		if (context == null)
+			return null;
+		ServiceReference<?> reference = context.getServiceReference(name);
+		if (reference == null)
+			return null;
+		Object result = context.getService(reference);
+		context.ungetService(reference);
+		return result;
+	}
+
 	/**
 	 * The constructor
 	 */
@@ -48,6 +80,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		Activator.context = context;
 	}
 
 	/*
@@ -58,15 +91,6 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-	}
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static Activator getDefault() {
-		return plugin;
 	}
 
 	@Override

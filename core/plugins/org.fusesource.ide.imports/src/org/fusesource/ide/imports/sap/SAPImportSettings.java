@@ -9,7 +9,7 @@
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
 ******************************************************************************/ 
-package org.fusesource.ide.imports;
+package org.fusesource.ide.imports.sap;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -34,7 +34,6 @@ public class SAPImportSettings {
 	//
 	///////////////////////////////////////////////////////
 
-	private static final String BUNDLE_MANIFEST_ENTRY = "META-INF/MANIFEST.MF"; //$NON-NLS-1$
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	protected String bundleName;
 	protected String bundleVersion;
@@ -118,10 +117,6 @@ public class SAPImportSettings {
 
 	public void setArchiveVersion(String archiveVersion) {
 		firePropertyChange(ARCHIVE_VERSION, this.archiveVersion, this.archiveVersion = archiveVersion);
-	}
-
-	public String getBundleManifestEntry() {
-		return BUNDLE_MANIFEST_ENTRY;
 	}
 
 }

@@ -9,7 +9,7 @@
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
 ******************************************************************************/ 
-package org.fusesource.ide.imports;
+package org.fusesource.ide.imports.sap;
 
 import static org.osgi.framework.Constants.BUNDLE_ACTIVATIONPOLICY;
 import static org.osgi.framework.Constants.BUNDLE_CLASSPATH;
@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
 import org.eclipse.core.runtime.Platform;
@@ -95,15 +96,15 @@ public class JCo3Archive extends SAPArchive {
 	public static final String FRAGMENT_DARWIN_64 = "com.sap.conn.jco.osx.x86_64"; //$NON-NLS-1$
 
 	public enum JCoArchiveType {
-		JCO_INVALID_ARCHIVE("Invalid JCo 3 Archive", "", "", "", "", "", ""),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-		JCO_WIN32_X86_ARCHIVE("Microsoft Windows (x86 32 bit)", "NTintel", "sapjco3.dll", FRAGMENT_WINDOWS_32, "(& (osgi.os=win32) (osgi.arch=x86))", Platform.OS_WIN32, Platform.ARCH_X86),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_WIN32_IA64_ARCHIVE("Microsoft Windows (Itanium 64 bit)", "NTia64", "sapjco3.dll", FRAGMENT_WINDOWS_64IA, "(& (osgi.os=win32) (osgi.arch=ia64n))", Platform.OS_WIN32, Platform.ARCH_IA64),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_WIN32_X86_64_ARCHIVE("Microsoft Windows (x86 64 bit)", "NTAMD64", "sapjco3.dll", FRAGMENT_WINDOWS_64X86, "(& (osgi.os=win32) (osgi.arch=x86_64))", Platform.OS_WIN32, Platform.ARCH_X86_64),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_LINUX_X86_ARCHIVE("Linux (x86 32 bit)", "linuxintel", "libsapjco3.so", FRAGMENT_LINUX_32, "(& (osgi.os=linux) (osgi.arch=x86))", Platform.OS_LINUX, Platform.ARCH_X86),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_LINUX_IA64_ARCHIVE("Linux (Itanium 64 bit)", "linuxia64", "libsapjco3.so", FRAGMENT_LINUX_64IA, "(& (osgi.os=linux) (osgi.arch=ia64n))", Platform.OS_LINUX, Platform.ARCH_IA64),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_LINUX_X86_64_ARCHIVE("Linux (x86 64 bit)", "linuxx86_64", "libsapjco3.so", FRAGMENT_LINUX_64X86, "(& (osgi.os=linux) (osgi.arch=x86_64))", Platform.OS_LINUX, Platform.ARCH_X86_64),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_OSX_X86_ARCHIVE("Apple MacOS X (x86 32 bit)", "darwinintel", "libsapjco3.jnilib", FRAGMENT_DARWIN_32, "(& (osgi.os=macosx) (osgi.arch=x86))", Platform.OS_MACOSX, Platform.ARCH_X86),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		JCO_OSX_X86_64_ARCHIVE("Apple MacOS X (x86 64 bit)", "darwinintel64", "libsapjco3.jnilib", FRAGMENT_DARWIN_64, "(& (osgi.os=macosx) (osgi.arch=x86_64))", Platform.OS_MACOSX, Platform.ARCH_X86_64); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_INVALID_ARCHIVE("Invalid JCo 3 Archive", "", "", "", "", "", "", ""),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+		JCO_WIN32_X86_ARCHIVE("Microsoft Windows (x86 32 bit)", "NTintel", "sapjco3.dll", FRAGMENT_WINDOWS_32, "(& (osgi.os=win32) (osgi.arch=x86))", Platform.OS_WIN32, Platform.ARCH_X86, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_WIN32_IA64_ARCHIVE("Microsoft Windows (Itanium 64 bit)", "NTia64", "sapjco3.dll", FRAGMENT_WINDOWS_64IA, "(& (osgi.os=win32) (osgi.arch=ia64n))", Platform.OS_WIN32, Platform.ARCH_IA64, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_WIN32_X86_64_ARCHIVE("Microsoft Windows (x86 64 bit)", "NTAMD64", "sapjco3.dll", FRAGMENT_WINDOWS_64X86, "(& (osgi.os=win32) (osgi.arch=x86_64))", Platform.OS_WIN32, Platform.ARCH_X86_64, Platform.WS_WIN32),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_LINUX_X86_ARCHIVE("Linux (x86 32 bit)", "linuxintel", "libsapjco3.so", FRAGMENT_LINUX_32, "(& (osgi.os=linux) (osgi.arch=x86))", Platform.OS_LINUX, Platform.ARCH_X86, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_LINUX_IA64_ARCHIVE("Linux (Itanium 64 bit)", "linuxia64", "libsapjco3.so", FRAGMENT_LINUX_64IA, "(& (osgi.os=linux) (osgi.arch=ia64n))", Platform.OS_LINUX, Platform.ARCH_IA64, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_LINUX_X86_64_ARCHIVE("Linux (x86 64 bit)", "linuxx86_64", "libsapjco3.so", FRAGMENT_LINUX_64X86, "(& (osgi.os=linux) (osgi.arch=x86_64))", Platform.OS_LINUX, Platform.ARCH_X86_64, Platform.WS_GTK),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_OSX_X86_ARCHIVE("Apple MacOS X (x86 32 bit)", "darwinintel", "libsapjco3.jnilib", FRAGMENT_DARWIN_32, "(& (osgi.os=macosx) (osgi.arch=x86))", Platform.OS_MACOSX, Platform.ARCH_X86, Platform.WS_COCOA),  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		JCO_OSX_X86_64_ARCHIVE("Apple MacOS X (x86 64 bit)", "darwinintel64", "libsapjco3.jnilib", FRAGMENT_DARWIN_64, "(& (osgi.os=macosx) (osgi.arch=x86_64))", Platform.OS_MACOSX, Platform.ARCH_X86_64, Platform.WS_COCOA); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	
 		private String description;
 		private String sapjcoOs;
@@ -111,16 +112,18 @@ public class JCo3Archive extends SAPArchive {
 		private String fragmentName;
 		private String platformFilter;
 		private String eclipseOS;
-		private String eclipseOSArch;
+		private String eclipseArch;
+		private String eclipseWS;
 	
-		JCoArchiveType(String description, String sapjcoOs, String nativeArchiveName, String fragmentName, String platformFilter, String eclipseOS, String eclipseOSArch) {
+		JCoArchiveType(String description, String sapjcoOs, String nativeArchiveName, String fragmentName, String platformFilter, String eclipseOS, String eclipseArch, String eclipseWS) {
 			this.description = description;
 			this.nativeArchiveName = nativeArchiveName;
 			this.sapjcoOs = sapjcoOs;
 			this.fragmentName = fragmentName;
 			this.platformFilter = platformFilter;
 			this.eclipseOS = eclipseOS;
-			this.eclipseOSArch = eclipseOSArch;
+			this.eclipseArch = eclipseArch;
+			this.eclipseWS = eclipseWS;
 		}
 	
 		public String getDescription() {
@@ -151,8 +154,12 @@ public class JCo3Archive extends SAPArchive {
 			return eclipseOS;
 		}
 
-		public String getEclipseOSArch() {
-			return eclipseOSArch;
+		public String getEclipseArch() {
+			return eclipseArch;
+		}
+
+		public String getEclipseWS() {
+			return eclipseWS;
 		}
 
 		public static JCoArchiveType getType(String sapjcoOsCode) {
@@ -349,7 +356,7 @@ public class JCo3Archive extends SAPArchive {
 	}
 	
 	public boolean supportsCurrentPlatform() {
-		if (Platform.getOS().equals(getType().getEclipseOS()) && Platform.getOSArch().equals(getType().getEclipseOSArch())) {
+		if (Platform.getOS().equals(getType().getEclipseOS()) && Platform.getOSArch().equals(getType().getEclipseArch())) {
 			return true;
 		}
 		return false;
@@ -367,7 +374,7 @@ public class JCo3Archive extends SAPArchive {
 
 			// Create and populate manifest file.
 			byte[] manifest = createBundleManifestFile(settings);
-			JarEntry manifestEntry = new JarEntry(settings.getBundleManifestEntry());
+			JarEntry manifestEntry = new JarEntry(JarFile.MANIFEST_NAME);
 			manifestEntry.setTime(lastModified);
 			target.putNextEntry(manifestEntry);
 			is = new ByteArrayInputStream(manifest);
@@ -423,7 +430,7 @@ public class JCo3Archive extends SAPArchive {
 
 			// Create and populate manifest file.
 			byte[] manifest = createFragmentManifestFile(settings);
-			JarEntry manifestEntry = new JarEntry(settings.getBundleManifestEntry());
+			JarEntry manifestEntry = new JarEntry(JarFile.MANIFEST_NAME);
 			manifestEntry.setTime(lastModified);
 			target.putNextEntry(manifestEntry);
 			is = new ByteArrayInputStream(manifest);

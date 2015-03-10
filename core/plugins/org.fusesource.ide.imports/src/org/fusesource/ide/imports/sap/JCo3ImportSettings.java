@@ -9,7 +9,7 @@
 * Red Hat, Inc. - initial API and implementation
 * William Collins punkhornsw@gmail.com
 ******************************************************************************/ 
-package org.fusesource.ide.imports;
+package org.fusesource.ide.imports.sap;
 
 import java.io.File;
 
