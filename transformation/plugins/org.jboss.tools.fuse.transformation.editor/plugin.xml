@@ -50,4 +50,10 @@
          </contentTypeBinding>
       </editor>
    </extension>
+   <extension
+         point="org.fusesource.ide.editor.paletteContributor">
+      <PaletteContribution
+            class="org.jboss.mapper.eclipse.internal.camel.DataMapperDozerPaletteEntry">
+      </PaletteContribution>
+   </extension>
 </plugin>
