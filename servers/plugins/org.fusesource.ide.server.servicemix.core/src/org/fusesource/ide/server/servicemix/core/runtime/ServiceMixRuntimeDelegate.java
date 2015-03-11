@@ -43,6 +43,12 @@ public class ServiceMixRuntimeDelegate extends KarafRuntimeDelegate {
 		} else if (version != null && version.trim().startsWith("5.2")) {
             if (!id.toLowerCase().equals(IServiceMixToolingConstants.RUNTIME_SMX_52)) 
                 return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+		} else if (version != null && version.trim().startsWith("5.3")) {
+            if (!id.toLowerCase().equals(IServiceMixToolingConstants.RUNTIME_SMX_53)) 
+                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
+		} else if (version != null && version.trim().startsWith("5.4")) {
+            if (!id.toLowerCase().equals(IServiceMixToolingConstants.RUNTIME_SMX_54)) 
+                return new Status(Status.ERROR, Activator.PLUGIN_ID, "Runtime type not compatible with found version...");
         } else {
 			return new Status(Status.ERROR, Activator.PLUGIN_ID, "No compatible runtime type found for version " + version + "...");
 		}

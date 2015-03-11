@@ -22,6 +22,8 @@ public interface IServiceMixRuntime extends IKarafRuntime{
 		IServiceMixToolingConstants.RUNTIME_SMX_45,
 		IServiceMixToolingConstants.RUNTIME_SMX_50,
 		IServiceMixToolingConstants.RUNTIME_SMX_51,
-		IServiceMixToolingConstants.RUNTIME_SMX_52
+		IServiceMixToolingConstants.RUNTIME_SMX_52,
+		IServiceMixToolingConstants.RUNTIME_SMX_53,
+		IServiceMixToolingConstants.RUNTIME_SMX_54
 	};
 }

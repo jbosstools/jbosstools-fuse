@@ -21,17 +21,21 @@ public interface IServiceMixToolingConstants {
 	public static final String RUNTIME_SMX_50 = "org.fusesource.ide.servicemix.runtime.50";
 	public static final String RUNTIME_SMX_51 = "org.fusesource.ide.servicemix.runtime.51";
 	public static final String RUNTIME_SMX_52 = "org.fusesource.ide.servicemix.runtime.52";
+	public static final String RUNTIME_SMX_53 = "org.fusesource.ide.servicemix.runtime.53";
+	public static final String RUNTIME_SMX_54 = "org.fusesource.ide.servicemix.runtime.54";
 		
 	public static final String[] ALL_SMX_RUNTIME_TYPES = new String[]{
-		RUNTIME_SMX_45, RUNTIME_SMX_50, RUNTIME_SMX_51, RUNTIME_SMX_52
+		RUNTIME_SMX_45, RUNTIME_SMX_50, RUNTIME_SMX_51, RUNTIME_SMX_52, RUNTIME_SMX_53, RUNTIME_SMX_54
 	};	
 
 	public static final String SERVER_SMX_45 = "org.fusesource.ide.servicemix.server.45";
 	public static final String SERVER_SMX_50 = "org.fusesource.ide.servicemix.server.50";
 	public static final String SERVER_SMX_51 = "org.fusesource.ide.servicemix.server.51";
 	public static final String SERVER_SMX_52 = "org.fusesource.ide.servicemix.server.52";
+	public static final String SERVER_SMX_53 = "org.fusesource.ide.servicemix.server.53";
+	public static final String SERVER_SMX_54 = "org.fusesource.ide.servicemix.server.54";
 	
 	public static final String[] ALL_SMX_SERVER_TYPES = new String[]{
-		SERVER_SMX_45, SERVER_SMX_50, SERVER_SMX_51, SERVER_SMX_52
+		SERVER_SMX_45, SERVER_SMX_50, SERVER_SMX_51, SERVER_SMX_52, SERVER_SMX_53, SERVER_SMX_54
 	};
 }

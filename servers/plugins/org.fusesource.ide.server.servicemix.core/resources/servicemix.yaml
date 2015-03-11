@@ -119,4 +119,50 @@ availableRuntimes:
         },
         wtp-runtime-type: org.fusesource.ide.servicemix.runtime.52
    }
+
+   ###################
+   #   ServiceMix5.3 #
+   ###################
+
+ - &servicemix531
+   id: servicemix531
+   name: Apache ServiceMix 5.3.1
+   version: 5.3.1
+   license: *apache20
+   url: http://servicemix.apache.org
+   labels: {
+        requiresCredentials: false,
+        runtime-category: OSGI_SERVER,
+        runtime-type: SERVICEMIX,
+        runtime-size: 83652111,
+        additionalDownloadURLs: {
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.1/apache-servicemix-5.3.1.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.1/apache-servicemix-5.3.1.zip",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.1/apache-servicemix-5.3.1.zip",
+        },
+        wtp-runtime-type: org.fusesource.ide.servicemix.runtime.53
+   }
+
+   ###################
+   #   ServiceMix5.4 #
+   ###################
+
+ - &servicemix540
+   id: servicemix540
+   name: Apache ServiceMix 5.4.0
+   version: 5.4.0
+   license: *apache20
+   url: http://servicemix.apache.org
+   labels: {
+        requiresCredentials: false,
+        runtime-category: OSGI_SERVER,
+        runtime-type: SERVICEMIX,
+        runtime-size: 90305346,
+        additionalDownloadURLs: {
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.4.0/apache-servicemix-5.4.0.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.4.0/apache-servicemix-5.4.0.zip",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.4.0/apache-servicemix-5.4.0.zip",
+        },
+        wtp-runtime-type: org.fusesource.ide.servicemix.runtime.54
+   }
    
