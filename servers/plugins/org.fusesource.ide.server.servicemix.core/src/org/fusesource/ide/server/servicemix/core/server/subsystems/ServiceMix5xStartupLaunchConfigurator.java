@@ -10,8 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.server.servicemix.core.server.subsystems;
 
+import java.io.File;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.server.core.IServer;
+import org.fusesource.ide.server.karaf.core.runtime.IKarafRuntime;
 import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xStartupLaunchConfigurator;
 
 /**
@@ -30,6 +33,16 @@ public class ServiceMix5xStartupLaunchConfigurator extends
 	}
 
 	protected String getVMArguments(String karafInstallDir) {
-		return super.getVMArguments(karafInstallDir);
+		IKarafRuntime runtime = null;
+		if (server.getRuntime() != null) {
+			runtime = (IKarafRuntime)server.getRuntime().loadAdapter(IKarafRuntime.class, null);
+			if (runtime.getVersion().startsWith("5.2.") || runtime.getVersion().startsWith("5.1.") || runtime.getVersion().startsWith("5.0.") || runtime.getVersion().startsWith("4.")) {
+				super.getVMArguments(karafInstallDir);
+			}
+		}
+		String args = super.getVMArguments(karafInstallDir);
+		args += SPACE + "-Djavax.management.builder.initial=org.apache.karaf.management.boot.KarafMBeanServerBuilder";
+		args += SPACE + "-Dkaraf.etc=\"" + karafInstallDir + File.separator + "etc\""; // <<< NEEDED since 5.3 
+		return args;
 	}
 }
