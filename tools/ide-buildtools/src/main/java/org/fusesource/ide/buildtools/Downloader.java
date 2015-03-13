@@ -21,26 +21,24 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
-import java.util.TreeSet;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
+import org.apache.camel.catalog.CamelCatalog;
+import org.apache.camel.catalog.DefaultCamelCatalog;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.fusesource.ide.buildtools.Downloader.ComponentModel.ComponentParam;
+import org.fusesource.ide.buildtools.Downloader.ComponentModel.UriParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Downloader {
 
@@ -225,126 +223,104 @@ public class Downloader {
         new DownloadLatestXsds(xsdDir, true).run();
     }
 
+    /**
+     * creates the camel component and parameter model and stores it in an xml in the model plugin
+     * 
+     * @throws IOException
+     */
     public void downloadCamelComponentData() throws IOException {
         String version = System.getProperty("camel.version");
 
         File outputFile = new File(camelComponentMetaData, "components-" + version + ".xml");
         if (outputFile.exists() && outputFile.isFile()) outputFile.delete(); 
         
-        HashMap<String, Component> knownComponents = new HashMap<String, Component>();
-        try {
-            List<ArtifactDTO> answer = indexer.search("org.apache.camel", "", version, "jar", "", null);
-
-            for (ArtifactDTO artifact : answer) {
-                if (!artifact.getGroupId().equalsIgnoreCase("org.apache.camel") &&
-                    !artifact.getArtifactId().startsWith("camel-")) {
-                    LOG.debug("Ignored: {}", artifact.getArtifactId());
-                    continue;
-                }
-                
-                String[] components = downloadProperties(artifact, artifact.getVersion());
-                for (String component : components) {
-                    String clazz = getCamelComponentClass(artifact, component);
-                    Component c = knownComponents.get(clazz);
-                    if (c == null) {
-                        c = new Component();
-                        c.setClazz(clazz);
-                    }
-
-                    c.getPrefixes().add(component);                        
-                    c.setArtifact(artifact);
-
-// commented for the moment
-//                        ArrayList<UriParam> params = getUriParams(c);
-//                        c.getUriParams().addAll(params);
-                    
-                    knownComponents.put(clazz, c);
-                }
-            }
-            
-            final String LABEL_POSTFIX = "_connector_title";
-            final String DESC_POSTFIX  = "_connector_description";
-            
-            File propFile = new File(targetDir(), "../../../editor/plugins/org.fusesource.ide.camel.editor/src/org/fusesource/ide/camel/editor/l10n/connectorsMessages.properties");
-            Properties languageProperties = new Properties();
-            languageProperties.load(new FileInputStream(propFile));
-            
-            File langFile = new File(targetDir(), "../../../editor/plugins/org.fusesource.ide.camel.editor/src/org/fusesource/ide/camel/editor/ConnectorsMessages.java");
-            StringBuffer lines = new StringBuffer();
-            
-            PrintWriter out = new PrintWriter(new FileWriter(outputFile));
-            out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            out.println("<components>");
-            
-            Collection<Component> comps = knownComponents.values();
-            for (Component comp : comps) {
-                
-                // write to language property file
-                String labelKey = String.format("%s%s", comp.getId().replaceAll("-", "_"), LABEL_POSTFIX);
-                String descKey = String.format("%s%s", comp.getId().replaceAll("-", "_"), DESC_POSTFIX);
-                if (!languageProperties.containsKey(labelKey)) {
-                    languageProperties.setProperty(labelKey, comp.getId().replaceAll("-", "_"));
-                } 
-                if (!languageProperties.containsKey(descKey)) {
-                    languageProperties.setProperty(descKey, comp.getId().replaceAll("-", "_"));
-                } 
-                
-                // write to ConnectorsMessages.java file
-                lines.append(String.format("\tpublic static String %s;\n", labelKey));
-                lines.append(String.format("\tpublic static String %s;\n\n", descKey));
-                                
-                out.println("   <component>");
-                out.println("       <id>" + comp.getId() + "</id>");
-                out.println("       <class>" + comp.getClazz() + "</class>");
-                out.println("       <prefixes>");
-                for (String prefix : comp.getPrefixes()) {
-                    out.println("           <prefix>" + prefix + "</prefix>");
-                }
-                out.println("       </prefixes>");
-                out.println("       <dependencies>");
-                out.println("           <dependency>");
-                out.println(String.format("             <groupId>%s</groupId>", comp.getArtifact().getGroupId()));
-                out.println(String.format("             <artifactId>%s</artifactId>", comp.getArtifact().getArtifactId()));
-                out.println(String.format("             <version>%s</version>", comp.getArtifact().getVersion()));
-                out.println("           </dependency>");
-                out.println("       </dependencies>");
-
-//                out.println("       <componentProperties />");
-//                out.println("       <uriParameters>");
-//                for (UriParam p : comp.getUriParams()) {
-//                    out.println("           <parameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" defaultValue=\"" + p.getDefaultValue() + "\" kind=\"" + p.getKind() + "\" mandatory=\"" + p.getMandatory() + "\" label=\"" + p.getLabel() + "\" description=\"" + p.getDescription() + "\"/>");
-//                }
-//                out.println("       </uriParameters>");
-                
-                out.println("   </component>");
-            }
-            out.println("</components>");
-            out.close();
-            
-            // save the properties
-            Properties tmp = new Properties() {
-                @Override
-                public synchronized Enumeration<Object> keys() {
-                    return Collections.enumeration(new TreeSet<Object>(super.keySet()));
-                }
-            };
-            tmp.putAll(languageProperties);
-            tmp.store(new FileOutputStream(propFile), "#\n" + 
-                    "# NOTE - this file is auto-generated.\n" + 
-                    "#\n" + 
-                    "# DO NOT ADD NEW PROPERTIES! ONLY EDIT EXISTING ONES! \n" + 
-                    "#");
-            
-            // save the java language file
-            IOUtils.write(String.format("%s%s%s", langFilePrefix, lines, langFilePostfix), new FileOutputStream(langFile));
-        } catch (Exception ex) {
-            LOG.error(ex.getMessage());
-        }
+        CamelCatalog cat = new DefaultCamelCatalog();
+        ObjectMapper mapper = new ObjectMapper();
         
-        LOG.info("Running git add...");
-        ProcessBuilder pb = new ProcessBuilder("git", "add", "*");
-        pb.directory(camelComponentMetaData);
-        pb.start();
+        HashMap<String, ComponentModel> knownComponents = new HashMap<String, ComponentModel>();
+        List<String> components = cat.findComponentNames();
+        
+        for (String compName : components) {
+        	String json = cat.componentJSonSchema(compName);
+        	
+        	if (compName.equalsIgnoreCase("ftp") || 
+        		compName.equalsIgnoreCase("ftps") ||
+        		compName.equalsIgnoreCase("sftp")) {
+
+        		// in 2.15.0 there is a bug in the description of the ftp components separator property: TODO: delete me when moving to 2.15.1 or higher
+        		json = json.replace("Windows = Path separator \\ ", "Windows = Path separator \\\\");
+        	}
+        	
+        	ComponentModel model = mapper.readValue(json, ComponentModel.class);
+        	
+        	String clazz = model.getComponent().getJavaType();
+        	ComponentModel c = knownComponents.get(clazz);
+            if (c == null) {
+                c = model;
+            } 
+            c.getComponent().getSchemes().add(model.getComponent().getScheme());                        
+            knownComponents.put(clazz, c);
+        }
+
+        PrintWriter out = new PrintWriter(new FileWriter(outputFile));
+        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        out.println("<components>");
+        
+        Collection<ComponentModel> comps = knownComponents.values();
+        for (ComponentModel compModel : comps) {
+        	ComponentModel.Component comp = compModel.getComponent();
+            out.println("   <component>");
+            out.println("      <tags>");
+            String[] tags = comp.getLabel().split(",");
+            for (String tag : tags) {
+            	out.println("         <tag>" + tag + "</tag>");
+            }
+            out.println("      </tags>");
+            out.println("      <description>" + comp.getDescription() + "</description>");
+            out.println("      <syntax>" + comp.getSyntax() + "</syntax>");
+            out.println("      <class>" + comp.getJavaType() + "</class>");
+            out.println("      <kind>" + comp.getKind() + "</kind>");
+            if (comp.getConsumerOnly() != null) out.println("      <consumerOnly>" + comp.consumerOnly + "</consumerOnly>");
+            if (comp.getProducerOnly() != null) out.println("      <producerOnly>" + comp.getProducerOnly() + "</producerOnly>");
+            out.println("      <schemes>");
+            for (String scheme : comp.getSchemes()) {
+                out.println("           <scheme>" + scheme + "</scheme>");
+            }
+            out.println("       </schemes>");
+            out.println("       <dependencies>");
+            out.println("           <dependency>");
+            out.println(String.format("             <groupId>%s</groupId>", comp.getGroupId()));
+            out.println(String.format("             <artifactId>%s</artifactId>", comp.getArtifactId()));
+            out.println(String.format("             <version>%s</version>", comp.getVersion()));
+            out.println("           </dependency>");
+            out.println("       </dependencies>");
+
+//            out.println("       <componentProperties />");
+
+            out.println("       <componentProperties>");
+            for (ComponentParam p : compModel.getComponentParams()) {
+                out.print("           <componentProperty name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
+                if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
+                out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
+            }           
+            out.println("       </componentProperties>");   
+            
+            out.println("       <uriParameters>");
+            for (UriParam p : compModel.getUriParams()) {
+                out.print("           <uriParameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
+                if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
+                if (p.getDefaultValue() != null) out.print("defaultValue=\"" + p.getDefaultValue() + "\" ");
+                if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
+                if (p.getLabel() != null) out.print("label=\"" + p.getLabel() + "\" ");
+                out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
+            }           
+            out.println("       </uriParameters>");            
+            out.println("   </component>");
+        }
+        out.println("</components>");
+        out.close();
     }
 
     public boolean isDelete() {
@@ -408,314 +384,569 @@ public class Downloader {
             LOG.error(ex.getMessage());
         }
     }
-
-    protected String[] downloadProperties(ArtifactDTO artifact, String version) {
-        try {
-            AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(), version, "properties", "camelComponent");
-            if (result != null) {
-                List<File> files = result.getResolvedFiles();
-                if (files != null && files.size() > 0) {
-                    File file = files.get(0);
-                    Properties p = new Properties();
-                    p.load(new FileInputStream(file));
-                    String comps = p.getProperty("components", "");
-                    return comps.split(" ");
-                }
-            }
-        } catch (Exception ex) {
-            LOG.error(ex.getMessage());
-        }
-        return new String[0];
-    }
     
-    protected String getCamelComponentClass(ArtifactDTO artifact, String component) {
-        String clazz = null;
-        
-        // download the artifact jar and check /META-INF/services/org/apache/camel/component/<component> for the class of the component
-        try {
-            AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), "jar", null);
-            if (result != null) {
-                List<File> files = result.getResolvedFiles();
-                if (files != null && files.size() > 0) {
-                    File file = files.get(0);
-                    //for (File file : files) {
-                    File newFile = new File(System.getProperty("java.io.tmpdir"), file.getName());
-                    FileInputStream input = new FileInputStream(file);
-                    FileOutputStream output = new FileOutputStream(newFile);
-                    IOUtils.copy(input, output);
-                    IOUtils.closeQuietly(input);
-                    IOUtils.closeQuietly(output);
+    public static class ComponentModel {
+    	
+    	public static class Component {
+    		private String kind;
+        	private String scheme;
+        	private String syntax;
+        	private String description;
+        	private String label;  // tags
+        	private String javaType; // class
+        	private String groupId;
+        	private String artifactId;
+        	private String version;
+        	private String producerOnly;
+        	private String consumerOnly;
+        	private ArrayList<String> schemes = new ArrayList<String>();
+        	
+        	
+        	/**
+			 * @return the consumerOnly
+			 */
+			public String getConsumerOnly() {
+				return this.consumerOnly;
+			}
+			
+			/**
+			 * @param consumerOnly the consumerOnly to set
+			 */
+			public void setConsumerOnly(String consumerOnly) {
+				this.consumerOnly = consumerOnly;
+			}
+        	
+        	/**
+			 * @return the producerOnly
+			 */
+			public String getProducerOnly() {
+				return this.producerOnly;
+			}
+			
+			/**
+			 * @param producerOnly the producerOnly to set
+			 */
+			public void setProducerOnly(String producerOnly) {
+				this.producerOnly = producerOnly;
+			}
+        	
+    		/**
+			 * @return the artifactId
+			 */
+			public String getArtifactId() {
+				return this.artifactId;
+			}
+			
+			/**
+			 * @return the description
+			 */
+			public String getDescription() {
+				return this.description;
+			}
+			
+			/**
+			 * @return the groupId
+			 */
+			public String getGroupId() {
+				return this.groupId;
+			}
+			
+			/**
+			 * @return the javaType
+			 */
+			public String getJavaType() {
+				return this.javaType;
+			}
+			
+			/**
+			 * @return the kind
+			 */
+			public String getKind() {
+				return this.kind;
+			}
+			
+			/**
+			 * @return the label
+			 */
+			public String getLabel() {
+				return this.label;
+			}
+			
+			/**
+			 * @return the scheme
+			 */
+			public String getScheme() {
+				return this.scheme;
+			}
+			
+			/**
+			 * @return the syntax
+			 */
+			public String getSyntax() {
+				return this.syntax;
+			}
+			
+			/**
+			 * @return the version
+			 */
+			public String getVersion() {
+				return this.version;
+			}
+			
+			/**
+			 * @param artifactId the artifactId to set
+			 */
+			public void setArtifactId(String artifactId) {
+				this.artifactId = artifactId;
+			}
+			
+			/**
+			 * @param description the description to set
+			 */
+			public void setDescription(String description) {
+				this.description = description;
+			}
+			
+			/**
+			 * @param groupId the groupId to set
+			 */
+			public void setGroupId(String groupId) {
+				this.groupId = groupId;
+			}
+			
+			/**
+			 * @param javaType the javaType to set
+			 */
+			public void setJavaType(String javaType) {
+				this.javaType = javaType;
+			}
+			
+			/**
+			 * @param kind the kind to set
+			 */
+			public void setKind(String kind) {
+				this.kind = kind;
+			}
+			
+			/**
+			 * @param label the label to set
+			 */
+			public void setLabel(String label) {
+				this.label = label;
+			}
+			
+			/**
+			 * @param scheme the scheme to set
+			 */
+			public void setScheme(String scheme) {
+				this.scheme = scheme;
+			}
+			
+			/**
+			 * @param syntax the syntax to set
+			 */
+			public void setSyntax(String syntax) {
+				this.syntax = syntax;
+			}
+			
+			/**
+			 * @param version the version to set
+			 */
+			public void setVersion(String version) {
+				this.version = version;
+			}
+			
+			/**
+			 * @return the schemes
+			 */
+			public ArrayList<String> getSchemes() {
+				return this.schemes;
+			}
+			
+			/**
+			 * @param schemes the schemes to set
+			 */
+			public void setSchemes(ArrayList<String> schemes) {
+				this.schemes = schemes;
+			}
+    	}
+    	
+    	public static class ComponentParam {
+    		private String name;
+    		private String kind;
+    		private String type;
+    		private String javaType;
+    		private String deprecated;
+    		@JsonProperty("enum")
+        	private String[] choice;
+    		private String description;
 
-                    ZipFile zf = new ZipFile(newFile);
-                    ZipEntry ze = zf.getEntry("META-INF/services/org/apache/camel/component/" + component);
-                    if (ze != null) {
-                        InputStream is = zf.getInputStream(ze);
-                        if (is != null) {
-                            Properties p = new Properties();
-                            p.load(is);
-                            is.close();
-                            if (p.containsKey("class")) {
-                                clazz = p.getProperty("class");
-                            }
-                        }
-                    }
-                }
+    		/**
+			 * @return the description
+			 */
+			public String getDescription() {
+				return this.description;
+			}
+    		
+    		/**
+			 * @return the choice
+			 */
+			public String[] getChoice() {
+				return this.choice;
+			}
+    		
+    		/**
+			 * @return the deprecated
+			 */
+			public String getDeprecated() {
+				return this.deprecated;
+			}
+			
+			/**
+			 * @return the javaType
+			 */
+			public String getJavaType() {
+				return this.javaType;
+			}
+			
+			/**
+			 * @return the kind
+			 */
+			public String getKind() {
+				return this.kind;
+			}
+			
+			/**
+			 * @return the name
+			 */
+			public String getName() {
+				return this.name;
+			}
+			
+			/**
+			 * @return the type
+			 */
+			public String getType() {
+				return this.type;
+			}
+			
+			/**
+			 * @param deprecated the deprecated to set
+			 */
+			public void setDeprecated(String deprecated) {
+				this.deprecated = deprecated;
+			}
+			
+			/**
+			 * @param javaType the javaType to set
+			 */
+			public void setJavaType(String javaType) {
+				this.javaType = javaType;
+			}
+			
+			/**
+			 * @param kind the kind to set
+			 */
+			public void setKind(String kind) {
+				this.kind = kind;
+			}
+			
+			/**
+			 * @param name the name to set
+			 */
+			public void setName(String name) {
+				this.name = name;
+			}
+			
+			/**
+			 * @param type the type to set
+			 */
+			public void setType(String type) {
+				this.type = type;
+			}
+			
+			/**
+			 * @param choice the choice to set
+			 */
+			public void setChoice(String[] choice) {
+				this.choice = choice;
+			}
+			
+			/**
+			 * @param description the description to set
+			 */
+			public void setDescription(String description) {
+				this.description = description;
+			}
+			
+			public String getChoiceString() {
+    			if (this.choice == null || this.choice.length<1) return null;
+    			String retVal = "";
+    			for (String c : this.choice) {
+    				if (retVal.length()>0) retVal += ","; 
+    				retVal += c;
+    			}
+    			return retVal;
+    		}
+    	}
+    	
+    	public static class UriParam {
+        	
+            private String name;
+        	private String kind;
+        	private String required;
+        	private String type;
+        	private String javaType;
+        	private String deprecated;
+        	private String defaultValue;
+            private String description;
+        	private String label;
+        	@JsonProperty("enum")
+        	private String[] choice;
+
+        	/**
+			 * @return the choice
+			 */
+			public String[] getChoice() {
+				return this.choice;
+			}
+			
+			/**
+			 * @param choice the choice to set
+			 */
+			public void setChoice(String[] choice) {
+				this.choice = choice;
+			}
+        	
+            /**
+             * @return the name
+             */
+            public String getName() {
+                return this.name;
             }
-        } catch (Exception ex) {
-            LOG.error(ex.getMessage());
-        }
-        
-        return clazz;
-    }
-
-    protected File getCamelComponentJar(ArtifactDTO artifact) {
-        File jar = null;
-        
-        // download the artifact jar and check /META-INF/services/org/apache/camel/component/<component> for the class of the component
-        try {
-            AetherResult result = aether.resolve(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), "jar", null);
-            if (result != null) {
-                List<File> files = result.getResolvedFiles();
-                if (files != null && files.size() > 0) {
-                    File file = files.get(0);
-                    //for (File file : files) {
-                    File newFile = new File(System.getProperty("java.io.tmpdir"), file.getName());
-                    FileInputStream input = new FileInputStream(file);
-                    FileOutputStream output = new FileOutputStream(newFile);
-                    IOUtils.copy(input, output);
-                    IOUtils.closeQuietly(input);
-                    IOUtils.closeQuietly(output);
-                    jar = newFile;
-                }
+            
+            /**
+             * @param name the name to set
+             */
+            public void setName(String name) {
+                this.name = name;
             }
-        } catch (Exception ex) {
-            LOG.error(ex.getMessage());
-        }
-        
-        return jar;
-    }
-    
-    private ArrayList<UriParam> getUriParams(Component c) {
-        ArrayList<UriParam> params = new ArrayList<UriParam>();
-        
-        File jarFile = getCamelComponentJar(c.getArtifact());
-        
-        ArtifactDTO core = new ArtifactDTO("org.apache.camel", "camel-core", c.getArtifact().getVersion(), null, null, null, 0, null, null);        
-        File coreFile = getCamelComponentJar(core);
-        
-        if (jarFile != null && jarFile.exists() && jarFile.isFile() &&
-            coreFile != null && coreFile.exists() && coreFile.isFile()) {
-            try {
-                URLClassLoader child = new URLClassLoader(new URL[] {jarFile.toURI().toURL(), coreFile.toURI().toURL()}, this.getClass().getClassLoader());
-                Class classToLoad = Class.forName (c.getClazz(), true, child);
-                Method method = classToLoad.getDeclaredMethod("createComponentConfiguration");
-                Object instance = classToLoad.newInstance();
-                Object compConf = method.invoke(instance);
-                method = compConf.getClass().getDeclaredMethod("createParameterJsonSchema");
-                Object jsonBlob = method.invoke(compConf);
-                System.err.println(jsonBlob);
-            } catch (Exception ex) {
-                LOG.error(ex.getMessage());
-                return new ArrayList<Downloader.UriParam>();
+            
+            /**
+             * @return the type
+             */
+            public String getType() {
+                return this.type;
             }
-        }
+            
+            /**
+             * @param type the type to set
+             */
+            public void setType(String type) {
+                this.type = type;
+            }
+            
+            /**
+             * @return the defaultValue
+             */
+            public String getDefaultValue() {
+                return this.defaultValue;
+            }
+            
+            /**
+             * @param defaultValue the defaultValue to set
+             */
+            public void setDefaultValue(String defaultValue) {
+                this.defaultValue = defaultValue;
+            }
+            
+            /**
+             * @return the kind
+             */
+            public String getKind() {
+                return this.kind;
+            }
+            
+            /**
+             * @param kind the kind to set
+             */
+            public void setKind(String kind) {
+                this.kind = kind;
+            }
+            
+            /**
+             * @return the label
+             */
+            public String getLabel() {
+                return this.label;
+            }
+            
+            /**
+             * @param label the label to set
+             */
+            public void setLabel(String label) {
+                this.label = label;
+            }
+            
+            /**
+             * @return the description
+             */
+            public String getDescription() {
+                return this.description;
+            }
 
-        return params;
-    }
-    
-    class Component {
-        private String id;
-        private String clazz;
-        private ArrayList<String> prefixes = new ArrayList<String>();
-        private ArrayList<UriParam> uriParams = new ArrayList<UriParam>();
-        private ArtifactDTO artifact;
-
-        /**
-         * always sort prefixes and use first prefix as id
-         */
-        public void calculateId() {
-            Collections.sort(prefixes);
-            this.id = prefixes.get(0);
+            /**
+             * @param description the description to set
+             */
+            public void setDescription(String description) {
+                this.description = description;
+            }
+            
+            /**
+    		 * @return the required
+    		 */
+    		public String getRequired() {
+    			return this.required;
+    		}
+    		
+    		/**
+    		 * @param required the required to set
+    		 */
+    		public void setRequired(String required) {
+    			this.required = required;
+    		}
+    		
+    		/**
+    		 * @return the deprecated
+    		 */
+    		public String getDeprecated() {
+    			return this.deprecated;
+    		}
+    		
+    		/**
+    		 * @param deprecated the deprecated to set
+    		 */
+    		public void setDeprecated(String deprecated) {
+    			this.deprecated = deprecated;
+    		}
+    		
+    		/**
+    		 * @return the javaType
+    		 */
+    		public String getJavaType() {
+    			return this.javaType;
+    		}
+    		
+    		/**
+    		 * @param javaType the javaType to set
+    		 */
+    		public void setJavaType(String javaType) {
+    			this.javaType = javaType;
+    		}
+    		
+    		public String getChoiceString() {
+    			if (this.choice == null || this.choice.length<1) return null;
+    			String retVal = "";
+    			for (String c : this.choice) {
+    				if (retVal.length()>0) retVal += ","; 
+    				retVal += c;
+    			}
+    			return retVal;
+    		}
         }
-        
-        /**
-         * @return the artifact
-         */
-        public ArtifactDTO getArtifact() {
-            return this.artifact;
-        }
-        
-        /**
-         * @param artifact the artifact to set
-         */
-        public void setArtifact(ArtifactDTO artifact) {
-            this.artifact = artifact;
-        }
-        
-        /**
-         * @return the id
-         */
-        public String getId() {
-            calculateId();
-            return this.id;
-        }
-        
-        /**
-         * @param id the id to set
-         */
-        public void setId(String id) {
-            this.id = id;
-        }
-        
-        /**
-         * @return the clazz
-         */
-        public String getClazz() {
-            return this.clazz;
-        }
-        
-        /**
-         * @param clazz the clazz to set
-         */
-        public void setClazz(String clazz) {
-            this.clazz = clazz;
-        }
-        
-        /**
-         * @return the prefixes
-         */
-        public ArrayList<String> getPrefixes() {
-            Collections.sort(this.prefixes);
-            return this.prefixes;
-        }
-        
-        /**
-         * @param prefixes the prefixes to set
-         */
-        public void setPrefixes(ArrayList<String> prefixes) {
-            this.prefixes = prefixes;
-        }
-        
-        /**
-         * @return the uriParams
-         */
-        public ArrayList<UriParam> getUriParams() {
-            return this.uriParams;
-        }
-        
-        /**
-         * @param uriParams the uriParams to set
-         */
-        public void setUriParams(ArrayList<UriParam> uriParams) {
-            this.uriParams = uriParams;
-        }
-    }
-    
-    class UriParam {
-        private String name;
-        private String type;
-        private String defaultValue;
-        private String kind;
-        private String mandatory;
-        private String label;
-        private String description;
-        
-        /**
-         * @return the name
-         */
-        public String getName() {
-            return this.name;
-        }
-        
-        /**
-         * @param name the name to set
-         */
-        public void setName(String name) {
-            this.name = name;
-        }
-        
-        /**
-         * @return the type
-         */
-        public String getType() {
-            return this.type;
-        }
-        
-        /**
-         * @param type the type to set
-         */
-        public void setType(String type) {
-            this.type = type;
-        }
-        
-        /**
-         * @return the defaultValue
-         */
-        public String getDefaultValue() {
-            return this.defaultValue;
-        }
-        
-        /**
-         * @param defaultValue the defaultValue to set
-         */
-        public void setDefaultValue(String defaultValue) {
-            this.defaultValue = defaultValue;
-        }
-        
-        /**
-         * @return the kind
-         */
-        public String getKind() {
-            return this.kind;
-        }
-        
-        /**
-         * @param kind the kind to set
-         */
-        public void setKind(String kind) {
-            this.kind = kind;
-        }
-        
-        /**
-         * @return the mandatory
-         */
-        public String getMandatory() {
-            return this.mandatory;
-        }
-        
-        /**
-         * @param mandatory the mandatory to set
-         */
-        public void setMandatory(String mandatory) {
-            this.mandatory = mandatory;
-        }
-        
-        /**
-         * @return the label
-         */
-        public String getLabel() {
-            return this.label;
-        }
-        
-        /**
-         * @param label the label to set
-         */
-        public void setLabel(String label) {
-            this.label = label;
-        }
-        
-        /**
-         * @return the description
-         */
-        public String getDescription() {
-            return this.description;
-        }
-
-        /**
-         * @param description the description to set
-         */
-        public void setDescription(String description) {
-            this.description = description;
-        }
+    	
+    	private Component component;
+    	private HashMap<String, HashMap> componentProperties;
+    	private HashMap<String, HashMap> properties;
+    	private ArrayList<UriParam> uriParams = new ArrayList<Downloader.ComponentModel.UriParam>();
+    	private ArrayList<ComponentParam> componentParams = new ArrayList<Downloader.ComponentModel.ComponentParam>();
+    	
+    	/**
+		 * @return the component
+		 */
+		public Component getComponent() {
+			return this.component;
+		}
+		
+		/**
+		 * @param component the component to set
+		 */
+		public void setComponent(Component component) {
+			this.component = component;
+		}
+		
+		/**
+		 * @return the componentProperties
+		 */
+		public HashMap<String, HashMap> getComponentProperties() {
+			return this.componentProperties;
+		}
+		
+		/**
+		 * @param componentProperties the componentProperties to set
+		 */
+		public void setComponentProperties(HashMap<String, HashMap> componentProperties) {
+			this.componentProperties = componentProperties;
+			generateComponentParamsModel();
+		}
+		
+		/**
+		 * @return the properties
+		 */
+		public HashMap<String, HashMap> getProperties() {
+			return this.properties;
+		}
+		
+		/**
+		 * @param properties the properties to set
+		 */
+		public void setProperties(HashMap<String, HashMap> properties) {
+			this.properties = properties;
+			generateUriParamsModel();
+		}
+		
+		/**
+		 * @return the uriParams
+		 */
+		public ArrayList<UriParam> getUriParams() {
+			return this.uriParams;
+		}
+		
+		/**
+		 * @return the componentParams
+		 */
+		public ArrayList<ComponentParam> getComponentParams() {
+			return this.componentParams;
+		}
+		
+		/**
+		 * used to generate the list of uri params for this component
+		 */
+		private void generateUriParamsModel() {
+			uriParams.clear();
+			ObjectMapper mapper = new ObjectMapper();
+			Iterator<String> it = properties.keySet().iterator();
+			while (it.hasNext()) {
+				String paramName = it.next();
+				UriParam p = mapper.convertValue(properties.get(paramName), UriParam.class);
+				p.setName(paramName);
+				uriParams.add(p);
+			}
+		}
+		
+		/**
+		 * used to generate the list of component params for this component
+		 */
+		private void generateComponentParamsModel() {
+			componentParams.clear();
+			ObjectMapper mapper = new ObjectMapper();
+			Iterator<String> it = componentProperties.keySet().iterator();
+			while (it.hasNext()) {
+				String paramName = it.next();
+				ComponentParam p = mapper.convertValue(componentProperties.get(paramName), ComponentParam.class);
+				p.setName(paramName);
+				componentParams.add(p);
+			}
+		}
     }
 }
