@@ -18,6 +18,7 @@ If you want to get in touch with the developers and other users you can join our
 
 ### Mailing lists
 Subscribe at: https://lists.jboss.org/mailman/listinfo/jbosstools-fuse-dev
+
 Mail to: jbosstools-fuse-dev@lists.jboss.org
 
 ## Building
