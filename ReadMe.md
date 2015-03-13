@@ -17,7 +17,7 @@ Get in touch with developers and users of JBoss Fuse Tooling in our [forums](htt
 If you want to get in touch with the developers and other users you can join our IRC channel *#fusetools* on FreeNode IRC Server.
 
 ### Mailing lists
-_coming soon_
+jbosstools-fuse-dev@lists.jboss.org
 
 ## Building
 If you want to know how to build the project and setup an Eclipse workspace for development please read the [build guide](https://github.com/fusesource/fuseide/blob/master/Build.md "Build Guide"). 
