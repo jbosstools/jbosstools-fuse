@@ -26,7 +26,7 @@ import org.apache.camel.model.language.MethodCallExpression;
 import org.apache.camel.model.language.MvelExpression;
 import org.apache.camel.model.language.OgnlExpression;
 import org.apache.camel.model.language.PhpExpression;
-import org.apache.camel.model.language.PropertyExpression;
+import org.apache.camel.model.language.ExchangePropertyExpression;
 import org.apache.camel.model.language.PythonExpression;
 import org.apache.camel.model.language.RefExpression;
 import org.apache.camel.model.language.RubyExpression;
@@ -197,8 +197,8 @@ public class LanguageExpressionBean extends LanguageExpression implements HasVal
 		if ("php".equals(language)) {
 			return getOrCreateOriginalExpression(PhpExpression.class, expression);
 		}
-		if ("property".equals(language)) {
-			return getOrCreateOriginalExpression(PropertyExpression.class, expression);
+		if ("exchangeProperty".equals(language)) {
+			return getOrCreateOriginalExpression(ExchangePropertyExpression.class, expression);
 		}
 		if ("python".equals(language)) {
 			return getOrCreateOriginalExpression(PythonExpression.class, expression);
