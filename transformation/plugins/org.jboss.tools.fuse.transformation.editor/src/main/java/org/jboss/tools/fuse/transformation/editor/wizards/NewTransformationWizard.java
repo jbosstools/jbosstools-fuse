@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.wizards;
+package org.jboss.tools.fuse.transformation.editor.wizards;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,15 +38,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.dozer.DozerMapperConfiguration;
-import org.jboss.mapper.eclipse.Activator;
-import org.jboss.mapper.eclipse.DozerConfigContentTypeDescriber;
-import org.jboss.mapper.eclipse.TransformationEditor;
-import org.jboss.mapper.eclipse.internal.util.Util;
-import org.jboss.mapper.eclipse.internal.wizards.FirstPage;
-import org.jboss.mapper.eclipse.internal.wizards.Model;
-import org.jboss.mapper.eclipse.internal.wizards.ModelType;
 import org.jboss.mapper.model.json.JsonModelGenerator;
 import org.jboss.mapper.model.xml.XmlModelGenerator;
+import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.DozerConfigContentTypeDescriber;
+import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
+import org.jboss.tools.fuse.transformation.editor.internal.wizards.FirstPage;
+import org.jboss.tools.fuse.transformation.editor.internal.wizards.Model;
+import org.jboss.tools.fuse.transformation.editor.internal.wizards.ModelType;
 
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;

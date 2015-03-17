@@ -1,4 +1,4 @@
-package org.jboss.mapper.eclipse.internal.editor;
+package org.jboss.tools.fuse.transformation.editor.internal;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -18,7 +18,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -30,10 +29,10 @@ import org.jboss.mapper.MappingOperation;
 import org.jboss.mapper.MappingType;
 import org.jboss.mapper.Variable;
 import org.jboss.mapper.VariableMapping;
-import org.jboss.mapper.eclipse.Activator;
-import org.jboss.mapper.eclipse.TransformationEditor;
-import org.jboss.mapper.eclipse.internal.util.Util;
 import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  *
@@ -48,6 +47,7 @@ public final class MappingViewer {
 
     final ScrolledComposite scroller;
     Composite contentPane;
+    Model sourceModel, targetModel;
     MappingOperation<?, ?> mapping;
 
     private final Point imageButtonLabelSize;
@@ -55,17 +55,15 @@ public final class MappingViewer {
     /**
      * @param editor
      * @param parent
-     * @param background
      */
     public MappingViewer(final TransformationEditor editor,
-            final Composite parent,
-            final Color background) {
+            final Composite parent) {
         this.editor = editor;
 
         scroller = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
         scroller.setExpandHorizontal(true);
         scroller.setExpandVertical(true);
-        scroller.setBackground(background);
+        scroller.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         final Label label = new Label(parent.getShell(), SWT.NONE);
         label.setImage(Util.Images.ADD_FUNCTION);
@@ -98,7 +96,7 @@ public final class MappingViewer {
         opPane.setBackground(opPane.getDisplay().getSystemColor(SWT.COLOR_GRAY));
         opPane.addPaintListener(Util.roundedRectanglePainter(10,
                 opPane.getDisplay()
-                        .getSystemColor(SWT.COLOR_WHITE)));
+                .getSystemColor(SWT.COLOR_WHITE)));
         final Label deleteOpLabel = new Label(opPane, SWT.NONE);
         deleteOpLabel.setLayoutData(GridDataFactory.swtDefaults()
                 .hint(imageButtonLabelSize)
@@ -157,7 +155,7 @@ public final class MappingViewer {
         pane.setBackground(parent.getBackground());
         pane.addPaintListener(Util.roundedRectanglePainter(10,
                 pane.getDisplay()
-                        .getSystemColor(SWT.COLOR_GRAY)));
+                .getSystemColor(SWT.COLOR_GRAY)));
         final Label label = new Label(pane, SWT.NONE);
         label.setLayoutData(GridDataFactory.fillDefaults()
                 .align(SWT.CENTER, SWT.CENTER)
@@ -289,7 +287,11 @@ public final class MappingViewer {
         // Create mapping detail pane
         if (contentPane != null)
             contentPane.dispose();
+        this.sourceModel = sourceModel;
+        this.targetModel = targetModel;
         this.mapping = mapping;
+        if (mapping == null)
+            return;
         contentPane = new Composite(scroller, SWT.NONE);
         scroller.setContent(contentPane);
         contentPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
@@ -327,11 +329,9 @@ public final class MappingViewer {
                 .grab(true, true)
                 .create());
         final Text targetText = createText(targetPane);
-        if (mapping != null) {
-            final Model model = (Model) mapping.getTarget();
-            targetText.setText(model.getName());
-            targetText.setToolTipText(Util.fullyQualifiedName(model));
-        }
+        final Model model = (Model) mapping.getTarget();
+        targetText.setText(model.getName());
+        targetText.setToolTipText(Util.fullyQualifiedName(model));
         final DropTarget targetDropTarget = new DropTarget(targetText, DND.DROP_MOVE);
         targetDropTarget.setTransfer(new Transfer[] {LocalSelectionTransfer.getTransfer()});
         targetDropTarget.addDropListener(new DropListener(targetText, editor.targetModel()) {
@@ -343,6 +343,13 @@ public final class MappingViewer {
         });
         scroller.setMinSize(contentPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         contentPane.layout();
+    }
+
+    /**
+     * @param variable
+     */
+    public void updateVariableMapping(Variable variable) {
+        if (mapping != null && mapping.getType() == MappingType.VARIABLE) update(sourceModel, targetModel, mapping);
     }
 
     boolean validSourceDropTarget(final Object dragSource) {
@@ -379,8 +386,8 @@ public final class MappingViewer {
 
         @Override
         public final void drop(final DropTargetEvent event) {
-            editor.unmap(mapping);
             try {
+                editor.unmap(mapping);
                 mapping = drop(dragSource());
                 editor.updateMapping(mapping);
             } catch (final Exception e) {

@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.internal.util;
+package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import java.util.Collections;
 import java.util.Set;

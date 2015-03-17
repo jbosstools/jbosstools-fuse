@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.internal.wizards;
+package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import org.jboss.mapper.TransformType;
 

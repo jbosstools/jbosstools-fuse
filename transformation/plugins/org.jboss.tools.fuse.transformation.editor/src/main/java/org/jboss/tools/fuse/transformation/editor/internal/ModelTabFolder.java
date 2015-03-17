@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.internal.editor;
+package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +37,10 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.dialogs.ResourceListSelectionDialog;
 import org.jboss.mapper.Variable;
-import org.jboss.mapper.eclipse.Activator;
-import org.jboss.mapper.eclipse.TransformationEditor;
-import org.jboss.mapper.eclipse.internal.util.Util;
 import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  *
@@ -88,6 +88,8 @@ public class ModelTabFolder extends CTabFolder {
                 changeModel(editor, title, tab);
             }
         });
+
+        constructAdditionalTabs(editor);
     }
 
     void changeModel(final TransformationEditor editor,
@@ -165,10 +167,16 @@ public class ModelTabFolder extends CTabFolder {
                 });
     }
 
+    /**
+     * Does nothing. Overridden by {@link TransformationEditor}.
+     *
+     * @param editor
+     */
+    protected void constructAdditionalTabs(final TransformationEditor editor) {}
+
     private void expand(final Model model) {
-        if (model == null) {
+        if (model == null)
             return;
-        }
         expand(model.getParent());
         modelViewer.treeViewer.expandToLevel(model, 0);
     }

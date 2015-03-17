@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.internal.editor;
+package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +30,11 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.MappingOperation;
-import org.jboss.mapper.eclipse.Activator;
-import org.jboss.mapper.eclipse.TransformationEditor;
-import org.jboss.mapper.eclipse.internal.util.Util;
+import org.jboss.mapper.Variable;
 import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  *
@@ -183,6 +184,24 @@ public class MappingsViewer extends Composite {
         mappingRow.sourceText.setFocus();
     }
 
+    /**
+     * @param mapping
+     * @throws Exception
+     */
+    public void unmap(final MappingOperation<?, ?> mapping) throws Exception {
+        for (final MappingRow mappingRow : mappingRows) {
+            if (mapping.getSource().equals(mappingRow.mapping.getSource())
+                    && mapping.getTarget().equals(mappingRow.mapping.getTarget())) {
+                mappingRow.unmap();
+                if (mappingRow == selectedRow) {
+                    selectedRow = null;
+                    deleteButton.setEnabled(false);
+                }
+                return;
+            }
+        }
+    }
+
     void updateLayout() {
         pane.layout();
         sourcePane.layout();
@@ -196,6 +215,15 @@ public class MappingsViewer extends Composite {
      */
     public void updateMapping(final MappingOperation<?, ?> mapping) {
         selectedRow.mapping = mapping;
+    }
+
+    /**
+     * @param variable
+     */
+    public void updateVariableMappings(final Variable variable) {
+        for (final MappingRow mappingRow : mappingRows) {
+            mappingRow.updateVariableMapping(variable);
+        }
     }
 
     interface CustomFunctionListener {

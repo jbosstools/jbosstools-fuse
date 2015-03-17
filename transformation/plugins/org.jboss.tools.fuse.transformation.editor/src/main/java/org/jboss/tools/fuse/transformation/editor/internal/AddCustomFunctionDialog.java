@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.internal.editor;
+package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,9 +53,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.mapper.eclipse.Activator;
-import org.jboss.mapper.eclipse.internal.editor.MappingsViewer.CustomFunctionListener;
-import org.jboss.mapper.eclipse.internal.util.Util;
+import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer.CustomFunctionListener;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 final class AddCustomFunctionDialog extends TitleAreaDialog {
 

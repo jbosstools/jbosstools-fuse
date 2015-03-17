@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.wizards;
+package org.jboss.tools.fuse.transformation.editor.wizards;
 
 import java.io.File;
 
@@ -48,9 +48,9 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.jboss.mapper.camel.CamelConfigBuilder;
-import org.jboss.mapper.eclipse.Activator;
-import org.jboss.mapper.eclipse.internal.util.JavaUtil;
 import org.jboss.mapper.test.TestGenerator;
+import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 
 /**
  *

@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.internal.util;
+package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.jboss.mapper.eclipse.Activator;
 import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.editor.Activator;
 
 /**
  *
@@ -368,12 +368,6 @@ public class Util {
         /**
          *
          */
-        public static final Image VARIABLE =
-                Activator.imageDescriptor("literal16.gif").createImage();
-
-        /**
-         *
-         */
         public static final Image MAPPED =
                 Activator.imageDescriptor("mapped16.gif").createImage();
 
@@ -387,5 +381,11 @@ public class Util {
          *
          */
         public static final Image TREE = Activator.imageDescriptor("tree16.gif").createImage();
+
+        /**
+         *
+         */
+        public static final Image VARIABLE =
+                Activator.imageDescriptor("variable16.gif").createImage();
     }
 }

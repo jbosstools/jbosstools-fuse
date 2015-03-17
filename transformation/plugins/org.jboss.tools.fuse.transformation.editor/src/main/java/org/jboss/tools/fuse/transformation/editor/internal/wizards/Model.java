@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse.internal.wizards;
+package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -21,7 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.mapper.camel.CamelConfigBuilder;
-import org.jboss.mapper.eclipse.internal.util.Util;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  *

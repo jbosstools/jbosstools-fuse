@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.mapper.eclipse;
+package org.jboss.tools.fuse.transformation.editor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,21 +46,23 @@ import org.jboss.mapper.CustomMapping;
 import org.jboss.mapper.FieldMapping;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.MappingOperation;
+import org.jboss.mapper.MappingType;
 import org.jboss.mapper.Variable;
+import org.jboss.mapper.VariableMapping;
 import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.camel.CamelEndpoint;
 import org.jboss.mapper.camel.EndpointHelper;
 import org.jboss.mapper.dozer.DozerMapperConfiguration;
-import org.jboss.mapper.eclipse.internal.editor.CamelEndpointSelectionDialog;
-import org.jboss.mapper.eclipse.internal.editor.VariablesViewer;
-import org.jboss.mapper.eclipse.internal.editor.MappingViewer;
-import org.jboss.mapper.eclipse.internal.editor.MappingsViewer;
-import org.jboss.mapper.eclipse.internal.editor.ModelTabFolder;
-import org.jboss.mapper.eclipse.internal.editor.ModelTabFolder.DropListener;
-import org.jboss.mapper.eclipse.internal.util.JavaUtil;
-import org.jboss.mapper.eclipse.internal.util.Util;
 import org.jboss.mapper.model.Model;
 import org.jboss.mapper.model.ModelBuilder;
+import org.jboss.tools.fuse.transformation.editor.internal.CamelEndpointSelectionDialog;
+import org.jboss.tools.fuse.transformation.editor.internal.MappingViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder;
+import org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder.DropListener;
+import org.jboss.tools.fuse.transformation.editor.internal.VariablesViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  *
@@ -68,10 +70,8 @@ import org.jboss.mapper.model.ModelBuilder;
 // TODO save preferences for toggle buttons
 // TODO content assist in text
 // TODO search fields in model viewers
-// TODO sort in mappings viewer
 // TODO search in mappings viewer
 // TODO DnD from model viewer to add new mapping
-// TODO add button in mappings viewer
 public class TransformationEditor extends EditorPart {
 
     private static final int SASH_COLOR = SWT.COLOR_DARK_GRAY;
@@ -143,7 +143,7 @@ public class TransformationEditor extends EditorPart {
         verticalSplitter.setSashWidth(SASH_WIDTH);
         final Composite pane = new Composite(verticalSplitter, SWT.NONE);
         pane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
-        pane.setBackground(parent.getBackground());
+        pane.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
         // Create source model toggle button
         ToolBar toolBar = new ToolBar(pane, SWT.NONE);
         toolBar.setLayoutData(GridDataFactory.swtDefaults()
@@ -176,21 +176,33 @@ public class TransformationEditor extends EditorPart {
         horizontalSplitter.setSashWidth(SASH_WIDTH);
         // Create source model tab folder
         sourceModelTabFolder =
-                new ModelTabFolder(this, horizontalSplitter, "Source", config.getSourceModel());
-        // Create variables tab
-        final CTabItem variablesTab = new CTabItem(sourceModelTabFolder, SWT.NONE);
-        variablesTab.setText("Variables");
-        final VariablesViewer variablesViewer =
-                new VariablesViewer(sourceModelTabFolder, config.getVariables());
-        variablesTab.setControl(variablesViewer);
-        variablesTab.setImage(Util.Images.VARIABLE);
+                new ModelTabFolder(this, horizontalSplitter, "Source", config.getSourceModel()) {
+
+            private VariablesViewer variablesViewer;
+
+            @Override
+            protected void constructAdditionalTabs(final TransformationEditor editor) {
+                // Create variables tab
+                final CTabItem variablesTab = new CTabItem(this, SWT.NONE);
+                variablesTab.setText("Variables");
+                variablesViewer = new VariablesViewer(editor, this, config);
+                variablesTab.setControl(variablesViewer);
+                variablesTab.setImage(Util.Images.VARIABLE);
+            }
+
+            @Override
+            public void refresh() {
+                super.refresh();
+                variablesViewer.refresh();
+            }
+        };
         // Create transformation viewer
         mappingsViewer = new MappingsViewer(this, horizontalSplitter, config);
         // Create target model tab folder
         targetModelTabFolder =
                 new ModelTabFolder(this, horizontalSplitter, "Target", config.getTargetModel());
         // Create detail area
-        mappingViewer = new MappingViewer(this, verticalSplitter, parent.getBackground());
+        mappingViewer = new MappingViewer(this, verticalSplitter);
         // Configure size of components in vertical splitter
         verticalSplitter.setWeights(new int[] {75, 25});
 
@@ -348,7 +360,7 @@ public class TransformationEditor extends EditorPart {
             final Model targetModel) throws Exception {
         final MappingOperation<?, ?> mapping = source instanceof Model
                 ? config.map((Model) source, targetModel)
-                : config.map(new Variable(source.toString(), source.toString()), targetModel);
+                : config.map((Variable) source, targetModel);
         save();
         return mapping;
     }
@@ -364,6 +376,20 @@ public class TransformationEditor extends EditorPart {
         return rootModel.equals(config.getSourceModel())
                 ? !config.getMappingsForSource(model).isEmpty()
                 : !config.getMappingsForTarget(model).isEmpty();
+    }
+
+    /**
+     * @param variable
+     * @return <code>true</code> if the supplied variable has been mapped at
+     *         least once
+     */
+    public boolean mapped(final Variable variable) {
+        for (final MappingOperation<?, ?> mapping : config.getMappings()) {
+            if (mapping.getType() == MappingType.VARIABLE
+                    && ((VariableMapping) mapping).getSource().getName().equals(variable.getName()))
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -457,14 +483,21 @@ public class TransformationEditor extends EditorPart {
     }
 
     /**
-     * Note, this method does not call {@link #save()}
-     *
      * @param mapping
      */
     public void unmap(final MappingOperation<?, ?> mapping) {
         config.removeMapping(mapping);
         refreshSourceModelViewer();
         refreshTargetModelViewer();
+        mappingViewer.update(null, null, null);
+    }
+
+    /**
+     * @param mapping
+     * @throws Exception
+     */
+    public void unmapVariableMapping(final MappingOperation<?, ?> mapping) throws Exception {
+        mappingsViewer.unmap(mapping);
     }
 
     void updateHelpText(final Text helpText) {
@@ -478,5 +511,13 @@ public class TransformationEditor extends EditorPart {
      */
     public void updateMapping(final MappingOperation<?, ?> mapping) {
         mappingsViewer.updateMapping(mapping);
+    }
+
+    /**
+     * @param variable
+     */
+    public void updateVariableMappings(final Variable variable) {
+        mappingsViewer.updateVariableMappings(variable);
+        mappingViewer.updateVariableMapping(variable);
     }
 }

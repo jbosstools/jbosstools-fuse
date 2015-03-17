@@ -1,4 +1,4 @@
-package org.jboss.mapper.eclipse.internal.editor;
+package org.jboss.tools.fuse.transformation.editor.internal;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -29,11 +29,11 @@ import org.jboss.mapper.MappingOperation;
 import org.jboss.mapper.MappingType;
 import org.jboss.mapper.Variable;
 import org.jboss.mapper.VariableMapping;
-import org.jboss.mapper.eclipse.Activator;
-import org.jboss.mapper.eclipse.TransformationEditor;
-import org.jboss.mapper.eclipse.internal.editor.MappingsViewer.TraversalListener;
-import org.jboss.mapper.eclipse.internal.util.Util;
 import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
+import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer.TraversalListener;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 final class MappingRow {
 
@@ -171,9 +171,7 @@ final class MappingRow {
 
         if (mapping != null) {
             if (MappingType.VARIABLE == mapping.getType())
-                sourceText.setText("\""
-                        + ((VariableMapping) mapping).getSource().getValue()
-                        + "\"");
+                setVariableText(((VariableMapping) mapping).getSource());
             else {
                 final Model model = ((FieldMapping) mapping).getSource();
                 sourceText.setText(model.getName());
@@ -396,6 +394,10 @@ final class MappingRow {
             mapping.targetText.setFocus();
     }
 
+    void setVariableText(final Variable variable) {
+        sourceText.setText("\"" + variable.getValue() + "\"");
+    }
+
     void unmap() throws Exception {
         editor.unmap(mapping);
         editor.save();
@@ -416,6 +418,15 @@ final class MappingRow {
         }
         mappingsViewer.mappingRows.remove(this);
         mappingsViewer.updateLayout();
+    }
+
+    /**
+     * @param variable
+     */
+    public void updateVariableMapping(final Variable variable) {
+        if (mapping.getType() == MappingType.VARIABLE
+                && ((VariableMapping) mapping).getSource().getName().equals(variable.getName()))
+            setVariableText(variable);
     }
 
     boolean validSourceDropTarget(final Object dragSource) {
@@ -454,8 +465,8 @@ final class MappingRow {
 
         @Override
         public final void drop(final DropTargetEvent event) {
-            editor.unmap(mapping);
             try {
+                editor.unmap(mapping);
                 mapping = drop(dragSource());
             } catch (final Exception e) {
                 Activator.error(e);

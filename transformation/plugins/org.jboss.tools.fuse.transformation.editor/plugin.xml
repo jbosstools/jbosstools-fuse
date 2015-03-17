@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            class="org.jboss.mapper.eclipse.wizards.NewTransformationWizard"
+            class="org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard"
             icon="icons/transform16.png"
             id="org.jboss.tools.fuse.transformation.editor.data-mapping-wizard"
             name="%new-wizard.name">
@@ -13,10 +13,10 @@
          </description>
       </wizard>
       <primaryWizard
-            id="org.jboss.mapper.eclipse.data-mapping-wizard">
+            id="org.jboss.tools.fuse.transformation.editor.data-mapping-wizard">
       </primaryWizard>
       <wizard
-            class="org.jboss.mapper.eclipse.wizards.NewTransformationTestWizard"
+            class="org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationTestWizard"
             icon="icons/transform16.png"
             id="org.jboss.tools.fuse.transformation.editor.transformationtest.new"
             name="%new-test-wizard.name">
@@ -29,7 +29,7 @@
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.core.runtime.xml"
-            describer="org.jboss.mapper.eclipse.DozerConfigContentTypeDescriber"
+            describer="org.jboss.tools.fuse.transformation.editor.DozerConfigContentTypeDescriber"
             file-extensions="xml"
             id="org.jboss.tools.fuse.transformation.editor.dozer-config-content-type"
             name="%dozer-content-type.name"
@@ -39,7 +39,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.jboss.mapper.eclipse.TransformationEditor"
+            class="org.jboss.tools.fuse.transformation.editor.TransformationEditor"
             default="false"
             extensions="xml"
             icon="icons/transform16.png"
