@@ -13,7 +13,7 @@
  */
 package org.jboss.mapper.camel;
 
-import org.jboss.mapper.camel.spring.CamelEndpointFactoryBean;
+import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

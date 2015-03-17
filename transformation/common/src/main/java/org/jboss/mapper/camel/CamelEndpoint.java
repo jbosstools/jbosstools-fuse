@@ -19,15 +19,15 @@ package org.jboss.mapper.camel;
  */
 public class CamelEndpoint {
 
-    private org.jboss.mapper.camel.spring.CamelEndpointFactoryBean springEndpoint;
-    private org.jboss.mapper.camel.blueprint.CamelEndpointFactoryBean blueprintEndpoint;
+    private org.apache.camel.spring.CamelEndpointFactoryBean springEndpoint;
+    private org.apache.camel.blueprint.CamelEndpointFactoryBean blueprintEndpoint;
 
     public CamelEndpoint(Object delegate) {
-        if (delegate instanceof org.jboss.mapper.camel.spring.CamelEndpointFactoryBean) {
-            springEndpoint = (org.jboss.mapper.camel.spring.CamelEndpointFactoryBean) delegate;
+        if (delegate instanceof org.apache.camel.spring.CamelEndpointFactoryBean) {
+            springEndpoint = (org.apache.camel.spring.CamelEndpointFactoryBean) delegate;
         } else {
             blueprintEndpoint =
-                    (org.jboss.mapper.camel.blueprint.CamelEndpointFactoryBean) delegate;
+                    (org.apache.camel.blueprint.CamelEndpointFactoryBean) delegate;
         }
     }
 

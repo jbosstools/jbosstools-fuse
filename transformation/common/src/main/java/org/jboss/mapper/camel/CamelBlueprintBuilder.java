@@ -11,24 +11,23 @@
  */
 package org.jboss.mapper.camel;
 
-import java.util.LinkedList;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
+import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.jboss.mapper.TransformType;
-import org.jboss.mapper.camel.blueprint.CamelContextFactoryBean;
-import org.jboss.mapper.camel.blueprint.CamelEndpointFactoryBean;
-import org.jboss.mapper.camel.blueprint.DataFormat;
-import org.jboss.mapper.camel.blueprint.DataFormatsDefinition;
-import org.jboss.mapper.camel.blueprint.JaxbDataFormat;
-import org.jboss.mapper.camel.blueprint.JsonDataFormat;
-import org.jboss.mapper.camel.blueprint.JsonLibrary;
-import org.jboss.mapper.camel.blueprint.ObjectFactory;
-import org.w3c.dom.DocumentFragment;
+import org.apache.camel.blueprint.CamelContextFactoryBean;
+import org.apache.camel.blueprint.CamelEndpointFactoryBean;
+import org.apache.camel.core.xml.AbstractCamelEndpointFactoryBean;
+import org.apache.camel.model.DataFormatDefinition;
+import org.apache.camel.model.dataformat.DataFormatsDefinition;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 /**
  * CamelConfigBuilder provides read/write access to Camel configuration used in
@@ -39,17 +38,18 @@ import org.w3c.dom.Element;
  * until saveConfig() is called.
  */
 public class CamelBlueprintBuilder extends CamelConfigBuilder {
-
-    // JAXB classes for Camel config model
-    private JAXBContext jaxbCtx;
-
+    
     private final CamelContextFactoryBean camelContext;
+    private final DocumentBuilderFactory docBuilder;
 
     public CamelBlueprintBuilder(Element camelConfig) throws Exception {
         this.camelConfig = camelConfig;
         JAXBElement<CamelContextFactoryBean> ccfb = getJAXBContext()
                 .createUnmarshaller().unmarshal(camelConfig, CamelContextFactoryBean.class);
         camelContext = ccfb.getValue();
+
+        docBuilder = DocumentBuilderFactory.newInstance();
+        docBuilder.setNamespaceAware(true);
     }
 
     /**
@@ -62,146 +62,57 @@ public class CamelBlueprintBuilder extends CamelConfigBuilder {
     }
 
     /**
-     * Add a transformation to the Camel configuration. This method adds all
-     * required data formats, Dozer configuration, and the camel-transform
-     * endpoint definition to the Camel config.
-     * 
-     * @param transformId id for the transformation
-     * @param dozerConfigPath path to Dozer config for transformation
-     * @param source type of the source data
-     * @param sourceClass name of the source model class
-     * @param target type of the target data
-     * @param targetClass name of the target model class
-     * @throws Exception failed to create transformation
+     *  Slightly different implementation than Spring as we need to replace Spring 
+     *  namespaces with blueprint namespaces during marshalling.  It's a hack, but it's 
+     *  better than maintaining two parallel sets of our own generated model classes.
      */
-    public void addTransformation(String transformId, String dozerConfigPath,
-            TransformType source, String sourceClass,
-            TransformType target, String targetClass) throws Exception {
-
-        // Add data formats
-        DataFormat unmarshaller = createDataFormat(source, sourceClass);
-        DataFormat marshaller = createDataFormat(target, targetClass);
-
-        // Create a transformation endpoint
-        String unmarshallerId = unmarshaller != null ? unmarshaller.getId() : null;
-        String marshallerId = marshaller != null ? marshaller.getId() : null;
-        String endpointUri = EndpointHelper.createEndpointUri(dozerConfigPath,
-                transformId, sourceClass, targetClass, unmarshallerId, marshallerId);
-        CamelEndpointFactoryBean endpoint = new CamelEndpointFactoryBean();
-        endpoint.setUri(endpointUri);
-        endpoint.setId(transformId);
-        camelContext.getEndpoint().add(endpoint);
+    protected void updateCamelContext() throws Exception {
+        // Marshal our current config as a string and replace namespaces
+        StringWriter sw = new StringWriter();
+        getJAXBContext().createMarshaller().marshal(camelContext, sw);
+        String newXml = sw.toString().replaceAll(SPRING_NS, BLUEPRINT_NS);
+        
+        // Parse the updated XML and replace the current config element
+        Document doc  = docBuilder.newDocumentBuilder().parse(
+                new InputSource(new StringReader(newXml)));
+        Node parent = camelConfig.getParentNode();
+        Node newConfig = camelConfig.getOwnerDocument().importNode(doc.getDocumentElement(), true);
+        parent.replaceChild(newConfig, camelConfig);
+        camelConfig = (Element)newConfig;
     }
 
-    public List<String> getTransformEndpointIds() {
-        List<String> endpointIds = new LinkedList<String>();
-        for (CamelEndpointFactoryBean ep : camelContext.getEndpoint()) {
-            if (ep.getUri().startsWith(EndpointHelper.DOZER_SCHEME)) {
-                endpointIds.add(ep.getId());
-            }
-        }
-        return endpointIds;
-    }
-
-    public CamelEndpoint getEndpoint(String endpointId) {
-        CamelEndpointFactoryBean endpoint = null;
-        for (CamelEndpointFactoryBean ep : camelContext.getEndpoint()) {
-            if (endpointId.equals(ep.getId())) {
-                endpoint = ep;
-                break;
-            }
-        }
-        return new CamelEndpoint(endpoint);
-    }
-
-    // If the JAXB config model for CamelContext was changed, call this method
-    // to marshal those changes into the DOM for the Spring application context
-    protected void updateCamelContext() throws JAXBException {
-        // Replace Camel Context in config DOM
-        ObjectFactory of = new ObjectFactory();
-        DocumentFragment frag = camelConfig.getOwnerDocument().createDocumentFragment();
-        getJAXBContext().createMarshaller().marshal(of.createCamelContext(camelContext), frag);
-        camelConfig.getParentNode().replaceChild(frag.getFirstChild(), camelConfig);
-    }
-
-    private DataFormat createDataFormat(TransformType type, String className) throws Exception {
-        DataFormat dataFormat;
-
-        switch (type) {
-            case JSON:
-                dataFormat = createJsonDataFormat();
-                break;
-            case XML:
-                dataFormat = createJaxbDataFormat(getPackage(className));
-                break;
-            case JAVA:
-                dataFormat = null;
-                break;
-            default:
-                throw new Exception("Unsupported data format type: " + type);
-        }
-
-        return dataFormat;
-    }
-
-    private DataFormat createJsonDataFormat() throws Exception {
-        final String id = "transform-json";
-
-        DataFormat dataFormat = getDataFormat(id);
-        if (dataFormat == null) {
-            // Looks like we need to create a new one
-            JsonDataFormat jdf = new JsonDataFormat();
-            jdf.setLibrary(JsonLibrary.JACKSON);
-            jdf.setId(id);
-            getDataFormats().add(jdf);
-            dataFormat = jdf;
-        }
-        return dataFormat;
-    }
-
-    private List<DataFormat> getDataFormats() {
+    @Override
+    public List<DataFormatDefinition> getDataFormats() {
         DataFormatsDefinition dfd = camelContext.getDataFormats();
         if (dfd == null) {
             dfd = new DataFormatsDefinition();
             camelContext.setDataFormats(dfd);
         }
-        return dfd.getAvroOrBarcodeOrBase64();
-    }
-
-    private DataFormat getDataFormat(String id) {
-        DataFormat dataFormat = null;
-        for (DataFormat df : getDataFormats()) {
-            if (id.equals(df.getId())) {
-                dataFormat = df;
-                break;
-            }
+        
+        if (dfd.getDataFormats() == null) {
+            dfd.setDataFormats(new ArrayList<DataFormatDefinition>());
         }
-        return dataFormat;
+        return dfd.getDataFormats();
     }
 
-    private DataFormat createJaxbDataFormat(String contextPath) throws Exception {
-        final String id = contextPath.replaceAll("\\.", "");
-        DataFormat dataFormat = getDataFormat(id);
-
-        if (dataFormat == null) {
-            JaxbDataFormat df = new JaxbDataFormat();
-            df.setContextPath(contextPath);
-            df.setId(id);
-            getDataFormats().add(df);
-            dataFormat = df;
+    @Override
+    public List<CamelEndpointFactoryBean> getEndpoints() {
+        if (camelContext.getEndpoints() == null) {
+            setEndpoints(camelContext, new ArrayList<CamelEndpointFactoryBean>());
         }
-        return dataFormat;
+        return camelContext.getEndpoints();
     }
 
-    private synchronized JAXBContext getJAXBContext() {
-        if (jaxbCtx == null) {
-            try {
-                jaxbCtx = JAXBContext.newInstance(ObjectFactory.class);
-            } catch (final JAXBException jaxbEx) {
-                throw new RuntimeException(jaxbEx);
-            }
-        }
-        return jaxbCtx;
+    @Override
+    protected AbstractCamelEndpointFactoryBean addEndpoint(String id, String uri) {
+        CamelEndpointFactoryBean endpoint = new CamelEndpointFactoryBean();
+        endpoint.setId(id);
+        endpoint.setUri(uri);
+        getEndpoints().add(endpoint);
+        return endpoint;
     }
-
+    
+    protected Class<?> getCamelContextType() {
+        return CamelContextFactoryBean.class;
+    }
 }

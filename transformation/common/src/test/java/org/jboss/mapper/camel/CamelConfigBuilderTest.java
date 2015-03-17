@@ -84,18 +84,16 @@ public class CamelConfigBuilderTest {
     public void readSpringConfig() throws Exception {
         CamelSpringBuilder config = (CamelSpringBuilder)CamelConfigBuilder.loadConfig(getFile(XML_JSON));
         Assert.assertNotNull(config.getCamelContext());
-        Assert.assertEquals(1, config.getCamelContext().getEndpoint().size());
-        Assert.assertEquals(2, config.getCamelContext().getDataFormats()
-                .getAvroOrBarcodeOrBase64().size());
+        Assert.assertEquals(1, config.getCamelContext().getEndpoints().size());
+        Assert.assertEquals(2, config.getCamelContext().getDataFormats().getDataFormats().size());
     }
     
     @Test
     public void readBlueprintConfig() throws Exception {
         CamelBlueprintBuilder config = (CamelBlueprintBuilder)CamelConfigBuilder.loadConfig(getFile(BLUEPRINT_CONFIG));
         Assert.assertNotNull(config.getCamelContext());
-        Assert.assertEquals(1, config.getCamelContext().getEndpoint().size());
-        Assert.assertEquals(2, config.getCamelContext().getDataFormats()
-                .getAvroOrBarcodeOrBase64().size());
+        Assert.assertEquals(1, config.getCamelContext().getEndpoints().size());
+        Assert.assertEquals(2, config.getCamelContext().getDataFormats().getDataFormats().size());
     }
     
     @Test
