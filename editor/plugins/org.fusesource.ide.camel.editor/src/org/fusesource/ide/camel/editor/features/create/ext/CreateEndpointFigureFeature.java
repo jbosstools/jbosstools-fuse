@@ -26,6 +26,10 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature<Endpoint> {
 	private final Endpoint endpoint;
 	private List<ComponentDependency> deps;
 
+	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint) {
+		this(fp, name, description, endpoint, null);
+	}
+	
 	/**
 	 * 
 	 * @param fp
