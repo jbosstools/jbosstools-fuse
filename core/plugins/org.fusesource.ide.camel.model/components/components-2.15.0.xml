@@ -257,7 +257,7 @@
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="allowShortLines" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Allows for lines to be shorter than expected and ignores the extra characters"/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="resourceUri" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description=""/>
            <uriParameter name="ignoreFirstRecord" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
@@ -600,7 +600,7 @@
            <uriParameter name="userPassword" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="clientId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="revokeOnShutdown" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description=""/>
-           <uriParameter name="httpParams" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="httpParams" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="authSecureStorage" type="object" javaType="com.box.boxjavalibv2.authorization.IAuthSecureStorage" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="boxConfig" type="object" javaType="com.box.boxjavalibv2.IBoxConfig" kind="parameter" deprecated="false" description=""/>
@@ -754,13 +754,13 @@
            <uriParameter name="idempotent" type="boolean" javaType="java.lang.Boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="password" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description="Password to use for login"/>
            <uriParameter name="privateKeyPassphrase" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="sortBy" type="object" javaType="java.util.Comparator<org.apache.camel.Exchange>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="sortBy" type="object" javaType="java.util.Comparator&lt;org.apache.camel.Exchange&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="scheduledExecutorService" type="object" javaType="java.util.concurrent.ScheduledExecutorService" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="directoryName" type="string" javaType="java.lang.String" kind="path" deprecated="false" description="The starting directory"/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="serverAliveInterval" type="integer" javaType="int" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="soTimeout" type="integer" javaType="int" kind="parameter" deprecated="false" description="Sets the so timeout Used only by FTPClient"/>
-           <uriParameter name="inProgressRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository<java.lang.String>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="inProgressRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository&lt;java.lang.String&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="passiveMode" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Sets passive mode connections. Default is active mode connections."/>
            <uriParameter name="proxy" type="object" javaType="com.jcraft.jsch.Proxy" kind="parameter" deprecated="false" description=""/>
@@ -772,7 +772,7 @@
            <uriParameter name="compression" type="integer" javaType="int" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="charset" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="idempotentKey" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="sorter" type="object" javaType="java.util.Comparator<org.apache.camel.component.file.GenericFile<T>>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="sorter" type="object" javaType="java.util.Comparator&lt;org.apache.camel.component.file.GenericFile&lt;T&gt;&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="stepwise" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description="Sets whether we should stepwise change directories while traversing file structures when downloading files or as well when uploading a file to a directory. You can disable this if you for example are in a situation where you cannot change directory on the FTP server due security reasons."/>
            <uriParameter name="maximumReconnectAttempts" type="integer" javaType="int" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="directoryMustExist" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" description=""/>
@@ -788,11 +788,11 @@
            <uriParameter name="tempPrefix" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="producer" description=""/>
            <uriParameter name="minDepth" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="include" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="idempotentRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository<java.lang.String>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="idempotentRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository&lt;java.lang.String&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="streamDownload" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Sets the download method to use when not using a local working directory. If set to true the remote files are streamed to the route as they are read. When set to false the remote files are loaded into memory before being sent into the route."/>
            <uriParameter name="reconnectDelay" type="integer" javaType="long" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="maxDepth" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="2147483647" label="consumer" description=""/>
-           <uriParameter name="filter" type="object" javaType="org.apache.camel.component.file.GenericFileFilter<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="filter" type="object" javaType="org.apache.camel.component.file.GenericFileFilter&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="pollStrategy" type="object" javaType="org.apache.camel.spi.PollingConsumerPollStrategy" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="knownHostsFile" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="antInclude" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" description=""/>
@@ -811,7 +811,7 @@
            <uriParameter name="maxMessagesPerPoll" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exclude" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="fastExistsCheck" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="processStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileProcessStrategy<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="processStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileProcessStrategy&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="readLock" type="string" javaType="java.lang.String" kind="parameter" choice="none,markerFile,fileLock,rename,changed" deprecated="false" label="consumer" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="separator" type="object" javaType="org.apache.camel.component.file.remote.RemoteFileConfiguration.PathSeparator" kind="parameter" deprecated="false" defaultValue="Auto" description="Sets the path separator to be used. UNIX = Path separator / is used Windows = Path separator \is used Auto = (is default) Use existing path separator in file name"/>
@@ -822,7 +822,7 @@
            <uriParameter name="eagerMaxMessagesPerPoll" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer" description=""/>
            <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="readLockCheckInterval" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
-           <uriParameter name="exclusiveReadLockStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="exclusiveReadLockStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="fileExist" type="string" javaType="org.apache.camel.component.file.GenericFileExist" kind="parameter" choice="Override,Append,Fail,Ignore,Move,TryRename" deprecated="false" defaultValue="Override" label="producer" description=""/>
            <uriParameter name="localWorkDirectory" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="startingDirectoryMustExist" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" label="consumer" description=""/>
@@ -1164,7 +1164,7 @@
            <uriParameter name="httpRetryCount" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="restBaseURL" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="appId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="options" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="options" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="notificationId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="allowNewOptions" type="boolean" javaType="java.lang.Boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="scoreValue" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" description=""/>
@@ -1191,7 +1191,7 @@
            <uriParameter name="domainName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="name" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="commentId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="ids" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="ids" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="httpConnectionTimeout" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="includeRead" type="boolean" javaType="java.lang.Boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="inBody" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -1210,15 +1210,15 @@
            <uriParameter name="testUser2" type="object" javaType="facebook4j.TestUser" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="friendlistId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="testUser1" type="object" javaType="facebook4j.TestUser" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="userIds" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="userIds" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="tagUpdate" type="object" javaType="facebook4j.TagUpdate" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="albumCreate" type="object" javaType="facebook4j.AlbumCreate" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="domainNames" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="domainNames" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="place" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="objectId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="checkinId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="question" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="toUserIds" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="toUserIds" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="gzipEnabled" type="boolean" javaType="java.lang.Boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="center" type="object" javaType="facebook4j.GeoLocation" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="optionDescription" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -1230,7 +1230,7 @@
            <uriParameter name="message" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="httpStreamingReadTimeout" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="achievementURL" type="string" javaType="java.net.URL" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="queries" type="object" javaType="java.util.Map<java.lang.String,java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="queries" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="userId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="httpProxyPassword" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="linkId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -1548,7 +1548,7 @@
            <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description="To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured."/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description="If the polling consumer did not poll any files you can enable this option to send an empty message (no body) instead."/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description="To configure additional properties when using a custom scheduler or any of the Quartz2 Spring based scheduler."/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description="To configure additional properties when using a custom scheduler or any of the Quartz2 Spring based scheduler."/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange."/>
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description="Milliseconds before the first poll starts."/>
            <uriParameter name="concurrentTasks" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="1" description="Number of threads used by the scheduling thread pool. Is by default using a single thread"/>
@@ -1738,7 +1738,7 @@
            <uriParameter name="query" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description="Sets the SQL query to perform"/>
            <uriParameter name="onConsumeBatchComplete" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description="After processing the entire batch this query can be executed to bulk update rows etc. The query cannot have parameters."/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="batch" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Enables or disables batch mode"/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="alwaysPopulateStatement" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="If enabled then the populateStatement method from org.apache.camel.component.sql.SqlPrepareStatementStrategy is always invoked also if there is no expected parameters to be prepared. When this is false then the populateStatement is only invoked if there is 1 or more expected parameters to be set; for example this avoids reading the message body/headers for SQL queries with no parameters."/>
@@ -1882,14 +1882,14 @@
        </dependencies>
        <componentProperties>
            <componentProperty name="eventBus" type="object" javaType="com.google.common.eventbus.EventBus" kind="property" deprecated="false" description=""/>
-           <componentProperty name="listenerInterface" type="string" javaType="java.lang.Class<?>" kind="property" deprecated="false" description=""/>
+           <componentProperty name="listenerInterface" type="string" javaType="java.lang.Class&lt;?&gt;" kind="property" deprecated="false" description=""/>
        </componentProperties>
        <uriParameters>
            <uriParameter name="eventBusRef" type="string" javaType="java.lang.String" kind="path" deprecated="false" description=""/>
-           <uriParameter name="eventClass" type="string" javaType="java.lang.Class<?>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="eventClass" type="string" javaType="java.lang.Class&lt;?&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
-           <uriParameter name="listenerInterface" type="string" javaType="java.lang.Class<?>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="listenerInterface" type="string" javaType="java.lang.Class&lt;?&gt;" kind="parameter" deprecated="false" description=""/>
        </uriParameters>
    </component>
    <component>
@@ -2032,7 +2032,7 @@
            <uriParameter name="sortEntries" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="feedHeader" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
@@ -2097,7 +2097,7 @@
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="secretKey" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="amazonS3Endpoint" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -2404,7 +2404,7 @@
            <uriParameter name="snmpCommunity" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" defaultValue="public" description=""/>
            <uriParameter name="snmpVersion" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="snmpContextEngineId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="authenticationProtocol" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -2603,7 +2603,7 @@
        </dependencies>
        <componentProperties>
            <componentProperty name="queueSize" type="integer" javaType="int" kind="property" deprecated="false" description="Sets the default maximum capacity of the SEDA queue (i.e. the number of messages it can hold)."/>
-           <componentProperty name="defaultQueueFactory" type="object" javaType="org.apache.camel.component.seda.BlockingQueueFactory<org.apache.camel.Exchange>" kind="property" deprecated="false" description="Sets the default queue factory."/>
+           <componentProperty name="defaultQueueFactory" type="object" javaType="org.apache.camel.component.seda.BlockingQueueFactory&lt;org.apache.camel.Exchange&gt;" kind="property" deprecated="false" description="Sets the default queue factory."/>
            <componentProperty name="concurrentConsumers" type="integer" javaType="int" kind="property" deprecated="false" description="Sets the default number of concurrent threads processing exchanges."/>
        </componentProperties>
        <uriParameters>
@@ -2679,7 +2679,7 @@
            <uriParameter name="useInlineAttachments" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sortTerm" type="object" javaType="com.sun.mail.imap.SortTerm[]" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="ignoreUnsupportedCharset" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="ignoreUriScheme" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
@@ -3344,7 +3344,7 @@
            <uriParameter name="baseUri" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description="You can set a base URI which is used in the URI dereferencing. Relative URIs are then concatenated with the base URI."/>
            <uriParameter name="name" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description=""/>
            <uriParameter name="verifierConfiguration" type="object" javaType="org.apache.camel.component.xmlsecurity.processor.XmlVerifierConfiguration" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="cryptoContextProperties" type="object" javaType="java.util.Map<java.lang.String,? extends java.lang.Object>" kind="parameter" deprecated="false" description="Sets the crypto context properties. See link XMLCryptoContextsetProperty(String Object). Possible properties are defined in XMLSignContext an XMLValidateContext (see Supported Properties). The following properties are set by default to the value link BooleanTRUE for the XML validation. If you want to switch these features off you must set the property value to link BooleanFALSE. org.jcp.xml.dsig.validateManifests javax.xml.crypto.dsig.cacheReference"/>
+           <uriParameter name="cryptoContextProperties" type="object" javaType="java.util.Map&lt;java.lang.String,? extends java.lang.Object&gt;" kind="parameter" deprecated="false" description="Sets the crypto context properties. See link XMLCryptoContextsetProperty(String Object). Possible properties are defined in XMLSignContext an XMLValidateContext (see Supported Properties). The following properties are set by default to the value link BooleanTRUE for the XML validation. If you want to switch these features off you must set the property value to link BooleanFALSE. org.jcp.xml.dsig.validateManifests javax.xml.crypto.dsig.cacheReference"/>
        </uriParameters>
    </component>
    <component>
@@ -3481,8 +3481,8 @@
            </dependency>
        </dependencies>
        <componentProperties>
-           <componentProperty name="blobStores" type="array" javaType="java.util.List<org.jclouds.blobstore.BlobStore>" kind="property" deprecated="false" description=""/>
-           <componentProperty name="computeServices" type="array" javaType="java.util.List<org.jclouds.compute.ComputeService>" kind="property" deprecated="false" description=""/>
+           <componentProperty name="blobStores" type="array" javaType="java.util.List&lt;org.jclouds.blobstore.BlobStore&gt;" kind="property" deprecated="false" description=""/>
+           <componentProperty name="computeServices" type="array" javaType="java.util.List&lt;org.jclouds.compute.ComputeService&gt;" kind="property" deprecated="false" description=""/>
        </componentProperties>
        <uriParameters>
            <uriParameter name="container" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -3602,19 +3602,19 @@
            <uriParameter name="greedy" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="maxMessagesPerPoll" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exclude" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="sortBy" type="object" javaType="java.util.Comparator<org.apache.camel.Exchange>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="sortBy" type="object" javaType="java.util.Comparator&lt;org.apache.camel.Exchange&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="fastExistsCheck" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="scheduledExecutorService" type="object" javaType="java.util.concurrent.ScheduledExecutorService" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="directoryName" type="string" javaType="java.lang.String" kind="path" deprecated="false" description="The starting directory"/>
            <uriParameter name="disableSecureDataChannelDefaults" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Use this option to disable default options when using secure data channel. This allows you to be in full control what the execPbsz and execProt setting should be used. Default is false"/>
-           <uriParameter name="processStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileProcessStrategy<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="processStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileProcessStrategy&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="readLock" type="string" javaType="java.lang.String" kind="parameter" choice="none,markerFile,fileLock,rename,changed" deprecated="false" label="consumer" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="execProt" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description="The exec protection level PROT command. C - Clear S - Safe(SSL protocol only) E - Confidential(SSL protocol only) P - Private"/>
            <uriParameter name="soTimeout" type="integer" javaType="int" kind="parameter" deprecated="false" description="Sets the so timeout Used only by FTPClient"/>
            <uriParameter name="separator" type="object" javaType="org.apache.camel.component.file.remote.RemoteFileConfiguration.PathSeparator" kind="parameter" deprecated="false" defaultValue="Auto" description="Sets the path separator to be used. UNIX = Path separator / is used Windows = Path separator \is used Auto = (is default) Use existing path separator in file name"/>
-           <uriParameter name="inProgressRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository<java.lang.String>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="inProgressRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository&lt;java.lang.String&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="readLockLoggingLevel" type="string" javaType="org.apache.camel.LoggingLevel" kind="parameter" choice="DEBUG,ERROR,INFO,TRACE,WARN,OFF" deprecated="false" defaultValue="WARN" label="consumer" description=""/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="passiveMode" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Sets passive mode connections. Default is active mode connections."/>
@@ -3631,9 +3631,9 @@
            <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="charset" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="idempotentKey" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="sorter" type="object" javaType="java.util.Comparator<org.apache.camel.component.file.GenericFile<T>>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="sorter" type="object" javaType="java.util.Comparator&lt;org.apache.camel.component.file.GenericFile&lt;T&gt;&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="readLockCheckInterval" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
-           <uriParameter name="exclusiveReadLockStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="exclusiveReadLockStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="stepwise" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description="Sets whether we should stepwise change directories while traversing file structures when downloading files or as well when uploading a file to a directory. You can disable this if you for example are in a situation where you cannot change directory on the FTP server due security reasons."/>
            <uriParameter name="maximumReconnectAttempts" type="integer" javaType="int" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="fileExist" type="string" javaType="org.apache.camel.component.file.GenericFileExist" kind="parameter" choice="Override,Append,Fail,Ignore,Move,TryRename" deprecated="false" defaultValue="Override" label="producer" description=""/>
@@ -3663,13 +3663,13 @@
            <uriParameter name="move" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="moveFailed" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="preMove" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="idempotentRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository<java.lang.String>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="idempotentRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository&lt;java.lang.String&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="streamDownload" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Sets the download method to use when not using a local working directory. If set to true the remote files are streamed to the route as they are read. When set to false the remote files are loaded into memory before being sent into the route."/>
            <uriParameter name="reconnectDelay" type="integer" javaType="long" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="useList" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description="Whether to allow using LIST command when downloading a file. Default is true. In some use cases you may want to download a specific file and are not allowed to use the LIST command and therefore you can set this option to false."/>
            <uriParameter name="maxDepth" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="2147483647" label="consumer" description=""/>
-           <uriParameter name="filter" type="object" javaType="org.apache.camel.component.file.GenericFileFilter<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="filter" type="object" javaType="org.apache.camel.component.file.GenericFileFilter&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="isImplicit" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Set the security mode(Implicit/Explicit). true - Implicit Mode / False - Explicit Mode"/>
            <uriParameter name="tempFileName" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="producer" description=""/>
            <uriParameter name="pollStrategy" type="object" javaType="org.apache.camel.spi.PollingConsumerPollStrategy" kind="parameter" deprecated="false" label="consumer" description=""/>
@@ -3800,7 +3800,7 @@
        </dependencies>
        <componentProperties>
            <componentProperty name="queueSize" type="integer" javaType="int" kind="property" deprecated="false" description="Sets the default maximum capacity of the SEDA queue (i.e. the number of messages it can hold)."/>
-           <componentProperty name="defaultQueueFactory" type="object" javaType="org.apache.camel.component.seda.BlockingQueueFactory<org.apache.camel.Exchange>" kind="property" deprecated="false" description="Sets the default queue factory."/>
+           <componentProperty name="defaultQueueFactory" type="object" javaType="org.apache.camel.component.seda.BlockingQueueFactory&lt;org.apache.camel.Exchange&gt;" kind="property" deprecated="false" description="Sets the default queue factory."/>
            <componentProperty name="concurrentConsumers" type="integer" javaType="int" kind="property" deprecated="false" description="Sets the default number of concurrent threads processing exchanges."/>
        </componentProperties>
        <uriParameters>
@@ -4148,9 +4148,9 @@
            <uriParameter name="persistenceUnit" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" defaultValue="camel" description=""/>
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="usePersist" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="entityType" type="string" javaType="java.lang.Class<?>" kind="path" deprecated="false" required="true" description="Entity class name"/>
+           <uriParameter name="entityType" type="string" javaType="java.lang.Class&lt;?&gt;" kind="path" deprecated="false" required="true" description="Entity class name"/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="usePassedInEntityManager" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="consumeLockEntity" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
@@ -4191,7 +4191,7 @@
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange."/>
            <uriParameter name="beanName" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description="Sets the name of the bean to invoke"/>
            <uriParameter name="multiParameterArray" type="boolean" javaType="boolean" kind="parameter" deprecated="true" description="How to treat the parameters which are passed from the message body; if it is true the message body should be an array of parameters. Note: This option is used internally by Camel and is not intended for end users to use."/>
-           <uriParameter name="parameters" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" description="Used for configuring additional properties on the bean"/>
+           <uriParameter name="parameters" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" description="Used for configuring additional properties on the bean"/>
        </uriParameters>
    </component>
    <component>
@@ -4225,7 +4225,7 @@
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="methodName" type="string" javaType="java.lang.String" kind="path" deprecated="false" description=""/>
            <uriParameter name="clientSecret" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="scopes" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="scopes" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="accessToken" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="inBody" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="applicationName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -4261,7 +4261,7 @@
            <uriParameter name="useTransactions" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Sets indicator to use transactions for consuming and error handling statements."/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="isolation" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
@@ -4324,7 +4324,7 @@
            <uriParameter name="autoAck" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
            <uriParameter name="requestedChannelMax" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="0" description=""/>
            <uriParameter name="automaticRecoveryEnabled" type="boolean" javaType="java.lang.Boolean" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="clientProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="clientProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="deadLetterExchange" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="channelPoolMaxSize" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="10" description="Set maximum number of opened channel in pool"/>
@@ -4365,7 +4365,7 @@
        </dependencies>
        <componentProperties>
            <componentProperty name="queueSize" type="integer" javaType="int" kind="property" deprecated="false" description="Sets the default maximum capacity of the SEDA queue (i.e. the number of messages it can hold)."/>
-           <componentProperty name="defaultQueueFactory" type="object" javaType="org.apache.camel.component.seda.BlockingQueueFactory<org.apache.camel.Exchange>" kind="property" deprecated="false" description="Sets the default queue factory."/>
+           <componentProperty name="defaultQueueFactory" type="object" javaType="org.apache.camel.component.seda.BlockingQueueFactory&lt;org.apache.camel.Exchange&gt;" kind="property" deprecated="false" description="Sets the default queue factory."/>
            <componentProperty name="concurrentConsumers" type="integer" javaType="int" kind="property" deprecated="false" description="Sets the default number of concurrent threads processing exchanges."/>
        </componentProperties>
        <uriParameters>
@@ -4425,7 +4425,7 @@
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="useJson" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="accessToken" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="userId" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -4652,7 +4652,7 @@
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange."/>
            <uriParameter name="beanName" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description="Sets the name of the bean to invoke"/>
            <uriParameter name="multiParameterArray" type="boolean" javaType="boolean" kind="parameter" deprecated="true" description="How to treat the parameters which are passed from the message body; if it is true the message body should be an array of parameters. Note: This option is used internally by Camel and is not intended for end users to use."/>
-           <uriParameter name="parameters" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" description="Used for configuring additional properties on the bean"/>
+           <uriParameter name="parameters" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" description="Used for configuring additional properties on the bean"/>
        </uriParameters>
    </component>
    <component>
@@ -4833,7 +4833,7 @@
            <uriParameter name="messageFactory" type="object" javaType="javax.sip.message.MessageFactory" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="contentTypeHeader" type="object" javaType="javax.sip.header.ContentTypeHeader" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="presenceAgent" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="viaHeaders" type="array" javaType="java.util.List<javax.sip.header.ViaHeader>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="viaHeaders" type="array" javaType="java.util.List&lt;javax.sip.header.ViaHeader&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="eventHeader" type="object" javaType="javax.sip.header.EventHeader" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="stackName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -4894,12 +4894,12 @@
        </componentProperties>
        <uriParameters>
            <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="hashFunction" type="object" javaType="krati.util.HashFunction<byte[]>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="hashFunction" type="object" javaType="krati.util.HashFunction&lt;byte[]&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="initialCapacity" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="100" description=""/>
            <uriParameter name="segmentFileSize" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="64" description=""/>
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
-           <uriParameter name="keySerializer" type="object" javaType="krati.io.Serializer<java.lang.Object>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="keySerializer" type="object" javaType="krati.io.Serializer&lt;java.lang.Object&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="scheduler" type="string" javaType="org.apache.camel.spi.ScheduledPollConsumerScheduler" kind="parameter" choice="spring,quartz2" deprecated="false" label="consumer" description=""/>
            <uriParameter name="path" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description=""/>
            <uriParameter name="useFixedDelay" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer" description=""/>
@@ -4912,8 +4912,8 @@
            <uriParameter name="key" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="valueSerializer" type="object" javaType="krati.io.Serializer<java.lang.Object>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="valueSerializer" type="object" javaType="krati.io.Serializer&lt;java.lang.Object&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="segmentFactory" type="object" javaType="krati.core.segment.SegmentFactory" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
@@ -5010,7 +5010,7 @@
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="authToken" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description="OAuth 2 auth token"/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
@@ -5067,7 +5067,7 @@
            <uriParameter name="jobTimeToRun" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="60" description="Job time to run in seconds. (when 0 the beanstalkd daemon raises it to 1 automatically see Beanstalk protocol)"/>
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="command" type="string" javaType="org.apache.camel.component.beanstalk.BeanstalkCommand" kind="parameter" choice="bury,release,put,touch,delete,kick" deprecated="false" description=""/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
@@ -5396,7 +5396,7 @@
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="searchType" type="object" javaType="org.apache.camel.component.jt400.Jt400Configuration.SearchType" kind="parameter" deprecated="false" defaultValue="EQ" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="format" type="object" javaType="org.apache.camel.component.jt400.Jt400Configuration.Format" kind="parameter" deprecated="false" defaultValue="text" description="Data format for sending messages."/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="searchKey" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -5762,7 +5762,7 @@
            <uriParameter name="app" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="owner" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="count" type="integer" javaType="int" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="index" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -5809,7 +5809,7 @@
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="beanName" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description=""/>
            <uriParameter name="multiParameterArray" type="boolean" javaType="boolean" kind="parameter" deprecated="true" description=""/>
-           <uriParameter name="parameters" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="parameters" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" description=""/>
        </uriParameters>
    </component>
    <component>
@@ -5890,7 +5890,7 @@
            <uriParameter name="scheduledExecutorService" type="object" javaType="java.util.concurrent.ScheduledExecutorService" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="pollCommand" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description="Sets the command string to send to the remote SSH server during every poll cycle. Only works with camel-ssh component being used as a consumer i.e. from(ssh://...)"/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
@@ -5933,8 +5933,8 @@
            <uriParameter name="amazonSESEndpoint" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="from" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description=""/>
-           <uriParameter name="to" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="replyToAddresses" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="to" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="replyToAddresses" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="amazonSESClient" type="object" javaType="com.amazonaws.services.simpleemail.AmazonSimpleEmailService" kind="parameter" deprecated="false" description=""/>
        </uriParameters>
    </component>
@@ -5982,10 +5982,10 @@
        <uriParameters>
            <uriParameter name="throwExceptionOnFailure" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-           <uriParameter name="restletRealm" type="object" javaType="java.util.Map<java.lang.String,java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="restletRealm" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sslContextParameters" type="object" javaType="org.apache.camel.util.jsse.SSLContextParameters" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
-           <uriParameter name="restletUriPatterns" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="restletUriPatterns" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="restletMethod" type="object" javaType="org.restlet.data.Method" kind="parameter" deprecated="false" defaultValue="GET" description=""/>
            <uriParameter name="protocol" type="string" javaType="java.lang.String" kind="path" choice="http" deprecated="false" required="true" description=""/>
            <uriParameter name="restletBinding" type="object" javaType="org.apache.camel.component.restlet.RestletBinding" kind="parameter" deprecated="false" description=""/>
@@ -6032,12 +6032,12 @@
            <uriParameter name="resultsFormat" type="string" javaType="org.apache.camel.component.xquery.ResultFormat" kind="parameter" choice="Bytes,BytesSource,DOM,DOMSource,List,String,StringSource" deprecated="false" defaultValue="DOM" description=""/>
            <uriParameter name="greedy" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="scheduledExecutorService" type="object" javaType="java.util.concurrent.ScheduledExecutorService" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="resultType" type="string" javaType="java.lang.Class<?>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="resultType" type="string" javaType="java.lang.Class&lt;?&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="headerName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="namespacePrefixes" type="object" javaType="java.util.Map<java.lang.String,java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="namespacePrefixes" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="resourceUri" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description=""/>
            <uriParameter name="allowStAX" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
@@ -6048,7 +6048,7 @@
            <uriParameter name="startScheduler" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer" description=""/>
            <uriParameter name="moduleURIResolver" type="object" javaType="net.sf.saxon.lib.ModuleURIResolver" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="stripsAllWhiteSpace" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
-           <uriParameter name="parameters" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="parameters" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="properties" type="object" javaType="java.util.Properties" kind="parameter" deprecated="false" description=""/>
        </uriParameters>
    </component>
@@ -6351,7 +6351,7 @@
            <uriParameter name="sortEntries" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Sets whether to sort entries by published date. Only works when splitEntries = true."/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="feedHeader" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description="Sets whether to add the feed object as a header"/>
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
@@ -6400,7 +6400,7 @@
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="threads" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="20" description=""/>
-           <uriParameter name="dispatchMap" type="object" javaType="java.util.Map<java.lang.String,java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="dispatchMap" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="producerUri" type="string" javaType="java.net.URI" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="local" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
            <uriParameter name="dispatchStrategy" type="object" javaType="org.apache.camel.component.routebox.strategy.RouteboxDispatchStrategy" kind="parameter" deprecated="false" description=""/>
@@ -6593,7 +6593,7 @@
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="clientId" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="delay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="500" label="consumer" description=""/>
@@ -6636,7 +6636,7 @@
            <uriParameter name="encoderMaxLineLength" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="-1" description=""/>
            <uriParameter name="disconnectOnNoReply" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
-           <uriParameter name="filters" type="array" javaType="java.util.List<org.apache.mina.common.IoFilter>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="filters" type="array" javaType="java.util.List&lt;org.apache.mina.common.IoFilter&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="encoding" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sync" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
            <uriParameter name="timeout" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="30000" description=""/>
@@ -6680,7 +6680,7 @@
            <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
@@ -6770,7 +6770,7 @@
            <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
@@ -6866,7 +6866,7 @@
            <componentProperty name="messageFactory" type="object" javaType="quickfix.MessageFactory" kind="property" deprecated="false" description=""/>
            <componentProperty name="logFactory" type="object" javaType="quickfix.LogFactory" kind="property" deprecated="false" description=""/>
            <componentProperty name="messageStoreFactory" type="object" javaType="quickfix.MessageStoreFactory" kind="property" deprecated="false" description=""/>
-           <componentProperty name="configurations" type="object" javaType="java.util.Map<java.lang.String,org.apache.camel.component.quickfixj.QuickfixjConfiguration>" kind="property" deprecated="false" description=""/>
+           <componentProperty name="configurations" type="object" javaType="java.util.Map&lt;java.lang.String,org.apache.camel.component.quickfixj.QuickfixjConfiguration&gt;" kind="property" deprecated="false" description=""/>
            <componentProperty name="forcedShutdown" type="boolean" javaType="boolean" kind="property" deprecated="true" description=""/>
        </componentProperties>
        <uriParameters>
@@ -6923,7 +6923,7 @@
            </dependency>
        </dependencies>
        <componentProperties>
-           <componentProperty name="extensions" type="array" javaType="java.util.List<org.cometd.bayeux.server.BayeuxServer.Extension>" kind="property" deprecated="false" description=""/>
+           <componentProperty name="extensions" type="array" javaType="java.util.List&lt;org.cometd.bayeux.server.BayeuxServer.Extension&gt;" kind="property" deprecated="false" description=""/>
            <componentProperty name="sslKeystore" type="string" javaType="java.lang.String" kind="property" deprecated="false" description=""/>
            <componentProperty name="sslContextParameters" type="object" javaType="org.apache.camel.util.jsse.SSLContextParameters" kind="property" deprecated="false" description=""/>
            <componentProperty name="sslPassword" type="string" javaType="java.lang.String" kind="property" deprecated="false" description=""/>
@@ -6976,7 +6976,7 @@
        <uriParameters>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
-           <uriParameter name="filters" type="array" javaType="java.util.List<org.apache.hadoop.hbase.filter.Filter>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="filters" type="array" javaType="java.util.List&lt;org.apache.hadoop.hbase.filter.Filter&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="removeHandler" type="object" javaType="org.apache.camel.component.hbase.HBaseRemoveHandler" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="remove" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
            <uriParameter name="mappingStrategyName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -7179,7 +7179,7 @@
            <uriParameter name="transferExchange" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="textlineDelimiter" type="string" javaType="org.apache.camel.component.mina2.Mina2TextLineDelimiter" kind="parameter" choice="DEFAULT,AUTO,UNIX,WINDOWS,MAC" deprecated="false" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
-           <uriParameter name="filters" type="array" javaType="java.util.List<org.apache.mina.core.filterchain.IoFilter>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="filters" type="array" javaType="java.util.List&lt;org.apache.mina.core.filterchain.IoFilter&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="orderedThreadPoolExecutor" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
            <uriParameter name="encoding" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sync" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description=""/>
@@ -7227,14 +7227,14 @@
            <uriParameter name="greedy" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description="If greedy is enabled then the ScheduledPollConsumer will run immediately again if the previous run polled 1 or more messages."/>
            <uriParameter name="maxMessagesPerPoll" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description="Tlo define a maximum messages to gather per poll. By default no maximum is set. Can be used to set a limit of e.g. 1000 to avoid when starting up the server that there are thousands of files. Set a value of 0 or negative to disabled it. Notice: If this option is in use then the File and FTP components will limit before any sorting. For example if you have 100000 files and use maxMessagesPerPoll=500 then only the first 500 files will be picked up and then sorted. You can use the eagerMaxMessagesPerPoll option and set this to false to allow to scan all files first and then sort afterwards."/>
            <uriParameter name="exclude" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" description="Is used to exclude files if filename matches the regex pattern."/>
-           <uriParameter name="sortBy" type="object" javaType="java.util.Comparator<org.apache.camel.Exchange>" kind="parameter" deprecated="false" label="consumer" description="Built-in sort by using the File Language. Supports nested sorts so you can have a sort by file name and as a 2nd group sort by modified date."/>
+           <uriParameter name="sortBy" type="object" javaType="java.util.Comparator&lt;org.apache.camel.Exchange&gt;" kind="parameter" deprecated="false" label="consumer" description="Built-in sort by using the File Language. Supports nested sorts so you can have a sort by file name and as a 2nd group sort by modified date."/>
            <uriParameter name="scheduledExecutorService" type="object" javaType="java.util.concurrent.ScheduledExecutorService" kind="parameter" deprecated="false" label="consumer" description="Allows for configuring a custom/shared thread pool to use for the consumer. By default each consumer has its own single threaded thread pool. This option allows you to share a thread pool among multiple consumers."/>
            <uriParameter name="directoryName" type="object" javaType="java.io.File" kind="path" deprecated="false" required="true" description="The starting directory"/>
-           <uriParameter name="processStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileProcessStrategy<T>" kind="parameter" deprecated="false" label="consumer" description="A pluggable org.apache.camel.component.file.GenericFileProcessStrategy allowing you to implement your own readLock option or similar. Can also be used when special conditions must be met before a file can be consumed such as a special ready file exists. If this option is set then the readLock option does not apply."/>
+           <uriParameter name="processStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileProcessStrategy&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description="A pluggable org.apache.camel.component.file.GenericFileProcessStrategy allowing you to implement your own readLock option or similar. Can also be used when special conditions must be met before a file can be consumed such as a special ready file exists. If this option is set then the readLock option does not apply."/>
            <uriParameter name="readLock" type="string" javaType="java.lang.String" kind="parameter" choice="none,markerFile,fileLock,rename,changed" deprecated="false" label="consumer" description="Used by consumer to only poll the files if it has exclusive read-lock on the file (i.e. the file is not in-progress or being written). Camel will wait until the file lock is granted. This option provides the build in strategies: none - No read lock is in use markerFile - Camel creates a marker file (fileName.camelLock) and then holds a lock on it. This option is not available for the FTP component changed - Changed is using file length/modification timestamp to detect whether the file is currently being copied or not. Will at least use 1 sec to determine this so this option cannot consume files as fast as the others but can be more reliable as the JDK IO API cannot always determine whether a file is currently being used by another process. The option readLockCheckInterval can be used to set the check frequency. fileLock - is for using java.nio.channels.FileLock. This option is not avail for the FTP component. This approach should be avoided when accessing a remote file system via a mount/share unless that file system supports distributed file locks. rename - rename is for using a try to rename the file as a test if we can get exclusive read-lock."/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description="If the polling consumer did not poll any files you can enable this option to send an empty message (no body) instead."/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description="To configure additional properties when using a custom scheduler or any of the Quartz2 Spring based scheduler."/>
-           <uriParameter name="inProgressRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository<java.lang.String>" kind="parameter" deprecated="false" label="consumer" description="A pluggable in-progress repository org.apache.camel.spi.IdempotentRepository. The in-progress repository is used to account the current in progress files being consumed. By default a memory based repository is used."/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description="To configure additional properties when using a custom scheduler or any of the Quartz2 Spring based scheduler."/>
+           <uriParameter name="inProgressRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository&lt;java.lang.String&gt;" kind="parameter" deprecated="false" label="consumer" description="A pluggable in-progress repository org.apache.camel.spi.IdempotentRepository. The in-progress repository is used to account the current in progress files being consumed. By default a memory based repository is used."/>
            <uriParameter name="readLockLoggingLevel" type="string" javaType="org.apache.camel.LoggingLevel" kind="parameter" choice="DEBUG,ERROR,INFO,TRACE,WARN,OFF" deprecated="false" defaultValue="WARN" label="consumer" description="Logging level used when a read lock could not be acquired. By default a WARN is logged. You can change this level for example to OFF to not have any logging. This option is only applicable for readLock of types: changed fileLock rename."/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description="The number of subsequent idle polls that should happen before the backoffMultipler should kick-in."/>
            <uriParameter name="readLockMinLength" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1" label="consumer" description="This option applied only for readLock=changed. This option allows you to configure a minimum file length. By default Camel expects the file to contain data and thus the default value is 1. You can set this option to zero to allow consuming zero-length files."/>
@@ -7246,9 +7246,9 @@
            <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description="To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured."/>
            <uriParameter name="charset" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description="This option is used to specify the encoding of the file. You can use this on the consumer to specify the encodings of the files which allow Camel to know the charset it should load the file content in case the file content is being accessed. Likewise when writing a file you can use this option to specify which charset to write the file as well."/>
            <uriParameter name="idempotentKey" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description="To use a custom idempotent key. By default the absolute path of the file is used. You can use the File Language for example to use the file name and file size you can do: idempotentKey=$file:name-$file:size"/>
-           <uriParameter name="sorter" type="object" javaType="java.util.Comparator<org.apache.camel.component.file.GenericFile<T>>" kind="parameter" deprecated="false" label="consumer" description="Pluggable sorter as a java.util.Comparator class."/>
+           <uriParameter name="sorter" type="object" javaType="java.util.Comparator&lt;org.apache.camel.component.file.GenericFile&lt;T&gt;&gt;" kind="parameter" deprecated="false" label="consumer" description="Pluggable sorter as a java.util.Comparator class."/>
            <uriParameter name="readLockCheckInterval" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description="Interval in millis for the read-lock if supported by the read lock. This interval is used for sleeping between attempts to acquire the read lock. For example when using the changed read lock you can set a higher interval period to cater for slow writes. The default of 1 sec. may be too fast if the producer is very slow writing the file. Notice: For FTP the default readLockCheckInterval is 5000. The readLockTimeout value must be higher than readLockCheckInterval but a rule of thumb is to have a timeout that is at least 2 or more times higher than the readLockCheckInterval. This is needed to ensure that amble time is allowed for the read lock process to try to grab the lock before the timeout was hit."/>
-           <uriParameter name="exclusiveReadLockStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy<T>" kind="parameter" deprecated="false" label="consumer" description="Pluggable read-lock as a org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy implementation."/>
+           <uriParameter name="exclusiveReadLockStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description="Pluggable read-lock as a org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy implementation."/>
            <uriParameter name="copyAndDeleteOnRenameFail" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description="Whether to fallback and do a copy and delete file in case the file could not be renamed directly. This option is not available for the FTP component."/>
            <uriParameter name="fileExist" type="string" javaType="org.apache.camel.component.file.GenericFileExist" kind="parameter" choice="Override,Append,Fail,Ignore,Move,TryRename" deprecated="false" defaultValue="Override" label="producer" description="What to do if a file already exists with the same name. Override which is the default replaces the existing file. Append - adds content to the existing file. Fail - throws a GenericFileOperationException indicating that there is already an existing file. Ignore - silently ignores the problem and does not override the existing file but assumes everything is okay. Move - option requires to use the moveExisting option to be configured as well. The option eagerDeleteTargetFile can be used to control what to do if an moving the file and there exists already an existing file otherwise causing the move operation to fail. The Move option will move any existing files before writing the target file. TryRename Camel is only applicable if tempFileName option is in use. This allows to try renaming the file from the temporary name to the actual name without doing any exists check.This check may be faster on some file systems and especially FTP servers."/>
            <uriParameter name="localWorkDirectory" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" description="When consuming a local work directory can be used to store the remote file content directly in local files to avoid loading the content into memory. This is beneficial if you consume a very big remote file and thus can conserve memory."/>
@@ -7275,10 +7275,10 @@
            <uriParameter name="move" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description="Expression (such as Simple Language) used to dynamically set the filename when moving it after processing. To move files into a .done subdirectory just enter .done."/>
            <uriParameter name="moveFailed" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description="Sets the move failure expression based on Simple language. For example to move files into a .error subdirectory use: .error. Note: When moving the files to the fail location Camel will handle the error and will not pick up the file again."/>
            <uriParameter name="preMove" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description="Expression (such as File Language) used to dynamically set the filename when moving it before processing. For example to move in-progress files into the order directory set this value to order."/>
-           <uriParameter name="idempotentRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository<java.lang.String>" kind="parameter" deprecated="false" label="consumer" description="A pluggable repository org.apache.camel.spi.IdempotentRepository which by default use MemoryMessageIdRepository if none is specified and idempotent is true."/>
+           <uriParameter name="idempotentRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository&lt;java.lang.String&gt;" kind="parameter" deprecated="false" label="consumer" description="A pluggable repository org.apache.camel.spi.IdempotentRepository which by default use MemoryMessageIdRepository if none is specified and idempotent is true."/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange."/>
            <uriParameter name="maxDepth" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="2147483647" label="consumer" description="The maximum depth to traverse when recursively processing a directory."/>
-           <uriParameter name="filter" type="object" javaType="org.apache.camel.component.file.GenericFileFilter<T>" kind="parameter" deprecated="false" label="consumer" description="Pluggable filter as a org.apache.camel.component.file.GenericFileFilter class. Will skip files if filter returns false in its accept() method."/>
+           <uriParameter name="filter" type="object" javaType="org.apache.camel.component.file.GenericFileFilter&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description="Pluggable filter as a org.apache.camel.component.file.GenericFileFilter class. Will skip files if filter returns false in its accept() method."/>
            <uriParameter name="tempFileName" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="producer" description="The same as tempPrefix option but offering a more fine grained control on the naming of the temporary filename as it uses the File Language."/>
            <uriParameter name="pollStrategy" type="object" javaType="org.apache.camel.spi.PollingConsumerPollStrategy" kind="parameter" deprecated="false" label="consumer" description="A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. In other words the error occurred while the polling was gathering information for instance access to a file network failed so Camel cannot access it to scan for files. The default implementation will log the caused exception at WARN level and ignore it."/>
            <uriParameter name="forceWrites" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="producer" description="Whether to force syncing writes to the file system. You can turn this off if you do not want this level of guarantee for example if writing to logs / audit logs etc; this would yield better performance."/>
@@ -7323,7 +7323,7 @@
            <uriParameter name="period" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="headerName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="delay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="500" label="consumer" description=""/>
@@ -7364,7 +7364,7 @@
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="methodName" type="string" javaType="java.lang.String" kind="path" deprecated="false" description=""/>
            <uriParameter name="clientSecret" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="scopes" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="scopes" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="accessToken" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="inBody" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="applicationName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
@@ -7396,7 +7396,7 @@
            <uriParameter name="method" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="port" type="integer" javaType="int" kind="path" deprecated="false" description=""/>
            <uriParameter name="synchronous" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="false" description="Sets whether synchronous processing should be strictly used or Camel is allowed to use asynchronous processing (if supported)."/>
-           <uriParameter name="remoteInterfaces" type="array" javaType="java.util.List<java.lang.Class<?>>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="remoteInterfaces" type="array" javaType="java.util.List&lt;java.lang.Class&lt;?&gt;&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="name" type="string" javaType="java.lang.String" kind="path" deprecated="false" required="true" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
        </uriParameters>
@@ -7489,7 +7489,7 @@
            <uriParameter name="initialDelay" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
            <uriParameter name="visibilityTimeout" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="scheduler" type="string" javaType="org.apache.camel.spi.ScheduledPollConsumerScheduler" kind="parameter" choice="spring,quartz2" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="attributeNames" type="array" javaType="java.util.Collection<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="attributeNames" type="array" javaType="java.util.Collection&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="useFixedDelay" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" label="consumer" description=""/>
            <uriParameter name="headerFilterStrategy" type="object" javaType="org.apache.camel.spi.HeaderFilterStrategy" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="runLoggingLevel" type="string" javaType="org.apache.camel.LoggingLevel" kind="parameter" choice="DEBUG,ERROR,INFO,TRACE,WARN,OFF" deprecated="false" defaultValue="TRACE" label="consumer" description=""/>
@@ -7501,10 +7501,10 @@
            <uriParameter name="policy" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="timeUnit" type="string" javaType="java.util.concurrent.TimeUnit" kind="parameter" choice="NANOSECONDS,MICROSECONDS,MILLISECONDS,SECONDS,MINUTES,HOURS,DAYS" deprecated="false" defaultValue="MILLISECONDS" label="consumer" description=""/>
            <uriParameter name="delaySeconds" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="messageAttributeNames" type="array" javaType="java.util.Collection<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="messageAttributeNames" type="array" javaType="java.util.Collection&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="secretKey" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="extendMessageVisibility" type="boolean" javaType="java.lang.Boolean" kind="parameter" deprecated="false" defaultValue="false" description=""/>
            <uriParameter name="defaultVisibilityTimeout" type="integer" javaType="java.lang.Integer" kind="parameter" deprecated="false" description=""/>
@@ -7543,16 +7543,16 @@
            </dependency>
        </dependencies>
        <componentProperties>
-           <componentProperty name="sslSocketConnectors" type="object" javaType="java.util.Map<java.lang.Integer,org.eclipse.jetty.server.Connector>" kind="property" deprecated="false" description=""/>
+           <componentProperty name="sslSocketConnectors" type="object" javaType="java.util.Map&lt;java.lang.Integer,org.eclipse.jetty.server.Connector&gt;" kind="property" deprecated="false" description=""/>
            <componentProperty name="sslContextParameters" type="object" javaType="org.apache.camel.util.jsse.SSLContextParameters" kind="property" deprecated="false" description=""/>
            <componentProperty name="sslKeyPassword" type="string" javaType="java.lang.String" kind="property" deprecated="false" description=""/>
            <componentProperty name="enableJmx" type="boolean" javaType="boolean" kind="property" deprecated="false" description=""/>
-           <componentProperty name="sslSocketConnectorProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="property" deprecated="false" description=""/>
+           <componentProperty name="sslSocketConnectorProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="property" deprecated="false" description=""/>
            <componentProperty name="useContinuation" type="boolean" javaType="boolean" kind="property" deprecated="false" description=""/>
            <componentProperty name="proxyPort" type="integer" javaType="java.lang.Integer" kind="property" deprecated="false" description=""/>
            <componentProperty name="httpClientMinThreads" type="integer" javaType="java.lang.Integer" kind="property" deprecated="false" description=""/>
            <componentProperty name="headerFilterStrategy" type="object" javaType="org.apache.camel.spi.HeaderFilterStrategy" kind="property" deprecated="false" description=""/>
-           <componentProperty name="socketConnectors" type="object" javaType="java.util.Map<java.lang.Integer,org.eclipse.jetty.server.Connector>" kind="property" deprecated="false" description=""/>
+           <componentProperty name="socketConnectors" type="object" javaType="java.util.Map&lt;java.lang.Integer,org.eclipse.jetty.server.Connector&gt;" kind="property" deprecated="false" description=""/>
            <componentProperty name="keystore" type="string" javaType="java.lang.String" kind="property" deprecated="false" description=""/>
            <componentProperty name="threadPool" type="object" javaType="org.eclipse.jetty.util.thread.ThreadPool" kind="property" deprecated="false" description=""/>
            <componentProperty name="httpConnectionManager" type="object" javaType="org.apache.commons.httpclient.HttpConnectionManager" kind="property" deprecated="false" description=""/>
@@ -7571,7 +7571,7 @@
            <componentProperty name="httpClientConfigurer" type="object" javaType="org.apache.camel.component.http.HttpClientConfigurer" kind="property" deprecated="false" description=""/>
            <componentProperty name="sslPassword" type="string" javaType="java.lang.String" kind="property" deprecated="false" description=""/>
            <componentProperty name="errorHandler" type="object" javaType="org.eclipse.jetty.server.handler.ErrorHandler" kind="property" deprecated="false" description=""/>
-           <componentProperty name="socketConnectorProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="property" deprecated="false" description=""/>
+           <componentProperty name="socketConnectorProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="property" deprecated="false" description=""/>
            <componentProperty name="endpointHeaderFilterStrategy" type="object" javaType="org.apache.camel.Endpoint" kind="property" deprecated="false" description=""/>
            <componentProperty name="httpClientMaxThreads" type="integer" javaType="java.lang.Integer" kind="property" deprecated="false" description=""/>
        </componentProperties>
@@ -7642,17 +7642,17 @@
            <uriParameter name="greedy" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="maxMessagesPerPoll" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exclude" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="sortBy" type="object" javaType="java.util.Comparator<org.apache.camel.Exchange>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="sortBy" type="object" javaType="java.util.Comparator&lt;org.apache.camel.Exchange&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="fastExistsCheck" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="scheduledExecutorService" type="object" javaType="java.util.concurrent.ScheduledExecutorService" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="directoryName" type="string" javaType="java.lang.String" kind="path" deprecated="false" description="The starting directory"/>
-           <uriParameter name="processStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileProcessStrategy<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="processStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileProcessStrategy&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="readLock" type="string" javaType="java.lang.String" kind="parameter" choice="none,markerFile,fileLock,rename,changed" deprecated="false" label="consumer" description=""/>
            <uriParameter name="sendEmptyMessageWhenIdle" type="boolean" javaType="boolean" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map<java.lang.String,java.lang.Object>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="schedulerProperties" type="object" javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="soTimeout" type="integer" javaType="int" kind="parameter" deprecated="false" description="Sets the so timeout Used only by FTPClient"/>
            <uriParameter name="separator" type="object" javaType="org.apache.camel.component.file.remote.RemoteFileConfiguration.PathSeparator" kind="parameter" deprecated="false" defaultValue="Auto" description="Sets the path separator to be used. UNIX = Path separator / is used Windows = Path separator \is used Auto = (is default) Use existing path separator in file name"/>
-           <uriParameter name="inProgressRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository<java.lang.String>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="inProgressRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository&lt;java.lang.String&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="readLockLoggingLevel" type="string" javaType="org.apache.camel.LoggingLevel" kind="parameter" choice="DEBUG,ERROR,INFO,TRACE,WARN,OFF" deprecated="false" defaultValue="WARN" label="consumer" description=""/>
            <uriParameter name="backoffIdleThreshold" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="passiveMode" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Sets passive mode connections. Default is active mode connections."/>
@@ -7668,9 +7668,9 @@
            <uriParameter name="backoffMultiplier" type="integer" javaType="int" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="charset" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="idempotentKey" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="sorter" type="object" javaType="java.util.Comparator<org.apache.camel.component.file.GenericFile<T>>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="sorter" type="object" javaType="java.util.Comparator&lt;org.apache.camel.component.file.GenericFile&lt;T&gt;&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="readLockCheckInterval" type="integer" javaType="long" kind="parameter" deprecated="false" defaultValue="1000" label="consumer" description=""/>
-           <uriParameter name="exclusiveReadLockStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="exclusiveReadLockStrategy" type="object" javaType="org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="stepwise" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description="Sets whether we should stepwise change directories while traversing file structures when downloading files or as well when uploading a file to a directory. You can disable this if you for example are in a situation where you cannot change directory on the FTP server due security reasons."/>
            <uriParameter name="maximumReconnectAttempts" type="integer" javaType="int" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="fileExist" type="string" javaType="org.apache.camel.component.file.GenericFileExist" kind="parameter" choice="Override,Append,Fail,Ignore,Move,TryRename" deprecated="false" defaultValue="Override" label="producer" description=""/>
@@ -7699,13 +7699,13 @@
            <uriParameter name="move" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="moveFailed" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="preMove" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="consumer" description=""/>
-           <uriParameter name="idempotentRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository<java.lang.String>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="idempotentRepository" type="object" javaType="org.apache.camel.spi.IdempotentRepository&lt;java.lang.String&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="streamDownload" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Sets the download method to use when not using a local working directory. If set to true the remote files are streamed to the route as they are read. When set to false the remote files are loaded into memory before being sent into the route."/>
            <uriParameter name="reconnectDelay" type="integer" javaType="long" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="useList" type="boolean" javaType="boolean" kind="parameter" deprecated="false" defaultValue="true" description="Whether to allow using LIST command when downloading a file. Default is true. In some use cases you may want to download a specific file and are not allowed to use the LIST command and therefore you can set this option to false."/>
            <uriParameter name="maxDepth" type="integer" javaType="int" kind="parameter" deprecated="false" defaultValue="2147483647" label="consumer" description=""/>
-           <uriParameter name="filter" type="object" javaType="org.apache.camel.component.file.GenericFileFilter<T>" kind="parameter" deprecated="false" label="consumer" description=""/>
+           <uriParameter name="filter" type="object" javaType="org.apache.camel.component.file.GenericFileFilter&lt;T&gt;" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="tempFileName" type="object" javaType="org.apache.camel.Expression" kind="parameter" deprecated="false" label="producer" description=""/>
            <uriParameter name="pollStrategy" type="object" javaType="org.apache.camel.spi.PollingConsumerPollStrategy" kind="parameter" deprecated="false" label="consumer" description=""/>
            <uriParameter name="ignoreFileNotFoundOrPermissionError" type="boolean" javaType="boolean" kind="parameter" deprecated="false" description="Whether to ignore when trying to download a file which does not exist or due to permission error. By default when a file does not exists or insufficient permission then an exception is thrown. Setting this option to true allows to ignore that instead."/>
@@ -7743,7 +7743,7 @@
            <uriParameter name="exchangePattern" type="string" javaType="org.apache.camel.ExchangePattern" kind="parameter" choice="InOnly,RobustInOnly,InOut,InOptionalOut,OutOnly,RobustOutOnly,OutIn,OutOptionalIn" deprecated="false" defaultValue="InOnly" description="Sets the default exchange pattern when creating an exchange"/>
            <uriParameter name="methodName" type="string" javaType="java.lang.String" kind="path" deprecated="false" description=""/>
            <uriParameter name="clientSecret" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
-           <uriParameter name="scopes" type="array" javaType="java.util.List<java.lang.String>" kind="parameter" deprecated="false" description=""/>
+           <uriParameter name="scopes" type="array" javaType="java.util.List&lt;java.lang.String&gt;" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="accessToken" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="inBody" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>
            <uriParameter name="applicationName" type="string" javaType="java.lang.String" kind="parameter" deprecated="false" description=""/>

@@ -22,22 +22,23 @@ import org.fusesource.ide.camel.model.Activator;
 /**
  * @author lhein
  */
-public class ConnectorModelFactory {
+public class ComponentModelFactory {
 
-	private static HashMap<String, ConnectorModel> supportedCamelModels;
+	private static HashMap<String, ComponentModel> supportedCamelModels;
 	
 	/**
 	 * initializes all available models for the connectors group of the camel editor palette
 	 */
 	public static void initializeModels() {
-		supportedCamelModels = new HashMap<String, ConnectorModel>();
+		supportedCamelModels = new HashMap<String, ComponentModel>();
 		Enumeration<URL> models = Activator.getDefault().getBundle().findEntries("components", "components-*.xml", false);
 		while (models.hasMoreElements()) {
 			URL model = models.nextElement();
 			String fileName = model.getFile();
 			String version = fileName.substring(fileName.indexOf("-")+1, fileName.indexOf(".xml"));
 			try {
-				supportedCamelModels.put(version, ConnectorModel.getConnectorFactoryInstance(model.openStream(), version));
+				ComponentModel m = ComponentModel.getComponentFactoryInstance(model.openStream(), version);
+				supportedCamelModels.put(version, m);				
 			} catch (IOException ex) {
 				Activator.getLogger().error(ex);
 				continue;
@@ -63,7 +64,7 @@ public class ConnectorModelFactory {
 	 * @param camelVersion
 	 * @return
 	 */
-	public static ConnectorModel getModelForVersion(String camelVersion) {
+	public static ComponentModel getModelForVersion(String camelVersion) {
 		return supportedCamelModels.get(camelVersion);
 	}
 }

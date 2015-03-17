@@ -11,16 +11,36 @@
 
 package org.fusesource.ide.camel.editor.features.create.ext;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateFeature;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.camel.editor.Activator;
+import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 
 
 /**
@@ -162,4 +182,79 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 		}
 		return node;
 	}
+	
+    /**
+     * checks if we need to add a maven dependency for the chosen component
+     * and inserts it into the pom.xml if needed
+     */
+    public void updateMavenDependencies(List<ComponentDependency> compDeps) throws CoreException {
+        RiderDesignEditor editor = Activator.getDiagramEditor();
+        if (editor == null) {
+            Activator.getLogger().error("Unable to add component dependencies because Editor instance can't be determined.");
+            return;
+        }
+        
+        IProject project = editor.getCamelContextFile().getProject();
+        if (project == null) {
+            Activator.getLogger().error("Unable to add component dependencies because selected project can't be determined.");
+            return;
+        }
+        
+        IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml"));
+        String pomPath = pomPathValue.toOSString();
+        final File pomFile = new File(pomPath);
+        final Model model = MavenPlugin.getMaven().readModel(pomFile);
+
+        // then check if component dependency is already a dep
+        ArrayList<ComponentDependency> missingDeps = new ArrayList<ComponentDependency>();
+        List<Dependency> deps = model.getDependencies();
+        for (ComponentDependency conDep : compDeps) {
+            boolean found = false;
+            for (Dependency pomDep : deps) {
+                if (pomDep.getGroupId().equalsIgnoreCase(conDep.getGroupId()) &&
+                    pomDep.getArtifactId().equalsIgnoreCase(conDep.getArtifactId())) {
+                    // check for correct version
+                    if (pomDep.getVersion().equalsIgnoreCase(conDep.getVersion()) == false) {
+                        // not the correct version - change it to fit
+                        pomDep.setVersion(conDep.getVersion());
+                    }
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                missingDeps.add(conDep);
+            }
+        }
+
+        for (ComponentDependency missDep : missingDeps) {
+            Dependency dep = new Dependency();
+            dep.setGroupId(missDep.getGroupId());
+            dep.setArtifactId(missDep.getArtifactId());
+            dep.setVersion(missDep.getVersion());
+            model.addDependency(dep);
+        }
+        
+        if (missingDeps.size()>0) {
+            OutputStream os = null;
+            try {
+                os = new BufferedOutputStream(new FileOutputStream(pomFile));
+                MavenPlugin.getMaven().writeModel(model, os);
+                IFile pomIFile = project.getProject().getFile("pom.xml");
+                if (pomIFile != null){
+                    pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+                }
+            } catch (Exception ex) {
+                Activator.getLogger().error(ex);
+            } finally {
+                try {
+                    if (os != null) {
+                        os.close();
+                    }
+                } catch (IOException e) {
+                    Activator.getLogger().error(e);
+                }
+            }
+        }
+    }
 }

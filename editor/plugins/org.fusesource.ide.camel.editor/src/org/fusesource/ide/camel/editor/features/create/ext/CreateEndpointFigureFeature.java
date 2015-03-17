@@ -11,17 +11,33 @@
 
 package org.fusesource.ide.camel.editor.features.create.ext;
 
+import java.util.List;
+
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.ICreateContext;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 
 
 public class CreateEndpointFigureFeature extends CreateFigureFeature<Endpoint> {
 	private final Endpoint endpoint;
+	private List<ComponentDependency> deps;
 
-	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint) {
+	/**
+	 * 
+	 * @param fp
+	 * @param name
+	 * @param description
+	 * @param endpoint
+	 * @param deps	optional dependencies...if not applicable hand over null or empty list
+	 */
+	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint, List<ComponentDependency> deps) {
 		super(fp, name, description, Endpoint.class);
 		this.endpoint = endpoint;
+		this.deps = deps;
 		setExemplar(endpoint);
 	}
 
@@ -30,5 +46,19 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature<Endpoint> {
 		return new Endpoint(endpoint);
 	}
 
-
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#create(org.eclipse.graphiti.features.context.ICreateContext)
+	 */
+	@Override
+	public Object[] create(ICreateContext context) {
+		if (this.deps != null && this.deps.isEmpty() == false) {
+			// add maven dependency to pom.xml if needed
+	        try {
+	            updateMavenDependencies(this.deps);
+	        } catch (CoreException ex) {
+	            Activator.getLogger().error("Unable to add the component dependency to the project maven configuration file.", ex);
+	        }
+		}
+		return super.create(context);
+	}
 }

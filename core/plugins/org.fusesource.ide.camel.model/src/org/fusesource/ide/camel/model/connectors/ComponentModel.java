@@ -26,9 +26,9 @@ import org.xml.sax.InputSource;
  * @author lhein
  */
 @XmlRootElement(name="components")
-public class ConnectorModel {
+public class ComponentModel {
 	
-	private ArrayList<Connector> supportedConnectors;
+	private ArrayList<Component> supportedComponents;
 	private String camelVersion;
 	
 	/**
@@ -46,46 +46,29 @@ public class ConnectorModel {
 	}
 	
 	/**
-	 * @return the supportedConnectors
+	 * @return the supportedComponents
 	 */
 	@XmlElement(name = "component")
-	public ArrayList<Connector> getSupportedConnectors() {
-		return this.supportedConnectors;
+	public ArrayList<Component> getSupportedComponents() {
+		return this.supportedComponents;
 	}
 	
 	/**
-	 * @param supportedConnectors the supportedConnectors to set
+	 * @param supportedComponents the supportedComponents to set
 	 */
-	public void setSupportedConnectors(ArrayList<Connector> supportedConnectors) {
-		this.supportedConnectors = supportedConnectors;
+	public void setSupportedComponents(ArrayList<Component> supportedComponents) {
+		this.supportedComponents = supportedComponents;
 	}
 		
 	/**
-	 * returns the connector for a given component id
-	 * 
-	 * @param componentId
-	 * @return
-	 */
-	public Connector getConnectorForComponent(String componentId) {
-	    String id = componentId;
-	    if (componentId.toLowerCase().startsWith("camel-")) {
-	        id = componentId.substring(componentId.indexOf('-')+1);
-	    }
-	    for (Connector c : supportedConnectors) {
-	        if (c.getId().equalsIgnoreCase(id)) return c;
-	    }
-	    return null;
-	}
-	
-	/**
 	 * looks up the connector which supports the given protocol prefix
 	 * 
-	 * @param protocol
+	 * @param scheme
 	 * @return
 	 */
-	public Connector getConnectorForProtocol(String protocol) {
-	    for (Connector c : supportedConnectors) {
-            if (c.supportsProtocol(protocol)) return c;
+	public Component getComponentForScheme(String scheme) {
+	    for (Component c : supportedComponents) {
+            if (c.supportsScheme(scheme)) return c;
         }
         return null;
 	}
@@ -96,12 +79,12 @@ public class ConnectorModel {
 	 * @param stream	the xml stream
 	 * @return	the message object or null on errors
 	 */
-	public static ConnectorModel getConnectorFactoryInstance(InputStream stream, String camelVersion) {
+	public static ComponentModel getComponentFactoryInstance(InputStream stream, String camelVersion) {
 		try {
 			// create JAXB context and instantiate marshaller
-		    JAXBContext context = JAXBContext.newInstance(ConnectorModel.class, Connector.class, ConnectorDependency.class, ConnectorProtocol.class);
+		    JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, ComponentDependency.class, ComponentScheme.class, ComponentProperty.class, UriParameter.class);
 		    Unmarshaller um = context.createUnmarshaller();
-		    ConnectorModel model = (ConnectorModel) um.unmarshal(new InputSource(stream));
+		    ComponentModel model = (ComponentModel) um.unmarshal(new InputSource(stream));
 		    model.setCamelVersion(camelVersion);
 		    return model;
 		} catch (JAXBException ex) {

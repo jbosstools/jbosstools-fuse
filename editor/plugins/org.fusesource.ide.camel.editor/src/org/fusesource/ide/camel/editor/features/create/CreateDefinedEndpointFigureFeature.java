@@ -22,7 +22,7 @@ public class CreateDefinedEndpointFigureFeature extends CreateEndpointFigureFeat
 	private final DefinedEndpoint endpoint;
 
 	public CreateDefinedEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint) {
-		super(fp, name, description, endpoint);
+		super(fp, name, description, endpoint, null);
 		this.endpoint = new DefinedEndpoint(endpoint);
 		setExemplar(this.endpoint);
 	}

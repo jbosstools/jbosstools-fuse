@@ -213,7 +213,6 @@ public class JMSBindingSection extends AbstractPropertySection {
         		newUri = String.format("%s:%s", parts[0], newDestination);
         	}
         }
-        System.err.println("EP URI: " + newUri);
         selectedEP.setUri(newUri);
     }
 

@@ -65,9 +65,9 @@ import org.fusesource.ide.camel.editor.validation.ValidationFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationResult;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Flow;
-import org.fusesource.ide.camel.model.connectors.Connector;
-import org.fusesource.ide.camel.model.connectors.ConnectorModel;
-import org.fusesource.ide.camel.model.connectors.ConnectorModelFactory;
+import org.fusesource.ide.camel.model.connectors.Component;
+import org.fusesource.ide.camel.model.connectors.ComponentModel;
+import org.fusesource.ide.camel.model.connectors.ComponentModelFactory;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
@@ -86,19 +86,24 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
     static {
         CONNECTORS_WHITELIST = new ArrayList<String>();
         
-        CONNECTORS_WHITELIST.add("file");
-        CONNECTORS_WHITELIST.add("jms");
+        CONNECTORS_WHITELIST.add("activemq");
         CONNECTORS_WHITELIST.add("atom");
+        CONNECTORS_WHITELIST.add("cxf");
+        CONNECTORS_WHITELIST.add("cxfrs");
+        CONNECTORS_WHITELIST.add("cxfbean");
+        CONNECTORS_WHITELIST.add("direct");
+        CONNECTORS_WHITELIST.add("direct-vm");
+        CONNECTORS_WHITELIST.add("ejb");
+        CONNECTORS_WHITELIST.add("file");
         CONNECTORS_WHITELIST.add("ftp");
         CONNECTORS_WHITELIST.add("ftps");
         CONNECTORS_WHITELIST.add("sftp");
         CONNECTORS_WHITELIST.add("imap");
         CONNECTORS_WHITELIST.add("imaps");
-        CONNECTORS_WHITELIST.add("nntp");
-        CONNECTORS_WHITELIST.add("pop3");
-        CONNECTORS_WHITELIST.add("pop3s");
-        CONNECTORS_WHITELIST.add("smtp");
-        CONNECTORS_WHITELIST.add("smtps");
+        CONNECTORS_WHITELIST.add("infinispan");
+        CONNECTORS_WHITELIST.add("jgroups");
+        CONNECTORS_WHITELIST.add("jms");
+        CONNECTORS_WHITELIST.add("language");
         CONNECTORS_WHITELIST.add("mina2");
         CONNECTORS_WHITELIST.add("mqtt");
         CONNECTORS_WHITELIST.add("mvel");
@@ -106,22 +111,22 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         CONNECTORS_WHITELIST.add("netty-http");
         CONNECTORS_WHITELIST.add("netty4");
         CONNECTORS_WHITELIST.add("netty4-http");
-        CONNECTORS_WHITELIST.add("cxf");
-        CONNECTORS_WHITELIST.add("cxfrs");
-        CONNECTORS_WHITELIST.add("cxfbean");
-        CONNECTORS_WHITELIST.add("activemq");
-        CONNECTORS_WHITELIST.add("ejb");
-        CONNECTORS_WHITELIST.add("infinispan");
-        CONNECTORS_WHITELIST.add("jgroups");
+        CONNECTORS_WHITELIST.add("nntp");
+        CONNECTORS_WHITELIST.add("pop3");
+        CONNECTORS_WHITELIST.add("pop3s");
         CONNECTORS_WHITELIST.add("quartz");
         CONNECTORS_WHITELIST.add("quartz2");
         CONNECTORS_WHITELIST.add("restlet");
         CONNECTORS_WHITELIST.add("rss");
         CONNECTORS_WHITELIST.add("sap-netweaver");
-        CONNECTORS_WHITELIST.add("xquery");
+        CONNECTORS_WHITELIST.add("seda");
         CONNECTORS_WHITELIST.add("servlet");
-        CONNECTORS_WHITELIST.add("language");
+        CONNECTORS_WHITELIST.add("smtp");
+        CONNECTORS_WHITELIST.add("smtps");
         CONNECTORS_WHITELIST.add("sql");
+        CONNECTORS_WHITELIST.add("vm");
+        CONNECTORS_WHITELIST.add("xquery");
+        CONNECTORS_WHITELIST.add("xslt");
         
         //CONNECTORS_WHITELIST.add("");
     }
@@ -469,11 +474,11 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
     public ArrayList<IToolEntry> getConnectorsToolEntries() {
         ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
         
-        // inject palette entries generated out of the connector model file
-        ConnectorModel connectorModel = ConnectorModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion());
-        for (Connector connector : connectorModel.getSupportedConnectors()) {
-            if (shouldBeIgnored(connector.getId())) continue;
-            ICreateFeature cf = new CreateConnectorFigureFeature(getFeatureProvider(), connector);
+        // inject palette entries generated out of the component model file
+        ComponentModel componentModel = ComponentModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion());
+        for (Component component : componentModel.getSupportedComponents()) {
+            if (shouldBeIgnored(component.getTitle())) continue;
+            ICreateFeature cf = new CreateConnectorFigureFeature(getFeatureProvider(), component);
             IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), cf.getCreateImageId(), cf.getCreateLargeImageId(), cf);
             entries.add(te);
         }
@@ -699,7 +704,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
     }
     
     /**
-     * checks whether a connector should be ignored or not and therefore not put
+     * checks whether a component should be ignored or not and therefore not put
      * onto the palette of the editor
      * 
      * @param connectorId

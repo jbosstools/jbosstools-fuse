@@ -155,24 +155,24 @@ public class Downloader {
     }
 
     public void start() throws Exception {
-        indexer = new MavenIndexerFacade();
-        String[] repositories = { "http://repository.jboss.org/nexus/content/groups/ea/", "http://repo1.maven.org/maven2" };
-        indexer.setRepositories(repositories);
-        indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
-        indexer.start();
-
-        List<Repository> repos = Aether.defaultRepositories();
-        repos.add(new Repository("ea.repository.jboss.org", "http://repository.jboss.org/nexus/content/groups/ea"));
-        aether = new Aether(Aether.USER_REPOSITORY, repos);
+//        indexer = new MavenIndexerFacade();
+//        String[] repositories = { "http://repository.jboss.org/nexus/content/groups/ea/", "http://repo1.maven.org/maven2" };
+//        indexer.setRepositories(repositories);
+//        indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
+//        indexer.start();
+//
+//        List<Repository> repos = Aether.defaultRepositories();
+//        repos.add(new Repository("ea.repository.jboss.org", "http://repository.jboss.org/nexus/content/groups/ea"));
+//        aether = new Aether(Aether.USER_REPOSITORY, repos);
     }
 
     public void stop() throws Exception {
-        indexer.destroy();
+//        indexer.destroy();
     }
 
     public void run() throws Exception {
-        downloadArchetypes();
-        downloadXsds();
+//        downloadArchetypes();
+//        downloadXsds();
         downloadCamelComponentData();
     }
 
@@ -519,6 +519,8 @@ public class Downloader {
 			 */
 			public void setJavaType(String javaType) {
 				this.javaType = javaType;
+				this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
 			}
 			
 			/**
@@ -642,6 +644,8 @@ public class Downloader {
 			 */
 			public void setJavaType(String javaType) {
 				this.javaType = javaType;
+				this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
 			}
 			
 			/**
@@ -842,6 +846,8 @@ public class Downloader {
     		 */
     		public void setJavaType(String javaType) {
     			this.javaType = javaType;
+    			this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
     		}
     		
     		public String getChoiceString() {

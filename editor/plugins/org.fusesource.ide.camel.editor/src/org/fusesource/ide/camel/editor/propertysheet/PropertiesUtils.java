@@ -22,11 +22,10 @@ import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.corext.util.JavaConventionsUtil;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponent;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponentUriParameter;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponentUriParameterKind;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponentUtils;
 import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.connectors.Component;
+import org.fusesource.ide.camel.model.connectors.UriParameter;
+import org.fusesource.ide.camel.model.connectors.UriParameterKind;
 
 /**
  * @author lhein
@@ -37,17 +36,27 @@ public class PropertiesUtils {
      * @param kind
      * @return
      */
-    public static List<CamelComponentUriParameter> getPropertiesFor(Endpoint selectedEP, CamelComponentUriParameterKind kind) {
-        ArrayList<CamelComponentUriParameter> result = new ArrayList<CamelComponentUriParameter>();
+    public static List<UriParameter> getPropertiesFor(Endpoint selectedEP, UriParameterKind kind) {
+        ArrayList<UriParameter> result = new ArrayList<UriParameter>();
 
         if (selectedEP != null && selectedEP.getUri() != null) {
             int protocolSeparatorIdx = selectedEP.getUri().indexOf(":");
             if (protocolSeparatorIdx != -1) {
-                CamelComponent componentModel = CamelComponentUtils.getComponentModel(selectedEP.getUri().substring(0, protocolSeparatorIdx));
+                Component componentModel = CamelComponentUtils.getComponentModel(selectedEP.getUri().substring(0, protocolSeparatorIdx));
                 if (componentModel != null) {
-                    for (CamelComponentUriParameter p : componentModel.getUriParameters()) {
-                        if (p.getKind().equals(kind)) {
-                            result.add(p);
+                    for (UriParameter p : componentModel.getUriParameters()) {
+                        if (kind == UriParameterKind.CONSUMER) {
+                        	if (p.getLabel() != null && p.getLabel().equalsIgnoreCase("consumer")) {
+                        		result.add(p);
+                        	}
+                        } else if (kind == UriParameterKind.PRODUCER) {
+                        	if (p.getLabel() != null && p.getLabel().equalsIgnoreCase("producer")) {
+                        		result.add(p);
+                        	}
+                        } else if (kind == UriParameterKind.BOTH) {
+                        	if (p.getLabel() == null) {
+                        		result.add(p);
+                        	}
                         }
                     }
                 }
@@ -62,7 +71,7 @@ public class PropertiesUtils {
      * @param p
      * @return
      */
-    public static String getPropertyFromUri(Endpoint selectedEP, CamelComponentUriParameter p) {
+    public static String getPropertyFromUri(Endpoint selectedEP, UriParameter p) {
         int idx = selectedEP.getUri().indexOf(p.getName() + "=");
         if (idx != -1) {
             return selectedEP.getUri().substring(idx + (p.getName() + "=").length(),
@@ -76,7 +85,7 @@ public class PropertiesUtils {
      * @param p
      * @return
      */
-    public static Object getTypedPropertyFromUri(Endpoint selectedEP, CamelComponentUriParameter p) {
+    public static Object getTypedPropertyFromUri(Endpoint selectedEP, UriParameter p) {
         String val = getPropertyFromUri(selectedEP, p);
 
         if (CamelComponentUtils.isBooleanProperty(p)) {
@@ -100,7 +109,7 @@ public class PropertiesUtils {
      * @param p
      * @param value
      */
-    public static void updateURIParams(Endpoint selectedEP, CamelComponentUriParameter p, Object value) {
+    public static void updateURIParams(Endpoint selectedEP, UriParameter p, Object value) {
 //        if (p.getName().equals(EndpointPropertyModel.PROTOCOL_PROPERTY) && CamelComponentUtils.isChoiceProperty(p)) {
 //            String oldProtocol = getUsedProtocol();
 //            if (oldProtocol.equalsIgnoreCase(value.toString()) == false) {

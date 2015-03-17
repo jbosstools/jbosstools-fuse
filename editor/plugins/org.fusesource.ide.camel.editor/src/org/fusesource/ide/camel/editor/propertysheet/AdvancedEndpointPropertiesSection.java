@@ -50,6 +50,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -65,12 +66,11 @@ import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.AbstractNodes;
 import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponentUriParameter;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponentUriParameterKind;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponentUtils;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.connectors.UriParameter;
+import org.fusesource.ide.camel.model.connectors.UriParameterKind;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.util.Strings;
 
@@ -145,23 +145,34 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
      * @param props
      * @param page
      */
-    protected void generateTabContents(List<CamelComponentUriParameter> props, final Composite page) {
+    protected void generateTabContents(List<UriParameter> props, final Composite page) {
         // display all the properties in alphabetic order - sorting needed
-        Collections.sort(props, new Comparator<CamelComponentUriParameter>() {
+        Collections.sort(props, new Comparator<UriParameter>() {
             /* (non-Javadoc)
              * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
              */
             @Override
-            public int compare(CamelComponentUriParameter o1, CamelComponentUriParameter o2) {
+            public int compare(UriParameter o1, UriParameter o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         }); 
         
-        for (CamelComponentUriParameter p : props) {
-            final CamelComponentUriParameter prop = p;
+        for (UriParameter p : props) {
+            final UriParameter prop = p;
             
-            Label l = toolkit.createLabel(page, Strings.humanize(p.getName()));            
+            String s = Strings.humanize(p.getName());
+            if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
+            
+            Label l = toolkit.createLabel(page, s);            
             l.setLayoutData(new GridData());
+            if (p.getDescription() != null) {
+            	l.setToolTipText(p.getDescription());
+            }
+            if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+            	l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+            }
+            
+            Control c = null;
             
             if (CamelComponentUtils.isBooleanProperty(prop)) {
                 Button checkBox = toolkit.createButton(page, "", SWT.CHECK | SWT.BORDER);
@@ -177,6 +188,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     }
                 });
                 checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = checkBox;
                 
             } else if (CamelComponentUtils.isTextProperty(prop)) {
                 Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
@@ -188,6 +200,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = txtField;
                 
             } else if (CamelComponentUtils.isNumberProperty(prop)) {
                 Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
@@ -208,6 +221,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = txtField;
                 
             } else if (CamelComponentUtils.isChoiceProperty(prop)) {
                 CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
@@ -231,6 +245,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     }
                 });
                 choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = choiceCombo;
                 
             } else if (CamelComponentUtils.isFileProperty(prop)) {
                 final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
@@ -258,6 +273,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     }
                 });
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+                c = txtField;
                 
             } else if (CamelComponentUtils.isFolderProperty(prop)) {
                 final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
@@ -285,7 +301,8 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     }
                 });
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-
+                c = txtField;
+                
             } else if (CamelComponentUtils.isExpressionProperty(prop)) {
                 Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
@@ -296,6 +313,22 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = txtField;
+                
+            } else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
+            	
+            	// TODO: check how to handle lists and maps - for now we treat them as string field only
+            	
+            	Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+                txtField.addModifyListener(new ModifyListener() {
+                    @Override
+                    public void modifyText(ModifyEvent e) {
+                        Text txt = (Text)e.getSource();
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText());
+                    }
+                });
+                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = txtField;
                 
             } else {
                 // must be some class as all other options were missed
@@ -312,13 +345,13 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 URLClassLoader child = CamelComponentUtils.getProjectClassLoader();
                 Class classToLoad;
                 try {
-                    if (prop.getType().indexOf("<")!=-1) {
-                        classToLoad = child.loadClass(prop.getType().substring(0,  prop.getType().indexOf("<")));
+                    if (prop.getJavaType().indexOf("<")!=-1) {
+                        classToLoad = child.loadClass(prop.getJavaType().substring(0,  prop.getJavaType().indexOf("<")));
                     } else {
-                        classToLoad = child.loadClass(prop.getType());   
+                        classToLoad = child.loadClass(prop.getJavaType());   
                     }
                 } catch (ClassNotFoundException ex) {
-                    Activator.getLogger().warning("Cannot find class " + prop.getType() + " on classpath.", ex);
+                    Activator.getLogger().warning("Cannot find class " + prop.getJavaType() + " on classpath.", ex);
                     classToLoad = null;
                 }
                 
@@ -401,14 +434,17 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 });
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 btn_browse.setEnabled(fClass != null);
+                c = txtField;
             }
+            
+            if (p.getDescription() != null) c.setToolTipText(p.getDescription());
         }
     }
     
 
         
     private void createCommonsTab(CTabFolder folder) {
-        List<CamelComponentUriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, CamelComponentUriParameterKind.BOTH);
+        List<UriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.BOTH);
 
         if (props.isEmpty()) return;
         
@@ -424,7 +460,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     }
 
     private void createConsumerTab(CTabFolder folder) {
-        List<CamelComponentUriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, CamelComponentUriParameterKind.CONSUMER);
+        List<UriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.CONSUMER);
         
         if (props.isEmpty()) return;
         
@@ -440,7 +476,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     }
 
     private void createProducerTab(CTabFolder folder) {
-        List<CamelComponentUriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, CamelComponentUriParameterKind.PRODUCER);
+        List<UriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.PRODUCER);
         
         if (props.isEmpty()) return;
         

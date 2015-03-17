@@ -10,29 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model.connectors;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
-
 /**
  * @author lhein
  */
-@XmlRootElement(name = "prefix")
-public class ConnectorProtocol {
-	
-	private String prefix;
-	
-	/**
-	 * @return the prefix
-	 */
-	@XmlValue
-	public String getPrefix() {
-		return this.prefix;
-	}
-	
-	/**
-	 * @param prefix the prefix to set
-	 */
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+public enum UriParameterKind {
+    PRODUCER,
+    CONSUMER,
+    BOTH
 }

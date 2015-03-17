@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 Red Hat, Inc.
+ * Copyright (c) 2015 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -8,6 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
+
 package org.fusesource.ide.camel.editor.provider;
 
 import java.util.ArrayList;
@@ -25,8 +26,9 @@ import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 
 /**
  * @author lhein
+ *
  */
-public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
+public class BrokerPaletteEntry implements ICustomPaletteEntry {
 
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getPaletteCategory()
@@ -41,7 +43,7 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
      */
     @Override
     public ICreateFeature newCreateFeature(IFeatureProvider fp) {
-        return new CreateEndpointFigureFeature(fp, "ActiveMQ", "Creates an ActiveMQ endpoint...", new Endpoint("activemq:queue:foo"), getRequiredCapabilities(null));
+        return new CreateEndpointFigureFeature(fp, "AMQ Broker", "Creates an ActiveMQ broker endpoint...", new Endpoint("broker:queue:foo"), getRequiredCapabilities(null));
     }
 
     /* (non-Javadoc)
@@ -57,7 +59,7 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
      */
     @Override
     public String getTypeName() {
-        return "ActiveMQ";
+        return "ActiveMQ Broker";
     }
 
     /* (non-Javadoc)

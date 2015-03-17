@@ -11,11 +11,9 @@
 
 package org.fusesource.ide.camel.editor.features.custom;
 
-import org.eclipse.graphiti.features.IAddFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
-import org.eclipse.graphiti.features.context.impl.AddContext;
 import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
 import org.eclipse.graphiti.features.context.impl.CreateContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
@@ -33,7 +31,7 @@ import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.ConnectorEndpoint;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.connectors.Connector;
+import org.fusesource.ide.camel.model.connectors.Component;
 
 
 /**
@@ -42,7 +40,7 @@ import org.fusesource.ide.camel.model.connectors.Connector;
 public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 
 	private Class<? extends AbstractNode> clazz;
-	private Connector connector;
+	private Component component;
 	private CreateConnectorFigureFeature conFeature;
 
 	public CreateNodeConnectionFeature(IFeatureProvider fp, Class<? extends AbstractNode> clazz) {
@@ -53,7 +51,7 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 		super(fp);
 		this.clazz = clazz;
 		this.conFeature = (octe != null && octe.getCreateFeature() instanceof CreateConnectorFigureFeature) ? (CreateConnectorFigureFeature)octe.getCreateFeature() : null; 
-		this.connector = this.conFeature != null ? this.conFeature.getConnector() : null;
+		this.component = this.conFeature != null ? this.conFeature.getConnector() : null;
 	}
 
 	@Override
@@ -188,8 +186,8 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 
 	protected AbstractNode createNode(ICustomContext context) throws Exception {
 		if (conFeature != null) {
-			conFeature.updateMavenDependencies();
-			return new ConnectorEndpoint(String.format("%s:", connector.getProtocols().get(0).getPrefix()));
+			conFeature.updateMavenDependencies(component.getDependencies());
+			return new ConnectorEndpoint(component != null && component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getSchemes().get(0).getScheme()));
 		} else {
 			return this.clazz.newInstance();
 		}

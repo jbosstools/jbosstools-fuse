@@ -8,13 +8,31 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.propertysheet.model;
+package org.fusesource.ide.camel.model.connectors;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  * @author lhein
  */
-public enum CamelComponentUriParameterKind {
-    PRODUCER,
-    CONSUMER,
-    BOTH
+@XmlRootElement(name = "scheme")
+public class ComponentScheme {
+	
+	private String scheme;
+	
+	/**
+	 * @return the scheme
+	 */
+	@XmlValue
+	public String getScheme() {
+		return this.scheme;
+	}
+	
+	/**
+	 * @param scheme the scheme to set
+	 */
+	public void setScheme(String scheme) {
+		this.scheme = scheme;
+	}
 }

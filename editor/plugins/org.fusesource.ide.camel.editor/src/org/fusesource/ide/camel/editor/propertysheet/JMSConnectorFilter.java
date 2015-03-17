@@ -29,7 +29,9 @@ public class JMSConnectorFilter implements IFilter {
             bo = ((ContainerShapeEditPart)toTest).getFeatureProvider().getBusinessObjectForPictogramElement(((ContainerShapeEditPart)toTest).getPictogramElement());
         }
         if (bo instanceof Endpoint) {
-            return ((Endpoint)bo).getUri().trim().toLowerCase().startsWith("activemq:") || ((Endpoint)bo).getUri().trim().toLowerCase().startsWith("jms:");
+            return   ((Endpoint)bo).getUri().trim().toLowerCase().startsWith("activemq:") || 
+            		 ((Endpoint)bo).getUri().trim().toLowerCase().startsWith("jms:") ||
+            		 ((Endpoint)bo).getUri().trim().toLowerCase().startsWith("broker:");
         }
         return false;
 	}

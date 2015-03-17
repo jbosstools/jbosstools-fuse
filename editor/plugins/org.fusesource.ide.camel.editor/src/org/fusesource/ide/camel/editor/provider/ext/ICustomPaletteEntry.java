@@ -15,7 +15,7 @@ import java.util.List;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.tb.IImageDecorator;
-import org.fusesource.ide.camel.model.connectors.ConnectorDependency;
+import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 
 /**
  * @author lhein
@@ -62,5 +62,5 @@ public interface ICustomPaletteEntry {
     * @param object the object being used.
     * @return a list of maven dependencies that are required to use this object within a project.
     */
-    public List<ConnectorDependency> getRequiredCapabilities(Object object);
+    public List<ComponentDependency> getRequiredCapabilities(Object object);
 }

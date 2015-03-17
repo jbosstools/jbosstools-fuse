@@ -34,11 +34,10 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.AbstractNodes;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponentUriParameter;
-import org.fusesource.ide.camel.editor.propertysheet.model.CamelComponentUriParameterKind;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.connectors.UriParameter;
 import org.fusesource.ide.commons.ui.Selections;
 
 /**
@@ -56,13 +55,17 @@ public class FileBindingSection extends AbstractPropertySection {
     private Button btnPathBrowser;
     
     private Endpoint selectedEP;
-    private CamelComponentUriParameter patternParam = new CamelComponentUriParameter("include", "Expression", null, CamelComponentUriParameterKind.CONSUMER);
+    private UriParameter patternParam;
     
     /**
      * 
      */
     public FileBindingSection() {
-        bindingContext = new DataBindingContext();
+    	patternParam = new UriParameter();
+    	patternParam.setName("include");
+    	patternParam.setType("Expression");
+    	patternParam.setLabel(null);
+    	bindingContext = new DataBindingContext();
     }
     
     /* (non-Javadoc)

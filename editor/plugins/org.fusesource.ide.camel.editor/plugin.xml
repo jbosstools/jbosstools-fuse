@@ -311,5 +311,8 @@
       <PaletteContribution
             class="org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry">
       </PaletteContribution>
+      <PaletteContribution
+            class="org.fusesource.ide.camel.editor.provider.BrokerPaletteEntry">
+      </PaletteContribution>
    </extension>
 </plugin>

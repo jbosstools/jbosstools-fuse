@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lhein
  */
 @XmlRootElement(name = "dependency")
-public class ConnectorDependency {
+public class ComponentDependency {
 	private String groupId;
 	private String artifactId;
 	private String version;
