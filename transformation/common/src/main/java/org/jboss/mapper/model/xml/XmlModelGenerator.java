@@ -49,7 +49,10 @@ public class XmlModelGenerator {
         final SchemaCompiler sc = XJC.createSchemaCompiler();
         final FileInputStream schemaStream = new FileInputStream(schemaFile);
         final InputSource is = new InputSource(schemaStream);
-        is.setSystemId(schemaFile.getAbsolutePath());
+
+        // to work around windows platform issue
+        String id = schemaFile.getAbsolutePath().replace('\\', '/');
+        is.setSystemId(id);
 
         sc.parseSchema(is);
         sc.forcePackageName(packageName);
