@@ -69,21 +69,6 @@ public abstract class CamelConfigBuilder {
             return new CamelBlueprintBuilder(getChildElement(parent, BLUEPRINT_NS, "camelContext"));
         }
     }
-    
-    /**
-     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
-     * endpoints on CamelContextFactoryBean directly.  Use reflection for now
-     * until this issue is resolved upstream.
-     */
-    public static void setEndpoints(Object camelContext, List<? extends AbstractCamelEndpointFactoryBean> endpoints) {
-        try {
-            Field endpointsField = camelContext.getClass().getDeclaredField("endpoints");
-            endpointsField.setAccessible(true);
-            endpointsField.set(camelContext, endpoints);
-        } catch (Exception ex) {
-            throw new RuntimeException("Unable to access endpoints field in CamelContextFactoryBean", ex);
-        }
-    }
 
     /**
      * Returns the root element in the Spring application context which contains
@@ -102,6 +87,35 @@ public abstract class CamelConfigBuilder {
                     "Failed to update DOM with JAXB model for camelContext", ex);
         }
         return camelConfig;
+    }
+    
+    public DataFormatDefinition createDataFormat(TransformType type, String className) throws Exception {
+        DataFormatDefinition dataFormat;
+
+        switch (type) {
+            case JSON:
+                dataFormat = createJsonDataFormat();
+                break;
+            case XML:
+                dataFormat = createJaxbDataFormat(getPackage(className));
+                break;
+            case JAVA:
+                dataFormat = null;
+                break;
+            default:
+                throw new Exception("Unsupported data format type: " + type);
+        }
+
+        return dataFormat;
+    }
+    
+    public CamelEndpoint createEndpoint(String transformId, String dozerConfigPath,
+            String sourceClass, String targetClass, DataFormatDefinition unmarshaller, DataFormatDefinition marshaller) {
+        String unmarshallerId = unmarshaller != null ? unmarshaller.getId() : null;
+        String marshallerId = marshaller != null ? marshaller.getId() : null;
+        String endpointUri = EndpointHelper.createEndpointUri(dozerConfigPath,
+                transformId, sourceClass, targetClass, unmarshallerId, marshallerId);
+        return addEndpoint(transformId, endpointUri);
     }
 
     /**
@@ -149,19 +163,19 @@ public abstract class CamelConfigBuilder {
     }
     
     public CamelEndpoint getEndpoint(String endpointId) {
-        AbstractCamelEndpointFactoryBean endpoint = null;
-        for (AbstractCamelEndpointFactoryBean ep : getEndpoints()) {
+        CamelEndpoint endpoint = null;
+        for (CamelEndpoint ep : getEndpoints()) {
             if (endpointId.equals(ep.getId())) {
                 endpoint = ep;
                 break;
             }
         }
-        return new CamelEndpoint(endpoint);
+        return endpoint;
     }
     
     public List<String> getTransformEndpointIds() {
         List<String> endpointIds = new LinkedList<String>();
-        for (AbstractCamelEndpointFactoryBean ep : getEndpoints()) {
+        for (CamelEndpoint ep : getEndpoints()) {
             if (ep.getUri().startsWith(EndpointHelper.DOZER_SCHEME)) {
                 endpointIds.add(ep.getId());
             }
@@ -169,7 +183,7 @@ public abstract class CamelConfigBuilder {
         return endpointIds;
     }
     
-    protected abstract List<? extends AbstractCamelEndpointFactoryBean> getEndpoints();
+    protected abstract List<? extends CamelEndpoint> getEndpoints();
     
     protected abstract List<DataFormatDefinition> getDataFormats();
 
@@ -177,33 +191,13 @@ public abstract class CamelConfigBuilder {
     // to marshal those changes into the DOM for the Spring application context
     protected abstract void updateCamelContext() throws Exception;
     
-    protected abstract AbstractCamelEndpointFactoryBean addEndpoint(String id, String uri);
+    protected abstract CamelEndpoint addEndpoint(String id, String uri);
     
     protected abstract Class<?> getCamelContextType();
     
     protected String getPackage(String type) {
         int idx = type.lastIndexOf('.');
         return idx > 0 ? type.substring(0, idx) : type;
-    }
-    
-    protected DataFormatDefinition createDataFormat(TransformType type, String className) throws Exception {
-        DataFormatDefinition dataFormat;
-
-        switch (type) {
-            case JSON:
-                dataFormat = createJsonDataFormat();
-                break;
-            case XML:
-                dataFormat = createJaxbDataFormat(getPackage(className));
-                break;
-            case JAVA:
-                dataFormat = null;
-                break;
-            default:
-                throw new Exception("Unsupported data format type: " + type);
-        }
-
-        return dataFormat;
     }
     
     protected DataFormatDefinition createJsonDataFormat() throws Exception {
@@ -256,7 +250,22 @@ public abstract class CamelConfigBuilder {
             }
         }
         return jaxbCtx;
-    }    
+    }
+    
+    /**
+     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
+     * endpoints on CamelContextFactoryBean directly.  Use reflection for now
+     * until this issue is resolved upstream.
+     */
+    protected void setEndpoints(Object camelContext, List<? extends AbstractCamelEndpointFactoryBean> endpoints) {
+        try {
+            Field endpointsField = camelContext.getClass().getDeclaredField("endpoints");
+            endpointsField.setAccessible(true);
+            endpointsField.set(camelContext, endpoints);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to access endpoints field in CamelContextFactoryBean", ex);
+        }
+    }
 
     private static Element loadCamelConfig(File configFile) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

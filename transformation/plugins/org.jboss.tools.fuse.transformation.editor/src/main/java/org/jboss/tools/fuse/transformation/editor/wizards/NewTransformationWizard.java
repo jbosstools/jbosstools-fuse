@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.text.StringCharacterIterator;
 import java.util.Iterator;
 
+import org.apache.camel.model.DataFormatDefinition;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -37,6 +38,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.mapper.MapperConfiguration;
+import org.jboss.mapper.camel.CamelEndpoint;
 import org.jboss.mapper.dozer.DozerMapperConfiguration;
 import org.jboss.mapper.model.json.JsonModelGenerator;
 import org.jboss.mapper.model.xml.XmlModelGenerator;
@@ -61,6 +63,12 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private static final String CAMEL_CONFIG_PATH = Util.RESOURCES_PATH
             + "META-INF/spring/camel-context.xml";
     private static final String OBJECT_FACTORY_NAME = "ObjectFactory";
+    
+    // Whether Camel configuration should be persisted directly by the wizard
+    private boolean saveCamelConfig = true;
+    private DataFormatDefinition sourceFormat;
+    private DataFormatDefinition targetFormat;
+    private CamelEndpoint endpoint;
 
     final Model uiModel = new Model();
 
@@ -70,7 +78,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public NewTransformationWizard() {
         addPage(new FirstPage(uiModel));
     }
-
+    
     private String generateModel(final String filePath,
             final ModelType type) throws Exception {
         // Build class name from file name
@@ -247,18 +255,26 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 // Update Camel config
                 final IPath resourcesPath =
                         uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
-                uiModel.camelConfigBuilder.addTransformation(uiModel.getId(),
-                        file.getFullPath().makeRelativeTo(resourcesPath).toString(),
-                        uiModel.getSourceType().transformType, sourceClassName,
+                
+                sourceFormat = uiModel.camelConfigBuilder.createDataFormat(
+                        uiModel.getSourceType().transformType, sourceClassName);
+                targetFormat = uiModel.camelConfigBuilder.createDataFormat(
                         uiModel.getTargetType().transformType, targetClassName);
-                try (FileOutputStream camelConfigStream =
-                        new FileOutputStream(new File(uiModel.getProject()
-                                .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
-                                .getLocationURI()))) {
-                    uiModel.camelConfigBuilder.saveConfig(camelConfigStream);
-                } catch (final Exception e) {
-                    Activator.error(e);
-                    return false;
+                endpoint = uiModel.camelConfigBuilder.createEndpoint(uiModel.getId(),
+                                                 file.getFullPath().makeRelativeTo(resourcesPath).toString(),
+                                                 sourceClassName, targetClassName,
+                                                 sourceFormat, targetFormat);
+                if (saveCamelConfig) {
+                    try (FileOutputStream camelConfigStream =
+                            new FileOutputStream(new File(uiModel.getProject()
+                                    .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
+                                    .getLocationURI()))) {
+                    
+                        uiModel.camelConfigBuilder.saveConfig(camelConfigStream);
+                    } catch (final Exception e) {
+                        Activator.error(e);
+                        return false;
+                    }
                 }
                 dozerConfigBuilder.addClassMapping(sourceClassName, targetClassName);
             }
@@ -291,6 +307,22 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             return false;
         }
         return true;
+    }
+    
+    public void setSaveCamelConfig(boolean saveCamelConfig) {
+        this.saveCamelConfig = saveCamelConfig;
+    }
+    
+    public DataFormatDefinition getSourceFormat() {
+        return sourceFormat;
+    }
+
+    public DataFormatDefinition getTargetFormat() {
+        return targetFormat;
+    }
+    
+    public CamelEndpoint getEndpoint() {
+        return endpoint;
     }
 
     private String selectModelClass(final JCodeModel model) {

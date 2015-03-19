@@ -11,6 +11,13 @@
  */
 package org.jboss.mapper.camel;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.camel.core.xml.AbstractCamelEndpointFactoryBean;
+import org.apache.camel.spring.CamelEndpointFactoryBean;
+
 /**
  * This class is a dirty hack to deal with two JAXB models (blueprint and
  * spring) underneath our config layer. The idea is to not expose the different
@@ -19,44 +26,51 @@ package org.jboss.mapper.camel;
  */
 public class CamelEndpoint {
 
-    private org.apache.camel.spring.CamelEndpointFactoryBean springEndpoint;
-    private org.apache.camel.blueprint.CamelEndpointFactoryBean blueprintEndpoint;
+    private AbstractCamelEndpointFactoryBean delegate;
 
-    public CamelEndpoint(Object delegate) {
-        if (delegate instanceof org.apache.camel.spring.CamelEndpointFactoryBean) {
-            springEndpoint = (org.apache.camel.spring.CamelEndpointFactoryBean) delegate;
-        } else {
-            blueprintEndpoint =
-                    (org.apache.camel.blueprint.CamelEndpointFactoryBean) delegate;
+    public CamelEndpoint(AbstractCamelEndpointFactoryBean delegate) {
+        this.delegate = delegate;
+    }
+    
+    public static List<CamelEndpoint> fromList(List<? extends AbstractCamelEndpointFactoryBean> endpoints) {
+        List<CamelEndpoint> endpointList = new LinkedList<CamelEndpoint>();
+        for (AbstractCamelEndpointFactoryBean endpoint : endpoints) {
+            endpointList.add(new CamelEndpoint(endpoint));
         }
+        // Prevent direct updates to this list because they won't be reflected in the
+        // the underlying model
+        return Collections.unmodifiableList(endpointList);
     }
 
     public String getUri() {
-        return isSpring() ? springEndpoint.getUri() : blueprintEndpoint.getUri();
+        return delegate.getUri();
     }
 
     public void setUri(String uri) {
-        if (isSpring()) {
-            springEndpoint.setUri(uri);
-        } else {
-            blueprintEndpoint.setUri(uri);
-        }
+        delegate.setUri(uri);
     }
 
     public String getId() {
-        return isSpring() ? springEndpoint.getId() : blueprintEndpoint.getId();
+        return delegate.getId();
     }
 
     public void setId(String id) {
-        if (isSpring()) {
-            springEndpoint.setId(id);
+        delegate.setId(id);
+    }
+
+    public AbstractCamelEndpointFactoryBean getDelegate() {
+        return delegate;
+    }
+    
+    public CamelEndpointFactoryBean asSpringEndpoint() {
+        CamelEndpointFactoryBean endpoint;
+        if (delegate instanceof CamelEndpointFactoryBean) {
+            endpoint = (CamelEndpointFactoryBean)delegate;
         } else {
-            blueprintEndpoint.setId(id);
+            endpoint = new CamelEndpointFactoryBean();
+            endpoint.setId(delegate.getId());
+            endpoint.setUri(delegate.getUri());
         }
+        return endpoint;
     }
-
-    private boolean isSpring() {
-        return springEndpoint != null;
-    }
-
 }

@@ -18,7 +18,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 
-import org.apache.camel.core.xml.AbstractCamelEndpointFactoryBean;
 import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.dataformat.DataFormatsDefinition;
 import org.apache.camel.spring.CamelContextFactoryBean;
@@ -83,23 +82,27 @@ public class CamelSpringBuilder extends CamelConfigBuilder {
     }
 
     @Override
-    public List<CamelEndpointFactoryBean> getEndpoints() {
-        if (camelContext.getEndpoints() == null) {
-            setEndpoints(camelContext, new ArrayList<CamelEndpointFactoryBean>());
-        }
-        return camelContext.getEndpoints();
+    public List<CamelEndpoint> getEndpoints() {
+        return CamelEndpoint.fromList(getSpringEndpoints());
     }
 
     @Override
-    protected AbstractCamelEndpointFactoryBean addEndpoint(String id, String uri) {
+    protected CamelEndpoint addEndpoint(String id, String uri) {
         CamelEndpointFactoryBean endpoint = new CamelEndpointFactoryBean();
         endpoint.setId(id);
         endpoint.setUri(uri);
-        getEndpoints().add(endpoint);
-        return endpoint;
+        getSpringEndpoints().add(endpoint);
+        return new CamelEndpoint(endpoint);
     }
     
     protected Class<?> getCamelContextType() {
         return CamelContextFactoryBean.class;
+    }
+    
+    private List<CamelEndpointFactoryBean> getSpringEndpoints() {
+        if (camelContext.getEndpoints() == null) {
+            setEndpoints(camelContext, new ArrayList<CamelEndpointFactoryBean>());
+        }
+        return camelContext.getEndpoints();
     }
 }

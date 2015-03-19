@@ -21,7 +21,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.camel.blueprint.CamelContextFactoryBean;
 import org.apache.camel.blueprint.CamelEndpointFactoryBean;
-import org.apache.camel.core.xml.AbstractCamelEndpointFactoryBean;
 import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.dataformat.DataFormatsDefinition;
 import org.w3c.dom.Document;
@@ -96,23 +95,27 @@ public class CamelBlueprintBuilder extends CamelConfigBuilder {
     }
 
     @Override
-    public List<CamelEndpointFactoryBean> getEndpoints() {
-        if (camelContext.getEndpoints() == null) {
-            setEndpoints(camelContext, new ArrayList<CamelEndpointFactoryBean>());
-        }
-        return camelContext.getEndpoints();
+    public List<CamelEndpoint> getEndpoints() {
+        return CamelEndpoint.fromList(getBlueprintEndpoints());
     }
 
     @Override
-    protected AbstractCamelEndpointFactoryBean addEndpoint(String id, String uri) {
+    protected CamelEndpoint addEndpoint(String id, String uri) {
         CamelEndpointFactoryBean endpoint = new CamelEndpointFactoryBean();
         endpoint.setId(id);
         endpoint.setUri(uri);
-        getEndpoints().add(endpoint);
-        return endpoint;
+        getBlueprintEndpoints().add(endpoint);
+        return new CamelEndpoint(endpoint);
     }
     
     protected Class<?> getCamelContextType() {
         return CamelContextFactoryBean.class;
+    }
+    
+    private List<CamelEndpointFactoryBean> getBlueprintEndpoints() {
+        if (camelContext.getEndpoints() == null) {
+            camelContext.setEndpoints(new ArrayList<CamelEndpointFactoryBean>());
+        }
+        return camelContext.getEndpoints();
     }
 }

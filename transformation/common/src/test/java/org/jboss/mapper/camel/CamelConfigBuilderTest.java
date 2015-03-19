@@ -17,6 +17,7 @@ import java.io.File;
 
 import junit.framework.Assert;
 
+import org.apache.camel.model.DataFormatDefinition;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.jboss.mapper.TransformType;
@@ -40,9 +41,14 @@ public class CamelConfigBuilderTest {
     public void createXmlToJson() throws Exception {
         Document xmlJsonDoc = loadDocument(XML_JSON);
         CamelConfigBuilder config = CamelConfigBuilder.loadConfig(getFile(NEW_CONFIG));
-        config.addTransformation("xml2json", DozerMapperConfiguration.DEFAULT_DOZER_CONFIG,
-                TransformType.XML, "xml.ABCOrder", 
-                TransformType.JSON, "json.XYZOrder");
+        DataFormatDefinition sourceFormat = config.createDataFormat(TransformType.XML, "xml.ABCOrder");
+        DataFormatDefinition targetFormat = config.createDataFormat(TransformType.JSON, "json.XYZOrder");
+        CamelEndpoint endpoint = config.createEndpoint("xml2json", 
+                DozerMapperConfiguration.DEFAULT_DOZER_CONFIG, 
+                "xml.ABCOrder", 
+                "json.XYZOrder",
+                sourceFormat, 
+                targetFormat);
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xmlJsonDoc, config.getConfiguration().getOwnerDocument());
     }
