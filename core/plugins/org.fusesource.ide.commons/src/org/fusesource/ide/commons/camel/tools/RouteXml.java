@@ -30,6 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,6 +54,7 @@ import org.apache.camel.model.ModelCamelContext;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.RoutesDefinition;
 import org.apache.camel.spring.CamelContextFactoryBean;
+import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.apache.camel.spring.CamelRouteContextFactoryBean;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.camel.tools.parser.PatchedXMLParser;
@@ -344,11 +346,27 @@ public class RouteXml {
         marshal(file, transformer.transform(model));
     }
 
-    public String marshalToText(String text, final List<RouteDefinition> routeDefinitionList) throws Exception {
+    /**
+     * This method is responsible for merging multiple pieces of Camel
+     * configuration and returning that merged configuration as a string.  The
+     * string parameter serves as the base config (usually pulled from source editor)
+     * and the route list and camel context are merged into this base config.
+     * @param text base configuration used for merging
+     * @param routeDefinitionList routes that will replace routes in base config
+     * @param camelContext any updates to camel context outside of route definitions
+     * @return new merged configuration as a string
+     */
+    public String marshalToText(String text, 
+            final List<RouteDefinition> routeDefinitionList,
+            final CamelContextFactoryBean camelContext) throws Exception {
         return marshalToText(text, new Model2Model() {
             @Override
             public XmlModel transform(XmlModel model) {
                 copyRoutesToElement(routeDefinitionList, model.getContextElement());
+                if (camelContext != null) {
+                    model.getContextElement().setDataFormats(camelContext.getDataFormats());
+                    setEndpoints(model.getContextElement(), camelContext.getEndpoints());
+                }
                 return model;
             }
         });
@@ -490,4 +508,18 @@ public class RouteXml {
 
     }
 
+    /**
+     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
+     * endpoints on CamelContextFactoryBean directly.  Use reflection for now
+     * until this issue is resolved upstream.
+     */
+    private void setEndpoints(CamelContextFactoryBean context, List<CamelEndpointFactoryBean> endpoints) {
+        try {
+            Field endpointsField = context.getClass().getDeclaredField("endpoints");
+            endpointsField.setAccessible(true);
+            endpointsField.set(context, endpoints);
+        } catch (Exception ex) {
+            Activator.getLogger().error("Failed to update endpoints in camelContext", ex);
+        }
+    }
 }

@@ -142,9 +142,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         targetFormat = configBuilder.createDataFormat(
                                 uiModel.getTargetType().transformType, targetClassName);
                         endpoint = configBuilder.createEndpoint(uiModel.getId(),
-	                                                 file.getFullPath().makeRelativeTo(resourcesPath).toString(),
-	                                                 sourceClassName, targetClassName,
-	                                                 sourceFormat, targetFormat);
+                                file.getFullPath().makeRelativeTo(resourcesPath).toString(),
+                                sourceClassName, targetClassName,
+                                sourceFormat, targetFormat);
 
                         // make sure we add our maven dependencies where needed
                         addCamelDozerDependency();
@@ -510,8 +510,18 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             dataFormats.setDataFormats(new LinkedList<DataFormatDefinition>());
         }
 
-        dataFormats.getDataFormats().add(dataFormat);
-        context.setDataFormats(dataFormats);
+        // only add the data format if it's not present
+        boolean exists = false;
+        for (DataFormatDefinition dfd : dataFormats.getDataFormats()) {
+            if (dataFormat.getId().equals(dfd.getId())) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            dataFormats.getDataFormats().add(dataFormat);
+            context.setDataFormats(dataFormats);
+        }
     }
 
     private ComponentDependency createDependency(String groupId, String artifactId, String version) {

@@ -98,7 +98,7 @@ public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 
 		try {
 			String text = IOUtils.loadText(ifile.getContents(), ifile.getCharset());
-			String newText = helper.marshalToText(text, list);
+			String newText = helper.marshalToText(text, list, model.getModel().getContextElement());
 			ifile.setContents(new ByteArrayInputStream(newText.getBytes()), true, true, monitor);
 		} catch (Exception ex) {
 			Activator.getLogger().error("Unable to load text from stream", ex);
@@ -171,7 +171,7 @@ public class XmlContainerMarshaller extends ContainerMarshallerSupport {
 		}
 
 		try {
-			return helper.marshalToText(newXMLText, list);
+			return helper.marshalToText(newXMLText, list, model.getModel().getContextElement());
 		} catch (Exception ex) {
 			Activator.getLogger().error(ex);
 		}
