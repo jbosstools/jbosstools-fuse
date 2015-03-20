@@ -128,18 +128,6 @@
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections contributorId="org.fusesource.ide.camel.editor">
          <propertySection
-               class="org.fusesource.ide.camel.editor.propertysheet.FileBindingSection"
-               filter="org.fusesource.ide.camel.editor.propertysheet.FileConnectorFilter"
-               id="org.fusesource.ide.camel.editor.propertysheet.FileBindingSection"
-               tab="FileBindingTab">
-         </propertySection>
-         <propertySection
-               class="org.fusesource.ide.camel.editor.propertysheet.JMSBindingSection"
-               filter="org.fusesource.ide.camel.editor.propertysheet.JMSConnectorFilter"
-               id="org.fusesource.ide.camel.editor.propertysheet.JMSBindingSection"
-               tab="JMSBindingTab">
-         </propertySection>
-         <propertySection
                afterSection="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
                class="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
                filter="org.fusesource.ide.camel.editor.propertysheet.AdvancedPropertiesFilter"

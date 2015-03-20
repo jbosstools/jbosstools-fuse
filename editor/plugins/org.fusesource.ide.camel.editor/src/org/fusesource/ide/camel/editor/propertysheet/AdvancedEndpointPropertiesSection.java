@@ -16,9 +16,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.observable.Observables;
+import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.core.databinding.observable.map.WritableMap;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jdt.core.IJavaElement;
@@ -32,6 +42,9 @@ import org.eclipse.jdt.internal.core.SourceType;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
 import org.eclipse.jdt.internal.ui.wizards.NewClassCreationWizard;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
+import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
+import org.eclipse.jface.databinding.swt.ISWTObservableValue;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -69,6 +82,7 @@ import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.connectors.Component;
 import org.fusesource.ide.camel.model.connectors.UriParameter;
 import org.fusesource.ide.camel.model.connectors.UriParameterKind;
 import org.fusesource.ide.commons.ui.Selections;
@@ -82,11 +96,15 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     private FormToolkit toolkit;
     private Form form;
     private CTabFolder tabFolder;
+    private CTabItem pathTab;
     private CTabItem commonTab;
     private CTabItem consumerTab;
     private CTabItem producerTab;
     private Endpoint selectedEP;
-
+    private DataBindingContext dbc;
+    private IObservableMap modelMap = new WritableMap();
+    private Component component;
+    
     /*
      * (non-Javadoc)
      * 
@@ -99,6 +117,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
             toolkit.dispose();
             toolkit = null;
         }
+        this.component = null;
         super.dispose();
     }
 
@@ -113,11 +132,15 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     public void setInput(IWorkbenchPart part, ISelection selection) {
         super.setInput(part, selection);
         
+        this.dbc = new DataBindingContext();
+//        this.modelMap.clear();
+        
         Object o = Selections.getFirstSelection(selection);
         AbstractNode n = AbstractNodes.toAbstractNode(o);
         
         if (n instanceof Endpoint) {
             this.selectedEP = (Endpoint) n;
+            this.component = PropertiesUtils.getComponentFor(selectedEP);
             form.setText("Advanced Properties - " + DiagramUtils.filterFigureLabel(selectedEP.getDisplayText()));
         } else {
             this.selectedEP = null;
@@ -126,15 +149,17 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         
         int idx = Math.max(tabFolder.getSelectionIndex(), 0);
 
+        if (pathTab != null) 		pathTab.dispose();
         if (commonTab != null)      commonTab.dispose();
         if (consumerTab != null)    consumerTab.dispose();
         if (producerTab != null)    producerTab.dispose();
-        
+
         // now generate the tab contents
+        createPathTab(tabFolder);
         createCommonsTab(tabFolder);
         createConsumerTab(tabFolder);
         createProducerTab(tabFolder);
-
+        
         tabFolder.setSingle(tabFolder.getItemCount()==1);
         
         tabFolder.setSelection(Math.min(idx, tabFolder.getItemCount()-1));
@@ -145,7 +170,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
      * @param props
      * @param page
      */
-    protected void generateTabContents(List<UriParameter> props, final Composite page) {
+    protected void generateTabContents(List<UriParameter> props, final Composite page, boolean ignorePathProperties) {
         // display all the properties in alphabetic order - sorting needed
         Collections.sort(props, new Comparator<UriParameter>() {
             /* (non-Javadoc)
@@ -158,9 +183,14 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         }); 
         
         for (UriParameter p : props) {
-            final UriParameter prop = p;
+        	// atm we don't want to care about path parameters
+        	if (ignorePathProperties && p.getKind().equalsIgnoreCase("path")) continue;
             
-            if (p.getKind().equalsIgnoreCase("path")) continue;
+        	final UriParameter prop = p;
+            
+            ISWTObservableValue uiObservable = null;
+            IObservableValue modelObservable = null;
+            IValidator validator = null;
             
             String s = Strings.humanize(p.getName());
             if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
@@ -176,9 +206,10 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
             
             Control c = null;
             
+            // BOOLEAN PROPERTIES
             if (CamelComponentUtils.isBooleanProperty(prop)) {
                 Button checkBox = toolkit.createButton(page, "", SWT.CHECK | SWT.BORDER);
-                Boolean b = (Boolean)PropertiesUtils.getTypedPropertyFromUri(selectedEP, prop);
+                Boolean b = (Boolean)PropertiesUtils.getTypedPropertyFromUri(selectedEP, prop, component);
                 checkBox.setSelection(b);
                 checkBox.addSelectionListener(new SelectionAdapter() {
                     /* (non-Javadoc)
@@ -186,26 +217,52 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                      */
                     @Override
                     public void widgetSelected(SelectionEvent e) {
-                        PropertiesUtils.updateURIParams(selectedEP, prop, ((Button)e.getSource()).getSelection());
+                        PropertiesUtils.updateURIParams(selectedEP, prop, ((Button)e.getSource()).getSelection(), component, modelMap);
                     }
                 });
                 checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = checkBox;
                 
+                //initialize the map entry
+                modelMap.put(p.getName(), checkBox.getSelection());
+                // create observables for the control
+                uiObservable = WidgetProperties.selection().observe(checkBox);
+                
+            // TEXT PROPERTIES
             } else if (CamelComponentUtils.isTextProperty(prop)) {
-                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText());
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = txtField;
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
                 
+            // NUMBER PROPERTIES
             } else if (CamelComponentUtils.isNumberProperty(prop)) {
-                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {
@@ -219,19 +276,45 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                             }
                         }
                         txt.setBackground(ColorConstants.white);
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText());
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = txtField;
-                
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
+                validator = new IValidator() {
+					/*
+					 * (non-Javadoc)
+					 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+					 */
+					@Override
+					public IStatus validate(Object value) {
+						if (prop.getRequired() != null && prop.getRequired().equalsIgnoreCase("true") && (value == null || value.toString().trim().length()<1)) {
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+						// only check non-empty fields
+						if (value != null && value.toString().trim().length()>0) {
+							try {
+								Double.parseDouble(value.toString());
+							} catch (NumberFormatException ex) {
+								return ValidationStatus.error("The parameter " + prop.getName() + " requires a numeric value.");
+							}
+						}
+						return ValidationStatus.ok();
+					}
+				};
+
+			// CHOICE PROPERTIES
             } else if (CamelComponentUtils.isChoiceProperty(prop)) {
                 CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
                 toolkit.adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
                 choiceCombo.setItems(CamelComponentUtils.getChoices(prop));
                 for (int i=0; i < choiceCombo.getItems().length; i++) {
-                    if (choiceCombo.getItem(i).equalsIgnoreCase(PropertiesUtils.getPropertyFromUri(selectedEP, prop))) {
+                    if (choiceCombo.getItem(i).equalsIgnoreCase(PropertiesUtils.getPropertyFromUri(selectedEP, prop, component))) {
                         choiceCombo.select(i);
                         break;
                     }
@@ -243,19 +326,38 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     @Override
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, choice.getText());
+                        PropertiesUtils.updateURIParams(selectedEP, prop, choice.getText(), component, modelMap);
                     }
                 });
                 choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = choiceCombo;
-                
+                //initialize the map entry
+                modelMap.put(p.getName(), choiceCombo.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+            // FILE PROPERTIES
             } else if (CamelComponentUtils.isFileProperty(prop)) {
-                final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+                final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText());
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
@@ -276,14 +378,34 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 });
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 c = txtField;
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
                 
+            // FOLDER PROPERTIES
             } else if (CamelComponentUtils.isFolderProperty(prop)) {
-                final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+                final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {
-                        Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText());
+                    	Text txt = (Text)e.getSource();
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
@@ -304,42 +426,102 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 });
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 c = txtField;
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
                 
+            // EXPRESSION PROPERTIES
             } else if (CamelComponentUtils.isExpressionProperty(prop)) {
-                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText());
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = txtField;
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
                 
+            // UNSUPPORTED PROPERTIES / REFS
             } else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
             	
             	// TODO: check how to handle lists and maps - for now we treat them as string field only
             	
-            	Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+            	Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText());
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = txtField;
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
                 
+            // CLASS BASED PROPERTIES - REF OR CLASSNAMES AS STRINGS
             } else {
                 // must be some class as all other options were missed
-                final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+                final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText());
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
@@ -437,13 +619,57 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 btn_browse.setEnabled(fClass != null);
                 c = txtField;
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
+                
             }
+            
+            // create UpdateValueStrategy and assign to the binding
+            UpdateValueStrategy strategy = new UpdateValueStrategy();
+            strategy.setBeforeSetValidator(validator);
+            
+            // create observables for the Map entries
+            modelObservable = Observables.observeMapEntry(modelMap, p.getName());
+            // bind the observables
+            Binding bindValue = dbc.bindValue(uiObservable, modelObservable, strategy, null);
+            ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT); 
             
             if (p.getDescription() != null) c.setToolTipText(p.getDescription());
         }
     }
     
+    private void createPathTab(CTabFolder folder) {
+    	List<UriParameter> props = PropertiesUtils.getPathProperties(selectedEP);
 
+        if (props.isEmpty()) return;
+        
+        pathTab = new CTabItem(tabFolder, SWT.NONE);
+        pathTab.setText("Path");
+
+        Composite page = toolkit.createComposite(folder);
+        page.setLayout(new GridLayout(4, false));
+                
+        generateTabContents(props, page, false);
+
+        pathTab.setControl(page);
+    }
         
     private void createCommonsTab(CTabFolder folder) {
         List<UriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.BOTH);
@@ -456,7 +682,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         Composite page = toolkit.createComposite(folder);
         page.setLayout(new GridLayout(4, false));
                 
-        generateTabContents(props, page);
+        generateTabContents(props, page, true);
 
         commonTab.setControl(page);
     }
@@ -472,7 +698,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         Composite page = toolkit.createComposite(folder);
         page.setLayout(new GridLayout(4, false));
                 
-        generateTabContents(props, page);        
+        generateTabContents(props, page, true);        
         
         consumerTab.setControl(page);
     }
@@ -488,7 +714,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         Composite page = toolkit.createComposite(folder);
         page.setLayout(new GridLayout(4, false));
                 
-        generateTabContents(props, page);
+        generateTabContents(props, page, true);
         
         producerTab.setControl(page);
     }

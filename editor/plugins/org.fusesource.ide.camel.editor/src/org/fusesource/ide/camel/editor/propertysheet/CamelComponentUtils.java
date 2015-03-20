@@ -135,6 +135,14 @@ public final class CamelComponentUtils {
         return p.getJavaType().toLowerCase().startsWith("java.util.map"); 
     }
     
+    public static boolean isUriPathParameter(UriParameter p) {
+    	return p.getKind() != null && p.getKind().equalsIgnoreCase("path");
+    }
+    
+    public static boolean isUriOptionParameter(UriParameter p) {
+    	return p.getKind() != null && p.getKind().equalsIgnoreCase("parameter");
+    }
+        
     public static boolean isUnsupportedProperty(UriParameter p) {
     	return isListProperty(p) ||
     		   isMapProperty(p) || 
@@ -142,7 +150,11 @@ public final class CamelComponentUtils {
     }
     
     public static String[] getChoices(UriParameter p) {
-        return p.getChoice().split(",");
+        String[] choices = p.getChoice().split(",");
+        ArrayList<String> res = new ArrayList<String>();
+        res.add(" "); // empty entry
+        for (String choice : choices) res.add(choice);
+        return res.toArray(new String[res.size()]);
     }
     
     public static String buildChoice(Component component, String protocol) {
