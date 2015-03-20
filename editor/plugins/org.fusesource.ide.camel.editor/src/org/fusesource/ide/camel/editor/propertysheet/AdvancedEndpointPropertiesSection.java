@@ -160,6 +160,8 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         for (UriParameter p : props) {
             final UriParameter prop = p;
             
+            if (p.getKind().equalsIgnoreCase("path")) continue;
+            
             String s = Strings.humanize(p.getName());
             if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
             
