@@ -143,9 +143,7 @@ public final class VariablesViewer extends Composite {
             protected void setValue(final Object element,
                     final Object value) {
                 Variable variable = (Variable) element;
-                config.removeVariable(variable);
-                variable = new Variable(variable.getName(), value.toString());
-                config.addVariable(variable);
+                variable.setValue(value.toString());
                 try {
                     editor.save();
                     editor.updateVariableMappings(variable);
@@ -187,7 +185,7 @@ public final class VariablesViewer extends Composite {
                         });
                 if (dlg.open() != Window.OK)
                     return;
-                config.addVariable(new Variable(dlg.getValue(), dlg.getValue()));
+                config.addVariable(dlg.getValue(), dlg.getValue());
                 try {
                     editor.save();
                     tableViewer.setInput(config.getVariables());

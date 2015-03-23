@@ -1,0 +1,78 @@
+/*
+ * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+ * applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+ * OF ANY KIND, either express or implied. See the License for the specific
+ * language governing permissions and limitations under the License.
+ */
+package org.jboss.mapper.dozer;
+
+import org.jboss.mapper.dozer.config.Variable;
+
+/**
+ * Dozer implementation of Variable which maps directly onto a Dozer Variable.
+ */
+public class DozerVariable implements org.jboss.mapper.Variable {
+
+    private Variable variable;
+
+    /**
+     * Create a new Variable.
+     * 
+     * @param variable dozer variable
+     */
+    public DozerVariable(Variable variable) {
+        this.variable = variable;
+    }
+
+    @Override
+    public String getValue() {
+        return variable.getContent();
+    }
+    
+    @Override
+    public void setValue(String value) {
+        variable.setContent(value);
+    }
+    
+    @Override
+    public String getName() {
+        return variable.getName();
+    }
+    
+    @Override
+    public void setName(String name) {
+        variable.setName(name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof DozerVariable) || obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+
+        DozerVariable that = (DozerVariable)obj;
+        return that.getVariable().equals(variable);
+    }
+
+    @Override
+    public int hashCode() {
+        return variable.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "variable[name:" + variable.getName() + ",value:" + variable.getContent() + "]";
+    }
+    
+    Variable getVariable() {
+        return variable;
+    }
+}

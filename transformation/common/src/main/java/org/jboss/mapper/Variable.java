@@ -15,63 +15,33 @@ package org.jboss.mapper;
  * A Variable represents a key and value mapping, where the variable name is 
  * used as the source in a mapping and is replaced with the variable value.
  */
-public class Variable {
-
-    private String name;
-    private String value;
-
-    /**
-     * Create a new Variable.
-     * 
-     * @param name variable name
-     * @param value variable value
-     */
-    public Variable(String name, String value) {
-        this.name = name;
-        this.value = value;
-    }
+public interface Variable {
 
     /**
      * Get the value of this Variable.
      * 
      * @return value of the variable
      */
-    public String getValue() {
-        return value;
-    }
+    public String getValue();
+    
+    /**
+     * Set the variable value.
+     * 
+     * @param value variable value.
+     */
+    public void setValue(String value);
     
     /**
      * Get the name of this Variable.
      * 
      * @return name of the variable
      */
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Variable) || obj == null) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-
-        Variable that = (Variable)obj;
-        return that.getName().equals(name) && that.getValue().equals(value);
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = hash * 37 + name.hashCode();
-        hash = hash * 37 + value.hashCode();
-        return hash;
-    }
-
-    @Override
-    public String toString() {
-        return "variable[name:" + name + ",value:" + value + "]";
-    }
+    public String getName();
+    
+    /**
+     * Set the variable name.
+     * 
+     * @param name variable name
+     */
+    public void setName(String name);
 }

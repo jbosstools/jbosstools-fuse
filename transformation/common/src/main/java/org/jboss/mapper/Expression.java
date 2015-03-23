@@ -14,43 +14,32 @@ package org.jboss.mapper;
 /**
  * An Expression consists of a language identifier and expression text.
  */
-public class Expression {
-
-    private String language;
-    private String expression;
-
-    /**
-     * Create a new Expression.
-     * 
-     * @param language expression language
-     * @param expression expression text
-     */
-    public Expression(String language, String expression) {
-        this.language = language;
-        this.expression = expression;
-    }
+public interface Expression {
 
     /**
      * The name of the language used by this expression.
      * 
      * @return expression language name
      */
-    public String getLanguage() {
-        return language;
-    }
+    String getLanguage();
+
+    /**
+     * Set the language for this expression.
+     * 
+     * @param language expression language name
+     */
+    void setLanguage(String language);
     
     /**
      * The expression text.
      * 
      * @return expression text
      */
-    public String getExpression() {
-        return expression;
-    }
-
-
-    @Override
-    public String toString() {
-        return "expression[lanugage:" + language + ",expr:" + expression + "]";
-    }
+    String getExpression();
+    
+    /**
+     * Sets the expression content.
+     * @param expression string containing complete expression
+     */
+    void setExpression(String expression);
 }

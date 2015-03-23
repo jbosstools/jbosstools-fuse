@@ -62,9 +62,11 @@ public interface MapperConfiguration {
      * mapping exists with the same variable name, the variable value is updated
      * instead of adding a new variable definition.
      * 
-     * @param variable variable to add
+     * @param name variable name
+     * @param value variable value
+     * @return reference to the new Variable
      */
-    void addVariable(Variable variable);
+    Variable addVariable(String name, String value);
 
     /**
      * Remove the specified variable from the mapping configuration. If no
@@ -97,7 +99,7 @@ public interface MapperConfiguration {
      * @param target model for the target field
      * @return mapping created
      */
-    FieldMapping map(Model source, Model target);
+    FieldMapping mapField(Model source, Model target);
 
     /**
      * Map a variable to a target field.
@@ -106,16 +108,17 @@ public interface MapperConfiguration {
      * @param target target field
      * @return mapping created
      */
-    VariableMapping map(Variable variable, Model target);
+    VariableMapping mapVariable(Variable variable, Model target);
     
     /**
      * Map an expression to a target field.
      * 
-     * @param expression source expression
+     * @param expression expression language
+     * @param expression expression text
      * @param target target field
      * @return mapping created
      */
-    ExpressionMapping map(Expression expression, Model target);
+    ExpressionMapping mapExpression(String language, String expression, Model target);
 
     /**
      * Write the mapping configuration to the specified output stream.

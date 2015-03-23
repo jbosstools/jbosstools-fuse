@@ -9,20 +9,24 @@
  * OF ANY KIND, either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.jboss.mapper;
+package org.jboss.mapper.dozer;
 
-import org.jboss.mapper.model.Model;
+import org.jboss.mapper.dozer.config.Field;
 
-/**
- * A VariableMapping represents a mapping where the source is a variable and 
- * the target is a model field.
- */
-public interface VariableMapping extends MappingOperation<Variable, Model> {
+public final class CustomParameterHelper {
 
-    /**
-     * Updates the variable used by this mapping.
-     * 
-     * @param variable new variable to use
-     */
-    void setVariable(Variable variable);
+    public static String getParameterPart(Field field, String separator, int idx) {
+        String part = null;
+        if (field.getCustomConverterParam() != null) {
+            String[] parts = field.getCustomConverterParam().split(separator);
+            if (parts.length > idx) {
+                part = parts[idx];
+            }
+        }
+        return part;
+    }
+
+    public static String emptyForNull(String str) {
+        return str == null ? "" : str;
+    }
 }

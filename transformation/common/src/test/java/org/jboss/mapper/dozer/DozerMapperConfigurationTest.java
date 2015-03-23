@@ -13,12 +13,15 @@
  */
 package org.jboss.mapper.dozer;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.custommonkey.xmlunit.XMLAssert;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.jboss.mapper.CustomMapping;
-import org.jboss.mapper.Expression;
 import org.jboss.mapper.ExpressionMapping;
 import org.jboss.mapper.FieldMapping;
 import org.jboss.mapper.MappingOperation;
@@ -32,6 +35,7 @@ import org.jboss.mapper.model.ModelBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.InputSource;
 
 import example.AClass;
 import example.BClass;
@@ -74,7 +78,7 @@ public class DozerMapperConfigurationTest {
         Model modelA = ModelBuilder.fromJavaClass(A.class);
         Model modelB = ModelBuilder.fromJavaClass(B.class);
         config.addClassMapping(modelA.getType(), modelB.getType());
-        config.map(modelA.get("data"), modelB.get("c").get("d").get("data"));
+        config.mapField(modelA.get("data"), modelB.get("c").get("d").get("data"));
         
        Mapping mapping = config.getClassMapping(modelA);
        Field field = (Field)mapping.getFieldOrFieldExclude().get(0);
@@ -91,7 +95,7 @@ public class DozerMapperConfigurationTest {
         Model modelA = ModelBuilder.fromJavaClass(A.class);
         Model modelB = ModelBuilder.fromJavaClass(B.class);
         config.addClassMapping(modelA.getType(), modelB.getType());
-        config.map(modelA.get("data"), modelB.get("data"));
+        config.mapField(modelA.get("data"), modelB.get("data"));
         
        Mapping mapping = config.getClassMapping(modelA);
        Field field = (Field)mapping.getFieldOrFieldExclude().get(0);
@@ -102,7 +106,7 @@ public class DozerMapperConfigurationTest {
     @Test
     public void clearMappings() throws Exception {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
-        config.map(modelA.get("A1"), modelB.get("B1"));
+        config.mapField(modelA.get("A1"), modelB.get("B1"));
         Assert.assertEquals(1, config.getMappings().size());
         config.removeAllMappings();
         Assert.assertEquals(0, config.getMappings().size());
@@ -128,8 +132,7 @@ public class DozerMapperConfigurationTest {
     @Test
     public void getVariables() throws Exception {
         DozerMapperConfiguration config = loadConfig("fieldAndVariableMapping.xml");
-        Variable var3 = new Variable("VAR3", "XYZ");
-        config.addVariable(var3);
+        Variable var3 = config.addVariable("VAR3", "XYZ");
         List<Variable> variables = config.getVariables();
         Assert.assertTrue(variables.contains(var3));
         Assert.assertEquals(3, variables.size());
@@ -140,7 +143,7 @@ public class DozerMapperConfigurationTest {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model source = modelA.get("A1");
         Model target = modelB.get("B1");
-        config.map(source, target);
+        config.mapField(source, target);
         FieldMapping mapping = (FieldMapping)config.getMappings().get(0);
         Assert.assertEquals(source, mapping.getSource());
         Assert.assertEquals(target, mapping.getTarget());
@@ -150,8 +153,8 @@ public class DozerMapperConfigurationTest {
     public void mapVariable() throws Exception {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model target = modelB.get("B1");
-        Variable variable = new Variable("VAR1", "ABC-VAL");
-        config.map(variable, modelB.get("B1"));
+        Variable variable = config.addVariable("VAR1", "ABC-VAL");
+        config.mapVariable(variable, modelB.get("B1"));
         VariableMapping mapping = (VariableMapping)config.getMappings().get(0);
         Assert.assertEquals(variable, mapping.getSource());
         Assert.assertEquals(target, mapping.getTarget());
@@ -161,11 +164,10 @@ public class DozerMapperConfigurationTest {
     public void mapExpression() throws Exception {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model target = modelB.get("B1");
-        Expression expr = new Expression("simple", "\\${property.foo}");
-        config.map(expr, modelB.get("B1"));
+        config.mapExpression("simple", "\\${property.foo}", modelB.get("B1"));
         ExpressionMapping mapping = (ExpressionMapping)config.getMappings().get(0);
-        Assert.assertEquals(expr.getLanguage(), mapping.getSource().getLanguage());
-        Assert.assertEquals(expr.getExpression(), mapping.getSource().getExpression());
+        Assert.assertEquals("simple", mapping.getSource().getLanguage());
+        Assert.assertEquals("\\${property.foo}", mapping.getSource().getExpression());
         Assert.assertEquals(target, mapping.getTarget());
     }
     
@@ -184,7 +186,7 @@ public class DozerMapperConfigurationTest {
         Model modelB = ModelBuilder.fromJavaClass(ListOfD.class);
         Model source = modelA.get("listOfCs").get("d");
         Model target = modelB.get("listOfDs").get("data");
-        config.map(source, target);
+        config.mapField(source, target);
         FieldMapping mapping = (FieldMapping)config.getMappings().get(0);
         Assert.assertEquals(source, mapping.getSource());
         Assert.assertEquals(target, mapping.getTarget());
@@ -215,7 +217,7 @@ public class DozerMapperConfigurationTest {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model source = modelA.get("A1");
         Model target = modelB.get("B1");
-        FieldMapping mapping = config.map(source, target);
+        FieldMapping mapping = config.mapField(source, target);
         Assert.assertNotNull(mapping);
         Assert.assertEquals(1, config.getMappings().size());
         
@@ -229,7 +231,7 @@ public class DozerMapperConfigurationTest {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model source = modelA.get("A1");
         Model target = modelB.get("B1");
-        FieldMapping mapping = config.map(source, target);
+        FieldMapping mapping = config.mapField(source, target);
         config.customizeMapping(mapping, customizeClass);
         Assert.assertEquals(1, config.getMappings().size());
         CustomMapping custom = (CustomMapping)config.getMappings().get(0);
@@ -244,12 +246,47 @@ public class DozerMapperConfigurationTest {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model source = modelA.get("A1");
         Model target = modelB.get("B1");
-        FieldMapping mapping = config.map(source, target);
+        FieldMapping mapping = config.mapField(source, target);
         config.customizeMapping(mapping, customizeClass, customizeOperation);
         Assert.assertEquals(1, config.getMappings().size());
         CustomMapping custom = (CustomMapping)config.getMappings().get(0);
         Assert.assertEquals(customizeClass, custom.getMappingClass());
         Assert.assertEquals(customizeOperation, custom.getMappingOperation());
+    }
+    
+    @Test
+    public void testEdits() throws Exception {
+        DozerMapperConfiguration config = loadConfig("allFeatures.xml");
+        // Edit variable names and values
+        Variable var1 = config.getVariable("VAR1");
+        var1.setValue(var1.getValue() + "-EDIT");
+        Variable var2 = config.getVariable("VAR2");
+        var2.setName("VAR3");
+        var2.setValue(var2.getValue() + "-EDIT");
+        
+        // Edit mappings
+        for (MappingOperation<?,?> mapping : config.getMappings()) {
+            if (mapping instanceof CustomMapping) {
+                CustomMapping custom = (CustomMapping)mapping;
+                custom.setMappingClass(custom.getMappingClass() + "Edited");
+                custom.setMappingOperation(custom.getMappingOperation() + "Edited");
+            } else if (mapping instanceof ExpressionMapping) {
+                ExpressionMapping expression = (ExpressionMapping)mapping;
+                expression.getSource().setExpression("customerNumber");
+                expression.getSource().setLanguage("header");
+            } else if (mapping instanceof VariableMapping) {
+                VariableMapping variable = (VariableMapping)mapping;
+                variable.setVariable(config.getVariable("VAR3"));
+            }
+        }
+        
+        // Serialize the edited config and compare to our reference
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        config.saveConfig(bos);
+        InputSource edited = new InputSource(new ByteArrayInputStream(bos.toByteArray()));
+        InputSource reference = new InputSource(getClass().getResourceAsStream("editConfiguration.xml"));
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(reference, edited);
     }
     
     @Test

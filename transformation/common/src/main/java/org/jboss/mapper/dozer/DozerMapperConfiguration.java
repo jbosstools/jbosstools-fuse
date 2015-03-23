@@ -23,7 +23,6 @@ import javax.xml.bind.Marshaller;
 
 import org.jboss.mapper.CustomMapping;
 import org.jboss.mapper.Expression;
-import org.jboss.mapper.ExpressionMapping;
 import org.jboss.mapper.FieldMapping;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.MappingOperation;
@@ -125,8 +124,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
                             field.getCustomConverterParam()));
                     mappings.add(new DozerVariableMapping(variable, targetModel, mapping, field));
                 } else if (EXPRESSION_MAPPER_ID.equals(field.getCustomConverterId())) {
-                    String[] params = field.getCustomConverterParam().split(":");
-                    Expression expression = new Expression(params[0], params[1]);
+                    Expression expression = new DozerExpression(field);
                     mappings.add(new DozerExpressionMapping(expression, targetModel, mapping, field));
                 } else {
                     Model sourceParentModel = loadModel(mapping.getClassA().getContent());
@@ -135,11 +133,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
                             new DozerFieldMapping(sourceModel, targetModel, mapping, field);
                     // check to see if this field mapping is customized
                     if (CUSTOM_MAPPER_ID.equals(field.getCustomConverterId())) {
-                        String[] params = field.getCustomConverterParam().split(",");
-                        String mapperClass = params[0];
-                        String mapperOperation = params.length > 1 ? params[1] : null;
-                        fieldMapping =
-                                new DozerCustomMapping(fieldMapping, mapperClass, mapperOperation);
+                        fieldMapping = new DozerCustomMapping(fieldMapping);
                     }
                     mappings.add(fieldMapping);
                 }
@@ -149,28 +143,16 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     }
     
     @Override
-    public void addVariable(Variable variable) {
-        Variable existing = getVariable(variable.getName());
-        // Remove the variable if it already exists
-        if (existing != null) {
-            removeVariable(variable);
+    public Variable addVariable(String name, String value) {
+        Variable variable = getVariable(name);
+        // if the variable already exists, just update it
+        if (variable != null) {
+            variable.setValue(value);
+        } else {
+            // looks like we need to create a new one
+            variable = createVariable(name, value);
         }
-        // Add the variable to the dozer config
-        Configuration dozerConfig = mapConfig.getConfiguration();
-        if (dozerConfig == null) {
-            dozerConfig = new Configuration();
-            mapConfig.setConfiguration(dozerConfig);
-        }
-        Variables variables = dozerConfig.getVariables();
-        if (variables == null) {
-            variables = new Variables();
-            dozerConfig.setVariables(variables);
-        }
-        org.jboss.mapper.dozer.config.Variable dozerVar = 
-                new org.jboss.mapper.dozer.config.Variable();
-        dozerVar.setName(variable.getName());
-        dozerVar.setContent(variable.getValue());
-        variables.getVariable().add(dozerVar);
+        return variable;
     }
 
     @Override
@@ -202,7 +184,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         }
         Variables dozerVars = mapConfig.getConfiguration().getVariables();
         for (org.jboss.mapper.dozer.config.Variable dozerVar : dozerVars.getVariable()) {
-            variableList.add(new Variable(dozerVar.getName(), dozerVar.getContent()));
+            variableList.add(new DozerVariable(dozerVar));
         }
         return variableList;
     }
@@ -220,7 +202,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     }
 
     @Override
-    public DozerFieldMapping map(final Model source, final Model target) {
+    public DozerFieldMapping mapField(final Model source, final Model target) {
         // Only add a class mapping if one has not been created already
         if (requiresClassMapping(source.getParent(), target.getParent())) {
             final String sourceType = source.getParent().isCollection()
@@ -237,9 +219,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     }
 
     @Override
-    public DozerVariableMapping map(final Variable variable, final Model target) {
-        // make sure the specified variable exists
-        addVariable(variable);
+    public DozerVariableMapping mapVariable(final Variable variable, final Model target) {
         // create the mapping
         Mapping mapping = getExtendedMapping(VARIABLE_MAPPER_CLASS, target);
         Field field = new Field();
@@ -248,21 +228,23 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         field.setCustomConverterId(VARIABLE_MAPPER_ID);
         field.setCustomConverterParam(DozerVariableMapping.qualifyName(variable.getName()));
         mapping.getFieldOrFieldExclude().add(field);
-
+        
         return new DozerVariableMapping(variable, target, mapping, field);
     }
 
     @Override
-    public ExpressionMapping map(Expression expression, Model target) {
+    public DozerExpressionMapping mapExpression(String language, String expression, Model target) {
         Mapping mapping = getExtendedMapping(EXPRESSION_MAPPER_CLASS, target);
         Field field = new Field();
         field.setA(createField(expressionModel, EXPRESSION_MAPPER_CLASS));
         field.setB(createField(target, mapping.getClassB().getContent()));
+        DozerExpression dozerExpression = new DozerExpression(field);
+        dozerExpression.setExpression(expression);
+        dozerExpression.setLanguage(language);
         field.setCustomConverterId(EXPRESSION_MAPPER_ID);
-        field.setCustomConverterParam(expression.getLanguage() + ":" + expression.getExpression());
         mapping.getFieldOrFieldExclude().add(field);
         
-        return new DozerExpressionMapping(expression, target, mapping, field);
+        return new DozerExpressionMapping(dozerExpression, target, mapping, field);
     }
 
     @Override
@@ -323,15 +305,14 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     @Override
     public CustomMapping customizeMapping(FieldMapping mapping, String mappingClass,
             String mappingOperation) {
-        DozerFieldMapping fieldMapping = (DozerFieldMapping) mapping;
-        // update the Dozer config to use the custom converter
+
+        DozerFieldMapping fieldMapping = (DozerFieldMapping)mapping;
         fieldMapping.getField().setCustomConverterId(CUSTOM_MAPPER_ID);
-        String param = mappingClass;
-        if (mappingOperation != null) {
-            param += "," + mappingOperation;
-        }
-        fieldMapping.getField().setCustomConverterParam(param);
-        return new DozerCustomMapping(fieldMapping, mappingClass, mappingOperation);
+        DozerCustomMapping customMapping = new DozerCustomMapping(fieldMapping);
+        customMapping.setMappingClass(mappingClass);
+        customMapping.setMappingOperation(mappingOperation);
+        
+        return customMapping;
     }
 
     boolean requiresClassMapping(final Model source, final Model target) {
@@ -458,5 +439,26 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             }
         }
         return jaxbCtx;
+    }
+    
+    private Variable createVariable(String name, String value) {
+        // Add the variable to the dozer config
+        Configuration dozerConfig = mapConfig.getConfiguration();
+        if (dozerConfig == null) {
+            dozerConfig = new Configuration();
+            mapConfig.setConfiguration(dozerConfig);
+        }
+        Variables variables = dozerConfig.getVariables();
+        if (variables == null) {
+            variables = new Variables();
+            dozerConfig.setVariables(variables);
+        }
+        org.jboss.mapper.dozer.config.Variable dozerVar = 
+                new org.jboss.mapper.dozer.config.Variable();
+        dozerVar.setName(name);
+        dozerVar.setContent(value);
+        variables.getVariable().add(dozerVar);
+        
+        return new DozerVariable(dozerVar);
     }
 }

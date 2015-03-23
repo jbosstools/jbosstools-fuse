@@ -30,4 +30,18 @@ public interface CustomMapping extends FieldMapping {
      * @return mapping operation name
      */
     String getMappingOperation();
+    
+    /**
+     * Set the name of the operation used for this custom mapping.
+     * 
+     * @param operationName operation name
+     */
+    void setMappingOperation(String operationName);
+    
+    /**
+     * Set the name of the mapping class used in this custom mapping.
+     * 
+     * @param className name of the class
+     */
+    void setMappingClass(String className);
 }

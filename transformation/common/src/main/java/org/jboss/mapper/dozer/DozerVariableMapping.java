@@ -68,4 +68,12 @@ public class DozerVariableMapping extends BaseDozerMapping implements VariableMa
     public static boolean isQualified(String variableName) {
         return variableName.startsWith("${") && variableName.endsWith("}");
     }
+
+    @Override
+    public void setVariable(Variable variable) {
+        source = variable;
+        // update the dozer config to reference the new variable name
+        getField().setCustomConverterParam(
+                DozerVariableMapping.qualifyName(variable.getName()));
+    }
 }

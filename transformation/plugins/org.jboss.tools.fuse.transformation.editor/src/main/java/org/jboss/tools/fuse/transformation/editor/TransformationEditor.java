@@ -359,8 +359,8 @@ public class TransformationEditor extends EditorPart {
     public MappingOperation<?, ?> map(final Object source,
             final Model targetModel) throws Exception {
         final MappingOperation<?, ?> mapping = source instanceof Model
-                ? config.map((Model) source, targetModel)
-                : config.map((Variable) source, targetModel);
+                ? config.mapField((Model) source, targetModel)
+                : config.mapVariable((Variable) source, targetModel);
         save();
         return mapping;
     }
