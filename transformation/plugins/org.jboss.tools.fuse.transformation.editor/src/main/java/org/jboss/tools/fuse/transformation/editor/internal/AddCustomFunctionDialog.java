@@ -26,7 +26,6 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jdt.ui.actions.OpenNewClassWizardAction;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -55,9 +54,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer.CustomFunctionListener;
+import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 
-final class AddCustomFunctionDialog extends TitleAreaDialog {
+final class AddCustomFunctionDialog extends BaseDialog {
 
     IProject project;
     String sourceType;
@@ -65,47 +66,37 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
     IMethod method;
 
     AddCustomFunctionDialog(final Shell shell,
-            final IProject project,
-            final String sourceType) {
+                            final IProject project,
+                            final String sourceType) {
         super(shell);
         this.project = project;
         this.sourceType = "java.lang.String".equals(sourceType) ? "String" : sourceType;
     }
 
     @Override
-    public void create() {
-        super.create();
-        getButton(IDialogConstants.OK_ID).setEnabled(false);
-    }
-
-    @Override
-    protected Control createDialogArea(final Composite parent) {
-        setTitle("Add Custom Operation");
-        setMessage("Select or create the Java class and method that implements the custom operation");
-        setHelpAvailable(false);
-        final Composite area = new Composite(parent, SWT.NONE);
-        area.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
-        area.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-        Label label = new Label(area, SWT.NONE);
+    protected void constructContents(final Composite parent) {
+        parent.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
+        Label label = new Label(parent, SWT.NONE);
         label.setText("Class:");
-        final Button classButton = new Button(area, SWT.NONE);
-        classButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER)
-                .grab(true, false).create());
+        final Button classButton = new Button(parent, SWT.NONE);
+        classButton.setLayoutData(GridDataFactory.swtDefaults()
+                                                 .align(SWT.FILL, SWT.CENTER)
+                                                 .grab(true, false).create());
         classButton.setAlignment(SWT.LEFT);
         classButton.setText("< Click to select an existing class >");
-        final Button newClassButton = new Button(area, SWT.NONE);
-        newClassButton.setImage(new DecorationOverlayIcon(JavaUI.getSharedImages().getImage(
-                ISharedImages.IMG_OBJS_CLASS),
-                Util.Decorations.ADD,
-                IDecoration.TOP_RIGHT).createImage());
-        label = new Label(area, SWT.NONE);
+        final Button newClassButton = new Button(parent, SWT.NONE);
+        newClassButton.setImage(new DecorationOverlayIcon(JavaUI.getSharedImages()
+                                                                .getImage(ISharedImages.IMG_OBJS_CLASS),
+                                                          Decorations.ADD,
+                                                          IDecoration.TOP_RIGHT).createImage());
+        label = new Label(parent, SWT.NONE);
         label.setText("Method:");
-        final ComboViewer methodComboViewer = new ComboViewer(area, SWT.READ_ONLY);
+        final ComboViewer methodComboViewer = new ComboViewer(parent, SWT.READ_ONLY);
         methodComboViewer.getCombo().setLayoutData(GridDataFactory.swtDefaults()
-                .span(2, 1)
-                .align(SWT.FILL, SWT.CENTER)
-                .grab(true, false)
-                .create());
+                                                                  .span(2, 1)
+                                                                  .align(SWT.FILL, SWT.CENTER)
+                                                                  .grab(true, false)
+                                                                  .create());
         methodComboViewer.setContentProvider(new ArrayContentProvider());
         methodComboViewer.setLabelProvider(new LabelProvider() {
 
@@ -122,9 +113,8 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
                     final String[] names = method.getParameterNames();
                     boolean hasPrm = false;
                     for (int ndx = 0; ndx < types.length; ndx++) {
-                        if (hasPrm) {
-                            builder.append(", ");
-                        } else {
+                        if (hasPrm) builder.append(", ");
+                        else {
                             builder.append(" ");
                             hasPrm = true;
                         }
@@ -132,9 +122,7 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
                         builder.append(" ");
                         builder.append(names[ndx]);
                     }
-                    if (hasPrm) {
-                        builder.append(" ");
-                    }
+                    if (hasPrm) builder.append(" ");
                     builder.append(")");
                     return builder.toString();
                 } catch (final JavaModelException e) {
@@ -146,27 +134,20 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
 
             @Override
             public int compare(final Viewer viewer,
-                    final Object object1,
-                    final Object object2) {
+                               final Object object1,
+                               final Object object2) {
                 final IMethod method1 = (IMethod) object1;
                 final IMethod method2 = (IMethod) object2;
                 int comparison = method1.getElementName().compareTo(method2.getElementName());
-                if (comparison != 0) {
-                    return comparison;
-                }
+                if (comparison != 0) return comparison;
                 final String[] types1 = method1.getParameterTypes();
                 final String[] types2 = method2.getParameterTypes();
                 comparison = types1.length - types2.length;
-                if (comparison != 0) {
-                    return comparison;
-                }
+                if (comparison != 0) return comparison;
                 for (int ndx = 0; ndx < types1.length; ndx++) {
-                    comparison =
-                            Signature.getSignatureSimpleName(types1[ndx]).compareTo(
-                                    Signature.getSignatureSimpleName(types2[ndx]));
-                    if (comparison != 0) {
-                        return comparison;
-                    }
+                    comparison = Signature.getSignatureSimpleName(types1[ndx]).compareTo(
+                                 Signature.getSignatureSimpleName(types2[ndx]));
+                    if (comparison != 0) return comparison;
                 }
                 return 0;
             }
@@ -192,11 +173,10 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
                 createNewClass(classButton, methodComboViewer);
             }
         });
-        return area;
     }
 
     void createNewClass(final Button classButton,
-            final ComboViewer methodComboViewer) {
+                        final ComboViewer methodComboViewer) {
         final OpenNewClassWizardAction action = new OpenNewClassWizardAction();
         action.setSelection(new StructuredSelection(project));
         final Page page = new Page(sourceType);
@@ -207,9 +187,9 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
         if (type != null) {
             try {
                 type.createMethod("public " + page.returnType + " " + page.methodName + "("
-                        + page.prmType + " input) {\n"
-                        + "\treturn null;\n"
-                        + "}",
+                                  + page.prmType + " input) {\n"
+                                  + "\treturn null;\n"
+                                  + "}",
                         null, false, null);
                 if (type.getCompilationUnit().isWorkingCopy()) {
                     type.getCompilationUnit().commitWorkingCopy(true, null);
@@ -221,28 +201,31 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog#message()
+     */
     @Override
-    protected int getShellStyle() {
-        return super.getShellStyle() | SWT.RESIZE;
+    protected String message() {
+        return "Select or create the Java class and method that implements the custom operation";
     }
 
     void methodSelected(final ComboViewer methodComboViewer) {
-        method =
-                (IMethod) ((IStructuredSelection) methodComboViewer.getSelection())
-                        .getFirstElement();
+        final IStructuredSelection selection =
+            (IStructuredSelection) methodComboViewer.getSelection();
+        method = (IMethod) selection.getFirstElement();
     }
 
     void selectClass(final Button classButton,
-            final ComboViewer methodComboViewer) {
+                     final ComboViewer methodComboViewer) {
         final Util.Filter filter = new Util.Filter() {
 
             @Override
             public boolean accept(final IType type) {
                 try {
                     for (final IMethod method : type.getMethods()) {
-                        if (valid(method)) {
-                            return true;
-                        }
+                        if (valid(method)) return true;
                     }
                 } catch (final JavaModelException ignored) {
                 }
@@ -250,31 +233,36 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
             }
         };
         final IType type = Util.selectClass(getShell(), project, filter);
-        if (type != null) {
-            setClass(type, classButton, methodComboViewer);
-        }
+        if (type != null) setClass(type, classButton, methodComboViewer);
     }
 
     void setClass(final IType type,
-            final Button classButton,
-            final ComboViewer methodComboViewer) {
+                  final Button classButton,
+                  final ComboViewer methodComboViewer) {
         try {
             classButton.setText(type.getFullyQualifiedName());
             final List<IMethod> methods = new ArrayList<>(Arrays.asList(type.getMethods()));
             for (final Iterator<IMethod> iter = methods.iterator(); iter.hasNext();) {
-                if (!valid(iter.next())) {
-                    iter.remove();
-                }
+                if (!valid(iter.next())) iter.remove();
             }
             methodComboViewer.setInput(methods.toArray());
-            if (!methods.isEmpty()) {
+            if (!methods.isEmpty())
                 methodComboViewer.setSelection(new StructuredSelection(methods.get(0)));
-            }
             this.type = type;
             getButton(IDialogConstants.OK_ID).setEnabled(true);
         } catch (final JavaModelException e) {
             Activator.error(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog#title()
+     */
+    @Override
+    protected String title() {
+        return "Add Custom Operation";
     }
 
     boolean valid(final IMethod method) {
@@ -302,12 +290,13 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
         }
 
         private void createComboPane(final Composite parent,
-                final String initialText,
-                final String labelText,
-                final CustomFunctionListener listener) {
+                                     final String initialText,
+                                     final String labelText,
+                                     final CustomFunctionListener listener) {
             final Combo combo = new Combo(parent, SWT.READ_ONLY);
-            combo.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER)
-                    .grab(true, false).create());
+            combo.setLayoutData(GridDataFactory.swtDefaults()
+                                               .align(SWT.FILL, SWT.CENTER)
+                                               .grab(true, false).create());
             combo.setItems(new String[] {
                     "boolean",
                     "byte",
@@ -336,10 +325,10 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
 
         @Override
         protected void createEnclosingTypeControls(final Composite composite,
-                final int columns) {}
+                                                   final int columns) {}
 
         private void createLabelPane(final Composite parent,
-                final String text) {
+                                     final String text) {
             final Label label = new Label(parent, SWT.NONE);
             label.setLayoutData(GridDataFactory.swtDefaults().span(2, 1).create());
             label.setText(text);
@@ -347,23 +336,25 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
 
         @Override
         protected void createModifierControls(final Composite composite,
-                final int columns) {}
+                                              final int columns) {}
 
         @Override
         protected void createPackageControls(final Composite composite,
-                final int nColumns) {
+                                             final int nColumns) {
             super.createPackageControls(composite, nColumns);
             pkgText = composite.getChildren()[4];
         }
 
         @Override
         protected void createSuperInterfacesControls(final Composite composite,
-                final int columns) {
+                                                     final int columns) {
             super.createSuperInterfacesControls(composite, columns);
 
             final Group group = new Group(composite, SWT.NONE);
-            group.setLayoutData(GridDataFactory.fillDefaults().span(columns, 1).grab(true, false)
-                    .create());
+            group.setLayoutData(GridDataFactory.fillDefaults()
+                                               .span(columns, 1)
+                                               .grab(true, false)
+                                               .create());
             group.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).numColumns(6).create());
             group.setText("Custom Function");
             createLabelPane(group, "Return Type");
@@ -399,12 +390,13 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
         }
 
         private Text createTextPane(final Composite parent,
-                final String initialText,
-                final String labelText,
-                final CustomFunctionListener listener) {
+                                    final String initialText,
+                                    final String labelText,
+                                    final CustomFunctionListener listener) {
             final Text text = new Text(parent, SWT.BORDER);
-            text.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER)
-                    .grab(true, false).create());
+            text.setLayoutData(GridDataFactory.swtDefaults()
+                                              .align(SWT.FILL, SWT.CENTER)
+                                              .grab(true, false).create());
             text.addModifyListener(new ModifyListener() {
 
                 @Override
@@ -419,36 +411,35 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
         }
 
         IStatus nameStatus(final String name,
-                final String nameName) {
+                           final String nameName) {
             // TODO I think there is an Apache library that does this along with
             // checking for Java reserved keywords
             if (name == null || name.isEmpty())
                 return new Status(IStatus.ERROR,
-                        Activator.plugin().getBundle().getSymbolicName(),
-                        "A " + nameName + " name for the custom operation must be provided");
+                                   Activator.plugin().getBundle().getSymbolicName(),
+                                   "A " + nameName
+                                   + " name for the custom operation must be provided");
             final char[] chars = name.toCharArray();
             final char firstChar = chars[0];
             if (!Character.isJavaIdentifierStart(firstChar)) {
                 return new Status(IStatus.ERROR,
-                        Activator.plugin().getBundle().getSymbolicName(),
-                        "The " + nameName
-                                + " name for the custom operation begins with an invalid character");
+                                  Activator.plugin().getBundle().getSymbolicName(),
+                                  "The " + nameName
+                                  + " name for the custom operation begins with an invalid character");
             }
             for (int ndx = 1; ndx < chars.length; ++ndx) {
                 if (!Character.isJavaIdentifierPart(chars[ndx])) {
-                    return new Status(
-                            IStatus.ERROR,
-                            Activator.plugin().getBundle().getSymbolicName(),
-                            "The "
-                                    + nameName
-                                    + " name for the custom operation contains at least one invalid character");
+                    return new Status(IStatus.ERROR,
+                                      Activator.plugin().getBundle().getSymbolicName(),
+                                      "The " + nameName
+                                      + " name for the custom operation contains at least one invalid character");
                 }
             }
             if (Character.isUpperCase(firstChar)) {
                 return new Status(IStatus.WARNING,
-                        Activator.plugin().getBundle().getSymbolicName(),
-                        "The " + nameName
-                                + " name for the custom operation begins with an uppercase letter");
+                                  Activator.plugin().getBundle().getSymbolicName(),
+                                  "The " + nameName
+                                  + " name for the custom operation begins with an uppercase letter");
             }
             return Status.OK_STATUS;
         }
@@ -459,11 +450,12 @@ final class AddCustomFunctionDialog extends TitleAreaDialog {
         }
 
         IStatus typeStatus(final String type,
-                final String typeName) {
+                           final String typeName) {
             if (type == null)
                 return new Status(IStatus.ERROR,
-                        Activator.plugin().getBundle().getSymbolicName(),
-                        "A " + typeName + " type for the custom operation must be selected");
+                                  Activator.plugin().getBundle().getSymbolicName(),
+                                  "A " + typeName
+                                  + " type for the custom operation must be selected");
             return Status.OK_STATUS;
         }
 

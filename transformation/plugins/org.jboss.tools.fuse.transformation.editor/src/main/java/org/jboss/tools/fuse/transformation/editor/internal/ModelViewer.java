@@ -9,6 +9,9 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -16,6 +19,7 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -42,65 +46,70 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.mapper.model.Model;
-import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
 class ModelViewer extends Composite {
 
-    final TransformationEditor editor;
-    Model rootModel;
+    final TransformationConfig config;
+    final Model rootModel;
     final TreeViewer treeViewer;
     boolean showFieldTypes;
     boolean hideMappedFields;
 
-    ModelViewer(final TransformationEditor editor,
-            final Composite parent,
-            final Model rootModel) {
-        super(parent, SWT.NONE);
-        setBackground(parent.getParent().getParent().getBackground());
+    ModelViewer(final TransformationConfig config,
+                final Composite parent,
+                final Model rootModel) {
+        super(parent, SWT.BORDER);
+        setBackground(Colors.BACKGROUND);
 
-        this.editor = editor;
+        this.config = config;
         this.rootModel = rootModel;
 
-        setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+        setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
 
         final ToolBar toolBar = new ToolBar(this, SWT.NONE);
         final ToolItem collapseAllButton = new ToolItem(toolBar, SWT.PUSH);
-        collapseAllButton.setImage(Util.Images.COLLAPSE_ALL);
+        collapseAllButton.setImage(Images.COLLAPSE_ALL);
         final ToolItem filterTypesButton = new ToolItem(toolBar, SWT.CHECK);
-        filterTypesButton.setImage(Util.Images.FILTER);
+        filterTypesButton.setImage(Images.FILTER);
         filterTypesButton.setToolTipText("Show types");
         final ToolItem filterMappedFieldsButton = new ToolItem(toolBar, SWT.CHECK);
-        filterMappedFieldsButton.setImage(Util.Images.HIDE_MAPPED);
+        filterMappedFieldsButton.setImage(Images.HIDE_MAPPED);
         filterMappedFieldsButton.setToolTipText("Hide mapped fields");
 
         final Composite searchPane = new Composite(this, SWT.NONE);
         searchPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         searchPane.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
         searchPane.setToolTipText("Search");
+        searchPane.setBackground(Colors.BACKGROUND);
         final Label searchLabel = new Label(searchPane, SWT.NONE);
-        searchLabel.setImage(Util.Images.SEARCH);
+        searchLabel.setImage(Images.SEARCH);
         searchLabel.setToolTipText("Search");
         final Text searchText = new Text(searchPane, SWT.NONE);
         searchText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         searchText.setToolTipText("Search");
         final Label clearSearchLabel = new Label(searchPane, SWT.NONE);
-        clearSearchLabel.setImage(Util.Images.CLEAR);
+        clearSearchLabel.setImage(Images.CLEAR);
         clearSearchLabel.setToolTipText("Search");
         searchPane.addPaintListener(Util.ovalBorderPainter());
 
         treeViewer = new TreeViewer(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-        treeViewer.getTree().setLayoutData(
-                GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
+        treeViewer.getTree().setLayoutData(GridDataFactory.fillDefaults()
+                                                          .span(2, 1)
+                                                          .grab(true, true)
+                                                          .create());
         treeViewer.setComparator(new ViewerComparator() {
 
             @Override
             public int compare(final Viewer viewer,
-                    final Object model1,
-                    final Object model2) {
+                               final Object model1,
+                               final Object model2) {
                 if (model1 instanceof Model && model2 instanceof Model)
-                    return ((Model) model1).getName()
-                            .compareTo(((Model) model2).getName());
+                    return ((Model) model1).getName().compareTo(((Model) model2).getName());
                 return 0;
             }
         });
@@ -111,9 +120,9 @@ class ModelViewer extends Composite {
 
             @Override
             public boolean select(final Viewer viewer,
-                    final Object parentElement,
-                    final Object element) {
-                return show(editor, element);
+                                  final Object parentElement,
+                                  final Object element) {
+                return show(element);
             }
         });
         treeViewer.addDragSupport(DND.DROP_MOVE,
@@ -122,7 +131,7 @@ class ModelViewer extends Composite {
                     @Override
                     public void dragStart(final DragSourceEvent event) {
                         LocalSelectionTransfer.getTransfer()
-                                .setSelection(treeViewer.getSelection());
+                                              .setSelection(treeViewer.getSelection());
                     }
                 });
         // Override selection background color
@@ -132,10 +141,9 @@ class ModelViewer extends Composite {
             public void handleEvent(final Event event) {
                 if ((event.detail & SWT.SELECTED) != 0) {
                     final Color oldBackground = event.gc.getBackground();
-                    event.gc.setBackground(getDisplay().getSystemColor(
-                            treeViewer.getTree().isFocusControl()
-                                    ? SWT.COLOR_LIST_SELECTION
-                                    : SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
+                    event.gc.setBackground(treeViewer.getTree().isFocusControl()
+                                           ? Colors.SELECTED
+                                           : Colors.SELECTED_NO_FOCUS);
                     event.gc.fillRectangle(event.getBounds());
                     event.gc.setBackground(oldBackground);
                     event.detail &= ~SWT.SELECTED;
@@ -156,17 +164,17 @@ class ModelViewer extends Composite {
                 final ToolItem item = (ToolItem) event.widget;
                 showFieldTypes = item.getSelection();
                 item.setToolTipText((showFieldTypes ? "Hide" : "Show") + " types");
-                treeViewer.refresh(true);
+                treeViewer.refresh();
             }
         });
         filterMappedFieldsButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(final org.eclipse.swt.events.SelectionEvent event) {
+            public void widgetSelected(final SelectionEvent event) {
                 final ToolItem item = (ToolItem) event.widget;
                 hideMappedFields = item.getSelection();
                 item.setToolTipText((hideMappedFields ? "Show" : "Hide") + " mapped fields");
-                treeViewer.refresh(true);
+                treeViewer.refresh();
             }
         });
         searchLabel.addMouseListener(new MouseAdapter() {
@@ -185,11 +193,43 @@ class ModelViewer extends Composite {
         });
 
         treeViewer.setInput("root");
+
+        config.addListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(final PropertyChangeEvent event) {
+                if (event.getPropertyName().equals(TransformationConfig.MAPPING))
+                    treeViewer.refresh();
+            }
+        });
     }
 
-    boolean show(final TransformationEditor editor,
-            final Object element) {
-        return !hideMappedFields || !editor.mapped((Model) element, rootModel);
+    /**
+     * @param model
+     * @param rootModel
+     * @return <code>true</code> if the supplied model has been mapped at least once
+     */
+    public boolean mapped(final Model model,
+                          final Model rootModel) {
+        return rootModel.equals(config.getSourceModel())
+               ? !config.getMappingsForSource(model).isEmpty()
+               : !config.getMappingsForTarget(model).isEmpty();
+    }
+
+    private void expand(final Model model) {
+        if (model == null) return;
+        expand(model.getParent());
+        treeViewer.expandToLevel(model, 0);
+    }
+
+    void select(final Model model) {
+        if (model == null) return;
+        expand(model.getParent());
+        treeViewer.setSelection(new StructuredSelection(model), true);
+    }
+
+    boolean show(final Object element) {
+        return !hideMappedFields || !mapped((Model) element, rootModel);
     }
 
     class ContentProvider implements ITreeContentProvider {
@@ -219,8 +259,8 @@ class ModelViewer extends Composite {
 
         @Override
         public void inputChanged(final Viewer viewer,
-                final Object oldInput,
-                final Object newInput) {}
+                                 final Object oldInput,
+                                 final Object newInput) {}
     }
 
     class LabelProvider extends StyledCellLabelProvider {
@@ -233,22 +273,23 @@ class ModelViewer extends Composite {
 
         private Image getImage(final Object element) {
             final Model model = (Model) element;
-            Image img =
-                    model.getChildren() != null && model.getChildren().size() > 0 ? Util.Images.ELEMENT
-                            : Util.Images.ATTRIBUTE;
+            Image img = model.getChildren() != null && model.getChildren().size() > 0
+                        ? Images.ELEMENT
+                        : Images.ATTRIBUTE;
             if (model.isCollection())
-                img =
-                        new DecorationOverlayIcon(img, Util.Decorations.COLLECTION,
-                                IDecoration.BOTTOM_RIGHT).createImage();
-            if (editor.mapped((Model) element, rootModel))
-                return new DecorationOverlayIcon(img, Util.Decorations.MAPPED,
-                        IDecoration.TOP_RIGHT).createImage();
+                img = new DecorationOverlayIcon(img,
+                                                Decorations.COLLECTION,
+                                                IDecoration.BOTTOM_RIGHT).createImage();
+            if (mapped((Model) element, rootModel))
+                return new DecorationOverlayIcon(img,
+                                                 Decorations.MAPPED,
+                                                 IDecoration.TOP_RIGHT).createImage();
             return img;
         }
 
         private String getText(final Object element,
-                final StyledString text,
-                final boolean showFieldTypesInLabel) {
+                               final StyledString text,
+                               final boolean showFieldTypesInLabel) {
             final Model model = (Model) element;
             text.append(model.getName());
             if (showFieldTypesInLabel) {
@@ -257,9 +298,8 @@ class ModelViewer extends Composite {
                     text.append(":", StyledString.DECORATIONS_STYLER);
                     text.append(" " + LIST_OF, StyledString.QUALIFIER_STYLER);
                     text.append(type.substring(1, type.length() - 1),
-                            StyledString.DECORATIONS_STYLER);
-                } else
-                    text.append(": " + type, StyledString.DECORATIONS_STYLER);
+                                StyledString.DECORATIONS_STYLER);
+                } else text.append(": " + type, StyledString.DECORATIONS_STYLER);
             }
             return text.getString();
         }

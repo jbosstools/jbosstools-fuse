@@ -38,40 +38,47 @@ import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 
 /**
- * @author bfitzpat
+ *
  */
-@SuppressWarnings("restriction")
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#newCreateFeature(org.eclipse.graphiti.features.IFeatureProvider)
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#newCreateFeature(org.eclipse.graphiti.features.IFeatureProvider)
      */
     @Override
     public ICreateFeature newCreateFeature(IFeatureProvider fp) {
-        return new DataMapperEndpointFigureFeature(fp, 
-                "Data Transformation", 
+        return new DataMapperEndpointFigureFeature(fp,
+                "Data Transformation",
                 "Creates a Data Transformation endpoint...");
     }
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#getImageDecorator(java.lang.Object)
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getImageDecorator(java.lang.Object)
      */
     @Override
     public IImageDecorator getImageDecorator(Object object) {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#getTypeName()
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getTypeName()
      */
     @Override
     public String getTypeName() {
         return "DataTransformation";
     }
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#supports(java.lang.Class)
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#supports(java.lang.Class)
      */
     @SuppressWarnings("rawtypes")
     @Override
@@ -79,12 +86,14 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#getRequiredCapabilities(java.lang.Object)
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getRequiredCapabilities(java.lang.Object)
      */
     @Override
     public List<ComponentDependency> getRequiredCapabilities(Object object) {
-        List<ComponentDependency> deps = new ArrayList<ComponentDependency>();
+        List<ComponentDependency> deps = new ArrayList<>();
         ComponentDependency dep = new ComponentDependency();
         dep.setGroupId("org.apache.camel");
         dep.setArtifactId("camel-dozer");
@@ -106,11 +115,11 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             RouteContainer routeContainer = Activator.getDiagramEditor().getModel();
             CamelContextFactoryBean camelContext =
                     routeContainer.getModel().getContextElement();
-            
+
             // Launch the New Transformation wizard
-            NewTransformationWizard wizard = new NewTransformationWizard(); 
+            NewTransformationWizard wizard = new NewTransformationWizard();
             WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-            int status = dialog.open(); 
+            int status = dialog.open();
             if (status != IStatus.OK) {
                 return new Object[] {};
             }
@@ -123,7 +132,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             if (wizard.getTargetFormat() != null) {
                 addDataFormat(camelContext, wizard.getTargetFormat());
             }
-            
+
             // Create the route endpoint
             Endpoint routeEndpoint = new Endpoint("ref:xml2json");
             if (selectedRoute != null) {
@@ -149,7 +158,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
                 CamelEndpointFactoryBean endpoint) {
             List<CamelEndpointFactoryBean> endpoints = context.getEndpoints();
             if (endpoints == null) {
-                endpoints = new LinkedList<CamelEndpointFactoryBean>();
+                endpoints = new LinkedList<>();
             }
             endpoints.add(endpoint);
             setEndpoints(context, endpoints);
@@ -172,6 +181,11 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getPaletteCategory()
+     */
     @Override
     public String getPaletteCategory() {
         return CATEGORY_TYPE.TRANSFORMATION.name();
@@ -181,8 +195,11 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
      * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
      * endpoints on CamelContextFactoryBean directly. Use reflection for now
      * until this issue is resolved upstream.
+     *
+     * @param context
+     * @param endpoints
      */
-    private void setEndpoints(CamelContextFactoryBean context,
+    void setEndpoints(CamelContextFactoryBean context,
             List<CamelEndpointFactoryBean> endpoints) {
         try {
             Field endpointsField = context.getClass().getDeclaredField("endpoints");

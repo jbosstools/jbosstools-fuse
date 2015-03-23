@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -63,7 +63,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private static final String CAMEL_CONFIG_PATH = Util.RESOURCES_PATH
             + "META-INF/spring/camel-context.xml";
     private static final String OBJECT_FACTORY_NAME = "ObjectFactory";
-    
+
     // Whether Camel configuration should be persisted directly by the wizard
     private boolean saveCamelConfig = true;
     private DataFormatDefinition sourceFormat;
@@ -78,7 +78,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public NewTransformationWizard() {
         addPage(new FirstPage(uiModel));
     }
-    
+
     private String generateModel(final String filePath,
             final ModelType type) throws Exception {
         // Build class name from file name
@@ -255,7 +255,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 // Update Camel config
                 final IPath resourcesPath =
                         uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
-                
+
                 sourceFormat = uiModel.camelConfigBuilder.createDataFormat(
                         uiModel.getSourceType().transformType, sourceClassName);
                 targetFormat = uiModel.camelConfigBuilder.createDataFormat(
@@ -269,7 +269,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                             new FileOutputStream(new File(uiModel.getProject()
                                     .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
                                     .getLocationURI()))) {
-                    
+
                         uiModel.camelConfigBuilder.saveConfig(camelConfigStream);
                     } catch (final Exception e) {
                         Activator.error(e);
@@ -308,19 +308,31 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
         return true;
     }
-    
+
+    /**
+     * @param saveCamelConfig
+     */
     public void setSaveCamelConfig(boolean saveCamelConfig) {
         this.saveCamelConfig = saveCamelConfig;
     }
-    
+
+    /**
+     * @return the source format
+     */
     public DataFormatDefinition getSourceFormat() {
         return sourceFormat;
     }
 
+    /**
+     * @return the target format
+     */
     public DataFormatDefinition getTargetFormat() {
         return targetFormat;
     }
-    
+
+    /**
+     * @return the Camel endpoint
+     */
     public CamelEndpoint getEndpoint() {
         return endpoint;
     }

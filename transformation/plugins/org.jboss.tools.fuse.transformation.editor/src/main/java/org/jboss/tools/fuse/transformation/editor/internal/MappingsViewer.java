@@ -9,6 +9,8 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,68 +20,74 @@ import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.MappingOperation;
-import org.jboss.mapper.Variable;
 import org.jboss.mapper.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
 /**
  *
  */
 public class MappingsViewer extends Composite {
 
+    final TransformationEditor editor;
     final ToolItem deleteButton;
     ScrolledComposite scroller;
-    Composite pane, sourcePane, mapsToPane, targetPane;
-    Color textBackground;
+    Composite summaryPane, sourcePane, mapsToPane, targetPane;
     Text prevTargetText;
     TraversalListener prevTraversalListener;
-    MappingRow selectedRow;
-    final List<MappingRow> mappingRows = new ArrayList<>();
+    MappingSummary selectedMappingSummary;
+    final List<MappingSummary> mappingSummaries = new ArrayList<>();
 
     /**
+     * @param config
      * @param editor
      * @param parent
-     * @param config
      */
-    public MappingsViewer(final TransformationEditor editor,
-            final Composite parent,
-            final MapperConfiguration config) {
+    public MappingsViewer(final TransformationConfig config,
+                          final TransformationEditor editor,
+                          final Composite parent) {
         super(parent, SWT.NONE);
+        this.editor = editor;
 
-        setLayout(GridLayoutFactory.fillDefaults().create());
+        setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         setBackground(parent.getParent().getBackground());
 
         // Create tool bar
         final ToolBar toolBar = new ToolBar(this, SWT.NONE);
         final ToolItem addButton = new ToolItem(toolBar, SWT.PUSH);
-        addButton.setImage(new DecorationOverlayIcon(Util.Images.MAPPED,
-                Util.Decorations.ADD,
-                IDecoration.TOP_RIGHT).createImage());
+        addButton.setImage(new DecorationOverlayIcon(Images.MAPPED,
+                                                     Decorations.ADD,
+                                                     IDecoration.TOP_RIGHT).createImage());
         addButton.setToolTipText("Add a new mapping");
         addButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                setFocus(createMapping(editor, null));
+                config.newMapping();
             }
         });
-        addButton.setEnabled(false); // TODO remove once fully implemented
         deleteButton = new ToolItem(toolBar, SWT.PUSH);
-        deleteButton.setImage(Util.Images.DELETE);
+        deleteButton.setImage(Images.DELETE);
         deleteButton.setToolTipText("Delete the selected mapping");
         deleteButton.setEnabled(false);
         deleteButton.addSelectionListener(new SelectionAdapter() {
@@ -87,143 +95,143 @@ public class MappingsViewer extends Composite {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 try {
-                    selectedRow.unmap();
-                    selectedRow = null;
-                    deleteButton.setEnabled(false);
+                    config.removeMapping(selectedMappingSummary.mapping);
+                    config.save();
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
             }
         });
-
-        createContents(editor, config);
-    }
-
-    @SuppressWarnings("unused")
-    private void createContents(final TransformationEditor editor,
-            final MapperConfiguration config) {
+        final Composite headerPane = new Composite(this, SWT.NONE);
+        headerPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+        final Label sourceHeader = createHeader(headerPane, config.getSourceModel());
+        final Label targetHeader = createHeader(headerPane, config.getTargetModel());
         scroller = new ScrolledComposite(this, SWT.V_SCROLL);
         scroller.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         scroller.setExpandHorizontal(true);
         scroller.setExpandVertical(true);
         scroller.setBackground(getBackground());
-        pane = new Composite(scroller, SWT.NONE);
-        scroller.setContent(pane);
-        pane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).spacing(0, 0).create());
-        pane.setBackground(getBackground());
-        createHeader(pane, config.getSourceModel());
-        new Label(pane, SWT.NONE); // spacer
-        createHeader(pane, config.getTargetModel());
-        sourcePane = new Composite(pane, SWT.BORDER);
+        summaryPane = new Composite(scroller, SWT.NONE);
+        scroller.setContent(summaryPane);
+        summaryPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).spacing(0, 0).create());
+        summaryPane.setBackground(getBackground());
+        sourcePane = new Composite(summaryPane, SWT.BORDER);
         sourcePane.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         sourcePane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         sourcePane.setBackground(getBackground());
-        mapsToPane = new Composite(pane, SWT.NONE);
+        mapsToPane = new Composite(summaryPane, SWT.NONE);
         mapsToPane.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
         final int margin = sourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y / 2;
         mapsToPane.setLayout(GridLayoutFactory.fillDefaults().margins(margin, margin).spacing(0, 0)
-                .create());
+                                              .create());
         mapsToPane.setBackground(getBackground());
-        targetPane = new Composite(pane, SWT.BORDER);
+        targetPane = new Composite(summaryPane, SWT.BORDER);
         targetPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         targetPane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         targetPane.setBackground(getBackground());
 
         for (final MappingOperation<?, ?> mapping : config.getMappings()) {
-            createMapping(editor, mapping);
+            mappingSummaries.add(new MappingSummary(config, mapping, this));
         }
-    }
 
-    private void createHeader(final Composite parent,
-            final Model model) {
-        final Composite headerPane = new Composite(parent, SWT.BORDER);
-        headerPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        headerPane.setLayout(GridLayoutFactory.fillDefaults().create());
-        final Label label = new Label(headerPane, SWT.CENTER);
-        label.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        label.setText(model.getName());
-        label.setBackground(getDisplay().getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
-    }
+        final int width = Math.max(sourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
+                                   targetPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
+        ((GridData)sourcePane.getLayoutData()).widthHint = width;
+        ((GridData)targetPane.getLayoutData()).widthHint = width;
 
-    /**
-     * @param editor
-     * @param mapping
-     * @return the newly-created mapping row
-     */
-    public MappingRow createMapping(final TransformationEditor editor,
-            final MappingOperation<?, ?> mapping) {
-        final MappingRow mappingRow = new MappingRow(editor, this, mapping);
-        mappingRows.add(mappingRow);
-        return mappingRow;
-    }
+        sourcePane.addControlListener(new ControlAdapter() {
 
-    /**
-     * @param editor
-     * @param config
-     */
-    public void refresh(final TransformationEditor editor,
-            final MapperConfiguration config) {
-        scroller.dispose();
-        createContents(editor, config);
-    }
-
-    void selectMapping(final TransformationEditor editor,
-            final MappingRow row) {
-        if (selectedRow != null)
-            selectedRow.deselect();
-        selectedRow = row;
-        deleteButton.setEnabled(true);
-        selectedRow.select();
-        editor.selectMapping(row.mapping);
-    }
-
-    /**
-     * @param mappingRow
-     */
-    public void setFocus(final MappingRow mappingRow) {
-        mappingRow.sourceText.setFocus();
-    }
-
-    /**
-     * @param mapping
-     * @throws Exception
-     */
-    public void unmap(final MappingOperation<?, ?> mapping) throws Exception {
-        for (final MappingRow mappingRow : mappingRows) {
-            if (mapping.getSource().equals(mappingRow.mapping.getSource())
-                    && mapping.getTarget().equals(mappingRow.mapping.getTarget())) {
-                mappingRow.unmap();
-                if (mappingRow == selectedRow) {
-                    selectedRow = null;
-                    deleteButton.setEnabled(false);
-                }
-                return;
+            @Override
+            public void controlResized(final ControlEvent event) {
+                sourceHeader.setBounds(sourcePane.getLocation().x, 0,
+                                       sourcePane.getSize().x, sourceHeader.getSize().y);
             }
-        }
+        });
+        targetPane.addControlListener(new ControlAdapter() {
+
+            @Override
+            public void controlResized(final ControlEvent event) {
+                targetHeader.setBounds(targetPane.getLocation().x, 0,
+                                       targetPane.getSize().x, targetHeader.getSize().y);
+            }
+        });
+        scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+        config.addListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(final PropertyChangeEvent event) {
+                if (!event.getPropertyName().equals(TransformationConfig.MAPPING)) return;
+                final MappingOperation<?, ?> mapping = (MappingOperation<?, ?>) event.getNewValue();
+                if (mapping != null) addMappingSummary(config, mapping);
+            }
+        });
     }
 
-    void updateLayout() {
-        pane.layout();
-        sourcePane.layout();
-        mapsToPane.layout();
-        targetPane.layout();
-        scroller.setMinSize(pane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+    void addMappingSummary(final TransformationConfig config,
+                           final MappingOperation<?, ?> mapping) {
+        final MappingSummary mappingSummary = new MappingSummary(config, mapping, this);
+        mappingSummaries.add(mappingSummary);
+        scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        scroller.setOrigin(0, scroller.getSize().y);
+        mappingSummary.sourceText.setFocus(); // This will call selected()
+    }
+
+    private Label createHeader(final Composite parent,
+                               final Model model) {
+        final Label label = new Label(parent, SWT.CENTER);
+        label.setText(model.getName());
+        label.setBackground(Colors.MODEL);
+        label.setSize(label.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        label.addPaintListener(new PaintListener() {
+
+            @Override
+            public void paintControl(final PaintEvent event) {
+                event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
+                final Rectangle bounds = label.getBounds();
+                event.gc.drawRectangle(0, 0, bounds.width - 1, bounds.height - 1);
+            }
+        });
+        return label;
+    }
+
+    private void focusOnMappingSummary(final int index) {
+        final MappingSummary mappingSummary = mappingSummaries.get(index);
+        if (selectedMappingSummary.sourceText.isFocusControl())
+            mappingSummary.sourceText.setFocus();
+        else mappingSummary.targetText.setFocus();
     }
 
     /**
-     * @param mapping
+     * Called by {@link MappingSummary#dispose(MappingOperation)}
+     *
+     * @param mappingSummary
      */
-    public void updateMapping(final MappingOperation<?, ?> mapping) {
-        selectedRow.mapping = mapping;
+    void removeMappingSummary(final MappingSummary mappingSummary) {
+        mappingSummaries.remove(mappingSummary);
+        if (mappingSummary == selectedMappingSummary) {
+            selectedMappingSummary = null;
+            deleteButton.setEnabled(false);
+        }
+        scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 
-    /**
-     * @param variable
-     */
-    public void updateVariableMappings(final Variable variable) {
-        for (final MappingRow mappingRow : mappingRows) {
-            mappingRow.updateVariableMapping(variable);
-        }
+    void selected(final MappingSummary mappingSummary) {
+        if (selectedMappingSummary != null && mappingSummary != selectedMappingSummary)
+            selectedMappingSummary.deselect();
+        selectedMappingSummary = mappingSummary;
+        deleteButton.setEnabled(true);
+        editor.selected(mappingSummary.mapping);
+    }
+
+    void selectNextMappingSummary() {
+        final int ndx = mappingSummaries.indexOf(this) + 1;
+        if (ndx < mappingSummaries.size()) focusOnMappingSummary(ndx);
+    }
+
+    void selectPreviousMappingSummary() {
+        final int ndx = mappingSummaries.indexOf(this) - 1;
+        if (ndx >= 0) focusOnMappingSummary(ndx);
     }
 
     interface CustomFunctionListener {
@@ -237,7 +245,7 @@ public class MappingsViewer extends Composite {
         TraversalListener prevTraversalListener, nextTraversalListener;
 
         TraversalListener(final Text prevText,
-                final Text nextText) {
+                          final Text nextText) {
             this.prevText = prevText;
             this.nextText = nextText;
         }

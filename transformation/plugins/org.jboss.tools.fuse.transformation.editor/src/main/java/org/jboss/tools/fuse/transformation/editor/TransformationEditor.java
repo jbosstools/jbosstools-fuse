@@ -9,22 +9,23 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLClassLoader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
@@ -33,36 +34,27 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
-import org.jboss.mapper.CustomMapping;
-import org.jboss.mapper.FieldMapping;
-import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.MappingOperation;
-import org.jboss.mapper.MappingType;
-import org.jboss.mapper.Variable;
-import org.jboss.mapper.VariableMapping;
 import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.camel.CamelEndpoint;
 import org.jboss.mapper.camel.EndpointHelper;
-import org.jboss.mapper.dozer.DozerMapperConfiguration;
-import org.jboss.mapper.model.Model;
-import org.jboss.mapper.model.ModelBuilder;
-import org.jboss.tools.fuse.transformation.editor.internal.CamelEndpointSelectionDialog;
-import org.jboss.tools.fuse.transformation.editor.internal.MappingViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder;
-import org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder.DropListener;
 import org.jboss.tools.fuse.transformation.editor.internal.VariablesViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
 /**
  *
@@ -71,14 +63,12 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 // TODO content assist in text
 // TODO search fields in model viewers
 // TODO search in mappings viewer
-// TODO DnD from model viewer to add new mapping
-public class TransformationEditor extends EditorPart {
+public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
     private static final int SASH_COLOR = SWT.COLOR_DARK_GRAY;
     private static final int SASH_WIDTH = 3;
 
-    IFile configFile;
-    MapperConfiguration config;
+    TransformationConfig config;
     URLClassLoader loader;
     File camelConfigFile;
     CamelConfigBuilder camelConfig;
@@ -87,49 +77,7 @@ public class TransformationEditor extends EditorPart {
     MappingsViewer mappingsViewer;
     Text helpText;
     ModelTabFolder sourceModelTabFolder, targetModelTabFolder;
-    MappingViewer mappingViewer;
-
-    /**
-     * @param existingModel
-     * @param name
-     * @return the new Model
-     * @throws Exception
-     */
-    public Model changeModel(final Model existingModel,
-            final String name) throws Exception {
-        final Model model = ModelBuilder.fromJavaClass(loader.loadClass(name));
-        if (existingModel.equals(model))
-            return model;
-        final boolean sourceChanged = existingModel.equals(config.getTargetModel());
-        if (sourceChanged) {
-            final String targetType = config.getTargetModel().getType();
-            config.removeAllMappings();
-            config.addClassMapping(model.getType(), targetType);
-        } else {
-            final String sourceType = config.getSourceModel().getType();
-            config.removeAllMappings();
-            config.addClassMapping(sourceType, model.getType());
-        }
-        if (camelEndpoint == null) {
-            final CamelEndpointSelectionDialog dlg =
-                    new CamelEndpointSelectionDialog(Display.getCurrent().getActiveShell(),
-                            configFile.getProject(),
-                            null);
-            if (dlg.open() != Window.OK)
-                throw new Exception("Unable to update Camel endpoint");
-            setCamelEndpoint(dlg.getEndpointID(), dlg.getCamelFilePath());
-        } else {
-            if (sourceChanged)
-                EndpointHelper.setSourceModel(camelEndpoint, model.getType());
-            else
-                EndpointHelper.setTargetModel(camelEndpoint, model.getType());
-            saveCamelConfig();
-        }
-        save();
-        mappingsViewer.refresh(this, config);
-        updateHelpText(helpText);
-        return model;
-    }
+    MappingDetailViewer mappingDetailViewer;
 
     /**
      * {@inheritDoc}
@@ -147,10 +95,10 @@ public class TransformationEditor extends EditorPart {
         // Create source model toggle button
         ToolBar toolBar = new ToolBar(pane, SWT.NONE);
         toolBar.setLayoutData(GridDataFactory.swtDefaults()
-                .align(SWT.BEGINNING, SWT.BOTTOM)
-                .create());
+                                             .align(SWT.BEGINNING, SWT.BOTTOM)
+                                             .create());
         final ToolItem sourceViewerButton = new ToolItem(toolBar, SWT.CHECK);
-        sourceViewerButton.setImage(Util.Images.TREE);
+        sourceViewerButton.setImage(Images.TREE);
         sourceViewerButton.setSelection(true);
         // Create help text
         helpText = new Text(pane, SWT.MULTI | SWT.WRAP);
@@ -161,59 +109,49 @@ public class TransformationEditor extends EditorPart {
         // Create target model toggle button
         toolBar = new ToolBar(pane, SWT.NONE);
         toolBar.setLayoutData(GridDataFactory.swtDefaults()
-                .align(SWT.END, SWT.BOTTOM)
-                .create());
+                                             .align(SWT.END, SWT.BOTTOM)
+                                             .create());
         final ToolItem targetViewerButton = new ToolItem(toolBar, SWT.CHECK);
-        targetViewerButton.setImage(Util.Images.TREE);
+        targetViewerButton.setImage(Images.TREE);
         targetViewerButton.setSelection(true);
         // Create splitter between mappings viewer and model viewers
         final SashForm horizontalSplitter = new SashForm(pane, SWT.HORIZONTAL);
         horizontalSplitter.setLayoutData(GridDataFactory.fillDefaults()
-                .span(3, 1)
-                .grab(true, true)
-                .create());
+                                                        .span(3, 1)
+                                                        .grab(true, true)
+                                                        .create());
         horizontalSplitter.setBackground(parent.getDisplay().getSystemColor(SASH_COLOR));
         horizontalSplitter.setSashWidth(SASH_WIDTH);
         // Create source model tab folder
-        sourceModelTabFolder =
-                new ModelTabFolder(this, horizontalSplitter, "Source", config.getSourceModel()) {
+        sourceModelTabFolder = new ModelTabFolder(config,
+                                                  horizontalSplitter,
+                                                  "Source",
+                                                  config.getSourceModel()) {
 
             private VariablesViewer variablesViewer;
 
             @Override
-            protected void constructAdditionalTabs(final TransformationEditor editor) {
+            protected void constructAdditionalTabs() {
                 // Create variables tab
                 final CTabItem variablesTab = new CTabItem(this, SWT.NONE);
                 variablesTab.setText("Variables");
-                variablesViewer = new VariablesViewer(editor, this, config);
+                variablesViewer = new VariablesViewer(config, this);
                 variablesTab.setControl(variablesViewer);
-                variablesTab.setImage(Util.Images.VARIABLE);
-            }
-
-            @Override
-            public void refresh() {
-                super.refresh();
-                variablesViewer.refresh();
+                variablesTab.setImage(Images.VARIABLE);
             }
         };
         // Create transformation viewer
-        mappingsViewer = new MappingsViewer(this, horizontalSplitter, config);
+        mappingsViewer = new MappingsViewer(config, this, horizontalSplitter);
         // Create target model tab folder
-        targetModelTabFolder =
-                new ModelTabFolder(this, horizontalSplitter, "Target", config.getTargetModel());
+        targetModelTabFolder = new ModelTabFolder(config,
+                                                  horizontalSplitter,
+                                                  "Target",
+                                                  config.getTargetModel());
         // Create detail area
-        mappingViewer = new MappingViewer(this, verticalSplitter);
+        mappingDetailViewer = new MappingDetailViewer(config, verticalSplitter);
         // Configure size of components in vertical splitter
         verticalSplitter.setWeights(new int[] {75, 25});
 
-        targetModelTabFolder.configureDropSupport(new DropListener() {
-
-            @Override
-            public void drop(final Object object,
-                    final Model targetModel) throws Exception {
-                dropOnTarget(object, targetModel);
-            }
-        });
         // Set weights so mappings view is at preferred with
         horizontalSplitter.addControlListener(new ControlAdapter() {
 
@@ -223,7 +161,9 @@ public class TransformationEditor extends EditorPart {
                 final double total = horizontalSplitter.getSize().x;
                 final int middleWeight = (int) (middle / total * 100.0);
                 final int sideWeight = (100 - middleWeight) / 2;
+                if (sideWeight < 0) return; // Happens occasionally when first displayed
                 horizontalSplitter.setWeights(new int[] {sideWeight, middleWeight, sideWeight});
+                horizontalSplitter.removeControlListener(this);
             }
         });
         // Wire tree buttons to toggle model viewers between visible and hidden
@@ -241,6 +181,13 @@ public class TransformationEditor extends EditorPart {
             public void widgetSelected(final SelectionEvent event) {
                 targetModelTabFolder.setVisible(targetViewerButton.getSelection());
                 horizontalSplitter.layout();
+            }
+        });
+        config.addListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(final PropertyChangeEvent event) {
+                firePropertyChange(IEditorPart.PROP_DIRTY);
             }
         });
     }
@@ -277,13 +224,6 @@ public class TransformationEditor extends EditorPart {
     @Override
     public void doSaveAs() {}
 
-    void dropOnTarget(final Object object,
-            final Model targetModel) throws Exception {
-        mappingsViewer.setFocus(mappingsViewer.createMapping(this, map(object, targetModel)));
-        refreshSourceModelViewer();
-        refreshTargetModelViewer();
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -291,24 +231,22 @@ public class TransformationEditor extends EditorPart {
      */
     @Override
     public void init(final IEditorSite site,
-            final IEditorInput input) throws PartInitException {
+                     final IEditorInput input) throws PartInitException {
         final IContentType contentType =
-                Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID);
+            Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID);
         if (!contentType.isAssociatedWith(input.getName()))
             throw new PartInitException("The Fuse Transformation editor can only be opened with a"
-                    + " Dozer configuration file.");
+                                        + " Dozer configuration file.");
         setSite(site);
         setInput(input);
         setPartName(input.getName());
 
-        configFile = ((FileEditorInput) getEditorInput()).getFile();
+        final IFile configFile = ((FileEditorInput) getEditorInput()).getFile();
         final IJavaProject javaProject = JavaCore.create(configFile.getProject());
         try {
-            loader =
-                    (URLClassLoader) JavaUtil.getProjectClassLoader(javaProject,
-                            getClass().getClassLoader());
-            config = DozerMapperConfiguration.loadConfig(new File(configFile.getLocationURI()),
-                    loader);
+            loader = (URLClassLoader) JavaUtil.getProjectClassLoader(javaProject,
+                                                                     getClass().getClassLoader());
+            config = new TransformationConfig(configFile, loader);
         } catch (final Exception e) {
             throw new PartInitException("Unable to load transformation configuration file", e);
         }
@@ -321,7 +259,7 @@ public class TransformationEditor extends EditorPart {
      */
     @Override
     public boolean isDirty() {
-        return false;
+        return config.hasMappingPlaceholders();
     }
 
     /**
@@ -335,112 +273,27 @@ public class TransformationEditor extends EditorPart {
     }
 
     /**
-     * @param fieldMapping
-     * @param customOperationType
-     * @param customOperationMethod
-     * @return A newly-created custom mapping
-     * @throws Exception
-     */
-    public CustomMapping map(final FieldMapping fieldMapping,
-            final String customOperationType,
-            final String customOperationMethod) throws Exception {
-        final CustomMapping mapping =
-                config.customizeMapping(fieldMapping, customOperationType, customOperationMethod);
-        save();
-        return mapping;
-    }
-
-    /**
-     * @param source
-     * @param targetModel
-     * @return A newly-created mapping
-     * @throws Exception
-     */
-    public MappingOperation<?, ?> map(final Object source,
-            final Model targetModel) throws Exception {
-        final MappingOperation<?, ?> mapping = source instanceof Model
-                ? config.mapField((Model) source, targetModel)
-                : config.mapVariable((Variable) source, targetModel);
-        save();
-        return mapping;
-    }
-
-    /**
-     * @param model
-     * @param rootModel
-     * @return <code>true</code> if the supplied model has been mapped at least
-     *         once
-     */
-    public boolean mapped(final Model model,
-            final Model rootModel) {
-        return rootModel.equals(config.getSourceModel())
-                ? !config.getMappingsForSource(model).isEmpty()
-                : !config.getMappingsForTarget(model).isEmpty();
-    }
-
-    /**
-     * @param variable
-     * @return <code>true</code> if the supplied variable has been mapped at
-     *         least once
-     */
-    public boolean mapped(final Variable variable) {
-        for (final MappingOperation<?, ?> mapping : config.getMappings()) {
-            if (mapping.getType() == MappingType.VARIABLE
-                    && ((VariableMapping) mapping).getSource().getName().equals(variable.getName()))
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * @return The project containing the transformation configuration being
-     *         edited
-     */
-    public IProject project() {
-        return configFile.getProject();
-    }
-
-    /**
+     * {@inheritDoc}
      *
+     * @see org.eclipse.ui.ISaveablePart2#promptToSaveOnClose()
      */
-    public void refreshSourceModelViewer() {
-        sourceModelTabFolder.refresh();
-    }
-
-    /**
-     *
-     */
-    public void refreshTargetModelViewer() {
-        targetModelTabFolder.refresh();
-    }
-
-    /**
-     * @throws Exception
-     */
-    public void save() throws Exception {
-        try (FileOutputStream stream =
-                new FileOutputStream(new File(configFile.getLocationURI()))) {
-            config.saveConfig(stream);
-            configFile.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
-        }
-    }
-
-    void saveCamelConfig() throws Exception {
-        try (FileOutputStream stream = new FileOutputStream(camelConfigFile)) {
-            camelConfig.saveConfig(stream);
-            configFile.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
-        }
+    @Override
+    public int promptToSaveOnClose() {
+        return config.hasMappingPlaceholders()
+               && !MessageDialog.openConfirm(mappingsViewer.getShell(), "Confirm",
+                                             "Are you sure?\n\n"
+                                             + "All incomplete mappings will be lost when the "
+                                             + "editor is closed.")
+        ? CANCEL : NO;
     }
 
     /**
      * @param mapping
      */
-    public void selectMapping(final MappingOperation<?, ?> mapping) {
-        if (mapping != null) {
-            sourceModelTabFolder.select(mapping.getSource());
-            targetModelTabFolder.select(mapping.getTarget());
-        }
-        mappingViewer.update(config.getSourceModel(), config.getTargetModel(), mapping);
+    public void selected(final MappingOperation<?, ?> mapping) {
+        sourceModelTabFolder.select(mapping.getSource());
+        targetModelTabFolder.select(mapping.getTarget());
+        mappingDetailViewer.update(mapping);
     }
 
     /**
@@ -449,14 +302,16 @@ public class TransformationEditor extends EditorPart {
      * @throws Exception
      */
     public void setCamelEndpoint(final String endPointId,
-            final String camelFilePath) throws Exception {
-        camelConfigFile =
-                new File(configFile.getProject().getFile(camelFilePath).getLocationURI());
+                                 final String camelFilePath) throws Exception {
+        camelConfigFile = new File(config.project().getFile(camelFilePath).getLocationURI());
         camelConfig = CamelConfigBuilder.loadConfig(camelConfigFile);
         camelEndpoint = camelConfig.getEndpoint(endPointId);
         EndpointHelper.setSourceModel(camelEndpoint, config.getSourceModel().getType());
         EndpointHelper.setTargetModel(camelEndpoint, config.getTargetModel().getType());
-        saveCamelConfig();
+        try (FileOutputStream stream = new FileOutputStream(camelConfigFile)) {
+            camelConfig.saveConfig(stream);
+            config.project().refreshLocal(IResource.DEPTH_INFINITE, null);
+        }
     }
 
     /**
@@ -465,59 +320,13 @@ public class TransformationEditor extends EditorPart {
      * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
      */
     @Override
-    public void setFocus() {}
-
-    /**
-     * @return the source model
-     */
-    public Model sourceModel() {
-        return config.getSourceModel();
-
-    }
-
-    /**
-     * @return the target model
-     */
-    public Model targetModel() {
-        return config.getTargetModel();
-    }
-
-    /**
-     * @param mapping
-     */
-    public void unmap(final MappingOperation<?, ?> mapping) {
-        config.removeMapping(mapping);
-        refreshSourceModelViewer();
-        refreshTargetModelViewer();
-        mappingViewer.update(null, null, null);
-    }
-
-    /**
-     * @param mapping
-     * @throws Exception
-     */
-    public void unmapVariableMapping(final MappingOperation<?, ?> mapping) throws Exception {
-        mappingsViewer.unmap(mapping);
+    public void setFocus() {
+        mappingsViewer.setFocus();
     }
 
     void updateHelpText(final Text helpText) {
         helpText.setText("Create a new mapping below by dragging a field from source "
                 + config.getSourceModel().getName() + " on the left to target "
                 + config.getTargetModel().getName() + " on the right.");
-    }
-
-    /**
-     * @param mapping
-     */
-    public void updateMapping(final MappingOperation<?, ?> mapping) {
-        mappingsViewer.updateMapping(mapping);
-    }
-
-    /**
-     * @param variable
-     */
-    public void updateVariableMappings(final Variable variable) {
-        mappingsViewer.updateVariableMappings(variable);
-        mappingViewer.updateVariableMapping(variable);
     }
 }
