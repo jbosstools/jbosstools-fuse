@@ -21,20 +21,18 @@
     </dependencies>
     <build>
 	    <plugins>
-	        <plugin>
+	    	<plugin>
+				<!-- make sure lib dir is removed after clean to avoid "dirty" build -->
 	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-clean-plugin</artifactId>
-	            <configuration>
-	                <filesets>
-	                    <fileset>
-	                        <directory>target/lib</directory>
-	                        <includes>
-	                            <include>**/*</include>
-	                        </includes>
-	                    </fileset>
-	                </filesets>
-	            </configuration>
-	        </plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${basedir}/libs</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
             <plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
 		        <artifactId>maven-dependency-plugin</artifactId>
@@ -46,8 +44,9 @@
 					        <goal>copy</goal>
 					    </goals>
                         <configuration>
-						    <stripVersion>true</stripVersion>
-						    <outputDirectory>target/lib</outputDirectory>
+                        	<skip>false</skip>
+						    <outputDirectory>${basedir}/libs/</outputDirectory>
+              				<stripVersion>true</stripVersion>
 						    <artifactItems>
 								<artifactItem>
 								    <groupId>org.jboss.tools.fuse.transformation</groupId>
@@ -91,40 +90,5 @@
 		        </executions>
             </plugin>
 	    </plugins>
-	    <pluginManagement>
-	    	<plugins>
-	    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-	    		<plugin>
-	    			<groupId>org.eclipse.m2e</groupId>
-	    			<artifactId>lifecycle-mapping</artifactId>
-	    			<version>1.0.0</version>
-	    			<configuration>
-	    				<lifecycleMappingMetadata>
-	    					<pluginExecutions>
-	    						<pluginExecution>
-	    							<pluginExecutionFilter>
-	    								<groupId>
-	    									org.apache.maven.plugins
-	    								</groupId>
-	    								<artifactId>
-	    									maven-dependency-plugin
-	    								</artifactId>
-	    								<versionRange>
-	    									[2.1,)
-	    								</versionRange>
-	    								<goals>
-	    									<goal>copy</goal>
-	    								</goals>
-	    							</pluginExecutionFilter>
-	    							<action>
-	    								<ignore></ignore>
-	    							</action>
-	    						</pluginExecution>
-	    					</pluginExecutions>
-	    				</lifecycleMappingMetadata>
-	    			</configuration>
-	    		</plugin>
-	    	</plugins>
-	    </pluginManagement>
     </build>
 </project>

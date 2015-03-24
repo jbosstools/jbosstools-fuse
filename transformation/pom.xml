@@ -14,7 +14,6 @@
     <module>common</module>
     <module>plugins</module>
     <module>features</module>
-    <module>site</module>
   </modules>
 
   <properties>
@@ -136,7 +135,6 @@
     
 
   <build>
-    <!--
     <pluginManagement>
       <plugins>
         <plugin>
@@ -144,14 +142,8 @@
           <artifactId>maven-clean-plugin</artifactId>
           <version>2.6.1</version>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>2.5</version>
-        </plugin>
       </plugins>
     </pluginManagement>
-  -->
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -187,79 +179,4 @@
       </plugin>
     </plugins>
   </build>
-<!--
-    <build>
-    	<sourceDirectory>src</sourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-maven-plugin</artifactId>
-                <version>${tycho.version}</version>
-                <extensions>true</extensions>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>target-platform-configuration</artifactId>
-                <version>${tycho.version}</version>
-                <configuration>
-                    <resolver>p2</resolver>
-                    <pomDependencies>consider</pomDependencies>
-                    <target>
-                        <artifact>
-                            <groupId>org.jboss.tools.integration-stack</groupId>
-                            <artifactId>target-platform</artifactId>
-                            <version>${version.jbtis.target-platform}</version>
-                            <type>target</type>
-                            <classifier>base</classifier>
-                        </artifact>
-                    </target>
-                    <environments>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                    </environments>
-                </configuration>
-            </plugin>
-      <plugin>
-        Builds the bundles, similar to felix bundle plugin, but different. 
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-packaging-plugin</artifactId>
-        <version>${tycho.version}</version>
-        <configuration>
-          Override for the "qualifier" or SNAPSHOT portion of verion. -
-          <format>'v'yyyyMMdd-HHmm'-LOCAL'</format>
-          <archiveSite>true</archiveSite>
-        </configuration>
-      </plugin>
-        </plugins>
-    </build>
-  -->
-
 </project>
