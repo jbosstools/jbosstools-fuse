@@ -298,7 +298,7 @@ public class PropertiesUtils {
     				val = modelMap.get(pparam.getName()).toString();
     			}
     			if (val.trim().length()<1) val = pparam.getDefaultValue();
-    			if (val.startsWith("/")) val = val.substring(1);
+    			if (val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
     			syntax = syntax.replace(pparam.getName(), val);
     		}
     		newUri += syntax + "?";

@@ -115,12 +115,6 @@ public final class CamelComponentUtils {
                 p.getJavaType().equalsIgnoreCase("java.io.file");
     }
     
-    public static boolean isFolderProperty(UriParameter p) {
-        return  p.getJavaType().equalsIgnoreCase("folder") ||
-                p.getJavaType().equalsIgnoreCase("path") || 
-                p.getJavaType().equalsIgnoreCase("directory");
-    }
-    
     public static boolean isExpressionProperty(UriParameter p) {
         return  p.getJavaType().equalsIgnoreCase("expression") ||
                 p.getJavaType().equalsIgnoreCase("org.apache.camel.Expression");

@@ -66,7 +66,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
@@ -369,55 +368,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                      */
                     @Override
                     public void widgetSelected(SelectionEvent e) {
-                        FileDialog fd = new FileDialog(page.getShell());
-                        String fileName = fd.open();
-                        if (fileName != null) {
-                            txtField.setText(fileName);
-                        }
-                    }
-                });
-                btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-                c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
-					validator = new IValidator() {
-						/*
-						 * (non-Javadoc)
-						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-						 */
-						@Override
-						public IStatus validate(Object value) {
-							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								return ValidationStatus.ok();
-							}
-							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
-						}
-					};
-                }
-                //initialize the map entry
-                modelMap.put(p.getName(), txtField.getText());
-                // create observables for the control
-                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
-                
-            // FOLDER PROPERTIES
-            } else if (CamelComponentUtils.isFolderProperty(prop)) {
-                final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
-                txtField.addModifyListener(new ModifyListener() {
-                    @Override
-                    public void modifyText(ModifyEvent e) {
-                    	Text txt = (Text)e.getSource();
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
-                    }
-                });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-                
-                Button btn_browse = toolkit.createButton(page, "...", SWT.BORDER | SWT.PUSH);
-                btn_browse.addSelectionListener(new SelectionAdapter() {
-                    /* (non-Javadoc)
-                     * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-                     */
-                    @Override
-                    public void widgetSelected(SelectionEvent e) {
-                        DirectoryDialog dd = new DirectoryDialog(page.getShell());
+                    	DirectoryDialog dd = new DirectoryDialog(page.getShell());
                         String pathName = dd.open();
                         if (pathName != null) {
                             txtField.setText(pathName);
@@ -445,7 +396,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), txtField.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
-                
+
             // EXPRESSION PROPERTIES
             } else if (CamelComponentUtils.isExpressionProperty(prop)) {
                 Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
