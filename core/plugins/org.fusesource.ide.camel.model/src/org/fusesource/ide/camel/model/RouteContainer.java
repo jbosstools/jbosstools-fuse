@@ -44,7 +44,7 @@ public class RouteContainer extends AbstractNode {
 
 	private Map<String,BeanDef> beans = new HashMap<String,BeanDef>();
 
-	private Set<String> camelContextEndpointUris = new TreeSet<String>();
+	private Map<String, String> camelContextEndpointUris = new HashMap<String, String>();
 
 	private boolean autoLayout;
 
@@ -71,7 +71,7 @@ public class RouteContainer extends AbstractNode {
 		// lets iterate through each route and for each route iterate through each node finding the URIs used...
 		Set<String> uris = new TreeSet<String>();
 		appendEndpointUris(uris);
-		uris.addAll(getCamelContextEndpointUris());
+		uris.addAll(getCamelContextEndpointUris().values());
 		return uris.toArray(new String[uris.size()]);
 	}
 
@@ -84,11 +84,11 @@ public class RouteContainer extends AbstractNode {
 	}
 
 
-	public Set<String> getCamelContextEndpointUris() {
+	public Map<String, String> getCamelContextEndpointUris() {
 		return camelContextEndpointUris;
 	}
 
-	public void setCamelContextEndpointUris(Set<String> camelContextEndpointUris) {
+	public void setCamelContextEndpointUris(Map<String, String> camelContextEndpointUris) {
 		this.camelContextEndpointUris = camelContextEndpointUris;
 	}
 

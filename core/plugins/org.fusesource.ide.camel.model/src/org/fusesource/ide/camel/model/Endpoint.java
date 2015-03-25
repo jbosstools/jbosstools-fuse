@@ -110,10 +110,9 @@ public class Endpoint extends AbstractNode {
 				// if its a ref we lookup what is the reference scheme
 				String refId = u.substring(u.indexOf(":") + 1);
 				RouteContainer c = getParent().getParent();
-				for (String refuri : c.getCamelContextEndpointUris()) {
-					if (refuri.indexOf(":" + refId) != -1) {
-						scheme = refuri.substring(0, refuri.indexOf(":")+1);
-					}
+				String refUri = c.getCamelContextEndpointUris().get(refId);
+				if (refUri != null) {
+					scheme = refUri.substring(0, refUri.indexOf(":")+1);
 				}
 			} else {
 				scheme = u.substring(0, u.indexOf(":")+1);

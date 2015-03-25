@@ -15,18 +15,14 @@
  */
 package org.fusesource.ide.commons.camel.tools;
 
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.droolsNamespace;
+import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.nodesByNamespace;
+
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import de.pdark.decentxml.Document;
-import de.pdark.decentxml.Element;
-import de.pdark.decentxml.Node;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
@@ -38,7 +34,9 @@ import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.fusesource.ide.commons.Activator;
 import org.xml.sax.SAXException;
 
-import static org.fusesource.ide.commons.camel.tools.CamelNamespaces.*;
+import de.pdark.decentxml.Document;
+import de.pdark.decentxml.Element;
+import de.pdark.decentxml.Node;
 
 public class XmlModel {
 
@@ -140,17 +138,13 @@ public class XmlModel {
      *
      * @return
      */
-    public Set<String> endpointUris() {
+    public Map<String, String> endpointUris() {
         try {
-            // we must use reflection for now until Camel supports the getEndpoints() method
-            // https://issues.apache.org/jira/browse/CAMEL-3644
-            // ...
-            // the above is no longer valid since Camel 2.7.0
             List<CamelEndpointFactoryBean> endpoints = contextElement.getEndpoints();
-            List<String> uris = new LinkedList<String>();
+            Map<String, String> uris = new HashMap<String, String>();
             if (endpoints != null) {
                 for (CamelEndpointFactoryBean cefb : endpoints) {
-                    uris.add(cefb.getUri());
+                    uris.put(cefb.getId(), cefb.getUri());
                 }
             }
 
@@ -165,26 +159,26 @@ public class XmlModel {
                         if (node != null && node.length() > 0 && sid != null && sid.length() > 0) {
                             String du = "drools:" + node + "/" + sid;
                             boolean exists = false;
-                            for (String uri : uris) {
+                            for (String uri : uris.values()) {
                                 if (uri.startsWith(du)) {
                                     exists = true;
                                 }
                             }
                             if (!exists) {
-                                uris.add(du);
+                                uris.put(sid, du);
                             }
                         }
                     }
                 }
             }
-            return new TreeSet<String>(uris);
+            return new HashMap<String, String>(uris);
         } catch (Exception e) {
         	Activator.getLogger().error(e.getMessage(), e);
-            return new HashSet<String>();
+            return new HashMap<String, String>();
         }
     }
 
-    public Set<String> endpointUriSet() {
+    public Map<String, String> endpointUriSet() {
         return endpointUris();
     }
 
