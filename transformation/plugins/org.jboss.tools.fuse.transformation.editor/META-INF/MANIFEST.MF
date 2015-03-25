@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.graphiti,
  org.eclipse.graphiti.mm,
  org.eclipse.graphiti.ui,
- org.fusesource.ide.commons
+ org.fusesource.ide.commons,
+ org.fusesource.ide.project
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor

@@ -29,7 +29,7 @@ import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
  * @author bfitzpat
  * @author Rob Cernich
  */
-class ClasspathResourceSelectionDialog extends FilteredResourcesSelectionDialog {
+public class ClasspathResourceSelectionDialog extends FilteredResourcesSelectionDialog {
 
     Set<String> fileExtensions;
     IJavaModel fJavaModel;
@@ -41,7 +41,7 @@ class ClasspathResourceSelectionDialog extends FilteredResourcesSelectionDialog 
      * @param container the root container
      * @param title
      */
-    ClasspathResourceSelectionDialog(Shell parentShell, IContainer container, String title) {
+    public ClasspathResourceSelectionDialog(Shell parentShell, IContainer container, String title) {
         this(parentShell, container, Collections.<String>emptySet(), title);
     }
 
@@ -53,7 +53,7 @@ class ClasspathResourceSelectionDialog extends FilteredResourcesSelectionDialog 
      * @param fileExtension the type of files to display; may be null
      * @param title
      */
-    ClasspathResourceSelectionDialog(Shell parentShell, IContainer container, String fileExtension,
+    public ClasspathResourceSelectionDialog(Shell parentShell, IContainer container, String fileExtension,
             String title) {
         this(parentShell, container, fileExtension == null ? Collections.<String>emptySet()
                 : Collections
@@ -68,7 +68,7 @@ class ClasspathResourceSelectionDialog extends FilteredResourcesSelectionDialog 
      * @param fileExtensions the types of files to display; may be null
      * @param title
      */
-    ClasspathResourceSelectionDialog(Shell parentShell, IContainer container,
+    public ClasspathResourceSelectionDialog(Shell parentShell, IContainer container,
             Set<String> fileExtensions, String title) {
         super(parentShell, false, container, IResource.FILE);
         fJavaModel = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());

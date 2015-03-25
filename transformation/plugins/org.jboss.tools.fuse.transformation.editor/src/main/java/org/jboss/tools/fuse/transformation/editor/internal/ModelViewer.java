@@ -46,24 +46,26 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
-class ModelViewer extends Composite {
+public class ModelViewer extends Composite {
 
-    final TransformationConfig config;
-    final Model rootModel;
+    TransformationConfig config;
+    TransformationEditor editor;
+    Model rootModel;
     final TreeViewer treeViewer;
     boolean showFieldTypes;
     boolean hideMappedFields;
 
-    ModelViewer(final TransformationConfig config,
-                final Composite parent,
-                final Model rootModel) {
-        super(parent, SWT.BORDER);
+    public ModelViewer(final TransformationConfig config,
+            final Composite parent,
+            final Model rootModel) {
+        super(parent, SWT.NONE);
         setBackground(Colors.BACKGROUND);
 
         this.config = config;
@@ -211,9 +213,12 @@ class ModelViewer extends Composite {
      */
     public boolean mapped(final Model model,
                           final Model rootModel) {
-        return rootModel.equals(config.getSourceModel())
+        if (config != null) {
+            return rootModel.equals(config.getSourceModel())
                ? !config.getMappingsForSource(model).isEmpty()
                : !config.getMappingsForTarget(model).isEmpty();
+        }
+        return false;
     }
 
     private void expand(final Model model) {
@@ -230,6 +235,37 @@ class ModelViewer extends Composite {
 
     boolean show(final Object element) {
         return !hideMappedFields || !mapped((Model) element, rootModel);
+    }
+    
+    public ModelViewer(final Composite parent,
+            final Model rootModel) {
+        super(parent, SWT.NONE);
+        // simple view
+        
+        setBackground(parent.getParent().getParent().getBackground());
+
+        this.rootModel = rootModel;
+
+        setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+
+        treeViewer = new TreeViewer(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+        treeViewer.getTree().setLayoutData(
+                GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
+        treeViewer.setComparator(new ViewerComparator() {
+
+            @Override
+            public int compare(final Viewer viewer,
+                    final Object model1,
+                    final Object model2) {
+                if (model1 instanceof Model && model2 instanceof Model)
+                    return ((Model) model1).getName()
+                            .compareTo(((Model) model2).getName());
+                return 0;
+            }
+        });
+        treeViewer.setLabelProvider(new LabelProvider());
+        ColumnViewerToolTipSupport.enableFor(treeViewer);
+        treeViewer.setContentProvider(new ContentProvider());
     }
 
     class ContentProvider implements ITreeContentProvider {
@@ -318,5 +354,13 @@ class ModelViewer extends Composite {
             cell.setStyleRanges(text.getStyleRanges());
             super.update(cell);
         }
+    }
+    
+    public TreeViewer getViewer() {
+        return treeViewer;
+    }
+    
+    public void setModel(Model input) {
+        this.rootModel = input;
     }
 }
