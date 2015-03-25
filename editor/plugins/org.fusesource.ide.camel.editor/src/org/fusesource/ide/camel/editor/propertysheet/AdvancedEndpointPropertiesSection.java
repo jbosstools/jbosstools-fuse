@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -266,16 +267,16 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
-                        for (int i = 0; i<txt.getText().length(); i++) {
-                            char c = txt.getText().charAt(i);
-                            if (!Character.isDigit(c)) {
-                                // invalid character found
-                                txt.setBackground(ColorConstants.red);
-                                return;
-                            }
+                        String val = txt.getText();
+                        try {
+                        	Double.parseDouble(val);
+                        	txt.setBackground(ColorConstants.white);
+                            PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
+                        } catch (NumberFormatException ex) {
+                        	// invalid character found
+                            txt.setBackground(ColorConstants.red);
+                            return;
                         }
-                        txt.setBackground(ColorConstants.white);
-                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
