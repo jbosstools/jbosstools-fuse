@@ -56,4 +56,10 @@
             class="org.jboss.tools.fuse.transformation.extensions.DataTransformationPaletteEntry">
       </PaletteContribution>
    </extension>
+   <extension
+         point="org.fusesource.ide.editor.dblClickHandler">
+      <DoubleClickHandler
+            class="org.jboss.tools.fuse.transformation.extensions.TransformationDblClickHandler">
+      </DoubleClickHandler>
+   </extension>
 </plugin>

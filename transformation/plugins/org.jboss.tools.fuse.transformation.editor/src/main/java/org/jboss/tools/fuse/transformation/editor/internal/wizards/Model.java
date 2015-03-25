@@ -51,6 +51,10 @@ public class Model implements PropertyChangeListener {
     private ModelType sourceType;
     private ModelType targetType;
     private String camelFilePath;
+    private String sourceTypeStr;
+    private String targetTypeStr;
+    private String sourceDataFormatid;
+    private String targetDataFormatid;
 
     /**
      * @param propertyName
@@ -212,5 +216,41 @@ public class Model implements PropertyChangeListener {
     public void setTargetType(final ModelType targetType) {
         changeSupport.firePropertyChange("targetType", this.targetType, this.targetType =
                 targetType);
+    }
+
+    public String getSourceTypeStr() {
+        return sourceTypeStr;
+    }
+
+    public void setSourceTypeStr(String sourceTypeStr) {
+        changeSupport.firePropertyChange("sourceTypeStr", this.sourceTypeStr, this.sourceTypeStr =
+                sourceTypeStr);
+    }
+
+    public String getTargetTypeStr() {
+        return targetTypeStr;
+    }
+
+    public void setTargetTypeStr(String targetTypeStr) {
+        changeSupport.firePropertyChange("targetTypeStr", this.targetTypeStr, this.targetTypeStr =
+                targetTypeStr);
+    }
+
+    public String getSourceDataFormatid() {
+        return sourceDataFormatid;
+    }
+
+    public void setSourceDataFormatid(String sourceDataFormatid) {
+        changeSupport.firePropertyChange("sourceDataFormatid", this.sourceDataFormatid, this.sourceDataFormatid =
+                sourceDataFormatid.trim());
+    }
+
+    public String getTargetDataFormatid() {
+        return targetDataFormatid;
+    }
+
+    public void setTargetDataFormatid(String targetDataFormatid) {
+        changeSupport.firePropertyChange("targetDataFormatid", this.targetDataFormatid, this.targetDataFormatid =
+                targetDataFormatid.trim());
     }
 }
