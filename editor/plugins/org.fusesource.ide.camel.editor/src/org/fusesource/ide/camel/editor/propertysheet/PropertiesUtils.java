@@ -322,31 +322,35 @@ public class PropertiesUtils {
     		selectedEP.setUri(newUri);
     	} else {
 	    	// normal uri options
-    		boolean valueDeleted = value == null || value.toString().trim().length()<1;
+    		boolean valueDeleted = value == null || value.toString().trim().length()<1 || (p.getDefaultValue() != null && value.toString().equals(p.getDefaultValue()));
 	        String val = getPropertyFromUri(selectedEP, p, c);
-	        if (val != null) {
+	        String key = String.format("%s=", p.getName());
+	        int idx = selectedEP.getUri().indexOf(key);
+	        if (val != null && idx != -1) {
 	            // special replace logic needed as special expression chars can break the replacement
-	            String key = String.format("%s=", p.getName());
-	            int idx = selectedEP.getUri().indexOf(key);
 	            String newUri = "";
-	            boolean firstParam = selectedEP.getUri().charAt(idx-1) == '?';
+	            boolean firstParam = idx == -1 || selectedEP.getUri().charAt(idx-1) == '?';
 	            newUri = valueDeleted ? selectedEP.getUri().substring(0, firstParam ? idx : idx-1) : selectedEP.getUri().substring(0, idx + key.length());
 	            if (!valueDeleted) newUri += value.toString();
 	            if (valueDeleted && firstParam) {
-	                newUri += selectedEP.getUri().substring(idx + key.length() + val.length() + 1);
+	                newUri += selectedEP.getUri().substring(idx + key.length() + val.length());
 	            } else {
 	                newUri += selectedEP.getUri().substring(idx + key.length() + val.length());
 	            }
+	            if (newUri.indexOf("?&") != -1) newUri = newUri.replace("?&", "?");
+	            if (newUri.endsWith("?")) newUri = newUri.substring(0, newUri.indexOf("?"));
 	            selectedEP.setUri(newUri);
 	        } else {
 	            String newUri = selectedEP.getUri();
-	            if (selectedEP.getUri().indexOf('?') == -1) {
-	                newUri += '?';
+	            if (valueDeleted == false) {
+		            if (selectedEP.getUri().indexOf('?') == -1) {
+		                newUri += '?';
+		            }
+		            if (selectedEP.getUri().indexOf('=') != -1) {
+		                newUri += '&';
+		            }
+	            	newUri += String.format("%s=%s", p.getName(), value.toString());
 	            }
-	            if (selectedEP.getUri().indexOf('=') != -1) {
-	                newUri += '&';
-	            }
-	            newUri += String.format("%s=%s", p.getName(), value.toString());
 	            selectedEP.setUri(newUri);
 	        }
     	}
