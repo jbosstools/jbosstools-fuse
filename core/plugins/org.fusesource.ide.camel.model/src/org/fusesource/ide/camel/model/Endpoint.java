@@ -104,33 +104,49 @@ public class Endpoint extends AbstractNode {
 	@Override
 	public String getIconName() {
 		String u = getUri();
-		if (u != null) {
-			if (u.startsWith("drools:")) {
+		if (u != null && u.trim().length()>0) {
+			String scheme = null;
+			if (u.startsWith("ref:")) {
+				// if its a ref we lookup what is the reference scheme
+				String refId = u.substring(u.indexOf(":") + 1);
+				RouteContainer c = getParent().getParent();
+				for (String refuri : c.getCamelContextEndpointUris()) {
+					if (refuri.indexOf(":" + refId) != -1) {
+						scheme = refuri.substring(0, refuri.indexOf(":")+1);
+					}
+				}
+			} else {
+				scheme = u.substring(0, u.indexOf(":")+1);
+			}
+			
+			if (scheme.startsWith("drools:")) {
 				return "endpointDrools.png";
-			} else if (u.startsWith("jms:") || u.startsWith("activemq") || u.startsWith("mq") || u.startsWith("sjms")) {
+			} else if (scheme.startsWith("jms:") || scheme.startsWith("activemq") || scheme.startsWith("mq") || scheme.startsWith("sjms")) {
 				return "endpointQueue.png";
-			} else if (u.startsWith("file:") || u.startsWith("ftp") || u.startsWith("sftp") || u.startsWith("jcr") || u.startsWith("scp")) {
+			} else if (scheme.startsWith("file:") || scheme.startsWith("ftp") || scheme.startsWith("sftp") || scheme.startsWith("jcr") || scheme.startsWith("scp")) {
 				return "endpointFolder.png";
-			} else if (u.startsWith("log:") || u.startsWith("hdfs") || u.startsWith("paxlogging")) {
+			} else if (scheme.startsWith("log:") || scheme.startsWith("hdfs") || scheme.startsWith("paxlogging")) {
 				return "endpointFile.png";
-			} else if (u.startsWith("timer:") || u.startsWith("quartz")) {
+			} else if (scheme.startsWith("timer:") || scheme.startsWith("quartz")) {
 				return "endpointTimer.png";
-			} else if (u.startsWith("elasticsearch:") || u.startsWith("hazelcast:") || u.startsWith("hibernate:") || u.startsWith("jpa:")
-					|| u.startsWith("jdbc:") || u.startsWith("sql:") || u.startsWith("ibatis:") || u.startsWith("mybatis:")
-					|| u.startsWith("javaspace:") || u.startsWith("jcr:") || u.startsWith("ldap:") || u.startsWith("mongodb:") || u.startsWith("zookeeper:")) {
+			} else if (scheme.startsWith("elasticsearch:") || scheme.startsWith("hazelcast:") || scheme.startsWith("hibernate:") || scheme.startsWith("jpa:")
+					|| scheme.startsWith("jdbc:") || scheme.startsWith("sql:") || scheme.startsWith("ibatis:") || scheme.startsWith("mybatis:")
+					|| scheme.startsWith("javaspace:") || scheme.startsWith("jcr:") || scheme.startsWith("ldap:") || scheme.startsWith("mongodb:") || scheme.startsWith("zookeeper:")) {
 				return "endpointRepository.png";
-			} else if (u.startsWith("twitter:")) {
+			} else if (scheme.startsWith("twitter:")) {
 			    return "endpointTwitter.png";
-			} else if (u.startsWith("weather:")) {
+			} else if (scheme.startsWith("weather:")) {
 			    return "endpointWeather.png";
-			} else if (u.startsWith("sap-netweaver:")) {
+			} else if (scheme.startsWith("sap-netweaver:")) {
                 return "endpointSAPNetweaver.png";
-            } else if (u.startsWith("sap:")) {
+            } else if (scheme.startsWith("sap:")) {
                 return "endpointSAP.png";
-            } else if (u.startsWith("salesforce:")) {
+            } else if (scheme.startsWith("salesforce:")) {
                 return "endpointSalesforce.png";
-            } else if (u.startsWith("facebook:")) {
+            } else if (scheme.startsWith("facebook:")) {
                 return "endpointFacebook.png";
+            } else if (scheme.startsWith("dozer:")) {
+                return "endpointDozer.png";
             }
 		}
 		return ICON;
