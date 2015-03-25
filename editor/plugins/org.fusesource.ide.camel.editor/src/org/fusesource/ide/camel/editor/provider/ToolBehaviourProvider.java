@@ -28,6 +28,7 @@ import org.eclipse.graphiti.features.ICreateConnectionFeature;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICustomContext;
+import org.eclipse.graphiti.features.context.IDoubleClickContext;
 import org.eclipse.graphiti.features.context.IPictogramElementContext;
 import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
 import org.eclipse.graphiti.features.context.impl.CustomContext;
@@ -57,6 +58,7 @@ import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
 import org.fusesource.ide.camel.editor.features.custom.AddRouteFeature;
 import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
+import org.fusesource.ide.camel.editor.features.custom.DoubleClickFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
@@ -701,6 +703,14 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
     @Override
     public boolean isMultiSelectionEnabled() {
         return true;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.eclipse.graphiti.tb.DefaultToolBehaviorProvider#getDoubleClickFeature(org.eclipse.graphiti.features.context.IDoubleClickContext)
+     */
+    @Override
+    public ICustomFeature getDoubleClickFeature(IDoubleClickContext context) {
+    	return new DoubleClickFeature(getFeatureProvider());
     }
     
     /**

@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.fusesource.ide.editor.paletteContributor" name="Fuse Camel Editor Palette Contributor" schema="schema/org.fusesource.ide.editor.paletteContributor.exsd"/>
+   <extension-point id="org.fusesource.ide.editor.dblClickHandler" name="Fuse Camel Editor Double Click Handler" schema="schema/org.fusesource.ide.editor.dblClickHandler.exsd"/>
    <extension
          point="org.eclipse.ui.editors">
       <editor
