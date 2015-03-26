@@ -11,6 +11,7 @@
 package org.fusesource.ide.project.providers;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IFile;
@@ -24,9 +25,21 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.wizards.IWizardDescriptor;
+import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.project.Activator;
 
-public class CamelVirtualFolder {
+public class CamelVirtualFolder implements ContextMenuProvider {
+	
+	private static final String NEW_CAMEL_XML_FILE_WIZARD_ID = "org.fusesource.ide.camel.editor.wizards.NewCamelXmlWizard";
 	
 	private IProject project;
 	private ArrayList<IResource> camelFiles = new ArrayList<IResource>();
@@ -186,5 +199,66 @@ public class CamelVirtualFolder {
 			}
 			return true; // visit the children
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.commons.ui.ContextMenuProvider#provideContextMenu(org.eclipse.jface.action.IMenuManager)
+	 */
+	@Override
+	public void provideContextMenu(IMenuManager menu) {
+		final IWizardDescriptor wiz = PlatformUI.getWorkbench().getNewWizardRegistry().findWizard(NEW_CAMEL_XML_FILE_WIZARD_ID);
+		
+		MenuManager subMenu = new MenuManager("New");
+				
+		Action action = new Action() {
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.action.Action#getText()
+			 */
+			@Override
+			public String getText() {
+				return wiz.getLabel();
+			}
+			
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.action.Action#getToolTipText()
+			 */
+			@Override
+			public String getToolTipText() {
+				return wiz.getDescription();
+			}
+			
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.action.Action#run()
+			 */
+			@Override
+			public void run() {
+				try  {
+				   // Then if we have a wizard, open it.
+				   if  (wiz != null) {
+					   IWizard wizard = wiz.createWizard();
+					   WizardDialog wd = new  WizardDialog(Display.getDefault().getActiveShell(), wizard);
+					   wd.setTitle(wizard.getWindowTitle());
+
+					   try {
+						   Field selection = wizard.getClass().getDeclaredField("selection");
+						   if (selection != null) {
+							   selection.setAccessible(true);
+							   selection.set(wizard, new StructuredSelection(getProject()));
+							   
+						   }
+					   } catch (Exception ex) {
+						   Activator.getLogger().error(ex);
+					   }
+					   
+					   wd.open();
+				   }
+				} catch  (CoreException e) {
+					Activator.getLogger().error(e);
+				}
+			}
+		};
+		
+		subMenu.add(action);
+		menu.add(subMenu);
 	}
 }

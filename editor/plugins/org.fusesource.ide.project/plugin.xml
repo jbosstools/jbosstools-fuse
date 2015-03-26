@@ -70,6 +70,17 @@
              </test>
           </and>
        </enablement>
+       <actionProvider
+             class="org.fusesource.ide.project.providers.VirtualCamelNodesActionProvider"
+             id="org.fusesource.ide.project.navigator.actionProvider">
+          <enablement>
+             <or>
+                <instanceof
+                      value="org.fusesource.ide.project.providers.CamelVirtualFolder">
+                </instanceof>
+             </or>
+          </enablement>
+       </actionProvider>
 	   </navigatorContent>
 	</extension>
 	
