@@ -26,7 +26,7 @@ public class LocationLabelProvider extends StyledCellLabelProvider {
 			String className = log.getClassName();
 			
 			// we don't want to display ? as location
-			if (className.trim().equals("?")) className = null;
+			if (className != null && className.trim().equals("?")) className = null;
 			
 			if (className != null) {
 				Styler style = null;
