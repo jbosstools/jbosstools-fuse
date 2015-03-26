@@ -59,7 +59,9 @@ public class VersionDTO extends BaseDTO {
 	 * @return
 	 */
 	public List<String> getProfileIds() {
-		return getFieldValue(JSON_FIELD_PROFILE_IDS);
+		List<String> profileIds = getFieldValue(JSON_FIELD_PROFILE_IDS);
+		if (profileIds == null) profileIds = getFieldValue(JSON_FIELD_PROFILES);
+		return profileIds == null ? new ArrayList<String>() : profileIds;
 	}
 	
 	/**
