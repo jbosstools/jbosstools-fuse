@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.jboss.mapper.CustomMapping;
+import org.jboss.mapper.Expression;
 import org.jboss.mapper.ExpressionMapping;
 import org.jboss.mapper.FieldMapping;
 import org.jboss.mapper.MapperConfiguration;
@@ -481,6 +482,7 @@ public class TransformationConfig implements MapperConfiguration {
         MappingOperation<?, ?> resultMapping;
         if (source == null || target == null) resultMapping = mapping;
         else {
+            // Not or no longer a mapping placeholder
             if (mapping.getType() == null) mappingPlaceholders.remove(mapping);
             if (source instanceof Model) {
                 resultMapping = delegate.mapField((Model)source, target);
@@ -490,11 +492,16 @@ public class TransformationConfig implements MapperConfiguration {
                                                               customMapping.getMappingClass(),
                                                               customMapping.getMappingOperation());
                 }
-            } else {
+            } else if (source instanceof Variable) {
                 if (mapping.getType() == MappingType.VARIABLE) {
                     resultMapping = mapping;
                     ((VariableMapping)mapping).setVariable((Variable)source);
                 } else resultMapping = delegate.mapVariable((Variable)source, target);
+            } else {
+                Expression expression = (Expression)source;
+                resultMapping = delegate.mapExpression(expression.getLanguage(),
+                                                       expression.getExpression(),
+                                                       target);
             }
         }
         fireEvent(eventType, mapping, resultMapping);

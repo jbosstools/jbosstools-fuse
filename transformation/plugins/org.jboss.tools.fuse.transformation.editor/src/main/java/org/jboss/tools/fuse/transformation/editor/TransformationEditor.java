@@ -187,9 +187,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                firePropertyChange(IEditorPart.PROP_DIRTY);
+                configEvent();
             }
         });
+    }
+
+    void configEvent() {
+        firePropertyChange(IEditorPart.PROP_DIRTY);
     }
 
     /**

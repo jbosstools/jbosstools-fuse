@@ -185,7 +185,7 @@ public final class MappingDetailViewer extends MappingViewer {
                     @Override
                     public void widgetSelected(final SelectionEvent event) {
                         try {
-                            setField(config.getSourceModel());
+                            setField(true);
                         } catch (final Exception e) {
                             Activator.error(e);
                         }
@@ -256,7 +256,7 @@ public final class MappingDetailViewer extends MappingViewer {
                     @Override
                     public void widgetSelected(final SelectionEvent event) {
                         try {
-                            setField(config.getTargetModel());
+                            setField(false);
                         } catch (final Exception e) {
                             Activator.error(e);
                         }
@@ -304,10 +304,13 @@ public final class MappingDetailViewer extends MappingViewer {
         config.save();
     }
 
-    void setField(final Model rootModel) throws Exception {
-        final FieldDialog dlg = new FieldDialog(rootModel);
+    void setField(final boolean source) throws Exception {
+        final FieldDialog dlg =
+            new FieldDialog(source ? config.getSourceModel() : config.getTargetModel());
         if (dlg.open() != Window.OK) return;
-        mapping = config.setSource(mapping, dlg.field);
+        mapping = source
+                  ? config.setSource(mapping, dlg.field)
+                  : config.setTarget(mapping, dlg.field);
         config.save();
     }
 
@@ -475,7 +478,7 @@ public final class MappingDetailViewer extends MappingViewer {
 
                 @Override
                 public void modifyText(final ModifyEvent event) {
-                    expression = text.getText().trim();
+                    expression = text.getText().trim().replace("${", "\\${");
                     validate();
                 }
             });
