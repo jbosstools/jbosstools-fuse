@@ -95,7 +95,7 @@ abstract class MappingViewer {
     String name(final Object object) {
         if (object instanceof Model) return ((Model)object).getName();
         if (object instanceof Variable) return "${" + ((Variable)object).getName() + "}";
-        if (object instanceof Expression) return "{" + ((Expression)object).getExpression() + "}";
+        if (object instanceof Expression) return ((Expression)object).getLanguage();
         return "";
     }
 
@@ -120,7 +120,7 @@ abstract class MappingViewer {
             text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.VARIABLE);
         } else if (object instanceof Expression) {
-            text.setToolTipText(((Expression)object).getLanguage() + "-language expression");
+            text.setToolTipText(((Expression)object).getExpression());
             text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.EXPRESSION);
         } else {
