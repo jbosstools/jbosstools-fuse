@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -35,7 +34,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -143,36 +141,25 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             }
             dozerConfigBuilder.saveConfig(configStream);
             uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+            // Ensure build of Java classes has completed
+            try {
+                Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
+            } catch (final InterruptedException ignored) {
+            }
 
-            // do the rest async otherwise the dialog stays open when clicked FINISH until build is done
-            Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-		            // Ensure build of Java classes has completed
-		            try {
-		                Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
-		            } catch (final InterruptedException ignored) {
-		            }
-
-					// Open mapping editor
-		            final IEditorDescriptor desc =
-		                    PlatformUI
-		                            .getWorkbench()
-		                            .getEditorRegistry()
-		                            .getEditors(
-		                                    file.getName(),
-		                                    Platform.getContentTypeManager().getContentType(
-		                                            DozerConfigContentTypeDescriber.ID))[0];
-		            try {
-		            	uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
-			            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-			                    .openEditor(new FileEditorInput(file),
-			                            desc.getId());
-		            } catch (CoreException ex) {
-		            	Activator.error(ex);
-		            }
-				}
-			});
+            // Open mapping editor
+            final IEditorDescriptor desc =
+                    PlatformUI
+                            .getWorkbench()
+                            .getEditorRegistry()
+                            .getEditors(
+                                    file.getName(),
+                                    Platform.getContentTypeManager().getContentType(
+                                            DozerConfigContentTypeDescriber.ID))[0];
+            uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                    .openEditor(new FileEditorInput(file),
+                            desc.getId());
         } catch (final Exception e) {
             Activator.error(e);
             return false;
