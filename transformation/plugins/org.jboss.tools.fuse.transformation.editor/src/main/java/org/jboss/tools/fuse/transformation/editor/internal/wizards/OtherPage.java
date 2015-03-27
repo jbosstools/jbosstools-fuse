@@ -10,10 +10,16 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
+import java.util.Iterator;
+
+import org.apache.camel.model.DataFormatDefinition;
+import org.apache.camel.model.dataformat.DataFormatsDefinition;
+import org.apache.camel.spring.CamelContextFactoryBean;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -33,11 +39,14 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -57,15 +66,17 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
+import org.fusesource.ide.camel.model.RouteContainer;
+import org.jboss.mapper.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
-import org.jboss.mapper.model.ModelBuilder;
 
 /**
  * @author brianf
  *
  */
+@SuppressWarnings("restriction")
 public class OtherPage extends XformWizardPage implements TransformationTypePage {
 
     final DataBindingContext context = new DataBindingContext(
@@ -74,10 +85,11 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     private Composite _page;
     private boolean isSource = true;
     private Text _javaClassText;
-    private Text _dataFormatIdText;
+    private ComboViewer _dataFormatIdCombo;
     private ModelBuilder _builder;
     private org.jboss.mapper.model.Model _javaModel = null;
     private ModelViewer _modelViewer;
+    private Label _dfErrorLabel;
 
     /**
      * @param model
@@ -180,11 +192,17 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         
         label = createLabel(_page, "Data Format ID:", "Unique ID for the data format.");
 
-        _dataFormatIdText = new Text(_page, SWT.BORDER);
-        _dataFormatIdText.setLayoutData(
+        _dataFormatIdCombo = new ComboViewer(_page, SWT.DROP_DOWN | SWT.READ_ONLY);
+        _dataFormatIdCombo.getCombo().setLayoutData(
                 new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-        _dataFormatIdText.setToolTipText(label.getToolTipText());
-
+        _dataFormatIdCombo.getCombo().setToolTipText(label.getToolTipText());
+        _dataFormatIdCombo.setContentProvider(new ObservableListContentProvider());
+        
+        label = createLabel(_page, "", ""); // spacer
+        _dfErrorLabel = createLabel(_page, "", "");
+        _dfErrorLabel.setLayoutData(
+                new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group.setText("Class Structure Preview");
         group.setLayout(new GridLayout(3, false)); 
@@ -232,8 +250,25 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 SWT.LEFT);
 
         // Bind id widget to UI model
-        widgetValue = WidgetProperties.text(SWT.Modify).observe(_dataFormatIdText);
+        widgetValue = ViewerProperties.singleSelection().observe(_dataFormatIdCombo);
         modelValue = null;
+        RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.
+                getDiagramEditor().getModel();
+        CamelContextFactoryBean camelContext =
+                routeContainer.getModel().getContextElement();
+        DataFormatsDefinition dataFormats = camelContext.getDataFormats();
+        WritableList dfList = new WritableList();
+        if (dataFormats != null && dataFormats.getDataFormats() != null) {
+            for (Iterator<DataFormatDefinition> iterator = dataFormats.getDataFormats().iterator(); iterator.hasNext();) {
+                DataFormatDefinition df = iterator.next();
+                dfList.add(df.getId());
+            }
+        } else {
+            _dfErrorLabel.setText("No available data format definitions in the selected Camel configuration.");
+            _dfErrorLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+            _dataFormatIdCombo.getCombo().setEnabled(false);
+        }
+        _dataFormatIdCombo.setInput(dfList);
         if (isSourcePage()) {
             modelValue = BeanProperties.value(Model.class, "sourceDataFormatid").observe(model);
         } else {
