@@ -14,6 +14,8 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,9 +26,15 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -43,22 +51,27 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.mapper.MappingOperation;
+import org.jboss.mapper.Variable;
 import org.jboss.mapper.camel.CamelEndpoint;
+import org.jboss.mapper.model.Model;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder;
+import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
 import org.jboss.tools.fuse.transformation.editor.internal.VariablesViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
 /**
  *
  */
 // TODO save preferences for toggle buttons
-// TODO content assist in text
 // TODO search fields in model viewers
 // TODO search in mappings viewer
+// TODO support change variable name
 public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
     private static final int SASH_COLOR = SWT.COLOR_DARK_GRAY;
@@ -73,6 +86,12 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
     Text helpText;
     ModelTabFolder sourceModelTabFolder, targetModelTabFolder;
     MappingDetailViewer mappingDetailViewer;
+
+    final List<PotentialDropTarget> potentialDropTargets = new ArrayList<>();
+
+    void configEvent() {
+        firePropertyChange(IEditorPart.PROP_DIRTY);
+    }
 
     /**
      * {@inheritDoc}
@@ -118,32 +137,14 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         horizontalSplitter.setBackground(parent.getDisplay().getSystemColor(SASH_COLOR));
         horizontalSplitter.setSashWidth(SASH_WIDTH);
         // Create source model tab folder
-        sourceModelTabFolder = new ModelTabFolder(config,
-                                                  horizontalSplitter,
-                                                  "Source",
-                                                  config.getSourceModel()) {
-
-            private VariablesViewer variablesViewer;
-
-            @Override
-            protected void constructAdditionalTabs() {
-                // Create variables tab
-                final CTabItem variablesTab = new CTabItem(this, SWT.NONE);
-                variablesTab.setText("Variables");
-                variablesViewer = new VariablesViewer(config, this);
-                variablesTab.setControl(variablesViewer);
-                variablesTab.setImage(Images.VARIABLE);
-            }
-        };
+        sourceModelTabFolder = new SourceModelTabFolder(horizontalSplitter);
         // Create transformation viewer
-        mappingsViewer = new MappingsViewer(config, this, horizontalSplitter);
+        mappingsViewer = new MappingsViewer(config, this, horizontalSplitter, potentialDropTargets);
         // Create target model tab folder
-        targetModelTabFolder = new ModelTabFolder(config,
-                                                  horizontalSplitter,
-                                                  "Target",
-                                                  config.getTargetModel());
+        targetModelTabFolder = new TargetModelTabFolder(horizontalSplitter);
         // Create detail area
-        mappingDetailViewer = new MappingDetailViewer(config, verticalSplitter);
+        mappingDetailViewer =
+            new MappingDetailViewer(config, verticalSplitter, potentialDropTargets);
         // Configure size of components in vertical splitter
         verticalSplitter.setWeights(new int[] {75, 25});
 
@@ -185,10 +186,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                 configEvent();
             }
         });
-    }
-
-    void configEvent() {
-        firePropertyChange(IEditorPart.PROP_DIRTY);
     }
 
     /**
@@ -309,5 +306,77 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         helpText.setText("Create a new mapping below by dragging a field from source "
                 + config.getSourceModel().getName() + " on the left to target "
                 + config.getTargetModel().getName() + " on the right.");
+    }
+
+    class SourceModelTabFolder extends ModelTabFolder {
+
+        private final VariablesViewer variablesViewer;
+
+        SourceModelTabFolder(final Composite parent) {
+            super(config, parent, "Source", config.getSourceModel(), potentialDropTargets);
+
+            // Create variables tab
+            final CTabItem variablesTab = new CTabItem(this, SWT.NONE);
+            variablesTab.setText("Variables");
+            variablesViewer = new VariablesViewer(config, this);
+            variablesTab.setControl(variablesViewer);
+            variablesTab.setImage(Images.VARIABLE);
+        }
+    }
+
+    class TargetModelTabFolder extends ModelTabFolder {
+
+        TargetModelTabFolder(final Composite parent) {
+            super(config, parent, "Target", config.getTargetModel(), potentialDropTargets);
+        }
+
+        @Override
+        protected ModelViewer constructModelViewer(final TransformationConfig config,
+                                                   final List<PotentialDropTarget> potentialDropTargets) {
+            final class TargetModelViewer extends ModelViewer {
+
+                TargetModelViewer(final Composite parent) {
+                    super(config, parent, config.getTargetModel(), potentialDropTargets);
+                    treeViewer.addDropSupport(DND.DROP_MOVE,
+                                              new Transfer[] {LocalSelectionTransfer.getTransfer()},
+                                              new ViewerDropAdapter(treeViewer) {
+
+                        @Override
+                        public boolean performDrop(final Object data) {
+                            try {
+                              final Object source =
+                                  ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
+                                                                                .getSelection())
+                                                                                .getFirstElement();
+                              if (source instanceof Model)
+                                  config.mapField((Model) source, (Model) getCurrentTarget());
+                              else config.mapVariable((Variable) source, (Model) getCurrentTarget());
+                              config.save();
+                              return true;
+                            } catch (final Exception e) {
+                              Activator.error(e);
+                              return false;
+                            }
+                        }
+
+                        @Override
+                        public boolean validateDrop(final Object target,
+                                                    final int operation,
+                                                    final TransferData transferType) {
+                            return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
+                                   && Util.draggingFromValidSource(config);
+                        }
+                    });
+                    potentialDropTargets.add(new PotentialDropTarget(treeViewer.getTree()) {
+
+                        @Override
+                        public boolean valid() {
+                            return Util.draggingFromValidSource(config);
+                        }
+                    });
+                }
+            }
+            return new TargetModelViewer(this);
+        }
     }
 }

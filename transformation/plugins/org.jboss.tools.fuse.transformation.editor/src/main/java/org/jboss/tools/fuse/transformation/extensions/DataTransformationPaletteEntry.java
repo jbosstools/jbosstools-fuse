@@ -40,7 +40,6 @@ import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizar
 /**
  *
  */
-@SuppressWarnings("restriction")
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 
 
@@ -109,7 +108,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
                 String name, String description) {
             super(fp, name, description, null, getRequiredCapabilities(null));
         }
-        
+
         /*
          * (non-Javadoc)
          * @see org.eclipse.graphiti.func.ICreate#create(org.eclipse.graphiti.features.context.ICreateContext)
@@ -120,12 +119,12 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             // before we can get the selected route
             RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
             AbstractNode node = createNode();
-            
+
             if (node == null) {
             	// user canceled the wizard
                 return new Object[0];
             }
-            
+
             if (selectedRoute != null) {
                 selectedRoute.addChild(node);
             } else {
@@ -136,10 +135,10 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             PictogramElement pe = addGraphicalRepresentation(context, node);
 
             getFeatureProvider().link(pe, node);
-            
+
             // activate direct editing after object creation
             getFeatureProvider().getDirectEditingInfo().setActive(true);
-            
+
             // return newly created business object(s)
             return new Object[] { node };
         }
@@ -149,7 +148,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             // Launch the New Transformation wizard
             NewTransformationWizard wizard = new NewTransformationWizard();
             wizard.setNeedsProgressMonitor(true);
-            
+
             Object element = Activator.getDiagramEditor().getEditorInput();
             if (element instanceof IFileEditorInput) {
                 IFileEditorInput input = (IFileEditorInput) element;
@@ -158,7 +157,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
                 IPath respath = JavaUtil.getJavaPathForResource(res);
                 String path = respath.makeRelative().toString();
                 wizard.setCamelFilePath(path);
-                
+
                 // eventually we want to do all our Camel file updates
                 // within the Camel editor's context, but for now
                 // we will have the camel config builder make the updates

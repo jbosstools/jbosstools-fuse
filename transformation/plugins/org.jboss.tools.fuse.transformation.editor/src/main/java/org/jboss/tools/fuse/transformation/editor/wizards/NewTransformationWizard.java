@@ -81,7 +81,6 @@ import com.sun.codemodel.JPackage;
  * @author brianf
  *
  */
-@SuppressWarnings("restriction")
 public class NewTransformationWizard extends Wizard implements INewWizard {
 
     private static final String JAVA_PATH = Util.MAIN_PATH + "java/";
@@ -95,7 +94,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private CamelEndpoint endpoint;
     private boolean saveCamelConfig = true;
     private Endpoint routeEndpoint;
-    
+
     public StartPage start;
     public JavaPage javaSource;
     public JavaPage javaTarget;
@@ -120,7 +119,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
         IRunnableWithProgress op = new IRunnableWithProgress() {
             @Override
-            public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
+            public void run(IProgressMonitor monitor) {
                 final MapperConfiguration dozerConfigBuilder = DozerMapperConfiguration.newConfig();
                 final File newFile = new File(file.getLocationURI());
                 if (!newFile.getParentFile().exists()) {
@@ -136,7 +135,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         // Update Camel config
                         final IPath resourcesPath =
                                 uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
-                        
+
                         CamelConfigBuilder configBuilder = uiModel.camelConfig.getConfigBuilder();
                         sourceFormat = configBuilder.createDataFormat(
                                 uiModel.getSourceType().transformType, sourceClassName);
@@ -146,12 +145,12 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 	                                                 file.getFullPath().makeRelativeTo(resourcesPath).toString(),
 	                                                 sourceClassName, targetClassName,
 	                                                 sourceFormat, targetFormat);
-                        
+
                         // make sure we add our maven dependencies where needed
                         addCamelDozerDependency();
                         addDataFormatDefinitionDependency(sourceFormat);
                         addDataFormatDefinitionDependency(targetFormat);
-                        
+
                         if (saveCamelConfig) {
                             try {
                             	File camelFile = new File(uiModel.getProject()
@@ -165,10 +164,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         dozerConfigBuilder.addClassMapping(sourceClassName, targetClassName);
                     }
                     dozerConfigBuilder.saveConfig(configStream);
-                    
+
                     if (!saveCamelConfig) {
                         // now update the camel config if we didn't already
-                        
+
                         RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.
                                 getDiagramEditor().getModel();
                         CamelContextFactoryBean camelContext =
@@ -185,7 +184,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         // Create the route endpoint
                         routeEndpoint = new Endpoint("ref:" + endpoint.getId());
                     }
-                    
+
                     uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
                     // Ensure build of Java classes has completed
                     try {
@@ -228,7 +227,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public Endpoint getRouteEndpoint() {
         return routeEndpoint;
     }
-    
+
     @Override
     public void addPages() {
         if (start == null) {
@@ -273,7 +272,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public String getWindowTitle() {
         return "New Fuse Transformation";
     }
-    
+
     public void setSelectedProject(IProject project) {
         uiModel.setProject(project);
         final IJavaProject javaProject = JavaCore.create(project);
@@ -286,7 +285,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             e.printStackTrace();
         }
     }
-    
+
     public URLClassLoader getLoader() {
         return this.loader;
     }
@@ -326,7 +325,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             ((XformWizardPage) page).resetFinish();
         }
     }
-    
+
     public void resetSourceAndTargetPages() {
         resetPage(javaSource);
         resetPage(javaTarget);
@@ -337,7 +336,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         resetPage(otherSource);
         resetPage(otherTarget);
     }
-    
+
     @Override
     public boolean canFinish() {
         if (start != null && start.getSourcePage() != null && start.getTargetPage() != null) {
@@ -472,7 +471,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public void setSaveCamelConfig(boolean saveCamelConfig) {
         this.saveCamelConfig = saveCamelConfig;
     }
-    
+
     public DataFormatDefinition getSourceFormat() {
         return sourceFormat;
     }
@@ -480,7 +479,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public DataFormatDefinition getTargetFormat() {
         return targetFormat;
     }
-    
+
     public CamelEndpoint getEndpoint() {
         return endpoint;
     }
@@ -557,7 +556,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             }
         }
     }
-   
+
     /**
      * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
      * endpoints on CamelContextFactoryBean directly. Use reflection for now

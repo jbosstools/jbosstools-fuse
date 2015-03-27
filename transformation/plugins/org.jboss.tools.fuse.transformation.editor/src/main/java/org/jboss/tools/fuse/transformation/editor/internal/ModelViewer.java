@@ -11,6 +11,8 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -18,6 +20,7 @@ import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
@@ -34,38 +37,53 @@ import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.mapper.model.Model;
-import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
+/**
+ *
+ */
 public class ModelViewer extends Composite {
 
-    TransformationConfig config;
-    TransformationEditor editor;
+    final TransformationConfig config;
     Model rootModel;
-    final TreeViewer treeViewer;
     boolean showFieldTypes;
     boolean hideMappedFields;
 
+    /**
+     *
+     */
+    protected final TreeViewer treeViewer;
+
+    /**
+     * @param config
+     * @param parent
+     * @param rootModel
+     * @param potentialDropTargets
+     */
     public ModelViewer(final TransformationConfig config,
-            final Composite parent,
-            final Model rootModel) {
-        super(parent, SWT.NONE);
+                       final Composite parent,
+                       final Model rootModel,
+                       final List<PotentialDropTarget> potentialDropTargets) {
+        super(parent, SWT.BORDER);
         setBackground(Colors.BACKGROUND);
 
         this.config = config;
@@ -127,31 +145,73 @@ public class ModelViewer extends Composite {
                 return show(element);
             }
         });
-        treeViewer.addDragSupport(DND.DROP_MOVE,
-                new Transfer[] {LocalSelectionTransfer.getTransfer()}, new DragSourceAdapter() {
+        if (potentialDropTargets != null) {
+            treeViewer.addDragSupport(DND.DROP_MOVE,
+                                      new Transfer[] {LocalSelectionTransfer.getTransfer()},
+                                      new DragSourceAdapter() {
+
+                Color color;
+                List<Control> controls = new ArrayList<>();
+                private final MouseMoveListener mouseMoveListener = new MouseMoveListener() {
 
                     @Override
-                    public void dragStart(final DragSourceEvent event) {
-                        LocalSelectionTransfer.getTransfer()
-                                              .setSelection(treeViewer.getSelection());
+                    public void mouseMove(final MouseEvent event) {
+                        for (final Control control : controls) {
+                            control.redraw();
+                        }
+                        if (color == Colors.POTENTIAL_DROP_TARGET1)
+                            color = Colors.POTENTIAL_DROP_TARGET2;
+                        else if (color == Colors.POTENTIAL_DROP_TARGET2)
+                            color = Colors.POTENTIAL_DROP_TARGET3;
+                        else if (color == Colors.POTENTIAL_DROP_TARGET3)
+                            color = Colors.POTENTIAL_DROP_TARGET4;
+                        else if (color == Colors.POTENTIAL_DROP_TARGET4)
+                            color = Colors.POTENTIAL_DROP_TARGET5;
+                        else if (color == Colors.POTENTIAL_DROP_TARGET5)
+                            color = Colors.POTENTIAL_DROP_TARGET6;
+                        else if (color == Colors.POTENTIAL_DROP_TARGET6)
+                            color = Colors.POTENTIAL_DROP_TARGET7;
+                        else if (color == Colors.POTENTIAL_DROP_TARGET7)
+                            color = Colors.POTENTIAL_DROP_TARGET8;
+                        else color = Colors.POTENTIAL_DROP_TARGET1;
                     }
-                });
-        // Override selection background color
-        treeViewer.getTree().addListener(SWT.EraseItem, new Listener() {
+                };
+                private final PaintListener paintListener = new PaintListener() {
 
-            @Override
-            public void handleEvent(final Event event) {
-                if ((event.detail & SWT.SELECTED) != 0) {
-                    final Color oldBackground = event.gc.getBackground();
-                    event.gc.setBackground(treeViewer.getTree().isFocusControl()
-                                           ? Colors.SELECTED
-                                           : Colors.SELECTED_NO_FOCUS);
-                    event.gc.fillRectangle(event.getBounds());
-                    event.gc.setBackground(oldBackground);
-                    event.detail &= ~SWT.SELECTED;
+                    @Override
+                    public void paintControl(final PaintEvent event) {
+                        event.gc.setForeground(color);
+                        final Rectangle bounds = ((Control)event.widget).getBounds();
+                        event.gc.drawRectangle(0, 0, bounds.width - 1, bounds.height - 1);
+                    }
+                };
+
+                @Override
+                public void dragFinished(final DragSourceEvent event) {
+                    treeViewer.getTree().removeMouseMoveListener(mouseMoveListener);
+                    for (final Control control : controls) {
+                        control.removePaintListener(paintListener);
+                        control.redraw();
+                    }
+                    controls.clear();
                 }
-            }
-        });
+
+                @Override
+                public void dragStart(final DragSourceEvent event) {
+                    final IStructuredSelection selection =
+                        (IStructuredSelection)treeViewer.getSelection();
+                    LocalSelectionTransfer.getTransfer().setSelection(selection);
+                    color = Colors.POTENTIAL_DROP_TARGET1;
+                    for (final PotentialDropTarget potentialDropTarget : potentialDropTargets) {
+                        if (potentialDropTarget.valid()) {
+                            controls.add(potentialDropTarget.control);
+                            potentialDropTarget.control.addPaintListener(paintListener);
+                        }
+                    }
+                    treeViewer.getTree().addMouseMoveListener(mouseMoveListener);
+                }
+            });
+        }
         collapseAllButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -196,7 +256,7 @@ public class ModelViewer extends Composite {
 
         if (rootModel != null) treeViewer.setInput("root");
 
-        config.addListener(new PropertyChangeListener() {
+        if (config != null) config.addListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
@@ -204,6 +264,12 @@ public class ModelViewer extends Composite {
                     treeViewer.refresh();
             }
         });
+    }
+
+    private void expand(final Model model) {
+        if (model == null) return;
+        expand(model.getParent());
+        treeViewer.expandToLevel(model, 0);
     }
 
     /**
@@ -221,51 +287,19 @@ public class ModelViewer extends Composite {
         return false;
     }
 
-    private void expand(final Model model) {
-        if (model == null) return;
-        expand(model.getParent());
-        treeViewer.expandToLevel(model, 0);
-    }
-
     void select(final Model model) {
         if (model == null) return;
         expand(model.getParent());
         treeViewer.setSelection(new StructuredSelection(model), true);
     }
 
-    boolean show(final Object element) {
-        return !hideMappedFields || !mapped((Model) element, rootModel);
+    public void setModel(final Model model) {
+        rootModel = model;
+        treeViewer.setInput("root");
     }
 
-    public ModelViewer(final Composite parent,
-            final Model rootModel) {
-        super(parent, SWT.NONE);
-        // simple view
-
-        setBackground(parent.getParent().getParent().getBackground());
-
-        this.rootModel = rootModel;
-
-        setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
-
-        treeViewer = new TreeViewer(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-        treeViewer.getTree().setLayoutData(
-                GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
-        treeViewer.setComparator(new ViewerComparator() {
-
-            @Override
-            public int compare(final Viewer viewer,
-                    final Object model1,
-                    final Object model2) {
-                if (model1 instanceof Model && model2 instanceof Model)
-                    return ((Model) model1).getName()
-                            .compareTo(((Model) model2).getName());
-                return 0;
-            }
-        });
-        treeViewer.setLabelProvider(new LabelProvider());
-        ColumnViewerToolTipSupport.enableFor(treeViewer);
-        treeViewer.setContentProvider(new ContentProvider());
+    boolean show(final Object element) {
+        return !hideMappedFields || !mapped((Model) element, rootModel);
     }
 
     class ContentProvider implements ITreeContentProvider {
@@ -354,13 +388,5 @@ public class ModelViewer extends Composite {
             cell.setStyleRanges(text.getStyleRanges());
             super.update(cell);
         }
-    }
-
-    public TreeViewer getViewer() {
-        return treeViewer;
-    }
-
-    public void setModel(Model input) {
-        this.rootModel = input;
     }
 }
