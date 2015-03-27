@@ -127,22 +127,26 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             // before we can get the selected route
             RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
             AbstractNode node = createNode();
-            if (selectedRoute != null) {
+            if (selectedRoute != null && node != null) {
                 selectedRoute.addChild(node);
             } else {
                 Activator.getLogger().warning("Warning! Could not find currently selectedNode, so can't associate this node with the route!: " + node);
             }
 
-            // do the add
-            PictogramElement pe = addGraphicalRepresentation(context, node);
-
-            getFeatureProvider().link(pe, node);
-            
-            // activate direct editing after object creation
-            getFeatureProvider().getDirectEditingInfo().setActive(true);
+            if (node != null) {
+                // do the add
+                PictogramElement pe = addGraphicalRepresentation(context, node);
+    
+                getFeatureProvider().link(pe, node);
+                
+                // activate direct editing after object creation
+                getFeatureProvider().getDirectEditingInfo().setActive(true);
+                
+                return new Object[] {node};
+            }
             
             // return newly created business object(s)
-            return new Object[] { node };
+            return null;
         }
 
         private void addCamelContextEndpoint(CamelContextFactoryBean context,
