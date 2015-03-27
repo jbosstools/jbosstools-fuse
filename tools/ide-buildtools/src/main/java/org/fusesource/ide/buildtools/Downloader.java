@@ -310,7 +310,21 @@ public class Downloader {
                 out.print("         <uriParameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
                 if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
                 if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
-                if (p.getDefaultValue() != null) out.print("defaultValue=\"" + p.getDefaultValue() + "\" ");
+                if (p.getDefaultValue() != null) { 
+                	out.print("defaultValue=\"" + p.getDefaultValue() + "\" ");
+                } else {
+                	if (p.getJavaType().equalsIgnoreCase("java.lang.boolean") || 
+                		p.getJavaType().equalsIgnoreCase("boolean")) {
+                		out.print("defaultValue=\"false\" ");  // default for booleans is FALSE
+                	} else if (p.getJavaType().equalsIgnoreCase("byte") || 
+                			p.getJavaType().equalsIgnoreCase("short") ||
+                			p.getJavaType().equalsIgnoreCase("int") ||
+                			p.getJavaType().equalsIgnoreCase("long") ||
+                			p.getJavaType().equalsIgnoreCase("float") || 
+                			p.getJavaType().equalsIgnoreCase("double") ) {
+                		out.print("defaultValue=\"0\" ");  // default for numbers is 0
+                	}
+                }
                 if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
                 if (p.getLabel() != null) out.print("label=\"" + p.getLabel() + "\" ");
                 out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
