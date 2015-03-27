@@ -127,6 +127,12 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             // before we can get the selected route
             RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
             AbstractNode node = createNode();
+            
+            if (node == null) {
+            	// user canceled the wizard
+                return new Object[0];
+            }
+            
             if (selectedRoute != null) {
                 selectedRoute.addChild(node);
             } else {
