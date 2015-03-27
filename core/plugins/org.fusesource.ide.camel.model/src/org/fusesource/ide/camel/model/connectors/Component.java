@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Component {
 	
 	private String clazz;
+	private String title;
 	private String description;
 	private String syntax;
 	private String kind;
@@ -151,23 +152,20 @@ public class Component {
 	public String getDescription() {
 		return this.description;
 	}
+
+	/**
+	 * @return the title
+	 */
+	@XmlElement(name="title")
+	public String getTitle() {
+		return this.title;
+	}
 	
 	/**
-	 * returns the label of the component
-	 * 
-	 * @return
+	 * @param title the title to set
 	 */
-	public String getTitle() {
-		Collections.sort(getSchemes(), new Comparator<ComponentScheme>() {
-			/* (non-Javadoc)
-			 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-			 */
-			@Override
-			public int compare(ComponentScheme o1, ComponentScheme o2) {
-				return o1.getScheme().compareTo(o2.getScheme());
-			}
-		});
-		return getSchemes().get(0).getScheme();
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	/**
@@ -248,4 +246,24 @@ public class Component {
 	    }
 	    return false;
 	}
+	
+	/**
+	 * returns the label of the component if component itself doesn't provide
+	 * a title
+	 * 
+	 * @return
+	 */
+	public String getSchemeTitle() {
+		Collections.sort(getSchemes(), new Comparator<ComponentScheme>() {
+			/* (non-Javadoc)
+			 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+			 */
+			@Override
+			public int compare(ComponentScheme o1, ComponentScheme o2) {
+				return o1.getScheme().compareTo(o2.getScheme());
+			}
+		});
+		return getSchemes().get(0).getScheme();
+	}
+
 }

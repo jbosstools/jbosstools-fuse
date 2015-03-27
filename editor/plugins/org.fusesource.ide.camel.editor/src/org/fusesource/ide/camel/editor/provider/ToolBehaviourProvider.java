@@ -479,7 +479,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         // inject palette entries generated out of the component model file
         ComponentModel componentModel = ComponentModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion());
         for (Component component : componentModel.getSupportedComponents()) {
-            if (shouldBeIgnored(component.getTitle())) continue;
+            if (shouldBeIgnored(component.getSchemeTitle())) continue;
             ICreateFeature cf = new CreateConnectorFigureFeature(getFeatureProvider(), component);
             IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), cf.getCreateImageId(), cf.getCreateLargeImageId(), cf);
             entries.add(te);

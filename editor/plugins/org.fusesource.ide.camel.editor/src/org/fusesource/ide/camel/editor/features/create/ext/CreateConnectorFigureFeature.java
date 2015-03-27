@@ -10,34 +10,14 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.features.create.ext;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.ConnectorsMessages;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.ConnectorEndpoint;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.connectors.Component;
-import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 import org.fusesource.ide.commons.util.Strings;
 
 /**
@@ -55,7 +35,7 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
      * @param component
      */
     public CreateConnectorFigureFeature(IFeatureProvider fp, Component component) {
-        super(fp, Strings.humanize(component.getTitle()), component.getDescription(), Endpoint.class);
+        super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), Endpoint.class);
         this.endpoint = new ConnectorEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getSchemes().get(0).getScheme())); // we use the first found protocol string
         setExemplar(this.endpoint);
         this.component = component;
@@ -66,7 +46,7 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
      */
     @Override
     protected String getIconName() {
-        return String.format("%s.png", this.component.getTitle().replaceAll("-", "_"));
+        return String.format("%s.png", this.component.getSchemeTitle().replaceAll("-", "_"));
     }
         
     /* (non-Javadoc)

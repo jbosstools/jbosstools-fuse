@@ -243,6 +243,7 @@ public class Downloader {
         for (String compName : components) {
         	String json = cat.componentJSonSchema(compName);
         	
+        	// TODO: remove after 2.15.1 release
         	if (compName.equalsIgnoreCase("ftp") || 
         		compName.equalsIgnoreCase("ftps") ||
         		compName.equalsIgnoreCase("sftp")) {
@@ -276,6 +277,7 @@ public class Downloader {
             	out.println("         <tag>" + tag + "</tag>");
             }
             out.println("      </tags>");
+            out.println("      <title>" + comp.getTitle() + "</title>");
             out.println("      <description>" + comp.getDescription() + "</description>");
             out.println("      <syntax>" + comp.getSyntax() + "</syntax>");
             out.println("      <class>" + comp.getJavaType() + "</class>");
@@ -389,6 +391,7 @@ public class Downloader {
     		private String kind;
         	private String scheme;
         	private String syntax;
+        	private String title;
         	private String description;
         	private String label;  // tags
         	private String javaType; // class
@@ -414,6 +417,20 @@ public class Downloader {
 				this.consumerOnly = consumerOnly;
 			}
         	
+			/**
+			 * @return the title
+			 */
+			public String getTitle() {
+				return this.title;
+			}
+			
+			/**
+			 * @param title the title to set
+			 */
+			public void setTitle(String title) {
+				this.title = title;
+			}
+			
         	/**
 			 * @return the producerOnly
 			 */
