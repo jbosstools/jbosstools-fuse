@@ -36,7 +36,7 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
      */
     public CreateConnectorFigureFeature(IFeatureProvider fp, Component component) {
         super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), Endpoint.class);
-        this.endpoint = new ConnectorEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getSchemes().get(0).getScheme())); // we use the first found protocol string
+        this.endpoint = new ConnectorEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme())); // we use the first found protocol string
         setExemplar(this.endpoint);
         this.component = component;
     }

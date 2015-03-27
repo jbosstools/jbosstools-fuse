@@ -82,7 +82,7 @@ public class ComponentModel {
 	public static ComponentModel getComponentFactoryInstance(InputStream stream, String camelVersion) {
 		try {
 			// create JAXB context and instantiate marshaller
-		    JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, ComponentDependency.class, ComponentScheme.class, ComponentProperty.class, UriParameter.class);
+		    JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, ComponentDependency.class, ComponentProperty.class, UriParameter.class);
 		    Unmarshaller um = context.createUnmarshaller();
 		    ComponentModel model = (ComponentModel) um.unmarshal(new InputSource(stream));
 		    model.setCamelVersion(camelVersion);

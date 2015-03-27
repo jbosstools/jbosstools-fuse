@@ -90,6 +90,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         
         CONNECTORS_WHITELIST.add("activemq");
         CONNECTORS_WHITELIST.add("atom");
+        CONNECTORS_WHITELIST.add("controlbus");
         CONNECTORS_WHITELIST.add("cxf");
         CONNECTORS_WHITELIST.add("cxfrs");
         CONNECTORS_WHITELIST.add("cxfbean");
@@ -103,6 +104,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         CONNECTORS_WHITELIST.add("imap");
         CONNECTORS_WHITELIST.add("imaps");
         CONNECTORS_WHITELIST.add("infinispan");
+        CONNECTORS_WHITELIST.add("jdbc");
         CONNECTORS_WHITELIST.add("jgroups");
         CONNECTORS_WHITELIST.add("jms");
         CONNECTORS_WHITELIST.add("language");
@@ -113,7 +115,6 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         CONNECTORS_WHITELIST.add("netty-http");
         CONNECTORS_WHITELIST.add("netty4");
         CONNECTORS_WHITELIST.add("netty4-http");
-        CONNECTORS_WHITELIST.add("nntp");
         CONNECTORS_WHITELIST.add("pop3");
         CONNECTORS_WHITELIST.add("pop3s");
         CONNECTORS_WHITELIST.add("quartz");
@@ -121,11 +122,13 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         CONNECTORS_WHITELIST.add("restlet");
         CONNECTORS_WHITELIST.add("rss");
         CONNECTORS_WHITELIST.add("sap-netweaver");
+        CONNECTORS_WHITELIST.add("scheduler");
         CONNECTORS_WHITELIST.add("seda");
         CONNECTORS_WHITELIST.add("servlet");
         CONNECTORS_WHITELIST.add("smtp");
         CONNECTORS_WHITELIST.add("smtps");
         CONNECTORS_WHITELIST.add("sql");
+        CONNECTORS_WHITELIST.add("timer");
         CONNECTORS_WHITELIST.add("vm");
         CONNECTORS_WHITELIST.add("xquery");
         CONNECTORS_WHITELIST.add("xslt");

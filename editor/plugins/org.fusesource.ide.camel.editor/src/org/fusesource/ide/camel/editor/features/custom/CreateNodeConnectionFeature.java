@@ -187,7 +187,7 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 	protected AbstractNode createNode(ICustomContext context) throws Exception {
 		if (conFeature != null) {
 			conFeature.updateMavenDependencies(component.getDependencies());
-			return new ConnectorEndpoint(component != null && component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getSchemes().get(0).getScheme()));
+			return new ConnectorEndpoint(component != null && component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme()));
 		} else {
 			return this.clazz.newInstance();
 		}

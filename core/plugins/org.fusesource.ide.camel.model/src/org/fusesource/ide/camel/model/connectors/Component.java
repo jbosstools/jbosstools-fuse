@@ -11,8 +11,6 @@
 package org.fusesource.ide.camel.model.connectors;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -24,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "component")
 public class Component {
 	
+	private String id;
 	private String clazz;
 	private String title;
 	private String description;
@@ -31,7 +30,7 @@ public class Component {
 	private String kind;
 	private String consumerOnly;
 	private String producerOnly;
-	private ArrayList<ComponentScheme> schemes;
+	private String scheme;
 	private ArrayList<ComponentDependency> dependencies;
 	private ArrayList<String> tags;
 	private ArrayList<ComponentProperty> componentProperties;
@@ -98,6 +97,36 @@ public class Component {
 	 */
 	public void setProducerOnly(String producerOnly) {
 		this.producerOnly = producerOnly;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	@XmlElement(name="id")
+	public String getId() {
+		return this.id;
+	}
+	
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the scheme
+	 */
+	@XmlElement(name="scheme")
+	public String getScheme() {
+		return this.scheme;
+	}
+	
+	/**
+	 * @param scheme the scheme to set
+	 */
+	public void setScheme(String scheme) {
+		this.scheme = scheme;
 	}
 	
 	/**
@@ -192,33 +221,6 @@ public class Component {
 	}
 	
 	/**
-	 * @return the schemes
-	 */
-	@XmlElementWrapper(name = "schemes")
-	@XmlElement(name = "scheme")
-	public ArrayList<ComponentScheme> getSchemes() {
-	    if (this.schemes != null) {
-    		Collections.sort(this.schemes, new Comparator<ComponentScheme>() {
-    		    /* (non-Javadoc)
-    		     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-    		     */
-    		    @Override
-    		    public int compare(ComponentScheme o1, ComponentScheme o2) {
-    		        return o1.getScheme().compareTo(o2.getScheme());
-    		    }
-    		});
-	    }
-	    return this.schemes;
-	}
-	
-	/**
-	 * @param schemes the schemes to set
-	 */
-	public void setSchemes(ArrayList<ComponentScheme> schemes) {
-		this.schemes = schemes;
-	}
-	
-	/**
 	 * @return the dependency
 	 */
 	@XmlElementWrapper(name = "dependencies")
@@ -241,10 +243,7 @@ public class Component {
 	 * @return
 	 */
 	public boolean supportsScheme(String scheme) {
-	    for (ComponentScheme p : schemes) {
-	        if (p.getScheme().equalsIgnoreCase(scheme)) return true;
-	    }
-	    return false;
+	    return getScheme().equals(scheme);
 	}
 	
 	/**
@@ -254,16 +253,6 @@ public class Component {
 	 * @return
 	 */
 	public String getSchemeTitle() {
-		Collections.sort(getSchemes(), new Comparator<ComponentScheme>() {
-			/* (non-Javadoc)
-			 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-			 */
-			@Override
-			public int compare(ComponentScheme o1, ComponentScheme o2) {
-				return o1.getScheme().compareTo(o2.getScheme());
-			}
-		});
-		return getSchemes().get(0).getScheme();
+		return getScheme();
 	}
-
 }

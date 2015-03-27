@@ -254,13 +254,14 @@ public class Downloader {
         	
         	ComponentModel model = mapper.readValue(json, ComponentModel.class);
         	
-        	String clazz = model.getComponent().getJavaType();
-        	ComponentModel c = knownComponents.get(clazz);
+        	String id = model.getComponent().getScheme();
+        	ComponentModel c = knownComponents.get(id);
             if (c == null) {
                 c = model;
             } 
-            c.getComponent().getSchemes().add(model.getComponent().getScheme());                        
-            knownComponents.put(clazz, c);
+            c.getComponent().setId(model.getComponent().getScheme());
+            c.getComponent().setScheme(model.getComponent().getScheme());                        
+            knownComponents.put(id, c);
         }
 
         PrintWriter out = new PrintWriter(new FileWriter(outputFile));
@@ -270,45 +271,43 @@ public class Downloader {
         Collection<ComponentModel> comps = knownComponents.values();
         for (ComponentModel compModel : comps) {
         	ComponentModel.Component comp = compModel.getComponent();
-            out.println("   <component>");
+
+        	out.println("   <component>");
+            out.println("      <id>" + comp.getId() + "</id>");
             out.println("      <tags>");
             String[] tags = comp.getLabel().split(",");
             for (String tag : tags) {
             	out.println("         <tag>" + tag + "</tag>");
             }
             out.println("      </tags>");
-            out.println("      <title>" + comp.getTitle() + "</title>");
+            if (comp.getTitle() != null) out.println("      <title>" + comp.getTitle() + "</title>");
             out.println("      <description>" + comp.getDescription() + "</description>");
             out.println("      <syntax>" + comp.getSyntax() + "</syntax>");
             out.println("      <class>" + comp.getJavaType() + "</class>");
             out.println("      <kind>" + comp.getKind() + "</kind>");
             if (comp.getConsumerOnly() != null) out.println("      <consumerOnly>" + comp.consumerOnly + "</consumerOnly>");
             if (comp.getProducerOnly() != null) out.println("      <producerOnly>" + comp.getProducerOnly() + "</producerOnly>");
-            out.println("      <schemes>");
-            for (String scheme : comp.getSchemes()) {
-                out.println("           <scheme>" + scheme + "</scheme>");
-            }
-            out.println("       </schemes>");
-            out.println("       <dependencies>");
-            out.println("           <dependency>");
-            out.println(String.format("             <groupId>%s</groupId>", comp.getGroupId()));
-            out.println(String.format("             <artifactId>%s</artifactId>", comp.getArtifactId()));
-            out.println(String.format("             <version>%s</version>", comp.getVersion()));
-            out.println("           </dependency>");
-            out.println("       </dependencies>");
+            out.println("      <scheme>" + comp.getScheme() + "</scheme>");
+            out.println("      <dependencies>");
+            out.println("         <dependency>");
+            out.println(String.format("            <groupId>%s</groupId>", comp.getGroupId()));
+            out.println(String.format("            <artifactId>%s</artifactId>", comp.getArtifactId()));
+            out.println(String.format("            <version>%s</version>", comp.getVersion()));
+            out.println("         </dependency>");
+            out.println("      </dependencies>");
 
-            out.println("       <componentProperties>");
+            out.println("      <componentProperties>");
             for (ComponentParam p : compModel.getComponentParams()) {
-                out.print("           <componentProperty name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                out.print("         <componentProperty name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
                 if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
                 if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
                 out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
             }           
-            out.println("       </componentProperties>");   
+            out.println("      </componentProperties>");   
             
-            out.println("       <uriParameters>");
+            out.println("      <uriParameters>");
             for (UriParam p : compModel.getUriParams()) {
-                out.print("           <uriParameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                out.print("         <uriParameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
                 if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
                 if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
                 if (p.getDefaultValue() != null) out.print("defaultValue=\"" + p.getDefaultValue() + "\" ");
@@ -316,7 +315,7 @@ public class Downloader {
                 if (p.getLabel() != null) out.print("label=\"" + p.getLabel() + "\" ");
                 out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
             }           
-            out.println("       </uriParameters>");            
+            out.println("      </uriParameters>");            
             out.println("   </component>");
         }
         out.println("</components>");
@@ -388,6 +387,7 @@ public class Downloader {
     public static class ComponentModel {
     	
     	public static class Component {
+    		private String id;
     		private String kind;
         	private String scheme;
         	private String syntax;
@@ -400,8 +400,6 @@ public class Downloader {
         	private String version;
         	private String producerOnly;
         	private String consumerOnly;
-        	private ArrayList<String> schemes = new ArrayList<String>();
-        	
         	
         	/**
 			 * @return the consumerOnly
@@ -417,6 +415,20 @@ public class Downloader {
 				this.consumerOnly = consumerOnly;
 			}
         	
+			/**
+			 * @return the id
+			 */
+			public String getId() {
+				return this.id;
+			}
+			
+			/**
+			 * @param id the id to set
+			 */
+			public void setId(String id) {
+				this.id = id;
+			}
+			
 			/**
 			 * @return the title
 			 */
@@ -571,20 +583,6 @@ public class Downloader {
 			 */
 			public void setVersion(String version) {
 				this.version = version;
-			}
-			
-			/**
-			 * @return the schemes
-			 */
-			public ArrayList<String> getSchemes() {
-				return this.schemes;
-			}
-			
-			/**
-			 * @param schemes the schemes to set
-			 */
-			public void setSchemes(ArrayList<String> schemes) {
-				this.schemes = schemes;
 			}
     	}
     	

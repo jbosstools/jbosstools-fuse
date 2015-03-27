@@ -41,7 +41,6 @@ import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 import org.fusesource.ide.camel.model.connectors.ComponentModel;
 import org.fusesource.ide.camel.model.connectors.ComponentModelFactory;
 import org.fusesource.ide.camel.model.connectors.ComponentProperty;
-import org.fusesource.ide.camel.model.connectors.ComponentScheme;
 import org.fusesource.ide.camel.model.connectors.UriParameter;
 import org.fusesource.ide.commons.util.JsonHelper;
 import org.jboss.dmr.ModelNode;
@@ -151,27 +150,6 @@ public final class CamelComponentUtils {
         return res.toArray(new String[res.size()]);
     }
     
-    public static String buildChoice(Component component, String protocol) {
-        String result = "choice[";
-        
-        if (component != null) {
-            boolean first = true;
-            for (ComponentScheme p : component.getSchemes()) {
-                if (first) {
-                    first = false;
-                } else {
-                    result += ",";
-                }
-                result += p.getScheme();
-            }        
-        } else {
-            result += protocol;
-        }
-        result += "]";
-        
-        return result;
-    }
-    
     /**
      * returns the component class for the given scheme
      * 
@@ -252,11 +230,7 @@ public final class CamelComponentUtils {
             Object oJSONBlob = method.invoke(compConf);
             if (oJSONBlob != null && oJSONBlob instanceof String) {
                 resModel = buildModelFromJSonBlob((String)oJSONBlob, clazz);  
-                ComponentScheme cs = new ComponentScheme();
-                cs.setScheme(scheme);
-                ArrayList<ComponentScheme> csl = new ArrayList<ComponentScheme>();
-                csl.add(cs);
-                resModel.setSchemes(csl);
+                resModel.setScheme(scheme);
                 saveModel(resModel);
             }
         } catch (Exception ex) {
@@ -269,7 +243,7 @@ public final class CamelComponentUtils {
     private static void saveModel(Component component) {
         try {
             // create JAXB context and instantiate marshaller
-        	JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, ComponentDependency.class, ComponentScheme.class, ComponentProperty.class, UriParameter.class);
+        	JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, ComponentDependency.class, ComponentProperty.class, UriParameter.class);
 		    Marshaller m = context.createMarshaller();
             m.marshal(component, new File("/var/tmp/model.xml"));
         } catch (Exception ex) {
