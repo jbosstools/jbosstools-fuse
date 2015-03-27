@@ -252,6 +252,14 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
 						 */
 						@Override
 						public IStatus validate(Object value) {
+							if (selectedEP.getUri().startsWith("ref:")) {
+								// check for broken refs
+								String refId = selectedEP.getUri().trim().length()>"ref:".length() ? selectedEP.getUri().substring("ref:".length()) : null;
+								if (refId == null || refId.trim().length()<1 || selectedEP.getParent().getParent().getCamelContextEndpointUris().get(refId) == null) {
+									return ValidationStatus.error("The entered reference does not exist in your context!");
+								}
+							}
+							
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
 								return ValidationStatus.ok();
 							}

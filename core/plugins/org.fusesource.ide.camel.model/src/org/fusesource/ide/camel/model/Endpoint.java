@@ -113,6 +113,9 @@ public class Endpoint extends AbstractNode {
 				String refUri = c.getCamelContextEndpointUris().get(refId);
 				if (refUri != null) {
 					scheme = refUri.substring(0, refUri.indexOf(":")+1);
+				} else {
+					// seems we have a broken ref
+					return ICON;
 				}
 			} else {
 				scheme = u.substring(0, u.indexOf(":")+1);
