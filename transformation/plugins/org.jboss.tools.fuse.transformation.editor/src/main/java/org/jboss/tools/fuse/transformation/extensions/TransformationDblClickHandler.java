@@ -36,7 +36,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
  * @author brianf
  *
  */
-@SuppressWarnings("restriction")
 public class TransformationDblClickHandler implements ICustomDblClickHandler {
 
     public TransformationDblClickHandler() {
@@ -71,7 +70,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
         }
         return uriStr.substring(startIdx + (key + '=').length(), endIdx);
     }
-    
+
     @Override
     public void handleDoubleClick(AbstractNode clickedNode) {
         if (clickedNode instanceof Endpoint) {
@@ -82,7 +81,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
                 String refUri = c.getCamelContextEndpointUris().get(id);
                 if (refUri != null && refUri.startsWith("dozer:")) {
                     String filename = getEndpointParameter(refUri, EndpointHelper.MAPPING_FILE);
-                    
+
                     // Open mapping editor
                     final IEditorDescriptor desc =
                             PlatformUI
@@ -92,7 +91,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
                                             filename,
                                             Platform.getContentTypeManager().getContentType(
                                                     DozerConfigContentTypeDescriber.ID))[0];
-                    
+
                     Object element = Activator.getDiagramEditor().getEditorInput();
                     if (element instanceof IFileEditorInput) {
                         IFileEditorInput input = (IFileEditorInput) element;
@@ -107,7 +106,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
                                 if (xmlFile != null && !xmlFile.exists()) {
                                     MessageDialog.openError(
                                             Display.getCurrent().getActiveShell(),
-                                            "Transformation File Not Accessible", 
+                                            "Transformation File Not Accessible",
                                             "The Transformation file (" + filename + ") is not accessible in the Camel project.");
                                     return;
                                 }
@@ -119,7 +118,7 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
                                                     desc.getId());
                             ((TransformationEditor) editor).setCamelEndpoint(id, res.getProjectRelativePath().toPortableString());
                         } catch (Exception e) {
-                            Activator.showUserError("Exception Opening Transformation File", 
+                            Activator.showUserError("Exception Opening Transformation File",
                                     "The Transformation file (" + filename + ") is not accessible in the Camel project.",
                                     e);
                             e.printStackTrace();

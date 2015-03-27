@@ -57,17 +57,21 @@ public class MappingsViewer extends Composite {
     TraversalListener prevTraversalListener;
     MappingSummary selectedMappingSummary;
     final List<MappingSummary> mappingSummaries = new ArrayList<>();
+    private final List<PotentialDropTarget> potentialDropTargets;
 
     /**
      * @param config
      * @param editor
      * @param parent
+     * @param potentialDropTargets
      */
     public MappingsViewer(final TransformationConfig config,
                           final TransformationEditor editor,
-                          final Composite parent) {
+                          final Composite parent,
+                          final List<PotentialDropTarget> potentialDropTargets) {
         super(parent, SWT.NONE);
         this.editor = editor;
+        this.potentialDropTargets = potentialDropTargets;
 
         setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         setBackground(parent.getParent().getBackground());
@@ -120,10 +124,23 @@ public class MappingsViewer extends Composite {
         sourcePane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         sourcePane.setBackground(getBackground());
         mapsToPane = new Composite(summaryPane, SWT.NONE);
-        mapsToPane.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
         final int margin = sourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y / 2;
-        mapsToPane.setLayout(GridLayoutFactory.fillDefaults().margins(margin, margin).spacing(0, 0)
+        mapsToPane.setLayout(GridLayoutFactory.fillDefaults()
+                                              .margins(margin, margin)
+                                              .spacing(0, 0)
                                               .create());
+        final Composite tempPane = new Composite(mapsToPane, SWT.NONE);
+        tempPane.setLayoutData(GridDataFactory.swtDefaults().create());
+        tempPane.setLayout(GridLayoutFactory.swtDefaults().create());
+        final Label tempLabel = new Label(tempPane, SWT.NONE);
+        tempLabel.setImage(Images.MAPPED);
+        final int mapsToPaneWidth = mapsToPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+        tempLabel.dispose();
+        tempPane.dispose();
+        mapsToPane.setLayoutData(GridDataFactory.fillDefaults()
+                                                .grab(false, true)
+                                                .hint(mapsToPaneWidth, SWT.DEFAULT)
+                                                .create());
         mapsToPane.setBackground(getBackground());
         targetPane = new Composite(summaryPane, SWT.BORDER);
         targetPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
@@ -131,11 +148,16 @@ public class MappingsViewer extends Composite {
         targetPane.setBackground(getBackground());
 
         for (final MappingOperation<?, ?> mapping : config.getMappings()) {
-            mappingSummaries.add(new MappingSummary(config, mapping, this));
+            mappingSummaries.add(new MappingSummary(config,
+                                                    mapping,
+                                                    this,
+                                                    potentialDropTargets));
         }
 
-        final int width = Math.max(sourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
-                                   targetPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
+        int width = Math.max(sourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
+                             targetPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
+        width = Math.max(sourceHeader.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, width);
+        width = Math.max(targetHeader.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, width);
         ((GridData)sourcePane.getLayoutData()).widthHint = width;
         ((GridData)targetPane.getLayoutData()).widthHint = width;
 
@@ -170,7 +192,8 @@ public class MappingsViewer extends Composite {
 
     void addMappingSummary(final TransformationConfig config,
                            final MappingOperation<?, ?> mapping) {
-        final MappingSummary mappingSummary = new MappingSummary(config, mapping, this);
+        final MappingSummary mappingSummary =
+            new MappingSummary(config, mapping, this, potentialDropTargets);
         mappingSummaries.add(mappingSummary);
         scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scroller.setOrigin(0, scroller.getSize().y);

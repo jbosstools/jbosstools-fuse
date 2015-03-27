@@ -27,6 +27,8 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -40,6 +42,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.jboss.mapper.Variable;
+import org.jboss.mapper.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 
 /**
@@ -56,6 +60,36 @@ public class Util {
      *
      */
     public static final String RESOURCES_PATH = MAIN_PATH + "resources/";
+
+    /**
+     * @param config
+     * @return <code>true</code> if the object being dragged is a valid source object
+     */
+    public static boolean draggingFromValidSource(final TransformationConfig config) {
+        final Object object = draggedObject();
+        return object instanceof Variable ||
+               (object instanceof Model
+                && config.root((Model)object).equals(config.getSourceModel()));
+    }
+
+    /**
+     * @param config
+     * @return <code>true</code> if the object being dragged is a valid target object
+     */
+    public static boolean draggingFromValidTarget(final TransformationConfig config) {
+        final Object object = draggedObject();
+        return object instanceof Model
+               && config.root((Model)object).equals(config.getTargetModel());
+    }
+
+    /**
+     * @return the object being dragged
+     */
+    public static Object draggedObject() {
+        return ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
+                                                             .getSelection())
+                                                             .getFirstElement();
+    }
 
     /**
      * @return a paint listener that paints a rounded border around a control
@@ -270,6 +304,46 @@ public class Util {
          *
          */
         Color MODEL = Activator.color(192, 192, 192);
+
+        /**
+         *
+         */
+        Color POTENTIAL_DROP_TARGET1 = Activator.color(0, 0, 128);
+
+        /**
+         *
+         */
+        Color POTENTIAL_DROP_TARGET2 = Activator.color(32, 32, 160);
+
+        /**
+         *
+         */
+        Color POTENTIAL_DROP_TARGET3 = Activator.color(64, 64, 192);
+
+        /**
+         *
+         */
+        Color POTENTIAL_DROP_TARGET4 = Activator.color(92, 92, 224);
+
+        /**
+         *
+         */
+        Color POTENTIAL_DROP_TARGET5 = Activator.color(128, 128, 255);
+
+        /**
+         *
+         */
+        Color POTENTIAL_DROP_TARGET6 = Activator.color(92, 92, 224);
+
+        /**
+         *
+         */
+        Color POTENTIAL_DROP_TARGET7 = Activator.color(64, 64, 192);
+
+        /**
+         *
+         */
+        Color POTENTIAL_DROP_TARGET8 = Activator.color(32, 32, 160);
 
         /**
          *

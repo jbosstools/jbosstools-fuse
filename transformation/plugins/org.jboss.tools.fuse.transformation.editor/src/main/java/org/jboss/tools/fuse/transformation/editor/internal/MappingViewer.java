@@ -9,8 +9,9 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal;
 
+import java.util.List;
+
 import org.eclipse.jface.util.LocalSelectionTransfer;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -20,7 +21,6 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.mapper.CustomMapping;
 import org.jboss.mapper.Expression;
 import org.jboss.mapper.MappingOperation;
 import org.jboss.mapper.MappingType;
@@ -28,6 +28,7 @@ import org.jboss.mapper.Variable;
 import org.jboss.mapper.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 
 abstract class MappingViewer {
@@ -36,9 +37,12 @@ abstract class MappingViewer {
     MappingOperation<?, ?> mapping;
     Text sourceText, targetText;
     DropTarget sourceDropTarget, targetDropTarget;
+    final List<PotentialDropTarget> potentialDropTargets;
 
-    MappingViewer(final TransformationConfig config) {
+    MappingViewer(final TransformationConfig config,
+                  final List<PotentialDropTarget> potentialDropTargets) {
         this.config = config;
+        this.potentialDropTargets = potentialDropTargets;
     }
 
     void createSourceText(final Composite parent) {
@@ -46,17 +50,24 @@ abstract class MappingViewer {
         setSourceText();
         sourceDropTarget = new DropTarget(sourceText, DND.DROP_MOVE);
         sourceDropTarget.setTransfer(new Transfer[] {LocalSelectionTransfer.getTransfer()});
-        sourceDropTarget.addDropListener(new DropListener(sourceText,
-                                                          config.getSourceModel()) {
+        sourceDropTarget.addDropListener(new DropListener(sourceText) {
 
             @Override
-            void drop(final Object dragSource) throws Exception {
-                dropOnSource(dragSource);
+            void drop() throws Exception {
+                dropOnSource();
             }
 
             @Override
-            boolean valid(final Object dragSource) {
-                return super.valid(dragSource) || validSourceDropTarget(dragSource);
+            boolean draggingFromValidObject() {
+                return Util.draggingFromValidSource(config);
+            }
+        });
+        potentialDropTargets.add(new PotentialDropTarget(sourceText) {
+
+            @Override
+            public boolean valid() {
+                return mapping.getType() != MappingType.CUSTOM
+                       && Util.draggingFromValidSource(config);
             }
         });
     }
@@ -66,12 +77,24 @@ abstract class MappingViewer {
         setTargetText();
         targetDropTarget = new DropTarget(targetText, DND.DROP_MOVE);
         targetDropTarget.setTransfer(new Transfer[] {LocalSelectionTransfer.getTransfer()});
-        targetDropTarget.addDropListener(new DropListener(targetText,
-                                                          config.getTargetModel()) {
+        targetDropTarget.addDropListener(new DropListener(targetText) {
 
             @Override
-            void drop(final Object dragSource) throws Exception {
-                dropOnTarget((Model) dragSource);
+            void drop() throws Exception {
+                dropOnTarget();
+            }
+
+            @Override
+            boolean draggingFromValidObject() {
+                return Util.draggingFromValidTarget(config);
+            }
+        });
+        potentialDropTargets.add(new PotentialDropTarget(targetText) {
+
+            @Override
+            public boolean valid() {
+                return mapping.getType() != MappingType.CUSTOM
+                       && Util.draggingFromValidTarget(config);
             }
         });
     }
@@ -82,13 +105,13 @@ abstract class MappingViewer {
         return text;
     }
 
-    void dropOnSource(final Object dragSource) throws Exception {
-        mapping = config.setSource(mapping, dragSource);
+    void dropOnSource() throws Exception {
+        mapping = config.setSource(mapping, Util.draggedObject());
         config.save();
     }
 
-    void dropOnTarget(final Model dragModel) throws Exception {
-        mapping = config.setTarget(mapping, dragModel);
+    void dropOnTarget() throws Exception {
+        mapping = config.setTarget(mapping, (Model)Util.draggedObject());
         config.save();
     }
 
@@ -130,31 +153,26 @@ abstract class MappingViewer {
         }
     }
 
-    boolean validSourceDropTarget(final Object dragSource) {
-        return dragSource instanceof Variable && !(mapping instanceof CustomMapping);
-    }
-
     abstract class DropListener extends DropTargetAdapter {
 
         private final Text dropText;
-        private final Model dragRootModel;
         private Color background, foreground;
 
-        DropListener(final Text dropText,
-                     final Model dragRootModel) {
+        DropListener(final Text dropText) {
             this.dropText = dropText;
-            this.dragRootModel = dragRootModel;
         }
 
         @Override
         public final void dragEnter(final DropTargetEvent event) {
             background = dropText.getBackground();
             foreground = dropText.getForeground();
-            if (valid(dragSource())) {
+            if (mapping.getType() != MappingType.CUSTOM && draggingFromValidObject()) {
                 dropText.setBackground(Colors.DROP_TARGET_BACKGROUND);
                 dropText.setForeground(Colors.DROP_TARGET_FOREGROUND);
             }
         }
+
+        abstract boolean draggingFromValidObject();
 
         @Override
         public final void dragLeave(final DropTargetEvent event) {
@@ -162,26 +180,15 @@ abstract class MappingViewer {
             dropText.setForeground(foreground);
         }
 
-        private Object dragSource() {
-            return ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
-                                                                 .getSelection())
-                                                                 .getFirstElement();
-        }
-
         @Override
         public final void drop(final DropTargetEvent event) {
             try {
-                drop(dragSource());
+                if (draggingFromValidObject()) drop();
             } catch (final Exception e) {
                 Activator.error(e);
             }
         }
 
-        abstract void drop(final Object dragSource) throws Exception;
-
-        boolean valid(final Object dragSource) {
-            return dragSource instanceof Model
-                   && config.root((Model) dragSource).equals(dragRootModel);
-        }
+        abstract void drop() throws Exception;
     }
 }

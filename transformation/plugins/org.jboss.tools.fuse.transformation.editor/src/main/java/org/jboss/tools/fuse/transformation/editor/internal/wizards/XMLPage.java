@@ -107,25 +107,25 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         _page = new Composite(parent, SWT.NONE);
         setControl(_page);
         _page.setLayout(GridLayoutFactory.swtDefaults().spacing(0, 5).numColumns(3).create());
-        
-        
+
+
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group.setText("XML Type Definition");
-        group.setLayout(new GridLayout(1, false)); 
+        group.setLayout(new GridLayout(1, false));
         group.setLayoutData(
                 new GridData(SWT.FILL, SWT.FILL, true, false, 3, 2));
-        
+
         _xmlSchemaOption = new Button(group, SWT.RADIO);
         _xmlSchemaOption.setText("XML Schema");
         _xmlSchemaOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         _xmlSchemaOption.setSelection(true);
-        
+
         _xmlInstanceOption = new Button(group, SWT.RADIO);
         _xmlInstanceOption.setText("XML Instance Document");
         _xmlInstanceOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        
+
         _xmlSchemaOption.addSelectionListener(new SelectionListener() {
-            
+
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (isSourcePage()) {
@@ -137,15 +137,15 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 _xmlPreviewText.setText("");
             }
-            
+
             @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // empty
             }
         });
-        
+
         _xmlInstanceOption.addSelectionListener(new SelectionListener() {
-            
+
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (isSourcePage()) {
@@ -157,7 +157,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 _xmlPreviewText.setText("");
             }
-            
+
             @Override
             public void widgetDefaultSelected(SelectionEvent e) {
                 // empty
@@ -183,6 +183,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         xmlFileBrowseButton.setToolTipText("Browse to specify the XML file.");
 
         xmlFileBrowseButton.addSelectionListener(new SelectionAdapter() {
+            @Override
             public void widgetSelected(final SelectionEvent e) {
                 String extension = "xml";
                 boolean isXML = true;
@@ -211,17 +212,17 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                         model.setTargetFilePath(path);
                     }
                     _xmlFileText.setText(path);
-                    
+
                     IPath tempPath = new Path(path);
                     IFile xmlFile = model.getProject().getFile(tempPath);
                     if (xmlFile != null) {
-                        try {
-                            InputStream istream = xmlFile.getContents();
-                            BufferedReader in = new BufferedReader(new InputStreamReader(istream));
-                            String inputLine;
+                        try (InputStream istream = xmlFile.getContents()) {
                             StringBuffer buffer = new StringBuffer();
-                            while ((inputLine = in.readLine()) != null) {
-                                buffer.append(inputLine + "\n");
+                            try (BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
+                                String inputLine;
+                                while ((inputLine = in.readLine()) != null) {
+                                    buffer.append(inputLine + "\n");
+                                }
                             }
                             _xmlPreviewText.setText(buffer.toString());
                         } catch (CoreException e1) {
@@ -234,10 +235,10 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
             }
         });
-        
+
         Group group2 = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group2.setText("XML Structure Preview");
-        group2.setLayout(new FillLayout()); 
+        group2.setLayout(new FillLayout());
         group2.setLayoutData(
                 new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
@@ -261,7 +262,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
     private String selectResourceFromWorkspace(Shell shell, final String extension) {
         IJavaProject javaProject = null;
         if (getModel() != null) {
-            if (getModel().getProject() != null) { 
+            if (getModel().getProject() != null) {
                 javaProject = JavaCore.create(getModel().getProject());
             }
         }
@@ -310,5 +311,5 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
                 SWT.TOP | SWT.LEFT);
-    }    
+    }
 }

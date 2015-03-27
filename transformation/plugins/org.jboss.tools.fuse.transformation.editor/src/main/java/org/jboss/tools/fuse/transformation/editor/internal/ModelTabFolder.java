@@ -9,22 +9,15 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal;
 
+import java.util.List;
+
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.util.LocalSelectionTransfer;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
-import org.jboss.mapper.Variable;
 import org.jboss.mapper.model.Model;
-import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 
 /**
@@ -32,19 +25,25 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationCo
  */
 public class ModelTabFolder extends CTabFolder {
 
-    Model model;
-    ModelViewer modelViewer;
+    final Model model;
+
+    /**
+     *
+     */
+    protected final ModelViewer modelViewer;
 
     /**
      * @param config
      * @param parent
      * @param title
      * @param model
+     * @param potentialDropTargets
      */
     public ModelTabFolder(final TransformationConfig config,
                           final Composite parent,
                           final String title,
-                          final Model model) {
+                          final Model model,
+                          final List<PotentialDropTarget> potentialDropTargets) {
         super(parent, SWT.BORDER);
 
         this.model = model;
@@ -57,49 +56,22 @@ public class ModelTabFolder extends CTabFolder {
 
         final CTabItem tab = new CTabItem(this, SWT.NONE);
         tab.setText(title + (model == null ? "" : ": " + model.getName()));
-        modelViewer = new ModelViewer(config, this, model);
+        modelViewer = constructModelViewer(config, potentialDropTargets);
         tab.setControl(modelViewer);
         modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         modelViewer.layout();
         setSelection(tab);
-
-        constructAdditionalTabs();
-
-        modelViewer.treeViewer.addDropSupport(DND.DROP_MOVE,
-                                              new Transfer[] {LocalSelectionTransfer.getTransfer()},
-                                              new ViewerDropAdapter(modelViewer.treeViewer) {
-
-            @Override
-            public boolean performDrop(final Object data) {
-                try {
-                    Object source =
-                        ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
-                                                                      .getSelection())
-                                                                      .getFirstElement();
-                    if (source instanceof Model)
-                        config.mapField((Model) source, (Model) getCurrentTarget());
-                    else config.mapVariable((Variable) source, (Model) getCurrentTarget());
-                    config.save();
-                    return true;
-                } catch (final Exception e) {
-                    Activator.error(e);
-                    return false;
-                }
-            }
-
-            @Override
-            public boolean validateDrop(final Object target,
-                                        final int operation,
-                                        final TransferData transferType) {
-                return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON;
-            }
-        });
     }
 
     /**
-     * Does nothing. Overridden by {@link TransformationEditor}.
+     * @param config
+     * @param potentialDropTargets
+     * @return this tab folder's model viewer
      */
-    protected void constructAdditionalTabs() {}
+    protected ModelViewer constructModelViewer(final TransformationConfig config,
+                                               final List<PotentialDropTarget> potentialDropTargets) {
+        return new ModelViewer(config, this, model, potentialDropTargets);
+    }
 
     /**
      * @param object

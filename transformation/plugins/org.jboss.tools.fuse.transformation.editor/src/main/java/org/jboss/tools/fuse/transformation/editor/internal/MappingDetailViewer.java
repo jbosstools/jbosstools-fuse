@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -71,10 +72,12 @@ public final class MappingDetailViewer extends MappingViewer {
     /**
      * @param config
      * @param parent
+     * @param potentialDropTargets
      */
     public MappingDetailViewer(final TransformationConfig config,
-                               final Composite parent) {
-        super(config);
+                               final Composite parent,
+                               final List<PotentialDropTarget> potentialDropTargets) {
+        super(config, potentialDropTargets);
 
         scroller = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
         scroller.setExpandHorizontal(true);
@@ -329,6 +332,9 @@ public final class MappingDetailViewer extends MappingViewer {
         if (sourceDropTarget != null) {
             sourceDropTarget.dispose();
             targetDropTarget.dispose();
+            // TODO find these
+//            dropTargetValidatorByControl.remove(sourceText);
+//            dropTargetValidatorByControl.remove(targetText);
         }
         final Composite contentPane = new Composite(scroller, SWT.NONE);
         scroller.setContent(contentPane);
@@ -518,7 +524,7 @@ public final class MappingDetailViewer extends MappingViewer {
         @Override
         protected void constructContents(final Composite parent) {
             parent.setLayout(GridLayoutFactory.swtDefaults().create());
-            final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel);
+            final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel, null);
             modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
             if (field != null) modelViewer.select(field);
             modelViewer.treeViewer.getTree().addSelectionListener(new SelectionAdapter() {

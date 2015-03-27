@@ -2,6 +2,7 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -34,8 +35,9 @@ final class MappingSummary extends MappingViewer {
 
     MappingSummary(final TransformationConfig config,
                    final MappingOperation<?, ?> mapping,
-                   final MappingsViewer mappingsViewer) {
-        super(config);
+                   final MappingsViewer mappingsViewer,
+                   final List<PotentialDropTarget> potentialDropTargets) {
+        super(config, potentialDropTargets);
         this.mapping = mapping;
         this.mappingsViewer = mappingsViewer;
 
@@ -193,6 +195,9 @@ final class MappingSummary extends MappingViewer {
                 sourceTraversalListener.prevTraversalListener;
         }
         mappingsViewer.removeMappingSummary(this);
+        // TODO find these
+//        potentialDropTargets.remove(sourceText);
+//        potentialDropTargets.remove(targetText);
     }
 
     void selected(final Text text) {

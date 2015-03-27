@@ -57,10 +57,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
+import org.jboss.mapper.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
-import org.jboss.mapper.model.ModelBuilder;
 
 /**
  * @author brianf
@@ -110,7 +110,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
 
         WizardPageSupport.create(this, context);
         setErrorMessage(null);
-        
+
     }
 
     private void createPage(Composite parent) {
@@ -152,7 +152,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                             model.setTargetType(ModelType.CLASS);
                             model.setTargetFilePath(selected.getFullyQualifiedName());
                         }
-                        
+
                         UIJob uiJob = new UIJob("open error") {
                             @Override
                             public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -161,7 +161,6 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                                     Class<?> tempClass = wizard.getLoader().loadClass(selected.getFullyQualifiedName());
                                     _javaModel = _builder.fromJavaClass(tempClass);
                                     _modelViewer.setModel(_javaModel);
-                                    _modelViewer.getViewer().setInput("root");
                                 } catch (ClassNotFoundException e) {
                                     e.printStackTrace();
                                 }
@@ -177,7 +176,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 }
             }
         });
-        
+
         label = createLabel(_page, "Data Format ID:", "Unique ID for the data format.");
 
         _dataFormatIdText = new Text(_page, SWT.BORDER);
@@ -187,18 +186,17 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
 
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group.setText("Class Structure Preview");
-        group.setLayout(new GridLayout(3, false)); 
+        group.setLayout(new GridLayout(3, false));
         group.setLayoutData(
                 new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        _modelViewer = new ModelViewer(group, _javaModel);
-        _modelViewer.getViewer().getControl().setBackground(_page.getBackground());
+        _modelViewer = new ModelViewer(null, group, _javaModel, null);
         _modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         _modelViewer.layout();
-        
+
         bindControls();
         validatePage();
-        
+
     }
 
     private void bindControls() {
@@ -254,8 +252,8 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
                 SWT.TOP | SWT.LEFT);
-    }    
-    
+    }
+
     @Override
     public boolean isSourcePage() {
         return isSource;
