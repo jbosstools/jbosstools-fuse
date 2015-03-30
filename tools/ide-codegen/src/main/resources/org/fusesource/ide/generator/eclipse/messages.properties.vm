@@ -19,6 +19,7 @@ invalidValidatorUniqueValueLabel=A unique value has to be provided!
 propertyLabelId=Id
 propertyLabelDescription=Description
 propertyLabelEndpointUri=Uri
+propertyLabelEndpointPattern=Exchange Pattern
 propertyLabelInheritErrorHandler=Inherit error handler
 #foreach($n in $generator.nodeDefinitions())
 #foreach($p in $n.beanProperties())

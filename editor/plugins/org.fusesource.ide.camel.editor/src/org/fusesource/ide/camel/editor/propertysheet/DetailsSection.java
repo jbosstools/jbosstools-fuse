@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.SetHeaderDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
@@ -90,6 +91,7 @@ import org.fusesource.ide.camel.editor.EditorMessages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.CamelModelHelper;
+import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.ExpressionPropertyDescriptor;
 import org.fusesource.ide.camel.model.LanguageExpressionBean;
 import org.fusesource.ide.camel.model.RouteContainer;
@@ -261,6 +263,15 @@ public class DetailsSection extends NodeSectionSupport {
 
 		boolean isComplexProperty = descriptor instanceof ComplexPropertyDescriptor;
 		boolean isUnionProperty = descriptor instanceof ComplexUnionPropertyDescriptor;
+		
+		// if we have not a ToDefinition and the descriptor id is "Endpoint.Pattern" then don't show the field
+		
+		if (id.equals(Endpoint.PROPERTY_PATTERN)) {
+			if (node.getSourceConnections().size()>0 && node.getTargetConnections().size()==0) {
+				return;
+			}
+		}
+		
 		if (isComplexProperty) {
 			widget = bindNestedComplexProperties(toolkit, parent, mmng, (ComplexPropertyDescriptor) descriptor, id, labelText, tooltip);
 		} else {
@@ -347,6 +358,17 @@ public class DetailsSection extends NodeSectionSupport {
 				} else if (isEndpointUri(node, propertyName)) {
 					Combo combo = new Combo(parent, SWT.NONE | SWT.BORDER);
 					combo.setItems(getEndpointUris());
+					toolkit.adapt(combo, true, true);
+					widget = combo;
+
+					ISWTObservableValue comboValue = WidgetProperties.selection().observe(combo);
+					Forms.bindBeanProperty(bindingContext, mmng, node, propertyName, isMandatory(node, propertyName), labelText, comboValue, combo);
+				} else if (isEndpointExchangePattern(node, propertyName)) {
+					Combo combo = new Combo(parent, SWT.NONE | SWT.BORDER | SWT.READ_ONLY);
+					combo.add("");
+					for (ExchangePattern p : ExchangePattern.values()) {
+						combo.add(p.name());
+					}
 					toolkit.adapt(combo, true, true);
 					widget = combo;
 
@@ -563,6 +585,18 @@ public class DetailsSection extends NodeSectionSupport {
 		} else if (isEndpointUri(value, propertyName)) {
 			Combo combo = new Combo(parent, SWT.NONE | SWT.BORDER);
 			combo.setItems(getEndpointUris());
+			toolkit.adapt(combo, true, true);
+			widget = combo;
+
+			ISWTObservableValue comboValue = WidgetProperties.selection().observe(combo);
+			observable = comboValue;
+			Forms.bindPojoProperty(bindingContext, mmng, value, propertyName, isMandatory(value, propertyName), labelText, comboValue, combo);
+		} else if (isEndpointExchangePattern(node, propertyName)) {
+			Combo combo = new Combo(parent, SWT.NONE | SWT.BORDER | SWT.READ_ONLY);
+			combo.add("");
+			for (ExchangePattern p : ExchangePattern.values()) {
+				combo.add(p.name());
+			}
 			toolkit.adapt(combo, true, true);
 			widget = combo;
 
@@ -1074,6 +1108,10 @@ public class DetailsSection extends NodeSectionSupport {
 	 */
 	protected boolean isEndpointUri(Object bean, String propertyName) {
 		return propertyName.matches("(uri)|(.+Uri)");
+	}
+	
+	protected boolean isEndpointExchangePattern(Object bean, String propertyName) {
+		return propertyName.equalsIgnoreCase("pattern");
 	}
 
 	/**

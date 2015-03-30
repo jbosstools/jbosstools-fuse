@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.camel.model;
 
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.model.DescriptionDefinition;
 import org.apache.camel.model.FromDefinition;
 import org.apache.camel.model.ToDefinition;
@@ -76,6 +77,23 @@ public class CamelModelHelper {
 		}
 	}
 
+	public static String getExchangePattern(ToDefinition input) {
+		String pattern = input.getPattern() != null ? input.getPattern().name() : null;
+		if (Strings.isBlank(pattern)) {
+			return null;
+		}
+		return pattern;
+	}
+	
+	public static void setExchangePattern(ToDefinition node, Endpoint endpoint) {
+		String value = endpoint.getPattern();
+		if (value != null && value.trim().length()>0) {
+			node.setPattern(ExchangePattern.asEnum(value));
+		} else {
+			node.setPattern(null);
+		}
+	}
+	
 	public static void setId(FromDefinition node, Endpoint endpoint) {
 		String value = endpoint.getId();
 		if (value != null && value.trim().length()>0) {

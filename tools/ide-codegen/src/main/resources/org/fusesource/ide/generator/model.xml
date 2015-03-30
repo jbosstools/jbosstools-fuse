@@ -12,6 +12,9 @@
       <property id="uri">
         <tooltip>URI of the endpoint</tooltip>
       </property>
+      <property id="pattern">
+        <tooltip>Exchange pattern of the endpoint</tooltip>
+      </property>
     </properties>
   </node>
   <node id="flow">

@@ -29,6 +29,7 @@ public class Messages extends NLS {
     public static String propertyLabelId;
     public static String propertyLabelDescription;
     public static String propertyLabelEndpointUri;
+    public static String propertyLabelEndpointPattern;
     public static String propertyLabelInheritErrorHandler;
 
 #foreach($n in $generator.nodeDefinitions())

@@ -28,11 +28,13 @@ import org.fusesource.ide.commons.util.XmlUtilities;
 public class Endpoint extends AbstractNode {
 
 	public static final String PROPERTY_URI = "Endpoint.Uri";
+	public static final String PROPERTY_PATTERN = "Endpoint.Pattern";
 
 	private static final String ICON = "endpoint.png";
 
 	private String uri = "";
-
+	private String pattern = null;
+	
 	public Endpoint() {
 	}
 
@@ -92,6 +94,24 @@ public class Endpoint extends AbstractNode {
 		}		
 	}
 
+	/**
+	 * @return the pattern
+	 */
+	public String getPattern() {
+		return this.pattern;
+	}
+	
+	/**
+	 * @param pattern the pattern to set
+	 */
+	public void setPattern(String pattern) {
+		String oldPattern = this.pattern;
+		this.pattern = pattern;
+		if (!isSame(pattern, oldPattern)) {
+			firePropertyChange(PROPERTY_PATTERN, oldPattern, pattern);	
+		}		
+	}
+	
 //	@Override
 //	public String getNewID() {
 //		// lets not create a new ID by default
@@ -175,6 +195,10 @@ public class Endpoint extends AbstractNode {
 		PropertyDescriptor desc = new TextPropertyDescriptor(PROPERTY_URI, Messages.propertyLabelEndpointUri);
 		desc.setValidator(DEFAULT_STRING_VALIDATOR);
 		descriptors.put(PROPERTY_URI, desc);
+		
+		desc = new TextPropertyDescriptor(PROPERTY_PATTERN, Messages.propertyLabelEndpointPattern);
+		desc.setValidator(DEFAULT_STRING_VALIDATOR);
+		descriptors.put(PROPERTY_PATTERN, desc);
 	}
 
 	/* (non-Javadoc)
@@ -184,6 +208,8 @@ public class Endpoint extends AbstractNode {
 	public void setPropertyValue(Object id, Object value) {
 		if (PROPERTY_URI.equals(id)) {
 			setUri((String)value);
+		} else if (PROPERTY_PATTERN.equals(id)) {
+			setPattern((String)value);
 		} else {
 			super.setPropertyValue(id, value);
 		}
@@ -196,6 +222,8 @@ public class Endpoint extends AbstractNode {
 	public Object getPropertyValue(Object id) {
 		if (PROPERTY_URI.equals(id)) {
 			return getUri();
+		} else if (PROPERTY_PATTERN.equals(id)) {
+			return getPattern();
 		} else {
 			return super.getPropertyValue(id);
 		}
@@ -206,17 +234,18 @@ public class Endpoint extends AbstractNode {
 	public ProcessorDefinition createCamelDefinition() {
 		ToDefinition answer = new ToDefinition();
 		CamelModelHelper.setUri(answer, this);
+		CamelModelHelper.setExchangePattern(answer, this);
 		super.savePropertiesToCamelDefinition(answer);
 		return answer;
 	}
 
 	@Override
 	public void savePropertiesToCamelDefinition(ProcessorDefinition processor) {
-		// TODO Auto-generated method stub
 		super.savePropertiesToCamelDefinition(processor);
 		if (processor instanceof ToDefinition) {
 			ToDefinition node = (ToDefinition) processor;
 			CamelModelHelper.setUri(node, this);
+			CamelModelHelper.setExchangePattern(node, this);
 		} else {
 			throw new IllegalArgumentException(
 					"ProcessorDefinition not an instanceof ToDefinition. Was "
@@ -234,6 +263,8 @@ public class Endpoint extends AbstractNode {
 			ToDefinition node = (ToDefinition) processor;
 			String value = CamelModelHelper.getUri(node);
 			setUri(value);
+			value = CamelModelHelper.getExchangePattern(node);
+			setPattern(value);
 		} else {
 			throw new IllegalArgumentException(
 					"ProcessorDefinition not an instanceof ToDefinition. Was "
