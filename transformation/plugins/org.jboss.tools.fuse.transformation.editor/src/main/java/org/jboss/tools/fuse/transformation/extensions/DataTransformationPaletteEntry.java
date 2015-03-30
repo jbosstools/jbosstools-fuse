@@ -12,16 +12,11 @@ package org.jboss.tools.fuse.transformation.extensions;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.camel.model.DataFormatDefinition;
-import org.apache.camel.model.dataformat.DataFormatsDefinition;
 import org.apache.camel.spring.CamelContextFactoryBean;
 import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.graphiti.features.ICreateFeature;
@@ -37,8 +32,6 @@ import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureF
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider.CATEGORY_TYPE;
 import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
@@ -151,40 +144,11 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             return new Object[] { node };
         }
 
-        private void addCamelContextEndpoint(CamelContextFactoryBean context,
-                CamelEndpointFactoryBean endpoint) {
-            List<CamelEndpointFactoryBean> endpoints = context.getEndpoints();
-            if (endpoints == null) {
-                endpoints = new LinkedList<>();
-            }
-            endpoints.add(endpoint);
-            setEndpoints(context, endpoints);
-        }
-
-        private void addDataFormat(CamelContextFactoryBean context, DataFormatDefinition dataFormat) {
-            DataFormatsDefinition dataFormats = context.getDataFormats();
-            // create the parent element if it doesn't exist
-            if (dataFormats == null) {
-                dataFormats = new DataFormatsDefinition();
-            }
-
-            // add to the list of formats
-            if (dataFormats.getDataFormats() == null) {
-                dataFormats.setDataFormats(new LinkedList<DataFormatDefinition>());
-            }
-
-            dataFormats.getDataFormats().add(dataFormat);
-            context.setDataFormats(dataFormats);
-        }
-
         @Override
         protected AbstractNode createNode() {
-            RouteContainer routeContainer = Activator.getDiagramEditor().getModel();
-            CamelContextFactoryBean camelContext =
-                    routeContainer.getModel().getContextElement();
-
             // Launch the New Transformation wizard
             NewTransformationWizard wizard = new NewTransformationWizard();
+            wizard.setNeedsProgressMonitor(true);
             
             Object element = Activator.getDiagramEditor().getEditorInput();
             if (element instanceof IFileEditorInput) {
@@ -205,29 +169,9 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             int status = dialog.open();
             if (status != IStatus.OK) {
                 return null;
+            } else {
+                return wizard.getRouteEndpoint();
             }
-
-            try {
-                // try to refresh the project one more time to make sure everything is
-                // not out of sync in Eclipse
-                if (wizard.getModel().getProject() != null) {
-                    wizard.getModel().getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
-                }
-            } catch (CoreException e) {
-                // ignore
-            }
-            // Wizard completed successfully; create the necessary config
-            addCamelContextEndpoint(camelContext, wizard.getEndpoint().asSpringEndpoint());
-            if (wizard.getSourceFormat() != null) {
-                addDataFormat(camelContext, wizard.getSourceFormat());
-            }
-            if (wizard.getTargetFormat() != null) {
-                addDataFormat(camelContext, wizard.getTargetFormat());
-            }
-
-            // Create the route endpoint
-            Endpoint routeEndpoint = new Endpoint("ref:" + wizard.getEndpoint().getId());
-            return routeEndpoint;
         }
     }
 

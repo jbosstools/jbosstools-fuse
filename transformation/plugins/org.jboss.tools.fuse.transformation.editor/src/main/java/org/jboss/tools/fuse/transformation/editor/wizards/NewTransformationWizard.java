@@ -12,17 +12,25 @@ package org.jboss.tools.fuse.transformation.editor.wizards;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URLClassLoader;
 import java.text.StringCharacterIterator;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.camel.model.DataFormatDefinition;
+import org.apache.camel.model.dataformat.DataFormatsDefinition;
+import org.apache.camel.spring.CamelContextFactoryBean;
+import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -31,6 +39,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -39,6 +48,8 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
+import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.RouteContainer;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.camel.CamelEndpoint;
 import org.jboss.mapper.dozer.DozerMapperConfiguration;
@@ -78,6 +89,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private DataFormatDefinition targetFormat;
     private CamelEndpoint endpoint;
     private boolean saveCamelConfig = true;
+    private Endpoint routeEndpoint;
     
     public StartPage start;
     public JavaPage javaSource;
@@ -101,72 +113,110 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         "Overwrite existing transformation file (\"" + file.getFullPath() + "\")?")) {
             return false;
         }
-        final MapperConfiguration dozerConfigBuilder = DozerMapperConfiguration.newConfig();
-        final File newFile = new File(file.getLocationURI());
-        if (!newFile.getParentFile().exists()) {
-            newFile.getParentFile().mkdirs();
-        }
-        try (FileOutputStream configStream = new FileOutputStream(newFile)) {
-            if (uiModel.getSourceFilePath() != null) {
-                // Generate models
-                final String sourceClassName =
-                        generateModel(uiModel.getSourceFilePath(), uiModel.getSourceType());
-                final String targetClassName =
-                        generateModel(uiModel.getTargetFilePath(), uiModel.getTargetType());
-                // Update Camel config
-                final IPath resourcesPath =
-                        uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
-                
-                sourceFormat = uiModel.camelConfigBuilder.createDataFormat(
-                        uiModel.getSourceType().transformType, sourceClassName);
-                targetFormat = uiModel.camelConfigBuilder.createDataFormat(
-                        uiModel.getTargetType().transformType, targetClassName);
-                endpoint = uiModel.camelConfigBuilder.createEndpoint(uiModel.getId(),
-                                                 file.getFullPath().makeRelativeTo(resourcesPath).toString(),
-                                                 sourceClassName, targetClassName,
-                                                 sourceFormat, targetFormat);
-                if (saveCamelConfig) {
-                    try (FileOutputStream camelConfigStream =
-                            new FileOutputStream(new File(uiModel.getProject()
-                                    .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
-                                    .getLocationURI()))) {
-                    
-                        uiModel.camelConfigBuilder.saveConfig(camelConfigStream);
-                    } catch (final Exception e) {
-                        Activator.error(e);
-                        return false;
-                    }
+        IRunnableWithProgress op = new IRunnableWithProgress() {
+            @Override
+            public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
+                final MapperConfiguration dozerConfigBuilder = DozerMapperConfiguration.newConfig();
+                final File newFile = new File(file.getLocationURI());
+                if (!newFile.getParentFile().exists()) {
+                    newFile.getParentFile().mkdirs();
                 }
-                dozerConfigBuilder.addClassMapping(sourceClassName, targetClassName);
+                try (FileOutputStream configStream = new FileOutputStream(newFile)) {
+                    if (uiModel.getSourceFilePath() != null) {
+                        // Generate models
+                        final String sourceClassName =
+                                generateModel(uiModel.getSourceFilePath(), uiModel.getSourceType());
+                        final String targetClassName =
+                                generateModel(uiModel.getTargetFilePath(), uiModel.getTargetType());
+                        // Update Camel config
+                        final IPath resourcesPath =
+                                uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
+                        
+                        sourceFormat = uiModel.camelConfigBuilder.createDataFormat(
+                                uiModel.getSourceType().transformType, sourceClassName);
+                        targetFormat = uiModel.camelConfigBuilder.createDataFormat(
+                                uiModel.getTargetType().transformType, targetClassName);
+                        endpoint = uiModel.camelConfigBuilder.createEndpoint(uiModel.getId(),
+                                                         file.getFullPath().makeRelativeTo(resourcesPath).toString(),
+                                                         sourceClassName, targetClassName,
+                                                         sourceFormat, targetFormat);
+                        if (saveCamelConfig) {
+                            try (FileOutputStream camelConfigStream =
+                                    new FileOutputStream(new File(uiModel.getProject()
+                                            .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
+                                            .getLocationURI()))) {
+                            
+                                uiModel.camelConfigBuilder.saveConfig(camelConfigStream);
+                            } catch (final Exception e) {
+                                throw e;
+                            }
+                        }
+                        dozerConfigBuilder.addClassMapping(sourceClassName, targetClassName);
+                    }
+                    dozerConfigBuilder.saveConfig(configStream);
+                    uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+                    // Ensure build of Java classes has completed
+                    try {
+                        Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
+                    } catch (final InterruptedException ignored) {
+                    }
+                    
+                    if (!saveCamelConfig) {
+                        // now update the camel config if we didn't already
+                        
+                        RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.
+                                getDiagramEditor().getModel();
+                        CamelContextFactoryBean camelContext =
+                                routeContainer.getModel().getContextElement();
+                        
+                        // Wizard completed successfully; create the necessary config
+                        addCamelContextEndpoint(camelContext, endpoint.asSpringEndpoint());
+                        if (sourceFormat != null) {
+                            addDataFormat(camelContext, sourceFormat);
+                        }
+                        if (targetFormat != null) {
+                            addDataFormat(camelContext, targetFormat);
+                        }
+                        // Create the route endpoint
+                        routeEndpoint = new Endpoint("ref:" + endpoint.getId());
+                    }
+                    
+                    // Open mapping editor
+                    final IEditorDescriptor desc =
+                            PlatformUI
+                                    .getWorkbench()
+                                    .getEditorRegistry()
+                                    .getEditors(
+                                            file.getName(),
+                                            Platform.getContentTypeManager().getContentType(
+                                                    DozerConfigContentTypeDescriber.ID))[0];
+                    uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                            .openEditor(new FileEditorInput(file),
+                                    desc.getId());
+                } catch (final Exception e) {
+                    Activator.error(e);
+                }
             }
-            dozerConfigBuilder.saveConfig(configStream);
-            uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
-            // Ensure build of Java classes has completed
-            try {
-                Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
-            } catch (final InterruptedException ignored) {
-            }
+        };
 
-            // Open mapping editor
-            final IEditorDescriptor desc =
-                    PlatformUI
-                            .getWorkbench()
-                            .getEditorRegistry()
-                            .getEditors(
-                                    file.getName(),
-                                    Platform.getContentTypeManager().getContentType(
-                                            DozerConfigContentTypeDescriber.ID))[0];
-            uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
-            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                    .openEditor(new FileEditorInput(file),
-                            desc.getId());
-        } catch (final Exception e) {
-            Activator.error(e);
-            return false;
+        try {
+            getContainer().run(false, false, op);
+            return true;
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.fillInStackTrace();
+        } catch (Exception e) {
+            e.fillInStackTrace();
         }
-        return true;
+        return false;
     }
 
+    public Endpoint getRouteEndpoint() {
+        return routeEndpoint;
+    }
+    
     @Override
     public void addPages() {
         if (start == null) {
@@ -425,5 +475,50 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
     public Model getModel() {
         return uiModel;
+    }
+
+    private void addCamelContextEndpoint(CamelContextFactoryBean context,
+            CamelEndpointFactoryBean endpoint) {
+        List<CamelEndpointFactoryBean> endpoints = context.getEndpoints();
+        if (endpoints == null) {
+            endpoints = new LinkedList<>();
+        }
+        endpoints.add(endpoint);
+        setEndpoints(context, endpoints);
+    }
+
+    private void addDataFormat(CamelContextFactoryBean context, DataFormatDefinition dataFormat) {
+        DataFormatsDefinition dataFormats = context.getDataFormats();
+        // create the parent element if it doesn't exist
+        if (dataFormats == null) {
+            dataFormats = new DataFormatsDefinition();
+        }
+
+        // add to the list of formats
+        if (dataFormats.getDataFormats() == null) {
+            dataFormats.setDataFormats(new LinkedList<DataFormatDefinition>());
+        }
+
+        dataFormats.getDataFormats().add(dataFormat);
+        context.setDataFormats(dataFormats);
+    }
+
+    /**
+     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
+     * endpoints on CamelContextFactoryBean directly. Use reflection for now
+     * until this issue is resolved upstream.
+     *
+     * @param context
+     * @param endpoints
+     */
+    void setEndpoints(CamelContextFactoryBean context,
+            List<CamelEndpointFactoryBean> endpoints) {
+        try {
+            Field endpointsField = context.getClass().getDeclaredField("endpoints");
+            endpointsField.setAccessible(true);
+            endpointsField.set(context, endpoints);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
