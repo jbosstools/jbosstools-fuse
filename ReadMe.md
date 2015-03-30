@@ -8,7 +8,7 @@ JBoss Fuse Tooling contains a set of plugins / features for Eclipse which allows
 JBoss Fuse Tooling is open source and we like to encourage everybody to try it and get involved into the future development of the project. For more information see the *Contributing* section below.
 
 ### Issues
-If you want to report bugs or request new features please raise a ticket at our [JIRA](http://fusesource.com/issues/browse/FUSETOOLS JBoss Fuse Tooling Jira). If you want to start contributing to the project its a good place to look for possible work.
+If you want to report bugs or request new features please raise a ticket at our [JIRA](https://issues.jboss.org/browse/FUSETOOLS). If you want to start contributing to the project its a good place to look for possible work.
 
 ### Forums
 Get in touch with developers and users of JBoss Fuse Tooling in our [forums](https://community.jboss.org/en/jbossfuse JBoss Fuse Community Forums). Thats the place to ask questions or help other users.
