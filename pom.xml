@@ -35,6 +35,10 @@
   </prerequisites>
 
   <properties>
+
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+
     <!-- JBoss Tools Integration Stack version -->
     <jbtis.version>4.2.2.CR1a</jbtis.version>
     
@@ -63,6 +67,15 @@
     <snapshot-build>redhat-610-SNAPSHOT</snapshot-build>    
     <activemq.version>5.9.0.${snapshot-build}</activemq.version>
     <servicemix-nmr.version>1.6.0.${snapshot-build}</servicemix-nmr.version>
+
+    <!-- data transformation versions -->
+    <version.fasterxml>2.2.0</version.fasterxml>
+    <version.jaxb>2.2.6</version.jaxb>
+    <version.jsonschema2pojo>0.4.5</version.jsonschema2pojo>
+    <version.xmlbeans>2.6.0</version.xmlbeans>
+    <version.xmlunit>1.5</version.xmlunit>
+    <version.commons>3.2.1</version.commons>
+    <version.camel>${camel.version}</version.camel>
   </properties>
 
   <modules>
@@ -74,9 +87,6 @@
     <module>jmx</module>
     <module>servers</module>
     <module>site</module>
-<!-- taken out as its now only used to create the tp mirror for eclipse development
-    <module>targetplatform</module>
--->
   </modules>
 
   <repositories>
@@ -209,7 +219,67 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
+    
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.6.1</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.13</version>
+        <configuration>
+            <configLocation>checkstyle/checkstyle.xml</configLocation>
+            <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
+            <failsOnError>true</failsOnError>
+            <useFile/>
+        </configuration>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.mapper</groupId>
+                <artifactId>data-mapper-build</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>6.3</version>
+            </dependency>
+        </dependencies>
+        <executions>
+            <execution>
+                <id>check-style</id>
+                <phase>site</phase>
+                <goals>
+                    <goal>checkstyle</goal>
+                </goals>
+            </execution>
+        </executions>
+      </plugin>
+
+      <!-- needed for building the source features -->
+      <plugin>
+        <groupId>org.eclipse.tycho.extras</groupId>
+        <artifactId>tycho-source-feature-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-p2-plugin</artifactId>
+      </plugin>
 
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
@@ -345,22 +415,6 @@
         </plugins>
       </build>
     </profile>
-	<profile>
-		<!-- Define the SAP tooling in a separate profile. Requires access to the 
-			proprietary SAP JCO and IDoc libraries at build-time -->
-		<id>sap</id>
-		<modules>
-			<module>sap</module>
-		</modules>
-		<repositories>
-			<repository>
-				<id>fuse-sap.mw.lab.eng.bos.redhat.com</id>
-				<name>jboss-fuse-sap-data-layer</name>
-				<url>http://fuse-sap.mw.lab.eng.bos.redhat.com/repositories/fuse-sap-data-layer/updatesite/6.2.0-SNAPSHOT/</url>
-				<layout>p2</layout>
-			</repository>
-		</repositories>
-	</profile>
-  </profiles>
+ </profiles>
 </project>
 

@@ -36,6 +36,9 @@
    <feature id="org.jboss.tools.fuse.transformation.feature">
       <category name="AllFeatures"/>
    </feature>
+   <feature id="org.jboss.tools.fuse.transformation.feature.source">
+      <category name="AllSources"/>
+   </feature>
    <category-def name="AllFeatures" label="JBoss Fuse Tooling Nightly Build Update Site">
       <description>
          JBoss Fuse Tooling Nightly Build Update Site: contains all features in this build.

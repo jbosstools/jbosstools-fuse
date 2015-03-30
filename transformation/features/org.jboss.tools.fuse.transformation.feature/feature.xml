@@ -3,23 +3,49 @@
       id="org.jboss.tools.fuse.transformation.feature"
       label="%featureName"
       version="7.3.0.qualifier"
-      provider-name="%featureProvider"
-      plugin="org.jboss.tools.fuse.transformation.editor">
+      provider-name="%providerName"
+      plugin="org.fusesource.ide.tooling">
 
-   <description>
+<description url="http://tools.jboss.org/features/apachecamel.html">
       %description
    </description>
 
-   <copyright>
+   <copyright url="http://redhat.com/">
       %copyright
    </copyright>
 
-   <license url="%licenseURL">
-      %license
+   <license url="license.html">
+      Red Hat, Inc. licenses these features and plugins to you under
+certain open source licenses (or aggregations of such licenses),
+which in a particular case may include the Eclipse Public License,
+the GNU Lesser General Public License, and/or certain other open
+source licenses. For precise licensing details, consult the corresponding
+source code, or contact Red Hat Legal Affairs, 1801 Varsity Drive,
+Raleigh NC 27606 USA.
    </license>
 
+   <url>
+      <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/luna/"/>
+   </url>
+
    <requires>
-      <import feature="org.eclipse.platform" version="3.6.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.core.feature" version="7.3.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.camel.editor.feature" version="7.3.0" match="greaterOrEqual"/>
+      
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.resources" version="3.9.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.jdt.core" version="3.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.core.databinding" version="1.4.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.databinding.beans" version="1.2.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.databinding.property" version="1.4.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.databinding"/>
+      <import plugin="org.eclipse.graphiti" version="0.10.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.graphiti.mm" version="0.10.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.graphiti.pattern" version="0.10.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.graphiti.ui" version="0.10.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin
