@@ -65,7 +65,6 @@ import com.sun.codemodel.JPackage;
  * @author brianf
  *
  */
-@SuppressWarnings("restriction")
 public class NewTransformationWizard extends Wizard implements INewWizard {
 
     private static final String JAVA_PATH = Util.MAIN_PATH + "java/";
@@ -78,7 +77,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private DataFormatDefinition targetFormat;
     private CamelEndpoint endpoint;
     private boolean saveCamelConfig = true;
-    
+
     public StartPage start;
     public JavaPage javaSource;
     public JavaPage javaTarget;
@@ -116,7 +115,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 // Update Camel config
                 final IPath resourcesPath =
                         uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
-                
+
                 sourceFormat = uiModel.camelConfigBuilder.createDataFormat(
                         uiModel.getSourceType().transformType, sourceClassName);
                 targetFormat = uiModel.camelConfigBuilder.createDataFormat(
@@ -130,7 +129,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                             new FileOutputStream(new File(uiModel.getProject()
                                     .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
                                     .getLocationURI()))) {
-                    
+
                         uiModel.camelConfigBuilder.saveConfig(camelConfigStream);
                     } catch (final Exception e) {
                         Activator.error(e);
@@ -211,7 +210,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public String getWindowTitle() {
         return "New Fuse Transformation";
     }
-    
+
     public void setSelectedProject(IProject project) {
         uiModel.setProject(project);
         final IJavaProject javaProject = JavaCore.create(project);
@@ -224,7 +223,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             e.printStackTrace();
         }
     }
-    
+
     public URLClassLoader getLoader() {
         return this.loader;
     }
@@ -264,7 +263,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             ((XformWizardPage) page).resetFinish();
         }
     }
-    
+
     public void resetSourceAndTargetPages() {
         resetPage(javaSource);
         resetPage(javaTarget);
@@ -275,7 +274,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         resetPage(otherSource);
         resetPage(otherTarget);
     }
-    
+
     @Override
     public boolean canFinish() {
         if (start != null && start.getSourcePage() != null && start.getTargetPage() != null) {
@@ -410,7 +409,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public void setSaveCamelConfig(boolean saveCamelConfig) {
         this.saveCamelConfig = saveCamelConfig;
     }
-    
+
     public DataFormatDefinition getSourceFormat() {
         return sourceFormat;
     }
@@ -418,7 +417,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public DataFormatDefinition getTargetFormat() {
         return targetFormat;
     }
-    
+
     public CamelEndpoint getEndpoint() {
         return endpoint;
     }

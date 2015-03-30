@@ -40,7 +40,6 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -74,12 +73,43 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
     /**
      * @param model
      */
-    public JSONPage(String pageName, final Model model, boolean isSource) {
+    public JSONPage(final String pageName, final Model model, final boolean isSource) {
         super(pageName, model);
         setTitle("JSON Page");
         setImageDescriptor(Activator.imageDescriptor("transform.png"));
         this.isSource = isSource;
         observablesManager.addObservablesFromContext(context, true, true);
+    }
+
+    private void bindControls() {
+
+        // Bind source file path widget to UI model
+        final IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(_jsonFileText);
+        IObservableValue modelValue = null;
+        if (isSourcePage()) {
+            modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model);
+        } else {
+            modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model);
+        }
+        final UpdateValueStrategy strategy = new UpdateValueStrategy();
+        strategy.setBeforeSetValidator(new IValidator() {
+
+            @Override
+            public IStatus validate(final Object value) {
+                final String path = value == null ? null : value.toString().trim();
+                if (path == null || path.isEmpty()) {
+                    return ValidationStatus
+                            .error("A source file path must be supplied for the transformation.");
+                }
+                if (model.getProject().findMember(path) == null) {
+                    return ValidationStatus
+                            .error("Unable to find a file with the supplied path");
+                }
+                return ValidationStatus.ok();
+            }
+        });
+        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
+                SWT.TOP | SWT.LEFT);
     }
 
     @Override
@@ -103,63 +133,41 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         setErrorMessage(null);
     }
 
-    private void createPage(Composite parent) {
+    private void createPage(final Composite parent) {
         _page = new Composite(parent, SWT.NONE);
         setControl(_page);
         _page.setLayout(GridLayoutFactory.swtDefaults().spacing(0, 5).numColumns(3).create());
-        
-        Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
+
+        final Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group.setText("JSON Type Definition");
-        group.setLayout(new GridLayout(1, false)); 
+        group.setLayout(new GridLayout(1, false));
         group.setLayoutData(
                 new GridData(SWT.FILL, SWT.FILL, true, false, 3, 2));
-        
+
         _jsonSchemaOption = new Button(group, SWT.RADIO);
         _jsonSchemaOption.setText("JSON Schema");
         _jsonSchemaOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         _jsonSchemaOption.setSelection(true);
-        
+
         _jsonInstanceOption = new Button(group, SWT.RADIO);
         _jsonInstanceOption.setText("JSON Instance Document");
         _jsonInstanceOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        
-        _jsonSchemaOption.addSelectionListener(new SelectionListener() {
-            
+
+        _jsonSchemaOption.addSelectionListener(new SelectionAdapter() {
+
             @Override
-            public void widgetSelected(SelectionEvent e) {
-                if (isSourcePage()) {
-                    model.setSourceType(ModelType.JSON_SCHEMA);
-                    model.setSourceFilePath("");
-                } else {
-                    model.setTargetType(ModelType.JSON_SCHEMA);
-                    model.setTargetFilePath("");
-                }
-                _jsonPreviewText.setText("");
-            }
-            
-            @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
-                // empty
+            public void widgetSelected(final SelectionEvent event) {
+                if (isSourcePage()) model.setSourceType(ModelType.JSON_SCHEMA);
+                else model.setTargetType(ModelType.JSON_SCHEMA);
             }
         });
-        
-        _jsonInstanceOption.addSelectionListener(new SelectionListener() {
-            
+
+        _jsonInstanceOption.addSelectionListener(new SelectionAdapter() {
+
             @Override
-            public void widgetSelected(SelectionEvent e) {
-                if (isSourcePage()) {
-                    model.setSourceType(ModelType.JSON);
-                    model.setSourceFilePath("");
-                } else {
-                    model.setTargetType(ModelType.JSON);
-                    model.setTargetFilePath("");
-                }
-                _jsonPreviewText.setText("");
-            }
-            
-            @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
-                // empty
+            public void widgetSelected(final SelectionEvent event) {
+                if (isSourcePage()) model.setSourceType(ModelType.JSON);
+                else model.setTargetType(ModelType.JSON);
             }
         });
 
@@ -182,59 +190,62 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         jsonFileBrowseButton.setToolTipText("Browse to specify the JSON file.");
 
         jsonFileBrowseButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(final SelectionEvent e) {
-                String extension = "json";
-                boolean isJSON = true;
-                if (_jsonInstanceOption.getSelection()) {
-                    isJSON = true;
-                } else if (_jsonSchemaOption.getSelection()) {
-                    isJSON = false;
-                }
-                String path = selectResourceFromWorkspace(_page.getShell(), extension);
+            @Override
+            public void widgetSelected(final SelectionEvent event) {
+                final String extension = "json";
+                final String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
-                    if (isSourcePage()) {
-                        if (isJSON) {
-                            model.setSourceType(ModelType.JSON);
-                        } else {
-                            model.setSourceType(ModelType.JSON_SCHEMA);
-                        }
-                        model.setSourceFilePath(path);
-                    } else {
-                        if (isJSON) {
-                            model.setTargetType(ModelType.JSON);
-                        } else {
-                            model.setTargetType(ModelType.JSON_SCHEMA);
-                        }
-                        model.setTargetFilePath(path);
-                    }
-                    _jsonFileText.setText(path);
-                    
-                    IPath tempPath = new Path(path);
-                    IFile xmlFile = model.getProject().getFile(tempPath);
-                    if (xmlFile != null) {
-                        try {
-                            InputStream istream = xmlFile.getContents();
-                            BufferedReader in = new BufferedReader(new InputStreamReader(istream));
-                            String inputLine;
-                            StringBuffer buffer = new StringBuffer();
-                            while ((inputLine = in.readLine()) != null) {
-                                buffer.append(inputLine + "\n");
+                    try {
+                        final boolean schema = jsonSchema(path);
+                        _jsonInstanceOption.setSelection(!schema);
+                        _jsonSchemaOption.setSelection(schema);
+                        if (isSourcePage()) {
+                            if (schema) {
+                                model.setSourceType(ModelType.JSON);
+                            } else {
+                                model.setSourceType(ModelType.JSON_SCHEMA);
                             }
-                            _jsonPreviewText.setText(buffer.toString());
-                        } catch (CoreException e1) {
-                            e1.printStackTrace();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
+                            model.setSourceFilePath(path);
+                        } else {
+                            if (schema) {
+                                model.setTargetType(ModelType.JSON);
+                            } else {
+                                model.setTargetType(ModelType.JSON_SCHEMA);
+                            }
+                            model.setTargetFilePath(path);
                         }
+                        _jsonFileText.setText(path);
+
+                        final IPath tempPath = new Path(path);
+                        final IFile xmlFile = model.getProject().getFile(tempPath);
+                        if (xmlFile != null) {
+                            try (final InputStream istream = xmlFile.getContents()) {
+                                final StringBuffer buffer = new StringBuffer();
+                                try (final BufferedReader in =
+                                        new BufferedReader(new InputStreamReader(istream))) {
+                                    String inputLine;
+                                    while ((inputLine = in.readLine()) != null) {
+                                        buffer.append(inputLine + "\n");
+                                    }
+                                }
+                                _jsonPreviewText.setText(buffer.toString());
+                            } catch (final CoreException e1) {
+                                e1.printStackTrace();
+                            } catch (final IOException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                        _jsonFileText.notifyListeners(SWT.Modify, new Event());
+                    } catch (final Exception e) {
+                        Activator.error(e);
                     }
-                    _jsonFileText.notifyListeners(SWT.Modify, new Event());
                 }
             }
         });
-        
-        Group group2 = new Group(_page, SWT.SHADOW_ETCHED_IN);
+
+        final Group group2 = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group2.setText("JSON Structure Preview");
-        group2.setLayout(new FillLayout()); 
+        group2.setLayout(new FillLayout());
         group2.setLayoutData(
                 new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
@@ -255,10 +266,34 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         return !isSource;
     }
 
-    private String selectResourceFromWorkspace(Shell shell, final String extension) {
+    boolean jsonSchema(final String path) throws Exception {
+        try (InputStream stream = model.getProject().getFile(path).getContents()) {
+            char quote = '\0';
+            final StringBuilder builder = new StringBuilder();
+            for (char chr = (char) stream.read(); chr != -1; chr = (char) stream.read()) {
+                // Find quote
+                if (quote == '\0') {
+                    if (chr == '"' || chr == '\'') quote = chr;
+                } else if (chr == quote) {
+                    final String keyword = builder.toString();
+                    switch (keyword) {
+                        case "$schema":
+                        case "title":
+                        case "type":
+                        case "id":
+                            return true;
+                    }
+                    break;
+                } else builder.append(chr);
+            }
+        }
+        return false;
+    }
+
+    private String selectResourceFromWorkspace(final Shell shell, final String extension) {
         IJavaProject javaProject = null;
         if (getModel() != null) {
-            if (getModel().getProject() != null) { 
+            if (getModel().getProject() != null) {
                 javaProject = JavaCore.create(getModel().getProject());
             }
         }
@@ -269,43 +304,12 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), extension);
         }
         dialog.setTitle("Select " + extension.toUpperCase() + " From Project");
-        dialog.setInitialPattern("*." + extension); //$NON-NLS-1$
+        dialog.setInitialPattern("*." + extension);
         dialog.open();
-        Object[] result = dialog.getResult();
+        final Object[] result = dialog.getResult();
         if (result == null || result.length == 0 || !(result[0] instanceof IResource)) {
             return null;
         }
         return ((IResource) result[0]).getProjectRelativePath().toPortableString();
     }
-
-    private void bindControls() {
-
-        // Bind source file path widget to UI model
-        IObservableValue widgetValue = WidgetProperties.text(SWT.Modify).observe(_jsonFileText);
-        IObservableValue modelValue = null;
-        if (isSourcePage()) {
-            modelValue = BeanProperties.value(Model.class, "sourceFilePath").observe(model);
-        } else {
-            modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model);
-        }
-        UpdateValueStrategy strategy = new UpdateValueStrategy();
-        strategy.setBeforeSetValidator(new IValidator() {
-
-            @Override
-            public IStatus validate(final Object value) {
-                final String path = value == null ? null : value.toString().trim();
-                if (path == null || path.isEmpty()) {
-                    return ValidationStatus
-                            .error("A source file path must be supplied for the transformation.");
-                }
-                if (model.getProject().findMember(path) == null) {
-                    return ValidationStatus
-                            .error("Unable to find a file with the supplied path");
-                }
-                return ValidationStatus.ok();
-            }
-        });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.TOP | SWT.LEFT);
-    }    
 }

@@ -194,7 +194,7 @@ public class ModelViewer extends Composite {
             }
         });
 
-        treeViewer.setInput("root");
+        if (rootModel != null) treeViewer.setInput("root");
 
         config.addListener(new PropertyChangeListener() {
 
@@ -236,12 +236,12 @@ public class ModelViewer extends Composite {
     boolean show(final Object element) {
         return !hideMappedFields || !mapped((Model) element, rootModel);
     }
-    
+
     public ModelViewer(final Composite parent,
             final Model rootModel) {
         super(parent, SWT.NONE);
         // simple view
-        
+
         setBackground(parent.getParent().getParent().getBackground());
 
         this.rootModel = rootModel;
@@ -355,11 +355,11 @@ public class ModelViewer extends Composite {
             super.update(cell);
         }
     }
-    
+
     public TreeViewer getViewer() {
         return treeViewer;
     }
-    
+
     public void setModel(Model input) {
         this.rootModel = input;
     }
