@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -207,8 +207,6 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
 		final IWizardDescriptor wiz = PlatformUI.getWorkbench().getNewWizardRegistry().findWizard(NEW_CAMEL_XML_FILE_WIZARD_ID);
-		
-		MenuManager subMenu = new MenuManager("New");
 				
 		Action action = new Action() {
 			/* (non-Javadoc)
@@ -216,7 +214,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 			 */
 			@Override
 			public String getText() {
-				return wiz.getLabel();
+				return "New " + wiz.getLabel();
 			}
 			
 			/* (non-Javadoc)
@@ -243,7 +241,17 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 						   Field selection = wizard.getClass().getDeclaredField("selection");
 						   if (selection != null) {
 							   selection.setAccessible(true);
-							   selection.set(wizard, new StructuredSelection(getProject()));
+							   
+							   // if there are already other camel context files we use the path the first best is stored under,
+							   // otherwise we use the project main folder
+							   IStructuredSelection sel = null;
+							   if (getCamelFiles().size()>0) {
+								   sel = new StructuredSelection(getCamelFiles().get(0).getParent());
+							   } else {
+								   sel = new StructuredSelection(getProject());
+							   }
+							   
+							   selection.set(wizard, sel);
 							   
 						   }
 					   } catch (Exception ex) {
@@ -258,7 +266,6 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 			}
 		};
 		
-		subMenu.add(action);
-		menu.add(subMenu);
+		menu.add(action);
 	}
 }

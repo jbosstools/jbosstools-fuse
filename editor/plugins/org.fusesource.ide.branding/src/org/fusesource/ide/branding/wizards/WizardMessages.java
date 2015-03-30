@@ -138,6 +138,7 @@ public final class WizardMessages extends NLS {
 	public static String NewCamelXMLWizardPage_statusUnspecifiedFileName;
 	public static String NewCamelXMLWizardPage_statusInvalidFileName;
 	public static String NewCamelXMLWizardPage_statusInvalidExtension;
+	public static String NewCamelXMLWizardPage_statusFileAlreadyExists;
 	
 	// new project wizard
 	public static String wizardProjectTitle;

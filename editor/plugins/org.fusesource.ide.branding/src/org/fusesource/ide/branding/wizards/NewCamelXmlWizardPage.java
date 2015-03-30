@@ -159,8 +159,7 @@ public class NewCamelXmlWizardPage extends WizardPage {
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1)
-				return;
+			if (ssel.size() > 1) return;
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IJavaElement) {
 				IJavaElement element = (IJavaElement) obj;
@@ -182,6 +181,8 @@ public class NewCamelXmlWizardPage extends WizardPage {
 			}
 		}
 		fileText.setText(DEFAULT_CAMEL_XML_NAME);
+		updateStatus(null);
+		dialogChanged();
 	}
 
 	/**
@@ -239,12 +240,22 @@ public class NewCamelXmlWizardPage extends WizardPage {
 				return;
 			}
 		}
+		if (container.getLocation().append(fileName).toFile().exists()) {
+			updateWarning(WizardMessages.NewCamelXMLWizardPage_statusFileAlreadyExists);
+			return;
+		}
 		updateStatus(null);
+		updateWarning(null);
 	}
 
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
+	}
+	
+	private void updateWarning(String message) {
+		setMessage(message, WizardPage.WARNING);
+		setPageComplete(true);
 	}
 
 	public String getContainerName() {
