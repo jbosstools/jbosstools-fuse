@@ -108,7 +108,7 @@ public class KarafRuntimeDelegate extends RuntimeDelegate implements IKarafRunti
 
 	@Override
 	public IExecutionEnvironment getMinimumExecutionEnvironment() {
-		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.6"); //$NON-NLS-1$
+		return EnvironmentsManager.getDefault().getEnvironment("JavaSE-1.7"); //$NON-NLS-1$
 	}
 	
 
