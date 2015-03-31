@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
@@ -112,10 +111,9 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
                                 }
                             }
 
-                            final IEditorPart editor =
-                                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                                            .openEditor(new FileEditorInput(xmlFile),
-                                                    desc.getId());
+                            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                                    .openEditor(new FileEditorInput(xmlFile),
+                                            desc.getId());
                         } catch (Exception e) {
                             Activator.showUserError("Exception Opening Transformation File", 
                                     "The Transformation file (" + filename + ") is not accessible in the Camel project.",
