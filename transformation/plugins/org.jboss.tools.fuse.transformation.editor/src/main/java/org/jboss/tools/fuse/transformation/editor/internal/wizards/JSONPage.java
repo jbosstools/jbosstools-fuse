@@ -201,16 +201,16 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                         _jsonSchemaOption.setSelection(schema);
                         if (isSourcePage()) {
                             if (schema) {
-                                model.setSourceType(ModelType.JSON);
-                            } else {
                                 model.setSourceType(ModelType.JSON_SCHEMA);
+                            } else {
+                                model.setSourceType(ModelType.JSON);
                             }
                             model.setSourceFilePath(path);
                         } else {
                             if (schema) {
-                                model.setTargetType(ModelType.JSON);
-                            } else {
                                 model.setTargetType(ModelType.JSON_SCHEMA);
+                            } else {
+                                model.setTargetType(ModelType.JSON);
                             }
                             model.setTargetFilePath(path);
                         }
