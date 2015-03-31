@@ -23,7 +23,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
-import org.jboss.mapper.camel.CamelConfigBuilder;
 
 /*
  * Allows user to select a Camel resource on the project's classpath. TODO -
@@ -115,7 +114,7 @@ class CamelResourceClasspathSelectionDialog extends FilteredResourcesSelectionDi
                 final File testFile = new File(resource.getLocationURI());
                 System.out.println("Testing " + testFile.toString());
                 if (testFile.exists()) {
-                    CamelConfigBuilder.loadConfig(testFile);
+                	CamelConfigurationHelper.load(testFile).getConfigBuilder();
                     return true;
                 }
             } catch (final Exception e) {

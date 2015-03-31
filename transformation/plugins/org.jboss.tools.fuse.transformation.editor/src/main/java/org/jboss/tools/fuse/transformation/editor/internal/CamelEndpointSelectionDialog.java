@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.mapper.camel.CamelConfigBuilder;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
@@ -213,7 +214,7 @@ public class CamelEndpointSelectionDialog extends TitleAreaDialog {
                     if (testFile.exists()) {
                         camelFilePath = Util.RESOURCES_PATH + camelFilePath;
                         final CamelConfigBuilder testBuilder =
-                                CamelConfigBuilder.loadConfig(testFile);
+                                CamelConfigurationHelper.load(testFile).getConfigBuilder();
                         if (updateCamelBuilder) {
                             camelConfigBuilder = testBuilder;
                         }

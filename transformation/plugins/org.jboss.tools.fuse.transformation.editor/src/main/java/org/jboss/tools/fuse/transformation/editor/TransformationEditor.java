@@ -12,12 +12,10 @@ package org.jboss.tools.fuse.transformation.editor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLClassLoader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
@@ -45,9 +43,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.mapper.MappingOperation;
-import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.camel.CamelEndpoint;
-import org.jboss.mapper.camel.EndpointHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder;
@@ -71,7 +67,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
     TransformationConfig config;
     URLClassLoader loader;
     File camelConfigFile;
-    CamelConfigBuilder camelConfig;
     CamelEndpoint camelEndpoint;
 
     MappingsViewer mappingsViewer;
@@ -298,24 +293,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         sourceModelTabFolder.select(mapping.getSource());
         targetModelTabFolder.select(mapping.getTarget());
         mappingDetailViewer.update(mapping);
-    }
-
-    /**
-     * @param endPointId
-     * @param camelFilePath
-     * @throws Exception
-     */
-    public void setCamelEndpoint(final String endPointId,
-                                 final String camelFilePath) throws Exception {
-        camelConfigFile = new File(config.project().getFile(camelFilePath).getLocationURI());
-        camelConfig = CamelConfigBuilder.loadConfig(camelConfigFile);
-        camelEndpoint = camelConfig.getEndpoint(endPointId);
-        EndpointHelper.setSourceModel(camelEndpoint, config.getSourceModel().getType());
-        EndpointHelper.setTargetModel(camelEndpoint, config.getTargetModel().getType());
-        try (FileOutputStream stream = new FileOutputStream(camelConfigFile)) {
-            camelConfig.saveConfig(stream);
-            config.project().refreshLocal(IResource.DEPTH_INFINITE, null);
-        }
     }
 
     /**

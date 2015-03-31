@@ -51,6 +51,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.jboss.mapper.MapperConfiguration;
+import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.camel.CamelEndpoint;
 import org.jboss.mapper.dozer.DozerMapperConfiguration;
 import org.jboss.mapper.model.json.JsonModelGenerator;
@@ -132,21 +133,21 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         final IPath resourcesPath =
                                 uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
                         
-                        sourceFormat = uiModel.camelConfigBuilder.createDataFormat(
+                        CamelConfigBuilder configBuilder = uiModel.camelConfig.getConfigBuilder();
+                        sourceFormat = configBuilder.createDataFormat(
                                 uiModel.getSourceType().transformType, sourceClassName);
-                        targetFormat = uiModel.camelConfigBuilder.createDataFormat(
+                        targetFormat = configBuilder.createDataFormat(
                                 uiModel.getTargetType().transformType, targetClassName);
-                        endpoint = uiModel.camelConfigBuilder.createEndpoint(uiModel.getId(),
-                                                         file.getFullPath().makeRelativeTo(resourcesPath).toString(),
-                                                         sourceClassName, targetClassName,
-                                                         sourceFormat, targetFormat);
+                        endpoint = configBuilder.createEndpoint(uiModel.getId(),
+	                                                 file.getFullPath().makeRelativeTo(resourcesPath).toString(),
+	                                                 sourceClassName, targetClassName,
+	                                                 sourceFormat, targetFormat);
                         if (saveCamelConfig) {
-                            try (FileOutputStream camelConfigStream =
-                                    new FileOutputStream(new File(uiModel.getProject()
-                                            .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
-                                            .getLocationURI()))) {
-                            
-                                uiModel.camelConfigBuilder.saveConfig(camelConfigStream);
+                            try {
+                            	File camelFile = new File(uiModel.getProject()
+                                        .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
+                                        .getLocationURI());
+                                uiModel.camelConfig.save(camelFile);
                             } catch (final Exception e) {
                                 throw e;
                             }

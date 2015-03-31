@@ -29,7 +29,6 @@ import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.jboss.mapper.camel.EndpointHelper;
 import org.jboss.tools.fuse.transformation.editor.DozerConfigContentTypeDescriber;
-import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
@@ -117,7 +116,6 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
                                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
                                             .openEditor(new FileEditorInput(xmlFile),
                                                     desc.getId());
-                            ((TransformationEditor) editor).setCamelEndpoint(id, res.getProjectRelativePath().toPortableString());
                         } catch (Exception e) {
                             Activator.showUserError("Exception Opening Transformation File", 
                                     "The Transformation file (" + filename + ") is not accessible in the Camel project.",

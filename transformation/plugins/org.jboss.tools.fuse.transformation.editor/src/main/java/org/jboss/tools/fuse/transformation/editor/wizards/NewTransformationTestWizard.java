@@ -50,6 +50,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.test.TestGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 
 /**
@@ -259,7 +260,7 @@ public class NewTransformationTestWizard extends Wizard implements INewWizard {
         if (dozerConfigFile != null) {
             File file = new File(dozerConfigFile.getLocationURI());
             try {
-                builder = CamelConfigBuilder.loadConfig(file);
+                builder = CamelConfigurationHelper.load(file).getConfigBuilder();
             } catch (Exception e) {
                 Activator.error(e);
             }

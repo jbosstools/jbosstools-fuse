@@ -20,7 +20,7 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.jboss.mapper.camel.CamelConfigBuilder;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
@@ -39,7 +39,7 @@ public class Model implements PropertyChangeListener {
     /**
      *
      */
-    public CamelConfigBuilder camelConfigBuilder;
+    public CamelConfigurationHelper camelConfig;
 
     private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
@@ -177,7 +177,7 @@ public class Model implements PropertyChangeListener {
                 }
                 if (test != null && test.exists()) {
                     final File camelFile = new File(test.getLocationURI());
-                    camelConfigBuilder = CamelConfigBuilder.loadConfig(camelFile);
+                    camelConfig = CamelConfigurationHelper.load(camelFile);
                 }
             } catch (final Exception e) {
                 // swallow

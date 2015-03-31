@@ -52,8 +52,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
@@ -303,8 +303,8 @@ public class StartPage extends XformWizardPage {
                                         + "digits, currency symbols, or underscores");
                     }
                 }
-                if (model.camelConfigBuilder != null) {
-                    for (final String endpointId : model.camelConfigBuilder
+                if (model.camelConfig != null && model.camelConfig.getConfigBuilder() != null) {
+                    for (final String endpointId : model.camelConfig.getConfigBuilder()
                             .getTransformEndpointIds()) {
                         if (id.equalsIgnoreCase(endpointId)) {
                             return ValidationStatus
@@ -368,7 +368,7 @@ public class StartPage extends XformWizardPage {
                         }
                     }
                     try {
-                        CamelConfigBuilder.loadConfig(testFile);
+                        CamelConfigurationHelper.load(testFile).getConfigBuilder();
                     } catch (final Exception e) {
                         return ValidationStatus.error(
                                 "The Camel file path must refer to a valid Camel file");

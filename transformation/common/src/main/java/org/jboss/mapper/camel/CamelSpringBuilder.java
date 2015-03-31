@@ -45,6 +45,10 @@ public class CamelSpringBuilder extends CamelConfigBuilder {
                 .createUnmarshaller().unmarshal(camelConfig, CamelContextFactoryBean.class);
         camelContext = ccfb.getValue();
     }
+    
+    public CamelSpringBuilder(CamelContextFactoryBean camelContext) {
+        this.camelContext = camelContext;
+    }
 
     /**
      * Returns the top-level object model for Camel configuration.
