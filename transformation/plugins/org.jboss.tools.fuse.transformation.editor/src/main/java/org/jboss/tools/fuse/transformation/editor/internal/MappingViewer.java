@@ -134,8 +134,10 @@ abstract class MappingViewer {
                          final Object object) {
         text.setText(name(object));
         if (object instanceof Model) {
-            text.setToolTipText(config.fullyQualifiedName((Model)object));
-            if (mapping.getType() == MappingType.CUSTOM) text.setBackground(Colors.FUNCTION);
+            Model model = (Model)object;
+            text.setToolTipText(config.fullyQualifiedName(model));
+            if (mapping.getType() == MappingType.CUSTOM && text == sourceText)
+                text.setBackground(Colors.FUNCTION);
             else text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.FOREGROUND);
         } else if (object instanceof Variable) {

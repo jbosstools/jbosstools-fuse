@@ -195,6 +195,9 @@ public class MappingsViewer extends Composite {
         final MappingSummary mappingSummary =
             new MappingSummary(config, mapping, this, potentialDropTargets);
         mappingSummaries.add(mappingSummary);
+        sourcePane.layout();
+        mapsToPane.layout();
+        targetPane.layout();
         scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scroller.setOrigin(0, scroller.getSize().y);
         mappingSummary.sourceText.setFocus(); // This will call selected()
