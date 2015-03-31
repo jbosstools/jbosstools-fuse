@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLClassLoader;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,8 +50,10 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
+import org.fusesource.ide.camel.model.connectors.ComponentDependency;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.camel.CamelEndpoint;
@@ -142,6 +146,12 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 	                                                 file.getFullPath().makeRelativeTo(resourcesPath).toString(),
 	                                                 sourceClassName, targetClassName,
 	                                                 sourceFormat, targetFormat);
+                        
+                        // make sure we add our maven dependencies where needed
+                        addCamelDozerDependency();
+                        addDataFormatDefinitionDependency(sourceFormat);
+                        addDataFormatDefinitionDependency(targetFormat);
+                        
                         if (saveCamelConfig) {
                             try {
                             	File camelFile = new File(uiModel.getProject()
@@ -155,12 +165,6 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         dozerConfigBuilder.addClassMapping(sourceClassName, targetClassName);
                     }
                     dozerConfigBuilder.saveConfig(configStream);
-                    uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
-                    // Ensure build of Java classes has completed
-                    try {
-                        Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
-                    } catch (final InterruptedException ignored) {
-                    }
                     
                     if (!saveCamelConfig) {
                         // now update the camel config if we didn't already
@@ -169,7 +173,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                 getDiagramEditor().getModel();
                         CamelContextFactoryBean camelContext =
                                 routeContainer.getModel().getContextElement();
-                        
+
                         // Wizard completed successfully; create the necessary config
                         addCamelContextEndpoint(camelContext, endpoint.asSpringEndpoint());
                         if (sourceFormat != null) {
@@ -182,6 +186,13 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         routeEndpoint = new Endpoint("ref:" + endpoint.getId());
                     }
                     
+                    uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+                    // Ensure build of Java classes has completed
+                    try {
+                        Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
+                    } catch (final InterruptedException ignored) {
+                    }
+
                     // Open mapping editor
                     final IEditorDescriptor desc =
                             PlatformUI
@@ -504,6 +515,49 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         context.setDataFormats(dataFormats);
     }
 
+    private ComponentDependency createDependency(String groupId, String artifactId, String version) {
+        ComponentDependency dep = new ComponentDependency();
+        dep.setGroupId(groupId);
+        dep.setArtifactId(artifactId);
+        dep.setVersion(version);
+        return dep;
+    }
+
+    private void addCamelDozerDependency() {
+        ComponentDependency dep = createDependency("org.apache.camel", "camel-dozer",
+                org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion());
+        List<ComponentDependency> deps = new ArrayList<>();
+        deps.add(dep);
+        try {
+            MavenUtils.updateMavenDependencies(deps);
+        } catch (CoreException e) {
+            org.fusesource.ide.camel.editor.Activator.getLogger().error(e);
+        }
+    }
+
+    private void addDataFormatDefinitionDependency(DataFormatDefinition dataFormat) {
+        ComponentDependency dep = null;
+
+        if (dataFormat != null) {
+            if (dataFormat.getDataFormatName().equalsIgnoreCase("json-jackson")) {
+                dep = createDependency("org.apache.camel", "camel-jackson", org.fusesource.ide.camel.editor.Activator
+                        .getDefault().getCamelVersion());
+            } else if (dataFormat.getDataFormatName().equalsIgnoreCase("jaxb")) {
+                dep = createDependency("org.apache.camel", "camel-jaxb", org.fusesource.ide.camel.editor.Activator
+                        .getDefault().getCamelVersion());
+            }
+            if (dep != null) {
+                List<ComponentDependency> deps = new ArrayList<>();
+                deps.add(dep);
+                try {
+                    MavenUtils.updateMavenDependencies(deps);
+                } catch (CoreException e) {
+                    org.fusesource.ide.camel.editor.Activator.getLogger().error(e);
+                }
+            }
+        }
+    }
+   
     /**
      * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
      * endpoints on CamelContextFactoryBean directly. Use reflection for now
