@@ -16,6 +16,7 @@
 #
 editorSourcePageTitle=Source
 editorDesignPageTitle=Design
+editorGlobalConfigurationPageTitle=Configurations
 connectorsDrawerTitle=Components
 endpointsDrawerTitle=Defined Endpoints
 routingDrawerTitle=Routing

@@ -10,10 +10,13 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.editor;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.apache.camel.model.DataFormatDefinition;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
@@ -34,9 +37,10 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.fusesource.ide.camel.editor.Activator;
+import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
+import org.fusesource.ide.commons.camel.tools.Strings;
 import org.fusesource.ide.commons.ui.Selections;
 
 /**
@@ -46,15 +50,6 @@ import org.fusesource.ide.commons.ui.Selections;
 public class GlobalConfigEditor extends EditorPart {
 
 	private RiderEditor parentEditor;
-	private IEditorSite editorSite;
-	private IEditorInput editorInput;
-
-	private IProject container;
-	@SuppressWarnings("unused")
-	private IFile camelContextFile;
-	@SuppressWarnings("unused")
-	private RouteContainer model;
-	private RouteSupport activeRoute;
 
 	private Composite parent;
 	private TreeViewer treeViewer;
@@ -102,8 +97,6 @@ public class GlobalConfigEditor extends EditorPart {
 			throws PartInitException {
 		setSite(editorSite);
 		setInput(input);
-		this.editorSite = editorSite;
-		this.editorInput = input;
 	}
 
 	/*
@@ -153,7 +146,7 @@ public class GlobalConfigEditor extends EditorPart {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				Object selObj = Selections.getFirstSelection(event.getSelection());
-				if (selObj != null && selObj instanceof BeanDef) {
+				if (selObj != null && isSupportedObjectType(selObj)) {
 					btnModify.setEnabled(true);
 					btnDelete.setEnabled(true);
 				} else {
@@ -259,11 +252,27 @@ public class GlobalConfigEditor extends EditorPart {
 	 */
 	private void deleteEntries() {
 		if (this.treeViewer.getSelection().isEmpty() == false) {
-			BeanDef def = (BeanDef)Selections.getFirstSelection(this.treeViewer.getSelection());
-			this.parentEditor.getModel().getBeans().remove(def.getId());
-			parentEditor.markDirty();
+			IStructuredSelection sel = (IStructuredSelection)this.treeViewer.getSelection();
+			for (Object selObj : sel.toList()) {
+				if (selObj instanceof BeanDef) {
+					this.parentEditor.getModel().getModel().beanMap().remove(((BeanDef)selObj).getId());				
+				} else if (selObj instanceof Endpoint) {
+//					this.parentEditor.getModel().getModel().removeContextEndpoint(((Endpoint)selObj).getId());				
+				} else if (selObj instanceof DataFormatDefinition) {
+//					this.parentEditor.getModel().getModel().removeDataFormat(((DataFormatDefinition)selObj).getId());				
+				} else {
+					continue;
+				}
+				parentEditor.markDirty();
+			}
 			reload();
 		}
+	}
+	
+	private boolean isSupportedObjectType(Object element) {
+		return  element instanceof BeanDef ||
+				element instanceof Endpoint ||
+				element instanceof DataFormatDefinition;
 	}
 
 	class GlobalConfigContentProvider implements ITreeContentProvider {
@@ -286,8 +295,8 @@ public class GlobalConfigEditor extends EditorPart {
 		 * .Object)
 		 */
 		@Override
-		public Object[] getChildren(Object arg0) {
-			return getElements(arg0);
+		public Object[] getChildren(Object parent) {
+			return getElements(parent);
 		}
 
 		/*
@@ -298,11 +307,28 @@ public class GlobalConfigEditor extends EditorPart {
 		 * .Object)
 		 */
 		@Override
-		public Object[] getElements(Object arg0) {
-			if (arg0 instanceof RouteContainer) {
-				return ((RouteContainer)arg0).getBeans().values().toArray();
+		public Object[] getElements(Object parent) {
+			ArrayList<Object> childElements = new ArrayList<Object>();
+			if (parent instanceof RouteContainer) {
+				RouteContainer rc = (RouteContainer)parent;
+				
+				// we add all global beans
+				childElements.addAll(rc.getModel().beanMap().values());
+				
+				// we add all context wide endpoints
+				Iterator<String> epIdIt = rc.getModel().endpointUris().keySet().iterator();
+				while (epIdIt.hasNext()) {
+					String epId = epIdIt.next();
+					String uri = rc.getCamelContextEndpointUris().get(epId);
+					Endpoint ep = new Endpoint(uri);
+					ep.setId(epId);
+					childElements.add(ep);
+				}
+				
+				// we add all data formats
+//				childElements.addAll(rc.getModel().getDataFormats().values());
 			}
-			return new Object[0];
+			return childElements.toArray();
 		}
 
 		/*
@@ -313,7 +339,7 @@ public class GlobalConfigEditor extends EditorPart {
 		 * .Object)
 		 */
 		@Override
-		public Object getParent(Object arg0) {
+		public Object getParent(Object element) {
 			return null;
 		}
 
@@ -325,7 +351,7 @@ public class GlobalConfigEditor extends EditorPart {
 		 * .Object)
 		 */
 		@Override
-		public boolean hasChildren(Object arg0) {
+		public boolean hasChildren(Object element) {
 			return false;
 		}
 
@@ -355,16 +381,40 @@ public class GlobalConfigEditor extends EditorPart {
 		public void update(ViewerCell cell) {
 			Object element = cell.getElement();
 			StyledString text = new StyledString();
-			BeanDef bean = (BeanDef) element;			
-			text.append(bean.getId());
-			cell.setImage(getIconForBean(bean));
-			text.append(" (" + bean.getBeanType() + ") ", StyledString.COUNTER_STYLER);
-			cell.setText(text.toString());
-			cell.setStyleRanges(text.getStyleRanges());
+
+			if (element instanceof BeanDef) {
+				BeanDef bean = (BeanDef) element;			
+				text.append(bean.getId());
+				cell.setImage(getIconForElement(bean));
+				text.append(" (" + Strings.capitalize(bean.getBeanType()) + ") ", StyledString.COUNTER_STYLER);
+				cell.setText(text.toString());
+				cell.setStyleRanges(text.getStyleRanges());
+			} else if (element instanceof Endpoint) {
+				Endpoint value = (Endpoint) element;			
+				text.append(value.getId());
+				cell.setImage(getIconForElement(value));
+				text.append(" (Endpoint)", StyledString.COUNTER_STYLER);
+				cell.setText(text.toString());
+				cell.setStyleRanges(text.getStyleRanges());
+			} else if (element instanceof DataFormatDefinition) {
+				DataFormatDefinition value = (DataFormatDefinition) element;			
+				text.append(value.getId());
+				cell.setImage(getIconForElement(value));
+				text.append(" (DataFormat)", StyledString.COUNTER_STYLER);
+				cell.setText(text.toString());
+				cell.setStyleRanges(text.getStyleRanges());
+			}
 			super.update(cell);
 		}
 		
-		private Image getIconForBean(BeanDef bean) {
+		private Image getIconForElement(Object element) {
+			if (element instanceof BeanDef) {
+				return Activator.getDefault().getImage("beandef.gif");
+			} else if (element instanceof DataFormatDefinition) {
+				return Activator.getDefault().getImage("dataformat.gif");
+			} else if (element instanceof Endpoint) {
+				return Activator.getDefault().getImage("endpointdef.png");
+			} 
 			return null;
 		}
 	}
