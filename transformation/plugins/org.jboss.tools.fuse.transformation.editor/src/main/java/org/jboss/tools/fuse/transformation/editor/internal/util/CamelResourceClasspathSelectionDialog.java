@@ -114,7 +114,7 @@ class CamelResourceClasspathSelectionDialog extends FilteredResourcesSelectionDi
                 final File testFile = new File(resource.getLocationURI());
                 System.out.println("Testing " + testFile.toString());
                 if (testFile.exists()) {
-                	CamelConfigurationHelper.load(testFile).getConfigBuilder();
+                    CamelConfigurationHelper.load(testFile).getConfigBuilder();
                     return true;
                 }
             } catch (final Exception e) {

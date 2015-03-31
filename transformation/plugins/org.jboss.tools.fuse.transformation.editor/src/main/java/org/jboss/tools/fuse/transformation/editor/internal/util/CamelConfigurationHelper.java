@@ -18,27 +18,27 @@ import org.jboss.mapper.camel.CamelSpringBuilder;
 
 public final class CamelConfigurationHelper {
 
-	private RouteXml routeXml;
-	private XmlModel camelModel;
-	private CamelConfigBuilder configBuilder;
-	
-	private CamelConfigurationHelper(RouteXml routeXml, XmlModel camelModel) {
-		this.routeXml = routeXml;
-		this.camelModel = camelModel;
-		configBuilder = new CamelSpringBuilder(camelModel.getContextElement());
-	}
-	
-	public static CamelConfigurationHelper load(File contextFile) throws Exception {
-		RouteXml routeXml = new RouteXml();
-		XmlModel camelModel = routeXml.unmarshal(contextFile);
-		return camelModel != null ? new CamelConfigurationHelper(routeXml, camelModel) : null;
-	}
+    private RouteXml routeXml;
+    private XmlModel camelModel;
+    private CamelConfigBuilder configBuilder;
 
-	public CamelConfigBuilder getConfigBuilder() {
-		return configBuilder;
-	}
-	
-	public void save(File file) throws Exception {
-		routeXml.marshal(file, camelModel);
-	}
+    private CamelConfigurationHelper(RouteXml routeXml, XmlModel camelModel) {
+        this.routeXml = routeXml;
+        this.camelModel = camelModel;
+        configBuilder = new CamelSpringBuilder(camelModel.getContextElement());
+    }
+
+    public static CamelConfigurationHelper load(File contextFile) throws Exception {
+        RouteXml routeXml = new RouteXml();
+        XmlModel camelModel = routeXml.unmarshal(contextFile);
+        return camelModel != null ? new CamelConfigurationHelper(routeXml, camelModel) : null;
+    }
+
+    public CamelConfigBuilder getConfigBuilder() {
+        return configBuilder;
+    }
+
+    public void save(File file) throws Exception {
+        routeXml.marshal(file, camelModel);
+    }
 }
