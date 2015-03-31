@@ -138,10 +138,18 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                 uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
 
                         CamelConfigBuilder configBuilder = uiModel.camelConfig.getConfigBuilder();
-                        sourceFormat = configBuilder.createDataFormat(
-                                uiModel.getSourceType().transformType, sourceClassName);
-                        targetFormat = configBuilder.createDataFormat(
-                                uiModel.getTargetType().transformType, targetClassName);
+                        if (ModelType.OTHER.equals(uiModel.getSourceType())) {
+                            sourceFormat = configBuilder.getDataFormat(uiModel.getSourceDataFormatid());
+                        } else {
+                            sourceFormat = configBuilder.createDataFormat(
+                                    uiModel.getSourceType().transformType, sourceClassName);
+                        }
+                        if (ModelType.OTHER.equals(uiModel.getTargetType())) {
+                            targetFormat = configBuilder.getDataFormat(uiModel.getTargetDataFormatid());
+                        } else {
+                            targetFormat = configBuilder.createDataFormat(
+                                    uiModel.getTargetType().transformType, targetClassName);
+                        }
                         endpoint = configBuilder.createEndpoint(uiModel.getId(),
                                 file.getFullPath().makeRelativeTo(resourcesPath).toString(),
                                 sourceClassName, targetClassName,
@@ -386,6 +394,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         final File targetClassesFolder =
                 new File(uiModel.getProject().getFolder(JAVA_PATH).getLocationURI());
         switch (type) {
+            case OTHER:
             case CLASS: {
                 final IJavaProject javaProject = JavaCore.create(uiModel.getProject());
                 IType pkg = javaProject.findType(filePath, new NullProgressMonitor());

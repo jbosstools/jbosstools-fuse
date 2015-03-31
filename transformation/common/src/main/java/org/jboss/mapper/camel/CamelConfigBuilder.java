@@ -99,6 +99,7 @@ public abstract class CamelConfigBuilder {
             case XML:
                 dataFormat = createJaxbDataFormat(getPackage(className));
                 break;
+            case OTHER:
             case JAVA:
                 dataFormat = null;
                 break;
@@ -182,10 +183,21 @@ public abstract class CamelConfigBuilder {
         }
         return endpointIds;
     }
+
+    public DataFormatDefinition getDataFormat(String id) {
+        DataFormatDefinition dataFormat = null;
+        for (DataFormatDefinition df : getDataFormats()) {
+            if (id.equals(df.getId())) {
+                dataFormat = df;
+                break;
+            }
+        }
+        return dataFormat;
+    }
     
-    protected abstract List<? extends CamelEndpoint> getEndpoints();
+    public abstract List<DataFormatDefinition> getDataFormats();
     
-    protected abstract List<DataFormatDefinition> getDataFormats();
+    public abstract List<CamelEndpoint> getEndpoints();
 
     // If the JAXB config model for CamelContext was changed, call this method
     // to marshal those changes into the DOM for the Spring application context
@@ -226,17 +238,6 @@ public abstract class CamelConfigBuilder {
             df.setId(id);
             getDataFormats().add(df);
             dataFormat = df;
-        }
-        return dataFormat;
-    }
-    
-    protected DataFormatDefinition getDataFormat(String id) {
-        DataFormatDefinition dataFormat = null;
-        for (DataFormatDefinition df : getDataFormats()) {
-            if (id.equals(df.getId())) {
-                dataFormat = df;
-                break;
-            }
         }
         return dataFormat;
     }

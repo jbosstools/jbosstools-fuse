@@ -14,8 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.camel.model.DataFormatDefinition;
-import org.apache.camel.model.dataformat.DataFormatsDefinition;
-import org.apache.camel.spring.CamelContextFactoryBean;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -67,10 +65,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
-import org.fusesource.ide.camel.model.RouteContainer;
-import org.jboss.mapper.camel.CamelBlueprintBuilder;
-import org.jboss.mapper.camel.CamelConfigBuilder;
-import org.jboss.mapper.camel.CamelSpringBuilder;
 import org.jboss.mapper.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
@@ -162,10 +156,10 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                     if (selected != null) {
                         _javaClassText.setText(selected.getFullyQualifiedName());
                         if (isSourcePage()) {
-                            model.setSourceType(ModelType.CLASS);
+                            model.setSourceType(ModelType.OTHER);
                             model.setSourceFilePath(selected.getFullyQualifiedName());
                         } else {
-                            model.setTargetType(ModelType.CLASS);
+                            model.setTargetType(ModelType.OTHER);
                             model.setTargetFilePath(selected.getFullyQualifiedName());
                         }
 
@@ -260,35 +254,11 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         IObservableValue modelValue = null;
         
         WritableList dfList = new WritableList();
-        NewTransformationWizard transformWizard = (NewTransformationWizard) getWizard();
-        List<DataFormatDefinition> dataFormats = null;
-        if (transformWizard.getModel() != null) {
-            CamelConfigBuilder builder = transformWizard.getModel().camelConfig.getConfigBuilder();
-            if (builder instanceof CamelSpringBuilder) {
-                CamelSpringBuilder springBuilder = (CamelSpringBuilder) builder;
-                dataFormats = springBuilder.getDataFormats();
-            } else if (builder instanceof CamelBlueprintBuilder) {
-                CamelBlueprintBuilder blueprintBuilder = (CamelBlueprintBuilder) builder;
-                dataFormats = blueprintBuilder.getDataFormats();
-            }
-            if (dataFormats != null) {
-                for (Iterator<DataFormatDefinition> iterator = dataFormats.iterator(); iterator.hasNext();) {
-                    DataFormatDefinition df = iterator.next();
-                    dfList.add(df.getId());
-                }
-            }
-        } else if (org.fusesource.ide.camel.editor.Activator.getDiagramEditor() != null) {
-            RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.
-                    getDiagramEditor().getModel();
-            CamelContextFactoryBean camelContext =
-                    routeContainer.getModel().getContextElement();
-            DataFormatsDefinition beandataFormats = camelContext.getDataFormats();
-            if (beandataFormats != null && beandataFormats.getDataFormats() != null) {
-                for (Iterator<DataFormatDefinition> iterator = beandataFormats.getDataFormats().iterator(); iterator.hasNext();) {
-                    DataFormatDefinition df = iterator.next();
-                    dfList.add(df.getId());
-                }
-            }
+        List<DataFormatDefinition> dataFormats = 
+                getModel().camelConfig.getConfigBuilder().getDataFormats();
+        for (Iterator<DataFormatDefinition> iterator = dataFormats.iterator(); iterator.hasNext();) {
+            DataFormatDefinition df = iterator.next();
+            dfList.add(df.getId());
         }
         if (dfList.isEmpty()) {
             _dfErrorLabel.setText("No available data format definitions in the selected Camel configuration.");

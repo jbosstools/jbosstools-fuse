@@ -44,7 +44,13 @@ public enum ModelType {
     /**
      *
      */
-    XSD("XSD", TransformType.XML);
+    XSD("XSD", TransformType.XML),
+    
+    /**
+     * Type where a dataformat and model classes already exist.
+     */
+    OTHER("OTHER", TransformType.OTHER);
+    
 
     final String text;
 

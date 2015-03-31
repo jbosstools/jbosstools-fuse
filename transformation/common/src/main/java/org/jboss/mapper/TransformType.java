@@ -16,5 +16,5 @@ package org.jboss.mapper;
  * Types supported for transformation input and output.
  */
 public enum TransformType {
-    JSON, XML, JAVA;
+    JSON, XML, JAVA, OTHER;
 }
