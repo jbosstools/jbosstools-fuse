@@ -81,6 +81,7 @@ import com.sun.codemodel.JPackage;
  * @author brianf
  *
  */
+@SuppressWarnings("restriction")
 public class NewTransformationWizard extends Wizard implements INewWizard {
 
     private static final String JAVA_PATH = Util.MAIN_PATH + "java/";
@@ -287,6 +288,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     }
 
     public URLClassLoader getLoader() {
+        if (this.loader == null && uiModel.getProject() != null) {
+            setSelectedProject(uiModel.getProject());
+        }
         return this.loader;
     }
 

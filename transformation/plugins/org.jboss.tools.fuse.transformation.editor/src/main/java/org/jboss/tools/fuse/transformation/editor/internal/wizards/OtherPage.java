@@ -11,6 +11,7 @@
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.dataformat.DataFormatsDefinition;
@@ -67,6 +68,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
 import org.fusesource.ide.camel.model.RouteContainer;
+import org.jboss.mapper.camel.CamelBlueprintBuilder;
+import org.jboss.mapper.camel.CamelConfigBuilder;
+import org.jboss.mapper.camel.CamelSpringBuilder;
 import org.jboss.mapper.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
@@ -76,6 +80,7 @@ import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizar
  * @author brianf
  *
  */
+@SuppressWarnings("restriction")
 public class OtherPage extends XformWizardPage implements TransformationTypePage {
 
     final DataBindingContext context = new DataBindingContext(
@@ -246,24 +251,52 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
                 SWT.LEFT);
 
+    }
+    
+    public void initialize() {
+        
         // Bind id widget to UI model
-        widgetValue = ViewerProperties.singleSelection().observe(_dataFormatIdCombo);
-        modelValue = null;
-        RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.
-                getDiagramEditor().getModel();
-        CamelContextFactoryBean camelContext =
-                routeContainer.getModel().getContextElement();
-        DataFormatsDefinition dataFormats = camelContext.getDataFormats();
+        IObservableValue widgetValue = ViewerProperties.singleSelection().observe(_dataFormatIdCombo);
+        IObservableValue modelValue = null;
+        
         WritableList dfList = new WritableList();
-        if (dataFormats != null && dataFormats.getDataFormats() != null) {
-            for (Iterator<DataFormatDefinition> iterator = dataFormats.getDataFormats().iterator(); iterator.hasNext();) {
-                DataFormatDefinition df = iterator.next();
-                dfList.add(df.getId());
+        NewTransformationWizard transformWizard = (NewTransformationWizard) getWizard();
+        List<DataFormatDefinition> dataFormats = null;
+        if (transformWizard.getModel() != null) {
+            CamelConfigBuilder builder = transformWizard.getModel().camelConfig.getConfigBuilder();
+            if (builder instanceof CamelSpringBuilder) {
+                CamelSpringBuilder springBuilder = (CamelSpringBuilder) builder;
+                dataFormats = springBuilder.getDataFormats();
+            } else if (builder instanceof CamelBlueprintBuilder) {
+                CamelBlueprintBuilder blueprintBuilder = (CamelBlueprintBuilder) builder;
+                dataFormats = blueprintBuilder.getDataFormats();
             }
-        } else {
+            if (dataFormats != null) {
+                for (Iterator<DataFormatDefinition> iterator = dataFormats.iterator(); iterator.hasNext();) {
+                    DataFormatDefinition df = iterator.next();
+                    dfList.add(df.getId());
+                }
+            }
+        } else if (org.fusesource.ide.camel.editor.Activator.getDiagramEditor() != null) {
+            RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.
+                    getDiagramEditor().getModel();
+            CamelContextFactoryBean camelContext =
+                    routeContainer.getModel().getContextElement();
+            DataFormatsDefinition beandataFormats = camelContext.getDataFormats();
+            if (beandataFormats != null && beandataFormats.getDataFormats() != null) {
+                for (Iterator<DataFormatDefinition> iterator = beandataFormats.getDataFormats().iterator(); iterator.hasNext();) {
+                    DataFormatDefinition df = iterator.next();
+                    dfList.add(df.getId());
+                }
+            }
+        }
+        if (dfList.isEmpty()) {
             _dfErrorLabel.setText("No available data format definitions in the selected Camel configuration.");
             _dfErrorLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
             _dataFormatIdCombo.getCombo().setEnabled(false);
+        } else {
+            _dfErrorLabel.setText("");
+            _dataFormatIdCombo.getCombo().setEnabled(true);
         }
         _dataFormatIdCombo.setInput(dfList);
         if (isSourcePage()) {
@@ -271,7 +304,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         } else {
             modelValue = BeanProperties.value(Model.class, "targetDataFormatid").observe(model);
         }
-        strategy = new UpdateValueStrategy();
+        UpdateValueStrategy strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
             @Override
@@ -342,6 +375,14 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             return null;
         }
         return (IType) types[0];
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            initialize();
+        }
     }
 
 }
