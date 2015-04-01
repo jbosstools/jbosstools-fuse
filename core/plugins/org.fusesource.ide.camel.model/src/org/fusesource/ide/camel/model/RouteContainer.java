@@ -11,9 +11,9 @@
 
 package org.fusesource.ide.camel.model;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -393,20 +393,17 @@ public class RouteContainer extends AbstractNode {
 	 * @param id
 	 */
 	public void removeDataFormat(String id) {
-		DataFormatDefinition defDelete = null;
-		DataFormatsDefinition dfd = getModel().getContextElement().getDataFormats();
-		if (dfd != null) {
-			for (DataFormatDefinition d : dfd.getDataFormats()) {
+		CamelContextFactoryBean context = getModel().getContextElement();
+		DataFormatsDefinition dfd = context.getDataFormats();
+		if (dfd != null && dfd.getDataFormats() != null) {
+			Iterator<DataFormatDefinition> it = dfd.getDataFormats().iterator();
+			while (it.hasNext()) {
+				DataFormatDefinition d = it.next();
 				if (d.getId().equals(id)) {
-					defDelete = d;
+					it.remove();
+					getModel().getContextElement().setDataFormats(dfd);				
 					break;
 				}
-			}
-			if (defDelete != null) {
-				List<DataFormatDefinition> ld = dfd.getDataFormats();
-				ld.remove(defDelete);
-				dfd.setDataFormats(ld);
-				getModel().getContextElement().setDataFormats(dfd);				
 			}
 		}
 	}
@@ -425,7 +422,7 @@ public class RouteContainer extends AbstractNode {
 		newEP.setId(ep.getId());
 		newEP.setUri(ep.getUri());
 		eps.add(newEP);
-		setEndpoints(getModel().getContextElement(), eps);
+		getModel().getContextElement().setEndpoints(eps);
 	}
 	
 	/**
@@ -434,41 +431,20 @@ public class RouteContainer extends AbstractNode {
 	 * @param id
 	 */
 	public void removeEndpoint(String id) {
-		CamelEndpointFactoryBean deleteObj = null;
-		List<CamelEndpointFactoryBean> eps = getModel().getContextElement().getEndpoints();
+		CamelContextFactoryBean context = getModel().getContextElement();
+		List<CamelEndpointFactoryBean> eps = context.getEndpoints();
 		if (eps != null) {
-			for (CamelEndpointFactoryBean b : eps) {
+			Iterator<CamelEndpointFactoryBean> it = eps.iterator();
+			while (it.hasNext()) {
+				CamelEndpointFactoryBean b = it.next();
 				if (b.getId().equals(id)) {
-					deleteObj = b;
+					it.remove();
+					context.setEndpoints(eps);
 					break;
 				}
 			}
-			if (deleteObj != null) {
-				eps.remove(deleteObj);
-				setEndpoints(getModel().getContextElement(), eps);
-			}
 		}
 	}
-	
-	/**
-     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
-     * endpoints on CamelContextFactoryBean directly. Use reflection for now
-     * until this issue is resolved upstream.
-     *
-     * @param context
-     * @param endpoints
-     */
-    void setEndpoints(CamelContextFactoryBean context,
-            List<CamelEndpointFactoryBean> endpoints) {
-        try {
-            Field endpointsField = context.getClass().getDeclaredField("endpoints");
-            endpointsField.setAccessible(true);
-            endpointsField.set(context, endpoints);
-        } catch (Exception ex) {
-        	ex.printStackTrace();
-            Activator.getLogger().error(ex);
-        }
-    }
 	
 	public ValidationHandler validate() throws Exception {
 		if (model != null) {
@@ -478,7 +454,6 @@ public class RouteContainer extends AbstractNode {
 			return new ValidationHandler();
 		}
 	}
-
 
 	public boolean isFailedToParseXml() {
 		return failedToParseXml;

@@ -194,7 +194,7 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	protected void createPages() {
 		createDesignPage(DESIGN_PAGE_INDEX);
 		createSourcePage(SOURCE_PAGE_INDEX);
-		createGlobalConfPage(GLOBAL_CONF_INDEX);
+//		createGlobalConfPage(GLOBAL_CONF_INDEX);
 
 		IDocument document = getDocument();
 		if (document == null) {
@@ -534,14 +534,14 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 				if (doPageChange) {
 					if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
 					if (lastActivePageIdx == DESIGN_PAGE_INDEX) updatedDesignPage();
-					if (lastActivePageIdx == GLOBAL_CONF_INDEX) updatedDesignPage();
+					if (lastActivePageIdx == GLOBAL_CONF_INDEX) updatedConfigPage();
 				} else {
 					setActivePage(DESIGN_PAGE_INDEX);
 					newPageIndex = DESIGN_PAGE_INDEX;
 				}
 			} else if (newPageIndex == DESIGN_PAGE_INDEX){
 				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updatedTextPage();
-				if (lastActivePageIdx == GLOBAL_CONF_INDEX) updatedDesignPage();
+				if (lastActivePageIdx == GLOBAL_CONF_INDEX) updatedConfigPage();
 			} else {
 				// must be global config page
 				if (lastActivePageIdx == DESIGN_PAGE_INDEX) updatedDesignPage();
@@ -661,6 +661,11 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 
 			}
 		});
+	}
+	
+	private void updatedConfigPage() {
+		// we are switching from the config page so lets update the model for the other editors
+		// TODO: make changes in Config tab visible on other tabs
 	}
 
 	/*
