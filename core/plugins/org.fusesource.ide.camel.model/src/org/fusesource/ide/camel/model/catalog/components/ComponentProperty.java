@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.model.connectors;
+package org.fusesource.ide.camel.model.catalog.components;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,6 +25,15 @@ public class ComponentProperty {
 	private String kind;
 	private String deprecated;
 	private String description;
+	private String defaultValue;
+	
+	/**
+	 * @return the defaultValue
+	 */
+	@XmlAttribute(name = "defaultValue")
+	public String getDefaultValue() {
+		return this.defaultValue;
+	}
 	
 	/**
 	 * @return the deprecated
@@ -72,6 +81,13 @@ public class ComponentProperty {
 	@XmlAttribute(name = "type")
 	public String getType() {
 		return this.type;
+	}
+	
+	/**
+	 * @param defaultValue the defaultValue to set
+	 */
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 	
 	/**

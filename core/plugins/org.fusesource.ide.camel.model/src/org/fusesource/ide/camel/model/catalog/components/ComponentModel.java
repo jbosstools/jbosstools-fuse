@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.model.connectors;
+package org.fusesource.ide.camel.model.catalog.components;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.fusesource.ide.camel.model.Activator;
+import org.fusesource.ide.camel.model.catalog.CamelModel;
 import org.xml.sax.InputSource;
 
 /**
@@ -27,22 +28,22 @@ import org.xml.sax.InputSource;
  */
 @XmlRootElement(name="components")
 public class ComponentModel {
-	
+
+	private CamelModel model;
 	private ArrayList<Component> supportedComponents;
-	private String camelVersion;
 	
 	/**
-	 * @return the camelVersion
+	 * @return the model
 	 */
-	public String getCamelVersion() {
-		return this.camelVersion;
+	public CamelModel getModel() {
+		return this.model;
 	}
 	
 	/**
-	 * @param camelVersion the camelVersion to set
+	 * @param model the model to set
 	 */
-	public void setCamelVersion(String camelVersion) {
-		this.camelVersion = camelVersion;
+	void setModel(CamelModel model) {
+		this.model = model;
 	}
 	
 	/**
@@ -74,18 +75,19 @@ public class ComponentModel {
 	}
 	
 	/**
-	 * creates the backlog tracer event message for a given xml dump
+	 * creates the model from the given input stream and sets the parent model before it returns it
 	 * 
-	 * @param stream	the xml stream
-	 * @return	the message object or null on errors
+	 * @param stream	the stream to parse
+	 * @param parent	the parent model
+	 * @return			the created model instance of null on errors
 	 */
-	public static ComponentModel getComponentFactoryInstance(InputStream stream, String camelVersion) {
+	public static ComponentModel getFactoryInstance(InputStream stream, CamelModel parent) {
 		try {
 			// create JAXB context and instantiate marshaller
 		    JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, ComponentDependency.class, ComponentProperty.class, UriParameter.class);
 		    Unmarshaller um = context.createUnmarshaller();
 		    ComponentModel model = (ComponentModel) um.unmarshal(new InputSource(stream));
-		    model.setCamelVersion(camelVersion);
+		    model.setModel(parent);
 		    return model;
 		} catch (JAXBException ex) {
 			Activator.getLogger().error(ex);

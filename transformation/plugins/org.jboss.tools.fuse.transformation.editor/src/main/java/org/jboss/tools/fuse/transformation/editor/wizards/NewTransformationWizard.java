@@ -53,7 +53,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.connectors.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.camel.CamelEndpoint;

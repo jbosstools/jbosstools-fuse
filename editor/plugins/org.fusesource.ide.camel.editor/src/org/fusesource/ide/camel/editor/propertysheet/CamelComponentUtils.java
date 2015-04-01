@@ -36,12 +36,12 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.model.connectors.Component;
-import org.fusesource.ide.camel.model.connectors.ComponentDependency;
-import org.fusesource.ide.camel.model.connectors.ComponentModel;
-import org.fusesource.ide.camel.model.connectors.ComponentModelFactory;
-import org.fusesource.ide.camel.model.connectors.ComponentProperty;
-import org.fusesource.ide.camel.model.connectors.UriParameter;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.components.Component;
+import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.components.ComponentModel;
+import org.fusesource.ide.camel.model.catalog.components.ComponentProperty;
+import org.fusesource.ide.camel.model.catalog.components.UriParameter;
 import org.fusesource.ide.commons.util.JsonHelper;
 import org.jboss.dmr.ModelNode;
 
@@ -159,7 +159,7 @@ public final class CamelComponentUtils {
     protected static String getComponentClass(String scheme) {
         String compClass = null;
         
-        ArrayList<Component> components = ComponentModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion()).getSupportedComponents();
+        ArrayList<Component> components = CamelModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion()).getComponentModel().getSupportedComponents();
         for (Component c : components) {
             if (c.supportsScheme(scheme)) {
                 compClass = c.getClazz();
@@ -203,7 +203,7 @@ public final class CamelComponentUtils {
         Component resModel = null;
 
         // 1. take what we have in our model xml
-        resModel = ComponentModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion()).getComponentForScheme(scheme);
+        resModel = CamelModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion()).getComponentModel().getComponentForScheme(scheme);
         
         // 2. try to generate the model from json blob
         if (resModel == null) resModel = buildModelFromJSON(scheme, clazz);

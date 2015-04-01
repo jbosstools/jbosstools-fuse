@@ -19,7 +19,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.connectors.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
 
 
 public class CreateEndpointFigureFeature extends CreateFigureFeature<Endpoint> {

@@ -25,7 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.editor.RiderEditor;
-import org.fusesource.ide.camel.model.connectors.ComponentModelFactory;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
 import org.fusesource.ide.commons.ui.UIHelper;
@@ -170,7 +170,7 @@ public class Activator extends ImagesActivatorSupport {
 	public synchronized String getCamelVersion() {
 	    if (this.camelVersion == null) {
 	        // TODO: read the set camel version from project settings in future
-	        this.camelVersion = ComponentModelFactory.getSupportedCamelVersions().get(0);
+	        this.camelVersion = CamelModelFactory.getSupportedCamelVersions().get(0);
 	    }
 	    return this.camelVersion;
 	}

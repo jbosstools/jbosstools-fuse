@@ -33,7 +33,7 @@ import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider.CATEGORY_TYPE;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.connectors.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 

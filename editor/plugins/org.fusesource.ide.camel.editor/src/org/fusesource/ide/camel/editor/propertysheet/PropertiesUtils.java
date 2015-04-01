@@ -27,9 +27,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.corext.util.JavaConventionsUtil;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.connectors.Component;
-import org.fusesource.ide.camel.model.connectors.UriParameter;
-import org.fusesource.ide.camel.model.connectors.UriParameterKind;
+import org.fusesource.ide.camel.model.catalog.components.Component;
+import org.fusesource.ide.camel.model.catalog.components.UriParameter;
+import org.fusesource.ide.camel.model.catalog.components.UriParameterKind;
 
 /**
  * @author lhein

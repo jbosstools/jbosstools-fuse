@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.model.connectors;
+package org.fusesource.ide.camel.model.catalog.components;
 
 import java.util.ArrayList;
 

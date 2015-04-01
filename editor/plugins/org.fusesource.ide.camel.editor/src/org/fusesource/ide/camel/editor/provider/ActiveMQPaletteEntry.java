@@ -21,7 +21,7 @@ import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureF
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.connectors.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
 
 /**
  * @author lhein

@@ -15,7 +15,7 @@ import java.util.List;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.tb.IImageDecorator;
-import org.fusesource.ide.camel.model.connectors.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
 
 /**
  * @author lhein

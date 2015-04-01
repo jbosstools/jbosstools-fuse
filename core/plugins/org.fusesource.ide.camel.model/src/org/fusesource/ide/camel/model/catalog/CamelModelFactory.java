@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 Red Hat, Inc.
+ * Copyright (c) 2015 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -8,9 +8,9 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.model.connectors;
 
-import java.io.IOException;
+package org.fusesource.ide.camel.model.catalog;
+
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -21,28 +21,25 @@ import org.fusesource.ide.camel.model.Activator;
 
 /**
  * @author lhein
+ *
  */
-public class ComponentModelFactory {
-
-	private static HashMap<String, ComponentModel> supportedCamelModels;
+public class CamelModelFactory {
+	
+	private static HashMap<String, CamelModel> supportedCamelModels;
 	
 	/**
 	 * initializes all available models for the connectors group of the camel editor palette
 	 */
 	public static void initializeModels() {
-		supportedCamelModels = new HashMap<String, ComponentModel>();
-		Enumeration<URL> models = Activator.getDefault().getBundle().findEntries("components", "components-*.xml", false);
+		supportedCamelModels = new HashMap<String, CamelModel>();
+		Enumeration<URL> models = Activator.getDefault().getBundle().findEntries("catalogs", "*", false);
 		while (models.hasMoreElements()) {
 			URL model = models.nextElement();
-			String fileName = model.getFile();
-			String version = fileName.substring(fileName.indexOf("-")+1, fileName.indexOf(".xml"));
-			try {
-				ComponentModel m = ComponentModel.getComponentFactoryInstance(model.openStream(), version);
-				supportedCamelModels.put(version, m);				
-			} catch (IOException ex) {
-				Activator.getLogger().error(ex);
-				continue;
-			}
+			String version = model.getFile();
+			version = version.substring(version.indexOf("catalogs/") + "catalogs/".length());
+			if (version.endsWith("/")) version = version.substring(0, version.length()-1);
+			CamelModel m = new CamelModel(version);
+			supportedCamelModels.put(version, m);				
 		}	
 	}
 	
@@ -64,7 +61,7 @@ public class ComponentModelFactory {
 	 * @param camelVersion
 	 * @return
 	 */
-	public static ComponentModel getModelForVersion(String camelVersion) {
+	public static CamelModel getModelForVersion(String camelVersion) {
 		return supportedCamelModels.get(camelVersion);
 	}
 }

@@ -67,9 +67,9 @@ import org.fusesource.ide.camel.editor.validation.ValidationFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationResult;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Flow;
-import org.fusesource.ide.camel.model.connectors.Component;
-import org.fusesource.ide.camel.model.connectors.ComponentModel;
-import org.fusesource.ide.camel.model.connectors.ComponentModelFactory;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.components.Component;
+import org.fusesource.ide.camel.model.catalog.components.ComponentModel;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
@@ -480,7 +480,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
         
         // inject palette entries generated out of the component model file
-        ComponentModel componentModel = ComponentModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion());
+        ComponentModel componentModel = CamelModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion()).getComponentModel();
         for (Component component : componentModel.getSupportedComponents()) {
             if (shouldBeIgnored(component.getSchemeTitle())) continue;
             ICreateFeature cf = new CreateConnectorFigureFeature(getFeatureProvider(), component);

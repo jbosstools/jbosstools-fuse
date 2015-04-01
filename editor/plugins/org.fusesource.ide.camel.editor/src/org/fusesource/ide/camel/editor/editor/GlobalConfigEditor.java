@@ -326,7 +326,7 @@ public class GlobalConfigEditor extends EditorPart {
 				}
 				
 				// we add all data formats
-//				childElements.addAll(rc.getModel().getDataFormats().values());
+				childElements.addAll(rc.getModel().getContextElement().getDataFormats().getDataFormats());
 			}
 			return childElements.toArray();
 		}

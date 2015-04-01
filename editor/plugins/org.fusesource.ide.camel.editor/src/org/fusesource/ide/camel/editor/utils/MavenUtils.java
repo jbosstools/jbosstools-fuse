@@ -31,7 +31,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
-import org.fusesource.ide.camel.model.connectors.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
 
 /**
  * @author lhein

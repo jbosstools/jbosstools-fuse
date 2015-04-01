@@ -17,7 +17,7 @@ import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.ConnectorEndpoint;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.connectors.Component;
+import org.fusesource.ide.camel.model.catalog.components.Component;
 import org.fusesource.ide.commons.util.Strings;
 
 /**

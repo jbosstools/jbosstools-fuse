@@ -1102,6 +1102,7 @@
           <xs:element maxOccurs="unbounded" minOccurs="0" ref="tns:propertiesFunction"/>
         </xs:sequence>
         <xs:attribute name="location" type="xs:string" use="required"/>
+        <xs:attribute name="encoding" type="xs:string"/>
         <xs:attribute name="cache" type="xs:boolean"/>
         <xs:attribute name="ignoreMissingLocation" type="xs:boolean"/>
         <xs:attribute name="propertiesResolverRef" type="xs:string"/>
@@ -2796,6 +2797,7 @@
         <xs:attribute name="logHandled" type="xs:string"/>
         <xs:attribute name="logContinued" type="xs:string"/>
         <xs:attribute name="logExhausted" type="xs:string"/>
+        <xs:attribute name="logExhaustedMessageHistory" type="xs:string"/>
         <xs:attribute name="disableRedelivery" type="xs:string"/>
         <xs:attribute name="delayPattern" type="xs:string"/>
         <xs:attribute name="allowRedeliveryWhileStopping" type="xs:string"/>
@@ -4188,6 +4190,11 @@
         <xs:attribute name="ignoreInvalidEndpoints" type="xs:boolean">
           <xs:annotation>
             <xs:documentation xml:lang="en">Ignore the invalidate endpoint exception when try to create a producer with that endpoint</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="cacheSize" type="xs:int">
+          <xs:annotation>
+            <xs:documentation xml:lang="en">Sets the maximum size used by the org.apache.camel.impl.ProducerCache which is used to cache and reuse producers when using this recipient list when uris are reused.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:anyAttribute namespace="##other" processContents="skip"/>
@@ -6081,8 +6088,8 @@
 
   <xs:simpleType name="shutdownRoute">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Default"/>
       <xs:enumeration value="Defer"/>
+      <xs:enumeration value="Default"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -6095,83 +6102,83 @@
 
   <xs:simpleType name="errorHandlerType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="DefaultErrorHandler"/>
       <xs:enumeration value="DeadLetterChannel"/>
       <xs:enumeration value="NoErrorHandler"/>
+      <xs:enumeration value="DefaultErrorHandler"/>
       <xs:enumeration value="LoggingErrorHandler"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="loggingLevel">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="INFO"/>
+      <xs:enumeration value="WARN"/>
       <xs:enumeration value="DEBUG"/>
       <xs:enumeration value="TRACE"/>
-      <xs:enumeration value="INFO"/>
-      <xs:enumeration value="OFF"/>
-      <xs:enumeration value="WARN"/>
       <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="OFF"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="threadPoolRejectedPolicy">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="CallerRuns"/>
       <xs:enumeration value="Abort"/>
       <xs:enumeration value="Discard"/>
       <xs:enumeration value="DiscardOldest"/>
-      <xs:enumeration value="CallerRuns"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="exchangePattern">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="RobustInOnly"/>
       <xs:enumeration value="RobustOutOnly"/>
       <xs:enumeration value="InOut"/>
-      <xs:enumeration value="OutOptionalIn"/>
-      <xs:enumeration value="InOptionalOut"/>
       <xs:enumeration value="InOnly"/>
-      <xs:enumeration value="OutOnly"/>
-      <xs:enumeration value="RobustInOnly"/>
       <xs:enumeration value="OutIn"/>
+      <xs:enumeration value="InOptionalOut"/>
+      <xs:enumeration value="OutOptionalIn"/>
+      <xs:enumeration value="OutOnly"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="bindyType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="KeyValue"/>
       <xs:enumeration value="Fixed"/>
       <xs:enumeration value="Csv"/>
+      <xs:enumeration value="KeyValue"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="jsonLibrary">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="XStream"/>
       <xs:enumeration value="Gson"/>
       <xs:enumeration value="Jackson"/>
-      <xs:enumeration value="XStream"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="onCompletionMode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="BeforeConsumer"/>
       <xs:enumeration value="AfterConsumer"/>
+      <xs:enumeration value="BeforeConsumer"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="restHostNameResolver">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="localHostName"/>
       <xs:enumeration value="localIp"/>
+      <xs:enumeration value="localHostName"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="restBindingMode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="off"/>
-      <xs:enumeration value="auto"/>
       <xs:enumeration value="json"/>
       <xs:enumeration value="xml"/>
+      <xs:enumeration value="off"/>
       <xs:enumeration value="json_xml"/>
+      <xs:enumeration value="auto"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

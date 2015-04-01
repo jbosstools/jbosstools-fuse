@@ -31,7 +31,7 @@ import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.ConnectorEndpoint;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.connectors.Component;
+import org.fusesource.ide.camel.model.catalog.components.Component;
 
 
 /**
