@@ -74,7 +74,6 @@ import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizar
  * @author brianf
  *
  */
-@SuppressWarnings("restriction")
 public class OtherPage extends XformWizardPage implements TransformationTypePage {
 
     final DataBindingContext context = new DataBindingContext(
@@ -246,15 +245,15 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 SWT.LEFT);
 
     }
-    
+
     public void initialize() {
-        
+
         // Bind id widget to UI model
         IObservableValue widgetValue = ViewerProperties.singleSelection().observe(_dataFormatIdCombo);
         IObservableValue modelValue = null;
-        
+
         WritableList dfList = new WritableList();
-        List<DataFormatDefinition> dataFormats = 
+        List<DataFormatDefinition> dataFormats =
                 getModel().camelConfig.getConfigBuilder().getDataFormats();
         for (Iterator<DataFormatDefinition> iterator = dataFormats.iterator(); iterator.hasNext();) {
             DataFormatDefinition df = iterator.next();

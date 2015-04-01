@@ -329,13 +329,7 @@ public final class MappingDetailViewer extends MappingViewer {
      */
     public void update(final MappingOperation<?, ?> mapping) {
         this.mapping = mapping;
-        if (sourceDropTarget != null) {
-            sourceDropTarget.dispose();
-            targetDropTarget.dispose();
-            // TODO find these
-//            dropTargetValidatorByControl.remove(sourceText);
-//            dropTargetValidatorByControl.remove(targetText);
-        }
+        if (sourceDropTarget != null) dispose();
         final Composite contentPane = new Composite(scroller, SWT.NONE);
         scroller.setContent(contentPane);
         contentPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());

@@ -195,9 +195,7 @@ public class MappingsViewer extends Composite {
         final MappingSummary mappingSummary =
             new MappingSummary(config, mapping, this, potentialDropTargets);
         mappingSummaries.add(mappingSummary);
-        sourcePane.layout();
-        mapsToPane.layout();
-        targetPane.layout();
+        layoutPanes();
         scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scroller.setOrigin(0, scroller.getSize().y);
         mappingSummary.sourceText.setFocus(); // This will call selected()
@@ -228,6 +226,12 @@ public class MappingsViewer extends Composite {
         else mappingSummary.targetText.setFocus();
     }
 
+    void layoutPanes() {
+        sourcePane.layout();
+        mapsToPane.layout();
+        targetPane.layout();
+    }
+
     /**
      * Called by {@link MappingSummary#dispose(MappingOperation)}
      *
@@ -239,6 +243,7 @@ public class MappingsViewer extends Composite {
             selectedMappingSummary = null;
             deleteButton.setEnabled(false);
         }
+        layoutPanes();
         scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
     }
 

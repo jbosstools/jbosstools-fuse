@@ -9,6 +9,7 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -53,13 +54,13 @@ abstract class MappingViewer {
         sourceDropTarget.addDropListener(new DropListener(sourceText) {
 
             @Override
-            void drop() throws Exception {
-                dropOnSource();
+            boolean draggingFromValidObject() {
+                return Util.draggingFromValidSource(config);
             }
 
             @Override
-            boolean draggingFromValidObject() {
-                return Util.draggingFromValidSource(config);
+            void drop() throws Exception {
+                dropOnSource();
             }
         });
         potentialDropTargets.add(new PotentialDropTarget(sourceText) {
@@ -80,13 +81,13 @@ abstract class MappingViewer {
         targetDropTarget.addDropListener(new DropListener(targetText) {
 
             @Override
-            void drop() throws Exception {
-                dropOnTarget();
+            boolean draggingFromValidObject() {
+                return Util.draggingFromValidTarget(config);
             }
 
             @Override
-            boolean draggingFromValidObject() {
-                return Util.draggingFromValidTarget(config);
+            void drop() throws Exception {
+                dropOnTarget();
             }
         });
         potentialDropTargets.add(new PotentialDropTarget(targetText) {
@@ -103,6 +104,17 @@ abstract class MappingViewer {
         final Text text = new Text(parent, SWT.BORDER);
         text.setEditable(false);
         return text;
+    }
+
+    void dispose() {
+        sourceDropTarget.dispose();
+        targetDropTarget.dispose();
+        for (final Iterator<PotentialDropTarget> iter = potentialDropTargets.iterator();
+             iter.hasNext();) {
+               final PotentialDropTarget potentialDropTarget = iter.next();
+               if (potentialDropTarget.control == sourceText
+                   || potentialDropTarget.control == targetText) iter.remove();
+        }
     }
 
     void dropOnSource() throws Exception {
@@ -134,7 +146,7 @@ abstract class MappingViewer {
                          final Object object) {
         text.setText(name(object));
         if (object instanceof Model) {
-            Model model = (Model)object;
+            final Model model = (Model)object;
             text.setToolTipText(config.fullyQualifiedName(model));
             if (mapping.getType() == MappingType.CUSTOM && text == sourceText)
                 text.setBackground(Colors.FUNCTION);
@@ -182,6 +194,8 @@ abstract class MappingViewer {
             dropText.setForeground(foreground);
         }
 
+        abstract void drop() throws Exception;
+
         @Override
         public final void drop(final DropTargetEvent event) {
             try {
@@ -190,7 +204,5 @@ abstract class MappingViewer {
                 Activator.error(e);
             }
         }
-
-        abstract void drop() throws Exception;
     }
 }

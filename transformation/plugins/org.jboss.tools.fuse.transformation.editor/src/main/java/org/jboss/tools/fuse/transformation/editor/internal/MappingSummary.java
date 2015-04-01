@@ -180,8 +180,6 @@ final class MappingSummary extends MappingViewer {
         mappingSourcePane.dispose();
         mapsToPane.dispose();
         mappingTargetPane.dispose();
-        sourceDropTarget.dispose();
-        targetDropTarget.dispose();
         if (sourceTraversalListener.prevTraversalListener != null) {
             sourceTraversalListener.prevTraversalListener.nextText =
                 targetTraversalListener.nextText;
@@ -195,9 +193,7 @@ final class MappingSummary extends MappingViewer {
                 sourceTraversalListener.prevTraversalListener;
         }
         mappingsViewer.removeMappingSummary(this);
-        // TODO find these
-//        potentialDropTargets.remove(sourceText);
-//        potentialDropTargets.remove(targetText);
+        dispose();
     }
 
     void selected(final Text text) {
