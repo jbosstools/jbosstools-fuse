@@ -37,8 +37,8 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.Dependency;
 import org.fusesource.ide.camel.model.catalog.components.Component;
-import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
 import org.fusesource.ide.camel.model.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.catalog.components.ComponentProperty;
 import org.fusesource.ide.camel.model.catalog.components.UriParameter;
@@ -243,7 +243,7 @@ public final class CamelComponentUtils {
     private static void saveModel(Component component) {
         try {
             // create JAXB context and instantiate marshaller
-        	JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, ComponentDependency.class, ComponentProperty.class, UriParameter.class);
+        	JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, Dependency.class, ComponentProperty.class, UriParameter.class);
 		    Marshaller m = context.createMarshaller();
             m.marshal(component, new File("/var/tmp/model.xml"));
         } catch (Exception ex) {

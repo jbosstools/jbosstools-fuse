@@ -17,6 +17,9 @@ import java.util.Enumeration;
 
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.catalog.components.ComponentModel;
+import org.fusesource.ide.camel.model.catalog.dataformats.DataFormatModel;
+import org.fusesource.ide.camel.model.catalog.eips.EipModel;
+import org.fusesource.ide.camel.model.catalog.languages.LanguageModel;
 
 /**
  * @author lhein
@@ -26,7 +29,9 @@ public class CamelModel {
 	private String camelVersion;
 	
 	private ComponentModel componentModel;
-	
+	private DataFormatModel dataformatModel;
+	private EipModel eipModel;
+	private LanguageModel languageModel;
 	
 	/**
 	 * creates a model skeleton for the given camel version
@@ -54,6 +59,30 @@ public class CamelModel {
 	}
 	
 	/**
+	 * @return the dataformatModel
+	 */
+	public DataFormatModel getDataformatModel() {
+		if (this.dataformatModel == null) initialize();
+		return this.dataformatModel;
+	}
+	
+	/**
+	 * @return the eipModel
+	 */
+	public EipModel getEipModel() {
+		if (this.eipModel == null) initialize();
+		return this.eipModel;
+	}
+	
+	/**
+	 * @return the languageModel
+	 */
+	public LanguageModel getLanguageModel() {
+		if (this.languageModel == null) initialize();
+		return this.languageModel;
+	}
+	
+	/**
 	 * initializes the model
 	 */
 	private synchronized void initialize() {
@@ -62,18 +91,17 @@ public class CamelModel {
 			URL model = models.nextElement();
 			String fileName = model.getFile();
 			try {
-				if (fileName.endsWith("components.xml")) {
+				if (fileName.endsWith("/components.xml")) {
 					this.componentModel = ComponentModel.getFactoryInstance(model.openStream(), this);
-				} else if (fileName.endsWith("dataformats.xml")) {
-					System.err.println("No model for dataformats yet...");
-//					this.dataformatModel = DataFormatModel.getFactoryInstance(model.openStream(), this);
-				} else if (fileName.endsWith("languages.xml")) {
-					System.err.println("No model for languages yet...");
-//					this.languageModel = LanguagesModel.getFactoryInstance(model.openStream(), this);
-				} else if (fileName.endsWith("eips.xml")) {
-					System.err.println("No model for eips yet...");
-//					this.eipModel = EIPModel.getFactoryInstance(model.openStream(), this);
-				} 
+				} else if (fileName.endsWith("/dataformats.xml")) {
+					this.dataformatModel = DataFormatModel.getFactoryInstance(model.openStream(), this);
+				} else if (fileName.endsWith("/languages.xml")) {
+					this.languageModel = LanguageModel.getFactoryInstance(model.openStream(), this);
+				} else if (fileName.endsWith("/eips.xml")) {
+					this.eipModel = EipModel.getFactoryInstance(model.openStream(), this);
+				} else {
+					Activator.getLogger().debug("Unknown catalog model file: " + fileName);
+				}
 			} catch (IOException ex) {
 				Activator.getLogger().error(ex);
 				continue;

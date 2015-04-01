@@ -19,12 +19,12 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.Dependency;
 
 
 public class CreateEndpointFigureFeature extends CreateFigureFeature<Endpoint> {
 	private final Endpoint endpoint;
-	private List<ComponentDependency> deps;
+	private List<Dependency> deps;
 
 	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint) {
 		this(fp, name, description, endpoint, null);
@@ -38,7 +38,7 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature<Endpoint> {
 	 * @param endpoint
 	 * @param deps	optional dependencies...if not applicable hand over null or empty list
 	 */
-	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint, List<ComponentDependency> deps) {
+	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint, List<Dependency> deps) {
 		super(fp, name, description, Endpoint.class);
 		this.endpoint = endpoint;
 		this.deps = deps;

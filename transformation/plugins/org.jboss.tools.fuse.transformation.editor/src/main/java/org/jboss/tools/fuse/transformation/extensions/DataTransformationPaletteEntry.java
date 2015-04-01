@@ -33,7 +33,7 @@ import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider.CATEGORY_TYPE;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 
@@ -92,9 +92,9 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
      * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getRequiredCapabilities(java.lang.Object)
      */
     @Override
-    public List<ComponentDependency> getRequiredCapabilities(Object object) {
-        List<ComponentDependency> deps = new ArrayList<>();
-        ComponentDependency dep = new ComponentDependency();
+    public List<Dependency> getRequiredCapabilities(Object object) {
+        List<Dependency> deps = new ArrayList<>();
+        Dependency dep = new Dependency();
         dep.setGroupId("org.apache.camel");
         dep.setArtifactId("camel-dozer");
         dep.setVersion(Activator.getDefault().getCamelVersion());

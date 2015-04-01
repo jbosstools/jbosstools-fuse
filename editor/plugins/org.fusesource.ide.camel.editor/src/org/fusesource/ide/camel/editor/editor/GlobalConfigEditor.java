@@ -400,7 +400,7 @@ public class GlobalConfigEditor extends EditorPart {
 				DataFormatDefinition value = (DataFormatDefinition) element;			
 				text.append(value.getId());
 				cell.setImage(getIconForElement(value));
-				text.append(" (DataFormat)", StyledString.COUNTER_STYLER);
+				text.append(" (Eip)", StyledString.COUNTER_STYLER);
 				cell.setText(text.toString());
 				cell.setStyleRanges(text.getStyleRanges());
 			}

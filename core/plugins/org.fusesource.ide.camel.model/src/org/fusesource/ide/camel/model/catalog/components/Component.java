@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.fusesource.ide.camel.model.catalog.Dependency;
+
 /**
  * @author lhein
  */
@@ -31,7 +33,7 @@ public class Component {
 	private String consumerOnly;
 	private String producerOnly;
 	private String scheme;
-	private ArrayList<ComponentDependency> dependencies;
+	private ArrayList<Dependency> dependencies;
 	private ArrayList<String> tags;
 	private ArrayList<ComponentProperty> componentProperties;
 	private ArrayList<UriParameter> uriParameters;
@@ -225,14 +227,14 @@ public class Component {
 	 */
 	@XmlElementWrapper(name = "dependencies")
 	@XmlElement(name = "dependency")
-	public ArrayList<ComponentDependency> getDependencies() {
+	public ArrayList<Dependency> getDependencies() {
 		return this.dependencies;
 	}
 	
 	/**
 	 * @param dependency the dependency to set
 	 */
-	public void setDependencies(ArrayList<ComponentDependency> dependencies) {
+	public void setDependencies(ArrayList<Dependency> dependencies) {
 		this.dependencies = dependencies;
 	}
 	

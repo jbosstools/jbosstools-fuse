@@ -11,37 +11,21 @@
 
 package org.fusesource.ide.camel.editor.features.create.ext;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateFeature;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.Dependency;
 
 
 /**
@@ -188,7 +172,7 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
      * checks if we need to add a maven dependency for the chosen component
      * and inserts it into the pom.xml if needed
      */
-    public void updateMavenDependencies(List<ComponentDependency> compDeps) throws CoreException {
+    public void updateMavenDependencies(List<Dependency> compDeps) throws CoreException {
     	MavenUtils.updateMavenDependencies(compDeps);
     }
 }

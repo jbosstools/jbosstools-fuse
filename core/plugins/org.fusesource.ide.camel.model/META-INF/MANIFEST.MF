@@ -12,6 +12,9 @@ Export-Package: org.fusesource.ide.camel.model;
    org.eclipse.draw2d.geometry",
  org.fusesource.ide.camel.model.catalog,
  org.fusesource.ide.camel.model.catalog.components,
+ org.fusesource.ide.camel.model.catalog.dataformats,
+ org.fusesource.ide.camel.model.catalog.eips,
+ org.fusesource.ide.camel.model.catalog.languages,
  org.fusesource.ide.camel.model.generated;uses:="org.eclipse.osgi.util,org.fusesource.ide.camel.model",
  org.fusesource.ide.camel.model.io,
  org.fusesource.ide.camel.model.util

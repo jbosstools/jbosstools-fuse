@@ -53,7 +53,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.Dependency;
 import org.jboss.mapper.MapperConfiguration;
 import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.mapper.camel.CamelEndpoint;
@@ -537,8 +537,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
     }
 
-    private ComponentDependency createDependency(String groupId, String artifactId, String version) {
-        ComponentDependency dep = new ComponentDependency();
+    private Dependency createDependency(String groupId, String artifactId, String version) {
+        Dependency dep = new Dependency();
         dep.setGroupId(groupId);
         dep.setArtifactId(artifactId);
         dep.setVersion(version);
@@ -546,9 +546,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     }
 
     private void addCamelDozerDependency() {
-        ComponentDependency dep = createDependency("org.apache.camel", "camel-dozer",
+        Dependency dep = createDependency("org.apache.camel", "camel-dozer",
                 org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion());
-        List<ComponentDependency> deps = new ArrayList<>();
+        List<Dependency> deps = new ArrayList<>();
         deps.add(dep);
         try {
             MavenUtils.updateMavenDependencies(deps);
@@ -558,7 +558,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     }
 
     private void addDataFormatDefinitionDependency(DataFormatDefinition dataFormat) {
-        ComponentDependency dep = null;
+        Dependency dep = null;
 
         if (dataFormat != null) {
             if (dataFormat.getDataFormatName().equalsIgnoreCase("json-jackson")) {
@@ -569,7 +569,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         .getDefault().getCamelVersion());
             }
             if (dep != null) {
-                List<ComponentDependency> deps = new ArrayList<>();
+                List<Dependency> deps = new ArrayList<>();
                 deps.add(dep);
                 try {
                     MavenUtils.updateMavenDependencies(deps);

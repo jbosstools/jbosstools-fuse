@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="libs/camel-blueprint-2.15.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-core-2.15.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-spring-2.15.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-blueprint-2.15.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-core-2.15.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-spring-2.15.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/spring-beans-4.1.5.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/spring-context-4.1.5.RELEASE.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/spring-core-4.1.5.RELEASE.jar"/>

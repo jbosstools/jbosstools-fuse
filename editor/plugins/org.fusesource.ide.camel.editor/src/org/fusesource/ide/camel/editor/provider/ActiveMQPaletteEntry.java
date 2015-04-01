@@ -21,7 +21,7 @@ import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureF
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
+import org.fusesource.ide.camel.model.catalog.Dependency;
 
 /**
  * @author lhein
@@ -72,14 +72,14 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
      * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#getRequiredCapabilities(java.lang.Object)
      */
     @Override
-    public List<ComponentDependency> getRequiredCapabilities(Object object) {
-        List<ComponentDependency> deps = new ArrayList<ComponentDependency>();
-        ComponentDependency dep = new ComponentDependency();
+    public List<Dependency> getRequiredCapabilities(Object object) {
+        List<Dependency> deps = new ArrayList<Dependency>();
+        Dependency dep = new Dependency();
         dep.setGroupId("org.apache.activemq");
         dep.setArtifactId("activemq-camel");
         dep.setVersion("5.10.0");
         deps.add(dep);
-        dep = new ComponentDependency();
+        dep = new Dependency();
         dep.setGroupId("org.apache.camel");
         dep.setArtifactId("camel-jms");
         dep.setVersion(Activator.getDefault().getCamelVersion());

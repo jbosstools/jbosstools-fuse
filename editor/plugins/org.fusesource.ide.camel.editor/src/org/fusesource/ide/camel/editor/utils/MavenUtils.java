@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
-import org.fusesource.ide.camel.model.catalog.components.ComponentDependency;
 
 /**
  * @author lhein
@@ -43,7 +42,7 @@ public class MavenUtils {
      * checks if we need to add a maven dependency for the chosen component
      * and inserts it into the pom.xml if needed
      */
-    public static void updateMavenDependencies(List<ComponentDependency> compDeps) throws CoreException {
+    public static void updateMavenDependencies(List<org.fusesource.ide.camel.model.catalog.Dependency> compDeps) throws CoreException {
         RiderDesignEditor editor = Activator.getDiagramEditor();
         if (editor == null) {
             Activator.getLogger().error("Unable to add component dependencies because Editor instance can't be determined.");
@@ -62,9 +61,9 @@ public class MavenUtils {
         final Model model = MavenPlugin.getMaven().readModel(pomFile);
 
         // then check if component dependency is already a dep
-        ArrayList<ComponentDependency> missingDeps = new ArrayList<ComponentDependency>();
+        ArrayList<org.fusesource.ide.camel.model.catalog.Dependency> missingDeps = new ArrayList<org.fusesource.ide.camel.model.catalog.Dependency>();
         List<Dependency> deps = model.getDependencies();
-        for (ComponentDependency conDep : compDeps) {
+        for (org.fusesource.ide.camel.model.catalog.Dependency conDep : compDeps) {
             boolean found = false;
             for (Dependency pomDep : deps) {
                 if (pomDep.getGroupId().equalsIgnoreCase(conDep.getGroupId()) &&
@@ -83,7 +82,7 @@ public class MavenUtils {
             }
         }
 
-        for (ComponentDependency missDep : missingDeps) {
+        for (org.fusesource.ide.camel.model.catalog.Dependency missDep : missingDeps) {
             Dependency dep = new Dependency();
             dep.setGroupId(missDep.getGroupId());
             dep.setArtifactId(missDep.getArtifactId());

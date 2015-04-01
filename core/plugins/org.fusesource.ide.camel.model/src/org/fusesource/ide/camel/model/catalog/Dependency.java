@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.model.catalog.components;
+package org.fusesource.ide.camel.model.catalog;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lhein
  */
 @XmlRootElement(name = "dependency")
-public class ComponentDependency {
+public class Dependency {
 	private String groupId;
 	private String artifactId;
 	private String version;
