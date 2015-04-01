@@ -146,9 +146,9 @@ public class GlobalConfigEditor extends EditorPart {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				Object selObj = Selections.getFirstSelection(event.getSelection());
-				if (selObj != null && isSupportedObjectType(selObj)) {
-					btnModify.setEnabled(true);
-					btnDelete.setEnabled(true);
+				if (selObj != null) {
+					btnModify.setEnabled(supportsEdit(selObj));
+					btnDelete.setEnabled(supportsDelete(selObj));
 				} else {
 					btnModify.setEnabled(false);
 					btnDelete.setEnabled(false);
@@ -214,6 +214,7 @@ public class GlobalConfigEditor extends EditorPart {
 		});
 
 		this.treeViewer.setInput(this.parentEditor.getModel());
+		this.treeViewer.setSelection(this.treeViewer.getSelection());
 	}
 
 	/*
@@ -255,11 +256,12 @@ public class GlobalConfigEditor extends EditorPart {
 			IStructuredSelection sel = (IStructuredSelection)this.treeViewer.getSelection();
 			for (Object selObj : sel.toList()) {
 				if (selObj instanceof BeanDef) {
-					this.parentEditor.getModel().getModel().beanMap().remove(((BeanDef)selObj).getId());				
+//					this.parentEditor.getModel().getModel().beanMap().remove(((BeanDef)selObj).getId());				
 				} else if (selObj instanceof Endpoint) {
-//					this.parentEditor.getModel().getModel().removeContextEndpoint(((Endpoint)selObj).getId());				
+					String id = ((Endpoint)selObj).getId();				
+					this.parentEditor.getModel().removeEndpoint(id);
 				} else if (selObj instanceof DataFormatDefinition) {
-//					this.parentEditor.getModel().getModel().removeDataFormat(((DataFormatDefinition)selObj).getId());				
+					this.parentEditor.getModel().removeDataFormat(((DataFormatDefinition)selObj).getId());				
 				} else {
 					continue;
 				}
@@ -273,6 +275,14 @@ public class GlobalConfigEditor extends EditorPart {
 		return  element instanceof BeanDef ||
 				element instanceof Endpoint ||
 				element instanceof DataFormatDefinition;
+	}
+	
+	private boolean supportsEdit(Object element) {
+		return isSupportedObjectType(element) && element instanceof BeanDef == false;
+	}
+
+	private boolean supportsDelete(Object element) {
+		return isSupportedObjectType(element) && element instanceof BeanDef == false;
 	}
 
 	class GlobalConfigContentProvider implements ITreeContentProvider {
@@ -326,7 +336,10 @@ public class GlobalConfigEditor extends EditorPart {
 				}
 				
 				// we add all data formats
-				childElements.addAll(rc.getModel().getContextElement().getDataFormats().getDataFormats());
+				if (rc.getModel().getContextElement().getDataFormats() != null && 
+					rc.getModel().getContextElement().getDataFormats().getDataFormats() != null) {
+					childElements.addAll(rc.getModel().getContextElement().getDataFormats().getDataFormats());	
+				}
 			}
 			return childElements.toArray();
 		}

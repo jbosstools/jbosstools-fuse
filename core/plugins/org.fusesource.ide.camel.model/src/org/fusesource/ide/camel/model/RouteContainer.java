@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.camel.model;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -19,16 +20,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
+import org.apache.camel.model.dataformat.DataFormatsDefinition;
+import org.apache.camel.spring.CamelContextFactoryBean;
+import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
 import org.fusesource.ide.commons.camel.tools.ValidationHandler;
 import org.fusesource.ide.commons.camel.tools.XmlModel;
 import org.fusesource.ide.commons.util.Objects;
-
-
 
 /**
  * @author lhein
@@ -365,6 +368,108 @@ public class RouteContainer extends AbstractNode {
 		this.model = model;
 	}
 
+	/**
+	 * adds a data format definition to the context
+	 * 
+	 * @param def
+	 */
+	public void addDataFormat(DataFormatDefinition def) {
+		DataFormatsDefinition dfd = getModel().getContextElement().getDataFormats();
+		if (dfd == null) {
+			dfd = new DataFormatsDefinition();
+		}
+		List<DataFormatDefinition> defs = dfd.getDataFormats();
+		if (defs == null) {
+			defs = new ArrayList<DataFormatDefinition>();
+		}
+		defs.add(def);
+		dfd.setDataFormats(defs);
+		getModel().getContextElement().setDataFormats(dfd);
+	}
+	
+	/**
+	 * removes a data format definition from the context
+	 * 
+	 * @param id
+	 */
+	public void removeDataFormat(String id) {
+		DataFormatDefinition defDelete = null;
+		DataFormatsDefinition dfd = getModel().getContextElement().getDataFormats();
+		if (dfd != null) {
+			for (DataFormatDefinition d : dfd.getDataFormats()) {
+				if (d.getId().equals(id)) {
+					defDelete = d;
+					break;
+				}
+			}
+			if (defDelete != null) {
+				List<DataFormatDefinition> ld = dfd.getDataFormats();
+				ld.remove(defDelete);
+				dfd.setDataFormats(ld);
+				getModel().getContextElement().setDataFormats(dfd);				
+			}
+		}
+	}
+	
+	/**
+	 * adds an endpoint to the context 
+	 * 
+	 * @param ep
+	 */
+	public void addEndpoint(org.fusesource.ide.camel.model.Endpoint ep) {
+		List<CamelEndpointFactoryBean> eps = getModel().getContextElement().getEndpoints();
+		if (eps == null) {
+			eps = new ArrayList<CamelEndpointFactoryBean>();
+		}
+		CamelEndpointFactoryBean newEP = new CamelEndpointFactoryBean();
+		newEP.setId(ep.getId());
+		newEP.setUri(ep.getUri());
+		eps.add(newEP);
+		setEndpoints(getModel().getContextElement(), eps);
+	}
+	
+	/**
+	 * removes an endpoint from the context
+	 * 
+	 * @param id
+	 */
+	public void removeEndpoint(String id) {
+		CamelEndpointFactoryBean deleteObj = null;
+		List<CamelEndpointFactoryBean> eps = getModel().getContextElement().getEndpoints();
+		if (eps != null) {
+			for (CamelEndpointFactoryBean b : eps) {
+				if (b.getId().equals(id)) {
+					deleteObj = b;
+					break;
+				}
+			}
+			if (deleteObj != null) {
+				eps.remove(deleteObj);
+				setEndpoints(getModel().getContextElement(), eps);
+			}
+		}
+	}
+	
+	/**
+     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
+     * endpoints on CamelContextFactoryBean directly. Use reflection for now
+     * until this issue is resolved upstream.
+     *
+     * @param context
+     * @param endpoints
+     */
+    void setEndpoints(CamelContextFactoryBean context,
+            List<CamelEndpointFactoryBean> endpoints) {
+        try {
+            Field endpointsField = context.getClass().getDeclaredField("endpoints");
+            endpointsField.setAccessible(true);
+            endpointsField.set(context, endpoints);
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+            Activator.getLogger().error(ex);
+        }
+    }
+	
 	public ValidationHandler validate() throws Exception {
 		if (model != null) {
 			return model.validate();
