@@ -34,6 +34,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.fusesource.ide.buildtools.Downloader.ComponentModel.ComponentParam;
 import org.fusesource.ide.buildtools.Downloader.ComponentModel.UriParam;
+import org.fusesource.ide.buildtools.Downloader.DataFormatModel.DataFormatProperty;
+import org.fusesource.ide.buildtools.Downloader.EIPModel.EIPProperty;
+import org.fusesource.ide.buildtools.Downloader.LanguageModel.LanguageProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -236,7 +239,8 @@ public class Downloader {
         
         CamelCatalog cat = new DefaultCamelCatalog();
         ObjectMapper mapper = new ObjectMapper();
-        
+
+        // build component model
         HashMap<String, ComponentModel> knownComponents = new HashMap<String, ComponentModel>();
         List<String> components = cat.findComponentNames();
         
@@ -263,51 +267,106 @@ public class Downloader {
             c.getComponent().setScheme(model.getComponent().getScheme());                        
             knownComponents.put(id, c);
         }
+        
+        // build data format model
+        HashMap<String, DataFormatModel> knownDataFormats = new HashMap<String, DataFormatModel>();
+        List<String> dataformatNames = cat.findDataFormatNames();
 
+        for (String dfName : dataformatNames) {
+        	String json = cat.dataFormatJSonSchema(dfName);
+        	
+        	DataFormatModel model = mapper.readValue(json, DataFormatModel.class);
+        	
+        	String id = model.getDataformat().getName();
+        	DataFormatModel c = knownDataFormats.get(id);
+            if (c == null) {
+                c = model;
+            } 
+            c.getDataformat().setName(model.getDataformat().getName());                        
+            knownDataFormats.put(id, c);
+        }
+
+        // build language model
+        HashMap<String, LanguageModel> knownLanguages = new HashMap<String, LanguageModel>();
+        List<String> languageNames = cat.findLanguageNames();
+
+        for (String langName : languageNames) {
+        	String json = cat.languageJSonSchema(langName);
+        	
+        	LanguageModel model = mapper.readValue(json, LanguageModel.class);
+        	
+        	String id = model.getLanguage().getName();
+        	LanguageModel c = knownLanguages.get(id);
+            if (c == null) {
+                c = model;
+            } 
+            c.getLanguage().setName(model.getLanguage().getName());                        
+            knownLanguages.put(id, c);
+        }
+
+        // build eip model
+        HashMap<String, EIPModel> knownEIPs = new HashMap<String, EIPModel>();
+        List<String> eipNames = cat.findModelNames();
+
+        for (String eipName : eipNames) {
+        	String json = cat.modelJSonSchema(eipName);
+        	
+        	EIPModel model = mapper.readValue(json, EIPModel.class);
+        	
+        	String id = model.getEip().getName();
+        	EIPModel c = knownEIPs.get(id);
+            if (c == null) {
+                c = model;
+            } 
+            c.getEip().setName(model.getEip().getName());                        
+            knownEIPs.put(id, c);
+        }
+        
         PrintWriter out = new PrintWriter(new FileWriter(outputFile));
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        out.println("<components>");
+        out.println("<model>");
+        out.println("   <components>");
         
         Collection<ComponentModel> comps = knownComponents.values();
         for (ComponentModel compModel : comps) {
         	ComponentModel.Component comp = compModel.getComponent();
 
-        	out.println("   <component>");
-            out.println("      <id>" + comp.getId() + "</id>");
-            out.println("      <tags>");
+        	out.println("      <component>");
+            out.println("         <id>" + comp.getId() + "</id>");
+            out.println("         <tags>");
             String[] tags = comp.getLabel().split(",");
             for (String tag : tags) {
-            	out.println("         <tag>" + tag + "</tag>");
+            	out.println("            <tag>" + tag + "</tag>");
             }
-            out.println("      </tags>");
-            if (comp.getTitle() != null) out.println("      <title>" + comp.getTitle() + "</title>");
-            out.println("      <description>" + comp.getDescription() + "</description>");
-            out.println("      <syntax>" + comp.getSyntax() + "</syntax>");
-            out.println("      <class>" + comp.getJavaType() + "</class>");
-            out.println("      <kind>" + comp.getKind() + "</kind>");
-            if (comp.getConsumerOnly() != null) out.println("      <consumerOnly>" + comp.consumerOnly + "</consumerOnly>");
-            if (comp.getProducerOnly() != null) out.println("      <producerOnly>" + comp.getProducerOnly() + "</producerOnly>");
-            out.println("      <scheme>" + comp.getScheme() + "</scheme>");
-            out.println("      <dependencies>");
-            out.println("         <dependency>");
-            out.println(String.format("            <groupId>%s</groupId>", comp.getGroupId()));
-            out.println(String.format("            <artifactId>%s</artifactId>", comp.getArtifactId()));
-            out.println(String.format("            <version>%s</version>", comp.getVersion()));
-            out.println("         </dependency>");
-            out.println("      </dependencies>");
+            out.println("         </tags>");
+            if (comp.getTitle() != null) out.println("         <title>" + comp.getTitle() + "</title>");
+            out.println("         <description>" + comp.getDescription() + "</description>");
+            out.println("         <syntax>" + comp.getSyntax() + "</syntax>");
+            out.println("         <class>" + comp.getJavaType() + "</class>");
+            out.println("         <kind>" + comp.getKind() + "</kind>");
+            if (comp.getConsumerOnly() != null) out.println("         <consumerOnly>" + comp.consumerOnly + "</consumerOnly>");
+            if (comp.getProducerOnly() != null) out.println("         <producerOnly>" + comp.getProducerOnly() + "</producerOnly>");
+            out.println("         <scheme>" + comp.getScheme() + "</scheme>");
+            out.println("         <dependencies>");
+            out.println("            <dependency>");
+            out.println(String.format("               <groupId>%s</groupId>", comp.getGroupId()));
+            out.println(String.format("               <artifactId>%s</artifactId>", comp.getArtifactId()));
+            out.println(String.format("               <version>%s</version>", comp.getVersion()));
+            out.println("            </dependency>");
+            out.println("         </dependencies>");
 
-            out.println("      <componentProperties>");
+            out.println("         <componentProperties>");
             for (ComponentParam p : compModel.getComponentParams()) {
-                out.print("         <componentProperty name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                out.print("            <componentProperty name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
                 if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
                 if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
                 out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
             }           
-            out.println("      </componentProperties>");   
+            out.println("         </componentProperties>");   
             
-            out.println("      <uriParameters>");
+            out.println("         <uriParameters>");
             for (UriParam p : compModel.getUriParams()) {
-                out.print("         <uriParameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                out.print("            <uriParameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
                 if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
                 if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
                 if (p.getDefaultValue() != null) { 
@@ -329,10 +388,171 @@ public class Downloader {
                 if (p.getLabel() != null) out.print("label=\"" + p.getLabel() + "\" ");
                 out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
             }           
-            out.println("      </uriParameters>");            
-            out.println("   </component>");
+            out.println("         </uriParameters>");            
+            out.println("      </component>");
         }
-        out.println("</components>");
+        out.println("   </components>");
+        
+        out.println("   <dataformats>");
+        
+        Collection<DataFormatModel> dataformats = knownDataFormats.values();
+        for (DataFormatModel dfModel : dataformats) {
+        	DataFormatModel.DataFormat df = dfModel.getDataformat();
+
+        	out.println("      <dataformat>");
+            out.println("         <name>" + df.getName() + "</name>");
+            out.println("         <tags>");
+            String[] tags = df.getLabel().split(",");
+            for (String tag : tags) {
+            	out.println("            <tag>" + tag + "</tag>");
+            }
+            out.println("         </tags>");
+            out.println("         <description>" + df.getDescription() + "</description>");
+            out.println("         <class>" + df.getJavaType() + "</class>");
+            out.println("         <kind>" + df.getKind() + "</kind>");
+            out.println("         <modelJavaType>" + df.getModelJavaType() + "</modelJavaType>");
+            out.println("         <modelName>" + df.getModelName() + "</modelName>");
+            out.println("         <dependencies>");
+            out.println("            <dependency>");
+            out.println(String.format("               <groupId>%s</groupId>", df.getGroupId()));
+            out.println(String.format("               <artifactId>%s</artifactId>", df.getArtifactId()));
+            out.println(String.format("               <version>%s</version>", df.getVersion()));
+            out.println("            </dependency>");
+            out.println("         </dependencies>");
+
+            out.println("         <parameters>");
+            for (DataFormatProperty p : dfModel.getParams()) {
+                out.print("            <parameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
+                if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
+                if (p.getDefaultValue() != null) { 
+                	out.print("defaultValue=\"" + p.getDefaultValue() + "\" ");
+                } else {
+                	if (p.getJavaType().equalsIgnoreCase("java.lang.boolean") || 
+                		p.getJavaType().equalsIgnoreCase("boolean")) {
+                		out.print("defaultValue=\"false\" ");  // default for booleans is FALSE
+                	} else if (p.getJavaType().equalsIgnoreCase("byte") || 
+                			p.getJavaType().equalsIgnoreCase("short") ||
+                			p.getJavaType().equalsIgnoreCase("int") ||
+                			p.getJavaType().equalsIgnoreCase("long") ||
+                			p.getJavaType().equalsIgnoreCase("float") || 
+                			p.getJavaType().equalsIgnoreCase("double") ) {
+                		out.print("defaultValue=\"0\" ");  // default for numbers is 0
+                	}
+                }
+                if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
+                out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
+            }           
+            out.println("         </parameters>");            
+            out.println("      </dataformat>");
+        }
+        out.println("   </dataformats>");
+        
+        out.println("   <languages>");
+        
+        Collection<LanguageModel> languages = knownLanguages.values();
+        for (LanguageModel langModel : languages) {
+        	LanguageModel.Language lang = langModel.getLanguage();
+
+        	out.println("      <language>");
+            out.println("         <name>" + lang.getName() + "</name>");
+            out.println("         <tags>");
+            String[] tags = lang.getLabel().split(",");
+            for (String tag : tags) {
+            	out.println("            <tag>" + tag + "</tag>");
+            }
+            out.println("         </tags>");
+            out.println("         <description>" + lang.getDescription() + "</description>");
+            out.println("         <class>" + lang.getJavaType() + "</class>");
+            out.println("         <kind>" + lang.getKind() + "</kind>");
+            out.println("         <modelJavaType>" + lang.getModelJavaType() + "</modelJavaType>");
+            out.println("         <dependencies>");
+            out.println("            <dependency>");
+            out.println(String.format("               <groupId>%s</groupId>", lang.getGroupId()));
+            out.println(String.format("               <artifactId>%s</artifactId>", lang.getArtifactId()));
+            out.println(String.format("               <version>%s</version>", lang.getVersion()));
+            out.println("            </dependency>");
+            out.println("         </dependencies>");
+
+            out.println("         <parameters>");
+            for (LanguageProperty p : langModel.getParams()) {
+                out.print("            <parameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
+                if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
+                if (p.getDefaultValue() != null) { 
+                	out.print("defaultValue=\"" + p.getDefaultValue() + "\" ");
+                } else {
+                	if (p.getJavaType().equalsIgnoreCase("java.lang.boolean") || 
+                		p.getJavaType().equalsIgnoreCase("boolean")) {
+                		out.print("defaultValue=\"false\" ");  // default for booleans is FALSE
+                	} else if (p.getJavaType().equalsIgnoreCase("byte") || 
+                			p.getJavaType().equalsIgnoreCase("short") ||
+                			p.getJavaType().equalsIgnoreCase("int") ||
+                			p.getJavaType().equalsIgnoreCase("long") ||
+                			p.getJavaType().equalsIgnoreCase("float") || 
+                			p.getJavaType().equalsIgnoreCase("double") ) {
+                		out.print("defaultValue=\"0\" ");  // default for numbers is 0
+                	}
+                }
+                if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
+                out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
+            }           
+            out.println("         </parameters>");            
+            out.println("      </language>");
+        }
+        out.println("   </languages>");
+        
+        out.println("   <eips>");
+        
+        Collection<EIPModel> eips = knownEIPs.values();
+        for (EIPModel eipModel : eips) {
+        	EIPModel.EIP eip = eipModel.getEip();
+
+        	out.println("      <eip>");
+            out.println("         <name>" + eip.getName() + "</name>");
+            out.println("         <tags>");
+            String[] tags = eip.getLabel().split(",");
+            for (String tag : tags) {
+            	out.println("            <tag>" + tag + "</tag>");
+            }
+            out.println("         </tags>");
+            out.println("         <title>" + eip.getTitle() + "</title>");
+            out.println("         <description>" + eip.getDescription() + "</description>");
+            out.println("         <class>" + eip.getJavaType() + "</class>");
+            out.println("         <kind>" + eip.getKind() + "</kind>");
+            out.println("         <input>" + eip.getInput() + "</input>");
+            out.println("         <output>" + eip.getOutput() + "</output>");
+            
+            out.println("         <parameters>");
+            for (EIPProperty p : eipModel.getParams()) {
+                out.print("            <parameter name=\"" + p.getName() + "\" type=\"" + p.getType() + "\" javaType=\"" + p.getJavaType() + "\" kind=\"" + p.getKind() + "\" ");
+                if (p.getOneOfString() != null) out.print("oneOf=\"" + p.getOneOfString() + "\" ");
+                if (p.getChoiceString() != null) out.print("choice=\"" + p.getChoiceString() + "\" ");
+                if (p.getDeprecated() != null) out.print("deprecated=\"" + p.getDeprecated() + "\" ");
+                if (p.getDefaultValue() != null) { 
+                	out.print("defaultValue=\"" + p.getDefaultValue() + "\" ");
+                } else {
+                	if (p.getJavaType().equalsIgnoreCase("java.lang.boolean") || 
+                		p.getJavaType().equalsIgnoreCase("boolean")) {
+                		out.print("defaultValue=\"false\" ");  // default for booleans is FALSE
+                	} else if (p.getJavaType().equalsIgnoreCase("byte") || 
+                			p.getJavaType().equalsIgnoreCase("short") ||
+                			p.getJavaType().equalsIgnoreCase("int") ||
+                			p.getJavaType().equalsIgnoreCase("long") ||
+                			p.getJavaType().equalsIgnoreCase("float") || 
+                			p.getJavaType().equalsIgnoreCase("double") ) {
+                		out.print("defaultValue=\"0\" ");  // default for numbers is 0
+                	}
+                }
+                if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
+                out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
+            }           
+            out.println("         </parameters>");            
+            out.println("      </eip>");
+        }
+        out.println("   </eips>");
+        
+        out.println("</model>");
         out.close();
     }
 
@@ -789,6 +1009,7 @@ public class Downloader {
              */
             public void setDefaultValue(String defaultValue) {
                 this.defaultValue = defaultValue;
+                this.defaultValue = this.defaultValue.replace("\"", "&quot;");
             }
             
             /**
@@ -979,6 +1200,1080 @@ public class Downloader {
 				ComponentParam p = mapper.convertValue(componentProperties.get(paramName), ComponentParam.class);
 				p.setName(paramName);
 				componentParams.add(p);
+			}
+		}
+    }
+    
+    public static class DataFormatModel {
+    	
+    	public static class DataFormat {
+    		private String name;
+    	    private String kind;
+    	    private String modelName;
+    	    private String description;
+    	    private String label;
+    	    private String javaType;
+    	    private String modelJavaType;
+    	    private String groupId;
+    	    private String artifactId;
+    	    private String version;
+    	    
+    	    /**
+			 * @return the artifactId
+			 */
+			public String getArtifactId() {
+				return this.artifactId;
+			}
+			
+			/**
+			 * @return the description
+			 */
+			public String getDescription() {
+				return this.description;
+			}
+			
+			/**
+			 * @return the groupId
+			 */
+			public String getGroupId() {
+				return this.groupId;
+			}
+			
+			/**
+			 * @return the javaType
+			 */
+			public String getJavaType() {
+				return this.javaType;
+			}
+			
+			/**
+			 * @return the kind
+			 */
+			public String getKind() {
+				return this.kind;
+			}
+			
+			/**
+			 * @return the label
+			 */
+			public String getLabel() {
+				return this.label;
+			}
+			
+			/**
+			 * @return the modelJavaType
+			 */
+			public String getModelJavaType() {
+				return this.modelJavaType;
+			}
+			
+			/**
+			 * @return the modelName
+			 */
+			public String getModelName() {
+				return this.modelName;
+			}
+			
+			/**
+			 * @return the name
+			 */
+			public String getName() {
+				return this.name;
+			}
+			
+			/**
+			 * @return the version
+			 */
+			public String getVersion() {
+				return this.version;
+			}
+			
+			/**
+			 * @param artifactId the artifactId to set
+			 */
+			public void setArtifactId(String artifactId) {
+				this.artifactId = artifactId;
+			}
+			
+			/**
+			 * @param description the description to set
+			 */
+			public void setDescription(String description) {
+				this.description = description;
+			}
+			
+			/**
+			 * @param groupId the groupId to set
+			 */
+			public void setGroupId(String groupId) {
+				this.groupId = groupId;
+			}
+			
+			/**
+			 * @param javaType the javaType to set
+			 */
+			public void setJavaType(String javaType) {
+				this.javaType = javaType;
+				this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
+			}
+			
+			/**
+			 * @param kind the kind to set
+			 */
+			public void setKind(String kind) {
+				this.kind = kind;
+			}
+			
+			/**
+			 * @param label the label to set
+			 */
+			public void setLabel(String label) {
+				this.label = label;
+			}
+			/**
+			 * @param modelJavaType the modelJavaType to set
+			 */
+			public void setModelJavaType(String modelJavaType) {
+				this.modelJavaType = modelJavaType;
+			}
+			
+			/**
+			 * @param modelName the modelName to set
+			 */
+			public void setModelName(String modelName) {
+				this.modelName = modelName;
+			}
+			
+			/**
+			 * @param name the name to set
+			 */
+			public void setName(String name) {
+				this.name = name;
+			}
+			
+			/**
+			 * @param version the version to set
+			 */
+			public void setVersion(String version) {
+				this.version = version;
+			}
+    	}
+    	
+    	public static class DataFormatProperty {
+    		private String kind;
+    		private String required;
+    		private String type;
+    		private String javaType;
+    		private String deprecated;
+    		private String description;
+    		private String defaultValue;
+    		private String name;
+    		@JsonProperty("enum")
+        	private String[] choice;
+    		
+    		/**
+			 * @return the choice
+			 */
+			public String[] getChoice() {
+				return this.choice;
+			}
+			
+			/**
+			 * @param choice the choice to set
+			 */
+			public void setChoice(String[] choice) {
+				this.choice = choice;
+			}
+    		
+    		/**
+			 * @return the name
+			 */
+			public String getName() {
+				return this.name;
+			}
+    		
+    		/**
+			 * @return the defaultValue
+			 */
+			public String getDefaultValue() {
+				return this.defaultValue;
+			}
+			
+			/**
+			 * @return the deprecated
+			 */
+			public String getDeprecated() {
+				return this.deprecated;
+			}
+			
+			/**
+			 * @return the description
+			 */
+			public String getDescription() {
+				return this.description;
+			}
+			
+			/**
+			 * @return the javaType
+			 */
+			public String getJavaType() {
+				return this.javaType;
+			}
+			
+			/**
+			 * @return the required
+			 */
+			public String getRequired() {
+				return this.required;
+			}
+			
+			/**
+			 * @return the kind
+			 */
+			public String getKind() {
+				return this.kind;
+			}
+			
+			/**
+			 * @return the type
+			 */
+			public String getType() {
+				return this.type;
+			}
+			
+			/**
+			 * @param name the name to set
+			 */
+			public void setName(String name) {
+				this.name = name;
+			}
+			
+			/**
+			 * @param defaultValue the defaultValue to set
+			 */
+			public void setDefaultValue(String defaultValue) {
+				this.defaultValue = defaultValue;
+				this.defaultValue = this.defaultValue.replace("\"", "&quot;");
+			}
+			
+			/**
+			 * @param deprecated the deprecated to set
+			 */
+			public void setDeprecated(String deprecated) {
+				this.deprecated = deprecated;
+			}
+			
+			/**
+			 * @param description the description to set
+			 */
+			public void setDescription(String description) {
+				this.description = description;
+			}
+			
+			/**
+			 * @param javaType the javaType to set
+			 */
+			public void setJavaType(String javaType) {
+				this.javaType = javaType;
+				this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
+			}
+			
+			/**
+			 * @param kind the kind to set
+			 */
+			public void setKind(String kind) {
+				this.kind = kind;
+			}
+			
+			/**
+			 * @param required the required to set
+			 */
+			public void setRequired(String required) {
+				this.required = required;
+			}
+			
+			/**
+			 * @param type the type to set
+			 */
+			public void setType(String type) {
+				this.type = type;
+			}
+			
+    		public String getChoiceString() {
+    			if (this.choice == null || this.choice.length<1) return null;
+    			String retVal = "";
+    			for (String c : this.choice) {
+    				if (retVal.length()>0) retVal += ","; 
+    				retVal += c;
+    			}
+    			return retVal;
+    		}
+    	}
+    	
+    	private DataFormat dataformat;
+    	private HashMap<String, HashMap> properties;
+    	private ArrayList<DataFormatProperty> params = new ArrayList<Downloader.DataFormatModel.DataFormatProperty>();
+   
+
+    	/**
+		 * @return the dataformat
+		 */
+		public DataFormat getDataformat() {
+			return this.dataformat;
+		}
+		
+		/**
+		 * @param dataformat the dataformat to set
+		 */
+		public void setDataformat(DataFormat dataformat) {
+			this.dataformat = dataformat;
+		}
+    	
+		/**
+		 * @return the properties
+		 */
+		public HashMap<String, HashMap> getProperties() {
+			return this.properties;
+		}
+		
+		/**
+		 * @param properties the properties to set
+		 */
+		public void setProperties(HashMap<String, HashMap> properties) {
+			this.properties = properties;
+			generateParamsModel();
+		}
+		
+		/**
+		 * @return the uriParams
+		 */
+		public ArrayList<DataFormatProperty> getParams() {
+			return this.params;
+		}
+		
+		/**
+		 * used to generate the list of uri params for this component
+		 */
+		private void generateParamsModel() {
+			params.clear();
+			ObjectMapper mapper = new ObjectMapper();
+			Iterator<String> it = properties.keySet().iterator();
+			while (it.hasNext()) {
+				String paramName = it.next();
+				DataFormatProperty p = mapper.convertValue(properties.get(paramName), DataFormatProperty.class);
+				p.setName(paramName);
+				params.add(p);
+			}
+		}
+    }
+    
+    public static class LanguageModel {
+    	
+    	public static class Language {
+    		private String name;
+    	    private String kind;
+    	    private String modelName;
+    	    private String description;
+    	    private String label;
+    	    private String javaType;
+    	    private String modelJavaType;
+    	    private String groupId;
+    	    private String artifactId;
+    	    private String version;
+    	    
+    	    /**
+			 * @return the artifactId
+			 */
+			public String getArtifactId() {
+				return this.artifactId;
+			}
+			
+			/**
+			 * @return the description
+			 */
+			public String getDescription() {
+				return this.description;
+			}
+			
+			/**
+			 * @return the groupId
+			 */
+			public String getGroupId() {
+				return this.groupId;
+			}
+			
+			/**
+			 * @return the javaType
+			 */
+			public String getJavaType() {
+				return this.javaType;
+			}
+			
+			/**
+			 * @return the kind
+			 */
+			public String getKind() {
+				return this.kind;
+			}
+			
+			/**
+			 * @return the label
+			 */
+			public String getLabel() {
+				return this.label;
+			}
+			
+			/**
+			 * @return the modelJavaType
+			 */
+			public String getModelJavaType() {
+				return this.modelJavaType;
+			}
+			
+			/**
+			 * @return the modelName
+			 */
+			public String getModelName() {
+				return this.modelName;
+			}
+			
+			/**
+			 * @return the name
+			 */
+			public String getName() {
+				return this.name;
+			}
+			
+			/**
+			 * @return the version
+			 */
+			public String getVersion() {
+				return this.version;
+			}
+			
+			/**
+			 * @param artifactId the artifactId to set
+			 */
+			public void setArtifactId(String artifactId) {
+				this.artifactId = artifactId;
+			}
+			
+			/**
+			 * @param description the description to set
+			 */
+			public void setDescription(String description) {
+				this.description = description;
+			}
+			
+			/**
+			 * @param groupId the groupId to set
+			 */
+			public void setGroupId(String groupId) {
+				this.groupId = groupId;
+			}
+			
+			/**
+			 * @param javaType the javaType to set
+			 */
+			public void setJavaType(String javaType) {
+				this.javaType = javaType;
+				this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
+			}
+			
+			/**
+			 * @param kind the kind to set
+			 */
+			public void setKind(String kind) {
+				this.kind = kind;
+			}
+			
+			/**
+			 * @param label the label to set
+			 */
+			public void setLabel(String label) {
+				this.label = label;
+			}
+			/**
+			 * @param modelJavaType the modelJavaType to set
+			 */
+			public void setModelJavaType(String modelJavaType) {
+				this.modelJavaType = modelJavaType;
+			}
+			
+			/**
+			 * @param modelName the modelName to set
+			 */
+			public void setModelName(String modelName) {
+				this.modelName = modelName;
+			}
+			
+			/**
+			 * @param name the name to set
+			 */
+			public void setName(String name) {
+				this.name = name;
+			}
+			
+			/**
+			 * @param version the version to set
+			 */
+			public void setVersion(String version) {
+				this.version = version;
+			}
+    	}
+    	
+    	public static class LanguageProperty {
+    		private String kind;
+    		private String required;
+    		private String type;
+    		private String javaType;
+    		private String deprecated;
+    		private String description;
+    		private String defaultValue;
+    		private String name;
+    		@JsonProperty("enum")
+        	private String[] choice;
+    		
+    		/**
+			 * @return the choice
+			 */
+			public String[] getChoice() {
+				return this.choice;
+			}
+			
+			/**
+			 * @param choice the choice to set
+			 */
+			public void setChoice(String[] choice) {
+				this.choice = choice;
+			}
+    		
+    		/**
+			 * @return the name
+			 */
+			public String getName() {
+				return this.name;
+			}
+    		
+    		/**
+			 * @return the defaultValue
+			 */
+			public String getDefaultValue() {
+				return this.defaultValue;
+			}
+			
+			/**
+			 * @return the deprecated
+			 */
+			public String getDeprecated() {
+				return this.deprecated;
+			}
+			
+			/**
+			 * @return the description
+			 */
+			public String getDescription() {
+				return this.description;
+			}
+			
+			/**
+			 * @return the javaType
+			 */
+			public String getJavaType() {
+				return this.javaType;
+			}
+			
+			/**
+			 * @return the required
+			 */
+			public String getRequired() {
+				return this.required;
+			}
+			
+			/**
+			 * @return the kind
+			 */
+			public String getKind() {
+				return this.kind;
+			}
+			
+			/**
+			 * @return the type
+			 */
+			public String getType() {
+				return this.type;
+			}
+			
+			/**
+			 * @param name the name to set
+			 */
+			public void setName(String name) {
+				this.name = name;
+			}
+			
+			/**
+			 * @param defaultValue the defaultValue to set
+			 */
+			public void setDefaultValue(String defaultValue) {
+				this.defaultValue = defaultValue;
+				this.defaultValue = this.defaultValue.replace("\"", "&quot;");
+			}
+			
+			/**
+			 * @param deprecated the deprecated to set
+			 */
+			public void setDeprecated(String deprecated) {
+				this.deprecated = deprecated;
+			}
+			
+			/**
+			 * @param description the description to set
+			 */
+			public void setDescription(String description) {
+				this.description = description;
+			}
+			
+			/**
+			 * @param javaType the javaType to set
+			 */
+			public void setJavaType(String javaType) {
+				this.javaType = javaType;
+				this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
+			}
+			
+			/**
+			 * @param kind the kind to set
+			 */
+			public void setKind(String kind) {
+				this.kind = kind;
+			}
+			
+			/**
+			 * @param required the required to set
+			 */
+			public void setRequired(String required) {
+				this.required = required;
+			}
+			
+			/**
+			 * @param type the type to set
+			 */
+			public void setType(String type) {
+				this.type = type;
+			}
+			
+    		public String getChoiceString() {
+    			if (this.choice == null || this.choice.length<1) return null;
+    			String retVal = "";
+    			for (String c : this.choice) {
+    				if (retVal.length()>0) retVal += ","; 
+    				retVal += c;
+    			}
+    			return retVal;
+    		}
+    	}
+    	
+    	private Language language;
+    	private HashMap<String, HashMap> properties;
+    	private ArrayList<LanguageProperty> params = new ArrayList<Downloader.LanguageModel.LanguageProperty>();
+   
+    	/**
+		 * @return the language
+		 */
+		public Language getLanguage() {
+			return this.language;
+		}
+		
+		/**
+		 * @param language the language to set
+		 */
+		public void setLanguage(Language language) {
+			this.language = language;
+		}
+    	
+		/**
+		 * @return the properties
+		 */
+		public HashMap<String, HashMap> getProperties() {
+			return this.properties;
+		}
+		
+		/**
+		 * @param properties the properties to set
+		 */
+		public void setProperties(HashMap<String, HashMap> properties) {
+			this.properties = properties;
+			generateParamsModel();
+		}
+		
+		/**
+		 * @return the uriParams
+		 */
+		public ArrayList<LanguageProperty> getParams() {
+			return this.params;
+		}
+		
+		/**
+		 * used to generate the list of uri params for this component
+		 */
+		private void generateParamsModel() {
+			params.clear();
+			ObjectMapper mapper = new ObjectMapper();
+			Iterator<String> it = properties.keySet().iterator();
+			while (it.hasNext()) {
+				String paramName = it.next();
+				LanguageProperty p = mapper.convertValue(properties.get(paramName), LanguageProperty.class);
+				p.setName(paramName);
+				params.add(p);
+			}
+		}
+    }
+    
+    public static class EIPModel {
+    	
+    	public static class EIP {
+    		private String kind;
+    		private String name;
+    	    private String title;
+    	    private String description;
+    	    private String javaType;
+    	    private String label;
+    	    private String input;
+    	    private String output;
+			/**
+			 * @return the kind
+			 */
+			public String getKind() {
+				return this.kind;
+			}
+			/**
+			 * @param kind the kind to set
+			 */
+			public void setKind(String kind) {
+				this.kind = kind;
+			}
+			/**
+			 * @return the name
+			 */
+			public String getName() {
+				return this.name;
+			}
+			/**
+			 * @param name the name to set
+			 */
+			public void setName(String name) {
+				this.name = name;
+			}
+			/**
+			 * @return the title
+			 */
+			public String getTitle() {
+				return this.title;
+			}
+			/**
+			 * @param title the title to set
+			 */
+			public void setTitle(String title) {
+				this.title = title;
+			}
+			/**
+			 * @return the description
+			 */
+			public String getDescription() {
+				return this.description;
+			}
+			/**
+			 * @param description the description to set
+			 */
+			public void setDescription(String description) {
+				this.description = description;
+			}
+			/**
+			 * @return the javaType
+			 */
+			public String getJavaType() {
+				return this.javaType;
+			}
+			/**
+			 * @param javaType the javaType to set
+			 */
+			public void setJavaType(String javaType) {
+				this.javaType = javaType;
+				this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
+			}
+			/**
+			 * @return the label
+			 */
+			public String getLabel() {
+				return this.label;
+			}
+			/**
+			 * @param label the label to set
+			 */
+			public void setLabel(String label) {
+				this.label = label;
+			}
+			/**
+			 * @return the input
+			 */
+			public String getInput() {
+				return this.input;
+			}
+			/**
+			 * @param input the input to set
+			 */
+			public void setInput(String input) {
+				this.input = input;
+			}
+			/**
+			 * @return the output
+			 */
+			public String getOutput() {
+				return this.output;
+			}
+			/**
+			 * @param output the output to set
+			 */
+			public void setOutput(String output) {
+				this.output = output;
+			}
+    	}
+    	
+    	public static class EIPProperty {
+    		private String kind;
+    		private String required;
+    		private String type;
+    		private String javaType;
+    		private String deprecated;
+    		private String description;
+    		private String defaultValue;
+    		private String name;
+    		private String[] oneOf;
+    		@JsonProperty("enum")
+        	private String[] choice;
+    		
+    		/**
+			 * @return the oneOf
+			 */
+			public String[] getOneOf() {
+				return this.oneOf;
+			}
+			
+			/**
+			 * @param oneOf the oneOf to set
+			 */
+			public void setOneOf(String[] oneOf) {
+				this.oneOf = oneOf;
+			}
+    		
+    		/**
+			 * @return the choice
+			 */
+			public String[] getChoice() {
+				return this.choice;
+			}
+			
+			/**
+			 * @param choice the choice to set
+			 */
+			public void setChoice(String[] choice) {
+				this.choice = choice;
+			}
+    		
+    		/**
+			 * @return the name
+			 */
+			public String getName() {
+				return this.name;
+			}
+    		
+    		/**
+			 * @return the defaultValue
+			 */
+			public String getDefaultValue() {
+				return this.defaultValue;
+			}
+			
+			/**
+			 * @return the deprecated
+			 */
+			public String getDeprecated() {
+				return this.deprecated;
+			}
+			
+			/**
+			 * @return the description
+			 */
+			public String getDescription() {
+				return this.description;
+			}
+			
+			/**
+			 * @return the javaType
+			 */
+			public String getJavaType() {
+				return this.javaType;
+			}
+			
+			/**
+			 * @return the required
+			 */
+			public String getRequired() {
+				return this.required;
+			}
+			
+			/**
+			 * @return the kind
+			 */
+			public String getKind() {
+				return this.kind;
+			}
+			
+			/**
+			 * @return the type
+			 */
+			public String getType() {
+				return this.type;
+			}
+			
+			/**
+			 * @param name the name to set
+			 */
+			public void setName(String name) {
+				this.name = name;
+			}
+			
+			/**
+			 * @param defaultValue the defaultValue to set
+			 */
+			public void setDefaultValue(String defaultValue) {
+				this.defaultValue = defaultValue;
+				this.defaultValue = this.defaultValue.replace("\"", "&quot;");
+			}
+			
+			/**
+			 * @param deprecated the deprecated to set
+			 */
+			public void setDeprecated(String deprecated) {
+				this.deprecated = deprecated;
+			}
+			
+			/**
+			 * @param description the description to set
+			 */
+			public void setDescription(String description) {
+				this.description = description;
+			}
+			
+			/**
+			 * @param javaType the javaType to set
+			 */
+			public void setJavaType(String javaType) {
+				this.javaType = javaType;
+				this.javaType = this.javaType.replaceAll("<", "&lt;");
+    			this.javaType = this.javaType.replaceAll(">", "&gt;");
+			}
+			
+			/**
+			 * @param kind the kind to set
+			 */
+			public void setKind(String kind) {
+				this.kind = kind;
+			}
+			
+			/**
+			 * @param required the required to set
+			 */
+			public void setRequired(String required) {
+				this.required = required;
+			}
+			
+			/**
+			 * @param type the type to set
+			 */
+			public void setType(String type) {
+				this.type = type;
+			}
+			
+    		public String getChoiceString() {
+    			if (this.choice == null || this.choice.length<1) return null;
+    			String retVal = "";
+    			for (String c : this.choice) {
+    				if (retVal.length()>0) retVal += ","; 
+    				retVal += c;
+    			}
+    			return retVal;
+    		}
+    		
+    		public String getOneOfString() {
+    			if (this.oneOf == null || this.oneOf.length<1) return null;
+    			String retVal = "";
+    			for (String c : this.oneOf) {
+    				if (retVal.length()>0) retVal += ","; 
+    				retVal += c;
+    			}
+    			return retVal;
+    		}
+    	}
+    	
+    	@JsonProperty("model")
+    	private EIP eip;
+    	private HashMap<String, HashMap> properties;
+    	private ArrayList<EIPProperty> params = new ArrayList<Downloader.EIPModel.EIPProperty>();
+   
+    	/**
+		 * @return the eip
+		 */
+		public EIP getEip() {
+			return this.eip;
+		}
+		
+		/**
+		 * @param eip the eip to set
+		 */
+		public void setEip(EIP eip) {
+			this.eip = eip;
+		}
+    	
+		/**
+		 * @return the properties
+		 */
+		public HashMap<String, HashMap> getProperties() {
+			return this.properties;
+		}
+		
+		/**
+		 * @param properties the properties to set
+		 */
+		public void setProperties(HashMap<String, HashMap> properties) {
+			this.properties = properties;
+			generateParamsModel();
+		}
+		
+		/**
+		 * @return the uriParams
+		 */
+		public ArrayList<EIPProperty> getParams() {
+			return this.params;
+		}
+		
+		/**
+		 * used to generate the list of uri params for this component
+		 */
+		private void generateParamsModel() {
+			params.clear();
+			ObjectMapper mapper = new ObjectMapper();
+			Iterator<String> it = properties.keySet().iterator();
+			while (it.hasNext()) {
+				String paramName = it.next();
+				EIPProperty p = mapper.convertValue(properties.get(paramName), EIPProperty.class);
+				p.setName(paramName);
+				params.add(p);
 			}
 		}
     }
