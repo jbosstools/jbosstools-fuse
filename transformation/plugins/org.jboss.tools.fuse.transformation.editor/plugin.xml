@@ -6,6 +6,7 @@
       <wizard
             class="org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard"
             icon="icons/transform16.png"
+            category="org.fusesource.ide.newwizards"
             id="org.jboss.tools.fuse.transformation.editor.data-mapping-wizard"
             name="%new-wizard.name">
          <description>
@@ -18,6 +19,7 @@
       <wizard
             class="org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationTestWizard"
             icon="icons/transform16.png"
+            category="org.fusesource.ide.newwizards"
             id="org.jboss.tools.fuse.transformation.editor.transformationtest.new"
             name="%new-test-wizard.name">
          <description>
