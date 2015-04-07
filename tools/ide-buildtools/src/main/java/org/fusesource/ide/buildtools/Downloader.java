@@ -95,6 +95,10 @@ public class Downloader {
         ignoredArtifacts.add("camel-archetype-scala");
         ignoredArtifacts.add("camel-web-osgi-archetype");
         ignoredArtifacts.add("camel-archetype-groovy");
+        ignoredArtifacts.add("camel-archetype-api-component");
+        ignoredArtifacts.add("camel-archetype-component");
+        ignoredArtifacts.add("camel-archetype-dataformat");
+        ignoredArtifacts.add("camel-archetype-scr");
     }
 
     public static void main(String[] args) {
