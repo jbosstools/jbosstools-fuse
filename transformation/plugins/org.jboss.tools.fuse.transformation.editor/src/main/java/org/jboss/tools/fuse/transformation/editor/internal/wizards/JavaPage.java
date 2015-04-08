@@ -37,7 +37,6 @@ import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -107,15 +106,20 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
             }
         });
 
-        WizardPageSupport.create(this, context);
-        setErrorMessage(null);
+        WizardPageSupport wps = WizardPageSupport.create(this, context);
+        wps.setValidationMessageProvider(new WizardValidationMessageProvider());
+        setErrorMessage(null); // clear any error messages at first 
+        setMessage(null); // now that we're using info messages, we must reset this too
 
     }
 
     private void createPage(Composite parent) {
         _page = new Composite(parent, SWT.NONE);
-        _page.setLayout(GridLayoutFactory.swtDefaults().spacing(0, 5).numColumns(3).create());
         setControl(_page);
+        GridLayout layout = new GridLayout(3, false);
+        layout.marginRight = 5;
+        layout.horizontalSpacing = 10;
+        _page.setLayout(layout);
 
         // Create file path widgets
         Label label;
@@ -219,7 +223,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.TOP | SWT.LEFT);
+                decoratorPosition, _javaClassText.getParent(), new WizardControlDecorationUpdater());
     }
 
     @Override
