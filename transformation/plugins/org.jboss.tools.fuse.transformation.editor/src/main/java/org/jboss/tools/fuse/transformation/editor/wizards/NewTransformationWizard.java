@@ -81,6 +81,7 @@ import com.sun.codemodel.JPackage;
  * @author brianf
  *
  */
+@SuppressWarnings("restriction")
 public class NewTransformationWizard extends Wizard implements INewWizard {
 
     private static final String JAVA_PATH = Util.MAIN_PATH + "java/";

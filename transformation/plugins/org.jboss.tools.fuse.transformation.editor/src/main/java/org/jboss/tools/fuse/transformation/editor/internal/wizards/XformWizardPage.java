@@ -32,6 +32,9 @@ public abstract class XformWizardPage extends WizardPage {
             SWTObservables.getRealm(Display.getCurrent()));
     final ObservablesManager observablesManager = new ObservablesManager();
     final Model model;
+    
+    protected int decoratorPosition = SWT.TOP; //SWT.TOP | SWT.LEFT;
+
 
     protected XformWizardPage(String pageName, final Model model) {
         super(pageName);
@@ -60,6 +63,7 @@ public abstract class XformWizardPage extends WizardPage {
     @Override
     public void createControl(Composite parent) {
         // empty
+        setErrorMessage(null);
     }
 
     @Override

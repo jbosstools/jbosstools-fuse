@@ -36,7 +36,6 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -109,7 +108,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.TOP | SWT.LEFT);
+                decoratorPosition, _jsonFileText.getParent(), new WizardControlDecorationUpdater());
     }
 
     @Override
@@ -129,14 +128,20 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             }
         });
 
-        WizardPageSupport.create(this, context);
-        setErrorMessage(null);
+        WizardPageSupport wps = WizardPageSupport.create(this, context);
+        wps.setValidationMessageProvider(new WizardValidationMessageProvider());
+        setErrorMessage(null); // clear any error messages at first 
+        setMessage(null); // now that we're using info messages, we must reset this too
     }
 
     private void createPage(final Composite parent) {
         _page = new Composite(parent, SWT.NONE);
         setControl(_page);
-        _page.setLayout(GridLayoutFactory.swtDefaults().spacing(0, 5).numColumns(3).create());
+
+        GridLayout layout = new GridLayout(3, false);
+        layout.marginRight = 5;
+        layout.horizontalSpacing = 10;
+        _page.setLayout(layout);
 
         final Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group.setText("JSON Type Definition");

@@ -34,7 +34,6 @@ import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -93,14 +92,19 @@ public class StartPage extends XformWizardPage {
             }
         });
 
-        WizardPageSupport.create(this, context);
-        setErrorMessage(null);
+        WizardPageSupport wps = WizardPageSupport.create(this, context);
+        wps.setValidationMessageProvider(new WizardValidationMessageProvider());
+        setErrorMessage(null); // clear any error messages at first 
+        setMessage(null); // now that we're using info messages, we must reset this too
     }
     
     private void createPage(Composite parent) {
         _page = new Composite(parent, SWT.NONE);
         setControl(_page);
-        _page.setLayout(GridLayoutFactory.swtDefaults().spacing(0, 5).numColumns(3).create());
+        GridLayout layout = new GridLayout(3, false);
+        layout.marginRight = 5;
+        layout.horizontalSpacing = 10;
+        _page.setLayout(layout);
 
         // Create project widgets
         Label label = createLabel(_page, "Project:", "The project to contain the mapping file.");
@@ -218,6 +222,12 @@ public class StartPage extends XformWizardPage {
         }
         _projectCombo.setInput(Properties.selfList(IProject.class).observe(model.projects));
 
+        if (model.getProject() == null) {
+            _projectCombo.getCombo().setFocus();
+        } else {
+            _idText.setFocus();
+        }
+
         // Set focus to appropriate control
         _page.addPaintListener(new PaintListener() {
 
@@ -280,7 +290,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.LEFT | SWT.TOP);
+                decoratorPosition, _projectCombo.getControl().getParent(), new WizardControlDecorationUpdater());
 
         // Bind transformation ID widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_idText);
@@ -316,7 +326,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.LEFT | SWT.TOP);
+                decoratorPosition, _idText.getParent(), new WizardControlDecorationUpdater());
 
         // Bind file path widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_dozerPathText);
@@ -341,7 +351,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.LEFT | SWT.TOP);
+                decoratorPosition, null, new WizardControlDecorationUpdater());
 
         // Bind camel file path widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_camelFilePathText);
@@ -378,7 +388,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.LEFT | SWT.TOP);
+                decoratorPosition, null, new WizardControlDecorationUpdater());
         
         // bind the source type string dropdown
         _sourceCV.setContentProvider(new ObservableListContentProvider());
@@ -398,7 +408,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.LEFT | SWT.TOP);
+                decoratorPosition, null, new WizardControlDecorationUpdater());
         
         WritableList sourceList = new WritableList();
         sourceList.add("Java");
@@ -425,7 +435,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                SWT.LEFT | SWT.TOP);
+                decoratorPosition, null, new WizardControlDecorationUpdater());
 
         WritableList targetList = new WritableList();
         targetList.add("Java");
