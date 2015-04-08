@@ -37,8 +37,10 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Intercept extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Intercept.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "Intercept.InheritErrorHandler";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
 
     public Intercept() {
@@ -66,6 +68,24 @@ public class Intercept extends AbstractNode {
     }
 
     /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
+    }
+
+    /**
      * @return the inheritErrorHandler
      */
     public Boolean getInheritErrorHandler() {
@@ -87,8 +107,10 @@ public class Intercept extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelInterceptCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelInterceptInheritErrorHandler);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
     }
 
@@ -97,6 +119,10 @@ public class Intercept extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -109,6 +135,9 @@ public class Intercept extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -120,6 +149,7 @@ public class Intercept extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         InterceptDefinition answer = new InterceptDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
 
         super.savePropertiesToCamelDefinition(answer);
@@ -140,6 +170,7 @@ public class Intercept extends AbstractNode {
         if (processor instanceof InterceptDefinition) {
             InterceptDefinition node = (InterceptDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof InterceptDefinition. Was " + processor.getClass().getName());

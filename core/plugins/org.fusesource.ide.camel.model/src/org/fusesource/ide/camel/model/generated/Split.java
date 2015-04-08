@@ -37,6 +37,7 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Split extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Split.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "Split.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "Split.Expression";
     public static final String PROPERTY_PARALLELPROCESSING = "Split.ParallelProcessing";
@@ -49,7 +50,9 @@ public class Split extends AbstractNode {
     public static final String PROPERTY_TIMEOUT = "Split.Timeout";
     public static final String PROPERTY_ONPREPAREREF = "Split.OnPrepareRef";
     public static final String PROPERTY_SHAREUNITOFWORK = "Split.ShareUnitOfWork";
+    public static final String PROPERTY_PARALLELAGGREGATE = "Split.ParallelAggregate";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private Boolean parallelProcessing;
@@ -62,6 +65,7 @@ public class Split extends AbstractNode {
     private Long timeout;
     private String onPrepareRef;
     private Boolean shareUnitOfWork;
+    private Boolean parallelAggregate;
 
     public Split() {
     }
@@ -85,6 +89,24 @@ public class Split extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -303,10 +325,29 @@ public class Split extends AbstractNode {
         }
     }
 
+    /**
+     * @return the parallelAggregate
+     */
+    public Boolean getParallelAggregate() {
+        return this.parallelAggregate;
+    }
+
+    /**
+     * @param parallelAggregate the parallelAggregate to set
+     */
+    public void setParallelAggregate(Boolean parallelAggregate) {
+        Boolean oldValue = this.parallelAggregate;
+        this.parallelAggregate = parallelAggregate;
+        if (!isSame(oldValue, parallelAggregate)) {
+            firePropertyChange(PROPERTY_PARALLELAGGREGATE, oldValue, parallelAggregate);
+        }
+    }
+
     @Override
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelSplitCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSplitInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelSplitExpression);
         PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelSplitParallelProcessing);
@@ -319,7 +360,9 @@ public class Split extends AbstractNode {
         PropertyDescriptor descTimeout = new TextPropertyDescriptor(PROPERTY_TIMEOUT, Messages.propertyLabelSplitTimeout);
         PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelSplitOnPrepareRef);
         PropertyDescriptor descShareUnitOfWork = new BooleanPropertyDescriptor(PROPERTY_SHAREUNITOFWORK, Messages.propertyLabelSplitShareUnitOfWork);
+        PropertyDescriptor descParallelAggregate = new BooleanPropertyDescriptor(PROPERTY_PARALLELAGGREGATE, Messages.propertyLabelSplitParallelAggregate);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
@@ -332,6 +375,7 @@ public class Split extends AbstractNode {
         descriptors.put(PROPERTY_TIMEOUT, descTimeout);
         descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
         descriptors.put(PROPERTY_SHAREUNITOFWORK, descShareUnitOfWork);
+        descriptors.put(PROPERTY_PARALLELAGGREGATE, descParallelAggregate);
     }
 
     /* (non-Javadoc)
@@ -339,6 +383,10 @@ public class Split extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -387,6 +435,10 @@ public class Split extends AbstractNode {
             setShareUnitOfWork(Objects.convertTo(value, Boolean.class));
             return;
         }
+        if (PROPERTY_PARALLELAGGREGATE.equals(id)) {
+            setParallelAggregate(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         super.setPropertyValue(id, value);
     }
 
@@ -395,6 +447,9 @@ public class Split extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -431,6 +486,9 @@ public class Split extends AbstractNode {
         if (PROPERTY_SHAREUNITOFWORK.equals(id)) {
             return this.getShareUnitOfWork();
         }
+        if (PROPERTY_PARALLELAGGREGATE.equals(id)) {
+            return this.getParallelAggregate();
+        }
         return super.getPropertyValue(id);
     }
 
@@ -439,6 +497,7 @@ public class Split extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         SplitDefinition answer = new SplitDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
@@ -451,6 +510,7 @@ public class Split extends AbstractNode {
         answer.setTimeout(toXmlPropertyValue(PROPERTY_TIMEOUT, this.getTimeout()));
         answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
         answer.setShareUnitOfWork(toXmlPropertyValue(PROPERTY_SHAREUNITOFWORK, this.getShareUnitOfWork()));
+        answer.setParallelAggregate(toXmlPropertyValue(PROPERTY_PARALLELAGGREGATE, this.getParallelAggregate()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -470,6 +530,7 @@ public class Split extends AbstractNode {
         if (processor instanceof SplitDefinition) {
             SplitDefinition node = (SplitDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setParallelProcessing(node.getParallelProcessing());
@@ -482,6 +543,7 @@ public class Split extends AbstractNode {
             this.setTimeout(node.getTimeout());
             this.setOnPrepareRef(node.getOnPrepareRef());
             this.setShareUnitOfWork(node.getShareUnitOfWork());
+            this.setParallelAggregate(node.getParallelAggregate());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof SplitDefinition. Was " + processor.getClass().getName());
         }

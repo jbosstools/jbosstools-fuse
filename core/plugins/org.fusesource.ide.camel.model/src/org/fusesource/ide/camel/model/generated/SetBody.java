@@ -37,9 +37,11 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class SetBody extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "SetBody.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "SetBody.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "SetBody.Expression";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
 
@@ -65,6 +67,24 @@ public class SetBody extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Transformation";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -107,9 +127,11 @@ public class SetBody extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelSetBodyCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSetBodyInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelSetBodyExpression);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
     }
@@ -119,6 +141,10 @@ public class SetBody extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -135,6 +161,9 @@ public class SetBody extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -149,6 +178,7 @@ public class SetBody extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         SetBodyDefinition answer = new SetBodyDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
 
@@ -170,6 +200,7 @@ public class SetBody extends AbstractNode {
         if (processor instanceof SetBodyDefinition) {
             SetBodyDefinition node = (SetBodyDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
         } else {

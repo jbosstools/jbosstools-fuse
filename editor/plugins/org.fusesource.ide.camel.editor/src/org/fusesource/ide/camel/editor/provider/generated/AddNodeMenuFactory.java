@@ -88,6 +88,7 @@ public class AddNodeMenuFactory extends AbstractAddNodeMenuFactory {
         addMenuItem(menu, Messages.paletteRemoveHeaderTitle, Messages.paletteRemoveHeaderDescription, RemoveHeader.class, context, fp);
         addMenuItem(menu, Messages.paletteRemoveHeadersTitle, Messages.paletteRemoveHeadersDescription, RemoveHeaders.class, context, fp);
         addMenuItem(menu, Messages.paletteRemovePropertyTitle, Messages.paletteRemovePropertyDescription, RemoveProperty.class, context, fp);
+        addMenuItem(menu, Messages.paletteRemovePropertiesTitle, Messages.paletteRemovePropertiesDescription, RemoveProperties.class, context, fp);
         addMenuItem(menu, Messages.paletteSetBodyTitle, Messages.paletteSetBodyDescription, SetBody.class, context, fp);
         addMenuItem(menu, Messages.paletteSetExchangePatternTitle, Messages.paletteSetExchangePatternDescription, SetExchangePattern.class, context, fp);
         addMenuItem(menu, Messages.paletteSetFaultBodyTitle, Messages.paletteSetFaultBodyDescription, SetFaultBody.class, context, fp);
@@ -165,6 +166,7 @@ public class AddNodeMenuFactory extends AbstractAddNodeMenuFactory {
         addMenuItem(menu, Messages.paletteRemoveHeaderTitle, Messages.paletteRemoveHeaderDescription, RemoveHeader.class);
         addMenuItem(menu, Messages.paletteRemoveHeadersTitle, Messages.paletteRemoveHeadersDescription, RemoveHeaders.class);
         addMenuItem(menu, Messages.paletteRemovePropertyTitle, Messages.paletteRemovePropertyDescription, RemoveProperty.class);
+        addMenuItem(menu, Messages.paletteRemovePropertiesTitle, Messages.paletteRemovePropertiesDescription, RemoveProperties.class);
         addMenuItem(menu, Messages.paletteSetBodyTitle, Messages.paletteSetBodyDescription, SetBody.class);
         addMenuItem(menu, Messages.paletteSetExchangePatternTitle, Messages.paletteSetExchangePatternDescription, SetExchangePattern.class);
         addMenuItem(menu, Messages.paletteSetFaultBodyTitle, Messages.paletteSetFaultBodyDescription, SetFaultBody.class);

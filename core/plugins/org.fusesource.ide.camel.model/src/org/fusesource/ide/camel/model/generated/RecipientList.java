@@ -37,6 +37,7 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class RecipientList extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "RecipientList.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "RecipientList.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "RecipientList.Expression";
     public static final String PROPERTY_DELIMITER = "RecipientList.Delimiter";
@@ -52,7 +53,9 @@ public class RecipientList extends AbstractNode {
     public static final String PROPERTY_ONPREPAREREF = "RecipientList.OnPrepareRef";
     public static final String PROPERTY_SHAREUNITOFWORK = "RecipientList.ShareUnitOfWork";
     public static final String PROPERTY_CACHESIZE = "RecipientList.CacheSize";
+    public static final String PROPERTY_PARALLELAGGREGATE = "RecipientList.ParallelAggregate";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private String delimiter;
@@ -68,6 +71,7 @@ public class RecipientList extends AbstractNode {
     private String onPrepareRef;
     private Boolean shareUnitOfWork;
     private Integer cacheSize;
+    private Boolean parallelAggregate;
 
     public RecipientList() {
     }
@@ -91,6 +95,24 @@ public class RecipientList extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -363,10 +385,29 @@ public class RecipientList extends AbstractNode {
         }
     }
 
+    /**
+     * @return the parallelAggregate
+     */
+    public Boolean getParallelAggregate() {
+        return this.parallelAggregate;
+    }
+
+    /**
+     * @param parallelAggregate the parallelAggregate to set
+     */
+    public void setParallelAggregate(Boolean parallelAggregate) {
+        Boolean oldValue = this.parallelAggregate;
+        this.parallelAggregate = parallelAggregate;
+        if (!isSame(oldValue, parallelAggregate)) {
+            firePropertyChange(PROPERTY_PARALLELAGGREGATE, oldValue, parallelAggregate);
+        }
+    }
+
     @Override
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRecipientListCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRecipientListInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelRecipientListExpression);
         PropertyDescriptor descDelimiter = new TextPropertyDescriptor(PROPERTY_DELIMITER, Messages.propertyLabelRecipientListDelimiter);
@@ -382,7 +423,9 @@ public class RecipientList extends AbstractNode {
         PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelRecipientListOnPrepareRef);
         PropertyDescriptor descShareUnitOfWork = new BooleanPropertyDescriptor(PROPERTY_SHAREUNITOFWORK, Messages.propertyLabelRecipientListShareUnitOfWork);
         PropertyDescriptor descCacheSize = new TextPropertyDescriptor(PROPERTY_CACHESIZE, Messages.propertyLabelRecipientListCacheSize);
+        PropertyDescriptor descParallelAggregate = new BooleanPropertyDescriptor(PROPERTY_PARALLELAGGREGATE, Messages.propertyLabelRecipientListParallelAggregate);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_DELIMITER, descDelimiter);
@@ -398,6 +441,7 @@ public class RecipientList extends AbstractNode {
         descriptors.put(PROPERTY_ONPREPAREREF, descOnPrepareRef);
         descriptors.put(PROPERTY_SHAREUNITOFWORK, descShareUnitOfWork);
         descriptors.put(PROPERTY_CACHESIZE, descCacheSize);
+        descriptors.put(PROPERTY_PARALLELAGGREGATE, descParallelAggregate);
     }
 
     /* (non-Javadoc)
@@ -405,6 +449,10 @@ public class RecipientList extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -465,6 +513,10 @@ public class RecipientList extends AbstractNode {
             setCacheSize(Objects.convertTo(value, Integer.class));
             return;
         }
+        if (PROPERTY_PARALLELAGGREGATE.equals(id)) {
+            setParallelAggregate(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         super.setPropertyValue(id, value);
     }
 
@@ -473,6 +525,9 @@ public class RecipientList extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -518,6 +573,9 @@ public class RecipientList extends AbstractNode {
         if (PROPERTY_CACHESIZE.equals(id)) {
             return this.getCacheSize();
         }
+        if (PROPERTY_PARALLELAGGREGATE.equals(id)) {
+            return this.getParallelAggregate();
+        }
         return super.getPropertyValue(id);
     }
 
@@ -526,6 +584,7 @@ public class RecipientList extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         RecipientListDefinition answer = new RecipientListDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setDelimiter(toXmlPropertyValue(PROPERTY_DELIMITER, this.getDelimiter()));
@@ -541,6 +600,7 @@ public class RecipientList extends AbstractNode {
         answer.setOnPrepareRef(toXmlPropertyValue(PROPERTY_ONPREPAREREF, this.getOnPrepareRef()));
         answer.setShareUnitOfWork(toXmlPropertyValue(PROPERTY_SHAREUNITOFWORK, this.getShareUnitOfWork()));
         answer.setCacheSize(toXmlPropertyValue(PROPERTY_CACHESIZE, this.getCacheSize()));
+        answer.setParallelAggregate(toXmlPropertyValue(PROPERTY_PARALLELAGGREGATE, this.getParallelAggregate()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -560,6 +620,7 @@ public class RecipientList extends AbstractNode {
         if (processor instanceof RecipientListDefinition) {
             RecipientListDefinition node = (RecipientListDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setDelimiter(node.getDelimiter());
@@ -575,6 +636,7 @@ public class RecipientList extends AbstractNode {
             this.setOnPrepareRef(node.getOnPrepareRef());
             this.setShareUnitOfWork(node.getShareUnitOfWork());
             this.setCacheSize(node.getCacheSize());
+            this.setParallelAggregate(node.getParallelAggregate());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof RecipientListDefinition. Was " + processor.getClass().getName());
         }

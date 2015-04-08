@@ -122,6 +122,18 @@ from a single ActiveMQDestination POJO
       <xs:attribute name='serverUrl' type='xs:string'/>
       <xs:attribute name='topicPrefetch' type='xs:integer'/>
       <xs:attribute name='useInboundSession' type='xs:boolean'/>
+      <xs:attribute name='useSessionArgs' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            if true, calls to managed connection factory.connection.createSession will
+respect the passed in args. When false (default) the args are ignored b/c
+the container will do transaction demarcation via xa or local transaction rar
+contracts.
+This option is useful when a managed connection is used in plain jms mode
+and a jms transacted session session is required.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='userName' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
@@ -188,6 +200,18 @@ if using embedded mode.
       <xs:attribute name='serverUrl' type='xs:string'/>
       <xs:attribute name='topicPrefetch' type='xs:integer'/>
       <xs:attribute name='useInboundSession' type='xs:boolean'/>
+      <xs:attribute name='useSessionArgs' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            if true, calls to managed connection factory.connection.createSession will
+respect the passed in args. When false (default) the args are ignored b/c
+the container will do transaction demarcation via xa or local transaction rar
+contracts.
+This option is useful when a managed connection is used in plain jms mode
+and a jms transacted session session is required.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='userName' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>

@@ -17,17 +17,12 @@
 		<maven>2.0.9</maven>
 	</prerequisites>
 
-	<properties>
-		<!-- versions aligned with Fabric8 1.2.0.Beta4 -->
-		<activemq.version>5.10.0</activemq.version>
-		<cxf.version>2.7.11</cxf.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>io.fabric8.insight</groupId>
 			<artifactId>insight-maven</artifactId>
-			<version>${fabric.version}</version>
+			<version>1.2.0.Beta4</version>
+<!--			<version>${fabric.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>io.hawt</groupId>

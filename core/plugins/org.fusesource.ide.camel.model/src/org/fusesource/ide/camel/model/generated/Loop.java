@@ -37,10 +37,12 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Loop extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Loop.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "Loop.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "Loop.Expression";
     public static final String PROPERTY_COPY = "Loop.Copy";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private Boolean copy;
@@ -67,6 +69,24 @@ public class Loop extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Control Flow";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -127,10 +147,12 @@ public class Loop extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelLoopCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelLoopInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelLoopExpression);
         PropertyDescriptor descCopy = new BooleanPropertyDescriptor(PROPERTY_COPY, Messages.propertyLabelLoopCopy);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_COPY, descCopy);
@@ -141,6 +163,10 @@ public class Loop extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -161,6 +187,9 @@ public class Loop extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -178,6 +207,7 @@ public class Loop extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         LoopDefinition answer = new LoopDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setCopy(toXmlPropertyValue(PROPERTY_COPY, this.getCopy()));
@@ -200,6 +230,7 @@ public class Loop extends AbstractNode {
         if (processor instanceof LoopDefinition) {
             LoopDefinition node = (LoopDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setCopy(node.getCopy());

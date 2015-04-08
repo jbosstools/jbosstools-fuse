@@ -12,6 +12,7 @@ package org.fusesource.ide.camel.model.generated;
 
 import java.util.Map;
 
+import org.apache.camel.model.OnCompletionMode;
 import org.apache.camel.model.OnCompletionDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.model.ProcessorDefinition;
@@ -37,15 +38,21 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class OnCompletion extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "OnCompletion.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "OnCompletion.InheritErrorHandler";
+    public static final String PROPERTY_MODE = "OnCompletion.Mode";
     public static final String PROPERTY_ONCOMPLETEONLY = "OnCompletion.OnCompleteOnly";
     public static final String PROPERTY_ONFAILUREONLY = "OnCompletion.OnFailureOnly";
+    public static final String PROPERTY_PARALLELPROCESSING = "OnCompletion.ParallelProcessing";
     public static final String PROPERTY_EXECUTORSERVICEREF = "OnCompletion.ExecutorServiceRef";
     public static final String PROPERTY_USEORIGINALMESSAGEPOLICY = "OnCompletion.UseOriginalMessagePolicy";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
+    private OnCompletionMode mode;
     private Boolean onCompleteOnly;
     private Boolean onFailureOnly;
+    private Boolean parallelProcessing;
     private String executorServiceRef;
     private Boolean useOriginalMessagePolicy;
 
@@ -74,6 +81,24 @@ public class OnCompletion extends AbstractNode {
     }
 
     /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
+    }
+
+    /**
      * @return the inheritErrorHandler
      */
     public Boolean getInheritErrorHandler() {
@@ -88,6 +113,24 @@ public class OnCompletion extends AbstractNode {
         this.inheritErrorHandler = inheritErrorHandler;
         if (!isSame(oldValue, inheritErrorHandler)) {
             firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+        }
+    }
+
+    /**
+     * @return the mode
+     */
+    public OnCompletionMode getMode() {
+        return this.mode;
+    }
+
+    /**
+     * @param mode the mode to set
+     */
+    public void setMode(OnCompletionMode mode) {
+        OnCompletionMode oldValue = this.mode;
+        this.mode = mode;
+        if (!isSame(oldValue, mode)) {
+            firePropertyChange(PROPERTY_MODE, oldValue, mode);
         }
     }
 
@@ -124,6 +167,24 @@ public class OnCompletion extends AbstractNode {
         this.onFailureOnly = onFailureOnly;
         if (!isSame(oldValue, onFailureOnly)) {
             firePropertyChange(PROPERTY_ONFAILUREONLY, oldValue, onFailureOnly);
+        }
+    }
+
+    /**
+     * @return the parallelProcessing
+     */
+    public Boolean getParallelProcessing() {
+        return this.parallelProcessing;
+    }
+
+    /**
+     * @param parallelProcessing the parallelProcessing to set
+     */
+    public void setParallelProcessing(Boolean parallelProcessing) {
+        Boolean oldValue = this.parallelProcessing;
+        this.parallelProcessing = parallelProcessing;
+        if (!isSame(oldValue, parallelProcessing)) {
+            firePropertyChange(PROPERTY_PARALLELPROCESSING, oldValue, parallelProcessing);
         }
     }
 
@@ -167,15 +228,21 @@ public class OnCompletion extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelOnCompletionCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelOnCompletionInheritErrorHandler);
+        PropertyDescriptor descMode = new EnumPropertyDescriptor(PROPERTY_MODE, Messages.propertyLabelOnCompletionMode, OnCompletionMode.class);
         PropertyDescriptor descOnCompleteOnly = new BooleanPropertyDescriptor(PROPERTY_ONCOMPLETEONLY, Messages.propertyLabelOnCompletionOnCompleteOnly);
         PropertyDescriptor descOnFailureOnly = new BooleanPropertyDescriptor(PROPERTY_ONFAILUREONLY, Messages.propertyLabelOnCompletionOnFailureOnly);
+        PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelOnCompletionParallelProcessing);
         PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelOnCompletionExecutorServiceRef);
         PropertyDescriptor descUseOriginalMessagePolicy = new BooleanPropertyDescriptor(PROPERTY_USEORIGINALMESSAGEPOLICY, Messages.propertyLabelOnCompletionUseOriginalMessagePolicy);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
+        descriptors.put(PROPERTY_MODE, descMode);
         descriptors.put(PROPERTY_ONCOMPLETEONLY, descOnCompleteOnly);
         descriptors.put(PROPERTY_ONFAILUREONLY, descOnFailureOnly);
+        descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
         descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
         descriptors.put(PROPERTY_USEORIGINALMESSAGEPOLICY, descUseOriginalMessagePolicy);
     }
@@ -185,8 +252,16 @@ public class OnCompletion extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+            return;
+        }
+        if (PROPERTY_MODE.equals(id)) {
+            setMode(Objects.convertTo(value, OnCompletionMode.class));
             return;
         }
         if (PROPERTY_ONCOMPLETEONLY.equals(id)) {
@@ -195,6 +270,10 @@ public class OnCompletion extends AbstractNode {
         }
         if (PROPERTY_ONFAILUREONLY.equals(id)) {
             setOnFailureOnly(Objects.convertTo(value, Boolean.class));
+            return;
+        }
+        if (PROPERTY_PARALLELPROCESSING.equals(id)) {
+            setParallelProcessing(Objects.convertTo(value, Boolean.class));
             return;
         }
         if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
@@ -213,14 +292,23 @@ public class OnCompletion extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
+        }
+        if (PROPERTY_MODE.equals(id)) {
+            return this.getMode();
         }
         if (PROPERTY_ONCOMPLETEONLY.equals(id)) {
             return this.getOnCompleteOnly();
         }
         if (PROPERTY_ONFAILUREONLY.equals(id)) {
             return this.getOnFailureOnly();
+        }
+        if (PROPERTY_PARALLELPROCESSING.equals(id)) {
+            return this.getParallelProcessing();
         }
         if (PROPERTY_EXECUTORSERVICEREF.equals(id)) {
             return this.getExecutorServiceRef();
@@ -236,9 +324,12 @@ public class OnCompletion extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         OnCompletionDefinition answer = new OnCompletionDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
+        answer.setMode(toXmlPropertyValue(PROPERTY_MODE, this.getMode()));
         answer.setOnCompleteOnly(toXmlPropertyValue(PROPERTY_ONCOMPLETEONLY, this.getOnCompleteOnly()));
         answer.setOnFailureOnly(toXmlPropertyValue(PROPERTY_ONFAILUREONLY, this.getOnFailureOnly()));
+        answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
         answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
         answer.setUseOriginalMessagePolicy(toXmlPropertyValue(PROPERTY_USEORIGINALMESSAGEPOLICY, this.getUseOriginalMessagePolicy()));
 
@@ -260,9 +351,12 @@ public class OnCompletion extends AbstractNode {
         if (processor instanceof OnCompletionDefinition) {
             OnCompletionDefinition node = (OnCompletionDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
+            this.setMode(node.getMode());
             this.setOnCompleteOnly(node.getOnCompleteOnly());
             this.setOnFailureOnly(node.getOnFailureOnly());
+            this.setParallelProcessing(node.getParallelProcessing());
             this.setExecutorServiceRef(node.getExecutorServiceRef());
             this.setUseOriginalMessagePolicy(node.getUseOriginalMessagePolicy());
         } else {

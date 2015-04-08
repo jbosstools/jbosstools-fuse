@@ -99,6 +99,9 @@ public class Downloader {
         ignoredArtifacts.add("camel-archetype-component");
         ignoredArtifacts.add("camel-archetype-dataformat");
         ignoredArtifacts.add("camel-archetype-scr");
+        ignoredArtifacts.add("camel-archetype-war");
+        ignoredArtifacts.add("camel-archetype-webconsole");
+        
     }
 
     public static void main(String[] args) {
@@ -195,7 +198,8 @@ public class Downloader {
         try {
             downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel.version"));
             downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf.version"));
-            downloadArchetypesForGroup(out, "io.fabric8", System.getProperty("fabric.version"));
+            // removed fabric8 archetypes
+//            downloadArchetypesForGroup(out, "io.fabric8.archetypes", System.getProperty("fabric.version"));
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
         } finally {

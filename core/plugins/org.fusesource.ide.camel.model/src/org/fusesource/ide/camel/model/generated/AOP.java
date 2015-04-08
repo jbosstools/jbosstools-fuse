@@ -37,11 +37,13 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class AOP extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "AOP.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "AOP.InheritErrorHandler";
     public static final String PROPERTY_BEFOREURI = "AOP.BeforeUri";
     public static final String PROPERTY_AFTERURI = "AOP.AfterUri";
     public static final String PROPERTY_AFTERFINALLYURI = "AOP.AfterFinallyUri";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private String beforeUri;
     private String afterUri;
@@ -69,6 +71,24 @@ public class AOP extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Miscellaneous";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -147,11 +167,13 @@ public class AOP extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelAOPCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelAOPInheritErrorHandler);
         PropertyDescriptor descBeforeUri = new TextPropertyDescriptor(PROPERTY_BEFOREURI, Messages.propertyLabelAOPBeforeUri);
         PropertyDescriptor descAfterUri = new TextPropertyDescriptor(PROPERTY_AFTERURI, Messages.propertyLabelAOPAfterUri);
         PropertyDescriptor descAfterFinallyUri = new TextPropertyDescriptor(PROPERTY_AFTERFINALLYURI, Messages.propertyLabelAOPAfterFinallyUri);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_BEFOREURI, descBeforeUri);
         descriptors.put(PROPERTY_AFTERURI, descAfterUri);
@@ -163,6 +185,10 @@ public class AOP extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -187,6 +213,9 @@ public class AOP extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -207,6 +236,7 @@ public class AOP extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         AOPDefinition answer = new AOPDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setBeforeUri(toXmlPropertyValue(PROPERTY_BEFOREURI, this.getBeforeUri()));
         answer.setAfterUri(toXmlPropertyValue(PROPERTY_AFTERURI, this.getAfterUri()));
@@ -230,6 +260,7 @@ public class AOP extends AbstractNode {
         if (processor instanceof AOPDefinition) {
             AOPDefinition node = (AOPDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setBeforeUri(node.getBeforeUri());
             this.setAfterUri(node.getAfterUri());

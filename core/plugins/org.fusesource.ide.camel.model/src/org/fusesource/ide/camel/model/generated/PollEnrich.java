@@ -37,17 +37,23 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class PollEnrich extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "PollEnrich.CustomId";
+    public static final String PROPERTY_INHERITERRORHANDLER = "PollEnrich.InheritErrorHandler";
     public static final String PROPERTY_RESOURCEURI = "PollEnrich.ResourceUri";
     public static final String PROPERTY_TIMEOUT = "PollEnrich.Timeout";
     public static final String PROPERTY_AGGREGATIONSTRATEGYREF = "PollEnrich.AggregationStrategyRef";
     public static final String PROPERTY_AGGREGATIONSTRATEGYMETHODNAME = "PollEnrich.AggregationStrategyMethodName";
     public static final String PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL = "PollEnrich.AggregationStrategyMethodAllowNull";
+    public static final String PROPERTY_AGGREGATEONEXCEPTION = "PollEnrich.AggregateOnException";
 
+    private Boolean customId;
+    private Boolean inheritErrorHandler;
     private String resourceUri;
     private Long timeout;
     private String aggregationStrategyRef;
     private String aggregationStrategyMethodName;
     private Boolean aggregationStrategyMethodAllowNull;
+    private Boolean aggregateOnException;
 
     public PollEnrich() {
     }
@@ -71,6 +77,42 @@ public class PollEnrich extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Transformation";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
+    }
+
+    /**
+     * @return the inheritErrorHandler
+     */
+    public Boolean getInheritErrorHandler() {
+        return this.inheritErrorHandler;
+    }
+
+    /**
+     * @param inheritErrorHandler the inheritErrorHandler to set
+     */
+    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+        Boolean oldValue = this.inheritErrorHandler;
+        this.inheritErrorHandler = inheritErrorHandler;
+        if (!isSame(oldValue, inheritErrorHandler)) {
+            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+        }
     }
 
     /**
@@ -163,21 +205,45 @@ public class PollEnrich extends AbstractNode {
         }
     }
 
+    /**
+     * @return the aggregateOnException
+     */
+    public Boolean getAggregateOnException() {
+        return this.aggregateOnException;
+    }
+
+    /**
+     * @param aggregateOnException the aggregateOnException to set
+     */
+    public void setAggregateOnException(Boolean aggregateOnException) {
+        Boolean oldValue = this.aggregateOnException;
+        this.aggregateOnException = aggregateOnException;
+        if (!isSame(oldValue, aggregateOnException)) {
+            firePropertyChange(PROPERTY_AGGREGATEONEXCEPTION, oldValue, aggregateOnException);
+        }
+    }
+
     @Override
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelPollEnrichCustomId);
+        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelPollEnrichInheritErrorHandler);
         PropertyDescriptor descResourceUri = new TextPropertyDescriptor(PROPERTY_RESOURCEURI, Messages.propertyLabelPollEnrichResourceUri);
         PropertyDescriptor descTimeout = new TextPropertyDescriptor(PROPERTY_TIMEOUT, Messages.propertyLabelPollEnrichTimeout);
         PropertyDescriptor descAggregationStrategyRef = new TextPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYREF, Messages.propertyLabelPollEnrichAggregationStrategyRef);
         PropertyDescriptor descAggregationStrategyMethodName = new TextPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYMETHODNAME, Messages.propertyLabelPollEnrichAggregationStrategyMethodName);
         PropertyDescriptor descAggregationStrategyMethodAllowNull = new BooleanPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL, Messages.propertyLabelPollEnrichAggregationStrategyMethodAllowNull);
+        PropertyDescriptor descAggregateOnException = new BooleanPropertyDescriptor(PROPERTY_AGGREGATEONEXCEPTION, Messages.propertyLabelPollEnrichAggregateOnException);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
+        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_RESOURCEURI, descResourceUri);
         descriptors.put(PROPERTY_TIMEOUT, descTimeout);
         descriptors.put(PROPERTY_AGGREGATIONSTRATEGYREF, descAggregationStrategyRef);
         descriptors.put(PROPERTY_AGGREGATIONSTRATEGYMETHODNAME, descAggregationStrategyMethodName);
         descriptors.put(PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL, descAggregationStrategyMethodAllowNull);
+        descriptors.put(PROPERTY_AGGREGATEONEXCEPTION, descAggregateOnException);
     }
 
     /* (non-Javadoc)
@@ -185,6 +251,14 @@ public class PollEnrich extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
+        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_RESOURCEURI.equals(id)) {
             setResourceUri(Objects.convertTo(value, String.class));
             return;
@@ -205,6 +279,10 @@ public class PollEnrich extends AbstractNode {
             setAggregationStrategyMethodAllowNull(Objects.convertTo(value, Boolean.class));
             return;
         }
+        if (PROPERTY_AGGREGATEONEXCEPTION.equals(id)) {
+            setAggregateOnException(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         super.setPropertyValue(id, value);
     }
 
@@ -213,6 +291,12 @@ public class PollEnrich extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
+        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+            return Objects.<Boolean>getField(this, "inheritErrorHandler");
+        }
         if (PROPERTY_RESOURCEURI.equals(id)) {
             return this.getResourceUri();
         }
@@ -228,6 +312,9 @@ public class PollEnrich extends AbstractNode {
         if (PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL.equals(id)) {
             return this.getAggregationStrategyMethodAllowNull();
         }
+        if (PROPERTY_AGGREGATEONEXCEPTION.equals(id)) {
+            return this.getAggregateOnException();
+        }
         return super.getPropertyValue(id);
     }
 
@@ -236,11 +323,14 @@ public class PollEnrich extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         PollEnrichDefinition answer = new PollEnrichDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
+        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setResourceUri(toXmlPropertyValue(PROPERTY_RESOURCEURI, this.getResourceUri()));
         answer.setTimeout(toXmlPropertyValue(PROPERTY_TIMEOUT, this.getTimeout()));
         answer.setAggregationStrategyRef(toXmlPropertyValue(PROPERTY_AGGREGATIONSTRATEGYREF, this.getAggregationStrategyRef()));
         answer.setAggregationStrategyMethodName(toXmlPropertyValue(PROPERTY_AGGREGATIONSTRATEGYMETHODNAME, this.getAggregationStrategyMethodName()));
         answer.setAggregationStrategyMethodAllowNull(toXmlPropertyValue(PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL, this.getAggregationStrategyMethodAllowNull()));
+        answer.setAggregateOnException(toXmlPropertyValue(PROPERTY_AGGREGATEONEXCEPTION, this.getAggregateOnException()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -260,11 +350,14 @@ public class PollEnrich extends AbstractNode {
         if (processor instanceof PollEnrichDefinition) {
             PollEnrichDefinition node = (PollEnrichDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
+            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setResourceUri(node.getResourceUri());
             this.setTimeout(node.getTimeout());
             this.setAggregationStrategyRef(node.getAggregationStrategyRef());
             this.setAggregationStrategyMethodName(node.getAggregationStrategyMethodName());
             this.setAggregationStrategyMethodAllowNull(node.getAggregationStrategyMethodAllowNull());
+            this.setAggregateOnException(node.getAggregateOnException());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof PollEnrichDefinition. Was " + processor.getClass().getName());
         }

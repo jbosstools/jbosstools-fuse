@@ -45,6 +45,7 @@ RecipientList otherAttributes
 RemoveHeader otherAttributes
 RemoveHeaders otherAttributes
 RemoveProperty otherAttributes
+RemoveProperties otherAttributes
 Resequence otherAttributes
 Rollback otherAttributes
 Route otherAttributes

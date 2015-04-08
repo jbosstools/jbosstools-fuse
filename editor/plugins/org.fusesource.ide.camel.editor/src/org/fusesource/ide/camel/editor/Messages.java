@@ -143,6 +143,9 @@ public class Messages extends NLS {
     public static String paletteRemovePropertyTitle;
     public static String paletteRemovePropertyDescription;
 
+    public static String paletteRemovePropertiesTitle;
+    public static String paletteRemovePropertiesDescription;
+
     public static String paletteResequenceTitle;
     public static String paletteResequenceDescription;
 

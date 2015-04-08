@@ -27,7 +27,8 @@ public class UpdateReleases {
 
     public static String fuseVersion = "redhat-" + fuseArchetypeVersion.split("-")[fuseArchetypeVersion.split("-").length - 1];
 
-    public static String releaseRepo = "nexus/content/groups/fs-public" /*"nexus/content/groups/ea"*/;
+    public static String releaseRepo = "nexus/content/groups/fs-public";
+    public static String eaRepo = "nexus/content/groups/ea";
 
     public static Authenticator fuseAuthenticator = new FuseRepoAuthenticator();
 

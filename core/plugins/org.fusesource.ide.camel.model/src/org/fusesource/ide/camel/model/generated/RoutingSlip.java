@@ -37,12 +37,14 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class RoutingSlip extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "RoutingSlip.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "RoutingSlip.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "RoutingSlip.Expression";
     public static final String PROPERTY_URIDELIMITER = "RoutingSlip.UriDelimiter";
     public static final String PROPERTY_IGNOREINVALIDENDPOINTS = "RoutingSlip.IgnoreInvalidEndpoints";
     public static final String PROPERTY_CACHESIZE = "RoutingSlip.CacheSize";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private String uriDelimiter;
@@ -71,6 +73,24 @@ public class RoutingSlip extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -167,12 +187,14 @@ public class RoutingSlip extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRoutingSlipCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRoutingSlipInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelRoutingSlipExpression);
         PropertyDescriptor descUriDelimiter = new TextPropertyDescriptor(PROPERTY_URIDELIMITER, Messages.propertyLabelRoutingSlipUriDelimiter);
         PropertyDescriptor descIgnoreInvalidEndpoints = new BooleanPropertyDescriptor(PROPERTY_IGNOREINVALIDENDPOINTS, Messages.propertyLabelRoutingSlipIgnoreInvalidEndpoints);
         PropertyDescriptor descCacheSize = new TextPropertyDescriptor(PROPERTY_CACHESIZE, Messages.propertyLabelRoutingSlipCacheSize);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_URIDELIMITER, descUriDelimiter);
@@ -185,6 +207,10 @@ public class RoutingSlip extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -213,6 +239,9 @@ public class RoutingSlip extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -236,6 +265,7 @@ public class RoutingSlip extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         RoutingSlipDefinition answer = new RoutingSlipDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setUriDelimiter(toXmlPropertyValue(PROPERTY_URIDELIMITER, this.getUriDelimiter()));
@@ -260,6 +290,7 @@ public class RoutingSlip extends AbstractNode {
         if (processor instanceof RoutingSlipDefinition) {
             RoutingSlipDefinition node = (RoutingSlipDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setUriDelimiter(node.getUriDelimiter());

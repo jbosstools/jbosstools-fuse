@@ -6,11 +6,11 @@
       <uri
           id="org.fusesource.xml.catalog.uri.activemq-spring"
           name="http://activemq.apache.org/schema/spring/activemq-spring.xsd"
-          uri="xsd/fuse/activemq-spring-5.10.0.xsd" />
+          uri="xsd/fuse/activemq-spring-5.11.0.redhat-620103.xsd" />
       <uri
           id="org.fusesource.xml.catalog.uri.activemq-ra"
           name="http://activemq.apache.org/schema/ra/activemq-ra.xsd"
-          uri="xsd/fuse/activemq-ra-5.10.0.xsd" />
+          uri="xsd/fuse/activemq-ra-5.11.0.redhat-620103.xsd" />
       <uri
           id="org.fusesource.xml.catalog.uri.camel-blueprint"
           name="http://camel.apache.org/schema/blueprint/camel-blueprint.xsd"

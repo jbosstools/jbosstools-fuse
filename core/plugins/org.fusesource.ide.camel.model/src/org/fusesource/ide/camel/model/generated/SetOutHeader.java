@@ -37,10 +37,12 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class SetOutHeader extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "SetOutHeader.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "SetOutHeader.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "SetOutHeader.Expression";
     public static final String PROPERTY_HEADERNAME = "SetOutHeader.HeaderName";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private String headerName;
@@ -67,6 +69,24 @@ public class SetOutHeader extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Transformation";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -127,10 +147,12 @@ public class SetOutHeader extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelSetOutHeaderCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSetOutHeaderInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelSetOutHeaderExpression);
         PropertyDescriptor descHeaderName = new TextPropertyDescriptor(PROPERTY_HEADERNAME, Messages.propertyLabelSetOutHeaderHeaderName);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_HEADERNAME, descHeaderName);
@@ -141,6 +163,10 @@ public class SetOutHeader extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -161,6 +187,9 @@ public class SetOutHeader extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -178,6 +207,7 @@ public class SetOutHeader extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         SetOutHeaderDefinition answer = new SetOutHeaderDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setHeaderName(toXmlPropertyValue(PROPERTY_HEADERNAME, this.getHeaderName()));
@@ -200,6 +230,7 @@ public class SetOutHeader extends AbstractNode {
         if (processor instanceof SetOutHeaderDefinition) {
             SetOutHeaderDefinition node = (SetOutHeaderDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setHeaderName(node.getHeaderName());

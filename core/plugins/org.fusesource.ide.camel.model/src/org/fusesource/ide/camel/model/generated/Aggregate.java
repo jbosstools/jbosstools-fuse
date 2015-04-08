@@ -38,6 +38,7 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Aggregate extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Aggregate.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "Aggregate.InheritErrorHandler";
     public static final String PROPERTY_CORRELATIONEXPRESSION = "Aggregate.CorrelationExpression";
     public static final String PROPERTY_COMPLETIONPREDICATE = "Aggregate.CompletionPredicate";
@@ -63,6 +64,7 @@ public class Aggregate extends AbstractNode {
     public static final String PROPERTY_FORCECOMPLETIONONSTOP = "Aggregate.ForceCompletionOnStop";
     public static final String PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION = "Aggregate.OptimisticLockRetryPolicyDefinition";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private ExpressionDefinition correlationExpression;
     private ExpressionDefinition completionPredicate;
@@ -110,6 +112,24 @@ public class Aggregate extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -548,6 +568,7 @@ public class Aggregate extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelAggregateCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelAggregateInheritErrorHandler);
         PropertyDescriptor descCorrelationExpression = new ExpressionPropertyDescriptor(PROPERTY_CORRELATIONEXPRESSION, Messages.propertyLabelAggregateCorrelationExpression);
         PropertyDescriptor descCompletionPredicate = new ExpressionPropertyDescriptor(PROPERTY_COMPLETIONPREDICATE, Messages.propertyLabelAggregateCompletionPredicate);
@@ -574,6 +595,7 @@ public class Aggregate extends AbstractNode {
         PropertyDescriptor descOptimisticLockRetryPolicyDefinition = new ComplexUnionPropertyDescriptor(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, Messages.propertyLabelAggregateOptimisticLockRetryPolicyDefinition, OptimisticLockRetryPolicyDefinition.class, new UnionTypeValue[] {
         });
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_CORRELATIONEXPRESSION, descCorrelationExpression);
         descriptors.put(PROPERTY_COMPLETIONPREDICATE, descCompletionPredicate);
@@ -605,6 +627,10 @@ public class Aggregate extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -709,6 +735,9 @@ public class Aggregate extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -789,6 +818,7 @@ public class Aggregate extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         AggregateDefinition answer = new AggregateDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         Objects.setField(answer, "correlationExpression", toXmlPropertyValue(PROPERTY_CORRELATIONEXPRESSION, this.getCorrelationExpression()));
         Objects.setField(answer, "completionPredicate", toXmlPropertyValue(PROPERTY_COMPLETIONPREDICATE, this.getCompletionPredicate()));
@@ -832,6 +862,7 @@ public class Aggregate extends AbstractNode {
         if (processor instanceof AggregateDefinition) {
             AggregateDefinition node = (AggregateDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             Objects.setField(this, "correlationExpression", node.getCorrelationExpression());
             Objects.setField(this, "completionPredicate", node.getCompletionPredicate());

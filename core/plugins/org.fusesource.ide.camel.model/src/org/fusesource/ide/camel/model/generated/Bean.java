@@ -37,15 +37,21 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Bean extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Bean.CustomId";
+    public static final String PROPERTY_INHERITERRORHANDLER = "Bean.InheritErrorHandler";
     public static final String PROPERTY_REF = "Bean.Ref";
     public static final String PROPERTY_METHOD = "Bean.Method";
     public static final String PROPERTY_BEANTYPE = "Bean.BeanType";
     public static final String PROPERTY_CACHE = "Bean.Cache";
+    public static final String PROPERTY_MULTIPARAMETERARRAY = "Bean.MultiParameterArray";
 
+    private Boolean customId;
+    private Boolean inheritErrorHandler;
     private String ref;
     private String method;
     private String beanType;
     private Boolean cache;
+    private Boolean multiParameterArray;
 
     public Bean() {
     }
@@ -69,6 +75,42 @@ public class Bean extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Components";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
+    }
+
+    /**
+     * @return the inheritErrorHandler
+     */
+    public Boolean getInheritErrorHandler() {
+        return this.inheritErrorHandler;
+    }
+
+    /**
+     * @param inheritErrorHandler the inheritErrorHandler to set
+     */
+    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+        Boolean oldValue = this.inheritErrorHandler;
+        this.inheritErrorHandler = inheritErrorHandler;
+        if (!isSame(oldValue, inheritErrorHandler)) {
+            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+        }
     }
 
     /**
@@ -143,19 +185,43 @@ public class Bean extends AbstractNode {
         }
     }
 
+    /**
+     * @return the multiParameterArray
+     */
+    public Boolean getMultiParameterArray() {
+        return this.multiParameterArray;
+    }
+
+    /**
+     * @param multiParameterArray the multiParameterArray to set
+     */
+    public void setMultiParameterArray(Boolean multiParameterArray) {
+        Boolean oldValue = this.multiParameterArray;
+        this.multiParameterArray = multiParameterArray;
+        if (!isSame(oldValue, multiParameterArray)) {
+            firePropertyChange(PROPERTY_MULTIPARAMETERARRAY, oldValue, multiParameterArray);
+        }
+    }
+
     @Override
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelBeanCustomId);
+        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelBeanInheritErrorHandler);
         PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelBeanRef);
         PropertyDescriptor descMethod = new TextPropertyDescriptor(PROPERTY_METHOD, Messages.propertyLabelBeanMethod);
         PropertyDescriptor descBeanType = new TextPropertyDescriptor(PROPERTY_BEANTYPE, Messages.propertyLabelBeanBeanType);
         PropertyDescriptor descCache = new BooleanPropertyDescriptor(PROPERTY_CACHE, Messages.propertyLabelBeanCache);
+        PropertyDescriptor descMultiParameterArray = new BooleanPropertyDescriptor(PROPERTY_MULTIPARAMETERARRAY, Messages.propertyLabelBeanMultiParameterArray);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
+        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_REF, descRef);
         descriptors.put(PROPERTY_METHOD, descMethod);
         descriptors.put(PROPERTY_BEANTYPE, descBeanType);
         descriptors.put(PROPERTY_CACHE, descCache);
+        descriptors.put(PROPERTY_MULTIPARAMETERARRAY, descMultiParameterArray);
     }
 
     /* (non-Javadoc)
@@ -163,6 +229,14 @@ public class Bean extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
+        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_REF.equals(id)) {
             setRef(Objects.convertTo(value, String.class));
             return;
@@ -179,6 +253,10 @@ public class Bean extends AbstractNode {
             setCache(Objects.convertTo(value, Boolean.class));
             return;
         }
+        if (PROPERTY_MULTIPARAMETERARRAY.equals(id)) {
+            setMultiParameterArray(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         super.setPropertyValue(id, value);
     }
 
@@ -187,6 +265,12 @@ public class Bean extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
+        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+            return Objects.<Boolean>getField(this, "inheritErrorHandler");
+        }
         if (PROPERTY_REF.equals(id)) {
             return this.getRef();
         }
@@ -199,6 +283,9 @@ public class Bean extends AbstractNode {
         if (PROPERTY_CACHE.equals(id)) {
             return this.getCache();
         }
+        if (PROPERTY_MULTIPARAMETERARRAY.equals(id)) {
+            return this.getMultiParameterArray();
+        }
         return super.getPropertyValue(id);
     }
 
@@ -207,10 +294,13 @@ public class Bean extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         BeanDefinition answer = new BeanDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
+        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setRef(toXmlPropertyValue(PROPERTY_REF, this.getRef()));
         answer.setMethod(toXmlPropertyValue(PROPERTY_METHOD, this.getMethod()));
         answer.setBeanType(toXmlPropertyValue(PROPERTY_BEANTYPE, this.getBeanType()));
         answer.setCache(toXmlPropertyValue(PROPERTY_CACHE, this.getCache()));
+        answer.setMultiParameterArray(toXmlPropertyValue(PROPERTY_MULTIPARAMETERARRAY, this.getMultiParameterArray()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -230,10 +320,13 @@ public class Bean extends AbstractNode {
         if (processor instanceof BeanDefinition) {
             BeanDefinition node = (BeanDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
+            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setRef(node.getRef());
             this.setMethod(node.getMethod());
             this.setBeanType(node.getBeanType());
             this.setCache(node.getCache());
+            this.setMultiParameterArray(node.getMultiParameterArray());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof BeanDefinition. Was " + processor.getClass().getName());
         }

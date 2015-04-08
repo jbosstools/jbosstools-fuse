@@ -12,7 +12,7 @@ package org.fusesource.ide.camel.model.generated;
 
 import java.util.Map;
 
-import org.apache.camel.model.RemovePropertyDefinition;
+import org.apache.camel.model.RemovePropertiesDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -29,26 +29,28 @@ import org.fusesource.ide.commons.properties.ListPropertyDescriptor;
 import org.fusesource.ide.commons.properties.UnionTypeValue;
 
 /**
- * The Node class from Camel's RemovePropertyDefinition
+ * The Node class from Camel's RemovePropertiesDefinition
  *
  * NOTE - this file is auto-generated using Velocity.
  *
  * DO NOT EDIT!
  */
-public class RemoveProperty extends AbstractNode {
+public class RemoveProperties extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "RemoveProperty.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "RemoveProperty.InheritErrorHandler";
-    public static final String PROPERTY_PROPERTYNAME = "RemoveProperty.PropertyName";
+    public static final String PROPERTY_CUSTOMID = "RemoveProperties.CustomId";
+    public static final String PROPERTY_INHERITERRORHANDLER = "RemoveProperties.InheritErrorHandler";
+    public static final String PROPERTY_PATTERN = "RemoveProperties.Pattern";
+    public static final String PROPERTY_EXCLUDEPATTERN = "RemoveProperties.ExcludePattern";
 
     private Boolean customId;
     private Boolean inheritErrorHandler;
-    private String propertyName;
+    private String pattern;
+    private String excludePattern;
 
-    public RemoveProperty() {
+    public RemoveProperties() {
     }
 
-    public RemoveProperty(RemovePropertyDefinition definition, RouteContainer parent) {
+    public RemoveProperties(RemovePropertiesDefinition definition, RouteContainer parent) {
         super(parent);
         loadPropertiesFromCamelDefinition(definition);
         loadChildrenFromCamelDefinition(definition);
@@ -61,7 +63,7 @@ public class RemoveProperty extends AbstractNode {
 
     @Override
     public String getDocumentationFileName() {
-        return "removePropertyNode";
+        return "allEIPs";
     }
 
     @Override
@@ -106,20 +108,38 @@ public class RemoveProperty extends AbstractNode {
     }
 
     /**
-     * @return the propertyName
+     * @return the pattern
      */
-    public String getPropertyName() {
-        return this.propertyName;
+    public String getPattern() {
+        return this.pattern;
     }
 
     /**
-     * @param propertyName the propertyName to set
+     * @param pattern the pattern to set
      */
-    public void setPropertyName(String propertyName) {
-        String oldValue = this.propertyName;
-        this.propertyName = propertyName;
-        if (!isSame(oldValue, propertyName)) {
-            firePropertyChange(PROPERTY_PROPERTYNAME, oldValue, propertyName);
+    public void setPattern(String pattern) {
+        String oldValue = this.pattern;
+        this.pattern = pattern;
+        if (!isSame(oldValue, pattern)) {
+            firePropertyChange(PROPERTY_PATTERN, oldValue, pattern);
+        }
+    }
+
+    /**
+     * @return the excludePattern
+     */
+    public String getExcludePattern() {
+        return this.excludePattern;
+    }
+
+    /**
+     * @param excludePattern the excludePattern to set
+     */
+    public void setExcludePattern(String excludePattern) {
+        String oldValue = this.excludePattern;
+        this.excludePattern = excludePattern;
+        if (!isSame(oldValue, excludePattern)) {
+            firePropertyChange(PROPERTY_EXCLUDEPATTERN, oldValue, excludePattern);
         }
     }
 
@@ -127,13 +147,15 @@ public class RemoveProperty extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRemovePropertyCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRemovePropertyInheritErrorHandler);
-        PropertyDescriptor descPropertyName = new TextPropertyDescriptor(PROPERTY_PROPERTYNAME, Messages.propertyLabelRemovePropertyPropertyName);
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRemovePropertiesCustomId);
+        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRemovePropertiesInheritErrorHandler);
+        PropertyDescriptor descPattern = new TextPropertyDescriptor(PROPERTY_PATTERN, Messages.propertyLabelRemovePropertiesPattern);
+        PropertyDescriptor descExcludePattern = new TextPropertyDescriptor(PROPERTY_EXCLUDEPATTERN, Messages.propertyLabelRemovePropertiesExcludePattern);
 
         descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
-        descriptors.put(PROPERTY_PROPERTYNAME, descPropertyName);
+        descriptors.put(PROPERTY_PATTERN, descPattern);
+        descriptors.put(PROPERTY_EXCLUDEPATTERN, descExcludePattern);
     }
 
     /* (non-Javadoc)
@@ -149,8 +171,12 @@ public class RemoveProperty extends AbstractNode {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
         }
-        if (PROPERTY_PROPERTYNAME.equals(id)) {
-            setPropertyName(Objects.convertTo(value, String.class));
+        if (PROPERTY_PATTERN.equals(id)) {
+            setPattern(Objects.convertTo(value, String.class));
+            return;
+        }
+        if (PROPERTY_EXCLUDEPATTERN.equals(id)) {
+            setExcludePattern(Objects.convertTo(value, String.class));
             return;
         }
         super.setPropertyValue(id, value);
@@ -167,8 +193,11 @@ public class RemoveProperty extends AbstractNode {
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
-        if (PROPERTY_PROPERTYNAME.equals(id)) {
-            return this.getPropertyName();
+        if (PROPERTY_PATTERN.equals(id)) {
+            return this.getPattern();
+        }
+        if (PROPERTY_EXCLUDEPATTERN.equals(id)) {
+            return this.getExcludePattern();
         }
         return super.getPropertyValue(id);
     }
@@ -176,11 +205,12 @@ public class RemoveProperty extends AbstractNode {
     @SuppressWarnings("rawtypes")
     @Override
     public ProcessorDefinition createCamelDefinition() {
-        RemovePropertyDefinition answer = new RemovePropertyDefinition();
+        RemovePropertiesDefinition answer = new RemovePropertiesDefinition();
 
         answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
-        answer.setPropertyName(toXmlPropertyValue(PROPERTY_PROPERTYNAME, this.getPropertyName()));
+        answer.setPattern(toXmlPropertyValue(PROPERTY_PATTERN, this.getPattern()));
+        answer.setExcludePattern(toXmlPropertyValue(PROPERTY_EXCLUDEPATTERN, this.getExcludePattern()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -189,7 +219,7 @@ public class RemoveProperty extends AbstractNode {
     @SuppressWarnings("rawtypes")
     @Override
     public Class<?> getCamelDefinitionClass() {
-        return RemovePropertyDefinition.class;
+        return RemovePropertiesDefinition.class;
     }
 
     @SuppressWarnings("rawtypes")
@@ -197,14 +227,15 @@ public class RemoveProperty extends AbstractNode {
     protected void loadPropertiesFromCamelDefinition(ProcessorDefinition processor) {
         super.loadPropertiesFromCamelDefinition(processor);
 
-        if (processor instanceof RemovePropertyDefinition) {
-            RemovePropertyDefinition node = (RemovePropertyDefinition) processor;
+        if (processor instanceof RemovePropertiesDefinition) {
+            RemovePropertiesDefinition node = (RemovePropertiesDefinition) processor;
 
             this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
-            this.setPropertyName(node.getPropertyName());
+            this.setPattern(node.getPattern());
+            this.setExcludePattern(node.getExcludePattern());
         } else {
-            throw new IllegalArgumentException("ProcessorDefinition not an instanceof RemovePropertyDefinition. Was " + processor.getClass().getName());
+            throw new IllegalArgumentException("ProcessorDefinition not an instanceof RemovePropertiesDefinition. Was " + processor.getClass().getName());
         }
     }
 

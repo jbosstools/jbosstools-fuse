@@ -6,13 +6,7 @@
 <archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-java' version='2.15.1'>Creates a new Camel project using Java DSL.</archetype>
 <archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-spring' version='2.15.1'>Creates a new Camel project with added Spring DSL support.</archetype>
 <archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-spring-dm' version='2.15.1'>Creates a new Camel project with added Spring DSL support. Ready to be deployed in OSGi.</archetype>
-<archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-war' version='2.15.1'>Creates a new Camel project that deploys the Camel Web Console, REST API, and your routes as a WAR</archetype>
 <archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-web' version='2.15.1'>Creates a new Camel web project that deploys the Camel routes as a WAR</archetype>
-<archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-webconsole' version='2.15.1'>Creates a new Camel project that deploys the Camel Web Console, REST API, and your routes as a WAR</archetype>
-<archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxrs-service' version='2.7.11'>Simple CXF JAX-RS webapp service using Spring configuration</archetype>
-<archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxws-javafirst' version='2.7.11'>Creates a project for developing a Web service starting from Java code</archetype>
-<archetype groupId='io.fabric8' artifactId='camel-cxf-code-first-archetype' version='1.2.0.Beta4'>Creates a new Camel project using CXF in code (Java) first.</archetype>
-<archetype groupId='io.fabric8' artifactId='camel-cxf-contract-first-archetype' version='1.2.0.Beta4'>Creates a new Camel project using CXF in contract (WSDL) first.</archetype>
-<archetype groupId='io.fabric8' artifactId='camel-drools-archetype' version='1.2.0.Beta4'>Creates a new Camel project using the Drools rule engine.</archetype>
-<archetype groupId='io.fabric8' artifactId='camel-webservice-archetype' version='1.2.0.Beta4'>Creates a new Camel web services project</archetype>
+<archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxrs-service' version='3.0.2.redhat-620103'>Simple CXF JAX-RS webapp service using Spring configuration</archetype>
+<archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxws-javafirst' version='3.0.2.redhat-620103'>Creates a project for developing a Web service starting from Java code</archetype>
 </archetypes>

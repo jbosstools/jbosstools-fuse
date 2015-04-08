@@ -38,12 +38,16 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Log extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Log.CustomId";
+    public static final String PROPERTY_INHERITERRORHANDLER = "Log.InheritErrorHandler";
     public static final String PROPERTY_MESSAGE = "Log.Message";
     public static final String PROPERTY_LOGGINGLEVEL = "Log.LoggingLevel";
     public static final String PROPERTY_LOGNAME = "Log.LogName";
     public static final String PROPERTY_MARKER = "Log.Marker";
     public static final String PROPERTY_LOGGERREF = "Log.LoggerRef";
 
+    private Boolean customId;
+    private Boolean inheritErrorHandler;
     private String message;
     private LoggingLevel loggingLevel;
     private String logName;
@@ -72,6 +76,42 @@ public class Log extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Components";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
+    }
+
+    /**
+     * @return the inheritErrorHandler
+     */
+    public Boolean getInheritErrorHandler() {
+        return this.inheritErrorHandler;
+    }
+
+    /**
+     * @param inheritErrorHandler the inheritErrorHandler to set
+     */
+    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+        Boolean oldValue = this.inheritErrorHandler;
+        this.inheritErrorHandler = inheritErrorHandler;
+        if (!isSame(oldValue, inheritErrorHandler)) {
+            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+        }
     }
 
     /**
@@ -168,12 +208,16 @@ public class Log extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelLogCustomId);
+        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelLogInheritErrorHandler);
         PropertyDescriptor descMessage = new TextPropertyDescriptor(PROPERTY_MESSAGE, Messages.propertyLabelLogMessage);
         PropertyDescriptor descLoggingLevel = new EnumPropertyDescriptor(PROPERTY_LOGGINGLEVEL, Messages.propertyLabelLogLoggingLevel, LoggingLevel.class);
         PropertyDescriptor descLogName = new TextPropertyDescriptor(PROPERTY_LOGNAME, Messages.propertyLabelLogLogName);
         PropertyDescriptor descMarker = new TextPropertyDescriptor(PROPERTY_MARKER, Messages.propertyLabelLogMarker);
         PropertyDescriptor descLoggerRef = new TextPropertyDescriptor(PROPERTY_LOGGERREF, Messages.propertyLabelLogLoggerRef);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
+        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_MESSAGE, descMessage);
         descriptors.put(PROPERTY_LOGGINGLEVEL, descLoggingLevel);
         descriptors.put(PROPERTY_LOGNAME, descLogName);
@@ -186,6 +230,14 @@ public class Log extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
+        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_MESSAGE.equals(id)) {
             setMessage(Objects.convertTo(value, String.class));
             return;
@@ -214,6 +266,12 @@ public class Log extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
+        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+            return Objects.<Boolean>getField(this, "inheritErrorHandler");
+        }
         if (PROPERTY_MESSAGE.equals(id)) {
             return this.getMessage();
         }
@@ -237,6 +295,8 @@ public class Log extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         LogDefinition answer = new LogDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
+        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setMessage(toXmlPropertyValue(PROPERTY_MESSAGE, this.getMessage()));
         answer.setLoggingLevel(toXmlPropertyValue(PROPERTY_LOGGINGLEVEL, this.getLoggingLevel()));
         answer.setLogName(toXmlPropertyValue(PROPERTY_LOGNAME, this.getLogName()));
@@ -261,6 +321,8 @@ public class Log extends AbstractNode {
         if (processor instanceof LogDefinition) {
             LogDefinition node = (LogDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
+            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setMessage(node.getMessage());
             this.setLoggingLevel(node.getLoggingLevel());
             this.setLogName(node.getLogName());

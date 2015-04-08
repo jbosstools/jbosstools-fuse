@@ -39,6 +39,7 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Threads extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Threads.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "Threads.InheritErrorHandler";
     public static final String PROPERTY_EXECUTORSERVICEREF = "Threads.ExecutorServiceRef";
     public static final String PROPERTY_POOLSIZE = "Threads.PoolSize";
@@ -46,10 +47,12 @@ public class Threads extends AbstractNode {
     public static final String PROPERTY_KEEPALIVETIME = "Threads.KeepAliveTime";
     public static final String PROPERTY_TIMEUNIT = "Threads.TimeUnit";
     public static final String PROPERTY_MAXQUEUESIZE = "Threads.MaxQueueSize";
+    public static final String PROPERTY_ALLOWCORETHREADTIMEOUT = "Threads.AllowCoreThreadTimeOut";
     public static final String PROPERTY_THREADNAME = "Threads.ThreadName";
     public static final String PROPERTY_REJECTEDPOLICY = "Threads.RejectedPolicy";
     public static final String PROPERTY_CALLERRUNSWHENREJECTED = "Threads.CallerRunsWhenRejected";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private String executorServiceRef;
     private Integer poolSize;
@@ -57,6 +60,7 @@ public class Threads extends AbstractNode {
     private Long keepAliveTime;
     private TimeUnit timeUnit;
     private Integer maxQueueSize;
+    private Boolean allowCoreThreadTimeOut;
     private String threadName;
     private ThreadPoolRejectedPolicy rejectedPolicy;
     private Boolean callerRunsWhenRejected;
@@ -83,6 +87,24 @@ public class Threads extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Miscellaneous";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -212,6 +234,24 @@ public class Threads extends AbstractNode {
     }
 
     /**
+     * @return the allowCoreThreadTimeOut
+     */
+    public Boolean getAllowCoreThreadTimeOut() {
+        return this.allowCoreThreadTimeOut;
+    }
+
+    /**
+     * @param allowCoreThreadTimeOut the allowCoreThreadTimeOut to set
+     */
+    public void setAllowCoreThreadTimeOut(Boolean allowCoreThreadTimeOut) {
+        Boolean oldValue = this.allowCoreThreadTimeOut;
+        this.allowCoreThreadTimeOut = allowCoreThreadTimeOut;
+        if (!isSame(oldValue, allowCoreThreadTimeOut)) {
+            firePropertyChange(PROPERTY_ALLOWCORETHREADTIMEOUT, oldValue, allowCoreThreadTimeOut);
+        }
+    }
+
+    /**
      * @return the threadName
      */
     public String getThreadName() {
@@ -269,6 +309,7 @@ public class Threads extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelThreadsCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelThreadsInheritErrorHandler);
         PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelThreadsExecutorServiceRef);
         PropertyDescriptor descPoolSize = new TextPropertyDescriptor(PROPERTY_POOLSIZE, Messages.propertyLabelThreadsPoolSize);
@@ -276,10 +317,12 @@ public class Threads extends AbstractNode {
         PropertyDescriptor descKeepAliveTime = new TextPropertyDescriptor(PROPERTY_KEEPALIVETIME, Messages.propertyLabelThreadsKeepAliveTime);
         PropertyDescriptor descTimeUnit = new EnumPropertyDescriptor(PROPERTY_TIMEUNIT, Messages.propertyLabelThreadsTimeUnit, TimeUnit.class);
         PropertyDescriptor descMaxQueueSize = new TextPropertyDescriptor(PROPERTY_MAXQUEUESIZE, Messages.propertyLabelThreadsMaxQueueSize);
+        PropertyDescriptor descAllowCoreThreadTimeOut = new BooleanPropertyDescriptor(PROPERTY_ALLOWCORETHREADTIMEOUT, Messages.propertyLabelThreadsAllowCoreThreadTimeOut);
         PropertyDescriptor descThreadName = new TextPropertyDescriptor(PROPERTY_THREADNAME, Messages.propertyLabelThreadsThreadName);
         PropertyDescriptor descRejectedPolicy = new EnumPropertyDescriptor(PROPERTY_REJECTEDPOLICY, Messages.propertyLabelThreadsRejectedPolicy, ThreadPoolRejectedPolicy.class);
         PropertyDescriptor descCallerRunsWhenRejected = new BooleanPropertyDescriptor(PROPERTY_CALLERRUNSWHENREJECTED, Messages.propertyLabelThreadsCallerRunsWhenRejected);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
         descriptors.put(PROPERTY_POOLSIZE, descPoolSize);
@@ -287,6 +330,7 @@ public class Threads extends AbstractNode {
         descriptors.put(PROPERTY_KEEPALIVETIME, descKeepAliveTime);
         descriptors.put(PROPERTY_TIMEUNIT, descTimeUnit);
         descriptors.put(PROPERTY_MAXQUEUESIZE, descMaxQueueSize);
+        descriptors.put(PROPERTY_ALLOWCORETHREADTIMEOUT, descAllowCoreThreadTimeOut);
         descriptors.put(PROPERTY_THREADNAME, descThreadName);
         descriptors.put(PROPERTY_REJECTEDPOLICY, descRejectedPolicy);
         descriptors.put(PROPERTY_CALLERRUNSWHENREJECTED, descCallerRunsWhenRejected);
@@ -297,6 +341,10 @@ public class Threads extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -325,6 +373,10 @@ public class Threads extends AbstractNode {
             setMaxQueueSize(Objects.convertTo(value, Integer.class));
             return;
         }
+        if (PROPERTY_ALLOWCORETHREADTIMEOUT.equals(id)) {
+            setAllowCoreThreadTimeOut(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_THREADNAME.equals(id)) {
             setThreadName(Objects.convertTo(value, String.class));
             return;
@@ -345,6 +397,9 @@ public class Threads extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -366,6 +421,9 @@ public class Threads extends AbstractNode {
         if (PROPERTY_MAXQUEUESIZE.equals(id)) {
             return this.getMaxQueueSize();
         }
+        if (PROPERTY_ALLOWCORETHREADTIMEOUT.equals(id)) {
+            return this.getAllowCoreThreadTimeOut();
+        }
         if (PROPERTY_THREADNAME.equals(id)) {
             return this.getThreadName();
         }
@@ -383,6 +441,7 @@ public class Threads extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         ThreadsDefinition answer = new ThreadsDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
         answer.setPoolSize(toXmlPropertyValue(PROPERTY_POOLSIZE, this.getPoolSize()));
@@ -390,6 +449,7 @@ public class Threads extends AbstractNode {
         answer.setKeepAliveTime(toXmlPropertyValue(PROPERTY_KEEPALIVETIME, this.getKeepAliveTime()));
         answer.setTimeUnit(toXmlPropertyValue(PROPERTY_TIMEUNIT, this.getTimeUnit()));
         answer.setMaxQueueSize(toXmlPropertyValue(PROPERTY_MAXQUEUESIZE, this.getMaxQueueSize()));
+        answer.setAllowCoreThreadTimeOut(toXmlPropertyValue(PROPERTY_ALLOWCORETHREADTIMEOUT, this.getAllowCoreThreadTimeOut()));
         answer.setThreadName(toXmlPropertyValue(PROPERTY_THREADNAME, this.getThreadName()));
         answer.setRejectedPolicy(toXmlPropertyValue(PROPERTY_REJECTEDPOLICY, this.getRejectedPolicy()));
         answer.setCallerRunsWhenRejected(toXmlPropertyValue(PROPERTY_CALLERRUNSWHENREJECTED, this.getCallerRunsWhenRejected()));
@@ -412,6 +472,7 @@ public class Threads extends AbstractNode {
         if (processor instanceof ThreadsDefinition) {
             ThreadsDefinition node = (ThreadsDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExecutorServiceRef(node.getExecutorServiceRef());
             this.setPoolSize(node.getPoolSize());
@@ -419,6 +480,7 @@ public class Threads extends AbstractNode {
             this.setKeepAliveTime(node.getKeepAliveTime());
             this.setTimeUnit(node.getTimeUnit());
             this.setMaxQueueSize(node.getMaxQueueSize());
+            this.setAllowCoreThreadTimeOut(node.getAllowCoreThreadTimeOut());
             this.setThreadName(node.getThreadName());
             this.setRejectedPolicy(node.getRejectedPolicy());
             this.setCallerRunsWhenRejected(node.getCallerRunsWhenRejected());

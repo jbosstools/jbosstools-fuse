@@ -128,6 +128,9 @@ public class NodeFactory {
         else if (processor instanceof RemovePropertyDefinition) {
             return new RemoveProperty((RemovePropertyDefinition)processor, parent);
         }
+        else if (processor instanceof RemovePropertiesDefinition) {
+            return new RemoveProperties((RemovePropertiesDefinition)processor, parent);
+        }
         else if (processor instanceof ResequenceDefinition) {
             return new Resequence((ResequenceDefinition)processor, parent);
         }

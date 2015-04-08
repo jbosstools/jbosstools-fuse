@@ -95,13 +95,23 @@ public class DownloadLatestXsds implements Runnable {
                     IOUtils.closeQuietly(input);
                     IOUtils.closeQuietly(output);
                 } catch (FileNotFoundException e) {
-                    xsd = "https://repo1.maven.org/maven2/org/apache/" + group + "/" + n + "/" + version + "/" + fileName;
-                    LOG.info("Downloading xsd: " + xsd + " to " + outFile);
-                    InputStream input = new URL(xsd).openStream();
-                    FileOutputStream output = new FileOutputStream(outFile);
-                    IOUtils.copy(input, output);
-                    IOUtils.closeQuietly(input);
-                    IOUtils.closeQuietly(output);
+                    try {
+	                	xsd = "https://repo1.maven.org/maven2/org/apache/" + group + "/" + n + "/" + version + "/" + fileName;
+	                    LOG.info("Downloading xsd: " + xsd + " to " + outFile);
+	                    InputStream input = new URL(xsd).openStream();
+	                    FileOutputStream output = new FileOutputStream(outFile);
+	                    IOUtils.copy(input, output);
+	                    IOUtils.closeQuietly(input);
+	                    IOUtils.closeQuietly(output);
+                    } catch (Exception ex) {
+                    	xsd = "http://repository.jboss.org/" + UpdateReleases.eaRepo + "/org/apache/" + group + "/" + n + "/" + version + "/" + fileName;
+                        LOG.info("Downloading xsd: " + xsd + " to " + outFile);
+                        InputStream input = new URL(xsd).openStream();
+                        FileOutputStream output = new FileOutputStream(outFile);
+                        IOUtils.copy(input, output);
+                        IOUtils.closeQuietly(input);
+                        IOUtils.closeQuietly(output);
+                    }
                 }
 
                 pluginXmlBuffer.append("      <uri\n");

@@ -53,8 +53,13 @@
     <ide-version>${project.version}</ide-version>
     
     <!-- dependency versions -->
-    <fabric.version>1.2.0.Beta4</fabric.version>
+    <!-- lookup in Fabric8-bom -->
+    <fabric.version>1.2.0.redhat-102</fabric.version>
     <camel.version>2.15.1</camel.version>
+    <cxf.version>3.0.2.redhat-620103</cxf.version>
+    <activemq.version>5.11.0.redhat-620103</activemq.version>
+    <servicemix-nmr.version>1.6.1</servicemix-nmr.version>
+
     <jackson.version>2.5.1</jackson.version>
     <spring.version>4.1.5.RELEASE</spring.version>
     <jclouds.version>1.8.0</jclouds.version>
@@ -62,11 +67,8 @@
     <guava.version>18.0</guava.version>
     <jolokia.version>1.2.2</jolokia.version>
     <json-simple.version>1.1.1</json-simple.version>
-    <apache.http.version>4.3.3</apache.http.version>
-    <apache.httpcore.version>4.3.2</apache.httpcore.version>
-    <snapshot-build>redhat-610-SNAPSHOT</snapshot-build>    
-    <activemq.version>5.9.0.${snapshot-build}</activemq.version>
-    <servicemix-nmr.version>1.6.0.${snapshot-build}</servicemix-nmr.version>
+    <apache.http.version>4.3.6</apache.http.version>
+    <apache.httpcore.version>4.3.3</apache.httpcore.version>
 
     <!-- data transformation versions -->
     <version.fasterxml>2.2.0</version.fasterxml>
@@ -90,7 +92,7 @@
   </modules>
 
   <repositories>
-
+<!--
     <repository>
       <id>jboss.org</id>
       <name>JBoss Repository</name>
@@ -114,6 +116,7 @@
 	<enabled>true</enabled>
       </releases>
     </repository>
+-->
 
     <repository>
       <id>ea.jboss.org</id>
@@ -126,7 +129,7 @@
         <enabled>true</enabled>
       </releases>
     </repository>
-
+<!--
     <repository>
       <id>m2-release-proxy.jboss.org</id>
       <name>JBoss Release Proxy Repository</name>
@@ -138,7 +141,7 @@
         <enabled>true</enabled>
       </releases>
     </repository>
-
+-->
     <repository>
       <id>jboss-public-repository-group</id>
       <name>JBoss Public Repository Group</name>

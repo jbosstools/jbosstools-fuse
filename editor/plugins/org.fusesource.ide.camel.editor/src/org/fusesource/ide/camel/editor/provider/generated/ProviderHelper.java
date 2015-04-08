@@ -51,6 +51,7 @@ import org.fusesource.ide.camel.model.generated.RecipientList;
 import org.fusesource.ide.camel.model.generated.RemoveHeader;
 import org.fusesource.ide.camel.model.generated.RemoveHeaders;
 import org.fusesource.ide.camel.model.generated.RemoveProperty;
+import org.fusesource.ide.camel.model.generated.RemoveProperties;
 import org.fusesource.ide.camel.model.generated.Resequence;
 import org.fusesource.ide.camel.model.generated.Rollback;
 import org.fusesource.ide.camel.model.generated.Route;
@@ -131,6 +132,7 @@ public class ProviderHelper {
                 new CreateFigureFeature<RemoveHeader>(fp, Messages.paletteRemoveHeaderTitle, Messages.paletteRemoveHeaderDescription, RemoveHeader.class),
                 new CreateFigureFeature<RemoveHeaders>(fp, Messages.paletteRemoveHeadersTitle, Messages.paletteRemoveHeadersDescription, RemoveHeaders.class),
                 new CreateFigureFeature<RemoveProperty>(fp, Messages.paletteRemovePropertyTitle, Messages.paletteRemovePropertyDescription, RemoveProperty.class),
+                new CreateFigureFeature<RemoveProperties>(fp, Messages.paletteRemovePropertiesTitle, Messages.paletteRemovePropertiesDescription, RemoveProperties.class),
                 new CreateFigureFeature<Resequence>(fp, Messages.paletteResequenceTitle, Messages.paletteResequenceDescription, Resequence.class),
                 new CreateFigureFeature<Rollback>(fp, Messages.paletteRollbackTitle, Messages.paletteRollbackDescription, Rollback.class),
                 new CreateFigureFeature<RoutingSlip>(fp, Messages.paletteRoutingSlipTitle, Messages.paletteRoutingSlipDescription, RoutingSlip.class),
@@ -197,6 +199,7 @@ public class ProviderHelper {
         imageProvider.addIconsForClass(new RemoveHeader());
         imageProvider.addIconsForClass(new RemoveHeaders());
         imageProvider.addIconsForClass(new RemoveProperty());
+        imageProvider.addIconsForClass(new RemoveProperties());
         imageProvider.addIconsForClass(new Resequence());
         imageProvider.addIconsForClass(new Rollback());
         imageProvider.addIconsForClass(new Route());

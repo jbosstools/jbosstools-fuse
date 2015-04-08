@@ -21,6 +21,7 @@ default is that a consumer that has not Ack'd a message for 30 seconds is slow.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -115,6 +116,7 @@ an abort.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -170,7 +172,7 @@ an abort.
   <xs:element name='authenticationUser'>
     <xs:annotation>
       <xs:documentation><![CDATA[
-        A helper object used to configure simple authentiaction plugin
+        A helper object used to configure simple authentication plugin
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
@@ -538,6 +540,7 @@ has experiences File or JDBC I/O Exceptions
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:defaultIOExceptionHandler'/>
               <xs:element ref='tns:jDBCIOExceptionHandler'/>
+              <xs:element ref='tns:leaseLockerIOExceptionHandler'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -642,9 +645,11 @@ authentication or authorization
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:authorizationPlugin'/>
+              <xs:element ref='tns:camelRoutesBrokerPlugin'/>
               <xs:element ref='tns:connectionDotFilePlugin'/>
               <xs:element ref='tns:destinationDotFilePlugin'/>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:discardingDLQBrokerPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBrokerPlugin'/>
               <xs:element ref='tns:jaasAuthenticationPlugin'/>
@@ -688,6 +693,7 @@ other brokers in a federated network
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -968,6 +974,7 @@ value filled in or not.
       <xs:attribute name='producerSystemUsage' type='xs:string'/>
       <xs:attribute name='producerSystemUsagePortion' type='xs:integer'/>
       <xs:attribute name='regionBroker' type='xs:string'/>
+      <xs:attribute name='rejectDurableConsumers' type='xs:boolean'/>
       <xs:attribute name='restartAllowed' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -1156,6 +1163,7 @@ has experiences File or JDBC I/O Exceptions
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:defaultIOExceptionHandler'/>
               <xs:element ref='tns:jDBCIOExceptionHandler'/>
+              <xs:element ref='tns:leaseLockerIOExceptionHandler'/>
               <xs:any namespace='##other'/>
             </xs:choice>
           </xs:complexType>
@@ -1260,9 +1268,11 @@ authentication or authorization
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='unbounded'>
               <xs:element ref='tns:authorizationPlugin'/>
+              <xs:element ref='tns:camelRoutesBrokerPlugin'/>
               <xs:element ref='tns:connectionDotFilePlugin'/>
               <xs:element ref='tns:destinationDotFilePlugin'/>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:discardingDLQBrokerPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBrokerPlugin'/>
               <xs:element ref='tns:jaasAuthenticationPlugin'/>
@@ -1306,6 +1316,7 @@ other brokers in a federated network
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -1586,6 +1597,7 @@ value filled in or not.
       <xs:attribute name='producerSystemUsage' type='xs:string'/>
       <xs:attribute name='producerSystemUsagePortion' type='xs:integer'/>
       <xs:attribute name='regionBroker' type='xs:string'/>
+      <xs:attribute name='rejectDurableConsumers' type='xs:boolean'/>
       <xs:attribute name='restartAllowed' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -1764,6 +1776,59 @@ policy.
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name='cacheSize' type='xs:integer'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- element for type: org.apache.activemq.camel.component.CamelEndpointLoader -->
+  <xs:element name='camelEndpointLoader'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        A helper bean which populates a {@link CamelContext} with ActiveMQ Queue endpoints
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='camelContext' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='component' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='source' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='camelContext' type='xs:string'/>
+      <xs:attribute name='component' type='xs:string'/>
+      <xs:attribute name='source' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- element for type: org.apache.activemq.camel.camelplugin.CamelRoutesBrokerPlugin -->
+  <xs:element name='camelRoutesBrokerPlugin'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        A CamelRoutesBrokerPlugin
+
+load camel routes dynamically from a routes.xml file located in same directory as ActiveMQ.xml
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name='checkPeriod' type='xs:integer'/>
+      <xs:attribute name='routesFile' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -2272,6 +2337,15 @@ no broker
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='connectionIdGenerator' type='xs:string'/>
+      <xs:attribute name='consumerExpiryCheckEnabled' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Controls whether message expiration checking is done in each MessageConsumer
+prior to dispatching a message.  Disabling this check can lead to consumption
+of expired messages.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='consumerFailoverRedeliveryWaitPeriod' type='xs:long'/>
       <xs:attribute name='copyMessageOnSend' type='xs:boolean'>
         <xs:annotation>
@@ -2944,6 +3018,7 @@ file creator plugin which creates a DOT file showing the current topic & queue h
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -2960,6 +3035,49 @@ file creator plugin which creates a DOT file showing the current topic & queue h
       <xs:attribute name='adminConnectionContext' type='xs:string'/>
       <xs:attribute name='next' type='xs:string'/>
       <xs:attribute name='pathSeparator' type='xs:string'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- element for type: org.apache.activemq.broker.util.DestinationsPlugin -->
+  <xs:element name='destinationsPlugin'>
+    <xs:annotation>
+      <xs:documentation><![CDATA[
+        A simple plugin that can be used to export/import runtime destinations. It's useful in security constrained
+environments where you want to create destinations only through the management APIs and be able to
+replicate them to another broker
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='adminConnectionContext' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='next' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
+              <xs:element ref='tns:forcePersistencyModeBroker'/>
+              <xs:element ref='tns:loggingBrokerPlugin'/>
+              <xs:element ref='tns:multicastTraceBrokerPlugin'/>
+              <xs:element ref='tns:redeliveryPlugin'/>
+              <xs:element ref='tns:timeStampingBrokerPlugin'/>
+              <xs:element ref='tns:traceBrokerPathPlugin'/>
+              <xs:element ref='tns:udpTraceBrokerPlugin'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='adminConnectionContext' type='xs:string'/>
+      <xs:attribute name='location' type='xs:string'/>
+      <xs:attribute name='next' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -2990,6 +3108,7 @@ file creator plugin which creates a DOT file showing the current topic & queue h
       </xs:choice></xs:choice>
       <xs:attribute name='deadLetterQueue' type='xs:string'/>
       <xs:attribute name='enableAudit' type='xs:boolean'/>
+      <xs:attribute name='expiration' type='xs:long'/>
       <xs:attribute name='processExpired' type='xs:boolean'/>
       <xs:attribute name='processNonPersistent' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -3207,6 +3326,7 @@ count of last messages.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -3250,6 +3370,7 @@ time order.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -3305,6 +3426,7 @@ messages.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -3683,6 +3805,7 @@ The default is false.
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='enableAudit' type='xs:boolean'/>
+      <xs:attribute name='expiration' type='xs:long'/>
       <xs:attribute name='processExpired' type='xs:boolean'/>
       <xs:attribute name='processNonPersistent' type='xs:boolean'/>
       <xs:attribute name='queuePrefix' type='xs:string'>
@@ -4599,6 +4722,11 @@ other long term persistent storage.
             </xs:choice>
           </xs:complexType>
         </xs:element>
+        <xs:element name='scheduledThreadPoolExecutor' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='statements' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
@@ -4657,6 +4785,7 @@ When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
       </xs:attribute>
       <xs:attribute name='lockKeepAlivePeriod' type='xs:long'/>
       <xs:attribute name='locker' type='xs:string'/>
+      <xs:attribute name='scheduledThreadPoolExecutor' type='xs:string'/>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='taskRunnerFactory' type='xs:string'/>
       <xs:attribute name='useDatabaseLock' type='xs:boolean'>
@@ -4762,6 +4891,11 @@ false so that messages actually reside long term in the JDBC database.
             </xs:choice>
           </xs:complexType>
         </xs:element>
+        <xs:element name='scheduledThreadPoolExecutor' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='statements' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
@@ -4820,6 +4954,7 @@ When set using Xbean, values of the form "20 Mb", "1024kb", and "1g" can be used
       </xs:attribute>
       <xs:attribute name='lockKeepAlivePeriod' type='xs:long'/>
       <xs:attribute name='locker' type='xs:string'/>
+      <xs:attribute name='scheduledThreadPoolExecutor' type='xs:string'/>
       <xs:attribute name='statements' type='xs:string'/>
       <xs:attribute name='taskRunnerFactory' type='xs:string'/>
       <xs:attribute name='useDatabaseLock' type='xs:boolean'>
@@ -4883,6 +5018,11 @@ KahaDB - Embedded Lightweight Non-Relational Database
               <xs:element ref='tns:transact-database-locker'/>
               <xs:any namespace='##other'/>
             </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='scheduledThreadPoolExecutor' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:element name='transactionIdTransformer' minOccurs='0' maxOccurs='1'>
@@ -4971,6 +5111,13 @@ batch)
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='indexDirectory' type='xs:string'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets the directory where KahaDB index files should be written.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='indexLFUEvictionFactor' type='xs:float'/>
       <xs:attribute name='indexWriteBatchSize' type='xs:string'>
         <xs:annotation>
@@ -5003,6 +5150,9 @@ batch)
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='preallocationScope' type='xs:string'/>
+      <xs:attribute name='preallocationStrategy' type='xs:string'/>
+      <xs:attribute name='scheduledThreadPoolExecutor' type='xs:string'/>
       <xs:attribute name='transactionIdTransformer' type='xs:string'/>
       <xs:attribute name='usageManager' type='xs:string'/>
       <xs:attribute name='useIndexLFRUEviction' type='xs:boolean'/>
@@ -5085,6 +5235,7 @@ last message.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -5302,6 +5453,35 @@ against the same logical database.
   </xs:element>
 
 
+  <!-- element for type: org.apache.activemq.util.LeaseLockerIOExceptionHandler -->
+  <xs:element name='leaseLockerIOExceptionHandler'>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded"><xs:choice>
+        <xs:element name='brokerService' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:choice minOccurs='0' maxOccurs='1'>
+              <xs:element ref='tns:broker'/>
+              <xs:element ref='tns:brokerService'/>
+              <xs:any namespace='##other'/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
+      </xs:choice></xs:choice>
+      <xs:attribute name='brokerService' type='xs:string'/>
+      <xs:attribute name='ignoreAllErrors' type='xs:boolean'/>
+      <xs:attribute name='ignoreNoSpaceErrors' type='xs:boolean'/>
+      <xs:attribute name='ignoreSQLExceptions' type='xs:boolean'/>
+      <xs:attribute name='noSpaceMessage' type='xs:string'/>
+      <xs:attribute name='resumeCheckSleepPeriod' type='xs:long'/>
+      <xs:attribute name='sqlExceptionMessage' type='xs:string'/>
+      <xs:attribute name='stopStartConnectors' type='xs:boolean'/>
+      <xs:attribute name='id' type='xs:ID'/>
+      <xs:anyAttribute namespace='##other' processContents='lax'/>
+    </xs:complexType>
+  </xs:element>
+
+
   <!-- element for type: org.apache.activemq.store.leveldb.LevelDBPersistenceAdapter -->
   <xs:element name='levelDB'>
     <xs:annotation>
@@ -5330,6 +5510,11 @@ LevelDB - Embedded Lightweight Non-Relational Database
               <xs:element ref='tns:transact-database-locker'/>
               <xs:any namespace='##other'/>
             </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='scheduledThreadPoolExecutor' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
         <xs:element name='transactionIdTransformer' minOccurs='0' maxOccurs='1'>
@@ -5369,6 +5554,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='maxFailoverProducersToTrack' type='xs:integer'/>
       <xs:attribute name='monitorStats' type='xs:boolean'/>
       <xs:attribute name='paranoidChecks' type='xs:boolean'/>
+      <xs:attribute name='scheduledThreadPoolExecutor' type='xs:string'/>
       <xs:attribute name='sync' type='xs:boolean'/>
       <xs:attribute name='transactionIdTransformer' type='xs:string'/>
       <xs:attribute name='usageManager' type='xs:string'/>
@@ -5398,6 +5584,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -5437,13 +5624,6 @@ LevelDB - Embedded Lightweight Non-Relational Database
         <xs:annotation>
           <xs:documentation><![CDATA[
             Logger Events that are normally internal to the broker
-          ]]></xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name='logMessageEvents' type='xs:boolean'>
-        <xs:annotation>
-          <xs:documentation><![CDATA[
-            Logger Events that are related to message processing
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -5516,6 +5696,11 @@ distribution of destinations across multiple kahaDB persistence adapters
             </xs:choice>
           </xs:complexType>
         </xs:element>
+        <xs:element name='scheduledThreadPoolExecutor' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='transactionStore' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
@@ -5554,6 +5739,7 @@ be used
       </xs:attribute>
       <xs:attribute name='lockKeepAlivePeriod' type='xs:long'/>
       <xs:attribute name='locker' type='xs:string'/>
+      <xs:attribute name='scheduledThreadPoolExecutor' type='xs:string'/>
       <xs:attribute name='transactionStore' type='xs:string'/>
       <xs:attribute name='usageManager' type='xs:string'/>
       <xs:attribute name='useLock' type='xs:boolean'/>
@@ -6010,6 +6196,7 @@ socket.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -6197,6 +6384,7 @@ available and setup a connection to each available remote broker
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -6814,7 +7002,20 @@ should be used
       <xs:attribute name='expireMessagesPeriod' type='xs:long'/>
       <xs:attribute name='gcInactiveDestinations' type='xs:boolean'/>
       <xs:attribute name='gcWithNetworkConsumers' type='xs:boolean'/>
-      <xs:attribute name='inactiveTimoutBeforeGC' type='xs:long'/>
+      <xs:attribute name='inactiveTimeoutBeforeGC' type='xs:long'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets the amount of time a destination is inactive before it is marked for GC
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='inactiveTimoutBeforeGC' type='xs:long'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets the amount of time a destination is inactive before it is marked for GC
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='lazyDispatch' type='xs:boolean'/>
       <xs:attribute name='maxAuditDepth' type='xs:integer'/>
       <xs:attribute name='maxBrowsePageSize' type='xs:integer'/>
@@ -7244,6 +7445,7 @@ specific query mechanism to load any messages they may have missed.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -7470,6 +7672,7 @@ and fallbackToDeadLetter
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -7652,6 +7855,11 @@ LevelDB - Embedded Lightweight Non-Relational Database
             </xs:choice>
           </xs:complexType>
         </xs:element>
+        <xs:element name='scheduledThreadPoolExecutor' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name='usageManager' minOccurs='0' maxOccurs='1'>
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
@@ -7666,6 +7874,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='bind' type='xs:string'/>
       <xs:attribute name='brokerName' type='xs:string'/>
       <xs:attribute name='brokerService' type='xs:string'/>
+      <xs:attribute name='connectUrl' type='xs:string'/>
       <xs:attribute name='container' type='xs:string'/>
       <xs:attribute name='directory' type='xs:string'/>
       <xs:attribute name='failoverProducersAuditDepth' type='xs:integer'/>
@@ -7686,6 +7895,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='monitorStats' type='xs:boolean'/>
       <xs:attribute name='paranoidChecks' type='xs:boolean'/>
       <xs:attribute name='replicas' type='xs:integer'/>
+      <xs:attribute name='scheduledThreadPoolExecutor' type='xs:string'/>
       <xs:attribute name='securityToken' type='xs:string'/>
       <xs:attribute name='sync' type='xs:string'/>
       <xs:attribute name='usageManager' type='xs:string'/>
@@ -7695,7 +7905,7 @@ LevelDB - Embedded Lightweight Non-Relational Database
       <xs:attribute name='zkAddress' type='xs:string'/>
       <xs:attribute name='zkPassword' type='xs:string'/>
       <xs:attribute name='zkPath' type='xs:string'/>
-      <xs:attribute name='zkSessionTmeout' type='xs:string'/>
+      <xs:attribute name='zkSessionTimeout' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -7716,6 +7926,7 @@ last non-zero length message with the {@link org.apache.activemq.command.ActiveM
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -7844,6 +8055,7 @@ a constant destination.
       </xs:choice></xs:choice>
       <xs:attribute name='deadLetterQueue' type='xs:string'/>
       <xs:attribute name='enableAudit' type='xs:boolean'/>
+      <xs:attribute name='expiration' type='xs:long'/>
       <xs:attribute name='processExpired' type='xs:boolean'/>
       <xs:attribute name='processNonPersistent' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
@@ -8587,6 +8799,11 @@ cooperative multitasking.
             <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name='threadClassLoader' minOccurs='0' maxOccurs='1'>
+          <xs:complexType>
+            <xs:sequence minOccurs='0' maxOccurs='1'><xs:any minOccurs='0' maxOccurs='unbounded'/></xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='daemon' type='xs:boolean'/>
@@ -8598,6 +8815,7 @@ cooperative multitasking.
       <xs:attribute name='priority' type='xs:integer'/>
       <xs:attribute name='rejectedTaskHandler' type='xs:string'/>
       <xs:attribute name='shutdownAwaitTermination' type='xs:long'/>
+      <xs:attribute name='threadClassLoader' type='xs:string'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>
@@ -8886,6 +9104,7 @@ Attribute 'ttlCeiling' can be used to apply a limit to the expiration time
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -8938,6 +9157,7 @@ subscriptions.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -9027,6 +9247,7 @@ message actually took through the network can be seen in the defined property.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -9310,6 +9531,7 @@ socket.
           <xs:complexType>
             <xs:choice minOccurs='0' maxOccurs='1'>
               <xs:element ref='tns:destinationPathSeparatorPlugin'/>
+              <xs:element ref='tns:destinationsPlugin'/>
               <xs:element ref='tns:forcePersistencyModeBroker'/>
               <xs:element ref='tns:loggingBrokerPlugin'/>
               <xs:element ref='tns:multicastTraceBrokerPlugin'/>
@@ -9389,7 +9611,8 @@ socket.
     <xs:annotation>
       <xs:documentation><![CDATA[
         Implements <a
-href="http://activemq.apache.org/virtual-destinations.html">Virtual Topics</a>.
+href="http://activemq.apache.org/virtual-destinations.html">Virtual
+Topics</a>.
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
@@ -9469,9 +9692,9 @@ topic
       <xs:attribute name='selectorAware' type='xs:boolean'>
         <xs:annotation>
           <xs:documentation><![CDATA[
-            Indicates whether the selectors of consumers are used to determine dispatch
-to a virtual destination, when true only messages matching an existing 
-consumer will be dispatched.
+            Indicates whether the selectors of consumers are used to determine
+dispatch to a virtual destination, when true only messages matching an
+existing consumer will be dispatched.
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -9761,6 +9984,15 @@ no broker
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name='connectionIdGenerator' type='xs:string'/>
+      <xs:attribute name='consumerExpiryCheckEnabled' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Controls whether message expiration checking is done in each MessageConsumer
+prior to dispatching a message.  Disabling this check can lead to consumption
+of expired messages.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='consumerFailoverRedeliveryWaitPeriod' type='xs:long'/>
       <xs:attribute name='copyMessageOnSend' type='xs:boolean'>
         <xs:annotation>

@@ -39,6 +39,7 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class OnException extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "OnException.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "OnException.InheritErrorHandler";
     public static final String PROPERTY_EXCEPTIONS = "OnException.Exceptions";
     public static final String PROPERTY_RETRYWHILE = "OnException.RetryWhile";
@@ -47,8 +48,9 @@ public class OnException extends AbstractNode {
     public static final String PROPERTY_CONTINUED = "OnException.Continued";
     public static final String PROPERTY_ONREDELIVERYREF = "OnException.OnRedeliveryRef";
     public static final String PROPERTY_USEORIGINALMESSAGEPOLICY = "OnException.UseOriginalMessagePolicy";
-    public static final String PROPERTY_REDELIVERYPOLICY = "OnException.RedeliveryPolicy";
+    public static final String PROPERTY_REDELIVERYPOLICYTYPE = "OnException.RedeliveryPolicyType";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private List exceptions;
     private ExpressionDefinition retryWhile;
@@ -57,7 +59,7 @@ public class OnException extends AbstractNode {
     private ExpressionDefinition continued;
     private String onRedeliveryRef;
     private Boolean useOriginalMessagePolicy;
-    private RedeliveryPolicyDefinition redeliveryPolicy;
+    private RedeliveryPolicyDefinition redeliveryPolicyType;
 
     public OnException() {
     }
@@ -81,6 +83,24 @@ public class OnException extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Control Flow";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -228,20 +248,20 @@ public class OnException extends AbstractNode {
     }
 
     /**
-     * @return the redeliveryPolicy
+     * @return the redeliveryPolicyType
      */
-    public RedeliveryPolicyDefinition getRedeliveryPolicy() {
-        return this.redeliveryPolicy;
+    public RedeliveryPolicyDefinition getRedeliveryPolicyType() {
+        return this.redeliveryPolicyType;
     }
 
     /**
-     * @param redeliveryPolicy the redeliveryPolicy to set
+     * @param redeliveryPolicyType the redeliveryPolicyType to set
      */
-    public void setRedeliveryPolicy(RedeliveryPolicyDefinition redeliveryPolicy) {
-        RedeliveryPolicyDefinition oldValue = this.redeliveryPolicy;
-        this.redeliveryPolicy = redeliveryPolicy;
-        if (!isSame(oldValue, redeliveryPolicy)) {
-            firePropertyChange(PROPERTY_REDELIVERYPOLICY, oldValue, redeliveryPolicy);
+    public void setRedeliveryPolicyType(RedeliveryPolicyDefinition redeliveryPolicyType) {
+        RedeliveryPolicyDefinition oldValue = this.redeliveryPolicyType;
+        this.redeliveryPolicyType = redeliveryPolicyType;
+        if (!isSame(oldValue, redeliveryPolicyType)) {
+            firePropertyChange(PROPERTY_REDELIVERYPOLICYTYPE, oldValue, redeliveryPolicyType);
         }
     }
 
@@ -249,6 +269,7 @@ public class OnException extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelOnExceptionCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelOnExceptionInheritErrorHandler);
         PropertyDescriptor descExceptions = new ListPropertyDescriptor(PROPERTY_EXCEPTIONS, Messages.propertyLabelOnExceptionExceptions);
         PropertyDescriptor descRetryWhile = new ExpressionPropertyDescriptor(PROPERTY_RETRYWHILE, Messages.propertyLabelOnExceptionRetryWhile);
@@ -257,9 +278,10 @@ public class OnException extends AbstractNode {
         PropertyDescriptor descContinued = new ExpressionPropertyDescriptor(PROPERTY_CONTINUED, Messages.propertyLabelOnExceptionContinued);
         PropertyDescriptor descOnRedeliveryRef = new TextPropertyDescriptor(PROPERTY_ONREDELIVERYREF, Messages.propertyLabelOnExceptionOnRedeliveryRef);
         PropertyDescriptor descUseOriginalMessagePolicy = new BooleanPropertyDescriptor(PROPERTY_USEORIGINALMESSAGEPOLICY, Messages.propertyLabelOnExceptionUseOriginalMessagePolicy);
-        PropertyDescriptor descRedeliveryPolicy = new ComplexUnionPropertyDescriptor(PROPERTY_REDELIVERYPOLICY, Messages.propertyLabelOnExceptionRedeliveryPolicy, RedeliveryPolicyDefinition.class, new UnionTypeValue[] {
+        PropertyDescriptor descRedeliveryPolicyType = new ComplexUnionPropertyDescriptor(PROPERTY_REDELIVERYPOLICYTYPE, Messages.propertyLabelOnExceptionRedeliveryPolicyType, RedeliveryPolicyDefinition.class, new UnionTypeValue[] {
         });
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXCEPTIONS, descExceptions);
         descriptors.put(PROPERTY_RETRYWHILE, descRetryWhile);
@@ -268,7 +290,7 @@ public class OnException extends AbstractNode {
         descriptors.put(PROPERTY_CONTINUED, descContinued);
         descriptors.put(PROPERTY_ONREDELIVERYREF, descOnRedeliveryRef);
         descriptors.put(PROPERTY_USEORIGINALMESSAGEPOLICY, descUseOriginalMessagePolicy);
-        descriptors.put(PROPERTY_REDELIVERYPOLICY, descRedeliveryPolicy);
+        descriptors.put(PROPERTY_REDELIVERYPOLICYTYPE, descRedeliveryPolicyType);
     }
 
     /* (non-Javadoc)
@@ -276,6 +298,10 @@ public class OnException extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -308,8 +334,8 @@ public class OnException extends AbstractNode {
             setUseOriginalMessagePolicy(Objects.convertTo(value, Boolean.class));
             return;
         }
-        if (PROPERTY_REDELIVERYPOLICY.equals(id)) {
-            setRedeliveryPolicy(Objects.convertTo(value, RedeliveryPolicyDefinition.class));
+        if (PROPERTY_REDELIVERYPOLICYTYPE.equals(id)) {
+            setRedeliveryPolicyType(Objects.convertTo(value, RedeliveryPolicyDefinition.class));
             return;
         }
         super.setPropertyValue(id, value);
@@ -320,6 +346,9 @@ public class OnException extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -344,8 +373,8 @@ public class OnException extends AbstractNode {
         if (PROPERTY_USEORIGINALMESSAGEPOLICY.equals(id)) {
             return this.getUseOriginalMessagePolicy();
         }
-        if (PROPERTY_REDELIVERYPOLICY.equals(id)) {
-            return this.getRedeliveryPolicy();
+        if (PROPERTY_REDELIVERYPOLICYTYPE.equals(id)) {
+            return this.getRedeliveryPolicyType();
         }
         return super.getPropertyValue(id);
     }
@@ -355,6 +384,7 @@ public class OnException extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         OnExceptionDefinition answer = new OnExceptionDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExceptions(toXmlPropertyValue(PROPERTY_EXCEPTIONS, this.getExceptions()));
         Objects.setField(answer, "retryWhile", toXmlPropertyValue(PROPERTY_RETRYWHILE, this.getRetryWhile()));
@@ -363,7 +393,7 @@ public class OnException extends AbstractNode {
         Objects.setField(answer, "continued", toXmlPropertyValue(PROPERTY_CONTINUED, this.getContinued()));
         answer.setOnRedeliveryRef(toXmlPropertyValue(PROPERTY_ONREDELIVERYREF, this.getOnRedeliveryRef()));
         answer.setUseOriginalMessagePolicy(toXmlPropertyValue(PROPERTY_USEORIGINALMESSAGEPOLICY, this.getUseOriginalMessagePolicy()));
-        answer.setRedeliveryPolicy(toXmlPropertyValue(PROPERTY_REDELIVERYPOLICY, this.getRedeliveryPolicy()));
+        answer.setRedeliveryPolicyType(toXmlPropertyValue(PROPERTY_REDELIVERYPOLICYTYPE, this.getRedeliveryPolicyType()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -383,6 +413,7 @@ public class OnException extends AbstractNode {
         if (processor instanceof OnExceptionDefinition) {
             OnExceptionDefinition node = (OnExceptionDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExceptions(node.getExceptions());
             Objects.setField(this, "retryWhile", node.getRetryWhile());
@@ -391,7 +422,7 @@ public class OnException extends AbstractNode {
             Objects.setField(this, "continued", node.getContinued());
             this.setOnRedeliveryRef(node.getOnRedeliveryRef());
             this.setUseOriginalMessagePolicy(node.getUseOriginalMessagePolicy());
-            this.setRedeliveryPolicy(node.getRedeliveryPolicy());
+            this.setRedeliveryPolicyType(node.getRedeliveryPolicyType());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof OnExceptionDefinition. Was " + processor.getClass().getName());
         }

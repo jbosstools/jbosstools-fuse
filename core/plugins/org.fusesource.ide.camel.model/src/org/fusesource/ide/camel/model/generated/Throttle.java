@@ -37,19 +37,23 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Throttle extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Throttle.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "Throttle.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "Throttle.Expression";
     public static final String PROPERTY_EXECUTORSERVICEREF = "Throttle.ExecutorServiceRef";
     public static final String PROPERTY_TIMEPERIODMILLIS = "Throttle.TimePeriodMillis";
     public static final String PROPERTY_ASYNCDELAYED = "Throttle.AsyncDelayed";
     public static final String PROPERTY_CALLERRUNSWHENREJECTED = "Throttle.CallerRunsWhenRejected";
+    public static final String PROPERTY_REJECTEXECUTION = "Throttle.RejectExecution";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private String executorServiceRef;
     private Long timePeriodMillis;
     private Boolean asyncDelayed;
     private Boolean callerRunsWhenRejected;
+    private Boolean rejectExecution;
 
     public Throttle() {
     }
@@ -73,6 +77,24 @@ public class Throttle extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Control Flow";
+    }
+
+    /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
     }
 
     /**
@@ -183,23 +205,45 @@ public class Throttle extends AbstractNode {
         }
     }
 
+    /**
+     * @return the rejectExecution
+     */
+    public Boolean getRejectExecution() {
+        return this.rejectExecution;
+    }
+
+    /**
+     * @param rejectExecution the rejectExecution to set
+     */
+    public void setRejectExecution(Boolean rejectExecution) {
+        Boolean oldValue = this.rejectExecution;
+        this.rejectExecution = rejectExecution;
+        if (!isSame(oldValue, rejectExecution)) {
+            firePropertyChange(PROPERTY_REJECTEXECUTION, oldValue, rejectExecution);
+        }
+    }
+
     @Override
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelThrottleCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelThrottleInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelThrottleExpression);
         PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelThrottleExecutorServiceRef);
         PropertyDescriptor descTimePeriodMillis = new TextPropertyDescriptor(PROPERTY_TIMEPERIODMILLIS, Messages.propertyLabelThrottleTimePeriodMillis);
         PropertyDescriptor descAsyncDelayed = new BooleanPropertyDescriptor(PROPERTY_ASYNCDELAYED, Messages.propertyLabelThrottleAsyncDelayed);
         PropertyDescriptor descCallerRunsWhenRejected = new BooleanPropertyDescriptor(PROPERTY_CALLERRUNSWHENREJECTED, Messages.propertyLabelThrottleCallerRunsWhenRejected);
+        PropertyDescriptor descRejectExecution = new BooleanPropertyDescriptor(PROPERTY_REJECTEXECUTION, Messages.propertyLabelThrottleRejectExecution);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
         descriptors.put(PROPERTY_TIMEPERIODMILLIS, descTimePeriodMillis);
         descriptors.put(PROPERTY_ASYNCDELAYED, descAsyncDelayed);
         descriptors.put(PROPERTY_CALLERRUNSWHENREJECTED, descCallerRunsWhenRejected);
+        descriptors.put(PROPERTY_REJECTEXECUTION, descRejectExecution);
     }
 
     /* (non-Javadoc)
@@ -207,6 +251,10 @@ public class Throttle extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -231,6 +279,10 @@ public class Throttle extends AbstractNode {
             setCallerRunsWhenRejected(Objects.convertTo(value, Boolean.class));
             return;
         }
+        if (PROPERTY_REJECTEXECUTION.equals(id)) {
+            setRejectExecution(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         super.setPropertyValue(id, value);
     }
 
@@ -239,6 +291,9 @@ public class Throttle extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -257,6 +312,9 @@ public class Throttle extends AbstractNode {
         if (PROPERTY_CALLERRUNSWHENREJECTED.equals(id)) {
             return this.getCallerRunsWhenRejected();
         }
+        if (PROPERTY_REJECTEXECUTION.equals(id)) {
+            return this.getRejectExecution();
+        }
         return super.getPropertyValue(id);
     }
 
@@ -265,12 +323,14 @@ public class Throttle extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         ThrottleDefinition answer = new ThrottleDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
         answer.setTimePeriodMillis(toXmlPropertyValue(PROPERTY_TIMEPERIODMILLIS, this.getTimePeriodMillis()));
         answer.setAsyncDelayed(toXmlPropertyValue(PROPERTY_ASYNCDELAYED, this.getAsyncDelayed()));
         answer.setCallerRunsWhenRejected(toXmlPropertyValue(PROPERTY_CALLERRUNSWHENREJECTED, this.getCallerRunsWhenRejected()));
+        answer.setRejectExecution(toXmlPropertyValue(PROPERTY_REJECTEXECUTION, this.getRejectExecution()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -290,12 +350,14 @@ public class Throttle extends AbstractNode {
         if (processor instanceof ThrottleDefinition) {
             ThrottleDefinition node = (ThrottleDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setExecutorServiceRef(node.getExecutorServiceRef());
             this.setTimePeriodMillis(node.getTimePeriodMillis());
             this.setAsyncDelayed(node.getAsyncDelayed());
             this.setCallerRunsWhenRejected(node.getCallerRunsWhenRejected());
+            this.setRejectExecution(node.getRejectExecution());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof ThrottleDefinition. Was " + processor.getClass().getName());
         }

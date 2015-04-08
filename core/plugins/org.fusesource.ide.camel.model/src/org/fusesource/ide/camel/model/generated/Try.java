@@ -37,8 +37,10 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Try extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "Try.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "Try.InheritErrorHandler";
 
+    private Boolean customId;
     private Boolean inheritErrorHandler;
 
     public Try() {
@@ -66,6 +68,24 @@ public class Try extends AbstractNode {
     }
 
     /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
+    }
+
+    /**
      * @return the inheritErrorHandler
      */
     public Boolean getInheritErrorHandler() {
@@ -87,8 +107,10 @@ public class Try extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelTryCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelTryInheritErrorHandler);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
     }
 
@@ -97,6 +119,10 @@ public class Try extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -109,6 +135,9 @@ public class Try extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -120,6 +149,7 @@ public class Try extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         TryDefinition answer = new TryDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
 
         super.savePropertiesToCamelDefinition(answer);
@@ -140,6 +170,7 @@ public class Try extends AbstractNode {
         if (processor instanceof TryDefinition) {
             TryDefinition node = (TryDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof TryDefinition. Was " + processor.getClass().getName());

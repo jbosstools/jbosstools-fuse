@@ -37,8 +37,12 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class RemoveHeader extends AbstractNode {
 
+    public static final String PROPERTY_CUSTOMID = "RemoveHeader.CustomId";
+    public static final String PROPERTY_INHERITERRORHANDLER = "RemoveHeader.InheritErrorHandler";
     public static final String PROPERTY_HEADERNAME = "RemoveHeader.HeaderName";
 
+    private Boolean customId;
+    private Boolean inheritErrorHandler;
     private String headerName;
 
     public RemoveHeader() {
@@ -66,6 +70,42 @@ public class RemoveHeader extends AbstractNode {
     }
 
     /**
+     * @return the customId
+     */
+    public Boolean getCustomId() {
+        return this.customId;
+    }
+
+    /**
+     * @param customId the customId to set
+     */
+    public void setCustomId(Boolean customId) {
+        Boolean oldValue = this.customId;
+        this.customId = customId;
+        if (!isSame(oldValue, customId)) {
+            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
+        }
+    }
+
+    /**
+     * @return the inheritErrorHandler
+     */
+    public Boolean getInheritErrorHandler() {
+        return this.inheritErrorHandler;
+    }
+
+    /**
+     * @param inheritErrorHandler the inheritErrorHandler to set
+     */
+    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
+        Boolean oldValue = this.inheritErrorHandler;
+        this.inheritErrorHandler = inheritErrorHandler;
+        if (!isSame(oldValue, inheritErrorHandler)) {
+            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
+        }
+    }
+
+    /**
      * @return the headerName
      */
     public String getHeaderName() {
@@ -87,8 +127,12 @@ public class RemoveHeader extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
+        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRemoveHeaderCustomId);
+        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRemoveHeaderInheritErrorHandler);
         PropertyDescriptor descHeaderName = new TextPropertyDescriptor(PROPERTY_HEADERNAME, Messages.propertyLabelRemoveHeaderHeaderName);
 
+        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
+        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_HEADERNAME, descHeaderName);
     }
 
@@ -97,6 +141,14 @@ public class RemoveHeader extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            setCustomId(Objects.convertTo(value, Boolean.class));
+            return;
+        }
+        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
+            return;
+        }
         if (PROPERTY_HEADERNAME.equals(id)) {
             setHeaderName(Objects.convertTo(value, String.class));
             return;
@@ -109,6 +161,12 @@ public class RemoveHeader extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
+        if (PROPERTY_CUSTOMID.equals(id)) {
+            return this.getCustomId();
+        }
+        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
+            return Objects.<Boolean>getField(this, "inheritErrorHandler");
+        }
         if (PROPERTY_HEADERNAME.equals(id)) {
             return this.getHeaderName();
         }
@@ -120,6 +178,8 @@ public class RemoveHeader extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         RemoveHeaderDefinition answer = new RemoveHeaderDefinition();
 
+        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
+        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setHeaderName(toXmlPropertyValue(PROPERTY_HEADERNAME, this.getHeaderName()));
 
         super.savePropertiesToCamelDefinition(answer);
@@ -140,6 +200,8 @@ public class RemoveHeader extends AbstractNode {
         if (processor instanceof RemoveHeaderDefinition) {
             RemoveHeaderDefinition node = (RemoveHeaderDefinition) processor;
 
+            this.setCustomId(node.getCustomId());
+            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setHeaderName(node.getHeaderName());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof RemoveHeaderDefinition. Was " + processor.getClass().getName());
