@@ -16,6 +16,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.fabric8.core.dto.ProfileDTO;
 import org.fusesource.ide.fabric8.ui.FabricPlugin;
+import org.fusesource.ide.fabric8.ui.navigator.FabricNodeSupport;
 import org.fusesource.ide.fabric8.ui.navigator.ProfileNode;
 import org.jboss.tools.jmx.core.tree.Node;
 
@@ -41,6 +42,7 @@ public class ProfileDeleteAction extends Action {
 			Node parent = node.getParent();
 			if (parent != null){
 				parent.removeChild(node);
+				((FabricNodeSupport)parent).refresh();
 			}
 		}
 	}
