@@ -73,6 +73,8 @@ public class Messages extends NLS {
 	public static String SAPToolSuiteImportWizard_SAPImportCancelledTitle;
 	public static String SapToolSuiteInstaller_InstallingJBossFuseSapToolSuite;
 	public static String SapToolSuiteInstaller_JBossFuseSapToolSuiteCouldNotBeInstalled;
+	public static String SapToolSuiteInstaller_JBossFuseSAPToolSuiteInstallFailed;
+	public static String SapToolSuiteInstaller_UnableToPerformInstallationOfJBossFuseSAPToolSuite;
 	
 	static {
 		// initialize resource bundle

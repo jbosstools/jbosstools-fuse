@@ -138,7 +138,10 @@ public class ImportUtils {
 	}
 	
 	public static void deleteTemporarySapLibrariesRepository() {
-
+		if (temporarySapLibraryUpdateSite == null) {
+			return;
+		}
+		
 		try {
 			Files.walkFileTree(temporarySapLibraryUpdateSite, new SimpleFileVisitor<Path>() {
 				@Override

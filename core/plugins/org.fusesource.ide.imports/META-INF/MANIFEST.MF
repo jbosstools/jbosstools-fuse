@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.equinox.p2.operations,
  org.eclipse.equinox.p2.ui,
  org.eclipse.equinox.p2.engine,
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ org.jboss.tools.foundation.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: OSGI-INF/l10n/bundle
