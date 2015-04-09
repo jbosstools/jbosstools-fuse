@@ -22,7 +22,6 @@ import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.fabric8.core.dto.VersionDTO;
 import org.fusesource.ide.fabric8.ui.FabricPlugin;
 import org.fusesource.ide.fabric8.ui.actions.CreateVersionAction;
-import org.fusesource.ide.fabric8.ui.navigator.properties.VersionTableSheetPage;
 import org.fusesource.ide.fabric8.ui.navigator.properties.VersionsTabViewPage;
 import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
@@ -47,6 +46,7 @@ public class VersionsNode extends FabricNodeSupport implements ImageProvider,
 
 	@Override
 	protected void loadChildren() {
+		clearChildren();
 		map.clear();
 		List<VersionDTO> versions = getFabric().getFabricService().getVersions();
 		if (versions != null) {
@@ -59,6 +59,7 @@ public class VersionsNode extends FabricNodeSupport implements ImageProvider,
 	}
 
 	public VersionNode getVersionNode(String version) {
+		if (map.isEmpty()) loadChildren();
 		return map.get(version);
 	}
 

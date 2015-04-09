@@ -51,6 +51,7 @@ public class ContainersNode extends FabricNodeSupport implements ImageProvider, 
 
 	@Override
 	protected void loadChildren() {
+		clearChildren();
 		List<ContainerDTO> agents = getFabric().getFabricService().getContainers();
 		if (agents != null) {
 			IdBasedFabricNode[] answer = new IdBasedFabricNode[agents.size()];
