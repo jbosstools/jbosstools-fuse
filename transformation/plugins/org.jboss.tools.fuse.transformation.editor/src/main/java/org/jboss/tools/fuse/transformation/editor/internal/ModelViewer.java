@@ -260,8 +260,11 @@ public class ModelViewer extends Composite {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                if (event.getPropertyName().equals(TransformationConfig.MAPPING))
-                    treeViewer.refresh();
+                if (event.getPropertyName().equals(TransformationConfig.MAPPING)) {
+                    if (!treeViewer.getControl().isDisposed()) {
+                        treeViewer.refresh();
+                    }
+                }
             }
         });
     }
