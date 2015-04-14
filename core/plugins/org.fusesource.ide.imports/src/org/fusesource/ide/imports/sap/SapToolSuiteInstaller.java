@@ -49,7 +49,8 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 	private static final String DOT = "."; //$NON-NLS-1$
 	private static final String CONFIGS_ARG = "-configs"; //$NON-NLS-1$
 	private static final String APPEND_FLAG = "-append"; //$NON-NLS-1$
-	private static final String INTEGRATION_STACK_EXTRAS_URL = "jboss.discovery.site.integration-stack-extras.url"; //$NON-NLS-1$
+	private static final String INTEGRATION_STACK_SAP_URL_PROP = "jboss.discovery.site.integration-stack-sap.url"; //$NON-NLS-1$
+	private static final String INTEGRATION_STACK_SAP_FEATURE_PROP = "jboss.discovery.site.integration-stack-sap.feature"; //$NON-NLS-1$
 	private SapLibrariesFeatureArchive sapLibrariesFeatureArchive;
 	private JCo3ImportSettings jco3ImportSettings;
 	private IDoc3ImportSettings idoc3ImportSettings;
@@ -102,19 +103,20 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 			
 			// Perform Installation
 			IProvisioningAgent provisioningAgent = Activator.getProvisioningAgent();
-			URI sapToolSuiteRepositoryURI = getSapToolingUpdateSiteUrl();
+			URI sapToolingSuiteRepositoryURI = getSapToolingUpdateSiteUrl();
+			String sapToolingSuiteFeature = getSapToolingFeature();
 			try {
 				ProvisioningSession session = new ProvisioningSession(provisioningAgent);
 
 				final ProvisioningUI ui = new ProvisioningUI(session, IProfileRegistry.SELF, new SapToolsPolicy());
 				ui.loadArtifactRepository(librariesRepositoryURI, false, monitor);
-				ui.loadArtifactRepository(sapToolSuiteRepositoryURI, false, new NullProgressMonitor());
+				ui.loadArtifactRepository(sapToolingSuiteRepositoryURI, false, new NullProgressMonitor());
 				IMetadataRepository librariesMetadataRepository = ui.loadMetadataRepository(librariesRepositoryURI, false, monitor);
-				IMetadataRepository sapToolingMetadataRepository = ui.loadMetadataRepository(sapToolSuiteRepositoryURI, false, new NullProgressMonitor());
+				IMetadataRepository sapToolingMetadataRepository = ui.loadMetadataRepository(sapToolingSuiteRepositoryURI, false, new NullProgressMonitor());
 				final Set<IInstallableUnit> toInstall = new HashSet<IInstallableUnit>();
 				toInstall.addAll(librariesMetadataRepository.query(QueryUtil.createIUGroupQuery(), monitor).toUnmodifiableSet());
-				toInstall.addAll(sapToolingMetadataRepository.query(QueryUtil.createIUQuery("org.fusesource.ide.sap.feature.feature.group"), monitor).toUnmodifiableSet());
-				final InstallOperation installOperation = ui.getInstallOperation(toInstall, new URI[] { librariesRepositoryURI, sapToolSuiteRepositoryURI });
+				toInstall.addAll(sapToolingMetadataRepository.query(QueryUtil.createIUQuery(sapToolingSuiteFeature), monitor).toUnmodifiableSet());
+				final InstallOperation installOperation = ui.getInstallOperation(toInstall, new URI[] { librariesRepositoryURI, sapToolingSuiteRepositoryURI });
 
 				IStatus status = installOperation.resolveModal(monitor);
 				monitor.worked(1);
@@ -135,8 +137,8 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 				IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager) provisioningAgent.getService(IMetadataRepositoryManager.SERVICE_NAME);
 				artifactRepositoryManager.removeRepository(librariesRepositoryURI);
 				metadataRepositoryManager.removeRepository(librariesRepositoryURI);
-				artifactRepositoryManager.removeRepository(sapToolSuiteRepositoryURI);
-				metadataRepositoryManager.removeRepository(sapToolSuiteRepositoryURI);
+				artifactRepositoryManager.removeRepository(sapToolingSuiteRepositoryURI);
+				metadataRepositoryManager.removeRepository(sapToolingSuiteRepositoryURI);
 			}
 		} catch (Exception e) {
 			throw new InvocationTargetException(e, e.getMessage());
@@ -146,16 +148,29 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 	}
 	
 	public URI getSapToolingUpdateSiteUrl() throws InterruptedException {
-		String sapToolingUpdateSite = System.getProperty(INTEGRATION_STACK_EXTRAS_URL, null);
+		String sapToolingUpdateSite = System.getProperty(INTEGRATION_STACK_SAP_URL_PROP, null);
 		if (sapToolingUpdateSite == null) {
 			IPropertiesProvider propertiesProvider = PropertiesHelper.getPropertiesProvider();
-			sapToolingUpdateSite = propertiesProvider.getValue(INTEGRATION_STACK_EXTRAS_URL);
+			sapToolingUpdateSite = propertiesProvider.getValue(INTEGRATION_STACK_SAP_URL_PROP);
 		}
 		if (sapToolingUpdateSite == null) {
-			throw new InterruptedException(String.format("No URL set for discovery catalog. Property %s is missing!", INTEGRATION_STACK_EXTRAS_URL)); //$NON-NLS-1$
+			throw new InterruptedException(String.format("No URL set for discovery catalog. Property %s is missing!", INTEGRATION_STACK_SAP_URL_PROP)); //$NON-NLS-1$
 		}
 		
 		return URI.create(sapToolingUpdateSite);
+	}
+
+	public String getSapToolingFeature() throws InterruptedException {
+		String sapToolingUpdateSite = System.getProperty(INTEGRATION_STACK_SAP_FEATURE_PROP, null);
+		if (sapToolingUpdateSite == null) {
+			IPropertiesProvider propertiesProvider = PropertiesHelper.getPropertiesProvider();
+			sapToolingUpdateSite = propertiesProvider.getValue(INTEGRATION_STACK_SAP_FEATURE_PROP);
+		}
+		if (sapToolingUpdateSite == null) {
+			throw new InterruptedException(String.format("No feature set for discovery catalog. Property %s is missing!", INTEGRATION_STACK_SAP_FEATURE_PROP)); //$NON-NLS-1$
+		}
+		
+		return sapToolingUpdateSite;
 	}
 
 	protected void checkCancelled(IProgressMonitor monitor) throws InterruptedException {

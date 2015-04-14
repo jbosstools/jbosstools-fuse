@@ -34,7 +34,7 @@ public class InstallOverviewPage extends WizardPage {
 	private static final String DOWNLOAD_LINK_TEXT = "<a>http://service.sap.com/connectors</a>"; //$NON-NLS-1$
 
 	protected InstallOverviewPage() {
-		super(Messages.OverviewPage_PageTitle, Messages.OverviewPage_PageTitle, Activator.getDefault().getImageRegistry().getDescriptor(Activator.WALDO48_IMAGE));
+		super(Messages.OverviewPage_PageTitle, Messages.OverviewPage_PageTitle, Activator.getDefault().getImageRegistry().getDescriptor(Activator.SAP_TOOL_SUITE_48_IMAGE));
 		setDescription(Messages.OverviewPage_DownloadTheSAPJavaConnectorAndSAPJavaIDocClassLibraryArchiveFiles);
 		setTitle(Messages.OverviewPage_PageTitle);
 		setPageComplete(true);

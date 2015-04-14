@@ -117,7 +117,7 @@ public class ArchivesSelectionPage extends WizardPage {
 	private Group grpSelectJcoArchive;
 	
 	protected ArchivesSelectionPage(DataBindingContext context, JCo3ImportSettings jcoImportSettings, IDoc3ImportSettings idocImportSettings) {
-		super(Messages.ArchivesSelectionPage_PageName, Messages.ArchivesSelectionPage_PageName, Activator.getDefault().getImageRegistry().getDescriptor(Activator.WALDO48_IMAGE));
+		super(Messages.ArchivesSelectionPage_PageName, Messages.ArchivesSelectionPage_PageName, Activator.getDefault().getImageRegistry().getDescriptor(Activator.SAP_TOOL_SUITE_48_IMAGE));
 		setDescription(Messages.ArchivesSelectionPage_SelectArchiveFilesContainingJCo3IDoc3Libs);
 		setTitle(Messages.ArchivesSelectionPage_SelectJCo3IDoc3ArchiveToImport);
 		this.context = context;
