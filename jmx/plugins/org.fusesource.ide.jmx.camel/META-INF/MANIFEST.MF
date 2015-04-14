@@ -28,4 +28,4 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.jmx.camel.CamelJMXPlugin
 Bundle-ClassPath: .,
- libs/tooling-camel-facade-1.2.0.redhat-102.jar
+ libs/tooling-camel-facade-1.2.0.redhat-104.jar
