@@ -25,10 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 /*
- * Allows user to select a Camel resource on the project's classpath. TODO -
- * work in progress - the CamelResourceFilter implementation is VERY resource
- * intensive has to be a better way to introspect the file to see whether it's a
- * valid camel route file or not
+ * Allows user to select a Camel resource on the project's classpath. 
  */
 class CamelResourceClasspathSelectionDialog extends FilteredResourcesSelectionDialog {
 
@@ -112,10 +109,13 @@ class CamelResourceClasspathSelectionDialog extends FilteredResourcesSelectionDi
             try {
                 final IResource resource = (IResource) item;
                 final File testFile = new File(resource.getLocationURI());
-                System.out.println("Testing " + testFile.toString());
                 if (testFile.exists()) {
-                    CamelConfigurationHelper.load(testFile).getConfigBuilder();
-                    return true;
+                    boolean isValidCamel = CamelFileTypeHelper.
+                            isSupportedCamelFile(resource.getProject(), resource.getProjectRelativePath().toPortableString());
+                    if (isValidCamel) {
+                        return true;
+                    }
+                    return false;
                 }
             } catch (final Exception e) {
                 // ignore
