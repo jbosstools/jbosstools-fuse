@@ -19,7 +19,7 @@ To run this project with Maven use
 mvn camel:run
 ```
 
-The application picks up input XML from the src/data directory and drops output JSON into the target/messages directory.  Note that you will need to kill the Java process (^C in terminal) when using "mvn camel:run", which is the default behavior of this plugin.
+Copy the src/data/abc-order.xml file into the /tmp/inbox directory and check for output JSON in the /tmp/outbox directory.  Note that you will need to kill the Java process (^C in terminal) when using "mvn camel:run", which is the default behavior of this plugin.
 
 ####Notable Bits
 [Input XML](https://github.com/fusesource/fuseide/blob/master/examples/transformation/xml-to-json/src/data/abc-order.xml)
