@@ -21,7 +21,7 @@ public class SpringXmlMatchingStrategy extends XmlMatchingStrategySupport {
 	 */
 	@Override
 	protected FindNamespaceHandlerSupport createNamespaceFinder() {
-		return new BlueprintNamespaceHandler();
+		return new SpringNamespaceHandler();
 	}
 
 }

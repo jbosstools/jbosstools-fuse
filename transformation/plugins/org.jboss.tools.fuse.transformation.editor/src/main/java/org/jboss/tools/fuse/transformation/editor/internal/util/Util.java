@@ -258,6 +258,30 @@ public class Util {
         return (IFile) result[0];
     }
 
+    /**
+     * @param shell
+     * @param extension
+     * @param project
+     * @return The selected resource
+     */
+    public static IResource selectCamelResourceFromWorkspace(final Shell shell,
+                                                        final IProject project) {
+        IJavaProject javaProject = null;
+        if (project != null) javaProject = JavaCore.create(project);
+        CamelResourceClasspathSelectionDialog dialog;
+        if (javaProject == null)
+            dialog = new CamelResourceClasspathSelectionDialog(shell,
+                                                          ResourcesPlugin.getWorkspace().getRoot(),
+                                                          "xml");
+        else dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
+        dialog.setTitle("Select Camel XML File from Project");
+        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
+        dialog.open();
+        final Object[] result = dialog.getResult();
+        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) return null;
+        return (IFile) result[0];
+    }
+
     private Util() {}
 
     /**

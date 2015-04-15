@@ -15,25 +15,38 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.ui.wizards.NewElementWizard;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.jboss.mapper.camel.CamelConfigBuilder;
-import org.jboss.mapper.test.TestGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CamelFileTypeHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.TransformTestWizardPage;
 
 /**
  *
  */
-public class NewTransformationTestWizard extends Wizard implements INewWizard {
+@SuppressWarnings("restriction")
+public class NewTransformationTestWizard extends NewElementWizard implements INewWizard {
 
     static final String DEFAULT_DOZER_CONFIG_FILE_NAME = "dozerBeanMapping.xml";
 
@@ -45,13 +58,21 @@ public class NewTransformationTestWizard extends Wizard implements INewWizard {
     String packageName = null;
     String className = null;
     
-    TransformTestWizardPage _page;
+    private TransformTestWizardPage _page = null;
+
+    private static final String JDT_EDITOR = 
+            "org.eclipse.jdt.ui.CompilationUnitEditor"; //$NON-NLS-1$
 
     /**
      *
      */
     public NewTransformationTestWizard() {
+        setWindowTitle("New Fuse Transformation Test");
         _page = new TransformTestWizardPage();
+    }
+
+    @Override
+    public void addPages() {
         addPage(_page);
     }
 
@@ -67,69 +88,112 @@ public class NewTransformationTestWizard extends Wizard implements INewWizard {
         if (selection.size() != 1) {
             return;
         }
+        _page.init(selection);
         Object selectedObject = selection.getFirstElement();
-        if (selectedObject != null && selectedObject instanceof IFile) {
-            camelConfigFile = (IFile) selectedObject;
-            project = camelConfigFile.getProject();
-        } else if (selectedObject != null && selectedObject instanceof IProject) {
-            project = (IProject) selectedObject;
-            IResource findCamelContext =
-                    project.findMember("src/main/resources/META-INF/spring/camel-context.xml");
-            if (findCamelContext != null) {
-                camelConfigFile = (IFile) findCamelContext;
-            } else {
-                Activator.error(new Throwable("Can't find camel context file."));
+        if (selectedObject != null) {
+            if (selectedObject instanceof IResource) {
+                project = ((IResource)selectedObject).getProject();
             }
-        }
-        if (project != null) {
-            _page.setProject(project);
-            javaProject = JavaCore.create(project);
-        }
-        if (camelConfigFile != null) {
-            _page.setCamelConfigFile(camelConfigFile);
-            File file = new File(camelConfigFile.getLocationURI());
-            try {
-                builder = CamelConfigurationHelper.load(file).getConfigBuilder();
-                _page.setBuilder(builder);
-            } catch (Exception e) {
-                Activator.error(e);
+            if (selectedObject instanceof IFile) {
+                IFile selectedFile = (IFile) selectedObject;
+                boolean isCamelConfig = CamelFileTypeHelper.isSupportedCamelFile(project, selectedFile.getProjectRelativePath().toPortableString());
+                if (isCamelConfig) {
+                    camelConfigFile = selectedFile;
+                }
             }
-        }
-        if (javaProject != null) {
-            _page.setJavaProject(javaProject);
-            IJavaElement element = JavaUtil.getInitialPackageForProject(javaProject);
-            if (element != null) {
-                packageName = element.getElementName();
-                _page.setPackageName(packageName);
+            _page.setTypeName("TransformationTest", true);
+            if (project != null) {
+                _page.setProject(project);
+                javaProject = JavaCore.create(project);
+            }
+            if (project != null && camelConfigFile == null) {
+                IResource findCamelContext =
+                        project.findMember("src/main/resources/META-INF/spring/camel-context.xml");
+                if (findCamelContext != null) {
+                    camelConfigFile = (IFile) findCamelContext;
+                }
+            }
+            if (camelConfigFile != null) {
+                _page.setCamelConfigFile(camelConfigFile);
+                File file = new File(camelConfigFile.getLocationURI());
+                try {
+                    builder = CamelConfigurationHelper.load(file).getConfigBuilder();
+                    _page.setBuilder(builder);
+                } catch (Exception e) {
+                    Activator.error(e);
+                }
+            }
+            if (javaProject != null) {
+                _page.setJavaProject(javaProject);
+                
+                IFolder srcFolder = javaProject.getProject().getFolder("src/test/java");
+                if (!JavaUtil.findFolderOnProjectClasspath(javaProject, srcFolder)) {
+                    JavaUtil.addFolderToProjectClasspath(javaProject, srcFolder);
+                }
+                if (!srcFolder.exists()) {
+                    try {
+                        srcFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
+                    } catch (CoreException e) {
+                        e.printStackTrace();
+                    }
+                }
+                
+                IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(srcFolder);
+                _page.setPackageFragmentRoot(root, true);
             }
         }
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.eclipse.jface.wizard.Wizard#performFinish()
-     */
     @Override
-    public boolean performFinish() {
-        // here we're creating the transformation test
-        IFolder folder = javaProject.getProject().getFolder("src/test/java");
-        if (!JavaUtil.findFolderOnProjectClasspath(javaProject, folder)) {
-            JavaUtil.addFolderToProjectClasspath(javaProject, folder);
-        }
-        File targetPath = new File(folder.getRawLocation().toPortableString());
-        try {
-            TestGenerator.createTransformTest(_page.getTransformID(),
-                    _page.getPackageName(),
-                    _page.getClassName(),
-                    targetPath);
-            project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
-            return true;
-        } catch (Exception e) {
-            Activator.error(e);
-        }
-
-        return false;
+    public boolean canFinish() {
+       return super.canFinish() &&
+                   getContainer().getCurrentPage() == _page;
     }
+ 
+    protected void finishPage(IProgressMonitor monitor) throws InterruptedException, CoreException {
+        _page.createType(monitor);
+        if (_page.getGeneratedResource() != null) {
+            if (project == null && _page.getProject() != null) {
+                project = _page.getProject();
+            }
+            project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+            IFile resource = (IFile) _page.getGeneratedResource();
+            openResource(resource);
+        } else {
+            throw new CoreException(new Status(IStatus.ERROR, 
+                "TransformationEditor", 
+                "Problem encountered while creating test class."));
+        }
+    }
+ 
+    @Override
+    public IJavaElement getCreatedElement() {
+        return _page.getCreatedType();
+    }
+    
+    protected void openResource(final IFile resource) {
+        if (resource.getType() != IResource.FILE) {
+            return;
+        }
+        final Display display = getShell().getDisplay();
+        display.asyncExec(new Runnable() {
+            public void run() {
+                IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+                if (window == null) {
+                    return;
+                }
 
+                IWorkbenchPage activePage = window.getActivePage();
+                if (activePage != null) {
+                    try {
+                        IDE.openEditor(activePage, resource, JDT_EDITOR, true);
+                        BasicNewResourceWizard.selectAndReveal(resource, activePage
+                                .getWorkbenchWindow());
+                    } catch (PartInitException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 }

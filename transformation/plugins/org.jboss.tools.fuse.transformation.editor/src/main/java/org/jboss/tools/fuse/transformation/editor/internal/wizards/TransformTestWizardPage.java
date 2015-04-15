@@ -12,49 +12,54 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 import java.io.File;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.ui.dialogs.StatusInfo;
+import org.eclipse.jdt.internal.ui.dialogs.StatusUtil;
+import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.SelectionDialog;
 import org.jboss.mapper.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CamelFileTypeHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TestGenerator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  *
  *
  */
-public class TransformTestWizardPage extends WizardPage {
+@SuppressWarnings("restriction")
+public class TransformTestWizardPage extends NewTypeWizardPage {
 
-    private Text testClassNameText;
-    private Text testClassPackageNameText;
     private ComboViewer transformationIDViewer;
     private Text _camelFilePathText;
 
@@ -63,44 +68,48 @@ public class TransformTestWizardPage extends WizardPage {
     private IFile _camelConfigFile;
     private CamelConfigBuilder _builder = null;
     private String _transformID = null;
-    private String _packageName = null;
-    private String _className = null;
     private String _camelFilePath = null;
+    private IResource _generatedClassResource;
 
+    private IStatus _camelFileSelectedStatus = Status.OK_STATUS;
+    private IStatus _camelEndpointSelectedStatus = Status.OK_STATUS;
+    
     public TransformTestWizardPage() {
-        super("New Transformation Test", "New Transformation Test", Activator.imageDescriptor("transform.png"));
+        super(true, TransformTestWizardPage.class.getSimpleName());
+        setImageDescriptor(Activator.imageDescriptor("transform.png"));
+        setTitle("New Transformation Test");
+        setDescription("Specify the transformation endpoint to test, then provide the camel configuration, class name and java package for the generated test class.");
     }
 
-    @Override
-    public void createControl(Composite parent) {
-        setDescription("Specify the transformation endpoint to test, then provide the camel configuration, class name and java package for the generated test class.");
-        final Composite page = new Composite(parent, SWT.NONE);
-        setControl(page);
-        page.setLayout(GridLayoutFactory.swtDefaults().spacing(0, 5).numColumns(3).create());
-
+    private void createCamelSpecificControls(Composite composite, int nColumns) {
         // Create camel file path widgets
-        Label label = new Label(page, SWT.NONE);
+        Label label = new Label(composite, SWT.NONE);
         label.setText("Camel File Path:");
         label.setToolTipText("The path to the Camel configuration file.");
 
-        _camelFilePathText = new Text(page, SWT.BORDER);
-        _camelFilePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        _camelFilePathText = new Text(composite, SWT.BORDER);
+        _camelFilePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
         _camelFilePathText.setToolTipText(label.getToolTipText());
 
-        final Button camelPathButton = new Button(page, SWT.NONE);
-        camelPathButton.setText("...");
+        final Button camelPathButton = new Button(composite, SWT.NONE);
+        camelPathButton.setText("Browse...");
         camelPathButton.setToolTipText("Browse to select an available Camel file.");
+        camelPathButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
         camelPathButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 _builder = null;
-                final IResource res = Util.selectResourceFromWorkspace(getShell(), ".xml", _project);
+                final IResource res = Util.selectCamelResourceFromWorkspace(getShell(), _project);
                 if (res != null) {
                     String path = "";
                     try {
                         IPath respath = JavaUtil.getJavaPathForResource(res);
+                        if (res != null && _project == null) {
+                            _project = res.getProject();
+                            _javaProject = JavaCore.create(_project);
+                        }
                         IFile camelConfigFile = (IFile) _project.findMember(respath);
                         if (camelConfigFile == null) {
                             IPath newrespath = new Path("src/main/resources/").append(respath);
@@ -108,8 +117,17 @@ public class TransformTestWizardPage extends WizardPage {
                         }
                         if (camelConfigFile != null) {
                             path = respath.makeRelative().toString();
+                            _camelFilePath = camelConfigFile.getProjectRelativePath().toPortableString();
                             File file = new File(camelConfigFile.getLocationURI());
-                            _builder = CamelConfigurationHelper.load(file).getConfigBuilder();
+                            boolean isValid = CamelFileTypeHelper.
+                                    isSupportedCamelFile(_project, _camelFilePath);
+                            if (isValid) {
+                                _builder = CamelConfigurationHelper.load(file).getConfigBuilder();
+                                _camelFileSelectedStatus = Status.OK_STATUS;
+                            } else {
+                                _builder = null;
+                                _camelFileSelectedStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "File selected is not a Camel Spring or Blueprint file. Please select another file.");
+                            }
                             if (_builder != null) {
                                 transformationIDViewer.getCombo().removeAll();
                                 transformationIDViewer.add(_builder.getTransformEndpointIds().toArray());
@@ -121,78 +139,24 @@ public class TransformTestWizardPage extends WizardPage {
                     if (_builder == null || _builder != null && _builder.getTransformEndpointIds().isEmpty()) {
                         transformationIDViewer.getCombo().removeAll();
                         transformationIDViewer.getCombo().setToolTipText("No transformation endpoints available");
+                        _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "No transformation endpoints available for the selected Camel file.");
                     } else {
+                        _camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID, "Select from the list of available transformation endpoints");
                         transformationIDViewer.getCombo().setToolTipText(
                                 "Select from the list of available transformation endpoints");
                     }
                     _camelFilePathText.setText(path);
-                    validatePage();
+                    doStatusUpdate();
                 }
             }
         });
 
-        label = new Label(page, SWT.NONE);
+        label = new Label(composite, SWT.NONE);
         label.setText("Transformation ID:");
         label.setToolTipText("Transformation endpoint to test");
-        transformationIDViewer = new ComboViewer(new Combo(page, SWT.READ_ONLY));
+        transformationIDViewer = new ComboViewer(new Combo(composite, SWT.READ_ONLY));
         transformationIDViewer.getCombo().setLayoutData(
                 GridDataFactory.swtDefaults().grab(true, false).span(2, 1).align(SWT.FILL, SWT.CENTER).create());
-
-        new Label(page, SWT.NONE).setText("Test Class Name:");
-        label.setToolTipText("Name of the generated test class");
-        testClassNameText = new Text(page, SWT.BORDER);
-        testClassNameText.setLayoutData(GridDataFactory.swtDefaults().grab(true, false).span(2, 1)
-                .align(SWT.FILL, SWT.CENTER).create());
-        testClassNameText.addModifyListener(new ModifyListener() {
-            @Override
-            public void modifyText(ModifyEvent event) {
-                _className = testClassNameText.getText().trim();
-                validatePage();
-            }
-        });
-
-        new Label(page, SWT.NONE).setText("Test Class Package:");
-        label.setToolTipText("Package where the test class is to be generated");
-        testClassPackageNameText = new Text(page, SWT.BORDER);
-        testClassPackageNameText.setLayoutData(GridDataFactory.swtDefaults().grab(true, false)
-                .align(SWT.FILL, SWT.CENTER).create());
-        Button browsePackage = new Button(page, SWT.PUSH);
-        browsePackage.setText("...");
-        browsePackage.setLayoutData(new GridData());
-        browsePackage.setToolTipText("Select existing package.");
-        browsePackage.addSelectionListener(new SelectionListener() {
-
-            @Override
-            public void widgetSelected(SelectionEvent event) {
-                if (_javaProject != null) {
-                    try {
-                        SelectionDialog dialog = JavaUI.createPackageDialog(getShell(), _javaProject, 0);
-                        if (dialog.open() == SelectionDialog.OK) {
-                            IPackageFragment result = (IPackageFragment) dialog.getResult()[0];
-                            testClassPackageNameText.setText(result.getElementName());
-                            _packageName = result.getElementName();
-                        }
-                    } catch (JavaModelException e) {
-                        Activator.error(e);
-                    }
-                }
-            }
-
-            @Override
-            public void widgetDefaultSelected(SelectionEvent event) {
-                // empty
-            }
-        });
-        testClassPackageNameText.addModifyListener(new ModifyListener() {
-            @Override
-            public void modifyText(ModifyEvent event) {
-                _packageName = testClassPackageNameText.getText().trim();
-                validatePage();
-            }
-        });
-        if (_packageName != null) {
-            testClassPackageNameText.setText(_packageName);
-        }
 
         transformationIDViewer.setLabelProvider(new LabelProvider() {
             @Override
@@ -203,13 +167,19 @@ public class TransformTestWizardPage extends WizardPage {
         if (_camelFilePath != null) {
             _camelFilePathText.setText(_camelFilePath);
         }
+        boolean noEndpoints = true;
+        transformationIDViewer.getCombo().removeAll();
         if (_builder != null) {
             transformationIDViewer.add(_builder.getTransformEndpointIds().toArray());
+            noEndpoints = _builder.getTransformEndpointIds().isEmpty();
+        }
+        if (!noEndpoints) {
             transformationIDViewer.getCombo().setToolTipText(
-                    "Select from the list of available transformation endpoints");
+                "Select from the list of available transformation endpoints");
+            _camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID, "Select from the list of available transformation endpoints");
         } else {
-            transformationIDViewer.getCombo().removeAll();
             transformationIDViewer.getCombo().setToolTipText("No transformation endpoints available");
+            _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "No transformation endpoints available for the selected Camel file.");
         }
 
         transformationIDViewer.getCombo().addSelectionListener(new SelectionAdapter() {
@@ -218,43 +188,153 @@ public class TransformTestWizardPage extends WizardPage {
             public void widgetSelected(final SelectionEvent event) {
                 _transformID = (String) ((IStructuredSelection) transformationIDViewer.getSelection())
                         .getFirstElement();
-                validatePage();
+                _camelEndpointSelectedStatus = Status.OK_STATUS;
+                doStatusUpdate();
             }
         });
-        validatePage();
+        doStatusUpdate();
+        setErrorMessage(null);
     }
-
-    void validatePage() {
-        if (!transformationIDViewer.getSelection().isEmpty() && !testClassNameText.getText().trim().isEmpty()
-                && !testClassPackageNameText.getText().trim().isEmpty()
-                && !_camelFilePathText.getText().trim().isEmpty()) {
-            if (_javaProject != null) {
-                IStatus packageOK = JavaUtil.validatePackageName(_packageName, _javaProject);
-                if (!packageOK.isOK()) {
-                    setErrorMessage(packageOK.getMessage());
-                } else {
-                    IStatus classNameOK = JavaUtil.validateClassFileName(_className, _javaProject);
-                    if (!classNameOK.isOK()) {
-                        setErrorMessage(classNameOK.getMessage());
-                    } else {
-                        try {
-                            IType foundType = _javaProject.findType(_packageName + "." + _className);
-                            if (foundType != null) {
-                                setErrorMessage("A generated test class with that "
-                                        + "name and package already exists.");
-                            } else {
-                                setErrorMessage(null);
-                            }
-                        } catch (JavaModelException e) {
-                            e.printStackTrace();
-                        }
+    
+    private ICompilationUnit createJavaClass(String packageName,
+            String className, IJavaProject project) {
+        try {
+            boolean isSpring = CamelFileTypeHelper.
+                    isSpringFile(project.getProject(), _camelFilePath);
+            boolean isBlueprint = CamelFileTypeHelper.
+                    isBlueprintFile(project.getProject(),_camelFilePath);
+            
+            if (!isSpring && !isBlueprint) {
+                // obviously we're not dealing with a camel file here
+                return null;
+            }
+            
+            IPath srcPath = null;
+            if (getPackageFragmentRoot() != null) {
+                srcPath = getPackageFragmentRoot().getPath().makeAbsolute();  
+                srcPath = srcPath.removeFirstSegments(1);
+                IFolder folder = _javaProject.getProject().getFolder(srcPath);
+                if (!JavaUtil.findFolderOnProjectClasspath(_javaProject, folder)) {
+                    JavaUtil.addFolderToProjectClasspath(_javaProject, folder);
+                }
+                if (!folder.exists()) {
+                    try {
+                        folder.refreshLocal(IResource.DEPTH_INFINITE, null);
+                    } catch (CoreException e) {
+                        e.printStackTrace();
                     }
                 }
+                
+            } else {
+                IFolder folder = _javaProject.getProject().getFolder("src/test/java");
+                if (!folder.exists()) {
+                    IFolder srcFolder = _javaProject.getProject().getFolder("src");
+                    if (!srcFolder.exists()) {
+                        srcFolder.create(true,  true,  null);
+                    }
+                    IFolder testFolder = srcFolder.getFolder("test");
+                    if (!testFolder.exists()) {
+                        testFolder.create(true,  true,  null);
+                    }
+                    IFolder javaFolder = testFolder.getFolder("java");
+                    if (!javaFolder.exists()) {
+                        javaFolder.create(true,  true,  null);
+                    }
+                }
+                if (!JavaUtil.findFolderOnProjectClasspath(_javaProject, folder)) {
+                    JavaUtil.addFolderToProjectClasspath(_javaProject, folder);
+                }
+                srcPath = folder.getProjectRelativePath();
             }
-            setPageComplete(true);
-            return;
+            
+            srcPath = project.getPath().append(
+                    srcPath.makeRelativeTo(project.getProject()
+                            .getLocation()));
+            IPackageFragmentRoot root = project
+                    .findPackageFragmentRoot(srcPath);
+            if (packageName == null) {
+                packageName = ""; //$NON-NLS-1$
+            }
+            if (root != null) {
+                IPackageFragment pkg = root.createPackageFragment(packageName,
+                        false, null);
+    
+                StringBuffer clsContent = new StringBuffer();
+                
+                if (isSpring || isBlueprint) {
+                    String codeTemplate = 
+                        TestGenerator.createTransformTestText(
+                                _transformID, packageName, className, isSpring);
+                
+                    if (codeTemplate != null) {
+                        clsContent.append(codeTemplate);
+                    }
+                    ICompilationUnit wrapperCls = pkg.createCompilationUnit(className
+                        + ".java", clsContent.toString(), true, null); //$NON-NLS-1$
+                    wrapperCls.save(null, true);
+                    return wrapperCls;
+                } else {
+                    return null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        setPageComplete(false);
+        return null;
+    }
+
+    @Override
+    public void createType(IProgressMonitor monitor) throws CoreException, InterruptedException {
+        ICompilationUnit createdClass =
+                createJavaClass(getPackageText(), getTypeName(), _javaProject);
+        if (createdClass != null) {
+            _generatedClassResource = createdClass.getResource();
+        }
+    }
+    
+    public IResource getGeneratedResource() {
+        return this._generatedClassResource;
+    }
+
+    @Override
+    public void createControl(Composite parent) {
+        initializeDialogUnits(parent);
+
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setFont(parent.getFont());
+
+        int nColumns = 4;
+
+        GridLayout layout = new GridLayout();
+        layout.numColumns = nColumns;
+        composite.setLayout(layout);
+
+        // pick & choose the wanted UI components
+
+        createContainerControls(composite, nColumns);
+        createPackageControls(composite, nColumns);
+
+        createSeparator(composite, nColumns);
+
+        createTypeNameControls(composite, nColumns);
+
+        createSeparator(composite, nColumns);
+
+        createCamelSpecificControls(composite, nColumns);
+        
+        setControl(composite);
+
+        Dialog.applyDialogFont(composite);
+        
+        doStatusUpdate();
+    }
+
+    @Override
+    public boolean isPageComplete() {
+        if (!transformationIDViewer.getControl().isDisposed() && transformationIDViewer.getSelection().isEmpty()) {
+            return false;
+        }
+        return super.isPageComplete();
     }
 
     public IProject getProject() {
@@ -300,22 +380,6 @@ public class TransformTestWizardPage extends WizardPage {
         this._transformID = transformID;
     }
 
-    public String getPackageName() {
-        return _packageName;
-    }
-
-    public void setPackageName(String packageName) {
-        this._packageName = packageName;
-    }
-
-    public String getClassName() {
-        return _className;
-    }
-
-    public void setClassName(String className) {
-        this._className = className;
-    }
-
     public String getCamelFilePath() {
         return _camelFilePath;
     }
@@ -324,4 +388,58 @@ public class TransformTestWizardPage extends WizardPage {
         this._camelFilePath = path;
     }
 
+    private void doStatusUpdate() {
+        if (fContainerStatus.getMessage() != null && fContainerStatus.getMessage().endsWith("does not exist.")) {
+            if (getPackageFragmentRootText().endsWith("src/test/java")) {
+                // override this particular case, since we'll create it
+                fContainerStatus = new StatusInfo(NONE, null);
+            }
+        }
+
+        if (fPackageStatus.getCode() == StatusInfo.ERROR && (fPackageStatus.getMessage() == null || fPackageStatus.getMessage().trim().isEmpty())) {
+            // override this particular case, since the default package is ok, though not great
+            fPackageStatus = new StatusInfo(NONE, null);
+        } else if (fPackageStatus.getCode() == StatusInfo.WARNING && fPackageStatus.getMessage() != null && fPackageStatus.getMessage().contains("default package is discouraged")) {
+            // override this particular case, since the default package is ok, though not great
+            fPackageStatus = new StatusInfo(NONE, null);
+        }
+        
+        // all used component status
+        IStatus[] status= new IStatus[] {
+            fContainerStatus,
+            fPackageStatus,
+            fTypeNameStatus,
+            _camelFileSelectedStatus,
+            _camelEndpointSelectedStatus
+        };
+
+        // the mode severe status will be displayed and the OK button enabled/disabled.
+        updateStatus(status);
+        
+        IStatus currStatus = StatusUtil.getMostSevere(status);
+        setPageComplete(!currStatus.matches(IStatus.ERROR) && !currStatus.matches(IStatus.WARNING));
+    }
+
+    /*
+     * @see NewContainerWizardPage#handleFieldChanged
+     */
+    @Override
+    protected void handleFieldChanged(String fieldName) {
+        super.handleFieldChanged(fieldName);
+        doStatusUpdate();
+    }
+
+    /**
+     * The wizard owning this page is responsible for calling this method with the
+     * current selection. The selection is used to initialize the fields of the wizard
+     * page.
+     *
+     * @param selection used to initialize the fields
+     */
+    public void init(IStructuredSelection selection) {
+        IJavaElement jelem= getInitialJavaElement(selection);
+        initContainerPage(jelem);
+        initTypePage(jelem);
+        doStatusUpdate();
+    }
 }
