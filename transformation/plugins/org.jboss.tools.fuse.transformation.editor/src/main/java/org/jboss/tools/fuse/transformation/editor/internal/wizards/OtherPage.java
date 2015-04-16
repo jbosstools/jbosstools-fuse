@@ -106,7 +106,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             setTitle("Source Type (Other)");
             setDescription("Specify details for the source data format and Java class for this transformation.");
         } else {
-            setTitle("Target Type (Java)");
+            setTitle("Target Type (Other)");
             setDescription("Specify details for the target data format and Java class for this transformation.");
         }
         observablesManager.runAndCollect(new Runnable() {
@@ -262,7 +262,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 getModel().camelConfig.getConfigBuilder().getDataFormats();
         for (Iterator<DataFormatDefinition> iterator = dataFormats.iterator(); iterator.hasNext();) {
             DataFormatDefinition df = iterator.next();
-            dfList.add(df.getId());
+            if (df.getId() != null) {
+                dfList.add(df.getId());
+            }
         }
         if (dfList.isEmpty()) {
             _dfErrorLabel.setText("No available data format definitions in the selected Camel configuration.");
