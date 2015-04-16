@@ -105,7 +105,7 @@ public class CamelSpringBuilder extends CamelConfigBuilder {
     
     private List<CamelEndpointFactoryBean> getSpringEndpoints() {
         if (camelContext.getEndpoints() == null) {
-            setEndpoints(camelContext, new ArrayList<CamelEndpointFactoryBean>());
+            camelContext.setEndpoints(new ArrayList<CamelEndpointFactoryBean>());
         }
         return camelContext.getEndpoints();
     }

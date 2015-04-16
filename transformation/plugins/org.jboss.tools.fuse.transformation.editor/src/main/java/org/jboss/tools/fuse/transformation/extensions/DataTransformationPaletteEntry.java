@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.extensions;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -182,24 +181,5 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
     @Override
     public String getPaletteCategory() {
         return CATEGORY_TYPE.TRANSFORMATION.name();
-    }
-
-    /**
-     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
-     * endpoints on CamelContextFactoryBean directly. Use reflection for now
-     * until this issue is resolved upstream.
-     *
-     * @param context
-     * @param endpoints
-     */
-    void setEndpoints(CamelContextFactoryBean context,
-            List<CamelEndpointFactoryBean> endpoints) {
-        try {
-            Field endpointsField = context.getClass().getDeclaredField("endpoints");
-            endpointsField.setAccessible(true);
-            endpointsField.set(context, endpoints);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }

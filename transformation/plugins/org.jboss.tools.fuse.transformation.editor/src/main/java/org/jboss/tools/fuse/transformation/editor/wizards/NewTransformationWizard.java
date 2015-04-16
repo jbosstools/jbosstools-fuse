@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.wizards;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLClassLoader;
 import java.text.StringCharacterIterator;
@@ -508,7 +507,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             endpoints = new LinkedList<>();
         }
         endpoints.add(endpoint);
-        setEndpoints(context, endpoints);
+        context.setEndpoints(endpoints);
     }
 
     private void addDataFormat(CamelContextFactoryBean context, DataFormatDefinition dataFormat) {
@@ -577,25 +576,6 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                     org.fusesource.ide.camel.editor.Activator.getLogger().error(e);
                 }
             }
-        }
-    }
-
-    /**
-     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
-     * endpoints on CamelContextFactoryBean directly. Use reflection for now
-     * until this issue is resolved upstream.
-     *
-     * @param context
-     * @param endpoints
-     */
-    void setEndpoints(CamelContextFactoryBean context,
-            List<CamelEndpointFactoryBean> endpoints) {
-        try {
-            Field endpointsField = context.getClass().getDeclaredField("endpoints");
-            endpointsField.setAccessible(true);
-            endpointsField.set(context, endpoints);
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 }

@@ -13,7 +13,6 @@ package org.jboss.mapper.camel;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.camel.core.xml.AbstractCamelEndpointFactoryBean;
 import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.dataformat.JaxbDataFormat;
 import org.apache.camel.model.dataformat.JsonDataFormat;
@@ -253,21 +251,6 @@ public abstract class CamelConfigBuilder {
         return jaxbCtx;
     }
     
-    /**
-     * Due to https://issues.apache.org/jira/browse/CAMEL-8498, we cannot set
-     * endpoints on CamelContextFactoryBean directly.  Use reflection for now
-     * until this issue is resolved upstream.
-     */
-    protected void setEndpoints(Object camelContext, List<? extends AbstractCamelEndpointFactoryBean> endpoints) {
-        try {
-            Field endpointsField = camelContext.getClass().getDeclaredField("endpoints");
-            endpointsField.setAccessible(true);
-            endpointsField.set(camelContext, endpoints);
-        } catch (Exception ex) {
-            throw new RuntimeException("Unable to access endpoints field in CamelContextFactoryBean", ex);
-        }
-    }
-
     private static Element loadCamelConfig(File configFile) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
