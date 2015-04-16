@@ -13,14 +13,25 @@
  */
 package org.jboss.mapper.dozer;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
 import junit.framework.Assert;
 
+import org.custommonkey.xmlunit.XMLUnit;
+import org.jboss.mapper.Variable;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 public class DozerVariableMappingTest {
     
     private final String unqualified = "myvar";
     private final String qualified = "${myvar}";
+    
+    private static final File CONFIG_ROOT = 
+            new File("target/test-classes/org/jboss/mapper/dozer");
     
     @Test
     public void qualifyVariableName() {
@@ -36,5 +47,22 @@ public class DozerVariableMappingTest {
         Assert.assertEquals(unqualified, DozerVariableMapping.unqualifyName(unqualified));
     }
     
+    @Test
+    public void removeVariablesWhenEmpty() throws Exception {
+        DozerMapperConfiguration dozerConfig = DozerMapperConfiguration.loadConfig(
+                new File(CONFIG_ROOT, "fieldAndVariableMapping.xml"));
+        // Remove all variables
+        for (Variable var : dozerConfig.getVariables()) {
+            dozerConfig.removeVariable(var);
+        }
+        // Save the config and then load it again
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        dozerConfig.saveConfig(bos);
+        Document doc = XMLUnit.buildTestDocument(
+                new InputSource(new ByteArrayInputStream(bos.toByteArray())));
+        // There shouldn't be a variables element since we removed all variables
+        Assert.assertEquals(0, doc.getElementsByTagName("variables").getLength());
+        
+    }
 }
 

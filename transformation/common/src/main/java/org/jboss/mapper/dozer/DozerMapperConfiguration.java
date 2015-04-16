@@ -12,6 +12,7 @@
 package org.jboss.mapper.dozer;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -70,6 +71,11 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         mapConfig = (Mappings) getJAXBContext().createUnmarshaller().unmarshal(file);
         this.loader = loader;
     }
+    
+    private DozerMapperConfiguration(final InputStream stream, final ClassLoader loader) throws Exception {
+        mapConfig = (Mappings) getJAXBContext().createUnmarshaller().unmarshal(stream);
+        this.loader = loader;
+    }
 
     private DozerMapperConfiguration(final Mappings mapConfig) {
         this.mapConfig = mapConfig;
@@ -82,6 +88,15 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     public static DozerMapperConfiguration loadConfig(final File file, ClassLoader loader)
             throws Exception {
         return new DozerMapperConfiguration(file, loader);
+    }
+    
+    public static DozerMapperConfiguration loadConfig(final InputStream stream) throws Exception {
+        return new DozerMapperConfiguration(stream, null);
+    }
+
+    public static DozerMapperConfiguration loadConfig(final InputStream stream, ClassLoader loader)
+            throws Exception {
+        return new DozerMapperConfiguration(stream, loader);
     }
 
     public static DozerMapperConfiguration newConfig() {
@@ -161,18 +176,26 @@ public class DozerMapperConfiguration implements MapperConfiguration {
                 || mapConfig.getConfiguration().getVariables() == null) {
             return false;
         }
+
         Variables dozerVars = mapConfig.getConfiguration().getVariables();
         Iterator<org.jboss.mapper.dozer.config.Variable> varIt = 
                 dozerVars.getVariable().iterator();
+        boolean removed = false;
         while (varIt.hasNext()) {
             org.jboss.mapper.dozer.config.Variable dozerVar = varIt.next();
             if (dozerVar.getName().equals(variable.getName())) {
                 varIt.remove();
-                return true;
+                removed = true;
             }
         }
         
-        return false;
+        // If there are no variables we need to remove the top-level variables
+        // element to make Dozer happy
+        if (removed) {
+            mapConfig.getConfiguration().setVariables(null);
+        }
+        
+        return removed;
     }
 
     @Override
