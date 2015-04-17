@@ -100,7 +100,14 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     }
 
     public static DozerMapperConfiguration newConfig() {
-        return new DozerMapperConfiguration();
+        DozerMapperConfiguration config = new DozerMapperConfiguration();
+        Configuration dozerConfig = config.getDozerConfig().getConfiguration();
+        if (dozerConfig == null) {
+            dozerConfig = new Configuration();
+            config.getDozerConfig().setConfiguration(dozerConfig);
+        }
+        dozerConfig.setWildcard(false);
+        return config;
     }
 
     // Adds a <class-a> and <class-b> mapping definition to the dozer config.

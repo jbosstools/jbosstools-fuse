@@ -28,6 +28,7 @@ import org.jboss.mapper.MappingOperation;
 import org.jboss.mapper.MappingType;
 import org.jboss.mapper.Variable;
 import org.jboss.mapper.VariableMapping;
+import org.jboss.mapper.dozer.config.Configuration;
 import org.jboss.mapper.dozer.config.Field;
 import org.jboss.mapper.dozer.config.Mapping;
 import org.jboss.mapper.model.Model;
@@ -295,6 +296,14 @@ public class DozerMapperConfigurationTest {
         CustomMapping custom = (CustomMapping)config.getMappings().get(0);
         Assert.assertEquals(CUSTOM_CLASS, custom.getMappingClass());
         Assert.assertEquals(CUSTOM_OPERATION, custom.getMappingOperation());
+    }
+    
+    @Test
+    public void wildcardDisabledOnNewConfigurations() throws Exception {
+        DozerMapperConfiguration mapConfig = DozerMapperConfiguration.newConfig();
+        Configuration config = mapConfig.getDozerConfig().getConfiguration();
+        Assert.assertNotNull(config);
+        Assert.assertFalse(config.isWildcard());
     }
     
     private DozerMapperConfiguration loadConfig(String configName) throws Exception {
