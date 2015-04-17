@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="libs/guava-17.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/fabric-api-1.2.0.redhat-104.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/fluent-hc-4.3.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/httpclient-4.3.6.jar"/>

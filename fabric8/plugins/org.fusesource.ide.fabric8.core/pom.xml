@@ -88,6 +88,11 @@
 				            <artifactId>tooling-jclouds-all</artifactId>
 				            <version>${fabric.version}</version>
 						</artifactItem>
+						<artifactItem>
+                            <groupId>com.google.guava</groupId>
+                            <artifactId>guava</artifactId>
+                            <version>${guava.version}</version>
+                        </artifactItem>
 					</artifactItems>
 					<useBaseVersion>true</useBaseVersion>
 					<skip>false</skip>
