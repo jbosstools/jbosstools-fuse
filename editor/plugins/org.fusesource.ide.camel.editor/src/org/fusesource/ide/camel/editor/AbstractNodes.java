@@ -12,6 +12,7 @@
 package org.fusesource.ide.camel.editor;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -32,10 +33,6 @@ import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
 import org.fusesource.ide.commons.tree.HasOwner;
-import org.fusesource.ide.commons.util.Objects;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 public class AbstractNodes {
 
@@ -127,12 +124,12 @@ public class AbstractNodes {
 	}
 
 	private static boolean containsUri(Set<Endpoint> set, final String uri) {
-		return Iterables.any(set, new Predicate<Endpoint>(){
-
-			@Override
-			public boolean apply(Endpoint endpoint) {
-				return Objects.equal(uri, endpoint.getUri());
-			}});
+		Iterator<Endpoint> setIt = set.iterator();
+		while (setIt.hasNext()) {
+			Endpoint ep = setIt.next();
+			if (ep.getUri().equalsIgnoreCase(uri)) return true;
+		}
+		return false;
 	}
 
 	public static SortedMap<String, BeanDef> getAllBeans(AbstractNode node) {
