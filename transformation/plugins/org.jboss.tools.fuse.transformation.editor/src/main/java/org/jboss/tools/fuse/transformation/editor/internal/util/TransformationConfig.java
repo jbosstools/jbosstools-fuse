@@ -420,7 +420,6 @@ public class TransformationConfig implements MapperConfiguration {
     public MappingOperation<?, ?> setSource(final MappingOperation<?, ?> mapping,
                                             final Object source) {
         if (mapping.getType() == null) ((MappingPlaceholder)mapping).setSource(source);
-        else delegate.removeMapping(mapping);
         return update(mapping, source, (Model)mapping.getTarget(), MAPPING_SOURCE);
     }
 
@@ -449,7 +448,6 @@ public class TransformationConfig implements MapperConfiguration {
     public MappingOperation<?, ?> setTarget(final MappingOperation<?, ?> mapping,
                                             final Model target) {
         if (mapping.getType() == null) ((MappingPlaceholder)mapping).setTarget(target);
-        else delegate.removeMapping(mapping);
         return update(mapping, mapping.getSource(), target, MAPPING_TARGET);
     }
 
@@ -485,6 +483,7 @@ public class TransformationConfig implements MapperConfiguration {
             // Not or no longer a mapping placeholder
             if (mapping.getType() == null) mappingPlaceholders.remove(mapping);
             if (source instanceof Model) {
+                if (mapping.getType() != null) delegate.removeMapping(mapping);
                 resultMapping = delegate.mapField((Model)source, target);
                 if (mapping.getType() == MappingType.CUSTOM) {
                     final CustomMapping customMapping = (CustomMapping)mapping;
@@ -496,8 +495,12 @@ public class TransformationConfig implements MapperConfiguration {
                 if (mapping.getType() == MappingType.VARIABLE) {
                     resultMapping = mapping;
                     ((VariableMapping)mapping).setVariable((Variable)source);
-                } else resultMapping = delegate.mapVariable((Variable)source, target);
+                } else {
+                    if (mapping.getType() != null) delegate.removeMapping(mapping);
+                    resultMapping = delegate.mapVariable((Variable)source, target);
+                }
             } else {
+                if (mapping.getType() != null) delegate.removeMapping(mapping);
                 Expression expression = (Expression)source;
                 resultMapping = delegate.mapExpression(expression.getLanguage(),
                                                        expression.getExpression(),
