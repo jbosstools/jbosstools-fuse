@@ -157,7 +157,7 @@ abstract class MappingViewer {
             text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.VARIABLE);
         } else if (object instanceof Expression) {
-            text.setToolTipText(((Expression)object).getExpression());
+            text.setToolTipText(((Expression)object).getExpression().replace("\\${", "${"));
             text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.EXPRESSION);
         } else {

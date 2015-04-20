@@ -463,7 +463,7 @@ public final class MappingDetailViewer extends MappingViewer {
             label.setText("Expression:");
             final Text text = new Text(parent, SWT.BORDER);
             text.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-            if (expression != null) text.setText(expression);
+            if (expression != null) text.setText(expression.replace("\\${", "${"));
 
             combo.addSelectionListener(new SelectionAdapter() {
 
@@ -478,7 +478,14 @@ public final class MappingDetailViewer extends MappingViewer {
 
                 @Override
                 public void modifyText(final ModifyEvent event) {
-                    expression = text.getText().trim().replace("${", "\\${");
+                    String expr = text.getText().trim();
+                    for (int ndx = expr.indexOf("${"); ndx >= 0; ndx = expr.indexOf("${", ndx)) {
+                        if (ndx == 0 || expr.charAt(ndx - 1) != '\\') {
+                            expr = expr.substring(0, ndx) + '\\' + expr.substring(ndx);
+                            ndx += 3;
+                        }
+                    }
+                    expression = expr;
                     validate();
                 }
             });
