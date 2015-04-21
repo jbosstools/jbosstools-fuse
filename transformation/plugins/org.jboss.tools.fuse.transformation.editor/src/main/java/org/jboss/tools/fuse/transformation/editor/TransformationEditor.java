@@ -117,7 +117,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         // Create help text
         helpText = new Text(pane, SWT.MULTI | SWT.WRAP);
         helpText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        helpText.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
         helpText.setEditable(false);
         updateHelpText(helpText);
         // Create target model toggle button

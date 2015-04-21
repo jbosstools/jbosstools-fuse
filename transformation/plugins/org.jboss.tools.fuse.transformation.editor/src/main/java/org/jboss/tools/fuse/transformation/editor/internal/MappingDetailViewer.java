@@ -182,7 +182,7 @@ public final class MappingDetailViewer extends MappingViewer {
 
             @Override
             Control constructControl() {
-                createSourceText(this);
+                createSourceText(this, SWT.NONE);
                 addMenuItem("Set field", new MenuItemHandler() {
 
                     @Override
@@ -271,8 +271,9 @@ public final class MappingDetailViewer extends MappingViewer {
     }
 
     @Override
-    Text createText(final Composite parent) {
-        final Text text = super.createText(parent);
+    Text createText(final Composite parent,
+                    final int style) {
+        final Text text = super.createText(parent, style);
         text.addFocusListener(new FocusAdapter() {
 
             @Override

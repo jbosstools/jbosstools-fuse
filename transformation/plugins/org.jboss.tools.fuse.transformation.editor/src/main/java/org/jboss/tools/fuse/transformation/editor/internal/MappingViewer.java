@@ -46,8 +46,9 @@ abstract class MappingViewer {
         this.potentialDropTargets = potentialDropTargets;
     }
 
-    void createSourceText(final Composite parent) {
-        sourceText = createText(parent);
+    void createSourceText(final Composite parent,
+                          final int style) {
+        sourceText = createText(parent, style);
         setSourceText();
         sourceDropTarget = new DropTarget(sourceText, DND.DROP_MOVE);
         sourceDropTarget.setTransfer(new Transfer[] {LocalSelectionTransfer.getTransfer()});
@@ -74,7 +75,7 @@ abstract class MappingViewer {
     }
 
     void createTargetText(final Composite parent) {
-        targetText = createText(parent);
+        targetText = createText(parent, SWT.NONE);
         setTargetText();
         targetDropTarget = new DropTarget(targetText, DND.DROP_MOVE);
         targetDropTarget.setTransfer(new Transfer[] {LocalSelectionTransfer.getTransfer()});
@@ -100,8 +101,9 @@ abstract class MappingViewer {
         });
     }
 
-    Text createText(final Composite parent) {
-        final Text text = new Text(parent, SWT.BORDER);
+    Text createText(final Composite parent,
+                    final int style) {
+        final Text text = new Text(parent, style | SWT.BORDER);
         text.setEditable(false);
         return text;
     }

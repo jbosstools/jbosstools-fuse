@@ -20,15 +20,10 @@ import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -36,11 +31,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.tools.fuse.transformation.MappingOperation;
-import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
@@ -75,6 +68,9 @@ public class MappingsViewer extends Composite {
 
         setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         setBackground(parent.getParent().getBackground());
+        final Label title = new Label(this, SWT.CENTER);
+        title.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+        title.setText("Transformations");
 
         // Create tool bar
         final ToolBar toolBar = new ToolBar(this, SWT.NONE);
@@ -106,10 +102,6 @@ public class MappingsViewer extends Composite {
                 }
             }
         });
-        final Composite headerPane = new Composite(this, SWT.NONE);
-        headerPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        final Label sourceHeader = createHeader(headerPane, config.getSourceModel());
-        final Label targetHeader = createHeader(headerPane, config.getTargetModel());
         scroller = new ScrolledComposite(this, SWT.V_SCROLL);
         scroller.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         scroller.setExpandHorizontal(true);
@@ -119,7 +111,7 @@ public class MappingsViewer extends Composite {
         scroller.setContent(summaryPane);
         summaryPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).spacing(0, 0).create());
         summaryPane.setBackground(getBackground());
-        sourcePane = new Composite(summaryPane, SWT.BORDER);
+        sourcePane = new Composite(summaryPane, SWT.NONE);
         sourcePane.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         sourcePane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         sourcePane.setBackground(getBackground());
@@ -142,7 +134,7 @@ public class MappingsViewer extends Composite {
                                                 .hint(mapsToPaneWidth, SWT.DEFAULT)
                                                 .create());
         mapsToPane.setBackground(getBackground());
-        targetPane = new Composite(summaryPane, SWT.BORDER);
+        targetPane = new Composite(summaryPane, SWT.NONE);
         targetPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         targetPane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         targetPane.setBackground(getBackground());
@@ -156,27 +148,9 @@ public class MappingsViewer extends Composite {
 
         int width = Math.max(sourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
                              targetPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
-        width = Math.max(sourceHeader.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, width);
-        width = Math.max(targetHeader.computeSize(SWT.DEFAULT, SWT.DEFAULT).x, width);
         ((GridData)sourcePane.getLayoutData()).widthHint = width;
         ((GridData)targetPane.getLayoutData()).widthHint = width;
 
-        sourcePane.addControlListener(new ControlAdapter() {
-
-            @Override
-            public void controlResized(final ControlEvent event) {
-                sourceHeader.setBounds(sourcePane.getLocation().x, 0,
-                                       sourcePane.getSize().x, sourceHeader.getSize().y);
-            }
-        });
-        targetPane.addControlListener(new ControlAdapter() {
-
-            @Override
-            public void controlResized(final ControlEvent event) {
-                targetHeader.setBounds(targetPane.getLocation().x, 0,
-                                       targetPane.getSize().x, targetHeader.getSize().y);
-            }
-        });
         scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
         config.addListener(new PropertyChangeListener() {
@@ -199,24 +173,6 @@ public class MappingsViewer extends Composite {
         scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scroller.setOrigin(0, scroller.getSize().y);
         mappingSummary.sourceText.setFocus(); // This will call selected()
-    }
-
-    private Label createHeader(final Composite parent,
-                               final Model model) {
-        final Label label = new Label(parent, SWT.CENTER);
-        label.setText(model.getName());
-        label.setBackground(Colors.MODEL);
-        label.setSize(label.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-        label.addPaintListener(new PaintListener() {
-
-            @Override
-            public void paintControl(final PaintEvent event) {
-                event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                final Rectangle bounds = label.getBounds();
-                event.gc.drawRectangle(0, 0, bounds.width - 1, bounds.height - 1);
-            }
-        });
-        return label;
     }
 
     private void focusOnMappingSummary(final int index) {

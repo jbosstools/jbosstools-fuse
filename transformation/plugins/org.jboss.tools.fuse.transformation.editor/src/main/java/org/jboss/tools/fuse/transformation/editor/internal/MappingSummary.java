@@ -42,11 +42,8 @@ final class MappingSummary extends MappingViewer {
         this.mappingsViewer = mappingsViewer;
 
         mappingSourcePane = createMappingPane(mappingsViewer.sourcePane);
-        createSourceText(mappingSourcePane);
-        sourceText.setLayoutData(GridDataFactory.swtDefaults()
-                                                .grab(true, false)
-                                                .align(SWT.RIGHT, SWT.CENTER)
-                                                .create());
+        createSourceText(mappingSourcePane, SWT.RIGHT);
+        sourceText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
         mapsToPane = new Composite(mappingsViewer.mapsToPane, SWT.NONE);
         mapsToPane.setLayoutData(GridDataFactory.swtDefaults().create());
@@ -67,6 +64,7 @@ final class MappingSummary extends MappingViewer {
 
         mappingTargetPane = createMappingPane(mappingsViewer.targetPane);
         createTargetText(mappingTargetPane);
+        targetText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
         // Make mappingSourcePane, mapsToLabel, & mappingTargetPane the same height
         int height = mappingSourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
@@ -144,8 +142,9 @@ final class MappingSummary extends MappingViewer {
     }
 
     @Override
-    Text createText(final Composite parent) {
-        final Text text = super.createText(parent);
+    Text createText(final Composite parent,
+                    final int style) {
+        final Text text = super.createText(parent, style);
         // Create focus listener to change highlight color when focus is lost & gained
         text.addFocusListener(new FocusListener() {
 
