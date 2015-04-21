@@ -64,7 +64,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
-import org.jboss.mapper.model.ModelBuilder;
+import org.jboss.tools.fuse.transformation.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
@@ -84,7 +84,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     private Text _javaClassText;
     private ComboViewer _dataFormatIdCombo;
     private ModelBuilder _builder;
-    private org.jboss.mapper.model.Model _javaModel = null;
+    private org.jboss.tools.fuse.transformation.model.Model _javaModel = null;
     private ModelViewer _modelViewer;
     private Label _dfErrorLabel;
 

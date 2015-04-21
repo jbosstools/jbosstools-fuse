@@ -42,8 +42,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.jboss.mapper.Variable;
-import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.Variable;
+import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 
 /**

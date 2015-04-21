@@ -22,17 +22,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.jboss.mapper.CustomMapping;
-import org.jboss.mapper.Expression;
-import org.jboss.mapper.ExpressionMapping;
-import org.jboss.mapper.FieldMapping;
-import org.jboss.mapper.MapperConfiguration;
-import org.jboss.mapper.MappingOperation;
-import org.jboss.mapper.MappingType;
-import org.jboss.mapper.Variable;
-import org.jboss.mapper.VariableMapping;
-import org.jboss.mapper.dozer.DozerMapperConfiguration;
-import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.CustomMapping;
+import org.jboss.tools.fuse.transformation.Expression;
+import org.jboss.tools.fuse.transformation.ExpressionMapping;
+import org.jboss.tools.fuse.transformation.FieldMapping;
+import org.jboss.tools.fuse.transformation.MapperConfiguration;
+import org.jboss.tools.fuse.transformation.MappingOperation;
+import org.jboss.tools.fuse.transformation.MappingType;
+import org.jboss.tools.fuse.transformation.Variable;
+import org.jboss.tools.fuse.transformation.VariableMapping;
+import org.jboss.tools.fuse.transformation.dozer.DozerMapperConfiguration;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
@@ -94,7 +94,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#addClassMapping(java.lang.String, java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#addClassMapping(java.lang.String, java.lang.String)
      */
     @Override
     public void addClassMapping(final String fromClass,
@@ -112,7 +112,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#addVariable(java.lang.String, java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#addVariable(java.lang.String, java.lang.String)
      */
     @Override
     public Variable addVariable(final String name,
@@ -125,7 +125,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#customizeMapping(org.jboss.mapper.FieldMapping, java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#customizeMapping(org.jboss.tools.fuse.transformation.FieldMapping, java.lang.String)
      */
     @Override
     public CustomMapping customizeMapping(final FieldMapping mapping,
@@ -177,7 +177,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#getMappings()
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getMappings()
      */
     @Override
     public List<MappingOperation<?, ?>> getMappings() {
@@ -189,7 +189,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#getMappingsForSource(org.jboss.mapper.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getMappingsForSource(org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public List<MappingOperation<?, ?>> getMappingsForSource(final Model source) {
@@ -203,7 +203,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#getMappingsForTarget(org.jboss.mapper.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getMappingsForTarget(org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public List<MappingOperation<?, ?>> getMappingsForTarget(final Model target) {
@@ -217,7 +217,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#getSourceModel()
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getSourceModel()
      */
     @Override
     public Model getSourceModel() {
@@ -227,7 +227,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#getTargetModel()
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getTargetModel()
      */
     @Override
     public Model getTargetModel() {
@@ -237,7 +237,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#getVariable(java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getVariable(java.lang.String)
      */
     @Override
     public Variable getVariable(final String variableName) {
@@ -247,7 +247,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#getVariables()
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getVariables()
      */
     @Override
     public List<Variable> getVariables() {
@@ -264,7 +264,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#mapExpression(java.lang.String, java.lang.String, org.jboss.mapper.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#mapExpression(java.lang.String, java.lang.String, org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public ExpressionMapping mapExpression(final String language,
@@ -278,7 +278,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#mapField(org.jboss.mapper.model.Model, org.jboss.mapper.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#mapField(org.jboss.tools.fuse.transformation.model.Model, org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public FieldMapping mapField(final Model source,
@@ -313,7 +313,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#mapVariable(org.jboss.mapper.Variable, org.jboss.mapper.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#mapVariable(org.jboss.tools.fuse.transformation.Variable, org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public VariableMapping mapVariable(final Variable variable, final Model target) {
@@ -342,7 +342,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#removeAllMappings()
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#removeAllMappings()
      */
     @Override
     public void removeAllMappings() {
@@ -359,7 +359,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#removeMapping(org.jboss.mapper.MappingOperation)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#removeMapping(org.jboss.tools.fuse.transformation.MappingOperation)
      */
     @Override
     public void removeMapping(final MappingOperation<?, ?> mapping) {
@@ -371,7 +371,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#removeVariable(org.jboss.mapper.Variable)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#removeVariable(org.jboss.tools.fuse.transformation.Variable)
      */
     @Override
     public boolean removeVariable(final Variable variable) {
@@ -404,7 +404,7 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MapperConfiguration#saveConfig(java.io.OutputStream)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#saveConfig(java.io.OutputStream)
      */
     @Override
     public void saveConfig(final OutputStream output) throws Exception {

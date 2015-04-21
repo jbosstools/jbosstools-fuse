@@ -9,7 +9,7 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
-import org.jboss.mapper.TransformType;
+import org.jboss.tools.fuse.transformation.TransformType;
 
 /**
  *

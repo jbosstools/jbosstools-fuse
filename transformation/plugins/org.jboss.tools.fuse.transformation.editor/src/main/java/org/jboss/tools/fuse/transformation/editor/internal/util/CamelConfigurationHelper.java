@@ -13,8 +13,8 @@ import java.io.File;
 
 import org.fusesource.ide.commons.camel.tools.RouteXml;
 import org.fusesource.ide.commons.camel.tools.XmlModel;
-import org.jboss.mapper.camel.CamelConfigBuilder;
-import org.jboss.mapper.camel.CamelSpringBuilder;
+import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder;
+import org.jboss.tools.fuse.transformation.camel.CamelSpringBuilder;
 
 public final class CamelConfigurationHelper {
 

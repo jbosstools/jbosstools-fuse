@@ -26,7 +26,7 @@ import org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.jboss.mapper.camel.EndpointHelper;
+import org.jboss.tools.fuse.transformation.camel.EndpointHelper;
 import org.jboss.tools.fuse.transformation.editor.DozerConfigContentTypeDescriber;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 

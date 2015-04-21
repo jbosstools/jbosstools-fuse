@@ -56,7 +56,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
-import org.jboss.mapper.model.ModelBuilder;
+import org.jboss.tools.fuse.transformation.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
@@ -74,7 +74,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     private boolean isSource = true;
     private Text _javaClassText;
     private ModelBuilder _builder;
-    private org.jboss.mapper.model.Model _javaModel = null;
+    private org.jboss.tools.fuse.transformation.model.Model _javaModel = null;
     private ModelViewer _modelViewer;
 
     /**

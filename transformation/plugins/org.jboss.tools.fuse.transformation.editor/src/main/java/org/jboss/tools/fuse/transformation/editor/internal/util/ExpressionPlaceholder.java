@@ -9,7 +9,7 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
-import org.jboss.mapper.Expression;
+import org.jboss.tools.fuse.transformation.Expression;
 
 /**
  *
@@ -31,7 +31,7 @@ public class ExpressionPlaceholder implements Expression {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.Expression#getExpression()
+     * @see org.jboss.tools.fuse.transformation.Expression#getExpression()
      */
     @Override
     public String getExpression() {
@@ -41,7 +41,7 @@ public class ExpressionPlaceholder implements Expression {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.Expression#getLanguage()
+     * @see org.jboss.tools.fuse.transformation.Expression#getLanguage()
      */
     @Override
     public String getLanguage() {
@@ -51,7 +51,7 @@ public class ExpressionPlaceholder implements Expression {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.Expression#setExpression(java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.Expression#setExpression(java.lang.String)
      */
     @Override
     public void setExpression(final String expression) {
@@ -61,7 +61,7 @@ public class ExpressionPlaceholder implements Expression {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.Expression#setLanguage(java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.Expression#setLanguage(java.lang.String)
      */
     @Override
     public void setLanguage(final String language) {

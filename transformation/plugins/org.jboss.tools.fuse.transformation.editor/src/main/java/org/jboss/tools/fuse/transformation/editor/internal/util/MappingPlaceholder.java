@@ -9,9 +9,9 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
-import org.jboss.mapper.MappingOperation;
-import org.jboss.mapper.MappingType;
-import org.jboss.mapper.model.Model;
+import org.jboss.tools.fuse.transformation.MappingOperation;
+import org.jboss.tools.fuse.transformation.MappingType;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
@@ -24,7 +24,7 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MappingOperation#getSource()
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#getSource()
      */
     @Override
     public Object getSource() {
@@ -34,7 +34,7 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MappingOperation#getTarget()
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#getTarget()
      */
     @Override
     public Model getTarget() {
@@ -44,7 +44,7 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.mapper.MappingOperation#getType()
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#getType()
      */
     @Override
     public MappingType getType() {
