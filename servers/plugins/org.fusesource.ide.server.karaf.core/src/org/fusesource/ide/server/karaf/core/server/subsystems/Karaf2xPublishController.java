@@ -44,6 +44,9 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	 */
 	@Override
 	public IStatus canPublish() {
+		// workaround for bug in WTP (https://bugs.eclipse.org/bugs/show_bug.cgi?id=465141), should be removed once its fixed upstream
+		// also switch back startBeforePublish=true to all kind of servers in the plugin.xml files
+		if (getServer().getServerState() != Server.STATE_STARTED) return Status.CANCEL_STATUS;
 		return Status.OK_STATUS;
 	}
 

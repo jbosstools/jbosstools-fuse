@@ -59,7 +59,7 @@
            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.60"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -76,7 +76,7 @@
            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.61"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -93,7 +93,7 @@
            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.62"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
   </extension>

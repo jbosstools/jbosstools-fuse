@@ -87,7 +87,7 @@
            runtimeTypeId="org.fusesource.ide.karaf.runtime.22"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -104,7 +104,7 @@
            runtimeTypeId="org.fusesource.ide.karaf.runtime.23"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -121,7 +121,7 @@
            runtimeTypeId="org.fusesource.ide.karaf.runtime.24"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -138,7 +138,7 @@
            runtimeTypeId="org.fusesource.ide.karaf.runtime.30"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
   </extension>

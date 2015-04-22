@@ -98,7 +98,7 @@
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.45"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -115,7 +115,7 @@
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.50"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -132,7 +132,7 @@
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.51"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -149,7 +149,7 @@
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.52"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -166,7 +166,7 @@
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.53"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
      <serverType
@@ -183,7 +183,7 @@
            runtimeTypeId="org.fusesource.ide.servicemix.runtime.54"
            startTimeout="90000"
            stopTimeout="45000"
-           startBeforePublish="true" 
+           startBeforePublish="false" 
            supportsRemoteHosts="false">
      </serverType>
   </extension>
