@@ -11,6 +11,7 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,8 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -40,26 +43,28 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.languages.Language;
 import org.jboss.tools.fuse.transformation.CustomMapping;
 import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.Variable;
-import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
@@ -97,14 +102,14 @@ public final class MappingDetailViewer extends MappingViewer {
                     case TransformationConfig.MAPPING: {
                         if (event.getOldValue() == mapping) scroller.setContent(null);
                         else if (event.getNewValue() != null)
-                            update((MappingOperation<?, ?>)event.getNewValue());
+                            update((MappingOperation<?, ?>) event.getNewValue());
                         break;
                     }
                     case TransformationConfig.MAPPING_CUSTOMIZE:
                     case TransformationConfig.MAPPING_SOURCE:
                     case TransformationConfig.MAPPING_TARGET: {
                         if (mapping != event.getOldValue()) return;
-                        update((MappingOperation<?, ?>)event.getNewValue());
+                        update((MappingOperation<?, ?>) event.getNewValue());
                     }
                 }
             }
@@ -112,12 +117,12 @@ public final class MappingDetailViewer extends MappingViewer {
     }
 
     void addCustomFunction() throws Exception {
-        final AddCustomFunctionDialog dlg
-                = new AddCustomFunctionDialog(scroller.getShell(),
-                                              config.project(),
-                                              ((Model)mapping.getSource()).getType());
+        final AddCustomFunctionDialog dlg =
+            new AddCustomFunctionDialog(scroller.getShell(),
+                                        config.project(),
+                                        ((Model)mapping.getSource()).getType());
         if (dlg.open() != Window.OK) return;
-        mapping = config.customizeMapping((FieldMapping)mapping,
+        mapping = config.customizeMapping((FieldMapping) mapping,
                                           dlg.type.getFullyQualifiedName(),
                                           dlg.method.getElementName());
         config.save();
@@ -297,14 +302,15 @@ public final class MappingDetailViewer extends MappingViewer {
     }
 
     void removeCustomFunction() throws Exception {
-        config.uncustomizeMapping((CustomMapping)mapping);
+        config.uncustomizeMapping((CustomMapping) mapping);
         config.save();
     }
 
     void setExpression() throws Exception {
         final ExpressionDialog dlg = new ExpressionDialog();
         if (dlg.open() != Window.OK) return;
-        mapping = config.setSourceExpression(mapping, dlg.language, dlg.expression);
+        MavenUtils.updateMavenDependencies(dlg.language.getDependencies());
+        mapping = config.setSourceExpression(mapping, dlg.language.getName(), dlg.expression);
         config.save();
     }
 
@@ -338,17 +344,17 @@ public final class MappingDetailViewer extends MappingViewer {
         contentPane.setForeground(contentPane.getBackground());
         final Composite sourceDetailPane = createDetailPane(contentPane, config.getSourceModel());
         sourceDetailPane.setLayoutData(GridDataFactory.swtDefaults()
-                                                .align(SWT.RIGHT, SWT.CENTER)
-                                                .grab(true, true)
-                                                .create());
+                                                      .align(SWT.RIGHT, SWT.CENTER)
+                                                      .grab(true, true)
+                                                      .create());
         if (mapping instanceof CustomMapping) createCustomSourcePane(sourceDetailPane);
         else createSourcePane(sourceDetailPane);
         new Label(contentPane, SWT.NONE).setImage(Images.MAPPED);
         final Composite targetDetailPane = createDetailPane(contentPane, config.getTargetModel());
         targetDetailPane.setLayoutData(GridDataFactory.swtDefaults()
-                                                .align(SWT.LEFT, SWT.CENTER)
-                                                .grab(true, true)
-                                                .create());
+                                                      .align(SWT.LEFT, SWT.CENTER)
+                                                      .grab(true, true)
+                                                      .create());
         createTargetPane(targetDetailPane);
         scroller.setMinSize(contentPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         contentPane.layout();
@@ -441,14 +447,30 @@ public final class MappingDetailViewer extends MappingViewer {
 
     final class ExpressionDialog extends BaseDialog {
 
-        String language, expression;
+        final List<Language> languages = new ArrayList<>();
+        Language language;
+        String expression;
 
         ExpressionDialog() {
             super(sourceText.getShell());
+            String languageName = null;
             if (mapping.getSource() instanceof Expression) {
-                final Expression expression = (Expression)mapping.getSource();
-                this.language = expression.getLanguage();
+                final Expression expression = (Expression) mapping.getSource();
                 this.expression = expression.getExpression();
+                languageName = expression.getLanguage();
+            }
+            final String version = CamelModelFactory.getSupportedCamelVersions().get(0);
+            for (final Language language : CamelModelFactory.getModelForVersion(version)
+                                                            .getLanguageModel()
+                                                            .getSupportedLanguages()) {
+                final String name = language.getName();
+                if (!name.equals("bean") && !name.equals("file") && !name.equals("sql")
+                    && !name.equals("xtokenize") && !name.equals("tokenize")
+                    && !name.equals("spel")) {
+                    if (languageName != null && name.equals(languageName))
+                        this.language = language;
+                    languages.add(language);
+                }
             }
         }
 
@@ -457,20 +479,37 @@ public final class MappingDetailViewer extends MappingViewer {
             parent.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
             Label label = new Label(parent, SWT.NONE);
             label.setText("Language:");
-            final Combo combo = new Combo(parent, SWT.READ_ONLY);
-            combo.setItems(new String[] {"constant", "exchangeProperty", "header", "simple"});
-            if (language != null ) combo.setText(language);
+            final ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+            comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+            comboViewer.setComparator(new ViewerComparator() {
+
+                @Override
+                public int compare(final Viewer viewer,
+                                   final Object object1,
+                                   final Object object2) {
+                    return ((Language)object1).getTitle().compareTo(((Language)object2).getTitle());
+                }
+            });
+            comboViewer.setLabelProvider(new LabelProvider() {
+
+                @Override
+                public String getText(final Object element) {
+                    return ((Language)element).getTitle();
+                }
+            });
             label = new Label(parent, SWT.NONE);
             label.setText("Expression:");
             final Text text = new Text(parent, SWT.BORDER);
             text.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             if (expression != null) text.setText(expression.replace("\\${", "${"));
 
-            combo.addSelectionListener(new SelectionAdapter() {
+            comboViewer.getCombo().addSelectionListener(new SelectionAdapter() {
 
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
-                    language = combo.getText();
+                    final IStructuredSelection selection =
+                        (IStructuredSelection)comboViewer.getSelection();
+                    language = (Language)selection.getFirstElement();
                     text.setFocus();
                     validate();
                 }
@@ -490,6 +529,15 @@ public final class MappingDetailViewer extends MappingViewer {
                     validate();
                 }
             });
+
+            comboViewer.setInput(languages);
+            if (language != null) comboViewer.setSelection(new StructuredSelection(language));
+        }
+
+        @Override
+        public void create() {
+            super.create();
+            validate();
         }
 
         @Override
@@ -519,8 +567,8 @@ public final class MappingDetailViewer extends MappingViewer {
             this.rootModel = rootModel;
             if (mapping.getSource() instanceof Model)
                 this.field = rootModel.equals(config.getSourceModel())
-                             ? (Model)mapping.getSource()
-                             : (Model)mapping.getTarget();
+                             ? (Model) mapping.getSource()
+                             : (Model) mapping.getTarget();
         }
 
         @Override
@@ -533,9 +581,9 @@ public final class MappingDetailViewer extends MappingViewer {
 
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
-                    field =
-                        (Model)((IStructuredSelection)modelViewer.treeViewer
-                                                                 .getSelection()).getFirstElement();
+                    final IStructuredSelection selection =
+                        (IStructuredSelection)modelViewer.treeViewer.getSelection();
+                    field = (Model)selection.getFirstElement();
                     validate();
                 }
             });
@@ -563,7 +611,7 @@ public final class MappingDetailViewer extends MappingViewer {
         VariableDialog() {
             super(sourceText.getShell());
             if (mapping.getSource() instanceof Variable)
-                this.variable = (Variable)mapping.getSource();
+                this.variable = (Variable) mapping.getSource();
         }
 
         @Override
@@ -576,13 +624,13 @@ public final class MappingDetailViewer extends MappingViewer {
             comboViewer.setLabelProvider(new LabelProvider() {
 
                 @Override
-                public Image getImage(Object element) {
+                public Image getImage(final Object element) {
                     return Images.VARIABLE;
                 }
 
                 @Override
-                public String getText(Object element) {
-                    return ((Variable)element).getName();
+                public String getText(final Object element) {
+                    return ((Variable) element).getName();
                 }
             });
 
@@ -590,7 +638,9 @@ public final class MappingDetailViewer extends MappingViewer {
 
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
-                    variable = (Variable)((IStructuredSelection)comboViewer.getSelection()).getFirstElement();
+                    final IStructuredSelection selection =
+                        (IStructuredSelection)comboViewer.getSelection();
+                    variable = (Variable)selection.getFirstElement();
                     validate();
                 }
             });

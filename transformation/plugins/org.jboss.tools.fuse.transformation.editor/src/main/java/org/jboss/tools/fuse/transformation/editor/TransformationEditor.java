@@ -50,10 +50,10 @@ import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.camel.CamelEndpoint;
-import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder;
@@ -64,6 +64,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
@@ -113,7 +114,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                                              .create());
         final ToolItem sourceViewerButton = new ToolItem(toolBar, SWT.CHECK);
         sourceViewerButton.setImage(Images.TREE);
-        sourceViewerButton.setSelection(true);
         // Create help text
         helpText = new Text(pane, SWT.MULTI | SWT.WRAP);
         helpText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
@@ -126,7 +126,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                                              .create());
         final ToolItem targetViewerButton = new ToolItem(toolBar, SWT.CHECK);
         targetViewerButton.setImage(Images.TREE);
-        targetViewerButton.setSelection(true);
         // Create splitter between mappings viewer and model viewers
         final SashForm horizontalSplitter = new SashForm(pane, SWT.HORIZONTAL);
         horizontalSplitter.setLayoutData(GridDataFactory.fillDefaults()
@@ -168,16 +167,24 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
             public void widgetSelected(final SelectionEvent event) {
                 sourceModelTabFolder.setVisible(sourceViewerButton.getSelection());
                 horizontalSplitter.layout();
+                sourceViewerButton.setToolTipText(sourceViewerButton.getSelection()
+                                                  ? "Hide the source/variables viewers"
+                                                  : "Show the source/variables viewers");
             }
         });
+        sourceViewerButton.setSelection(true);
         targetViewerButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 targetModelTabFolder.setVisible(targetViewerButton.getSelection());
                 horizontalSplitter.layout();
+                targetViewerButton.setToolTipText(targetViewerButton.getSelection()
+                                                  ? "Hide the target viewer"
+                                                  : "Show the target viewer");
             }
         });
+        targetViewerButton.setSelection(true);
         config.addListener(new PropertyChangeListener() {
 
             @Override
@@ -245,6 +252,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         } catch (final Exception e) {
             throw new PartInitException("Unable to load transformation configuration file", e);
         }
+        CamelModelFactory.initializeModels();
     }
 
     /**
