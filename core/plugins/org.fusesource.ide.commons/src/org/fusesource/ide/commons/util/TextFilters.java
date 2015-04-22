@@ -46,6 +46,8 @@ public class TextFilters {
 			return matches(searchText, (Map) object);
 		} else if (object instanceof Collection) {
 			return matches(searchText, (Collection) object);
+		} else if (object instanceof IPropertySource) {
+			return matches(searchText, (IPropertySource)object);
 		} else if (object instanceof Object[]) {
 			return matches(searchText, Arrays.asList((Object[]) object));
 		} else {
@@ -87,5 +89,4 @@ public class TextFilters {
 		}
 		return false;
 	}
-
 }
