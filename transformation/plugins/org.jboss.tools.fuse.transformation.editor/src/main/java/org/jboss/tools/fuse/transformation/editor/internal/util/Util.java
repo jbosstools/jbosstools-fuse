@@ -72,6 +72,59 @@ public class Util {
                 && config.root((Model)object).equals(config.getSourceModel()));
     }
 
+    public static String dragSourceIsValid (final Model source) {
+        if (source == null) {
+            return "Invalid - Source is null.";
+        }
+        if (source.getParent() == null) {
+            return "Invalid - Source may not be the root node.";
+        }
+        return null;
+    }
+    
+    public static String dragDropComboIsValid (final Model source,
+            final Model target) {
+        if (source == null) {
+            return "Invalid - Source is null.";
+        }
+        if (target == null) {
+            return "Invalid - Target is null.";
+        }
+        if (source.getParent() == null) {
+            return "Invalid - Source may not be the root node.";
+        }
+        if (target.getParent() == null) {
+            return "Invalid - Target may not be the root node.";
+        }
+        Model sourceModel = source;
+        Model targetModel = target;
+        if (!sourceModel.isCollection() && targetModel.isCollection()) {
+            // invalid
+            return "Invalid - The Source is not a collection, but the Target is.";
+        }
+        if (sourceModel.isCollection() && !targetModel.isCollection()) {
+            // invalid
+            return "Invalid - The Source is a collection, but the Target is not.";
+        }
+        if (!sourceModel.getParent().isCollection() && targetModel.getParent().isCollection()) {
+            // invalid
+            return "Invalid - Source parent is not a collection and Target parent is.";
+        }
+        if (sourceModel.getParent().isCollection() && !targetModel.getParent().isCollection()) {
+            // invalid
+            return "Invalid - Source parent is a collection and Target parent is not.";
+        }        
+        if (!sourceModel.getChildren().isEmpty() && !sourceModel.isCollection()) {
+            // invalid
+            return "Invalid - Source model has children and is not a collection.";
+        }
+        if (!targetModel.getChildren().isEmpty() && !targetModel.isCollection()) {
+            // invalid
+            return "Invalid - Target model has children and is not a collection";
+        }        
+        return null;
+    }
+    
     /**
      * @param config
      * @return <code>true</code> if the object being dragged is a valid target object

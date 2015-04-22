@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -335,6 +336,11 @@ public final class MappingDetailViewer extends MappingViewer {
      * @param mapping
      */
     public void update(final MappingOperation<?, ?> mapping) {
+        if (mapping.getSource() instanceof Model && mapping.getTarget() instanceof Model) {
+            if (Util.dragDropComboIsValid((Model) mapping.getSource(), (Model) mapping.getTarget()) != null) {
+                return;
+            }
+        }
         this.mapping = mapping;
         if (sourceDropTarget != null) dispose();
         final Composite contentPane = new Composite(scroller, SWT.NONE);
@@ -600,7 +606,26 @@ public final class MappingDetailViewer extends MappingViewer {
         }
 
         void validate() {
-            getButton(IDialogConstants.OK_ID).setEnabled(field != null);
+            String message = null;
+            // are we looking at the target side of the equation?
+            if (field != null && !rootModel.equals(config.getSourceModel())) {
+                message = Util.dragDropComboIsValid((Model)mapping.getSource(), field);
+                if (message != null) {
+                    message = "Invalid target."; // override message for now
+                }
+            } else {
+                message = Util.dragSourceIsValid(field);
+                if (message != null) {
+                    message = "Invalid source."; // override message for now
+                }
+            }
+            if (message != null) {
+                this.setMessage(message, IMessageProvider.WARNING);
+            } else {
+                this.setMessage(message());
+            }
+            getButton(IDialogConstants.OK_ID).setEnabled(message == null);
+//            getButton(IDialogConstants.OK_ID).setEnabled(field != null);
         }
     }
 

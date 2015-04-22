@@ -24,8 +24,10 @@ import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer.TraversalListener;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 final class MappingSummary extends MappingViewer {
 
@@ -118,15 +120,21 @@ final class MappingSummary extends MappingViewer {
         if (eventType.equals(TransformationConfig.MAPPING))
             dispose((MappingOperation<?, ?>) oldValue);
         else if (eventType.equals(TransformationConfig.MAPPING_SOURCE)) {
-            mapping = (MappingOperation<?, ?>)newValue;
-            setSourceText();
-            mappingSourcePane.layout();
-            sourceText.setFocus();
+            MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
+            if (Util.dragSourceIsValid((Model) tempMapping.getSource()) == null) {
+                mapping = (MappingOperation<?, ?>)newValue;
+                setSourceText();
+                mappingSourcePane.layout();
+                sourceText.setFocus();
+            }
         } else if (eventType.equals(TransformationConfig.MAPPING_TARGET)) {
-            mapping = (MappingOperation<?, ?>)newValue;
-            setTargetText();
-            mappingTargetPane.layout();
-            targetText.setFocus();
+            MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
+            if (Util.dragDropComboIsValid((Model) tempMapping.getSource(), (Model) tempMapping.getTarget()) == null) {
+                mapping = (MappingOperation<?, ?>)newValue;
+                setTargetText();
+                mappingTargetPane.layout();
+                targetText.setFocus();
+            }
         } else if (eventType.equals(TransformationConfig.MAPPING_CUSTOMIZE)) {
             mapping = (MappingOperation<?, ?>)newValue;
             setSourceText();

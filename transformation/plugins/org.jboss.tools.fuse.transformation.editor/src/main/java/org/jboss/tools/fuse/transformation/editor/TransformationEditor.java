@@ -380,11 +380,19 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                         }
 
                         @Override
-                        public boolean validateDrop(final Object target,
-                                                    final int operation,
-                                                    final TransferData transferType) {
-                            return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
-                                   && Util.draggingFromValidSource(config);
+                        public boolean validateDrop(final Object target, final int operation,
+                                final TransferData transferType) {
+                            final Object source = ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
+                                    .getSelection()).getFirstElement();
+
+                            if (source instanceof Model && target instanceof Model) {
+                                return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
+                                        && Util.draggingFromValidSource(config)
+                                        && (Util.dragDropComboIsValid((Model) source, (Model) target) == null);
+                            } else {
+                                return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
+                                        && Util.draggingFromValidSource(config);
+                            }
                         }
                     });
                     potentialDropTargets.add(new PotentialDropTarget(treeViewer.getTree()) {
