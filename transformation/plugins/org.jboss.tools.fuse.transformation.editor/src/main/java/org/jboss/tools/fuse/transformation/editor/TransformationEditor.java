@@ -69,10 +69,6 @@ import org.jboss.tools.fuse.transformation.model.Model;
 /**
  *
  */
-// TODO save preferences for toggle buttons
-// TODO search fields in model viewers
-// TODO search in mappings viewer
-// TODO support change variable name
 public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
     private static final int SASH_COLOR = SWT.COLOR_DARK_GRAY;
@@ -87,6 +83,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
     Text helpText;
     ModelTabFolder sourceModelTabFolder, targetModelTabFolder;
     MappingDetailViewer mappingDetailViewer;
+    ToolItem sourceViewerButton, targetViewerButton;
 
     final List<PotentialDropTarget> potentialDropTargets = new ArrayList<>();
 
@@ -112,19 +109,18 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         toolBar.setLayoutData(GridDataFactory.swtDefaults()
                                              .align(SWT.BEGINNING, SWT.BOTTOM)
                                              .create());
-        final ToolItem sourceViewerButton = new ToolItem(toolBar, SWT.CHECK);
+        sourceViewerButton = new ToolItem(toolBar, SWT.CHECK);
         sourceViewerButton.setImage(Images.TREE);
         // Create help text
         helpText = new Text(pane, SWT.MULTI | SWT.WRAP);
         helpText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         helpText.setEditable(false);
-        updateHelpText(helpText);
         // Create target model toggle button
         toolBar = new ToolBar(pane, SWT.NONE);
         toolBar.setLayoutData(GridDataFactory.swtDefaults()
                                              .align(SWT.END, SWT.BOTTOM)
                                              .create());
-        final ToolItem targetViewerButton = new ToolItem(toolBar, SWT.CHECK);
+        targetViewerButton = new ToolItem(toolBar, SWT.CHECK);
         targetViewerButton.setImage(Images.TREE);
         // Create splitter between mappings viewer and model viewers
         final SashForm horizontalSplitter = new SashForm(pane, SWT.HORIZONTAL);
@@ -170,6 +166,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                 sourceViewerButton.setToolTipText(sourceViewerButton.getSelection()
                                                   ? "Hide the source/variables viewers"
                                                   : "Show the source/variables viewers");
+                updateHelpText();
             }
         });
         sourceViewerButton.setSelection(true);
@@ -182,6 +179,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                 targetViewerButton.setToolTipText(targetViewerButton.getSelection()
                                                   ? "Hide the target viewer"
                                                   : "Show the target viewer");
+                updateHelpText();
             }
         });
         targetViewerButton.setSelection(true);
@@ -192,6 +190,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                 configEvent();
             }
         });
+        updateHelpText();
     }
 
     /**
@@ -309,10 +308,17 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         mappingsViewer.setFocus();
     }
 
-    void updateHelpText(final Text helpText) {
-        helpText.setText("Create a new mapping below by dragging a field from source "
-                + config.getSourceModel().getName() + " on the left to target "
-                + config.getTargetModel().getName() + " on the right.");
+    void updateHelpText() {
+        if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
+            if (sourceModelTabFolder.getSelectionIndex() == 0)
+                helpText.setText("Create a new mapping below by dragging a field in source "
+                                 + config.getSourceModel().getName()
+                                 + " on the left to a field in target "
+                                 + config.getTargetModel().getName() + " on the right.");
+            else helpText.setText("Create a new mapping below by dragging a variable from the list"
+                                  + " of variables on the left to a field in target "
+                                  + config.getTargetModel().getName() + " on the right.");
+        } else helpText.setText("");
     }
 
     class SourceModelTabFolder extends ModelTabFolder {
@@ -328,6 +334,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
             variablesViewer = new VariablesViewer(config, this);
             variablesTab.setControl(variablesViewer);
             variablesTab.setImage(Images.VARIABLE);
+            addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(final SelectionEvent event) {
+                    updateHelpText();
+                }
+            });
         }
     }
 
