@@ -51,12 +51,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
@@ -275,19 +275,19 @@ public class ModelViewer extends Composite {
         treeViewer.expandToLevel(model, 0);
     }
 
-    /**
-     * @param model
-     * @param rootModel
-     * @return <code>true</code> if the supplied model has been mapped at least once
-     */
-    public boolean mapped(final Model model,
-                          final Model rootModel) {
-        if (config != null) {
-            return rootModel.equals(config.getSourceModel())
+    boolean mapped(final Model model) {
+        if (config == null) return false;
+        return rootModel.equals(config.getSourceModel())
                ? !config.getMappingsForSource(model).isEmpty()
                : !config.getMappingsForTarget(model).isEmpty();
+    }
+
+    private boolean mappedOrFullyMappedParent(final Model model) {
+        final List<Model> children = model.getChildren();
+        for (final Model child : children) {
+            if (!mappedOrFullyMappedParent(child)) return false;
         }
-        return false;
+        return (mapped(model)) ? true : !children.isEmpty();
     }
 
     void select(final Model model) {
@@ -302,7 +302,7 @@ public class ModelViewer extends Composite {
     }
 
     boolean show(final Object element) {
-        return !hideMappedFields || !mapped((Model) element, rootModel);
+        return (!hideMappedFields || !mappedOrFullyMappedParent((Model)element));
     }
 
     class ContentProvider implements ITreeContentProvider {
@@ -340,10 +340,6 @@ public class ModelViewer extends Composite {
 
         private static final String LIST_OF = "list of ";
 
-        LabelProvider() {
-            super(StyledCellLabelProvider.COLORS_ON_SELECTION);
-        }
-
         private Image getImage(final Object element) {
             final Model model = (Model) element;
             Image img = model.getChildren() != null && model.getChildren().size() > 0
@@ -353,7 +349,7 @@ public class ModelViewer extends Composite {
                 img = new DecorationOverlayIcon(img,
                                                 Decorations.COLLECTION,
                                                 IDecoration.BOTTOM_RIGHT).createImage();
-            if (mapped((Model) element, rootModel))
+            if (mapped((Model)element))
                 return new DecorationOverlayIcon(img,
                                                  Decorations.MAPPED,
                                                  IDecoration.TOP_RIGHT).createImage();
