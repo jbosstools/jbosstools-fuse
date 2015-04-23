@@ -139,7 +139,7 @@ public class XmlModelGenerator {
         if (root == null) {
             throw new Exception("Invalid instance document : no root element");
         }
-        return new QName(root.getNamespaceURI(), root.getNodeName());
+        return new QName(root.getNamespaceURI(), root.getLocalName());
     }
     
     /**

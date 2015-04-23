@@ -29,6 +29,8 @@ public class XmlModelGeneratorTest {
     
     private static String XML_INST_PATH =
             "src/test/resources/org/jboss/tools/fuse/transformation/model/xml/abc-order.xml";
+    private static String XML_INST_PATH_2 =
+            "src/test/resources/org/jboss/tools/fuse/transformation/model/xml/doc-with-namespace.xml";
     private static String XML_SCHEMA_PATH =
             "src/test/resources/org/jboss/tools/fuse/transformation/model/xml/multi-element.xsd";
     private static String XML_SCHEMA_PATH_2 =
@@ -67,6 +69,13 @@ public class XmlModelGeneratorTest {
         XmlModelGenerator modelGen = new XmlModelGenerator();
         QName rootName = modelGen.getRootElementName(new File(XML_INST_PATH));
         Assert.assertEquals(new QName("ABCOrder"), rootName);
+    }
+    
+    @Test
+    public void getRootElementNamespace() throws Exception {
+        XmlModelGenerator modelGen = new XmlModelGenerator();
+        QName rootName = modelGen.getRootElementName(new File(XML_INST_PATH_2));
+        Assert.assertEquals(new QName("http://example.org", "ABCOrder"), rootName);
     }
     
     @Test
