@@ -54,10 +54,10 @@
     
     <!-- dependency versions -->
     <!-- lookup in Fabric8-bom -->
-    <fabric.version>1.2.0.redhat-104</fabric.version>
+    <fabric.version>1.2.0.redhat-099</fabric.version>
     <camel.version>2.15.1</camel.version>
-    <cxf.version>3.0.2.redhat-620103</cxf.version>
-    <activemq.version>5.11.0.redhat-620104</activemq.version>
+    <cxf.version>3.0.2.redhat-620099</cxf.version>
+    <activemq.version>5.11.0.redhat-620099</activemq.version>
     <servicemix-nmr.version>1.6.1</servicemix-nmr.version>
 
     <jackson.version>2.5.1</jackson.version>

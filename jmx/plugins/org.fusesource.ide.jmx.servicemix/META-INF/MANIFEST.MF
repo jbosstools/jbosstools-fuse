@@ -20,4 +20,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.jmx.servicemix.ServiceMixJMXPlugin
 Bundle-ClassPath: .,
  libs/org.apache.servicemix.nmr.management-1.6.1.jar,
- libs/tooling-servicemix-facade-1.2.0.redhat-104.jar
+ libs/tooling-servicemix-facade-1.2.0.redhat-099.jar

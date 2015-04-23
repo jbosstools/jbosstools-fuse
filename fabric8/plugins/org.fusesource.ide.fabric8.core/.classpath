@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="lib" path="libs/guava-17.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/fabric-api-1.2.0.redhat-104.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/fabric-api-1.2.0.redhat-099.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/fluent-hc-4.3.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/httpclient-4.3.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/httpclient-cache-4.3.6.jar"/>
@@ -10,8 +10,8 @@
 	<classpathentry exported="true" kind="lib" path="libs/httpmime-4.3.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jolokia-client-java-1.2.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/json-simple-1.1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/tooling-fabric-all-1.2.0.redhat-104.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/tooling-jclouds-all-1.2.0.redhat-104.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/tooling-fabric-all-1.2.0.redhat-099.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/tooling-jclouds-all-1.2.0.redhat-099.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
