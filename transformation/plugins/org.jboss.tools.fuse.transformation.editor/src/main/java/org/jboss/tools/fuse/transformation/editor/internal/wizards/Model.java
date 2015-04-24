@@ -55,6 +55,8 @@ public class Model implements PropertyChangeListener {
     private String targetTypeStr;
     private String sourceDataFormatid;
     private String targetDataFormatid;
+    private String sourceClassName;
+    private String targetClassName;
 
     /**
      * @param propertyName
@@ -252,5 +254,21 @@ public class Model implements PropertyChangeListener {
     public void setTargetDataFormatid(String targetDataFormatid) {
         changeSupport.firePropertyChange("targetDataFormatid", this.targetDataFormatid, this.targetDataFormatid =
                 targetDataFormatid.trim());
+    }
+
+    public String getSourceClassName() {
+        return sourceClassName;
+    }
+
+    public void setSourceClassName(String sourceClassName) {
+        this.sourceClassName = sourceClassName;
+    }
+
+    public String getTargetClassName() {
+        return targetClassName;
+    }
+
+    public void setTargetClassName(String targetClassName) {
+        this.targetClassName = targetClassName;
     }
 }

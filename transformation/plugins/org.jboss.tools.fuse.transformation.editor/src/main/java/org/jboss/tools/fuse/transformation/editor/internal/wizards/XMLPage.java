@@ -11,15 +11,24 @@
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.xml.namespace.QName;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.resources.IFile;
@@ -34,8 +43,13 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -53,6 +67,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
+import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
 
 /**
  * @author brianf
@@ -69,7 +84,8 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
     private Button _xmlSchemaOption;
     private Button _xmlInstanceOption;
     private Text _xmlPreviewText;
-
+    private ComboViewer _xmlRootsCombo;
+    
     /**
      * @param model
      */
@@ -240,6 +256,17 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         });
 
+        label = createLabel(_page, "Element Root:", "Element root to use for the root of the transformation object.");
+
+        _xmlRootsCombo = new ComboViewer(_page, SWT.DROP_DOWN | SWT.READ_ONLY);
+        _xmlRootsCombo.getCombo().setLayoutData(
+                new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        _xmlRootsCombo.getCombo().setToolTipText(label.getToolTipText());
+        _xmlRootsCombo.setContentProvider(new ObservableListContentProvider());
+        _xmlRootsCombo.setLabelProvider(new QNameLabelProvider());
+        _xmlRootsCombo.getCombo().setEnabled(false);
+        _xmlRootsCombo.getCombo().setToolTipText("This list will be populated as soon as an XML file is selected.");
+
         Group group2 = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group2.setText("XML Structure Preview");
         group2.setLayout(new FillLayout());
@@ -251,6 +278,19 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
 
         bindControls();
         validatePage();
+    }
+    
+    class QNameLabelProvider extends LabelProvider {
+
+        @Override
+        public String getText(Object element) {
+            if (element instanceof QName) {
+                QName qname = (QName) element;
+                return qname.getLocalPart();
+            }
+            return super.getText(element);
+        }
+        
     }
 
     @Override
@@ -315,5 +355,103 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
                 decoratorPosition, _xmlFileText.getParent(), new WizardControlDecorationUpdater());
-    }
+        
+        IObservableValue comboWidgetValue = ViewerProperties.singleSelection().observe(_xmlRootsCombo);
+        IObservableValue comboModelValue = null;
+        if (isSourcePage()) {
+            comboModelValue = BeanProperties.value(Model.class, "sourceClassName").observe(model);
+        } else {
+            comboModelValue = BeanProperties.value(Model.class, "targetClassName").observe(model);
+        }
+
+        UpdateValueStrategy combostrategy = new UpdateValueStrategy();
+        combostrategy.setBeforeSetValidator(new IValidator() {
+
+            @Override
+            public IStatus validate(final Object value) {
+                final String name = value == null ? null : value.toString().trim();
+                if (name == null || name.isEmpty()) {
+                    return ValidationStatus.error("A root element name must be supplied for the transformation.");
+                }
+                return ValidationStatus.ok();
+            }
+        });
+        ControlDecorationSupport.create(context.bindValue(comboWidgetValue, comboModelValue, combostrategy, null),
+                decoratorPosition, _xmlRootsCombo.getControl().getParent(), new WizardControlDecorationUpdater());
+
+        modelValue.addValueChangeListener(new IValueChangeListener() {
+
+            @Override
+            public void handleValueChange(ValueChangeEvent event) {
+                Object value = event.diff.getNewValue();
+                String path = value == null ? null : value.toString().trim();
+                XmlModelGenerator modelGen = new XmlModelGenerator();
+                List<QName> elements = null;
+                IPath filePath = model.getProject().getLocation().makeAbsolute().append(path);
+                path = filePath.makeAbsolute().toPortableString();
+                if (isSourcePage()) {
+                    if (model.getSourceType().equals(ModelType.XSD)) {
+                        try {
+                            elements = modelGen.getElementsFromSchema(new File(path));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else if (model.getSourceType().equals(ModelType.XML)) {
+                        try {
+                            QName element = modelGen.getRootElementName(new File(path));
+                            if (element != null) {
+                                elements = new ArrayList<QName>();
+                                elements.add(element);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    if (model.getTargetType().equals(ModelType.XSD)) {
+                        try {
+                            elements = modelGen.getElementsFromSchema(new File(path));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else if (model.getTargetType().equals(ModelType.XML)) {
+                        try {
+                            QName element = modelGen.getRootElementName(new File(path));
+                            if (element != null) {
+                                elements = new ArrayList<QName>();
+                                elements.add(element);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                WritableList elementList = new WritableList();
+                if (elements != null && !elements.isEmpty()) {
+                    Iterator<QName> iter = elements.iterator();
+                    while (iter.hasNext()) {
+                        QName qname = iter.next();
+                        elementList.add(qname.getLocalPart());
+                        _xmlRootsCombo.setData(qname.getLocalPart(), qname.getNamespaceURI());
+                    }
+                }
+                _xmlRootsCombo.setInput(elementList);
+                if (elementList != null && !elementList.isEmpty()) {
+                    _xmlRootsCombo.setSelection(new StructuredSelection(elementList.get(0)));
+                    String elementName = (String) elementList.get(0);
+                    if (isSourcePage()) {
+                        model.setSourceClassName(elementName);
+                    } else {
+                        model.setTargetClassName(elementName);
+                    }
+                    _xmlRootsCombo.getCombo().setEnabled(true);
+                    if (elementList.size() == 1) {
+                        _xmlRootsCombo.getCombo().setToolTipText("Only one root element found.");
+                    } else {
+                        _xmlRootsCombo.getCombo().setToolTipText("Select from the available list of root elements.");
+                    }
+                }
+            }
+        });
+   }
 }

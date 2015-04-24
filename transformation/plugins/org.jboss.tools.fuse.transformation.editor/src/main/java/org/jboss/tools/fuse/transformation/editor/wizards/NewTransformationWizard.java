@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.dataformat.DataFormatsDefinition;
@@ -57,8 +58,6 @@ import org.jboss.tools.fuse.transformation.MapperConfiguration;
 import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.camel.CamelEndpoint;
 import org.jboss.tools.fuse.transformation.dozer.DozerMapperConfiguration;
-import org.jboss.tools.fuse.transformation.model.json.JsonModelGenerator;
-import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.DozerConfigContentTypeDescriber;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
@@ -71,6 +70,8 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.OtherPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.StartPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
+import org.jboss.tools.fuse.transformation.model.json.JsonModelGenerator;
+import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
 
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
@@ -129,9 +130,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                     if (uiModel.getSourceFilePath() != null) {
                         // Generate models
                         final String sourceClassName =
-                                generateModel(uiModel.getSourceFilePath(), uiModel.getSourceType());
+                                generateModel(uiModel.getSourceFilePath(), uiModel.getSourceType(), true);
                         final String targetClassName =
-                                generateModel(uiModel.getTargetFilePath(), uiModel.getTargetType());
+                                generateModel(uiModel.getTargetFilePath(), uiModel.getTargetType(), false);
                         // Update Camel config
                         final IPath resourcesPath =
                                 uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
@@ -362,7 +363,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     }
 
     private String generateModel(final String filePath,
-            final ModelType type) throws Exception {
+            final ModelType type, boolean isSource) throws Exception {
         // Build class name from file name
         final StringBuilder className = new StringBuilder();
         final StringCharacterIterator iter =
@@ -428,14 +429,21 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             }
             case XSD: {
                 final XmlModelGenerator generator = new XmlModelGenerator();
-                final JCodeModel model =
-                        generator
-                                .generateFromSchema(
-                                        new File(uiModel.getProject().findMember(filePath)
-                                                .getLocationURI()),
-                                        pkgName,
-                                        targetClassesFolder);
-                final String modelClass = selectModelClass(model);
+                final File schemaFile = new File(uiModel.getProject().findMember(filePath).getLocationURI());
+                final JCodeModel model = generator.generateFromSchema(schemaFile, pkgName, targetClassesFolder);
+                String elementName = null;
+                if (isSource) {
+                    elementName = uiModel.getSourceClassName();
+                } else {
+                    elementName = uiModel.getTargetClassName();
+                }
+                String modelClass = null;
+                Map<String, String> mappings = generator.elementToClassMapping(model);
+                if (mappings != null && !mappings.isEmpty()) {
+                    modelClass = mappings.get(elementName);
+                } else {
+                    modelClass = selectModelClass(model);
+                }
                 if (modelClass != null) {
                     return modelClass;
                 }
@@ -443,17 +451,22 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             }
             case XML: {
                 final XmlModelGenerator generator = new XmlModelGenerator();
-                final File schemaPath =
-                        new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI());
-                final JCodeModel model =
-                        generator
-                                .generateFromInstance(
-                                        new File(uiModel.getProject().findMember(filePath)
-                                                .getLocationURI()),
-                                        schemaPath,
-                                        pkgName,
-                                        targetClassesFolder);
-                final String modelClass = selectModelClass(model);
+                final File schemaPath = new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI());
+                final JCodeModel model = generator.generateFromInstance(new File(uiModel.getProject().findMember(filePath)
+                        .getLocationURI()), schemaPath, pkgName, targetClassesFolder);
+                String elementName = null;
+                if (isSource) {
+                    elementName = uiModel.getSourceClassName();
+                } else {
+                    elementName = uiModel.getTargetClassName();
+                }
+                String modelClass = null;
+                Map<String, String> mappings = generator.elementToClassMapping(model);
+                if (mappings != null && !mappings.isEmpty()) {
+                    modelClass = mappings.get(elementName);
+                } else {
+                    modelClass = selectModelClass(model);
+                }
                 if (modelClass != null) {
                     return modelClass;
                 }
