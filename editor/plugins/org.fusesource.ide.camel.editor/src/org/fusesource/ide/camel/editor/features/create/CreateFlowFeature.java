@@ -18,12 +18,16 @@ import org.eclipse.graphiti.features.context.impl.AddConnectionContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateConnectionFeature;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Connection;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.generated.Choice;
 
 
 /**
@@ -48,7 +52,11 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		// and those EClasses are not identical
 		AbstractNode source = getNode(context.getSourceAnchor());
 		AbstractNode target = getNode(context.getTargetAnchor());
+		
 		if (target != null && source != target) {
+			// if we only support a single output and we already have one then we can't connect to another output
+			if (this.canHaveMultipleOutputs(source) == false && !source.getOutputs().isEmpty()) return false;
+
 			// source == null indicates its a new node with the route being the source
 			return source == null || source.canConnectTo(target);
 		}
@@ -136,4 +144,21 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	public String getCategoryName() {
 		return null;
 	}
+	
+
+	/**
+	 * flags the node to allow multiple outputs or not
+	 * 
+	 * @param source	the source node
+	 * @return	true if the node can have more than one output
+	 */
+	protected boolean canHaveMultipleOutputs(AbstractNode source) {
+		String camelVersion=Activator.getDefault().getCamelVersion();
+		Eip eip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByClass(source.getPatternName());
+		if (eip != null) {
+			return eip.getOutput().equalsIgnoreCase("true") || source instanceof Choice; // special case choice
+		}
+		return false;
+	}
+
 }

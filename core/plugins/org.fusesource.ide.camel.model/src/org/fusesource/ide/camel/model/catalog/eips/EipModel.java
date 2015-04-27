@@ -61,6 +61,21 @@ public class EipModel {
 	public void setSupportedEIPs(ArrayList<Eip> supportedEIPs) {
 		this.supportedEIPs = supportedEIPs;
 	}
+	
+	/**
+	 * returns the EIP for the given class or null if not found
+	 * 
+	 * @param className
+	 * @return	the eip or null if not found
+	 */
+	public Eip getEIPByClass(String className) {
+		for (Eip eip : getSupportedEIPs()) {
+			if (eip.getName().equalsIgnoreCase(className)) {
+				return eip;
+			}
+		}
+		return null;
+	}
 		
 	/**
 	 * creates the model from the given input stream and sets the parent model before it returns it
