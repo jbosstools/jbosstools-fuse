@@ -29,6 +29,7 @@ import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
 import org.eclipse.graphiti.tb.ContextMenuEntry;
 import org.eclipse.graphiti.tb.IContextMenuEntry;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -400,7 +401,6 @@ public abstract class AbstractAddNodeMenuFactory {
 			MenuManager subMenu = new MenuManager(Messages.endpointsDrawerTitle, "org.fusesource.ide.actions.add.endpoints");
 			fillEndpointsMenu(subMenu);
 			fillAdditionalEndpointsMenu(subMenu, additionalEndpoints);
-            Arrays.sort(subMenu.getItems());
 			addMenu(menus, subMenu);
 
 			subMenu = new MenuManager(Messages.routingDrawerTitle, "org.fusesource.ide.actions.add.routing");
