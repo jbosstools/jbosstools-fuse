@@ -13,9 +13,6 @@
             %new-wizard.description
          </description>
       </wizard>
-      <primaryWizard
-            id="org.jboss.tools.fuse.transformation.editor.data-mapping-wizard">
-      </primaryWizard>
       <wizard
             class="org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationTestWizard"
             icon="icons/transform16.png"
