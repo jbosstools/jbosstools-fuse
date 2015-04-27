@@ -173,13 +173,20 @@ public class StartPage extends XformWizardPage {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                final IResource res =
-                        Util.selectResourceFromWorkspace(getShell(), ".xml", model.getProject());
+                final IResource res = Util.selectCamelResourceFromWorkspace(getShell(), model.getProject());
                 if (res != null) {
                     final IPath respath = JavaUtil.getJavaPathForResource(res);
                     final String path = respath.makeRelative().toString();
                     model.setCamelFilePath(path);
                     _camelFilePathText.setText(path);
+                    
+                    // if the project wasn't previously set...
+                    if (model.getProject() == null) {
+                        // set it based on the camel file selected
+                        model.setProject(res.getProject());
+                        _projectCombo.getCombo().notifyListeners(SWT.Modify, new Event());
+                    }
+                    
                     _camelFilePathText.notifyListeners(SWT.Modify, new Event());
                 }
             }
