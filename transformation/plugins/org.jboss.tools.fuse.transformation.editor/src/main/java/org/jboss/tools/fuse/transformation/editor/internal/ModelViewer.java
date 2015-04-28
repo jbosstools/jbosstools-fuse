@@ -11,8 +11,13 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -35,6 +40,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSourceAdapter;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -67,6 +74,8 @@ public class ModelViewer extends Composite {
     Model rootModel;
     boolean showFieldTypes;
     boolean hideMappedFields;
+    final Map<String, List<Model>> searchMap = new HashMap<>();
+    final Set<Model> searchResults = new HashSet<>();
 
     /**
      *
@@ -88,6 +97,8 @@ public class ModelViewer extends Composite {
 
         this.config = config;
         this.rootModel = rootModel;
+
+        updateSearchMap(rootModel);
 
         setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
 
@@ -142,7 +153,7 @@ public class ModelViewer extends Composite {
             public boolean select(final Viewer viewer,
                                   final Object parentElement,
                                   final Object element) {
-                return show(element);
+                return show(element, !searchText.getText().trim().isEmpty());
             }
         });
         if (potentialDropTargets != null) {
@@ -253,6 +264,23 @@ public class ModelViewer extends Composite {
                 searchText.setText("");
             }
         });
+        searchText.addModifyListener(new ModifyListener() {
+
+            @Override
+            public void modifyText(final ModifyEvent event) {
+                searchResults.clear();
+                final List<Model> models = searchMap.get(searchText.getText().trim().toLowerCase());
+                if (models != null) for (final Model model : models) {
+                    searchResults.add(model);
+                    for (Model parent = model.getParent();
+                         parent != null;
+                         parent = parent.getParent()) {
+                        searchResults.add(parent);
+                    }
+                }
+                treeViewer.refresh();
+            }
+        });
 
         if (rootModel != null) treeViewer.setInput("root");
 
@@ -292,8 +320,15 @@ public class ModelViewer extends Composite {
 
     void select(final Model model) {
         if (model == null) return;
-        expand(model.getParent());
-        treeViewer.setSelection(new StructuredSelection(model), true);
+        final List<Model> models = searchMap.get(model.getName().toLowerCase());
+        if (models == null) return;
+        for (final Model actualModel : models) {
+            if (actualModel.equals(model)) {
+                expand(actualModel.getParent());
+                treeViewer.setSelection(new StructuredSelection(actualModel), true);
+                return;
+            }
+        }
     }
 
     public void setModel(final Model model) {
@@ -301,8 +336,29 @@ public class ModelViewer extends Composite {
         treeViewer.setInput("root");
     }
 
-    boolean show(final Object element) {
-        return (!hideMappedFields || !mappedOrFullyMappedParent((Model)element));
+    boolean show(final Object element,
+                 final boolean searching) {
+        if (hideMappedFields && mappedOrFullyMappedParent((Model)element)) return false;
+        return !searching || searchResults.contains(element);
+    }
+
+    void updateSearchMap(final Model model) {
+        final StringCharacterIterator iter =
+            new StringCharacterIterator(model.getName().toLowerCase());
+        final StringBuilder builder = new StringBuilder();
+        for (char chr = iter.first(); chr != StringCharacterIterator.DONE; chr = iter.next()) {
+            builder.append(chr);
+            final String key = builder.toString();
+            List<Model> models = searchMap.get(key);
+            if (models == null) {
+                models = new ArrayList<>();
+                searchMap.put(key, models);
+            }
+            models.add(model);
+        }
+        for (final Model child : model.getChildren()) {
+            updateSearchMap(child);
+        }
     }
 
     class ContentProvider implements ITreeContentProvider {
