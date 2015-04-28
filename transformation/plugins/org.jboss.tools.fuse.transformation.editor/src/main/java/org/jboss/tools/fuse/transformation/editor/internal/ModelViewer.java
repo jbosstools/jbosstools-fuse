@@ -343,6 +343,7 @@ public class ModelViewer extends Composite {
     }
 
     void updateSearchMap(final Model model) {
+        if (model == null) return;
         final StringCharacterIterator iter =
             new StringCharacterIterator(model.getName().toLowerCase());
         final StringBuilder builder = new StringBuilder();
