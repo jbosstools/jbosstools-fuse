@@ -121,7 +121,12 @@ final class MappingSummary extends MappingViewer {
             dispose((MappingOperation<?, ?>) oldValue);
         else if (eventType.equals(TransformationConfig.MAPPING_SOURCE)) {
             MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
-            if (Util.dragSourceIsValid((Model) tempMapping.getSource()) == null) {
+            if (tempMapping.getSource() instanceof Model && Util.dragSourceIsValid((Model) tempMapping.getSource()) == null) {
+                mapping = (MappingOperation<?, ?>)newValue;
+                setSourceText();
+                mappingSourcePane.layout();
+                sourceText.setFocus();
+            } else if (tempMapping.getSource() != null && !(tempMapping.getSource() instanceof Model)) {
                 mapping = (MappingOperation<?, ?>)newValue;
                 setSourceText();
                 mappingSourcePane.layout();
@@ -129,7 +134,14 @@ final class MappingSummary extends MappingViewer {
             }
         } else if (eventType.equals(TransformationConfig.MAPPING_TARGET)) {
             MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
-            if (Util.dragDropComboIsValid((Model) tempMapping.getSource(), (Model) tempMapping.getTarget()) == null) {
+            if (tempMapping.getSource() instanceof Model && tempMapping.getTarget() instanceof Model) {
+                if (Util.dragDropComboIsValid((Model) tempMapping.getSource(), (Model) tempMapping.getTarget()) == null) {
+                    mapping = (MappingOperation<?, ?>)newValue;
+                    setTargetText();
+                    mappingTargetPane.layout();
+                    targetText.setFocus();
+                }
+            } else {
                 mapping = (MappingOperation<?, ?>)newValue;
                 setTargetText();
                 mappingTargetPane.layout();
