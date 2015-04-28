@@ -247,11 +247,14 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 srcPath = folder.getProjectRelativePath();
             }
             
-            srcPath = project.getPath().append(
-                    srcPath.makeRelativeTo(project.getProject()
-                            .getLocation()));
-            IPackageFragmentRoot root = project
-                    .findPackageFragmentRoot(srcPath);
+            IFolder srcFolder = project.getProject().getFolder(srcPath);
+            if (srcFolder == null || !srcFolder.exists()) {
+                srcPath = project.getPath().append(
+                        srcPath.makeRelativeTo(project.getProject()
+                                .getLocation()));
+                srcFolder = project.getProject().getFolder(srcPath);
+            }
+            IPackageFragmentRoot root = project.getPackageFragmentRoot(srcFolder);            
             if (packageName == null) {
                 packageName = ""; //$NON-NLS-1$
             }
