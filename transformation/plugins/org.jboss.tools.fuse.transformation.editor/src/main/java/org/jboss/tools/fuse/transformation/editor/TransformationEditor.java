@@ -35,8 +35,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -139,23 +137,9 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         // Create detail area
         mappingDetailViewer =
             new MappingDetailViewer(config, verticalSplitter, potentialDropTargets);
-        // Configure size of components in vertical splitter
+        // Configure size of components in splitters
         verticalSplitter.setWeights(new int[] {75, 25});
-
-        // Set weights so mappings view is at preferred with
-        horizontalSplitter.addControlListener(new ControlAdapter() {
-
-            @Override
-            public void controlResized(final ControlEvent event) {
-                final double middle = mappingsViewer.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-                final double total = horizontalSplitter.getSize().x;
-                final int middleWeight = (int) (middle / total * 100.0);
-                final int sideWeight = (100 - middleWeight) / 2;
-                if (sideWeight < 0) return; // Happens occasionally when first displayed
-                horizontalSplitter.setWeights(new int[] {sideWeight, middleWeight, sideWeight});
-                horizontalSplitter.removeControlListener(this);
-            }
-        });
+        horizontalSplitter.setWeights(new int[] {33, 34, 33});
         // Wire tree buttons to toggle model viewers between visible and hidden
         sourceViewerButton.addSelectionListener(new SelectionAdapter() {
 
@@ -380,19 +364,21 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                         }
 
                         @Override
-                        public boolean validateDrop(final Object target, final int operation,
-                                final TransferData transferType) {
-                            final Object source = ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
-                                    .getSelection()).getFirstElement();
-
+                        public boolean validateDrop(final Object target,
+                                                    final int operation,
+                                                    final TransferData transferType) {
+                            final Object source =
+                                ((IStructuredSelection)LocalSelectionTransfer.getTransfer()
+                                                                             .getSelection())
+                                                                             .getFirstElement();
                             if (source instanceof Model && target instanceof Model) {
                                 return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
-                                        && Util.draggingFromValidSource(config)
-                                        && (Util.dragDropComboIsValid((Model) source, (Model) target) == null);
-                            } else {
-                                return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
-                                        && Util.draggingFromValidSource(config);
+                                       && Util.draggingFromValidSource(config)
+                                       && (Util.dragDropComboIsValid((Model)source,
+                                                                     (Model)target) == null);
                             }
+                            return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
+                                   && Util.draggingFromValidSource(config);
                         }
                     });
                     potentialDropTargets.add(new PotentialDropTarget(treeViewer.getTree()) {
