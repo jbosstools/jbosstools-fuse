@@ -609,9 +609,11 @@ public final class MappingDetailViewer extends MappingViewer {
             String message = null;
             // are we looking at the target side of the equation?
             if (field != null && !rootModel.equals(config.getSourceModel())) {
-                message = Util.dragDropComboIsValid((Model)mapping.getSource(), field);
-                if (message != null) {
-                    message = "Invalid target."; // override message for now
+                if (mapping.getSource() instanceof Model) {
+                    message = Util.dragDropComboIsValid((Model)mapping.getSource(), field);
+                    if (message != null) {
+                        message = "Invalid target."; // override message for now
+                    }
                 }
             } else {
                 message = Util.dragSourceIsValid(field);
