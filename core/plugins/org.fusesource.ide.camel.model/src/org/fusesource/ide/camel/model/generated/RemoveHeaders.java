@@ -37,13 +37,9 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class RemoveHeaders extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "RemoveHeaders.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "RemoveHeaders.InheritErrorHandler";
     public static final String PROPERTY_PATTERN = "RemoveHeaders.Pattern";
     public static final String PROPERTY_EXCLUDEPATTERN = "RemoveHeaders.ExcludePattern";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private String pattern;
     private String excludePattern;
 
@@ -69,42 +65,6 @@ public class RemoveHeaders extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Transformation";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -147,13 +107,9 @@ public class RemoveHeaders extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRemoveHeadersCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRemoveHeadersInheritErrorHandler);
         PropertyDescriptor descPattern = new TextPropertyDescriptor(PROPERTY_PATTERN, Messages.propertyLabelRemoveHeadersPattern);
         PropertyDescriptor descExcludePattern = new TextPropertyDescriptor(PROPERTY_EXCLUDEPATTERN, Messages.propertyLabelRemoveHeadersExcludePattern);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_PATTERN, descPattern);
         descriptors.put(PROPERTY_EXCLUDEPATTERN, descExcludePattern);
     }
@@ -163,14 +119,6 @@ public class RemoveHeaders extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_PATTERN.equals(id)) {
             setPattern(Objects.convertTo(value, String.class));
             return;
@@ -187,12 +135,6 @@ public class RemoveHeaders extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_PATTERN.equals(id)) {
             return this.getPattern();
         }
@@ -207,8 +149,6 @@ public class RemoveHeaders extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         RemoveHeadersDefinition answer = new RemoveHeadersDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setPattern(toXmlPropertyValue(PROPERTY_PATTERN, this.getPattern()));
         answer.setExcludePattern(toXmlPropertyValue(PROPERTY_EXCLUDEPATTERN, this.getExcludePattern()));
 
@@ -230,8 +170,6 @@ public class RemoveHeaders extends AbstractNode {
         if (processor instanceof RemoveHeadersDefinition) {
             RemoveHeadersDefinition node = (RemoveHeadersDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setPattern(node.getPattern());
             this.setExcludePattern(node.getExcludePattern());
         } else {

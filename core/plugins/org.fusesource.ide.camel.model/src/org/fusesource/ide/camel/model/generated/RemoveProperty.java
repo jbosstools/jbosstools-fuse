@@ -37,12 +37,8 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class RemoveProperty extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "RemoveProperty.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "RemoveProperty.InheritErrorHandler";
     public static final String PROPERTY_PROPERTYNAME = "RemoveProperty.PropertyName";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private String propertyName;
 
     public RemoveProperty() {
@@ -70,42 +66,6 @@ public class RemoveProperty extends AbstractNode {
     }
 
     /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
-    }
-
-    /**
      * @return the propertyName
      */
     public String getPropertyName() {
@@ -127,12 +87,8 @@ public class RemoveProperty extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRemovePropertyCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRemovePropertyInheritErrorHandler);
         PropertyDescriptor descPropertyName = new TextPropertyDescriptor(PROPERTY_PROPERTYNAME, Messages.propertyLabelRemovePropertyPropertyName);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_PROPERTYNAME, descPropertyName);
     }
 
@@ -141,14 +97,6 @@ public class RemoveProperty extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_PROPERTYNAME.equals(id)) {
             setPropertyName(Objects.convertTo(value, String.class));
             return;
@@ -161,12 +109,6 @@ public class RemoveProperty extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_PROPERTYNAME.equals(id)) {
             return this.getPropertyName();
         }
@@ -178,8 +120,6 @@ public class RemoveProperty extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         RemovePropertyDefinition answer = new RemovePropertyDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setPropertyName(toXmlPropertyValue(PROPERTY_PROPERTYNAME, this.getPropertyName()));
 
         super.savePropertiesToCamelDefinition(answer);
@@ -200,8 +140,6 @@ public class RemoveProperty extends AbstractNode {
         if (processor instanceof RemovePropertyDefinition) {
             RemovePropertyDefinition node = (RemovePropertyDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setPropertyName(node.getPropertyName());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof RemovePropertyDefinition. Was " + processor.getClass().getName());

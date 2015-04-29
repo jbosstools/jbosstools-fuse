@@ -38,14 +38,10 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Sampling extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "Sampling.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "Sampling.InheritErrorHandler";
     public static final String PROPERTY_SAMPLEPERIOD = "Sampling.SamplePeriod";
     public static final String PROPERTY_MESSAGEFREQUENCY = "Sampling.MessageFrequency";
     public static final String PROPERTY_UNITS = "Sampling.Units";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private Long samplePeriod;
     private Long messageFrequency;
     private TimeUnit units;
@@ -72,42 +68,6 @@ public class Sampling extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Miscellaneous";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -168,14 +128,10 @@ public class Sampling extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelSamplingCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSamplingInheritErrorHandler);
         PropertyDescriptor descSamplePeriod = new TextPropertyDescriptor(PROPERTY_SAMPLEPERIOD, Messages.propertyLabelSamplingSamplePeriod);
         PropertyDescriptor descMessageFrequency = new TextPropertyDescriptor(PROPERTY_MESSAGEFREQUENCY, Messages.propertyLabelSamplingMessageFrequency);
         PropertyDescriptor descUnits = new EnumPropertyDescriptor(PROPERTY_UNITS, Messages.propertyLabelSamplingUnits, TimeUnit.class);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_SAMPLEPERIOD, descSamplePeriod);
         descriptors.put(PROPERTY_MESSAGEFREQUENCY, descMessageFrequency);
         descriptors.put(PROPERTY_UNITS, descUnits);
@@ -186,14 +142,6 @@ public class Sampling extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_SAMPLEPERIOD.equals(id)) {
             setSamplePeriod(Objects.convertTo(value, Long.class));
             return;
@@ -214,12 +162,6 @@ public class Sampling extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_SAMPLEPERIOD.equals(id)) {
             return this.getSamplePeriod();
         }
@@ -237,8 +179,6 @@ public class Sampling extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         SamplingDefinition answer = new SamplingDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setSamplePeriod(toXmlPropertyValue(PROPERTY_SAMPLEPERIOD, this.getSamplePeriod()));
         answer.setMessageFrequency(toXmlPropertyValue(PROPERTY_MESSAGEFREQUENCY, this.getMessageFrequency()));
         answer.setUnits(toXmlPropertyValue(PROPERTY_UNITS, this.getUnits()));
@@ -261,8 +201,6 @@ public class Sampling extends AbstractNode {
         if (processor instanceof SamplingDefinition) {
             SamplingDefinition node = (SamplingDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setSamplePeriod(node.getSamplePeriod());
             this.setMessageFrequency(node.getMessageFrequency());
             this.setUnits(node.getUnits());

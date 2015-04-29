@@ -37,11 +37,7 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Otherwise extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "Otherwise.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "Otherwise.InheritErrorHandler";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
 
     public Otherwise() {
     }
@@ -67,51 +63,11 @@ public class Otherwise extends AbstractNode {
         return "Routing";
     }
 
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
-    }
-
     @Override
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelOtherwiseCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelOtherwiseInheritErrorHandler);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
     }
 
     /* (non-Javadoc)
@@ -119,14 +75,6 @@ public class Otherwise extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         super.setPropertyValue(id, value);
     }
 
@@ -135,12 +83,6 @@ public class Otherwise extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         return super.getPropertyValue(id);
     }
 
@@ -149,8 +91,6 @@ public class Otherwise extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         OtherwiseDefinition answer = new OtherwiseDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -170,8 +110,6 @@ public class Otherwise extends AbstractNode {
         if (processor instanceof OtherwiseDefinition) {
             OtherwiseDefinition node = (OtherwiseDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof OtherwiseDefinition. Was " + processor.getClass().getName());
         }

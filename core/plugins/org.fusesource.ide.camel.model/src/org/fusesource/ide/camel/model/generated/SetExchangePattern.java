@@ -38,12 +38,8 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class SetExchangePattern extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "SetExchangePattern.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "SetExchangePattern.InheritErrorHandler";
     public static final String PROPERTY_PATTERN = "SetExchangePattern.Pattern";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private ExchangePattern pattern;
 
     public SetExchangePattern() {
@@ -71,42 +67,6 @@ public class SetExchangePattern extends AbstractNode {
     }
 
     /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
-    }
-
-    /**
      * @return the pattern
      */
     public ExchangePattern getPattern() {
@@ -128,12 +88,8 @@ public class SetExchangePattern extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelSetExchangePatternCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSetExchangePatternInheritErrorHandler);
         PropertyDescriptor descPattern = new EnumPropertyDescriptor(PROPERTY_PATTERN, Messages.propertyLabelSetExchangePatternPattern, ExchangePattern.class);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_PATTERN, descPattern);
     }
 
@@ -142,14 +98,6 @@ public class SetExchangePattern extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_PATTERN.equals(id)) {
             setPattern(Objects.convertTo(value, ExchangePattern.class));
             return;
@@ -162,12 +110,6 @@ public class SetExchangePattern extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_PATTERN.equals(id)) {
             return this.getPattern();
         }
@@ -179,8 +121,6 @@ public class SetExchangePattern extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         SetExchangePatternDefinition answer = new SetExchangePatternDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setPattern(toXmlPropertyValue(PROPERTY_PATTERN, this.getPattern()));
 
         super.savePropertiesToCamelDefinition(answer);
@@ -201,8 +141,6 @@ public class SetExchangePattern extends AbstractNode {
         if (processor instanceof SetExchangePatternDefinition) {
             SetExchangePatternDefinition node = (SetExchangePatternDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setPattern(node.getPattern());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof SetExchangePatternDefinition. Was " + processor.getClass().getName());

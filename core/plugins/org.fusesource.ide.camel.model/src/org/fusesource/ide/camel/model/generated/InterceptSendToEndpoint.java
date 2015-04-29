@@ -37,13 +37,9 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class InterceptSendToEndpoint extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "InterceptSendToEndpoint.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "InterceptSendToEndpoint.InheritErrorHandler";
     public static final String PROPERTY_URI = "InterceptSendToEndpoint.Uri";
     public static final String PROPERTY_SKIPSENDTOORIGINALENDPOINT = "InterceptSendToEndpoint.SkipSendToOriginalEndpoint";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private String uri;
     private Boolean skipSendToOriginalEndpoint;
 
@@ -69,42 +65,6 @@ public class InterceptSendToEndpoint extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Control Flow";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -147,13 +107,9 @@ public class InterceptSendToEndpoint extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelInterceptSendToEndpointCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelInterceptSendToEndpointInheritErrorHandler);
         PropertyDescriptor descUri = new TextPropertyDescriptor(PROPERTY_URI, Messages.propertyLabelInterceptSendToEndpointUri);
         PropertyDescriptor descSkipSendToOriginalEndpoint = new BooleanPropertyDescriptor(PROPERTY_SKIPSENDTOORIGINALENDPOINT, Messages.propertyLabelInterceptSendToEndpointSkipSendToOriginalEndpoint);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_URI, descUri);
         descriptors.put(PROPERTY_SKIPSENDTOORIGINALENDPOINT, descSkipSendToOriginalEndpoint);
     }
@@ -163,14 +119,6 @@ public class InterceptSendToEndpoint extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_URI.equals(id)) {
             setUri(Objects.convertTo(value, String.class));
             return;
@@ -187,12 +135,6 @@ public class InterceptSendToEndpoint extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_URI.equals(id)) {
             return this.getUri();
         }
@@ -207,8 +149,6 @@ public class InterceptSendToEndpoint extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         InterceptSendToEndpointDefinition answer = new InterceptSendToEndpointDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setUri(toXmlPropertyValue(PROPERTY_URI, this.getUri()));
         answer.setSkipSendToOriginalEndpoint(toXmlPropertyValue(PROPERTY_SKIPSENDTOORIGINALENDPOINT, this.getSkipSendToOriginalEndpoint()));
 
@@ -230,8 +170,6 @@ public class InterceptSendToEndpoint extends AbstractNode {
         if (processor instanceof InterceptSendToEndpointDefinition) {
             InterceptSendToEndpointDefinition node = (InterceptSendToEndpointDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setUri(node.getUri());
             this.setSkipSendToOriginalEndpoint(node.getSkipSendToOriginalEndpoint());
         } else {

@@ -37,12 +37,8 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class InOnly extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "InOnly.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "InOnly.InheritErrorHandler";
     public static final String PROPERTY_URI = "InOnly.Uri";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private String uri;
 
     public InOnly() {
@@ -70,42 +66,6 @@ public class InOnly extends AbstractNode {
     }
 
     /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
-    }
-
-    /**
      * @return the uri
      */
     public String getUri() {
@@ -127,12 +87,8 @@ public class InOnly extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelInOnlyCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelInOnlyInheritErrorHandler);
         PropertyDescriptor descUri = new TextPropertyDescriptor(PROPERTY_URI, Messages.propertyLabelInOnlyUri);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_URI, descUri);
     }
 
@@ -141,14 +97,6 @@ public class InOnly extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_URI.equals(id)) {
             setUri(Objects.convertTo(value, String.class));
             return;
@@ -161,12 +109,6 @@ public class InOnly extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_URI.equals(id)) {
             return this.getUri();
         }
@@ -178,8 +120,6 @@ public class InOnly extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         InOnlyDefinition answer = new InOnlyDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setUri(toXmlPropertyValue(PROPERTY_URI, this.getUri()));
 
         super.savePropertiesToCamelDefinition(answer);
@@ -200,8 +140,6 @@ public class InOnly extends AbstractNode {
         if (processor instanceof InOnlyDefinition) {
             InOnlyDefinition node = (InOnlyDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setUri(node.getUri());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof InOnlyDefinition. Was " + processor.getClass().getName());

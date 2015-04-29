@@ -38,8 +38,6 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class OnCompletion extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "OnCompletion.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "OnCompletion.InheritErrorHandler";
     public static final String PROPERTY_MODE = "OnCompletion.Mode";
     public static final String PROPERTY_ONCOMPLETEONLY = "OnCompletion.OnCompleteOnly";
     public static final String PROPERTY_ONFAILUREONLY = "OnCompletion.OnFailureOnly";
@@ -47,8 +45,6 @@ public class OnCompletion extends AbstractNode {
     public static final String PROPERTY_EXECUTORSERVICEREF = "OnCompletion.ExecutorServiceRef";
     public static final String PROPERTY_USEORIGINALMESSAGEPOLICY = "OnCompletion.UseOriginalMessagePolicy";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private OnCompletionMode mode;
     private Boolean onCompleteOnly;
     private Boolean onFailureOnly;
@@ -78,42 +74,6 @@ public class OnCompletion extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Control Flow";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -228,8 +188,6 @@ public class OnCompletion extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelOnCompletionCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelOnCompletionInheritErrorHandler);
         PropertyDescriptor descMode = new EnumPropertyDescriptor(PROPERTY_MODE, Messages.propertyLabelOnCompletionMode, OnCompletionMode.class);
         PropertyDescriptor descOnCompleteOnly = new BooleanPropertyDescriptor(PROPERTY_ONCOMPLETEONLY, Messages.propertyLabelOnCompletionOnCompleteOnly);
         PropertyDescriptor descOnFailureOnly = new BooleanPropertyDescriptor(PROPERTY_ONFAILUREONLY, Messages.propertyLabelOnCompletionOnFailureOnly);
@@ -237,8 +195,6 @@ public class OnCompletion extends AbstractNode {
         PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelOnCompletionExecutorServiceRef);
         PropertyDescriptor descUseOriginalMessagePolicy = new BooleanPropertyDescriptor(PROPERTY_USEORIGINALMESSAGEPOLICY, Messages.propertyLabelOnCompletionUseOriginalMessagePolicy);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_MODE, descMode);
         descriptors.put(PROPERTY_ONCOMPLETEONLY, descOnCompleteOnly);
         descriptors.put(PROPERTY_ONFAILUREONLY, descOnFailureOnly);
@@ -252,14 +208,6 @@ public class OnCompletion extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_MODE.equals(id)) {
             setMode(Objects.convertTo(value, OnCompletionMode.class));
             return;
@@ -292,12 +240,6 @@ public class OnCompletion extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_MODE.equals(id)) {
             return this.getMode();
         }
@@ -324,8 +266,6 @@ public class OnCompletion extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         OnCompletionDefinition answer = new OnCompletionDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setMode(toXmlPropertyValue(PROPERTY_MODE, this.getMode()));
         answer.setOnCompleteOnly(toXmlPropertyValue(PROPERTY_ONCOMPLETEONLY, this.getOnCompleteOnly()));
         answer.setOnFailureOnly(toXmlPropertyValue(PROPERTY_ONFAILUREONLY, this.getOnFailureOnly()));
@@ -351,8 +291,6 @@ public class OnCompletion extends AbstractNode {
         if (processor instanceof OnCompletionDefinition) {
             OnCompletionDefinition node = (OnCompletionDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setMode(node.getMode());
             this.setOnCompleteOnly(node.getOnCompleteOnly());
             this.setOnFailureOnly(node.getOnFailureOnly());

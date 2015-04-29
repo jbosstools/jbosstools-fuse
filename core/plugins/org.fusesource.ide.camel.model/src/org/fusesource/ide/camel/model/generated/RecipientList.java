@@ -37,8 +37,6 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class RecipientList extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "RecipientList.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "RecipientList.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "RecipientList.Expression";
     public static final String PROPERTY_DELIMITER = "RecipientList.Delimiter";
     public static final String PROPERTY_PARALLELPROCESSING = "RecipientList.ParallelProcessing";
@@ -55,8 +53,6 @@ public class RecipientList extends AbstractNode {
     public static final String PROPERTY_CACHESIZE = "RecipientList.CacheSize";
     public static final String PROPERTY_PARALLELAGGREGATE = "RecipientList.ParallelAggregate";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private String delimiter;
     private Boolean parallelProcessing;
@@ -95,42 +91,6 @@ public class RecipientList extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -407,8 +367,6 @@ public class RecipientList extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRecipientListCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRecipientListInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelRecipientListExpression);
         PropertyDescriptor descDelimiter = new TextPropertyDescriptor(PROPERTY_DELIMITER, Messages.propertyLabelRecipientListDelimiter);
         PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelRecipientListParallelProcessing);
@@ -425,8 +383,6 @@ public class RecipientList extends AbstractNode {
         PropertyDescriptor descCacheSize = new TextPropertyDescriptor(PROPERTY_CACHESIZE, Messages.propertyLabelRecipientListCacheSize);
         PropertyDescriptor descParallelAggregate = new BooleanPropertyDescriptor(PROPERTY_PARALLELAGGREGATE, Messages.propertyLabelRecipientListParallelAggregate);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_DELIMITER, descDelimiter);
         descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
@@ -449,14 +405,6 @@ public class RecipientList extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             setExpression(Objects.convertTo(value, ExpressionDefinition.class));
             return;
@@ -525,12 +473,6 @@ public class RecipientList extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             return this.getExpression();
         }
@@ -584,8 +526,6 @@ public class RecipientList extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         RecipientListDefinition answer = new RecipientListDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setDelimiter(toXmlPropertyValue(PROPERTY_DELIMITER, this.getDelimiter()));
         answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
@@ -620,8 +560,6 @@ public class RecipientList extends AbstractNode {
         if (processor instanceof RecipientListDefinition) {
             RecipientListDefinition node = (RecipientListDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setDelimiter(node.getDelimiter());
             this.setParallelProcessing(node.getParallelProcessing());

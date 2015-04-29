@@ -37,19 +37,13 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class DynamicRouter extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "DynamicRouter.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "DynamicRouter.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "DynamicRouter.Expression";
     public static final String PROPERTY_URIDELIMITER = "DynamicRouter.UriDelimiter";
     public static final String PROPERTY_IGNOREINVALIDENDPOINTS = "DynamicRouter.IgnoreInvalidEndpoints";
-    public static final String PROPERTY_CACHESIZE = "DynamicRouter.CacheSize";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private String uriDelimiter;
     private Boolean ignoreInvalidEndpoints;
-    private Integer cacheSize;
 
     public DynamicRouter() {
     }
@@ -73,42 +67,6 @@ public class DynamicRouter extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -165,41 +123,17 @@ public class DynamicRouter extends AbstractNode {
         }
     }
 
-    /**
-     * @return the cacheSize
-     */
-    public Integer getCacheSize() {
-        return this.cacheSize;
-    }
-
-    /**
-     * @param cacheSize the cacheSize to set
-     */
-    public void setCacheSize(Integer cacheSize) {
-        Integer oldValue = this.cacheSize;
-        this.cacheSize = cacheSize;
-        if (!isSame(oldValue, cacheSize)) {
-            firePropertyChange(PROPERTY_CACHESIZE, oldValue, cacheSize);
-        }
-    }
-
     @Override
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelDynamicRouterCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelDynamicRouterInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelDynamicRouterExpression);
         PropertyDescriptor descUriDelimiter = new TextPropertyDescriptor(PROPERTY_URIDELIMITER, Messages.propertyLabelDynamicRouterUriDelimiter);
         PropertyDescriptor descIgnoreInvalidEndpoints = new BooleanPropertyDescriptor(PROPERTY_IGNOREINVALIDENDPOINTS, Messages.propertyLabelDynamicRouterIgnoreInvalidEndpoints);
-        PropertyDescriptor descCacheSize = new TextPropertyDescriptor(PROPERTY_CACHESIZE, Messages.propertyLabelDynamicRouterCacheSize);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_URIDELIMITER, descUriDelimiter);
         descriptors.put(PROPERTY_IGNOREINVALIDENDPOINTS, descIgnoreInvalidEndpoints);
-        descriptors.put(PROPERTY_CACHESIZE, descCacheSize);
     }
 
     /* (non-Javadoc)
@@ -207,14 +141,6 @@ public class DynamicRouter extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             setExpression(Objects.convertTo(value, ExpressionDefinition.class));
             return;
@@ -227,10 +153,6 @@ public class DynamicRouter extends AbstractNode {
             setIgnoreInvalidEndpoints(Objects.convertTo(value, Boolean.class));
             return;
         }
-        if (PROPERTY_CACHESIZE.equals(id)) {
-            setCacheSize(Objects.convertTo(value, Integer.class));
-            return;
-        }
         super.setPropertyValue(id, value);
     }
 
@@ -239,12 +161,6 @@ public class DynamicRouter extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             return this.getExpression();
         }
@@ -254,9 +170,6 @@ public class DynamicRouter extends AbstractNode {
         if (PROPERTY_IGNOREINVALIDENDPOINTS.equals(id)) {
             return this.getIgnoreInvalidEndpoints();
         }
-        if (PROPERTY_CACHESIZE.equals(id)) {
-            return this.getCacheSize();
-        }
         return super.getPropertyValue(id);
     }
 
@@ -265,12 +178,9 @@ public class DynamicRouter extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         DynamicRouterDefinition answer = new DynamicRouterDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setUriDelimiter(toXmlPropertyValue(PROPERTY_URIDELIMITER, this.getUriDelimiter()));
         answer.setIgnoreInvalidEndpoints(toXmlPropertyValue(PROPERTY_IGNOREINVALIDENDPOINTS, this.getIgnoreInvalidEndpoints()));
-        answer.setCacheSize(toXmlPropertyValue(PROPERTY_CACHESIZE, this.getCacheSize()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -290,12 +200,9 @@ public class DynamicRouter extends AbstractNode {
         if (processor instanceof DynamicRouterDefinition) {
             DynamicRouterDefinition node = (DynamicRouterDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setUriDelimiter(node.getUriDelimiter());
             this.setIgnoreInvalidEndpoints(node.getIgnoreInvalidEndpoints());
-            this.setCacheSize(node.getCacheSize());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof DynamicRouterDefinition. Was " + processor.getClass().getName());
         }

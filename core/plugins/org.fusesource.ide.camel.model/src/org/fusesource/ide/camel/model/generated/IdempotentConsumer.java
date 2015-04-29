@@ -37,16 +37,12 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class IdempotentConsumer extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "IdempotentConsumer.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "IdempotentConsumer.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "IdempotentConsumer.Expression";
     public static final String PROPERTY_MESSAGEIDREPOSITORYREF = "IdempotentConsumer.MessageIdRepositoryRef";
     public static final String PROPERTY_EAGER = "IdempotentConsumer.Eager";
     public static final String PROPERTY_SKIPDUPLICATE = "IdempotentConsumer.SkipDuplicate";
     public static final String PROPERTY_REMOVEONFAILURE = "IdempotentConsumer.RemoveOnFailure";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private String messageIdRepositoryRef;
     private Boolean eager;
@@ -75,42 +71,6 @@ public class IdempotentConsumer extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -207,16 +167,12 @@ public class IdempotentConsumer extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelIdempotentConsumerCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelIdempotentConsumerInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelIdempotentConsumerExpression);
         PropertyDescriptor descMessageIdRepositoryRef = new TextPropertyDescriptor(PROPERTY_MESSAGEIDREPOSITORYREF, Messages.propertyLabelIdempotentConsumerMessageIdRepositoryRef);
         PropertyDescriptor descEager = new BooleanPropertyDescriptor(PROPERTY_EAGER, Messages.propertyLabelIdempotentConsumerEager);
         PropertyDescriptor descSkipDuplicate = new BooleanPropertyDescriptor(PROPERTY_SKIPDUPLICATE, Messages.propertyLabelIdempotentConsumerSkipDuplicate);
         PropertyDescriptor descRemoveOnFailure = new BooleanPropertyDescriptor(PROPERTY_REMOVEONFAILURE, Messages.propertyLabelIdempotentConsumerRemoveOnFailure);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_MESSAGEIDREPOSITORYREF, descMessageIdRepositoryRef);
         descriptors.put(PROPERTY_EAGER, descEager);
@@ -229,14 +185,6 @@ public class IdempotentConsumer extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             setExpression(Objects.convertTo(value, ExpressionDefinition.class));
             return;
@@ -265,12 +213,6 @@ public class IdempotentConsumer extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             return this.getExpression();
         }
@@ -294,8 +236,6 @@ public class IdempotentConsumer extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         IdempotentConsumerDefinition answer = new IdempotentConsumerDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setMessageIdRepositoryRef(toXmlPropertyValue(PROPERTY_MESSAGEIDREPOSITORYREF, this.getMessageIdRepositoryRef()));
         answer.setEager(toXmlPropertyValue(PROPERTY_EAGER, this.getEager()));
@@ -320,8 +260,6 @@ public class IdempotentConsumer extends AbstractNode {
         if (processor instanceof IdempotentConsumerDefinition) {
             IdempotentConsumerDefinition node = (IdempotentConsumerDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setMessageIdRepositoryRef(node.getMessageIdRepositoryRef());
             this.setEager(node.getEager());

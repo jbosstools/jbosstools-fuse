@@ -37,8 +37,6 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Throttle extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "Throttle.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "Throttle.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "Throttle.Expression";
     public static final String PROPERTY_EXECUTORSERVICEREF = "Throttle.ExecutorServiceRef";
     public static final String PROPERTY_TIMEPERIODMILLIS = "Throttle.TimePeriodMillis";
@@ -46,8 +44,6 @@ public class Throttle extends AbstractNode {
     public static final String PROPERTY_CALLERRUNSWHENREJECTED = "Throttle.CallerRunsWhenRejected";
     public static final String PROPERTY_REJECTEXECUTION = "Throttle.RejectExecution";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private String executorServiceRef;
     private Long timePeriodMillis;
@@ -77,42 +73,6 @@ public class Throttle extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Control Flow";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -227,8 +187,6 @@ public class Throttle extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelThrottleCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelThrottleInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelThrottleExpression);
         PropertyDescriptor descExecutorServiceRef = new TextPropertyDescriptor(PROPERTY_EXECUTORSERVICEREF, Messages.propertyLabelThrottleExecutorServiceRef);
         PropertyDescriptor descTimePeriodMillis = new TextPropertyDescriptor(PROPERTY_TIMEPERIODMILLIS, Messages.propertyLabelThrottleTimePeriodMillis);
@@ -236,8 +194,6 @@ public class Throttle extends AbstractNode {
         PropertyDescriptor descCallerRunsWhenRejected = new BooleanPropertyDescriptor(PROPERTY_CALLERRUNSWHENREJECTED, Messages.propertyLabelThrottleCallerRunsWhenRejected);
         PropertyDescriptor descRejectExecution = new BooleanPropertyDescriptor(PROPERTY_REJECTEXECUTION, Messages.propertyLabelThrottleRejectExecution);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_EXECUTORSERVICEREF, descExecutorServiceRef);
         descriptors.put(PROPERTY_TIMEPERIODMILLIS, descTimePeriodMillis);
@@ -251,14 +207,6 @@ public class Throttle extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             setExpression(Objects.convertTo(value, ExpressionDefinition.class));
             return;
@@ -291,12 +239,6 @@ public class Throttle extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             return this.getExpression();
         }
@@ -323,8 +265,6 @@ public class Throttle extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         ThrottleDefinition answer = new ThrottleDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setExecutorServiceRef(toXmlPropertyValue(PROPERTY_EXECUTORSERVICEREF, this.getExecutorServiceRef()));
         answer.setTimePeriodMillis(toXmlPropertyValue(PROPERTY_TIMEPERIODMILLIS, this.getTimePeriodMillis()));
@@ -350,8 +290,6 @@ public class Throttle extends AbstractNode {
         if (processor instanceof ThrottleDefinition) {
             ThrottleDefinition node = (ThrottleDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setExecutorServiceRef(node.getExecutorServiceRef());
             this.setTimePeriodMillis(node.getTimePeriodMillis());

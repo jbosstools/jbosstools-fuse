@@ -37,14 +37,10 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Rollback extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "Rollback.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "Rollback.InheritErrorHandler";
     public static final String PROPERTY_MARKROLLBACKONLY = "Rollback.MarkRollbackOnly";
     public static final String PROPERTY_MARKROLLBACKONLYLAST = "Rollback.MarkRollbackOnlyLast";
     public static final String PROPERTY_MESSAGE = "Rollback.Message";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private Boolean markRollbackOnly;
     private Boolean markRollbackOnlyLast;
     private String message;
@@ -71,42 +67,6 @@ public class Rollback extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Control Flow";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -167,14 +127,10 @@ public class Rollback extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRollbackCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelRollbackInheritErrorHandler);
         PropertyDescriptor descMarkRollbackOnly = new BooleanPropertyDescriptor(PROPERTY_MARKROLLBACKONLY, Messages.propertyLabelRollbackMarkRollbackOnly);
         PropertyDescriptor descMarkRollbackOnlyLast = new BooleanPropertyDescriptor(PROPERTY_MARKROLLBACKONLYLAST, Messages.propertyLabelRollbackMarkRollbackOnlyLast);
         PropertyDescriptor descMessage = new TextPropertyDescriptor(PROPERTY_MESSAGE, Messages.propertyLabelRollbackMessage);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_MARKROLLBACKONLY, descMarkRollbackOnly);
         descriptors.put(PROPERTY_MARKROLLBACKONLYLAST, descMarkRollbackOnlyLast);
         descriptors.put(PROPERTY_MESSAGE, descMessage);
@@ -185,14 +141,6 @@ public class Rollback extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_MARKROLLBACKONLY.equals(id)) {
             setMarkRollbackOnly(Objects.convertTo(value, Boolean.class));
             return;
@@ -213,12 +161,6 @@ public class Rollback extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_MARKROLLBACKONLY.equals(id)) {
             return this.getMarkRollbackOnly();
         }
@@ -236,8 +178,6 @@ public class Rollback extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         RollbackDefinition answer = new RollbackDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setMarkRollbackOnly(toXmlPropertyValue(PROPERTY_MARKROLLBACKONLY, this.getMarkRollbackOnly()));
         answer.setMarkRollbackOnlyLast(toXmlPropertyValue(PROPERTY_MARKROLLBACKONLYLAST, this.getMarkRollbackOnlyLast()));
         answer.setMessage(toXmlPropertyValue(PROPERTY_MESSAGE, this.getMessage()));
@@ -260,8 +200,6 @@ public class Rollback extends AbstractNode {
         if (processor instanceof RollbackDefinition) {
             RollbackDefinition node = (RollbackDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setMarkRollbackOnly(node.getMarkRollbackOnly());
             this.setMarkRollbackOnlyLast(node.getMarkRollbackOnlyLast());
             this.setMessage(node.getMessage());

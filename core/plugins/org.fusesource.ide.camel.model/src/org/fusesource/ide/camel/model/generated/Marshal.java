@@ -38,13 +38,9 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Marshal extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "Marshal.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "Marshal.InheritErrorHandler";
     public static final String PROPERTY_REF = "Marshal.Ref";
     public static final String PROPERTY_DATAFORMATTYPE = "Marshal.DataFormatType";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private String ref;
     private DataFormatDefinition dataFormatType;
 
@@ -70,42 +66,6 @@ public class Marshal extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Transformation";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -148,8 +108,6 @@ public class Marshal extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelMarshalCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelMarshalInheritErrorHandler);
         PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelMarshalRef);
         PropertyDescriptor descDataFormatType = new ComplexUnionPropertyDescriptor(PROPERTY_DATAFORMATTYPE, Messages.propertyLabelMarshalDataFormatType, DataFormatDefinition.class, new UnionTypeValue[] {
                 new UnionTypeValue("avro", org.apache.camel.model.dataformat.AvroDataFormat.class),
@@ -187,8 +145,6 @@ public class Marshal extends AbstractNode {
                 new UnionTypeValue("zipFile", org.apache.camel.model.dataformat.ZipFileDataFormat.class),
         });
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_REF, descRef);
         descriptors.put(PROPERTY_DATAFORMATTYPE, descDataFormatType);
     }
@@ -198,14 +154,6 @@ public class Marshal extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_REF.equals(id)) {
             setRef(Objects.convertTo(value, String.class));
             return;
@@ -222,12 +170,6 @@ public class Marshal extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_REF.equals(id)) {
             return this.getRef();
         }
@@ -242,8 +184,6 @@ public class Marshal extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         MarshalDefinition answer = new MarshalDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setRef(toXmlPropertyValue(PROPERTY_REF, this.getRef()));
         answer.setDataFormatType(toXmlPropertyValue(PROPERTY_DATAFORMATTYPE, this.getDataFormatType()));
 
@@ -265,8 +205,6 @@ public class Marshal extends AbstractNode {
         if (processor instanceof MarshalDefinition) {
             MarshalDefinition node = (MarshalDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setRef(node.getRef());
             this.setDataFormatType(node.getDataFormatType());
         } else {

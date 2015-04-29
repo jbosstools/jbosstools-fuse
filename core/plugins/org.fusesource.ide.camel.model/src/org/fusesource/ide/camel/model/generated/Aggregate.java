@@ -38,8 +38,6 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Aggregate extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "Aggregate.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "Aggregate.InheritErrorHandler";
     public static final String PROPERTY_CORRELATIONEXPRESSION = "Aggregate.CorrelationExpression";
     public static final String PROPERTY_COMPLETIONPREDICATE = "Aggregate.CompletionPredicate";
     public static final String PROPERTY_COMPLETIONTIMEOUTEXPRESSION = "Aggregate.CompletionTimeoutExpression";
@@ -64,8 +62,6 @@ public class Aggregate extends AbstractNode {
     public static final String PROPERTY_FORCECOMPLETIONONSTOP = "Aggregate.ForceCompletionOnStop";
     public static final String PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION = "Aggregate.OptimisticLockRetryPolicyDefinition";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private ExpressionDefinition correlationExpression;
     private ExpressionDefinition completionPredicate;
     private ExpressionDefinition completionTimeoutExpression;
@@ -112,42 +108,6 @@ public class Aggregate extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -568,8 +528,6 @@ public class Aggregate extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelAggregateCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelAggregateInheritErrorHandler);
         PropertyDescriptor descCorrelationExpression = new ExpressionPropertyDescriptor(PROPERTY_CORRELATIONEXPRESSION, Messages.propertyLabelAggregateCorrelationExpression);
         PropertyDescriptor descCompletionPredicate = new ExpressionPropertyDescriptor(PROPERTY_COMPLETIONPREDICATE, Messages.propertyLabelAggregateCompletionPredicate);
         PropertyDescriptor descCompletionTimeoutExpression = new ExpressionPropertyDescriptor(PROPERTY_COMPLETIONTIMEOUTEXPRESSION, Messages.propertyLabelAggregateCompletionTimeoutExpression);
@@ -595,8 +553,6 @@ public class Aggregate extends AbstractNode {
         PropertyDescriptor descOptimisticLockRetryPolicyDefinition = new ComplexUnionPropertyDescriptor(PROPERTY_OPTIMISTICLOCKRETRYPOLICYDEFINITION, Messages.propertyLabelAggregateOptimisticLockRetryPolicyDefinition, OptimisticLockRetryPolicyDefinition.class, new UnionTypeValue[] {
         });
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_CORRELATIONEXPRESSION, descCorrelationExpression);
         descriptors.put(PROPERTY_COMPLETIONPREDICATE, descCompletionPredicate);
         descriptors.put(PROPERTY_COMPLETIONTIMEOUTEXPRESSION, descCompletionTimeoutExpression);
@@ -627,14 +583,6 @@ public class Aggregate extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_CORRELATIONEXPRESSION.equals(id)) {
             setCorrelationExpression(Objects.convertTo(value, ExpressionDefinition.class));
             return;
@@ -735,12 +683,6 @@ public class Aggregate extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_CORRELATIONEXPRESSION.equals(id)) {
             return this.getCorrelationExpression();
         }
@@ -818,8 +760,6 @@ public class Aggregate extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         AggregateDefinition answer = new AggregateDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         Objects.setField(answer, "correlationExpression", toXmlPropertyValue(PROPERTY_CORRELATIONEXPRESSION, this.getCorrelationExpression()));
         Objects.setField(answer, "completionPredicate", toXmlPropertyValue(PROPERTY_COMPLETIONPREDICATE, this.getCompletionPredicate()));
         Objects.setField(answer, "completionTimeoutExpression", toXmlPropertyValue(PROPERTY_COMPLETIONTIMEOUTEXPRESSION, this.getCompletionTimeoutExpression()));
@@ -862,8 +802,6 @@ public class Aggregate extends AbstractNode {
         if (processor instanceof AggregateDefinition) {
             AggregateDefinition node = (AggregateDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             Objects.setField(this, "correlationExpression", node.getCorrelationExpression());
             Objects.setField(this, "completionPredicate", node.getCompletionPredicate());
             Objects.setField(this, "completionTimeoutExpression", node.getCompletionTimeoutExpression());

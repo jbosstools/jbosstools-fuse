@@ -37,12 +37,8 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Validate extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "Validate.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "Validate.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "Validate.Expression";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
 
     public Validate() {
@@ -70,42 +66,6 @@ public class Validate extends AbstractNode {
     }
 
     /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
-    }
-
-    /**
      * @return the expression
      */
     public ExpressionDefinition getExpression() {
@@ -127,12 +87,8 @@ public class Validate extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelValidateCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelValidateInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelValidateExpression);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
     }
 
@@ -141,14 +97,6 @@ public class Validate extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             setExpression(Objects.convertTo(value, ExpressionDefinition.class));
             return;
@@ -161,12 +109,6 @@ public class Validate extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             return this.getExpression();
         }
@@ -178,8 +120,6 @@ public class Validate extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         ValidateDefinition answer = new ValidateDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
 
         super.savePropertiesToCamelDefinition(answer);
@@ -200,8 +140,6 @@ public class Validate extends AbstractNode {
         if (processor instanceof ValidateDefinition) {
             ValidateDefinition node = (ValidateDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof ValidateDefinition. Was " + processor.getClass().getName());

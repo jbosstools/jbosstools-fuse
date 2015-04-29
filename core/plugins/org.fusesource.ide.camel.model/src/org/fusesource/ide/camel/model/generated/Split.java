@@ -37,8 +37,6 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class Split extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "Split.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "Split.InheritErrorHandler";
     public static final String PROPERTY_EXPRESSION = "Split.Expression";
     public static final String PROPERTY_PARALLELPROCESSING = "Split.ParallelProcessing";
     public static final String PROPERTY_STRATEGYREF = "Split.StrategyRef";
@@ -52,8 +50,6 @@ public class Split extends AbstractNode {
     public static final String PROPERTY_SHAREUNITOFWORK = "Split.ShareUnitOfWork";
     public static final String PROPERTY_PARALLELAGGREGATE = "Split.ParallelAggregate";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private ExpressionDefinition expression;
     private Boolean parallelProcessing;
     private String strategyRef;
@@ -89,42 +85,6 @@ public class Split extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -347,8 +307,6 @@ public class Split extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelSplitCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelSplitInheritErrorHandler);
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelSplitExpression);
         PropertyDescriptor descParallelProcessing = new BooleanPropertyDescriptor(PROPERTY_PARALLELPROCESSING, Messages.propertyLabelSplitParallelProcessing);
         PropertyDescriptor descStrategyRef = new TextPropertyDescriptor(PROPERTY_STRATEGYREF, Messages.propertyLabelSplitStrategyRef);
@@ -362,8 +320,6 @@ public class Split extends AbstractNode {
         PropertyDescriptor descShareUnitOfWork = new BooleanPropertyDescriptor(PROPERTY_SHAREUNITOFWORK, Messages.propertyLabelSplitShareUnitOfWork);
         PropertyDescriptor descParallelAggregate = new BooleanPropertyDescriptor(PROPERTY_PARALLELAGGREGATE, Messages.propertyLabelSplitParallelAggregate);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_PARALLELPROCESSING, descParallelProcessing);
         descriptors.put(PROPERTY_STRATEGYREF, descStrategyRef);
@@ -383,14 +339,6 @@ public class Split extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             setExpression(Objects.convertTo(value, ExpressionDefinition.class));
             return;
@@ -447,12 +395,6 @@ public class Split extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_EXPRESSION.equals(id)) {
             return this.getExpression();
         }
@@ -497,8 +439,6 @@ public class Split extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         SplitDefinition answer = new SplitDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setParallelProcessing(toXmlPropertyValue(PROPERTY_PARALLELPROCESSING, this.getParallelProcessing()));
         answer.setStrategyRef(toXmlPropertyValue(PROPERTY_STRATEGYREF, this.getStrategyRef()));
@@ -530,8 +470,6 @@ public class Split extends AbstractNode {
         if (processor instanceof SplitDefinition) {
             SplitDefinition node = (SplitDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setExpression(node.getExpression());
             this.setParallelProcessing(node.getParallelProcessing());
             this.setStrategyRef(node.getStrategyRef());

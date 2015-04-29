@@ -38,12 +38,10 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class LoadBalance extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "LoadBalance.CustomId";
     public static final String PROPERTY_INHERITERRORHANDLER = "LoadBalance.InheritErrorHandler";
     public static final String PROPERTY_REF = "LoadBalance.Ref";
     public static final String PROPERTY_LOADBALANCERTYPE = "LoadBalance.LoadBalancerType";
 
-    private Boolean customId;
     private Boolean inheritErrorHandler;
     private String ref;
     private LoadBalancerDefinition loadBalancerType;
@@ -70,24 +68,6 @@ public class LoadBalance extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
     }
 
     /**
@@ -148,7 +128,6 @@ public class LoadBalance extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelLoadBalanceCustomId);
         PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelLoadBalanceInheritErrorHandler);
         PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelLoadBalanceRef);
         PropertyDescriptor descLoadBalancerType = new ComplexUnionPropertyDescriptor(PROPERTY_LOADBALANCERTYPE, Messages.propertyLabelLoadBalanceLoadBalancerType, LoadBalancerDefinition.class, new UnionTypeValue[] {
@@ -162,7 +141,6 @@ public class LoadBalance extends AbstractNode {
                 new UnionTypeValue("circuitBreaker", org.apache.camel.model.loadbalancer.CircuitBreakerLoadBalancerDefinition.class),
         });
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_REF, descRef);
         descriptors.put(PROPERTY_LOADBALANCERTYPE, descLoadBalancerType);
@@ -173,10 +151,6 @@ public class LoadBalance extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
             return;
@@ -197,9 +171,6 @@ public class LoadBalance extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
         if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
             return Objects.<Boolean>getField(this, "inheritErrorHandler");
         }
@@ -217,7 +188,6 @@ public class LoadBalance extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         LoadBalanceDefinition answer = new LoadBalanceDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setRef(toXmlPropertyValue(PROPERTY_REF, this.getRef()));
         answer.setLoadBalancerType(toXmlPropertyValue(PROPERTY_LOADBALANCERTYPE, this.getLoadBalancerType()));
@@ -240,7 +210,6 @@ public class LoadBalance extends AbstractNode {
         if (processor instanceof LoadBalanceDefinition) {
             LoadBalanceDefinition node = (LoadBalanceDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
             this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setRef(node.getRef());
             this.setLoadBalancerType(node.getLoadBalancerType());

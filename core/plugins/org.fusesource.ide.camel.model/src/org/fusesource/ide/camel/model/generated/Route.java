@@ -40,7 +40,6 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
 public class Route extends RouteSupport {
 
     public static final String PROPERTY_AUTOSTARTUP = "Route.AutoStartup";
-    public static final String PROPERTY_CUSTOMID = "Route.CustomId";
     public static final String PROPERTY_DELAYER = "Route.Delayer";
     public static final String PROPERTY_ERRORHANDLERREF = "Route.ErrorHandlerRef";
     public static final String PROPERTY_GROUP = "Route.Group";
@@ -54,7 +53,6 @@ public class Route extends RouteSupport {
     public static final String PROPERTY_TRACE = "Route.Trace";
 
     private String autoStartup;
-    private Boolean customId;
     private String delayer;
     private String errorHandlerRef;
     private String group;
@@ -90,24 +88,6 @@ public class Route extends RouteSupport {
         this.autoStartup = autoStartup;
         if (!isSame(oldValue, autoStartup)) {
             firePropertyChange(PROPERTY_AUTOSTARTUP, oldValue, autoStartup);
-        }
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
         }
     }
 
@@ -314,7 +294,6 @@ public class Route extends RouteSupport {
         super.addCustomProperties(descriptors);
 
         PropertyDescriptor descAutoStartup = new TextPropertyDescriptor(PROPERTY_AUTOSTARTUP, Messages.propertyLabelRouteAutoStartup);
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelRouteCustomId);
         PropertyDescriptor descDelayer = new TextPropertyDescriptor(PROPERTY_DELAYER, Messages.propertyLabelRouteDelayer);
         PropertyDescriptor descErrorHandlerRef = new TextPropertyDescriptor(PROPERTY_ERRORHANDLERREF, Messages.propertyLabelRouteErrorHandlerRef);
         PropertyDescriptor descGroup = new TextPropertyDescriptor(PROPERTY_GROUP, Messages.propertyLabelRouteGroup);
@@ -328,7 +307,6 @@ public class Route extends RouteSupport {
         PropertyDescriptor descTrace = new TextPropertyDescriptor(PROPERTY_TRACE, Messages.propertyLabelRouteTrace);
 
         descriptors.put(PROPERTY_AUTOSTARTUP, descAutoStartup);
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
         descriptors.put(PROPERTY_DELAYER, descDelayer);
         descriptors.put(PROPERTY_ERRORHANDLERREF, descErrorHandlerRef);
         descriptors.put(PROPERTY_GROUP, descGroup);
@@ -349,10 +327,6 @@ public class Route extends RouteSupport {
     public void setPropertyValue(Object id, Object value) {
         if (PROPERTY_AUTOSTARTUP.equals(id)) {
             setAutoStartup(Objects.convertTo(value, String.class));
-            return;
-        }
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
             return;
         }
         if (PROPERTY_DELAYER.equals(id)) {
@@ -410,9 +384,6 @@ public class Route extends RouteSupport {
         if (PROPERTY_AUTOSTARTUP.equals(id)) {
             return this.getAutoStartup();
         }
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
         if (PROPERTY_DELAYER.equals(id)) {
             return this.getDelayer();
         }
@@ -455,7 +426,6 @@ public class Route extends RouteSupport {
         RouteDefinition answer = new RouteDefinition();
 
         answer.setAutoStartup(toXmlPropertyValue(PROPERTY_AUTOSTARTUP, this.getAutoStartup()));
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
         answer.setDelayer(toXmlPropertyValue(PROPERTY_DELAYER, this.getDelayer()));
         answer.setErrorHandlerRef(toXmlPropertyValue(PROPERTY_ERRORHANDLERREF, this.getErrorHandlerRef()));
         answer.setGroup(toXmlPropertyValue(PROPERTY_GROUP, this.getGroup()));
@@ -487,7 +457,6 @@ public class Route extends RouteSupport {
             RouteDefinition node = (RouteDefinition) processor;
 
             this.setAutoStartup(node.getAutoStartup());
-            this.setCustomId(node.getCustomId());
             this.setDelayer(node.getDelayer());
             this.setErrorHandlerRef(node.getErrorHandlerRef());
             this.setGroup(node.getGroup());

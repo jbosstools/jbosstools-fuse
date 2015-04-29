@@ -37,8 +37,6 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class PollEnrich extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "PollEnrich.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "PollEnrich.InheritErrorHandler";
     public static final String PROPERTY_RESOURCEURI = "PollEnrich.ResourceUri";
     public static final String PROPERTY_TIMEOUT = "PollEnrich.Timeout";
     public static final String PROPERTY_AGGREGATIONSTRATEGYREF = "PollEnrich.AggregationStrategyRef";
@@ -46,8 +44,6 @@ public class PollEnrich extends AbstractNode {
     public static final String PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL = "PollEnrich.AggregationStrategyMethodAllowNull";
     public static final String PROPERTY_AGGREGATEONEXCEPTION = "PollEnrich.AggregateOnException";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private String resourceUri;
     private Long timeout;
     private String aggregationStrategyRef;
@@ -77,42 +73,6 @@ public class PollEnrich extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Transformation";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -227,8 +187,6 @@ public class PollEnrich extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelPollEnrichCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelPollEnrichInheritErrorHandler);
         PropertyDescriptor descResourceUri = new TextPropertyDescriptor(PROPERTY_RESOURCEURI, Messages.propertyLabelPollEnrichResourceUri);
         PropertyDescriptor descTimeout = new TextPropertyDescriptor(PROPERTY_TIMEOUT, Messages.propertyLabelPollEnrichTimeout);
         PropertyDescriptor descAggregationStrategyRef = new TextPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYREF, Messages.propertyLabelPollEnrichAggregationStrategyRef);
@@ -236,8 +194,6 @@ public class PollEnrich extends AbstractNode {
         PropertyDescriptor descAggregationStrategyMethodAllowNull = new BooleanPropertyDescriptor(PROPERTY_AGGREGATIONSTRATEGYMETHODALLOWNULL, Messages.propertyLabelPollEnrichAggregationStrategyMethodAllowNull);
         PropertyDescriptor descAggregateOnException = new BooleanPropertyDescriptor(PROPERTY_AGGREGATEONEXCEPTION, Messages.propertyLabelPollEnrichAggregateOnException);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_RESOURCEURI, descResourceUri);
         descriptors.put(PROPERTY_TIMEOUT, descTimeout);
         descriptors.put(PROPERTY_AGGREGATIONSTRATEGYREF, descAggregationStrategyRef);
@@ -251,14 +207,6 @@ public class PollEnrich extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_RESOURCEURI.equals(id)) {
             setResourceUri(Objects.convertTo(value, String.class));
             return;
@@ -291,12 +239,6 @@ public class PollEnrich extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_RESOURCEURI.equals(id)) {
             return this.getResourceUri();
         }
@@ -323,8 +265,6 @@ public class PollEnrich extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         PollEnrichDefinition answer = new PollEnrichDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setResourceUri(toXmlPropertyValue(PROPERTY_RESOURCEURI, this.getResourceUri()));
         answer.setTimeout(toXmlPropertyValue(PROPERTY_TIMEOUT, this.getTimeout()));
         answer.setAggregationStrategyRef(toXmlPropertyValue(PROPERTY_AGGREGATIONSTRATEGYREF, this.getAggregationStrategyRef()));
@@ -350,8 +290,6 @@ public class PollEnrich extends AbstractNode {
         if (processor instanceof PollEnrichDefinition) {
             PollEnrichDefinition node = (PollEnrichDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setResourceUri(node.getResourceUri());
             this.setTimeout(node.getTimeout());
             this.setAggregationStrategyRef(node.getAggregationStrategyRef());

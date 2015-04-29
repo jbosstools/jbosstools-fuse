@@ -37,12 +37,8 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class ThrowException extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "ThrowException.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "ThrowException.InheritErrorHandler";
     public static final String PROPERTY_REF = "ThrowException.Ref";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private String ref;
 
     public ThrowException() {
@@ -70,42 +66,6 @@ public class ThrowException extends AbstractNode {
     }
 
     /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
-    }
-
-    /**
      * @return the ref
      */
     public String getRef() {
@@ -127,12 +87,8 @@ public class ThrowException extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelThrowExceptionCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelThrowExceptionInheritErrorHandler);
         PropertyDescriptor descRef = new TextPropertyDescriptor(PROPERTY_REF, Messages.propertyLabelThrowExceptionRef);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_REF, descRef);
     }
 
@@ -141,14 +97,6 @@ public class ThrowException extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_REF.equals(id)) {
             setRef(Objects.convertTo(value, String.class));
             return;
@@ -161,12 +109,6 @@ public class ThrowException extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_REF.equals(id)) {
             return this.getRef();
         }
@@ -178,8 +120,6 @@ public class ThrowException extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         ThrowExceptionDefinition answer = new ThrowExceptionDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setRef(toXmlPropertyValue(PROPERTY_REF, this.getRef()));
 
         super.savePropertiesToCamelDefinition(answer);
@@ -200,8 +140,6 @@ public class ThrowException extends AbstractNode {
         if (processor instanceof ThrowExceptionDefinition) {
             ThrowExceptionDefinition node = (ThrowExceptionDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setRef(node.getRef());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof ThrowExceptionDefinition. Was " + processor.getClass().getName());

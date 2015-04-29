@@ -72,7 +72,7 @@ public class NodeDefinition<T> {
     ));
 
     protected Set<String> ignoredProperties = new HashSet<>(Arrays.asList(
-            "id", "description", "errorHandlerBuilder", "nodeFactory", "outputs", "parent", "whenClauses"
+            "id", "description", "errorHandlerBuilder", "nodeFactory", "outputs", "parent", "whenClauses", "customId", "inheritErrorHandler", "onlyWhenOrOtherwise"
     ));
 
     protected Set<Class<?>> simplePropertyTypes = new HashSet<>(Arrays.asList(
@@ -252,6 +252,11 @@ public class NodeDefinition<T> {
     public List<Property<?>> properties() {
         List<Property<?>> props = new LinkedList<>();
         for (Property<?> n : getIntrospectionProperties()) {
+        	// special case...we want to show the inherit error handler on the load balancer only
+    		if (n.name().equalsIgnoreCase("inheritErrorHandler") && getId().equalsIgnoreCase("loadbalance")) {
+        		props.add(n);
+        	}
+        	// otherwise we check only if the property is in the ignore list	
             if (!ignoredProperties.contains(n.name()) && !isRefForUri(n) && !isTransient(n)) {
                 props.add(n);
             }

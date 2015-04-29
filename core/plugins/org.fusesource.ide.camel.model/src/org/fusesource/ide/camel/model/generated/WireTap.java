@@ -38,8 +38,6 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
  */
 public class WireTap extends AbstractNode {
 
-    public static final String PROPERTY_CUSTOMID = "WireTap.CustomId";
-    public static final String PROPERTY_INHERITERRORHANDLER = "WireTap.InheritErrorHandler";
     public static final String PROPERTY_URI = "WireTap.Uri";
     public static final String PROPERTY_NEWEXCHANGEPROCESSORREF = "WireTap.NewExchangeProcessorRef";
     public static final String PROPERTY_NEWEXCHANGEEXPRESSION = "WireTap.NewExchangeExpression";
@@ -48,8 +46,6 @@ public class WireTap extends AbstractNode {
     public static final String PROPERTY_COPY = "WireTap.Copy";
     public static final String PROPERTY_ONPREPAREREF = "WireTap.OnPrepareRef";
 
-    private Boolean customId;
-    private Boolean inheritErrorHandler;
     private String uri;
     private String newExchangeProcessorRef;
     private ExpressionDefinition newExchangeExpression;
@@ -80,42 +76,6 @@ public class WireTap extends AbstractNode {
     @Override
     public String getCategoryName() {
         return "Routing";
-    }
-
-    /**
-     * @return the customId
-     */
-    public Boolean getCustomId() {
-        return this.customId;
-    }
-
-    /**
-     * @param customId the customId to set
-     */
-    public void setCustomId(Boolean customId) {
-        Boolean oldValue = this.customId;
-        this.customId = customId;
-        if (!isSame(oldValue, customId)) {
-            firePropertyChange(PROPERTY_CUSTOMID, oldValue, customId);
-        }
-    }
-
-    /**
-     * @return the inheritErrorHandler
-     */
-    public Boolean getInheritErrorHandler() {
-        return this.inheritErrorHandler;
-    }
-
-    /**
-     * @param inheritErrorHandler the inheritErrorHandler to set
-     */
-    public void setInheritErrorHandler(Boolean inheritErrorHandler) {
-        Boolean oldValue = this.inheritErrorHandler;
-        this.inheritErrorHandler = inheritErrorHandler;
-        if (!isSame(oldValue, inheritErrorHandler)) {
-            firePropertyChange(PROPERTY_INHERITERRORHANDLER, oldValue, inheritErrorHandler);
-        }
     }
 
     /**
@@ -248,8 +208,6 @@ public class WireTap extends AbstractNode {
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
 
-        PropertyDescriptor descCustomId = new BooleanPropertyDescriptor(PROPERTY_CUSTOMID, Messages.propertyLabelWireTapCustomId);
-        PropertyDescriptor descInheritErrorHandler = new BooleanPropertyDescriptor(PROPERTY_INHERITERRORHANDLER, Messages.propertyLabelWireTapInheritErrorHandler);
         PropertyDescriptor descUri = new TextPropertyDescriptor(PROPERTY_URI, Messages.propertyLabelWireTapUri);
         PropertyDescriptor descNewExchangeProcessorRef = new TextPropertyDescriptor(PROPERTY_NEWEXCHANGEPROCESSORREF, Messages.propertyLabelWireTapNewExchangeProcessorRef);
         PropertyDescriptor descNewExchangeExpression = new ExpressionPropertyDescriptor(PROPERTY_NEWEXCHANGEEXPRESSION, Messages.propertyLabelWireTapNewExchangeExpression);
@@ -258,8 +216,6 @@ public class WireTap extends AbstractNode {
         PropertyDescriptor descCopy = new BooleanPropertyDescriptor(PROPERTY_COPY, Messages.propertyLabelWireTapCopy);
         PropertyDescriptor descOnPrepareRef = new TextPropertyDescriptor(PROPERTY_ONPREPAREREF, Messages.propertyLabelWireTapOnPrepareRef);
 
-        descriptors.put(PROPERTY_CUSTOMID, descCustomId);
-        descriptors.put(PROPERTY_INHERITERRORHANDLER, descInheritErrorHandler);
         descriptors.put(PROPERTY_URI, descUri);
         descriptors.put(PROPERTY_NEWEXCHANGEPROCESSORREF, descNewExchangeProcessorRef);
         descriptors.put(PROPERTY_NEWEXCHANGEEXPRESSION, descNewExchangeExpression);
@@ -274,14 +230,6 @@ public class WireTap extends AbstractNode {
      */
     @Override
     public void setPropertyValue(Object id, Object value) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            setCustomId(Objects.convertTo(value, Boolean.class));
-            return;
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            setInheritErrorHandler(Objects.convertTo(value, Boolean.class));
-            return;
-        }
         if (PROPERTY_URI.equals(id)) {
             setUri(Objects.convertTo(value, String.class));
             return;
@@ -318,12 +266,6 @@ public class WireTap extends AbstractNode {
      */
     @Override
     public Object getPropertyValue(Object id) {
-        if (PROPERTY_CUSTOMID.equals(id)) {
-            return this.getCustomId();
-        }
-        if (PROPERTY_INHERITERRORHANDLER.equals(id)) {
-            return Objects.<Boolean>getField(this, "inheritErrorHandler");
-        }
         if (PROPERTY_URI.equals(id)) {
             return this.getUri();
         }
@@ -353,8 +295,6 @@ public class WireTap extends AbstractNode {
     public ProcessorDefinition createCamelDefinition() {
         WireTapDefinition answer = new WireTapDefinition();
 
-        answer.setCustomId(toXmlPropertyValue(PROPERTY_CUSTOMID, this.getCustomId()));
-        answer.setInheritErrorHandler(toXmlPropertyValue(PROPERTY_INHERITERRORHANDLER, Objects.<Boolean>getField(this, "inheritErrorHandler")));
         answer.setUri(toXmlPropertyValue(PROPERTY_URI, this.getUri()));
         answer.setNewExchangeProcessorRef(toXmlPropertyValue(PROPERTY_NEWEXCHANGEPROCESSORREF, this.getNewExchangeProcessorRef()));
         Objects.setField(answer, "newExchangeExpression", toXmlPropertyValue(PROPERTY_NEWEXCHANGEEXPRESSION, this.getNewExchangeExpression()));
@@ -381,8 +321,6 @@ public class WireTap extends AbstractNode {
         if (processor instanceof WireTapDefinition) {
             WireTapDefinition node = (WireTapDefinition) processor;
 
-            this.setCustomId(node.getCustomId());
-            this.setInheritErrorHandler(Objects.<Boolean>getField(node, "inheritErrorHandler"));
             this.setUri(node.getUri());
             this.setNewExchangeProcessorRef(node.getNewExchangeProcessorRef());
             Objects.setField(this, "newExchangeExpression", node.getNewExchangeExpression());
