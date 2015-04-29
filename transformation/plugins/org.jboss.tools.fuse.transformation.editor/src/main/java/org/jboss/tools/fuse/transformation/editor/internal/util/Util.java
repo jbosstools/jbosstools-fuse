@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
@@ -82,46 +83,110 @@ public class Util {
         return null;
     }
     
-    public static String dragDropComboIsValid (final Model source,
-            final Model target) {
-        if (source == null) {
-            return "Invalid - Source is null.";
+    
+    private static String validateModel (final Model model) {
+        if (model == null) {
+            return "Invalid - Model is null.";
         }
-        if (target == null) {
-            return "Invalid - Target is null.";
+        if (model.getParent() == null) {
+            return "Invalid - You may not map the root node.";
         }
-        if (source.getParent() == null) {
-            return "Invalid - Source may not be the root node.";
+        return null;
+    }
+    
+    private static String validateVariable (final Variable var) {
+        if (var == null) {
+            return "Invalid - Variable is null.";
         }
-        if (target.getParent() == null) {
-            return "Invalid - Target may not be the root node.";
+        if (var.getValue() == null) {
+            return "Invalid - Variables must have a value.";
         }
-        Model sourceModel = source;
-        Model targetModel = target;
-        if (!sourceModel.isCollection() && targetModel.isCollection()) {
-            // invalid
-            return "Invalid - The Source is not a collection, but the Target is.";
+        return null;
+    }
+    
+    private static String validateExpression (final Expression expr) {
+        if (expr == null) {
+            return "Invalid - Expression is null.";
         }
-        if (sourceModel.isCollection() && !targetModel.isCollection()) {
-            // invalid
-            return "Invalid - The Source is a collection, but the Target is not.";
+        if (expr.getExpression() == null) {
+            return "Invalid - Expressions must have an expression value.";
         }
-        if (!sourceModel.getParent().isCollection() && targetModel.getParent().isCollection()) {
-            // invalid
-            return "Invalid - Source parent is not a collection and Target parent is.";
+        if (expr.getLanguage() == null) {
+            return "Invalid - Expressions must have an expression language.";
         }
-        if (sourceModel.getParent().isCollection() && !targetModel.getParent().isCollection()) {
-            // invalid
-            return "Invalid - Source parent is a collection and Target parent is not.";
-        }        
-        if (!sourceModel.getChildren().isEmpty() && !sourceModel.isCollection()) {
-            // invalid
-            return "Invalid - Source model has children and is not a collection.";
+        return null;
+    }
+    
+    private static String validateDropObject (final Object var) {
+        if (var instanceof Model) {
+            return validateModel((Model)var);
         }
-        if (!targetModel.getChildren().isEmpty() && !targetModel.isCollection()) {
-            // invalid
-            return "Invalid - Target model has children and is not a collection";
-        }        
+        if (var instanceof Variable) {
+            return validateVariable((Variable)var);
+        }
+        if (var instanceof Expression) {
+            return validateExpression((Expression) var);
+        }
+        return null;
+    }
+
+    public static String dragDropComboIsValid (final Object source,
+            final Object target) {
+        String sourceMsg = validateDropObject(source);
+        if (sourceMsg != null) return sourceMsg;
+        
+        String targetMsg = validateDropObject(target);
+        if (targetMsg != null) return targetMsg;
+        
+        if (target instanceof Variable || target instanceof Expression) {
+            return "Invalid - Target of a mapping may not be a variable or expression.";
+        }
+        
+        boolean sourceIsModel = (source instanceof Model);
+        boolean sourceIsVariable = (source instanceof Variable);
+        boolean sourceIsExpression = (source instanceof Expression);
+        
+        Model targetModel = (Model) target;
+        
+        if (sourceIsModel && targetModel != null) {
+            Model sourceModel = (Model) source;
+            if (!sourceModel.isCollection() && targetModel.isCollection()) {
+                // invalid
+                return "Invalid - The Source is not a collection, but the Target is.";
+            }
+            if (sourceModel.isCollection() && !targetModel.isCollection()) {
+                // invalid
+                return "Invalid - The Source is a collection, but the Target is not.";
+            }
+            if (!sourceModel.getParent().isCollection() && targetModel.getParent().isCollection()) {
+                // invalid
+                return "Invalid - Source parent is not a collection and Target parent is.";
+            }
+            if (sourceModel.getParent().isCollection() && !targetModel.getParent().isCollection()) {
+                // invalid
+                return "Invalid - Source parent is a collection and Target parent is not.";
+            }        
+            if (!sourceModel.getChildren().isEmpty() && !sourceModel.isCollection()) {
+                // invalid
+                return "Invalid - Source model has children and is not a collection.";
+            }
+        }
+        if (targetModel != null) {
+            if (!targetModel.getChildren().isEmpty() && !targetModel.isCollection()) {
+                // invalid
+                return "Invalid - Target model has children and is not a collection";
+            }
+            if ((sourceIsVariable || sourceIsExpression) && !targetModel.getChildren().isEmpty()) {
+                // invalid
+                return "Invalid - Source is a variable or expression and the Target model has children.";
+            }
+            if ((sourceIsVariable || sourceIsExpression) 
+                    && (targetModel.getParent() == null || !targetModel.getParent().getChildren().isEmpty())) {
+                // invalid
+                return "Invalid - Source is a variable or expression and the Target model is the root or a non-empty collection.";
+            }
+        }
+        
         return null;
     }
     
