@@ -24,10 +24,8 @@ import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer.TraversalListener;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
-import org.jboss.tools.fuse.transformation.model.Model;
 
 final class MappingSummary extends MappingViewer {
 
@@ -120,33 +118,33 @@ final class MappingSummary extends MappingViewer {
         if (eventType.equals(TransformationConfig.MAPPING))
             dispose((MappingOperation<?, ?>) oldValue);
         else if (eventType.equals(TransformationConfig.MAPPING_SOURCE)) {
-            MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
-            if (tempMapping.getSource() instanceof Model && Util.dragSourceIsValid((Model) tempMapping.getSource()) == null) {
+//            MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
+//            if (tempMapping.getSource() instanceof Model && Util.dragSourceIsValid((Model) tempMapping.getSource()) == null) {
+//                mapping = (MappingOperation<?, ?>)newValue;
+//                setSourceText();
+//                mappingSourcePane.layout();
+//                sourceText.setFocus();
+//            } else if (tempMapping.getSource() != null && !(tempMapping.getSource() instanceof Model)) {
                 mapping = (MappingOperation<?, ?>)newValue;
                 setSourceText();
                 mappingSourcePane.layout();
                 sourceText.setFocus();
-            } else if (tempMapping.getSource() != null && !(tempMapping.getSource() instanceof Model)) {
-                mapping = (MappingOperation<?, ?>)newValue;
-                setSourceText();
-                mappingSourcePane.layout();
-                sourceText.setFocus();
-            }
+//            }
         } else if (eventType.equals(TransformationConfig.MAPPING_TARGET)) {
-            MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
-            if (tempMapping.getSource() instanceof Model && tempMapping.getTarget() instanceof Model) {
-                if (Util.dragDropComboIsValid((Model) tempMapping.getSource(), (Model) tempMapping.getTarget()) == null) {
-                    mapping = (MappingOperation<?, ?>)newValue;
-                    setTargetText();
-                    mappingTargetPane.layout();
-                    targetText.setFocus();
-                }
-            } else {
+//            MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
+//            if (tempMapping.getSource() instanceof Model && tempMapping.getTarget() instanceof Model) {
+//                if (Util.dragDropComboIsValid((Model) tempMapping.getSource(), (Model) tempMapping.getTarget()) == null) {
+//                    mapping = (MappingOperation<?, ?>)newValue;
+//                    setTargetText();
+//                    mappingTargetPane.layout();
+//                    targetText.setFocus();
+//                }
+//            } else {
                 mapping = (MappingOperation<?, ?>)newValue;
                 setTargetText();
                 mappingTargetPane.layout();
                 targetText.setFocus();
-            }
+//            }
         } else if (eventType.equals(TransformationConfig.MAPPING_CUSTOMIZE)) {
             mapping = (MappingOperation<?, ?>)newValue;
             setSourceText();

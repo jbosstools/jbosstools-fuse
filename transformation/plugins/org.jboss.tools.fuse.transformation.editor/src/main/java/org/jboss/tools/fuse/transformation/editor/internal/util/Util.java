@@ -43,8 +43,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.jboss.tools.fuse.transformation.Variable;
-import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
@@ -62,86 +62,37 @@ public class Util {
     public static final String RESOURCES_PATH = MAIN_PATH + "resources/";
 
     /**
-     * @param config
-     * @return <code>true</code> if the object being dragged is a valid source object
-     */
-    public static boolean draggingFromValidSource(final TransformationConfig config) {
-        final Object object = draggedObject();
-        return object instanceof Variable ||
-               (object instanceof Model
-                && config.root((Model)object).equals(config.getSourceModel()));
-    }
-
-    public static String dragSourceIsValid (final Model source) {
-        if (source == null) {
-            return "Invalid - Source is null.";
-        }
-        if (source.getParent() == null) {
-            return "Invalid - Source may not be the root node.";
-        }
-        return null;
-    }
-    
-    public static String dragDropComboIsValid (final Model source,
-            final Model target) {
-        if (source == null) {
-            return "Invalid - Source is null.";
-        }
-        if (target == null) {
-            return "Invalid - Target is null.";
-        }
-        if (source.getParent() == null) {
-            return "Invalid - Source may not be the root node.";
-        }
-        if (target.getParent() == null) {
-            return "Invalid - Target may not be the root node.";
-        }
-        Model sourceModel = source;
-        Model targetModel = target;
-        if (!sourceModel.isCollection() && targetModel.isCollection()) {
-            // invalid
-            return "Invalid - The Source is not a collection, but the Target is.";
-        }
-        if (sourceModel.isCollection() && !targetModel.isCollection()) {
-            // invalid
-            return "Invalid - The Source is a collection, but the Target is not.";
-        }
-        if (!sourceModel.getParent().isCollection() && targetModel.getParent().isCollection()) {
-            // invalid
-            return "Invalid - Source parent is not a collection and Target parent is.";
-        }
-        if (sourceModel.getParent().isCollection() && !targetModel.getParent().isCollection()) {
-            // invalid
-            return "Invalid - Source parent is a collection and Target parent is not.";
-        }        
-        if (!sourceModel.getChildren().isEmpty() && !sourceModel.isCollection()) {
-            // invalid
-            return "Invalid - Source model has children and is not a collection.";
-        }
-        if (!targetModel.getChildren().isEmpty() && !targetModel.isCollection()) {
-            // invalid
-            return "Invalid - Target model has children and is not a collection";
-        }        
-        return null;
-    }
-    
-    /**
-     * @param config
-     * @return <code>true</code> if the object being dragged is a valid target object
-     */
-    public static boolean draggingFromValidTarget(final TransformationConfig config) {
-        final Object object = draggedObject();
-        return object instanceof Model
-               && config.root((Model)object).equals(config.getTargetModel());
-    }
-
-    /**
      * @return the object being dragged
      */
     public static Object draggedObject() {
         return ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
                                                              .getSelection())
                                                              .getFirstElement();
+    }
+
+    /**
+     * @param config
+     * @return <code>true</code> if the object being dragged is a valid source object
+     */
+    public static boolean draggingFromValidSource(final TransformationConfig config) {
+        final Object object = draggedObject();
+        if (object instanceof Variable) return true;
+        if (!(object instanceof Model)) return false;
+        final Model model = (Model)object;
+        if (type(model)) return false;
+        return config.root(model).equals(config.getSourceModel());
+    }
+
+    /**
+     * @param config
+     * @return <code>true</code> if the object being dragged is a valid target object
+     */
+    public static boolean draggingFromValidTarget(final TransformationConfig config) {
+        final Object object = draggedObject();
+        if (!(object instanceof Model)) return false;
+        final Model model = (Model)object;
+        if (type(model)) return false;
+        return config.root(model).equals(config.getTargetModel());
     }
 
     /**
@@ -218,6 +169,30 @@ public class Util {
                 event.gc.fillRoundRectangle(0, 0, bounds.width - 1, bounds.height - 1, arc, arc);
             }
         };
+    }
+
+    /**
+     * @param shell
+     * @param extension
+     * @param project
+     * @return The selected resource
+     */
+    public static IResource selectCamelResourceFromWorkspace(final Shell shell,
+                                                        final IProject project) {
+        IJavaProject javaProject = null;
+        if (project != null) javaProject = JavaCore.create(project);
+        CamelResourceClasspathSelectionDialog dialog;
+        if (javaProject == null)
+            dialog = new CamelResourceClasspathSelectionDialog(shell,
+                                                          ResourcesPlugin.getWorkspace().getRoot(),
+                                                          "xml");
+        else dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
+        dialog.setTitle("Select Camel XML File from Project");
+        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
+        dialog.open();
+        final Object[] result = dialog.getResult();
+        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) return null;
+        return (IFile) result[0];
     }
 
     /**
@@ -311,28 +286,24 @@ public class Util {
         return (IFile) result[0];
     }
 
-    /**
-     * @param shell
-     * @param extension
-     * @param project
-     * @return The selected resource
-     */
-    public static IResource selectCamelResourceFromWorkspace(final Shell shell,
-                                                        final IProject project) {
-        IJavaProject javaProject = null;
-        if (project != null) javaProject = JavaCore.create(project);
-        CamelResourceClasspathSelectionDialog dialog;
-        if (javaProject == null)
-            dialog = new CamelResourceClasspathSelectionDialog(shell,
-                                                          ResourcesPlugin.getWorkspace().getRoot(),
-                                                          "xml");
-        else dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
-        dialog.setTitle("Select Camel XML File from Project");
-        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
-        dialog.open();
-        final Object[] result = dialog.getResult();
-        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) return null;
-        return (IFile) result[0];
+    public static boolean type(final Model model) {
+        return (!model.isCollection() && !model.getChildren().isEmpty());
+    }
+
+    public static boolean validSourceAndTarget(final Object source,
+                                               final Object target) {
+        if (!(target instanceof Model)) return false;
+        final Model targetModel = (Model)target;
+        if (targetModel.getParent() == null || Util.type(targetModel)) return false;
+        if (source instanceof Model) {
+            final Model sourceModel = (Model)source;
+            if (sourceModel.isCollection() != targetModel.isCollection()
+                || sourceModel.getParent() == null
+                || sourceModel.getParent().isCollection() != targetModel.getParent().isCollection())
+                return false;
+        } else if (targetModel.isCollection() || targetModel.getParent().isCollection())
+            return false;
+        return true;
     }
 
     private Util() {}

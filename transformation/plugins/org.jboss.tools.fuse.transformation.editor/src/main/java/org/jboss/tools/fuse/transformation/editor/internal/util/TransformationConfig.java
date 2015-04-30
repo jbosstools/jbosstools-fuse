@@ -87,8 +87,7 @@ public class TransformationConfig implements MapperConfiguration {
     public TransformationConfig(final IFile file,
                                 final URLClassLoader loader) throws Exception {
         this.file = file;
-        this.delegate = DozerMapperConfiguration.loadConfig(new File(file.getLocationURI()),
-                                                            loader);
+        delegate = DozerMapperConfiguration.loadConfig(new File(file.getLocationURI()), loader);
     }
 
     /**
@@ -147,6 +146,16 @@ public class TransformationConfig implements MapperConfiguration {
         return customMapping;
     }
 
+    Model find(final Object object,
+               final Model model) {
+        if (model.equals(object)) return model;
+        for (final Model child : model.getChildren()) {
+            final Model match = find(object, child);
+            if (match != null) return match;
+        }
+        return null;
+    }
+
     private void fireEvent(final String eventType,
                            final Object oldValue,
                            final Object newValue) {
@@ -181,7 +190,119 @@ public class TransformationConfig implements MapperConfiguration {
      */
     @Override
     public List<MappingOperation<?, ?>> getMappings() {
-        final List<MappingOperation<?, ?>> mappings = delegate.getMappings();
+        final List<MappingOperation<?, ?>> mappings = new ArrayList<>();
+        for (final MappingOperation<?, ?> mapping : delegate.getMappings()) {
+            final Model target = find(mapping.getTarget(), delegate.getTargetModel());
+            if (target == null)
+                throw new RuntimeException("Unable to find target model: " + mapping.getTarget());
+            if (mapping.getType() == MappingType.FIELD) {
+                final Model source = find(mapping.getSource(), delegate.getSourceModel());
+                if (source == null)
+                    throw new RuntimeException("Unable to find source model: " + mapping.getSource());
+                mappings.add(new FieldMapping() {
+
+                    @Override
+                    public Model getSource() {
+                        return source;
+                    }
+
+                    @Override
+                    public Model getTarget() {
+                        return target;
+                    }
+
+                    @Override
+                    public MappingType getType() {
+                        return mapping.getType();
+                    }
+                });
+            } else if (mapping.getType() == MappingType.CUSTOM) {
+                final Model source = find(mapping.getSource(), delegate.getSourceModel());
+                if (source == null)
+                    throw new RuntimeException("Unable to find source model: " + mapping.getSource());
+                final CustomMapping customMapping = (CustomMapping)mapping;
+                mappings.add(new CustomMapping() {
+
+                    @Override
+                    public String getMappingClass() {
+                        return customMapping.getMappingClass();
+                    }
+
+                    @Override
+                    public String getMappingOperation() {
+                        return customMapping.getMappingOperation();
+                    }
+
+                    @Override
+                    public Model getSource() {
+                        return source;
+                    }
+
+                    @Override
+                    public Model getTarget() {
+                        return target;
+                    }
+
+                    @Override
+                    public MappingType getType() {
+                        return mapping.getType();
+                    }
+
+                    @Override
+                    public void setMappingClass(final String className) {
+                        customMapping.setMappingClass(className);
+                    }
+
+                    @Override
+                    public void setMappingOperation(final String operationName) {
+                        customMapping.setMappingOperation(operationName);
+                    }
+                });
+            } else if (mapping.getType() == MappingType.VARIABLE) {
+                final VariableMapping variableMapping = (VariableMapping)mapping;
+                mappings.add(new VariableMapping() {
+
+                    @Override
+                    public Variable getSource() {
+                        return variableMapping.getSource();
+                    }
+
+                    @Override
+                    public Model getTarget() {
+                        return target;
+                    }
+
+                    @Override
+                    public MappingType getType() {
+                        return mapping.getType();
+                    }
+
+                    @Override
+                    public void setVariable(final Variable variable) {
+                        variableMapping.setVariable(variable);
+                    }
+                });
+            } else if (mapping.getType() == MappingType.EXPRESSION) {
+                final ExpressionMapping expressionMapping = (ExpressionMapping)mapping;
+                mappings.add(new ExpressionMapping() {
+
+                    @Override
+                    public Expression getSource() {
+                        return expressionMapping.getSource();
+                    }
+
+                    @Override
+                    public Model getTarget() {
+                        return target;
+                    }
+
+                    @Override
+                    public MappingType getType() {
+                        return mapping.getType();
+                    }
+                });
+            }
+        }
         mappings.addAll(mappingPlaceholders);
         return mappings;
     }
@@ -501,7 +622,7 @@ public class TransformationConfig implements MapperConfiguration {
                 }
             } else {
                 if (mapping.getType() != null) delegate.removeMapping(mapping);
-                Expression expression = (Expression)source;
+                final Expression expression = (Expression)source;
                 resultMapping = delegate.mapExpression(expression.getLanguage(),
                                                        expression.getExpression(),
                                                        target);

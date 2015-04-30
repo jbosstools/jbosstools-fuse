@@ -26,11 +26,11 @@ import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.Variable;
-import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 abstract class MappingViewer {
 
@@ -56,7 +56,9 @@ abstract class MappingViewer {
 
             @Override
             boolean draggingFromValidObject() {
-                return Util.draggingFromValidSource(config);
+                return Util.draggingFromValidSource(config)
+                       && Util.validSourceAndTarget(Util.draggedObject(),
+                                                                mapping.getTarget());
             }
 
             @Override
@@ -69,7 +71,9 @@ abstract class MappingViewer {
             @Override
             public boolean valid() {
                 return mapping.getType() != MappingType.CUSTOM
-                       && Util.draggingFromValidSource(config);
+                       && Util.draggingFromValidSource(config)
+                       && Util.validSourceAndTarget(Util.draggedObject(),
+                               mapping.getTarget());
             }
         });
     }
@@ -83,7 +87,9 @@ abstract class MappingViewer {
 
             @Override
             boolean draggingFromValidObject() {
-                return Util.draggingFromValidTarget(config);
+                return Util.draggingFromValidTarget(config)
+                       && Util.validSourceAndTarget(mapping.getSource(),
+                                                                Util.draggedObject());
             }
 
             @Override
@@ -96,7 +102,9 @@ abstract class MappingViewer {
             @Override
             public boolean valid() {
                 return mapping.getType() != MappingType.CUSTOM
-                       && Util.draggingFromValidTarget(config);
+                       && Util.draggingFromValidTarget(config)
+                       && Util.validSourceAndTarget(mapping.getSource(),
+                                                                Util.draggedObject());
             }
         });
     }
