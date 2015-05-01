@@ -600,11 +600,11 @@ public final class MappingDetailViewer extends MappingViewer {
         }
 
         void validate() {
-            boolean enabled = field != null && !Util.type(field);
+            boolean enabled = field != null && !Util.type(config.model(field));
             if (enabled) {
                 if (rootModel.equals(config.getSourceModel()))
-                    enabled = Util.validSourceAndTarget(field, mapping.getTarget());
-                else enabled = Util.validSourceAndTarget(mapping.getSource(), field);
+                    enabled = Util.validSourceAndTarget(field, mapping.getTarget(), config);
+                else enabled = Util.validSourceAndTarget(mapping.getSource(), field, config);
             }
             setErrorMessage(enabled ? null : "Invalid field");
             getButton(IDialogConstants.OK_ID).setEnabled(enabled);

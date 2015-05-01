@@ -370,7 +370,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                             return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
                                    && Util.draggingFromValidSource(config)
                                    && Util.validSourceAndTarget(Util.draggedObject(),
-                                                                            target);
+                                                                target,
+                                                                config);
                         }
                     });
                     potentialDropTargets.add(new PotentialDropTarget(treeViewer.getTree()) {

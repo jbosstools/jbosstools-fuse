@@ -58,7 +58,8 @@ abstract class MappingViewer {
             boolean draggingFromValidObject() {
                 return Util.draggingFromValidSource(config)
                        && Util.validSourceAndTarget(Util.draggedObject(),
-                                                                mapping.getTarget());
+                                                    mapping.getTarget(),
+                                                    config);
             }
 
             @Override
@@ -73,7 +74,8 @@ abstract class MappingViewer {
                 return mapping.getType() != MappingType.CUSTOM
                        && Util.draggingFromValidSource(config)
                        && Util.validSourceAndTarget(Util.draggedObject(),
-                               mapping.getTarget());
+                                                    mapping.getTarget(),
+                                                    config);
             }
         });
     }
@@ -89,7 +91,8 @@ abstract class MappingViewer {
             boolean draggingFromValidObject() {
                 return Util.draggingFromValidTarget(config)
                        && Util.validSourceAndTarget(mapping.getSource(),
-                                                                Util.draggedObject());
+                                                    Util.draggedObject(),
+                                                    config);
             }
 
             @Override
@@ -104,7 +107,8 @@ abstract class MappingViewer {
                 return mapping.getType() != MappingType.CUSTOM
                        && Util.draggingFromValidTarget(config)
                        && Util.validSourceAndTarget(mapping.getSource(),
-                                                                Util.draggedObject());
+                                                    Util.draggedObject(),
+                                                    config);
             }
         });
     }
