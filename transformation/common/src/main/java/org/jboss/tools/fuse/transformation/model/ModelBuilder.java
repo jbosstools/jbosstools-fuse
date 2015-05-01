@@ -77,12 +77,14 @@ public class ModelBuilder {
                 }
             } else {
                 fieldType = field.getType().getName();
-                if (!field.getType().isPrimitive()
-                        && !field.getType().getName().equals(String.class.getName())
-                        && !field.getType().getName().startsWith("java.lang")
-                        && !Number.class.isAssignableFrom(field.getType())) {
+                Class<?> fieldClass = field.getType();
+                if (!fieldClass.isPrimitive()
+                        && !fieldType.equals(String.class.getName())
+                        && !fieldType.startsWith("java.lang")
+                        && !Number.class.isAssignableFrom(fieldClass)
+                        && !(fieldClass instanceof Class<?> && ((Class<?>)fieldClass).isEnum())) {
 
-                    childFields = getFields(field.getType());
+                    childFields = getFields(fieldClass);
                 }
             }
 

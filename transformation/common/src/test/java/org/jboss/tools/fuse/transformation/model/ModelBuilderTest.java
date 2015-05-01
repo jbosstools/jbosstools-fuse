@@ -40,6 +40,12 @@ public class ModelBuilderTest {
         Model model = ModelBuilder.fromJavaClass(ContainsNumber.class);
         Assert.assertEquals(1, model.listFields().size());
     }
+    
+    @Test
+    public void buildWithEnum() {
+        Model model = ModelBuilder.fromJavaClass(ClassWithEnum.class);
+        Assert.assertEquals(1, model.listFields().size());
+    }
 }
 
 class NoSuper {
@@ -60,6 +66,19 @@ class NoSuper {
     
     public void setFieldTwo(String fieldTwo) {
         this.fieldTwo = fieldTwo;
+    }
+}
+
+class ClassWithEnum {
+    enum MY_ENUM {one, two, three};
+    private MY_ENUM myEnum;
+    
+    public MY_ENUM getEnum() {
+        return myEnum;
+    }
+    
+    public void setEnum(MY_ENUM myEnum) {
+        this.myEnum = myEnum;
     }
 }
 
