@@ -139,7 +139,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
             new MappingDetailViewer(config, verticalSplitter, potentialDropTargets);
         // Configure size of components in splitters
         verticalSplitter.setWeights(new int[] {75, 25});
-        horizontalSplitter.setWeights(new int[] {33, 34, 33});
+        horizontalSplitter.setWeights(new int[] {36, 28, 36});
         // Wire tree buttons to toggle model viewers between visible and hidden
         sourceViewerButton.addSelectionListener(new SelectionAdapter() {
 
