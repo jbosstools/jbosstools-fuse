@@ -108,8 +108,13 @@ public abstract class CamelConfigBuilder {
         return dataFormat;
     }
     
-    public CamelEndpoint createEndpoint(String transformId, String dozerConfigPath,
-            String sourceClass, String targetClass, DataFormatDefinition unmarshaller, DataFormatDefinition marshaller) {
+    public CamelEndpoint createEndpoint(String transformId, 
+            String dozerConfigPath,
+            String sourceClass, 
+            String targetClass, 
+            DataFormatDefinition unmarshaller,
+            DataFormatDefinition marshaller) {
+        
         String unmarshallerId = unmarshaller != null ? unmarshaller.getId() : null;
         String marshallerId = marshaller != null ? marshaller.getId() : null;
         String endpointUri = EndpointHelper.createEndpointUri(dozerConfigPath,

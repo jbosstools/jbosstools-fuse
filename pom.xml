@@ -81,6 +81,7 @@
   </properties>
 
   <modules>
+    <module>build-config</module>
     <module>tools</module>
     <module>core</module>
     <module>editor</module>
@@ -248,13 +249,13 @@
         <configuration>
             <configLocation>checkstyle/checkstyle.xml</configLocation>
             <suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
-            <failsOnError>true</failsOnError>
+            <failOnError>true</failOnError>
             <useFile/>
         </configuration>
         <dependencies>
             <dependency>
-                <groupId>org.jboss.mapper</groupId>
-                <artifactId>data-mapper-build</artifactId>
+                <groupId>org.fusesource.ide</groupId>
+                <artifactId>build-config</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

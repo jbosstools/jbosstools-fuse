@@ -156,15 +156,15 @@ public class XmlModelGenerator {
         while (packageIt.hasNext()) {
             Iterator<JDefinedClass> classIt = packageIt.next().classes();
             while (classIt.hasNext()) {
-                JDefinedClass jClass = classIt.next();
+                JDefinedClass jdClass = classIt.next();
                 // Top-level elements will result in classes with the @XmlRootElement annotation
                 // which is all we care about.
-                for (JAnnotationUse ann : jClass.annotations()) {
+                for (JAnnotationUse ann : jdClass.annotations()) {
                     if (ann.getAnnotationClass().fullName().equals(XmlRootElement.class.getName())) {
-                        JAnnotationValue jVal = ann.getAnnotationMembers().get("name");
+                        JAnnotationValue jaVal = ann.getAnnotationMembers().get("name");
                         StringWriter sw = new StringWriter();
-                        jVal.generate(new JFormatter(sw));
-                        mappings.put(sw.toString().replaceAll("\"", ""), jClass.fullName());
+                        jaVal.generate(new JFormatter(sw));
+                        mappings.put(sw.toString().replaceAll("\"", ""), jdClass.fullName());
                     }
                 }
             }
