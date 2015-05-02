@@ -26,15 +26,8 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.util.LocalSelectionTransfer;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -50,19 +43,15 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
 import org.jboss.tools.fuse.transformation.MappingOperation;
-import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.camel.CamelEndpoint;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
-import org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder;
-import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
-import org.jboss.tools.fuse.transformation.editor.internal.VariablesViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.SourceTabFolder;
+import org.jboss.tools.fuse.transformation.editor.internal.TargetTabFolder;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
-import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
@@ -79,7 +68,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
     MappingsViewer mappingsViewer;
     Text helpText;
-    ModelTabFolder sourceModelTabFolder, targetModelTabFolder;
+    SourceTabFolder sourceTabFolder;
+    TargetTabFolder targetTabFolder;
     MappingDetailViewer mappingDetailViewer;
     ToolItem sourceViewerButton, targetViewerButton;
 
@@ -128,12 +118,19 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                                                         .create());
         horizontalSplitter.setBackground(parent.getDisplay().getSystemColor(SASH_COLOR));
         horizontalSplitter.setSashWidth(SASH_WIDTH);
-        // Create source model tab folder
-        sourceModelTabFolder = new SourceModelTabFolder(horizontalSplitter);
+        // Create source tab folder
+        sourceTabFolder = new SourceTabFolder(config, horizontalSplitter, potentialDropTargets);
+        sourceTabFolder.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(final SelectionEvent event) {
+                updateHelpText();
+            }
+        });
         // Create transformation viewer
         mappingsViewer = new MappingsViewer(config, this, horizontalSplitter, potentialDropTargets);
-        // Create target model tab folder
-        targetModelTabFolder = new TargetModelTabFolder(horizontalSplitter);
+        // Create target tab folder
+        targetTabFolder = new TargetTabFolder(config, horizontalSplitter, potentialDropTargets);
         // Create detail area
         mappingDetailViewer =
             new MappingDetailViewer(config, verticalSplitter, potentialDropTargets);
@@ -145,7 +142,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                sourceModelTabFolder.setVisible(sourceViewerButton.getSelection());
+                sourceTabFolder.setVisible(sourceViewerButton.getSelection());
                 horizontalSplitter.layout();
                 sourceViewerButton.setToolTipText(sourceViewerButton.getSelection()
                                                   ? "Hide the source/variables viewers"
@@ -158,7 +155,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                targetModelTabFolder.setVisible(targetViewerButton.getSelection());
+                targetTabFolder.setVisible(targetViewerButton.getSelection());
                 horizontalSplitter.layout();
                 targetViewerButton.setToolTipText(targetViewerButton.getSelection()
                                                   ? "Hide the target viewer"
@@ -277,8 +274,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
      * @param mapping
      */
     public void selected(final MappingOperation<?, ?> mapping) {
-        sourceModelTabFolder.select(mapping.getSource());
-        targetModelTabFolder.select(mapping.getTarget());
+        sourceTabFolder.select(mapping.getSource());
+        targetTabFolder.select(mapping.getTarget());
         mappingDetailViewer.update(mapping);
     }
 
@@ -294,7 +291,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
     void updateHelpText() {
         if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
-            if (sourceModelTabFolder.getSelectionIndex() == 0)
+            if (sourceTabFolder.getSelectionIndex() == 0)
                 helpText.setText("Create a new mapping below by dragging a field in source "
                                  + config.getSourceModel().getName()
                                  + " on the left to a field in target "
@@ -303,87 +300,5 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                                   + " of variables on the left to a field in target "
                                   + config.getTargetModel().getName() + " on the right.");
         } else helpText.setText("");
-    }
-
-    class SourceModelTabFolder extends ModelTabFolder {
-
-        private final VariablesViewer variablesViewer;
-
-        SourceModelTabFolder(final Composite parent) {
-            super(config, parent, "Source", config.getSourceModel(), potentialDropTargets);
-
-            // Create variables tab
-            final CTabItem variablesTab = new CTabItem(this, SWT.NONE);
-            variablesTab.setText("Variables");
-            variablesViewer = new VariablesViewer(config, this);
-            variablesTab.setControl(variablesViewer);
-            variablesTab.setImage(Images.VARIABLE);
-            addSelectionListener(new SelectionAdapter() {
-
-                @Override
-                public void widgetSelected(final SelectionEvent event) {
-                    updateHelpText();
-                }
-            });
-        }
-    }
-
-    class TargetModelTabFolder extends ModelTabFolder {
-
-        TargetModelTabFolder(final Composite parent) {
-            super(config, parent, "Target", config.getTargetModel(), potentialDropTargets);
-        }
-
-        @Override
-        protected ModelViewer constructModelViewer(final TransformationConfig config,
-                                                   final List<PotentialDropTarget> potentialDropTargets) {
-            final class TargetModelViewer extends ModelViewer {
-
-                TargetModelViewer(final Composite parent) {
-                    super(config, parent, config.getTargetModel(), potentialDropTargets);
-                    treeViewer.addDropSupport(DND.DROP_MOVE,
-                                              new Transfer[] {LocalSelectionTransfer.getTransfer()},
-                                              new ViewerDropAdapter(treeViewer) {
-
-                        @Override
-                        public boolean performDrop(final Object data) {
-                            try {
-                              final Object source =
-                                  ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
-                                                                                .getSelection())
-                                                                                .getFirstElement();
-                              if (source instanceof Model)
-                                  config.mapField((Model) source, (Model) getCurrentTarget());
-                              else config.mapVariable((Variable) source, (Model) getCurrentTarget());
-                              config.save();
-                              return true;
-                            } catch (final Exception e) {
-                              Activator.error(e);
-                              return false;
-                            }
-                        }
-
-                        @Override
-                        public boolean validateDrop(final Object target,
-                                                    final int operation,
-                                                    final TransferData transferType) {
-                            return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
-                                   && Util.draggingFromValidSource(config)
-                                   && Util.validSourceAndTarget(Util.draggedObject(),
-                                                                target,
-                                                                config);
-                        }
-                    });
-                    potentialDropTargets.add(new PotentialDropTarget(treeViewer.getTree()) {
-
-                        @Override
-                        public boolean valid() {
-                            return Util.draggingFromValidSource(config);
-                        }
-                    });
-                }
-            }
-            return new TargetModelViewer(this);
-        }
     }
 }

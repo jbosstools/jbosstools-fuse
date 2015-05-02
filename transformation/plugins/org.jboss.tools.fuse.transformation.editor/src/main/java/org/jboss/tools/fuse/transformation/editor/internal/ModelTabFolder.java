@@ -17,20 +17,14 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
-import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.model.Model;
 
-/**
- *
- */
-public class ModelTabFolder extends CTabFolder {
+abstract class ModelTabFolder extends CTabFolder {
 
     final Model model;
 
-    /**
-     *
-     */
-    protected final ModelViewer modelViewer;
+    final ModelViewer modelViewer;
 
     /**
      * @param config
@@ -39,11 +33,11 @@ public class ModelTabFolder extends CTabFolder {
      * @param model
      * @param potentialDropTargets
      */
-    public ModelTabFolder(final TransformationConfig config,
-                          final Composite parent,
-                          final String title,
-                          final Model model,
-                          final List<PotentialDropTarget> potentialDropTargets) {
+    ModelTabFolder(final TransformationConfig config,
+                   final Composite parent,
+                   final String title,
+                   final Model model,
+                   final List<PotentialDropTarget> potentialDropTargets) {
         super(parent, SWT.BORDER);
 
         this.model = model;
@@ -63,12 +57,7 @@ public class ModelTabFolder extends CTabFolder {
         setSelection(tab);
     }
 
-    /**
-     * @param config
-     * @param potentialDropTargets
-     * @return this tab folder's model viewer
-     */
-    protected ModelViewer constructModelViewer(final TransformationConfig config,
+    ModelViewer constructModelViewer(final TransformationConfig config,
                                                final List<PotentialDropTarget> potentialDropTargets) {
         return new ModelViewer(config, this, model, potentialDropTargets);
     }

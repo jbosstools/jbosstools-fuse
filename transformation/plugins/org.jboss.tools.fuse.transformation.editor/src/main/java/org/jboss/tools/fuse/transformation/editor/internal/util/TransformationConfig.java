@@ -526,7 +526,8 @@ public class TransformationConfig implements MapperConfiguration {
                                                               customMapping.getMappingOperation());
                 }
             } else if (source instanceof Variable) {
-                if (mapping.getType() == MappingType.VARIABLE) {
+                if (mapping.getType() == MappingType.VARIABLE
+                    && target.equals(mapping.getTarget())) {
                     resultMapping = mapping;
                     ((VariableMapping)mapping).setVariable((Variable)source);
                 } else {
