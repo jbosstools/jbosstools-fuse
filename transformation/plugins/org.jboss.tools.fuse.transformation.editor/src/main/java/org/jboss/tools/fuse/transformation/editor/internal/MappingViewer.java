@@ -197,7 +197,7 @@ abstract class MappingViewer {
             if (mapping.getType() != MappingType.CUSTOM && draggingFromValidObject()) {
                 dropText.setBackground(Colors.DROP_TARGET_BACKGROUND);
                 dropText.setForeground(Colors.DROP_TARGET_FOREGROUND);
-            }
+            } else event.detail = DND.DROP_NONE;
         }
 
         abstract boolean draggingFromValidObject();
