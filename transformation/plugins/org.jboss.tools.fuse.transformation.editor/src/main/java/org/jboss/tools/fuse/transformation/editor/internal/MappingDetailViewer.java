@@ -49,7 +49,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
-import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.catalog.languages.Language;
 import org.jboss.tools.fuse.transformation.CustomMapping;
@@ -309,7 +308,7 @@ public final class MappingDetailViewer extends MappingViewer {
     void setExpression() throws Exception {
         final ExpressionDialog dlg = new ExpressionDialog();
         if (dlg.open() != Window.OK) return;
-        MavenUtils.updateMavenDependencies(dlg.language.getDependencies());
+        Util.updateMavenDependencies(dlg.language.getDependencies(), config.project());
         mapping = config.setSourceExpression(mapping, dlg.language.getName(), dlg.expression);
         config.save();
     }

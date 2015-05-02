@@ -9,6 +9,10 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +21,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -30,6 +36,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -42,6 +49,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.fusesource.ide.camel.model.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.model.Model;
@@ -288,6 +296,49 @@ public class Util {
 
     public static boolean type(final Model model) {
         return (!model.isCollection() && !model.getChildren().isEmpty());
+    }
+
+    public static void updateMavenDependencies(final List<Dependency> dependencies,
+                                               final IProject project) throws CoreException {
+        final IFile pomIFile = project.getProject().getFile("pom.xml");
+        final File pomFile = new File(pomIFile.getLocationURI());
+        final org.apache.maven.model.Model pom = MavenPlugin.getMaven().readModel(pomFile);
+
+        // Check if dependency already in the pom
+        final List<Dependency> missingDependencies = new ArrayList<>();
+        for (final Dependency dependency : dependencies) {
+            boolean found = false;
+            for (final org.apache.maven.model.Dependency pomDependency : pom.getDependencies()) {
+                if (pomDependency.getGroupId().equalsIgnoreCase(dependency.getGroupId()) &&
+                    pomDependency.getArtifactId().equalsIgnoreCase(dependency.getArtifactId())) {
+                    // check for correct version
+                    if (!pomDependency.getVersion().equalsIgnoreCase(dependency.getVersion()))
+                        pomDependency.setVersion(dependency.getVersion());
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) missingDependencies.add(dependency);
+        }
+
+        for (final Dependency dependency : missingDependencies) {
+            final org.apache.maven.model.Dependency pomDependency =
+                new org.apache.maven.model.Dependency();
+            pomDependency.setGroupId(dependency.getGroupId());
+            pomDependency.setArtifactId(dependency.getArtifactId());
+            pomDependency.setVersion(dependency.getVersion());
+            pom.addDependency(pomDependency);
+        }
+
+        if (!missingDependencies.isEmpty()) {
+            try (final OutputStream stream =
+                     new BufferedOutputStream(new FileOutputStream(pomFile))) {
+                MavenPlugin.getMaven().writeModel(pom, stream);
+                pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+            } catch (final Exception e) {
+                Activator.error(e);
+            }
+        }
     }
 
     public static boolean validSourceAndTarget(final Object source,
