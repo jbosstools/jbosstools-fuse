@@ -599,7 +599,7 @@ public final class MappingDetailViewer extends MappingViewer {
         }
 
         void validate() {
-            boolean enabled = field != null && !Util.type(config.model(field));
+            boolean enabled = field != null && !Util.type(field);
             if (enabled) {
                 if (rootModel.equals(config.getSourceModel()))
                     enabled = Util.validSourceAndTarget(field, mapping.getTarget(), config);

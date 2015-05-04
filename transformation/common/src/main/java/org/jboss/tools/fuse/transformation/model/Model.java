@@ -47,14 +47,21 @@ public class Model {
     }
 
     public Model get(String nodeName) {
+        Model model = null;
         if (nodeName.contains(".")) {
-            int idx = nodeName.indexOf(".");
-            String parent = nodeName.substring(0, idx);
-            String child = nodeName.substring(idx + 1, nodeName.length());
-            return children.get(parent).get(child);
+            if (hasChildren()) {
+                int idx = nodeName.indexOf(".");
+                String parent = nodeName.substring(0, idx);
+                String child = nodeName.substring(idx + 1, nodeName.length());
+                Model parentModel = children.get(parent);
+                if (parentModel != null) {
+                    model = parentModel.get(child);
+                }
+            }
         } else {
             return children.get(nodeName);
         }
+        return model;
     }
 
     public String getName() {
@@ -71,6 +78,10 @@ public class Model {
 
     public boolean isCollection() {
         return isCollection;
+    }
+    
+    public boolean hasChildren() {
+        return children.size() > 0;
     }
 
     public Model setIsCollection(boolean isCollection) {

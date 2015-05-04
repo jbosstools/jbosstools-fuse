@@ -345,10 +345,10 @@ public class Util {
                                                final Object target,
                                                final TransformationConfig config) {
         if (!(target instanceof Model)) return false;
-        final Model targetModel = config.model((Model)target);
+        final Model targetModel = (Model)target;
         if (targetModel.getParent() == null || Util.type(targetModel)) return false;
         if (source instanceof Model) {
-            final Model sourceModel = config.model((Model)source);
+            final Model sourceModel = (Model)source;
             if (sourceModel.isCollection() != targetModel.isCollection()
                 || sourceModel.getParent() == null
                 || sourceModel.getParent().isCollection() != targetModel.getParent().isCollection())
