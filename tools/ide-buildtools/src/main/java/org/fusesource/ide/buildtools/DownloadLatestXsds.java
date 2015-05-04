@@ -72,7 +72,7 @@ public class DownloadLatestXsds implements Runnable {
         pluginXmlBuffer.append("<?eclipse version=\"3.4\"?>\n");
         pluginXmlBuffer.append("<plugin>\n");
         pluginXmlBuffer.append("  <extension point=\"org.eclipse.wst.xml.core.catalogContributions\">\n");
-        pluginXmlBuffer.append("    <catalogContribution id=\"org.fusesource.ide.catalogs\">\n");
+        pluginXmlBuffer.append("    <catalogContribution id=\"default\">\n");
 
         for (Schema schema: xsdArchetypes) {
             try {
@@ -115,9 +115,12 @@ public class DownloadLatestXsds implements Runnable {
                 }
 
                 pluginXmlBuffer.append("      <uri\n");
-                pluginXmlBuffer.append("          id=\"org.fusesource.xml.catalog.uri." + n + "\"\n");
-                pluginXmlBuffer.append("          name=\"http://" + group + ".apache.org/schema/" + n.substring(n.indexOf('-') + 1) + "/" + n + ".xsd\"\n");
-                pluginXmlBuffer.append("          uri=\"xsd/fuse/" + fileName + "\" />\n");
+                pluginXmlBuffer.append("          name=\"http://" + group + ".apache.org/schema/");
+                if (postfix.trim().length()>0) {
+                	pluginXmlBuffer.append(postfix.substring(postfix.indexOf('-') + 1) + "/");
+                }
+                pluginXmlBuffer.append(n.substring(n.indexOf('-') + 1) + "\"\n");
+                pluginXmlBuffer.append("          uri=\"platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/" + fileName + "\" />\n");
             } catch (IOException e) {
                 LOG.error("WARNING: not found: " + e.getMessage(), e);
             }

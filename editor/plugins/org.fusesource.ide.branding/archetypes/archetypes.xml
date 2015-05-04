@@ -7,6 +7,6 @@
 <archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-spring' version='2.15.1'>Creates a new Camel project with added Spring DSL support.</archetype>
 <archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-spring-dm' version='2.15.1'>Creates a new Camel project with added Spring DSL support. Ready to be deployed in OSGi.</archetype>
 <archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-web' version='2.15.1'>Creates a new Camel web project that deploys the Camel routes as a WAR</archetype>
-<archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxrs-service' version='3.0.2.redhat-620103'>Simple CXF JAX-RS webapp service using Spring configuration</archetype>
-<archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxws-javafirst' version='3.0.2.redhat-620103'>Creates a project for developing a Web service starting from Java code</archetype>
+<archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxrs-service' version='3.0.2.redhat-620099'>Simple CXF JAX-RS webapp service using Spring configuration</archetype>
+<archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxws-javafirst' version='3.0.2.redhat-620099'>Creates a project for developing a Web service starting from Java code</archetype>
 </archetypes>
