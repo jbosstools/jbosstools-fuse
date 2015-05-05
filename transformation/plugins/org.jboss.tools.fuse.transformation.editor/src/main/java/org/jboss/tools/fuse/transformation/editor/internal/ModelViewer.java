@@ -103,6 +103,7 @@ public class ModelViewer extends Composite {
         setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
 
         final ToolBar toolBar = new ToolBar(this, SWT.NONE);
+        toolBar.setBackground(getBackground());
         final ToolItem collapseAllButton = new ToolItem(toolBar, SWT.PUSH);
         collapseAllButton.setImage(Images.COLLAPSE_ALL);
         final ToolItem filterTypesButton = new ToolItem(toolBar, SWT.CHECK);
@@ -116,16 +117,18 @@ public class ModelViewer extends Composite {
         searchPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         searchPane.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
         searchPane.setToolTipText("Search");
-        searchPane.setBackground(Colors.BACKGROUND);
+        searchPane.setBackground(getBackground());
         final Label searchLabel = new Label(searchPane, SWT.NONE);
         searchLabel.setImage(Images.SEARCH);
         searchLabel.setToolTipText("Search");
+        searchLabel.setBackground(getBackground());
         final Text searchText = new Text(searchPane, SWT.NONE);
         searchText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         searchText.setToolTipText("Search");
         final Label clearSearchLabel = new Label(searchPane, SWT.NONE);
         clearSearchLabel.setImage(Images.CLEAR);
         clearSearchLabel.setToolTipText("Search");
+        clearSearchLabel.setBackground(getBackground());
         searchPane.addPaintListener(Util.ovalBorderPainter());
 
         treeViewer = new TreeViewer(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
