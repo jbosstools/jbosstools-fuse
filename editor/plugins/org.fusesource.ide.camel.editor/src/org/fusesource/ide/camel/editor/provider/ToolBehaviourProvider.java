@@ -71,6 +71,7 @@ import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.catalog.components.Component;
 import org.fusesource.ide.camel.model.catalog.components.ComponentModel;
 import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
@@ -80,9 +81,14 @@ import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
  */
 public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 
-    private static final String PALETTE_ENTRY_PROVIDER_EXT_POINT_ID = "org.fusesource.ide.editor.paletteContributor";
+    public static final String PALETTE_ENTRY_PROVIDER_EXT_POINT_ID = "org.fusesource.ide.editor.paletteContributor";
+    public static final String PALETTE_CATEGORY_NAME = "categoryName";
+    public static final String PALETTE_ICON_ATTR = "paletteIcon";
+    public static final String DIAGRAM_IMAGE_ATTR = "diagramImage";
+    public static final String EXT_ID_ATTR = "id";
+    
+    private static HashMap<ICreateFeature, IConfigurationElement> paletteItemExtensions = new HashMap<ICreateFeature, IConfigurationElement>();
 
-    private static HashMap<ICreateFeature, ICustomPaletteEntry> paletteItemExtensions = new HashMap<ICreateFeature, ICustomPaletteEntry>();
     private static final ArrayList<String> CONNECTORS_WHITELIST;
     
     static {
@@ -366,9 +372,10 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
                     PaletteCategoryItemProvider.CATEGORY_TYPE pcit = null;
                     String catname = null;
                     if (paletteItemExtensions.containsKey(octe.getCreateFeature())) {
-                    	catname = paletteItemExtensions.get(octe.getCreateFeature()).getPaletteCategory();
-                    	pcit = PaletteCategoryItemProvider.CATEGORY_TYPE.getCategoryType(paletteItemExtensions.get(octe.getCreateFeature()).getPaletteCategory());
+                    	catname = paletteItemExtensions.get(octe.getCreateFeature()).getAttribute(PALETTE_CATEGORY_NAME);
+                    	pcit = PaletteCategoryItemProvider.CATEGORY_TYPE.getCategoryType(catname);
                     } else {
+                    	// defaults to components
                     	pcit = ((PaletteCategoryItemProvider)octe.getCreateFeature()).getCategoryType();
                     }
                     switch (pcit) {
@@ -450,12 +457,15 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         try {
             for (IConfigurationElement e : extensions) {
                 final Object o = e.createExecutableExtension("class");
+                
                 if (o instanceof ICustomPaletteEntry) {
                     ICustomPaletteEntry pe = (ICustomPaletteEntry)o;
                     ICreateFeature cf = pe.newCreateFeature(getFeatureProvider());
-                    IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), cf.getCreateImageId(), cf.getCreateLargeImageId(), cf);
+                    String paletteIcon = Strings.isBlank(e.getAttribute(PALETTE_ICON_ATTR)) ? cf.getCreateImageId() : ImageProvider.PREFIX + e.getAttribute(EXT_ID_ATTR) + ImageProvider.POSTFIX_SMALL;
+                    String diagramImg = Strings.isBlank(e.getAttribute(DIAGRAM_IMAGE_ATTR)) ? cf.getCreateLargeImageId() : ImageProvider.PREFIX + e.getAttribute(EXT_ID_ATTR) + ImageProvider.POSTFIX_LARGE;
+                    IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), paletteIcon, diagramImg, cf);
                     entries.add(te);
-                    paletteItemExtensions.put(cf, pe);
+                    paletteItemExtensions.put(cf, e);
                 }
             }
         } catch (CoreException ex) {

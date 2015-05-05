@@ -14,20 +14,12 @@ import java.util.List;
 
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
-import org.eclipse.graphiti.tb.IImageDecorator;
 import org.fusesource.ide.camel.model.catalog.Dependency;
 
 /**
  * @author lhein
  */
 public interface ICustomPaletteEntry {
-    
-    /**
-     * returns the palette category this items goes into
-     * 
-     * @return
-     */
-    public String getPaletteCategory();
     
     /**
     * @param fp the feature provider
@@ -38,29 +30,27 @@ public interface ICustomPaletteEntry {
     public ICreateFeature newCreateFeature(IFeatureProvider fp);
     
     /**
-    * @param object the model object.
-    * @return an IImageDecorator that represents the model object.
-    */
-    public IImageDecorator getImageDecorator(Object object);
-    
-    /**
-    * @return the display text for the object type.
-    */
-    public String getTypeName();
-    
-    /**
-    * @param type the type
-    * @return true if this extension supports the specified type.
-    */
-    public boolean supports(Class type);
-    
-    /**
     * Returns a list of capabilities required to use this object within a
     * project. The ID's returned will be used to resolve component extensions,
     * adding the listed dependencies to the project's pom.
     *
-    * @param object the object being used.
     * @return a list of maven dependencies that are required to use this object within a project.
     */
-    public List<Dependency> getRequiredCapabilities(Object object);
+    public List<Dependency> getRequiredDependencies();
+    
+    /**
+     * returns true if this palette entry creates endpoints with the given
+     * protocol (for instance "sap")
+     * 
+     * @param protocol	the protocol used in the endpoint uri
+     * @return	true if this class injected this kind of endpoint to the palette
+     */
+    public boolean providesProtocol(String protocol);
+    
+    /**
+     * returns the endpoint protocol this entry provides to the palette
+     * 
+     * @return	the camel endpoint protocol (like "sap" or "smtp")
+     */
+    public String getProtocol();
 }

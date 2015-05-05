@@ -16,11 +16,9 @@ import java.util.List;
 
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
-import org.eclipse.graphiti.tb.IImageDecorator;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
-import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.catalog.Dependency;
 
@@ -30,51 +28,38 @@ import org.fusesource.ide.camel.model.catalog.Dependency;
  */
 public class BrokerPaletteEntry implements ICustomPaletteEntry {
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getPaletteCategory()
-	 */
-	@Override
-	public String getPaletteCategory() {
-		return PaletteCategoryItemProvider.CATEGORY_TYPE.COMPONENTS.name();
-	}
-
+	private static final String PROTOCOL = "broker";
+	
     /* (non-Javadoc)
      * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#newCreateFeature(org.eclipse.graphiti.features.IFeatureProvider)
      */
     @Override
     public ICreateFeature newCreateFeature(IFeatureProvider fp) {
-        return new CreateEndpointFigureFeature(fp, "AMQ Broker", "Creates an ActiveMQ broker endpoint...", new Endpoint("broker:queue:foo"), getRequiredCapabilities(null));
+        return new CreateEndpointFigureFeature(fp, "AMQ Broker", "Creates an ActiveMQ broker endpoint...", new Endpoint("broker:queue:foo"), getRequiredDependencies());
     }
 
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#getImageDecorator(java.lang.Object)
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getProtocol()
      */
     @Override
-    public IImageDecorator getImageDecorator(Object object) {
-        return null;
+    public String getProtocol() {
+    	return PROTOCOL;
     }
-
+    
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#getTypeName()
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#providesProtocol(java.lang.String)
      */
     @Override
-    public String getTypeName() {
-        return "ActiveMQ Broker";
+    public boolean providesProtocol(String protocol) {
+    	return PROTOCOL.equalsIgnoreCase(protocol);
     }
-
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#supports(java.lang.Class)
+    
+    /*
+     * (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getRequiredDependencies()
      */
     @Override
-    public boolean supports(Class type) {
-        return false;
-    }
-
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.provider.ICustomPaletteEntry#getRequiredCapabilities(java.lang.Object)
-     */
-    @Override
-    public List<Dependency> getRequiredCapabilities(Object object) {
+    public List<Dependency> getRequiredDependencies() {
         List<Dependency> deps = new ArrayList<Dependency>();
         Dependency dep = new Dependency();
         dep.setGroupId("org.apache.activemq");

@@ -14,11 +14,17 @@ package org.fusesource.ide.camel.editor.provider;
 import java.net.URL;
 import java.util.Enumeration;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.graphiti.ui.platform.AbstractImageProvider;
+import org.eclipse.graphiti.ui.services.GraphitiUi;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.generated.Route;
+import org.osgi.framework.Bundle;
 
 
 /**
@@ -30,8 +36,8 @@ public class ImageProvider extends AbstractImageProvider {
 
 	// The prefix for all identifiers of this image provider
 	public static final String PREFIX = "org.fusesource.demo.icons."; //$NON-NLS-1$
-	protected static final String POSTFIX_SMALL = "_small"; //$NON-NLS-1$
-	protected static final String POSTFIX_LARGE = "_large"; //$NON-NLS-1$
+	public static final String POSTFIX_SMALL = "_small"; //$NON-NLS-1$
+	public static final String POSTFIX_LARGE = "_large"; //$NON-NLS-1$
 
 	public static final String IMG_FLOW = PREFIX + "flow"; //$NON-NLS-1$
 	public static final String IMG_REDDOT = PREFIX + "reddot"; //$NON-NLS-1$
@@ -77,6 +83,9 @@ public class ImageProvider extends AbstractImageProvider {
 		addImage(IMG_OUTLINE_TREE, ROOT_FOLDER_FOR_IMG + "tree.gif"); //$NON-NLS-1$
 		addToImageRegistry(IMG_OUTLINE_TREE, ROOT_FOLDER_FOR_IMG + "tree.gif"); //$NON-NLS-1$
 
+		// add the images from extension point users
+		addExtensionPointImages();
+		
 		// let the helper class fill all figure images
 		ProviderHelper.addFigureIcons(this);
 
@@ -97,6 +106,41 @@ public class ImageProvider extends AbstractImageProvider {
         }
 	}
 
+	private void addExtensionPointImages() {
+		// inject palette entries icons delivered via extension points
+        IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(ToolBehaviourProvider.PALETTE_ENTRY_PROVIDER_EXT_POINT_ID);
+        for (IConfigurationElement e : extensions) {
+            Bundle b = getBundleById(e.getContributor().getName());
+        	if (b == null) return; // seems there is a problem with the osgi framework
+        	String entryId = e.getAttribute(ToolBehaviourProvider.EXT_ID_ATTR);
+            String paletteIconPath = e.getAttribute(ToolBehaviourProvider.PALETTE_ICON_ATTR);
+            String diagramImagePath = e.getAttribute(ToolBehaviourProvider.DIAGRAM_IMAGE_ATTR);
+            if (paletteIconPath != null && paletteIconPath.trim().length()>0) {
+            	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_SMALL);
+            	addImageFilePath(key, b.getResource(paletteIconPath).toString());
+            	Activator.getDefault().getImageRegistry().put(key, getExternalImage(b, paletteIconPath));
+            }
+            if (diagramImagePath != null && diagramImagePath.trim().length()>0) {
+            	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_LARGE);
+            	addImageFilePath(key, b.getResource(diagramImagePath).toString());
+            	Activator.getDefault().getImageRegistry().put(key, getExternalImage(b, diagramImagePath));
+            }
+        }
+	}
+	
+	private Bundle getBundleById(String id) {
+		for (Bundle b : Activator.getDefault().getBundle().getBundleContext().getBundles()) {
+			if (b.getSymbolicName().equals(id)) return b;
+		}
+		return null;
+	}
+	
+	private ImageDescriptor getExternalImage(Bundle bundle, String iconPath) {
+		URL url = bundle.getResource(iconPath);
+		if (url != null) return ImageDescriptor.createFromURL(url);
+		return null;
+	}
+	
 	private void addIconCustomImages(String... iconNames) {
 		for (String iconName : iconNames) {
 			String littleIcon = iconName.replace(".png", "16.png");
@@ -153,6 +197,10 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 	
 	protected static boolean isImageAvailable(String iconName) {
+		if (Activator.getDiagramEditor() != null) {
+			Image img = GraphitiUi.getImageService().getImageForId(Activator.getDiagramEditor().getDiagramTypeProvider().getProviderId(), iconName);
+			return img != null;
+		}
 	    return Activator.getDefault().getBundle().getEntry(String.format("%s%s", ROOT_FOLDER_FOR_IMG, iconName)) != null;
 	}
 }

@@ -49,10 +49,68 @@
 
    <element name="PaletteContribution">
       <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The id of the palette entry. This id value should be unique amongst all the other palette contributions. It would be a good idea to include the protocol of the Camel endpoint in that id.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="categoryName">
+            <annotation>
+               <documentation>
+                  The name of the category in the palette the new entry should injected into. You can specify one of the existing category names or specify your own name to create a new palette drawer with that name.
+
+Existing categories are: 
+COMPONENTS 
+ENDPOINTS
+ROUTING
+CONTROL_FLOW
+TRANSFORMATION
+MISCELLANEOUS
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="COMPONENTS">
+                  </enumeration>
+                  <enumeration value="ENDPOINTS">
+                  </enumeration>
+                  <enumeration value="ROUTING">
+                  </enumeration>
+                  <enumeration value="CONTROL_FLOW">
+                  </enumeration>
+                  <enumeration value="TRANSFORMATION">
+                  </enumeration>
+                  <enumeration value="MISCELLANEOUS">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="paletteIcon" type="string">
+            <annotation>
+               <documentation>
+                  The icon to be displayed in the Editor&apos;s palette. Preferred size of the palette icons is 16x16 pixels.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="diagramImage" type="string">
+            <annotation>
+               <documentation>
+                  The image to be used in the diagram. Currently this attribute is ignored and only reserved for future use. Preferred size is approx. 84x50 pixels.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A class which provides the needed create feature for your palette entry. It has to implement the ICustomPaletteEntry interface.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry"/>

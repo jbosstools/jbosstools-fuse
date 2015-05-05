@@ -52,7 +52,11 @@
    <extension
          point="org.fusesource.ide.editor.paletteContributor">
       <PaletteContribution
-            class="org.jboss.tools.fuse.transformation.extensions.DataTransformationPaletteEntry">
+            categoryName="TRANSFORMATION"
+            class="org.jboss.tools.fuse.transformation.extensions.DataTransformationPaletteEntry"
+            diagramImage="icons/transform.png"
+            id="datatransformation"
+            paletteIcon="icons/transform16.png">
       </PaletteContribution>
    </extension>
    <extension

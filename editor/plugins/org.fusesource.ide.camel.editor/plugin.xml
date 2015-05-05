@@ -298,10 +298,18 @@
    <extension
          point="org.fusesource.ide.editor.paletteContributor">
       <PaletteContribution
-            class="org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry">
+            categoryName="COMPONENTS"
+            class="org.fusesource.ide.camel.editor.provider.ActiveMQPaletteEntry"
+            diagramImage="icons/endpointQueue.png"
+            id="amq"
+            paletteIcon="icons/endpointQueue16.png">
       </PaletteContribution>
       <PaletteContribution
-            class="org.fusesource.ide.camel.editor.provider.BrokerPaletteEntry">
+            categoryName="COMPONENTS"
+            class="org.fusesource.ide.camel.editor.provider.BrokerPaletteEntry"
+            diagramImage="icons/endpointQueue.png"
+            id="amqBroker"
+            paletteIcon="icons/endpointQueue16.png">
       </PaletteContribution>
    </extension>
 </plugin>

@@ -13,8 +13,6 @@ package org.jboss.tools.fuse.transformation.extensions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.camel.spring.CamelContextFactoryBean;
-import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -22,14 +20,12 @@ import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.tb.IImageDecorator;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
-import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider.CATEGORY_TYPE;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.catalog.Dependency;
@@ -41,6 +37,7 @@ import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizar
  */
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 
+	private static final String PROTOCOL = "dozer";
 
     /**
      * {@inheritDoc}
@@ -55,46 +52,27 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
                 "Creates a Data Transformation endpoint...");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry
-     * #getImageDecorator(java.lang.Object)
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getProtocol()
      */
     @Override
-    public IImageDecorator getImageDecorator(Object object) {
-        return null;
+    public String getProtocol() {
+    	return PROTOCOL;
     }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getTypeName()
+    
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#providesProtocol(java.lang.String)
      */
     @Override
-    public String getTypeName() {
-        return "DataTransformation";
+    public boolean providesProtocol(String protocol) {
+    	return PROTOCOL.equalsIgnoreCase(protocol);
     }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#supports(java.lang.Class)
-     */
-    @SuppressWarnings("rawtypes")
-    @Override
-    public boolean supports(Class type) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry
-     * #getRequiredCapabilities(java.lang.Object)
+    
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getRequiredDependencies()
      */
     @Override
-    public List<Dependency> getRequiredCapabilities(Object object) {
+    public List<Dependency> getRequiredDependencies() {
         List<Dependency> deps = new ArrayList<>();
         Dependency dep = new Dependency();
         dep.setGroupId("org.apache.camel");
@@ -108,7 +86,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 
         public DataMapperEndpointFigureFeature(IFeatureProvider fp,
                 String name, String description) {
-            super(fp, name, description, null, getRequiredCapabilities(null));
+            super(fp, name, description, null, getRequiredDependencies());
         }
 
         /*
@@ -175,15 +153,5 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
                 return wizard.getRouteEndpoint();
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getPaletteCategory()
-     */
-    @Override
-    public String getPaletteCategory() {
-        return CATEGORY_TYPE.TRANSFORMATION.name();
     }
 }
