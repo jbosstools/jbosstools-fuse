@@ -344,18 +344,15 @@ public class Util {
     public static boolean validSourceAndTarget(final Object source,
                                                final Object target,
                                                final TransformationConfig config) {
-        if (!(target instanceof Model)) return false;
-        final Model targetModel = (Model)target;
-        if (targetModel.getParent() == null || Util.type(targetModel)) return false;
-        if (source instanceof Model) {
-            final Model sourceModel = (Model)source;
-            if (sourceModel.isCollection() != targetModel.isCollection()
-                || sourceModel.getParent() == null
-                || sourceModel.getParent().isCollection() != targetModel.getParent().isCollection())
-                return false;
-        } else if (targetModel.isCollection() || targetModel.getParent().isCollection())
-            return false;
-        return true;
+        final Model sourceModel = source instanceof Model ? (Model)source : null;
+        final Model targetModel = target instanceof Model ? (Model)target : null;
+        if (sourceModel != null && Util.type(sourceModel)) return false;
+        if (targetModel != null && Util.type(targetModel)) return false;
+        if (source == null || targetModel == null) return true;
+        if (sourceModel == null)
+            return (!targetModel.isCollection() && !targetModel.getParent().isCollection());
+        return sourceModel.isCollection() == targetModel.isCollection() &&
+               sourceModel.getParent().isCollection() == targetModel.getParent().isCollection();
     }
 
     private Util() {}
