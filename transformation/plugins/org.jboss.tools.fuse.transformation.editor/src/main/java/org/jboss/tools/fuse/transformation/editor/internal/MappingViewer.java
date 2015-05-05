@@ -177,7 +177,7 @@ abstract class MappingViewer {
             }
             text.setForeground(Colors.FOREGROUND);
         } else if (object instanceof Variable) {
-            text.setToolTipText("\"" + ((Variable)object).getValue() + "\"");
+            text.setToolTipText(variableToolTip((Variable)object));
             text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.VARIABLE);
         } else if (object instanceof Expression) {
@@ -189,6 +189,15 @@ abstract class MappingViewer {
             text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.FOREGROUND);
         }
+    }
+
+    String variableToolTip(final Variable variable) {
+        return "\"" + variable.getValue() + "\"";
+    }
+
+    void variableValueUpdated(final Variable variable) {
+        if (variable.equals(mapping.getSource()))
+            sourceText.setToolTipText(variableToolTip(variable));
     }
 
     abstract class DropListener extends DropTargetAdapter {

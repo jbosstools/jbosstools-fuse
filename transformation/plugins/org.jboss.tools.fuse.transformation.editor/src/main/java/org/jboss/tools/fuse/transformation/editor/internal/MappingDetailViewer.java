@@ -97,27 +97,7 @@ public final class MappingDetailViewer extends MappingViewer {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                switch (event.getPropertyName()) {
-                    case TransformationConfig.MAPPING: {
-                        if (event.getOldValue() == mapping) {
-                            scroller.setContent(null);
-                        } else if (event.getNewValue() != null) {
-                            update((MappingOperation<?, ?>) event.getNewValue());
-                        }
-                        break;
-                    }
-                    case TransformationConfig.MAPPING_CUSTOMIZE:
-                    case TransformationConfig.MAPPING_SOURCE:
-                    case TransformationConfig.MAPPING_TARGET: {
-                        if (mapping != event.getOldValue()) {
-                            return;
-                        }
-                        update((MappingOperation<?, ?>) event.getNewValue());
-                        break;
-                    }
-                    default :
-                        // ignore other cases
-                }
+                configEvent(event.getPropertyName(), event.getOldValue(), event.getNewValue());
             }
         });
     }
@@ -134,6 +114,35 @@ public final class MappingDetailViewer extends MappingViewer {
                                           dlg.type.getFullyQualifiedName(),
                                           dlg.method.getElementName());
         config.save();
+    }
+
+    void configEvent(final String eventType,
+                     final Object oldValue,
+                     final Object newValue) {
+        switch (eventType) {
+            case TransformationConfig.MAPPING: {
+                if (oldValue == mapping) {
+                    scroller.setContent(null);
+                } else if (newValue != null) {
+                    update((MappingOperation<?, ?>)newValue);
+                }
+                break;
+            }
+            case TransformationConfig.MAPPING_CUSTOMIZE:
+            case TransformationConfig.MAPPING_SOURCE:
+            case TransformationConfig.MAPPING_TARGET: {
+                if (mapping != oldValue) {
+                    return;
+                }
+                update((MappingOperation<?, ?>)newValue);
+                break;
+            }
+            case TransformationConfig.VARIABLE_VALUE: {
+                variableValueUpdated((Variable)newValue);
+                break;
+            }
+            default: // ignore other cases
+        }
     }
 
     @SuppressWarnings("unused")

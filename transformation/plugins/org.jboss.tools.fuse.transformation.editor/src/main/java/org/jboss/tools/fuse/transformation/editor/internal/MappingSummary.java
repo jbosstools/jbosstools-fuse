@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.CustomMapping;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
+import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer.TraversalListener;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
@@ -121,11 +122,15 @@ final class MappingSummary extends MappingViewer {
     void configEvent(final String eventType,
                      final Object oldValue,
                      final Object newValue) {
+        if (eventType.equals(TransformationConfig.VARIABLE_VALUE)) {
+            variableValueUpdated((Variable)newValue);
+            return;
+        }
         if (mapping != oldValue) {
             return;
         }
         if (eventType.equals(TransformationConfig.MAPPING)) {
-            dispose((MappingOperation<?, ?>) oldValue);
+            dispose((MappingOperation<?, ?>)oldValue);
         } else if (eventType.equals(TransformationConfig.MAPPING_SOURCE)) {
             mapping = (MappingOperation<?, ?>)newValue;
             setSourceText();
