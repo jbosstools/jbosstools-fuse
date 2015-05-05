@@ -176,6 +176,7 @@ public final class MappingDetailViewer extends MappingViewer {
         final Label label = new Label(pane, SWT.NONE);
         label.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
         label.setText(model.getName());
+        label.setBackground(pane.getForeground());
         return pane;
     }
 
@@ -196,6 +197,7 @@ public final class MappingDetailViewer extends MappingViewer {
             @Override
             Control constructControl() {
                 createSourceText(this, SWT.NONE);
+                sourceText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
                 addMenuItem("Set field", new MenuItemHandler() {
 
                     @Override
@@ -267,6 +269,7 @@ public final class MappingDetailViewer extends MappingViewer {
             @Override
             Control constructControl() {
                 createTargetText(this);
+                targetText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
                 addMenuItem("Set field", new MenuItemHandler() {
 
                     @Override
@@ -368,7 +371,9 @@ public final class MappingDetailViewer extends MappingViewer {
         } else {
             createSourcePane(sourceDetailPane);
         }
-        new Label(contentPane, SWT.NONE).setImage(Images.MAPPED);
+        final Label mapsToLabel = new Label(contentPane, SWT.NONE);
+        mapsToLabel.setImage(Images.MAPPED);
+        mapsToLabel.setBackground(contentPane.getBackground());
         final Composite targetDetailPane = createDetailPane(contentPane, config.getTargetModel());
         targetDetailPane.setLayoutData(GridDataFactory.swtDefaults()
                                                       .align(SWT.LEFT, SWT.CENTER)
@@ -391,15 +396,15 @@ public final class MappingDetailViewer extends MappingViewer {
             final Label spacer = new Label(this, SWT.NONE);
             spacer.setLayoutData(GridDataFactory.swtDefaults()
                                                 .hint(imageButtonLabelSize)
-                                                .grab(true, false)
                                                 .create());
+            spacer.setBackground(getBackground());
             final Control control = constructControl();
             final Label menuLabel = new Label(this, SWT.NONE);
             menuLabel.setLayoutData(GridDataFactory.swtDefaults()
                                                    .hint(imageButtonLabelSize)
                                                    .align(SWT.BEGINNING, SWT.BOTTOM)
-                                                   .grab(true, false)
                                                    .create());
+            menuLabel.setBackground(getBackground());
             final MouseTrackListener mouseOverListener = new MouseTrackAdapter() {
 
                 @Override

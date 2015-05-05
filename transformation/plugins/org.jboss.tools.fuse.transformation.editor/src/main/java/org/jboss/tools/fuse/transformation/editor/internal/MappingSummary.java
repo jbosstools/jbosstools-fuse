@@ -32,6 +32,7 @@ final class MappingSummary extends MappingViewer {
     final MappingsViewer mappingsViewer;
     final Composite mappingSourcePane;
     final Composite mapsToPane;
+    final Label mapsToLabel;
     final Composite mappingTargetPane;
     final TraversalListener sourceTraversalListener;
     final TraversalListener targetTraversalListener;
@@ -52,8 +53,9 @@ final class MappingSummary extends MappingViewer {
         mapsToPane.setLayoutData(GridDataFactory.swtDefaults().create());
         mapsToPane.setLayout(GridLayoutFactory.swtDefaults().create());
         mapsToPane.setBackground(mappingsViewer.getBackground());
-        final Label mapsToLabel = new Label(mapsToPane, SWT.NONE);
+        mapsToLabel = new Label(mapsToPane, SWT.NONE);
         mapsToLabel.setImage(Images.MAPPED);
+        mapsToLabel.setBackground(mapsToPane.getBackground());
         final StringBuilder builder = new StringBuilder();
         if (mapping.getType() == MappingType.CUSTOM) {
             builder.append(((CustomMapping)mapping).getMappingOperation());
@@ -215,6 +217,7 @@ final class MappingSummary extends MappingViewer {
     void setBackground(final Color color) {
         mappingSourcePane.setBackground(color);
         mapsToPane.setBackground(color);
+        mapsToLabel.setBackground(color);
         mappingTargetPane.setBackground(color);
     }
 }
