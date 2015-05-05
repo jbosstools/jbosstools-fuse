@@ -51,6 +51,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.SourceTabFolder;
 import org.jboss.tools.fuse.transformation.editor.internal.TargetTabFolder;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
 /**
@@ -92,7 +93,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         verticalSplitter.setSashWidth(SASH_WIDTH);
         final Composite pane = new Composite(verticalSplitter, SWT.NONE);
         pane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
-        pane.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+        pane.setBackground(Colors.BACKGROUND);
         // Create source model toggle button
         ToolBar toolBar = new ToolBar(pane, SWT.NONE);
         toolBar.setLayoutData(GridDataFactory.swtDefaults()
@@ -104,6 +105,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
         helpText = new Text(pane, SWT.MULTI | SWT.WRAP);
         helpText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
         helpText.setEditable(false);
+        helpText.setBackground(pane.getBackground());
         // Create target model toggle button
         toolBar = new ToolBar(pane, SWT.NONE);
         toolBar.setLayoutData(GridDataFactory.swtDefaults()

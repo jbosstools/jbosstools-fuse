@@ -103,6 +103,7 @@ public class ModelViewer extends Composite {
         setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
 
         final ToolBar toolBar = new ToolBar(this, SWT.NONE);
+        toolBar.setBackground(getBackground());
         final ToolItem collapseAllButton = new ToolItem(toolBar, SWT.PUSH);
         collapseAllButton.setImage(Images.COLLAPSE_ALL);
         final ToolItem filterTypesButton = new ToolItem(toolBar, SWT.CHECK);
