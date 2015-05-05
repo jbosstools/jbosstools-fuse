@@ -176,6 +176,7 @@ public final class MappingDetailViewer extends MappingViewer {
         final Label label = new Label(pane, SWT.NONE);
         label.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
         label.setText(model.getName());
+        label.setBackground(pane.getForeground());
         return pane;
     }
 
@@ -393,6 +394,7 @@ public final class MappingDetailViewer extends MappingViewer {
                                                 .hint(imageButtonLabelSize)
                                                 .grab(true, false)
                                                 .create());
+            spacer.setBackground(getBackground());
             final Control control = constructControl();
             final Label menuLabel = new Label(this, SWT.NONE);
             menuLabel.setLayoutData(GridDataFactory.swtDefaults()
@@ -400,6 +402,7 @@ public final class MappingDetailViewer extends MappingViewer {
                                                    .align(SWT.BEGINNING, SWT.BOTTOM)
                                                    .grab(true, false)
                                                    .create());
+            menuLabel.setBackground(getBackground());
             final MouseTrackListener mouseOverListener = new MouseTrackAdapter() {
 
                 @Override
