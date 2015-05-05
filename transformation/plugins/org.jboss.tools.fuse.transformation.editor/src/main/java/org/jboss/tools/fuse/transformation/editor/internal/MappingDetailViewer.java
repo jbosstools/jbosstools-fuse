@@ -99,17 +99,24 @@ public final class MappingDetailViewer extends MappingViewer {
             public void propertyChange(final PropertyChangeEvent event) {
                 switch (event.getPropertyName()) {
                     case TransformationConfig.MAPPING: {
-                        if (event.getOldValue() == mapping) scroller.setContent(null);
-                        else if (event.getNewValue() != null)
+                        if (event.getOldValue() == mapping) {
+                            scroller.setContent(null);
+                        } else if (event.getNewValue() != null) {
                             update((MappingOperation<?, ?>) event.getNewValue());
+                        }
                         break;
                     }
                     case TransformationConfig.MAPPING_CUSTOMIZE:
                     case TransformationConfig.MAPPING_SOURCE:
                     case TransformationConfig.MAPPING_TARGET: {
-                        if (mapping != event.getOldValue()) return;
+                        if (mapping != event.getOldValue()) {
+                            return;
+                        }
                         update((MappingOperation<?, ?>) event.getNewValue());
+                        break;
                     }
+                    default :
+                        // ignore other cases
                 }
             }
         });
@@ -120,7 +127,9 @@ public final class MappingDetailViewer extends MappingViewer {
             new AddCustomFunctionDialog(scroller.getShell(),
                                         config.project(),
                                         ((Model)mapping.getSource()).getType());
-        if (dlg.open() != Window.OK) return;
+        if (dlg.open() != Window.OK) {
+            return;
+        }
         mapping = config.customizeMapping((FieldMapping) mapping,
                                           dlg.type.getFullyQualifiedName(),
                                           dlg.method.getElementName());
@@ -307,7 +316,9 @@ public final class MappingDetailViewer extends MappingViewer {
 
     void setExpression() throws Exception {
         final ExpressionDialog dlg = new ExpressionDialog();
-        if (dlg.open() != Window.OK) return;
+        if (dlg.open() != Window.OK) {
+            return;
+        }
         Util.updateMavenDependencies(dlg.language.getDependencies(), config.project());
         mapping = config.setSourceExpression(mapping, dlg.language.getName(), dlg.expression);
         config.save();
@@ -316,7 +327,9 @@ public final class MappingDetailViewer extends MappingViewer {
     void setField(final boolean source) throws Exception {
         final FieldDialog dlg =
             new FieldDialog(source ? config.getSourceModel() : config.getTargetModel());
-        if (dlg.open() != Window.OK) return;
+        if (dlg.open() != Window.OK) {
+            return;
+        }
         mapping = source
                   ? config.setSource(mapping, dlg.field)
                   : config.setTarget(mapping, dlg.field);
@@ -325,7 +338,9 @@ public final class MappingDetailViewer extends MappingViewer {
 
     void setVariable() throws Exception {
         final VariableDialog dlg = new VariableDialog();
-        if (dlg.open() != Window.OK) return;
+        if (dlg.open() != Window.OK) {
+            return;
+        }
         mapping = config.setSource(mapping, dlg.variable);
         config.save();
     }
@@ -335,7 +350,9 @@ public final class MappingDetailViewer extends MappingViewer {
      */
     public void update(final MappingOperation<?, ?> mapping) {
         this.mapping = mapping;
-        if (sourceDropTarget != null) dispose();
+        if (sourceDropTarget != null) {
+            dispose();
+        }
         final Composite contentPane = new Composite(scroller, SWT.NONE);
         scroller.setContent(contentPane);
         contentPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
@@ -346,8 +363,11 @@ public final class MappingDetailViewer extends MappingViewer {
                                                       .align(SWT.RIGHT, SWT.CENTER)
                                                       .grab(true, true)
                                                       .create());
-        if (mapping instanceof CustomMapping) createCustomSourcePane(sourceDetailPane);
-        else createSourcePane(sourceDetailPane);
+        if (mapping instanceof CustomMapping) {
+            createCustomSourcePane(sourceDetailPane);
+        } else {
+            createSourcePane(sourceDetailPane);
+        }
         new Label(contentPane, SWT.NONE).setImage(Images.MAPPED);
         final Composite targetDetailPane = createDetailPane(contentPane, config.getTargetModel());
         targetDetailPane.setLayoutData(GridDataFactory.swtDefaults()
@@ -413,10 +433,12 @@ public final class MappingDetailViewer extends MappingViewer {
         abstract Control constructControl();
 
         void popupMenu(final Label menuLabel,
-                       final int x,
-                       final int y) {
+                       final int xPos,
+                       final int yPos) {
             final Point size = menuLabel.getSize();
-            if (x < 0 || x > size.x || y < 0 || y > size.y) return;
+            if (xPos < 0 || xPos > size.x || yPos < 0 || yPos > size.y) {
+                return;
+            }
             final Menu popupMenu = new Menu(menuLabel);
             menuLabel.setMenu(popupMenu);
             for (final Entry<String, MenuItemHandler> entry : menuItems.entrySet()) {
@@ -466,8 +488,9 @@ public final class MappingDetailViewer extends MappingViewer {
                 if (!name.equals("bean") && !name.equals("file") && !name.equals("sql")
                     && !name.equals("xtokenize") && !name.equals("tokenize")
                     && !name.equals("spel")) {
-                    if (languageName != null && name.equals(languageName))
+                    if (languageName != null && name.equals(languageName)) {
                         this.language = language;
+                    }
                     languages.add(language);
                 }
             }
@@ -500,7 +523,9 @@ public final class MappingDetailViewer extends MappingViewer {
             label.setText("Expression:");
             final Text text = new Text(parent, SWT.BORDER);
             text.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-            if (expression != null) text.setText(expression.replace("\\${", "${"));
+            if (expression != null) {
+                text.setText(expression.replace("\\${", "${"));
+            }
 
             comboViewer.getCombo().addSelectionListener(new SelectionAdapter() {
 
@@ -530,7 +555,9 @@ public final class MappingDetailViewer extends MappingViewer {
             });
 
             comboViewer.setInput(languages);
-            if (language != null) comboViewer.setSelection(new StructuredSelection(language));
+            if (language != null) {
+                comboViewer.setSelection(new StructuredSelection(language));
+            }
         }
 
         @Override
@@ -564,10 +591,11 @@ public final class MappingDetailViewer extends MappingViewer {
         FieldDialog(final Model rootModel) {
             super(sourceText.getShell());
             this.rootModel = rootModel;
-            if (mapping.getSource() instanceof Model)
+            if (mapping.getSource() instanceof Model) {
                 this.field = rootModel.equals(config.getSourceModel())
                              ? (Model) mapping.getSource()
                              : (Model) mapping.getTarget();
+            }
         }
 
         @Override
@@ -575,7 +603,9 @@ public final class MappingDetailViewer extends MappingViewer {
             parent.setLayout(GridLayoutFactory.swtDefaults().create());
             final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel, null);
             modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-            if (field != null) modelViewer.select(field);
+            if (field != null) {
+                modelViewer.select(field);
+            }
             modelViewer.treeViewer.getTree().addSelectionListener(new SelectionAdapter() {
 
                 @Override
@@ -601,9 +631,11 @@ public final class MappingDetailViewer extends MappingViewer {
         void validate() {
             boolean enabled = field != null && !Util.type(field);
             if (enabled) {
-                if (rootModel.equals(config.getSourceModel()))
+                if (rootModel.equals(config.getSourceModel())) {
                     enabled = Util.validSourceAndTarget(field, mapping.getTarget(), config);
-                else enabled = Util.validSourceAndTarget(mapping.getSource(), field, config);
+                } else {
+                    enabled = Util.validSourceAndTarget(mapping.getSource(), field, config);
+                }
             }
             setErrorMessage(enabled ? null : "Invalid field");
             getButton(IDialogConstants.OK_ID).setEnabled(enabled);
@@ -616,8 +648,9 @@ public final class MappingDetailViewer extends MappingViewer {
 
         VariableDialog() {
             super(sourceText.getShell());
-            if (mapping.getSource() instanceof Variable)
+            if (mapping.getSource() instanceof Variable) {
                 this.variable = (Variable) mapping.getSource();
+            }
         }
 
         @Override
@@ -652,7 +685,9 @@ public final class MappingDetailViewer extends MappingViewer {
             });
 
             comboViewer.setInput(config.getVariables());
-            if (variable != null) comboViewer.setSelection(new StructuredSelection(variable));
+            if (variable != null) {
+                comboViewer.setSelection(new StructuredSelection(variable));
+            }
         }
 
         @Override

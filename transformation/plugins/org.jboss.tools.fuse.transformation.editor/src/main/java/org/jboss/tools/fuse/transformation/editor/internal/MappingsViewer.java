@@ -45,7 +45,10 @@ public class MappingsViewer extends Composite {
     final TransformationEditor editor;
     final ToolItem deleteButton;
     ScrolledComposite scroller;
-    Composite summaryPane, sourcePane, mapsToPane, targetPane;
+    Composite summaryPane;
+    Composite sourcePane;
+    Composite mapsToPane;
+    Composite targetPane;
     Text prevTargetText;
     TraversalListener prevTraversalListener;
     MappingSummary selectedMappingSummary;
@@ -157,9 +160,13 @@ public class MappingsViewer extends Composite {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                if (!event.getPropertyName().equals(TransformationConfig.MAPPING)) return;
+                if (!event.getPropertyName().equals(TransformationConfig.MAPPING)) {
+                    return;
+                }
                 final MappingOperation<?, ?> mapping = (MappingOperation<?, ?>) event.getNewValue();
-                if (mapping != null) addMappingSummary(config, mapping);
+                if (mapping != null) {
+                    addMappingSummary(config, mapping);
+                }
             }
         });
     }
@@ -177,9 +184,11 @@ public class MappingsViewer extends Composite {
 
     private void focusOnMappingSummary(final int index) {
         final MappingSummary mappingSummary = mappingSummaries.get(index);
-        if (selectedMappingSummary.sourceText.isFocusControl())
+        if (selectedMappingSummary.sourceText.isFocusControl()) {
             mappingSummary.sourceText.setFocus();
-        else mappingSummary.targetText.setFocus();
+        } else {
+            mappingSummary.targetText.setFocus();
+        }
     }
 
     void layoutPanes() {
@@ -204,8 +213,9 @@ public class MappingsViewer extends Composite {
     }
 
     void selected(final MappingSummary mappingSummary) {
-        if (selectedMappingSummary != null && mappingSummary != selectedMappingSummary)
+        if (selectedMappingSummary != null && mappingSummary != selectedMappingSummary) {
             selectedMappingSummary.deselect();
+        }
         selectedMappingSummary = mappingSummary;
         deleteButton.setEnabled(true);
         editor.selected(mappingSummary.mapping);
@@ -213,12 +223,16 @@ public class MappingsViewer extends Composite {
 
     void selectNextMappingSummary() {
         final int ndx = mappingSummaries.indexOf(this) + 1;
-        if (ndx < mappingSummaries.size()) focusOnMappingSummary(ndx);
+        if (ndx < mappingSummaries.size()) {
+            focusOnMappingSummary(ndx);
+        }
     }
 
     void selectPreviousMappingSummary() {
         final int ndx = mappingSummaries.indexOf(this) - 1;
-        if (ndx >= 0) focusOnMappingSummary(ndx);
+        if (ndx >= 0) {
+            focusOnMappingSummary(ndx);
+        }
     }
 
     interface CustomFunctionListener {
@@ -228,8 +242,10 @@ public class MappingsViewer extends Composite {
 
     static final class TraversalListener implements TraverseListener {
 
-        Text prevText, nextText;
-        TraversalListener prevTraversalListener, nextTraversalListener;
+        Text prevText;
+        Text nextText;
+        TraversalListener prevTraversalListener;
+        TraversalListener nextTraversalListener;
 
         TraversalListener(final Text prevText,
                           final Text nextText) {

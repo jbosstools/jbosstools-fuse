@@ -162,8 +162,11 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                if (isSourcePage()) model.setSourceType(ModelType.JSON_SCHEMA);
-                else model.setTargetType(ModelType.JSON_SCHEMA);
+                if (isSourcePage()) {
+                    model.setSourceType(ModelType.JSON_SCHEMA);
+                } else {
+                    model.setTargetType(ModelType.JSON_SCHEMA);
+                }
             }
         });
 
@@ -171,8 +174,11 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                if (isSourcePage()) model.setSourceType(ModelType.JSON);
-                else model.setTargetType(ModelType.JSON);
+                if (isSourcePage()) {
+                    model.setSourceType(ModelType.JSON);
+                } else {
+                    model.setTargetType(ModelType.JSON);
+                }
             }
         });
 
@@ -278,7 +284,9 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             for (char chr = (char) stream.read(); chr != -1; chr = (char) stream.read()) {
                 // Find quote
                 if (quote == '\0') {
-                    if (chr == '"' || chr == '\'') quote = chr;
+                    if (chr == '"' || chr == '\'') {
+                        quote = chr;
+                    }
                 } else if (chr == quote) {
                     final String keyword = builder.toString();
                     switch (keyword) {
@@ -287,9 +295,13 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                         case "type":
                         case "id":
                             return true;
+                        default:
+                            // all other cases ignored
                     }
                     break;
-                } else builder.append(chr);
+                } else {
+                    builder.append(chr);
+                }
             }
         }
         return false;
@@ -304,7 +316,8 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         }
         ClasspathResourceSelectionDialog dialog = null;
         if (javaProject == null) {
-            dialog = new ClasspathResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
+            dialog = new ClasspathResourceSelectionDialog(shell, 
+                    ResourcesPlugin.getWorkspace().getRoot(), extension);
         } else {
             dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), extension);
         }

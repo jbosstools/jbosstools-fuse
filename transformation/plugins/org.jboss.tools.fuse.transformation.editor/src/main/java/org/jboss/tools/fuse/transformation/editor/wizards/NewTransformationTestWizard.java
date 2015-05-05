@@ -96,7 +96,8 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
             }
             if (selectedObject instanceof IFile) {
                 IFile selectedFile = (IFile) selectedObject;
-                boolean isCamelConfig = CamelFileTypeHelper.isSupportedCamelFile(project, selectedFile.getProjectRelativePath().toPortableString());
+                boolean isCamelConfig = CamelFileTypeHelper.isSupportedCamelFile(project, 
+                        selectedFile.getProjectRelativePath().toPortableString());
                 if (isCamelConfig) {
                     camelConfigFile = selectedFile;
                 }
@@ -146,8 +147,8 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
 
     @Override
     public boolean canFinish() {
-       return super.canFinish() &&
-                   getContainer().getCurrentPage() == _page;
+       return super.canFinish()
+               && getContainer().getCurrentPage() == _page;
     }
  
     protected void finishPage(IProgressMonitor monitor) throws InterruptedException, CoreException {

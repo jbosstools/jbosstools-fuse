@@ -84,10 +84,16 @@ public class Util {
      */
     public static boolean draggingFromValidSource(final TransformationConfig config) {
         final Object object = draggedObject();
-        if (object instanceof Variable) return true;
-        if (!(object instanceof Model)) return false;
+        if (object instanceof Variable) {
+            return true;
+        }
+        if (!(object instanceof Model)) {
+            return false;
+        }
         final Model model = (Model)object;
-        if (type(model)) return false;
+        if (type(model)) {
+            return false;
+        }
         return config.root(model).equals(config.getSourceModel());
     }
 
@@ -97,9 +103,13 @@ public class Util {
      */
     public static boolean draggingFromValidTarget(final TransformationConfig config) {
         final Object object = draggedObject();
-        if (!(object instanceof Model)) return false;
+        if (!(object instanceof Model)) {
+            return false;
+        }
         final Model model = (Model)object;
-        if (type(model)) return false;
+        if (type(model)) {
+            return false;
+        }
         return config.root(model).equals(config.getTargetModel());
     }
 
@@ -133,13 +143,15 @@ public class Util {
                     if (type.isClass() && type.isStructureKnown() && !type.isAnonymous()
                         && !type.isLocal() && !Flags.isAbstract(type.getFlags())
                         && Flags.isPublic(type.getFlags())
-                        && (filter == null || filter.accept(type)))
-                        types.add(type);
+                        && (filter == null || filter.accept(type))) {
+                            types.add(type);
+                    }
                 } else if (element instanceof IParent
                            && !element.getPath().toString().contains("/test/")
                            && (!(element instanceof IPackageFragmentRoot)
-                                 || !((IPackageFragmentRoot) element).isExternal()))
+                                 || !((IPackageFragmentRoot) element).isExternal())) {
                     populateClasses(shell, (IParent) element, types, filter);
+                }
             }
         } catch (final JavaModelException e) {
             Activator.error(e);
@@ -151,9 +163,11 @@ public class Util {
                                           final List<IResource> resources) {
         try {
             for (final IResource resource : container.members()) {
-                if (resource instanceof IContainer)
+                if (resource instanceof IContainer) {
                     populateResources(shell, (IContainer) resource, resources);
-                else resources.add(resource);
+                } else {
+                    resources.add(resource);
+                }
             }
         } catch (final Exception e) {
             Activator.error(e);
@@ -188,18 +202,24 @@ public class Util {
     public static IResource selectCamelResourceFromWorkspace(final Shell shell,
                                                         final IProject project) {
         IJavaProject javaProject = null;
-        if (project != null) javaProject = JavaCore.create(project);
+        if (project != null) {
+            javaProject = JavaCore.create(project);
+        }
         CamelResourceClasspathSelectionDialog dialog;
-        if (javaProject == null)
+        if (javaProject == null) {
             dialog = new CamelResourceClasspathSelectionDialog(shell,
                                                           ResourcesPlugin.getWorkspace().getRoot(),
                                                           "xml");
-        else dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
+        } else {
+            dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
+        }
         dialog.setTitle("Select Camel XML File from Project");
         dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
-        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) return null;
+        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
+            return null;
+        }
         return (IFile) result[0];
     }
 
@@ -279,18 +299,24 @@ public class Util {
                                                         final String extension,
                                                         final IProject project) {
         IJavaProject javaProject = null;
-        if (project != null) javaProject = JavaCore.create(project);
+        if (project != null) {
+            javaProject = JavaCore.create(project);
+        }
         ClasspathResourceSelectionDialog dialog;
-        if (javaProject == null)
+        if (javaProject == null) {
             dialog = new ClasspathResourceSelectionDialog(shell,
                                                           ResourcesPlugin.getWorkspace().getRoot(),
                                                           "xml");
-        else dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), "xml");
+        } else {
+            dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), "xml");
+        }
         dialog.setTitle("Select Camel XML File from Project");
         dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
-        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) return null;
+        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
+            return null;
+        }
         return (IFile) result[0];
     }
 
@@ -309,16 +335,19 @@ public class Util {
         for (final Dependency dependency : dependencies) {
             boolean found = false;
             for (final org.apache.maven.model.Dependency pomDependency : pom.getDependencies()) {
-                if (pomDependency.getGroupId().equalsIgnoreCase(dependency.getGroupId()) &&
-                    pomDependency.getArtifactId().equalsIgnoreCase(dependency.getArtifactId())) {
+                if (pomDependency.getGroupId().equalsIgnoreCase(dependency.getGroupId())
+                    && pomDependency.getArtifactId().equalsIgnoreCase(dependency.getArtifactId())) {
                     // check for correct version
-                    if (!pomDependency.getVersion().equalsIgnoreCase(dependency.getVersion()))
+                    if (!pomDependency.getVersion().equalsIgnoreCase(dependency.getVersion())) {
                         pomDependency.setVersion(dependency.getVersion());
+                    }
                     found = true;
                     break;
                 }
             }
-            if (!found) missingDependencies.add(dependency);
+            if (!found) {
+                missingDependencies.add(dependency);
+            }
         }
 
         for (final Dependency dependency : missingDependencies) {
@@ -346,13 +375,20 @@ public class Util {
                                                final TransformationConfig config) {
         final Model sourceModel = source instanceof Model ? (Model)source : null;
         final Model targetModel = target instanceof Model ? (Model)target : null;
-        if (sourceModel != null && Util.type(sourceModel)) return false;
-        if (targetModel != null && Util.type(targetModel)) return false;
-        if (source == null || targetModel == null) return true;
-        if (sourceModel == null)
+        if (sourceModel != null && Util.type(sourceModel)) {
+            return false;
+        }
+        if (targetModel != null && Util.type(targetModel)) {
+            return false;
+        }
+        if (source == null || targetModel == null) {
+            return true;
+        }
+        if (sourceModel == null) {
             return (!targetModel.isCollection() && !targetModel.getParent().isCollection());
-        return sourceModel.isCollection() == targetModel.isCollection() &&
-               sourceModel.getParent().isCollection() == targetModel.getParent().isCollection();
+        }
+        return sourceModel.isCollection() == targetModel.isCollection()
+               && sourceModel.getParent().isCollection() == targetModel.getParent().isCollection();
     }
 
     private Util() {}

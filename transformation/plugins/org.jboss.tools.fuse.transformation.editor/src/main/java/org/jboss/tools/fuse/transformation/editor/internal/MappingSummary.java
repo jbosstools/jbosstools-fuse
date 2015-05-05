@@ -30,8 +30,11 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 final class MappingSummary extends MappingViewer {
 
     final MappingsViewer mappingsViewer;
-    final Composite mappingSourcePane, mapsToPane, mappingTargetPane;
-    final TraversalListener sourceTraversalListener, targetTraversalListener;
+    final Composite mappingSourcePane;
+    final Composite mapsToPane;
+    final Composite mappingTargetPane;
+    final TraversalListener sourceTraversalListener;
+    final TraversalListener targetTraversalListener;
 
     MappingSummary(final TransformationConfig config,
                    final MappingOperation<?, ?> mapping,
@@ -57,7 +60,9 @@ final class MappingSummary extends MappingViewer {
             builder.append('(');
         }
         builder.append(name(mapping.getSource()));
-        if (mapping.getType() == MappingType.CUSTOM) builder.append(')');
+        if (mapping.getType() == MappingType.CUSTOM) {
+            builder.append(')');
+        }
         builder.append(" => ");
         builder.append(name(mapping.getTarget()));
         mapsToLabel.setToolTipText(builder.toString());
@@ -114,37 +119,21 @@ final class MappingSummary extends MappingViewer {
     void configEvent(final String eventType,
                      final Object oldValue,
                      final Object newValue) {
-        if (mapping != oldValue) return;
-        if (eventType.equals(TransformationConfig.MAPPING))
+        if (mapping != oldValue) {
+            return;
+        }
+        if (eventType.equals(TransformationConfig.MAPPING)) {
             dispose((MappingOperation<?, ?>) oldValue);
-        else if (eventType.equals(TransformationConfig.MAPPING_SOURCE)) {
-//            MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
-//            if (tempMapping.getSource() instanceof Model && Util.dragSourceIsValid((Model) tempMapping.getSource()) == null) {
-//                mapping = (MappingOperation<?, ?>)newValue;
-//                setSourceText();
-//                mappingSourcePane.layout();
-//                sourceText.setFocus();
-//            } else if (tempMapping.getSource() != null && !(tempMapping.getSource() instanceof Model)) {
-                mapping = (MappingOperation<?, ?>)newValue;
-                setSourceText();
-                mappingSourcePane.layout();
-                sourceText.setFocus();
-//            }
+        } else if (eventType.equals(TransformationConfig.MAPPING_SOURCE)) {
+            mapping = (MappingOperation<?, ?>)newValue;
+            setSourceText();
+            mappingSourcePane.layout();
+            sourceText.setFocus();
         } else if (eventType.equals(TransformationConfig.MAPPING_TARGET)) {
-//            MappingOperation<?, ?> tempMapping = (MappingOperation<?, ?>) newValue;
-//            if (tempMapping.getSource() instanceof Model && tempMapping.getTarget() instanceof Model) {
-//                if (Util.dragDropComboIsValid((Model) tempMapping.getSource(), (Model) tempMapping.getTarget()) == null) {
-//                    mapping = (MappingOperation<?, ?>)newValue;
-//                    setTargetText();
-//                    mappingTargetPane.layout();
-//                    targetText.setFocus();
-//                }
-//            } else {
-                mapping = (MappingOperation<?, ?>)newValue;
-                setTargetText();
-                mappingTargetPane.layout();
-                targetText.setFocus();
-//            }
+            mapping = (MappingOperation<?, ?>)newValue;
+            setTargetText();
+            mappingTargetPane.layout();
+            targetText.setFocus();
         } else if (eventType.equals(TransformationConfig.MAPPING_CUSTOMIZE)) {
             mapping = (MappingOperation<?, ?>)newValue;
             setSourceText();
@@ -173,8 +162,9 @@ final class MappingSummary extends MappingViewer {
 
             @Override
             public void focusLost(final FocusEvent event) {
-                if (mappingsViewer.selectedMappingSummary == MappingSummary.this)
+                if (mappingsViewer.selectedMappingSummary == MappingSummary.this) {
                     setBackground(Colors.SELECTED_NO_FOCUS);
+                }
             }
         } );
         // Create key listener to make up and down arrow navigate selection up and down
@@ -182,8 +172,11 @@ final class MappingSummary extends MappingViewer {
 
             @Override
             public void keyReleased(final KeyEvent event) {
-                if (event.keyCode == SWT.ARROW_DOWN) mappingsViewer.selectNextMappingSummary();
-                else if (event.keyCode == SWT.ARROW_UP) mappingsViewer.selectPreviousMappingSummary();
+                if (event.keyCode == SWT.ARROW_DOWN) {
+                    mappingsViewer.selectNextMappingSummary();
+                } else if (event.keyCode == SWT.ARROW_UP) {
+                    mappingsViewer.selectPreviousMappingSummary();
+                }
             }
         } );
         return text;

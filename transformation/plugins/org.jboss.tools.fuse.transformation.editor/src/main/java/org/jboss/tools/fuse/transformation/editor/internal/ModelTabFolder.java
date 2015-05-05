@@ -66,6 +66,8 @@ abstract class ModelTabFolder extends CTabFolder {
      * @param object
      */
     public void select(final Object object) {
-        if (object instanceof Model) modelViewer.select((Model)object);
+        if (object instanceof Model) {
+            modelViewer.select((Model)object);
+        }
     }
 }

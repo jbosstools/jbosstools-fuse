@@ -162,7 +162,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                         if (saveCamelConfig) {
                             try {
-                            	File camelFile = new File(uiModel.getProject()
+                                File camelFile = new File(uiModel.getProject()
                                         .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
                                         .getLocationURI());
                                 uiModel.camelConfig.save(camelFile);
@@ -177,8 +177,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                     if (!saveCamelConfig) {
                         // now update the camel config if we didn't already
 
-                        RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.
-                                getDiagramEditor().getModel();
+                        RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator
+                                .getDiagramEditor().getModel();
                         CamelContextFactoryBean camelContext =
                                 routeContainer.getModel().getContextElement();
 
@@ -352,8 +352,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     @Override
     public boolean canFinish() {
         if (start != null && start.getSourcePage() != null && start.getTargetPage() != null) {
-            if (start.getSourcePage().isPageComplete() &&
-                    start.getTargetPage().isPageComplete()) {
+            if (start.getSourcePage().isPageComplete()
+                    && start.getTargetPage().isPageComplete()) {
                 return true;
             }
         } else {
@@ -451,9 +451,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             }
             case XML: {
                 final XmlModelGenerator generator = new XmlModelGenerator();
-                final File schemaPath = new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI());
-                final JCodeModel model = generator.generateFromInstance(new File(uiModel.getProject().findMember(filePath)
-                        .getLocationURI()), schemaPath, pkgName, targetClassesFolder);
+                final File schemaPath = new File(
+                        uiModel.getProject().getFile(filePath + ".xsd").getLocationURI());
+                final JCodeModel model = generator.generateFromInstance(
+                        new File(uiModel.getProject().findMember(filePath)
+                                .getLocationURI()), schemaPath, pkgName, targetClassesFolder);
                 String elementName = null;
                 if (isSource) {
                     elementName = uiModel.getSourceClassName();
@@ -574,11 +576,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
         if (dataFormat != null) {
             if (dataFormat.getDataFormatName().equalsIgnoreCase("json-jackson")) {
-                dep = createDependency("org.apache.camel", "camel-jackson", org.fusesource.ide.camel.editor.Activator
-                        .getDefault().getCamelVersion());
+                dep = createDependency("org.apache.camel", "camel-jackson", 
+                        org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion());
             } else if (dataFormat.getDataFormatName().equalsIgnoreCase("jaxb")) {
-                dep = createDependency("org.apache.camel", "camel-jaxb", org.fusesource.ide.camel.editor.Activator
-                        .getDefault().getCamelVersion());
+                dep = createDependency("org.apache.camel", "camel-jaxb", 
+                        org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion());
             }
             if (dep != null) {
                 List<Dependency> deps = new ArrayList<>();

@@ -78,7 +78,8 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         super(true, TransformTestWizardPage.class.getSimpleName());
         setImageDescriptor(Activator.imageDescriptor("transform.png"));
         setTitle("New Transformation Test");
-        setDescription("Specify the transformation endpoint to test, then provide the camel configuration, class name and java package for the generated test class.");
+        setDescription("Specify the transformation endpoint to test, then provide the camel configuration"
+                + ", class name and java package for the generated test class.");
     }
 
     private void createCamelSpecificControls(Composite composite, int nColumns) {
@@ -119,14 +120,16 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                             path = respath.makeRelative().toString();
                             _camelFilePath = camelConfigFile.getProjectRelativePath().toPortableString();
                             File file = new File(camelConfigFile.getLocationURI());
-                            boolean isValid = CamelFileTypeHelper.
-                                    isSupportedCamelFile(_project, _camelFilePath);
+                            boolean isValid = CamelFileTypeHelper
+                                    .isSupportedCamelFile(_project, _camelFilePath);
                             if (isValid) {
                                 _builder = CamelConfigurationHelper.load(file).getConfigBuilder();
                                 _camelFileSelectedStatus = Status.OK_STATUS;
                             } else {
                                 _builder = null;
-                                _camelFileSelectedStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, "File selected is not a Camel Spring or Blueprint file. Please select another file.");
+                                _camelFileSelectedStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, 
+                                        "File selected is not a Camel Spring or Blueprint file. "
+                                        + "Please select another file.");
                             }
                             if (_builder != null) {
                                 transformationIDViewer.getCombo().removeAll();
@@ -139,9 +142,11 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                     if (_builder == null || _builder != null && _builder.getTransformEndpointIds().isEmpty()) {
                         transformationIDViewer.getCombo().removeAll();
                         transformationIDViewer.getCombo().setToolTipText("No transformation endpoints available");
-                        _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "No transformation endpoints available for the selected Camel file.");
+                        _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID, 
+                                "No transformation endpoints available for the selected Camel file.");
                     } else {
-                        _camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID, "Select from the list of available transformation endpoints");
+                        _camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID, 
+                                "Select from the list of available transformation endpoints");
                         transformationIDViewer.getCombo().setToolTipText(
                                 "Select from the list of available transformation endpoints");
                     }
@@ -176,10 +181,12 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         if (!noEndpoints) {
             transformationIDViewer.getCombo().setToolTipText(
                 "Select from the list of available transformation endpoints");
-            _camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID, "Select from the list of available transformation endpoints");
+            _camelEndpointSelectedStatus = new Status(IStatus.INFO, Activator.PLUGIN_ID, 
+                    "Select from the list of available transformation endpoints");
         } else {
             transformationIDViewer.getCombo().setToolTipText("No transformation endpoints available");
-            _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID, "No transformation endpoints available for the selected Camel file.");
+            _camelEndpointSelectedStatus = new Status(IStatus.WARNING, Activator.PLUGIN_ID, 
+                    "No transformation endpoints available for the selected Camel file.");
         }
 
         transformationIDViewer.getCombo().addSelectionListener(new SelectionAdapter() {
@@ -199,10 +206,10 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     private ICompilationUnit createJavaClass(String packageName,
             String className, IJavaProject project) {
         try {
-            boolean isSpring = CamelFileTypeHelper.
-                    isSpringFile(project.getProject(), _camelFilePath);
-            boolean isBlueprint = CamelFileTypeHelper.
-                    isBlueprintFile(project.getProject(),_camelFilePath);
+            boolean isSpring = CamelFileTypeHelper
+                    .isSpringFile(project.getProject(), _camelFilePath);
+            boolean isBlueprint = CamelFileTypeHelper
+                    .isBlueprintFile(project.getProject(),_camelFilePath);
             
             if (!isSpring && !isBlueprint) {
                 // obviously we're not dealing with a camel file here
@@ -399,16 +406,18 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
             }
         }
 
-        if (fPackageStatus.getCode() == StatusInfo.ERROR && (fPackageStatus.getMessage() == null || fPackageStatus.getMessage().trim().isEmpty())) {
+        if (fPackageStatus.getCode() == StatusInfo.ERROR && (fPackageStatus.getMessage() == null 
+                || fPackageStatus.getMessage().trim().isEmpty())) {
             // override this particular case, since the default package is ok, though not great
             fPackageStatus = new StatusInfo(NONE, null);
-        } else if (fPackageStatus.getCode() == StatusInfo.WARNING && fPackageStatus.getMessage() != null && fPackageStatus.getMessage().contains("default package is discouraged")) {
+        } else if (fPackageStatus.getCode() == StatusInfo.WARNING && fPackageStatus.getMessage() != null 
+                && fPackageStatus.getMessage().contains("default package is discouraged")) {
             // override this particular case, since the default package is ok, though not great
             fPackageStatus = new StatusInfo(NONE, null);
         }
         
         // all used component status
-        IStatus[] status= new IStatus[] {
+        IStatus[] status = new IStatus[] {
             fContainerStatus,
             fPackageStatus,
             fTypeNameStatus,
@@ -440,7 +449,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
      * @param selection used to initialize the fields
      */
     public void init(IStructuredSelection selection) {
-        IJavaElement jelem= getInitialJavaElement(selection);
+        IJavaElement jelem = getInitialJavaElement(selection);
         initContainerPage(jelem);
         initTypePage(jelem);
         doStatusUpdate();

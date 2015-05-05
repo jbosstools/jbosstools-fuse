@@ -45,7 +45,8 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
     /**
      * {@inheritDoc}
      *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#newCreateFeature(org.eclipse.graphiti.features.IFeatureProvider)
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry
+     * #newCreateFeature(org.eclipse.graphiti.features.IFeatureProvider)
      */
     @Override
     public ICreateFeature newCreateFeature(IFeatureProvider fp) {
@@ -57,7 +58,8 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
     /**
      * {@inheritDoc}
      *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getImageDecorator(java.lang.Object)
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry
+     * #getImageDecorator(java.lang.Object)
      */
     @Override
     public IImageDecorator getImageDecorator(Object object) {
@@ -88,7 +90,8 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
     /**
      * {@inheritDoc}
      *
-     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getRequiredCapabilities(java.lang.Object)
+     * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry
+     * #getRequiredCapabilities(java.lang.Object)
      */
     @Override
     public List<Dependency> getRequiredCapabilities(Object object) {
@@ -114,20 +117,21 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
          */
         @Override
         public Object[] create(ICreateContext context) {
-            // had to override so we get the route BEFORE we create the node, otherwise the focus has changed to the transformation editor
-            // before we can get the selected route
+            // had to override so we get the route BEFORE we create the node, otherwise the focus has 
+            // changed to the transformation editor before we can get the selected route
             RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
             AbstractNode node = createNode();
 
             if (node == null) {
-            	// user canceled the wizard
+                // user canceled the wizard
                 return new Object[0];
             }
 
             if (selectedRoute != null) {
                 selectedRoute.addChild(node);
             } else {
-                Activator.getLogger().warning("Warning! Could not find currently selectedNode, so can't associate this node with the route!: " + node);
+                Activator.getLogger().warning("Warning! Could not find currently selectedNode,"
+                        + " so can't associate this node with the route!: " + node);
             }
 
             // do the add

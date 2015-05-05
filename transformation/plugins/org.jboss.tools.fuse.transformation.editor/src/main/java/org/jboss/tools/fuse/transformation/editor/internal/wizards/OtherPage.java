@@ -172,7 +172,8 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                             public IStatus runInUIThread(IProgressMonitor monitor) {
                                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                                 try {
-                                    Class<?> tempClass = wizard.getLoader().loadClass(selected.getFullyQualifiedName());
+                                    Class<?> tempClass = wizard.getLoader().loadClass(
+                                            selected.getFullyQualifiedName());
                                     _javaModel = _builder.fromJavaClass(tempClass);
                                     _modelViewer.setModel(_javaModel);
                                 } catch (ClassNotFoundException e) {

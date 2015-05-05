@@ -52,9 +52,11 @@ public final class TargetTabFolder extends ModelTabFolder {
                         ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
                                                                       .getSelection())
                                                                       .getFirstElement();
-                    if (source instanceof Model)
+                    if (source instanceof Model) {
                         config.mapField((Model) source, (Model) getCurrentTarget());
-                    else config.mapVariable((Variable) source, (Model) getCurrentTarget());
+                    } else {
+                        config.mapVariable((Variable) source, (Model) getCurrentTarget());
+                    }
                     config.save();
                     return true;
                 } catch (final Exception e) {

@@ -71,7 +71,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
     SourceTabFolder sourceTabFolder;
     TargetTabFolder targetTabFolder;
     MappingDetailViewer mappingDetailViewer;
-    ToolItem sourceViewerButton, targetViewerButton;
+    ToolItem sourceViewerButton;
+    ToolItem targetViewerButton;
 
     final List<PotentialDropTarget> potentialDropTargets = new ArrayList<>();
 
@@ -182,12 +183,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
     @Override
     public void dispose() {
         super.dispose();
-        if (loader != null)
+        if (loader != null) {
             try {
                 loader.close();
             } catch (final IOException e) {
                 Activator.error(e);
             }
+        }
     }
 
     /**
@@ -216,9 +218,10 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
                      final IEditorInput input) throws PartInitException {
         final IContentType contentType =
             Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID);
-        if (!contentType.isAssociatedWith(input.getName()))
+        if (!contentType.isAssociatedWith(input.getName())) {
             throw new PartInitException("The Fuse Transformation editor can only be opened with a"
                                         + " Dozer configuration file.");
+        }
         setSite(site);
         setInput(input);
         setPartName(input.getName());
@@ -291,14 +294,18 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
 
     void updateHelpText() {
         if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
-            if (sourceTabFolder.getSelectionIndex() == 0)
+            if (sourceTabFolder.getSelectionIndex() == 0) {
                 helpText.setText("Create a new mapping below by dragging a field in source "
                                  + config.getSourceModel().getName()
                                  + " on the left to a field in target "
                                  + config.getTargetModel().getName() + " on the right.");
-            else helpText.setText("Create a new mapping below by dragging a variable from the list"
+            } else {
+                helpText.setText("Create a new mapping below by dragging a variable from the list"
                                   + " of variables on the left to a field in target "
                                   + config.getTargetModel().getName() + " on the right.");
-        } else helpText.setText("");
+            }
+        } else {
+            helpText.setText("");
+        }
     }
 }

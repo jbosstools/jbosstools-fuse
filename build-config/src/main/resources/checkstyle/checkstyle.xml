@@ -100,7 +100,7 @@
              value="Type name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="MemberName">
-            <property name="format" value="^[a-z][a-zA-Z0-9][a-zA-Z0-9]*$"/>
+            <property name="format" value="^[_a-z][a-zA-Z0-9][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern"
              value="Member name ''{0}'' must match pattern ''{1}''."/>
         </module>
@@ -111,7 +111,7 @@
         </module>
         <module name="LocalVariableName">
             <property name="tokens" value="VARIABLE_DEF"/>
-            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
             <message key="name.invalidPattern"
              value="Local variable name ''{0}'' must match pattern ''{1}''."/>
@@ -126,7 +126,6 @@
             <message key="name.invalidPattern"
              value="Method type name ''{0}'' must match pattern ''{1}''."/>
         </module>
-        <module name="NoFinalizer"/>
         <module name="GenericWhitespace">
             <message key="ws.followed"
              value="GenericWhitespace ''{0}'' is followed by whitespace."/>
@@ -148,7 +147,6 @@
         </module>
         -->
         <module name="OverloadMethodsDeclarationOrder"/>
-        <module name="VariableDeclarationUsageDistance"/>
         <module name="MethodParamPad"/>
         <module name="OperatorWrap">
             <property name="option" value="NL"/>

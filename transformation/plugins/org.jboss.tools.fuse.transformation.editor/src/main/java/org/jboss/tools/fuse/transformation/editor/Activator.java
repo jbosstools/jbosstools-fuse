@@ -42,7 +42,9 @@ public class Activator extends AbstractUIPlugin {
                               final int blue) {
         final RGB rgb = new RGB(red, green, blue);
         Color color = plugin.colorRegistry.get(rgb);
-        if (color != null) return color;
+        if (color != null) {
+            return color;
+        }
         color = new Color(null, rgb);
         plugin.colorRegistry.put(rgb, color);
         return color;
@@ -70,7 +72,9 @@ public class Activator extends AbstractUIPlugin {
     public static ImageDescriptor imageDescriptor(final String name) {
         final String key = plugin.getBundle().getSymbolicName() + "." + name;
         ImageDescriptor img = plugin.getImageRegistry().getDescriptor(key);
-        if (img != null) return img;
+        if (img != null) {
+            return img;
+        }
         img = ImageDescriptor.createFromURL(plugin.getBundle().getEntry("icons/" + name));
         plugin.getImageRegistry().put(key, img);
         return img;

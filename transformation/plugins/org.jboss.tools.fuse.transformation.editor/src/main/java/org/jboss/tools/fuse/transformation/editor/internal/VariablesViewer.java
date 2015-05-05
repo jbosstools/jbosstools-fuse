@@ -109,10 +109,11 @@ public final class VariablesViewer extends Composite {
             @Override
             public Image getImage(final Object element) {
                 final Image img = Images.VARIABLE;
-                if (config.mapped((Variable) element))
+                if (config.mapped((Variable) element)) {
                     return new DecorationOverlayIcon(img,
                                                      Decorations.MAPPED,
                                                      IDecoration.BOTTOM_RIGHT).createImage();
+                }
                 return img;
             }
 
@@ -186,13 +187,16 @@ public final class VariablesViewer extends Composite {
                     @Override
                     public String isValid(final String text) {
                         for (final Variable variable : config.getVariables()) {
-                            if (variable.getName().equals(text))
+                            if (variable.getName().equals(text)) {
                                 return "Variable already exists";
+                            }
                         }
                         return null;
                     }
                 });
-                if (dlg.open() != Window.OK) return;
+                if (dlg.open() != Window.OK) {
+                    return;
+                }
                 config.addVariable(dlg.getValue(), dlg.getValue());
                 try {
                     config.save();
@@ -237,9 +241,13 @@ public final class VariablesViewer extends Composite {
                                                           },
                                                           3);
                                 final int button = dlg.open();
-                                if (button == 2) deleteAll = true;
-                                else if (button == 3) continue;
-                                else if (button < 1) return;
+                                if (button == 2) {
+                                    deleteAll = true;
+                                } else if (button == 3) {
+                                    continue;
+                                } else if (button < 1) {
+                                    return;
+                                }
                             }
                         }
                         config.removeVariable(variable);

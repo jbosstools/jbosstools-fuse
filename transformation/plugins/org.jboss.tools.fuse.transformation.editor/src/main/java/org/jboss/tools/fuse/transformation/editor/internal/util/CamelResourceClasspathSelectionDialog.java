@@ -110,8 +110,9 @@ class CamelResourceClasspathSelectionDialog extends FilteredResourcesSelectionDi
                 final IResource resource = (IResource) item;
                 final File testFile = new File(resource.getLocationURI());
                 if (testFile.exists()) {
-                    boolean isValidCamel = CamelFileTypeHelper.
-                            isSupportedCamelFile(resource.getProject(), resource.getProjectRelativePath().toPortableString());
+                    boolean isValidCamel = CamelFileTypeHelper
+                            .isSupportedCamelFile(resource.getProject(), 
+                                    resource.getProjectRelativePath().toPortableString());
                     if (isValidCamel) {
                         return true;
                     }

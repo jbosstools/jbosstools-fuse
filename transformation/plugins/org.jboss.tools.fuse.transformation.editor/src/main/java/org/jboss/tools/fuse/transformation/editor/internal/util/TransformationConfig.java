@@ -93,7 +93,8 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#addClassMapping(java.lang.String, java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     *          #addClassMapping(java.lang.String, java.lang.String)
      */
     @Override
     public void addClassMapping(final String fromClass,
@@ -111,7 +112,8 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#addVariable(java.lang.String, java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     *          #addVariable(java.lang.String, java.lang.String)
      */
     @Override
     public Variable addVariable(final String name,
@@ -124,7 +126,8 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#customizeMapping(org.jboss.tools.fuse.transformation.FieldMapping, java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     *          #customizeMapping(org.jboss.tools.fuse.transformation.FieldMapping, java.lang.String)
      */
     @Override
     public CustomMapping customizeMapping(final FieldMapping mapping,
@@ -141,17 +144,22 @@ public class TransformationConfig implements MapperConfiguration {
     public CustomMapping customizeMapping(final FieldMapping fieldMapping,
                                           final String mappingClass,
                                           final String mappingOperation) {
-        final CustomMapping customMapping = delegate.customizeMapping(fieldMapping, mappingClass, mappingOperation);
+        final CustomMapping customMapping = delegate.customizeMapping(
+                fieldMapping, mappingClass, mappingOperation);
         fireEvent(MAPPING_CUSTOMIZE, fieldMapping, customMapping);
         return customMapping;
     }
 
     Model find(final Object object,
                final Model model) {
-        if (model.equals(object)) return model;
+        if (model.equals(object)) {
+            return model;
+        }
         for (final Model child : model.getChildren()) {
             final Model match = find(object, child);
-            if (match != null) return match;
+            if (match != null) {
+                return match;
+            }
         }
         return null;
     }
@@ -198,13 +206,16 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getMappingsForSource(org.jboss.tools.fuse.transformation.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     *          #getMappingsForSource(org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public List<MappingOperation<?, ?>> getMappingsForSource(final Model source) {
         final List<MappingOperation<?, ?>> mappings = delegate.getMappingsForSource(source);
         for (final MappingOperation<?, ?> mapping : mappingPlaceholders) {
-            if (source.equals(mapping.getSource())) mappings.add(mapping);
+            if (source.equals(mapping.getSource())) {
+                mappings.add(mapping);
+            }
         }
         return mappings;
     }
@@ -212,13 +223,16 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#getMappingsForTarget(org.jboss.tools.fuse.transformation.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     * #getMappingsForTarget(org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public List<MappingOperation<?, ?>> getMappingsForTarget(final Model target) {
         final List<MappingOperation<?, ?>> mappings = delegate.getMappingsForTarget(target);
         for (final MappingOperation<?, ?> mapping : mappingPlaceholders) {
-            if (target.equals(mapping.getTarget())) mappings.add(mapping);
+            if (target.equals(mapping.getTarget())) {
+                mappings.add(mapping);
+            }
         }
         return mappings;
     }
@@ -273,7 +287,8 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#mapExpression(java.lang.String, java.lang.String, org.jboss.tools.fuse.transformation.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     * #mapExpression(java.lang.String, java.lang.String, org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public ExpressionMapping mapExpression(final String language,
@@ -287,7 +302,8 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#mapField(org.jboss.tools.fuse.transformation.model.Model, org.jboss.tools.fuse.transformation.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     * #mapField(org.jboss.tools.fuse.transformation.model.Model, org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public FieldMapping mapField(final Model source,
@@ -303,7 +319,9 @@ public class TransformationConfig implements MapperConfiguration {
      */
     public boolean mapped(final Variable variable) {
         for (final MappingOperation<?, ?> mapping : getMappings()) {
-            if (mappingContainsVariable(mapping, variable)) return true;
+            if (mappingContainsVariable(mapping, variable)) {
+                return true;
+            }
         }
         return false;
     }
@@ -322,7 +340,8 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#mapVariable(org.jboss.tools.fuse.transformation.Variable, org.jboss.tools.fuse.transformation.model.Model)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     * #mapVariable(org.jboss.tools.fuse.transformation.Variable, org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public VariableMapping mapVariable(final Variable variable, final Model target) {
@@ -368,24 +387,31 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#removeMapping(org.jboss.tools.fuse.transformation.MappingOperation)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     *      #removeMapping(org.jboss.tools.fuse.transformation.MappingOperation)
      */
     @Override
     public void removeMapping(final MappingOperation<?, ?> mapping) {
-        if (mapping.getType() == null) mappingPlaceholders.remove(mapping);
-        else delegate.removeMapping(mapping);
+        if (mapping.getType() == null) {
+            mappingPlaceholders.remove(mapping);
+        } else {
+            delegate.removeMapping(mapping);
+        }
         fireEvent(MAPPING, mapping, null);
     }
 
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#removeVariable(org.jboss.tools.fuse.transformation.Variable)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
+     *      #removeVariable(org.jboss.tools.fuse.transformation.Variable)
      */
     @Override
     public boolean removeVariable(final Variable variable) {
         for (final MappingOperation<?, ?> mapping : getMappings()) {
-            if (mappingContainsVariable(mapping, variable)) removeMapping(mapping);
+            if (mappingContainsVariable(mapping, variable)) {
+                removeMapping(mapping);
+            }
         }
         final boolean removed = delegate.removeVariable(variable);
         fireEvent(VARIABLE, variable, null);
@@ -428,7 +454,9 @@ public class TransformationConfig implements MapperConfiguration {
      */
     public MappingOperation<?, ?> setSource(final MappingOperation<?, ?> mapping,
                                             final Object source) {
-        if (mapping.getType() == null) ((MappingPlaceholder)mapping).setSource(source);
+        if (mapping.getType() == null) {
+            ((MappingPlaceholder)mapping).setSource(source);
+        }
         return update(mapping, source, (Model)mapping.getTarget(), MAPPING_SOURCE);
     }
 
@@ -442,9 +470,11 @@ public class TransformationConfig implements MapperConfiguration {
     public MappingOperation<?, ?> setSourceExpression(final MappingOperation<?, ?> mapping,
                                                       final String language,
                                                       final String expression) {
-        if (mapping.getType() == null)
+        if (mapping.getType() == null) {
             ((MappingPlaceholder)mapping).setSource(new ExpressionPlaceholder(language, expression));
-        else delegate.removeMapping(mapping);
+        } else {
+            delegate.removeMapping(mapping);
+        }
         return update(mapping, language, expression, (Model)mapping.getTarget(), MAPPING_SOURCE);
     }
 
@@ -456,7 +486,9 @@ public class TransformationConfig implements MapperConfiguration {
      */
     public MappingOperation<?, ?> setTarget(final MappingOperation<?, ?> mapping,
                                             final Model target) {
-        if (mapping.getType() == null) ((MappingPlaceholder)mapping).setTarget(target);
+        if (mapping.getType() == null) {
+            ((MappingPlaceholder)mapping).setTarget(target);
+        }
         return update(mapping, mapping.getSource(), target, MAPPING_TARGET);
     }
 
@@ -487,12 +519,17 @@ public class TransformationConfig implements MapperConfiguration {
                                           final Model target,
                                           final String eventType) {
         MappingOperation<?, ?> resultMapping;
-        if (source == null || target == null) resultMapping = mapping;
-        else {
+        if (source == null || target == null) {
+            resultMapping = mapping;
+        } else {
             // Not or no longer a mapping placeholder
-            if (mapping.getType() == null) mappingPlaceholders.remove(mapping);
+            if (mapping.getType() == null) {
+                mappingPlaceholders.remove(mapping);
+            }
             if (source instanceof Model) {
-                if (mapping.getType() != null) delegate.removeMapping(mapping);
+                if (mapping.getType() != null) {
+                    delegate.removeMapping(mapping);
+                }
                 resultMapping = delegate.mapField((Model)source, target);
                 if (mapping.getType() == MappingType.CUSTOM) {
                     final CustomMapping customMapping = (CustomMapping)mapping;
@@ -506,11 +543,15 @@ public class TransformationConfig implements MapperConfiguration {
                     resultMapping = mapping;
                     ((VariableMapping)mapping).setVariable((Variable)source);
                 } else {
-                    if (mapping.getType() != null) delegate.removeMapping(mapping);
+                    if (mapping.getType() != null) {
+                        delegate.removeMapping(mapping);
+                    }
                     resultMapping = delegate.mapVariable((Variable)source, target);
                 }
             } else {
-                if (mapping.getType() != null) delegate.removeMapping(mapping);
+                if (mapping.getType() != null) {
+                    delegate.removeMapping(mapping);
+                }
                 final Expression expression = (Expression)source;
                 resultMapping = delegate.mapExpression(expression.getLanguage(),
                                                        expression.getExpression(),
@@ -527,9 +568,12 @@ public class TransformationConfig implements MapperConfiguration {
                                           final Model target,
                                           final String eventType) {
         MappingOperation<?, ?> resultMapping;
-        if (target == null) resultMapping = mapping;
-        else {
-            if (mapping.getType() == null) mappingPlaceholders.remove(mapping);
+        if (target == null) {
+            resultMapping = mapping;
+        } else {
+            if (mapping.getType() == null) {
+                mappingPlaceholders.remove(mapping);
+            }
             resultMapping = delegate.mapExpression(language, expression, target);
         }
         fireEvent(eventType, mapping, resultMapping);

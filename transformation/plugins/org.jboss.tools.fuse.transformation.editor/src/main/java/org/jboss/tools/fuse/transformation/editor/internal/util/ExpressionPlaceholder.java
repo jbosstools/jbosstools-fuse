@@ -16,7 +16,8 @@ import org.jboss.tools.fuse.transformation.Expression;
  */
 public class ExpressionPlaceholder implements Expression {
 
-    private String language, expression;
+    private String language;
+    private String expression;
 
     /**
      * @param language

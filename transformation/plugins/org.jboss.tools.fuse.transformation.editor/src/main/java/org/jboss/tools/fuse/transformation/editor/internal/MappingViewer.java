@@ -36,8 +36,10 @@ abstract class MappingViewer {
 
     final TransformationConfig config;
     MappingOperation<?, ?> mapping;
-    Text sourceText, targetText;
-    DropTarget sourceDropTarget, targetDropTarget;
+    Text sourceText;
+    Text targetText;
+    DropTarget sourceDropTarget;
+    DropTarget targetDropTarget;
     final List<PotentialDropTarget> potentialDropTargets;
 
     MappingViewer(final TransformationConfig config,
@@ -127,7 +129,9 @@ abstract class MappingViewer {
              iter.hasNext();) {
                final PotentialDropTarget potentialDropTarget = iter.next();
                if (potentialDropTarget.control == sourceText
-                   || potentialDropTarget.control == targetText) iter.remove();
+                   || potentialDropTarget.control == targetText) {
+                   iter.remove();
+               }
         }
     }
 
@@ -142,9 +146,13 @@ abstract class MappingViewer {
     }
 
     String name(final Object object) {
-        if (object instanceof Model) return ((Model)object).getName();
-        if (object instanceof Variable) return "${" + ((Variable)object).getName() + "}";
-        if (object instanceof Expression) return ((Expression)object).getLanguage();
+        if (object instanceof Model) {
+            return ((Model)object).getName();
+        } else if (object instanceof Variable) {
+            return "${" + ((Variable)object).getName() + "}";
+        } else if (object instanceof Expression) {
+            return ((Expression)object).getLanguage();
+        }
         return "";
     }
 
@@ -162,9 +170,11 @@ abstract class MappingViewer {
         if (object instanceof Model) {
             final Model model = (Model)object;
             text.setToolTipText(config.fullyQualifiedName(model));
-            if (mapping.getType() == MappingType.CUSTOM && text == sourceText)
+            if (mapping.getType() == MappingType.CUSTOM && text == sourceText) {
                 text.setBackground(Colors.FUNCTION);
-            else text.setBackground(Colors.BACKGROUND);
+            } else {
+                text.setBackground(Colors.BACKGROUND);
+            }
             text.setForeground(Colors.FOREGROUND);
         } else if (object instanceof Variable) {
             text.setToolTipText("\"" + ((Variable)object).getValue() + "\"");
@@ -184,7 +194,8 @@ abstract class MappingViewer {
     abstract class DropListener extends DropTargetAdapter {
 
         private final Text dropText;
-        private Color background, foreground;
+        private Color background;
+        private Color foreground;
 
         DropListener(final Text dropText) {
             this.dropText = dropText;
@@ -197,7 +208,9 @@ abstract class MappingViewer {
             if (mapping.getType() != MappingType.CUSTOM && draggingFromValidObject()) {
                 dropText.setBackground(Colors.DROP_TARGET_BACKGROUND);
                 dropText.setForeground(Colors.DROP_TARGET_FOREGROUND);
-            } else event.detail = DND.DROP_NONE;
+            } else {
+                event.detail = DND.DROP_NONE;
+            }
         }
 
         abstract boolean draggingFromValidObject();
@@ -213,7 +226,9 @@ abstract class MappingViewer {
         @Override
         public final void drop(final DropTargetEvent event) {
             try {
-                if (draggingFromValidObject()) drop();
+                if (draggingFromValidObject()) {
+                    drop();
+                }
             } catch (final Exception e) {
                 Activator.error(e);
             }

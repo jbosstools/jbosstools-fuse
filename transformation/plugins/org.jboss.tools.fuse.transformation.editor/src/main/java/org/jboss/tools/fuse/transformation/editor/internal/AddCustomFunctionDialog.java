@@ -113,8 +113,9 @@ final class AddCustomFunctionDialog extends BaseDialog {
                     final String[] names = method.getParameterNames();
                     boolean hasPrm = false;
                     for (int ndx = 0; ndx < types.length; ndx++) {
-                        if (hasPrm) builder.append(", ");
-                        else {
+                        if (hasPrm) {
+                            builder.append(", ");
+                        } else {
                             builder.append(" ");
                             hasPrm = true;
                         }
@@ -122,7 +123,9 @@ final class AddCustomFunctionDialog extends BaseDialog {
                         builder.append(" ");
                         builder.append(names[ndx]);
                     }
-                    if (hasPrm) builder.append(" ");
+                    if (hasPrm) {
+                        builder.append(" ");
+                    }
                     builder.append(")");
                     return builder.toString();
                 } catch (final JavaModelException e) {
@@ -139,15 +142,21 @@ final class AddCustomFunctionDialog extends BaseDialog {
                 final IMethod method1 = (IMethod) object1;
                 final IMethod method2 = (IMethod) object2;
                 int comparison = method1.getElementName().compareTo(method2.getElementName());
-                if (comparison != 0) return comparison;
+                if (comparison != 0) {
+                    return comparison;
+                }
                 final String[] types1 = method1.getParameterTypes();
                 final String[] types2 = method2.getParameterTypes();
                 comparison = types1.length - types2.length;
-                if (comparison != 0) return comparison;
+                if (comparison != 0) {
+                    return comparison;
+                }
                 for (int ndx = 0; ndx < types1.length; ndx++) {
                     comparison = Signature.getSignatureSimpleName(types1[ndx]).compareTo(
                                  Signature.getSignatureSimpleName(types2[ndx]));
-                    if (comparison != 0) return comparison;
+                    if (comparison != 0) {
+                        return comparison;
+                    }
                 }
                 return 0;
             }
@@ -225,7 +234,9 @@ final class AddCustomFunctionDialog extends BaseDialog {
             public boolean accept(final IType type) {
                 try {
                     for (final IMethod method : type.getMethods()) {
-                        if (valid(method)) return true;
+                        if (valid(method)) {
+                            return true;
+                        }
                     }
                 } catch (final JavaModelException ignored) {
                 }
@@ -233,7 +244,9 @@ final class AddCustomFunctionDialog extends BaseDialog {
             }
         };
         final IType type = Util.selectClass(getShell(), project, filter);
-        if (type != null) setClass(type, classButton, methodComboViewer);
+        if (type != null) {
+            setClass(type, classButton, methodComboViewer);
+        }
     }
 
     void setClass(final IType type,
@@ -243,11 +256,14 @@ final class AddCustomFunctionDialog extends BaseDialog {
             classButton.setText(type.getFullyQualifiedName());
             final List<IMethod> methods = new ArrayList<>(Arrays.asList(type.getMethods()));
             for (final Iterator<IMethod> iter = methods.iterator(); iter.hasNext();) {
-                if (!valid(iter.next())) iter.remove();
+                if (!valid(iter.next())) {
+                    iter.remove();
+                }
             }
             methodComboViewer.setInput(methods.toArray());
-            if (!methods.isEmpty())
+            if (!methods.isEmpty()) {
                 methodComboViewer.setSelection(new StructuredSelection(methods.get(0)));
+            }
             this.type = type;
             getButton(IDialogConstants.OK_ID).setEnabled(true);
         } catch (final JavaModelException e) {
@@ -414,11 +430,12 @@ final class AddCustomFunctionDialog extends BaseDialog {
                            final String nameName) {
             // TODO I think there is an Apache library that does this along with
             // checking for Java reserved keywords
-            if (name == null || name.isEmpty())
+            if (name == null || name.isEmpty()) {
                 return new Status(IStatus.ERROR,
                                    Activator.plugin().getBundle().getSymbolicName(),
                                    "A " + nameName
                                    + " name for the custom operation must be provided");
+            }
             final char[] chars = name.toCharArray();
             final char firstChar = chars[0];
             if (!Character.isJavaIdentifierStart(firstChar)) {
@@ -451,11 +468,12 @@ final class AddCustomFunctionDialog extends BaseDialog {
 
         IStatus typeStatus(final String type,
                            final String typeName) {
-            if (type == null)
+            if (type == null) {
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
                                   "A " + typeName
                                   + " type for the custom operation must be selected");
+            }
             return Status.OK_STATUS;
         }
 

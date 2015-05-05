@@ -139,8 +139,9 @@ public class ModelViewer extends Composite {
             public int compare(final Viewer viewer,
                                final Object model1,
                                final Object model2) {
-                if (model1 instanceof Model && model2 instanceof Model)
+                if (model1 instanceof Model && model2 instanceof Model) {
                     return ((Model) model1).getName().compareTo(((Model) model2).getName());
+                }
                 return 0;
             }
         });
@@ -170,21 +171,23 @@ public class ModelViewer extends Composite {
                         for (final Control control : controls) {
                             control.redraw();
                         }
-                        if (color == Colors.POTENTIAL_DROP_TARGET1)
+                        if (color == Colors.POTENTIAL_DROP_TARGET1) {
                             color = Colors.POTENTIAL_DROP_TARGET2;
-                        else if (color == Colors.POTENTIAL_DROP_TARGET2)
+                        } else if (color == Colors.POTENTIAL_DROP_TARGET2) {
                             color = Colors.POTENTIAL_DROP_TARGET3;
-                        else if (color == Colors.POTENTIAL_DROP_TARGET3)
+                        } else if (color == Colors.POTENTIAL_DROP_TARGET3) {
                             color = Colors.POTENTIAL_DROP_TARGET4;
-                        else if (color == Colors.POTENTIAL_DROP_TARGET4)
+                        } else if (color == Colors.POTENTIAL_DROP_TARGET4) {
                             color = Colors.POTENTIAL_DROP_TARGET5;
-                        else if (color == Colors.POTENTIAL_DROP_TARGET5)
+                        } else if (color == Colors.POTENTIAL_DROP_TARGET5) {
                             color = Colors.POTENTIAL_DROP_TARGET6;
-                        else if (color == Colors.POTENTIAL_DROP_TARGET6)
+                        } else if (color == Colors.POTENTIAL_DROP_TARGET6) {
                             color = Colors.POTENTIAL_DROP_TARGET7;
-                        else if (color == Colors.POTENTIAL_DROP_TARGET7)
+                        } else if (color == Colors.POTENTIAL_DROP_TARGET7) {
                             color = Colors.POTENTIAL_DROP_TARGET8;
-                        else color = Colors.POTENTIAL_DROP_TARGET1;
+                        } else {
+                            color = Colors.POTENTIAL_DROP_TARGET1;
+                        }
                     }
                 };
                 private final PaintListener paintListener = new PaintListener() {
@@ -270,41 +273,50 @@ public class ModelViewer extends Composite {
             public void modifyText(final ModifyEvent event) {
                 searchResults.clear();
                 final List<Model> models = searchMap.get(searchText.getText().trim().toLowerCase());
-                if (models != null) for (final Model model : models) {
-                    searchResults.add(model);
-                    for (Model parent = model.getParent();
-                         parent != null;
-                         parent = parent.getParent()) {
-                        searchResults.add(parent);
+                if (models != null) {
+                    for (final Model model : models) {
+                        searchResults.add(model);
+                        for (Model parent = model.getParent();
+                             parent != null;
+                             parent = parent.getParent()) {
+                            searchResults.add(parent);
+                        }
                     }
                 }
                 treeViewer.refresh();
             }
         });
 
-        if (rootModel != null) treeViewer.setInput("root");
+        if (rootModel != null) {
+            treeViewer.setInput("root");
+        }
 
-        if (config != null) config.addListener(new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(final PropertyChangeEvent event) {
-                if (event.getPropertyName().equals(TransformationConfig.MAPPING)) {
-                    if (!treeViewer.getControl().isDisposed()) {
-                        treeViewer.refresh();
+        if (config != null) {
+            config.addListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange(final PropertyChangeEvent event) {
+                    if (event.getPropertyName().equals(TransformationConfig.MAPPING)) {
+                        if (!treeViewer.getControl().isDisposed()) {
+                            treeViewer.refresh();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void expand(final Model model) {
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
         expand(model.getParent());
         treeViewer.expandToLevel(model, 0);
     }
 
     boolean mapped(final Model model) {
-        if (config == null) return false;
+        if (config == null) {
+            return false;
+        }
         return rootModel.equals(config.getSourceModel())
                ? !config.getMappingsForSource(model).isEmpty()
                : !config.getMappingsForTarget(model).isEmpty();
@@ -313,15 +325,21 @@ public class ModelViewer extends Composite {
     private boolean mappedOrFullyMappedParent(final Model model) {
         final List<Model> children = model.getChildren();
         for (final Model child : children) {
-            if (!mappedOrFullyMappedParent(child)) return false;
+            if (!mappedOrFullyMappedParent(child)) {
+                return false;
+            }
         }
         return (mapped(model)) ? true : !children.isEmpty();
     }
 
     void select(final Model model) {
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
         final List<Model> models = searchMap.get(model.getName().toLowerCase());
-        if (models == null) return;
+        if (models == null) {
+            return;
+        }
         for (final Model actualModel : models) {
             if (actualModel.equals(model)) {
                 expand(actualModel.getParent());
@@ -338,12 +356,16 @@ public class ModelViewer extends Composite {
 
     boolean show(final Object element,
                  final boolean searching) {
-        if (hideMappedFields && mappedOrFullyMappedParent((Model)element)) return false;
+        if (hideMappedFields && mappedOrFullyMappedParent((Model)element)) {
+            return false;
+        }
         return !searching || searchResults.contains(element);
     }
 
     void updateSearchMap(final Model model) {
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
         final StringCharacterIterator iter =
             new StringCharacterIterator(model.getName().toLowerCase());
         final StringBuilder builder = new StringBuilder();
@@ -402,14 +424,16 @@ public class ModelViewer extends Composite {
             Image img = model.getChildren() != null && model.getChildren().size() > 0
                         ? Images.ELEMENT
                         : Images.ATTRIBUTE;
-            if (model.isCollection())
+            if (model.isCollection()) {
                 img = new DecorationOverlayIcon(img,
                                                 Decorations.COLLECTION,
                                                 IDecoration.BOTTOM_RIGHT).createImage();
-            if (mapped((Model)element))
+            }
+            if (mapped((Model)element)) {
                 return new DecorationOverlayIcon(img,
                                                  Decorations.MAPPED,
                                                  IDecoration.TOP_RIGHT).createImage();
+            }
             return img;
         }
 
@@ -425,7 +449,9 @@ public class ModelViewer extends Composite {
                     text.append(" " + LIST_OF, StyledString.QUALIFIER_STYLER);
                     text.append(type.substring(1, type.length() - 1),
                                 StyledString.DECORATIONS_STYLER);
-                } else text.append(": " + type, StyledString.DECORATIONS_STYLER);
+                } else {
+                    text.append(": " + type, StyledString.DECORATIONS_STYLER);
+                }
             }
             return text.getString();
         }

@@ -64,7 +64,7 @@ public final class CamelFileTypeHelper {
     private static boolean fileMatches(IProject project, String filePath, XmlMatchingStrategySupport matcher) {
         boolean matches = false;
         
-        if (filePath != null && filePath.trim().length()>0) {
+        if (filePath != null && filePath.trim().length() > 0) {
             String rawPath = null;
             if (filePath.startsWith("file:")) {
                 rawPath = filePath.substring(5);
@@ -72,11 +72,12 @@ public final class CamelFileTypeHelper {
                 IPath wholePath = project.getLocation().append(filePath);
                 rawPath = wholePath.toPortableString();
             }
-            Path f = new Path(rawPath);
-            java.io.File nf = new java.io.File(f.toOSString());
+            Path fp = new Path(rawPath);
+            java.io.File nf = new java.io.File(fp.toOSString());
             if (nf.exists() && nf.isFile()) {
                 // file exists, now check if its blueprint or spring
-                IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(f.makeRelativeTo(ResourcesPlugin.getWorkspace().getRoot().getLocation()));
+                IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(
+                        fp.makeRelativeTo(ResourcesPlugin.getWorkspace().getRoot().getLocation()));
                 matches = matcher.matches(file);
             }
         }

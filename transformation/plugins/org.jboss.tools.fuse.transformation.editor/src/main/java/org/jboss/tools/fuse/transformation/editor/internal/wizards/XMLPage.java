@@ -147,7 +147,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         _xmlSchemaOption.addSelectionListener(new SelectionListener() {
 
             @Override
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(SelectionEvent event) {
                 if (isSourcePage()) {
                     model.setSourceType(ModelType.XSD);
                     model.setSourceFilePath("");
@@ -159,7 +159,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
 
             @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
+            public void widgetDefaultSelected(SelectionEvent event) {
                 // empty
             }
         });
@@ -167,7 +167,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         _xmlInstanceOption.addSelectionListener(new SelectionListener() {
 
             @Override
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(SelectionEvent event) {
                 if (isSourcePage()) {
                     model.setSourceType(ModelType.XML);
                     model.setSourceFilePath("");
@@ -179,7 +179,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
 
             @Override
-            public void widgetDefaultSelected(SelectionEvent e) {
+            public void widgetDefaultSelected(SelectionEvent event) {
                 // empty
             }
         });
@@ -204,7 +204,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
 
         xmlFileBrowseButton.addSelectionListener(new SelectionAdapter() {
             @Override
-            public void widgetSelected(final SelectionEvent e) {
+            public void widgetSelected(final SelectionEvent event) {
                 String extension = "xml";
                 boolean isXML = true;
                 if (_xmlInstanceOption.getSelection()) {
@@ -256,7 +256,8 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         });
 
-        label = createLabel(_page, "Element Root:", "Element root to use for the root of the transformation object.");
+        label = createLabel(_page, "Element Root:", 
+                "Element root to use for the root of the transformation object.");
 
         _xmlRootsCombo = new ComboViewer(_page, SWT.DROP_DOWN | SWT.READ_ONLY);
         _xmlRootsCombo.getCombo().setLayoutData(
@@ -265,7 +266,8 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         _xmlRootsCombo.setContentProvider(new ObservableListContentProvider());
         _xmlRootsCombo.setLabelProvider(new QNameLabelProvider());
         _xmlRootsCombo.getCombo().setEnabled(false);
-        _xmlRootsCombo.getCombo().setToolTipText("This list will be populated as soon as an XML file is selected.");
+        _xmlRootsCombo.getCombo().setToolTipText(
+                "This list will be populated as soon as an XML file is selected.");
 
         Group group2 = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group2.setText("XML Structure Preview");
@@ -312,7 +314,8 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         }
         ClasspathResourceSelectionDialog dialog = null;
         if (javaProject == null) {
-            dialog = new ClasspathResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
+            dialog = new ClasspathResourceSelectionDialog(
+                    shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
         } else {
             dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), extension);
         }
@@ -448,7 +451,8 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                     if (elementList.size() == 1) {
                         _xmlRootsCombo.getCombo().setToolTipText("Only one root element found.");
                     } else {
-                        _xmlRootsCombo.getCombo().setToolTipText("Select from the available list of root elements.");
+                        _xmlRootsCombo.getCombo().setToolTipText(
+                                "Select from the available list of root elements.");
                     }
                 }
             }

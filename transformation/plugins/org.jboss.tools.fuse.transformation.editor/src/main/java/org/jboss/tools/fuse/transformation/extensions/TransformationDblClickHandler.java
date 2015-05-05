@@ -99,13 +99,14 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
                             IPath tempPath = new Path(filename);
                             IFile xmlFile = res.getProject().getFile(tempPath);
                             if (xmlFile != null && !xmlFile.exists()) {
-                                tempPath = new Path (Util.RESOURCES_PATH + filename);
+                                tempPath = new Path(Util.RESOURCES_PATH + filename);
                                 xmlFile = res.getProject().getFile(tempPath);
                                 if (xmlFile != null && !xmlFile.exists()) {
                                     MessageDialog.openError(
                                             Display.getCurrent().getActiveShell(),
                                             "Transformation File Not Accessible",
-                                            "The Transformation file (" + filename + ") is not accessible in the Camel project.");
+                                            "The Transformation file (" + filename 
+                                            + ") is not accessible in the Camel project.");
                                     return;
                                 }
                             }
@@ -115,7 +116,8 @@ public class TransformationDblClickHandler implements ICustomDblClickHandler {
                                             desc.getId());
                         } catch (Exception e) {
                             Activator.showUserError("Exception Opening Transformation File",
-                                    "The Transformation file (" + filename + ") is not accessible in the Camel project.",
+                                    "The Transformation file (" + filename 
+                                    + ") is not accessible in the Camel project.",
                                     e);
                             e.printStackTrace();
                         }

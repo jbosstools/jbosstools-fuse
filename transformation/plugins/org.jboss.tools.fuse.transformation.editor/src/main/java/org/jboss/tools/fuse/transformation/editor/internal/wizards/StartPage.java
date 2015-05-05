@@ -83,7 +83,8 @@ public class StartPage extends XformWizardPage {
     
     @Override
     public void createControl(final Composite parent) {
-        setDescription("Supply the ID, project, and path, as well as the source and target types for the transformation.");
+        setDescription("Supply the ID, project, and path, as well as"
+                + " the source and target types for the transformation.");
         observablesManager.runAndCollect(new Runnable() {
 
             @Override
@@ -121,7 +122,8 @@ public class StartPage extends XformWizardPage {
         });
 
         // Create ID widgets
-        label = createLabel(_page, "Transformation ID:", "The transformation ID that will be shown in the Fuse editor.");
+        label = createLabel(_page, "Transformation ID:", 
+                "The transformation ID that will be shown in the Fuse editor.");
 
         _idText = new Text(_page, SWT.BORDER);
         _idText.setLayoutData(
