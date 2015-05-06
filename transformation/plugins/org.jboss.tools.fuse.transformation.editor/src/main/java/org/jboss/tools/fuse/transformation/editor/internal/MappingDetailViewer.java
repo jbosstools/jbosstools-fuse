@@ -121,7 +121,7 @@ public final class MappingDetailViewer extends MappingViewer {
                      final Object newValue) {
         switch (eventType) {
             case TransformationConfig.MAPPING: {
-                if (oldValue == mapping) {
+                if (equals(mapping, oldValue)) {
                     scroller.setContent(null);
                 } else if (newValue != null) {
                     update((MappingOperation<?, ?>)newValue);
@@ -131,10 +131,9 @@ public final class MappingDetailViewer extends MappingViewer {
             case TransformationConfig.MAPPING_CUSTOMIZE:
             case TransformationConfig.MAPPING_SOURCE:
             case TransformationConfig.MAPPING_TARGET: {
-                if (mapping != oldValue) {
-                    return;
+                if (equals(mapping, oldValue)) {
+                    update((MappingOperation<?, ?>)newValue);
                 }
-                update((MappingOperation<?, ?>)newValue);
                 break;
             }
             case TransformationConfig.VARIABLE_VALUE: {

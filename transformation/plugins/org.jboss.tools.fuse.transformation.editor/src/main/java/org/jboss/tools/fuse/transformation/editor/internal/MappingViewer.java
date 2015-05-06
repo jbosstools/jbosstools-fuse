@@ -145,6 +145,31 @@ abstract class MappingViewer {
         config.save();
     }
 
+    boolean equals(final MappingOperation<?, ?> mapping,
+                   final Object object) {
+        if (mapping == object) {
+            return true;
+        }
+        if (mapping == null || object == null) {
+            return false;
+        }
+        if (!(object instanceof MappingOperation<?, ?>)) {
+            return false;
+        }
+        final MappingOperation<?, ?> mapping2 = (MappingOperation<?, ?>)object;
+        if (mapping.getSource() == mapping2.getSource()
+            && mapping.getTarget() == mapping2.getTarget()) {
+            return true;
+        }
+        if (mapping.getSource() != null && !mapping.getSource().equals(mapping2.getSource())) {
+            return false;
+        }
+        if (mapping.getTarget() != null && !mapping.getTarget().equals(mapping2.getTarget())) {
+            return false;
+        }
+        return true;
+    }
+
     String name(final Object object) {
         if (object instanceof Model) {
             return ((Model)object).getName();

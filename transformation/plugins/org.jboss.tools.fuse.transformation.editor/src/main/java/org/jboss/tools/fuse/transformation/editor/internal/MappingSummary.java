@@ -126,7 +126,7 @@ final class MappingSummary extends MappingViewer {
             variableValueUpdated((Variable)newValue);
             return;
         }
-        if (mapping != oldValue) {
+        if (!equals(mapping, oldValue)) {
             return;
         }
         if (eventType.equals(TransformationConfig.MAPPING)) {

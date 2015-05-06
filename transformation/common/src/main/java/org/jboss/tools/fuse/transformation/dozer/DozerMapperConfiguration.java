@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -73,7 +73,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         mapConfig = (Mappings) getJAXBContext().createUnmarshaller().unmarshal(file);
         this.loader = loader;
     }
-    
+
     private DozerMapperConfiguration(final InputStream stream, final ClassLoader loader) throws Exception {
         mapConfig = (Mappings) getJAXBContext().createUnmarshaller().unmarshal(stream);
         this.loader = loader;
@@ -91,7 +91,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             throws Exception {
         return new DozerMapperConfiguration(file, loader);
     }
-    
+
     public static DozerMapperConfiguration loadConfig(final InputStream stream) throws Exception {
         return new DozerMapperConfiguration(stream, null);
     }
@@ -130,7 +130,8 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         ((BaseDozerMapping) mapping).delete();
     }
 
-    
+
+    @Override
     public List<MappingOperation<?, ?>> getMappings() {
         LinkedList<MappingOperation<?, ?>> mappings = new LinkedList<MappingOperation<?, ?>>();
         for (Mapping mapping : mapConfig.getMapping()) {
@@ -165,7 +166,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         }
         return mappings;
     }
-    
+
     @Override
     public Variable addVariable(String name, String value) {
         Variable variable = getVariable(name);
@@ -181,13 +182,13 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
     @Override
     public boolean removeVariable(Variable variable) {
-        if (mapConfig.getConfiguration() == null 
+        if (mapConfig.getConfiguration() == null
                 || mapConfig.getConfiguration().getVariables() == null) {
             return false;
         }
 
         Variables dozerVars = mapConfig.getConfiguration().getVariables();
-        Iterator<org.jboss.tools.fuse.transformation.dozer.config.Variable> varIt = 
+        Iterator<org.jboss.tools.fuse.transformation.dozer.config.Variable> varIt =
                 dozerVars.getVariable().iterator();
         boolean removed = false;
         while (varIt.hasNext()) {
@@ -195,22 +196,23 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             if (dozerVar.getName().equals(variable.getName())) {
                 varIt.remove();
                 removed = true;
+                break;
             }
         }
-        
+
         // If there are no variables we need to remove the top-level variables
         // element to make Dozer happy
-        if (removed) {
+        if (dozerVars.getVariable().isEmpty()) {
             mapConfig.getConfiguration().setVariables(null);
         }
-        
+
         return removed;
     }
 
     @Override
     public List<Variable> getVariables() {
         LinkedList<Variable> variableList = new LinkedList<Variable>();
-        if (mapConfig.getConfiguration() == null 
+        if (mapConfig.getConfiguration() == null
                 || mapConfig.getConfiguration().getVariables() == null) {
             return variableList;
         }
@@ -260,7 +262,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         field.setCustomConverterId(VARIABLE_MAPPER_ID);
         field.setCustomConverterParam(DozerVariableMapping.qualifyName(variable.getName()));
         mapping.getFieldOrFieldExclude().add(field);
-        
+
         return new DozerVariableMapping(variable, target, mapping, field);
     }
 
@@ -275,7 +277,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         dozerExpression.setLanguage(language);
         field.setCustomConverterId(EXPRESSION_MAPPER_ID);
         mapping.getFieldOrFieldExclude().add(field);
-        
+
         return new DozerExpressionMapping(dozerExpression, target, mapping, field);
     }
 
@@ -345,7 +347,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         DozerCustomMapping customMapping = new DozerCustomMapping(fieldMapping);
         customMapping.setMappingClass(mappingClass);
         customMapping.setMappingOperation(mappingOperation);
-        
+
         return customMapping;
     }
 
@@ -474,7 +476,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         }
         return jaxbCtx;
     }
-    
+
     private Variable createVariable(String name, String value) {
         // Add the variable to the dozer config
         Configuration dozerConfig = mapConfig.getConfiguration();
@@ -487,21 +489,21 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             variables = new Variables();
             dozerConfig.setVariables(variables);
         }
-        org.jboss.tools.fuse.transformation.dozer.config.Variable dozerVar = 
+        org.jboss.tools.fuse.transformation.dozer.config.Variable dozerVar =
                 new org.jboss.tools.fuse.transformation.dozer.config.Variable();
         dozerVar.setName(name);
         dozerVar.setContent(value);
         variables.getVariable().add(dozerVar);
-        
+
         return new DozerVariable(dozerVar);
     }
-    
+
     private Model getModel(Model model, String type, String name) {
         // See if the current model is the target model
         if (type.equals(model.getType()) && name.equals(model.getName())) {
             return model;
         }
-        // If the target model is not a list, we can get it by name 
+        // If the target model is not a list, we can get it by name
         Model found = model.get(name);
         // If we still don't have a hit, the target model must be part of a collection
         if (found == null) {
@@ -511,13 +513,13 @@ public class DozerMapperConfiguration implements MapperConfiguration {
                 } else {
                     found = getModel(childModel, type, name);
                 }
-                
+
                 if (found != null) {
                     break;
                 }
             }
         }
-        
+
         return found;
     }
 }
