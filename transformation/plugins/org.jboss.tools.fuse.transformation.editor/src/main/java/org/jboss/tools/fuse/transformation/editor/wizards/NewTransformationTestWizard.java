@@ -84,6 +84,7 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
      */
     @Override
     public void init(IWorkbench workbench, IStructuredSelection selection) {
+        _page.setTypeName("TransformationTest", true);
         // what are we passing in? assume we're right-clicking on the dozer file
         if (selection.size() != 1) {
             return;
@@ -102,7 +103,6 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
                     camelConfigFile = selectedFile;
                 }
             }
-            _page.setTypeName("TransformationTest", true);
             if (project != null) {
                 _page.setProject(project);
                 javaProject = JavaCore.create(project);
