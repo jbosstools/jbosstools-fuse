@@ -40,7 +40,7 @@ public class $[test-name] extends CamelSpringTestSupport {
     
     @Override
     protected AbstractXmlApplicationContext createApplicationContext() {
-        return new ClassPathXmlApplicationContext("META-INF/spring/camel-context.xml");
+        return new ClassPathXmlApplicationContext("$[camel-name]");
     }
     
     private String readFile(String filePath) throws Exception {

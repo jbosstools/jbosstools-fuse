@@ -26,6 +26,7 @@ public class TestGenerator {
     private static final String ENDPOINT_KEY = "\\$\\[transform-id\\]";
     private static final String PACKAGE_KEY = "\\$\\[package-name\\]";
     private static final String CLASSNAME_KEY = "\\$\\[test-name\\]";
+    private static final String FILENAME_KEY = "\\$\\[camel-name\\]";
 
     /**
      * Creates a test class for a transformation endpoint with the specified
@@ -40,6 +41,7 @@ public class TestGenerator {
     public static String createTransformTestText(String transformId,
             String packageName,
             String className,
+            String fileName,
             boolean isSpring) throws Exception {
 
         String template = null;
@@ -47,12 +49,14 @@ public class TestGenerator {
             template = readTemplate(SPRING_TEST_TEMPLATE)
                     .replaceAll(ENDPOINT_KEY, transformId)
                     .replaceAll(PACKAGE_KEY, packageName)
-                    .replaceAll(CLASSNAME_KEY, className);
+                    .replaceAll(CLASSNAME_KEY, className)
+                    .replaceAll(FILENAME_KEY, fileName);
         } else {
             template = readTemplate(BLUEPRINT_TEST_TEMPLATE)
                     .replaceAll(ENDPOINT_KEY, transformId)
                     .replaceAll(PACKAGE_KEY, packageName)
-                    .replaceAll(CLASSNAME_KEY, className);
+                    .replaceAll(CLASSNAME_KEY, className)
+                    .replaceAll(FILENAME_KEY, fileName);
         }
         // in the case of a default package, we don't have the package name
         if (packageName.isEmpty()) {
