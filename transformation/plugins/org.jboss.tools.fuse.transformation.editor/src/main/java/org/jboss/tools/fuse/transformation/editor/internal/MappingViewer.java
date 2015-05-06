@@ -221,8 +221,9 @@ abstract class MappingViewer {
     }
 
     void variableValueUpdated(final Variable variable) {
-        if (variable.equals(mapping.getSource()))
+        if (variable.equals(mapping.getSource())) {
             sourceText.setToolTipText(variableToolTip(variable));
+        }
     }
 
     abstract class DropListener extends DropTargetAdapter {
