@@ -64,5 +64,14 @@ public class DozerVariableMappingTest {
         Assert.assertEquals(0, doc.getElementsByTagName("variables").getLength());
         
     }
+    
+    @Test
+    public void removeOneVariable() throws Exception {
+        DozerMapperConfiguration dozerConfig = DozerMapperConfiguration.loadConfig(
+                new File(CONFIG_ROOT, "fieldAndVariableMapping.xml"));
+        Variable var = dozerConfig.getVariable("VAR2");
+        dozerConfig.removeVariable(var);
+        Assert.assertEquals(1, dozerConfig.getVariables().size());
+    }
 }
 
