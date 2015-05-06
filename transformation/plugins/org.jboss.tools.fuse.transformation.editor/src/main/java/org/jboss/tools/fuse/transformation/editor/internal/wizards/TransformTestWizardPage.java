@@ -288,10 +288,15 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     
                 StringBuffer clsContent = new StringBuffer();
                 
+                String filePath = getCamelFilePath();
+                IResource res = project.getProject().findMember(filePath);
+                IPath respath = JavaUtil.getJavaPathForResource(res);
+                filePath = respath.makeRelative().toString();
+                
                 if (isSpring || isBlueprint) {
                     String codeTemplate = 
                         TestGenerator.createTransformTestText(
-                                _transformID, packageName, className, isSpring);
+                                _transformID, packageName, className, filePath, isSpring);
                 
                     if (codeTemplate != null) {
                         clsContent.append(codeTemplate);
@@ -364,7 +369,7 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     public boolean isPageComplete() {
         // having an endpoint selected implies that we also have a camel file selected
         boolean endpointSelected = (getTransformID() != null && !getTransformID().trim().isEmpty());
-        boolean sourceFolderSpecified = (getPackageFragmentRoot() != null);
+        boolean sourceFolderSpecified = (getPackageFragmentRoot() != null) || (getPackageFragmentRootText() != null && getPackageFragmentRootText().endsWith("src/test/java"));
         boolean classNameSpecified = (getTypeName() != null);
         boolean superComplete = super.isPageComplete();
         if (superComplete && endpointSelected && sourceFolderSpecified && classNameSpecified) {

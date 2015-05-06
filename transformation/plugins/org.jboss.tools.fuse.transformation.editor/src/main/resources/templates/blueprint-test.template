@@ -38,7 +38,7 @@ public class $[test-name] extends CamelBlueprintTestSupport {
     
 	@Override
 	protected String getBlueprintDescriptor() {
-		return "OSGI-INF/blueprint/camel-blueprint.xml";
+		return "$[camel-name]";
 	}
     
     private String readFile(String filePath) throws Exception {
