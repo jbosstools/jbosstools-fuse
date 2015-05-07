@@ -170,7 +170,7 @@ public class Activator extends ImagesActivatorSupport {
 	public synchronized String getCamelVersion() {
 	    if (this.camelVersion == null) {
 	        // TODO: read the set camel version from project settings in future
-	        this.camelVersion = CamelModelFactory.getSupportedCamelVersions().get(0);
+	        this.camelVersion = CamelModelFactory.getLatestCamelVersion();
 	    }
 	    return this.camelVersion;
 	}

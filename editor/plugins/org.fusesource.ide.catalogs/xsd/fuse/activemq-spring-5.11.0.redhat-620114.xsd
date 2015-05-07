@@ -145,6 +145,21 @@ an abort.
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='ignoreNetworkConsumers' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            Sets whether the strategy is configured to ignore consumers that are part of a network
+connection to another broker.
+
+When configured to not ignore idle consumers this strategy acts not only on consumers
+that are actually slow but also on any consumer that has not received any messages for
+the maxTimeSinceLastAck.  This allows for a way to evict idle consumers while also
+aborting slow consumers however for a network subscription this can create a lot of
+unnecessary churn and if the abort connection option is also enabled this can result
+in the entire network connection being torn down and rebuilt for no reason.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='maxSlowCount' type='xs:long'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -1001,7 +1016,6 @@ with JUnit tests you may wish to start and stop the broker explicitly yourself.
       </xs:attribute>
       <xs:attribute name='startAsync' type='xs:boolean'/>
       <xs:attribute name='storeOpenWireVersion' type='xs:integer'/>
-      <xs:attribute name='supportFailOver' type='xs:boolean'/>
       <xs:attribute name='systemExitOnShutdown' type='xs:string'/>
       <xs:attribute name='systemExitOnShutdownExitCode' type='xs:integer'/>
       <xs:attribute name='systemUsage' type='xs:string'/>
@@ -1615,7 +1629,6 @@ value filled in or not.
       <xs:attribute name='sslContext' type='xs:string'/>
       <xs:attribute name='startAsync' type='xs:boolean'/>
       <xs:attribute name='storeOpenWireVersion' type='xs:integer'/>
-      <xs:attribute name='supportFailOver' type='xs:boolean'/>
       <xs:attribute name='systemExitOnShutdown' type='xs:string'/>
       <xs:attribute name='systemExitOnShutdownExitCode' type='xs:integer'/>
       <xs:attribute name='systemUsage' type='xs:string'/>
@@ -8304,6 +8317,7 @@ matches the message.
         <xs:any namespace='##other' minOccurs='0' maxOccurs='unbounded'/>
       </xs:choice></xs:choice>
       <xs:attribute name='SSLContext' type='xs:string'/>
+      <xs:attribute name='crlPath' type='xs:string'/>
       <xs:attribute name='keyStore' type='xs:string'/>
       <xs:attribute name='keyStoreAlgorithm' type='xs:string'/>
       <xs:attribute name='keyStoreKeyPassword' type='xs:string'/>
@@ -9648,6 +9662,7 @@ This is influenced by code snippets developed by Maciej Rakowicz
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name='ignoreWildcardSelectors' type='xs:boolean'/>
       <xs:attribute name='persistFile' type='xs:string'>
         <xs:annotation>
           <xs:documentation><![CDATA[
@@ -9655,6 +9670,8 @@ This is influenced by code snippets developed by Maciej Rakowicz
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name='persistInterval' type='xs:long'/>
+      <xs:attribute name='singleSelectorPerDestination' type='xs:boolean'/>
       <xs:attribute name='id' type='xs:ID'/>
       <xs:anyAttribute namespace='##other' processContents='lax'/>
     </xs:complexType>

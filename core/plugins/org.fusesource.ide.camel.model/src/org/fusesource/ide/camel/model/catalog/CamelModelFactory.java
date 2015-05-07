@@ -64,4 +64,25 @@ public class CamelModelFactory {
 	public static CamelModel getModelForVersion(String camelVersion) {
 		return supportedCamelModels.get(camelVersion);
 	}
+	
+	/**
+	 * returns the latest and greatest supported Camel version we have a catalog 
+	 * for. If there are 2 catalogs with the same version (for instance 2.15.1 and 
+	 * 2.15.1.redhat-114) then we will always prefer the Red Hat variant.
+	 * 
+	 * @return
+	 */
+	public static String getLatestCamelVersion() {
+		String latest = null;
+		for (String v : supportedCamelModels.keySet()) {
+			if (latest == null) {
+				latest = v;
+			} else if (v.compareTo(latest)>0) {
+				latest = v;
+			}
+		}
+		if (latest != null) return latest;
+		
+		return supportedCamelModels.keySet().iterator().next();
+	}
 }

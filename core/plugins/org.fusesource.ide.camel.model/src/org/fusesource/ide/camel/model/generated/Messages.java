@@ -81,6 +81,7 @@ public class Messages extends NLS {
     public static String propertyLabelDynamicRouterExpression;
     public static String propertyLabelDynamicRouterUriDelimiter;
     public static String propertyLabelDynamicRouterIgnoreInvalidEndpoints;
+    public static String propertyLabelDynamicRouterCacheSize;
 
     public static String propertyLabelEnrichResourceUri;
     public static String propertyLabelEnrichAggregationStrategyRef;
@@ -345,6 +346,7 @@ public class Messages extends NLS {
         map.put("propertyLabelDynamicRouterExpression", propertyLabelDynamicRouterExpression);
         map.put("propertyLabelDynamicRouterUriDelimiter", propertyLabelDynamicRouterUriDelimiter);
         map.put("propertyLabelDynamicRouterIgnoreInvalidEndpoints", propertyLabelDynamicRouterIgnoreInvalidEndpoints);
+        map.put("propertyLabelDynamicRouterCacheSize", propertyLabelDynamicRouterCacheSize);
         map.put("propertyLabelEnrichResourceUri", propertyLabelEnrichResourceUri);
         map.put("propertyLabelEnrichAggregationStrategyRef", propertyLabelEnrichAggregationStrategyRef);
         map.put("propertyLabelEnrichAggregationStrategyMethodName", propertyLabelEnrichAggregationStrategyMethodName);

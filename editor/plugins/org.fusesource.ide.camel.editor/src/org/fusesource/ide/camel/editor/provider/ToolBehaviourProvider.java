@@ -114,6 +114,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         CONNECTORS_WHITELIST.add("jgroups");
         CONNECTORS_WHITELIST.add("jms");
         CONNECTORS_WHITELIST.add("language");
+        CONNECTORS_WHITELIST.add("linkedin");
         CONNECTORS_WHITELIST.add("mina2");
         CONNECTORS_WHITELIST.add("mqtt");
         CONNECTORS_WHITELIST.add("mvel");
@@ -127,6 +128,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         CONNECTORS_WHITELIST.add("quartz2");
         CONNECTORS_WHITELIST.add("restlet");
         CONNECTORS_WHITELIST.add("rss");
+        CONNECTORS_WHITELIST.add("salesforce");
         CONNECTORS_WHITELIST.add("sap-netweaver");
         CONNECTORS_WHITELIST.add("scheduler");
         CONNECTORS_WHITELIST.add("seda");

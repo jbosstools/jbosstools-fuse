@@ -40,10 +40,12 @@ public class DynamicRouter extends AbstractNode {
     public static final String PROPERTY_EXPRESSION = "DynamicRouter.Expression";
     public static final String PROPERTY_URIDELIMITER = "DynamicRouter.UriDelimiter";
     public static final String PROPERTY_IGNOREINVALIDENDPOINTS = "DynamicRouter.IgnoreInvalidEndpoints";
+    public static final String PROPERTY_CACHESIZE = "DynamicRouter.CacheSize";
 
     private ExpressionDefinition expression;
     private String uriDelimiter;
     private Boolean ignoreInvalidEndpoints;
+    private Integer cacheSize;
 
     public DynamicRouter() {
     }
@@ -123,6 +125,24 @@ public class DynamicRouter extends AbstractNode {
         }
     }
 
+    /**
+     * @return the cacheSize
+     */
+    public Integer getCacheSize() {
+        return this.cacheSize;
+    }
+
+    /**
+     * @param cacheSize the cacheSize to set
+     */
+    public void setCacheSize(Integer cacheSize) {
+        Integer oldValue = this.cacheSize;
+        this.cacheSize = cacheSize;
+        if (!isSame(oldValue, cacheSize)) {
+            firePropertyChange(PROPERTY_CACHESIZE, oldValue, cacheSize);
+        }
+    }
+
     @Override
     protected void addCustomProperties(Map<String, PropertyDescriptor> descriptors) {
         super.addCustomProperties(descriptors);
@@ -130,10 +150,12 @@ public class DynamicRouter extends AbstractNode {
         PropertyDescriptor descExpression = new ExpressionPropertyDescriptor(PROPERTY_EXPRESSION, Messages.propertyLabelDynamicRouterExpression);
         PropertyDescriptor descUriDelimiter = new TextPropertyDescriptor(PROPERTY_URIDELIMITER, Messages.propertyLabelDynamicRouterUriDelimiter);
         PropertyDescriptor descIgnoreInvalidEndpoints = new BooleanPropertyDescriptor(PROPERTY_IGNOREINVALIDENDPOINTS, Messages.propertyLabelDynamicRouterIgnoreInvalidEndpoints);
+        PropertyDescriptor descCacheSize = new TextPropertyDescriptor(PROPERTY_CACHESIZE, Messages.propertyLabelDynamicRouterCacheSize);
 
         descriptors.put(PROPERTY_EXPRESSION, descExpression);
         descriptors.put(PROPERTY_URIDELIMITER, descUriDelimiter);
         descriptors.put(PROPERTY_IGNOREINVALIDENDPOINTS, descIgnoreInvalidEndpoints);
+        descriptors.put(PROPERTY_CACHESIZE, descCacheSize);
     }
 
     /* (non-Javadoc)
@@ -153,6 +175,10 @@ public class DynamicRouter extends AbstractNode {
             setIgnoreInvalidEndpoints(Objects.convertTo(value, Boolean.class));
             return;
         }
+        if (PROPERTY_CACHESIZE.equals(id)) {
+            setCacheSize(Objects.convertTo(value, Integer.class));
+            return;
+        }
         super.setPropertyValue(id, value);
     }
 
@@ -170,6 +196,9 @@ public class DynamicRouter extends AbstractNode {
         if (PROPERTY_IGNOREINVALIDENDPOINTS.equals(id)) {
             return this.getIgnoreInvalidEndpoints();
         }
+        if (PROPERTY_CACHESIZE.equals(id)) {
+            return this.getCacheSize();
+        }
         return super.getPropertyValue(id);
     }
 
@@ -181,6 +210,7 @@ public class DynamicRouter extends AbstractNode {
         answer.setExpression(toXmlPropertyValue(PROPERTY_EXPRESSION, this.getExpression()));
         answer.setUriDelimiter(toXmlPropertyValue(PROPERTY_URIDELIMITER, this.getUriDelimiter()));
         answer.setIgnoreInvalidEndpoints(toXmlPropertyValue(PROPERTY_IGNOREINVALIDENDPOINTS, this.getIgnoreInvalidEndpoints()));
+        answer.setCacheSize(toXmlPropertyValue(PROPERTY_CACHESIZE, this.getCacheSize()));
 
         super.savePropertiesToCamelDefinition(answer);
         return answer;
@@ -203,6 +233,7 @@ public class DynamicRouter extends AbstractNode {
             this.setExpression(node.getExpression());
             this.setUriDelimiter(node.getUriDelimiter());
             this.setIgnoreInvalidEndpoints(node.getIgnoreInvalidEndpoints());
+            this.setCacheSize(node.getCacheSize());
         } else {
             throw new IllegalArgumentException("ProcessorDefinition not an instanceof DynamicRouterDefinition. Was " + processor.getClass().getName());
         }

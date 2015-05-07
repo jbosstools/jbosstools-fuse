@@ -6086,14 +6086,14 @@
 
   <xs:simpleType name="exchangePattern">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="OutOnly"/>
-      <xs:enumeration value="InOnly"/>
       <xs:enumeration value="InOptionalOut"/>
+      <xs:enumeration value="InOnly"/>
+      <xs:enumeration value="OutIn"/>
       <xs:enumeration value="RobustInOnly"/>
+      <xs:enumeration value="OutOnly"/>
       <xs:enumeration value="InOut"/>
       <xs:enumeration value="OutOptionalIn"/>
       <xs:enumeration value="RobustOutOnly"/>
-      <xs:enumeration value="OutIn"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -6101,9 +6101,9 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="WARN"/>
       <xs:enumeration value="TRACE"/>
-      <xs:enumeration value="ERROR"/>
-      <xs:enumeration value="DEBUG"/>
       <xs:enumeration value="OFF"/>
+      <xs:enumeration value="DEBUG"/>
+      <xs:enumeration value="ERROR"/>
       <xs:enumeration value="INFO"/>
     </xs:restriction>
   </xs:simpleType>
@@ -6112,24 +6112,24 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="Discard"/>
       <xs:enumeration value="DiscardOldest"/>
-      <xs:enumeration value="Abort"/>
       <xs:enumeration value="CallerRuns"/>
+      <xs:enumeration value="Abort"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="bindyType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Csv"/>
-      <xs:enumeration value="Fixed"/>
       <xs:enumeration value="KeyValue"/>
+      <xs:enumeration value="Fixed"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="jsonLibrary">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="XStream"/>
       <xs:enumeration value="Gson"/>
       <xs:enumeration value="Jackson"/>
+      <xs:enumeration value="XStream"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -6142,8 +6142,8 @@
 
   <xs:simpleType name="shutdownRoute">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Defer"/>
       <xs:enumeration value="Default"/>
+      <xs:enumeration value="Defer"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -6156,11 +6156,11 @@
 
   <xs:simpleType name="restBindingMode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="auto"/>
-      <xs:enumeration value="off"/>
       <xs:enumeration value="json_xml"/>
       <xs:enumeration value="xml"/>
+      <xs:enumeration value="off"/>
       <xs:enumeration value="json"/>
+      <xs:enumeration value="auto"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -6173,9 +6173,9 @@
 
   <xs:simpleType name="errorHandlerType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="DeadLetterChannel"/>
-      <xs:enumeration value="TransactionErrorHandler"/>
       <xs:enumeration value="NoErrorHandler"/>
+      <xs:enumeration value="TransactionErrorHandler"/>
+      <xs:enumeration value="DeadLetterChannel"/>
       <xs:enumeration value="LoggingErrorHandler"/>
       <xs:enumeration value="DefaultErrorHandler"/>
     </xs:restriction>

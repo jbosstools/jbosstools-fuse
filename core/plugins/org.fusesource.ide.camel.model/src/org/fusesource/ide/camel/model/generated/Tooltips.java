@@ -89,6 +89,7 @@ public class Tooltips extends NLS {
     public static String tooltipDynamicRouterExpression;
     public static String tooltipDynamicRouterUriDelimiter;
     public static String tooltipDynamicRouterIgnoreInvalidEndpoints;
+    public static String tooltipDynamicRouterCacheSize;
 
     public static String tooltipEnrich;
     public static String tooltipEnrichResourceUri;
@@ -424,6 +425,7 @@ public class Tooltips extends NLS {
         map.put("tooltipDynamicRouterExpression", tooltipDynamicRouterExpression);
         map.put("tooltipDynamicRouterUriDelimiter", tooltipDynamicRouterUriDelimiter);
         map.put("tooltipDynamicRouterIgnoreInvalidEndpoints", tooltipDynamicRouterIgnoreInvalidEndpoints);
+        map.put("tooltipDynamicRouterCacheSize", tooltipDynamicRouterCacheSize);
 
         map.put("tooltipEnrich", tooltipEnrich);
         map.put("tooltipEnrichResourceUri", tooltipEnrichResourceUri);
