@@ -111,21 +111,21 @@
       <propertyTabs contributorId="org.eclipse.wst.server.ui.ServersView">
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.ContentsTab"
-               category="org.jboss.tools.jmx.ui.views"
+               category="org.eclipse.wst.server.ui.ServersView"
                id="org.fusesource.ide.jmx.ui.views.ProcessorsTab.server"
                label="Processors"/>
          <propertyTab
                afterTab="org.fusesource.ide.jmx.ui.views.ProcessorsTab"
-               category="org.jboss.tools.jmx.ui.views"
+               category="org.eclipse.wst.server.ui.ServersView"
                id="org.fusesource.ide.jmx.ui.views.ProfileTab.server"
                label="Profile"/>
          <propertyTab
                afterTab="org.jboss.tools.jmx.ui.views.PropertiesTab"
-               category="org.jboss.tools.jmx.ui.views"
+               category="org.eclipse.wst.server.ui.ServersView"
                id="org.fusesource.ide.jmx.ui.views.ContentsTab.server"
                label="Contents"/>
          <propertyTab
-               category="org.jboss.tools.jmx.ui.views"
+               category="org.eclipse.wst.server.ui.ServersView"
                id="org.jboss.tools.jmx.ui.views.PropertiesTab.server"
                label="Properties"/>
       </propertyTabs>
@@ -168,12 +168,12 @@
                class="org.fusesource.ide.jmx.commons.properties.ContentsTabSection"
                filter="org.fusesource.ide.jmx.commons.properties.ContentsSectionFilter"
                id="ContentsSection"
-               tab="org.fusesource.ide.jmx.ui.views.ContentsTab">
+               tab="org.fusesource.ide.jmx.ui.views.ContentsTab.server">
          </propertySection>
          <propertySection
                class="org.fusesource.ide.jmx.camel.navigator.RoutesProcessorsTabSection"
                id="RoutesProcessorsSection"
-               tab="org.fusesource.ide.jmx.ui.views.ProcessorsTab">
+               tab="org.fusesource.ide.jmx.ui.views.ProcessorsTab.server">
             <input
                   type="org.fusesource.ide.jmx.camel.navigator.RoutesNode">
             </input>
@@ -182,13 +182,13 @@
                class="org.fusesource.ide.jmx.camel.navigator.ProcessorTabSection"
                filter="org.fusesource.ide.jmx.camel.navigator.ProcessorTabSectionFilter"
                id="ProcessorProcessorsSection"
-               tab="org.fusesource.ide.jmx.ui.views.ProcessorsTab">
+               tab="org.fusesource.ide.jmx.ui.views.ProcessorsTab.server">
          </propertySection>
          <propertySection
                class="org.fusesource.ide.jmx.camel.navigator.ProcessorCallsTabSection"
                filter="org.fusesource.ide.jmx.camel.navigator.ProcessorCallsTabSectionFilter"
                id="ProfileSection"
-               tab="org.fusesource.ide.jmx.ui.views.ProfileTab">
+               tab="org.fusesource.ide.jmx.ui.views.ProfileTab.server">
          </propertySection>
       </propertySections>
    </extension>

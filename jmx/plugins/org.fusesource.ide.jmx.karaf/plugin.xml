@@ -65,6 +65,15 @@
                label="Bundles"/>
       </propertyTabs>
    </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs contributorId="org.eclipse.wst.server.ui.ServersView">
+         <propertyTab
+               category="org.eclipse.wst.server.ui.ServersView"
+               id="org.fusesource.ide.jmx.ui.views.BundlesTab.server"
+               label="Bundles"/>
+      </propertyTabs>
+   </extension>
    
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
@@ -78,20 +87,21 @@
             </input>
          </propertySection>
       </propertySections>
-</extension>
-  <extension
+  </extension>
+   <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections contributorId="org.eclipse.wst.server.ui.ServersView">
          <propertySection
                class="org.fusesource.ide.jmx.karaf.navigator.osgi.BundlesTabSection"
                id="BundlesSection"
-               tab="org.fusesource.ide.jmx.ui.views.BundlesTab">
+               tab="org.fusesource.ide.jmx.ui.views.BundlesTab.server">
             <input
                   type="org.fusesource.ide.jmx.karaf.navigator.osgi.BundlesNode">
             </input>
          </propertySection>
       </propertySections>
-   </extension>
+  </extension>
+
   <extension
         point="org.jboss.tools.jmx.core.MBeanServerConnectionProvider">
      <connectionProvider
