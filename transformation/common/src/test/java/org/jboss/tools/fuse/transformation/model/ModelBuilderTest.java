@@ -13,12 +13,13 @@
  */
 package org.jboss.tools.fuse.transformation.model;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 
 import junit.framework.Assert;
 
-import org.jboss.tools.fuse.transformation.model.Model;
-import org.jboss.tools.fuse.transformation.model.ModelBuilder;
 import org.junit.Test;
 
 public class ModelBuilderTest {
@@ -46,6 +47,12 @@ public class ModelBuilderTest {
         Model model = ModelBuilder.fromJavaClass(ClassWithEnum.class);
         Assert.assertEquals(1, model.listFields().size());
     }
+    
+    @Test
+    public void buildWithDateEtc() {
+        Model model = ModelBuilder.fromJavaClass(ClassWithDateEtc.class);
+        Assert.assertEquals(4, model.listFields().size());
+    }
 }
 
 class NoSuper {
@@ -67,6 +74,13 @@ class NoSuper {
     public void setFieldTwo(String fieldTwo) {
         this.fieldTwo = fieldTwo;
     }
+}
+
+class ClassWithDateEtc {
+    private String field1;
+    private Date field2;
+    private Calendar field3;
+    private InputStream field4;
 }
 
 class ClassWithEnum {

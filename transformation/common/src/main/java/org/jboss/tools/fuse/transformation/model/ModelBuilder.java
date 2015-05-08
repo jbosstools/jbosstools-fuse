@@ -80,7 +80,7 @@ public class ModelBuilder {
                 Class<?> fieldClass = field.getType();
                 if (!fieldClass.isPrimitive()
                         && !fieldType.equals(String.class.getName())
-                        && !fieldType.startsWith("java.lang")
+                        && !fieldType.startsWith("java.")
                         && !Number.class.isAssignableFrom(fieldClass)
                         && !(fieldClass instanceof Class<?> && ((Class<?>)fieldClass).isEnum())) {
 
