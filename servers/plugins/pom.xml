@@ -4,15 +4,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
                 <artifactId>servers</artifactId>
-		<version>7.3.0-SNAPSHOT</version>
+		<version>8.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.fusesource.ide.servers</groupId>
 	<artifactId>plugins</artifactId>
 	<name>JBoss Fuse Tooling :: Server Adapters :: Plugins</name>
 	<packaging>pom</packaging>
 	<modules>
-                <module>org.fusesource.ide.server.fabric8.core</module>
-		<module>org.fusesource.ide.server.fabric8.ui</module>
 		<module>org.fusesource.ide.server.fuse.core</module>
 		<module>org.fusesource.ide.server.fuse.ui</module>
 		<module>org.fusesource.ide.server.karaf.core</module>

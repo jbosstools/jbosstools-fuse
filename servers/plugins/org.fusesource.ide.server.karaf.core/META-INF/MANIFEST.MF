@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.server.karaf.core;singleton:=true
-Bundle-Version: 7.3.0.qualifier
+Bundle-Version: 8.0.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.2.0,4.0.0)",
@@ -26,7 +26,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.2.0,4.0.0)",
  org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.jboss.tools.jmx.jvmmonitor.core;bundle-version="1.6.0",
  org.jboss.tools.jmx.local;bundle-version="1.6.0",
- org.fusesource.ide.commons;bundle-version="7.3.0"
+ org.fusesource.ide.commons;bundle-version="8.0.0"
 Bundle-Activator: org.fusesource.ide.server.karaf.core.Activator
 Bundle-ActivationPolicy: lazy
 Export-Package: org.fusesource.ide.server.karaf.core,

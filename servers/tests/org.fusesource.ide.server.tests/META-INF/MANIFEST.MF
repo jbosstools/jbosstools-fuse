@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Activator: org.fusesource.ide.server.tests.FuseServerTestActivator
 Bundle-Name: Fuse Plugins for Eclipse Server Plugin Tests
 Bundle-SymbolicName: org.fusesource.ide.server.tests;singleton:=true
-Bundle-Version: 7.3.0.qualifier
+Bundle-Version: 8.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -12,12 +12,12 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0",
  org.junit;bundle-version="4.11.0",
  org.jboss.tools.as.test.core;bundle-version="3.0.0",
  org.jboss.ide.eclipse.as.wtp.core;bundle-version="3.0.0",
- org.fusesource.ide.commons;bundle-version="7.3.0",
- org.fusesource.ide.preferences;bundle-version="7.3.0",
- org.fusesource.ide.server.karaf.core;bundle-version="7.3.0",
- org.fusesource.ide.server.karaf.ui;bundle-version="7.3.0",
- org.fusesource.ide.server.fuse.core;bundle-version="7.3.0",
- org.fusesource.ide.server.fuse.ui;bundle-version="7.3.0",
- org.fusesource.ide.server.servicemix.core;bundle-version="7.3.0",
- org.fusesource.ide.server.servicemix.ui;bundle-version="7.3.0",
- org.fusesource.ide.server.view;bundle-version="7.3.0"
+ org.fusesource.ide.commons;bundle-version="8.0.0",
+ org.fusesource.ide.preferences;bundle-version="8.0.0",
+ org.fusesource.ide.server.karaf.core;bundle-version="8.0.0",
+ org.fusesource.ide.server.karaf.ui;bundle-version="8.0.0",
+ org.fusesource.ide.server.fuse.core;bundle-version="8.0.0",
+ org.fusesource.ide.server.fuse.ui;bundle-version="8.0.0",
+ org.fusesource.ide.server.servicemix.core;bundle-version="8.0.0",
+ org.fusesource.ide.server.servicemix.ui;bundle-version="8.0.0",
+ org.fusesource.ide.server.view;bundle-version="8.0.0"

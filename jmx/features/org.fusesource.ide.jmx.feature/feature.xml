@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.jmx.feature"
       label="%featureName"
-      version="7.3.0.qualifier"
+      version="8.0.0.qualifier"
       provider-name="%providerName"
       plugin="org.fusesource.ide.tooling">
 
@@ -30,8 +30,8 @@ Raleigh NC 27606 USA.
    </url>
 
    <requires>
-      <import feature="org.fusesource.ide.core.feature" version="7.3.0" match="greaterOrEqual"/>
-      <import feature="org.fusesource.ide.server.extensions.feature" version="7.3.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.core.feature" version="8.0.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.server.extensions.feature" version="8.0.0" match="greaterOrEqual"/>
       
       <import plugin="org.jboss.tools.jmx.core" version="1.6.0" match="greaterOrEqual"/>
       <import plugin="org.jboss.tools.jmx.ui" version="1.6.0" match="greaterOrEqual"/>
@@ -69,14 +69,7 @@ Raleigh NC 27606 USA.
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-<!--
-   <plugin
-         id="org.fusesource.ide.jmx.fabric8"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
--->
+
    <plugin
          id="org.fusesource.ide.jmx.karaf"
          download-size="0"

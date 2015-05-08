@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.server.fuse.ui;singleton:=true
-Bundle-Version: 7.3.0.qualifier
+Bundle-Version: 8.0.0.qualifier
 Bundle-Activator: org.fusesource.ide.server.fuse.ui.FuseESBUIPlugin
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.fusesource.ide.server.karaf.core,

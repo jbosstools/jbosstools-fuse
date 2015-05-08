@@ -68,6 +68,7 @@ find * -name 'pom.xml' | xargs perl -pi -e "s/<version>$SOURCE_VERSION_PATTERN_O
 
 # replace manifest versions
 find * -name 'MANIFEST.MF' | xargs perl -pi -e "s/$SOURCE_VERSION_PATTERN_OSGI/$OSGI_TARGET_VERSION/g"
+find * -name 'MANIFEST.MF' | xargs perl -pi -e "s/;bundle-version=\"$SOURCE_VERSION\"/;bundle-version=\"$TARGET_VERSION\"/g"
 
 # bundle.properties
 #find * -name 'bundle.properties' | xargs perl -pi -e "s/$SOURCE_VERSION_PATTERN_OSGI/$OSGI_TARGET_VERSION/g"
@@ -77,12 +78,13 @@ find * -name 'MANIFEST.MF' | xargs perl -pi -e "s/$SOURCE_VERSION_PATTERN_OSGI/$
 
 # feature.xml files
 find * -name 'feature.xml' | xargs perl -pi -e "s/$SOURCE_VERSION_PATTERN_OSGI/$OSGI_TARGET_VERSION/g"
+find * -name 'feature.xml' | xargs perl -pi -e "s/version=\"$SOURCE_VERSION\"/version=\"$TARGET_VERSION\"/g"
 
 # other xml files
 #find * -name '*.xml' | xargs perl -pi -e "s/$SOURCE_VERSION_PATTERN_OSGI/$OSGI_TARGET_VERSION/g"
 
 # replace IDE version
-perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>$MVN_TARGET_VERSION<\/ide-version>/g" plugins/pom.xml
+#perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>$MVN_TARGET_VERSION<\/ide-version>/g" plugins/pom.xml
 
 echo "DONE!"
 

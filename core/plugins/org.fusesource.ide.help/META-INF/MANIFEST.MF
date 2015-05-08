@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Version: 7.3.0.qualifier
+Bundle-Version: 8.0.0.qualifier
 Bundle-Name: Fuse Plugins for Eclipse Help Plugin
 Bundle-SymbolicName: org.fusesource.ide.help;singleton:=true
 Bundle-Vendor: JBoss by Red Hat

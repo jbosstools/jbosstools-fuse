@@ -4,13 +4,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
                 <artifactId>project</artifactId>
-		<version>7.3.0-SNAPSHOT</version>
+		<version>8.0.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.fusesource.ide</groupId>
 	<artifactId>servers</artifactId>
 	<name>JBoss Fuse Tooling :: Server Adapters</name>
-	<version>7.3.0-SNAPSHOT</version>
+	<version>8.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>plugins</module>

@@ -2,7 +2,7 @@
 <feature
       id="org.fusesource.ide.server.extensions.feature"
       label="%featureName"
-      version="7.3.0.qualifier"
+      version="8.0.0.qualifier"
       provider-name="%providerName"
       plugin="org.fusesource.ide.tooling">
 
@@ -59,7 +59,7 @@ Raleigh NC 27606 USA.
       <import plugin="org.jboss.ide.eclipse.as.wtp.ui" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.jboss.tools.as.runtimes.integration" version="3.0.0" match="greaterOrEqual"/>
       
-      <import feature="org.fusesource.ide.core.feature" version="7.3.0" match="greaterOrEqual"/>
+      <import feature="org.fusesource.ide.core.feature" version="8.0.0" match="greaterOrEqual"/>
       <import feature="org.jboss.tools.foundation.feature" version="1.1.0" match="greaterOrEqual"/>
       <import feature="org.jboss.tools.stacks.core.feature" version="1.1.0" match="greaterOrEqual"/>
       <import feature="org.jboss.tools.runtime.core.feature" version="3.0.0" match="greaterOrEqual"/>
@@ -94,22 +94,6 @@ Raleigh NC 27606 USA.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-<!-- won't be part of the 6.2 release
-   <plugin
-         id="org.fusesource.ide.server.fabric8.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.fusesource.ide.server.fabric8.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
--->
 
    <plugin
          id="org.fusesource.ide.server.fuse.core"
