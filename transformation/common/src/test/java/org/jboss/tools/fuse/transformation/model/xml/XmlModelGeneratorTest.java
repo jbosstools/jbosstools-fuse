@@ -35,6 +35,8 @@ public class XmlModelGeneratorTest {
             "src/test/resources/org/jboss/tools/fuse/transformation/model/xml/multi-element.xsd";
     private static String XML_SCHEMA_PATH_2 =
             "src/test/resources/org/jboss/tools/fuse/transformation/model/xml/abc-order.xsd";
+    private static String XML_SCHEMA_PATH_3 =
+            "src/test/resources/org/jboss/tools/fuse/transformation/model/xml/Application.xsd";
     private static String XML_SCHEMA_GEN_PATH = "target/abc-order.xsd";
 
     @Test
@@ -89,6 +91,19 @@ public class XmlModelGeneratorTest {
         Assert.assertEquals("test.getGeneratedElementsMultipleElements.Header", mappings.get("header"));
         Assert.assertEquals("test.getGeneratedElementsMultipleElements.OrderItems", mappings.get("order-items"));
         Assert.assertEquals("test.getGeneratedElementsMultipleElements.ZABCOrder", mappings.get("ZABCOrder"));
+        
+    }
+    
+    @Test
+    public void getGeneratedElementsXmlElementDecl() throws Exception {
+        File xmlSchema = new File(XML_SCHEMA_PATH_3);
+        XmlModelGenerator modelGen = new XmlModelGenerator();
+        JCodeModel codeModel = modelGen.generateFromSchema(
+                xmlSchema, "test.getGeneratedElementsXmlElementDecl", new File("target"));
+        Map<String, String> mappings = modelGen.elementToClassMapping(codeModel);
+        Assert.assertEquals(2, mappings.size());
+        Assert.assertEquals("test.getGeneratedElementsXmlElementDecl.ApplicationType", mappings.get("Application"));
+        //Assert.assertEquals("test.getGeneratedElementsXmlElementDecl.ApplicationType", mappings.get("Application"));
         
     }
     

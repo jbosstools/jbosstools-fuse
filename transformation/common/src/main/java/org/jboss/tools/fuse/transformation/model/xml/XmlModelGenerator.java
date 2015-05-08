@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,12 +36,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import com.sun.codemodel.JAnnotatable;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JAnnotationValue;
+import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JFormatter;
+import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JPackage;
+import com.sun.codemodel.JType;
 import com.sun.tools.xjc.api.Mapping;
 import com.sun.tools.xjc.api.S2JJAXBModel;
 import com.sun.tools.xjc.api.SchemaCompiler;
@@ -152,19 +157,31 @@ public class XmlModelGenerator {
     public Map<String, String> elementToClassMapping(JCodeModel model) {
         Map<String, String> mappings = new HashMap<String, String>();
         Iterator<JPackage> packageIt = model.packages();
+        
         // We need to search through all generated classes of generated packages
         while (packageIt.hasNext()) {
             Iterator<JDefinedClass> classIt = packageIt.next().classes();
             while (classIt.hasNext()) {
                 JDefinedClass jdClass = classIt.next();
-                // Top-level elements will result in classes with the @XmlRootElement annotation
-                // which is all we care about.
-                for (JAnnotationUse ann : jdClass.annotations()) {
-                    if (ann.getAnnotationClass().fullName().equals(XmlRootElement.class.getName())) {
-                        JAnnotationValue jaVal = ann.getAnnotationMembers().get("name");
-                        StringWriter sw = new StringWriter();
-                        jaVal.generate(new JFormatter(sw));
-                        mappings.put(sw.toString().replaceAll("\"", ""), jdClass.fullName());
+                // Certain schema styles do not use XmlRootElement annotations and use
+                // XmlElementDecl inside of ObjectFactory instead - check for that
+                if (jdClass.name().equals("ObjectFactory")) {
+                    for (JMethod method : jdClass.methods()) {
+                        JAnnotationUse elementAnnotation = getAnnotation(
+                                method, XmlElementDecl.class.getName());
+                        if (elementAnnotation != null) {
+                            String elementName = getAnnotationValue(elementAnnotation, "name");
+                            JType returnType = ((JClass)method.type()).getTypeParameters().get(0);
+                            mappings.put(elementName, returnType.fullName());
+                        }
+                    }
+                } else {
+                    // Top-level elements will result in classes with the @XmlRootElement annotation
+                    // which is all we care about.
+                    JAnnotationUse elementAnnotation = getAnnotation(jdClass, XmlRootElement.class.getName());
+                    if (elementAnnotation != null) {
+                        String elementName = getAnnotationValue(elementAnnotation, "name");
+                        mappings.put(elementName, jdClass.fullName());
                     }
                 }
             }
@@ -183,5 +200,26 @@ public class XmlModelGenerator {
         
         sc.parseSchema(is);
         return sc;
+    }
+    
+    private JAnnotationUse getAnnotation(JAnnotatable annotated, String type) {
+        JAnnotationUse annotation = null;
+        for (JAnnotationUse ann : annotated.annotations()) {
+            if (ann.getAnnotationClass().fullName().equals(type)) {
+                annotation = ann;
+                break;
+            }
+        }
+        return annotation;
+    }
+    
+    private String getAnnotationValue(JAnnotationUse annotation, String elementName) {
+        JAnnotationValue jaVal = annotation.getAnnotationMembers().get(elementName);
+        if (jaVal == null) {
+            return null;
+        }
+        StringWriter sw = new StringWriter();
+        jaVal.generate(new JFormatter(sw));
+        return sw.toString().replaceAll("\"", "");
     }
 }
