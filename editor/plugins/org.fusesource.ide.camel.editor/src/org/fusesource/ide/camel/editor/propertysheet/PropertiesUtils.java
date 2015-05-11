@@ -11,6 +11,8 @@
 package org.fusesource.ide.camel.editor.propertysheet;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,6 +176,16 @@ public class PropertiesUtils {
     	// first strip off the <scheme>:
     	delimiterString = syntaxWithoutScheme;
     	
+    	Collections.sort(params, new Comparator<UriParameter>() {
+    		/* (non-Javadoc)
+    		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+    		 */
+    		@Override
+    		public int compare(UriParameter o1, UriParameter o2) {
+    			return o2.getName().length() - o1.getName().length();
+    		}
+    	});
+    	
     	// then strip off the remaining variable names
     	for (UriParameter p : params) {
     		if (CamelComponentUtils.isUriPathParameter(p)) {
@@ -201,7 +213,7 @@ public class PropertiesUtils {
     	String uri = selectedEP.getUri().substring(selectedEP.getUri().indexOf(":") + 1, selectedEP.getUri().indexOf("?") != -1 ? selectedEP.getUri().indexOf("?") : selectedEP.getUri().length());
     	
     	Map<Integer, UriParameter> fieldMapping = new HashMap<Integer, UriParameter>();
-    	for (UriParameter param : getPathProperties(selectedEP)) {
+    	for (UriParameter param : pathParams) {
     		int idx = getFieldIndex(delimiters, c.getSyntax().substring(c.getSyntax().indexOf(":")+1), param.getName());
     		fieldMapping.put(idx, param);
     	}

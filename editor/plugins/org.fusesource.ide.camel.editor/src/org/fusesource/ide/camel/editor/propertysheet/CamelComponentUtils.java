@@ -11,13 +11,12 @@
 package org.fusesource.ide.camel.editor.propertysheet;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -42,7 +41,9 @@ import org.fusesource.ide.camel.model.catalog.components.Component;
 import org.fusesource.ide.camel.model.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.catalog.components.ComponentProperty;
 import org.fusesource.ide.camel.model.catalog.components.UriParameter;
+import org.fusesource.ide.commons.util.IOUtils;
 import org.fusesource.ide.commons.util.JsonHelper;
+import org.fusesource.ide.commons.util.Strings;
 import org.jboss.dmr.ModelNode;
 
 /**
@@ -199,6 +200,50 @@ public final class CamelComponentUtils {
         return compClass;
     }
     
+    /**
+     * returns the component class for the given scheme
+     * 
+     * @param scheme
+     * @return  the class or null if not found
+     */
+    protected static String getComponentJSon(String scheme) {
+        String json = null;
+
+        try {
+            IMavenProjectFacade m2facade = MavenPlugin.getMavenProjectRegistry().create(Activator.getDiagramEditor().getCamelContextFile().getProject(), new NullProgressMonitor());
+            Set<Artifact> deps = m2facade.getMavenProject(new NullProgressMonitor()).getArtifacts();
+            ZipFile zf = null;
+            ZipEntry ze = null;
+            for (Artifact dep : deps) {
+                zf = new ZipFile(dep.getFile());
+                ze = zf.getEntry(String.format("META-INF/services/org/apache/camel/component/%s", scheme));
+                if (ze != null) {
+                    break;
+                }
+                ze = null;
+                zf = null;
+            }
+            
+            if (ze != null) {
+            	// try to generate a model entry for the component class
+            	Properties p = new Properties();
+            	p.load(zf.getInputStream(ze));
+            	String compClass = p.getProperty("class");
+            	String packageName = compClass.substring(0, compClass.lastIndexOf("."));
+            	String folder = packageName.replaceAll("\\.", "/");
+            	ze = zf.getEntry(String.format("%s/%s.json", folder, scheme));
+                if (ze != null) {
+                	json = IOUtils.loadText(zf.getInputStream(ze), null);
+                }
+            }
+    	} catch (Exception ex) {
+    		Activator.getLogger().error(ex);
+    		json = null;
+    	}
+        
+        return json;
+    }
+    
     protected static Component buildModelForComponent(String scheme, String clazz) {
         Component resModel = null;
 
@@ -206,7 +251,7 @@ public final class CamelComponentUtils {
         resModel = CamelModelFactory.getModelForVersion(Activator.getDefault().getCamelVersion()).getComponentModel().getComponentForScheme(scheme);
         
         // 2. try to generate the model from json blob
-        if (resModel == null) resModel = buildModelFromJSON(scheme, clazz);
+        if (resModel == null) resModel = buildModelFromJSON(scheme, getComponentJSon(scheme), clazz);
         
         return resModel;        
     }
@@ -217,23 +262,17 @@ public final class CamelComponentUtils {
      * @param clazz the component class
      * @return
      */
-    protected static Component buildModelFromJSON(String scheme, String clazz) {
+    protected static Component buildModelFromJSON(String scheme, String oJSONBlob, String clazz) {
         Component resModel = null;
 
         try {
-            URLClassLoader child = getProjectClassLoader();
-            Class classToLoad = child.loadClass(clazz);
-            Method method = classToLoad.getMethod("createComponentConfiguration");
-            Object instance = classToLoad.newInstance();
-            Object compConf = method.invoke(instance);
-            method = compConf.getClass().getMethod("createParameterJsonSchema");
-            Object oJSONBlob = method.invoke(compConf);
-            if (oJSONBlob != null && oJSONBlob instanceof String) {
-                resModel = buildModelFromJSonBlob((String)oJSONBlob, clazz);  
+            if (oJSONBlob != null) {
+                resModel = buildModelFromJSonBlob(oJSONBlob, clazz);  
                 resModel.setScheme(scheme);
                 saveModel(resModel);
             }
         } catch (Exception ex) {
+        	ex.printStackTrace();
             Activator.getLogger().error(ex);
         }
     
@@ -241,11 +280,12 @@ public final class CamelComponentUtils {
     }
     
     private static void saveModel(Component component) {
-        try {
+    	knownComponents.put(component.getClazz(), component);
+    	try {
             // create JAXB context and instantiate marshaller
-        	JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, Dependency.class, ComponentProperty.class, UriParameter.class);
-		    Marshaller m = context.createMarshaller();
-            m.marshal(component, new File("/var/tmp/model.xml"));
+//        	JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, Dependency.class, ComponentProperty.class, UriParameter.class);
+//		    Marshaller m = context.createMarshaller();
+//            m.marshal(component, new File("/var/tmp/model.xml"));
         } catch (Exception ex) {
             Activator.getLogger().error(ex);
         }
@@ -279,34 +319,137 @@ public final class CamelComponentUtils {
         resModel.setClazz(clazz);
         
         try {
-            ArrayList<UriParameter> uriParams = new ArrayList<UriParameter>();
             ModelNode model = JsonHelper.getModelNode(json);
-            ModelNode propsNode = model.get("properties");
-            Map<String, Object> props = JsonHelper.getAsMap(propsNode);    
+            
+            ModelNode componentNode = model.get("component");
+            Map<String, Object> props = JsonHelper.getAsMap(componentNode);    
             Iterator<String> it = props.keySet().iterator();
+
+            String grpId = null, artId = null, ver = null;
+
+            while (it.hasNext()) {
+            	String propName = it.next();
+                ModelNode valueNode = componentNode.get(propName);
+                
+                if (propName.equals("kind")) {
+                	resModel.setKind(valueNode.asString());
+                } else if (propName.equals("scheme")) {
+                	resModel.setScheme(valueNode.asString());
+                } else if (propName.equals("syntax")) {
+                	resModel.setSyntax(valueNode.asString());
+                } else if (propName.equals("title")) {
+                	resModel.setTitle(valueNode.asString());
+                } else if (propName.equals("description")) {
+                	resModel.setDescription(valueNode.asString());
+                } else if (propName.equals("label")) {
+                	ArrayList<String> al = new ArrayList<String>();
+                	al.addAll(Arrays.asList(valueNode.asString().split(",")));
+                	resModel.setTags(al);
+                } else if (propName.equals("consumerOnly")) {
+                	resModel.setConsumerOnly(valueNode.asString());
+                } else if (propName.equals("producerOnly")) {
+                	resModel.setProducerOnly(valueNode.asString());
+                } else if (propName.equals("javaType")) {
+                	resModel.setClazz(valueNode.asString());
+                } else if (propName.equals("groupId")) {
+                	grpId = valueNode.asString();
+                } else if (propName.equals("artifactId")) {
+                	artId = valueNode.asString();
+                } else if (propName.equals("version")) {
+                	ver = valueNode.asString();
+                } else {
+                	// unknown property
+                }
+            }
+            
+            if (!Strings.isBlank(grpId) && !Strings.isBlank(artId) && !Strings.isBlank(ver)) {
+            	ArrayList<Dependency> depList = new ArrayList<Dependency>();
+            	Dependency dep = new Dependency();
+            	dep.setGroupId(grpId);
+            	dep.setArtifactId(artId);
+            	dep.setVersion(ver);
+            	depList.add(dep);
+            	resModel.setDependencies(depList);
+            }
+                        
+            ArrayList<ComponentProperty> cProps = new ArrayList<ComponentProperty>();
+
+            ModelNode componentPropertiesNode = model.get("componentProperties");
+            Map<String, Object> cprops = JsonHelper.getAsMap(componentPropertiesNode);    
+            it = cprops.keySet().iterator();
+            
+            while (it.hasNext()) {
+                ComponentProperty cp = new ComponentProperty();
+            	String propName = it.next();
+                ModelNode valueNode = componentNode.get(propName);
+                
+                if (propName.equals("defaultValue")) {
+                	cp.setDefaultValue(valueNode.asString());
+                } else if (propName.equals("deprecated")) {
+                	cp.setDeprecated(valueNode.asString());
+                } else  if (propName.equals("description")) {
+                	cp.setDescription(valueNode.asString());
+                } else  if (propName.equals("javaType")) {
+                	cp.setJavaType(valueNode.asString());
+                } else  if (propName.equals("kind")) {
+                	cp.setKind(valueNode.asString());
+                } else  if (propName.equals("name")) {
+                	cp.setName(valueNode.asString());
+                } else  if (propName.equals("type")) {
+                	cp.setType(valueNode.asString());
+                } else {
+                	// unknown property
+                }
+                cProps.add(cp);
+            }
+            resModel.setComponentProperties(cProps);
+            
+            ModelNode propsNode = model.get("properties");
+            props = JsonHelper.getAsMap(propsNode);    
+            it = props.keySet().iterator();
+            
+            ArrayList<UriParameter> uriParams = new ArrayList<UriParameter>();
             
             while (it.hasNext()) {
                 String propName = it.next();
                 ModelNode valueNode = propsNode.get(propName);
-                String type = null;
-                if (valueNode.has("enum")) {
-                    type = "choice[";
-                    List<ModelNode> vals = JsonHelper.getAsList(valueNode, "enum");
-                    for (ModelNode mn : vals) {
-                        if (!type.equalsIgnoreCase("choice[")) {
-                            type += ",";
-                        }
-                        type += mn.asString();
-                    }
-                    type += "]";
-                } else {
-                    type = valueNode.get("type").asString();
-                }
-                
                 UriParameter param = new UriParameter();
+                
                 param.setName(propName);
-                param.setJavaType(type);
-                param.setLabel(null);
+                
+                if (valueNode.hasDefined("choice")) {
+                	param.setChoice(valueNode.get("choice").asString());
+                }
+//                if (valueNode.hasDefined("oneOf")) {
+//                	param.setOneOf(valueNode.get("oneOf").asString());
+//                } 
+                if (valueNode.hasDefined("defaultValue")) {
+                	param.setDefaultValue(valueNode.get("defaultValue").asString());
+                } 
+                if (valueNode.hasDefined("deprecated")) {
+                	param.setDeprecated(valueNode.get("deprecated").asString());
+                }
+                if (valueNode.hasDefined("description")) {
+                	param.setDescription(valueNode.get("description").asString());
+                }
+                if (valueNode.hasDefined("javaType")) {
+                	param.setJavaType(valueNode.get("javaType").asString());
+                }
+                if (valueNode.hasDefined("kind")) {
+                	param.setKind(valueNode.get("kind").asString());
+                }
+                if (valueNode.hasDefined("label")) {
+                	param.setLabel(valueNode.get("label").asString());
+                }
+                if (valueNode.hasDefined("name")) {
+                	param.setName(valueNode.get("name").asString());
+                }
+                if (valueNode.hasDefined("required")) {
+                	param.setRequired(valueNode.get("required").asString());
+                }
+                if (valueNode.hasDefined("type")) {
+                	param.setType(valueNode.get("type").asString());
+                }
                 uriParams.add(param);
             }
             

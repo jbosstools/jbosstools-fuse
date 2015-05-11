@@ -184,7 +184,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         
         for (UriParameter p : props) {
         	// atm we don't want to care about path parameters
-        	if (ignorePathProperties && p.getKind().equalsIgnoreCase("path")) continue;
+        	if (ignorePathProperties && p.getKind() != null && p.getKind().equalsIgnoreCase("path")) continue;
             
         	final UriParameter prop = p;
             
