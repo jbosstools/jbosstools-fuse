@@ -50,7 +50,6 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
-import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.catalog.Dependency;
@@ -565,7 +564,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         List<Dependency> deps = new ArrayList<>();
         deps.add(dep);
         try {
-            MavenUtils.updateMavenDependencies(deps);
+            Util.updateMavenDependencies(deps, uiModel.getProject());
         } catch (CoreException e) {
             org.fusesource.ide.camel.editor.Activator.getLogger().error(e);
         }
@@ -586,7 +585,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 List<Dependency> deps = new ArrayList<>();
                 deps.add(dep);
                 try {
-                    MavenUtils.updateMavenDependencies(deps);
+                    Util.updateMavenDependencies(deps, uiModel.getProject());
                 } catch (CoreException e) {
                     org.fusesource.ide.camel.editor.Activator.getLogger().error(e);
                 }

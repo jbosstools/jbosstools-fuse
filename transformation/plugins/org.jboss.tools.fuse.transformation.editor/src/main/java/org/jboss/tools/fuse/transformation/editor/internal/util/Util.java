@@ -60,6 +60,7 @@ import org.jboss.tools.fuse.transformation.model.Model;
 /**
  *
  */
+@SuppressWarnings("restriction")
 public class Util {
 
     /**
@@ -422,6 +423,25 @@ public class Util {
                 Activator.error(e);
             }
         }
+    }
+
+    public static String getCamelVersion(IProject project) {
+        IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml"));
+        String pomPath = pomPathValue.toOSString();
+        final File pomFile = new File(pomPath);
+        try {
+	        final org.apache.maven.model.Model model = MavenPlugin.getMaven().readModel(pomFile);
+	        List<org.apache.maven.model.Dependency> deps = model.getDependencies();
+	        for (Iterator<org.apache.maven.model.Dependency> iterator = deps.iterator(); iterator.hasNext();) {
+	        	org.apache.maven.model.Dependency dependency = iterator.next();
+				if (dependency.getArtifactId().equals("camel-core")) {
+					return dependency.getVersion();
+				}
+			}
+        } catch (CoreException e) {
+        	// not found, go with default
+        }
+        return org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion();
     }
 
     public static boolean validSourceAndTarget(final Object source,
