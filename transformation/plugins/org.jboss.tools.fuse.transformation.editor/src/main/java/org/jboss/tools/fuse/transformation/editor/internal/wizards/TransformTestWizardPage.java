@@ -10,17 +10,21 @@
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -28,6 +32,7 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.dialogs.StatusInfo;
+import org.eclipse.jdt.internal.ui.dialogs.StatusUtil;
 import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -46,6 +51,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.model.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
@@ -53,7 +59,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.CamelFileTypeHel
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TestGenerator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
-import org.eclipse.jdt.internal.ui.dialogs.StatusUtil;
 
 /**
  *
@@ -219,7 +224,27 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         doStatusUpdate();
         setErrorMessage(null);
     }
-    
+
+    private List<Dependency> getRequiredBlueprintTestDependencies(IProject project) {
+        List<Dependency> deps = new ArrayList<>();
+        Dependency dep = new Dependency();
+        dep.setGroupId("org.apache.camel");
+        dep.setArtifactId("camel-test-blueprint");
+        dep.setVersion(Util.getCamelVersion(project));
+        deps.add(dep);
+        return deps;
+    }
+
+    private List<Dependency> getRequiredSpringTestDependencies(IProject project) {
+        List<Dependency> deps = new ArrayList<>();
+        Dependency dep = new Dependency();
+        dep.setGroupId("org.apache.camel");
+        dep.setArtifactId("camel-test-spring");
+        dep.setVersion(Util.getCamelVersion(project));
+        deps.add(dep);
+        return deps;
+    }
+
     private ICompilationUnit createJavaClass(String packageName,
             String className, IJavaProject project) {
         try {
@@ -233,6 +258,23 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
                 return null;
             }
             
+            if (isBlueprint) {
+            	updateMavenDependencies(project.getProject(), 
+            			getRequiredBlueprintTestDependencies(project.getProject()));
+            }
+            if (isSpring) {
+            	updateMavenDependencies(project.getProject(), 
+            			getRequiredSpringTestDependencies(project.getProject()));
+            }
+            
+            // refresh the project in case we added dependencies
+            project.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
+            // Ensure build of Java classes has completed
+            try {
+                Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
+            } catch (final InterruptedException ignored) {
+            }
+           
             IPath srcPath = null;
             if (getPackageFragmentRoot() != null) {
                 srcPath = getPackageFragmentRoot().getPath().makeAbsolute();  
@@ -315,6 +357,14 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         return null;
     }
 
+    /**
+     * checks if we need to add a maven dependency for the chosen component
+     * and inserts it into the pom.xml if needed
+     */
+    public void updateMavenDependencies(IProject project, List<Dependency> compDeps) throws CoreException {
+    	Util.updateMavenDependencies(compDeps, project);
+    }
+    
     @Override
     public void createType(IProgressMonitor monitor) throws CoreException, InterruptedException {
         ICompilationUnit createdClass =
