@@ -14,14 +14,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
@@ -193,6 +196,57 @@ public class Util {
         };
     }
 
+    private static void recursivelyFindFilesWithExtension(ArrayList<IResource> allFiles, IPath path, 
+            IWorkspaceRoot wsRoot, String extension) {
+        IContainer  container =  wsRoot.getContainerForLocation(path);
+
+        try {
+            IResource[] resources = container.members();
+            for (IResource resource : resources) {
+                if (extension.equalsIgnoreCase(resource.getFileExtension())) {
+                    allFiles.add(resource);
+                }
+                if (resource.getType() == IResource.FOLDER) {
+                    IPath tempPath = resource.getLocation();
+                    recursivelyFindFilesWithExtension(allFiles, tempPath, wsRoot, extension);
+                }
+            }
+        } catch (CoreException e) {
+            // eat the exception, but throw it in the console
+            e.printStackTrace();
+        }
+    }    
+    
+    private static ArrayList<IResource> getAllXMLFilesInProject(final IProject project) {
+        ArrayList<IResource> allFiles = new ArrayList<IResource>();
+        IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
+        IPath path = project.getLocation();
+        recursivelyFindFilesWithExtension(allFiles, path, wsRoot, "xml");
+        return allFiles;
+    }    
+    
+    public static boolean projectHasCamelResource(final IProject project) {
+        try {
+            ArrayList<IResource> xmlResources = getAllXMLFilesInProject(project);
+            for (Iterator<IResource> iterator = xmlResources.iterator(); iterator.hasNext();) {
+                IResource item = iterator.next();
+                File testFile = new File(item.getLocationURI());
+                if (testFile.exists()) {
+                    boolean isValidCamel = CamelFileTypeHelper
+                            .isSupportedCamelFile(project, 
+                                    item.getProjectRelativePath().toPortableString());
+                    if (isValidCamel) {
+                        return true;
+                    }
+                }
+            }
+        } catch (final Exception e) {
+            // ignore
+        }
+        
+        return false;
+    }
+    
     /**
      * @param shell
      * @param extension

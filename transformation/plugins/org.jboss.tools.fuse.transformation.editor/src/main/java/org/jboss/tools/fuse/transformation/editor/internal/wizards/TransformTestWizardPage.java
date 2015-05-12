@@ -62,8 +62,8 @@ import org.eclipse.jdt.internal.ui.dialogs.StatusUtil;
 @SuppressWarnings("restriction")
 public class TransformTestWizardPage extends NewTypeWizardPage {
 
-    protected static final String CAMEL_FILE_PATH= "TransformTestWizardPage.CamelFilePath"; //$NON-NLS-1$
-    protected static final String ENDPOINT= "TransformTestWizardPage.Endpoint"; //$NON-NLS-1$
+    protected static final String CAMEL_FILE_PATH = "TransformTestWizardPage.CamelFilePath"; //$NON-NLS-1$
+    protected static final String ENDPOINT = "TransformTestWizardPage.Endpoint"; //$NON-NLS-1$
 
     private ComboViewer transformationIDViewer;
     private Text _camelFilePathText;
@@ -360,7 +360,8 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
         
         doStatusUpdate();
         
-        updateStatus(new Status(IStatus.OK, Activator.PLUGIN_ID, "Specify the transformation endpoint to test, then provide the camel configuration"
+        updateStatus(new Status(IStatus.OK, Activator.PLUGIN_ID, 
+                "Specify the transformation endpoint to test, then provide the camel configuration"
                 + ", class name and java package for the generated test class."));
         setErrorMessage(null);
     }
@@ -369,7 +370,9 @@ public class TransformTestWizardPage extends NewTypeWizardPage {
     public boolean isPageComplete() {
         // having an endpoint selected implies that we also have a camel file selected
         boolean endpointSelected = (getTransformID() != null && !getTransformID().trim().isEmpty());
-        boolean sourceFolderSpecified = (getPackageFragmentRoot() != null) || (getPackageFragmentRootText() != null && getPackageFragmentRootText().endsWith("src/test/java"));
+        boolean sourceFolderSpecified = (getPackageFragmentRoot() != null) 
+                || (getPackageFragmentRootText() != null 
+                && getPackageFragmentRootText().endsWith("src/test/java"));
         boolean classNameSpecified = (getTypeName() != null);
         boolean superComplete = super.isPageComplete();
         if (superComplete && endpointSelected && sourceFolderSpecified && classNameSpecified) {

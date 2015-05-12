@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.io.File;
 import java.text.StringCharacterIterator;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.eclipse.core.databinding.Binding;
@@ -27,6 +28,7 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
@@ -223,9 +225,13 @@ public class StartPage extends XformWizardPage {
     }
     
     private void initialize() {
+        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+        model.projects.clear();
+        model.projects.addAll(Arrays.asList(projects));
+
         for (final Iterator<IProject> iter = model.projects.iterator(); iter.hasNext();) {
             IProject toTest = iter.next();
-            if (toTest.findMember(NewTransformationWizard.CAMEL_CONFIG_PATH) == null) {
+            if (!toTest.isOpen() || !Util.projectHasCamelResource(toTest)) {
                 iter.remove();
             }
         }
@@ -349,11 +355,13 @@ public class StartPage extends XformWizardPage {
                     return ValidationStatus.error("The transformation file path must be supplied");
                 }
                 if (!(value.toString().trim().isEmpty())) {
-                    final IFile file =
+                    if (model.getProject() != null) {
+                        final IFile file =
                             model.getProject().getFile(Util.RESOURCES_PATH + (String) value);
-                    if (file.exists()) {
-                        return ValidationStatus
+                        if (file != null && file.exists()) {
+                            return ValidationStatus
                                 .warning("A transformation file with that name already exists.");
+                        }
                     }
                 }
                 return ValidationStatus.ok();

@@ -37,7 +37,7 @@ import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizar
  */
 public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 
-	private static final String PROTOCOL = "dozer";
+    private static final String PROTOCOL = "dozer";
 
     /**
      * {@inheritDoc}
@@ -57,7 +57,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
      */
     @Override
     public String getProtocol() {
-    	return PROTOCOL;
+        return PROTOCOL;
     }
     
     /* (non-Javadoc)
@@ -65,7 +65,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
      */
     @Override
     public boolean providesProtocol(String protocol) {
-    	return PROTOCOL.equalsIgnoreCase(protocol);
+        return PROTOCOL.equalsIgnoreCase(protocol);
     }
     
     /* (non-Javadoc)
