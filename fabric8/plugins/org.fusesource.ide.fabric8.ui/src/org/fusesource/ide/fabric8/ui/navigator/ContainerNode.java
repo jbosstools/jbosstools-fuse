@@ -348,6 +348,8 @@ public class ContainerNode extends IdBasedFabricNode implements
 		String user = theFabric.getUserName();
 		String password = theFabric.getPassword();
 
+		if (url == null) return;
+		
 		if (!url.contains("://")) {
 			url = "http://" + url;
 		}

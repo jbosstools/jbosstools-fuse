@@ -573,7 +573,9 @@ public class Fabric extends FabricNodeSupport implements ImageProvider,
 
 	public Collection<ProfileStatusDTO> getProfileStatuses() {
 		Fabric8Facade service = getFabricService();
-		if (service == null || !isConnected()) {
+		if (service == null || 
+			service.getFabricStatus() == null ||
+			!isConnected()) {
 			return new ArrayList<ProfileStatusDTO>();
 		}
 		return service.getFabricStatus().getProfileStatusMap().values();
