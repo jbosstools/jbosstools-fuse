@@ -460,5 +460,7 @@ public class StartPage extends XformWizardPage {
         targetList.add("JSON");
         targetList.add("Other");
         _targetCV.setInput(targetList);
+        
+        listenForValidationChanges();
     }
 }

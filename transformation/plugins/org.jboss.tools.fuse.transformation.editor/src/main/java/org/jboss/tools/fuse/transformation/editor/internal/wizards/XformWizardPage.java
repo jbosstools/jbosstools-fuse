@@ -10,8 +10,12 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
+import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -130,5 +134,28 @@ public abstract class XformWizardPage extends WizardPage {
     
     protected Model getModel() {
         return this.model;
+    }
+    
+    protected void listenForValidationChanges() {
+        if (context != null) {
+            // get the validation status provides
+            IObservableList bindings = context.getValidationStatusProviders();
+
+            IChangeListener listener = new ValidationChangedListener();
+            // register the listener to all bindings
+            for (Object o : bindings) {
+                Binding b = (Binding) o;
+                b.getTarget().addChangeListener(listener);
+            }
+        }
+    }
+
+    class ValidationChangedListener implements IChangeListener {
+
+        @Override
+        public void handleChange(ChangeEvent event) {
+            validatePage();
+        }
+
     }
 }
