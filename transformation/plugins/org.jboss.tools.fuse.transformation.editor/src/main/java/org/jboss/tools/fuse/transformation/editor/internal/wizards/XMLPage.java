@@ -21,8 +21,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.list.WritableList;
@@ -41,7 +40,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
@@ -59,7 +57,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -75,9 +72,6 @@ import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
  */
 public class XMLPage extends XformWizardPage implements TransformationTypePage {
 
-    final DataBindingContext context = new DataBindingContext(
-            SWTObservables.getRealm(Display.getCurrent()));
-    final ObservablesManager observablesManager = new ObservablesManager();
     private Composite _page;
     private boolean isSource = true;
     private Text _xmlFileText;
@@ -85,7 +79,9 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
     private Button _xmlInstanceOption;
     private Text _xmlPreviewText;
     private ComboViewer _xmlRootsCombo;
-    
+    private Binding _binding;
+    private Binding _binding2;
+
     /**
      * @param model
      */
@@ -116,8 +112,9 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
 
         WizardPageSupport wps = WizardPageSupport.create(this, context);
         wps.setValidationMessageProvider(new WizardValidationMessageProvider());
-        setErrorMessage(null); // clear any error messages at first 
-        setMessage(null); // now that we're using info messages, we must reset this too
+        setErrorMessage(null); // clear any error messages at first
+        setMessage(null); // now that we're using info messages, we must reset
+                          // this too
     }
 
     private void createPage(Composite parent) {
@@ -132,8 +129,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group.setText("XML Type Definition");
         group.setLayout(new GridLayout(1, false));
-        group.setLayoutData(
-                new GridData(SWT.FILL, SWT.FILL, true, false, 3, 2));
+        group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 2));
 
         _xmlSchemaOption = new Button(group, SWT.RADIO);
         _xmlSchemaOption.setText("XML Schema");
@@ -193,8 +189,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         }
 
         _xmlFileText = new Text(_page, SWT.BORDER | SWT.READ_ONLY);
-        _xmlFileText.setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        _xmlFileText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         _xmlFileText.setToolTipText(label.getToolTipText());
 
         final Button xmlFileBrowseButton = new Button(_page, SWT.NONE);
@@ -251,37 +246,33 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                             e1.printStackTrace();
                         }
                     }
-                    _xmlFileText.notifyListeners(SWT.Modify, new Event());
+                    _xmlFileText.notifyListeners(SWT.Modify, null);
                 }
             }
         });
 
-        label = createLabel(_page, "Element Root:", 
-                "Element root to use for the root of the transformation object.");
+        label = createLabel(_page, "Element Root:", "Element root to use for the root of the transformation object.");
 
         _xmlRootsCombo = new ComboViewer(_page, SWT.DROP_DOWN | SWT.READ_ONLY);
-        _xmlRootsCombo.getCombo().setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        _xmlRootsCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
         _xmlRootsCombo.getCombo().setToolTipText(label.getToolTipText());
         _xmlRootsCombo.setContentProvider(new ObservableListContentProvider());
         _xmlRootsCombo.setLabelProvider(new QNameLabelProvider());
         _xmlRootsCombo.getCombo().setEnabled(false);
-        _xmlRootsCombo.getCombo().setToolTipText(
-                "This list will be populated as soon as an XML file is selected.");
+        _xmlRootsCombo.getCombo().setToolTipText("This list will be populated as soon as an XML file is selected.");
 
         Group group2 = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group2.setText("XML Structure Preview");
         group2.setLayout(new FillLayout());
-        group2.setLayoutData(
-                new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
+        group2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        _xmlPreviewText = new Text(group2, SWT.V_SCROLL | SWT.READ_ONLY );
+        _xmlPreviewText = new Text(group2, SWT.V_SCROLL | SWT.READ_ONLY);
         _xmlPreviewText.setBackground(_page.getBackground());
 
         bindControls();
         validatePage();
     }
-    
+
     class QNameLabelProvider extends LabelProvider {
 
         @Override
@@ -292,7 +283,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
             return super.getText(element);
         }
-        
+
     }
 
     @Override
@@ -314,8 +305,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         }
         ClasspathResourceSelectionDialog dialog = null;
         if (javaProject == null) {
-            dialog = new ClasspathResourceSelectionDialog(
-                    shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
+            dialog = new ClasspathResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
         } else {
             dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), extension);
         }
@@ -346,19 +336,18 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             public IStatus validate(final Object value) {
                 final String path = value == null ? null : value.toString().trim();
                 if (path == null || path.isEmpty()) {
-                    return ValidationStatus
-                            .error("A source file path must be supplied for the transformation.");
+                    return ValidationStatus.error("A source file path must be supplied for the transformation.");
                 }
                 if (model.getProject().findMember(path) == null) {
-                    return ValidationStatus
-                            .error("Unable to find a file with the supplied path");
+                    return ValidationStatus.error("Unable to find a file with the supplied path");
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                decoratorPosition, _xmlFileText.getParent(), new WizardControlDecorationUpdater());
-        
+        _binding = context.bindValue(widgetValue, modelValue, strategy, null);
+        ControlDecorationSupport.create(_binding, decoratorPosition, _xmlFileText.getParent(),
+                new WizardControlDecorationUpdater());
+
         IObservableValue comboWidgetValue = ViewerProperties.singleSelection().observe(_xmlRootsCombo);
         IObservableValue comboModelValue = null;
         if (isSourcePage()) {
@@ -379,15 +368,22 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(comboWidgetValue, comboModelValue, combostrategy, null),
-                decoratorPosition, _xmlRootsCombo.getControl().getParent(), new WizardControlDecorationUpdater());
+        _binding2 = context.bindValue(comboWidgetValue, comboModelValue, combostrategy, null);
+        ControlDecorationSupport.create(_binding2, decoratorPosition, _xmlRootsCombo.getControl().getParent(),
+                new WizardControlDecorationUpdater());
 
         modelValue.addValueChangeListener(new IValueChangeListener() {
 
             @Override
             public void handleValueChange(ValueChangeEvent event) {
                 Object value = event.diff.getNewValue();
-                String path = value == null ? null : value.toString().trim();
+                String path = null;
+                if (value != null && !value.toString().trim().isEmpty()) {
+                    path = value.toString().trim();
+                }
+                if (path == null) {
+                    return;
+                }
                 XmlModelGenerator modelGen = new XmlModelGenerator();
                 List<QName> elements = null;
                 IPath filePath = model.getProject().getLocation().makeAbsolute().append(path);
@@ -451,11 +447,40 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                     if (elementList.size() == 1) {
                         _xmlRootsCombo.getCombo().setToolTipText("Only one root element found.");
                     } else {
-                        _xmlRootsCombo.getCombo().setToolTipText(
-                                "Select from the available list of root elements.");
+                        _xmlRootsCombo.getCombo().setToolTipText("Select from the available list of root elements.");
                     }
                 }
             }
         });
-   }
+
+        listenForValidationChanges();
+    }
+
+    @Override
+    public void notifyListeners() {
+        if (_xmlFileText != null && !_xmlFileText.isDisposed()) {
+            _xmlFileText.notifyListeners(SWT.Modify, new Event());
+            _xmlRootsCombo.getCombo().notifyListeners(SWT.Modify, new Event());
+        }
+    }
+
+    @Override
+    public void clearControls() {
+        if (_xmlFileText != null && !_xmlFileText.isDisposed()) {
+            _xmlFileText.setText("");
+            _xmlRootsCombo.setSelection(null);
+            _xmlPreviewText.setText("");
+        }
+        notifyListeners();
+    }
+
+    @Override
+    public void pingBinding() {
+        if (_binding != null) {
+            _binding.validateTargetToModel();
+        }
+        if (_binding2 != null) {
+            _binding2.validateTargetToModel();
+        }
+    }
 }

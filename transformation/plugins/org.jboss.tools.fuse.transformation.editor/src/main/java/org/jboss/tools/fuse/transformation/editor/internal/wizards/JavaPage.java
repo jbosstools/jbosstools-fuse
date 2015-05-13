@@ -10,8 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -31,7 +30,6 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -47,7 +45,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -56,10 +53,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
-import org.jboss.tools.fuse.transformation.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
+import org.jboss.tools.fuse.transformation.model.ModelBuilder;
 
 /**
  * @author brianf
@@ -67,15 +64,13 @@ import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizar
  */
 public class JavaPage extends XformWizardPage implements TransformationTypePage {
 
-    final DataBindingContext context = new DataBindingContext(
-            SWTObservables.getRealm(Display.getCurrent()));
-    final ObservablesManager observablesManager = new ObservablesManager();
     private Composite _page;
     private boolean isSource = true;
     private Text _javaClassText;
     private ModelBuilder _builder;
     private org.jboss.tools.fuse.transformation.model.Model _javaModel = null;
     private ModelViewer _modelViewer;
+    private Binding _binding;
 
     /**
      * @param model
@@ -108,8 +103,9 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
 
         WizardPageSupport wps = WizardPageSupport.create(this, context);
         wps.setValidationMessageProvider(new WizardValidationMessageProvider());
-        setErrorMessage(null); // clear any error messages at first 
-        setMessage(null); // now that we're using info messages, we must reset this too
+        setErrorMessage(null); // clear any error messages at first
+        setMessage(null); // now that we're using info messages, we must reset
+                          // this too
 
     }
 
@@ -130,8 +126,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         }
 
         _javaClassText = new Text(_page, SWT.BORDER | SWT.READ_ONLY);
-        _javaClassText.setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        _javaClassText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         _javaClassText.setToolTipText(label.getToolTipText());
 
         final Button javaClassBrowseButton = new Button(_page, SWT.NONE);
@@ -161,8 +156,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                             public IStatus runInUIThread(IProgressMonitor monitor) {
                                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                                 try {
-                                    Class<?> tempClass = wizard.getLoader().loadClass(
-                                            selected.getFullyQualifiedName());
+                                    Class<?> tempClass = wizard.getLoader().loadClass(selected.getFullyQualifiedName());
                                     _javaModel = _builder.fromJavaClass(tempClass);
                                     _modelViewer.setModel(_javaModel);
                                 } catch (ClassNotFoundException e) {
@@ -184,8 +178,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group.setText("Class Structure Preview");
         group.setLayout(new GridLayout(3, false));
-        group.setLayoutData(
-                new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
+        group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
         _modelViewer = new ModelViewer(null, group, _javaModel, null);
         _modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -213,18 +206,25 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
             public IStatus validate(final Object value) {
                 final String path = value == null ? null : value.toString().trim();
                 if (path == null || path.isEmpty()) {
-                    return ValidationStatus
-                            .error("A source file path must be supplied for the transformation.");
+                    return ValidationStatus.error("A source file path must be supplied for the transformation.");
                 }
-                if (model.getProject().findMember(path) == null) {
-                    return ValidationStatus
-                            .error("Unable to find a source file with the supplied path");
+                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+                try {
+                    Class<?> tempClass = wizard.getLoader().loadClass(path);
+                    if (tempClass == null) {
+                        return ValidationStatus.error("Unable to find a source file with the supplied path");
+                    }
+                } catch (ClassNotFoundException e) {
+                    return ValidationStatus.error("Unable to find a source file with the supplied path");
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                decoratorPosition, _javaClassText.getParent(), new WizardControlDecorationUpdater());
+        _binding = context.bindValue(widgetValue, modelValue, strategy, null);
+        ControlDecorationSupport.create(_binding, decoratorPosition, _javaClassText.getParent(),
+                new WizardControlDecorationUpdater());
+
+        listenForValidationChanges();
     }
 
     @Override
@@ -281,6 +281,31 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
             return null;
         }
         return (IType) types[0];
+    }
+
+    @Override
+    public void notifyListeners() {
+        if (_javaClassText != null && !_javaClassText.isDisposed()) {
+            _javaClassText.notifyListeners(SWT.Modify, null);
+        }
+    }
+
+    @Override
+    public void pingBinding() {
+        if (_binding != null) {
+            _binding.validateTargetToModel();
+        }
+
+    }
+
+    @Override
+    public void clearControls() {
+        if (_javaClassText != null && !_javaClassText.isDisposed()) {
+            _javaModel = new org.jboss.tools.fuse.transformation.model.Model("", "");
+            _modelViewer.setModel(_javaModel);
+            _javaClassText.setText("");
+        }
+        notifyListeners();
     }
 
 }

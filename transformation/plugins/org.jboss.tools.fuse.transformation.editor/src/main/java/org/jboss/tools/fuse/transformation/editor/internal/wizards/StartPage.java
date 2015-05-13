@@ -30,7 +30,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
@@ -53,6 +55,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.progress.UIJob;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
@@ -77,12 +80,10 @@ public class StartPage extends XformWizardPage {
      * @param model
      */
     public StartPage(final Model model) {
-        super("New Transformation", "New Transformation", 
-                Activator.imageDescriptor("transform.png"), model);
+        super("New Transformation", "New Transformation", Activator.imageDescriptor("transform.png"), model);
         observablesManager.addObservablesFromContext(context, true, true);
     }
 
-    
     @Override
     public void createControl(final Composite parent) {
         setDescription("Supply the ID, project, and path, as well as"
@@ -97,10 +98,11 @@ public class StartPage extends XformWizardPage {
 
         WizardPageSupport wps = WizardPageSupport.create(this, context);
         wps.setValidationMessageProvider(new WizardValidationMessageProvider());
-        setErrorMessage(null); // clear any error messages at first 
-        setMessage(null); // now that we're using info messages, we must reset this too
+        setErrorMessage(null); // clear any error messages at first
+        setMessage(null); // now that we're using info messages, we must reset
+                          // this too
     }
-    
+
     private void createPage(Composite parent) {
         _page = new Composite(parent, SWT.NONE);
         setControl(_page);
@@ -113,8 +115,7 @@ public class StartPage extends XformWizardPage {
         Label label = createLabel(_page, "Project:", "The project to contain the mapping file.");
 
         _projectCombo = new ComboViewer(new Combo(_page, SWT.READ_ONLY));
-        _projectCombo.getCombo().setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        _projectCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
         _projectCombo.getCombo().setToolTipText(label.getToolTipText());
         _projectCombo.setLabelProvider(new LabelProvider() {
             @Override
@@ -124,20 +125,17 @@ public class StartPage extends XformWizardPage {
         });
 
         // Create ID widgets
-        label = createLabel(_page, "Transformation ID:", 
-                "The transformation ID that will be shown in the Fuse editor.");
+        label = createLabel(_page, "Transformation ID:", "The transformation ID that will be shown in the Fuse editor.");
 
         _idText = new Text(_page, SWT.BORDER);
-        _idText.setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        _idText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
         _idText.setToolTipText(label.getToolTipText());
 
         // Create file path widgets
         label = createLabel(_page, "Dozer File Path:", "The path to the Dozer transformation file.");
 
         _dozerPathText = new Text(_page, SWT.BORDER);
-        _dozerPathText.setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        _dozerPathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         _dozerPathText.setToolTipText(label.getToolTipText());
 
         final Button dozerPathButton = new Button(_page, SWT.NONE);
@@ -149,8 +147,7 @@ public class StartPage extends XformWizardPage {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                final IResource res =
-                        Util.selectResourceFromWorkspace(getShell(), ".xml", model.getProject());
+                final IResource res = Util.selectResourceFromWorkspace(getShell(), ".xml", model.getProject());
                 if (res != null) {
                     final IPath respath = JavaUtil.getJavaPathForResource(res);
                     final String path = respath.makeRelative().toString();
@@ -160,13 +157,12 @@ public class StartPage extends XformWizardPage {
                 }
             }
         });
-        
+
         // Create camel file path widgets
         label = createLabel(_page, "Camel File Path:", "The path to the Camel configuration file.");
 
         _camelFilePathText = new Text(_page, SWT.BORDER);
-        _camelFilePathText.setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        _camelFilePathText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         _camelFilePathText.setToolTipText(label.getToolTipText());
 
         final Button camelPathButton = new Button(_page, SWT.NONE);
@@ -183,47 +179,43 @@ public class StartPage extends XformWizardPage {
                     final String path = respath.makeRelative().toString();
                     model.setCamelFilePath(path);
                     _camelFilePathText.setText(path);
-                    
+
                     // if the project wasn't previously set...
                     if (model.getProject() == null) {
                         // set it based on the camel file selected
                         model.setProject(res.getProject());
                         _projectCombo.getCombo().notifyListeners(SWT.Modify, new Event());
                     }
-                    
+
                     _camelFilePathText.notifyListeners(SWT.Modify, new Event());
                 }
             }
         });
-        
+
         label = createLabel(_page, "", ""); // spacer
-        label.setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
-                
+        label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+
         Group group = new Group(_page, SWT.SHADOW_ETCHED_IN);
         group.setText("Types Transformed");
-        group.setLayout(new GridLayout(3, false)); 
-        group.setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 2));
-        
+        group.setLayout(new GridLayout(3, false));
+        group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 2));
+
         createLabel(group, "Source Type", "Data type for the source being transformed.");
-        createLabel(group, "", ""); //spacer
+        createLabel(group, "", ""); // spacer
         createLabel(group, "Target Type", "Data type for the target of the transformation.");
-        
+
         _sourceCV = new ComboViewer(new Combo(group, SWT.READ_ONLY));
-        _sourceCV.getCombo().setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false));
-        
+        _sourceCV.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
         new Label(group, SWT.NONE).setImage(Activator.imageDescriptor("mapped16.gif").createImage());
         _targetCV = new ComboViewer(new Combo(group, SWT.READ_ONLY));
-        _targetCV.getCombo().setLayoutData(
-                new GridData(SWT.FILL, SWT.CENTER, true, false));
-        
+        _targetCV.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
         bindControls();
         initialize();
         validatePage();
     }
-    
+
     private void initialize() {
         IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
         model.projects.clear();
@@ -270,25 +262,25 @@ public class StartPage extends XformWizardPage {
         if (model.getProject() != null) {
             _projectCombo.setSelection(new StructuredSelection(model.getProject()));
         }
-        
+
         if (model.getCamelFilePath() != null) {
             _camelFilePathText.setText(model.getCamelFilePath());
             _camelFilePathText.notifyListeners(SWT.Modify, new Event());
         }
-        
+
         if (model.getFilePath() != null) {
             _dozerPathText.setText(model.getFilePath());
             _dozerPathText.notifyListeners(SWT.Modify, new Event());
         }
-        
+
         if (model.getId() != null) {
             _idText.setText(model.getId());
             _idText.notifyListeners(SWT.Modify, new Event());
         }
     }
-    
+
     private void bindControls() {
-        
+
         // bind the project dropdown
         _projectCombo.setContentProvider(new ObservableListContentProvider());
         IObservableValue widgetValue = ViewerProperties.singleSelection().observe(_projectCombo);
@@ -304,8 +296,8 @@ public class StartPage extends XformWizardPage {
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                decoratorPosition, _projectCombo.getControl().getParent(), new WizardControlDecorationUpdater());
+        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
+                _projectCombo.getControl().getParent(), new WizardControlDecorationUpdater());
 
         // Bind transformation ID widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_idText);
@@ -320,28 +312,24 @@ public class StartPage extends XformWizardPage {
                 }
                 final String id = value.toString().trim();
                 final StringCharacterIterator iter = new StringCharacterIterator(id);
-                for (char chr = iter.first(); chr != StringCharacterIterator.DONE; chr =
-                        iter.next()) {
+                for (char chr = iter.first(); chr != StringCharacterIterator.DONE; chr = iter.next()) {
                     if (!Character.isJavaIdentifierPart(chr)) {
-                        return ValidationStatus.error(
-                                "The transformation ID may only contain letters, "
-                                        + "digits, currency symbols, or underscores");
+                        return ValidationStatus.error("The transformation ID may only contain letters, "
+                                + "digits, currency symbols, or underscores");
                     }
                 }
                 if (model.camelConfig != null && model.camelConfig.getConfigBuilder() != null) {
-                    for (final String endpointId : model.camelConfig.getConfigBuilder()
-                            .getTransformEndpointIds()) {
+                    for (final String endpointId : model.camelConfig.getConfigBuilder().getTransformEndpointIds()) {
                         if (id.equalsIgnoreCase(endpointId)) {
-                            return ValidationStatus
-                                    .error("A transformation with the supplied ID already exists");
+                            return ValidationStatus.error("A transformation with the supplied ID already exists");
                         }
                     }
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                decoratorPosition, _idText.getParent(), new WizardControlDecorationUpdater());
+        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
+                _idText.getParent(), new WizardControlDecorationUpdater());
 
         // Bind file path widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_dozerPathText);
@@ -356,19 +344,17 @@ public class StartPage extends XformWizardPage {
                 }
                 if (!(value.toString().trim().isEmpty())) {
                     if (model.getProject() != null) {
-                        final IFile file =
-                            model.getProject().getFile(Util.RESOURCES_PATH + (String) value);
+                        final IFile file = model.getProject().getFile(Util.RESOURCES_PATH + (String) value);
                         if (file != null && file.exists()) {
-                            return ValidationStatus
-                                .warning("A transformation file with that name already exists.");
+                            return ValidationStatus.warning("A transformation file with that name already exists.");
                         }
                     }
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                decoratorPosition, null, new WizardControlDecorationUpdater());
+        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
+                null, new WizardControlDecorationUpdater());
 
         // Bind camel file path widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_camelFilePathText);
@@ -386,27 +372,23 @@ public class StartPage extends XformWizardPage {
                     final String path = (String) value;
                     testFile = new File(model.getProject().getFile(path).getLocationURI());
                     if (!testFile.exists()) {
-                        testFile =
-                                new File(model.getProject().getFile(Util.RESOURCES_PATH + path)
-                                        .getLocationURI());
+                        testFile = new File(model.getProject().getFile(Util.RESOURCES_PATH + path).getLocationURI());
                         if (!testFile.exists()) {
-                            return ValidationStatus
-                                    .error("The Camel file path must be a valid file location");
+                            return ValidationStatus.error("The Camel file path must be a valid file location");
                         }
                     }
                     try {
                         CamelConfigurationHelper.load(testFile).getConfigBuilder();
                     } catch (final Exception e) {
-                        return ValidationStatus.error(
-                                "The Camel file path must refer to a valid Camel file");
+                        return ValidationStatus.error("The Camel file path must refer to a valid Camel file");
                     }
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                decoratorPosition, null, new WizardControlDecorationUpdater());
-        
+        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
+                null, new WizardControlDecorationUpdater());
+
         // bind the source type string dropdown
         _sourceCV.setContentProvider(new ObservableListContentProvider());
         widgetValue = ViewerProperties.singleSelection().observe(_sourceCV);
@@ -417,23 +399,39 @@ public class StartPage extends XformWizardPage {
             @Override
             public IStatus validate(final Object value) {
                 getModel().setSourceFilePath(new String());
-                ((NewTransformationWizard)getWizard()).resetSourceAndTargetPages();
-                if (value == null) {
+                ((NewTransformationWizard) getWizard()).resetSourceAndTargetPages();
+                if (StartPage.this.getSourcePage() != null) {
+                    ((XformWizardPage) StartPage.this.getSourcePage()).clearControls();
+                }
+                UIJob uiJob = new UIJob("open error") {
+                    @Override
+                    public IStatus runInUIThread(IProgressMonitor monitor) {
+                        if (StartPage.this.getTargetPage() != null) {
+                            ((XformWizardPage) StartPage.this.getTargetPage()).pingBinding();
+                        }
+                        return Status.OK_STATUS;
+                    }
+                };
+                uiJob.setSystem(true);
+                uiJob.schedule();
+
+                if (value == null || ((String) value).trim().isEmpty()) {
                     return ValidationStatus.error("A source type must be selected");
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                decoratorPosition, null, new WizardControlDecorationUpdater());
-        
+
         WritableList sourceList = new WritableList();
         sourceList.add("Java");
         sourceList.add("XML");
         sourceList.add("JSON");
         sourceList.add("Other");
+        sourceList.add("");
         _sourceCV.setInput(sourceList);
-        
+        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
+                null, new WizardControlDecorationUpdater());
+
         // bind the source type string dropdown
         _targetCV.setContentProvider(new ObservableListContentProvider());
         widgetValue = ViewerProperties.singleSelection().observe(_targetCV);
@@ -444,21 +442,39 @@ public class StartPage extends XformWizardPage {
             @Override
             public IStatus validate(final Object value) {
                 getModel().setTargetFilePath(new String());
-                ((NewTransformationWizard)getWizard()).resetSourceAndTargetPages();
-                if (value == null) {
+                ((NewTransformationWizard) getWizard()).resetSourceAndTargetPages();
+                if (StartPage.this.getTargetPage() != null) {
+                    ((XformWizardPage) StartPage.this.getTargetPage()).clearControls();
+                }
+                UIJob uiJob = new UIJob("open error") {
+                    @Override
+                    public IStatus runInUIThread(IProgressMonitor monitor) {
+                        if (StartPage.this.getSourcePage() != null) {
+                            ((XformWizardPage) StartPage.this.getSourcePage()).pingBinding();
+                        }
+                        return Status.OK_STATUS;
+                    }
+                };
+                uiJob.setSystem(true);
+                uiJob.schedule();
+
+                if (value == null || ((String) value).trim().isEmpty()) {
                     return ValidationStatus.error("A target type must be selected");
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null),
-                decoratorPosition, null, new WizardControlDecorationUpdater());
 
         WritableList targetList = new WritableList();
         targetList.add("Java");
         targetList.add("XML");
         targetList.add("JSON");
         targetList.add("Other");
+        targetList.add("");
         _targetCV.setInput(targetList);
+        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
+                null, new WizardControlDecorationUpdater());
+
+        listenForValidationChanges();
     }
 }
