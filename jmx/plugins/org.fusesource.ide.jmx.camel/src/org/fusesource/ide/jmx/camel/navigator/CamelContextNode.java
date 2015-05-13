@@ -64,7 +64,7 @@ ImageProvider {
 	private final CamelContextMBean camelContextMBean;
 	private XmlContainerMarshaller marshaller = new XmlContainerMarshaller();
 	private final RoutesNode routes;
-	private Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<String, TraceExchangeList>();
+	private static Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<String, TraceExchangeList>();
 	private NodeStatisticsContainer runtimeNodeStatisticsContainer;
 
 	public CamelContextNode(CamelContextsNode camelContextsNode, CamelFacade facade, CamelContextMBean camelContext) throws Exception {
@@ -216,7 +216,7 @@ ImageProvider {
 		} else {
 			((CamelFabricTracerMBean)tracer).setEnabled(false);
 		}
-		traceMessageMap.clear();
+		traceMessageMap.remove(getContextId());
 		reloadRoutes();
 		refresh();
 	}
@@ -532,5 +532,4 @@ ImageProvider {
 	public Object createProcessorBeanView(String routeId, String nodeId) {
 		return new ProcessorBeanView(this, routeId, nodeId);
 	}
-
 }
