@@ -85,8 +85,7 @@ import com.sun.codemodel.JPackage;
 public class NewTransformationWizard extends Wizard implements INewWizard {
 
     private static final String JAVA_PATH = Util.MAIN_PATH + "java/";
-    public static final String CAMEL_CONFIG_PATH = Util.RESOURCES_PATH
-            + "META-INF/spring/camel-context.xml";
+    public static final String CAMEL_CONFIG_PATH = Util.RESOURCES_PATH + "META-INF/spring/camel-context.xml";
     private static final String OBJECT_FACTORY_NAME = "ObjectFactory";
 
     private Model uiModel = new Model();
@@ -110,12 +109,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     @Override
     public boolean performFinish() {
         // Save transformation file
-        final IFile file =
-                uiModel.getProject().getFile(Util.RESOURCES_PATH + uiModel.getFilePath());
+        final IFile file = uiModel.getProject().getFile(Util.RESOURCES_PATH + uiModel.getFilePath());
         if (file.exists()
-                && !MessageDialog.openConfirm(getShell(),
-                        "Confirm",
-                        "Overwrite existing transformation file (\"" + file.getFullPath() + "\")?")) {
+                && !MessageDialog.openConfirm(getShell(), "Confirm", "Overwrite existing transformation file (\""
+                        + file.getFullPath() + "\")?")) {
             return false;
         }
         IRunnableWithProgress op = new IRunnableWithProgress() {
@@ -129,31 +126,29 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 try (FileOutputStream configStream = new FileOutputStream(newFile)) {
                     if (uiModel.getSourceFilePath() != null) {
                         // Generate models
-                        final String sourceClassName =
-                                generateModel(uiModel.getSourceFilePath(), uiModel.getSourceType(), true);
-                        final String targetClassName =
-                                generateModel(uiModel.getTargetFilePath(), uiModel.getTargetType(), false);
+                        final String sourceClassName = generateModel(uiModel.getSourceFilePath(),
+                                uiModel.getSourceType(), true);
+                        final String targetClassName = generateModel(uiModel.getTargetFilePath(),
+                                uiModel.getTargetType(), false);
                         // Update Camel config
-                        final IPath resourcesPath =
-                                uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
+                        final IPath resourcesPath = uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
 
                         CamelConfigBuilder configBuilder = uiModel.camelConfig.getConfigBuilder();
                         if (ModelType.OTHER.equals(uiModel.getSourceType())) {
                             sourceFormat = configBuilder.getDataFormat(uiModel.getSourceDataFormatid());
                         } else {
-                            sourceFormat = configBuilder.createDataFormat(
-                                    uiModel.getSourceType().transformType, sourceClassName);
+                            sourceFormat = configBuilder.createDataFormat(uiModel.getSourceType().transformType,
+                                    sourceClassName);
                         }
                         if (ModelType.OTHER.equals(uiModel.getTargetType())) {
                             targetFormat = configBuilder.getDataFormat(uiModel.getTargetDataFormatid());
                         } else {
-                            targetFormat = configBuilder.createDataFormat(
-                                    uiModel.getTargetType().transformType, targetClassName);
+                            targetFormat = configBuilder.createDataFormat(uiModel.getTargetType().transformType,
+                                    targetClassName);
                         }
                         endpoint = configBuilder.createEndpoint(uiModel.getId(),
-                                file.getFullPath().makeRelativeTo(resourcesPath).toString(),
-                                sourceClassName, targetClassName,
-                                sourceFormat, targetFormat);
+                                file.getFullPath().makeRelativeTo(resourcesPath).toString(), sourceClassName,
+                                targetClassName, sourceFormat, targetFormat);
 
                         // make sure we add our maven dependencies where needed
                         addCamelDozerDependency();
@@ -163,8 +158,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                         if (saveCamelConfig) {
                             try {
                                 File camelFile = new File(uiModel.getProject()
-                                        .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath())
-                                        .getLocationURI());
+                                        .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath()).getLocationURI());
                                 uiModel.camelConfig.save(camelFile);
                             } catch (final Exception e) {
                                 throw e;
@@ -177,12 +171,12 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                     if (!saveCamelConfig) {
                         // now update the camel config if we didn't already
 
-                        RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator
-                                .getDiagramEditor().getModel();
-                        CamelContextFactoryBean camelContext =
-                                routeContainer.getModel().getContextElement();
+                        RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.getDiagramEditor()
+                                .getModel();
+                        CamelContextFactoryBean camelContext = routeContainer.getModel().getContextElement();
 
-                        // Wizard completed successfully; create the necessary config
+                        // Wizard completed successfully; create the necessary
+                        // config
                         addCamelContextEndpoint(camelContext, endpoint.asSpringEndpoint());
                         if (sourceFormat != null) {
                             addDataFormat(camelContext, sourceFormat);
@@ -202,18 +196,14 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                     }
 
                     // Open mapping editor
-                    final IEditorDescriptor desc =
-                            PlatformUI
-                                    .getWorkbench()
-                                    .getEditorRegistry()
-                                    .getEditors(
-                                            file.getName(),
-                                            Platform.getContentTypeManager().getContentType(
-                                                    DozerConfigContentTypeDescriber.ID))[0];
+                    final IEditorDescriptor desc = PlatformUI
+                            .getWorkbench()
+                            .getEditorRegistry()
+                            .getEditors(file.getName(),
+                                    Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID))[0];
                     uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                            .openEditor(new FileEditorInput(file),
-                                    desc.getId());
+                            .openEditor(new FileEditorInput(file), desc.getId());
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
@@ -286,9 +276,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         uiModel.setProject(project);
         final IJavaProject javaProject = JavaCore.create(project);
         try {
-            loader =
-                    (URLClassLoader) JavaUtil.getProjectClassLoader(javaProject,
-                            getClass().getClassLoader());
+            loader = (URLClassLoader) JavaUtil.getProjectClassLoader(javaProject, getClass().getClassLoader());
         } catch (final Exception e) {
             // eat exception
             e.printStackTrace();
@@ -316,16 +304,13 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         if (uiModel.projects.size() == 1) {
             uiModel.setProject(uiModel.projects.get(0));
         } else {
-            final IStructuredSelection resourceSelection =
-                    (IStructuredSelection) workbench.getActiveWorkbenchWindow()
-                            .getSelectionService()
-                            .getSelection("org.eclipse.ui.navigator.ProjectExplorer");
+            final IStructuredSelection resourceSelection = (IStructuredSelection) workbench.getActiveWorkbenchWindow()
+                    .getSelectionService().getSelection("org.eclipse.ui.navigator.ProjectExplorer");
             if (resourceSelection == null || resourceSelection.size() != 1) {
                 return;
             }
-            final IProject project =
-                    ((IResource) ((IAdaptable) resourceSelection.getFirstElement())
-                            .getAdapter(IResource.class)).getProject();
+            final IProject project = ((IResource) ((IAdaptable) resourceSelection.getFirstElement())
+                    .getAdapter(IResource.class)).getProject();
             if (uiModel.projects.contains(project)) {
                 uiModel.setProject(project);
             }
@@ -352,7 +337,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     @Override
     public boolean canFinish() {
         if (start != null && start.getSourcePage() != null && start.getTargetPage() != null) {
-            if (start.getSourcePage().isPageComplete()
+            ((XformWizardPage) start.getSourcePage()).notifyListeners();
+            ((XformWizardPage) start.getTargetPage()).notifyListeners();
+            if (start.isPageComplete() && start.getSourcePage().isPageComplete()
                     && start.getTargetPage().isPageComplete()) {
                 return true;
             }
@@ -362,13 +349,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return super.canFinish();
     }
 
-    private String generateModel(final String filePath,
-            final ModelType type, boolean isSource) throws Exception {
+    private String generateModel(final String filePath, final ModelType type, boolean isSource) throws Exception {
         // Build class name from file name
         final StringBuilder className = new StringBuilder();
-        final StringCharacterIterator iter =
-                new StringCharacterIterator(filePath.substring(filePath.lastIndexOf('/') + 1,
-                        filePath.lastIndexOf('.')));
+        final StringCharacterIterator iter = new StringCharacterIterator(filePath.substring(
+                filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.')));
         boolean wordStart = true;
         for (char chr = iter.first(); chr != StringCharacterIterator.DONE; chr = iter.next()) {
             if (className.length() == 0) {
@@ -391,91 +376,84 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
         pkgName = pkgName.toLowerCase();
         // Generate model
-        final File targetClassesFolder =
-                new File(uiModel.getProject().getFolder(JAVA_PATH).getLocationURI());
+        final File targetClassesFolder = new File(uiModel.getProject().getFolder(JAVA_PATH).getLocationURI());
         switch (type) {
-            case OTHER:
-            case CLASS: {
-                final IJavaProject javaProject = JavaCore.create(uiModel.getProject());
-                IType pkg = javaProject.findType(filePath, new NullProgressMonitor());
-                if (pkg != null) {
-                    return pkg.getFullyQualifiedName();
-                }
-                return null;
+        case OTHER:
+        case CLASS: {
+            final IJavaProject javaProject = JavaCore.create(uiModel.getProject());
+            IType pkg = javaProject.findType(filePath, new NullProgressMonitor());
+            if (pkg != null) {
+                return pkg.getFullyQualifiedName();
             }
-            case JAVA: {
-                final IJavaProject javaProject = JavaCore.create(uiModel.getProject());
-                IType pkg = javaProject.findType(filePath, new NullProgressMonitor());
-                if (pkg != null) {
-                    return pkg.getFullyQualifiedName();
-                }
-                return null;
+            return null;
+        }
+        case JAVA: {
+            final IJavaProject javaProject = JavaCore.create(uiModel.getProject());
+            IType pkg = javaProject.findType(filePath, new NullProgressMonitor());
+            if (pkg != null) {
+                return pkg.getFullyQualifiedName();
             }
-            case JSON: {
-                final JsonModelGenerator generator = new JsonModelGenerator();
-                generator.generateFromInstance(className.toString(),
-                        pkgName,
-                        uiModel.getProject().findMember(filePath).getLocationURI().toURL(),
-                        targetClassesFolder);
-                return pkgName + "." + className;
+            return null;
+        }
+        case JSON: {
+            final JsonModelGenerator generator = new JsonModelGenerator();
+            generator.generateFromInstance(className.toString(), pkgName, uiModel.getProject().findMember(filePath)
+                    .getLocationURI().toURL(), targetClassesFolder);
+            return pkgName + "." + className;
+        }
+        case JSON_SCHEMA: {
+            final JsonModelGenerator generator = new JsonModelGenerator();
+            generator.generateFromSchema(className.toString(), pkgName, uiModel.getProject().findMember(filePath)
+                    .getLocationURI().toURL(), targetClassesFolder);
+            return pkgName + "." + className;
+        }
+        case XSD: {
+            final XmlModelGenerator generator = new XmlModelGenerator();
+            final File schemaFile = new File(uiModel.getProject().findMember(filePath).getLocationURI());
+            final JCodeModel model = generator.generateFromSchema(schemaFile, pkgName, targetClassesFolder);
+            String elementName = null;
+            if (isSource) {
+                elementName = uiModel.getSourceClassName();
+            } else {
+                elementName = uiModel.getTargetClassName();
             }
-            case JSON_SCHEMA: {
-                final JsonModelGenerator generator = new JsonModelGenerator();
-                generator.generateFromSchema(className.toString(),
-                        pkgName,
-                        uiModel.getProject().findMember(filePath).getLocationURI().toURL(),
-                        targetClassesFolder);
-                return pkgName + "." + className;
+            String modelClass = null;
+            Map<String, String> mappings = generator.elementToClassMapping(model);
+            if (mappings != null && !mappings.isEmpty()) {
+                modelClass = mappings.get(elementName);
+            } else {
+                modelClass = selectModelClass(model);
             }
-            case XSD: {
-                final XmlModelGenerator generator = new XmlModelGenerator();
-                final File schemaFile = new File(uiModel.getProject().findMember(filePath).getLocationURI());
-                final JCodeModel model = generator.generateFromSchema(schemaFile, pkgName, targetClassesFolder);
-                String elementName = null;
-                if (isSource) {
-                    elementName = uiModel.getSourceClassName();
-                } else {
-                    elementName = uiModel.getTargetClassName();
-                }
-                String modelClass = null;
-                Map<String, String> mappings = generator.elementToClassMapping(model);
-                if (mappings != null && !mappings.isEmpty()) {
-                    modelClass = mappings.get(elementName);
-                } else {
-                    modelClass = selectModelClass(model);
-                }
-                if (modelClass != null) {
-                    return modelClass;
-                }
-                return null;
+            if (modelClass != null) {
+                return modelClass;
             }
-            case XML: {
-                final XmlModelGenerator generator = new XmlModelGenerator();
-                final File schemaPath = new File(
-                        uiModel.getProject().getFile(filePath + ".xsd").getLocationURI());
-                final JCodeModel model = generator.generateFromInstance(
-                        new File(uiModel.getProject().findMember(filePath)
-                                .getLocationURI()), schemaPath, pkgName, targetClassesFolder);
-                String elementName = null;
-                if (isSource) {
-                    elementName = uiModel.getSourceClassName();
-                } else {
-                    elementName = uiModel.getTargetClassName();
-                }
-                String modelClass = null;
-                Map<String, String> mappings = generator.elementToClassMapping(model);
-                if (mappings != null && !mappings.isEmpty()) {
-                    modelClass = mappings.get(elementName);
-                } else {
-                    modelClass = selectModelClass(model);
-                }
-                if (modelClass != null) {
-                    return modelClass;
-                }
-                return null;
+            return null;
+        }
+        case XML: {
+            final XmlModelGenerator generator = new XmlModelGenerator();
+            final File schemaPath = new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI());
+            final JCodeModel model = generator.generateFromInstance(new File(uiModel.getProject().findMember(filePath)
+                    .getLocationURI()), schemaPath, pkgName, targetClassesFolder);
+            String elementName = null;
+            if (isSource) {
+                elementName = uiModel.getSourceClassName();
+            } else {
+                elementName = uiModel.getTargetClassName();
             }
-            default:
-                return null;
+            String modelClass = null;
+            Map<String, String> mappings = generator.elementToClassMapping(model);
+            if (mappings != null && !mappings.isEmpty()) {
+                modelClass = mappings.get(elementName);
+            } else {
+                modelClass = selectModelClass(model);
+            }
+            if (modelClass != null) {
+                return modelClass;
+            }
+            return null;
+        }
+        default:
+            return null;
         }
     }
 
@@ -515,8 +493,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return uiModel;
     }
 
-    private void addCamelContextEndpoint(CamelContextFactoryBean context,
-            CamelEndpointFactoryBean endpoint) {
+    private void addCamelContextEndpoint(CamelContextFactoryBean context, CamelEndpointFactoryBean endpoint) {
         List<CamelEndpointFactoryBean> endpoints = context.getEndpoints();
         if (endpoints == null) {
             endpoints = new LinkedList<>();
@@ -560,8 +537,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     }
 
     private void addCamelDozerDependency() {
-        Dependency dep = createDependency("org.apache.camel", "camel-dozer",
-                org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion());
+        Dependency dep = createDependency("org.apache.camel", "camel-dozer", org.fusesource.ide.camel.editor.Activator
+                .getDefault().getCamelVersion());
         List<Dependency> deps = new ArrayList<>();
         deps.add(dep);
         try {
@@ -576,11 +553,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
         if (dataFormat != null) {
             if (dataFormat.getDataFormatName().equalsIgnoreCase("json-jackson")) {
-                dep = createDependency("org.apache.camel", "camel-jackson", 
-                        org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion());
+                dep = createDependency("org.apache.camel", "camel-jackson", org.fusesource.ide.camel.editor.Activator
+                        .getDefault().getCamelVersion());
             } else if (dataFormat.getDataFormatName().equalsIgnoreCase("jaxb")) {
-                dep = createDependency("org.apache.camel", "camel-jaxb", 
-                        org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion());
+                dep = createDependency("org.apache.camel", "camel-jaxb", org.fusesource.ide.camel.editor.Activator
+                        .getDefault().getCamelVersion());
             }
             if (dep != null) {
                 List<Dependency> deps = new ArrayList<>();
