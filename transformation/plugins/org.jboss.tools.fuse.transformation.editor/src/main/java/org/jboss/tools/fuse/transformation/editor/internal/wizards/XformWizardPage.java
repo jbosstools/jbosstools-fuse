@@ -10,8 +10,12 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
+import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -28,26 +32,22 @@ import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizar
  */
 public abstract class XformWizardPage extends WizardPage {
 
-    final DataBindingContext context = new DataBindingContext(
-            SWTObservables.getRealm(Display.getCurrent()));
+    final DataBindingContext context = new DataBindingContext(SWTObservables.getRealm(Display.getCurrent()));
     final ObservablesManager observablesManager = new ObservablesManager();
     final Model model;
-    
-    protected int decoratorPosition = SWT.TOP; //SWT.TOP | SWT.LEFT;
 
+    protected int decoratorPosition = SWT.TOP; // SWT.TOP | SWT.LEFT;
 
     protected XformWizardPage(String pageName, final Model model) {
         super(pageName);
         this.model = model;
     }
-    
-    protected XformWizardPage(String pageName, String title,
-            ImageDescriptor titleImage, Model model) {
+
+    protected XformWizardPage(String pageName, String title, ImageDescriptor titleImage, Model model) {
         this(pageName, model);
         setTitle(title);
         setImageDescriptor(titleImage);
     }
-    
 
     protected Label createLabel(Composite parent, int style, String labeltext, String tooltip) {
         Label label = new Label(parent, style);
@@ -80,11 +80,20 @@ public abstract class XformWizardPage extends WizardPage {
         }
         return super.getNextPage();
     }
-    
+
     public void resetFinish() {
         setPageComplete(false);
+        notifyListeners();
     }
-    
+
+    public void clearControls() {
+        // empty here - extenders can override
+    }
+
+    public void notifyListeners() {
+        // empty here - extenders should override
+    }
+
     public IWizardPage getSourcePage() {
         if (model.getSourceTypeStr() != null) {
             if (model.getSourceTypeStr().equalsIgnoreCase("java")) {
@@ -126,9 +135,58 @@ public abstract class XformWizardPage extends WizardPage {
 
     void validatePage() {
         setPageComplete(getErrorMessage() == null);
+
+        // if this is the source page that changed, let's refresh the target
+        // page too
+        NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+        StartPage startPage = (StartPage) wizard.getStartingPage();
+        XformWizardPage pageToRefresh = null;
+        if (startPage != null && startPage.getSourcePage() != null && startPage.getSourcePage().equals(this)) {
+            pageToRefresh = (XformWizardPage) startPage.getTargetPage();
+            pageToRefresh.pingBinding();
+        }
     }
-    
+
+    public boolean isSourceOrTargetPage() {
+        NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+        StartPage startPage = (StartPage) wizard.getStartingPage();
+        if (startPage.getSourcePage().equals(this)) {
+            return true;
+        }
+        if (startPage.getTargetPage().equals(this)) {
+            return true;
+        }
+        return false;
+    }
+
     protected Model getModel() {
         return this.model;
+    }
+
+    public void pingBinding() {
+        // empty
+    }
+
+    protected void listenForValidationChanges() {
+        if (context != null) {
+            // get the validation status provides
+            IObservableList bindings = context.getValidationStatusProviders();
+
+            IChangeListener listener = new ValidationChangedListener();
+            // register the listener to all bindings
+            for (Object o : bindings) {
+                Binding b = (Binding) o;
+                b.getTarget().addChangeListener(listener);
+            }
+        }
+    }
+
+    class ValidationChangedListener implements IChangeListener {
+
+        @Override
+        public void handleChange(ChangeEvent event) {
+            validatePage();
+        }
+
     }
 }
