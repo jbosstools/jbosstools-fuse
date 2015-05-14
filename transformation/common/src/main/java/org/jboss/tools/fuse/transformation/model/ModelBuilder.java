@@ -22,7 +22,9 @@ public class ModelBuilder {
 
     public static Model fromJavaClass(Class<?> javaClass) {
         Model model = new Model(javaClass.getSimpleName(), javaClass.getName());
-        addFieldsToModel(getFields(javaClass), model);
+        List<Field> fields = new LinkedList<Field>();
+        getFields(javaClass, fields);
+        addFieldsToModel(fields, model);
         model.setModelClass(javaClass);
         return model;
     }
@@ -56,39 +58,34 @@ public class ModelBuilder {
 
     private static void addFieldsToModel(List<Field> fields, Model model) {
         for (Field field : fields) {
-            String fieldType;
+            String fieldTypeName;
             List<Field> childFields = null;
             boolean isCollection = false;
 
             if (field.getType().isArray()) {
                 isCollection = true;
-                fieldType = getListName(field.getType().getComponentType());
-                childFields = getFields(field.getType().getComponentType());
+                fieldTypeName = getListName(field.getType().getComponentType());
+                childFields = getFields(field.getType().getComponentType(), model);
             } else if (Collection.class.isAssignableFrom(field.getType())) {
                 isCollection = true;
                 Type ft = field.getGenericType();
                 if (ft instanceof ParameterizedType) {
                     Class<?> ftClass =
                             (Class<?>) ((ParameterizedType) ft).getActualTypeArguments()[0];
-                    fieldType = getListName(ftClass);
-                    childFields = getFields(ftClass);
+                    fieldTypeName = getListName(ftClass);
+                    childFields = getFields(ftClass, model);
                 } else {
-                    fieldType = getListName(Object.class);
+                    fieldTypeName = getListName(Object.class);
                 }
             } else {
-                fieldType = field.getType().getName();
+                fieldTypeName = field.getType().getName();
                 Class<?> fieldClass = field.getType();
-                if (!fieldClass.isPrimitive()
-                        && !fieldType.equals(String.class.getName())
-                        && !fieldType.startsWith("java.")
-                        && !Number.class.isAssignableFrom(fieldClass)
-                        && !(fieldClass instanceof Class<?> && ((Class<?>)fieldClass).isEnum())) {
-
-                    childFields = getFields(fieldClass);
+                if (parseChildren(field.getType())) {
+                    childFields = getFields(fieldClass, model);
                 }
             }
 
-            Model child = model.addChild(field.getName(), fieldType);
+            Model child = model.addChild(field.getName(), fieldTypeName);
             child.setIsCollection(isCollection);
             if (childFields != null) {
                 addFieldsToModel(childFields, child);
@@ -96,9 +93,20 @@ public class ModelBuilder {
         }
     }
 
-    private static List<Field> getFields(Class<?> clazz) {
+    private static List<Field> getFields(Class<?> clazz, Model parent) {
         LinkedList<Field> fields = new LinkedList<Field>();
-        getFields(clazz, fields);
+        boolean cycle = false;
+        // convenient place to check for a cycle where a child field references an ancestor
+        for (Model pm = parent; pm != null; pm = pm.getParent()) {
+            String parentType = pm.isCollection() ? getListType(pm.getType()) : pm.getType();
+            if (clazz.getName().equals(parentType)) {
+                cycle = true;
+                break;
+            }
+        }
+        if (!cycle) {
+            getFields(clazz, fields);
+        }
         return fields;
     }
 
@@ -114,5 +122,16 @@ public class ModelBuilder {
             }
         }
         getFields(clazz.getSuperclass(), fields);
+    }
+    
+    private static boolean parseChildren(Class<?> fieldClass) {
+        boolean excluded = 
+            fieldClass.isPrimitive()
+            || fieldClass.getName().equals(String.class.getName())
+            || fieldClass.getName().startsWith("java.")
+            || Number.class.isAssignableFrom(fieldClass)
+            || (fieldClass instanceof Class<?> && ((Class<?>)fieldClass).isEnum());
+        
+        return !excluded;
     }
 }
