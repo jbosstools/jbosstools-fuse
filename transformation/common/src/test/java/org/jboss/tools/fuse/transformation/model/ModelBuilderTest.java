@@ -53,6 +53,19 @@ public class ModelBuilderTest {
         Model model = ModelBuilder.fromJavaClass(ClassWithDateEtc.class);
         Assert.assertEquals(4, model.listFields().size());
     }
+    
+    @Test
+    public void selfReferenceCycle() {
+        Model model = ModelBuilder.fromJavaClass(SelfReference.class);
+        Assert.assertEquals(2, model.listFields().size());
+    }
+    
+    @Test
+    public void childAncestorCycle() {
+        Model model = ModelBuilder.fromJavaClass(Parent.class);
+        model.print(System.out);
+        Assert.assertEquals(7, model.listFields().size());
+    }
 }
 
 class NoSuper {
@@ -120,4 +133,25 @@ class ContainsNumber {
         this.bigNum = bigNum;
     }
     
+}
+
+class SelfReference {
+    private String field1;
+    private SelfReference self;
+}
+
+class Parent {
+    private Child child;
+    private String field1;
+}
+
+class Child {
+    private Parent parent;
+    private String field2;
+    private Grandchild grandchild;
+}
+
+class Grandchild {
+    private Parent grandparent;
+    private String field3;
 }

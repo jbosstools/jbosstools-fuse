@@ -352,7 +352,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     @Override
     public boolean canFinish() {
         if (start != null && start.getSourcePage() != null && start.getTargetPage() != null) {
-            if (start.getSourcePage().isPageComplete()
+            if (start.isPageComplete() && start.getSourcePage().isPageComplete()
                     && start.getTargetPage().isPageComplete()) {
                 return true;
             }
