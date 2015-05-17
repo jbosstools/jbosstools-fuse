@@ -87,7 +87,7 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	 * @see org.eclipse.graphiti.ui.editor.DiagramBehavior#getConfigurationProvider()
 	 */
 	@Override
-	protected IConfigurationProvider getConfigurationProvider() {
+	public IConfigurationProvider getConfigurationProvider() {
 		return super.getConfigurationProvider();
 	}
 	

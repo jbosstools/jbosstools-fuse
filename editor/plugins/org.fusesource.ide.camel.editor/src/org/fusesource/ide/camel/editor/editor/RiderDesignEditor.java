@@ -595,7 +595,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#configureGraphicalViewer()
 	 */
 	@Override
-	protected void configureGraphicalViewer() {
+	public void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
 
 		GraphicalViewer viewer = getGraphicalViewer();

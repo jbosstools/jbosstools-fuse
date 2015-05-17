@@ -40,7 +40,7 @@
     <maven.compiler.target>1.7</maven.compiler.target>
 
     <!-- JBoss Tools Integration Stack version -->
-    <jbtis.version>4.2.3.Final</jbtis.version>
+    <jbtis.version>4.3.0.Alpha2a</jbtis.version>
     
     <!-- Tycho versions -->
     <jboss-tycho-version>0.22.1-SNAPSHOT</jboss-tycho-version>
@@ -307,6 +307,11 @@
                 <arch>x86</arch>
              </environment>
              <environment>
+                <os>win32</os>
+                <ws>win32</ws>
+                <arch>x86_64</arch>
+             </environment>
+             <environment>
                 <os>linux</os>
                 <ws>gtk</ws>
                 <arch>x86_64</arch>
@@ -314,11 +319,6 @@
              <environment>
                 <os>linux</os>
                 <ws>gtk</ws>
-                <arch>x86</arch>
-             </environment>
-             <environment>
-                <os>macosx</os>
-                <ws>cocoa</ws>
                 <arch>x86</arch>
              </environment>
              <environment>

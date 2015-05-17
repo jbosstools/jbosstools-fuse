@@ -50,9 +50,9 @@ import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
-import org.eclipse.graphiti.platform.IDiagramEditor;
 import org.eclipse.graphiti.ui.features.DefaultFeatureProvider;
 import org.fusesource.ide.camel.editor.AbstractNodes;
+import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
@@ -118,14 +118,10 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	public ICreateFeature[] getCreateFeatures() {
 		ICreateFeature[] features = ProviderHelper.getCreateFeatures(this);
 		AbstractNode selectedNode = null;
-		IDiagramTypeProvider dtp = getDiagramTypeProvider();
-		IDiagramEditor diagramEditor = dtp.getDiagramEditor();
-		if (diagramEditor instanceof RiderDesignEditor) {
-			RiderDesignEditor rider = (RiderDesignEditor) diagramEditor;
-			selectedNode = rider.getSelectedNode();
-			if (selectedNode == null) {
-				selectedNode = rider.getSelectedRoute();
-			}
+		RiderDesignEditor rider = Activator.getDiagramEditor();
+		selectedNode = rider.getSelectedNode();
+		if (selectedNode == null) {
+			selectedNode = rider.getSelectedRoute();
 		}
 
 		if (selectedNode != null) {
