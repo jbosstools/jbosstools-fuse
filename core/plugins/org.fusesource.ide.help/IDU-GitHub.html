@@ -1,0 +1,80 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>GitHub</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Geocoder.html" title="Geocoder"><link rel="next" href="IDU-GoogleCalenda.html" title="GoogleCalendar"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GitHub"></a>GitHub</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-GitHub_HSH_GitHubComponent"></a>GitHub component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.15</strong></span></p><p>The GitHub component interacts with the GitHub API by encapsulating <a class="link" href="http://org.eclipse.egit.github.core" target="_top">egit-github</a>. It currently
+            provides polling for new pull requests, pull request comments, tags, and commits. It is
+            also able to produce comments on pull requests, as well as close the pull request
+            entirely.</p><p>Rather than webhooks, this endpoint relies on simple polling. Reasons include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Concern for reliability/stability</p></li><li class="listitem"><p>The types of payloads we're polling aren't typically large (plus, paging is
+                    available in the API)</p></li><li class="listitem"><p>The need to support apps running somewhere not publicly accessible where a
+                    webhook would fail</p></li></ul></div><p>Note that the GitHub API is fairly expansive. Therefore, this component could be
+            easily expanded to provide additional interactions.</p><p>Maven users will need to add the following dependency to their pom.xml for this
+            component:</p><pre class="programlisting">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-github&lt;/artifactId&gt;
+    &lt;version&gt;${camel-version}&lt;/version&gt;
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58426"></a>URI format</h2></div></div></div><pre class="programlisting">gihub://endpoint[?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58431"></a>Mandatory Options:</h2></div></div></div><p>Note that these can be configured directly through the endpoint.</p><table id="d0e58436"><tbody><tr>
+                    <th><p>Option</p></th>
+                    <th><p>Description</p></th>
+                </tr><tr>
+                    <td><p>username</p></td>
+                    <td><p>GitHub username, required unless oauthToken is provided</p></td>
+                </tr><tr>
+                    <td><p>password</p></td>
+                    <td><p>GitHub password, required unless oauthToken is provided</p></td>
+                </tr><tr>
+                    <td><p>oauthToken</p></td>
+                    <td><p>GitHub OAuth token, required unless username &amp; password are
+                            provided</p></td>
+                </tr><tr>
+                    <td><p>repoOwner</p></td>
+                    <td><p>GitHub repository owner (organization)</p></td>
+                </tr><tr>
+                    <td>repoName</td>
+                    <td>GitHub repository name</td>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58496"></a>Consumer Endpoints:</h2></div></div></div><table id="d0e58499"><tbody><tr>
+                    <th><p>Endpoint</p></th>
+                    <th><p>Context</p></th>
+                    <th><p>Body Type</p></th>
+                </tr><tr>
+                    <td><p>pullRequest</p></td>
+                    <td><p>polling</p></td>
+                    <td><p>org.eclipse.egit.github.core.PullRequest</p></td>
+                </tr><tr>
+                    <td><p>pullRequestComment</p></td>
+                    <td><p>polling</p></td>
+                    <td><p>org.eclipse.egit.github.core.Comment (comment on the general pull
+                            request discussion) or org.eclipse.egit.github.core.CommitComment
+                            (inline comment on a pull request diff)</p></td>
+                </tr><tr>
+                    <td><p>tag</p></td>
+                    <td><p>polling</p></td>
+                    <td><p>org.eclipse.egit.github.core.RepositoryTag</p></td>
+                </tr><tr>
+                    <td><p>commit</p></td>
+                    <td><p>polling</p></td>
+                    <td><p>org.eclipse.egit.github.core.RepositoryCommit</p></td>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58571"></a>Producer Endpoints:</h2></div></div></div><table id="d0e58574"><tbody><tr>
+                    <th><p>Endpoint</p></th>
+                    <th><p>Body</p></th>
+                    <th>Message Headers</th>
+                </tr><tr>
+                    <td><p>pullRequestComment</p></td>
+                    <td><p>String (comment text)</p></td>
+                    <td><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>GitHubPullRequest (integer) (REQUIRED): Pull request
+                                    number.</p></li><li class="listitem"><p>GitHubInResponseTo (integer): Required if responding to
+                                    another inline comment on the pull request diff. If left off, a
+                                    general comment on the pull request discussion is
+                                    assumed.</p></li></ul></div></td>
+                </tr><tr>
+                    <td><p>closePullRequest</p></td>
+                    <td><p>none</p></td>
+                    <td><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>GitHubPullRequest (integer) (REQUIRED): Pull request
+                                    number.</p></li></ul></div></td>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58624"></a>URI Options</h2></div></div></div><table id="d0e58627"><tbody><tr>
+                    <th><p>Name</p></th>
+                    <th><p>Default Value</p></th>
+                    <th><p>Description</p></th>
+                </tr><tr>
+                    <td><p>delay</p></td>
+                    <td><p><code class="code">60</code></p></td>
+                    <td><p>in seconds</p></td>
+                </tr></tbody></table></div></div></body></html>

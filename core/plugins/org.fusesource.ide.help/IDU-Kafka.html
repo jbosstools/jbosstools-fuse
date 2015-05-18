@@ -1,0 +1,213 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Kafka</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-JT400.html" title="JT400"><link rel="next" href="IDU-Kestrel.html" title="Kestrel"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Kafka"></a>Kafka</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e83209"></a>Kafka Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.13</strong></span></p><p>The <span class="strong"><strong>kafka:</strong></span> component is used for communicating
+                with <a class="link" href="http://kafka.apache.org/" target="_top">Apache Kafka</a> message
+                broker.</p><p>Maven users will need to add the following dependency to their
+                    <code class="code">pom.xml</code> for this component:</p><div class="informalexample"><pre class="programlisting">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-kafka&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;!-- use the same version as your Camel core version --&gt;
+&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-325"></a>URI format</h2></div></div></div><div class="informalexample"><pre class="programlisting">kafka:server:port[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-326"></a>Options</h2></div></div></div><table id="d0e83240"><tbody><tr>
+                            <th><p>Property</p></th>
+                            <th><p>Default</p></th>
+                            <th><p>Description</p></th>
+                        </tr><tr>
+                            <td><p>zookeeperHost</p></td>
+                            <td><p> </p></td>
+                            <td><p>The zookeeper host to use</p></td>
+                        </tr><tr>
+                            <td><p>zookeeperPort</p></td>
+                            <td><p>2181</p></td>
+                            <td><p>The zookeeper port to use</p></td>
+                        </tr><tr>
+                            <td>zookeeperConnect</td>
+                            <td> </td>
+                            <td><span class="emphasis"><em>Camel
+                                2.13.3/2.14.1:</em></span> If in use, then
+                                zookeeperHost/zookeeperPort is not used.</td>
+                        </tr><tr>
+                            <td><p>topic</p></td>
+                            <td><p> </p></td>
+                            <td><p>The topic to use</p></td>
+                        </tr><tr>
+                            <td>groupId</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>partitioner</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>consumerStreams</td>
+                            <td>10</td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>clientId</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>zookeeperSessionTimeoutMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>zookeeperConnectionTimeoutMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>zookeeperSyncTimeMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                    <td>consumersCount</td>
+                    <td>
+                        <code class="code">1</code></td>
+                    <td>
+                        <span class="bold"><strong>Camel 2.15.0:</strong></span> The number of consumers that
+                        connect to Kafka server.</td>
+                </tr><tr>
+                    <td>batchSize</td>
+                    <td>
+                        <code class="code">100</code></td>
+                    <td>
+                        <span class="bold"><strong>Camel 2.15.0:</strong></span> The <code class="code">batchSize</code>
+                        that the <code class="code">BatchingConsumerTask</code> processes once. </td>
+                </tr><tr>
+                    <td>barrierAwaitTimeoutMs</td>
+                    <td>
+                        <code class="code">10000</code></td>
+                    <td>
+                        <span class="bold"><strong>Camel 2.15.0:</strong></span> If the
+                            <code class="code">BatchingConsumerTask</code> processes exchange exceed the
+                            <code class="code">batchSize</code>, it will wait for
+                            <code class="code">barrierAwaitTimeoutMs</code>. </td>
+                </tr></tbody></table><p>You can append query options to the URI in the following format,
+                        <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-327"></a>Producer Options</h2></div></div></div><table class="confluenceTable" id="d0e83458"><tbody><tr>
+                            <th><p>Property</p></th>
+                            <th><p>Default</p></th>
+                            <th><p>Description</p></th>
+                        </tr><tr>
+                            <td><p>producerType</p></td>
+                            <td><p> </p></td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>compressionCodec</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>compressedTopics</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>messageSendMaxRetries</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>retryBackoffMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>topicMetadataRefreshIntervalMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>sendBufferBytes</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>requestRequiredAcks</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>requestTimeoutMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>queueBufferingMaxMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>queueBufferingMaxMessages</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>queueEnqueueTimeoutMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>batchNumMessages</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>serializerClass</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>keySerializerClass</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-328"></a>Consumer Options</h2></div></div></div><table class="confluenceTable" id="d0e83644"><tbody><tr>
+                            <th><p>Property</p></th>
+                            <th><p>Default</p></th>
+                            <th><p>Description</p></th>
+                        </tr><tr>
+                            <td><p>consumerId</p></td>
+                            <td><p> </p></td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>socketTimeoutMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>socketReceiveBufferBytes</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>fetchMessageMaxBytes</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>autoCommitEnable</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>autoCommitIntervalMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>queuedMaxMessages</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>rebalanceMaxRetries</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>fetchMinBytes</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>fetchWaitMaxMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>rebalanceBackoffMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>refreshLeaderBackoffMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>autoOffsetReset</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr><tr>
+                            <td>consumerTimeoutMs</td>
+                            <td> </td>
+                            <td> </td>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-329"></a>Samples</h2></div></div></div><p>Consuming messages:</p><div class="informalexample"><pre class="programlisting">from("kafka:localhost:9092?topic=test&amp;zookeeperHost=localhost&amp;zookeeperPort=2181&amp;groupId=group1").to("log:input");</pre></div><p>Producing messages:</p><p>See unit tests of camel-kafka for more examples</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-330"></a>Endpoints</h2></div></div></div><p>Camel supports the <a class="link" href="http://localhost:8090/display/CAMEL/Message+Endpoint" target="_top">Message
+                    Endpoint</a> pattern using the <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Endpoint.html" target="_top">Endpoint</a> interface. Endpoints are usually created by a <a class="link" href="http://localhost:8090/display/CAMEL/Component" target="_top">Component</a> and
+                Endpoints are usually referred to in the <a class="link" href="http://localhost:8090/display/CAMEL/DSL" target="_top">DSL</a> via their <a class="link" href="http://localhost:8090/display/CAMEL/URIs" target="_top">URIs</a>.</p><p>From an Endpoint you can use the following methods</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Endpoint.html#createProducer%28%29" target="_top">createProducer()</a> will create a <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Producer.html" target="_top">Producer</a> for sending message exchanges to the endpoint</p></li><li class="listitem"><p><a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Endpoint.html#createConsumer%28org.apache.camel.Processor%29" target="_top">createConsumer()</a> implements the <a class="link" href="http://localhost:8090/display/CAMEL/Event+Driven+Consumer" target="_top">Event Driven Consumer</a> pattern for consuming message exchanges
+                        from the endpoint via a <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Processor.html" target="_top">Processor</a> when creating a <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Consumer.html" target="_top">Consumer</a></p></li><li class="listitem"><p><a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/Endpoint.html#createPollingConsumer%28%29" target="_top">createPollingConsumer()</a> implements the <a class="link" href="http://localhost:8090/display/CAMEL/Polling+Consumer" target="_top">Polling Consumer</a> pattern for consuming message exchanges from
+                        the endpoint via a <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/PollingConsumer.html" target="_top">PollingConsumer</a></p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-331"></a>See Also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="link" href="http://localhost:8090/display/CAMEL/Configuring+Camel" target="_top">Configuring Camel</a></p></li><li class="listitem"><p><a class="link" href="http://localhost:8090/display/CAMEL/Message+Endpoint" target="_top">Message Endpoint</a> pattern</p></li><li class="listitem"><p><a class="link" href="http://localhost:8090/display/CAMEL/URIs" target="_top">URIs</a></p></li><li class="listitem"><p><a class="link" href="http://localhost:8090/display/CAMEL/Writing+Components" target="_top">Writing Components</a></p></li></ul></div></div></div></body></html>

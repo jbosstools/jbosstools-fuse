@@ -1,0 +1,13 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>AMQP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-AHC-WS.html" title="AHC-WS"><link rel="next" href="IDU-APNS.html" title="APNS"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-AMQP"></a>AMQP</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AMQP_HSH_AMQP"></a>AMQP</h2></div></div></div><p>The AMQP component supports the <a class="link" href="http://www.amqp.org/" target="_top">AMQP
+                protocol</a> via the <a class="link" href="http://cwiki.apache.org/qpid/" target="_top">Qpid</a>
+            project.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-ampq&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;!-- use the same version as your Camel core version --&gt;
+&lt;/dependency&gt;
+
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AMQP_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">amqp:[queue:|topic:]destinationName[?options]</pre><p>You can specify all of the various configuration options of the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-JMS.html" class="olink">JMS</a> component after the destination name.</p></div></div></body></html>

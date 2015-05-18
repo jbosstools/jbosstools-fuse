@@ -4,6 +4,6 @@
       <toc file="toc.xml" primary="true"/>
    </extension>
    <extension point="org.eclipse.help.contexts">
-      <contexts file="contexts.xml" plugin="org.fusesource.ide.camel.editor"/>
+      <contexts file="contexts.xml" plugin="org.fusesource.ide.editor"/>
    </extension>
 </plugin>

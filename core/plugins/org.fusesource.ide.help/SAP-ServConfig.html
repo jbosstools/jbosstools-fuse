@@ -1,0 +1,157 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Server Configuration</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="SAP.html" title="SAP Component"><link rel="prev" href="SAP-DestConfig.html" title="Destination Configuration"><link rel="next" href="SAP-RepoConfig.html" title="Repository Configuration"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-ServConfig"></a>Server Configuration</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37526"></a>Overview</h3></div></div></div><p>The configurations for servers are maintained in the <code class="code">serverDataStore</code>
+                property of the SAP component. Each entry in this map configures a distinct inbound
+                connection from an SAP instance. The key for each entry is the name of the outbound
+                connection and is used in the <code class="code">serverName</code> component of a server endpoint
+                URI as described in the URI format section.</p><p>The value for each entry is a <em class="firstterm">server data configuration
+                    object</em>,
+                    <code class="code">org.fusesource.camel.component.sap.model.rfc.impl.ServerDataImpl</code>,
+                that defines the configuration of an inbound SAP connection. The following tables
+                lists the configuration properties that may be set on this object.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37527"></a>Required options</h3></div></div></div><p>The required options for the server data configuration object are, as
+                follows:</p><table width="761" id="d0e111422"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    <th align="center">
+                        <span class="bold"><strong>Name</strong></span>
+                    </th>
+                    <th align="center">
+                        <span class="bold"><strong>Default Value</strong></span>
+                    </th>
+                    <th align="center">
+                        <span class="bold"><strong>Description</strong></span>
+                    </th>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">gwhost</code>
+                    </td>
+                    <td> </td>
+                    <td> Gateway host on which the server connection should
+                        be registered.</td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">gwserv</code>
+                    </td>
+                    <td> </td>
+                    <td> Gateway service, which is the port on which a
+                        registration can be done. In order to resolve the service names
+                            <code class="code">sapgwXXX</code>, a look-up in <code class="code">etc/services</code> is
+                        performed by the network layer of the operating system. If using port
+                        numbers instead of symbolic service names, no look-ups are performed and no
+                        additional entries are needed. </td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">progid</code>
+                    </td>
+                    <td> </td>
+                    <td> The program ID with which the registration is done.
+                        Serves as identifier on the gateway and in the destination in the ABAP
+                        system. </td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">connectionCount</code>
+                    </td>
+                    <td> </td>
+                    <td> The number of connections that should be registered
+                        at the gateway. </td>
+                </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37528"></a>Secure network connection options</h3></div></div></div><p>The secure network connection options for the server data configuration object
+                are, as follows:</p><table width="761" id="d0e111514"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    <th align="center">
+                        <span class="bold"><strong>Name</strong></span>
+                    </th>
+                    <th align="center">
+                        <span class="bold"><strong>Default Value</strong></span>
+                    </th>
+                    <th align="center">
+                        <span class="bold"><strong>Description</strong></span>
+                    </th>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">sncMode</code>
+                    </td>
+                    <td> </td>
+                    <td> Secure network connection (SNC) mode,
+                            <code class="code">0</code> (off) or <code class="code">1</code> (on) </td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">sncQop</code>
+                    </td>
+                    <td> </td>
+                    <td> SNC level of security, <code class="code">1</code> to
+                            <code class="code">9</code>
+                    </td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">sncMyname</code>
+                    </td>
+                    <td> </td>
+                    <td> SNC name of your server. Overrides the default SNC
+                        name. Typically something like <code class="code">p:CN=JCoServer, O=ACompany,
+                        C=EN</code>.</td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">sncLib</code>
+                    </td>
+                    <td> </td>
+                    <td> Path to library which provides SNC service. If this
+                        property is not provided, the value of the
+                            <code class="code">jco.middleware.snc_lib</code> property is used instead </td>
+                </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37529"></a>Other options</h3></div></div></div><p>The other options for the server data configuration object are, as follows:</p><table width="761" id="d0e111618"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    <th align="center">
+                        <span class="bold"><strong>Name</strong></span>
+                    </th>
+                    <th align="center">
+                        <span class="bold"><strong>Default Value</strong></span>
+                    </th>
+                    <th align="center">
+                        <span class="bold"><strong>Description</strong></span>
+                    </th>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">saprouter</code>
+                    </td>
+                    <td> </td>
+                    <td> SAP router string to use for a system protected by
+                        a firewall, which can therefore only be reached through a SAProuter, when
+                        registering the server at the gateway of that ABAP System. A typical router
+                        string is <code class="code">/H/firewall.hostname/H/</code>
+                    </td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">maxStartupDelay</code>
+                    </td>
+                    <td> </td>
+                    <td> The maximum time (in seconds) between two start-up
+                        attempts in case of failures. The waiting time is doubled from initially 1
+                        second after each start-up failure until either the maximum value is reached
+                        or the server could be started successfully. </td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">trace</code>
+                    </td>
+                    <td> </td>
+                    <td> Enable/disable RFC trace (<code class="code">0</code> or
+                            <code class="code">1</code>) </td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">workerThreadCount</code>
+                    </td>
+                    <td> </td>
+                    <td> The maximum number of threads used by the server
+                        connection. If not set, the value for the <code class="code">connectionCount</code> is
+                        used as the <code class="code">workerThreadCount</code>. The maximum number of threads
+                        can not exceed 99. </td>
+                </tr><tr valign="top">
+                    <td>
+                        <code class="code">workerThreadMinCount</code>
+                    </td>
+                    <td> </td>
+                    <td> The minimum number of threads used by server
+                        connection. If not set, the value for <code class="code">connectionCount</code> is used
+                        as the <code class="code">workerThreadMinCount</code>. </td>
+                </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37530"></a>Server data example</h3></div></div></div><p></p><div class="informalexample"><pre class="programlisting">&lt;bean id="nplServerData"
+    class="org.fusesource.camel.component.sap.model.rfc.impl.ServerDataImpl"&gt;
+    &lt;property name="gwhost" value="nplhost" /&gt;
+    &lt;property name="gwserv" value="3342" /&gt;
+    &lt;property name="progid" value="JCO_SERVER" /&gt;
+    &lt;property name="repositoryDestination" value="nplDest" /&gt;
+    &lt;property name="connectionCount" value="2" /&gt;
+&lt;/bean&gt;</pre></div></div></div></body></html>

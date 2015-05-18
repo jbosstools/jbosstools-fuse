@@ -1,0 +1,96 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Overview</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="SAP.html" title="SAP Component"><link rel="prev" href="SAP.html" title="SAP Component"><link rel="next" href="SAP-Message.html" title="Message Body"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Overview"></a>Overview</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37497"></a>Dependencies</h3></div></div></div><p>Maven users need to add the following dependency to their <code class="code">pom.xml</code>
+                file to use this component:</p><div class="informalexample"><pre class="programlisting">&lt;dependency&gt;
+    &lt;groupId&gt;org.fusesource&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-sap&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+&lt;dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37498"></a>Deploying in a Fuse Fabric</h3></div></div></div><p>A prerequisite for using the SAP component is that the SAP Java Connector (SAP
+                JCo) libraries must be installed into the <code class="code">lib/</code> directory of the Java
+                runtime (<code class="code">sapjco3.jar</code> and <code class="code">libsapjco3.jnilib</code>).</p><p>In the case of a Fuse Fabric deployment, this requires some special configuration.
+                There is no point in simply installing the SAP JCo libraries in the Java
+                    <code class="code">lib</code> directory on a single machine, because Fabric containers need
+                to be deployable anywhere in the network. The correct approach is to define a
+                special profile that is capable of downloading and installing the SAP JCo libraries
+                on whichever host it is running on.</p><p>You can define a profile for the SAP JCo libraries as follows:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Deploy the JCo libraries (<code class="code">sapjco3.jar</code> and
+                            <code class="code">libsapjco3.jnilib</code>) to a network accessible location. For
+                        example, you could install the libraries in a Web server, so that the JCo
+                        libraries can be downloaded through HTTP URLs,
+                            <code class="code">http://mywebserver/sapjco3.jar</code> and
+                            <code class="code">http://mywebserver/libsapjco3.jnilib</code>.</p></li><li class="listitem"><p>Create a new profile, <code class="code">camel-sap-profile</code>, by entering the
+                        following console command:</p><pre class="programlisting">JBossFuse:karaf@root&gt; profile-create camel-sap-profile</pre></li><li class="listitem"><p>Edit the agent properties of the <code class="code">camel-sap-profile</code> profile,
+                        by entering the following console command:</p><pre class="programlisting">JBossFuse:karaf@root&gt; profile-edit camel-sap-profile</pre></li><li class="listitem"><p>The built-in profile editor starts up. Use this built-in text editor to
+                        add the following contents to the agent properties (and type Ctrl-S to save
+                        the properties when you are finished):</p><pre class="programlisting"># Profile:my-camel-sap-profile
+attribute.parents = feature-camel
+
+# Deploy JCo3 Libs to Container
+lib.sapjco3.jar = http://mywebserver/sapjco3.jar
+lib.libsapjco3.jnilib = http://mywebserver/libsapjco3.jnilib
+
+# Append JCo3 Packages to OSGi system property
+# in order to expose JCo3 classes to OSGi environment
+config.org.osgi.framework.system.packages.extra= \
+	org.apache.karaf.branding, \
+	com.sun.xml.bind.v2.model.core, \
+	com.sap.conn.jco, \
+	com.sap.conn.jco.ext, \
+	com.sap.conn.jco.monitor, \
+	com.sap.conn.jco.rt, \
+	com.sap.conn.jco.server</pre></li><li class="listitem"><p>You can now deploy the <code class="code">camel-sap-profile</code> profile to any
+                        Fabric container where you want to run the SAP component. For example, to
+                        deploy the <code class="code">camel-sap-profile</code>profile to the
+                            <code class="code">sap-instance</code> container:</p><pre class="programlisting">JBossFuse:karaf@root&gt; container-add-profile sap-instance came-sap-profile</pre></li></ol></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37499"></a>URI format</h3></div></div></div><p>The URI scheme for an SAP component is as follows:</p><div class="informalexample"><pre class="programlisting">sap:[destination:<em class="replaceable"><code>destinationName</code></em>|server:<em class="replaceable"><code>serverName</code></em>]<em class="replaceable"><code>rfcName</code></em>?<em class="replaceable"><code>options</code></em></pre></div><p>The <code class="code">destination:</code> prefix designates a destination endpoint and
+                        <code class="code"><em class="replaceable"><code>destinationName</code></em></code> is the name of a
+                specific outbound connection to an SAP instance. Outbound connections are named and
+                configured at the component level, as described in <a class="xref" href="SAP-DestConfig.html" title="Destination Configuration">Destination Configuration</a>.
+                The <code class="code"><em class="replaceable"><code>rfcName</code></em></code> in a destination endpoint URI is
+                the name of the RFC invoked by the endpoint in the connected SAP instance.</p><p>The <code class="code">server:</code> prefix designates a server endpoint and
+                        <code class="code"><em class="replaceable"><code>serverName</code></em></code> is the name of a specific
+                inbound connection from an SAP instance. Inbound connections are named and
+                configured at the component level, as described in the <a class="xref" href="SAP-ServConfig.html" title="Server Configuration">Server Configuration</a>. The <code class="code"><em class="replaceable"><code>rfcName</code></em></code>
+                in a server endpoint URI is the name of the RFC handled by the endpoint when invoked
+                from the connected SAP instance.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Server endpoints do not currently support any options.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37500"></a>URI options for destination endpoints</h3></div></div></div><p>The following table summarizes the options supported by the URI for destination
+                endpoints:</p><div class="informaltable"><table border="1"><colgroup><col width="16%" class="c1"><col width="15%" class="c2"><col width="69%" class="c3"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="code">transacted</code></td><td><code class="code">false</code></td><td>
+                                <p>When true, the endpoint will join or initiate a SAP
+                                    transaction invoking an RFC call.</p>
+                            </td></tr></tbody></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37501"></a>SAP destination endpoint</h3></div></div></div><p>A destination endpoint supports outbound communication to SAP, which enable these
+                endpoints to make RFC calls out to ABAP function modules in SAP. A destination
+                endpoint is configured to make an RFC call to a specific ABAP function over a
+                specific connection to an SAP instance. A destination is a logical designation for
+                an outbound connection and has a unique name. A destination is specified by a set of
+                connection parameters called <em class="firstterm">destination data</em>. </p><p>A destination endpoint will extract an RFC request from the input message of the
+                IN-OUT exchanges it receives and dispatch that request in a function call to SAP.
+                The response from the function call will be returned in the output message of the
+                exchange. Since SAP destination endpoints only support outbound communication, a
+                destination endpoint will only support the creation of producers.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37502"></a>SAP server endpoint</h3></div></div></div><p>A server endpoint supports inbound communication from SAP, which enables ABAP
+                applications in SAP to make RFC calls into server endpoints. An ABAP application
+                interacts with a server endpoint as if it were a remote function module. A server
+                endpoint is configured to receive an RFC call to a specific RFC function over a
+                specific connection from an SAP instance. A server is a logical designation for an
+                inbound connection and has a unique name. A server is specified by a set of
+                connection parameters called server data. </p><p>A server endpoint will handle an incoming RFC request and dispatch it as the input
+                message of an IN-OUT exchange. The output message of the exchange will be returned
+                as the response of the RFC call. Since SAP server endpoints only support inbound
+                communication, a server endpoint will only support the creation of consumers.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37503"></a>Meta-data repositories</h3></div></div></div><p>A meta-data repository is used to store and provide interface descriptions of
+                function modules. This meta-data is used by the JCo and ABAP runtimes to check RFC
+                calls to ensure the type-safe transfer of data between communication partners before
+                dispatching those calls. A repository is populated with repository data. Repository
+                data is a map of named function templates. A function template contains the
+                meta-data describing all the parameters and their typing information passed to and
+                from a function module and has the unique name of the function module it
+                describes.</p><p>SAP destination and server endpoints thus require access to a repository in order
+                to send and receive RFC calls and the meta-data for all function modules invoked and
+                handled by the endpoints must reside within a repository. The location of the
+                repository used by a destination and server endpoint is specified in destination and
+                server data of their respective connections.</p><p>In the case of an SAP destination endpoint, the repository it uses typically
+                resides in an SAP system and it defaults to the SAP system it is connected to. This
+                default requires no explicit configuration in the destination data. Furthermore, the
+                meta-data for the remote function call that a destination endpoint makes will
+                already exist in a repository for any existing function module that it calls. The
+                meta-data for calls made by destination endpoints thus require no configuration in
+                the SAP component.</p><p>On the other hand, the meta-data for function calls handled by server endpoints do
+                not typically reside in the repository of an SAP system and must instead be provided
+                by a repository residing in the SAP component. The SAP component maintains a map of
+                named meta-data repositories. The name of a repository corresponds to the name of
+                the server to which it provides meta-data.</p></div></div></body></html>
