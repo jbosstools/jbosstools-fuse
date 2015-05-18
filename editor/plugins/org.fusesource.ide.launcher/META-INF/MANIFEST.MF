@@ -16,15 +16,16 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.ui.externaltools,
  org.eclipse.ui.console,
  org.eclipse.m2e.core,
- org.eclipse.m2e.launching;bundle-version="1.5.0",
- org.eclipse.m2e.maven.runtime;bundle-version="1.5.0",
+ org.eclipse.m2e.launching;bundle-version="1.6.0",
+ org.eclipse.m2e.maven.runtime;bundle-version="1.6.0",
  org.eclipse.ui,
  org.eclipse.equinox.security;bundle-version="1.2.0",
  org.eclipse.ui.ide,
  org.eclipse.core.filesystem;bundle-version="1.4.100",
  org.eclipse.jdt.core,
  org.fusesource.ide.commons;bundle-version="8.0.0",
- org.fusesource.ide.camel.model;bundle-version="8.0.0"
+ org.fusesource.ide.camel.model;bundle-version="8.0.0",
+ org.eclipse.m2e.maven.indexer;bundle-version="1.6.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.Activator
 Export-Package: org.fusesource.ide.launcher;uses:="org.eclipse.osgi.util,org.eclipse.core.runtime",
@@ -42,5 +43,4 @@ Export-Package: org.fusesource.ide.launcher;uses:="org.eclipse.osgi.util,org.ecl
  org.fusesource.ide.launcher.debug.util;uses:="org.fusesource.ide.launcher.debug.model,org.eclipse.core.resources,org.eclipse.debug.core.model",
  org.fusesource.ide.launcher.run.util,
  org.fusesource.ide.launcher.util;uses:="org.eclipse.debug.core"
-Import-Package: org.apache.maven.artifact,
- org.eclipse.jdt.ui
+Import-Package: org.eclipse.jdt.ui
