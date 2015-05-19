@@ -78,21 +78,21 @@ availableRuntimes:
    #   ServiceMix5.1 #
    ###################
 
- - &servicemix514
-   id: servicemix514
-   name: Apache ServiceMix 5.1.4
-   version: 5.1.4
+ - &servicemix515
+   id: servicemix515
+   name: Apache ServiceMix 5.1.5
+   version: 5.1.5
    license: *apache20
    url: http://servicemix.apache.org
    labels: {
         requiresCredentials: false,
         runtime-category: OSGI_SERVER,
         runtime-type: SERVICEMIX,
-        runtime-size: 79061689,
+        runtime-size: 78869104,
         additionalDownloadURLs: {
-            "win32": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.1.4/apache-servicemix-5.1.4.zip",
-            "linux": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.1.4/apache-servicemix-5.1.4.zip",
-            "macosx": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.1.4/apache-servicemix-5.1.4.zip",
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.1.5/apache-servicemix-5.1.5.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.1.5/apache-servicemix-5.1.5.zip",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.1.5/apache-servicemix-5.1.5.zip",
         },
         wtp-runtime-type: org.fusesource.ide.servicemix.runtime.51
    }
@@ -101,21 +101,21 @@ availableRuntimes:
    #   ServiceMix5.2 #
    ###################
 
- - &servicemix520
-   id: servicemix520
-   name: Apache ServiceMix 5.2.0
-   version: 5.2.0
+ - &servicemix521
+   id: servicemix521
+   name: Apache ServiceMix 5.2.1
+   version: 5.2.1
    license: *apache20
    url: http://servicemix.apache.org
    labels: {
         requiresCredentials: false,
         runtime-category: OSGI_SERVER,
         runtime-type: SERVICEMIX,
-        runtime-size: 85656337,
+        runtime-size: 86571486,
         additionalDownloadURLs: {
-            "win32": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.2.0/apache-servicemix-5.2.0.zip",
-            "linux": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.2.0/apache-servicemix-5.2.0.zip",
-            "macosx": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.2.0/apache-servicemix-5.2.0.zip",
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.2.1/apache-servicemix-5.2.1.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.2.1/apache-servicemix-5.2.1.zip",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.2.1/apache-servicemix-5.2.1.zip",
         },
         wtp-runtime-type: org.fusesource.ide.servicemix.runtime.52
    }
@@ -124,21 +124,21 @@ availableRuntimes:
    #   ServiceMix5.3 #
    ###################
 
- - &servicemix531
-   id: servicemix531
-   name: Apache ServiceMix 5.3.1
-   version: 5.3.1
+ - &servicemix532
+   id: servicemix532
+   name: Apache ServiceMix 5.3.2
+   version: 5.3.2
    license: *apache20
    url: http://servicemix.apache.org
    labels: {
         requiresCredentials: false,
         runtime-category: OSGI_SERVER,
         runtime-type: SERVICEMIX,
-        runtime-size: 83652111,
+        runtime-size: 82967956,
         additionalDownloadURLs: {
-            "win32": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.1/apache-servicemix-5.3.1.zip",
-            "linux": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.1/apache-servicemix-5.3.1.zip",
-            "macosx": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.1/apache-servicemix-5.3.1.zip",
+            "win32": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.2/apache-servicemix-5.3.2.zip",
+            "linux": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.2/apache-servicemix-5.3.2.zip",
+            "macosx": "https://repository.apache.org/content/groups/public/org/apache/servicemix/apache-servicemix/5.3.2/apache-servicemix-5.3.2.zip",
         },
         wtp-runtime-type: org.fusesource.ide.servicemix.runtime.53
    }
