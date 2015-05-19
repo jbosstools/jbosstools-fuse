@@ -439,10 +439,21 @@ public class Util {
             return true;
         }
         if (sourceModel == null) {
-            return (!targetModel.isCollection() && !targetModel.getParent().isCollection());
+            return (!targetModel.isCollection() && !hasCollectionAncestor(targetModel));
         }
         return sourceModel.isCollection() == targetModel.isCollection()
-               && sourceModel.getParent().isCollection() == targetModel.getParent().isCollection();
+                && hasCollectionAncestor(sourceModel) == hasCollectionAncestor(targetModel);
+    }
+    
+    private static boolean hasCollectionAncestor(final Model model) {
+        Model parent = model.getParent();
+        while (parent != null) {
+            if (parent.isCollection()) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
     }
 
     private Util() {}

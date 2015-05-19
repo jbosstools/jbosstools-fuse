@@ -58,37 +58,32 @@ public class ModelBuilder {
 
     private static void addFieldsToModel(List<Field> fields, Model model) {
         for (Field field : fields) {
-            String fieldTypeName;
-            List<Field> childFields = null;
+            Class<?> fieldClass;
             boolean isCollection = false;
 
             if (field.getType().isArray()) {
                 isCollection = true;
-                fieldTypeName = getListName(field.getType().getComponentType());
-                childFields = getFields(field.getType().getComponentType(), model);
+                fieldClass = field.getType().getComponentType();
             } else if (Collection.class.isAssignableFrom(field.getType())) {
                 isCollection = true;
                 Type ft = field.getGenericType();
                 if (ft instanceof ParameterizedType) {
-                    Class<?> ftClass =
-                            (Class<?>) ((ParameterizedType) ft).getActualTypeArguments()[0];
-                    fieldTypeName = getListName(ftClass);
-                    childFields = getFields(ftClass, model);
+                    fieldClass = (Class<?>) ((ParameterizedType) ft).getActualTypeArguments()[0];
                 } else {
-                    fieldTypeName = getListName(Object.class);
+                    fieldClass = Object.class;
                 }
             } else {
-                fieldTypeName = field.getType().getName();
-                Class<?> fieldClass = field.getType();
-                if (parseChildren(field.getType())) {
-                    childFields = getFields(fieldClass, model);
-                }
+                fieldClass = field.getType();
             }
-
+            
+            // Create the model for this field
+            String fieldTypeName = isCollection ? getListName(fieldClass) : fieldClass.getName();
             Model child = model.addChild(field.getName(), fieldTypeName);
             child.setIsCollection(isCollection);
-            if (childFields != null) {
-                addFieldsToModel(childFields, child);
+
+            // Deal with child fields if necessary
+            if (parseChildren(fieldClass)) {
+                addFieldsToModel(getFields(fieldClass, model), child);
             }
         }
     }
