@@ -50,11 +50,11 @@ public class ArchivesSelectionPage extends WizardPage {
 	private class JCo3ArchiveNameValidator implements IValidator {
 		@Override
 		public IStatus validate(Object value) {
+			isJCo3ArchiveValid = false;
 			try {
 				if (value instanceof String) {
 					String str = (String) value;
 					if (str == null || str.length() == 0) {
-						isJCo3ArchiveValid = false;
 						return ValidationStatus.error(Messages.ArchivesSelectionPage_PleaseSelectJCo3Archive);
 					}
 				} else {
@@ -71,11 +71,11 @@ public class ArchivesSelectionPage extends WizardPage {
 	private class IDoc3ArchiveNameValidator implements IValidator {
 		@Override
 		public IStatus validate(Object value) {
+			isIDoc3ArchiveValid = false;
 			try {
 				if (value instanceof String) {
 					String str = (String) value;
 					if (str == null || str.length() == 0) {
-						isIDoc3ArchiveValid = false;
 						return ValidationStatus.error(Messages.ArchivesSelectionPage_PleaseSelectIDoc3Archive);
 					}
 				} else {
@@ -236,27 +236,28 @@ public class ArchivesSelectionPage extends WizardPage {
             	try {
 					JCo3Archive jcoArchive = new JCo3Archive(filename);
 					if (jcoArchive.getType() == JCoArchiveType.JCO_INVALID_ARCHIVE) {
-						clearInput();
+						clearJCo3Inputs();
 						setErrorMessage(Messages.ArchivesSelectionPage_UnsupportedJC03ArchiveFile);
 						return;
 					} 
 					if (!jcoArchive.supportsCurrentPlatform()) {
-						clearInput();
+						clearJCo3Inputs();
 						setErrorMessage(MessageFormat.format(Messages.ArchivesSelectionPage_IncompatibleJC03ArchiveFileType, jcoArchive.getType().getDescription()));
 						return;
 					}
 					try {
 						ImportUtils.isJCoArchiveVersionSupported(jcoArchive.getVersion());
 					} catch (UnsupportedVersionException e) {
-						clearInput();
+						clearJCo3Inputs();
 						setErrorMessage(MessageFormat.format(Messages.ArchivesSelectionPage_IncompatibleJCo3ArchiveFileVersion, e.getMessage()));
 						return;
 					}
 					jcoImportSettings.setJco3Archive(jcoArchive);
-					textSelectJCo3Archive.setText(filename);
 				} catch (IOException e) {
-					clearInput();
+					clearJCo3Inputs();
 					setErrorMessage(MessageFormat.format(Messages.ArchivesSelectionPage_UnsupportedJCo3ArchiveFileFilename, e.getMessage()));
+				} finally {
+					textSelectJCo3Archive.setText(filename);
 				}
 			}
         }
@@ -270,23 +271,24 @@ public class ArchivesSelectionPage extends WizardPage {
             	try {
 					IDoc3Archive idocArchive = new IDoc3Archive(filename);
 					if (!idocArchive.isValid()) {
-						clearInput();
+						clearIDoc3Inputs();
 						setErrorMessage(Messages.ArchivesSelectionPage_UnsupportedIDoc3ArchiveFile);
 						return;
 					}
 					try {
 						ImportUtils.isIDocArchiveVersionSupported(idocArchive.getVersion());
 					} catch (UnsupportedVersionException e) {
-						clearInput();
+						clearIDoc3Inputs();
 						setErrorMessage(MessageFormat.format(Messages.ArchivesSelectionPage_IncompatibleIDoc3ArchibeFileVersion, e.getMessage()));
 						return;
 					}
 					idoc3ImportSettings.setIdoc3Archive(idocArchive);
-					textSelectIDoc3Archive.setText(filename);
 				} catch (IOException e) {
-					clearInput();
+					clearIDoc3Inputs();
 					setErrorMessage(MessageFormat.format(Messages.ArchivesSelectionPage_UnsupportedIDoc3ArchiveFileFilename, e.getMessage()));
-				}
+				} finally {
+					textSelectIDoc3Archive.setText(filename);
+				}            	
 			}
         }
 	}
@@ -316,11 +318,21 @@ public class ArchivesSelectionPage extends WizardPage {
         return null;
 	}
 	
-	protected void clearInput() {
-		textSelectJCo3Archive.setText(BLANK_STRING);
+	protected void clearJCo3Inputs() {
+// we should keep what the user selected, its confusing to select something and end up having a blank text field but an error msg in top		
+//		textSelectJCo3Archive.setText(BLANK_STRING);
 		textJCo3ArchiveOs.setText(BLANK_STRING);
 		textJCo3ArchiveVersion.setText(BLANK_STRING);
-		textSelectIDoc3Archive.setText(BLANK_STRING);
+	}
+	
+	protected void clearIDoc3Inputs() {
+// we should keep what the user selected, its confusing to select something and end up having a blank text field but an error msg in top
+//		textSelectIDoc3Archive.setText(BLANK_STRING);
 		textIDoc3ArchiveVersion.setText(BLANK_STRING);
+	}
+	
+	protected void clearInput() {
+		clearJCo3Inputs();
+		clearIDoc3Inputs();
 	}
 }
