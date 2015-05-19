@@ -37,6 +37,7 @@ final class MappingSummary extends MappingViewer {
     final Composite mappingTargetPane;
     final TraversalListener sourceTraversalListener;
     final TraversalListener targetTraversalListener;
+    final PropertyChangeListener configListener;
 
     MappingSummary(final TransformationConfig config,
                    final MappingOperation<?, ?> mapping,
@@ -110,13 +111,14 @@ final class MappingSummary extends MappingViewer {
         mappingsViewer.prevTargetText = targetText;
         mappingsViewer.prevTraversalListener = targetTraversalListener;
 
-        config.addListener(new PropertyChangeListener() {
+        configListener = new PropertyChangeListener() {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
                 configEvent(event.getPropertyName(), event.getOldValue(), event.getNewValue());
             }
-        });
+        };
+        config.addListener(configListener);
     }
 
     void configEvent(final String eventType,
@@ -209,6 +211,7 @@ final class MappingSummary extends MappingViewer {
             targetTraversalListener.nextTraversalListener.prevTraversalListener =
                 sourceTraversalListener.prevTraversalListener;
         }
+        config.removeListener(configListener);
         mappingsViewer.removeMappingSummary(this);
         dispose();
     }
