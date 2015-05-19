@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -63,9 +64,20 @@ public class ModelBuilderTest {
     @Test
     public void childAncestorCycle() {
         Model model = ModelBuilder.fromJavaClass(Parent.class);
-        model.print(System.out);
         Assert.assertEquals(7, model.listFields().size());
     }
+    
+    @Test
+    public void listsOfStringsAndNumbers() {
+        Model model = ModelBuilder.fromJavaClass(ListOfStringsAndNumbers.class);
+        Assert.assertEquals(3, model.listFields().size());
+    }
+}
+
+class ListOfStringsAndNumbers {
+    private List<Number> numbers;
+    private List<String> strings;
+    private String field1;
 }
 
 class NoSuper {
