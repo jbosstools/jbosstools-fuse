@@ -51,6 +51,7 @@ public class ArchivesSelectionPage extends WizardPage {
 	private class JCo3ArchiveNameValidator implements IValidator {
 		@Override
 		public IStatus validate(Object value) {
+			isJCo3ArchiveValid = false;
 			try {
 				if (value instanceof String) {
 					String filename = (String) value;
@@ -104,6 +105,7 @@ public class ArchivesSelectionPage extends WizardPage {
 	private class IDoc3ArchiveNameValidator implements IValidator {
 		@Override
 		public IStatus validate(Object value) {
+			isIDoc3ArchiveValid = false;
 			try {
 				if (value instanceof String) {
 					String filename = (String) value;
@@ -330,11 +332,21 @@ public class ArchivesSelectionPage extends WizardPage {
         return null;
 	}
 	
-	protected void clearInput() {
-		textSelectJCo3Archive.setText(BLANK_STRING);
+	protected void clearJCo3Inputs() {
+// we should keep what the user selected, its confusing to select something and end up having a blank text field but an error msg in top		
+//		textSelectJCo3Archive.setText(BLANK_STRING);
 		textJCo3ArchiveOs.setText(BLANK_STRING);
 		textJCo3ArchiveVersion.setText(BLANK_STRING);
-		textSelectIDoc3Archive.setText(BLANK_STRING);
+	}
+	
+	protected void clearIDoc3Inputs() {
+// we should keep what the user selected, its confusing to select something and end up having a blank text field but an error msg in top
+//		textSelectIDoc3Archive.setText(BLANK_STRING);
 		textIDoc3ArchiveVersion.setText(BLANK_STRING);
+	}
+	
+	protected void clearInput() {
+		clearJCo3Inputs();
+		clearIDoc3Inputs();
 	}
 }
