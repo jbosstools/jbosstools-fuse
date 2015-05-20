@@ -21,6 +21,7 @@ import org.apache.camel.model.DataFormatDefinition;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.jboss.tools.fuse.transformation.TransformType;
+import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder.MarshalType;
 import org.jboss.tools.fuse.transformation.dozer.DozerMapperConfiguration;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -33,6 +34,7 @@ public class CamelConfigBuilderTest {
     private static final String XML_JSON = "xml-to-json.xml";
     private static final String JAVA_XML = "java-to-xml.xml";
     private static final String JAVA_JAVA = "java-to-java.xml";
+    private static final String JSON_JAVA = "json-to-java.xml";
     private static final String XML_JAVA = "xml-to-java.xml";
     private static final String BLUEPRINT_CONFIG = "blueprint-config.xml";
     private static final String NEW_BLUEPRINT_CONFIG = "new-blueprint-config.xml";
@@ -41,8 +43,10 @@ public class CamelConfigBuilderTest {
     public void createXmlToJson() throws Exception {
         Document xmlJsonDoc = loadDocument(XML_JSON);
         CamelConfigBuilder config = CamelConfigBuilder.loadConfig(getFile(NEW_CONFIG));
-        DataFormatDefinition sourceFormat = config.createDataFormat(TransformType.XML, "xml.ABCOrder");
-        DataFormatDefinition targetFormat = config.createDataFormat(TransformType.JSON, "json.XYZOrder");
+        DataFormatDefinition sourceFormat = config.createDataFormat(
+                TransformType.XML, "xml.ABCOrder", MarshalType.UNMARSHALLER);
+        DataFormatDefinition targetFormat = config.createDataFormat(
+                TransformType.JSON, "json.XYZOrder", MarshalType.MARSHALLER);
         CamelEndpoint endpoint = config.createEndpoint("xml2json", 
                 DozerMapperConfiguration.DEFAULT_DOZER_CONFIG, 
                 "xml.ABCOrder", 
@@ -84,6 +88,17 @@ public class CamelConfigBuilderTest {
                 TransformType.JAVA, "target.Output");
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(javaJavaDoc, config.getConfiguration().getOwnerDocument());
+    }
+    
+    @Test
+    public void createJsonToJava() throws Exception {
+        Document jsonJavaDoc = loadDocument(JSON_JAVA);
+        CamelConfigBuilder config = CamelConfigBuilder.loadConfig(getFile(NEW_CONFIG));
+        config.addTransformation("json2java", DozerMapperConfiguration.DEFAULT_DOZER_CONFIG,
+                TransformType.JSON, "source.Input", 
+                TransformType.JAVA, "target.Output");
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(jsonJavaDoc, config.getConfiguration().getOwnerDocument());
     }
     
     @Test
