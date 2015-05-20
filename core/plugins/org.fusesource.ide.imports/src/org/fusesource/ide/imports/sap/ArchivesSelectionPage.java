@@ -153,7 +153,7 @@ public class ArchivesSelectionPage extends WizardPage {
 		Label lblSelectJCo3Archive = new Label(grpSelectJcoArchive, SWT.NONE);
 		lblSelectJCo3Archive.setText(Messages.ArchivesSelectionPage_JCo3ArchiveFile);
 		
-		textSelectJCo3Archive = new Text(grpSelectJcoArchive, SWT.BORDER | SWT.READ_ONLY);
+		textSelectJCo3Archive = new Text(grpSelectJcoArchive, SWT.BORDER);
 		textSelectJCo3Archive.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		textSelectJCo3Archive.setMessage(Messages.ArchivesSelectionPage_JCo3ArchivePath_text_message);
 		binding = context.bindValue(SWTObservables.observeText(textSelectJCo3Archive, SWT.Modify), BeansObservables.observeValue(jcoImportSettings, JCo3ImportSettings.JCO3_ARCHIVE_FILENAME), new UpdateValueStrategy().setAfterConvertValidator(new JCo3ArchiveNameValidator())	, new UpdateValueStrategy());
@@ -196,7 +196,7 @@ public class ArchivesSelectionPage extends WizardPage {
 		Label lblSelectIDoc3Archive = new Label(grpSelectIDocArchive, SWT.NONE);
 		lblSelectIDoc3Archive.setText(Messages.ArchivesSelectionPage_IDoc3ArchiveFile);
 		
-		textSelectIDoc3Archive = new Text(grpSelectIDocArchive, SWT.BORDER | SWT.READ_ONLY);
+		textSelectIDoc3Archive = new Text(grpSelectIDocArchive, SWT.BORDER);
 		GridData gd_textSelectIDoc3Archive = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_textSelectIDoc3Archive.widthHint = 230;
 		textSelectIDoc3Archive.setLayoutData(gd_textSelectIDoc3Archive);
