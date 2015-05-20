@@ -56,6 +56,7 @@ import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.MapperConfiguration;
 import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder;
+import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder.MarshalType;
 import org.jboss.tools.fuse.transformation.camel.CamelEndpoint;
 import org.jboss.tools.fuse.transformation.dozer.DozerMapperConfiguration;
 import org.jboss.tools.fuse.transformation.editor.Activator;
@@ -138,13 +139,13 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                             sourceFormat = configBuilder.getDataFormat(uiModel.getSourceDataFormatid());
                         } else {
                             sourceFormat = configBuilder.createDataFormat(uiModel.getSourceType().transformType,
-                                    sourceClassName);
+                                    sourceClassName, MarshalType.UNMARSHALLER);
                         }
                         if (ModelType.OTHER.equals(uiModel.getTargetType())) {
                             targetFormat = configBuilder.getDataFormat(uiModel.getTargetDataFormatid());
                         } else {
                             targetFormat = configBuilder.createDataFormat(uiModel.getTargetType().transformType,
-                                    targetClassName);
+                                    targetClassName, MarshalType.MARSHALLER);
                         }
                         endpoint = configBuilder.createEndpoint(uiModel.getId(),
                                 file.getFullPath().makeRelativeTo(resourcesPath).toString(), sourceClassName,

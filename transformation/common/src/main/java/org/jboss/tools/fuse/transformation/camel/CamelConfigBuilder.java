@@ -49,6 +49,7 @@ public abstract class CamelConfigBuilder {
 
     protected Element camelConfig;
     private JAXBContext jaxbCtx;
+    public enum MarshalType {MARSHALLER, UNMARSHALLER};
 
     /**
      * Load a Spring application context containing Camel configuration from the
@@ -87,12 +88,14 @@ public abstract class CamelConfigBuilder {
         return camelConfig;
     }
     
-    public DataFormatDefinition createDataFormat(TransformType type, String className) throws Exception {
+    public DataFormatDefinition createDataFormat(
+            TransformType type, String className, MarshalType marshalType) throws Exception {
         DataFormatDefinition dataFormat;
 
         switch (type) {
             case JSON:
-                dataFormat = createJsonDataFormat();
+                dataFormat = MarshalType.UNMARSHALLER.equals(marshalType)
+                    ? createJsonDataFormat(className) : createJsonDataFormat(null);
                 break;
             case XML:
                 dataFormat = createJaxbDataFormat(getPackage(className));
@@ -140,8 +143,10 @@ public abstract class CamelConfigBuilder {
             TransformType target, String targetClass) throws Exception {
 
         // Add data formats
-        DataFormatDefinition unmarshaller = createDataFormat(source, sourceClass);
-        DataFormatDefinition marshaller = createDataFormat(target, targetClass);
+        DataFormatDefinition unmarshaller = createDataFormat(
+                source, sourceClass, MarshalType.UNMARSHALLER);
+        DataFormatDefinition marshaller = createDataFormat(
+                target, targetClass, MarshalType.MARSHALLER);
 
         // Create a transformation endpoint
         String unmarshallerId = unmarshaller != null ? unmarshaller.getId() : null;
@@ -215,8 +220,9 @@ public abstract class CamelConfigBuilder {
         return idx > 0 ? type.substring(0, idx) : type;
     }
     
-    protected DataFormatDefinition createJsonDataFormat() throws Exception {
-        final String id = "transform-json";
+    protected DataFormatDefinition createJsonDataFormat(String className) throws Exception {
+        final String id = className != null 
+                ? className.replaceAll("\\.", "") : "transform-json";
 
         DataFormatDefinition dataFormat = getDataFormat(id);
         if (dataFormat == null) {
