@@ -1,0 +1,88 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>ElasticSearch</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Dropbox.html" title="Dropbox"><link rel="next" href="IDU-EventAdmin.html" title="EventAdmin"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-ElasticSearch"></a>ElasticSearch</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_ElasticSearchComponent"></a>ElasticSearch Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.11</strong></span>
+    </p><p>The ElasticSearch component allows you to interface with an <a class="link" href="http://elasticsearch.org" target="_top">ElasticSearch</a> server.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+    &lt;artifactId&gt;camel-elasticsearch&lt;/artifactId&gt;
+    &lt;version&gt;x.x.x&lt;/version&gt;
+    &lt;!-- use the same version as your Camel core version --&gt;
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">elasticsearch://clusterName?[options]</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>if you want to run against a local (in JVM/classloader) ElasticSearch server, just set
+        the clusterName value in the URI to <code class="code">local</code>. See the <a class="link" href="http://www.elasticsearch.org/guide/reference/java-api/client.html" target="_top">client
+          guide</a> for more details.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The following options may be configured on the ElasticSearch endpoint.  All are required to be set as either an endpoint URI parameter or as a header (headers override endpoint properties)</p><table id="d0e44348"><tr>
+        <th>name </th>
+        <th>description</th>
+      </tr><tr>
+        <td>operation</td>
+        <td>required, indicates the operation to perform</td>
+      </tr><tr>
+        <td>indexName</td>
+        <td>
+          <p>the name of the index to act against </p>
+        </td>
+      </tr><tr>
+        <td>ip</td>
+        <td>
+          <p>the TransportClient remote host ip to use <span class="bold"><strong>Camel 2.12</strong></span>
+          </p>
+        </td>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_MessageOperations"></a>Message Operations</h2></div></div></div><p>The following ElasticSearch operations are currently supported. Simply set an endpoint URI
+      option or exchange header with a key of <code class="code">operation</code> and a value set to one of the
+      following. Some operations also require other parameters or the message body to be set.</p><table id="d0e44399"><tr>
+        <th>operation </th>
+        <th>message body </th>
+        <th>description</th>
+      </tr><tr>
+        <td><code class="code">INDEX</code></td>
+        <td><code class="code">Map</code>, <code class="code">String</code>, <code class="code">byte[]</code> or
+            <code class="code">XContentBuilder</code> content to index</td>
+        <td> Adds content to an index and returns the content's <code class="code">indexId</code> in the
+          body.</td>
+      </tr><tr>
+        <td><code class="code">GET_BY_ID</code></td>
+        <td>Index ID of content to retrieve</td>
+        <td> Retrieves the specified index and returns a <code class="code">GetResult</code> object in the
+          body.</td>
+      </tr><tr>
+        <td><code class="code">DELETE</code></td>
+        <td>Index ID of content to delete</td>
+        <td> Deletes the specified indexId and returns a <code class="code">DeleteResult</code> object in the
+          body.</td>
+      </tr><tr>
+            <td>
+                <p><code class="code">BULK_INDEX</code></p>
+            </td>
+            <td>
+                <p>A <span class="strong"><strong>List</strong></span> or <span class="strong"><strong>Collection</strong></span> of any type that is already accepted
+                            (<code class="code">XContentBuilder</code>, <code class="code">Map</code>, <code class="code">byte[]</code>, or
+                            <code class="code">String</code>)</p>
+            </td>
+            <td>
+                <p><span class="strong"><strong>Camel 2.14, </strong></span> Adds content to an index and
+            return a List of the id of the successfully indexed documents in the body.</p>
+            </td>
+        </tr><tr>
+        <td>
+          <p><code class="code">BULK</code></p>
+        </td>
+        <td>
+          <p>A <span class="strong"><strong>List</strong></span> or <span class="strong"><strong>Collection</strong></span> of any type that is already accepted
+              (<code class="code">XContentBuilder</code>, <code class="code">Map</code>, <code class="code">byte[]</code>, or
+              <code class="code">String</code>)</p>
+        </td>
+        <td>
+          <p><span class="strong"><strong>Camel 2.15, </strong></span>  Adds content to an index and
+            returns the BulkResponse object in the body.</p>
+        </td>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_IndexExample"></a>Index Example</h2></div></div></div><p>Below is a simple INDEX example</p><pre class="programlisting">from("direct:index")
+    .to("elasticsearch://local?operation=INDEX&amp;indexName=twitter&amp;indexType=tweet");</pre><pre class="programlisting">&lt;route&gt;
+    &lt;from uri="direct:index" /&gt;
+    &lt;to uri="elasticsearch://local?operation=INDEX&amp;indexName=twitter&amp;indexType=tweet"/&gt;
+&lt;/route&gt;</pre><p>A client would simply need to pass a body message containing a Map to the route.  The result body contains the indexId created.</p><pre class="programlisting">Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+map.put("content", "test");
+String indexId = template.requestBody("direct:index", map, String.class);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-ElasticSearch_HSH_Formoreinformationseetheseresources"></a>For more information, see these resources</h2></div></div></div><p>
+      <a class="link" href="http://elasticsearch.org" target="_top">ElasticSearch Main Site</a>
+    </p><p>
+      <a class="link" href="http://www.elasticsearch.org/guide/reference/java-api/" target="_top">ElasticSearch Java API</a>
+    </p><p>
+
+    </p></div></div></body></html>

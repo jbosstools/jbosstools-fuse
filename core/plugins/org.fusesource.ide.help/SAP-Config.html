@@ -1,0 +1,25 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Configuration Overview</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="SAP.html" title="SAP Component"><link rel="prev" href="SAP-Message.html" title="Message Body"><link rel="next" href="SAP-DestConfig.html" title="Destination Configuration"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Config"></a>Configuration Overview</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37516"></a>Overview</h3></div></div></div><p>The SAP component maintains three maps to store destination data, server data and
+                repository data. The component&#8217;s property, <code class="code">destinationDataStore</code>, stores
+                destination data keyed by destination name, the property,
+                    <code class="code">serverDataStore</code>, stores server data keyed by server name and the
+                property, <code class="code">repositoryDataStore</code>, stores repository data keyed by
+                repository name. These configurations must be passed to the component during its
+                initialization.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37517"></a>Example</h3></div></div></div><p></p><div class="informalexample"><pre class="programlisting">&lt;bean id="sap" class="org.fusesource.camel.component.sap.SAPComponent"&gt;
+    &lt;property name="destinationDataStore"&gt;
+        &lt;map&gt;
+            &lt;entry key="nplDest" value-ref="nplDestinationData" /&gt;
+        &lt;/map&gt;
+    &lt;/property&gt;
+    &lt;property name="serverDataStore"&gt;
+        &lt;map&gt;
+            &lt;entry key="nplServer" value-ref="nplServerData" /&gt;
+        &lt;/map&gt;
+    &lt;/property&gt;
+    &lt;property name="repositoryDataStore"&gt;
+        &lt;map&gt;
+            &lt;entry key="nplServer" value-ref="nplRepositoryData"/&gt;
+        &lt;/map&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</pre></div></div></div></body></html>
