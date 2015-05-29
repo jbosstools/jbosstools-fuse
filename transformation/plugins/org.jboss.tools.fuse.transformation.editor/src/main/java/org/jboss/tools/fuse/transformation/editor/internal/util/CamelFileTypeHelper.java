@@ -11,6 +11,7 @@ package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -46,7 +47,7 @@ public final class CamelFileTypeHelper {
     public static boolean isSpringFile(IProject project, String filePath) {
         return fileMatches(project, filePath, springXmlMatcher);
     }
-    
+
     /**
      * checks if the given file is a spring or blueprint file or not
      * @param filePath
@@ -63,7 +64,7 @@ public final class CamelFileTypeHelper {
 
     private static boolean fileMatches(IProject project, String filePath, XmlMatchingStrategySupport matcher) {
         boolean matches = false;
-        
+
         if (filePath != null && filePath.trim().length() > 0) {
             String rawPath = null;
             if (filePath.startsWith("file:")) {
@@ -76,12 +77,13 @@ public final class CamelFileTypeHelper {
             java.io.File nf = new java.io.File(fp.toOSString());
             if (nf.exists() && nf.isFile()) {
                 // file exists, now check if its blueprint or spring
-                IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(
-                        fp.makeRelativeTo(ResourcesPlugin.getWorkspace().getRoot().getLocation()));
+                IWorkspace workspace = ResourcesPlugin.getWorkspace();
+                IPath location = Path. fromOSString(nf.getAbsolutePath());
+                IFile file = workspace .getRoot().getFileForLocation(location);
                 matches = matcher.matches(file);
             }
         }
-        
+
         return matches;
     }
 
