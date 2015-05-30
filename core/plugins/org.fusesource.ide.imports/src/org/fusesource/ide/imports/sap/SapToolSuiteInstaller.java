@@ -20,10 +20,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.operations.InstallOperation;
+import org.eclipse.equinox.p2.operations.ProvisioningJob;
 import org.eclipse.equinox.p2.operations.ProvisioningSession;
 import org.eclipse.equinox.p2.publisher.eclipse.FeaturesAndBundlesPublisherApplication;
 import org.eclipse.equinox.p2.query.QueryUtil;
@@ -34,10 +37,17 @@ import org.eclipse.equinox.p2.ui.ProvisioningUI;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.fusesource.ide.imports.sap.JCo3Archive.JCoArchiveType;
 import org.jboss.tools.foundation.core.properties.IPropertiesProvider;
 import org.jboss.tools.foundation.core.properties.PropertiesHelper;
 
+/**
+ * SAP Tool Suite Installer
+ * 
+ * @author William Collins punkhornsw@gmail.com
+ *
+ */
 @SuppressWarnings("restriction")
 public class SapToolSuiteInstaller implements IRunnableWithProgress {
 
@@ -92,7 +102,7 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 				throw new InterruptedException();
 			
 			// Generate P2 Meta Data
-			URI librariesRepositoryURI = ImportUtils.getTemporySapLibrariesRepository().toUri();
+			final URI librariesRepositoryURI = ImportUtils.getTemporySapLibrariesRepository().toUri();
 			String librariesRepositoryURL = librariesRepositoryURI.toString();
 			String librariesRepositoryPath = ImportUtils.getTemporySapLibrariesRepository().toString();
 			FeaturesAndBundlesPublisherApplication fabpa = new FeaturesAndBundlesPublisherApplication();
@@ -102,44 +112,47 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 			checkCancelled(monitor);
 			
 			// Perform Installation
-			IProvisioningAgent provisioningAgent = Activator.getProvisioningAgent();
-			URI sapToolingSuiteRepositoryURI = getSapToolingUpdateSiteUrl();
+			final IProvisioningAgent provisioningAgent = Activator.getProvisioningAgent();
+			final URI sapToolingSuiteRepositoryURI = getSapToolingUpdateSiteUrl();
 			String sapToolingSuiteFeature = getSapToolingFeature();
-			try {
-				ProvisioningSession session = new ProvisioningSession(provisioningAgent);
 
-				final ProvisioningUI ui = new ProvisioningUI(session, IProfileRegistry.SELF, new SapToolsPolicy());
-				ui.loadArtifactRepository(librariesRepositoryURI, false, monitor);
-				ui.loadArtifactRepository(sapToolingSuiteRepositoryURI, false, new NullProgressMonitor());
-				IMetadataRepository librariesMetadataRepository = ui.loadMetadataRepository(librariesRepositoryURI, false, monitor);
-				IMetadataRepository sapToolingMetadataRepository = ui.loadMetadataRepository(sapToolingSuiteRepositoryURI, false, new NullProgressMonitor());
-				final Set<IInstallableUnit> toInstall = new HashSet<IInstallableUnit>();
-				toInstall.addAll(librariesMetadataRepository.query(QueryUtil.createIUGroupQuery(), monitor).toUnmodifiableSet());
-				toInstall.addAll(sapToolingMetadataRepository.query(QueryUtil.createIUQuery(sapToolingSuiteFeature), monitor).toUnmodifiableSet());
-				final InstallOperation installOperation = ui.getInstallOperation(toInstall, new URI[] { librariesRepositoryURI, sapToolingSuiteRepositoryURI });
+			ProvisioningSession session = new ProvisioningSession(provisioningAgent);
 
-				IStatus status = installOperation.resolveModal(monitor);
-				monitor.worked(1);
-				checkCancelled(monitor);
-				if (!status.isOK()) {
-					ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.SapToolSuiteInstaller_JBossFuseSAPToolSuiteInstallFailed, Messages.SapToolSuiteInstaller_UnableToPerformInstallationOfJBossFuseSAPToolSuite, status);
-					throw new InvocationTargetException(status.getException(), Messages.SapToolSuiteInstaller_JBossFuseSapToolSuiteCouldNotBeInstalled + status.getMessage());
-				}
+			final ProvisioningUI ui = new ProvisioningUI(session, IProfileRegistry.SELF, new SapToolsPolicy());
+			ui.loadArtifactRepository(librariesRepositoryURI, false, monitor);
+			ui.loadArtifactRepository(sapToolingSuiteRepositoryURI, false, new NullProgressMonitor());
+			IMetadataRepository librariesMetadataRepository = ui.loadMetadataRepository(librariesRepositoryURI, false, monitor);
+			IMetadataRepository sapToolingMetadataRepository = ui.loadMetadataRepository(sapToolingSuiteRepositoryURI, false, new NullProgressMonitor());
+			final Set<IInstallableUnit> toInstall = new HashSet<IInstallableUnit>();
+			toInstall.addAll(librariesMetadataRepository.query(QueryUtil.createIUGroupQuery(), monitor).toUnmodifiableSet());
+			toInstall.addAll(sapToolingMetadataRepository.query(QueryUtil.createIUQuery(sapToolingSuiteFeature), monitor).toUnmodifiableSet());
+			final InstallOperation installOperation = ui.getInstallOperation(toInstall, new URI[] { librariesRepositoryURI, sapToolingSuiteRepositoryURI });
 
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						ui.openInstallWizard(toInstall, installOperation, null);
-					}
-				});
-			} finally {
-				// Remove SAP Tooling and SAP Libraries repository from Repository manager's list of known repositories.
-				IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager) provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME);
-				IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager) provisioningAgent.getService(IMetadataRepositoryManager.SERVICE_NAME);
-				artifactRepositoryManager.removeRepository(librariesRepositoryURI);
-				metadataRepositoryManager.removeRepository(librariesRepositoryURI);
-				artifactRepositoryManager.removeRepository(sapToolingSuiteRepositoryURI);
-				metadataRepositoryManager.removeRepository(sapToolingSuiteRepositoryURI);
+			IStatus status = installOperation.resolveModal(monitor);
+			monitor.worked(1);
+			checkCancelled(monitor);
+			if (!status.isOK()) {
+				ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.SapToolSuiteInstaller_JBossFuseSAPToolSuiteInstallFailed, Messages.SapToolSuiteInstaller_UnableToPerformInstallationOfJBossFuseSAPToolSuite, status);
+				throw new InvocationTargetException(status.getException(), Messages.SapToolSuiteInstaller_JBossFuseSapToolSuiteCouldNotBeInstalled + status.getMessage());
 			}
+
+			final ProvisioningJob job = installOperation.getProvisioningJob(new NullProgressMonitor());
+			job.addJobChangeListener(new JobChangeAdapter() {
+				@Override
+				public void done(IJobChangeEvent event) {
+					// Remove SAP Tooling and SAP Libraries repository from Repository manager's list of known repositories.
+					IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager) provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME);
+					IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager) provisioningAgent.getService(IMetadataRepositoryManager.SERVICE_NAME);
+					artifactRepositoryManager.removeRepository(librariesRepositoryURI);
+					metadataRepositoryManager.removeRepository(librariesRepositoryURI);
+					artifactRepositoryManager.removeRepository(sapToolingSuiteRepositoryURI);
+					metadataRepositoryManager.removeRepository(sapToolingSuiteRepositoryURI);
+					
+					// Delete SAP Library repository
+					ImportUtils.deleteTemporarySapLibrariesRepository();
+				}
+			});
+			ui.schedule(job, StatusManager.SHOW | StatusManager.LOG);
 		} catch (Exception e) {
 			throw new InvocationTargetException(e, e.getMessage());
 		} finally {

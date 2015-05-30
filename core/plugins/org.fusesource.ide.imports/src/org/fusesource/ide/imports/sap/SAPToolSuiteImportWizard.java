@@ -22,8 +22,13 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 
+/**
+ * Install Wizard for SAP Tool Suite
+ * 
+ * @author William Collins punkhornsw@gmail.com
+ *
+ */
 public class SAPToolSuiteImportWizard extends Wizard implements IImportWizard {
 	
 	private static final String SAP_I_DOC_LIBRARY_VERSION_3 = "SAP IDoc Library version 3"; //$NON-NLS-1$
@@ -91,9 +96,6 @@ public class SAPToolSuiteImportWizard extends Wizard implements IImportWizard {
 		try {
 			
 			getContainer().run(false, true, new SapToolSuiteInstaller(sapLibrariesFeatureArchive, jco3ImportSettings, idoc3ImportSettings));
-			if (MessageDialog.openConfirm(getShell(), Messages.SAPToolSuiteImportWizard_RestartEclipseTitle, Messages.SAPToolSuiteImportWizard_RestartEclipseMessage)) {
-				PlatformUI.getWorkbench().restart();
-			}
 
 			return true;
 
@@ -103,9 +105,7 @@ public class SAPToolSuiteImportWizard extends Wizard implements IImportWizard {
 		} catch (InterruptedException e) {
 			MessageDialog.openWarning(getShell(), Messages.SAPToolSuiteImportWizard_SAPImportCancelledTitle, Messages.SAPToolSuiteImportWizard_SAPImportCancelledMessage);
 			return false;
-		} finally {
-			ImportUtils.deleteTemporarySapLibrariesRepository();
-		}
+		} 
 	}
 	
 	@Override
