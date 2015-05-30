@@ -12,7 +12,7 @@ public class SapToolsPolicy extends Policy {
 		setRepositoriesVisible(false);
 		setRepositoryPreferencePageId(null);
 		setRepositoryPreferencePageName(null);
-		setRestartPolicy(RESTART_POLICY_FORCE_APPLY);
+		setRestartPolicy(RESTART_POLICY_PROMPT);
 		setShowDrilldownRequirements(false);
 		setShowLatestVersionsOnly(true);
 		setUpdateDetailsPreferredSize(null);
