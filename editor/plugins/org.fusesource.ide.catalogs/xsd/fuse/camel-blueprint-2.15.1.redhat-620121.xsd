@@ -6095,50 +6095,50 @@
 
   <xs:simpleType name="shutdownRunningTask">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="CompleteAllTasks"/>
       <xs:enumeration value="CompleteCurrentTaskOnly"/>
+      <xs:enumeration value="CompleteAllTasks"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="errorHandlerType">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="NoErrorHandler"/>
       <xs:enumeration value="DeadLetterChannel"/>
       <xs:enumeration value="DefaultErrorHandler"/>
       <xs:enumeration value="LoggingErrorHandler"/>
-      <xs:enumeration value="NoErrorHandler"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="loggingLevel">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="INFO"/>
-      <xs:enumeration value="TRACE"/>
       <xs:enumeration value="WARN"/>
-      <xs:enumeration value="OFF"/>
-      <xs:enumeration value="ERROR"/>
       <xs:enumeration value="DEBUG"/>
+      <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="OFF"/>
+      <xs:enumeration value="TRACE"/>
+      <xs:enumeration value="INFO"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="threadPoolRejectedPolicy">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Discard"/>
-      <xs:enumeration value="Abort"/>
-      <xs:enumeration value="DiscardOldest"/>
       <xs:enumeration value="CallerRuns"/>
+      <xs:enumeration value="Discard"/>
+      <xs:enumeration value="DiscardOldest"/>
+      <xs:enumeration value="Abort"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="exchangePattern">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="InOptionalOut"/>
-      <xs:enumeration value="OutOnly"/>
-      <xs:enumeration value="RobustInOnly"/>
-      <xs:enumeration value="OutIn"/>
-      <xs:enumeration value="InOnly"/>
-      <xs:enumeration value="OutOptionalIn"/>
       <xs:enumeration value="InOut"/>
+      <xs:enumeration value="OutOnly"/>
+      <xs:enumeration value="InOnly"/>
+      <xs:enumeration value="OutIn"/>
+      <xs:enumeration value="InOptionalOut"/>
+      <xs:enumeration value="RobustInOnly"/>
       <xs:enumeration value="RobustOutOnly"/>
+      <xs:enumeration value="OutOptionalIn"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -6152,33 +6152,33 @@
 
   <xs:simpleType name="jsonLibrary">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Jackson"/>
-      <xs:enumeration value="Gson"/>
       <xs:enumeration value="XStream"/>
+      <xs:enumeration value="Gson"/>
+      <xs:enumeration value="Jackson"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="onCompletionMode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="AfterConsumer"/>
       <xs:enumeration value="BeforeConsumer"/>
+      <xs:enumeration value="AfterConsumer"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="restHostNameResolver">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="localHostName"/>
       <xs:enumeration value="localIp"/>
+      <xs:enumeration value="localHostName"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="restBindingMode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="auto"/>
-      <xs:enumeration value="xml"/>
-      <xs:enumeration value="off"/>
       <xs:enumeration value="json"/>
       <xs:enumeration value="json_xml"/>
+      <xs:enumeration value="xml"/>
+      <xs:enumeration value="auto"/>
+      <xs:enumeration value="off"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="libs/camel-blueprint-2.15.1.redhat-620117.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-core-2.15.1.redhat-620117.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/camel-spring-2.15.1.redhat-620117.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-blueprint-2.15.1.redhat-620121.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-core-2.15.1.redhat-620121.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/camel-spring-2.15.1.redhat-620121.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/decentxml-1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/log4j-over-slf4j-1.7.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/slf4j-api-1.7.5.jar"/>

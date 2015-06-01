@@ -50,6 +50,9 @@ from a single ActiveMQDestination POJO
       <xs:attribute name='destinationType' type='xs:string'/>
       <xs:attribute name='enableBatch' type='xs:string'/>
       <xs:attribute name='initialRedeliveryDelay' type='xs:long'/>
+      <xs:attribute name='keyStore' type='xs:string'/>
+      <xs:attribute name='keyStoreKeyPassword' type='xs:string'/>
+      <xs:attribute name='keyStorePassword' type='xs:string'/>
       <xs:attribute name='maxMessagesPerBatch' type='xs:string'/>
       <xs:attribute name='maxMessagesPerSessions' type='xs:string'/>
       <xs:attribute name='maxSessions' type='xs:string'/>
@@ -61,6 +64,8 @@ from a single ActiveMQDestination POJO
       <xs:attribute name='resourceAdapter' type='xs:string'/>
       <xs:attribute name='subscriptionDurability' type='xs:string'/>
       <xs:attribute name='subscriptionName' type='xs:string'/>
+      <xs:attribute name='trustStore' type='xs:string'/>
+      <xs:attribute name='trustStorePassword' type='xs:string'/>
       <xs:attribute name='useExponentialBackOff' type='xs:boolean'/>
       <xs:attribute name='useJndi' type='xs:boolean'/>
       <xs:attribute name='useRAManagedTransaction' type='xs:string'/>
@@ -109,6 +114,9 @@ from a single ActiveMQDestination POJO
       </xs:attribute>
       <xs:attribute name='initialRedeliveryDelay' type='xs:long'/>
       <xs:attribute name='inputStreamPrefetch' type='xs:integer'/>
+      <xs:attribute name='keyStore' type='xs:string'/>
+      <xs:attribute name='keyStoreKeyPassword' type='xs:string'/>
+      <xs:attribute name='keyStorePassword' type='xs:string'/>
       <xs:attribute name='logWriter' type='xs:string'/>
       <xs:attribute name='maximumRedeliveries' type='xs:integer'/>
       <xs:attribute name='maximumRedeliveryDelay' type='xs:long'/>
@@ -121,6 +129,8 @@ from a single ActiveMQDestination POJO
       <xs:attribute name='resourceAdapter' type='xs:string'/>
       <xs:attribute name='serverUrl' type='xs:string'/>
       <xs:attribute name='topicPrefetch' type='xs:integer'/>
+      <xs:attribute name='trustStore' type='xs:string'/>
+      <xs:attribute name='trustStorePassword' type='xs:string'/>
       <xs:attribute name='useInboundSession' type='xs:boolean'/>
       <xs:attribute name='useSessionArgs' type='xs:boolean'>
         <xs:annotation>
@@ -189,6 +199,9 @@ if using embedded mode.
       </xs:attribute>
       <xs:attribute name='initialRedeliveryDelay' type='xs:long'/>
       <xs:attribute name='inputStreamPrefetch' type='xs:integer'/>
+      <xs:attribute name='keyStore' type='xs:string'/>
+      <xs:attribute name='keyStoreKeyPassword' type='xs:string'/>
+      <xs:attribute name='keyStorePassword' type='xs:string'/>
       <xs:attribute name='maximumRedeliveries' type='xs:integer'/>
       <xs:attribute name='maximumRedeliveryDelay' type='xs:long'/>
       <xs:attribute name='optimizeDurableTopicPrefetch' type='xs:integer'/>
@@ -199,6 +212,8 @@ if using embedded mode.
       <xs:attribute name='redeliveryUseExponentialBackOff' type='xs:boolean'/>
       <xs:attribute name='serverUrl' type='xs:string'/>
       <xs:attribute name='topicPrefetch' type='xs:integer'/>
+      <xs:attribute name='trustStore' type='xs:string'/>
+      <xs:attribute name='trustStorePassword' type='xs:string'/>
       <xs:attribute name='useInboundSession' type='xs:boolean'/>
       <xs:attribute name='useSessionArgs' type='xs:boolean'>
         <xs:annotation>
