@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Kafka</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-JT400.html" title="JT400"><link rel="next" href="IDU-Kestrel.html" title="Kestrel"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Kafka"></a>Kafka</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e83209"></a>Kafka Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.13</strong></span></p><p>The <span class="strong"><strong>kafka:</strong></span> component is used for communicating
+   <title>Kafka</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-JT400.html" title="JT400"><link rel="next" href="IDU-Kestrel.html" title="Kestrel"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Kafka"></a>Kafka</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e79344"></a>Kafka Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.13</strong></span></p><p>The <span class="strong"><strong>kafka:</strong></span> component is used for communicating
                 with <a class="link" href="http://kafka.apache.org/" target="_top">Apache Kafka</a> message
                 broker.</p><p>Maven users will need to add the following dependency to their
                     <code class="code">pom.xml</code> for this component:</p><div class="informalexample"><pre class="programlisting">&lt;dependency&gt;
@@ -8,7 +8,7 @@
     &lt;artifactId&gt;camel-kafka&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-325"></a>URI format</h2></div></div></div><div class="informalexample"><pre class="programlisting">kafka:server:port[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-326"></a>Options</h2></div></div></div><table id="d0e83240"><tbody><tr>
+&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-325"></a>URI format</h2></div></div></div><div class="informalexample"><pre class="programlisting">kafka:server:port[?options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-326"></a>Options</h2></div></div></div><table id="d0e79375"><tbody><tr>
                             <th><p>Property</p></th>
                             <th><p>Default</p></th>
                             <th><p>Description</p></th>
@@ -82,7 +82,7 @@
                             <code class="code">batchSize</code>, it will wait for
                             <code class="code">barrierAwaitTimeoutMs</code>. </td>
                 </tr></tbody></table><p>You can append query options to the URI in the following format,
-                        <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-327"></a>Producer Options</h2></div></div></div><table class="confluenceTable" id="d0e83458"><tbody><tr>
+                        <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-327"></a>Producer Options</h2></div></div></div><table class="confluenceTable" id="d0e79593"><tbody><tr>
                             <th><p>Property</p></th>
                             <th><p>Default</p></th>
                             <th><p>Description</p></th>
@@ -146,7 +146,7 @@
                             <td>keySerializerClass</td>
                             <td> </td>
                             <td> </td>
-                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-328"></a>Consumer Options</h2></div></div></div><table class="confluenceTable" id="d0e83644"><tbody><tr>
+                        </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-328"></a>Consumer Options</h2></div></div></div><table class="confluenceTable" id="d0e79779"><tbody><tr>
                             <th><p>Property</p></th>
                             <th><p>Default</p></th>
                             <th><p>Description</p></th>

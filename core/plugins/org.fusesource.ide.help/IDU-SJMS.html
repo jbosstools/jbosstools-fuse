@@ -14,7 +14,7 @@ The classic <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-JMS.html" class="o
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">sjms:[queue:|topic:]destinationName[?options]</pre><p>Where <code class="literal">destinationName</code> is a JMS queue or topic name. By default, the <code class="literal">destinationName</code> is interpreted as a queue name. For example, to connect to the queue, <code class="literal">FOO.BAR</code> use:</p><pre class="programlisting">sjms:FOO.BAR</pre><p>You can include the optional <code class="literal">queue:</code> prefix, if you prefer:</p><pre class="programlisting">sjms:queue:FOO.BAR</pre><p>To connect to a topic, you <span class="emphasis"><em>must</em></span> include the <code class="literal">topic:</code> prefix. For example, to connect to the topic, <code class="literal">Stocks.Prices</code>, use:</p><pre class="programlisting">sjms:topic:Stocks.Prices</pre><p>You append query options to the URI using the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_ComponentOptionsandConfigurations"></a>Component Options and Configurations</h2></div></div></div><p>The SJMS Component supports the following configuration options:</p><p>
 
-    </p><table id="d0e115530"><tr>
+    </p><table id="d0e113191"><tr>
         <th> Option </th>
         <th> Required </th>
         <th> Default Value </th>
@@ -79,7 +79,7 @@ SjmsComponent component = new SjmsComponent();
 component.setConnectionResource(connectionResource);
 component.setMaxConnections(1);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_ProducerConfigurationOptions"></a>Producer Configuration Options</h2></div></div></div><p>The SjmsProducer Endpoint supports the following properties:</p><p>
 
-    </p><table id="d0e115694"><tr>
+    </p><table id="d0e113355"><tr>
         <th> Option </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -165,7 +165,7 @@ component.setMaxConnections(1);</pre></div><div class="simplesect"><div class="t
 .to("sjms:queue:bar?exchangePattern=InOut");</pre><p>You can specify a <code class="literal">namedReplyTo</code> though which can provide a better monitor point.</p><pre class="programlisting">from("direct:start")
 .to("sjms:queue:bar?exchangePattern=InOut&amp;namedReplyTo=my.reply.to.queue");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SJMS_HSH_ConsumersConfigurationOptions"></a>Consumers Configuration Options</h2></div></div></div><p>The SjmsConsumer Endpoint supports the following properties:</p><p>
 
-    </p><table id="d0e115968"><tr>
+    </p><table id="d0e113629"><tr>
         <th> Option </th>
         <th> Default Value </th>
         <th> Description </th>

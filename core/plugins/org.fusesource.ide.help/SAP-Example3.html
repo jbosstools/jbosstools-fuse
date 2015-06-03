@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>Example 3: Handling Requests from SAP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="SAP.html" title="SAP Component"><link rel="prev" href="SAP-Example2.html" title="Example 2: Writing Data to SAP"><link rel="next" href="IDU-SAPNetWeaver.html" title="SAP NetWeaver"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SAP-Example3"></a>Example 3: Handling Requests from SAP</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37561"></a>Overview</h3></div></div></div><p>This example demonstrates a route which handles a request from SAP to the
-                    <code class="code">BOOK_FLIGHT</code> RCF, which is implemented by the route. In addition, it
+                    <code class="code">BOOK_FLIGHT</code> RFC, which is implemented by the route. In addition, it
                 demonstrates the component's XML serialization support, using JAXB to unmarshal and
                 marshal SAP request objects and response objects to custom beans.</p><p>This route creates a <code class="code">FlightTrip</code> business object on behalf of a travel
                 agent, <code class="code">FlightCustomer</code>. The route first unmarshals the SAP request
@@ -13,7 +13,7 @@
                 bean which is marshaled into an SAP response object and returned by the server
                 endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37562"></a>Java DSL for route</h3></div></div></div><p>The Java DSL for the example route is as follows:</p><div class="informalexample"><pre class="programlisting">DataFormat jaxb = new JaxbDataFormat("org.fusesource.sap.example.jaxb");
 
-from("sap:server:nplserver:BOOK_FLIGHT")
+from("sap-srfc-server:nplserver:BOOK_FLIGHT")
     .unmarshal(jaxb)
     .multicast()
     .to("direct:getFlightConnectionInfo", 
@@ -21,8 +21,8 @@ from("sap:server:nplserver:BOOK_FLIGHT")
         "direct:getPassengerInfo")
     .end()
     .to("direct:createFlightTrip")
-    .marshal(jaxb);</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37563"></a>XML DSL for route</h3></div></div></div><p>And the Spring DSL for the same route is as follows:</p><div class="informalexample"><pre class="programlisting">&lt;route&gt;
-    &lt;from uri="sap:server:nplserver:BOOK_FLIGHT"/&gt;
+    .marshal(jaxb);</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37563"></a>XML DSL for route</h3></div></div></div><p>And the XML DSL for the same route is as follows:</p><div class="informalexample"><pre class="programlisting">&lt;route&gt;
+    &lt;from uri="sap-srfc-server:nplserver:BOOK_FLIGHT"/&gt;
     &lt;unmarshal&gt;
         &lt;jaxb contextPath="org.fusesource.sap.example.jaxb"/&gt;
     &lt;/unmarshal&gt;

@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>GoogleCalendar</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-GitHub.html" title="GitHub"><link rel="next" href="IDU-GoogleDrive.html" title="GoogleDrive"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GoogleCalenda"></a>GoogleCalendar</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-GoogleCalendar_HSH_GoogleCalendarComponent"></a>GoogleCalendar component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.15</strong></span></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58667"></a>Component Description</h2></div></div></div><p>The Google Calendar component provides access to <a class="link" href="http://google.com/calendar" target="_top">Google Calendar</a> via the <a class="link" href="https://developers.google.com/google-apps/calendar/v3/reference/" target="_top">Google
+   <title>GoogleCalendar</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-GitHub.html" title="GitHub"><link rel="next" href="IDU-GoogleDrive.html" title="GoogleDrive"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GoogleCalenda"></a>GoogleCalendar</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-GoogleCalendar_HSH_GoogleCalendarComponent"></a>GoogleCalendar component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.15</strong></span></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e54802"></a>Component Description</h2></div></div></div><p>The Google Calendar component provides access to <a class="link" href="http://google.com/calendar" target="_top">Google Calendar</a> via the <a class="link" href="https://developers.google.com/google-apps/calendar/v3/reference/" target="_top">Google
                 Calendar Web APIs</a>.</p><p>Google Calendar uses the <a class="link" href="https://developers.google.com/accounts/docs/OAuth2" target="_top">OAuth 2.0
                 protocol</a> for authenticating a Google account and authorizing access to user
             data. Before you can use this component, you will need to <a class="link" href="https://developers.google.com/google-apps/calendar/auth" target="_top">create an account
@@ -12,9 +12,9 @@
             &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
             &lt;artifactId&gt;camel-google-calendar&lt;/artifactId&gt;
             &lt;version&gt;2.15-SNAPSHOT&lt;/version&gt;
-    &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58693"></a>URI Format</h2></div></div></div><p>The GoogleCalendar Component uses the following URI format:</p><pre class="programlisting">google-calendar://endpoint-prefix/endpoint?[options]</pre><p>Endpoint prefix can be one of:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>acl</p></li><li class="listitem"><p>calendars</p></li><li class="listitem"><p>channels</p></li><li class="listitem"><p>colors</p></li><li class="listitem"><p>events</p></li><li class="listitem"><p>freebusy</p></li><li class="listitem"><p>list</p></li><li class="listitem"><p>settings</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58727"></a>GoogleCalendarComponent</h2></div></div></div><p>The GoogleCalendar Component can be configured with the options below. These options
+    &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e54828"></a>URI Format</h2></div></div></div><p>The GoogleCalendar Component uses the following URI format:</p><pre class="programlisting">google-calendar://endpoint-prefix/endpoint?[options]</pre><p>Endpoint prefix can be one of:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>acl</p></li><li class="listitem"><p>calendars</p></li><li class="listitem"><p>channels</p></li><li class="listitem"><p>colors</p></li><li class="listitem"><p>events</p></li><li class="listitem"><p>freebusy</p></li><li class="listitem"><p>list</p></li><li class="listitem"><p>settings</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e54862"></a>GoogleCalendarComponent</h2></div></div></div><p>The GoogleCalendar Component can be configured with the options below. These options
             can be provided using the component's bean property <code class="code">configuration</code> of type
-                <code class="code">org.apache.camel.component.google.calendar.GoogleCalendarConfiguration</code>.</p><table id="d0e58738"><tbody><tr>
+                <code class="code">org.apache.camel.component.google.calendar.GoogleCalendarConfiguration</code>.</p><table id="d0e54873"><tbody><tr>
                     <th>Option</th>
                     <th>Type</th>
                     <th> </th>
@@ -48,7 +48,7 @@
                     <td>Specifies the level of permissions you want a calendar application to have
                         to a user account. See <a class="link" href="https://developers.google.com/google-apps/calendar/auth" target="_top">https://developers.google.com/google-apps/calendar/auth</a> for more
                         info.</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58821"></a>Producer Endpoints</h2></div></div></div><p>Producer endpoints can use endpoint prefixes followed by endpoint names and associated
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e54956"></a>Producer Endpoints</h2></div></div></div><p>Producer endpoints can use endpoint prefixes followed by endpoint names and associated
             options described next. A shorthand alias can be used for some endpoints. The endpoint
             URI MUST contain a prefix.</p><p>Endpoint options that are not mandatory are denoted by []. When there are no mandatory
             options for an endpoint, one of the set of [] options MUST be provided. Producer
@@ -57,8 +57,8 @@
             in a message header. The message header name must be of the format
                 <code class="code">CamelGoogleCalendar.&lt;option&gt;</code>. Note that the <code class="code">inBody</code>
             option overrides message header, i.e. the endpoint option <code class="code">inBody=option</code>
-            would override a <code class="code">CamelGoogleCalendar.option</code> header.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58846"></a>1. Endpoint Prefix <span class="emphasis"><em>acl</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">acl</code> as
-            follows:</p><pre class="programlisting">google-calendar://acl/endpoint?[options]</pre><table id="d0e58858"><tbody><tr>
+            would override a <code class="code">CamelGoogleCalendar.option</code> header.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e54981"></a>1. Endpoint Prefix <span class="emphasis"><em>acl</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">acl</code> as
+            follows:</p><pre class="programlisting">google-calendar://acl/endpoint?[options]</pre><table id="d0e54993"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -98,7 +98,7 @@
                     <td> </td>
                     <td>calendarId, contentChannel</td>
                     <td>com.google.api.services.calendar.model.Channel</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58973"></a>URI Options for <span class="emphasis"><em>acl</em></span></h2></div></div></div><table id="d0e58978"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55108"></a>URI Options for <span class="emphasis"><em>acl</em></span></h2></div></div></div><table id="d0e55113"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -113,8 +113,8 @@
                 </tr><tr>
                     <td>ruleId</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59020"></a>2. Endpoint Prefix <span class="emphasis"><em>calendars</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">calendars</code> as
-            follows:</p><pre class="programlisting">google-calendar://calendars/endpoint?[options]</pre><table id="d0e59032"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55155"></a>2. Endpoint Prefix <span class="emphasis"><em>calendars</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">calendars</code> as
+            follows:</p><pre class="programlisting">google-calendar://calendars/endpoint?[options]</pre><table id="d0e55167"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -149,7 +149,7 @@
                     <td> </td>
                     <td>calendarId, content</td>
                     <td><code class="code">com.google.api.services.calendar.Calendar</code></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59136"></a>URI Options for <span class="emphasis"><em>calendars</em></span></h2></div></div></div><table id="d0e59141"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55271"></a>URI Options for <span class="emphasis"><em>calendars</em></span></h2></div></div></div><table id="d0e55276"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -158,8 +158,8 @@
                 </tr><tr>
                     <td>content</td>
                     <td>com.google.api.services.calendar.model.Calendar</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59167"></a>3. Endpoint Prefix <span class="emphasis"><em>channels</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">channels</code> as
-            follows:</p><pre class="programlisting">google-calendar://channels/endpoint?[options]</pre><table id="d0e59179"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55302"></a>3. Endpoint Prefix <span class="emphasis"><em>channels</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">channels</code> as
+            follows:</p><pre class="programlisting">google-calendar://channels/endpoint?[options]</pre><table id="d0e55314"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -169,14 +169,14 @@
                     <td> </td>
                     <td>contentChannel</td>
                     <td> </td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59209"></a>URI Options for <span class="emphasis"><em>channels</em></span></h2></div></div></div><table id="d0e59214"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55344"></a>URI Options for <span class="emphasis"><em>channels</em></span></h2></div></div></div><table id="d0e55349"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
                     <td>contentChannel</td>
                     <td>com.google.api.services.calendar.model.Channel</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59232"></a>4. Endpoint Prefix <span class="emphasis"><em>colors</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">colors</code> as
-            follows:</p><pre class="programlisting">google-calendar://colors/endpoint?[options]</pre><table id="d0e59244"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55367"></a>4. Endpoint Prefix <span class="emphasis"><em>colors</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">colors</code> as
+            follows:</p><pre class="programlisting">google-calendar://colors/endpoint?[options]</pre><table id="d0e55379"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -186,12 +186,12 @@
                     <td> </td>
                     <td> </td>
                     <td><code class="code">com.google.api.services.calendar.model.Colors</code></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59275"></a>URI Options for <span class="emphasis"><em>colors</em></span></h2></div></div></div><table id="d0e59280"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55410"></a>URI Options for <span class="emphasis"><em>colors</em></span></h2></div></div></div><table id="d0e55415"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59290"></a>5. Endpoint Prefix <span class="emphasis"><em>events</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">events</code> as
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55425"></a>5. Endpoint Prefix <span class="emphasis"><em>events</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">events</code> as
             follows:</p><pre class="programlisting">        google-calendar://events/endpoint?[options]
-    </pre><table id="d0e59302"><tbody><tr>
+    </pre><table id="d0e55437"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -251,7 +251,7 @@
                     <td> </td>
                     <td>calendarId, contentChannel</td>
                     <td>com.google.api.services.calendar.model.Channel</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59474"></a>URI Options for <span class="emphasis"><em>events</em></span></h2></div></div></div><table id="d0e59479"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55609"></a>URI Options for <span class="emphasis"><em>events</em></span></h2></div></div></div><table id="d0e55614"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -272,9 +272,9 @@
                 </tr><tr>
                     <td>text</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59537"></a>6. Endpoint Prefix <span class="emphasis"><em>freebusy</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">freebusy</code> as
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55672"></a>6. Endpoint Prefix <span class="emphasis"><em>freebusy</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">freebusy</code> as
             follows:</p><pre class="programlisting">        google-calendar://freebusy/endpoint?[options]
-    </pre><table id="d0e59549"><tbody><tr>
+    </pre><table id="d0e55684"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -284,14 +284,14 @@
                     <td> </td>
                     <td>content</td>
                     <td>com.google.api.services.calendar.model.FreeBusyResponse</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59579"></a>URI Options for <span class="emphasis"><em>freebusy</em></span></h2></div></div></div><table id="d0e59584"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55714"></a>URI Options for <span class="emphasis"><em>freebusy</em></span></h2></div></div></div><table id="d0e55719"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
                     <td>content</td>
                     <td>com.google.api.services.calendar.model.FreeBusyRequest</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59602"></a>7. Endpoint Prefix <span class="emphasis"><em>list</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">list</code> as
-            follows:</p><pre class="programlisting">google-calendar://list/endpoint?[options]</pre><table id="d0e59614"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55737"></a>7. Endpoint Prefix <span class="emphasis"><em>list</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">list</code> as
+            follows:</p><pre class="programlisting">google-calendar://list/endpoint?[options]</pre><table id="d0e55749"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -331,7 +331,7 @@
                     <td> </td>
                     <td>contentChannel</td>
                     <td>com.google.api.services.calendar.model.Channel</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59733"></a>URI Options for <span class="emphasis"><em>list</em></span></h2></div></div></div><table id="d0e59738"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55868"></a>URI Options for <span class="emphasis"><em>list</em></span></h2></div></div></div><table id="d0e55873"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -343,9 +343,9 @@
                 </tr><tr>
                     <td>contentChannel</td>
                     <td>com.google.api.services.calendar.model.Channel</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59772"></a>8. Endpoint Prefix <span class="emphasis"><em>settings</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">settings</code> as
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55907"></a>8. Endpoint Prefix <span class="emphasis"><em>settings</em></span></h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">settings</code> as
             follows:</p><pre class="programlisting">        google-calendar://settings/endpoint?[options]
-    </pre><table id="d0e59784"><tbody><tr>
+    </pre><table id="d0e55919"><tbody><tr>
                     <th>Endpoint</th>
                     <th>Shorthand Alias</th>
                     <th>Options</th>
@@ -365,7 +365,7 @@
                     <td> </td>
                     <td>contentChannel</td>
                     <td>com.google.api.services.calendar.model.Channel</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59844"></a>URI Options for <span class="emphasis"><em>settings</em></span></h2></div></div></div><table id="d0e59849"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55979"></a>URI Options for <span class="emphasis"><em>settings</em></span></h2></div></div></div><table id="d0e55984"><tbody><tr>
                     <th>Name</th>
                     <th>Type</th>
                 </tr><tr>
@@ -374,12 +374,12 @@
                 </tr><tr>
                     <td>setting</td>
                     <td>String</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59875"></a>Consumer Endpoints</h2></div></div></div><p>Any of the producer endpoints can be used as a consumer endpoint. Consumer endpoints
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56010"></a>Consumer Endpoints</h2></div></div></div><p>Any of the producer endpoints can be used as a consumer endpoint. Consumer endpoints
             can use <a class="link" href="http://camel.apache.org/polling-consumer.html#PollingConsumer-ScheduledPollConsumerOptions" target="_top">Scheduled Poll Consumer Options</a> with a <code class="code">consumer.</code> prefix to
             schedule endpoint invocation. Consumer endpoints that return an array or collection will
             generate one exchange per element, and their routes will be executed once for each
-            exchange.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59886"></a>Message Headers</h2></div></div></div><p>Any URI option can be provided in a message header for producer endpoints with a
-                <code class="code">CamelGoogleCalendar.</code> prefix.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e59894"></a>Message Body</h2></div></div></div><p>All result message bodies utilize objects provided by the underlying APIs used by the
+            exchange.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56021"></a>Message Headers</h2></div></div></div><p>Any URI option can be provided in a message header for producer endpoints with a
+                <code class="code">CamelGoogleCalendar.</code> prefix.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56029"></a>Message Body</h2></div></div></div><p>All result message bodies utilize objects provided by the underlying APIs used by the
             GoogleCalendarComponent. Producer endpoints can specify the option name for incoming
             message body in the <code class="code">inBody</code> endpoint URI parameter. For endpoints that
             return an array or collection, a consumer endpoint will map every element to distinct

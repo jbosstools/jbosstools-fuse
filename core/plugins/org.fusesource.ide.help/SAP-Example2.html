@@ -5,11 +5,11 @@
                     <code class="code">BAPI_FLTRIP_CREATE</code>, using a destination endpoint to create the
                 object.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37557"></a>Java DSL for route</h3></div></div></div><p>The Java DSL for the example route is as follows:</p><div class="informalexample"><pre class="programlisting">from("direct:createFlightTrip")
     .to("bean:createFlightTripRequest")
-    .to("sap:destination:nplDest:BAPI_FLTRIP_GETLIST?transacted=true")
+    .to("sap-srfc-destination:nplDest:BAPI_FLTRIP_GETLIST?transacted=true")
     .to("bean:returnFlightTripResponse");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37558"></a>XML DSL for route</h3></div></div></div><p>And the Spring DSL for the same route is as follows:</p><div class="informalexample"><pre class="programlisting">&lt;route&gt;
     &lt;from uri="direct:createFlightTrip"/&gt;
     &lt;to uri="bean:createFlightTripRequest"/&gt;
-    &lt;to uri="sap:destination:nplDest:BAPI_FLTRIP_GETLIST?transacted=true"/&gt;
+    &lt;to uri="sap-srfc-destination:nplDest:BAPI_FLTRIP_GETLIST?transacted=true"/&gt;
     &lt;to uri="bean:returnFlightTripResponse"/&gt;
 &lt;/route&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-37559"></a>Transaction support</h3></div></div></div><p>Note that the URL for the SAP endpoint has the <code class="code">transacted</code> option set
                 to <code class="code">true</code>. As discussed in <a class="xref" href="SAP-Txn.html" title="Transaction Support">Transaction Support</a>, when this option is

@@ -778,9 +778,45 @@
         <description>Salesforce Component Options</description>
         <topic href="IDU-Salesforce.html" label="Salesforce"/>
     </context>
-    <context id="sap">
+    <context id="sap-srfc-destination">
         <description>SAP Component Options</description>
-        <topic href="SAP.html" label="SAP"/>
+        <topic href="SAP.html" label="SAP sRFC Destination"/>
+    </context>
+    <context id="sap-trfc-destination">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP tRFC Destination"/>
+    </context>
+    <context id="sap-qrfc-destination">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP qRFC Destination"/>
+    </context>
+    <context id="sap-srfc-server">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP sRFC Server"/>
+    </context>
+    <context id="sap-trfc-server">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP tRFC Server"/>
+    </context>
+    <context id="sap-idoc-destination">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP IDoc Destination"/>
+    </context>
+    <context id="sap-idoclist-destination">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP IDoc List Destination"/>
+    </context>
+    <context id="sap-qidoc-destination">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP Queued IDoc Destination"/>
+    </context>
+    <context id="sap-qidoclist-destination">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP Queued IDoc List Destination"/>
+    </context>
+    <context id="sap-idoclist-server">
+        <description>SAP Component Options</description>
+        <topic href="SAP.html" label="SAP IDoc List Server"/>
     </context>
     <context id="sap-netweaver">
         <description>SAP Netweaver Component Options</description>

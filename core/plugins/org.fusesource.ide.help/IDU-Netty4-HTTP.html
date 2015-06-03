@@ -31,7 +31,7 @@
                 options from <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty4.html" class="olink">Netty4</a>. So make sure to look at
                 the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty4.html" class="olink">Netty4</a> documentation as well. Notice that
                 some options from Netty4 are not applicable when using this Netty4 HTTP component,
-                such as options related to UDP transport.</p></td></tr></table></div><table class="confluenceTable" id="d0e100824"><tbody><tr>
+                such as options related to UDP transport.</p></td></tr></table></div><table class="confluenceTable" id="d0e96959"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Default Value</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -155,7 +155,7 @@
                             the option is <code class="code">false</code> then the Netty Acceptor is unbound when
                             the consumer is suspended, so clients cannot connect
                         anymore.</p></td>
-                </tr></tbody></table><p>The <code class="code">NettyHttpSecurityConfiguration</code> has the following options:</p><table class="confluenceTable" id="d0e101176"><tbody><tr>
+                </tr></tbody></table><p>The <code class="code">NettyHttpSecurityConfiguration</code> has the following options:</p><table class="confluenceTable" id="d0e97311"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Default Value</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -200,7 +200,7 @@
                             assume a <code class="code">Principal</code> is role based if its FQN classname has
                             the lower-case word <code class="code">role</code> in its classname. You can specify
                             multiple class names separated by comma.</p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-364"></a>Message Headers</h2></div></div></div><p>The following headers can be used on the producer to control the HTTP request.</p><table class="confluenceTable" id="d0e101324"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-364"></a>Message Headers</h2></div></div></div><p>The following headers can be used on the producer to control the HTTP request.</p><table class="confluenceTable" id="d0e97459"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Type</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -239,7 +239,7 @@
                         success, and 500 for failure.</td>
                 </tr></tbody></table><p>The following headers is provided as meta-data when a route starts from an Netty4 HTTP
             endpoint:</p><p>The description in the table takes offset in a route having:
-                <code class="code">from("netty4-http:http:0.0.0.0:8080/myapp")...</code></p><table class="confluenceTable" id="d0e101439"><tbody><tr>
+                <code class="code">from("netty4-http:http:0.0.0.0:8080/myapp")...</code></p><table class="confluenceTable" id="d0e97574"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Type</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -310,7 +310,7 @@
                 <code class="code">org.apache.camel.component.netty4.NettyServerBootstrapConfiguration</code>
             configuration class. If you have configured another route with different options, Camel
             will throw an exception on startup, indicating the options is not identical. To mitigate
-            this ensure all options is identical.</p><p>Here is an example with two routes that share the same port.</p><div class="example"><a name="d0e101710"></a><p class="title"><b>Example&nbsp;9.&nbsp;Two routes sharing the same port</b></p><div class="example-contents"><pre class="programlisting">from("netty4-http:http://0.0.0.0:{{port}}/foo")
+            this ensure all options is identical.</p><p>Here is an example with two routes that share the same port.</p><div class="example"><a name="d0e97845"></a><p class="title"><b>Example&nbsp;9.&nbsp;Two routes sharing the same port</b></p><div class="example-contents"><pre class="programlisting">from("netty4-http:http://0.0.0.0:{{port}}/foo")
   .to("mock:foo")
   .transform().constant("Bye World");
 
@@ -318,7 +318,7 @@ from("netty4-http:http://0.0.0.0:{{port}}/bar")
   .to("mock:bar")
   .transform().constant("Bye Camel");</pre></div></div><br class="example-break"><p>And here is an example of a mis configured 2nd route that do not have identical
                 <code class="code">org.apache.camel.component.netty4.NettyServerBootstrapConfiguration</code>
-            option as the 1st route. This will cause Camel to fail on startup.</p><div class="example"><a name="d0e101720"></a><p class="title"><b>Example&nbsp;10.&nbsp;Two routes sharing the same port, but the 2nd route is misconfigured and will
+            option as the 1st route. This will cause Camel to fail on startup.</p><div class="example"><a name="d0e97855"></a><p class="title"><b>Example&nbsp;10.&nbsp;Two routes sharing the same port, but the 2nd route is misconfigured and will
                 fail on starting</b></p><div class="example-contents"><pre class="programlisting">from("netty4-http:http://0.0.0.0:{{port}}/foo")
   .to("mock:foo")
   .transform().constant("Bye World");

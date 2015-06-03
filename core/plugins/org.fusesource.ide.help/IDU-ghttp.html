@@ -6,7 +6,7 @@
       receive HTTP requests on GAE). This is achieved by extending the 
         <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-SERVLET.html" class="olink">Servlet component</a>. As a consequence,
         <code class="literal">ghttp</code> URI formats and options sets differ on the consumer-side
-        (<code class="literal">from</code>) and producer-side (<code class="literal">to</code>). </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-ghttp_HSH_URIformat"></a>URI format</h3></div></div></div><table id="d0e56619"><tr>
+        (<code class="literal">from</code>) and producer-side (<code class="literal">to</code>). </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-ghttp_HSH_URIformat"></a>URI format</h3></div></div></div><table id="d0e52754"><tr>
         <th>Format</th>
         <th>Context</th>
         <th>Comment</th>
@@ -25,7 +25,7 @@ ghttps://hostname[:port][/path][?options]</pre>
         <td>Producer</td>
         <td>See also <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HTTP.html" class="olink">Http component</a>
         </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-ghttp_HSH_Options"></a>Options</h3></div></div></div><table id="d0e56669"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-ghttp_HSH_Options"></a>Options</h3></div></div></div><table id="d0e52804"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -71,7 +71,7 @@ ghttps://hostname[:port][/path][?options]</pre>
           <code class="literal">URLFetchService</code>.</td>
       </tr></table><p>On the consumer-side, all options of the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-SERVLET.html" class="olink">Servlet
         component</a> are supported.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-ghttp_HSH_Messageheaders"></a>Message headers</h3></div></div></div><p>On the producer side, the following headers of the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HTTP.html" class="olink">Http
-        component</a> are supported.</p><table id="d0e56814"><tr>
+        component</a> are supported.</p><table id="d0e52949"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -126,7 +126,7 @@ ghttps://hostname[:port][/path][?options]</pre>
         <code class="literal">byte[]</code>. The <code class="literal">out</code> message body is made available as
         <code class="literal">InputStream</code>. If the reponse size exceeds 1 megabyte a <a class="link" href="http://code.google.com/appengine/docs/java/javadoc/" target="_top">ResponseTooLargeException</a> is thrown by the URL fetch service (see <a class="link" href="http://code.google.com/appengine/docs/java/urlfetch/overview.html#Quotas_and_Limits" target="_top">quotas and limits</a>).</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-ghttp_HSH_Receivingmessages"></a>Receiving messages</h3></div></div></div><p>For receiving messages via the <code class="literal">ghttp</code> component, a
         <code class="literal">CamelHttpTransportServlet</code> must be configured and mapped in the
-      application's <code class="literal">web.xml</code> (see <a href="PLUGINS_ROOT/org.fusesource.ide.help/bk05ch46s01.html#IDU-GAE_HSH_Thewebxml" class="olink">The web.xml</a>). For example, to handle requests targeted at
+      application's <code class="literal">web.xml</code> (see <a href="PLUGINS_ROOT/org.fusesource.ide.help/bk04ch46s01.html#IDU-GAE_HSH_Thewebxml" class="olink">The web.xml</a>). For example, to handle requests targeted at
         <code class="literal">http://&lt;appname&gt;.appspot.com/camel/*</code> or
         <code class="literal">http://localhost/camel/*</code> (when using a local development server) the
       following servlet mapping must be defined:</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: web.xml"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">web.xml</th></tr><tr><td align="left" valign="top"><pre class="programlisting">    ...
