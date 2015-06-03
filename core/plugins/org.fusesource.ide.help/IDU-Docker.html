@@ -10,17 +10,17 @@
     &lt;artifactId&gt;camel-docker&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e42354"></a>URI format</h2></div></div></div><pre class="programlisting">docker://[operation]?[options]</pre><p>Where <span class="bold"><strong>operation</strong></span> is the specific action to perform on
-            Docker.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e42364"></a>Header Strategy</h2></div></div></div><p>All URI option can be passed as Header properties.
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e38489"></a>URI format</h2></div></div></div><pre class="programlisting">docker://[operation]?[options]</pre><p>Where <span class="bold"><strong>operation</strong></span> is the specific action to perform on
+            Docker.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e38499"></a>Header Strategy</h2></div></div></div><p>All URI option can be passed as Header properties.
             Values found in a message header take precedence over URI parameters. A header property
-            takes the form of a URI option prefixed with *CamelDocker* as shown below</p><table id="d0e42369"><tbody><tr>
+            takes the form of a URI option prefixed with *CamelDocker* as shown below</p><table id="d0e38504"><tbody><tr>
                     <th>URI Option</th>
                     <th>Header Property</th>
                 </tr><tr>
                     <td>containerId</td>
                     <td>CamelDockerContainerId</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e42387"></a>General Options</h2></div></div></div><p>The following parameters can be used with any invocation
-            of the component</p><table id="d0e42392"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e38522"></a>General Options</h2></div></div></div><p>The following parameters can be used with any invocation
+            of the component</p><table id="d0e38527"><tbody><tr>
                     <th>Option</th>
                     <th>Header</th>
                     <th>Description</th>
@@ -68,8 +68,8 @@
                     <td>Location containing the SSL certificate
                         chain</td>
                     <td> </td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e42524"></a>Consumer Operations</h2></div></div></div><p>The consumer supports the following
-            operations.</p><table id="d0e42529"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e38659"></a>Consumer Operations</h2></div></div></div><p>The consumer supports the following
+            operations.</p><table id="d0e38664"><tbody><tr>
                     <th>Operation</th>
                     <th>Options</th>
                     <th>Description</th>
@@ -79,8 +79,8 @@
                     <td>initialRange</td>
                     <td>Monitor Docker events (Streaming)</td>
                     <td>Event</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e42559"></a>Producer Operations</h2></div></div></div><p>The following producer operations are
-            available.</p><table id="d0e42564"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e38694"></a>Producer Operations</h2></div></div></div><p>The following producer operations are
+            available.</p><table id="d0e38699"><tbody><tr>
                     <th>Misc Operation</th>
                     <th>Options</th>
                     <th>Description</th>
@@ -105,7 +105,7 @@
                     <td> </td>
                     <td>Show the docker version information</td>
                     <td>Version</td>
-                </tr></tbody></table><p></p><table id="d0e42637"><tbody><tr>
+                </tr></tbody></table><p></p><table id="d0e38772"><tbody><tr>
                     <th>Image Operation</th>
                     <th>Options</th>
                     <th>Description</th>
@@ -167,7 +167,7 @@
                     <td>Inspect an image</td>
                     <td> </td>
                     <td>InspectImageResponse</td>
-                </tr></tbody></table><p></p><table id="d0e42818"><tbody><tr>
+                </tr></tbody></table><p></p><table id="d0e38953"><tbody><tr>
                     <th>Container Operation</th>
                     <th>Options</th>
                     <th>Description</th>
@@ -295,6 +295,6 @@
                     <td>Remove a container</td>
                     <td> </td>
                     <td> </td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e43157"></a>Examples</h2></div></div></div><p>The following example consumes events from
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e39292"></a>Examples</h2></div></div></div><p>The following example consumes events from
             Docker:</p><pre class="programlisting">from("docker://events?host=192.168.59.103&amp;port=2375").to("log:event");</pre><p>The following example queries Docker for system wide
             information</p><pre class="programlisting">from("docker://info?host=192.168.59.103&amp;port=2375").to("log:info");</pre></div></div></body></html>

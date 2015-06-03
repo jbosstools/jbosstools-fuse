@@ -25,12 +25,19 @@
          <topic label="Creating a new Apache Camel JUnit test case" href="newCamelTestCase.html"/>
          <topic label="The Source View" href="RiderEditSource.html"/>
          <topic label="Running routes inside Red Hat JBoss Fuse Tooling" href="RiderRunning.html">
-            <topic label="Running routes using Maven" href="RiderRunningMaven.html"/>
             <topic label="Running routes as a local Camel context" href="RiderRunningProfile.html"/>
+            <topic label="Running routes using Maven" href="RiderRunningMaven.html"/>
             <topic label="Working with runtime profiles" href="RiderEditRunProfile.html">
                <topic label="Editing a Local Camel Context runtime profile" href="RiderNewRunProfile.html"/>
                <topic label="Editing a Maven runtime profile" href="RiderMvnRunProfile.html"/>
             </topic>
+         </topic>
+         <topic label="Using the JBoss Fuse SAP Tool Suite" href="RiderSAP.html">
+            <topic label="Installing the JBoss Fuse SAP Tool Suite" href="RiderSAP-Install.html"/>
+            <topic label="Create and Test an SAP Destination Connection" href="RiderSAP-CreateDest.html"/>
+            <topic label="Create and Test an SAP Server Connection" href="RiderSAP-CreateServer.html"/>
+            <topic label="Export SAP Connection Configuration to a File" href="RiderSAP-ExportConfig.html"/>
+            <topic label="Create a New SAP Endpoint" href="RiderSAP-Endpoint.html"/>
          </topic>
       </topic>
       <topic label="Monitoring and Testing Applications" href="RiderDebugPart.html">
@@ -58,7 +65,6 @@
          <topic label="Managing routing contexts" href="RiderManageRouteContexts.html">
             <topic label="Suspending a routing context" href="RiderContextSuspend.html"/>
             <topic label="Resuming a routing context" href="RiderContextResume.html"/>
-            <topic label="Shutting down a routing context" href="RiderContextClose.html"/>
          </topic>
       </topic>
       <topic label="Working with Fabrics" href="RiderFabricPart.html">
@@ -113,6 +119,7 @@
       <topic label="Tooling preferences" href="RiderPrefRef.html">
          <topic label="Deploy Folders" href="RiderDeployPrefRef.html"/>
          <topic label="Editor" href="RiderEditorPrefRef.html"/>
+         <topic label="Colors" href="RiderColorsPrefRef.html"/>
          <topic label="JMX Navigator" href="RiderMonitorPrefRef.html"/>
          <topic label="Tools" href="RiderToolsPrefRef.html"/>
       </topic>
@@ -138,15 +145,6 @@
       <topic label="SQL" href="SQL.html"/>
       <topic label="XPath" href="XPath.html"/>
       <topic label="XQuery" href="XQuery.html"/>
-   </topic>
-   <topic label="Tutorials" href="RiderTutorials.html">
-      <topic label="To Create a New Route" href="RiderTutorialCreate.html"/>
-      <topic label="To Run a Route" href="RiderTutorialRun.html"/>
-      <topic label="To Add a Content-Based Router" href="RiderTutorialCBR.html"/>
-      <topic label="To Trace a Message Through a Route" href="RiderTutorialTrace.html"/>
-      <topic label="To Test a Route with JUnit" href="RiderTutorialJUnit.html"/>
-      <topic label="To Publish a Fuse Project to Red Hat JBoss Fuse" href="RiderTutDeployFESB.html"/>
-      <topic label="To Deploy a Camel Project to a fabric profile" href="RiderTutDeployProfile.html"/>
    </topic>
    <topic label="Enterprise Integration Pattern Reference" href="RiderEIPRef.html">
       <topic label="Route Editor Patterns" href="RefIntroToEIP.html"/>
@@ -229,7 +227,7 @@
       <topic label="Atom" href="IDU-Atom.html"/>
       <topic label="avro" href="IDU-avro.html"/>
       <topic label="AWS" href="IDU-AWS.html">
-         <topic label="Introduction to the AWS Components" href="bk05ch09s01.html"/>
+         <topic label="Introduction to the AWS Components" href="bk04ch09s01.html"/>
          <topic label="AWS-CW" href="IDU-AWS-CW.html"/>
          <topic label="AWS-DDB" href="IDU-AWS-DDB.html"/>
          <topic label="AWS-S3" href="IDU-AWS-S3.html"/>
@@ -279,7 +277,7 @@
       <topic label="FreeMarker" href="IDU-FreeMarker.html"/>
       <topic label="FTP2" href="IDU-FTP2.html"/>
       <topic label="GAE" href="IDU-GAE.html">
-         <topic label="Introduction to the GAE Components" href="bk05ch46s01.html"/>
+         <topic label="Introduction to the GAE Components" href="bk04ch46s01.html"/>
          <topic label="gauth" href="IDU-gauth.html"/>
          <topic label="ghttp" href="IDU-ghttp.html"/>
          <topic label="glogin" href="IDU-glogin.html"/>
@@ -358,13 +356,17 @@
       <topic label="Salesforce" href="IDU-Salesforce.html"/>
       <topic label="SAP Component" href="SAP.html">
          <topic label="Overview" href="SAP-Overview.html"/>
-         <topic label="Message Body" href="SAP-Message.html"/>
-         <topic label="Configuration Overview" href="SAP-Config.html"/>
-         <topic label="Destination Configuration" href="SAP-DestConfig.html"/>
-         <topic label="Server Configuration" href="SAP-ServConfig.html"/>
-         <topic label="Repository Configuration" href="SAP-RepoConfig.html"/>
+         <topic label="Configuration" href="SAP-Config.html">
+            <topic label="Configuration Overview" href="SAP-Config-Overview.html"/>
+            <topic label="Destination Configuration" href="SAP-DestConfig.html"/>
+            <topic label="Server Configuration" href="SAP-ServConfig.html"/>
+            <topic label="Repository Configuration" href="SAP-RepoConfig.html"/>
+         </topic>
+         <topic label="Message Body for RFC" href="SAP-Message-RFC.html"/>
+         <topic label="Message Body for IDoc" href="SAP-Message-IDoc.html"/>
          <topic label="Transaction Support" href="SAP-Txn.html"/>
-         <topic label="XML Serialization" href="SAP-XMLSerial.html"/>
+         <topic label="XML Serialization for RFC" href="SAP-XMLSerial-RFC.html"/>
+         <topic label="XML Serialization for IDoc" href="SAP-XMLSerial-IDoc.html"/>
          <topic label="Example 1: Reading Data from SAP" href="SAP-Example1.html"/>
          <topic label="Example 2: Writing Data to SAP" href="SAP-Example2.html"/>
          <topic label="Example 3: Handling Requests from SAP" href="SAP-Example3.html"/>

@@ -2,7 +2,7 @@
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>AWS-S3</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-AWS.html" title="AWS"><link rel="prev" href="IDU-AWS-DDB.html" title="AWS-DDB"><link rel="next" href="IDU-AWS-SDB.html" title="AWS-SDB"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AWS-S3"></a>AWS-S3</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_S3Component"></a>S3 Component</h3></div></div></div><p><span class="bold"><strong>Available as of Camel 2.8</strong></span>
     </p><p>The S3 component supports storing and retrieving objetcs from/to <a class="link" href="http://aws.amazon.com/s3" target="_top">Amazon's S3</a> service.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Prerequisites"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Prerequisites</th></tr><tr><td align="left" valign="top"><p>You must have a valid Amazon Web Services developer account, and be signed up to use Amazon S3. More information are available at <a class="link" href="http://aws.amazon.com/s3" target="_top">Amazon S3</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_URIFormat"></a>URI Format</h3></div></div></div><pre class="programlisting">aws-s3://bucket-name[?options]</pre><p>The bucket will be created if it don't already exists.
-You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e28485"><tr>
+You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e24620"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -91,7 +91,7 @@ You can append query options to the URI in the following format, ?options=value&
           multi-part upload. Default is 25 MB. </td>
       </tr></table><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Required S3 component options"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Required S3 component options</th></tr><tr><td align="left" valign="top"><p>You have to provide the amazonS3Client in the <a class="link" href="Registry" target="_top">Registry</a> or your accessKey and secretKey to access the <a class="link" href="http://aws.amazon.com/s3" target="_top">Amazon's S3</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_BatchConsumer"></a>Batch Consumer</h3></div></div></div><p></p><p>This component implements the <a class="link" href="Batch Consumer" target="_top">Batch Consumer</a>.</p><p>This allows you for instance to know how many messages exists in this batch and for instance let the <span class="olink">Aggregator</span> aggregate this number of messages.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_Usage"></a>Usage</h3></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_MessageheadersevaluatedbytheS3producer"></a>Message headers evaluated by the S3 producer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e28784"><tr>
+    </p><table id="d0e24919"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -165,7 +165,7 @@ You can append query options to the URI in the following format, ?options=value&
 
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_MessageheaderssetbytheS3producer"></a>Message headers set by the S3 producer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e28984"><tr>
+    </p><table id="d0e25119"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -185,7 +185,7 @@ You can append query options to the URI in the following format, ?options=value&
 
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-S3_HSH_MessageheaderssetbytheS3consumer"></a>Message headers set by the S3 consumer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e29042"><tr>
+    </p><table id="d0e25177"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

@@ -11,7 +11,7 @@ ftps://[username@]hostname[:port]/directoryname[?options]</pre><p>Where <span cl
         <a class="link" href="http://www.jcraft.com/jsch/" target="_top">JCraft JSCH</a>.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FTP2_HSH_URIOptions"></a>URI Options</h2></div></div></div><p>The options below are exclusive to the FTP
-      component:</p><table id="d0e54022"><tr>
+      component:</p><table id="d0e50157"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -427,7 +427,7 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
       written over FTP; for instance, you can write to a temporary destination and move the file
       after it has been written. </p><p>The ftp producer does <span class="bold"><strong>not</strong></span> support appending to existing
       files. Any existing files on the remote server will be deleted before the file is
-      written.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FTP2_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following message headers can be used to affect the behavior of the component</p><table id="d0e55295"><tr>
+      written.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-FTP2_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following message headers can be used to affect the behavior of the component</p><table id="d0e51430"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -459,7 +459,7 @@ ftp://publicftpserver.com/download</pre><div class="warning" style="margin-left:
         </td>
         <td> Path to the local work file, if local work directory is used. </td>
       </tr></table><p>In addition the FTP/FTPS consumer and producer will enrich the Camel <code class="literal">Message</code> with the following headers:
-    </p><table id="d0e55369"><tr>
+    </p><table id="d0e51504"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>

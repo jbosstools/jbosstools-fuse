@@ -3,7 +3,7 @@
    <title>AWS-SDB</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-AWS.html" title="AWS"><link rel="prev" href="IDU-AWS-S3.html" title="AWS-S3"><link rel="next" href="IDU-AWS-SES.html" title="AWS-SES"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AWS-SDB"></a>AWS-SDB</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_SDBComponent"></a>SDB Component</h3></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.8.4</strong></span>
     </p><p>The sdb component supports storing and retrieving data from/to <a class="link" href="http://aws.amazon.com/sdb" target="_top">Amazon's SDB</a> service.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Prerequisites"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Prerequisites</th></tr><tr><td align="left" valign="top"><p>You must have a valid Amazon Web Services developer account, and be signed up to use Amazon SDB. More information are available at <a class="link" href="http://aws.amazon.com/sdb" target="_top">Amazon SDB</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_URIFormat"></a>URI Format</h3></div></div></div><p></p><pre class="programlisting">
 aws-sdb://domainName[?options]
-</pre><p>You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e29310"><tr>
+</pre><p>You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_URIOptions"></a>URI Options</h3></div></div></div><p></p><table id="d0e25445"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -58,7 +58,7 @@ aws-sdb://domainName[?options]
         <td> Valid values are BatchDeleteAttributes, BatchPutAttributes, DeleteAttributes, DeleteDomain, DomainMetadata, GetAttributes, ListDomains, PutAttributes, Select.</td>
       </tr></table><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Required SDB component options"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Required SDB component options</th></tr><tr><td align="left" valign="top"><p>You have to provide the amazonSDBClient in the <a class="link" href="Registry" target="_top">Registry</a> or your accessKey and secretKey to access the <a class="link" href="http://aws.amazon.com/sdb" target="_top">Amazon's SDB</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_Usage"></a>Usage</h3></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_MessageheadersevaluatedbytheSDBproducer"></a>Message headers evaluated by the SDB producer</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e29484"><tr>
+    </p><table id="d0e25619"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -142,7 +142,7 @@ aws-sdb://domainName[?options]
         <td> The update condition which, if specified, determines whether the specified attributes will be updated/deleted or not. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_MessageheaderssetduringDomainMetadataoperation"></a>Message headers set during DomainMetadata operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e29700"><tr>
+    </p><table id="d0e25835"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -190,7 +190,7 @@ aws-sdb://domainName[?options]
         <td> The total size of all item names in the domain, in bytes. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_MessageheaderssetduringGetAttributesoperation"></a>Message headers set during GetAttributes operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e29826"><tr>
+    </p><table id="d0e25961"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -202,7 +202,7 @@ aws-sdb://domainName[?options]
         <td> The list of attributes returned by the operation. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_MessageheaderssetduringListDomainsoperation"></a>Message headers set during ListDomains operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e29862"><tr>
+    </p><table id="d0e25997"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -220,7 +220,7 @@ aws-sdb://domainName[?options]
         <td> An opaque token indicating that there are more domains than the specified MaxNumberOfDomains still available. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="IDU-AWS-SDB_HSH_MessageheaderssetduringSelectoperation"></a>Message headers set during Select operation</h3></div></div></div><p></p><p>
 
-    </p><table id="d0e29913"><tr>
+    </p><table id="d0e26048"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

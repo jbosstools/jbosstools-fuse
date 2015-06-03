@@ -14,7 +14,7 @@
       query is substituted with the <code class="literal">#</code> symbol, because the <code class="literal">?</code>
       symbol is used to specify options for the endpoint. The <code class="literal">?</code> symbol replacement can be configured on endpoint basis.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Options"></a>Options</h2></div></div></div><table id="d0e124186"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Options"></a>Options</h2></div></div></div><table id="d0e121847"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Default </th>
@@ -252,7 +252,7 @@
                 <code class="code">outputHeader</code> and <code class="code">outputType</code> together, for example:</p><pre class="programlisting">from("jms:order.inbox")
 	.to("sql:select order_seq.nextval from dual?outputHeader=OrderId&amp;outputType=SelectOne")
 	.to("jms:order.booking");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Headervalues"></a>Header values</h2></div></div></div><p>When performing <code class="literal">update</code> operations, the SQL Component stores the update
-      count in the following message headers:</p><table id="d0e124969"><tr>
+      count in the following message headers:</p><table id="d0e122630"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -275,7 +275,7 @@
       </tr></table><p>When performing <code class="code">insert</code> operations, the SQL Component stores the rows
           with the generated keys and number of these rown in the following message headers
           (<span class="strong"><strong>Available as of Camel 2.12.4,
-              2.13.1</strong></span>):</p><table id="d0e125039"><colgroup> </colgroup><thead><tr>
+              2.13.1</strong></span>):</p><table id="d0e122700"><colgroup> </colgroup><thead><tr>
                   <td>
                       <p>Header</p>
                   </td>
@@ -378,7 +378,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
 			&lt;camel:to uri="mock:result" /&gt;
 		&lt;/camel:idempotentConsumer&gt;
 	&lt;/camel:route&gt;
-&lt;/camel:camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_CustomizetheJdbcMessageIdRepository"></a>Customize the JdbcMessageIdRepository</h2></div></div></div><p></p><p>Starting with <span class="bold"><strong>Camel 2.9.1</strong></span> you have a few options to tune the <code class="literal">org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository</code> for your needs:</p><table id="d0e125279"><tr>
+&lt;/camel:camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_CustomizetheJdbcMessageIdRepository"></a>Customize the JdbcMessageIdRepository</h2></div></div></div><p></p><p>Starting with <span class="bold"><strong>Camel 2.9.1</strong></span> you have a few options to tune the <code class="literal">org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository</code> for your needs:</p><table id="d0e122940"><tr>
         <th> Parameter </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -421,7 +421,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
       This ensures that you will not loose messages, as the default aggregator will use an in memory
       only <code class="literal">AggregationRepository</code>. The
         <code class="literal">JdbcAggregationRepository</code> allows together with Camel to provide
-      persistent support for the <span class="olink">Aggregator</span>.</p><p>It has the following options:</p><table id="d0e125425"><tr>
+      persistent support for the <span class="olink">Aggregator</span>.</p><p>It has the following options:</p><table id="d0e123086"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Description </th>
@@ -500,7 +500,7 @@ assertEquals("Linux", row.get("PROJECT"));</pre><p>We could configure the <code 
         </td>
         <td></td>
         <td><span class="bold"><strong>Camel 2.12:</strong></span> Allows to plugin a custom <code class="literal">org.apache.camel.processor.aggregate.jdbc.JdbcOptimisticLockingExceptionMapper</code> to map vendor specific error codes to an optimistick locking error, for Camel to perform a retry. This requires <code class="literal">optimisticLocking</code> to be enabled. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Whatispreservedwhenpersisting"></a>What is preserved when persisting</h2></div></div></div><p><code class="literal">JdbcAggregationRepository</code> will only preserve any <code class="literal">Serializable</code> compatible data types. If a data type is not such a type its dropped and a <code class="literal">WARN</code> is logged. And it only persists the <code class="literal">Message</code> body and the <code class="literal">Message</code> headers. The <code class="literal">Exchange</code> properties are <span class="bold"><strong>not</strong></span> persisted. </p><p>From Camel 2.11 onwards you can store the message body and select(ed) headers as String in separate columns.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Recovery"></a>Recovery</h2></div></div></div><p>The <code class="literal">JdbcAggregationRepository</code> will by default recover any failed <a class="link" href="Exchange" target="_top">Exchange</a>. It does this by having a background tasks that scans for failed <a class="link" href="Exchange" target="_top">Exchange</a>s in the persistent store. You can use the <code class="literal">checkInterval</code> option to set how often this task runs. The recovery works as transactional which ensures that Camel will try to recover and redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being recovered/redelivered:</p><table id="d0e125724"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Whatispreservedwhenpersisting"></a>What is preserved when persisting</h2></div></div></div><p><code class="literal">JdbcAggregationRepository</code> will only preserve any <code class="literal">Serializable</code> compatible data types. If a data type is not such a type its dropped and a <code class="literal">WARN</code> is logged. And it only persists the <code class="literal">Message</code> body and the <code class="literal">Message</code> headers. The <code class="literal">Exchange</code> properties are <span class="bold"><strong>not</strong></span> persisted. </p><p>From Camel 2.11 onwards you can store the message body and select(ed) headers as String in separate columns.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SQLComponent_HSH_Recovery"></a>Recovery</h2></div></div></div><p>The <code class="literal">JdbcAggregationRepository</code> will by default recover any failed <a class="link" href="Exchange" target="_top">Exchange</a>. It does this by having a background tasks that scans for failed <a class="link" href="Exchange" target="_top">Exchange</a>s in the persistent store. You can use the <code class="literal">checkInterval</code> option to set how often this task runs. The recovery works as transactional which ensures that Camel will try to recover and redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being recovered/redelivered:</p><table id="d0e123385"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
