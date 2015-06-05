@@ -83,6 +83,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     private ModelViewer _modelViewer;
     private Label _dfErrorLabel;
     private Binding _binding;
+    private Binding _binding2;
 
     /**
      * @param model
@@ -137,7 +138,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             label = createLabel(_page, "Target Class:", "The target Java class for the transformation.");
         }
 
-        _javaClassText = new Text(_page, SWT.BORDER | SWT.READ_ONLY);
+        _javaClassText = new Text(_page, SWT.BORDER);
         _javaClassText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         _javaClassText.setToolTipText(label.getToolTipText());
 
@@ -228,16 +229,26 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             @Override
             public IStatus validate(final Object value) {
                 final String path = value == null ? null : value.toString().trim();
+                String pathEmptyError = null;
+                String unableToFindError = null;
+                if (isSourcePage()) {
+                    pathEmptyError = "A source file path must be supplied for the transformation.";
+                    unableToFindError = "Unable to find a source file with the supplied path";
+                } else {
+                    pathEmptyError = "A target file path must be supplied for the transformation.";
+                    unableToFindError = "Unable to find a target file with the supplied path";
+                }
                 if (path == null || path.isEmpty()) {
-                    return ValidationStatus.error("A source file path must be supplied for the transformation.");
+                    return ValidationStatus.error(pathEmptyError);
                 }
                 if (model.getProject().findMember(path) == null) {
-                    return ValidationStatus.error("Unable to find a source file with the supplied path");
+                    return ValidationStatus.error(unableToFindError);
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
+        _binding = context.bindValue(widgetValue, modelValue, strategy, null);
+        ControlDecorationSupport.create(_binding, decoratorPosition,
                 _javaClassText.getParent(), new WizardControlDecorationUpdater());
 
         listenForValidationChanges();
@@ -283,8 +294,8 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 return ValidationStatus.ok();
             }
         });
-        _binding = context.bindValue(widgetValue, modelValue, strategy, null);
-        ControlDecorationSupport.create(_binding, decoratorPosition, _javaClassText.getParent(),
+        _binding2 = context.bindValue(widgetValue, modelValue, strategy, null);
+        ControlDecorationSupport.create(_binding2, decoratorPosition, _javaClassText.getParent(),
                 new WizardControlDecorationUpdater());
     }
 
@@ -374,5 +385,13 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         if (_binding != null) {
             _binding.validateTargetToModel();
         }
+        if (_binding2 != null) {
+            _binding2.validateTargetToModel();
+        }
+    }
+
+    @Override
+    public void resetFinish() {
+        super.resetFinish();
     }
 }

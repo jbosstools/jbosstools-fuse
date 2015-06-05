@@ -188,7 +188,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             label = createLabel(_page, "Target File:", "The target XML file for the transformation.");
         }
 
-        _xmlFileText = new Text(_page, SWT.BORDER | SWT.READ_ONLY);
+        _xmlFileText = new Text(_page, SWT.BORDER);
         _xmlFileText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         _xmlFileText.setToolTipText(label.getToolTipText());
 
@@ -335,11 +335,20 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             @Override
             public IStatus validate(final Object value) {
                 final String path = value == null ? null : value.toString().trim();
+                String pathEmptyError = null;
+                String unableToFindError = null;
+                if (isSourcePage()) {
+                    pathEmptyError = "A source file path must be supplied for the transformation.";
+                    unableToFindError = "Unable to find a source file with the supplied path";
+                } else {
+                    pathEmptyError = "A target file path must be supplied for the transformation.";
+                    unableToFindError = "Unable to find a target file with the supplied path";
+                }
                 if (path == null || path.isEmpty()) {
-                    return ValidationStatus.error("A source file path must be supplied for the transformation.");
+                    return ValidationStatus.error(pathEmptyError);
                 }
                 if (model.getProject().findMember(path) == null) {
-                    return ValidationStatus.error("Unable to find a file with the supplied path");
+                    return ValidationStatus.error(unableToFindError);
                 }
                 return ValidationStatus.ok();
             }
@@ -388,40 +397,42 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 List<QName> elements = null;
                 IPath filePath = model.getProject().getLocation().makeAbsolute().append(path);
                 path = filePath.makeAbsolute().toPortableString();
-                if (isSourcePage()) {
-                    if (model.getSourceType().equals(ModelType.XSD)) {
-                        try {
-                            elements = modelGen.getElementsFromSchema(new File(path));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else if (model.getSourceType().equals(ModelType.XML)) {
-                        try {
-                            QName element = modelGen.getRootElementName(new File(path));
-                            if (element != null) {
-                                elements = new ArrayList<QName>();
-                                elements.add(element);
+                if (model != null) {
+                    if (isSourcePage() && model.getSourceType() != null) {
+                        if (model.getSourceType().equals(ModelType.XSD)) {
+                            try {
+                                elements = modelGen.getElementsFromSchema(new File(path));
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else {
-                    if (model.getTargetType().equals(ModelType.XSD)) {
-                        try {
-                            elements = modelGen.getElementsFromSchema(new File(path));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else if (model.getTargetType().equals(ModelType.XML)) {
-                        try {
-                            QName element = modelGen.getRootElementName(new File(path));
-                            if (element != null) {
-                                elements = new ArrayList<QName>();
-                                elements.add(element);
+                        } else if (model.getSourceType().equals(ModelType.XML)) {
+                            try {
+                                QName element = modelGen.getRootElementName(new File(path));
+                                if (element != null) {
+                                    elements = new ArrayList<QName>();
+                                    elements.add(element);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        }
+                    } else if (!isSourcePage() && model.getTargetType() != null) {
+                        if (model.getTargetType().equals(ModelType.XSD)) {
+                            try {
+                                elements = modelGen.getElementsFromSchema(new File(path));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else if (model.getTargetType().equals(ModelType.XML)) {
+                            try {
+                                QName element = modelGen.getRootElementName(new File(path));
+                                if (element != null) {
+                                    elements = new ArrayList<QName>();
+                                    elements.add(element);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
