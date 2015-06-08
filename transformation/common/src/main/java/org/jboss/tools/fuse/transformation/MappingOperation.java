@@ -11,6 +11,8 @@
  */
 package org.jboss.tools.fuse.transformation;
 
+import java.util.List;
+
 /**
  * Generic representation of a mapping operation.
  * 
@@ -39,4 +41,34 @@ public interface MappingOperation<S, T> {
      * @return mapping type
      */
     MappingType getType();
+    
+    /**
+     * Returns a list of indexes corresponding for the source model in this mapping.
+     * The index of a non-collection field will always be null.
+     * @return index list
+     */
+    List<Integer> getSourceIndex();
+    
+    /**
+     * Specifies the source index for this mapping.  An index value must be supplied for
+     * every model in the tree.  For example, a source model with two parent models would
+     * require a list containing three index values.
+     * @param indexes index list
+     */
+    void setSourceIndex(List<Integer> indexes);
+    
+    /**
+     * Returns a list of indexes corresponding for the target model in this mapping.
+     * The index of a non-collection field will always be null.
+     * @return index list
+     */
+    List<Integer> getTargetIndex();
+    
+    /**
+     * Specifies the target index for this mapping.  An index value must be supplied for
+     * every model in the tree.  For example, a target model with two parent models would
+     * require a list containing three index values.
+     * @param indexes index list
+     */
+    void setTargetIndex(List<Integer> indexes);
 }

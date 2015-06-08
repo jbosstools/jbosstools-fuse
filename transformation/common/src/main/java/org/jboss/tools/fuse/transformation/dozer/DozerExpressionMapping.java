@@ -11,6 +11,8 @@
  */
 package org.jboss.tools.fuse.transformation.dozer;
 
+import java.util.List;
+
 import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.ExpressionMapping;
 import org.jboss.tools.fuse.transformation.MappingType;
@@ -51,5 +53,10 @@ public class DozerExpressionMapping extends BaseDozerMapping implements Expressi
     @Override
     public MappingType getType() {
         return MappingType.EXPRESSION;
+    }
+    
+    @Override
+    public void setTargetIndex(List<Integer> indexes) {
+        setFieldIndex(getField().getB(), target, getMapping().getClassB().getContent(), indexes);
     }
 }

@@ -11,6 +11,8 @@
  */
 package org.jboss.tools.fuse.transformation.dozer;
 
+import java.util.List;
+
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.VariableMapping;
@@ -75,5 +77,10 @@ public class DozerVariableMapping extends BaseDozerMapping implements VariableMa
         // update the dozer config to reference the new variable name
         getField().setCustomConverterParam(
                 DozerVariableMapping.qualifyName(variable.getName()));
+    }
+    
+    @Override
+    public void setTargetIndex(List<Integer> indexes) {
+        setFieldIndex(getField().getB(), target, getMapping().getClassB().getContent(), indexes);
     }
 }

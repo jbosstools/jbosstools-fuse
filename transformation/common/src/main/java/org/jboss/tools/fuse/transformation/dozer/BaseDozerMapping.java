@@ -1,7 +1,11 @@
 package org.jboss.tools.fuse.transformation.dozer;
 
+import java.util.List;
+
 import org.jboss.tools.fuse.transformation.dozer.config.Field;
+import org.jboss.tools.fuse.transformation.dozer.config.FieldDefinition;
 import org.jboss.tools.fuse.transformation.dozer.config.Mapping;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 public abstract class BaseDozerMapping {
 
@@ -36,5 +40,27 @@ public abstract class BaseDozerMapping {
      */
     public Field getField() {
         return field;
+    }
+    
+    public List<Integer> getSourceIndex() {
+        return DozerUtil.getFieldIndexes(field.getA().getContent());
+    }
+    
+    public List<Integer> getTargetIndex() {
+        return DozerUtil.getFieldIndexes(field.getB().getContent());
+    }
+    
+    public void setSourceIndex(List<Integer> indexes) {
+        throw new UnsupportedOperationException(
+                "setSourceIndex not supported for mappings of type " + getClass().getSimpleName());
+    }
+    
+    public void setTargetIndex(List<Integer> indexes) {
+        throw new UnsupportedOperationException(
+                "setTargetIndex not supported for mappings of type " + getClass().getSimpleName());
+    }
+    
+    public void setFieldIndex(FieldDefinition field, Model model, String rootType, List<Integer> indexes) {
+        field.setContent(DozerUtil.getFieldName(model, rootType, indexes));
     }
 }
