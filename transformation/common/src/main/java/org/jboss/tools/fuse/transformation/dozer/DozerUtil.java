@@ -1,0 +1,115 @@
+package org.jboss.tools.fuse.transformation.dozer;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jboss.tools.fuse.transformation.model.Model;
+
+/**
+ * Utility code related to Dozer configuration.
+ */
+public final class DozerUtil {
+    
+    // Regex which catches indexes in a field name
+    private static final Pattern INDEX_PATTERN = Pattern.compile("\\[[0-9]+\\]");
+    
+    public static List<Integer> getFieldIndexes(String fieldVal) {
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        if (fieldVal != null) {
+            for (String fieldName : fieldVal.split("\\.")) {
+                indices.add(getIndex(fieldName));
+            }
+        }
+        return indices;
+    }
+    
+    /**
+     * Remove all [n] indexes from a field name
+     * @param fieldVal field name
+     * @return field name with indexes removed
+     */
+    public static String removeIndexes(String fieldVal) {
+        return fieldVal != null && fieldVal.indexOf('[') > 0
+                ? fieldVal.replaceAll(INDEX_PATTERN.pattern(), "")
+                : fieldVal;
+    }
+    
+    /**
+     * Returns the field name used in a dozer config based on a model and root 
+     * type.
+     * @param model field model
+     * @param rootType the class used in a mapping definition.  The field name
+     * is created relative to this root type.
+     * @return field name
+     */
+    public static String getFieldName(final Model model, final String rootType) {
+        Integer[] indexes = new Integer[numberOfNodes(model)];
+        Arrays.fill(indexes, null);
+        return getFieldName(model, rootType, Arrays.asList(indexes));
+    }
+    
+    /**
+     * Returns the field name used in a dozer config based on a model and root 
+     * type with a list of indexes for all fields in the ancenstry of the field model.
+     * @param model field model
+     * @param rootType the class used in a mapping definition.  The field name
+     * is created relative to this root type.
+     * @param indexes a list of indexes 
+     * @return field name
+     */
+    public static String getFieldName(final Model model, final String rootType, List<Integer> indexes) {
+        int depth = numberOfNodes(model);
+        if (depth != indexes.size()) {
+            throw new IllegalArgumentException("Size of index list " + indexes.size() 
+                    + "does not match depth of model tree " + depth);
+        }
+        
+        // The model tree is bottom-top order while the indexes are top-bottom, so reverse the list
+        List<Integer> reversedIndex = new ArrayList<Integer>(indexes.size());
+        reversedIndex.addAll(indexes);
+        Collections.reverse(reversedIndex);
+        Iterator<Integer> indexItr = reversedIndex.iterator();
+        
+        // Start with the bottom node and then iterate up through parent nodes until we hit 
+        // the root type or an unindexed collection
+        StringBuilder name = new StringBuilder(formatName(model.getName(), indexItr.next()));
+        for (Model parent = model.getParent(); parent != null; parent = parent.getParent()) {
+            if (parent.getType().equals(rootType)) {
+                break;
+            }
+            Integer parentIdx = indexItr.next();
+            if (parent.isCollection() && parentIdx == null) {
+                break;
+            }
+            name.insert(0, formatName(parent.getName(), parentIdx) + ".");
+        }
+        return name.toString();
+    }
+    
+    static Integer getIndex(String fieldName) {
+        Matcher matcher = INDEX_PATTERN.matcher(fieldName);
+        if (matcher.find()) {
+            String indexStr = matcher.group();
+            return Integer.valueOf(indexStr.substring(1, indexStr.length() - 1));
+        } else {
+            return null;
+        }
+    }
+    
+    static String formatName(String name, Integer index) {
+        return index != null ? name + "[" + index + "]" : name;
+    }
+    
+    static int numberOfNodes(Model model) {
+        int nodes = 0;
+        for (Model m = model.getParent() ; m != null ; m = m.getParent()) {
+            ++nodes;
+        }
+        return nodes;
+    }
+}

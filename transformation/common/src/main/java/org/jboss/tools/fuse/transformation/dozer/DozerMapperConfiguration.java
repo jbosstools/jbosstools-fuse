@@ -398,19 +398,8 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
     FieldDefinition createField(final Model model, final String rootType) {
         final FieldDefinition fd = new FieldDefinition();
-        fd.setContent(getModelName(model, rootType));
+        fd.setContent(DozerUtil.getFieldName(model, rootType));
         return fd;
-    }
-
-    String getModelName(final Model model, final String rootType) {
-        StringBuilder name = new StringBuilder(model.getName());
-        for (Model parent = model.getParent(); parent != null; parent = parent.getParent()) {
-            if (parent.getType().equals(rootType) || parent.isCollection()) {
-                break;
-            }
-            name.insert(0, parent.getName() + ".");
-        }
-        return name.toString();
     }
 
     // Add a field mapping to the dozer config.
@@ -498,7 +487,9 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return new DozerVariable(dozerVar);
     }
 
-    private Model getModel(Model model, String type, String name) {
+    private Model getModel(Model model, String type, String fieldName) {
+        // Indexed fields have a [] which we need to trim off
+        String name = DozerUtil.removeIndexes(fieldName);
         // See if the current model is the target model
         if (type.equals(model.getType()) && name.equals(model.getName())) {
             return model;
