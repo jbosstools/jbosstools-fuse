@@ -11,6 +11,8 @@
  */
 package org.jboss.tools.fuse.transformation.dozer;
 
+import java.util.List;
+
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.dozer.config.Field;
@@ -50,5 +52,15 @@ public class DozerFieldMapping extends BaseDozerMapping implements FieldMapping 
     @Override
     public MappingType getType() {
         return MappingType.FIELD;
+    }
+    
+    @Override
+    public void setSourceIndex(List<Integer> indexes) {
+        setFieldIndex(getField().getA(), source, getMapping().getClassA().getContent(), indexes);
+    }
+    
+    @Override
+    public void setTargetIndex(List<Integer> indexes) {
+        setFieldIndex(getField().getB(), target, getMapping().getClassB().getContent(), indexes);
     }
 }

@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.custommonkey.xmlunit.XMLAssert;
@@ -313,12 +314,7 @@ public class DozerMapperConfigurationTest {
         }
         
         // Serialize the edited config and compare to our reference
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        config.saveConfig(bos);
-        InputSource edited = new InputSource(new ByteArrayInputStream(bos.toByteArray()));
-        InputSource reference = new InputSource(getClass().getResourceAsStream("editConfiguration.xml"));
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(reference, edited);
+        compareConfig(config, "editConfiguration.xml");
     }
     
     @Test
@@ -327,6 +323,50 @@ public class DozerMapperConfigurationTest {
         CustomMapping custom = (CustomMapping)config.getMappings().get(0);
         Assert.assertEquals(CUSTOM_CLASS, custom.getMappingClass());
         Assert.assertEquals(CUSTOM_OPERATION, custom.getMappingOperation());
+    }
+    
+    @Test
+    public void loadIndexedMappings() throws Exception {
+        DozerMapperConfiguration config = loadConfig("indexedMapping.xml");
+        FieldMapping scalarToVector = (FieldMapping)config.getMappings().get(0);
+        FieldMapping vectorToScalar = (FieldMapping)config.getMappings().get(1);
+        Assert.assertEquals("fieldL2", scalarToVector.getTarget().getName());
+        Assert.assertEquals("fieldL3", vectorToScalar.getSource().getName());
+    }
+    
+    @Test
+    public void setIndexOnInvalidTarget() throws Exception {
+        boolean expressionExCaught = false;
+        boolean variableExCaught = false;
+        List<Integer> indexes = Arrays.asList(new Integer[] {1, 5, 7});
+        DozerExpressionMapping exMap = new DozerExpressionMapping(null, null, null, null);
+        try {
+            exMap.setSourceIndex(indexes);
+        } catch (UnsupportedOperationException uoEx) {
+            expressionExCaught = true;
+        }
+        DozerVariableMapping varMap = new DozerVariableMapping(null, null, null, null);
+        try {
+            varMap.setSourceIndex(indexes);
+        } catch (UnsupportedOperationException uoEx) {
+            variableExCaught = true;
+        }
+        
+        Assert.assertTrue(expressionExCaught);
+        Assert.assertTrue(variableExCaught);
+    }
+    
+    @Test
+    public void setMappingIndexes() throws Exception {
+        DozerMapperConfiguration config = loadConfig("indexedMapping.xml");
+
+        FieldMapping scalarToVector = (FieldMapping)config.getMappings().get(0);
+        FieldMapping vectorToScalar = (FieldMapping)config.getMappings().get(1);
+        scalarToVector.setTargetIndex(Arrays.asList(new Integer[] {1, null}));
+        vectorToScalar.setSourceIndex(Arrays.asList(new Integer[] {2, 3, null}));
+        
+        // Serialize the edited config and compare to our reference
+        compareConfig(config, "indexedMapping2.xml");
     }
     
     @Test
@@ -339,6 +379,16 @@ public class DozerMapperConfigurationTest {
     
     private DozerMapperConfiguration loadConfig(String configName) throws Exception {
         return DozerMapperConfiguration.loadConfig(new File(CONFIG_ROOT, configName));
+    }
+    
+    private void compareConfig(DozerMapperConfiguration config, String referenceConfigPath) throws Exception {
+        // Serialize the edited config and compare to our reference
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        config.saveConfig(bos);
+        InputSource edited = new InputSource(new ByteArrayInputStream(bos.toByteArray()));
+        InputSource reference = new InputSource(getClass().getResourceAsStream(referenceConfigPath));
+        XMLUnit.setIgnoreWhitespace(true);
+        XMLAssert.assertXMLEqual(reference, edited);
     }
 }
 
