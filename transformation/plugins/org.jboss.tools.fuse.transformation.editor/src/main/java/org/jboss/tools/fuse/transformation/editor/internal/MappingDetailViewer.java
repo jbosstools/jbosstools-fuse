@@ -11,7 +11,6 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,15 +24,11 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseTrackAdapter;
@@ -49,10 +44,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.catalog.languages.Language;
 import org.jboss.tools.fuse.transformation.CustomMapping;
-import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
@@ -144,7 +136,6 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    @SuppressWarnings("unused")
     private void createCustomSourcePane(final Composite parent) {
         final Composite pane = createRoundedPane(parent, Colors.FUNCTION);
         pane.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
@@ -198,7 +189,6 @@ public final class MappingDetailViewer extends MappingViewer {
         return pane;
     }
 
-    @SuppressWarnings("unused")
     private void createSourcePane(final Composite parent) {
         new ControlWithMenuPane(parent) {
 
@@ -270,7 +260,6 @@ public final class MappingDetailViewer extends MappingViewer {
         };
     }
 
-    @SuppressWarnings("unused")
     private void createTargetPane(final Composite parent) {
         new ControlWithMenuPane(parent) {
 
@@ -325,19 +314,20 @@ public final class MappingDetailViewer extends MappingViewer {
         config.save();
     }
 
+    @SuppressWarnings("restriction")
     void setExpression() throws Exception {
-        final ExpressionDialog dlg = new ExpressionDialog();
+        final ExpressionDialog dlg = new ExpressionDialog(sourceText.getShell(), mapping, config.project());
         if (dlg.open() != Window.OK) {
             return;
         }
-        Util.updateMavenDependencies(dlg.language.getDependencies(), config.project());
+        Util.updateMavenDependencies(dlg.getLanguage().getDependencies(), config.project());
         final Model targetModel = (Model)mapping.getTarget();
         final List<Integer> indexes =
             targetModel != null && Util.isOrInCollection(targetModel)
             ? Util.indexes(sourceText.getShell(), targetModel, false)
             : null;
         mapping =
-            config.setSourceExpression(mapping, dlg.language.getName(), dlg.expression, indexes);
+            config.setSourceExpression(mapping, dlg.getLanguage().getName(), dlg.getExpression(), indexes);
         config.save();
     }
 
@@ -488,123 +478,6 @@ public final class MappingDetailViewer extends MappingViewer {
 
             @Override
             public abstract void widgetSelected(SelectionEvent event);
-        }
-    }
-
-    final class ExpressionDialog extends BaseDialog {
-
-        final List<Language> languages = new ArrayList<>();
-        Language language;
-        String expression;
-
-        ExpressionDialog() {
-            super(sourceText.getShell());
-            String languageName = null;
-            if (mapping.getSource() instanceof Expression) {
-                final Expression expression = (Expression) mapping.getSource();
-                this.expression = expression.getExpression();
-                languageName = expression.getLanguage();
-            }
-            final String version = CamelModelFactory.getSupportedCamelVersions().get(0);
-            for (final Language language : CamelModelFactory.getModelForVersion(version)
-                                                            .getLanguageModel()
-                                                            .getSupportedLanguages()) {
-                final String name = language.getName();
-                if (!name.equals("bean") && !name.equals("file") && !name.equals("sql")
-                    && !name.equals("xtokenize") && !name.equals("tokenize")
-                    && !name.equals("spel")) {
-                    if (languageName != null && name.equals(languageName)) {
-                        this.language = language;
-                    }
-                    languages.add(language);
-                }
-            }
-        }
-
-        @Override
-        protected void constructContents(final Composite parent) {
-            parent.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
-            Label label = new Label(parent, SWT.NONE);
-            label.setText("Language:");
-            final ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
-            comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-            comboViewer.setComparator(new ViewerComparator() {
-
-                @Override
-                public int compare(final Viewer viewer,
-                                   final Object object1,
-                                   final Object object2) {
-                    return ((Language)object1).getTitle().compareTo(((Language)object2).getTitle());
-                }
-            });
-            comboViewer.setLabelProvider(new LabelProvider() {
-
-                @Override
-                public String getText(final Object element) {
-                    return ((Language)element).getTitle();
-                }
-            });
-            label = new Label(parent, SWT.NONE);
-            label.setText("Expression:");
-            final Text text = new Text(parent, SWT.BORDER);
-            text.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-            if (expression != null) {
-                text.setText(expression.replace("\\${", "${"));
-            }
-
-            comboViewer.getCombo().addSelectionListener(new SelectionAdapter() {
-
-                @Override
-                public void widgetSelected(final SelectionEvent event) {
-                    final IStructuredSelection selection =
-                        (IStructuredSelection)comboViewer.getSelection();
-                    language = (Language)selection.getFirstElement();
-                    text.setFocus();
-                    validate();
-                }
-            });
-            text.addModifyListener(new ModifyListener() {
-
-                @Override
-                public void modifyText(final ModifyEvent event) {
-                    String expr = text.getText().trim();
-                    for (int ndx = expr.indexOf("${"); ndx >= 0; ndx = expr.indexOf("${", ndx)) {
-                        if (ndx == 0 || expr.charAt(ndx - 1) != '\\') {
-                            expr = expr.substring(0, ndx) + '\\' + expr.substring(ndx);
-                            ndx += 3;
-                        }
-                    }
-                    expression = expr;
-                    validate();
-                }
-            });
-
-            comboViewer.setInput(languages);
-            if (language != null) {
-                comboViewer.setSelection(new StructuredSelection(language));
-            }
-        }
-
-        @Override
-        public void create() {
-            super.create();
-            validate();
-        }
-
-        @Override
-        protected String message() {
-            return "Select the expression language, then enter the expression using that language.";
-        }
-
-        @Override
-        protected String title() {
-            return "Expression";
-        }
-
-        void validate() {
-            getButton(IDialogConstants.OK_ID).setEnabled(language != null
-                                                         && expression != null
-                                                         && !expression.isEmpty());
         }
     }
 

@@ -46,7 +46,15 @@ public class DozerExpression implements Expression {
 
     @Override
     public String getExpression() {
-        return getParameterPart(field, SEP, 1);
+        String nextPart = getParameterPart(field, SEP, 1);
+        if (nextPart.equalsIgnoreCase("resource")) {
+            String scheme = getParameterPart(field, SEP, 2);
+            String path = getParameterPart(field, SEP, 3);
+            if (scheme != null && path != null) {
+                return nextPart + SEP + scheme + SEP + path;
+            }
+        }
+        return nextPart;
     }
 
     @Override
@@ -56,6 +64,6 @@ public class DozerExpression implements Expression {
 
     @Override
     public String toString() {
-        return "expression[lanugage:" + getLanguage() + ",expr:" + getExpression() + "]";
+        return "expression[language:" + getLanguage() + ",expr:" + getExpression() + "]";
     }
 }
