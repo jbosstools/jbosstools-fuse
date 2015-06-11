@@ -7,7 +7,7 @@
                             <code class="code"><em class="replaceable"><code>destinationName</code></em></code> component of a
                     destination endpoint URI as described in the URI format section.</p><p>The value for each entry is a destination data configuration object -
                         <code class="code">org.fusesource.camel.component.sap.model.rfc.impl.DestinationDataImpl</code>
-                    - that specifies the configuration of an outbound SAP connection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="d0e106198"></a>Sample destination configuration</h4></div></div></div><p>The following Blueprint XML code shows how to configure a sample destination
+                    - that specifies the configuration of an outbound SAP connection.</p></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="d0e106899"></a>Sample destination configuration</h4></div></div></div><p>The following Blueprint XML code shows how to configure a sample destination
                     with the name, <code class="code">quickstartDest</code>.</p><pre class="programlisting">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;blueprint ... &gt;
     ...
@@ -37,7 +37,7 @@
 &lt;/blueprint&gt;</pre><p>For example, after configuring the destination as shown in the preceding
                     Blueprint XML file, you could invoke the <code class="code">BAPI_FLCUST_GETLIST</code> remote
                     function call on the <code class="code">quickstartDest</code> destination using the following
-                    URI:</p><pre class="programlisting">sap-srfc-destination:quickstartDest:BAPI_FLCUST_GETLIST</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37519"></a>Logon and authentication options</h4></div></div></div><p></p><table width="761" id="d0e106223"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    URI:</p><pre class="programlisting">sap-srfc-destination:quickstartDest:BAPI_FLCUST_GETLIST</pre></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37519"></a>Logon and authentication options</h4></div></div></div><p></p><table width="761" id="d0e106924"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -142,7 +142,7 @@
                         <td> </td>
                         <td> If set to <code class="code">1</code>, using initial
                             passwords will lead to an exception (default is <code class="code">0</code>).</td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37520"></a>Connection options</h4></div></div></div><p></p><table width="761" id="d0e106440"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37520"></a>Connection options</h4></div></div></div><p></p><table width="761" id="d0e107141"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -228,7 +228,7 @@
                         <td> </td>
                         <td> Group of SAP application servers, mandatory
                             property for a load balancing connection </td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37521"></a>Connection pool options</h4></div></div></div><p></p><table width="761" id="d0e106601"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37521"></a>Connection pool options</h4></div></div></div><p></p><table width="761" id="d0e107302"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -284,7 +284,7 @@
                         <td> Maximum time in milliseconds to wait for a
                             connection, if the maximum allowed number of connections has already
                             been allocated by the application.</td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37522"></a>Secure network connection options</h4></div></div></div><p></p><table width="761" id="d0e106726"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37522"></a>Secure network connection options</h4></div></div></div><p></p><table width="761" id="d0e107427"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -330,7 +330,7 @@
                         </td>
                         <td> </td>
                         <td> Path to library that provides SNC service </td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37523"></a>Repository options</h4></div></div></div><p></p><table width="761" id="d0e106840"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37523"></a>Repository options</h4></div></div></div><p></p><table width="761" id="d0e107541"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>
@@ -393,7 +393,7 @@
                                 value on all destinations pointing to the same ABAP System. See note
                                     <a class="link" href="https://service.sap.com/sap/support/notes/1456826" target="_top">1456826</a> for backend prerequisites.</p>
                         </td>
-                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37524"></a>Trace configuration options</h4></div></div></div><p></p><table width="761" id="d0e106990"><col width="233"><col width="97"><col width="405"><tr valign="top">
+                    </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h4 class="title"><a name="topic-37524"></a>Trace configuration options</h4></div></div></div><p></p><table width="761" id="d0e107691"><col width="233"><col width="97"><col width="405"><tr valign="top">
                         <th align="center">
                             <span class="bold"><strong>Name</strong></span>
                         </th>

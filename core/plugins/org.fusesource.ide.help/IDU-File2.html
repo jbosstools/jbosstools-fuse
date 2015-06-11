@@ -17,7 +17,7 @@
                 the file is not locked by another process and start consuming it. Therefore you have
                 to do you own investigation as to what suits your environment. To help with this,
                 Apache Camel provides different <code class="literal">readLock</code> options and the
-                    <code class="code">doneFileOption</code> option that you can use. See also the section <a class="xref" href="IDU-File2.html#IDU-File2_HSH_Consumingfilesfromfolderswhereothersdropfilesdirectly" title="Consuming files from folders where others drop files directly">Consuming files from folders where others drop files directly</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_URIOptions"></a>URI Options</h2></div></div></div><table id="d0e46275"><tr>
+                    <code class="code">doneFileOption</code> option that you can use. See also the section <a class="xref" href="IDU-File2.html#IDU-File2_HSH_Consumingfilesfromfolderswhereothersdropfilesdirectly" title="Consuming files from folders where others drop files directly">Consuming files from folders where others drop files directly</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_URIOptions"></a>URI Options</h2></div></div></div><table id="d0e46976"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -93,7 +93,7 @@
                             <code class="code">copyAndDeleteOnRenameFail</code> parameter that will automatically
                         fall back to the copy and delete strategy, but only after additional
                         delays.</p></td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Consumeronly"></a>Consumer only</h2></div></div></div><table id="d0e46471"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Consumeronly"></a>Consumer only</h2></div></div></div><table id="d0e47172"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -510,7 +510,7 @@
                         <code class="literal">.groovy</code>.</p></li><li class="listitem"><p>Only files (not directories) are matched for valid filename, if options such
                     as: <code class="literal">includeNamePrefix</code>, <code class="literal">includeNamePostfix</code>,
                         <code class="literal">excludeNamePrefix</code>, <code class="literal">excludeNamePostfix</code>,
-                        <code class="literal">regexPattern</code> are used. </p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Produceronly"></a>Producer only</h2></div></div></div><table id="d0e47548"><tr>
+                        <code class="literal">regexPattern</code> are used. </p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Produceronly"></a>Producer only</h2></div></div></div><table id="d0e48249"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -662,7 +662,7 @@
             as a error folder of your choice. For example to move the files in an error folder with
             a timestamp you can use
                 <code class="code">moveFailed=/error/${file:name.noext}-${date:now:yyyyMMddHHmmssSSS}.${file:name.ext}</code>.</p><p>See more examples at <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File
-                Language</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following headers are supported by this component:</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Fileproduceronly"></a>File producer only</h2></div></div></div><table id="d0e47999"><tr>
+                Language</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following headers are supported by this component:</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Fileproduceronly"></a>File producer only</h2></div></div></div><table id="d0e48700"><tr>
                 <th> Header </th>
                 <th> Description </th>
             </tr><tr>
@@ -686,7 +686,7 @@
                     once, as the producer will remove this header after writing the file). The value
                     can be only be a String. Notice that if the option <code class="literal">fileName</code>
                     has been configured, then this is still being evaluated. </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Fileconsumeronly"></a>File consumer only</h2></div></div></div><table id="d0e48068"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Fileconsumeronly"></a>File consumer only</h2></div></div></div><table id="d0e48769"><tr>
                 <th> Header </th>
                 <th> Description </th>
             </tr><tr>
@@ -736,7 +736,7 @@
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_BatchConsumer"></a>Batch Consumer</h2></div></div></div><p>This component implements the <a class="link" href="Batch Consumer" target="_top">Batch Consumer</a>.
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_ExchangePropertiesfileconsumeronly"></a>Exchange Properties, file consumer only</h2></div></div></div><p>As the file consumer is <code class="literal">BatchConsumer</code> it supports batching the
             files it polls. By batching it means that Apache Camel will add some properties to the <a class="link" href="Exchange" target="_top">Exchange</a> so you know the number of files polled the
-            current index in that order.</p><table id="d0e48200"><tr>
+            current index in that order.</p><table id="d0e48901"><tr>
                 <th> Property </th>
                 <th> Description </th>
             </tr><tr>

@@ -15,7 +15,7 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-341"></a>URI format</h2></div></div></div><p>The URI scheme for a netty component is as follows</p><div class="informalexample"><pre class="programlisting">netty4:tcp://localhost:99999[?options]
 netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports producer and consumer endpoints for both TCP and UDP.</p><p>You can append query options to the URI in the following format,
-                <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-342"></a>Options</h2></div></div></div><table class="confluenceTable" id="d0e94321"><tbody><tr>
+                <code class="code">?option=value&amp;option=value&amp;...</code></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-342"></a>Options</h2></div></div></div><table class="confluenceTable" id="d0e95022"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Default Value</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -323,7 +323,7 @@ netty4:udp://remotehost:99999/[?options]</pre></div><p>This component supports p
                     <td><span class="bold"><strong>Camel 2.15:</strong></span> Consumer only. If
                             <code class="code">clientMode</code> is <code class="code">true</code>, the Netty consumer
                         connects to the address as a TCP client.</td></tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-343"></a>Registry based Options</h2></div></div></div><p>Codec Handlers and SSL Keystores can be enlisted in the <a class="link" href="http://localhost:8090/display/CAMEL/Registry" target="_top">Registry</a>, such as in
-            the Spring XML file. The values that could be passed in, are the following:</p><table class="confluenceTable" width="859" id="d0e95220"><col width="203pt"><col width="648pt"><tbody><tr>
+            the Spring XML file. The values that could be passed in, are the following:</p><table class="confluenceTable" width="859" id="d0e95921"><col width="203pt"><col width="648pt"><tbody><tr>
                     <th class="confluenceTh">
                         <p>Name</p>
                     </th>
@@ -627,7 +627,7 @@ registry.bind("decoders", decoders);
                     insert custom handler(s), encoder(s) and decoder(s). Not overriding the
                         <code class="code">initChannel()</code> method creates a pipeline with no handlers,
                     encoders or decoders wired to the pipeline.</p></li></ul></div><p>The example below shows how <code class="code">ServerInitializerFactory</code> factory may be
-            created</p><div class="example"><a name="d0e95688"></a><p class="title"><b>Example&nbsp;8.&nbsp;Using server initializer factory</b></p><div class="example-contents"><pre class="programlisting">public class SampleServerInitializerFactory extends ServerInitializerFactory {
+            created</p><div class="example"><a name="d0e96389"></a><p class="title"><b>Example&nbsp;8.&nbsp;Using server initializer factory</b></p><div class="example-contents"><pre class="programlisting">public class SampleServerInitializerFactory extends ServerInitializerFactory {
     private int maxLineSize = 1024;
  
      protected void initChannel(Channel ch) throws Exception {

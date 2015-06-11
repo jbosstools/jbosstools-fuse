@@ -1,0 +1,167 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Your First Data Transformation</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="TransTools.html" title="Getting Started with Data Transformation"><link rel="prev" href="bk01pt01ch08s01.html" title="Fuse Transformation Tooling"><link rel="next" href="RiderDebugPart.html" title="Part&nbsp;II.&nbsp;Monitoring and Testing Applications"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e3063"></a>Your First Data Transformation</h2></div></div></div><p>
+		In this tutorial you will learn how to use the tooling provided by JBoss Fuse to add a data transformation to a predefined Camel route. The Camel route used in this example directs messages from a source endpoint that produces XML data to a target endpoint that consumes JSON data. You will add a data transformation to map the XML data to JSON data in order for this route to work correctly.
+	</p><h3><a name="d0e3068"></a>
+		Prerequisites
+	</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+				JBoss Fuse tooling is installed on JBoss Developer Studio. See <a class="link" href="https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Developer_Studio_Integration_Stack/8.0/html/Install_Red_Hat_JBoss_Developer_Studio_Integration_Stack/index.html" target="_top">Install Red Hat JBoss Developer Studio Integration Stack</a>.
+			</p></li><li class="listitem"><p>
+				Maven is installed and configured correctly. See <a class="link" href="https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.2/html/Installation_Guide/FuseRepos.html" target="_top">Red Hat JBoss Fuse Maven Repositories</a>.
+			</p></li><li class="listitem"><p>
+				You have downloaded the <a class="link" href="https://github.com/fusesource/fuseide/tree/7.3.x/examples/transformation" target="_top">transformation quickstart applications</a> for use with this technical preview.
+			</p></li></ul></div><h3><a name="d0e3089"></a>
+		Procedure
+	</h3><div class="procedure"><ol class="procedure" type="1"><li class="step"><p class="title"><b>Import the <code class="code">starter</code> quickstart application in JBoss Developer Studio.</b></p><ol type="a" class="substeps"><li class="step"><p>
+						Select <span class="guimenuitem">File</span> &gt; <span class="guimenuitem">Import</span>. Expand <span class="guimenuitem">Maven</span> and select <span class="guimenuitem">Existing Maven Projects</span>, then select <span class="guibutton">Next</span>.
+					</p></li><li class="step"><p>
+						You are prompted to select a Maven project to import. Select <span class="guibutton">Browse</span> and navigate to the root directory of the <code class="code">starter</code> quickstart application, then select <span class="guibutton">OK</span>. Review the selection and select <span class="guibutton">Finish</span>. The starter application will appear in the <span class="guilabel">Project Explorer</span>.
+					</p></li><li class="step"><p>
+						Expand the <code class="code">starter</code> project in the <span class="guilabel">Project Explorer</span> and navigate to <code class="filename">starter/src/main/resources/META-INF/spring/camel-context.xml</code>. Open this file to view the Camel route. By default, the file is presented visually on the <span class="guilabel">Design</span> tab.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7182.png" alt="Description"></div></div><p>
+						Select the <span class="guilabel">Source</span> tab to view the underlying XML. You can see that an XML file is produced from a source endpoint and a JSON file is consumed by a target endpoint.
+					</p></li></ol></li><li class="step"><p class="title"><b>Add a data transformation to the Camel route.</b></p><ol type="a" class="substeps"><li class="step"><p>
+						Select the <span class="guilabel">Design</span> view for the <code class="filename">camel-context.xml</code> file.
+					</p></li><li class="step"><p>
+						Remove the arrow connecting the two endpoints.
+					</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+							Do not save your project at this point. If you save your project now, the endpoints will disappear.
+						</p></td></tr></table></div></li><li class="step"><p>
+						Click on the <span class="guilabel">Transformation</span> <em class="firstterm">drawer</em> in the <span class="guilabel">Palette</span>. Drag a <span class="guilabel">Data Transformation</span> endpoint onto the canvas.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7183.gif" alt="Description"></div></div><p>
+						This will invoke the <span class="guilabel">New Transformation</span> wizard. If the <span class="guilabel">Palette</span> is not yet visible, select <span class="guimenuitem">Window</span> &gt; <span class="guimenuitem">Show View</span> &gt; <span class="guimenuitem">Other</span>, then expand <span class="guimenuitem">General</span> and select <span class="guimenuitem">Palette</span>.
+					</p></li><li class="step"><p>
+						In the <span class="guilabel">New Transformation</span> wizard, set the following values (leaving all other default values) then select <span class="guibutton">Next</span>.
+					</p><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>
+										Field
+									</th><th>
+										Value
+									</th></tr></thead><tbody><tr><td> 
+										<span class="guilabel">Transformation ID</span>
+									</td><td> 
+										<code class="code">xml2json</code>
+									</td></tr><tr><td> 
+										<span class="guilabel">Source Type</span>
+									</td><td> 
+										<code class="code">XML</code>
+									</td></tr><tr><td> 
+										<span class="guilabel">Target Type</span>
+									</td><td> 
+										<code class="code">JSON</code>
+									</td></tr></tbody></table></div></li><li class="step"><p>
+						Now you are prompted to provide the source type definition. You can do this by supplying either an <span class="guilabel">XML Schema</span> (default) or an example <span class="guilabel">XML Instance Document</span>. Leave the default option and browse to select a <span class="guilabel">Source File</span>. Choose <code class="filename">abc-order.xsd</code>, then select <span class="guibutton">OK</span>. You are provided with a preview of the XML. Select <span class="guibutton">Next</span> to continue.
+					</p></li><li class="step"><p>
+						Now you are prompted to describe the target type definition in the same way. Browse to select a <span class="guilabel">Target File</span>. Choose <code class="filename">xyz-order.json</code>, then select <span class="guilabel">OK</span>. Because this is an example file, the <span class="guilabel">JSON Type Definition</span> is updated automatically to reflect this. Select <span class="guibutton">Finish</span>.
+					</p></li></ol></li><li class="step"><p class="title"><b>You are now presented with the transformation editor with source fields on the left and target fields on the right. Map one set to the other. </b></p><ol type="a" class="substeps"><li class="step"><p>
+						Expand all of the fields on both sides of the transformation editor.
+					</p></li><li class="step"><p>
+						Drag the source <code class="code">customerNum</code> field from the left onto the target <code class="code">custId</code> field on the right. The transformation (or mapping) will appear in the center.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7184.png" alt="Description"></div></div><p>
+						Continue to map the fields as follows:
+					</p><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>
+										Source
+									</th><th>
+										Target
+									</th></tr></thead><tbody><tr><td> 
+										<code class="code">orderNum</code>
+									</td><td> 
+										<code class="code">orderId</code>
+									</td></tr><tr><td> 
+										<code class="code">status</code>
+									</td><td> 
+										<code class="code">priority</code>
+									</td></tr><tr><td> 
+										<code class="code">item</code>
+									</td><td> 
+										<code class="code">lineItems</code>
+									</td></tr><tr><td> 
+										<code class="code">id</code>
+									</td><td> 
+										<code class="code">itemId</code>
+									</td></tr><tr><td> 
+										<code class="code">price</code>
+									</td><td> 
+										<code class="code">cost</code>
+									</td></tr><tr><td> 
+										<code class="code">quantity</code>
+									</td><td> 
+										<code class="code">amount</code>
+									</td></tr></tbody></table></div></li></ol></li><li class="step"><p class="title"><b>Map any remaining fields.</b></p><ol type="a" class="substeps"><li class="step"><p>
+						Click on <span class="guilabel">Hide mapped fields</span> for both source and target to determine whether all fields have been mapped.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7185.png" alt="Description"></div></div><p>
+						You will find that the target <code class="code">approvalCode</code> and <code class="code">origin</code> fields remain unmapped.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7193.png" alt="Description"></div></div></li><li class="step"><p>
+						Map the <code class="code">origin</code> field to a constant variable: click on the <span class="guilabel">Variables</span> tab on the <span class="guilabel">Source</span> side. Select <span class="guilabel">Add a new variable</span>.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7186.png" alt="Description"></div></div></li><li class="step"><p>
+						You are prompted to <span class="guilabel">Enter a new variable name</span>. Enter <code class="code">ORIGIN</code> and select <span class="guibutton">OK</span>. The variable is created and appears on the left in the <span class="guilabel">Variables</span> window.
+					</p></li><li class="step"><p>
+						Select the default value and change it to <code class="code">Web</code>.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7187.png" alt="Description"></div></div></li><li class="step"><p>
+						Drag the new variable onto the target <code class="code">origin</code> field.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7188.gif" alt="Description"></div></div></li><li class="step"><p>
+						Associate the <code class="code">approvalCode</code> field with a dynamic evaluation of a Camel language expression: select <span class="guilabel">Add a new mapping</span>.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7189.png" alt="Description"></div></div><p>
+						An empty transformation is added.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7194.png" alt="Description"></div></div></li><li class="step"><p>
+						Drag <code class="code">approvalCode</code> from the target list into the target box of the empty transformation. You will notice that the selected transformation also appears in a window below. When you move your cursor over the source field in this view, an arrow appears. Select this arrow to open the menu from which you select <span class="guimenuitem">Set expression</span>.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7190.png" alt="Description"></div></div></li><li class="step"><p>
+						You are prompted to select the expression language, and to enter an expression. Set the following values, then select <span class="guibutton">OK</span>:
+					</p><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>
+										Field
+									</th><th>
+										Value
+									</th></tr></thead><tbody><tr><td> 
+										<span class="guilabel">Language</span>
+									</td><td> 
+										<code class="code">Header</code>
+									</td></tr><tr><td> 
+										<span class="guilabel">Expression</span>
+									</td><td> 
+										<code class="code">ApprovalID</code>
+									</td></tr></tbody></table></div></li></ol></li><li class="step"><p class="title"><b>Connect the endpoints.</b></p><ol type="a" class="substeps"><li class="step"><p>
+						Select the <code class="filename">camel-context.xml</code> tab to focus on the Camel route again.
+					</p></li><li class="step"><p>
+						When you hover your cursor over each endpoint, you are presented with an option to <span class="guilabel">Create connection</span>.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7191.png" alt="Description"></div></div><p>
+						Create a connection from the source endpoint to the transformation endpoint and then from the transformation endpoint to the target endpoint. Save your changes. The endpoints are automatically arranged horizontally.
+					</p><div class="informalfigure"><div class="mediaobject"><img src="images/7192.png" alt="Description"></div></div></li></ol></li><li class="step"><p class="title"><b>Test your data transformation.</b></p><ol type="a" class="substeps"><li class="step"><p>
+						Select <span class="guimenuitem">File</span> &gt; <span class="guimenuitem">New</span> &gt; <span class="guimenuitem">Other</span>. Expand <span class="guimenuitem">Fuse Tooling</span> and select <span class="guimenuitem">Fuse Transformation Test</span>, then select <span class="guibutton">Next</span>. This will invoke the <span class="guilabel">New Transformation Test</span> wizard.
+					</p></li><li class="step"><p>
+						In the <span class="guilabel">New Transformation Test</span> wizard, set the following values:
+					</p><div class="informaltable"><table border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>
+										Field
+									</th><th>
+										Value
+									</th></tr></thead><tbody><tr><td> 
+										<span class="guilabel">Package</span>
+									</td><td> 
+										<code class="code">example</code>
+									</td></tr><tr><td> 
+										<span class="guilabel">Transformation ID</span>
+									</td><td> 
+										<code class="code">xml2json</code>
+									</td></tr></tbody></table></div></li><li class="step"><p>
+						In the <span class="guilabel">Project Explorer</span> navigate to <code class="filename">starter/src/test/java/example</code> and then open the <code class="filename">TransformationTest.java</code> file.
+					</p></li><li class="step"><p>
+						Add the following code to the <code class="code">transform</code> method:
+					</p><pre class="programlisting">startEndpoint.sendBodyAndHeader(readFile("src/data/abc-order.xml"), "approvalID", "AUTO_OK");</pre></li><li class="step"><p>
+						Ensure the <code class="filename">TransformationTest.java</code> file has focus, then select <span class="guimenuitem">Run</span> &gt; <span class="guimenuitem">Run As</span> &gt; <span class="guimenuitem">JUnit Test</span>.
+					</p></li><li class="step"><p>
+						The output will be presented in the <span class="guilabel">Console</span> window. Here you can see both the source XML and the resulting target JSON.
+					</p><div class="example"><a name="d0e3724"></a><p class="title"><b>Example&nbsp;1.&nbsp;Source XML</b></p><div class="example-contents"><pre class="programlisting">&lt;ABCOrder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://java.sun.com"&gt;
+    &lt;header&gt;
+        &lt;status&gt;GOLD&lt;/status&gt;
+        &lt;customer-num&gt;ACME-123&lt;/customer-num&gt;
+        &lt;order-num&gt;ORDER1&lt;/order-num&gt;
+    &lt;/header&gt;
+    &lt;order-items&gt;
+        &lt;item id="PICKLE"&gt;
+            &lt;price&gt;2.25&lt;/price&gt;
+            &lt;quantity&gt;1000&lt;/quantity&gt;
+        &lt;/item&gt;
+        &lt;item id="BANANA"&gt;
+            &lt;price&gt;1.25&lt;/price&gt;
+            &lt;quantity&gt;400&lt;/quantity&gt;
+        &lt;/item&gt;
+    &lt;/order-items&gt;
+&lt;/ABCOrder&gt;</pre></div></div><br class="example-break"><div class="example"><a name="d0e3729"></a><p class="title"><b>Example&nbsp;2.&nbsp;Target JSON</b></p><div class="example-contents"><pre class="programlisting">{"custId":"ACME-123","priority":"GOLD","orderId":"ORDER1","origin":"Web","approvalCode":"AUTO_OK","lineItems":[{"itemId":"PICKLE","amount":1000,"cost":2.25},{"itemId":"BANANA","amount":400,"cost":1.25}]}</pre></div></div><br class="example-break"></li></ol></li></ol></div></div></body></html>
