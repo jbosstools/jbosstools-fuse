@@ -10,7 +10,7 @@
 Finally it provides the ability to the user to implement and use his own mapping strategy.</p><p>Regardless of the mapping strategy camel-hbase will convert a message into an org.apache.camel.component.hbase.model.HBaseData object and use that object for its internal operations.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_Configuringthecomponent"></a>Configuring the component</h2></div></div></div><p>The HBase component can be provided a custom HBaseConfiguration object as a property or it can create an HBase configuration object on its own based on the HBase related resources that are found on classpath.</p><pre class="programlisting">    &lt;bean id="hbase" class="org.apache.camel.component.hbase.HBaseComponent"&gt;
         &lt;property name="configuration" ref="config"/&gt;
     &lt;/bean&gt;</pre><p>If no configuration object is provided to the component, the component will create one. The created configuration will search the class path for an hbase-site.xml file, from which it will draw the configuration. You can find more information about how to configure HBase clients at: <a class="link" href="http://archive.apache.org/dist/hbase/docs/client_dependencies.html" target="_top">HBase client configuration and dependencies</a>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_HBaseProducer"></a>HBase Producer</h2></div></div></div><p>As mentioned above camel provides produers endpoints for HBase. This allows you to store, delete, retrieve or query data from HBase using your camel routes.</p><pre class="programlisting">hbase://table[?options]</pre><p>where <span class="bold"><strong>table</strong></span> is the table name.</p><p>The supported operations are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Put</p></li><li class="listitem"><p>Get</p></li><li class="listitem"><p>Delete</p></li><li class="listitem"><p>Scan</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_SupportedURIoptionsonproducer"></a>Supported URI options on producer</h2></div></div></div><p></p><table id="d0e62432"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_HBaseProducer"></a>HBase Producer</h2></div></div></div><p>As mentioned above camel provides produers endpoints for HBase. This allows you to store, delete, retrieve or query data from HBase using your camel routes.</p><pre class="programlisting">hbase://table[?options]</pre><p>where <span class="bold"><strong>table</strong></span> is the table name.</p><p>The supported operations are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Put</p></li><li class="listitem"><p>Get</p></li><li class="listitem"><p>Delete</p></li><li class="listitem"><p>Scan</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_SupportedURIoptionsonproducer"></a>Supported URI options on producer</h2></div></div></div><p></p><table id="d0e63133"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -44,7 +44,7 @@ Finally it provides the ability to the user to implement and use his own mapping
         <td><code class="literal">null</code>
         </td>
         <td> A list of filters. <span class="bold"><strong>Supported operations</strong></span>: <code class="literal">CamelHBaseScan</code>. </td>
-      </tr></table><p>Header mapping options:</p><table id="d0e62554"><tr>
+      </tr></table><p>Header mapping options:</p><table id="d0e63255"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -175,7 +175,7 @@ When using a ModelAwareFilter camel-hbase will apply the selected mapping strate
                     &lt;bean class="org.apache.camel.component.hbase.filters.ModelAwareColumnMatchingFilter"/&gt;
                 &lt;/list&gt;
             &lt;/constructor-arg&gt;
-        &lt;/bean&gt;</pre><p>The route above assumes that a pojo is with properties firstName and lastName is passed as the message body, it takes those properties and adds them as part of the message headers. The default mapping strategy will create a model object that will map the headers to HBase columns and will pass that model the the ModelAwareColumnMatchingFilter. The filter will filter out any rows, that do not contain columns that match the model. It is like query by example.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_HBaseConsumer"></a>HBase Consumer</h2></div></div></div><p>The Camel HBase Consumer, will perform repeated scan on the specified HBase table and will return the scan results as part of the message. You can either specify header mapping (default) or body mapping. The later will just add the org.apache.camel.component.hbase.model.HBaseData as part of the message body.</p><pre class="programlisting">hbase://table[?options]</pre><p>You can specify the columns that you want to be return and their types as part of the uri options:</p><pre class="programlisting">hbase:mutable?family=name&amp;qualifer=first&amp;valueType=java.lang.String&amp;family=address&amp;qualifer=number&amp;valueType2=java.lang.Integer&amp;rowType=java.lang.Long</pre><p>The example above will create a model object that is consisted of the specified fields and the scan results will populate the model object with values. Finally the mapping strategy will be used to map this model to the camel message.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_SupportedURIoptionsonconsumer"></a>Supported URI options on consumer</h2></div></div></div><p></p><table id="d0e62751"><tr>
+        &lt;/bean&gt;</pre><p>The route above assumes that a pojo is with properties firstName and lastName is passed as the message body, it takes those properties and adds them as part of the message headers. The default mapping strategy will create a model object that will map the headers to HBase columns and will pass that model the the ModelAwareColumnMatchingFilter. The filter will filter out any rows, that do not contain columns that match the model. It is like query by example.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_HBaseConsumer"></a>HBase Consumer</h2></div></div></div><p>The Camel HBase Consumer, will perform repeated scan on the specified HBase table and will return the scan results as part of the message. You can either specify header mapping (default) or body mapping. The later will just add the org.apache.camel.component.hbase.model.HBaseData as part of the message body.</p><pre class="programlisting">hbase://table[?options]</pre><p>You can specify the columns that you want to be return and their types as part of the uri options:</p><pre class="programlisting">hbase:mutable?family=name&amp;qualifer=first&amp;valueType=java.lang.String&amp;family=address&amp;qualifer=number&amp;valueType2=java.lang.Integer&amp;rowType=java.lang.Long</pre><p>The example above will create a model object that is consisted of the specified fields and the scan results will populate the model object with values. Finally the mapping strategy will be used to map this model to the camel message.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_SupportedURIoptionsonconsumer"></a>Supported URI options on consumer</h2></div></div></div><p></p><table id="d0e63452"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -239,7 +239,7 @@ When using a ModelAwareFilter camel-hbase will apply the selected mapping strate
         </td>
         <td> A list of filters. <span class="bold"><strong>Supported operations</strong></span>: <code class="literal">CamelHBaseScan</code>
         </td>
-      </tr></table><p>Header mapping options:</p><table id="d0e62957"><tr>
+      </tr></table><p>Header mapping options:</p><table id="d0e63658"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -280,7 +280,7 @@ from("direct:in")
   .idempotentConsumer(header("messageId"), repository)
   .to("log:out);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_HBaseMapping"></a>HBase Mapping</h2></div></div></div><p>It was mentioned above that you the default mapping strategies are <span class="bold"><strong>header</strong></span> and <span class="bold"><strong>body</strong></span> mapping.
 Below you can find some detailed examples of how each mapping strategy works.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-hbase_HSH_HBaseHeadermappingExamples"></a>HBase Header mapping Examples</h2></div></div></div><p>The header mapping is the default mapping.
-To put the value "myvalue" into HBase row "myrow" and column "myfamily:mycolum" the message should contain the following headers:</p><table id="d0e63074"><tr>
+To put the value "myvalue" into HBase row "myrow" and column "myfamily:mycolum" the message should contain the following headers:</p><table id="d0e63775"><tr>
         <th> Header </th>
         <th> Value </th>
       </tr><tr>
@@ -295,7 +295,7 @@ To put the value "myvalue" into HBase row "myrow" and column "myfamily:mycolum" 
       </tr><tr>
         <td> CamelHBaseValue </td>
         <td> myvalue </td>
-      </tr></table><p>To put more values for different columns and / or different rows you can specify additional headers suffixed with the index of the headers, e.g:</p><table id="d0e63117"><tr>
+      </tr></table><p>To put more values for different columns and / or different rows you can specify additional headers suffixed with the index of the headers, e.g:</p><table id="d0e63818"><tr>
         <th> Header </th>
         <th> Value </th>
       </tr><tr>
@@ -322,7 +322,7 @@ To put the value "myvalue" into HBase row "myrow" and column "myfamily:mycolum" 
       </tr><tr>
         <td> CamelHBaseValue2 </td>
         <td> myvalue2 </td>
-      </tr></table><p>In the case of retrieval operations such as get or scan you can also specify for each column the type that you want the data to be converted to. For exampe:</p><table id="d0e63192"><tr>
+      </tr></table><p>In the case of retrieval operations such as get or scan you can also specify for each column the type that you want the data to be converted to. For exampe:</p><table id="d0e63893"><tr>
         <th> Header </th>
         <th> Value </th>
       </tr><tr>

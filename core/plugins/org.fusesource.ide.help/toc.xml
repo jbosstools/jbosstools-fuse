@@ -39,6 +39,10 @@
             <topic label="Export SAP Connection Configuration to a File" href="RiderSAP-ExportConfig.html"/>
             <topic label="Create a New SAP Endpoint" href="RiderSAP-Endpoint.html"/>
          </topic>
+         <topic label="Getting Started with Data Transformation" href="TransTools.html">
+            <topic label="Fuse Transformation Tooling" href="bk01pt01ch08s01.html"/>
+            <topic label="Your First Data Transformation" href="bk01pt01ch08s02.html"/>
+         </topic>
       </topic>
       <topic label="Monitoring and Testing Applications" href="RiderDebugPart.html">
          <topic label="JMX Navigator" href="FIDEJMXExplore.html">

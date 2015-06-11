@@ -15,7 +15,7 @@
         <code class="code">camel-netty4</code> component is used with the HL7MLLPCodec (mina2) or
       HL7MLLPNettyDecoder/HL7MLLPNettyEncoder (Netty4).</p><p>The HL7 MLLP codec has the following options:
 
-    </p><table id="d0e64996"><tr>
+    </p><table id="d0e65697"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -79,7 +79,7 @@ public class PatientLookupService {
         // find patient data based on the patient id and create a HL7 model object with the response
         Message response = ... create and set response data
         return response
-    }</pre><p>Notice that this class uses just imports from the HAPI library and <span class="bold"><strong>not</strong></span> from Camel.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e65171"></a>Exposing an HL7 listener using Netty (available from Camel 2.15 onwards)</h2></div></div></div><p>In the Spring XML file, we configure a Netty4 endpoint to listen for HL7 requests using
+    }</pre><p>Notice that this class uses just imports from the HAPI library and <span class="bold"><strong>not</strong></span> from Camel.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e65872"></a>Exposing an HL7 listener using Netty (available from Camel 2.15 onwards)</h2></div></div></div><p>In the Spring XML file, we configure a Netty4 endpoint to listen for HL7 requests using
       TCP on port 8888:</p><pre class="programlisting">&lt;endpoint id="hl7NettyListener" uri="netty4:tcp://localhost:8888?sync=true&amp;amp;encoder=#hl7encoder&amp;amp;decoder=#hl7decoder"/&gt;</pre><p><code class="code">sync=true</code> indicates that this listener is synchronous and therefore will
       return a HL7 response to the caller. The HL7 codec is set up with
         <code class="code">encoder=#hl7encoder</code> and <code class="code">decoder=#hl7decoder</code>. Note that
@@ -101,7 +101,7 @@ String patientId = qrd.getWhoSubjectFilter(0).getIDNumber().getValue();  // 0101
         <code class="code">byte[]</code>, <code class="code">String</code> or any other simple object formats. You can just
       use the HAPI HL7v2 model objects. If you know the message type in advance, you can be more
       type-safe:</p><pre class="programlisting">QRY_A19 msg = exchange.getIn().getBody(QRY_A19.class);
-String patientId = msg.getQRD().getWhoSubjectFilter(0).getIDNumber().getValue();</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e65259"></a>HL7 DataFormat</h2></div></div></div><p>The HL7 component ships with a HL7 data format that can be used to marshal or
+String patientId = msg.getQRD().getWhoSubjectFilter(0).getIDNumber().getValue();</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e65960"></a>HL7 DataFormat</h2></div></div></div><p>The HL7 component ships with a HL7 data format that can be used to marshal or
             unmarshal HL7 model objects.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="code">marshal</code> = from Message to byte stream (can be used when
                     responding using the HL7 MLLP codec)</p></li><li class="listitem"><p><code class="code">unmarshal</code> = from byte stream to Message (can be used when
                     receiving streamed data from the HL7 MLLP</p></li></ul></div><p>To use the data format, simply instantiate an instance and invoke the
@@ -127,7 +127,7 @@ from("jms:queue:hl7out").unmarshal(hl7).to("patientLookupService");</pre><p>Here
             used. Then you don't need to create an instance of the <code class="code">HL7DataFormat</code>
             object:</p><pre class="programlisting">from("direct:hl7in").marshal().hl7().to("jms:queue:hl7out");
 from("jms:queue:hl7out").unmarshal().hl7().to("patientLookupService");</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HL7_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The <code class="code">unmarshal</code> operation adds these fields from the MSH segment as headers on
-      the Camel message:</p><table id="d0e65352"><tr>
+      the Camel message:</p><table id="d0e66053"><tr>
         <th> Key </th>
         <th> MSH field </th>
         <th> Example </th>
@@ -229,7 +229,7 @@ from("jms:queue:hl7out").unmarshal().hl7().to("patientLookupService");</pre></di
       </tr></table><p>All headers except <code class="code">CamelHL7Context</code> are <code class="literal">String</code> types. If a
             header value is missing, its value is <code class="literal">null</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HL7_HSH_Options"></a>Options</h2></div></div></div><p>The HL7 Data Format supports the following options:
 
-    </p><table id="d0e65614"><tr>
+    </p><table id="d0e66315"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
