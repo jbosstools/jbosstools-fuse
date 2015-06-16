@@ -54,10 +54,10 @@
     
     <!-- dependency versions -->
     <!-- lookup in Fabric8-bom -->
-    <fabric.version>1.2.0.redhat-117</fabric.version>
-    <camel.version>2.15.1.redhat-620117</camel.version>
-    <cxf.version>3.0.4.redhat-620117</cxf.version>
-    <activemq.version>5.11.0.redhat-620117</activemq.version>
+    <fabric.version>1.2.0.redhat-129</fabric.version>
+    <camel.version>2.15.1.redhat-620129</camel.version>
+    <cxf.version>3.0.4.redhat-620129</cxf.version>
+    <activemq.version>5.11.0.redhat-620129</activemq.version>
     <servicemix-nmr.version>1.6.1</servicemix-nmr.version>
 
     <jackson.version>2.5.1</jackson.version>
@@ -92,31 +92,6 @@
   </modules>
 
   <repositories>
-<!--
-    <repository>
-      <id>jboss.org</id>
-      <name>JBoss Repository</name>
-      <url>http://repository.jboss.org</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-
-    <repository>
-      <id>jboss-fuse-snapshots</id>
-      <name>jboss-fuse-snapshots</name>
-      <url>http://repository.jboss.org/nexus/content/groups/fs-public-snapshots</url>
-      <snapshots>
-	<enabled>true</enabled>
-      </snapshots>
-      <releases>
-	<enabled>true</enabled>
-      </releases>
-    </repository>
--->
 
     <repository>
       <id>ea.jboss.org</id>
@@ -129,19 +104,19 @@
         <enabled>true</enabled>
       </releases>
     </repository>
-<!--
+
     <repository>
-      <id>m2-release-proxy.jboss.org</id>
-      <name>JBoss Release Proxy Repository</name>
-      <url>http://repository.jboss.org/nexus/content/groups/m2-release-proxy/</url>
+      <id>origin.ea.jboss.org</id>
+      <name>JBoss Early Access Repository</name>
+      <url>http://origin-repository.jboss.org/nexus/content/groups/ea/</url>
       <snapshots>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
       </snapshots>
       <releases>
         <enabled>true</enabled>
       </releases>
     </repository>
--->
+
     <repository>
       <id>jboss-public-repository-group</id>
       <name>JBoss Public Repository Group</name>

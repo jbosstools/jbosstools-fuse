@@ -6102,20 +6102,20 @@
 
   <xs:simpleType name="errorHandlerType">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="NoErrorHandler"/>
       <xs:enumeration value="DeadLetterChannel"/>
       <xs:enumeration value="DefaultErrorHandler"/>
-      <xs:enumeration value="NoErrorHandler"/>
       <xs:enumeration value="LoggingErrorHandler"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="loggingLevel">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="DEBUG"/>
       <xs:enumeration value="OFF"/>
-      <xs:enumeration value="TRACE"/>
       <xs:enumeration value="INFO"/>
       <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="DEBUG"/>
+      <xs:enumeration value="TRACE"/>
       <xs:enumeration value="WARN"/>
     </xs:restriction>
   </xs:simpleType>
@@ -6123,22 +6123,22 @@
   <xs:simpleType name="threadPoolRejectedPolicy">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Abort"/>
-      <xs:enumeration value="CallerRuns"/>
       <xs:enumeration value="Discard"/>
       <xs:enumeration value="DiscardOldest"/>
+      <xs:enumeration value="CallerRuns"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="exchangePattern">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="InOnly"/>
       <xs:enumeration value="OutIn"/>
-      <xs:enumeration value="OutOnly"/>
-      <xs:enumeration value="InOptionalOut"/>
       <xs:enumeration value="RobustInOnly"/>
       <xs:enumeration value="RobustOutOnly"/>
+      <xs:enumeration value="OutOnly"/>
+      <xs:enumeration value="InOptionalOut"/>
       <xs:enumeration value="InOut"/>
       <xs:enumeration value="OutOptionalIn"/>
-      <xs:enumeration value="InOnly"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -6152,8 +6152,8 @@
 
   <xs:simpleType name="jsonLibrary">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Jackson"/>
       <xs:enumeration value="XStream"/>
+      <xs:enumeration value="Jackson"/>
       <xs:enumeration value="Gson"/>
     </xs:restriction>
   </xs:simpleType>
@@ -6167,8 +6167,8 @@
 
   <xs:simpleType name="restHostNameResolver">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="localIp"/>
       <xs:enumeration value="localHostName"/>
+      <xs:enumeration value="localIp"/>
     </xs:restriction>
   </xs:simpleType>
 
