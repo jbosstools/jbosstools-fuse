@@ -14,7 +14,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-saxon</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -39,7 +39,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jxpath</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -63,7 +63,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -86,7 +86,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-groovy</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -109,7 +109,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -136,7 +136,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -161,7 +161,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-hl7</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -184,7 +184,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -207,7 +207,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -230,7 +230,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -260,7 +260,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -283,7 +283,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-josql</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -306,7 +306,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-juel</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -329,7 +329,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-ognl</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -352,7 +352,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -376,7 +376,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -402,7 +402,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -425,7 +425,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mvel</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -448,7 +448,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>
@@ -479,7 +479,7 @@
          <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jsonpath</artifactId>
-            <version>2.15.1.redhat-620121</version>
+            <version>2.15.1.redhat-620129</version>
          </dependency>
       </dependencies>
       <parameters>

@@ -6086,41 +6086,41 @@
 
   <xs:simpleType name="exchangePattern">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="OutIn"/>
       <xs:enumeration value="InOut"/>
-      <xs:enumeration value="OutOnly"/>
-      <xs:enumeration value="RobustInOnly"/>
-      <xs:enumeration value="RobustOutOnly"/>
       <xs:enumeration value="InOptionalOut"/>
+      <xs:enumeration value="RobustInOnly"/>
       <xs:enumeration value="OutOptionalIn"/>
+      <xs:enumeration value="RobustOutOnly"/>
+      <xs:enumeration value="OutIn"/>
+      <xs:enumeration value="OutOnly"/>
       <xs:enumeration value="InOnly"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="loggingLevel">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="ERROR"/>
-      <xs:enumeration value="INFO"/>
-      <xs:enumeration value="OFF"/>
       <xs:enumeration value="WARN"/>
-      <xs:enumeration value="DEBUG"/>
       <xs:enumeration value="TRACE"/>
+      <xs:enumeration value="INFO"/>
+      <xs:enumeration value="DEBUG"/>
+      <xs:enumeration value="OFF"/>
+      <xs:enumeration value="ERROR"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="threadPoolRejectedPolicy">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="CallerRuns"/>
-      <xs:enumeration value="DiscardOldest"/>
-      <xs:enumeration value="Discard"/>
       <xs:enumeration value="Abort"/>
+      <xs:enumeration value="CallerRuns"/>
+      <xs:enumeration value="Discard"/>
+      <xs:enumeration value="DiscardOldest"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="bindyType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Csv"/>
       <xs:enumeration value="KeyValue"/>
+      <xs:enumeration value="Csv"/>
       <xs:enumeration value="Fixed"/>
     </xs:restriction>
   </xs:simpleType>
@@ -6135,8 +6135,8 @@
 
   <xs:simpleType name="onCompletionMode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="BeforeConsumer"/>
       <xs:enumeration value="AfterConsumer"/>
+      <xs:enumeration value="BeforeConsumer"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -6149,17 +6149,17 @@
 
   <xs:simpleType name="shutdownRunningTask">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="CompleteAllTasks"/>
       <xs:enumeration value="CompleteCurrentTaskOnly"/>
+      <xs:enumeration value="CompleteAllTasks"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="restBindingMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="json_xml"/>
-      <xs:enumeration value="xml"/>
       <xs:enumeration value="json"/>
       <xs:enumeration value="auto"/>
+      <xs:enumeration value="xml"/>
       <xs:enumeration value="off"/>
     </xs:restriction>
   </xs:simpleType>
@@ -6174,9 +6174,9 @@
   <xs:simpleType name="errorHandlerType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="NoErrorHandler"/>
+      <xs:enumeration value="DefaultErrorHandler"/>
       <xs:enumeration value="DeadLetterChannel"/>
       <xs:enumeration value="TransactionErrorHandler"/>
-      <xs:enumeration value="DefaultErrorHandler"/>
       <xs:enumeration value="LoggingErrorHandler"/>
     </xs:restriction>
   </xs:simpleType>

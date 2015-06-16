@@ -27,4 +27,4 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.eclipse.ui.ide;bundle-version="3.10.0",
  org.fusesource.ide.commons;bundle-version="7.3.0"
 Bundle-ClassPath: .,
- libs/tooling-fabric-all-1.2.0.redhat-121.jar
+ libs/tooling-fabric-all-1.2.0.redhat-129.jar
