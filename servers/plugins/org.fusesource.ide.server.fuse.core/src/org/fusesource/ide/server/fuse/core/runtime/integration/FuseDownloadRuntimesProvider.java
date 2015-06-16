@@ -14,10 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.fusesource.ide.commons.util.BundleResourceUtils;
-import org.fusesource.ide.server.fuse.core.Activator;
 import org.fusesource.ide.server.karaf.core.runtime.integration.AbstractStacksDownloadRuntimesProvider;
 import org.jboss.jdf.stacks.model.Stacks;
 import org.jboss.tools.runtime.core.model.DownloadRuntime;
@@ -38,17 +35,7 @@ public class FuseDownloadRuntimesProvider extends AbstractStacksDownloadRuntimes
 
 	@Override
 	protected Stacks[] getStacks(IProgressMonitor monitor) {
-		try {
-			File f = BundleResourceUtils.getFileFromBundle(Activator.PLUGIN_ID, "resources/fuse.yaml");
-			CustomStacksManager csm = new CustomStacksManager();
-			Stacks s = csm.getStacksFromFile(f);
-			return new Stacks[]{s};
-		} catch(CoreException ce) {
-			// TODO handle
-		} catch(IOException ioe) {
-			// TODO handle
-		}
-		return new Stacks[0];
+		return new StacksManager().getStacks("Loading Downloadable Runtimes", monitor, StacksManager.StacksType.PRESTACKS_TYPE, StacksManager.StacksType.STACKS_TYPE);
 	}
 
 	@Override
