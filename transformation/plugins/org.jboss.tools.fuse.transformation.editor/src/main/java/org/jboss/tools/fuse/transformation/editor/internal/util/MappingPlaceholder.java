@@ -9,6 +9,8 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
+import java.util.List;
+
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.model.Model;
@@ -49,6 +51,42 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
     @Override
     public MappingType getType() {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#getSourceIndex()
+     */
+    public List<Integer> getSourceIndex() {
+        return null;
+    }
+    
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#setSourceIndex()
+     */
+    public void setSourceIndex(List<Integer> indexes) {
+
+    }
+    
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#getTargetIndex()
+     */
+    public List<Integer> getTargetIndex() {
+        return null;
+    }
+    
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#setTargetIndex()
+     */
+    public void setTargetIndex(List<Integer> indexes) {
+
     }
 
     void setSource(final Object source) {
