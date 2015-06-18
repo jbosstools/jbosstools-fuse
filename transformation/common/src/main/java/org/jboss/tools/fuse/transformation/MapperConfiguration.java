@@ -100,6 +100,18 @@ public interface MapperConfiguration {
      * @return mapping created
      */
     FieldMapping mapField(Model source, Model target);
+    
+    /**
+     * Map a source field to a target field using indexes.
+     * 
+     * @param source model for the source field
+     * @param target model for the target field
+     * @param sourceIndex index for source field
+     * @param targetIndex index for target field
+     * @return mapping created
+     */
+    FieldMapping mapField(Model source, Model target, 
+            List<Integer> sourceIndex, List<Integer> targetIndex);
 
     /**
      * Map a variable to a target field.
@@ -111,6 +123,16 @@ public interface MapperConfiguration {
     VariableMapping mapVariable(Variable variable, Model target);
     
     /**
+     * Map a variable to a target using an index for the target field.
+     * 
+     * @param variable source variable
+     * @param target target field
+     * @param targetIndex index for target field
+     * @return mapping created
+     */
+    VariableMapping mapVariable(Variable variable, Model target, List<Integer> targetIndex);
+    
+    /**
      * Map an expression to a target field.
      * 
      * @param expression expression language
@@ -119,6 +141,18 @@ public interface MapperConfiguration {
      * @return mapping created
      */
     ExpressionMapping mapExpression(String language, String expression, Model target);
+    
+    /**
+     * Map an expression to a target using an index for the target field.
+     * 
+     * @param expression expression language
+     * @param expression expression text
+     * @param target target field
+     * @param targetIndex index for target field
+     * @return mapping created
+     */
+    ExpressionMapping mapExpression(
+            String language, String expression, Model target, List<Integer> targetIndex);
 
     /**
      * Write the mapping configuration to the specified output stream.
