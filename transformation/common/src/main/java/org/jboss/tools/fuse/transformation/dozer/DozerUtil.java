@@ -48,9 +48,7 @@ public final class DozerUtil {
      * @return field name
      */
     public static String getFieldName(final Model model, final String rootType) {
-        Integer[] indexes = new Integer[numberOfNodes(model)];
-        Arrays.fill(indexes, null);
-        return getFieldName(model, rootType, Arrays.asList(indexes));
+        return getFieldName(model, rootType, noIndex(model));
     }
     
     /**
@@ -105,11 +103,21 @@ public final class DozerUtil {
         return index != null ? name + "[" + index + "]" : name;
     }
     
-    static int numberOfNodes(Model model) {
+    public static int numberOfNodes(Model model) {
         int nodes = 0;
         for (Model m = model.getParent() ; m != null ; m = m.getParent()) {
             ++nodes;
         }
         return nodes;
+    }
+    
+    /**
+     * Creates an index list for a model field with all nulls, which is the
+     * equivalent of no index for any level of the model.
+     */
+    public static List<Integer> noIndex(Model model) {
+        Integer[] indexes = new Integer[numberOfNodes(model)];
+        Arrays.fill(indexes, null);
+        return Arrays.asList(indexes);
     }
 }

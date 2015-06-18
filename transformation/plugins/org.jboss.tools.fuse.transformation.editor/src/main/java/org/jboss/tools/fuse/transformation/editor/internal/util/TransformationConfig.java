@@ -287,6 +287,20 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
+     */
+    @Override
+    public ExpressionMapping mapExpression(final String language,
+                                           final String expression,
+                                           final Model target,
+                                           final List<Integer> targetIndex) {
+        final ExpressionMapping mapping = delegate.mapExpression(language, expression, target, targetIndex);
+        fireEvent(MAPPING, null, mapping);
+        return mapping;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @see org.jboss.tools.fuse.transformation.MapperConfiguration
      * #mapExpression(java.lang.String, java.lang.String, org.jboss.tools.fuse.transformation.model.Model)
      */
@@ -295,6 +309,20 @@ public class TransformationConfig implements MapperConfiguration {
                                            final String expression,
                                            final Model target) {
         final ExpressionMapping mapping = delegate.mapExpression(language, expression, target);
+        fireEvent(MAPPING, null, mapping);
+        return mapping;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public FieldMapping mapField(final Model source,
+                                 final Model target,
+                                 final List<Integer> sourceIndex,
+                                 final List<Integer> targetIndex) {
+        final FieldMapping mapping = delegate.mapField(source, target, sourceIndex, targetIndex);
         fireEvent(MAPPING, null, mapping);
         return mapping;
     }
@@ -335,6 +363,19 @@ public class TransformationConfig implements MapperConfiguration {
                                            final Variable variable) {
         return mapping != null && mapping.getType() == MappingType.VARIABLE
                && ((VariableMapping) mapping).getSource().getName().equals(variable.getName());
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public VariableMapping mapVariable(final Variable variable,
+                                       final Model target,
+                                       final List<Integer> targetIndex) {
+        final VariableMapping mapping = delegate.mapVariable(variable, target, targetIndex);
+        fireEvent(MAPPING, null, mapping);
+        return mapping;
     }
 
     /**
