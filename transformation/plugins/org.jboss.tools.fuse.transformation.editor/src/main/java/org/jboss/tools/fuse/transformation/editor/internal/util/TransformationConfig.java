@@ -190,6 +190,14 @@ public class TransformationConfig implements MapperConfiguration {
         builder.append(model.getName());
         return builder.toString();
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MappingOperation<?, ?> getMapping(Model source, Model target) {
+        return delegate.getMapping(source, target);
+    }
 
     /**
      * {@inheritDoc}
