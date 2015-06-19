@@ -137,6 +137,22 @@ public class DozerMapperConfigurationTest {
     }
     
     @Test
+    public void getMapping() throws Exception {
+        DozerMapperConfiguration config = loadConfig("exampleMapping.xml");
+        MappingOperation<?,?> custNumMapping = config.getMapping(
+                config.getSourceModel().get("header.customerNum"),
+                config.getTargetModel().get("custId"));
+        Assert.assertEquals(config.getMappings().get(0).getSource(), custNumMapping.getSource());
+        Assert.assertEquals(config.getMappings().get(0).getTarget(), custNumMapping.getTarget());
+        
+        MappingOperation<?,?> itemIdMapping = config.getMapping(
+                config.getSourceModel().get("orderItems.item.id"),
+                config.getTargetModel().get("lineItems.itemId"));
+        Assert.assertEquals(config.getMappings().get(4).getSource(), itemIdMapping.getSource());
+        Assert.assertEquals(config.getMappings().get(4).getTarget(), itemIdMapping.getTarget());
+    }
+    
+    @Test
     public void getMappingsListsAndNested() throws Exception {
         DozerMapperConfiguration config = loadConfig("parentsAndLists.xml");
         Assert.assertEquals(8, config.getMappings().size());
@@ -220,12 +236,19 @@ public class DozerMapperConfigurationTest {
     @Test
     public void mapListItem() throws Exception {
         DozerMapperConfiguration config = DozerMapperConfiguration.newConfig();
+        config.addClassMapping(ListOfC.class.getName(), ListOfD.class.getName());
         Model modelA = ModelBuilder.fromJavaClass(ListOfC.class);
         Model modelB = ModelBuilder.fromJavaClass(ListOfD.class);
         Model source = modelA.get("listOfCs").get("d");
         Model target = modelB.get("listOfDs").get("data");
         config.mapField(source, target);
-        FieldMapping mapping = (FieldMapping)config.getMappings().get(0);
+        // Verify auto mapping of parent collection
+        FieldMapping parentMapping = (FieldMapping)config.getMappings().get(0);
+        Assert.assertEquals(source.getParent(), parentMapping.getSource());
+        Assert.assertEquals(target.getParent(), parentMapping.getTarget());
+        
+        // Verify field mapping
+        FieldMapping mapping = (FieldMapping)config.getMappings().get(1);
         Assert.assertEquals(source, mapping.getSource());
         Assert.assertEquals(target, mapping.getTarget());
     }

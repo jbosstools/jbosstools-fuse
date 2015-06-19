@@ -367,6 +367,18 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return customMapping;
     }
     
+    @Override
+    public MappingOperation<?, ?> getMapping(Model source, Model target) {
+        MappingOperation<?, ?> mapping = null;
+        for (MappingOperation<?, ?> op : getMappings()) {
+            if (op.getSource().equals(source) && op.getTarget().equals(target)) {
+                mapping = op;
+                break;
+            }
+        }
+        return mapping;
+    }
+    
     String getRootType(Model field) {
         return getRootType(field, DozerUtil.noIndex(field));
     }
@@ -434,6 +446,11 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     // Add a field mapping to the dozer config.
     DozerFieldMapping addFieldMapping(final Model source, final Model target,
             final List<Integer> sourceIndex, final List<Integer> targetIndex) {
+        // If the source and target fields are part of a collection, make sure there's
+        // a mapping for the parent field
+        if (source.getParent().isCollection() && target.getParent().isCollection()) {
+            mapParentCollection(source, target);
+        }
         Mapping mapping = getClassMapping(source, target, sourceIndex, targetIndex);
         final Field field = new Field();
         field.setA(createField(source, mapping.getClassA().getContent(), sourceIndex));
@@ -547,6 +564,15 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         if (nodes != index.size()) {
             throw new RuntimeException("Invalid index size for model, expected " 
                     + nodes + " but index size is " + index.size());
+        }
+    }
+    
+    private void mapParentCollection(Model source, Model target) {
+        Model sourceParent = source.getParent();
+        Model targetParent = target.getParent();
+        if (getMapping(sourceParent, targetParent) == null) {
+            addFieldMapping(source.getParent(), target.getParent(), 
+                DozerUtil.noIndex(source.getParent()), DozerUtil.noIndex(target.getParent()));
         }
     }
 }

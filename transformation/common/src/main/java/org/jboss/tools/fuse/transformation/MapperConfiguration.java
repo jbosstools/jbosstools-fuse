@@ -49,6 +49,14 @@ public interface MapperConfiguration {
      * @return list of mappings
      */
     List<MappingOperation<?,?>> getMappingsForTarget(Model target);
+    
+    /**
+     * Returns the mapping, if defined, between the specified source and target fields.
+     * @param source source field
+     * @param target target field
+     * @return mapping instance or null if no mapping exists between the two fields.
+     */
+    MappingOperation<?, ?> getMapping(Model source, Model target);
 
     /**
      * Get a list of all mappings in the mapper configuration.
