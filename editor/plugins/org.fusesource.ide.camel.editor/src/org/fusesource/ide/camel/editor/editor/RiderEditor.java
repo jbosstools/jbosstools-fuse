@@ -819,14 +819,14 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 			designEditor.autoLayoutRoute();
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_VISIBILITY)) {
 			// user switched grid visibility
-			DiagramUtils.setGridVisible((Boolean)event.getNewValue());
+			DiagramUtils.setGridVisible((Boolean)event.getNewValue(), designEditor);
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_TEXT_COLOR) ||
 				   event.getProperty().equals(PreferencesConstants.EDITOR_CONNECTION_COLOR) ||
 				   event.getProperty().equals(PreferencesConstants.EDITOR_FIGURE_BG_COLOR) ||
 				   event.getProperty().equals(PreferencesConstants.EDITOR_FIGURE_FG_COLOR)) {
 			designEditor.getDiagramBehavior().refresh();
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
-			designEditor.setupGridVisibility();
+			designEditor.setupGridVisibilityAsync();
 		} 	
 	}
 }

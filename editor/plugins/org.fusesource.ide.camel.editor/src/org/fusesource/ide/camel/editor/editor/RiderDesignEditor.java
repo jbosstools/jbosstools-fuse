@@ -328,7 +328,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
         DiagramOperations.layoutDiagram(RiderDesignEditor.this);
 
         // setup grid visibility
-        setupGridVisibility();
+        setupGridVisibilityAsync();
 	}
 
 	@Override
@@ -964,7 +964,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	    });
 	}
 
-	public void setupGridVisibility() {
+	private void setupGridVisibility() {
 		// TODO is this causing transaction issues???
 		DiagramOperations.updateGridColor(RiderDesignEditor.this);
 
@@ -972,7 +972,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 		boolean gridVisible = PreferenceManager.getInstance().loadPreferenceAsBoolean(PreferencesConstants.EDITOR_GRID_VISIBILITY);
 
 		// reset the grid visibility flag
-		DiagramUtils.setGridVisible(gridVisible);
+		DiagramUtils.setGridVisible(gridVisible, this);
+		
+		getDiagramBehavior().refresh();
 	}
 
 	/**

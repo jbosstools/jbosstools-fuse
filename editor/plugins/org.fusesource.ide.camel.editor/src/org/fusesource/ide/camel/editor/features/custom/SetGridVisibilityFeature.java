@@ -35,7 +35,7 @@ public class SetGridVisibilityFeature extends AbstractCustomFeature {
 	@Override
 	public void execute(ICustomContext context) {
 		gridVisible = !gridVisible;
-		DiagramUtils.setGridVisible(gridVisible);
+		DiagramUtils.setGridVisible(gridVisible, null);
 	}
 
 	/* (non-Javadoc)
