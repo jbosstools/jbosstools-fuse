@@ -50,8 +50,10 @@ public class DiagramUtils {
 		return null;
 	}
 	
-	public static void setGridVisible(boolean visible) {
-		RiderDesignEditor editor = Activator.getDiagramEditor();
+	public static void setGridVisible(boolean visible, RiderDesignEditor editor) {
+		if (editor == null) {
+			editor = Activator.getDiagramEditor();
+		}
 		if (editor != null) {
 			GraphicalViewer graphicalViewer = editor.getGraphicalViewer();
 			if (graphicalViewer != null
