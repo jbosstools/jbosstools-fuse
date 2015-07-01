@@ -68,6 +68,11 @@
                    property="org.eclipse.core.resources.projectNature"
                    value="org.fusesource.ide.project.RiderProjectNature">
              </test>
+             <test
+                   forcePluginActivation="true"
+                   property="org.fusesource.ide.project.CamelNatureTester.hasChildren"
+                   value="true">
+             </test>
           </and>
        </enablement>
        <actionProvider
@@ -186,7 +191,7 @@
           class="org.fusesource.ide.project.CamelNatureTester"
           id="org.fusesource.ide.project.CamelNatureTester"
           namespace="org.fusesource.ide.project.CamelNatureTester"
-          properties="camelNatureEnabled,camelNatureDisabled,projectOpen"
+          properties="camelNatureEnabled,camelNatureDisabled,projectOpen,hasChildren"
           type="org.eclipse.core.resources.IProject">
     </propertyTester>
  </extension>

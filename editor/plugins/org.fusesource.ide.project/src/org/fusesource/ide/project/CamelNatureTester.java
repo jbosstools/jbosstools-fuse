@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
+import org.fusesource.ide.project.providers.CamelVirtualFolder;
 
 /**
  * @author lhein
@@ -34,11 +35,22 @@ public class CamelNatureTester extends PropertyTester {
 				return enabled == false;
 			} else if (property.equals("projectOpen")) {
 				return project.isOpen() == true;
+			} else if (property.equals("hasChildren")) {
+				return hasChildren(project);
 			}
 		}
 		return false;
 	}
 
+	private boolean hasChildren(IProject project) {
+		if (project.isOpen()) {
+			CamelVirtualFolder cvf = new CamelVirtualFolder(project);
+			cvf.populateChildren();
+			return cvf.getCamelFiles().isEmpty() == false;
+		}
+		return false;
+	}
+	
 	private boolean isCamelNatureDefined(IProject project) {
 		if (project.isOpen()) {
 			try {
