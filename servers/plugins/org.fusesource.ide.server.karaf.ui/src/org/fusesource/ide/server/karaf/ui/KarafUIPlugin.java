@@ -40,7 +40,7 @@ public class KarafUIPlugin extends AbstractUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.fusesource.ide.server.karaf.ui";
 
-	public static final String TERMINAL_VIEW_ID = "org.fusesource.ide.server.view.TerminalView";
+	public static final String TERMINAL_VIEW_ID = "org.eclipse.tm.terminal.view.ui.TerminalsView";
 	
 	// The shared instance
 	private static KarafUIPlugin plugin;

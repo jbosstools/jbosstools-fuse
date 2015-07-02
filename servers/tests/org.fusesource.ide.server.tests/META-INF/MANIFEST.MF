@@ -19,5 +19,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0",
  org.fusesource.ide.server.fuse.core;bundle-version="8.0.0",
  org.fusesource.ide.server.fuse.ui;bundle-version="8.0.0",
  org.fusesource.ide.server.servicemix.core;bundle-version="8.0.0",
- org.fusesource.ide.server.servicemix.ui;bundle-version="8.0.0",
- org.fusesource.ide.server.view;bundle-version="8.0.0"
+ org.fusesource.ide.server.servicemix.ui;bundle-version="8.0.0"
