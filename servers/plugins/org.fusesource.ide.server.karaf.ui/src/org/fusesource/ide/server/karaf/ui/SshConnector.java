@@ -12,21 +12,22 @@
 package org.fusesource.ide.server.karaf.ui;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.tm.terminal.connector.ssh.launcher.SshLauncherDelegate;
+import org.eclipse.tm.terminal.view.core.interfaces.constants.ITerminalsConnectorConstants;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Messages;
 import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
-import org.fusesource.ide.server.view.ITerminalConnectionListener;
-import org.fusesource.ide.server.view.SshView;
 import org.jboss.ide.eclipse.as.wtp.core.server.behavior.IControllableServerBehavior;
 
 
 /**
  * Thread used to ping server to test when it is started.
  */
-public class SshConnector implements ITerminalConnectionListener {
+public class SshConnector  {
 
 	private static HashMap<IServer, SshConnector> connectors = new HashMap<IServer, SshConnector>();
 	
@@ -68,36 +69,42 @@ public class SshConnector implements ITerminalConnectionListener {
 		this.passwd = pass;
 	}
 	
+	
+
+	public void extractData(Map<String, Object> data) {
+		if (data == null) return;
+
+    	// set the terminal connector id for ssh
+    	data.put(ITerminalsConnectorConstants.PROP_TERMINAL_CONNECTOR_ID, "org.eclipse.tm.terminal.connector.ssh.SshConnector"); //$NON-NLS-1$
+		data.put(ITerminalsConnectorConstants.PROP_IP_HOST, host);
+		data.put(ITerminalsConnectorConstants.PROP_IP_PORT, Integer.valueOf(port));
+		data.put(ITerminalsConnectorConstants.PROP_TIMEOUT, Integer.valueOf(0));
+		data.put(ITerminalsConnectorConstants.PROP_SSH_KEEP_ALIVE, Integer.valueOf(300));
+		data.put(ITerminalsConnectorConstants.PROP_SSH_PASSWORD, passwd);
+		data.put(ITerminalsConnectorConstants.PROP_SSH_USER, userName);
+		data.put(ITerminalsConnectorConstants.PROP_ENCODING, null);
+    }
+	
 	/**
 	 * starts the ssh connection
 	 */
 	public void start() {
 		// open the terminal view
 		IViewPart vp = KarafUIPlugin.openTerminalView();
-		if (vp == null || vp instanceof SshView == false) {
+		if (vp == null ) {
 			KarafUIPlugin.getLogger().error("Unable to open the terminal view!");
 			return;
 		}
 		
-		// get the view
-		final SshView connectorView = (SshView)vp;
-		
-		connectorView.setPartName(server.getName());
-		
-		// add a connection listener
-		connectorView.addConnectionListener(this);
-		
-		// create the connection
-		try {
-			connectorView.createConnectionIfNotExists(host, port, userName, passwd);
-		} catch (Exception ex) {
-			KarafUIPlugin.getLogger().error("Unable to connect via SSH", ex);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		extractData(properties);
+		if (properties != null) {
+			properties.put(ITerminalsConnectorConstants.PROP_DELEGATE_ID, "org.eclipse.tm.terminal.connector.ssh.launcher.ssh");
+			SshLauncherDelegate delegate = new SshLauncherDelegate();
+			delegate.execute(properties, null);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.view.ITerminalConnectionListener#onConnect()
-	 */
 	public void onConnect() {
 		// store the active connector
 		connectors.put(server, this);
@@ -105,26 +112,13 @@ public class SshConnector implements ITerminalConnectionListener {
 		KarafUIPlugin.openTerminalView().setFocus();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.server.view.ITerminalConnectionListener#onDisconnect()
-	 */
 	public void onDisconnect() {
 		// open the terminal view
 		IViewPart vp = KarafUIPlugin.openTerminalView();
-		if (vp == null || vp instanceof SshView == false) {
+		if (vp == null ) {
 			KarafUIPlugin.getLogger().error("Unable to open the terminal view!");
 			return;
 		}
-		
-		// get the view
-		final SshView connectorView = (SshView)vp;
-		
-		// add a connection listener
-		connectorView.addConnectionListener(this);
-		connectorView.setPartName(TERMINAL_VIEW_LABEL);
-
-		connectorView.onTerminalDisconnect();
-		
 		// remove from the active connectors
 		connectors.remove(server);
 	}
