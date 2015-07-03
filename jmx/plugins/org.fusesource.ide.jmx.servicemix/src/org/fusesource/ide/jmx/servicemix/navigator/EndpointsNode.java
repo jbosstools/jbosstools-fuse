@@ -11,14 +11,13 @@
 
 package org.fusesource.ide.jmx.servicemix.navigator;
 
-import io.fabric8.servicemix.facade.ServiceMixFacade;
-
 import java.util.List;
 
 import org.apache.servicemix.nmr.management.ManagedEndpointMBean;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.jmx.servicemix.ServiceMixJMXPlugin;
+import org.fusesource.ide.jmx.servicemix.internal.ServiceMixFacade;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 

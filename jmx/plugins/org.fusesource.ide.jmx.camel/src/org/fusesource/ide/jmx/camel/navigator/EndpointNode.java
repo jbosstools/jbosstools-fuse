@@ -11,10 +11,6 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import io.fabric8.camel.facade.mbean.CamelBrowsableEndpointMBean;
-import io.fabric8.camel.facade.mbean.CamelContextMBean;
-import io.fabric8.camel.facade.mbean.CamelEndpointMBean;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +28,9 @@ import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
 import org.fusesource.ide.commons.util.URIs;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
+import org.fusesource.ide.jmx.camel.internal.CamelBrowsableEndpointMBean;
+import org.fusesource.ide.jmx.camel.internal.CamelContextMBean;
+import org.fusesource.ide.jmx.camel.internal.CamelEndpointMBean;
 import org.fusesource.ide.jmx.commons.messages.Exchange;
 import org.fusesource.ide.jmx.commons.messages.Exchanges;
 import org.fusesource.ide.jmx.commons.messages.IExchange;

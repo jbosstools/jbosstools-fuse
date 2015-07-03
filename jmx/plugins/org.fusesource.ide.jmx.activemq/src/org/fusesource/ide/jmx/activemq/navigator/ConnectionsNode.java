@@ -11,9 +11,6 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
-import io.fabric8.activemq.facade.BrokerFacade;
-import io.fabric8.activemq.facade.ConnectionViewFacade;
-
 import java.util.Collection;
 
 import org.eclipse.jface.action.IMenuManager;
@@ -21,6 +18,8 @@ import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
+import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;
+import org.fusesource.ide.jmx.activemq.internal.ConnectionViewFacade;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 

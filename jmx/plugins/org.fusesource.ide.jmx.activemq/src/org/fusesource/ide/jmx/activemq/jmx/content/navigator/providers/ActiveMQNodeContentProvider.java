@@ -10,13 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.jmx.activemq.jmx.content.navigator.providers;
 
-import io.fabric8.activemq.facade.BrokerFacade;
-import io.fabric8.activemq.facade.JmxTemplateBrokerFacade;
-
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
+import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;
+import org.fusesource.ide.jmx.activemq.internal.JmxTemplateBrokerFacade;
 import org.fusesource.ide.jmx.activemq.navigator.BrokerNode;
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
 import org.jboss.tools.jmx.core.IConnectionWrapper;

@@ -11,15 +11,14 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
-import io.fabric8.activemq.facade.BrokerFacade;
-import io.fabric8.activemq.facade.RemoteBrokerFacade;
-
 import java.util.List;
 
 import javax.management.MBeanServerConnection;
 
 import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
+import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;
+import org.fusesource.ide.jmx.activemq.internal.RemoteBrokerFacade;
 import org.jboss.tools.jmx.core.IJMXRunnable;
 import org.jboss.tools.jmx.core.JMXException;
 import org.jboss.tools.jmx.core.tree.NodeProvider;

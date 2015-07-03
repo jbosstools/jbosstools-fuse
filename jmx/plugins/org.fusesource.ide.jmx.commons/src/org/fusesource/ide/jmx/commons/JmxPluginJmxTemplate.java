@@ -11,17 +11,12 @@
 
 package org.fusesource.ide.jmx.commons;
 
-import io.fabric8.api.FabricException;
-import io.fabric8.service.JmxTemplateSupport;
-import io.fabric8.service.LocalJMXConnector;
-
 import javax.management.MBeanServerConnection;
 import javax.management.remote.JMXConnector;
 
 import org.jboss.tools.jmx.core.IConnectionWrapper;
 import org.jboss.tools.jmx.core.IJMXRunnable;
 import org.jboss.tools.jmx.core.JMXException;
-
 
 public class JmxPluginJmxTemplate extends JmxTemplateSupport {
 
@@ -55,7 +50,7 @@ public class JmxPluginJmxTemplate extends JmxTemplateSupport {
 			});
 			return (T) answerHolder[0];
 		} catch (Exception e) {
-			throw new FabricException(e);
+			throw new RuntimeException(e);
 		}
 
 	}

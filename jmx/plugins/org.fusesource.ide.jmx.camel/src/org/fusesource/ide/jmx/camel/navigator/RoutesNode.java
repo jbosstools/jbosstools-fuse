@@ -11,9 +11,6 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import io.fabric8.camel.facade.CamelFacade;
-import io.fabric8.camel.facade.mbean.CamelRouteMBean;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,6 +29,8 @@ import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
+import org.fusesource.ide.jmx.camel.internal.CamelFacade;
+import org.fusesource.ide.jmx.camel.internal.CamelRouteMBean;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.HasTotalStatistics;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.IProcessorStatistics;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.IProcessorStatisticsContainer;

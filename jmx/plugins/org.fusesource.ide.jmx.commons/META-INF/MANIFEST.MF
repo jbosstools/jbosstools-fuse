@@ -5,15 +5,13 @@ Bundle-SymbolicName: org.fusesource.ide.jmx.commons;singleton:=true
 Bundle-Version: 8.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: io.fabric8.service,
- org.fusesource.ide.jmx.commons,
+Export-Package: org.fusesource.ide.jmx.commons,
  org.fusesource.ide.jmx.commons.messages,
  org.fusesource.ide.jmx.commons.messages.contenttype,
  org.fusesource.ide.jmx.commons.messages.support,
  org.fusesource.ide.jmx.commons.properties,
  org.fusesource.ide.jmx.commons.tree,
- org.fusesource.ide.jmx.commons.views.messages,
- org.slf4j
+ org.fusesource.ide.jmx.commons.views.messages
 Bundle-Activator: org.fusesource.ide.jmx.commons.Activator
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
@@ -26,5 +24,4 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.eclipse.ui.views.properties.tabbed;bundle-version="3.6.0",
  org.eclipse.ui.ide;bundle-version="3.10.0",
  org.fusesource.ide.commons;bundle-version="8.0.0"
-Bundle-ClassPath: .,
- libs/tooling-fabric-all-1.2.0.redhat-133.jar
+Bundle-ClassPath: .

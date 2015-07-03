@@ -10,12 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.jmx.camel.jmx.content.navigator.providers;
 
-import io.fabric8.camel.facade.CamelFacade;
-import io.fabric8.camel.facade.JmxTemplateCamelFacade;
-
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.jmx.camel.internal.CamelFacade;
+import org.fusesource.ide.jmx.camel.internal.JmxTemplateCamelFacade;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextsNode;
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
 import org.jboss.tools.jmx.core.IConnectionWrapper;

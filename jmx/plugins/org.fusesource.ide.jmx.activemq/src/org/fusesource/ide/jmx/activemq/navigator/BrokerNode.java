@@ -11,14 +11,12 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
-
-import io.fabric8.activemq.facade.BrokerFacade;
-
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.commons.tree.Refreshable;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
+import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;
 import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
 

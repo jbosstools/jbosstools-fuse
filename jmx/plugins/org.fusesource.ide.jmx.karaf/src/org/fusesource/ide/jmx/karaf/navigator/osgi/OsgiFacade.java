@@ -11,8 +11,6 @@
 
 package org.fusesource.ide.jmx.karaf.navigator.osgi;
 
-import io.fabric8.service.JmxTemplateSupport;
-
 import java.io.IOException;
 import java.util.Set;
 
@@ -26,6 +24,7 @@ import javax.management.openmbean.TabularData;
 import javax.management.remote.JMXConnector;
 
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
+import org.fusesource.ide.jmx.commons.JmxTemplateSupport;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.osgi.jmx.framework.BundleStateMBean;
 import org.osgi.jmx.framework.FrameworkMBean;

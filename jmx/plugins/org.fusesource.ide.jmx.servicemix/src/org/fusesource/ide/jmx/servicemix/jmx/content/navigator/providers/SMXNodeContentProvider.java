@@ -10,13 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.jmx.servicemix.jmx.content.navigator.providers;
 
-import io.fabric8.servicemix.facade.JmxTemplateServiceMixFacade;
-import io.fabric8.servicemix.facade.ServiceMixFacade;
-
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
+import org.fusesource.ide.jmx.servicemix.internal.JmxTemplateServiceMixFacade;
+import org.fusesource.ide.jmx.servicemix.internal.ServiceMixFacade;
 import org.fusesource.ide.jmx.servicemix.navigator.ServiceMixNode;
 import org.jboss.tools.jmx.core.IConnectionWrapper;
 import org.jboss.tools.jmx.core.tree.Node;

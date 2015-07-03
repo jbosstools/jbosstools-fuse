@@ -11,11 +11,10 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import io.fabric8.camel.facade.CamelFacade;
-import io.fabric8.camel.facade.JmxTemplateCamelFacade;
-
 import java.util.List;
 
+import org.fusesource.ide.jmx.camel.internal.CamelFacade;
+import org.fusesource.ide.jmx.camel.internal.JmxTemplateCamelFacade;
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
 import org.jboss.tools.jmx.core.tree.NodeProvider;
 import org.jboss.tools.jmx.core.tree.Root;

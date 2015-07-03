@@ -26,7 +26,7 @@ Raleigh NC 27606 USA.
 
    <url>
       <discovery label="Gemini Update Site" url="http://download.jboss.org/jbosstools/updates/requirements/gemini/2.0.0.RELEASE/"/>
-      <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/luna/"/>
+      <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/mars/"/>
    </url>
 
    <requires>

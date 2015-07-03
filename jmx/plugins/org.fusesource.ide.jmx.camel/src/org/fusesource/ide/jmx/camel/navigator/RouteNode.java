@@ -11,8 +11,6 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import io.fabric8.camel.facade.mbean.CamelRouteMBean;
-
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -26,6 +24,7 @@ import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
+import org.fusesource.ide.jmx.camel.internal.CamelRouteMBean;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 

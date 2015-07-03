@@ -13,10 +13,10 @@ package org.fusesource.ide.jmx.camel.navigator;
 
 import java.util.List;
 
-import io.fabric8.camel.facade.CamelFacade;
-import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.jmx.camel.internal.CamelFacade;
+import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
 
 public class CamelFacades {

@@ -11,8 +11,7 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
-
+import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 import org.fusesource.ide.jmx.commons.messages.INodeStatistics;
 import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
 

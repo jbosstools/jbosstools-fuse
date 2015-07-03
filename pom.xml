@@ -35,9 +35,9 @@
   </prerequisites>
 
   <properties>
-
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <!-- compiler settings -->
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
 
     <!-- JBoss Tools Integration Stack version -->
     <jbtis.version>4.3.0.Beta1a</jbtis.version>
@@ -47,29 +47,24 @@
     <tychoVersion>0.22.0</tychoVersion>
     <tychoExtrasVersion>${tychoVersion}</tychoExtrasVersion>
     
-    <!-- fuse tooling related versions -->
+    <!-- fuse tooling related -->
     <tycho.scmUrl>scm:git:https://github.com/fusesource/fuseide.git</tycho.scmUrl>
     <forge-project-id>ide</forge-project-id>
     <ide-version>${project.version}</ide-version>
     
-    <!-- dependency versions -->
-    <!-- lookup in Fabric8-bom -->
-    <fabric.version>1.2.0.redhat-133</fabric.version>
+    <!-- camel version -->
     <camel.version>2.15.1.redhat-620133</camel.version>
-    <cxf.version>3.0.4.redhat-620133</cxf.version>
+
+    <!-- AMQ JMX plugin -->
     <activemq.version>5.11.0.redhat-620133</activemq.version>
+    <geronimo.jms.version>1.1.1</geronimo.jms.version>
+
+    <!-- SMX JMX plugin -->
     <servicemix-nmr.version>1.6.1</servicemix-nmr.version>
 
-    <jackson.version>2.5.1</jackson.version>
-    <spring.version>4.1.5.RELEASE</spring.version>
-    <jclouds.version>1.8.0</jclouds.version>
-    <slf4j.version>1.7.5</slf4j.version>
-    <guava.version>17.0</guava.version>
-    <jolokia.version>1.2.2</jolokia.version>
-    <json-simple.version>1.1.1</json-simple.version>
-    <apache.http.version>4.3.6</apache.http.version>
-    <apache.httpcore.version>4.3.3</apache.httpcore.version>
-
+    <!-- codegen/buildtools fabric8 versions (only build time deps) -->
+    <fabric.version>1.2.0.redhat-133</fabric.version>
+    
     <!-- data transformation versions -->
     <version.fasterxml>2.2.0</version.fasterxml>
     <version.jaxb>2.2.6</version.jaxb>
@@ -78,6 +73,17 @@
     <version.xmlunit>1.5</version.xmlunit>
     <version.commons>3.2.1</version.commons>
     <version.camel>${camel.version}</version.camel>
+
+    <!-- other versions -->
+    <jackson.version>2.5.1</jackson.version>
+    <spring.version>4.1.5.RELEASE</spring.version>
+    <slf4j.version>1.7.5</slf4j.version>
+    <guava.version>17.0</guava.version>
+    <jolokia.version>1.2.2</jolokia.version>
+    <json-simple.version>1.1.1</json-simple.version>
+    <apache.http.version>4.3.6</apache.http.version>
+    <apache.httpcore.version>4.3.3</apache.httpcore.version>
+
   </properties>
 
   <modules>

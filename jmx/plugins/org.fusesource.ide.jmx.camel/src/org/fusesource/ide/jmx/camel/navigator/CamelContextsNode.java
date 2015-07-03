@@ -11,14 +11,13 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import io.fabric8.camel.facade.CamelFacade;
-import io.fabric8.camel.facade.mbean.CamelContextMBean;
-
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
+import org.fusesource.ide.jmx.camel.internal.CamelContextMBean;
+import org.fusesource.ide.jmx.camel.internal.CamelFacade;
 import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
 

@@ -15,9 +15,9 @@ import java.util.List;
 
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import io.fabric8.camel.facade.mbean.CamelProcessorMBean;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableView;
 import org.fusesource.ide.commons.ui.views.PageTabDescriptor;
+import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
 
 public class ProcessorsPageTabDescriptor extends PageTabDescriptor {

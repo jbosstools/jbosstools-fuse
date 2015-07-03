@@ -11,10 +11,6 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import io.fabric8.camel.facade.CamelFacade;
-import io.fabric8.camel.facade.mbean.CamelContextMBean;
-import io.fabric8.camel.facade.mbean.CamelEndpointMBean;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +31,9 @@ import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.commons.util.URIs;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
+import org.fusesource.ide.jmx.camel.internal.CamelContextMBean;
+import org.fusesource.ide.jmx.camel.internal.CamelEndpointMBean;
+import org.fusesource.ide.jmx.camel.internal.CamelFacade;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 

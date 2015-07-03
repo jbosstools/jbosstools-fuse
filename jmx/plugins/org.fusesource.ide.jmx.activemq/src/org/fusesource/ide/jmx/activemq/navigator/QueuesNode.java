@@ -11,9 +11,6 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
-import io.fabric8.activemq.facade.BrokerFacade;
-import io.fabric8.activemq.facade.QueueViewFacade;
-
 import java.util.Collection;
 
 import org.eclipse.jface.action.Action;
@@ -28,6 +25,8 @@ import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
 import org.fusesource.ide.jmx.activemq.Messages;
+import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;
+import org.fusesource.ide.jmx.activemq.internal.QueueViewFacade;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 

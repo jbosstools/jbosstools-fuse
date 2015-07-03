@@ -11,15 +11,12 @@
 
 package org.fusesource.ide.jmx.servicemix.navigator;
 
-import io.fabric8.servicemix.facade.ServiceMixFacade;
-
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.jmx.servicemix.ServiceMixJMXPlugin;
+import org.fusesource.ide.jmx.servicemix.internal.ServiceMixFacade;
 import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
-
-
 
 public class ServiceMixNode extends NodeSupport implements ImageProvider {
 

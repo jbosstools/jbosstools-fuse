@@ -11,8 +11,6 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
-import io.fabric8.activemq.facade.BrokerFacade;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +31,7 @@ import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.jmx.activemq.ActiveMQConverter;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
 import org.fusesource.ide.jmx.activemq.Messages;
+import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;
 import org.fusesource.ide.jmx.commons.messages.IExchange;
 import org.fusesource.ide.jmx.commons.messages.IExchangeBrowser;
 import org.jboss.tools.jmx.core.tree.Node;
