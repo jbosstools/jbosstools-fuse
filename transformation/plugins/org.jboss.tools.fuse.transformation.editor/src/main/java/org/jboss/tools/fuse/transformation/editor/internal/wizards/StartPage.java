@@ -37,7 +37,6 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
-import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -96,8 +95,6 @@ public class StartPage extends XformWizardPage {
             }
         });
 
-        WizardPageSupport wps = WizardPageSupport.create(this, context);
-        wps.setValidationMessageProvider(new WizardValidationMessageProvider());
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
@@ -297,7 +294,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                _projectCombo.getControl().getParent(), new WizardControlDecorationUpdater());
+                _projectCombo.getControl().getParent());
 
         // Bind transformation ID widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_idText);
@@ -329,7 +326,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                _idText.getParent(), new WizardControlDecorationUpdater());
+                _idText.getParent());
 
         // Bind file path widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_dozerPathText);
@@ -354,7 +351,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                null, new WizardControlDecorationUpdater());
+                null);
 
         // Bind camel file path widget to UI model
         widgetValue = WidgetProperties.text(SWT.Modify).observe(_camelFilePathText);
@@ -387,7 +384,7 @@ public class StartPage extends XformWizardPage {
             }
         });
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                null, new WizardControlDecorationUpdater());
+                null);
 
         // bind the source type string dropdown
         _sourceCV.setContentProvider(new ObservableListContentProvider());
@@ -430,7 +427,7 @@ public class StartPage extends XformWizardPage {
         sourceList.add("");
         _sourceCV.setInput(sourceList);
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                null, new WizardControlDecorationUpdater());
+                null);
 
         // bind the source type string dropdown
         _targetCV.setContentProvider(new ObservableListContentProvider());
@@ -473,7 +470,7 @@ public class StartPage extends XformWizardPage {
         targetList.add("");
         _targetCV.setInput(targetList);
         ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                null, new WizardControlDecorationUpdater());
+                null);
 
         listenForValidationChanges();
     }

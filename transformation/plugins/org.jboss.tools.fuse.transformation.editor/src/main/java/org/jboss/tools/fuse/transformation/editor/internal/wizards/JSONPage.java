@@ -32,7 +32,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
-import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -110,8 +109,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             }
         });
         _binding = context.bindValue(widgetValue, modelValue, strategy, null);
-        ControlDecorationSupport.create(_binding, decoratorPosition, _jsonFileText.getParent(),
-                new WizardControlDecorationUpdater());
+        ControlDecorationSupport.create(_binding, decoratorPosition, _jsonFileText.getParent());
 
         listenForValidationChanges();
     }
@@ -133,8 +131,6 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             }
         });
 
-        WizardPageSupport wps = WizardPageSupport.create(this, context);
-        wps.setValidationMessageProvider(new WizardValidationMessageProvider());
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too

@@ -38,7 +38,6 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
-import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -114,8 +113,6 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             }
         });
 
-        WizardPageSupport wps = WizardPageSupport.create(this, context);
-        wps.setValidationMessageProvider(new WizardValidationMessageProvider());
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
@@ -249,7 +246,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         });
         _binding = context.bindValue(widgetValue, modelValue, strategy, null);
         ControlDecorationSupport.create(_binding, decoratorPosition,
-                _javaClassText.getParent(), new WizardControlDecorationUpdater());
+                _javaClassText.getParent());
 
         listenForValidationChanges();
     }
@@ -295,8 +292,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             }
         });
         _binding2 = context.bindValue(widgetValue, modelValue, strategy, null);
-        ControlDecorationSupport.create(_binding2, decoratorPosition, _javaClassText.getParent(),
-                new WizardControlDecorationUpdater());
+        ControlDecorationSupport.create(_binding2, decoratorPosition, _javaClassText.getParent());
     }
 
     @Override

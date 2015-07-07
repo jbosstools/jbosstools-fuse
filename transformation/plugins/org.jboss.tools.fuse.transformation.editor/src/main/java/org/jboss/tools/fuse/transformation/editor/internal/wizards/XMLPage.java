@@ -43,7 +43,6 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
-import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -110,8 +109,6 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         });
 
-        WizardPageSupport wps = WizardPageSupport.create(this, context);
-        wps.setValidationMessageProvider(new WizardValidationMessageProvider());
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
@@ -354,8 +351,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         });
         _binding = context.bindValue(widgetValue, modelValue, strategy, null);
-        ControlDecorationSupport.create(_binding, decoratorPosition, _xmlFileText.getParent(),
-                new WizardControlDecorationUpdater());
+        ControlDecorationSupport.create(_binding, decoratorPosition, _xmlFileText.getParent());
 
         IObservableValue comboWidgetValue = ViewerProperties.singleSelection().observe(_xmlRootsCombo);
         IObservableValue comboModelValue = null;
@@ -378,8 +374,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         });
         _binding2 = context.bindValue(comboWidgetValue, comboModelValue, combostrategy, null);
-        ControlDecorationSupport.create(_binding2, decoratorPosition, _xmlRootsCombo.getControl().getParent(),
-                new WizardControlDecorationUpdater());
+        ControlDecorationSupport.create(_binding2, decoratorPosition, _xmlRootsCombo.getControl().getParent());
 
         modelValue.addValueChangeListener(new IValueChangeListener() {
 
