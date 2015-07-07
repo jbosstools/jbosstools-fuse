@@ -152,6 +152,9 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                     model.setTargetFilePath("");
                 }
                 _xmlPreviewText.setText("");
+                _xmlRootsCombo.getCombo().removeAll();
+                _xmlRootsCombo.getCombo().setText("");
+                XMLPage.this.resetFinish();
             }
 
             @Override
@@ -166,12 +169,14 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             public void widgetSelected(SelectionEvent event) {
                 if (isSourcePage()) {
                     model.setSourceType(ModelType.XML);
-                    model.setSourceFilePath("");
                 } else {
                     model.setTargetType(ModelType.XML);
-                    model.setTargetFilePath("");
                 }
+                model.setTargetFilePath("");
                 _xmlPreviewText.setText("");
+                _xmlRootsCombo.getCombo().removeAll();
+                _xmlRootsCombo.getCombo().setText("");
+                XMLPage.this.resetFinish();
             }
 
             @Override

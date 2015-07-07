@@ -147,7 +147,7 @@ public class StartPage extends XformWizardPage {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                final IResource res = Util.selectResourceFromWorkspace(getShell(), ".xml", model.getProject());
+                final IResource res = Util.selectDozerResourceFromWorkspace(getShell(), model.getProject());
                 if (res != null) {
                     final IPath respath = JavaUtil.getJavaPathForResource(res);
                     final String path = respath.makeRelative().toString();

@@ -172,6 +172,9 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 } else {
                     model.setTargetType(ModelType.JSON_SCHEMA);
                 }
+                model.setTargetFilePath("");
+                _jsonPreviewText.setText("");
+                JSONPage.this.resetFinish();
             }
         });
 
@@ -184,6 +187,9 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 } else {
                     model.setTargetType(ModelType.JSON);
                 }
+                model.setTargetFilePath("");
+                _jsonPreviewText.setText("");
+                JSONPage.this.resetFinish();
             }
         });
 
