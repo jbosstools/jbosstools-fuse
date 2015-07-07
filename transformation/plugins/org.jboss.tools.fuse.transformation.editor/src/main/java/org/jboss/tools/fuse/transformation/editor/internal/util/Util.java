@@ -56,6 +56,7 @@ import org.fusesource.ide.camel.model.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.model.Model;
+import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
 
 /**
  *
@@ -268,6 +269,36 @@ public class Util {
             dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
         }
         dialog.setTitle("Select Camel XML File from Project");
+        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
+        dialog.open();
+        final Object[] result = dialog.getResult();
+        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
+            return null;
+        }
+        return (IFile) result[0];
+    }
+
+    /**
+     * @param shell
+     * @param extension
+     * @param project
+     * @return The selected resource
+     */
+    public static IResource selectDozerResourceFromWorkspace(final Shell shell,
+                                                        final IProject project) {
+        IJavaProject javaProject = null;
+        if (project != null) {
+            javaProject = JavaCore.create(project);
+        }
+        DozerResourceClasspathSelectionDialog dialog;
+        if (javaProject == null) {
+            dialog = new DozerResourceClasspathSelectionDialog(shell,
+                                                          ResourcesPlugin.getWorkspace().getRoot(),
+                                                          "xml");
+        } else {
+            dialog = new DozerResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
+        }
+        dialog.setTitle("Select Transformation File from Project");
         dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
