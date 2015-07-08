@@ -100,9 +100,9 @@
   <repositories>
 
     <repository>
-      <id>ea.jboss.org</id>
-      <name>JBoss Early Access Repository</name>
-      <url>https://repository.jboss.org/nexus/content/groups/ea</url>
+      <id>fusesource.ea.repo</id>
+      <name>JBoss Fuse Early Access Repository</name>
+      <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
@@ -112,9 +112,9 @@
     </repository>
 
     <repository>
-      <id>origin.ea.jboss.org</id>
-      <name>JBoss Early Access Repository</name>
-      <url>http://origin-repository.jboss.org/nexus/content/groups/ea/</url>
+      <id>fusesource.release.repo</id>
+      <name>JBoss Fuse Release Repository</name>
+      <url>https://repo.fusesource.com/nexus/content/repositories/releases</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
@@ -124,33 +124,9 @@
     </repository>
 
     <repository>
-      <id>jboss-public-repository-group</id>
-      <name>JBoss Public Repository Group</name>
-      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-    
-    <repository>
-      <id>jboss-snapshots-repository</id>
-      <name>JBoss Snapshots Repository</name>
-      <url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-    
-    <repository>
-      <id>jboss-fs-snapshots-repository</id>
-      <name>JBoss FS Snapshots Repository</name>
-      <url>https://repository.jboss.org/nexus/content/repositories/fs-snapshots/</url>
+      <id>jboss.public.repo</id>
+      <name>JBoss Public Repository</name>
+      <url>http://repository.jboss.org/nexus/content/repositories/public</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
@@ -162,40 +138,39 @@
   </repositories>
 
   <pluginRepositories>
+    <pluginRepository>
+      <id>fusesource.ea.repo</id>
+      <name>JBoss Fuse Early Access Repository</name>
+      <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
 
     <pluginRepository>
-      <id>release-proxy.jboss.org</id>
-      <name>JBoss Release Proxy Repository</name>
-      <url>http://repository.jboss.org/nexus/content/groups/m2-release-proxy</url>
+      <id>fusesource.release.repo</id>
+      <name>JBoss Fuse Release Repository</name>
+      <url>https://repo.fusesource.com/nexus/content/repositories/releases</url>
       <snapshots>
-	      <enabled>false</enabled>
+        <enabled>true</enabled>
       </snapshots>
       <releases>
-	      <enabled>true</enabled>
+        <enabled>true</enabled>
       </releases>
     </pluginRepository>
-    
+
     <pluginRepository>
-      <id>ea.jboss.org</id>
-      <name>JBoss Early Access Repository</name>
-      <url>http://repository.jboss.org/nexus/content/groups/ea</url>
+      <id>jboss.public.repo</id>
+      <name>JBoss Public Repository</name>
+      <url>http://repository.jboss.org/nexus/content/repositories/public</url>
       <snapshots>
-	      <enabled>false</enabled>
+        <enabled>true</enabled>
       </snapshots>
       <releases>
-	      <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-    
-    <pluginRepository>
-      <id>jboss-snapshots-repository</id>
-      <name>JBoss Snapshots Repository</name>
-      <url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
-      <snapshots>
-	      <enabled>true</enabled>
-      </snapshots>
-      <releases>
-	      <enabled>true</enabled>
+        <enabled>true</enabled>
       </releases>
     </pluginRepository>
 
