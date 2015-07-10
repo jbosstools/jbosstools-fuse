@@ -22,6 +22,7 @@ import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.ToDefinition;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.fusesource.ide.camel.model.generated.Choice;
 import org.fusesource.ide.camel.model.generated.NodeFactory;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
 
@@ -172,10 +173,14 @@ public abstract class RouteSupport extends RouteContainer {
 				} else {
 					// lets find all the last nodes added
 					// such as the When / Otherwise nodes in a Choice...
-					lastNode.addTargetNodeAsLastStep(node);
+					lastNode.addTargetNode(node);
 				}
 			} else {
-				parent.addTargetNode(node);
+				if (lastNode != null && lastNode instanceof Choice) {
+					lastNode.addTargetNode(node);
+				} else {
+					parent.addTargetNode(node);
+				}
 			}
 			if (!isMulticastNode(parent, node) && node.isNextSiblingStepAddedAsNodeChild()) {
 				parent = node;
