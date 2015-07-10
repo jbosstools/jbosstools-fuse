@@ -44,7 +44,7 @@
     
     <!-- Tycho versions -->
     <jboss-tycho-version>0.22.1-SNAPSHOT</jboss-tycho-version>
-    <tychoVersion>0.22.0</tychoVersion>
+    <tychoVersion>0.23.0</tychoVersion>
     <tychoExtrasVersion>${tychoVersion}</tychoExtrasVersion>
     
     <!-- fuse tooling related -->
