@@ -136,13 +136,11 @@ abstract class MappingViewer {
     }
 
     void dropOnSource() throws Exception {
-        mapping = config.setSource(mapping, Util.draggedObject());
-        config.save();
+        setSource(Util.draggedObject());
     }
 
     void dropOnTarget() throws Exception {
-        mapping = config.setTarget(mapping, (Model)Util.draggedObject());
-        config.save();
+        setTarget((Model)Util.draggedObject());
     }
 
     boolean equals(final MappingOperation<?, ?> mapping,
@@ -181,8 +179,58 @@ abstract class MappingViewer {
         return "";
     }
 
+    void setSource(final Object sourceObject) throws Exception {
+        final Model targetModel = (Model)mapping.getTarget();
+        if (targetModel == null) {
+            mapping = config.setSource(mapping, sourceObject, null, null);
+        } else {
+            final boolean sourceIsOrInCollection =
+                sourceObject instanceof Model && Util.isOrInCollection((Model)sourceObject);
+            final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
+            if (sourceIsOrInCollection == targetIsOrInCollection) {
+                mapping = config.setSource(mapping, sourceObject, null, null);
+            } else {
+                final List<Integer> sourceIndexes = sourceIsOrInCollection
+                                                    ? Util.indexes(sourceText.getShell(),
+                                                                   (Model)sourceObject, true)
+                                                    : null;
+                final List<Integer> targetIndexes = targetIsOrInCollection
+                                                    ? Util.indexes(targetText.getShell(),
+                                                                   targetModel, false)
+                                                    : null;
+                mapping = config.setSource(mapping, sourceObject, sourceIndexes, targetIndexes);
+            }
+        }
+        config.save();
+    }
+
     void setSourceText() {
         setText(sourceText, mapping.getSource());
+    }
+
+    void setTarget(final Model targetModel) throws Exception {
+        final Object sourceObject = mapping.getSource();
+        if (sourceObject == null) {
+            mapping = config.setTarget(mapping, targetModel, null, null);
+        } else {
+            final boolean sourceIsOrInCollection =
+                sourceObject instanceof Model && Util.isOrInCollection((Model)sourceObject);
+            final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
+            if (sourceIsOrInCollection == targetIsOrInCollection) {
+                mapping = config.setTarget(mapping, targetModel, null, null);
+            } else {
+                final List<Integer> sourceIndexes = sourceIsOrInCollection
+                                                    ? Util.indexes(sourceText.getShell(),
+                                                                   (Model)sourceObject, true)
+                                                    : null;
+                final List<Integer> targetIndexes = targetIsOrInCollection
+                                                    ? Util.indexes(targetText.getShell(),
+                                                                   targetModel, false)
+                                                    : null;
+                mapping = config.setTarget(mapping, targetModel, sourceIndexes, targetIndexes);
+            }
+        }
+        config.save();
     }
 
     void setTargetText() {
