@@ -579,9 +579,13 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 	 * @return
 	 */
 	private boolean findUnconnectedNode(List<AbstractNode> nodes) {
+		boolean unconnected = false;
 		for (AbstractNode node : nodes) {
 			if (node instanceof Route == false && node.getAllConnections().isEmpty()) return true;
-			if (!node.getChildren().isEmpty()) return findUnconnectedNode(node.getChildren());
+			if (!node.getChildren().isEmpty()) {
+				unconnected = findUnconnectedNode(node.getChildren());
+				if (unconnected) return true;
+			}
 		}
 		return false;
 	}
