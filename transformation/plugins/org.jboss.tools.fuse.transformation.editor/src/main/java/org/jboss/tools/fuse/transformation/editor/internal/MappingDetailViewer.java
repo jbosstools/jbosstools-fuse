@@ -331,7 +331,13 @@ public final class MappingDetailViewer extends MappingViewer {
             return;
         }
         Util.updateMavenDependencies(dlg.language.getDependencies(), config.project());
-        mapping = config.setSourceExpression(mapping, dlg.language.getName(), dlg.expression);
+        final Model targetModel = (Model)mapping.getTarget();
+        final List<Integer> indexes =
+            targetModel != null && Util.isOrInCollection(targetModel)
+            ? Util.indexes(sourceText.getShell(), targetModel, false)
+            : null;
+        mapping =
+            config.setSourceExpression(mapping, dlg.language.getName(), dlg.expression, indexes);
         config.save();
     }
 
@@ -341,10 +347,11 @@ public final class MappingDetailViewer extends MappingViewer {
         if (dlg.open() != Window.OK) {
             return;
         }
-        mapping = source
-                  ? config.setSource(mapping, dlg.field)
-                  : config.setTarget(mapping, dlg.field);
-        config.save();
+        if (source) {
+            setSource(dlg.field);
+        } else {
+            setTarget(dlg.field);
+        }
     }
 
     void setVariable() throws Exception {
@@ -352,7 +359,12 @@ public final class MappingDetailViewer extends MappingViewer {
         if (dlg.open() != Window.OK) {
             return;
         }
-        mapping = config.setSource(mapping, dlg.variable);
+        final Model targetModel = (Model)mapping.getTarget();
+        final List<Integer> indexes =
+            targetModel != null && Util.isOrInCollection(targetModel)
+            ? Util.indexes(sourceText.getShell(), targetModel, false)
+            : null;
+        mapping = config.setSource(mapping, dlg.variable, null, indexes);
         config.save();
     }
 

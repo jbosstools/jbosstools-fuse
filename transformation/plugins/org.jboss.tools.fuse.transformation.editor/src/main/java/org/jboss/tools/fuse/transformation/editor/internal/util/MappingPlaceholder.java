@@ -9,6 +9,7 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.tools.fuse.transformation.MappingOperation;
@@ -21,7 +22,9 @@ import org.jboss.tools.fuse.transformation.model.Model;
 public class MappingPlaceholder implements MappingOperation<Object, Model> {
 
     private Object source;
+    private List<Integer> sourceIndexes;
     private Model target;
+    private List<Integer> targetIndexes;
 
     /**
      * {@inheritDoc}
@@ -58,35 +61,39 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
      *
      * @see org.jboss.tools.fuse.transformation.MappingOperation#getSourceIndex()
      */
+    @Override
     public List<Integer> getSourceIndex() {
-        return null;
+        return new ArrayList<>(sourceIndexes);
     }
-    
+
     /**
      * {@inheritDoc}
      *
      * @see org.jboss.tools.fuse.transformation.MappingOperation#setSourceIndex()
      */
+    @Override
     public void setSourceIndex(List<Integer> indexes) {
-
+        sourceIndexes = indexes;
     }
-    
+
     /**
      * {@inheritDoc}
      *
      * @see org.jboss.tools.fuse.transformation.MappingOperation#getTargetIndex()
      */
+    @Override
     public List<Integer> getTargetIndex() {
-        return null;
+        return new ArrayList<>(targetIndexes);
     }
-    
+
     /**
      * {@inheritDoc}
      *
      * @see org.jboss.tools.fuse.transformation.MappingOperation#setTargetIndex()
      */
+    @Override
     public void setTargetIndex(List<Integer> indexes) {
-
+        targetIndexes = indexes;
     }
 
     void setSource(final Object source) {

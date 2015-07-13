@@ -190,7 +190,7 @@ public class TransformationConfig implements MapperConfiguration {
         builder.append(model.getName());
         return builder.toString();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -300,8 +300,10 @@ public class TransformationConfig implements MapperConfiguration {
     public ExpressionMapping mapExpression(final String language,
                                            final String expression,
                                            final Model target,
-                                           final List<Integer> targetIndex) {
-        final ExpressionMapping mapping = delegate.mapExpression(language, expression, target, targetIndex);
+                                           final List<Integer> targetIndexes) {
+        final ExpressionMapping mapping =
+            delegate.mapExpression(language, expression, target,
+                                   targetIndexes == null ? noIndexes(target) : targetIndexes);
         fireEvent(MAPPING, null, mapping);
         return mapping;
     }
@@ -309,8 +311,6 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
-     * #mapExpression(java.lang.String, java.lang.String, org.jboss.tools.fuse.transformation.model.Model)
      */
     @Override
     public ExpressionMapping mapExpression(final String language,
@@ -328,9 +328,12 @@ public class TransformationConfig implements MapperConfiguration {
     @Override
     public FieldMapping mapField(final Model source,
                                  final Model target,
-                                 final List<Integer> sourceIndex,
-                                 final List<Integer> targetIndex) {
-        final FieldMapping mapping = delegate.mapField(source, target, sourceIndex, targetIndex);
+                                 final List<Integer> sourceIndexes,
+                                 final List<Integer> targetIndexes) {
+        final FieldMapping mapping =
+            delegate.mapField(source, target,
+                              sourceIndexes == null ? noIndexes(source) : sourceIndexes,
+                              targetIndexes == null ? noIndexes(target) : targetIndexes);
         fireEvent(MAPPING, null, mapping);
         return mapping;
     }
@@ -380,8 +383,10 @@ public class TransformationConfig implements MapperConfiguration {
     @Override
     public VariableMapping mapVariable(final Variable variable,
                                        final Model target,
-                                       final List<Integer> targetIndex) {
-        final VariableMapping mapping = delegate.mapVariable(variable, target, targetIndex);
+                                       final List<Integer> targetIndexes) {
+        final VariableMapping mapping =
+            delegate.mapVariable(variable, target,
+                                 targetIndexes == null ? noIndexes(target) : targetIndexes);
         fireEvent(MAPPING, null, mapping);
         return mapping;
     }
@@ -407,6 +412,14 @@ public class TransformationConfig implements MapperConfiguration {
         mappingPlaceholders.add(mapping);
         fireEvent(MAPPING, null, mapping);
         return mapping;
+    }
+
+    private List<Integer> noIndexes(final Model model) {
+        if (model == null) return null;
+        List<Integer> indexes = noIndexes(model.getParent());
+        if (indexes == null) return new ArrayList<>();
+        indexes.add(null);
+        return indexes;
     }
 
     /**
@@ -502,11 +515,14 @@ public class TransformationConfig implements MapperConfiguration {
      *         delegate
      */
     public MappingOperation<?, ?> setSource(final MappingOperation<?, ?> mapping,
-                                            final Object source) {
+                                            final Object source,
+                                            final List<Integer> sourceIndexes,
+                                            final List<Integer> targetIndexes) {
         if (mapping.getType() == null) {
             ((MappingPlaceholder)mapping).setSource(source);
         }
-        return update(mapping, source, (Model)mapping.getTarget(), MAPPING_SOURCE);
+        return update(mapping, source, sourceIndexes, (Model)mapping.getTarget(), targetIndexes,
+                      MAPPING_SOURCE);
     }
 
     /**
@@ -518,13 +534,16 @@ public class TransformationConfig implements MapperConfiguration {
      */
     public MappingOperation<?, ?> setSourceExpression(final MappingOperation<?, ?> mapping,
                                                       final String language,
-                                                      final String expression) {
+                                                      final String expression,
+                                                      final List<Integer> targetIndexes) {
         if (mapping.getType() == null) {
-            ((MappingPlaceholder)mapping).setSource(new ExpressionPlaceholder(language, expression));
+            ((MappingPlaceholder)mapping).setSource(new ExpressionPlaceholder(language,
+                                                                              expression));
         } else {
             delegate.removeMapping(mapping);
         }
-        return update(mapping, language, expression, (Model)mapping.getTarget(), MAPPING_SOURCE);
+        final Model targetModel = (Model)mapping.getTarget();
+        return update(mapping, language, expression, targetModel, targetIndexes, MAPPING_SOURCE);
     }
 
     /**
@@ -534,11 +553,14 @@ public class TransformationConfig implements MapperConfiguration {
      *         delegate
      */
     public MappingOperation<?, ?> setTarget(final MappingOperation<?, ?> mapping,
-                                            final Model target) {
+                                            final Model target,
+                                            final List<Integer> sourceIndexes,
+                                            final List<Integer> targetIndexes) {
         if (mapping.getType() == null) {
             ((MappingPlaceholder)mapping).setTarget(target);
         }
-        return update(mapping, mapping.getSource(), target, MAPPING_TARGET);
+        return update(mapping, mapping.getSource(), sourceIndexes, target, targetIndexes,
+                      MAPPING_TARGET);
     }
 
     /**
@@ -565,7 +587,9 @@ public class TransformationConfig implements MapperConfiguration {
 
     private MappingOperation<?, ?> update(final MappingOperation<?, ?> mapping,
                                           final Object source,
+                                          List<Integer> sourceIndexes,
                                           final Model target,
+                                          List<Integer> targetIndexes,
                                           final String eventType) {
         MappingOperation<?, ?> resultMapping;
         if (source == null || target == null) {
@@ -579,7 +603,15 @@ public class TransformationConfig implements MapperConfiguration {
                 if (mapping.getType() != null) {
                     delegate.removeMapping(mapping);
                 }
-                resultMapping = delegate.mapField((Model)source, target);
+                final Model sourceModel = (Model)source;
+                if (sourceIndexes == null && targetIndexes == null) {
+                    resultMapping = delegate.mapField(sourceModel, target);
+                } else {
+                    if (sourceIndexes == null) sourceIndexes = noIndexes(sourceModel);
+                    if (targetIndexes == null) targetIndexes = noIndexes(target);
+                    resultMapping =
+                        delegate.mapField(sourceModel, target, sourceIndexes, targetIndexes);
+                }
                 if (mapping.getType() == MappingType.CUSTOM) {
                     final CustomMapping customMapping = (CustomMapping)mapping;
                     resultMapping = delegate.customizeMapping((FieldMapping)resultMapping,
@@ -590,21 +622,38 @@ public class TransformationConfig implements MapperConfiguration {
                 if (mapping.getType() == MappingType.VARIABLE
                     && target.equals(mapping.getTarget())) {
                     resultMapping = mapping;
-                    ((VariableMapping)mapping).setVariable((Variable)source);
+                    if (targetIndexes == null) {
+                        ((VariableMapping)mapping).setVariable((Variable)source);
+                    } else {
+                        resultMapping =
+                            delegate.mapVariable((Variable)source, target, targetIndexes);
+                    }
                 } else {
                     if (mapping.getType() != null) {
                         delegate.removeMapping(mapping);
                     }
-                    resultMapping = delegate.mapVariable((Variable)source, target);
+                    if (targetIndexes == null) {
+                        resultMapping = delegate.mapVariable((Variable)source, target);
+                    } else {
+                        resultMapping =
+                            delegate.mapVariable((Variable)source, target, targetIndexes);
+                    }
                 }
             } else {
                 if (mapping.getType() != null) {
                     delegate.removeMapping(mapping);
                 }
                 final Expression expression = (Expression)source;
-                resultMapping = delegate.mapExpression(expression.getLanguage(),
-                                                       expression.getExpression(),
-                                                       target);
+                if (targetIndexes == null) {
+                    resultMapping = delegate.mapExpression(expression.getLanguage(),
+                                                           expression.getExpression(),
+                                                           target);
+                } else {
+                    resultMapping = delegate.mapExpression(expression.getLanguage(),
+                                                           expression.getExpression(),
+                                                           target,
+                                                           targetIndexes);
+                }
             }
         }
         fireEvent(eventType, mapping, resultMapping);
@@ -615,6 +664,7 @@ public class TransformationConfig implements MapperConfiguration {
                                           final String language,
                                           final String expression,
                                           final Model target,
+                                          List<Integer> targetIndexes,
                                           final String eventType) {
         MappingOperation<?, ?> resultMapping;
         if (target == null) {
@@ -623,7 +673,11 @@ public class TransformationConfig implements MapperConfiguration {
             if (mapping.getType() == null) {
                 mappingPlaceholders.remove(mapping);
             }
-            resultMapping = delegate.mapExpression(language, expression, target);
+            if (targetIndexes == null) {
+                resultMapping = delegate.mapExpression(language, expression, target);
+            } else {
+                resultMapping = delegate.mapExpression(language, expression, target, targetIndexes);
+            }
         }
         fireEvent(eventType, mapping, resultMapping);
         return resultMapping;

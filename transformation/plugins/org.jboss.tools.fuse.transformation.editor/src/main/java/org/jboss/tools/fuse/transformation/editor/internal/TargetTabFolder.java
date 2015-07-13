@@ -53,9 +53,31 @@ public final class TargetTabFolder extends ModelTabFolder {
                                                                       .getSelection())
                                                                       .getFirstElement();
                     if (source instanceof Model) {
-                        config.mapField((Model) source, (Model) getCurrentTarget());
+                        final Model sourceModel = (Model)source;
+                        final Model targetModel = (Model)getCurrentTarget();
+                        final boolean sourceIsOrInCollection = Util.isOrInCollection(sourceModel);
+                        final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
+                        if (sourceIsOrInCollection == targetIsOrInCollection) {
+                            config.mapField(sourceModel, targetModel, null, null);
+                        } else {
+                            final List<Integer> sourceIndexes = sourceIsOrInCollection
+                                                                ? Util.indexes(getShell(),
+                                                                               sourceModel, true)
+                                                                : null;
+                            final List<Integer> targetIndexes = targetIsOrInCollection
+                                                                ? Util.indexes(getShell(),
+                                                                               targetModel, false)
+                                                                : null;
+                            config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
+                        }
                     } else {
-                        config.mapVariable((Variable) source, (Model) getCurrentTarget());
+                        final Variable variable = (Variable)source;
+                        final Model targetModel = (Model)getCurrentTarget();
+                        final List<Integer> indexes =
+                                Util.isOrInCollection(targetModel)
+                                ? Util.indexes(getShell(), targetModel, false)
+                                : null;
+                        config.mapVariable(variable, targetModel, indexes);
                     }
                     config.save();
                     return true;

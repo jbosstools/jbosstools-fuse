@@ -118,6 +118,30 @@ public class Util {
         return config.root(model).equals(config.getTargetModel());
     }
 
+    private static ArrayList<IResource> getAllXMLFilesInProject(final IProject project) {
+        ArrayList<IResource> allFiles = new ArrayList<>();
+        IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
+        IPath path = project.getLocation();
+        recursivelyFindFilesWithExtension(allFiles, path, wsRoot, "xml");
+        return allFiles;
+    }
+
+    public static List<Integer> indexes(final Shell shell,
+                                        final Model model,
+                                        final boolean source) {
+        if (Util.isOrInCollection(model)) {
+            final IndexesDialog dlg = new IndexesDialog(shell, model, source);
+            if (dlg.open() == Window.OK) {
+                return dlg.indexes;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isOrInCollection(final Model model) {
+        return model != null && (model.isCollection() || isOrInCollection(model.getParent()));
+    }
+
     /**
      * @return a paint listener that paints a rounded border around a control
      */
@@ -179,6 +203,49 @@ public class Util {
         }
     }
 
+    public static boolean projectHasCamelResource(final IProject project) {
+        try {
+            ArrayList<IResource> xmlResources = getAllXMLFilesInProject(project);
+            for (Iterator<IResource> iterator = xmlResources.iterator(); iterator.hasNext();) {
+                IResource item = iterator.next();
+                File testFile = new File(item.getLocationURI());
+                if (testFile.exists()) {
+                    boolean isValidCamel = CamelFileTypeHelper
+                            .isSupportedCamelFile(project,
+                                    item.getProjectRelativePath().toPortableString());
+                    if (isValidCamel) {
+                        return true;
+                    }
+                }
+            }
+        } catch (final Exception e) {
+            // ignore
+        }
+
+        return false;
+    }
+
+    private static void recursivelyFindFilesWithExtension(ArrayList<IResource> allFiles, IPath path,
+            IWorkspaceRoot wsRoot, String extension) {
+        IContainer  container =  wsRoot.getContainerForLocation(path);
+
+        try {
+            IResource[] resources = container.members();
+            for (IResource resource : resources) {
+                if (extension.equalsIgnoreCase(resource.getFileExtension())) {
+                    allFiles.add(resource);
+                }
+                if (resource.getType() == IResource.FOLDER) {
+                    IPath tempPath = resource.getLocation();
+                    recursivelyFindFilesWithExtension(allFiles, tempPath, wsRoot, extension);
+                }
+            }
+        } catch (CoreException e) {
+            // eat the exception, but throw it in the console
+            e.printStackTrace();
+        }
+    }
+
     /**
      * @param arc
      * @param background
@@ -198,57 +265,6 @@ public class Util {
         };
     }
 
-    private static void recursivelyFindFilesWithExtension(ArrayList<IResource> allFiles, IPath path, 
-            IWorkspaceRoot wsRoot, String extension) {
-        IContainer  container =  wsRoot.getContainerForLocation(path);
-
-        try {
-            IResource[] resources = container.members();
-            for (IResource resource : resources) {
-                if (extension.equalsIgnoreCase(resource.getFileExtension())) {
-                    allFiles.add(resource);
-                }
-                if (resource.getType() == IResource.FOLDER) {
-                    IPath tempPath = resource.getLocation();
-                    recursivelyFindFilesWithExtension(allFiles, tempPath, wsRoot, extension);
-                }
-            }
-        } catch (CoreException e) {
-            // eat the exception, but throw it in the console
-            e.printStackTrace();
-        }
-    }    
-    
-    private static ArrayList<IResource> getAllXMLFilesInProject(final IProject project) {
-        ArrayList<IResource> allFiles = new ArrayList<IResource>();
-        IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
-        IPath path = project.getLocation();
-        recursivelyFindFilesWithExtension(allFiles, path, wsRoot, "xml");
-        return allFiles;
-    }    
-    
-    public static boolean projectHasCamelResource(final IProject project) {
-        try {
-            ArrayList<IResource> xmlResources = getAllXMLFilesInProject(project);
-            for (Iterator<IResource> iterator = xmlResources.iterator(); iterator.hasNext();) {
-                IResource item = iterator.next();
-                File testFile = new File(item.getLocationURI());
-                if (testFile.exists()) {
-                    boolean isValidCamel = CamelFileTypeHelper
-                            .isSupportedCamelFile(project, 
-                                    item.getProjectRelativePath().toPortableString());
-                    if (isValidCamel) {
-                        return true;
-                    }
-                }
-            }
-        } catch (final Exception e) {
-            // ignore
-        }
-        
-        return false;
-    }
-    
     /**
      * @param shell
      * @param extension
@@ -486,25 +502,7 @@ public class Util {
         if (targetModel != null && Util.type(targetModel)) {
             return false;
         }
-        if (source == null || targetModel == null) {
-            return true;
-        }
-        if (sourceModel == null) {
-            return (!targetModel.isCollection() && !hasCollectionAncestor(targetModel));
-        }
-        return sourceModel.isCollection() == targetModel.isCollection()
-                && hasCollectionAncestor(sourceModel) == hasCollectionAncestor(targetModel);
-    }
-    
-    private static boolean hasCollectionAncestor(final Model model) {
-        Model parent = model.getParent();
-        while (parent != null) {
-            if (parent.isCollection()) {
-                return true;
-            }
-            parent = parent.getParent();
-        }
-        return false;
+        return true;
     }
 
     private Util() {}
