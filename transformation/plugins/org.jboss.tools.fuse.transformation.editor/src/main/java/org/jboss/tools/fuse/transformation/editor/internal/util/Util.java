@@ -501,9 +501,13 @@ public class Util {
         if (targetModel != null && Util.type(targetModel)) {
             return false;
         }
-        if (sourceModel != null && targetModel != null
-            && config.getMapping(sourceModel, targetModel) != null) {
-            return false;
+        if (sourceModel != null && targetModel != null) {
+            if (config.getMapping(sourceModel, targetModel) != null) {
+                return false;
+            }
+            if (sourceModel.isCollection() && targetModel.isCollection()) {
+                return false;
+            }
         }
         return true;
     }

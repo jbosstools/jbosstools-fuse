@@ -31,11 +31,13 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.tools.fuse.transformation.MappingOperation;
+import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
@@ -143,10 +145,15 @@ public class MappingsViewer extends Composite {
         targetPane.setBackground(getBackground());
 
         for (final MappingOperation<?, ?> mapping : config.getMappings()) {
-            mappingSummaries.add(new MappingSummary(config,
-                                                    mapping,
-                                                    this,
-                                                    potentialDropTargets));
+            if (mapping.getType() == MappingType.EXPRESSION
+                || mapping.getType() == MappingType.VARIABLE
+                || !((Model)mapping.getSource()).isCollection()
+                || !((Model)mapping.getTarget()).isCollection()) {
+                mappingSummaries.add(new MappingSummary(config,
+                                                        mapping,
+                                                        this,
+                                                        potentialDropTargets));
+            }
         }
 
         int width = Math.max(sourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x,
