@@ -55,13 +55,12 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.fusesource.ide.camel.model.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.model.Model;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
+import org.jboss.tools.fuse.transformation.model.Model;
 
 /**
  *
  */
-@SuppressWarnings("restriction")
 public class Util {
 
     /**
@@ -500,6 +499,10 @@ public class Util {
             return false;
         }
         if (targetModel != null && Util.type(targetModel)) {
+            return false;
+        }
+        if (sourceModel != null && targetModel != null
+            && config.getMapping(sourceModel, targetModel) != null) {
             return false;
         }
         return true;
