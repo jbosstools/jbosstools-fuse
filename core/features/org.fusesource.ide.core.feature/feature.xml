@@ -4,6 +4,8 @@
       label="%featureName"
       version="8.0.0.qualifier"
       provider-name="%providerName"
+      license-feature="org.jboss.tools.foundation.license.feature"
+      license-feature-version="0.0.0"
       plugin="org.fusesource.ide.tooling">
 
    <description url="http://tools.jboss.org/features/apachecamel.html">
@@ -14,16 +16,10 @@
       %copyright
    </copyright>
 
-   <license url="license.html">
-      Red Hat, Inc. licenses these features and plugins to you under
-certain open source licenses (or aggregations of such licenses),
-which in a particular case may include the Eclipse Public License,
-the GNU Lesser General Public License, and/or certain other open
-source licenses. For precise licensing details, consult the corresponding
-source code, or contact Red Hat Legal Affairs, 1801 Varsity Drive,
-Raleigh NC 27606 USA.
+   <license>
+      %license
    </license>
-   
+
    <url>
       <discovery label="JBoss Tools Update Site" url="http://download.jboss.org/jbosstools/updates/development/mars/"/>
    </url>
