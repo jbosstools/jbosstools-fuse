@@ -82,7 +82,7 @@ find * -name 'feature.xml' | xargs perl -pi -e "s/$SOURCE_VERSION_PATTERN_OSGI/$
 #find * -name '*.xml' | xargs perl -pi -e "s/$SOURCE_VERSION_PATTERN_OSGI/$OSGI_TARGET_VERSION/g"
 
 # replace IDE version
-perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>$MVN_TARGET_VERSION<\/ide-version>/g" plugins/pom.xml
+#perl -pi -e "s/<ide-version>.*<\/ide-version>/<ide-version>$MVN_TARGET_VERSION<\/ide-version>/g" pom.xml
 
 echo "DONE!"
 
