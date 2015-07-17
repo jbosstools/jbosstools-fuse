@@ -125,4 +125,23 @@ public class TopicNode extends DestinationNodeSupport  implements ImageProvider,
 	protected BrokerFacade getFacade() {
 		return getBrokerNode().getFacade();
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof TopicNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("AMQTopicNode-" + topicsNode.toString() + "-" + consumersNode.toString() + "-" + producersNode.toString() +  "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }

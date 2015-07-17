@@ -531,4 +531,23 @@ ImageProvider {
 	public Object createProcessorBeanView(String routeId, String nodeId) {
 		return new ProcessorBeanView(this, routeId, nodeId);
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof CamelContextNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("CamelContextNode-" + camelContextsNode.toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }

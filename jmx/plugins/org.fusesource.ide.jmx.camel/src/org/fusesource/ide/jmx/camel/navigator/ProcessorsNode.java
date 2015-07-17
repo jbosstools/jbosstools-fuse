@@ -32,5 +32,22 @@ public class ProcessorsNode extends RefreshableCollectionNode {
 		
 	}
 
-
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof ProcessorsNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("CamelProcessorsNode-" + camelContextNode.getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }

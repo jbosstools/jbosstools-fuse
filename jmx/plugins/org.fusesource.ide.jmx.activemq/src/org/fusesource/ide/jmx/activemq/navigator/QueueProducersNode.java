@@ -73,4 +73,22 @@ public class QueueProducersNode extends RefreshableCollectionNode implements Ima
 		return getBrokerNode().getFacade();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof QueueProducersNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("AMQQueueProducersNode-" + brokerNode.getBrokerName() + "-" + queueNode.getName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }

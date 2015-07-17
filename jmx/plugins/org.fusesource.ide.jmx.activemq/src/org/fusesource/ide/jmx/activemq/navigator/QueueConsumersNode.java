@@ -72,4 +72,22 @@ public class QueueConsumersNode extends RefreshableCollectionNode implements Ima
 		return getBrokerNode().getFacade();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof QueueConsumersNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("AMQQueueConsumersNode-" + brokerNode.getBrokerName() + "-" + queueNode.getName() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }

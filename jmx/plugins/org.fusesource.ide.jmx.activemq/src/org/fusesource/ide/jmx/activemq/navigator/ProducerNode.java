@@ -57,8 +57,28 @@ public class ProducerNode extends NodeSupport implements ConnectedNode {
 		}
 		return null;
 	}
+	
 	@Override
 	public List<Node> getConnectedTo() {
 		return Collections.singletonList(getDestinationNode());
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof ProducerNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("AMQProducerNode-" + getParent().toString() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
 	}
 }

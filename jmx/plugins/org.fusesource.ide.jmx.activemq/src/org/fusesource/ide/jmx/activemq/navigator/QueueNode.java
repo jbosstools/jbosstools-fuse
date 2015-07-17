@@ -148,4 +148,22 @@ public class QueueNode extends DestinationNodeSupport implements IExchangeBrowse
 		return getBrokerNode().getFacade();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof QueueNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("AMQQueueNode-" + queuesNode.getBrokerNode().getBrokerName() + "-" + queuesNode.toString() + "-" + queue.getName() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }

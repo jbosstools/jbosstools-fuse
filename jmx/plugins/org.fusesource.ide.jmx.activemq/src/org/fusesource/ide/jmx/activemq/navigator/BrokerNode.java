@@ -90,10 +90,34 @@ public class BrokerNode extends NodeSupport implements ImageProvider, Refreshabl
 		this.password = password;
 	}
 
+	/**
+	 * @return the brokerName
+	 */
+	public String getBrokerName() {
+		return this.brokerName;
+	}
 
 	@Override
 	public Image getImage() {
 		return ActiveMQJMXPlugin.getDefault().getImage("message_broker.png");
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof BrokerNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("AMQBrokerNode-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }

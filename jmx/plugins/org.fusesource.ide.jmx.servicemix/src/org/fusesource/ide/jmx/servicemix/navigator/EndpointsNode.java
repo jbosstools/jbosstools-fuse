@@ -57,4 +57,23 @@ public class EndpointsNode extends RefreshableCollectionNode implements ImagePro
 	public Image getImage() {
 		return ServiceMixJMXPlugin.getDefault().getImage("queue_folder.png");
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof EndpointsNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("ServiceMixEndpointsNode" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }

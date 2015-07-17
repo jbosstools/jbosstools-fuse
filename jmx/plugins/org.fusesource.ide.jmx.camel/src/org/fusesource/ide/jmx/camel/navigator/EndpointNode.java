@@ -169,4 +169,23 @@ public class EndpointNode extends NodeSupport implements IExchangeBrowser, Messa
 		// TODO
 		//schemeNode.getEndpointsNode().getCamelContextNode().getFacade().removeEndpoint(name);
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof EndpointNode && obj.hashCode() == hashCode();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if( getConnection() != null && getConnection().getProvider() != null ) {
+			return ("CamelEndpointNode-" + schemeNode.getEndpointsNode().getCamelContextNode().getManagementName() + "-" + toString() + "-" + getConnection().getProvider().getName(getConnection())).hashCode();
+		}
+		return super.hashCode();
+	}
 }
