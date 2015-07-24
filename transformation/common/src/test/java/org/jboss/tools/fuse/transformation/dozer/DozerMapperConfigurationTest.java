@@ -215,6 +215,19 @@ public class DozerMapperConfigurationTest {
     }
     
     @Test
+    public void mapVariableToIndex() throws Exception {
+        DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
+        Model target = ModelBuilder
+                .fromJavaClass(ABCOrder.class).get("orderItems").get("item").get("id");
+        Variable variable = config.addVariable("VAR1", "ABC-VAL");
+        List<Integer> index = Arrays.asList(new Integer[] {null, 0, null});
+        config.mapVariable(variable, target, index);
+        VariableMapping mapping = (VariableMapping)config.getMappings().get(0);
+        Assert.assertEquals(variable, mapping.getSource());
+        Assert.assertEquals(index, mapping.getTargetIndex());
+    }
+    
+    @Test
     public void mapExpression() throws Exception {
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model target = modelB.get("B1");
