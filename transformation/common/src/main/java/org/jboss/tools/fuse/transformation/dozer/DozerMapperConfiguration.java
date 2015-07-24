@@ -265,7 +265,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     public DozerVariableMapping mapVariable(
             final Variable variable, final Model target, List<Integer> targetIndex) {
         // create the mapping
-        Mapping mapping = getExtendedMapping(VARIABLE_MAPPER_CLASS, target);
+        Mapping mapping = getExtendedMapping(VARIABLE_MAPPER_CLASS, target, targetIndex);
         Field field = new Field();
         field.setA(createField(variableModel, VARIABLE_MAPPER_CLASS));
         field.setB(createField(target, mapping.getClassB().getContent(), targetIndex));
@@ -284,7 +284,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     @Override
     public DozerExpressionMapping mapExpression(
             String language, String expression, Model target, List<Integer> targetIndex) {
-        Mapping mapping = getExtendedMapping(EXPRESSION_MAPPER_CLASS, target);
+        Mapping mapping = getExtendedMapping(EXPRESSION_MAPPER_CLASS, target, targetIndex);
         Field field = new Field();
         field.setA(createField(expressionModel, EXPRESSION_MAPPER_CLASS));
         field.setB(createField(target, mapping.getClassB().getContent(), targetIndex));
@@ -410,20 +410,20 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return map;
     }
 
-    Mapping getExtendedMapping(String sourceClass, final Model target) {
+    Mapping getExtendedMapping(String sourceClass, final Model target, List<Integer> index) {
         Mapping mapping = null;
 
         // See if the variable mapping class is already setup for the target
         for (Mapping m : mapConfig.getMapping()) {
             if (m.getClassA().getContent().equals(sourceClass)
-                    && m.getClassB().getContent().equals(target.getParent().getType())) {
+                    && m.getClassB().getContent().equals(getRootType(target, index))) {
                 mapping = m;
                 break;
             }
         }
         // If not, we need to create it
         if (mapping == null) {
-            mapping = mapClass(sourceClass, target.getParent().getType());
+            mapping = mapClass(sourceClass, getRootType(target, index));
         }
 
         return mapping;
