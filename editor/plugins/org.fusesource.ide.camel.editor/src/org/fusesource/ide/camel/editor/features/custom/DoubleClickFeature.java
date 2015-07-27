@@ -55,6 +55,14 @@ public class DoubleClickFeature extends AbstractCustomFeature {
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#canUndo(org.eclipse.graphiti.features.context.IContext)
+	 */
+	@Override
+	public boolean canUndo(IContext context) {
+		return false;
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.features.custom.ICustomFeature#execute(org.eclipse.graphiti.features.context.ICustomContext)
 	 */
 	@Override
