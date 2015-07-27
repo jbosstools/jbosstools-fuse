@@ -622,7 +622,7 @@
     </properties>
   </node>
   <node id="routingSlip">
-    <tooltip>Route a message through a series of processing steps where the sequence of steps is determined at runtime"</tooltip>
+    <tooltip>Route a message through a series of processing steps where the sequence of steps is determined at runtime</tooltip>
     <contextId>routingSlipEIP</contextId>
     <properties>
       <property id="description">
