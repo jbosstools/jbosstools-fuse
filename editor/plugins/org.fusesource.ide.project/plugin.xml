@@ -65,8 +65,8 @@
              </instanceof>
              <test
                    forcePluginActivation="true"
-                   property="org.eclipse.core.resources.projectNature"
-                   value="org.fusesource.ide.project.RiderProjectNature">
+                   property="org.fusesource.ide.project.CamelNatureTester.camelNatureEnabled"
+                   value="true">
              </test>
              <test
                    forcePluginActivation="true"
@@ -220,6 +220,7 @@
           id="org.fusesource.ide.project.image"
           typeIds="fuse.camel"/>
  </extension>
+
  <extension
        point="org.eclipse.ui.decorators">
     <decorator
@@ -247,4 +248,127 @@
        </enablement>
     </decorator>
  </extension>
+ 
+ <!-- Camel Project -->
+
+      <extension
+         point="org.eclipse.wst.common.project.facet.core.facets">
+      <project-facet
+            id="jst.camel">
+         <label>
+            Camel
+         </label>
+      </project-facet>
+      <project-facet-version
+            facet="jst.camel"
+            version="2.15">
+         <constraint>
+            <and>
+               <requires
+                     facet="jst.java"
+                     version="[5.0">
+               </requires>
+               <or>
+	               <requires 
+	               		facet="jst.utility"
+	               		version="1.0">
+	               	</requires>
+	               <requires 
+	               		facet="jst.web"
+	               		version="[1.0">
+	               	</requires>
+	            </or>
+            </and>
+         </constraint>
+      </project-facet-version>
+         <action
+            facet="jst.camel"
+            id="jst.camel.install"
+            type="install">
+         <delegate
+               class="org.fusesource.ide.project.camel.CamelFacetInstallationDelegate">
+         </delegate>
+         <config-factory
+               class="org.fusesource.ide.project.camel.CamelFacetDataModelProvider">
+         </config-factory>
+      </action>
+      <template id="template.jst.camel.2.15.util">
+         <label>Camel Template</label>
+         <fixed facet="jst.java"></fixed>
+         <fixed facet="jst.camel"></fixed>
+         <preset id="preset.jst.camel.2.15.util"></preset>
+      </template>
+      <template id="template.jst.camel.2.15.web">
+         <label>Camel Web Template</label>
+         <fixed facet="jst.java"></fixed>
+         <fixed facet="jst.camel"></fixed>
+         <preset id="preset.jst.camel.2.15.web"></preset>
+      </template>
+      <event-handler
+            facet="jst.camel"
+            type="RUNTIME_CHANGED"
+            version="1.0">
+         <delegate
+               class="org.fusesource.ide.project.camel.CamelRuntimeChangedDelegate">
+         </delegate>
+      </event-handler>
+   </extension>
+       <extension
+          point="org.eclipse.wst.server.core.moduleTypes">
+       <moduleType
+             id="jst.camel"
+             name="Camel Module">
+       </moduleType>
+    </extension>
+    <extension
+          point="org.eclipse.wst.server.core.moduleFactories">
+       <moduleFactory
+             class="org.fusesource.ide.project.camel.CamelModuleFactory"
+             id="org.fusesource.ide.project.camel.CamelModuleFactory"
+             projects="true">
+          <moduleType
+                types="jst.camel"
+                versions="1.0">
+          </moduleType>
+       </moduleFactory>
+    </extension>
+ 
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.fusesource.ide.newwizards"
+            class="org.fusesource.ide.project.camel.ui.CamelProjectWizard"
+            icon="icons/camel_context_icon.png"
+            id="jst.camel.project.wizard"
+            name="Camel Project"
+            project="true">
+      </wizard>
+   </extension>
+
+   <extension
+         point="org.eclipse.wst.common.project.facet.ui.wizardPages">
+      <wizard-pages
+            action="jst.camel.install">
+         <page
+               class="org.fusesource.ide.project.camel.ui.CamelFacetInstallationPage">
+         </page>
+      </wizard-pages>
+   </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.presets">
+      <static-preset id="preset.jst.camel.2.15.util">
+         <label>Camel 2.15 Utility Project</label>
+         <facet id="jst.java" version="6.0"></facet>
+         <facet id="jst.utility" version="1.0"></facet>
+         <facet id="jst.camel" version="2.15"></facet>
+         <description>Configure a Utility project to use Camel 2.15</description>
+      </static-preset>
+      <static-preset id="preset.jst.camel.2.15.web">
+         <label>Camel 2.15 Web Project</label>
+         <facet id="jst.java" version="6.0"></facet>
+         <facet id="jst.web" version="3.0"></facet>
+         <facet id="jst.camel" version="2.15"></facet>
+         <description>Configure a Utility project to use Camel 2.15</description>
+      </static-preset>
+   </extension>
 </plugin>

@@ -68,8 +68,13 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	
 	@Override
 	public long installBundle(MBeanServerConnection mbsc, String bundlePath) {
+		// Small hack here bc mazy
+		String path2 = bundlePath;
+		if( !bundlePath.startsWith("file:"))
+			path2 = "file:" + bundlePath;
+		
 		try {
-			Object retVal = mbsc.invoke(this.objectNameFramework, "installBundle", new Object[] { bundlePath } , new String[] {String.class.getName() }); 
+			Object retVal = mbsc.invoke(this.objectNameFramework, "installBundle", new Object[] { path2 } , new String[] {String.class.getName() }); 
 			if (retVal instanceof Long) {
 				long bid = (Long)retVal;
 				// also start the bundle
