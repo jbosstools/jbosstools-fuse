@@ -118,7 +118,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	public ICreateFeature[] getCreateFeatures() {
 		ICreateFeature[] features = ProviderHelper.getCreateFeatures(this);
 		AbstractNode selectedNode = null;
-		RiderDesignEditor rider = Activator.getDiagramEditor();
+		RiderDesignEditor rider = (RiderDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
 		selectedNode = rider.getSelectedNode();
 		if (selectedNode == null) {
 			selectedNode = rider.getSelectedRoute();
