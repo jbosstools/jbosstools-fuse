@@ -10,11 +10,19 @@
  ******************************************************************************/
 package org.fusesource.ide.project;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
+import org.eclipse.wst.common.project.facet.core.FacetedProjectFramework;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.project.providers.CamelVirtualFolder;
 
 /**
@@ -61,6 +69,19 @@ public class CamelNatureTester extends PropertyTester {
 					if (RiderProjectNature.NATURE_ID.equals(natures[i])) {
 						return true;
 					}
+				}
+				
+				// no camel nature found - check for facet
+				if(FacetedProjectFramework.isFacetedProject(project)) {
+					IFacetedProject fp = ProjectFacetsManager.create(project);
+	                Set<IProjectFacetVersion> enabled = fp.getProjectFacets();
+	                Iterator<IProjectFacetVersion> it = enabled.iterator();
+	                while(it.hasNext()) {
+	                        IProjectFacetVersion i = it.next();
+	                        if( i.getProjectFacet().getId().equals("jst.camel")) {
+	                                return true;
+	                        }
+	                }	
 				}
 			} catch (CoreException e) {
 				RiderLogFacade.getLog(Activator.getDefault().getLog()).error(e);

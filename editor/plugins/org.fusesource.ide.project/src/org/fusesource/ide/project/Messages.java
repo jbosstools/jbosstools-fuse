@@ -25,6 +25,16 @@ public class Messages extends NLS {
 	public static String invalidCamelContextFileMessage;
 	public static String riderLaunchConfigTabTitle;
 	
+	
+	
+
+	public static String NewCamelProject_ContentRootLabel;
+	public static String NewCamelProject_FacetInstallationPage;
+	public static String NewCamelProject_FacetInstallationPageDesc;
+	public static String NewCamelProject_FacetInstallationPage_ContentRootError;
+	public static String NewCamelProject_FirstPageTitle;
+	public static String NewCamelProject_FirstPageDesc;
+	
 	static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);
