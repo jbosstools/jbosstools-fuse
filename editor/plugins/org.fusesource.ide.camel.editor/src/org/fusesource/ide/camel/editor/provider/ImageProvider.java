@@ -117,12 +117,14 @@ public class ImageProvider extends AbstractImageProvider {
             String diagramImagePath = e.getAttribute(ToolBehaviourProvider.DIAGRAM_IMAGE_ATTR);
             if (paletteIconPath != null && paletteIconPath.trim().length()>0) {
             	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_SMALL);
-            	addImageFilePath(key, b.getResource(paletteIconPath).toString());
+            	URL imgUrl = b.getEntry(paletteIconPath);
+            	addImageFilePath(key, imgUrl.toString());
             	Activator.getDefault().getImageRegistry().put(key, getExternalImage(b, paletteIconPath));
             }
             if (diagramImagePath != null && diagramImagePath.trim().length()>0) {
             	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_LARGE);
-            	addImageFilePath(key, b.getResource(diagramImagePath).toString());
+            	URL imgUrl = b.getEntry(diagramImagePath);
+            	addImageFilePath(key, imgUrl.toString());
             	Activator.getDefault().getImageRegistry().put(key, getExternalImage(b, diagramImagePath));
             }
         }
