@@ -64,7 +64,7 @@ public class BrokerPaletteEntry implements ICustomPaletteEntry {
         Dependency dep = new Dependency();
         dep.setGroupId("org.apache.activemq");
         dep.setArtifactId("activemq-camel");
-        dep.setVersion("5.11.0.redhat-620114");
+        dep.setVersion("5.11.0.redhat-620133");
         deps.add(dep);
         dep = new Dependency();
         dep.setGroupId("org.apache.camel");
