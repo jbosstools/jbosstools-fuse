@@ -300,7 +300,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	}
 
 	protected void initializeDiagramForSelectedRoute() {
-	    if (activeRoute == null) {
+	    if (activeRoute == null || activeConfig == null) {
 	        return;
 	    }
 
@@ -916,7 +916,7 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	
 	public void refreshDiagramContents() {
 		initializeDiagramForSelectedRoute();
-		if (activeConfig.diagram != null) {
+		if (activeConfig != null && activeConfig.diagram != null) {
 			getDiagramTypeProvider().init(activeConfig.diagram, getDiagramBehavior());
 			getDiagramBehavior().getRefreshBehavior().initRefresh();
 	        setPictogramElementsForSelection(null);
