@@ -956,6 +956,9 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	}
 
 	public void setupGridVisibilityAsync() {
+		// this can't be invoked async as its causing dirty editor all the time then
+		DiagramOperations.updateGridColor(RiderDesignEditor.this);
+				
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -965,9 +968,6 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	}
 
 	private void setupGridVisibility() {
-		// TODO is this causing transaction issues???
-		DiagramOperations.updateGridColor(RiderDesignEditor.this);
-
 		// retrieve the grid visibility setting
 		boolean gridVisible = PreferenceManager.getInstance().loadPreferenceAsBoolean(PreferencesConstants.EDITOR_GRID_VISIBILITY);
 
