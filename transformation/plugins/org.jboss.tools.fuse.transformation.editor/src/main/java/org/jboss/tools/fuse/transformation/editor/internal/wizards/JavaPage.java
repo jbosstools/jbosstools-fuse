@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
+import java.util.List;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -54,6 +56,8 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 import org.jboss.tools.fuse.transformation.model.ModelBuilder;
 
@@ -68,7 +72,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     private Text _javaClassText;
     private ModelBuilder _builder;
     private org.jboss.tools.fuse.transformation.model.Model _javaModel = null;
-    private ModelViewer _modelViewer;
+    private SimplerModelViewer _modelViewer;
     private Binding _binding;
 
     /**
@@ -177,7 +181,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         group.setLayout(new GridLayout(3, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        _modelViewer = new ModelViewer(null, group, _javaModel, null);
+        _modelViewer = new SimplerModelViewer(null, group, _javaModel, null);
         _modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         _modelViewer.layout();
 
@@ -306,11 +310,38 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     @Override
     public void clearControls() {
         if (_javaClassText != null && !_javaClassText.isDisposed()) {
-            _javaModel = new org.jboss.tools.fuse.transformation.model.Model("", "");
+            _javaModel = null; //new org.jboss.tools.fuse.transformation.model.Model("", "");
             _modelViewer.setModel(_javaModel);
             _javaClassText.setText("");
         }
         notifyListeners();
+    }
+    
+    /**
+     * Hide the search field and mapped fields buttons.
+     * @author brianf
+     */
+    class SimplerModelViewer extends ModelViewer {
+
+        /**
+         * Constructor
+         * @param config
+         * @param parent
+         * @param rootModel
+         * @param potentialDropTargets
+         */
+        public SimplerModelViewer(TransformationConfig config, Composite parent,
+                org.jboss.tools.fuse.transformation.model.Model rootModel,
+                List<PotentialDropTarget> potentialDropTargets) {
+            super(config, parent, rootModel, potentialDropTargets);
+        }
+
+        @Override
+        protected void setViewOptions() {
+            this.showMappedFieldsButton = false;
+            this.showSearchField = false;
+        }
+        
     }
 
 }
