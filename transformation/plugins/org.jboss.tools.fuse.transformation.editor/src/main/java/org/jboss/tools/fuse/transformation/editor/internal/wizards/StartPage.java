@@ -37,6 +37,7 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -95,9 +96,10 @@ public class StartPage extends XformWizardPage {
             }
         });
 
+        WizardPageSupport.create(this, context);
         setErrorMessage(null); // clear any error messages at first
-        setMessage(null); // now that we're using info messages, we must reset
-                          // this too
+//        setMessage(null); // now that we're using info messages, we must reset
+//                          // this too
     }
 
     private void createPage(Composite parent) {
@@ -413,6 +415,7 @@ public class StartPage extends XformWizardPage {
                 uiJob.schedule();
 
                 if (value == null || ((String) value).trim().isEmpty()) {
+                    resetFinish();
                     return ValidationStatus.error("A source type must be selected");
                 }
                 return ValidationStatus.ok();
@@ -456,6 +459,7 @@ public class StartPage extends XformWizardPage {
                 uiJob.schedule();
 
                 if (value == null || ((String) value).trim().isEmpty()) {
+                    resetFinish();
                     return ValidationStatus.error("A target type must be selected");
                 }
                 return ValidationStatus.ok();
@@ -473,5 +477,24 @@ public class StartPage extends XformWizardPage {
                 null);
 
         listenForValidationChanges();
+    }
+
+    @Override
+    public void notifyListeners() {
+        if (_camelFilePathText != null && !_camelFilePathText.isDisposed()) {
+            notifyControl(_sourceCV.getCombo(), SWT.Selection);
+            notifyControl(_targetCV.getCombo(), SWT.Selection);
+            notifyControl(_camelFilePathText, SWT.Modify);
+            notifyControl(_dozerPathText, SWT.Modify);
+            notifyControl(_idText, SWT.Modify);
+        }
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            notifyListeners();
+        }
     }
 }

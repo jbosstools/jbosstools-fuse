@@ -32,6 +32,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -131,6 +132,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             }
         });
 
+        WizardPageSupport.create(this, context);
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
@@ -337,7 +339,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
     @Override
     public void notifyListeners() {
         if (_jsonFileText != null && !_jsonFileText.isDisposed()) {
-            _jsonFileText.notifyListeners(SWT.Modify, new Event());
+            notifyControl(_jsonFileText, SWT.Modify);
         }
     }
 
@@ -354,6 +356,14 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
     public void pingBinding() {
         if (_binding != null) {
             _binding.validateTargetToModel();
+        }
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            notifyListeners();
         }
     }
 }

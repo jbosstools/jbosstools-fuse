@@ -43,6 +43,7 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -56,7 +57,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -109,6 +109,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         });
 
+        WizardPageSupport.create(this, context);
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
@@ -470,8 +471,8 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
     @Override
     public void notifyListeners() {
         if (_xmlFileText != null && !_xmlFileText.isDisposed()) {
-            _xmlFileText.notifyListeners(SWT.Modify, new Event());
-            _xmlRootsCombo.getCombo().notifyListeners(SWT.Modify, new Event());
+            notifyControl(_xmlFileText, SWT.Modify);
+            notifyControl(_xmlRootsCombo.getCombo(), SWT.Modify);
         }
     }
 
@@ -492,6 +493,14 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         }
         if (_binding2 != null) {
             _binding2.validateTargetToModel();
+        }
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            notifyListeners();
         }
     }
 }

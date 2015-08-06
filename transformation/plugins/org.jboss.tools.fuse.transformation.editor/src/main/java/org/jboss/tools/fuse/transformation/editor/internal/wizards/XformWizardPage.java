@@ -22,7 +22,9 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 
@@ -83,6 +85,7 @@ public abstract class XformWizardPage extends WizardPage {
 
     public void resetFinish() {
         setPageComplete(false);
+        pingBinding();
         notifyListeners();
     }
 
@@ -95,7 +98,7 @@ public abstract class XformWizardPage extends WizardPage {
     }
 
     public IWizardPage getSourcePage() {
-        if (model.getSourceTypeStr() != null) {
+        if (model.getSourceTypeStr() != null && !model.getSourceTypeStr().trim().isEmpty()) {
             if (model.getSourceTypeStr().equalsIgnoreCase("java")) {
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.javaSource;
@@ -115,7 +118,7 @@ public abstract class XformWizardPage extends WizardPage {
     }
 
     public IWizardPage getTargetPage() {
-        if (model.getTargetTypeStr() != null) {
+        if (model.getTargetTypeStr() != null && !model.getTargetTypeStr().trim().isEmpty()) {
             if (model.getTargetTypeStr().equalsIgnoreCase("java")) {
                 NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
                 return wizard.javaTarget;
@@ -189,4 +192,11 @@ public abstract class XformWizardPage extends WizardPage {
         }
 
     }
+
+    protected void notifyControl(Control cntrl, int event) {
+        if (cntrl != null && !cntrl.isDisposed()) {
+            cntrl.notifyListeners(event, new Event());
+        }
+    }
+    
 }
