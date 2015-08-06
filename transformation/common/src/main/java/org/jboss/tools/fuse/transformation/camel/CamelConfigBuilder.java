@@ -229,6 +229,7 @@ public abstract class CamelConfigBuilder {
             // Looks like we need to create a new one
             JsonDataFormat jdf = new JsonDataFormat();
             jdf.setLibrary(JsonLibrary.Jackson);
+            jdf.setUnmarshalTypeName(className);
             jdf.setId(id);
             getDataFormats().add(jdf);
             dataFormat = jdf;
