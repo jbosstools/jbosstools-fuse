@@ -33,6 +33,7 @@ import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -104,6 +105,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
             }
         });
 
+        WizardPageSupport.create(this, context);
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
@@ -295,7 +297,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     @Override
     public void notifyListeners() {
         if (_javaClassText != null && !_javaClassText.isDisposed()) {
-            _javaClassText.notifyListeners(SWT.Modify, null);
+            notifyControl(_javaClassText, SWT.Modify);
         }
     }
 
@@ -343,5 +345,12 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         }
         
     }
-
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            notifyListeners();
+        }
+    }
 }

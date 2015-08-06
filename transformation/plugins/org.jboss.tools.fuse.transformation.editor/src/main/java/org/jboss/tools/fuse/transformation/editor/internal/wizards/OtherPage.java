@@ -38,6 +38,7 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -85,6 +86,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     private Label _dfErrorLabel;
     private Binding _binding;
     private Binding _binding2;
+    private IObservableValue idModelValue;
 
     /**
      * @param model
@@ -115,6 +117,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             }
         });
 
+        WizardPageSupport.create(this, context);
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
@@ -240,7 +243,13 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 if (path == null || path.isEmpty()) {
                     return ValidationStatus.error(pathEmptyError);
                 }
-                if (model.getProject().findMember(path) == null) {
+                NewTransformationWizard wizard = (NewTransformationWizard) getWizard();
+                try {
+                    Class<?> tempClass = wizard.getLoader().loadClass(path);
+                    if (tempClass == null) {
+                        return ValidationStatus.error(unableToFindError);
+                    }
+                } catch (ClassNotFoundException e) {
                     return ValidationStatus.error(unableToFindError);
                 }
                 return ValidationStatus.ok();
@@ -257,7 +266,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
 
         // Bind id widget to UI model
         IObservableValue widgetValue = ViewerProperties.singleSelection().observe(_dataFormatIdCombo);
-        IObservableValue modelValue = null;
+        idModelValue = null;
 
         WritableList dfList = new WritableList();
         List<DataFormatDefinition> dataFormats = getModel().camelConfig.getConfigBuilder().getDataFormats();
@@ -277,9 +286,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         }
         _dataFormatIdCombo.setInput(dfList);
         if (isSourcePage()) {
-            modelValue = BeanProperties.value(Model.class, "sourceDataFormatid").observe(model);
+            idModelValue = BeanProperties.value(Model.class, "sourceDataFormatid").observe(model);
         } else {
-            modelValue = BeanProperties.value(Model.class, "targetDataFormatid").observe(model);
+            idModelValue = BeanProperties.value(Model.class, "targetDataFormatid").observe(model);
         }
         UpdateValueStrategy strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
@@ -293,7 +302,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                 return ValidationStatus.ok();
             }
         });
-        _binding2 = context.bindValue(widgetValue, modelValue, strategy, null);
+        _binding2 = context.bindValue(widgetValue, idModelValue, strategy, null);
         ControlDecorationSupport.create(_binding2, decoratorPosition, _javaClassText.getParent());
     }
 
@@ -358,6 +367,8 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         super.setVisible(visible);
         if (visible) {
             initialize();
+            pingBinding();
+            notifyListeners();
         }
     }
 
@@ -365,6 +376,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     public void notifyListeners() {
         if (_javaClassText != null && !_javaClassText.isDisposed()) {
             _javaClassText.notifyListeners(SWT.Modify, new Event());
+            _dataFormatIdCombo.getCombo().notifyListeners(SWT.Selection, new Event());
         }
     }
 
@@ -374,6 +386,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             _javaModel = null; // new org.jboss.tools.fuse.transformation.model.Model("", "");
             _modelViewer.setModel(_javaModel);
             _javaClassText.setText("");
+            _dataFormatIdCombo.getCombo().deselectAll();
+            _dataFormatIdCombo.getCombo().clearSelection();
+            idModelValue.setValue("");
         }
         notifyListeners();
     }
@@ -386,11 +401,6 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         if (_binding2 != null) {
             _binding2.validateTargetToModel();
         }
-    }
-
-    @Override
-    public void resetFinish() {
-        super.resetFinish();
     }
 
     /**
