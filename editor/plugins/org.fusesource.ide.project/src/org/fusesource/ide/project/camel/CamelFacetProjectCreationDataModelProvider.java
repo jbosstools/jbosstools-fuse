@@ -30,8 +30,6 @@ public class CamelFacetProjectCreationDataModelProvider extends
 		
 		IDataModel camelFacet = DataModelFactory.createDataModel(new CamelFacetDataModelProvider());
 		map.add(camelFacet);
-		String camelSrc = camelFacet.getStringProperty(ICamelFacetDataModelProperties.CAMEL_SOURCE_FOLDER);
-		javaFacet.setProperty(IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME, camelSrc);
 	}
 
 	@Override

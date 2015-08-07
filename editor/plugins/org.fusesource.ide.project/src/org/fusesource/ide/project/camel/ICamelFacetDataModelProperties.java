@@ -19,7 +19,6 @@ public interface ICamelFacetDataModelProperties extends IFacetDataModelPropertie
 	 * Our primary keys for setting sar information in the wizard
 	 */
 	public static final String CAMEL_CONTENT_FOLDER = "ICamelFacetDataModelProperties.Content_Folder"; //$NON-NLS-1$
-	public static final String CAMEL_SOURCE_FOLDER = "ICamelFacetDataModelProperties.Source_Folder"; //$NON-NLS-1$
 	public static final String CAMEL_PROJECT_VERSION = "ICamelFacetDataModelProperties.Project.Version"; //$NON-NLS-1$
 	public static final String CREATE_BLUEPRINT_DESCRIPTOR = "ICamelFacetDataModelProperties.Project.Descriptor.Blueprint.Create"; //$NON-NLS-1$
 	
@@ -31,7 +30,6 @@ public interface ICamelFacetDataModelProperties extends IFacetDataModelPropertie
 	
 	/* Store settings inside the project .settings folder */
 	public static final QualifiedName QNAME_CAMEL_CONTENT_FOLDER = new QualifiedName("camel", CAMEL_CONTENT_FOLDER); //$NON-NLS-1$
-	public static final QualifiedName QNAME_CAMEL_SRC_FOLDER = new QualifiedName("camel", CAMEL_SOURCE_FOLDER); //$NON-NLS-1$
 
 	
 	

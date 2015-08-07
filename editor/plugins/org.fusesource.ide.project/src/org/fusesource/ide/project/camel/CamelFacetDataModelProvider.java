@@ -22,7 +22,6 @@ public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModel
 
 	public Set getPropertyNames() {
 		Set names = super.getPropertyNames();
-		names.add(ICamelFacetDataModelProperties.CAMEL_SOURCE_FOLDER);
 		names.add(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER);
 		names.add(ICamelFacetDataModelProperties.CREATE_BLUEPRINT_DESCRIPTOR);
 		names.add(ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE);
@@ -35,9 +34,6 @@ public class CamelFacetDataModelProvider extends J2EEModuleFacetInstallDataModel
 		}
 		else if(ICamelFacetDataModelProperties.CAMEL_CONTENT_FOLDER.equals(propertyName)){
 			return ICamelFacetDataModelProperties.DEFAULT_CAMEL_CONFIG_RESOURCE_FOLDER;
-		}
-		else if(ICamelFacetDataModelProperties.CAMEL_SOURCE_FOLDER.equals(propertyName)){
-			return ICamelFacetDataModelProperties.DEFAULT_CAMEL_SOURCE_FOLDER;
 		} else if( ICamelFacetDataModelProperties.UPDATE_PROJECT_STRUCTURE.equals(propertyName)) {
 			return false;
 		}
