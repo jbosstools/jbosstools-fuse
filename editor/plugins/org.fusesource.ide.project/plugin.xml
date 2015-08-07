@@ -371,4 +371,14 @@
          <description>Configure a Utility project to use Camel 2.15</description>
       </static-preset>
    </extension>
+ 
+ <!-- Maven configurator  -->
+   <extension point="org.eclipse.m2e.core.projectConfigurators">
+      <configurator 
+          id="org.fusesource.ide.project.camel.maven.configurator.wtp"
+          class="org.fusesource.ide.project.camel.maven.CamelProjectConfigurator"
+          name="Camel Configurator" 
+          secondaryTo="org.maven.ide.eclipse.configuration.wtp.configurator"/>
+    </extension>
+
 </plugin>
