@@ -19,8 +19,9 @@ import java.util.Set;
 
 
 public class FindCamelNamespaceHandler extends FindNamespaceHandlerSupport {
-
-	private static String[] camelNamesapceArray = new String[]{ "http://camel.apache.org/schema/spring", "http://camel.apache.org/schema/blueprint" };
+	private static String[] camelNamesapceArray = new String[]{ "http://camel.apache.org/schema/spring", "http://camel.apache.org/schema/blueprint", 
+			"http://www.osgi.org/xmlns/blueprint/v1.0.0", "https://www.osgi.org/xmlns/blueprint/v1.0.0" };
+org.fusesource.ide.commons/src/org/fusesource/ide/commons/contenttype/FindCamelNamespaceHandler.java
 	public static Set<String> camelNamespaces = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(camelNamesapceArray)));
 	
 	public FindCamelNamespaceHandler() {
