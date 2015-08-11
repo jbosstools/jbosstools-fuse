@@ -28,7 +28,7 @@ public class CamelFilesContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof IProject) {
+ 	if (parentElement instanceof IProject) {
 			IProject project = (IProject) parentElement;
 
 			if (!project.isAccessible()) {
