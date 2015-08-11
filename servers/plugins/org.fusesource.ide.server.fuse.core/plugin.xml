@@ -11,10 +11,9 @@
           vendor="%fusesource"
           vendorId="%fusesource"
           version="6.0">
-       <moduleType
-             types="fuse.camel"
-             versions="1.0">
-       </moduleType>
+       <moduleType types="fuse.camel" versions="1.0"></moduleType>
+       <moduleType types="jst.utility" versions="1.0"></moduleType>
+       <moduleType types="jboss.osgi" versions="1.0"></moduleType>
     </runtimeType>
     <runtimeType
           class="org.fusesource.ide.server.fuse.core.runtime.FuseESBRuntimeDelegate"
@@ -24,10 +23,9 @@
           vendor="%fusesource"
           vendorId="%fusesource"
           version="6.1">
-       <moduleType
-             types="fuse.camel"
-             versions="1.0">
-       </moduleType>
+       <moduleType types="fuse.camel" versions="1.0"></moduleType>
+       <moduleType types="jst.utility" versions="1.0"></moduleType>
+       <moduleType types="jboss.osgi" versions="1.0"></moduleType>
     </runtimeType>
     <runtimeType
           class="org.fusesource.ide.server.fuse.core.runtime.FuseESBRuntimeDelegate"
@@ -37,10 +35,9 @@
           vendor="%fusesource"
           vendorId="%fusesource"
           version="6.2">
-       <moduleType
-             types="fuse.camel"
-             versions="1.0">
-       </moduleType>
+       <moduleType types="fuse.camel" versions="1.0"></moduleType>
+       <moduleType types="jst.utility" versions="1.0"></moduleType>
+       <moduleType types="jboss.osgi" versions="1.0"></moduleType>
     </runtimeType>
   </extension>
 
@@ -183,6 +180,104 @@
             mappedId="port.fuse.local"
             serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61,org.fusesource.ide.fuseesb.server.62">
          </subsystemMapping>
+       <!-- Publisher Controllers for specific module types. This one will not be mapped, and will be global  -->
+      <subsystemMapping
+            id="publishDelegate.fuse.default"
+            mappedId="publishDelegate.fuse.default"
+            serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61,org.fusesource.ide.fuseesb.server.62">
+      </subsystemMapping>
+      <!-- osgi assembler mapping -->
+      <subsystemMapping
+            id="publishDelegate.osgi.default"
+            mappedId="publishDelegate.osgi.default"
+			serverTypes="org.fusesource.ide.fuseesb.server.60,org.fusesource.ide.fuseesb.server.61,org.fusesource.ide.fuseesb.server.62">
+      </subsystemMapping>
   </extension>
+  
+  
+  
+  <!-- Runtime facets -->
+   <extension
+         point="org.eclipse.jst.server.core.runtimeFacetMappings">
+      <runtimeFacetMapping
+            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.61"
+            runtime-component="org.fusesource.ide.fuseesb.runtime.component"
+            version="6.0"/>
+      <runtimeFacetMapping
+            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.61"
+            runtime-component="org.fusesource.ide.fuseesb.runtime.component"
+            version="6.1"/>
+      <runtimeFacetMapping
+            runtimeTypeId="org.fusesource.ide.fuseesb.runtime.61"
+            runtime-component="org.fusesource.ide.fuseesb.runtime.component"
+            version="6.2"/>
+  </extension>
+  
+  
+    <extension
+         point="org.eclipse.wst.common.project.facet.core.runtimes">
+      		<runtime-component-type id="org.fusesource.ide.fuseesb.runtime.component"/>
+      		<runtime-component-version type="org.fusesource.ide.fuseesb.runtime.component" version="6.0"/>
+      		<runtime-component-version type="org.fusesource.ide.fuseesb.runtime.component" version="6.1"/>
+      		<runtime-component-version type="org.fusesource.ide.fuseesb.runtime.component" version="6.2"/>
+   			<supported>
+        		<runtime-component
+         			id="org.fusesource.ide.fuseesb.runtime.component"
+         			version="6.0"/>
+                <facet id="wst.web"  version="1.0,1.2,1.3,1.4"/>
+       			<facet id="jst.web"  version="2.2,2.3,2.4,2.5,3.0"/>
+       			<facet id="jst.java" version="1.3,1.4,5.0,6.0,1.7,1.8"/>
+       			<facet id="jst.utility" version="1.0"/>
+       			<facet id="jst.camel" version="2.15"/>
+     		</supported>
+   			<supported>
+        		<runtime-component
+         			id="org.fusesource.ide.fuseesb.runtime.component"
+         			version="6.1"/>
+                <facet id="wst.web"  version="1.0,1.2,1.3,1.4"/>
+       			<facet id="jst.web"  version="2.2,2.3,2.4,2.5,3.0"/>
+       			<facet id="jst.java" version="1.3,1.4,5.0,6.0,1.7,1.8"/>
+       			<facet id="jst.utility" version="1.0"/>
+       			<facet id="jst.camel" version="2.15"/>
+     		</supported>
+   			<supported>
+        		<runtime-component
+         			id="org.fusesource.ide.fuseesb.runtime.component"
+         			version="6.2"/>
+                <facet id="wst.web"  version="1.0,1.2,1.3,1.4"/>
+       			<facet id="jst.web"  version="2.2,2.3,2.4,2.5,3.0"/>
+       			<facet id="jst.java" version="1.3,1.4,5.0,6.0,1.7,1.8"/>
+       			<facet id="jst.utility" version="1.0"/>
+       			<facet id="jst.camel" version="2.15"/>
+     		</supported>
+   </extension>  
+   
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.runtimes">
+     <adapter>
+      <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.0"/>
+      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+	</adapter>
+     <adapter>
+      <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.1"/>
+      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+	</adapter>
+     <adapter>
+      <runtime-component id="org.fusesource.ide.fuseesb.runtime.component" version="6.2"/>
+      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+	</adapter>
+   </extension>
+   
+   
+  <!-- 		NEW_SERVER_ADAPTER add id for new runtime in the runtimeIds field below -->
+   <extension point="org.eclipse.jst.server.core.runtimeClasspathProviders">
+     <runtimeClasspathProvider
+        id="org.fusesource.ide.fuseesb.runtime.component"
+        runtimeTypeIds="org.fusesource.ide.fuseesb.runtime.60,org.fusesource.ide.fuseesb.runtime.61,org.fusesource.ide.fuseesb.runtime.62"
+        class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafProjectRuntimeClasspathProvider"/>
+   </extension>
   
 </plugin>
