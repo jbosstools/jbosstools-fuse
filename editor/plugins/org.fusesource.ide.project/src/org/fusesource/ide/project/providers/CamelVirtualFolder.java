@@ -14,6 +14,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -23,11 +24,8 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
-import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -43,7 +41,8 @@ import org.fusesource.ide.project.Activator;
 public class CamelVirtualFolder implements ContextMenuProvider {
 	
 	private static final String NEW_CAMEL_XML_FILE_WIZARD_ID = "org.fusesource.ide.camel.editor.wizards.NewCamelXmlWizard";
-	
+	private static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
+
 	private IProject project;
 	private ArrayList<IResource> camelFiles = new ArrayList<IResource>();
 
@@ -80,25 +79,23 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 	}
 
 	public void populateChildren() {
-		IPath p = project.getLocation();
-		if (p != null) {
+		if (project != null) {
 			try {
-				findFiles(p.toFile());
+				findFiles(project);
 			} catch (CoreException ex) {
 				// ignore
 			}
 		}
 	}
 
-	private void findFiles(File folder) throws CoreException {
-		File[] files = folder.listFiles();
-		if (files != null) {
-			for (File f : files) {
-				if (f.isDirectory()) {
+	private void findFiles(IResource resource) throws CoreException {
+		if (resource instanceof IContainer ) {
+			IResource[] children = ((IContainer)resource).members();
+			for (IResource f : children) {
+				if (f instanceof IContainer) {
 					// ignore the target folder
 					if (f.getName().equalsIgnoreCase("target")
-							&& f.getParentFile().getName()
-									.equalsIgnoreCase(project.getName()))
+							&& f.getParent().getName().equalsIgnoreCase(project.getName()))
 						continue;
 					findFiles(f);
 				} else {
@@ -115,19 +112,11 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 							addCamelFile(ifile);
 						}
 // END MASTER
+					IFile ifile = (IFile)f;
 					if (ifile != null && ifile.getContentDescription() != null ) {
 						IContentType primary = ifile.getContentDescription().getContentType();
 						boolean primaryMatches = primary.getId().equals(FUSE_CAMEL_CONTENT_TYPE);
-						IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
-						// try to find the obvious content type matching its name
-						IContentType[] types = contentTypeManager.findContentTypesFor(ifile.getName());
-						boolean hasCamelContentType = false;
-						for( int i = 0; i < types.length && !hasCamelContentType; i++ ) {
-							if( types[i].getId().equals(FUSE_CAMEL_CONTENT_TYPE)) {
-								hasCamelContentType = true;
-							}
-						}
-						if( hasCamelContentType )
+						if( primaryMatches )
 							addCamelFile(ifile);
 					}
 				}
@@ -183,9 +172,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 			switch (delta.getKind()) {
 			case IResourceDelta.ADDED:
 				if (resource
-						.getFullPath()
-						.toOSString()
-						.contains(
+						.getFullPath().toOSString().contains(
 								File.separator + "target" + File.separator
 										+ "classes" + File.separator)) {
 					// skip target folder
@@ -195,13 +182,8 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 				// camel virtual folder too
 				try {
 					if (resource != null
-							&& resource instanceof IFile
-							&& ((IFile) resource).getContentDescription() != null
-							&& ((IFile) resource)
-									.getContentDescription()
-									.getContentType()
-									.getId()
-									.equals("org.fusesource.ide.camel.editor.camelContentType")) {
+							&& resource instanceof IFile && ((IFile) resource).getContentDescription() != null
+							&& ((IFile) resource).getContentDescription().getContentType().getId().equals(FUSE_CAMEL_CONTENT_TYPE)) {
 						addCamelFile(resource);
 					}
 				} catch (CoreException ex) {
