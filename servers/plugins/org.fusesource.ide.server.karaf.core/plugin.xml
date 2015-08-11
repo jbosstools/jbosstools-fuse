@@ -304,9 +304,10 @@
   <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
       		<runtime-component-type id="org.fusesource.ide.karaf.runtime.component"/>
-      		<runtime-component-version
-            	type="org.fusesource.ide.karaf.runtime.component"
-            	version="3.0"/>
+      		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="2.2"/>
+      		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="2.3"/>
+      		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="2.4"/>
+      		<runtime-component-version type="org.fusesource.ide.karaf.runtime.component" version="3.0"/>
    			<supported>
         		<runtime-component
          			id="org.fusesource.ide.karaf.runtime.component"
@@ -351,10 +352,23 @@
    
    <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
-
      <adapter>
-      <runtime-component
-            id="org.fusesource.ide.karaf.runtime.component" version="3.0"/>
+      <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="2.2"/>
+      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+	</adapter>
+     <adapter>
+      <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="2.3"/>
+      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+	</adapter>
+     <adapter>
+      <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="2.4"/>
+      <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
+      <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
+	</adapter>
+     <adapter>
+      <runtime-component id="org.fusesource.ide.karaf.runtime.component" version="3.0"/>
       <factory class="org.fusesource.ide.server.karaf.core.runtime.classpath.KarafClasspathProviderAdapterFactory"/>
       <type class="org.eclipse.jst.common.project.facet.core.IClasspathProvider"/>
 	</adapter>

@@ -61,7 +61,6 @@ public class KarafProjectRuntimeClasspathProvider
 		// It is advisable to cache the result, at least for the default entries
 		
 		// More work to pull from the classpath defaults via pref page per runtime type... might need api extensions
-		System.out.println("Reached resolveClasspathContainer");
 		return new IClasspathEntry[0];
 	}
 }
