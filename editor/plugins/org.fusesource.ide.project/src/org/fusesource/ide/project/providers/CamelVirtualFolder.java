@@ -25,6 +25,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -99,7 +102,10 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 						continue;
 					findFiles(f);
 				} else {
+					final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
 					IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(f.getPath()));
+
+// MASTER
 					if (ifile != null) {
 						if (ifile.getContentDescription() != null
 								&& ifile.getContentDescription()
@@ -108,6 +114,21 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 										.equals("org.fusesource.ide.camel.editor.camelContentType")) {
 							addCamelFile(ifile);
 						}
+// END MASTER
+					if (ifile != null && ifile.getContentDescription() != null ) {
+						IContentType primary = ifile.getContentDescription().getContentType();
+						boolean primaryMatches = primary.getId().equals(FUSE_CAMEL_CONTENT_TYPE);
+						IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
+						// try to find the obvious content type matching its name
+						IContentType[] types = contentTypeManager.findContentTypesFor(ifile.getName());
+						boolean hasCamelContentType = false;
+						for( int i = 0; i < types.length && !hasCamelContentType; i++ ) {
+							if( types[i].getId().equals(FUSE_CAMEL_CONTENT_TYPE)) {
+								hasCamelContentType = true;
+							}
+						}
+						if( hasCamelContentType )
+							addCamelFile(ifile);
 					}
 				}
 			}
