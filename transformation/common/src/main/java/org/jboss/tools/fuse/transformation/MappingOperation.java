@@ -71,4 +71,30 @@ public interface MappingOperation<S, T> {
      * @param indexes index list
      */
     void setTargetIndex(List<Integer> indexes);
+    
+    /**
+     * Specifies the date format for the source mapping. Only used when mapping to a field of a
+     * java.util.Date type. 
+     * @param format String to use for the formatting - look at Date formats in Java for examples 
+     */
+    void setSourceDateFormat(String format);
+    
+    /**
+     * Retrieves the current date format for the source mapping or null.
+     * @return currently specified date format
+     */
+    String getSourceDateFormat();
+
+    /**
+     * Specifies the date format for the target mapping. Only used when mapping to a field of a
+     * java.util.Date type. 
+     * @param format String to use for the formatting - look at Date formats in Java for examples 
+     */
+    void setTargetDateFormat(String format);
+    
+    /**
+     * Retrieves the current date format for the target mapping or null.
+     * @return currently specified date format
+     */
+    String getTargetDateFormat();
 }

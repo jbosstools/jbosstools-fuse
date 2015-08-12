@@ -46,6 +46,7 @@ import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.Variable;
+import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
@@ -162,7 +163,6 @@ public final class MappingDetailViewer extends MappingViewer {
         return pane;
     }
 
-    @SuppressWarnings("unused")
     private void createCustomSourcePane(final Composite parent,
                                         final Model model) {
         final Composite pane =
@@ -207,7 +207,6 @@ public final class MappingDetailViewer extends MappingViewer {
         return pane;
     }
 
-    @SuppressWarnings("unused")
     private void createSourcePane(final Composite parent) {
         new ControlWithMenuPane(parent) {
 
@@ -274,11 +273,26 @@ public final class MappingDetailViewer extends MappingViewer {
                         }
                     }
                 });
+                if (mapping != null && mapping.getSource() != null) {
+                    if (Util.modelsNeedDateFormat(mapping.getSource(), 
+                            mapping.getTarget(), true)) {
+                        addMenuItem("Set date format", new MenuItemHandler() {
+                            @Override
+                            public void widgetSelected(final SelectionEvent event) {
+                                try {
+                                    // open dialog to select date format
+                                    setDateFormat(true);
+                                } catch (final Exception e) {
+                                    Activator.error(e);
+                                }
+                            }
+                        });
+                    }
+                }
             }
         };
     }
 
-    @SuppressWarnings("unused")
     private void createTargetPane(final Composite parent) {
         final Composite pane = createContainerPane(parent,
                                                    ((Model)mapping.getTarget()).getParent());
@@ -299,6 +313,22 @@ public final class MappingDetailViewer extends MappingViewer {
                         }
                     }
                 });
+                if (mapping != null && mapping.getTarget() != null) {
+                    if (Util.modelsNeedDateFormat(mapping.getSource(), 
+                            mapping.getTarget(), false)) {
+                        addMenuItem("Set date format", new MenuItemHandler() {
+                            @Override
+                            public void widgetSelected(final SelectionEvent event) {
+                                try {
+                                    // open dialog to select date format
+                                    setDateFormat(false);
+                                } catch (final Exception e) {
+                                    Activator.error(e);
+                                }
+                            }
+                        });
+                    }
+                }
             }
         };
     }
@@ -334,6 +364,20 @@ public final class MappingDetailViewer extends MappingViewer {
         config.save();
     }
 
+    void setDateFormat(boolean isSource) throws Exception {
+        String dateFormatStr = Util.getDateFormat(sourceText.getShell(), mapping, isSource);
+        if (dateFormatStr != null && !dateFormatStr.trim().isEmpty()) {
+            BaseDozerMapping dMapping = (BaseDozerMapping) mapping;
+            if (isSource) {
+                dMapping.setSourceDateFormat(dateFormatStr);
+            } else if (!isSource) {
+                dMapping.setTargetDateFormat(dateFormatStr);
+            }
+            config.save();
+        }
+    }
+
+    @SuppressWarnings("restriction")
     void setExpression() throws Exception {
         final ExpressionDialog dlg = new ExpressionDialog(sourceText.getShell(), mapping, config.project());
         if (dlg.open() != Window.OK) {

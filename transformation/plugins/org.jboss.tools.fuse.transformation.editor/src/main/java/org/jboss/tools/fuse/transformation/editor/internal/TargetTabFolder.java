@@ -19,6 +19,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
@@ -52,13 +53,15 @@ public final class TargetTabFolder extends ModelTabFolder {
                         ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
                                                                       .getSelection())
                                                                       .getFirstElement();
+                    FieldMapping tempMapping = null;
                     if (source instanceof Model) {
                         final Model sourceModel = (Model)source;
                         final Model targetModel = (Model)getCurrentTarget();
                         final boolean sourceIsOrInCollection = Util.isOrInCollection(sourceModel);
                         final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
+                        
                         if (sourceIsOrInCollection == targetIsOrInCollection) {
-                            config.mapField(sourceModel, targetModel, null, null);
+                            tempMapping = config.mapField(sourceModel, targetModel, null, null);
                         } else {
                             final List<Integer> sourceIndexes = sourceIsOrInCollection
                                                                 ? Util.indexes(getShell(),
@@ -68,7 +71,8 @@ public final class TargetTabFolder extends ModelTabFolder {
                                                                 ? Util.indexes(getShell(),
                                                                                targetModel, false)
                                                                 : null;
-                            config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
+                            tempMapping = 
+                                    config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
                         }
                     } else {
                         final Variable variable = (Variable)source;
@@ -78,6 +82,12 @@ public final class TargetTabFolder extends ModelTabFolder {
                                 ? Util.indexes(getShell(), targetModel, false)
                                 : null;
                         config.mapVariable(variable, targetModel, indexes);
+                    }
+
+                    if (tempMapping != null && 
+                            Util.modelsNeedDateFormat((Model)tempMapping.getSource(), 
+                                    (Model)tempMapping.getTarget(), false)) {
+                        Util.updateDateFormat(getShell(), tempMapping);
                     }
                     config.save();
                     return true;
