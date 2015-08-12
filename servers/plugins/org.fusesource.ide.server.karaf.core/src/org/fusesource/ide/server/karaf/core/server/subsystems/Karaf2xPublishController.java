@@ -276,8 +276,9 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 	public int removeModule(IModule[] module, IProgressMonitor monitor) throws CoreException {
 		BundleDetails bd = new ModuleBundleVersionUtility().getBundleDetails(module, null);  // This will clearly break... wtf.  Crap. 
 		if( bd != null ) {
-			getPublisher(module).uninstall(getServer(), module, bd.getSymbolicName(), bd.getVersion());
-			return IServer.PUBLISH_STATE_NONE;
+			boolean removed = getPublisher(module).uninstall(getServer(), module, bd.getSymbolicName(), bd.getVersion());
+			if( removed )
+				return IServer.PUBLISH_STATE_NONE;
 		}
 		return IServer.PUBLISH_STATE_FULL;
 	}
