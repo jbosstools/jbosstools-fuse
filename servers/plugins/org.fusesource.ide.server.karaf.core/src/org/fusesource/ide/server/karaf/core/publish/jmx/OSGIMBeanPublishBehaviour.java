@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.server.karaf.core.publish.jmx;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Set;
 
@@ -22,6 +24,8 @@ import javax.management.openmbean.TabularData;
 import org.eclipse.wst.server.core.IServer;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleState;
+
+import com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException;
 
 /**
  * publisher using the osgi.core:type=framework mbean
@@ -68,13 +72,15 @@ public class OSGIMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	
 	@Override
 	public long installBundle(MBeanServerConnection mbsc, String bundlePath) {
-		// Small hack here bc mazy
-		String path2 = bundlePath;
-		if( !bundlePath.startsWith("file:"))
-			path2 = "file:" + bundlePath;
+		String bundleUrl = bundlePath;
+		try {
+			bundleUrl = new File(bundlePath).toURL().toExternalForm();
+		} catch(MalformedURLException murle) {
+			murle.printStackTrace();		
+		}
 		
 		try {
-			Object retVal = mbsc.invoke(this.objectNameFramework, "installBundle", new Object[] { path2 } , new String[] {String.class.getName() }); 
+			Object retVal = mbsc.invoke(this.objectNameFramework, "installBundle", new Object[] { bundleUrl } , new String[] {String.class.getName() }); 
 			if (retVal instanceof Long) {
 				long bid = (Long)retVal;
 				// also start the bundle
