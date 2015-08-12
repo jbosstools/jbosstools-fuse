@@ -38,7 +38,9 @@ public class ModuleBundleVersionUtility {
 		} else if( moduleTypeId.equals("jboss.osgi")) { 
 			return getJBossOSGiDetails(module, srcFile);
 		} else if( moduleTypeId.equals("jst.utility")) {
-			return getJBossOSGiDetailsFromJar(srcFile);
+			if( srcFile != null )
+				return getJBossOSGiDetailsFromJar(srcFile);
+			return getJBossOSGiDetailsFromProject(module);
 		}
 		// TODO maybe log? 
 		return null;
