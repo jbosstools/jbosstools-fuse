@@ -25,6 +25,8 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
     private List<Integer> sourceIndexes;
     private Model target;
     private List<Integer> targetIndexes;
+    private String sourceDateFormat;
+    private String targetDateFormat;
 
     /**
      * {@inheritDoc}
@@ -63,7 +65,9 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
      */
     @Override
     public List<Integer> getSourceIndex() {
-        return new ArrayList<>(sourceIndexes);
+        if (sourceIndexes != null) 
+            return new ArrayList<>(sourceIndexes);
+        return null;
     }
 
     /**
@@ -83,7 +87,9 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
      */
     @Override
     public List<Integer> getTargetIndex() {
-        return new ArrayList<>(targetIndexes);
+        if (targetIndexes != null) 
+            return new ArrayList<>(targetIndexes);
+        return null;
     }
 
     /**
@@ -102,5 +108,21 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
 
     void setTarget(final Model target) {
         this.target = target;
+    }
+
+    public void setSourceDateFormat(String format) {
+        sourceDateFormat = format;
+    }
+    
+    public String getSourceDateFormat() {
+        return sourceDateFormat;
+    }
+
+    public void setTargetDateFormat(String format) {
+        targetDateFormat = format;
+    }
+    
+    public String getTargetDateFormat() {
+        return targetDateFormat;
     }
 }
