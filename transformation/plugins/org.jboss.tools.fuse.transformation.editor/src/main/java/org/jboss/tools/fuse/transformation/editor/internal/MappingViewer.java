@@ -201,6 +201,9 @@ abstract class MappingViewer {
                 mapping = config.setSource(mapping, sourceObject, sourceIndexes, targetIndexes);
             }
         }
+        if (mapping != null) {
+            Util.updateDateFormat(sourceText.getShell(),  mapping);
+        }
         config.save();
     }
 
@@ -229,6 +232,9 @@ abstract class MappingViewer {
                                                     : null;
                 mapping = config.setTarget(mapping, targetModel, sourceIndexes, targetIndexes);
             }
+        }
+        if (mapping != null) {
+            Util.updateDateFormat(sourceText.getShell(),  mapping);
         }
         config.save();
     }

@@ -63,4 +63,20 @@ public abstract class BaseDozerMapping {
     public void setFieldIndex(FieldDefinition field, Model model, String rootType, List<Integer> indexes) {
         field.setContent(DozerUtil.getFieldName(model, rootType, indexes));
     }
+
+    public void setSourceDateFormat(String format) {
+        field.getA().setDateFormat(format);
+    }
+    
+    public String getSourceDateFormat() {
+        return field.getA().getDateFormat();
+    }
+
+    public void setTargetDateFormat(String format) {
+        field.getB().setDateFormat(format);
+    }
+    
+    public String getTargetDateFormat() {
+        return field.getB().getDateFormat();
+    }
 }

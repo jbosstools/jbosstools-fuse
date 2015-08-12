@@ -53,7 +53,10 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.fusesource.ide.camel.model.catalog.Dependency;
+import org.jboss.tools.fuse.transformation.FieldMapping;
+import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.Variable;
+import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
 import org.jboss.tools.fuse.transformation.model.Model;
@@ -135,6 +138,93 @@ public class Util {
             }
         }
         return null;
+    }
+    
+    public static FieldMapping updateDateFormat(final Shell shell,
+                                                final Model srcModel,
+                                                final Model tgtModel,
+                                                final TransformationConfig config) {
+        
+        if (srcModel != null && tgtModel != null && config != null) {
+            FieldMapping mapping = config.mapField(srcModel, tgtModel);
+            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
+                String dateFormatStr = Util.getDateFormat(shell, mapping, true);
+                mapping.setSourceDateFormat(dateFormatStr);
+            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    srcModel.getType().equalsIgnoreCase("java.util.Date")) {
+                String dateFormatStr = Util.getDateFormat(shell, mapping, false);
+                mapping.setTargetDateFormat(dateFormatStr);
+            }
+            return mapping;
+        }
+        return null;
+    }
+
+    private static boolean isValidNonNullType(Model model) {
+        if (model != null && model.getType() != null) {
+            return true;
+        }
+        return false;
+    }
+    
+    public static boolean modelsNeedDateFormat(final Object source, 
+                        final Object target, final boolean isSource) {
+        if (!(source instanceof Model && target instanceof Model)) {
+            return false;
+        }
+        Model srcModel = (Model) source;
+        Model tgtModel = (Model) target;
+        if (isValidNonNullType(srcModel) && isValidNonNullType(tgtModel)) {
+            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    tgtModel.getType().equalsIgnoreCase("java.util.Date") && isSource) {
+                return true;
+            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    srcModel.getType().equalsIgnoreCase("java.util.Date") && !isSource) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static void updateDateFormat(final Shell shell,
+                                        final MappingOperation<?, ?> mappingOp) {
+        if (mappingOp != null && mappingOp instanceof BaseDozerMapping) {
+            
+            // if both sides of the equation are Models, we're good to check this out
+            if (!(mappingOp.getSource() instanceof Model && 
+                    mappingOp.getTarget() instanceof Model)) {
+                return;
+            }
+            Model srcModel = (Model) mappingOp.getSource();
+            Model tgtModel = (Model) mappingOp.getTarget();
+            BaseDozerMapping dMapping = (BaseDozerMapping) mappingOp;
+            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
+                String dateFormatStr = Util.getDateFormat(shell, mappingOp, true);
+                dMapping.setSourceDateFormat(dateFormatStr);
+            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    srcModel.getType().equalsIgnoreCase("java.util.Date")) {
+                String dateFormatStr = Util.getDateFormat(shell, mappingOp, false);
+                dMapping.setTargetDateFormat(dateFormatStr);
+            }
+        }
+    }
+    
+    public static String getDateFormat(final Shell shell, 
+            final MappingOperation<?, ?> mappingOp,
+            final boolean isSource) {
+        final DateFormatInputDialog dlg = new DateFormatInputDialog(shell, mappingOp);
+        BaseDozerMapping dMapping = (BaseDozerMapping) mappingOp;
+        if (dMapping.getSourceDateFormat() != null && isSource) {
+            dlg.setFormatString(dMapping.getSourceDateFormat());
+        } else if (dMapping.getTargetDateFormat() != null && !isSource) {
+            dlg.setFormatString(dMapping.getTargetDateFormat());
+        }
+        if (dlg.open() != Window.OK) {
+            return null;
+        }
+        return dlg.getFormatString();
     }
 
     public static boolean isOrInCollection(final Model model) {
