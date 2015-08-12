@@ -31,15 +31,12 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseTrackAdapter;
-import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -136,15 +133,47 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    private void createCustomSourcePane(final Composite parent) {
-        final Composite pane = createRoundedPane(parent, Colors.FUNCTION);
+    private Composite createContainerPane(Composite parent,
+                                          final Model model) {
+        if (model == null) return parent;
+        parent = createContainerPane(parent, model.getParent());
+        final Color color;
+        if (model.getParent() == null) color = Colors.CONTAINER;
+        else if (parent.getForeground().equals(Colors.CONTAINER))
+            color = Colors.CONTAINER_ALTERNATE;
+        else color = Colors.CONTAINER;
+        final Composite pane = createRoundedPane(parent, color);
+        if (model.getParent() == null) {
+            pane.setLayoutData(GridDataFactory.swtDefaults()
+                                              .align(model == config.getSourceModel()
+                                                     ? SWT.RIGHT
+                                                     : SWT.LEFT,
+                                                     SWT.CENTER)
+                                              .grab(true, true)
+                                              .create());
+        } else pane.setLayoutData(GridDataFactory.swtDefaults()
+                                                 .align(SWT.CENTER, SWT.CENTER)
+                                                 .grab(true, true)
+                                                 .create());
+        final Label label = new Label(pane, SWT.NONE);
+        label.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
+        label.setText(model.getName());
+        label.setBackground(pane.getForeground());
+        return pane;
+    }
+
+    @SuppressWarnings("unused")
+    private void createCustomSourcePane(final Composite parent,
+                                        final Model model) {
+        final Composite pane =
+            createRoundedPane(createContainerPane(parent, model.getParent()), Colors.FUNCTION);
         pane.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
         new ControlWithMenuPane(pane) {
 
             @Override
-            Control constructControl() {
+            void constructControl() {
                 final Label functionLabel = new Label(this, SWT.NONE);
-                final CustomMapping customMapping = (CustomMapping) mapping;
+                final CustomMapping customMapping = (CustomMapping)mapping;
                 functionLabel.setText(customMapping.getMappingOperation());
                 functionLabel.setToolTipText(customMapping.getMappingClass() + '.'
                                              + customMapping.getMappingOperation());
@@ -159,7 +188,6 @@ public final class MappingDetailViewer extends MappingViewer {
                         }
                     }
                 });
-                return functionLabel;
             }
         };
         Label label = new Label(pane, SWT.NONE);
@@ -167,16 +195,6 @@ public final class MappingDetailViewer extends MappingViewer {
         createSourcePane(pane);
         label = new Label(pane, SWT.NONE);
         label.setText(")");
-    }
-
-    private Composite createDetailPane(final Composite parent,
-                                       final Model model) {
-        final Composite pane = createRoundedPane(parent, Colors.MODEL);
-        final Label label = new Label(pane, SWT.NONE);
-        label.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
-        label.setText(model.getName());
-        label.setBackground(pane.getForeground());
-        return pane;
     }
 
     private Composite createRoundedPane(final Composite parent,
@@ -189,11 +207,12 @@ public final class MappingDetailViewer extends MappingViewer {
         return pane;
     }
 
+    @SuppressWarnings("unused")
     private void createSourcePane(final Composite parent) {
         new ControlWithMenuPane(parent) {
 
             @Override
-            Control constructControl() {
+            void constructControl() {
                 createSourceText(this, SWT.NONE);
                 sourceText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
                 addMenuItem("Set field", new MenuItemHandler() {
@@ -255,16 +274,18 @@ public final class MappingDetailViewer extends MappingViewer {
                         }
                     }
                 });
-                return sourceText;
             }
         };
     }
 
+    @SuppressWarnings("unused")
     private void createTargetPane(final Composite parent) {
-        new ControlWithMenuPane(parent) {
+        final Composite pane = createContainerPane(parent,
+                                                   ((Model)mapping.getTarget()).getParent());
+        new ControlWithMenuPane(pane) {
 
             @Override
-            Control constructControl() {
+            void constructControl() {
                 createTargetText(this);
                 targetText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
                 addMenuItem("Set field", new MenuItemHandler() {
@@ -278,7 +299,6 @@ public final class MappingDetailViewer extends MappingViewer {
                         }
                     }
                 });
-                return targetText;
             }
         };
     }
@@ -314,7 +334,6 @@ public final class MappingDetailViewer extends MappingViewer {
         config.save();
     }
 
-    @SuppressWarnings("restriction")
     void setExpression() throws Exception {
         final ExpressionDialog dlg = new ExpressionDialog(sourceText.getShell(), mapping, config.project());
         if (dlg.open() != Window.OK) {
@@ -363,33 +382,25 @@ public final class MappingDetailViewer extends MappingViewer {
      */
     public void update(final MappingOperation<?, ?> mapping) {
         this.mapping = mapping;
-        if (sourceDropTarget != null) {
-            dispose();
-        }
+        if (sourceDropTarget != null) dispose();
         final Composite contentPane = new Composite(scroller, SWT.NONE);
         scroller.setContent(contentPane);
         contentPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
         contentPane.setBackground(scroller.getBackground());
         contentPane.setForeground(contentPane.getBackground());
-        final Composite sourceDetailPane = createDetailPane(contentPane, config.getSourceModel());
-        sourceDetailPane.setLayoutData(GridDataFactory.swtDefaults()
-                                                      .align(SWT.RIGHT, SWT.CENTER)
-                                                      .grab(true, true)
-                                                      .create());
-        if (mapping instanceof CustomMapping) {
-            createCustomSourcePane(sourceDetailPane);
-        } else {
-            createSourcePane(sourceDetailPane);
+        if (mapping.getType() == MappingType.CUSTOM)
+            createCustomSourcePane(contentPane, (Model)mapping.getSource());
+        else {
+            final Composite pane;
+            if (mapping.getType() == MappingType.FIELD)
+                pane = createContainerPane(contentPane, ((Model)mapping.getSource()).getParent());
+            else pane = createContainerPane(contentPane, config.getSourceModel());
+            createSourcePane(pane);
         }
         final Label mapsToLabel = new Label(contentPane, SWT.NONE);
         mapsToLabel.setImage(Images.MAPPED);
         mapsToLabel.setBackground(contentPane.getBackground());
-        final Composite targetDetailPane = createDetailPane(contentPane, config.getTargetModel());
-        targetDetailPane.setLayoutData(GridDataFactory.swtDefaults()
-                                                      .align(SWT.LEFT, SWT.CENTER)
-                                                      .grab(true, true)
-                                                      .create());
-        createTargetPane(targetDetailPane);
+        createTargetPane(contentPane);
         scroller.setMinSize(contentPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         contentPane.layout();
     }
@@ -408,29 +419,14 @@ public final class MappingDetailViewer extends MappingViewer {
                                                 .hint(imageButtonLabelSize)
                                                 .create());
             spacer.setBackground(getBackground());
-            final Control control = constructControl();
+            constructControl();
             final Label menuLabel = new Label(this, SWT.NONE);
             menuLabel.setLayoutData(GridDataFactory.swtDefaults()
                                                    .hint(imageButtonLabelSize)
                                                    .align(SWT.BEGINNING, SWT.BOTTOM)
                                                    .create());
             menuLabel.setBackground(getBackground());
-            final MouseTrackListener mouseOverListener = new MouseTrackAdapter() {
-
-                @Override
-                public void mouseEnter(final MouseEvent event) {
-                    menuLabel.setImage(Images.MENU);
-                }
-
-                @Override
-                public void mouseExit(final MouseEvent event) {
-                    menuLabel.setImage(null);
-                }
-            };
-            addMouseTrackListener(mouseOverListener);
-            spacer.addMouseTrackListener(mouseOverListener);
-            control.addMouseTrackListener(mouseOverListener);
-            menuLabel.addMouseTrackListener(mouseOverListener);
+            menuLabel.setImage(Images.MENU);
             menuLabel.addMouseListener(new MouseAdapter() {
 
                 @Override
@@ -445,7 +441,7 @@ public final class MappingDetailViewer extends MappingViewer {
             menuItems.put(item, handler);
         }
 
-        abstract Control constructControl();
+        abstract void constructControl();
 
         void popupMenu(final Label menuLabel,
                        final int xPos,

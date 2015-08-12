@@ -527,6 +527,16 @@ public class Util {
         /**
          *
          */
+        Color CONTAINER = Activator.color(192, 192, 192);
+
+        /**
+         *
+         */
+        Color CONTAINER_ALTERNATE = Activator.color(224, 224, 224);
+
+        /**
+         *
+         */
         Color DROP_TARGET_BACKGROUND = Activator.color(0, 0, 255);
 
         /**
@@ -553,11 +563,6 @@ public class Util {
          *
          */
         Color FUNCTION_ALTERNATE = Activator.color(128, 255, 128);
-
-        /**
-         *
-         */
-        Color MODEL = Activator.color(192, 192, 192);
 
         /**
          *

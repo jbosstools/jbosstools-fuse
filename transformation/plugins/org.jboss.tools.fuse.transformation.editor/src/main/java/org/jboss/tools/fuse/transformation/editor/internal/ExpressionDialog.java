@@ -65,7 +65,7 @@ public class ExpressionDialog extends BaseDialog {
     private ComboViewer scriptTypeComboViewer;
     private Text pathText;
     private IProject project;
-    
+
     public ExpressionDialog(Shell shell, MappingOperation<?, ?> mapping, IProject project){
         super(shell);
         this.project = project;
@@ -115,12 +115,12 @@ public class ExpressionDialog extends BaseDialog {
             }
         });
         languageComboViewer.getCombo().setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(1, 1).create());
-        
+
         Group detailsGroup = new Group(parent, SWT.NONE);
         detailsGroup.setText("Details");
         detailsGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(2, 1).create());
         detailsGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
-        
+
         valueOption = new Button(detailsGroup, SWT.RADIO);
         valueOption.setText("Value");
         valueOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(3, 1).create());
@@ -146,7 +146,7 @@ public class ExpressionDialog extends BaseDialog {
         if (expression != null) {
             expressionText.setText(expression.replace("\\${", "${"));
         }
-        
+
         scriptOption = new Button(detailsGroup, SWT.RADIO);
         scriptOption.setText("Script");
         scriptOption.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).span(3, 1).create());
@@ -159,7 +159,7 @@ public class ExpressionDialog extends BaseDialog {
             public void widgetDefaultSelected(SelectionEvent e) {
             }
         });
-        
+
         label = new Label(detailsGroup, SWT.NONE);
         label.setText("Source:");
         label.setLayoutData(GridDataFactory.fillDefaults().indent(20, 0).create());
@@ -194,7 +194,7 @@ public class ExpressionDialog extends BaseDialog {
                 }
             }
         });
-        
+
         label = new Label(detailsGroup, SWT.NONE);
         label.setText("Path:");
         label.setLayoutData(GridDataFactory.fillDefaults().indent(20, 0).create());
@@ -264,7 +264,6 @@ public class ExpressionDialog extends BaseDialog {
 
     private void updateExpression() {
         if (expression != null) {
-            String part0 = getParameterPart(expression, 0);
             if (scriptOption.getSelection()) {
                 final IStructuredSelection selection =
                         (IStructuredSelection)scriptTypeComboViewer.getSelection();
@@ -276,13 +275,13 @@ public class ExpressionDialog extends BaseDialog {
             }
         }
     }
-    
+
     @Override
     public void create() {
         super.create();
         validate();
     }
-    
+
     @Override
     protected String message() {
         return "Select the expression language, then specify details for the expression.";
@@ -301,8 +300,8 @@ public class ExpressionDialog extends BaseDialog {
         }
         return part;
     }
-    
-    
+
+
     void validate() {
         if (getButton(IDialogConstants.OK_ID) != null) {
             getButton(IDialogConstants.OK_ID).setEnabled(language != null
@@ -358,6 +357,7 @@ public class ExpressionDialog extends BaseDialog {
         return ((IResource) result[0]).getProjectRelativePath().toPortableString();
     }
 
+    @Override
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
         shell.setText("Fuse Transformation");
