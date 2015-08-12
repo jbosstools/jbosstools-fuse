@@ -28,7 +28,7 @@ public class RiderLogFacade {
 	
 	private ILog log;
 	
-	private boolean isDebugEnabled = Boolean.valueOf(System.getProperty("fusesource.debugEnabled"));
+	private boolean isDebugEnabled = System.getProperty("fusesource.debugEnabled") == null ? true : Boolean.valueOf(System.getProperty("fusesource.debugEnabled"));
 		
 	/**
 	 * creates the log facade for the given plugin log
@@ -149,7 +149,7 @@ public class RiderLogFacade {
 	 * @param ex	the exception to log
 	 */
 	public void error(Throwable ex) {
-		error(null, ex);
+		error(ex == null ? "null" : ex.getMessage(), ex);
 	}
 	
 	/**

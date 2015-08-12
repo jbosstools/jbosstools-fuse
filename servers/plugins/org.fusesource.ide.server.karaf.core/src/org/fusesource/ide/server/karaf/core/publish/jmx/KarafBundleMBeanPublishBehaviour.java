@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.server.karaf.core.publish.jmx;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Set;
 
@@ -66,8 +68,15 @@ public class KarafBundleMBeanPublishBehaviour implements IJMXPublishBehaviour {
 	
 	@Override
 	public long installBundle(MBeanServerConnection mbsc, String bundlePath) {
+		String bundleUrl = bundlePath;
 		try {
-			Object retVal = mbsc.invoke(this.objectName, "install", new Object[] { bundlePath, Boolean.TRUE } , new String[] {String.class.getName(), "boolean" }); 
+			bundleUrl = new File(bundlePath).toURL().toExternalForm();
+		} catch(MalformedURLException murle) {
+			murle.printStackTrace();		
+		}
+
+		try {
+			Object retVal = mbsc.invoke(this.objectName, "install", new Object[] { bundleUrl, Boolean.TRUE } , new String[] {String.class.getName(), "boolean" }); 
 			if (retVal instanceof Long) {
 				return (Long)retVal;
 			} else {
