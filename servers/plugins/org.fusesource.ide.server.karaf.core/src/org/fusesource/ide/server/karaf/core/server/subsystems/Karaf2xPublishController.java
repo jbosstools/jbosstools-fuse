@@ -45,8 +45,6 @@ import org.jboss.ide.eclipse.as.wtp.core.util.ServerModelUtilities;
  */
 public class Karaf2xPublishController extends AbstractSubsystemController 
 	implements IPublishController, IPrimaryPublishController  {
-
-	public static final List<String> GOALS = Arrays.asList(new String[] {"clean", "package"});
 	
 	protected IPublishBehaviour publisher2 = new KarafJMXPublisher();
 	
