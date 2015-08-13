@@ -134,9 +134,10 @@ public final class MappingDetailViewer extends MappingViewer {
     }
 
     private Composite createContainerPane(Composite parent,
-                                          final Model model) {
+                                          final Model model,
+                                          List<Integer> indexes) {
         if (model == null) return parent;
-        parent = createContainerPane(parent, model.getParent());
+        parent = createContainerPane(parent, model.getParent(), parentIndexes(indexes));
         final Color color;
         if (model.getParent() == null) color = Colors.CONTAINER;
         else if (parent.getForeground().equals(Colors.CONTAINER))
@@ -157,16 +158,19 @@ public final class MappingDetailViewer extends MappingViewer {
                                                  .create());
         final Label label = new Label(pane, SWT.NONE);
         label.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
-        label.setText(model.getName());
+        final Integer index = indexes == null ? null : indexes.get(indexes.size() - 1);
+        label.setText(model.getName() + (index == null ? "" : "[" + index + "]"));
         label.setBackground(pane.getForeground());
         return pane;
     }
 
     @SuppressWarnings("unused")
-    private void createCustomSourcePane(final Composite parent,
-                                        final Model model) {
+    private void createCustomSourcePane(final Composite parent) {
         final Composite pane =
-            createRoundedPane(createContainerPane(parent, model.getParent()), Colors.FUNCTION);
+            createRoundedPane(createContainerPane(parent,
+                                                  ((Model)mapping.getSource()).getParent(),
+                                                  parentIndexes(mapping.getSourceIndex())),
+                              Colors.FUNCTION);
         pane.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
         new ControlWithMenuPane(pane) {
 
@@ -280,8 +284,12 @@ public final class MappingDetailViewer extends MappingViewer {
 
     @SuppressWarnings("unused")
     private void createTargetPane(final Composite parent) {
-        final Composite pane = createContainerPane(parent,
-                                                   ((Model)mapping.getTarget()).getParent());
+        final Composite pane;
+        if (mapping.getTarget() == null)
+            pane = createContainerPane(parent, config.getTargetModel(), null);
+        else pane = createContainerPane(parent,
+                                        ((Model)mapping.getTarget()).getParent(),
+                                        parentIndexes(mapping.getTargetIndex()));
         new ControlWithMenuPane(pane) {
 
             @Override
@@ -327,6 +335,12 @@ public final class MappingDetailViewer extends MappingViewer {
         sourceDropTarget.dispose();
         targetDropTarget.dispose();
         super.finalize();
+    }
+
+    private List<Integer> parentIndexes(final List<Integer> indexes) {
+        return indexes != null && indexes.size() > 1
+               ? indexes.subList(0, indexes.size() - 1)
+               : null;
     }
 
     void removeCustomFunction() throws Exception {
@@ -388,13 +402,14 @@ public final class MappingDetailViewer extends MappingViewer {
         contentPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
         contentPane.setBackground(scroller.getBackground());
         contentPane.setForeground(contentPane.getBackground());
-        if (mapping.getType() == MappingType.CUSTOM)
-            createCustomSourcePane(contentPane, (Model)mapping.getSource());
+        if (mapping.getType() == MappingType.CUSTOM) createCustomSourcePane(contentPane);
         else {
             final Composite pane;
-            if (mapping.getType() == MappingType.FIELD)
-                pane = createContainerPane(contentPane, ((Model)mapping.getSource()).getParent());
-            else pane = createContainerPane(contentPane, config.getSourceModel());
+            if (mapping.getSource() instanceof Model)
+                pane = createContainerPane(contentPane,
+                                           ((Model)mapping.getSource()).getParent(),
+                                           parentIndexes(mapping.getSourceIndex()));
+            else pane = createContainerPane(contentPane, config.getSourceModel(), null);
             createSourcePane(pane);
         }
         final Label mapsToLabel = new Label(contentPane, SWT.NONE);
