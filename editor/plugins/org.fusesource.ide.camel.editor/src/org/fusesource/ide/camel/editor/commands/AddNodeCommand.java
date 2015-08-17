@@ -19,23 +19,42 @@ import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.custom.CreateNodeConnectionFeature;
 import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
 
 
 public class AddNodeCommand extends RecordingCommand {
 	private final RiderDesignEditor editor;
-	private final Class<? extends AbstractNode> aClass;
 	private final AbstractNode selectedNode;
 
+	private final Class<? extends AbstractNode> aClass;
+	private final Eip eip;
+	
 	public AddNodeCommand(RiderDesignEditor editor, TransactionalEditingDomain editingDomain, Class<? extends AbstractNode> aClass, AbstractNode selectedNode) {
 		super(editingDomain);
 		this.editor = editor;
-		this.aClass = aClass;
 		this.selectedNode = selectedNode;
+		this.aClass = aClass;
+		this.eip = null;
 	}
 
+	public AddNodeCommand(RiderDesignEditor editor, TransactionalEditingDomain editingDomain, Eip eip, AbstractNode selectedNode) {
+		super(editingDomain);
+		this.editor = editor;
+		this.selectedNode = selectedNode;
+		this.aClass = null;
+		this.eip = eip;
+	}
+
+	
 	@Override
 	protected void doExecute() {
-		CreateNodeConnectionFeature feature = new CreateNodeConnectionFeature(editor.getFeatureProvider(), aClass);
+		CreateNodeConnectionFeature feature = null;
+		if( eip == null )
+			feature = new CreateNodeConnectionFeature(editor.getFeatureProvider(), aClass);
+		else
+			feature = new CreateNodeConnectionFeature(editor.getFeatureProvider(), eip);
+		
+		
 		PictogramElement selectedElement = editor.getFeatureProvider().getPictogramElementForBusinessObject(selectedNode);
 		PictogramElement[] selectedElements;
 		if (selectedElement != null) {

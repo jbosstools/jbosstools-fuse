@@ -52,7 +52,6 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.ui.features.DefaultFeatureProvider;
 import org.fusesource.ide.camel.editor.AbstractNodes;
-import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
@@ -82,7 +81,10 @@ import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.Flow;
-import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.camel.model.catalog.CamelModel;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
 import org.fusesource.ide.commons.util.Strings;
 
@@ -152,10 +154,12 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 			if (processedBeans.contains(name)) continue;
 			processedBeans.add(name);
 			
-			Bean bean = new Bean();
+			CamelModel model = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null));
+			Eip eip = model.getEipModel().getEIPByClass("bean");
+			UniversalEIPNode bean = new UniversalEIPNode(eip);
 			bean.setName(name);
-			bean.setRef(name);
-			bean.setBeanType(aClass);
+			bean.setShortPropertyValue("ref", name); 
+			bean.setShortPropertyValue("beanType", aClass); 
 
 			String title = bean.getDisplayText();
 			String description = "bean '" + name + "' of type " + aClass;

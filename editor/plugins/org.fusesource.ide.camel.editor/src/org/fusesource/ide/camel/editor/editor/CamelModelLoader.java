@@ -27,7 +27,6 @@ import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.generated.Choice;
 
 
 public class CamelModelLoader {
@@ -100,7 +99,7 @@ public class CamelModelLoader {
 			List<AbstractNode> children = node.getOutputs();
 			AbstractNode lastNode = null;
 			for (AbstractNode child : children) {
-				if (lastNode != null && lastNode instanceof Choice) {
+				if (lastNode != null && "choice".equals(lastNode.getNodeTypeId())) {
 					y = addProcessor(lastNode, child, x, y, processedNodes);
 				} else {
 					y = addProcessor(node, child, x, y, processedNodes);

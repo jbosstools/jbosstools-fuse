@@ -26,22 +26,36 @@ import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.catalog.Dependency;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
+import org.fusesource.ide.camel.model.generated.UniversalEIPUtility;
 
 
 /**
  * @author lhein
  */
-public class CreateFigureFeature<E> extends AbstractCreateFeature implements PaletteCategoryItemProvider {
+public class CreateFigureFeature extends AbstractCreateFeature implements PaletteCategoryItemProvider {
 
-	private Class<E> clazz;
-	private AbstractNode exemplar;
-
-	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Class<E> clazz) {
+	private Eip eip;
+	private Class<? extends AbstractNode> clazz;
+	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Eip eip) {
 		super(fp, name, description);
-		this.clazz = clazz;
+		this.eip = eip;
+	}
+	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Class<? extends AbstractNode> clazz) {
+		super(fp, name, description);
+		this.clazz = clazz;;
 	}
 
 
+	public Eip getEip() {
+		return eip;
+	}
+	
+	public Class<? extends AbstractNode> getClazz() {
+		return clazz;
+	}
+	
 	@Override
 	public CATEGORY_TYPE getCategoryType() {
 		return CATEGORY_TYPE.getCategoryType(getCategoryName());
@@ -50,9 +64,11 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 
 	@Override
 	public String getCategoryName() {
-		AbstractNode node = getExemplar();
-		if (node != null) {
-			return node.getCategoryName();
+		if( eip != null )
+			return UniversalEIPUtility.getCategoryName(eip.getName());
+		AbstractNode an = createNode();
+		if( an != null ) {
+			return an.getCategoryName();
 		}
 		return null;
 	}
@@ -94,38 +110,17 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 	 * @return	the icon name or null
 	 */
 	protected String getIconName() {
-		AbstractNode node = getExemplar();
-		if (node != null) {
-			return node.getIconName();
-		}
-		return null;
-	}
-
-	/**
-     * @return the clazz
-     */
-    public Class<E> getClazz() {
-        return this.clazz;
-    }
-	
-	/**
-	 * Returns the singleton exemplar node we can use to access things like icons and category names etc
-	 */
-	protected AbstractNode getExemplar() {
-		if (exemplar == null) {
-			try {
-				exemplar = (AbstractNode) clazz.newInstance();
-			} catch (Exception e) {
-				Activator.getLogger().warning("Failed to create instance of " + clazz + ". " + e, e);
+		String ret = null;
+		if( eip != null )
+			ret = UniversalEIPUtility.getIconName(eip.getName());
+		if( ret == null ) {
+			AbstractNode an = createNode();
+			if( an != null ) {
+				ret = an.getIconName();
 			}
 		}
-		return exemplar;
+		return ret != null ? ret : "generic.png";
 	}
-
-	protected void setExemplar(AbstractNode exemplar) {
-		this.exemplar = exemplar;
-	}
-
 
 	/*
 	 * (non-Javadoc)
@@ -157,17 +152,37 @@ public class CreateFigureFeature<E> extends AbstractCreateFeature implements Pal
 	}
 
 
+	/**
+	 * Create a new node of this figure feature's underlying node. 
+	 * Default implementation will use either an eip or an Abstract Node class. 
+	 * Subclasses with neither should override this method.
+	 * 
+	 * @return
+	 */
 	protected AbstractNode createNode() {
-		AbstractNode node = null;
-
-		try {
-			node = (AbstractNode)this.clazz.newInstance();
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+		if( eip != null )
+			return new UniversalEIPNode(eip);
+		if( clazz != null ) {
+			Object o = newInstance(clazz);
+			if( o instanceof AbstractNode ) {
+				return ((AbstractNode)o);
+			}
 		}
-		return node;
+		return null;
 	}
-	
+
+	protected Object newInstance(final Class<?> aClass) {
+		if( aClass == null ) {
+			System.out.println("Dead, left for POC debugging");
+		}
+		try {
+			return aClass.newInstance();
+		} catch (Exception e) {
+			Activator.getLogger().warning("Failed to create instance of " + aClass.getName() + ". " + e, e);
+			return null;
+		}
+	}
+
     /**
      * checks if we need to add a maven dependency for the chosen component
      * and inserts it into the pom.xml if needed

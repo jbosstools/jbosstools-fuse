@@ -15,7 +15,7 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.model.DescriptionDefinition;
 import org.apache.camel.model.FromDefinition;
 import org.apache.camel.model.ToDefinition;
-import org.fusesource.ide.camel.model.generated.WireTap;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 import org.fusesource.ide.commons.util.Objects;
 import org.fusesource.ide.commons.util.Strings;
 import org.fusesource.ide.preferences.PreferencesConstants;
@@ -34,7 +34,7 @@ public class CamelModelHelper {
 	}
 
 	public static boolean isPropertyListOFSetHeaders(final Object id) {
-		return Objects.equal(WireTap.PROPERTY_HEADERS, id);
+		return Objects.equal(UniversalEIPNode.getPropertyKey("wireTap", "headers"), id);
 	}
 
 	public static String getUri(FromDefinition input) {

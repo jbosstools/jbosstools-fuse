@@ -14,21 +14,14 @@ import java.util.Map;
 
 import org.apache.camel.ShutdownRoute;
 import org.apache.camel.ShutdownRunningTask;
-import org.apache.camel.model.RouteDefinition;
-import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.ExpressionPropertyDescriptor;
 import org.fusesource.ide.camel.model.RouteContainer;
+import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.util.Objects;
-import org.fusesource.ide.commons.properties.BooleanPropertyDescriptor;
-import org.fusesource.ide.commons.properties.ComplexPropertyDescriptor;
-import org.fusesource.ide.commons.properties.ComplexUnionPropertyDescriptor;
 import org.fusesource.ide.commons.properties.EnumPropertyDescriptor;
-import org.fusesource.ide.commons.properties.ListPropertyDescriptor;
-import org.fusesource.ide.commons.properties.UnionTypeValue;
 
 /**
  * The Node class from Camel's RouteDefinition

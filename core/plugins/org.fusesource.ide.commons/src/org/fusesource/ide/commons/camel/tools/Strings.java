@@ -19,10 +19,17 @@ import java.beans.Introspector;
 
 public class Strings {
 
+    public static String convertCamelCase(String original) {
+    	String display = original.replaceAll("(\\p{Ll})(\\p{Lu})","$1 $2");
+    	return capitalize(display);
+    }
+
     public static boolean isEmpty(String text) {
         return text == null || text.length() == 0;
     }
 
+
+    
     public static String splitCamelCase(String text) {
         StringBuilder buffer = new StringBuilder();
         char last = 'A';

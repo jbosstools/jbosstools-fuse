@@ -20,8 +20,11 @@ import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.camel.model.catalog.CamelModel;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.generated.Route;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 
 
 public class StubContainerMarshaller extends ContainerMarshallerSupport {
@@ -75,13 +78,18 @@ public class StubContainerMarshaller extends ContainerMarshallerSupport {
 	}
 
 	protected RouteContainer createDummyModel() {
+		CamelModel model = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null));
+		Eip eip = model.getEipModel().getEIPByClass("bean");
+		
+		
 		RouteContainer c = new RouteContainer();
 
 		RouteSupport route1 = new Route();
 
 		Endpoint ep1 = new Endpoint();
-		Bean bean1 = new Bean();
-		Bean bean2 = new Bean();
+		UniversalEIPNode bean1 = new UniversalEIPNode(eip);
+		UniversalEIPNode bean2 = new UniversalEIPNode(eip);
+		
 
 		ep1.setId("fileIn1");
 		ep1.setDescription("Polls files from input folder...");
@@ -90,14 +98,14 @@ public class StubContainerMarshaller extends ContainerMarshallerSupport {
 
 		bean1.setId("procBean1");
 		bean1.setDescription("Examines the file...");
-		bean1.setMethod("examineFile");
-		bean1.setRef("proc1");
+		bean1.setShortPropertyValue("method", "examineFile");
+		bean1.setShortPropertyValue("ref", "proc1"); 
 		bean1.setLayout(new Rectangle(150, 10, 100, 40));
 
 		bean2.setId("procBean2");
 		bean2.setDescription("Examines the file...");
-		bean2.setMethod("examineFile");
-		bean2.setRef("proc2");
+		bean1.setShortPropertyValue("method", "examineFile");
+		bean1.setShortPropertyValue("ref", "proc2");
 		bean2.setLayout(new Rectangle(300, 10, 100, 40));
 
 		ep1.addTargetNode(bean1);

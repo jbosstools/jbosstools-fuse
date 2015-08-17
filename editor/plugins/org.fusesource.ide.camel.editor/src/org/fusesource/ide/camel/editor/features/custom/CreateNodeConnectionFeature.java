@@ -32,6 +32,8 @@ import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.ConnectorEndpoint;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.catalog.components.Component;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 
 
 /**
@@ -39,19 +41,35 @@ import org.fusesource.ide.camel.model.catalog.components.Component;
  */
 public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 
-	private Class<? extends AbstractNode> clazz;
 	private Component component;
 	private CreateConnectorFigureFeature conFeature;
+	
+	// Instances should either have an abstractnode class or an eip
+	private Class<? extends AbstractNode> clazz;
+	private Eip eip;
 
 	public CreateNodeConnectionFeature(IFeatureProvider fp, Class<? extends AbstractNode> clazz) {
 		this(fp, clazz, null);
 	}
-	
+
+	public CreateNodeConnectionFeature(IFeatureProvider fp, Eip eip) {
+		this(fp, eip, null);
+	}
+
 	public CreateNodeConnectionFeature(IFeatureProvider fp, Class<? extends AbstractNode> clazz, ObjectCreationToolEntry octe) {
-		super(fp);
+		this(fp, octe);
 		this.clazz = clazz;
+	}
+
+	public CreateNodeConnectionFeature(IFeatureProvider fp, Eip eip, ObjectCreationToolEntry octe) {
+		this(fp, octe);
+		this.eip = eip;
+	}
+
+	private CreateNodeConnectionFeature(IFeatureProvider fp, ObjectCreationToolEntry octe) {
+		super(fp);
 		this.conFeature = (octe != null && octe.getCreateFeature() instanceof CreateConnectorFigureFeature) ? (CreateConnectorFigureFeature)octe.getCreateFeature() : null; 
-		this.component = this.conFeature != null ? this.conFeature.getConnector() : null;
+		this.component = this.conFeature != null ? this.conFeature.getConnector() : null;		
 	}
 
 	@Override
@@ -189,7 +207,12 @@ public class CreateNodeConnectionFeature extends AbstractCustomFeature {
 			conFeature.updateMavenDependencies(component.getDependencies());
 			return new ConnectorEndpoint(component != null && component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme()));
 		} else {
-			return this.clazz.newInstance();
+			if( clazz != null )
+				return this.clazz.newInstance();
+			if( eip != null ) {
+				return new UniversalEIPNode(eip);
+			}
+			return null;
 		}
 	}
 }

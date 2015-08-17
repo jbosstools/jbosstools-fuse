@@ -1,31 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <languages>
    <language>
-      <name>xquery</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>XQuery</title>
-      <description>Camel Saxon (XQuery/XPath) support</description>
-      <class>org.apache.camel.language.xquery.XQueryLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.XQueryExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-saxon</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-         <parameter name="headerName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of header to use as input instead of the message body"/>
-         <parameter name="type" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output) The default result type is NodeSet"/>
-      </parameters>
-   </language>
-   <language>
       <name>jxpath</name>
       <tags>
          <tag>language</tag>
@@ -43,10 +18,33 @@
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
          <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="lenient" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Allows to turn lenient on the JXPathContext. When turned on this allows the JXPath expression to evaluate against expressions and message bodies which may be invalid / missing data. This option is by default false"/>
+      </parameters>
+   </language>
+   <language>
+      <name>ognl</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>OGNL</title>
+      <description>Camel OGNL support</description>
+      <class>org.apache.camel.language.ognl.OgnlLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.OgnlExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-ognl</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
       </parameters>
    </language>
    <language>
@@ -67,83 +65,80 @@
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
          <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
       </parameters>
    </language>
    <language>
-      <name>groovy</name>
+      <name>mvel</name>
       <tags>
          <tag>language</tag>
       </tags>
-      <title>Groovy</title>
-      <description>Camel Groovy support</description>
-      <class>org.apache.camel.language.groovy.GroovyLanguage</class>
+      <title>MVEL</title>
+      <description>Camel MVEL support</description>
+      <class>org.apache.camel.language.mvel.MvelLanguage</class>
       <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.GroovyExpression</modelJavaType>
+      <modelJavaType>org.apache.camel.model.language.MvelExpression</modelJavaType>
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-groovy</artifactId>
+            <artifactId>camel-mvel</artifactId>
             <version>2.15.1</version>
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
          <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
       </parameters>
    </language>
    <language>
-      <name>bean</name>
+      <name>xquery</name>
       <tags>
          <tag>language</tag>
       </tags>
-      <title>Bean method</title>
-      <description>The Core Camel Java DSL based router</description>
-      <class>org.apache.camel.language.bean.BeanLanguage</class>
+      <title>XQuery</title>
+      <description>Camel Saxon (XQuery/XPath) support</description>
+      <class>org.apache.camel.language.xquery.XQueryLanguage</class>
       <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.MethodCallExpression</modelJavaType>
+      <modelJavaType>org.apache.camel.model.language.XQueryExpression</modelJavaType>
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
+            <artifactId>camel-saxon</artifactId>
             <version>2.15.1</version>
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+         <parameter name="headerName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of header to use as input instead of the message body"/>
          <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="ref" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Reference to bean to lookup in the registry"/>
-         <parameter name="bean" type="string" javaType="java.lang.String" kind="attribute" deprecated="true" required="false" description="Either a reference or a class name of the bean to use"/>
-         <parameter name="beanType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Class name of the bean to use"/>
-         <parameter name="method" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of method to call"/>
          <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+         <parameter name="type" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output) The default result type is NodeSet"/>
       </parameters>
    </language>
    <language>
-      <name>simple</name>
+      <name>el</name>
       <tags>
          <tag>language</tag>
       </tags>
-      <title>Simple</title>
-      <description>The Core Camel Java DSL based router</description>
-      <class>org.apache.camel.language.simple.SimpleLanguage</class>
+      <title>EL</title>
+      <description>Camel JUEL support</description>
+      <class>org.apache.camel.language.juel.JuelLanguage</class>
       <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.SimpleExpression</modelJavaType>
+      <modelJavaType>org.apache.camel.model.language.ELExpression</modelJavaType>
       <dependencies>
          <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
+            <artifactId>camel-juel</artifactId>
             <version>2.15.1</version>
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="resultType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output)"/>
          <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
       </parameters>
    </language>
    <language>
@@ -165,187 +160,19 @@
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
          <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
       </parameters>
    </language>
    <language>
-      <name>exchangeProperty</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>ExchangeProperty</title>
-      <description>The Core Camel Java DSL based router</description>
-      <class>org.apache.camel.language.property.ExchangePropertyLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.ExchangePropertyExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-      </parameters>
-   </language>
-   <language>
-      <name>header</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>Header</title>
-      <description>The Core Camel Java DSL based router</description>
-      <class>org.apache.camel.language.header.HeaderLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.HeaderExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-      </parameters>
-   </language>
-   <language>
-      <name>xpath</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>XPath</title>
-      <description>The Core Camel Java DSL based router</description>
-      <class>org.apache.camel.language.xpath.XPathLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.XPathExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="objectModel" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="The XPath object model to use"/>
-         <parameter name="documentType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of class for document type The default value is org.w3c.dom.Document"/>
-         <parameter name="logNamespaces" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Whether to log namespaces which can assist during trouble shooting"/>
-         <parameter name="saxon" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Whether to use Saxon."/>
-         <parameter name="resultType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output) The default result type is NodeSet"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-         <parameter name="headerName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of header to use as input instead of the message body"/>
-         <parameter name="factoryRef" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="References to a custom XPathFactory to lookup in the registry"/>
-      </parameters>
-   </language>
-   <language>
-      <name>ref</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>Ref</title>
-      <description>The Core Camel Java DSL based router</description>
-      <class>org.apache.camel.language.ref.RefLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.RefExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-      </parameters>
-   </language>
-   <language>
-      <name>sql</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>SQL</title>
-      <description>Camel JoSQL support</description>
-      <class>org.apache.camel.language.sql.SqlLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.SqlExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-josql</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-      </parameters>
-   </language>
-   <language>
-      <name>el</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>EL</title>
-      <description>Camel JUEL support</description>
-      <class>org.apache.camel.language.juel.JuelLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.ELExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-juel</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-      </parameters>
-   </language>
-   <language>
-      <name>ognl</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>OGNL</title>
-      <description>Camel OGNL support</description>
-      <class>org.apache.camel.language.ognl.OgnlLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.OgnlExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ognl</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-      </parameters>
-   </language>
-   <language>
-      <name>file</name>
+      <name>simple</name>
       <tags>
          <tag>language</tag>
       </tags>
       <title>Simple</title>
       <description>The Core Camel Java DSL based router</description>
-      <class>org.apache.camel.language.simple.FileLanguage</class>
+      <class>org.apache.camel.language.simple.SimpleLanguage</class>
       <kind>language</kind>
       <modelJavaType>org.apache.camel.model.language.SimpleExpression</modelJavaType>
       <dependencies>
@@ -356,82 +183,10 @@
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="resultType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output)"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-      </parameters>
-   </language>
-   <language>
-      <name>xtokenize</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>XML Tokenize</title>
-      <description>The Core Camel Java DSL based router</description>
-      <class>org.apache.camel.language.tokenizer.XMLTokenizeLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.XMLTokenizerExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-         <parameter name="group" type="integer" javaType="java.lang.Integer" kind="attribute" deprecated="false" required="false" description="To group N parts together"/>
-         <parameter name="headerName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of header to tokenize instead of using the message body."/>
-         <parameter name="mode" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="The extraction mode. The available extraction modes are: i - injecting the contextual namespace bindings into the extracted token (default) w - wrapping the extracted token in its ancestor context u - unwrapping the extracted token to its child content t - extracting the text content of the specified element"/>
-      </parameters>
-   </language>
-   <language>
-      <name>spel</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>SpEL</title>
-      <description>Camel Spring support</description>
-      <class>org.apache.camel.language.spel.SpelLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.SpELExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-      </parameters>
-   </language>
-   <language>
-      <name>mvel</name>
-      <tags>
-         <tag>language</tag>
-      </tags>
-      <title>MVEL</title>
-      <description>Camel MVEL support</description>
-      <class>org.apache.camel.language.mvel.MvelLanguage</class>
-      <kind>language</kind>
-      <modelJavaType>org.apache.camel.model.language.MvelExpression</modelJavaType>
-      <dependencies>
-         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mvel</artifactId>
-            <version>2.15.1</version>
-         </dependency>
-      </dependencies>
-      <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
       </parameters>
    </language>
    <language>
@@ -452,17 +207,186 @@
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
-         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="token" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="true" description="The (start) token to use as tokenizer for example \n for a new line token"/>
-         <parameter name="regex" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="If the token is a regular expression pattern. The default value is false"/>
-         <parameter name="inheritNamespaceTagName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="To inherit namepaces from a root/parent tag name"/>
-         <parameter name="xml" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Whether the input is XML messages. This option must be set to true if working with XML payloads."/>
          <parameter name="endToken" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="The end token to use as tokenizer if using start/end token pairs."/>
-         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
-         <parameter name="group" type="integer" javaType="java.lang.Integer" kind="attribute" deprecated="false" required="false" description="To group N parts together for example to split big files into chunks of 1000 lines."/>
+         <parameter name="regex" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="If the token is a regular expression pattern. The default value is false"/>
          <parameter name="headerName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of header to tokenize instead of using the message body."/>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
          <parameter name="includeTokens" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Whether to include the tokens in the parts The default value is false"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="xml" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Whether the input is XML messages. This option must be set to true if working with XML payloads."/>
+         <parameter name="inheritNamespaceTagName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="To inherit namepaces from a root/parent tag name"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+         <parameter name="token" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="true" description="The (start) token to use as tokenizer for example \n for a new line token"/>
+         <parameter name="group" type="integer" javaType="java.lang.Integer" kind="attribute" deprecated="false" required="false" description="To group N parts together for example to split big files into chunks of 1000 lines."/>
+      </parameters>
+   </language>
+   <language>
+      <name>sql</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>SQL</title>
+      <description>Camel JoSQL support</description>
+      <class>org.apache.camel.language.sql.SqlLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.SqlExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-josql</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+      </parameters>
+   </language>
+   <language>
+      <name>spel</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>SpEL</title>
+      <description>Camel Spring support</description>
+      <class>org.apache.camel.language.spel.SpelLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.SpELExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+      </parameters>
+   </language>
+   <language>
+      <name>ref</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>Ref</title>
+      <description>The Core Camel Java DSL based router</description>
+      <class>org.apache.camel.language.ref.RefLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.RefExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+      </parameters>
+   </language>
+   <language>
+      <name>xpath</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>XPath</title>
+      <description>The Core Camel Java DSL based router</description>
+      <class>org.apache.camel.language.xpath.XPathLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.XPathExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="headerName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of header to use as input instead of the message body"/>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="documentType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of class for document type The default value is org.w3c.dom.Document"/>
+         <parameter name="objectModel" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="The XPath object model to use"/>
+         <parameter name="logNamespaces" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Whether to log namespaces which can assist during trouble shooting"/>
+         <parameter name="factoryRef" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="References to a custom XPathFactory to lookup in the registry"/>
+         <parameter name="saxon" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="false" required="false" description="Whether to use Saxon."/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+         <parameter name="resultType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output) The default result type is NodeSet"/>
+      </parameters>
+   </language>
+   <language>
+      <name>file</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>Simple</title>
+      <description>The Core Camel Java DSL based router</description>
+      <class>org.apache.camel.language.simple.FileLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.SimpleExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+         <parameter name="resultType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output)"/>
+      </parameters>
+   </language>
+   <language>
+      <name>groovy</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>Groovy</title>
+      <description>Camel Groovy support</description>
+      <class>org.apache.camel.language.groovy.GroovyLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.GroovyExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-groovy</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+      </parameters>
+   </language>
+   <language>
+      <name>exchangeProperty</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>ExchangeProperty</title>
+      <description>The Core Camel Java DSL based router</description>
+      <class>org.apache.camel.language.property.ExchangePropertyLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.ExchangePropertyExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
       </parameters>
    </language>
    <language>
@@ -483,10 +407,86 @@
          </dependency>
       </dependencies>
       <parameters>
-         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
          <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
-         <parameter name="resultType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output)"/>
          <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+         <parameter name="resultType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the class name of the result type (type from output)"/>
+      </parameters>
+   </language>
+   <language>
+      <name>header</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>Header</title>
+      <description>The Core Camel Java DSL based router</description>
+      <class>org.apache.camel.language.header.HeaderLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.HeaderExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+      </parameters>
+   </language>
+   <language>
+      <name>xtokenize</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>XML Tokenize</title>
+      <description>The Core Camel Java DSL based router</description>
+      <class>org.apache.camel.language.tokenizer.XMLTokenizeLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.XMLTokenizerExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="mode" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="The extraction mode. The available extraction modes are: i - injecting the contextual namespace bindings into the extracted token (default) w - wrapping the extracted token in its ancestor context u - unwrapping the extracted token to its child content t - extracting the text content of the specified element"/>
+         <parameter name="headerName" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of header to tokenize instead of using the message body."/>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+         <parameter name="group" type="integer" javaType="java.lang.Integer" kind="attribute" deprecated="false" required="false" description="To group N parts together"/>
+      </parameters>
+   </language>
+   <language>
+      <name>bean</name>
+      <tags>
+         <tag>language</tag>
+      </tags>
+      <title>Bean method</title>
+      <description>The Core Camel Java DSL based router</description>
+      <class>org.apache.camel.language.bean.BeanLanguage</class>
+      <kind>language</kind>
+      <modelJavaType>org.apache.camel.model.language.MethodCallExpression</modelJavaType>
+      <dependencies>
+         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.15.1</version>
+         </dependency>
+      </dependencies>
+      <parameters>
+         <parameter name="ref" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Reference to bean to lookup in the registry"/>
+         <parameter name="expression" type="string" javaType="java.lang.String" kind="value" deprecated="false" required="true" description="The expression value in your chosen language syntax"/>
+         <parameter name="method" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Name of method to call"/>
+         <parameter name="trim" type="boolean" javaType="java.lang.Boolean" kind="attribute" deprecated="false" defaultValue="true" required="false" description="Whether to trim the value to remove leading and trailing whitespaces and line breaks"/>
+         <parameter name="id" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Sets the id of this node"/>
+         <parameter name="bean" type="string" javaType="java.lang.String" kind="attribute" deprecated="true" required="false" description="Either a reference or a class name of the bean to use"/>
+         <parameter name="beanType" type="string" javaType="java.lang.String" kind="attribute" deprecated="false" required="false" description="Class name of the bean to use"/>
       </parameters>
    </language>
 </languages>

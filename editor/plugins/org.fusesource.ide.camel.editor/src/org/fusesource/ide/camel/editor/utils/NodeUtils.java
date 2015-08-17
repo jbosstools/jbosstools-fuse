@@ -27,16 +27,6 @@ import org.apache.camel.model.ExpressionNode;
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.spi.Required;
 import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.generated.Aggregate;
-import org.fusesource.ide.camel.model.generated.ConvertBody;
-import org.fusesource.ide.camel.model.generated.Log;
-import org.fusesource.ide.camel.model.generated.Process;
-import org.fusesource.ide.camel.model.generated.RemoveHeader;
-import org.fusesource.ide.camel.model.generated.RemoveProperty;
-import org.fusesource.ide.camel.model.generated.Resequence;
-import org.fusesource.ide.camel.model.generated.SetHeader;
-import org.fusesource.ide.camel.model.generated.SetOutHeader;
-import org.fusesource.ide.camel.model.generated.SetProperty;
 
 
 /**
@@ -119,25 +109,32 @@ public class NodeUtils {
 				}
 			}
 		}
+		
+		String type = null;
+		if( bean instanceof AbstractNode ) {
+			AbstractNode bean2 = (AbstractNode)bean;
+			type = bean2.getNodeTypeId();
+			if ("resequence".equals(type) && "expression".equals(propertyName)) {
+				return true;
+			}
+		}
 
 		// expression is mandatory on resequence
-		if (bean instanceof Resequence && "expression".equals(propertyName)) {
-			return true;
-		}
 
 		// lets make all URI properties mandatory by default to avoid complex
 		// validation with ref v uri
+		
 		boolean answer = ("uri".equals(propertyName) || propertyName.endsWith("Uri"))
-				|| (bean instanceof Aggregate && "strategyRef".equals(propertyName))
-				|| (bean instanceof ConvertBody && "type".equals(propertyName))
+				|| ("aggregate".equals(type) && "strategyRef".equals(propertyName))
+				|| ("convertBody".equals(type) && "type".equals(propertyName))
 				|| (bean instanceof ExpressionDefinition && isMandatoryExpression(((AbstractNode)bean)))
-				|| (bean instanceof Log && "message".equals(propertyName))
+				|| ("log".equals(type) && "message".equals(propertyName))
 				|| (bean instanceof Process && "ref".equals(propertyName))
-				|| (bean instanceof RemoveHeader && "headerName".equals(propertyName))
-				|| (bean instanceof RemoveProperty && "propertyName".equals(propertyName))
-				|| (bean instanceof SetHeader && "headerName".equals(propertyName))
-				|| (bean instanceof SetOutHeader && "headerName".equals(propertyName))
-				|| (bean instanceof SetProperty && "propertyName".equals(propertyName));
+				|| ("removeHeader".equals(type) && "headerName".equals(propertyName))
+				|| ("removeProperty".equals(type) && "propertyName".equals(propertyName))
+				|| ("setHeader".equals(type) && "headerName".equals(propertyName))
+				|| ("setOutHeader".equals(type) && "headerName".equals(propertyName))
+				|| ("setProperty".equals(type) && "propertyName".equals(propertyName));
 		return answer;
 	}
 

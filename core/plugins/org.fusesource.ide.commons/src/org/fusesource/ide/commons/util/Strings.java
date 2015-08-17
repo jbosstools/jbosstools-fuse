@@ -13,6 +13,13 @@
 package org.fusesource.ide.commons.util;
 
 public class Strings {
+	
+
+    public static String convertCamelCase(String original) {
+    	String display = original.replaceAll("(\\p{Ll})(\\p{Lu})","$1 $2");
+    	return capitalize(display);
+    }
+    
 	public static String getOrElse(Object text) {
 		return getOrElse(text, "");
 	}

@@ -23,7 +23,9 @@ import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
 import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.generated.Route;
+import org.fusesource.ide.camel.model.generated.UniversalEIPUtility;
 import org.osgi.framework.Bundle;
 
 
@@ -187,6 +189,15 @@ public class ImageProvider extends AbstractImageProvider {
 	public void addIconsForClass(AbstractNode node) {
 		addIconsForClass(node, node.getSmallIconName(), node.getIconName());
 	}
+	
+	public void addIconsForEIP(Eip eip ) {
+		String eipName = eip.getName();
+		addIconsForIconName(UniversalEIPUtility.getIconName(eipName), 
+				UniversalEIPUtility.getSmallIconName(eipName), 
+				UniversalEIPUtility.getIconName(eipName));
+	}
+
+	
 
 	public static String getKeyForSmallIcon(String iconName) {
 	    if (isImageAvailable(iconName)) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL);

@@ -29,7 +29,6 @@ import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
 import org.eclipse.graphiti.tb.ContextMenuEntry;
 import org.eclipse.graphiti.tb.IContextMenuEntry;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -49,8 +48,10 @@ import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.generated.Route;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
 import org.fusesource.ide.commons.util.Strings;
 
@@ -198,19 +199,22 @@ public abstract class AbstractAddNodeMenuFactory {
 			processedBeans.add(name);
 			
 			String description = "bean '" + name + "' of type " + aClass;
-			addMenuItem(menu, name, description, Bean.class, context, fp, new CreateNodeConnectionFeature(fp, Bean.class) {
-
+			
+			String version =  CamelModelFactory.getCamelVersion(null); 
+			final Eip eip = CamelModelFactory.getModelForVersion(version).getEipModel().getEIPByClass("bean");
+			
+			CreateNodeConnectionFeature f = new CreateNodeConnectionFeature(fp, eip) {
 				@Override
 				protected AbstractNode createNode(ICustomContext ctx) throws Exception {
-					Bean bean = new Bean();
+					UniversalEIPNode bean = new UniversalEIPNode(eip);
 					bean.setName(name);
-					bean.setRef(name);
-					bean.setBeanType(aClass);
+			    	bean.setShortPropertyValue("ref", name);
+			    	bean.setShortPropertyValue("beanType", aClass);
 					return bean;
 				}
-			});
+			};
+			addMenuItem(menu, name, description, eip, context, fp, f);		
 		}
-
 	}
 
 
@@ -247,6 +251,12 @@ public abstract class AbstractAddNodeMenuFactory {
 		addMenuItem(parent, label, description, clazz, context, fp, (ObjectCreationToolEntry)null);
 	}
 
+	
+	protected void addMenuItem(ContextMenuEntry parent, String label, String description, Eip eip, ICustomContext context, IFeatureProvider fp) {
+		addMenuItem(parent, label, description, eip, context, fp, (ObjectCreationToolEntry)null);
+	}
+
+	
 	/**
 	 * creates a new menu item and adds it to the parent menu
 	 * 
@@ -262,16 +272,35 @@ public abstract class AbstractAddNodeMenuFactory {
 		CreateNodeConnectionFeature feature = new CreateNodeConnectionFeature(fp, clazz, octe);
 		addMenuItem(parent, label, description, clazz, context, fp, feature);
 	}
+	
+	protected void addMenuItem(ContextMenuEntry parent, String label, String description, Eip eip, ICustomContext context, IFeatureProvider fp, ObjectCreationToolEntry octe) {
+		// check if we can actually connect to the current selection
+		CreateNodeConnectionFeature feature = new CreateNodeConnectionFeature(fp, eip, octe);
+		addMenuItem(parent, label, description, eip, context, fp, feature);
+	}
+
 
 
 	protected void addMenuItem(ContextMenuEntry parent, String label, String description,
 			Class<? extends AbstractNode> clazz, ICustomContext context, IFeatureProvider fp,
 			CreateNodeConnectionFeature feature) {
-		AbstractNode selectedNode = getSelectedNode(context, fp);
 		Object newObject = newInstance(clazz);
 		if (newObject instanceof AbstractNode) {
 			AbstractNode newNode = (AbstractNode) newObject;
+			addMenuItem(parent, label, description, newNode, context, fp, feature);
+		}
+	}
 
+	protected void addMenuItem(ContextMenuEntry parent, String label, String description,
+			Eip eip, ICustomContext context, IFeatureProvider fp,
+			CreateNodeConnectionFeature feature) {
+		UniversalEIPNode newNode = new UniversalEIPNode(eip);
+		addMenuItem(parent, label, description, newNode, context, fp, feature);
+	}
+	
+	protected void addMenuItem(ContextMenuEntry parent, String label, String description,
+			AbstractNode newNode, ICustomContext context, IFeatureProvider fp,
+			CreateNodeConnectionFeature feature) {
 			// TODO change to allow us to add any new item to the selection...
 			//if (newNode instanceof RouteSupport || (selectedNode != null && selectedNode.canConnectTo(newNode))) {
 
@@ -283,8 +312,7 @@ public abstract class AbstractAddNodeMenuFactory {
 			menuEntry.setDescription(description);
 			try {
 				// set the image
-				AbstractNode node = clazz.newInstance();
-				String iconName = node.getIconName();
+				String iconName = newNode.getIconName();
 				menuEntry.setIconId(ImageProvider.getKeyForSmallIcon(iconName));
 			} catch (Exception ex) {
 				menuEntry.setIconId(DEFAULT_IMAGE_KEY);
@@ -294,9 +322,7 @@ public abstract class AbstractAddNodeMenuFactory {
 			// add entry to parent
 			parent.add(menuEntry);
 			//}
-		}
 	}
-
 
 
 
@@ -444,11 +470,24 @@ public abstract class AbstractAddNodeMenuFactory {
 	}
 
 
-	protected void addMenuItem(IMenuManager menu, final String title, final String description, final Class<? extends AbstractNode> aClass) {
+	protected void addMenuItem(IMenuManager menu, final String title, final String description, 
+			final Class<? extends AbstractNode> aClass) {
 		// lets decide if we can actually add this kind of node first...
 		Object newObject = newInstance(aClass);
 		if (newObject instanceof AbstractNode) {
 			final AbstractNode newNode = (AbstractNode) newObject;
+			addMenuItem(menu, title, description, newNode, null, aClass);
+		}
+	}
+	
+	protected void addMenuItem(IMenuManager menu, final String title, final String description, 
+			Eip eip) {
+		UniversalEIPNode newObject = new UniversalEIPNode(eip);
+		addMenuItem(menu, title, description, newObject, eip, null);
+	}
+	
+	protected void addMenuItem(IMenuManager menu, final String title, final String description, 
+			final AbstractNode newNode, final Eip eip, final Class<? extends AbstractNode> aClass) {
 			if (newNode instanceof RouteSupport || (selectedNode != null && selectedNode.canConnectTo(newNode))) {
 				final AbstractNode node = selectedNode;
 				Action action = new Action() {
@@ -457,7 +496,10 @@ public abstract class AbstractAddNodeMenuFactory {
 						if (newNode instanceof Route) {
 							editor.addNewRoute();
 						} else {
-							DiagramOperations.addNode(editor, aClass, node);
+							if( aClass != null )
+								DiagramOperations.addNode(editor, aClass, node);
+							else 
+								DiagramOperations.addNode(editor, eip, node);
 						}
 
 						/*
@@ -564,7 +606,6 @@ public abstract class AbstractAddNodeMenuFactory {
 				action.setImageDescriptor(getImageDescriptor(newNode.getSmallIconName()));
 				menu.add(action);
 			}
-		}
 	}
 
 
@@ -589,7 +630,11 @@ public abstract class AbstractAddNodeMenuFactory {
 		        	PaletteCategoryItemProvider pcip = (PaletteCategoryItemProvider) octe.getCreateFeature();
 		        	if (pcip != null && pcip.getCategoryType() == PaletteCategoryItemProvider.CATEGORY_TYPE.COMPONENTS) {
 		        	    CreateFigureFeature cff = (CreateFigureFeature)octe.getCreateFeature();
-		        		addMenuItem(menu, octe.getLabel(), octe.getDescription(), cff.getClazz(), context, fp, octe);
+		        	    Class<? extends AbstractNode> c = cff.getClazz();
+		        	    if( c != null )
+		        	    	addMenuItem(menu, octe.getLabel(), octe.getDescription(), cff.getClazz(), context, fp, octe);
+		        	    else 
+		        	    	addMenuItem(menu, octe.getLabel(), octe.getDescription(), cff.getEip(), context, fp, octe);
 		        	}
 	            }
 	        }	        

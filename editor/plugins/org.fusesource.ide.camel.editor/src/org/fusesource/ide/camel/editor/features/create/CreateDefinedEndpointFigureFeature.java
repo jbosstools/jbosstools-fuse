@@ -24,19 +24,10 @@ public class CreateDefinedEndpointFigureFeature extends CreateEndpointFigureFeat
 	public CreateDefinedEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint) {
 		super(fp, name, description, endpoint, null);
 		this.endpoint = new DefinedEndpoint(endpoint);
-		setExemplar(this.endpoint);
 	}
 
 	@Override
 	protected AbstractNode createNode() {
 		return new DefinedEndpoint(endpoint);
 	}
-
-	/**
-     * Returns the singleton exemplar node we can use to access things like icons and category names etc
-     */
-    @Override
-	protected AbstractNode getExemplar() {
-        return new DefinedEndpoint();
-    }
 }

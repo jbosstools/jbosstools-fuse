@@ -21,7 +21,7 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 
 
 public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
@@ -83,9 +83,12 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 		if (bo instanceof Endpoint) {
 			Endpoint ep = (Endpoint)getBusinessObjectForPictogramElement(pe);
 			ep.setUri(value);
-		} else if (bo instanceof Bean) {
-			Bean bean = (Bean)getBusinessObjectForPictogramElement(pe);
-			bean.setRef(value);
+		} else if (bo instanceof UniversalEIPNode) {
+			UniversalEIPNode uNode = (UniversalEIPNode)bo;
+			if( uNode.getNodeTypeId().equals("bean")) {
+				UniversalEIPNode bean = (UniversalEIPNode)getBusinessObjectForPictogramElement(pe);
+				bean.setShortPropertyValue("ref", value);
+			}
 		}
 		
 		// Explicitly update the shape to display the new value in the diagram

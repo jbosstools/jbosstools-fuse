@@ -37,6 +37,9 @@ public class BasicNodeValidator implements ValidationSupport {
 
 		// we check if all mandatory fields are filled
 		for (IPropertyDescriptor pd : node.getPropertyDescriptors()) {
+			if( pd == null ) {
+				continue;
+			}
 			String property = NodeUtils.getPropertyName(pd.getId());
 			if (NodeUtils.isMandatory(node, property)) {
 				Object val = node.getPropertyValue(pd.getId());

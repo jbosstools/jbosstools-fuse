@@ -27,7 +27,6 @@ import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.generated.Choice;
 
 
 /**
@@ -156,7 +155,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		String camelVersion=Activator.getDefault().getCamelVersion();
 		Eip eip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByClass(source.getPatternName());
 		if (eip != null) {
-			return eip.getOutput().equalsIgnoreCase("true") || source instanceof Choice; // special case choice
+			return eip.getOutput().equalsIgnoreCase("true") || "choice".equals(source.getNodeTypeId()); // special case choice
 		}
 		return false;
 	}

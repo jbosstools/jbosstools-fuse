@@ -16,14 +16,14 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.ConnectorEndpoint;
-import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.catalog.components.Component;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
 import org.fusesource.ide.commons.util.Strings;
 
 /**
  * @author lhein
  */
-public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> {
+public class CreateConnectorFigureFeature extends CreateFigureFeature {
     
     private final ConnectorEndpoint endpoint;
     protected final Component component;
@@ -35,9 +35,8 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
      * @param component
      */
     public CreateConnectorFigureFeature(IFeatureProvider fp, Component component) {
-        super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), Endpoint.class);
+        super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), (Eip)null);
         this.endpoint = new ConnectorEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme())); // we use the first found protocol string
-        setExemplar(this.endpoint);
         this.component = component;
     }
     

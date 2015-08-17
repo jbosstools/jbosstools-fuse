@@ -22,6 +22,7 @@ public class Parameter {
 	private String type;
 	private String javaType;
 	private String kind;
+	private String originalFieldName;
 	private String deprecated;
 	private String description;
 	private String required;
@@ -84,6 +85,14 @@ public class Parameter {
 	@XmlAttribute(name = "kind")
 	public String getKind() {
 		return this.kind;
+	}
+	
+	/**
+	 * @return the original field name
+	 */
+	@XmlAttribute(name = "originalFieldName")
+	public String getOriginalFieldName() {
+		return this.originalFieldName;
 	}
 
 	/**
@@ -166,6 +175,14 @@ public class Parameter {
 	public void setKind(String kind) {
 		this.kind = kind;
 	}
+	
+	/**
+	 * @return the original field name
+	 */
+	public void setOriginalFieldName(String original) {
+		this.originalFieldName = original;
+	}
+
 	
 	/**
 	 * @param label the label to set

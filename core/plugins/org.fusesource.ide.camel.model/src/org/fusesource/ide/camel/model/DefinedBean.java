@@ -10,25 +10,28 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model;
 
-import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 
 /**
  * @author lhein
  *
  */
-public class DefinedBean extends Bean {
+public class DefinedBean extends UniversalEIPNode {
     /**
      * 
      */
     public DefinedBean() {
-        super();
+        super(CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null)).getEipModel().getEIPByClass("bean"));
     }
     
-    public DefinedBean(Bean endpoint) {
-        setRef(endpoint.getRef());
-        setMethod(endpoint.getMethod());
-        setBeanType(endpoint.getBeanType());
-        setCache(endpoint.getCache());
+    // Takes a UniversalEIPNode representing a 'bean' element
+    public DefinedBean(UniversalEIPNode endpoint) {
+    	this();
+    	setShortPropertyValue("ref", endpoint.getShortPropertyValue("ref"));
+    	setShortPropertyValue("method", endpoint.getShortPropertyValue("method"));
+    	setShortPropertyValue("beanType", endpoint.getShortPropertyValue("beanType"));
+    	setShortPropertyValue("cache", endpoint.getShortPropertyValue("cache"));
     }
     
     /* (non-Javadoc)

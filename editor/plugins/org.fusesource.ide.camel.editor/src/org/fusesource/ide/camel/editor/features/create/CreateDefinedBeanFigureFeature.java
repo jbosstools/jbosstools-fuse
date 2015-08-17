@@ -14,31 +14,27 @@ package org.fusesource.ide.camel.editor.features.create;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.DefinedBean;
-import org.fusesource.ide.camel.model.generated.Bean;
+import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 
 
 public class CreateDefinedBeanFigureFeature extends CreateBeanFigureFeature {
 	private final DefinedBean bean;
 
-	public CreateDefinedBeanFigureFeature(IFeatureProvider fp, String name, String description, Bean endpoint) {
+	public CreateDefinedBeanFigureFeature(IFeatureProvider fp, String name, 
+			String description, UniversalEIPNode endpoint) {
 		super(fp, name, description, endpoint);
 		this.bean = new DefinedBean(endpoint);
 	}
 
 	@Override
 	protected AbstractNode createNode() {
-		Bean answer = new Bean();
-		answer.setRef(bean.getRef());
-		answer.setBeanType(bean.getBeanType());
+		Eip eip = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null)).getEipModel().getEIPByClass("bean");
+		UniversalEIPNode answer = new UniversalEIPNode(eip);
+    	answer.setShortPropertyValue("ref", bean.getShortPropertyValue("ref"));
+    	answer.setShortPropertyValue("beanType", bean.getShortPropertyValue("beanType"));
 		answer.setName(bean.getName());
 		return answer;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.features.create.CreateFigureFeature#getExemplar()
-	 */
-	@Override
-	protected AbstractNode getExemplar() {
-        return new DefinedBean();
 	}
 }

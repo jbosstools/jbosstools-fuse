@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.camel.model.catalog.eips.Eip;
 
 
 public class DiagramOperations {
@@ -54,6 +55,13 @@ public class DiagramOperations {
 	public static AddNodeCommand addNode(RiderDesignEditor designEditor, Class<? extends AbstractNode> aClass, AbstractNode selectedNode) {
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
 		AddNodeCommand operation = new AddNodeCommand(designEditor, editingDomain, aClass, selectedNode);
+		execute(editingDomain, operation, true);
+		return operation;
+	}
+
+	public static AddNodeCommand addNode(RiderDesignEditor designEditor, Eip eip, AbstractNode selectedNode) {
+		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
+		AddNodeCommand operation = new AddNodeCommand(designEditor, editingDomain, eip, selectedNode);
 		execute(editingDomain, operation, true);
 		return operation;
 	}

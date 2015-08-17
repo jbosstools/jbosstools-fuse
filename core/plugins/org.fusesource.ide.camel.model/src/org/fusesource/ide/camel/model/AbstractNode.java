@@ -15,6 +15,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,33 +58,11 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-import org.fusesource.ide.camel.model.generated.Bean;
-import org.fusesource.ide.camel.model.generated.Catch;
-import org.fusesource.ide.camel.model.generated.Choice;
-import org.fusesource.ide.camel.model.generated.ConvertBody;
-import org.fusesource.ide.camel.model.generated.Enrich;
-import org.fusesource.ide.camel.model.generated.Finally;
-import org.fusesource.ide.camel.model.generated.InOnly;
-import org.fusesource.ide.camel.model.generated.InOut;
-import org.fusesource.ide.camel.model.generated.InterceptSendToEndpoint;
-import org.fusesource.ide.camel.model.generated.LoadBalance;
-import org.fusesource.ide.camel.model.generated.Log;
-import org.fusesource.ide.camel.model.generated.Marshal;
 import org.fusesource.ide.camel.model.generated.Messages;
-import org.fusesource.ide.camel.model.generated.Multicast;
 import org.fusesource.ide.camel.model.generated.NodeFactory;
-import org.fusesource.ide.camel.model.generated.OnException;
-import org.fusesource.ide.camel.model.generated.Otherwise;
-import org.fusesource.ide.camel.model.generated.PollEnrich;
-import org.fusesource.ide.camel.model.generated.RemoveHeader;
-import org.fusesource.ide.camel.model.generated.RemoveProperty;
-import org.fusesource.ide.camel.model.generated.Rollback;
-import org.fusesource.ide.camel.model.generated.SetExchangePattern;
-import org.fusesource.ide.camel.model.generated.Sort;
 import org.fusesource.ide.camel.model.generated.Tooltips;
-import org.fusesource.ide.camel.model.generated.Try;
-import org.fusesource.ide.camel.model.generated.Unmarshal;
-import org.fusesource.ide.camel.model.generated.When;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
+import org.fusesource.ide.camel.model.generated.UniversalEIPUtility;
 import org.fusesource.ide.camel.model.util.Expressions;
 import org.fusesource.ide.commons.camel.tools.CamelModelUtils;
 import org.fusesource.ide.commons.util.Objects;
@@ -142,10 +121,32 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	private Image smallImage;
 	private Boolean inheritErrorHandler;
 
+	public AbstractNode(RouteContainer parent) {
+		this(parent, false);
+	}
+	public AbstractNode(RouteContainer parent, boolean skipCustomProperties) {
+		this(skipCustomProperties);
+		this.parent = parent;
+		if (parent != null) {
+			parent.addChild(this);
+		}
+	}
+	
 	/**
 	 * default constructor
 	 */
 	public AbstractNode() {
+		this(true);
+		addCustomProperties();
+	}
+
+	/**
+	 * This method is basically only here to allow the delaying of adding custom properties
+	 * until after the subclass's constructor has finished
+	 * 
+	 * @param skipAddCustomProperties
+	 */
+	protected AbstractNode(boolean skipAddCustomProperties) {
 		this.sourceConnections = new ArrayList<Flow>();
 		this.targetConnections = new ArrayList<Flow>();
 		this.listeners = new PropertyChangeSupport(this);
@@ -173,15 +174,18 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		this.descriptors.get(PROPERTY_DESCRIPTION).setValidator(DEFAULT_STRING_VALIDATOR);
 
 		// now let the subclasses add stuff
-		addCustomProperties(this.descriptors);
+		if( !skipAddCustomProperties)
+			addCustomProperties();
 	}
 
-	public AbstractNode(RouteContainer parent) {
-		this();
-		this.parent = parent;
-		if (parent != null) {
-			parent.addChild(this);
-		}
+	/**
+	 * Return the typeid of this node, if applicable. 
+	 * This should match the parameter name from the eip.xml model, so for example, 
+	 * doTry, resequence, etc
+	 * @return
+	 */
+	public String getNodeTypeId() {
+		return null;
 	}
 
 	@Override
@@ -323,8 +327,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 
 
 	public String getSmallIconName() {
-		String iconName = getIconName();
-		return iconName.replace(".png", "16.png");
+		return UniversalEIPUtility.getSmallIconName(getNodeTypeId());
 	}
 
 	public Image getImage() {
@@ -391,6 +394,14 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		return null;
 	}
 
+	/**
+	 * allows a subclass to call addCustomProperties once its constructor is complete
+	 */
+	protected void addCustomProperties() {
+		addCustomProperties(descriptors);
+	}
+	
+	
 	/**
 	 * override this method to register class specific property descriptors
 	 * 
@@ -599,7 +610,14 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	public final String getDisplayText() {
 		return getDisplayText(true);
 	}
+    protected static String convertCamelCase(String original) {
+    	return Strings.convertCamelCase(original); 
+    }
 
+    protected static String capitalizeFirstLetter(String input) {
+    	return Strings.capitalize(input);
+    }
+    
 	public final String getDisplayText(boolean useID) {
 
 		// honor the PREFER_ID_AS_LABEL preference
@@ -627,95 +645,82 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 				// uri specified, use it
 				return node.getUri();
 			}
-		} else if (this instanceof Bean) {
-			Bean node = (Bean) this;
-			return "bean " + Strings.getOrElse(node.getRef());
-		} else if (this instanceof Catch) {
-			Catch node = (Catch) this;
-			List exceptions = node.getExceptions();
+		} 
+		
+		String eipType = getNodeTypeId();
+		// For some nodes, we just return their node name
+		String[] nodeNameOnly = new String[]{
+				"choice", "try", "finally","otherwise", "marshal",  "unmarshal" 
+		};
+		if( Arrays.asList(nodeNameOnly).contains(eipType))
+			return eipType;
+		
+		// Some nodes just need the value of a param
+		HashMap<String, String> singlePropertyDisplay = new HashMap<String, String>();
+		singlePropertyDisplay.put("bean",  "ref");
+		singlePropertyDisplay.put("convertBodyTo",  "type");
+		singlePropertyDisplay.put("enrich",  "uri");
+		singlePropertyDisplay.put("inOnly",  "uri");
+		singlePropertyDisplay.put("inOut",  "uri");
+		singlePropertyDisplay.put("interceptSendToEndpoint",  "uri");
+		singlePropertyDisplay.put("log",  "logName");
+		singlePropertyDisplay.put("onException",  "exception");
+		singlePropertyDisplay.put("pollEnrich",  "uri");
+		singlePropertyDisplay.put("removeHeader",  "headerName");
+		singlePropertyDisplay.put("removeProperty",  "propertyName");
+		singlePropertyDisplay.put("rollback",  "message");
+		singlePropertyDisplay.put("sort",  "expression");
+		singlePropertyDisplay.put("when",  "expression");
+		
+		String propertyToCheck = singlePropertyDisplay.get(eipType);
+		if( propertyToCheck != null ) {
+			Object propVal = getShortPropertyValue(propertyToCheck, Object.class);
+			String suffix = null;
+			if( propVal instanceof ExpressionDefinition ) {
+				suffix = Expressions.getExpressionOrElse(((ExpressionDefinition)propVal));
+			} else {
+				suffix = Strings.getOrElse(propVal);
+			}
+			String ret = convertCamelCase(eipType) + " " + suffix;
+			return ret;
+		}
+		
+		
+		if ("catch".equals(eipType)) {
+			List exceptions = getShortPropertyValue("exception", List.class);
 			if (exceptions != null && exceptions.size() > 0) {
 				return "catch " + exceptions;
 			} else {
-				return "catch " + Expressions.getExpressionOrElse(node.getHandled());
+				return "catch " + Expressions.getExpressionOrElse(getShortPropertyValue("handled", ExpressionDefinition.class));
 			}
-		} else if (this instanceof Choice) {
-			return "choice";
-		} else if (this instanceof ConvertBody) {
-			ConvertBody node = (ConvertBody) this;
-			return "convertBody " + Strings.getOrElse(node.getType());
-		} else if (this instanceof Enrich) {
-			Enrich node = (Enrich) this;
-			return "enrich " + Strings.getOrElse(node.getResourceUri());
-		} else if (this instanceof Finally) {
-			return "finally";
-		} else if (this instanceof InOnly) {
-			InOnly node = (InOnly) this;
-			return "inOnly " + Strings.getOrElse(node.getUri());
-		} else if (this instanceof InOut) {
-			InOut node = (InOut) this;
-			return "inOut " + Strings.getOrElse(node.getUri());
-		} else if (this instanceof InterceptSendToEndpoint) {
-			InterceptSendToEndpoint node = (InterceptSendToEndpoint) this;
-			return "intercept " + Strings.getOrElse(node.getUri());
-		} else if (this instanceof Log) {
-			Log node = (Log) this;
-			return "log " + Strings.getOrElse(node.getLogName());
-		} else if (this instanceof Marshal) {
-			return "marshal";
-		} else if (this instanceof OnException) {
-			OnException node = (OnException) this;
-			return "on exception " + Strings.getOrElse(node.getExceptions());
-		} else if (this instanceof Otherwise) {
-			return "otherwise";
-		} else if (this instanceof PollEnrich) {
-			PollEnrich node = (PollEnrich) this;
-			return "poll enrich " + Strings.getOrElse(node.getResourceUri());
-		} else if (this instanceof RemoveHeader) {
-			RemoveHeader node = (RemoveHeader) this;
-			return "remove header " + Strings.getOrElse(node.getHeaderName());
-		} else if (this instanceof RemoveProperty) {
-			RemoveProperty node = (RemoveProperty) this;
-			return "remove property " + Strings.getOrElse(node.getPropertyName());
-		} else if (this instanceof Rollback) {
-			Rollback node = (Rollback) this;
-			return "rollback " + Strings.getOrElse(node.getMessage());
-		} else if (this instanceof SetExchangePattern) {
-			SetExchangePattern node = (SetExchangePattern) this;
-			ExchangePattern pattern = node.getPattern();
+		} else if ("setExchangePattern".equals(eipType)) {
+			ExchangePattern pattern = getShortPropertyValue("handled", ExchangePattern.class);
 			if (pattern == null) {
 				return "setExchangePattern";
 			} else {
 				return "set " + pattern;
 			}
-		} else if (this instanceof Sort) {
-			Sort node = (Sort) this;
-			return "sort " + Expressions.getExpressionOrElse(node.getExpression());
-		} else if (this instanceof When) {
-			When node = (When) this;
-			return "when " + Expressions.getExpressionOrElse(node.getExpression());
-		} else if (this instanceof Unmarshal) {
-			return "unmarshal";
-		} else if (this instanceof Try) {
-			return "try";
-		} else if (this instanceof LoadBalance) {
-			LoadBalance load = (LoadBalance) this;
-			if (load.getRef() != null) {
-				return "custom " + Strings.getOrElse(load.getRef());
-			} else if (load.getLoadBalancerType() != null) {
-				if (load.getLoadBalancerType().getClass().isAssignableFrom(CustomLoadBalancerDefinition.class)) {
-					CustomLoadBalancerDefinition custom = (CustomLoadBalancerDefinition) load.getLoadBalancerType();
+		} else if ("loadBalance".equals(eipType)) {
+			String ref = getShortPropertyValue("ref", String.class);
+			if (ref != null) {
+				return "custom " + Strings.getOrElse(ref);
+			} 
+			Object loadType = getShortPropertyValue("loadBalancerType", Object.class);
+			if (loadType  != null) {
+				if (loadType.getClass().isAssignableFrom(CustomLoadBalancerDefinition.class)) {
+					CustomLoadBalancerDefinition custom = (CustomLoadBalancerDefinition) loadType;
 					return "custom " + Strings.getOrElse(custom.getRef());
-				} else if (load.getLoadBalancerType().getClass().isAssignableFrom(FailoverLoadBalancerDefinition.class)) {
+				} else if (loadType.getClass().isAssignableFrom(FailoverLoadBalancerDefinition.class)) {
 					return "failover";
-				} else if (load.getLoadBalancerType().getClass().isAssignableFrom(RandomLoadBalancerDefinition.class)) {
+				} else if (loadType.getClass().isAssignableFrom(RandomLoadBalancerDefinition.class)) {
 					return "random";
-				} else if (load.getLoadBalancerType().getClass().isAssignableFrom(RoundRobinLoadBalancerDefinition.class)) {
+				} else if (loadType.getClass().isAssignableFrom(RoundRobinLoadBalancerDefinition.class)) {
 					return "round robin";
-				} else if (load.getLoadBalancerType().getClass().isAssignableFrom(StickyLoadBalancerDefinition.class)) {
+				} else if (loadType.getClass().isAssignableFrom(StickyLoadBalancerDefinition.class)) {
 					return "sticky";
-				} else if (load.getLoadBalancerType().getClass().isAssignableFrom(TopicLoadBalancerDefinition.class)) {
+				} else if (loadType.getClass().isAssignableFrom(TopicLoadBalancerDefinition.class)) {
 					return "topic";
-				} else if (load.getLoadBalancerType().getClass().isAssignableFrom(WeightedLoadBalancerDefinition.class)) {
+				} else if (loadType.getClass().isAssignableFrom(WeightedLoadBalancerDefinition.class)) {
 					return "weighted";
 				}
 			} else {
@@ -755,10 +760,13 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 * @return the tooltip to display for the shape figure
 	 */
 	public String getDisplayToolTip() {
-		if (this instanceof When) {
-			When node = (When) this;
-			return "when " + Expressions.getExpressionOrElse(node.getExpression());
+		String eipType = getNodeTypeId();
+		if ("when".equals(eipType)) {
+			ExpressionDefinition propVal = getShortPropertyValue("expression", ExpressionDefinition.class);
+			return "when " + Expressions.getExpressionOrElse(propVal);
 		}
+		
+		
 		String answer = Tooltips.tooltip(getPatternName());
 		if (answer == null) {
 			ProcessorDefinition camelDef = createCamelDefinition();
@@ -896,38 +904,42 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 * before a flow
 	 */
 	protected Predicate<Flow> createBeforePredicate(AbstractNode target) {
-		if (this instanceof Choice) {
+		String targetType = target.getNodeTypeId();
+		String thisType = getNodeTypeId();
+		if ("choice".equals(thisType)) {
 			// when is first
-			if (target instanceof When) {
+			if ("when".equals(targetType)) {
 				return new Predicate<Flow>() {
 					@Override
 					public boolean matches(Flow f) {
-						return f.getTarget() instanceof Otherwise || !(f.getTarget() instanceof When);
+						return "otherwise".equals(f.getTarget().getNodeTypeId()) 
+								|| !("when".equals(f.getTarget().getNodeTypeId()));
 					}
 				};
-			} else if (target instanceof Otherwise) {
+			} else if ("otherwise".equals(targetType)) {
 				return new Predicate<Flow>() {
 					@Override
 					public boolean matches(Flow f) {
-						return !(f.getTarget() instanceof When);
+						return !("when".equals(f.getTarget().getNodeTypeId()));
 					}
 				};
 			}
-		} else if (this instanceof Try) {
-			if (target instanceof Catch) {
+		} else if ("try".equals(thisType)) {
+			if ("catch".equals(targetType)) {
 				// add before finally
 				return new Predicate<Flow>() {
 					@Override
 					public boolean matches(Flow f) {
-						return f.getTarget() instanceof Finally;
+						return "finally".equals(f.getTarget().getNodeTypeId());
 					}
 				};
-			} else if (!(target instanceof Finally)) {
+			} else if (!("finally".equals(targetType))) {
 				// add before catch/finally
 				return new Predicate<Flow>() {
 					@Override
 					public boolean matches(Flow f) {
-						return f.getTarget() instanceof Catch || f.getTarget() instanceof Finally;
+						return "catch".equals(f.getTarget().getNodeTypeId())
+								|| "finally".equals(f.getTarget().getNodeTypeId());
 					}
 				};
 			}
@@ -1057,6 +1069,43 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		return null;
 	}
 
+	
+	/**
+	 * Pass in a short property, such as "uri" as opposed to "Enrich.Uri"
+	 * 
+	 * The default impl here will return the map value for the id provided. 
+	 * Subclasses (Such as {@link UniversalEIPNode} will change "ref" to 
+	 * Bean.Ref  instead, since that's the key the values are stored under. 
+	 * 
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public <T> T getShortPropertyValue(String id, Class<T> c) {
+		Object ret = getPropertyValue(id);
+    	if( ret != null && c.isInstance(ret)) {
+    		return c.cast(ret);
+    	}
+    	return null;
+	}
+	
+	/**
+	 * Set the short property (such as uri) by discovering what key it is actually
+	 * stored under, and setting that property. 
+	 * 
+	 * For example, a subclass may choose to change "uri" to "Bean.Uri" in a Bean eip element. 
+	 * 
+	 * This abstract class's implementation returns the value of 
+	 * the exact key with no modifications during lookup. 
+	 * 
+	 * @param id
+	 * @param val
+	 */
+	public void setShortPropertyValue(String id, Object val) {
+		setPropertyValue(id, val);
+	}
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1140,9 +1189,13 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 * Returns true if this node is a multicast node - i.e. all immediate children are rendered connecting to this node.
 	 */
 	protected boolean isMulticastNode(AbstractNode parent, AbstractNode child) {
-		return parent instanceof Multicast ||
-				(parent instanceof Choice && (child instanceof When || child instanceof Otherwise)) ||
-				(parent instanceof Try && (child instanceof Catch || child instanceof Finally));
+		String parentType, childType;
+		parentType = parent == null ? null : parent.getNodeTypeId();
+		childType = child == null ? null : child.getNodeTypeId();
+		
+		return "multicast".equals(parent) ||
+				("choice".equals(parent) && ("when".equals(child) || "otherwise".equals(child))) ||
+				("try".equals(parent) && ("catch".equals(child) || "finally".equals(child)));
 	}
 
 	/**
@@ -1360,10 +1413,10 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 */
 	public boolean supportsBreakpoint() {
 		return !isFirstNodeInRoute() && 				// not working on the From node
-				this instanceof When == false &&		// not working for When nodes
-				this instanceof Otherwise == false; /**&&	// not working for Otherwise nodes
-				Strings.isBlank(getCamelContextId()) == false && // not working if no Camel Context Id is set
-				Strings.isBlank(getId()) == false;		// not working if no ID is set **/
+				!"when".equals(getNodeTypeId()) && 		// not working for When nodes
+				!"otherwise".equals(getNodeTypeId());	// not working for Otherwise nodes
+//				Strings.isBlank(getCamelContextId()) == false && // not working if no Camel Context Id is set
+//				Strings.isBlank(getId()) == false;		// not working if no ID is set **/
 	}
 
 	/**
@@ -1403,16 +1456,16 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 			return false;
 		}
 
-		boolean isOtherwise = target instanceof Otherwise;
-		boolean isWhen = target instanceof When;
+		boolean isOtherwise = "otherwise".equals(getNodeTypeId());
+		boolean isWhen = "when".equals(getNodeTypeId());
 		boolean whenOrOtherwise = isWhen || isOtherwise;
-		boolean thisIsChoice = this instanceof Choice;
+		boolean thisIsChoice = "choice".equals(getNodeTypeId());
 
 		// try / catch / finally is not like choice/when/otherwise as try can
 		// connect to anything
 		if (thisIsChoice) {
 			if (isOtherwise) {
-				List<AbstractNode> outputs = getOutputs(Otherwise.class);
+				List<AbstractNode> outputs = getOutputs("otherwise");
 				return outputs.size() == 0;
 			}
 			// you must also be able to connect to anything from choice
@@ -1515,6 +1568,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		return false;
 	}
 
+	@Deprecated
 	public List<AbstractNode> getOutputs(Class<? extends AbstractNode> aClass) {
 		List<AbstractNode> list = getOutputs();
 		List<AbstractNode> answer = new ArrayList<AbstractNode>();
@@ -1526,6 +1580,19 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		return answer;
 	}
 
+	public List<AbstractNode> getOutputs(String eipType) {
+		List<AbstractNode> list = getOutputs();
+		List<AbstractNode> answer = new ArrayList<AbstractNode>();
+		for (AbstractNode node : list) {
+			if( node.getNodeTypeId().equals(eipType)) {
+				answer.add(node);
+			}
+		}
+		return answer;
+	}
+
+	
+	
 	/**
 	 * Appends all the endpoint URIs used by this node to the given set
 	 */

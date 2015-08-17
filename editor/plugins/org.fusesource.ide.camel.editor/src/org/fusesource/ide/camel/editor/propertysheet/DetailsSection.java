@@ -95,16 +95,6 @@ import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.ExpressionPropertyDescriptor;
 import org.fusesource.ide.camel.model.LanguageExpressionBean;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.generated.Aggregate;
-import org.fusesource.ide.camel.model.generated.ConvertBody;
-import org.fusesource.ide.camel.model.generated.Log;
-import org.fusesource.ide.camel.model.generated.Process;
-import org.fusesource.ide.camel.model.generated.RemoveHeader;
-import org.fusesource.ide.camel.model.generated.RemoveProperty;
-import org.fusesource.ide.camel.model.generated.Resequence;
-import org.fusesource.ide.camel.model.generated.SetHeader;
-import org.fusesource.ide.camel.model.generated.SetOutHeader;
-import org.fusesource.ide.camel.model.generated.SetProperty;
 import org.fusesource.ide.camel.model.generated.Tooltips;
 import org.fusesource.ide.camel.model.util.JaxbHelper;
 import org.fusesource.ide.commons.Viewers;
@@ -188,6 +178,9 @@ public class DetailsSection extends NodeSectionSupport {
 
 			for (int i = 0; i < 2; i++) {
 				for (IPropertyDescriptor descriptor : propertyDescriptors) {
+					if( descriptor == null )
+						continue;
+					
 					final Object id = descriptor.getId();
 					if ("AbstractNode.Id".equals(id)) {
 						idDescriptor = descriptor;
@@ -1064,23 +1057,24 @@ public class DetailsSection extends NodeSectionSupport {
 		}
 
 		// expression is mandatory on resequence
-		if (node instanceof Resequence && "expression".equals(propertyName)) {
+		String nodeType = node.getNodeTypeId();
+		if ("resequence".equals(nodeType) && "expression".equals(propertyName)) {
 			return true;
 		}
 
 		// lets make all URI properties mandatory by default to avoid complex
 		// validation with ref v uri
 		boolean answer = ("uri".equals(propertyName) || propertyName.endsWith("Uri"))
-				|| (bean instanceof Aggregate && "strategyRef".equals(propertyName))
-				|| (bean instanceof ConvertBody && "type".equals(propertyName))
+				|| ("aggregate".equals(nodeType) && "strategyRef".equals(propertyName))
+				|| ("convertBody".equals(nodeType) && "type".equals(propertyName))
 				|| (bean instanceof ExpressionDefinition && isMandatoryExpression())
-				|| (bean instanceof Log && "message".equals(propertyName))
+				|| ("log".equals(nodeType) && "message".equals(propertyName))
 				|| (bean instanceof Process && "ref".equals(propertyName))
-				|| (bean instanceof RemoveHeader && "headerName".equals(propertyName))
-				|| (bean instanceof RemoveProperty && "propertyName".equals(propertyName))
-				|| (bean instanceof SetHeader && "headerName".equals(propertyName))
-				|| (bean instanceof SetOutHeader && "headerName".equals(propertyName))
-				|| (bean instanceof SetProperty && "propertyName".equals(propertyName));
+				|| ("removeHeader".equals(nodeType) && "headerName".equals(propertyName))
+				|| ("removeProperty".equals(nodeType) && "propertyName".equals(propertyName))
+				|| ("setHeader".equals(nodeType) && "headerName".equals(propertyName))
+				|| ("setOutHeader".equals(nodeType) && "headerName".equals(propertyName))
+				|| ("setProperty".equals(nodeType) && "propertyName".equals(propertyName));
 		return answer;
 	}
 

@@ -17,6 +17,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.fusesource.ide.camel.model.Activator;
 
 /**
@@ -84,5 +85,17 @@ public class CamelModelFactory {
 		if (latest != null) return latest;
 		
 		return supportedCamelModels.keySet().iterator().next();
+	}
+	
+	/**
+	 * TODO   This method should be used as much as possible to make sure
+	 * the editor is pulling the proper model for the given project. 
+	 * 
+	 * 
+	 * @return
+	 */
+	public static String getCamelVersion(IProject p) {
+		// TODO stubbed out for now. We should check the facets if possible. 
+		return getLatestCamelVersion();
 	}
 }

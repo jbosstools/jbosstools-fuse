@@ -22,7 +22,7 @@ import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.catalog.Dependency;
 
 
-public class CreateEndpointFigureFeature extends CreateFigureFeature<Endpoint> {
+public class CreateEndpointFigureFeature extends CreateFigureFeature {
 	private final Endpoint endpoint;
 	private List<Dependency> deps;
 
@@ -35,15 +35,18 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature<Endpoint> {
 	 * @param deps	optional dependencies...if not applicable hand over null or empty list
 	 */
 	public CreateEndpointFigureFeature(IFeatureProvider fp, String name, String description, Endpoint endpoint, List<Dependency> deps) {
-		super(fp, name, description, Endpoint.class);
+		super(fp, name, description, (Class<? extends AbstractNode>)null);
 		this.endpoint = endpoint;
 		this.deps = deps;
-		setExemplar(endpoint);
 	}
 
 	@Override
 	protected AbstractNode createNode() {
 		return new Endpoint(endpoint);
+	}
+	
+	protected String getIconName() {
+		return endpoint.getIconName();
 	}
 
 	/* (non-Javadoc)
