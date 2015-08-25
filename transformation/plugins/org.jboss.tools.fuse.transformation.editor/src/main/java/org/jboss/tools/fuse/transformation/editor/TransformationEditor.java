@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
@@ -31,13 +34,16 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.ISaveablePart2;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
@@ -57,7 +63,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 /**
  *
  */
-public class TransformationEditor extends EditorPart implements ISaveablePart2 {
+public class TransformationEditor extends EditorPart implements ISaveablePart2, IResourceChangeListener {
 
     private static final int SASH_COLOR = SWT.COLOR_DARK_GRAY;
     private static final int SASH_WIDTH = 3;
@@ -76,6 +82,14 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
     ToolItem targetViewerButton;
 
     final List<PotentialDropTarget> potentialDropTargets = new ArrayList<>();
+
+    /**
+     * creates a new editor instance
+     */
+    public TransformationEditor() {
+        super();
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+    }
 
     void configEvent() {
         firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -310,4 +324,76 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2 {
             helpText.setText("");
         }
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org
+     * .eclipse.core.resources.IResourceChangeEvent)
+     */
+    @Override
+    public void resourceChanged(final IResourceChangeEvent event) {
+        switch (event.getType()) {
+        case IResourceChangeEvent.POST_CHANGE:
+            // file has been deleted...
+            closeEditorsWithoutValidInput();
+            break;
+        case IResourceChangeEvent.PRE_CLOSE:
+            Display.getDefault().asyncExec(new Runnable() {
+                /*
+                 * (non-Javadoc)
+                 * 
+                 * @see java.lang.Runnable#run()
+                 */
+                @Override
+                public void run() {
+                    IWorkbenchPage[] pages = getSite().getWorkbenchWindow()
+                            .getPages();
+                    for (int i = 0; i < pages.length; i++) {
+                        IEditorInput editorInput = getEditorInput();
+                        if (editorInput instanceof FileEditorInput && ((FileEditorInput) editorInput)
+                                .getFile().getProject()
+                                .equals(event.getResource())) {
+                            IWorkbenchPage page = pages[i];
+                            IEditorPart editorPart = page.findEditor(editorInput);
+                            page.closeEditor(editorPart, true);
+                        }
+                    }
+                }
+            });
+            break;
+        default:
+            // do nothing
+        }
+    }
+
+    protected void closeEditorsWithoutValidInput() {
+        Display.getDefault().asyncExec(new Runnable() {
+            /*
+             * (non-Javadoc)
+             * 
+             * @see java.lang.Runnable#run()
+             */
+            @Override
+            public void run() {
+                // close all editors without valid input
+                IEditorReference[] eds = getSite().getPage().getEditorReferences();
+                for (IEditorReference er : eds) {
+                    IEditorPart editor = er.getEditor(false);
+                    if (editor != null) {
+                        IEditorInput editorInput = editor.getEditorInput();
+                        if (editorInput instanceof FileEditorInput
+                                && !((FileEditorInput) editorInput).getFile().exists()) {
+                            getSite().getPage().closeEditor(er.getEditor(false), false);
+                            if (er != null && er.getEditor(false) != null) {
+                                er.getEditor(false).dispose();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
 }
