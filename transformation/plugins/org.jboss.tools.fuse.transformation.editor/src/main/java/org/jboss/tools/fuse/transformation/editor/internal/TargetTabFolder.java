@@ -43,11 +43,10 @@ public final class TargetTabFolder extends ModelTabFolder {
     @Override
     protected ModelViewer constructModelViewer(final TransformationConfig config,
                                                final List<PotentialDropTarget> potentialDropTargets) {
-        final ModelViewer modelViewer =
-            new ModelViewer(config, this, config.getTargetModel(), potentialDropTargets);
-        modelViewer.treeViewer.addDropSupport(DND.DROP_MOVE,
-                                              new Transfer[] {LocalSelectionTransfer.getTransfer()},
-                                              new ViewerDropAdapter(modelViewer.treeViewer) {
+        final ModelViewer viewer = super.constructModelViewer(config, potentialDropTargets);
+        viewer.treeViewer.addDropSupport(DND.DROP_MOVE,
+                                         new Transfer[] {LocalSelectionTransfer.getTransfer()},
+                                         new ViewerDropAdapter(viewer.treeViewer) {
 
             @Override
             public boolean performDrop(final Object data) {
@@ -56,7 +55,7 @@ public final class TargetTabFolder extends ModelTabFolder {
                         ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
                                                                       .getSelection())
                                                                       .getFirstElement();
-                    FieldMapping tempMapping = null;
+                    FieldMapping mapping = null;
                     if (source instanceof Model) {
                         final Model sourceModel = (Model)source;
                         final Model targetModel = (Model)getCurrentTarget();
@@ -64,7 +63,7 @@ public final class TargetTabFolder extends ModelTabFolder {
                         final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
 
                         if (sourceIsOrInCollection == targetIsOrInCollection) {
-                            tempMapping = config.mapField(sourceModel, targetModel, null, null);
+                            mapping = config.mapField(sourceModel, targetModel, null, null);
                         } else try {
                             final List<Integer> sourceIndexes = sourceIsOrInCollection
                                                                 ? Util.indexes(getShell(),
@@ -74,8 +73,8 @@ public final class TargetTabFolder extends ModelTabFolder {
                                                                 ? Util.indexes(getShell(),
                                                                                targetModel, false)
                                                                 : null;
-                            tempMapping =
-                                    config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
+                            mapping =
+                                config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
                         } catch (CanceledDialogException e) {
                             return false;
                         }
@@ -89,11 +88,11 @@ public final class TargetTabFolder extends ModelTabFolder {
                         config.mapVariable(variable, targetModel, indexes);
                     }
 
-                    if (tempMapping != null
-                        && Util.modelsNeedDateFormat(tempMapping.getSource(),
-                                                     tempMapping.getTarget(),
+                    if (mapping != null
+                        && Util.modelsNeedDateFormat(mapping.getSource(),
+                                                     mapping.getTarget(),
                                                      false)) {
-                        Util.updateDateFormat(getShell(), tempMapping);
+                        Util.updateDateFormat(getShell(), mapping);
                     }
                     config.save();
                     return true;
@@ -114,7 +113,7 @@ public final class TargetTabFolder extends ModelTabFolder {
                                                                             config);
             }
         });
-        potentialDropTargets.add(new PotentialDropTarget(modelViewer.treeViewer.getTree()) {
+        potentialDropTargets.add(new PotentialDropTarget(viewer.treeViewer.getTree()) {
 
             @Override
             public boolean valid() {
@@ -126,12 +125,12 @@ public final class TargetTabFolder extends ModelTabFolder {
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
                 if (event.getPropertyName().equals(TransformationConfig.MAPPING_TARGET)) {
-                    if (!modelViewer.treeViewer.getControl().isDisposed()) {
-                        modelViewer.treeViewer.refresh();
+                    if (!viewer.treeViewer.getControl().isDisposed()) {
+                        viewer.treeViewer.refresh();
                     }
                 }
             }
         });
-        return modelViewer;
+        return viewer;
     }
 }
