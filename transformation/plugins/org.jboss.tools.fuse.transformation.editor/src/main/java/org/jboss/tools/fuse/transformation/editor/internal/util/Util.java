@@ -130,21 +130,20 @@ public class Util {
 
     public static List<Integer> indexes(final Shell shell,
                                         final Model model,
-                                        final boolean source) {
+                                        final boolean source) throws CanceledDialogException {
         if (Util.isOrInCollection(model)) {
             final IndexesDialog dlg = new IndexesDialog(shell, model, source);
-            if (dlg.open() == Window.OK) {
-                return dlg.indexes;
-            }
+            if (dlg.open() == Window.OK) return dlg.indexes;
+            throw new CanceledDialogException();
         }
         return null;
     }
-    
+
     public static FieldMapping updateDateFormat(final Shell shell,
                                                 final Model srcModel,
                                                 final Model tgtModel,
                                                 final TransformationConfig config) {
-        
+
         if (srcModel != null && tgtModel != null && config != null) {
             FieldMapping mapping = config.mapField(srcModel, tgtModel);
             if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
@@ -167,8 +166,8 @@ public class Util {
         }
         return false;
     }
-    
-    public static boolean modelsNeedDateFormat(final Object source, 
+
+    public static boolean modelsNeedDateFormat(final Object source,
                         final Object target, final boolean isSource) {
         if (!(source instanceof Model && target instanceof Model)) {
             return false;
@@ -186,13 +185,13 @@ public class Util {
         }
         return false;
     }
-    
+
     public static void updateDateFormat(final Shell shell,
                                         final MappingOperation<?, ?> mappingOp) {
         if (mappingOp != null && mappingOp instanceof BaseDozerMapping) {
-            
+
             // if both sides of the equation are Models, we're good to check this out
-            if (!(mappingOp.getSource() instanceof Model && 
+            if (!(mappingOp.getSource() instanceof Model &&
                     mappingOp.getTarget() instanceof Model)) {
                 return;
             }
@@ -210,8 +209,8 @@ public class Util {
             }
         }
     }
-    
-    public static String getDateFormat(final Shell shell, 
+
+    public static String getDateFormat(final Shell shell,
             final MappingOperation<?, ?> mappingOp,
             final boolean isSource) {
         final DateFormatInputDialog dlg = new DateFormatInputDialog(shell, mappingOp);

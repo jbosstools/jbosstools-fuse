@@ -327,7 +327,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org
      * .eclipse.core.resources.IResourceChangeEvent)
@@ -343,7 +343,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             Display.getDefault().asyncExec(new Runnable() {
                 /*
                  * (non-Javadoc)
-                 * 
+                 *
                  * @see java.lang.Runnable#run()
                  */
                 @Override
@@ -370,25 +370,19 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 
     protected void closeEditorsWithoutValidInput() {
         Display.getDefault().asyncExec(new Runnable() {
-            /*
-             * (non-Javadoc)
-             * 
-             * @see java.lang.Runnable#run()
-             */
+
             @Override
             public void run() {
                 // close all editors without valid input
-                IEditorReference[] eds = getSite().getPage().getEditorReferences();
-                for (IEditorReference er : eds) {
-                    IEditorPart editor = er.getEditor(false);
+                IEditorReference[] refs = getSite().getPage().getEditorReferences();
+                for (IEditorReference ref : refs) {
+                    IEditorPart editor = ref.getEditor(false);
                     if (editor != null) {
                         IEditorInput editorInput = editor.getEditorInput();
                         if (editorInput instanceof FileEditorInput
-                                && !((FileEditorInput) editorInput).getFile().exists()) {
-                            getSite().getPage().closeEditor(er.getEditor(false), false);
-                            if (er != null && er.getEditor(false) != null) {
-                                er.getEditor(false).dispose();
-                            }
+                            && !((FileEditorInput)editorInput).getFile().exists()) {
+                            getSite().getPage().closeEditor(editor, false);
+                            editor.dispose();
                         }
                     }
                 }

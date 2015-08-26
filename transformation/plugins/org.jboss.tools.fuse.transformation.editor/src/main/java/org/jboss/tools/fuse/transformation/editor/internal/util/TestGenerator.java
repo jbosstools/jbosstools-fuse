@@ -1,6 +1,6 @@
 /*
  * Copyright 2015 Red Hat Inc. and/or its affiliates and other contributors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -11,7 +11,6 @@
  */
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
@@ -31,7 +30,7 @@ public class TestGenerator {
     /**
      * Creates a test class for a transformation endpoint with the specified
      * transformid.
-     * 
+     *
      * @param transformId id of a transform endpoint to test
      * @param packageName package name for the generated test class
      * @param className class name for the generated test class
@@ -62,25 +61,19 @@ public class TestGenerator {
         if (packageName.isEmpty()) {
             template = template.replaceFirst("package ;", "");
         }
-        
+
         return template;
     }
 
     private static String readTemplate(String template) throws Exception {
-        InputStreamReader reader = null;
         StringBuilder templateStr = new StringBuilder();
-        try {
-            InputStream is =
-                    TestGenerator.class.getClassLoader().getResourceAsStream(template);
-            reader = new InputStreamReader(is, StandardCharsets.UTF_8);
+        try (InputStreamReader reader =
+                 new InputStreamReader(TestGenerator.class.getClassLoader().getResourceAsStream(template),
+                                       StandardCharsets.UTF_8)) {
             char[] buf = new char[1024];
             int count = 0;
             while ((count = reader.read(buf)) != -1) {
                 templateStr.append(buf, 0, count);
-            }
-        } finally {
-            if (reader != null) {
-                reader.close();
             }
         }
         return templateStr.toString();

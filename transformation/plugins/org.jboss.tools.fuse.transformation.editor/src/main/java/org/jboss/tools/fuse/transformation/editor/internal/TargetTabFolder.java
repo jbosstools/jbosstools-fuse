@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CanceledDialogException;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.model.Model;
@@ -59,10 +60,10 @@ public final class TargetTabFolder extends ModelTabFolder {
                         final Model targetModel = (Model)getCurrentTarget();
                         final boolean sourceIsOrInCollection = Util.isOrInCollection(sourceModel);
                         final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
-                        
+
                         if (sourceIsOrInCollection == targetIsOrInCollection) {
                             tempMapping = config.mapField(sourceModel, targetModel, null, null);
-                        } else {
+                        } else try {
                             final List<Integer> sourceIndexes = sourceIsOrInCollection
                                                                 ? Util.indexes(getShell(),
                                                                                sourceModel, true)
@@ -71,8 +72,10 @@ public final class TargetTabFolder extends ModelTabFolder {
                                                                 ? Util.indexes(getShell(),
                                                                                targetModel, false)
                                                                 : null;
-                            tempMapping = 
+                            tempMapping =
                                     config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
+                        } catch (CanceledDialogException e) {
+                            return false;
                         }
                     } else {
                         final Variable variable = (Variable)source;
@@ -84,9 +87,10 @@ public final class TargetTabFolder extends ModelTabFolder {
                         config.mapVariable(variable, targetModel, indexes);
                     }
 
-                    if (tempMapping != null && 
-                            Util.modelsNeedDateFormat((Model)tempMapping.getSource(), 
-                                    (Model)tempMapping.getTarget(), false)) {
+                    if (tempMapping != null
+                        && Util.modelsNeedDateFormat(tempMapping.getSource(),
+                                                     tempMapping.getTarget(),
+                                                     false)) {
                         Util.updateDateFormat(getShell(), tempMapping);
                     }
                     config.save();

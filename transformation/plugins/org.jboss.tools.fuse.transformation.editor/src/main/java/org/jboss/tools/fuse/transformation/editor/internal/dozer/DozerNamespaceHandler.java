@@ -15,16 +15,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.fusesource.ide.commons.contenttype.FindNamespaceHandlerSupport;
 
 /**
  * @author bfitzpat
  */
 public class DozerNamespaceHandler extends FindNamespaceHandlerSupport {
-	
+
 	private static String[] dozerNamespaces = new String[]{ "http://dozer.sourceforge.net" };
-	public static Set<String> dzrNamespaces = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(dozerNamespaces)));
-	
+	public static Set<String> dzrNamespaces =
+	    Collections.unmodifiableSet(new HashSet<>(Arrays.asList(dozerNamespaces)));
+
 	public DozerNamespaceHandler() {
 		super(dzrNamespaces);
 	}

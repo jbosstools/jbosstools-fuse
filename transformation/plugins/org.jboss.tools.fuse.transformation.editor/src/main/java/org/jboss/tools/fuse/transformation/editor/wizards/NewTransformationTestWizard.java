@@ -1,8 +1,8 @@
 /******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc. and others. 
- * All rights reserved. This program and the accompanying materials are 
- * made available under the terms of the Eclipse Public License v1.0 which 
- * accompanies this distribution, and is available at 
+ * Copyright (c) 2015 Red Hat, Inc. and others.
+ * All rights reserved. This program and the accompanying materials are
+ * made available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
@@ -27,7 +27,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.wizards.NewElementWizard;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -46,7 +45,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.TransformTest
  *
  */
 @SuppressWarnings("restriction")
-public class NewTransformationTestWizard extends NewElementWizard implements INewWizard {
+public class NewTransformationTestWizard extends NewElementWizard {
 
     static final String DEFAULT_DOZER_CONFIG_FILE_NAME = "dozerBeanMapping.xml";
 
@@ -57,10 +56,10 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
     String transformID = null;
     String packageName = null;
     String className = null;
-    
+
     private TransformTestWizardPage _page = null;
 
-    private static final String JDT_EDITOR = 
+    private static final String JDT_EDITOR =
             "org.eclipse.jdt.ui.CompilationUnitEditor"; //$NON-NLS-1$
 
     /**
@@ -97,7 +96,7 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
             }
             if (selectedObject instanceof IFile) {
                 IFile selectedFile = (IFile) selectedObject;
-                boolean isCamelConfig = CamelFileTypeHelper.isSupportedCamelFile(project, 
+                boolean isCamelConfig = CamelFileTypeHelper.isSupportedCamelFile(project,
                         selectedFile.getProjectRelativePath().toPortableString());
                 if (isCamelConfig) {
                     camelConfigFile = selectedFile;
@@ -126,7 +125,7 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
             }
             if (javaProject != null) {
                 _page.setJavaProject(javaProject);
-                
+
                 IFolder srcFolder = javaProject.getProject().getFolder("src/test/java");
                 if (!JavaUtil.findFolderOnProjectClasspath(javaProject, srcFolder)) {
                     JavaUtil.addFolderToProjectClasspath(javaProject, srcFolder);
@@ -138,7 +137,7 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
                         e.printStackTrace();
                     }
                 }
-                
+
                 IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(srcFolder);
                 _page.setPackageFragmentRoot(root, true);
             }
@@ -150,8 +149,9 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
        return super.canFinish()
                && getContainer().getCurrentPage() == _page;
     }
- 
-    protected void finishPage(IProgressMonitor monitor) throws InterruptedException, CoreException {
+
+    @Override
+    protected void finishPage(IProgressMonitor monitor) throws CoreException {
         _page.createType(monitor);
         if (_page.getGeneratedResource() != null) {
             if (project == null && _page.getProject() != null) {
@@ -161,23 +161,25 @@ public class NewTransformationTestWizard extends NewElementWizard implements INe
             IFile resource = (IFile) _page.getGeneratedResource();
             openResource(resource);
         } else {
-            throw new CoreException(new Status(IStatus.ERROR, 
-                "TransformationEditor", 
+            throw new CoreException(new Status(IStatus.ERROR,
+                "TransformationEditor",
                 "Problem encountered while creating test class."));
         }
     }
- 
+
     @Override
     public IJavaElement getCreatedElement() {
         return _page.getCreatedType();
     }
-    
+
+    @Override
     protected void openResource(final IFile resource) {
         if (resource.getType() != IResource.FILE) {
             return;
         }
         final Display display = getShell().getDisplay();
         display.asyncExec(new Runnable() {
+            @Override
             public void run() {
                 IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
                 if (window == null) {

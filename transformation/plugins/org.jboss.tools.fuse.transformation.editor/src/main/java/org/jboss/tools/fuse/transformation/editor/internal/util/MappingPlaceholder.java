@@ -38,6 +38,23 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         return source;
     }
 
+    @Override
+    public String getSourceDateFormat() {
+        return sourceDateFormat;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#getSourceIndex()
+     */
+    @Override
+    public List<Integer> getSourceIndex() {
+        if (sourceIndexes != null)
+            return new ArrayList<>(sourceIndexes);
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -46,6 +63,23 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
     @Override
     public Model getTarget() {
         return target;
+    }
+
+    @Override
+    public String getTargetDateFormat() {
+        return targetDateFormat;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.MappingOperation#getTargetIndex()
+     */
+    @Override
+    public List<Integer> getTargetIndex() {
+        if (targetIndexes != null)
+            return new ArrayList<>(targetIndexes);
+        return null;
     }
 
     /**
@@ -58,16 +92,13 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#getSourceIndex()
-     */
+    void setSource(final Object source) {
+        this.source = source;
+    }
+
     @Override
-    public List<Integer> getSourceIndex() {
-        if (sourceIndexes != null) 
-            return new ArrayList<>(sourceIndexes);
-        return null;
+    public void setSourceDateFormat(String format) {
+        sourceDateFormat = format;
     }
 
     /**
@@ -80,16 +111,13 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         sourceIndexes = indexes;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#getTargetIndex()
-     */
+    void setTarget(final Model target) {
+        this.target = target;
+    }
+
     @Override
-    public List<Integer> getTargetIndex() {
-        if (targetIndexes != null) 
-            return new ArrayList<>(targetIndexes);
-        return null;
+    public void setTargetDateFormat(String format) {
+        targetDateFormat = format;
     }
 
     /**
@@ -100,29 +128,5 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
     @Override
     public void setTargetIndex(List<Integer> indexes) {
         targetIndexes = indexes;
-    }
-
-    void setSource(final Object source) {
-        this.source = source;
-    }
-
-    void setTarget(final Model target) {
-        this.target = target;
-    }
-
-    public void setSourceDateFormat(String format) {
-        sourceDateFormat = format;
-    }
-    
-    public String getSourceDateFormat() {
-        return sourceDateFormat;
-    }
-
-    public void setTargetDateFormat(String format) {
-        targetDateFormat = format;
-    }
-    
-    public String getTargetDateFormat() {
-        return targetDateFormat;
     }
 }
