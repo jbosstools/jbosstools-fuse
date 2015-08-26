@@ -24,6 +24,7 @@ abstract class ModelTabFolder extends CTabFolder {
 
     final Model model;
 
+    final CTabItem modelTab;
     final ModelViewer modelViewer;
 
     /**
@@ -48,17 +49,17 @@ abstract class ModelTabFolder extends CTabFolder {
         final ToolBar toolBar = new ToolBar(this, SWT.RIGHT);
         setTopRight(toolBar);
 
-        final CTabItem tab = new CTabItem(this, SWT.NONE);
-        tab.setText(title + (model == null ? "" : ": " + model.getName()));
+        modelTab = new CTabItem(this, SWT.NONE);
+        modelTab.setText(title + (model == null ? "" : ": " + model.getName()));
         modelViewer = constructModelViewer(config, potentialDropTargets);
-        tab.setControl(modelViewer);
+        modelTab.setControl(modelViewer);
         modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         modelViewer.layout();
-        setSelection(tab);
+        setSelection(modelTab);
     }
 
-    ModelViewer constructModelViewer(final TransformationConfig config,
-                                               final List<PotentialDropTarget> potentialDropTargets) {
+    ModelViewer constructModelViewer(TransformationConfig config,
+                                     List<PotentialDropTarget> potentialDropTargets) {
         return new ModelViewer(config, this, model, potentialDropTargets);
     }
 
@@ -67,6 +68,7 @@ abstract class ModelTabFolder extends CTabFolder {
      */
     public void select(final Object object) {
         if (object instanceof Model) {
+            setSelection(modelTab);
             modelViewer.select((Model)object);
         }
     }

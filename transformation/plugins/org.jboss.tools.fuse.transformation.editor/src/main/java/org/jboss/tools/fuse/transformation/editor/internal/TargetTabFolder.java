@@ -10,6 +10,8 @@
 
 package org.jboss.tools.fuse.transformation.editor.internal;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -117,6 +119,17 @@ public final class TargetTabFolder extends ModelTabFolder {
             @Override
             public boolean valid() {
                 return Util.draggingFromValidSource(config);
+            }
+        });
+        config.addListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(final PropertyChangeEvent event) {
+                if (event.getPropertyName().equals(TransformationConfig.MAPPING_TARGET)) {
+                    if (!modelViewer.treeViewer.getControl().isDisposed()) {
+                        modelViewer.treeViewer.refresh();
+                    }
+                }
             }
         });
         return modelViewer;
