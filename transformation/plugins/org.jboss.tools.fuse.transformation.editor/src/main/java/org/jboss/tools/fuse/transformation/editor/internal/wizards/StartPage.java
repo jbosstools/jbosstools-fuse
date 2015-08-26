@@ -204,11 +204,15 @@ public class StartPage extends XformWizardPage {
         createLabel(group, "Target Type", "Data type for the target of the transformation.");
 
         _sourceCV = new ComboViewer(new Combo(group, SWT.READ_ONLY));
-        _sourceCV.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+        GridData sourceGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        sourceGD.horizontalIndent = 5;
+        _sourceCV.getCombo().setLayoutData(sourceGD);
 
         new Label(group, SWT.NONE).setImage(Activator.imageDescriptor("mapped16.gif").createImage());
         _targetCV = new ComboViewer(new Combo(group, SWT.READ_ONLY));
-        _targetCV.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+        GridData targetGD = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        targetGD.horizontalIndent = 5;
+        _targetCV.getCombo().setLayoutData(targetGD);
 
         bindControls();
         initialize();
