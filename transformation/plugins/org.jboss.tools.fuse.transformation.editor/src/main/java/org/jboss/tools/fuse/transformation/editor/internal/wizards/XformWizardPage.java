@@ -73,12 +73,7 @@ public abstract class XformWizardPage extends WizardPage {
         if (this instanceof StartPage) {
             return getSourcePage();
         } else if (this instanceof TransformationTypePage) {
-            TransformationTypePage page = (TransformationTypePage) this;
-            if (page.isSourcePage()) {
-                return getTargetPage();
-            } else {
-                return null;
-            }
+            return ((TransformationTypePage)this).isSourcePage() ? getTargetPage() : null;
         }
         return super.getNextPage();
     }
@@ -198,5 +193,5 @@ public abstract class XformWizardPage extends WizardPage {
             cntrl.notifyListeners(event, new Event());
         }
     }
-    
+
 }

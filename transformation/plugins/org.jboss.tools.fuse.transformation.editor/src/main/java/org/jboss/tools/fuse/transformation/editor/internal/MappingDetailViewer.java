@@ -49,6 +49,7 @@ import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CanceledDialogException;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
@@ -165,6 +166,7 @@ public final class MappingDetailViewer extends MappingViewer {
         return pane;
     }
 
+    @SuppressWarnings("unused")
     private void createCustomSourcePane(final Composite parent) {
         final Composite pane =
             createRoundedPane(createContainerPane(parent,
@@ -211,6 +213,7 @@ public final class MappingDetailViewer extends MappingViewer {
         return pane;
     }
 
+    @SuppressWarnings("unused")
     private void createSourcePane(final Composite parent) {
         new ControlWithMenuPane(parent) {
 
@@ -278,7 +281,7 @@ public final class MappingDetailViewer extends MappingViewer {
                     }
                 });
                 if (mapping != null && mapping.getSource() != null) {
-                    if (Util.modelsNeedDateFormat(mapping.getSource(), 
+                    if (Util.modelsNeedDateFormat(mapping.getSource(),
                             mapping.getTarget(), true)) {
                         addMenuItem("Set date format", new MenuItemHandler() {
                             @Override
@@ -297,6 +300,7 @@ public final class MappingDetailViewer extends MappingViewer {
         };
     }
 
+    @SuppressWarnings("unused")
     private void createTargetPane(final Composite parent) {
         final Composite pane;
         if (mapping.getTarget() == null)
@@ -322,7 +326,7 @@ public final class MappingDetailViewer extends MappingViewer {
                     }
                 });
                 if (mapping != null && mapping.getTarget() != null) {
-                    if (Util.modelsNeedDateFormat(mapping.getSource(), 
+                    if (Util.modelsNeedDateFormat(mapping.getSource(),
                             mapping.getTarget(), false)) {
                         addMenuItem("Set date format", new MenuItemHandler() {
                             @Override
@@ -391,7 +395,6 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    @SuppressWarnings("restriction")
     void setExpression() throws Exception {
         final ExpressionDialog dlg = new ExpressionDialog(sourceText.getShell(), mapping, config.project());
         if (dlg.open() != Window.OK) {
@@ -399,13 +402,15 @@ public final class MappingDetailViewer extends MappingViewer {
         }
         Util.updateMavenDependencies(dlg.getLanguage().getDependencies(), config.project());
         final Model targetModel = (Model)mapping.getTarget();
-        final List<Integer> indexes =
-            targetModel != null && Util.isOrInCollection(targetModel)
-            ? Util.indexes(sourceText.getShell(), targetModel, false)
-            : null;
-        mapping =
-            config.setSourceExpression(mapping, dlg.getLanguage().getName(), dlg.getExpression(), indexes);
-        config.save();
+        try {
+            final List<Integer> indexes =
+                targetModel != null && Util.isOrInCollection(targetModel)
+                ? Util.indexes(sourceText.getShell(), targetModel, false)
+                : null;
+            mapping =
+                config.setSourceExpression(mapping, dlg.getLanguage().getName(), dlg.getExpression(), indexes);
+            config.save();
+        } catch (CanceledDialogException ignored) {}
     }
 
     void setField(final boolean source) throws Exception {
@@ -427,12 +432,14 @@ public final class MappingDetailViewer extends MappingViewer {
             return;
         }
         final Model targetModel = (Model)mapping.getTarget();
-        final List<Integer> indexes =
-            targetModel != null && Util.isOrInCollection(targetModel)
-            ? Util.indexes(sourceText.getShell(), targetModel, false)
-            : null;
-        mapping = config.setSource(mapping, dlg.variable, null, indexes);
-        config.save();
+        try {
+            final List<Integer> indexes =
+                targetModel != null && Util.isOrInCollection(targetModel)
+                ? Util.indexes(sourceText.getShell(), targetModel, false)
+                : null;
+            mapping = config.setSource(mapping, dlg.variable, null, indexes);
+            config.save();
+        } catch (CanceledDialogException ignored) {}
     }
 
     /**

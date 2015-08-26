@@ -27,6 +27,7 @@ import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CanceledDialogException;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
@@ -189,7 +190,7 @@ abstract class MappingViewer {
             final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
             if (sourceIsOrInCollection == targetIsOrInCollection) {
                 mapping = config.setSource(mapping, sourceObject, null, null);
-            } else {
+            } else try {
                 final List<Integer> sourceIndexes = sourceIsOrInCollection
                                                     ? Util.indexes(sourceText.getShell(),
                                                                    (Model)sourceObject, true)
@@ -199,6 +200,8 @@ abstract class MappingViewer {
                                                                    targetModel, false)
                                                     : null;
                 mapping = config.setSource(mapping, sourceObject, sourceIndexes, targetIndexes);
+            } catch (CanceledDialogException e) {
+                return;
             }
         }
         if (mapping != null) {
@@ -221,7 +224,7 @@ abstract class MappingViewer {
             final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
             if (sourceIsOrInCollection == targetIsOrInCollection) {
                 mapping = config.setTarget(mapping, targetModel, null, null);
-            } else {
+            } else try {
                 final List<Integer> sourceIndexes = sourceIsOrInCollection
                                                     ? Util.indexes(sourceText.getShell(),
                                                                    (Model)sourceObject, true)
@@ -231,6 +234,8 @@ abstract class MappingViewer {
                                                                    targetModel, false)
                                                     : null;
                 mapping = config.setTarget(mapping, targetModel, sourceIndexes, targetIndexes);
+            } catch (CanceledDialogException e) {
+                return;
             }
         }
         if (mapping != null) {

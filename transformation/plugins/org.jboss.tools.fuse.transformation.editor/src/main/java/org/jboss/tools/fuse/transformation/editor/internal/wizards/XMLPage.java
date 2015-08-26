@@ -410,7 +410,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                             try {
                                 QName element = modelGen.getRootElementName(new File(path));
                                 if (element != null) {
-                                    elements = new ArrayList<QName>();
+                                    elements = new ArrayList<>();
                                     elements.add(element);
                                 }
                             } catch (Exception e) {
@@ -428,7 +428,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                             try {
                                 QName element = modelGen.getRootElementName(new File(path));
                                 if (element != null) {
-                                    elements = new ArrayList<QName>();
+                                    elements = new ArrayList<>();
                                     elements.add(element);
                                 }
                             } catch (Exception e) {
@@ -447,7 +447,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                     }
                 }
                 _xmlRootsCombo.setInput(elementList);
-                if (elementList != null && !elementList.isEmpty()) {
+                if (!elementList.isEmpty()) {
                     _xmlRootsCombo.setSelection(new StructuredSelection(elementList.get(0)));
                     String elementName = (String) elementList.get(0);
                     if (isSourcePage()) {

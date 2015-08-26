@@ -73,7 +73,6 @@ import org.jboss.tools.fuse.transformation.model.ModelBuilder;
  * @author brianf
  *
  */
-@SuppressWarnings("restriction")
 public class OtherPage extends XformWizardPage implements TransformationTypePage {
 
     private Composite _page;
@@ -427,6 +426,6 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             this.showMappedFieldsButton = false;
             this.showSearchField = false;
         }
-        
+
     }
 }

@@ -59,7 +59,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
     public String getProtocol() {
         return PROTOCOL;
     }
-    
+
     /* (non-Javadoc)
      * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#providesProtocol(java.lang.String)
      */
@@ -67,7 +67,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
     public boolean providesProtocol(String protocol) {
         return PROTOCOL.equalsIgnoreCase(protocol);
     }
-    
+
     /* (non-Javadoc)
      * @see org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry#getRequiredDependencies()
      */
@@ -95,7 +95,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
          */
         @Override
         public Object[] create(ICreateContext context) {
-            // had to override so we get the route BEFORE we create the node, otherwise the focus has 
+            // had to override so we get the route BEFORE we create the node, otherwise the focus has
             // changed to the transformation editor before we can get the selected route
             RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
             AbstractNode node = createNode();
@@ -147,11 +147,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
 
             WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
             int status = dialog.open();
-            if (status != IStatus.OK) {
-                return null;
-            } else {
-                return wizard.getRouteEndpoint();
-            }
+            return (status == IStatus.OK) ? wizard.getRouteEndpoint() : null;
         }
     }
 }
