@@ -14,6 +14,9 @@
     "origin": {
       "type": "string"
     },
+    "approvalCode": {
+      "type": "string"
+    },
     "lineItems": {
         "type": "array",
         "items": {
