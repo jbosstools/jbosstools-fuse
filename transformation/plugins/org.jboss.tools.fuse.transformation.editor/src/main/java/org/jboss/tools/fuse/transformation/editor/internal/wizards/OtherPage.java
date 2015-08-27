@@ -64,8 +64,6 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
-import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 import org.jboss.tools.fuse.transformation.model.ModelBuilder;
 
@@ -205,7 +203,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         group.setLayout(new GridLayout(3, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        _modelViewer = new SimplerModelViewer(null, group, _javaModel, null);
+        _modelViewer = new SimplerModelViewer(group, _javaModel);
         _modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         _modelViewer.layout();
 
@@ -409,16 +407,12 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     class SimplerModelViewer extends ModelViewer {
 
         /**
-         * Constructor
-         * @param config
          * @param parent
          * @param rootModel
-         * @param potentialDropTargets
          */
-        public SimplerModelViewer(TransformationConfig config, Composite parent,
-                org.jboss.tools.fuse.transformation.model.Model rootModel,
-                List<PotentialDropTarget> potentialDropTargets) {
-            super(config, parent, rootModel, potentialDropTargets);
+        public SimplerModelViewer(Composite parent,
+                                  org.jboss.tools.fuse.transformation.model.Model rootModel) {
+            super(null, parent, rootModel, null, null);
         }
 
         @Override

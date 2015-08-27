@@ -29,8 +29,11 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -68,6 +71,19 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     private static final int SASH_COLOR = SWT.COLOR_DARK_GRAY;
     private static final int SASH_WIDTH = 3;
 
+    private static final String PREFERENCE_PREFIX = TransformationEditor.class.getName() + ".";
+
+    private static final String SOURCE_VIEWER_PREFERENCE = PREFERENCE_PREFIX + "sourceViewer";
+    private static final String TARGET_VIEWER_PREFERENCE = PREFERENCE_PREFIX + "targetViewer";
+
+    private static final String HORIZONTAL_SPLITTER_PREFIX = PREFERENCE_PREFIX + "horizontalSplitterWeight.";
+    private static final String VERTICAL_SPLITTER_PREFIX = PREFERENCE_PREFIX + "verticalSplitterWeight.";
+    private static final String HORIZONTAL_SPLITTER_WEIGHT_LEFT_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "left";
+    private static final String HORIZONTAL_SPLITTER_WEIGHT_CENTER_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "center";
+    private static final String HORIZONTAL_SPLITTER_WEIGHT_RIGHT_PREFERENCE = HORIZONTAL_SPLITTER_PREFIX + "right";
+    private static final String VERTICAL_SPLITTER_WEIGHT_TOP_PREFERENCE = VERTICAL_SPLITTER_PREFIX + "top";
+    private static final String VERTICAL_SPLITTER_WEIGHT_BOTTOM_PREFERENCE = VERTICAL_SPLITTER_PREFIX + "bottom";
+
     TransformationConfig config;
     URLClassLoader loader;
     File camelConfigFile;
@@ -91,6 +107,28 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
     }
 
+    protected void closeEditorsWithoutValidInput() {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            @Override
+            public void run() {
+                // close all editors without valid input
+                IEditorReference[] refs = getSite().getPage().getEditorReferences();
+                for (IEditorReference ref : refs) {
+                    IEditorPart editor = ref.getEditor(false);
+                    if (editor != null) {
+                        IEditorInput editorInput = editor.getEditorInput();
+                        if (editorInput instanceof FileEditorInput
+                            && !((FileEditorInput)editorInput).getFile().exists()) {
+                            getSite().getPage().closeEditor(editor, false);
+                            editor.dispose();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     void configEvent() {
         firePropertyChange(IEditorPart.PROP_DIRTY);
     }
@@ -102,6 +140,15 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
      */
     @Override
     public void createPartControl(final Composite parent) {
+        final IPreferenceStore prefs = Activator.plugin().getPreferenceStore();
+        prefs.setDefault(SOURCE_VIEWER_PREFERENCE, true);
+        prefs.setDefault(TARGET_VIEWER_PREFERENCE, true);
+        prefs.setDefault(HORIZONTAL_SPLITTER_WEIGHT_LEFT_PREFERENCE, 33);
+        prefs.setDefault(HORIZONTAL_SPLITTER_WEIGHT_CENTER_PREFERENCE, 34);
+        prefs.setDefault(HORIZONTAL_SPLITTER_WEIGHT_RIGHT_PREFERENCE, 33);
+        prefs.setDefault(VERTICAL_SPLITTER_WEIGHT_TOP_PREFERENCE, 75);
+        prefs.setDefault(VERTICAL_SPLITTER_WEIGHT_BOTTOM_PREFERENCE, 25);
+
         final SashForm verticalSplitter = new SashForm(parent, SWT.VERTICAL);
         verticalSplitter.setBackground(parent.getDisplay().getSystemColor(SASH_COLOR));
         verticalSplitter.setSashWidth(SASH_WIDTH);
@@ -152,35 +199,45 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         mappingDetailViewer =
             new MappingDetailViewer(config, verticalSplitter, potentialDropTargets);
         // Configure size of components in splitters
-        verticalSplitter.setWeights(new int[] {75, 25});
-        horizontalSplitter.setWeights(new int[] {33, 34, 33});
+        verticalSplitter.setWeights(new int[] {prefs.getInt(VERTICAL_SPLITTER_WEIGHT_TOP_PREFERENCE),
+                                               prefs.getInt(VERTICAL_SPLITTER_WEIGHT_BOTTOM_PREFERENCE)});
+        horizontalSplitter.setWeights(new int[] {prefs.getInt(HORIZONTAL_SPLITTER_WEIGHT_LEFT_PREFERENCE),
+                                                 prefs.getInt(HORIZONTAL_SPLITTER_WEIGHT_CENTER_PREFERENCE),
+                                                 prefs.getInt(HORIZONTAL_SPLITTER_WEIGHT_RIGHT_PREFERENCE)});
+        mappingsViewer.addControlListener(new ControlAdapter() {
+
+            @Override
+            public void controlResized(ControlEvent event) {
+                int[] weights = horizontalSplitter.getWeights();
+                prefs.setValue(HORIZONTAL_SPLITTER_WEIGHT_LEFT_PREFERENCE, weights[0]);
+                prefs.setValue(HORIZONTAL_SPLITTER_WEIGHT_CENTER_PREFERENCE, weights[1]);
+                prefs.setValue(HORIZONTAL_SPLITTER_WEIGHT_RIGHT_PREFERENCE, weights[2]);
+                weights = verticalSplitter.getWeights();
+                prefs.setValue(VERTICAL_SPLITTER_WEIGHT_TOP_PREFERENCE, weights[0]);
+                prefs.setValue(VERTICAL_SPLITTER_WEIGHT_BOTTOM_PREFERENCE, weights[1]);
+            }
+        });
         // Wire tree buttons to toggle model viewers between visible and hidden
         sourceViewerButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                sourceTabFolder.setVisible(sourceViewerButton.getSelection());
-                horizontalSplitter.layout();
-                sourceViewerButton.setToolTipText(sourceViewerButton.getSelection()
-                                                  ? "Hide the source/variables viewers"
-                                                  : "Show the source/variables viewers");
-                updateHelpText();
+                toggleSourceViewer(horizontalSplitter);
+                prefs.setValue(SOURCE_VIEWER_PREFERENCE, sourceViewerButton.getSelection());
             }
         });
-        sourceViewerButton.setSelection(true);
+        sourceViewerButton.setSelection(prefs.getBoolean(SOURCE_VIEWER_PREFERENCE));
+        if (!sourceViewerButton.getSelection()) toggleSourceViewer(horizontalSplitter);
         targetViewerButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                targetTabFolder.setVisible(targetViewerButton.getSelection());
-                horizontalSplitter.layout();
-                targetViewerButton.setToolTipText(targetViewerButton.getSelection()
-                                                  ? "Hide the target viewer"
-                                                  : "Show the target viewer");
-                updateHelpText();
+                toggleTargetViewer(horizontalSplitter);
+                prefs.setValue(TARGET_VIEWER_PREFERENCE, targetViewerButton.getSelection());
             }
         });
-        targetViewerButton.setSelection(true);
+        targetViewerButton.setSelection(prefs.getBoolean(TARGET_VIEWER_PREFERENCE));
+        if (!targetViewerButton.getSelection()) toggleTargetViewer(horizontalSplitter);
         config.addListener(new PropertyChangeListener() {
 
             @Override
@@ -289,42 +346,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         ? CANCEL : NO;
     }
 
-    /**
-     * @param mapping
-     */
-    public void selected(final MappingOperation<?, ?> mapping) {
-        sourceTabFolder.select(mapping.getSource());
-        targetTabFolder.select(mapping.getTarget());
-        mappingDetailViewer.update(mapping);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
-     */
-    @Override
-    public void setFocus() {
-        mappingsViewer.setFocus();
-    }
-
-    void updateHelpText() {
-        if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
-            if (sourceTabFolder.getSelectionIndex() == 0) {
-                helpText.setText("Create a new mapping below by dragging a field in source "
-                                 + config.getSourceModel().getName()
-                                 + " on the left to a field in target "
-                                 + config.getTargetModel().getName() + " on the right.");
-            } else {
-                helpText.setText("Create a new mapping below by dragging a variable from the list"
-                                  + " of variables on the left to a field in target "
-                                  + config.getTargetModel().getName() + " on the right.");
-            }
-        } else {
-            helpText.setText("");
-        }
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -368,26 +389,58 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         }
     }
 
-    protected void closeEditorsWithoutValidInput() {
-        Display.getDefault().asyncExec(new Runnable() {
+    /**
+     * @param mapping
+     */
+    public void selected(final MappingOperation<?, ?> mapping) {
+        sourceTabFolder.select(mapping.getSource());
+        targetTabFolder.select(mapping.getTarget());
+        mappingDetailViewer.update(mapping);
+    }
 
-            @Override
-            public void run() {
-                // close all editors without valid input
-                IEditorReference[] refs = getSite().getPage().getEditorReferences();
-                for (IEditorReference ref : refs) {
-                    IEditorPart editor = ref.getEditor(false);
-                    if (editor != null) {
-                        IEditorInput editorInput = editor.getEditorInput();
-                        if (editorInput instanceof FileEditorInput
-                            && !((FileEditorInput)editorInput).getFile().exists()) {
-                            getSite().getPage().closeEditor(editor, false);
-                            editor.dispose();
-                        }
-                    }
-                }
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
+     */
+    @Override
+    public void setFocus() {
+        mappingsViewer.setFocus();
+    }
+
+    void toggleSourceViewer(SashForm horizontalSplitter) {
+        sourceTabFolder.setVisible(sourceViewerButton.getSelection());
+        horizontalSplitter.layout();
+        sourceViewerButton.setToolTipText(sourceViewerButton.getSelection()
+                                          ? "Hide the source/variables viewers"
+                                          : "Show the source/variables viewers");
+        updateHelpText();
+    }
+
+    void toggleTargetViewer(SashForm horizontalSplitter) {
+        targetTabFolder.setVisible(targetViewerButton.getSelection());
+        horizontalSplitter.layout();
+        targetViewerButton.setToolTipText(targetViewerButton.getSelection()
+                                          ? "Hide the target viewer"
+                                          : "Show the target viewer");
+        updateHelpText();
+    }
+
+    void updateHelpText() {
+        if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
+            if (sourceTabFolder.getSelectionIndex() == 0) {
+                helpText.setText("Create a new mapping below by dragging a field in source "
+                                 + config.getSourceModel().getName()
+                                 + " on the left to a field in target "
+                                 + config.getTargetModel().getName() + " on the right.");
+            } else {
+                helpText.setText("Create a new mapping below by dragging a variable from the list"
+                                  + " of variables on the left to a field in target "
+                                  + config.getTargetModel().getName() + " on the right.");
             }
-        });
+        } else {
+            helpText.setText("");
+        }
     }
 
 }

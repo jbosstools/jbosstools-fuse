@@ -51,7 +51,7 @@ abstract class ModelTabFolder extends CTabFolder {
 
         modelTab = new CTabItem(this, SWT.NONE);
         modelTab.setText(title + (model == null ? "" : ": " + model.getName()));
-        modelViewer = constructModelViewer(config, potentialDropTargets);
+        modelViewer = constructModelViewer(config, potentialDropTargets, title);
         modelTab.setControl(modelViewer);
         modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         modelViewer.layout();
@@ -59,8 +59,9 @@ abstract class ModelTabFolder extends CTabFolder {
     }
 
     ModelViewer constructModelViewer(TransformationConfig config,
-                                     List<PotentialDropTarget> potentialDropTargets) {
-        return new ModelViewer(config, this, model, potentialDropTargets);
+                                     List<PotentialDropTarget> potentialDropTargets,
+                                     String preferenceId) {
+        return new ModelViewer(config, this, model, potentialDropTargets, preferenceId);
     }
 
     /**

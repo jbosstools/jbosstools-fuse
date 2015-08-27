@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
@@ -58,6 +59,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
@@ -69,6 +71,10 @@ import org.jboss.tools.fuse.transformation.model.Model;
  *
  */
 public class ModelViewer extends Composite {
+
+    private static final String PREFERENCE_PREFIX = ModelViewer.class.getName() + ".";
+    private static final String FILTER_MAPPED_FIELDS_PREFERENCE = ".filterMappedFields";
+    private static final String FILTER_TYPES_PREFERENCE = ".filterTypes";
 
     final TransformationConfig config;
     Model rootModel;
@@ -93,21 +99,24 @@ public class ModelViewer extends Composite {
      * @param parent
      * @param rootModel
      * @param potentialDropTargets
+     * @param preferenceId
      */
     public ModelViewer(final TransformationConfig config,
                        final Composite parent,
                        final Model rootModel,
-                       final List<PotentialDropTarget> potentialDropTargets) {
+                       final List<PotentialDropTarget> potentialDropTargets,
+                       final String preferenceId) {
         super(parent, SWT.BORDER);
         setBackground(Colors.BACKGROUND);
         setViewOptions();
-        
+
         this.config = config;
         this.rootModel = rootModel;
 
         updateSearchMap(rootModel);
 
         setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
+        final IPreferenceStore prefs = Activator.plugin().getPreferenceStore();
 
         final ToolBar toolBar = new ToolBar(this, SWT.NONE);
         toolBar.setBackground(getBackground());
@@ -116,7 +125,7 @@ public class ModelViewer extends Composite {
         final ToolItem filterTypesButton = new ToolItem(toolBar, SWT.CHECK);
         filterTypesButton.setImage(Images.FILTER);
         filterTypesButton.setToolTipText("Show types");
-        
+
         if (showMappedFieldsButton) {
             filterMappedFieldsButton = new ToolItem(toolBar, SWT.CHECK);
             filterMappedFieldsButton.setImage(Images.HIDE_MAPPED);
@@ -165,7 +174,7 @@ public class ModelViewer extends Composite {
         treeViewer.setContentProvider(new ContentProvider());
         if (showSearchField) {
             treeViewer.addFilter(new ViewerFilter() {
-    
+
                 @Override
                 public boolean select(final Viewer viewer,
                                       final Object parentElement,
@@ -243,6 +252,7 @@ public class ModelViewer extends Composite {
                 }
             });
         }
+
         collapseAllButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -254,41 +264,60 @@ public class ModelViewer extends Composite {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                final ToolItem item = (ToolItem) event.widget;
-                showFieldTypes = item.getSelection();
-                item.setToolTipText((showFieldTypes ? "Hide" : "Show") + " types");
+                showFieldTypes = filterTypesButton.getSelection();
+                filterTypesButton.setToolTipText((showFieldTypes ? "Hide" : "Show") + " types");
                 treeViewer.refresh();
+                if (preferenceId != null)
+                    prefs.setValue(PREFERENCE_PREFIX + preferenceId + FILTER_TYPES_PREFERENCE,
+                                   showFieldTypes);
             }
         });
+        if (preferenceId != null) {
+            showFieldTypes = prefs.getBoolean(PREFERENCE_PREFIX
+                                              + preferenceId
+                                              + FILTER_TYPES_PREFERENCE);
+            filterTypesButton.setSelection(showFieldTypes);
+        }
         if (showMappedFieldsButton) {
             filterMappedFieldsButton.addSelectionListener(new SelectionAdapter() {
-    
+
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
-                    final ToolItem item = (ToolItem) event.widget;
-                    hideMappedFields = item.getSelection();
-                    item.setToolTipText((hideMappedFields ? "Show" : "Hide") + " mapped fields");
+                    hideMappedFields = filterMappedFieldsButton.getSelection();
+                    filterMappedFieldsButton.setToolTipText((hideMappedFields ? "Show" : "Hide")
+                                                            + " mapped fields");
                     treeViewer.refresh();
+                    if (preferenceId != null)
+                        prefs.setValue(PREFERENCE_PREFIX
+                                       + preferenceId
+                                       + FILTER_MAPPED_FIELDS_PREFERENCE,
+                                       hideMappedFields);
                 }
             });
+            if (preferenceId != null) {
+                hideMappedFields = prefs.getBoolean(PREFERENCE_PREFIX
+                                                    + preferenceId
+                                                    + FILTER_MAPPED_FIELDS_PREFERENCE);
+                filterMappedFieldsButton.setSelection(hideMappedFields);
+            }
         }
         if (showSearchField) {
             searchLabel.addMouseListener(new MouseAdapter() {
-    
+
                 @Override
                 public void mouseUp(final MouseEvent event) {
                     searchText.setFocus();
                 }
             });
             clearSearchLabel.addMouseListener(new MouseAdapter() {
-    
+
                 @Override
                 public void mouseUp(final MouseEvent event) {
                     searchText.setText("");
                 }
             });
             searchText.addModifyListener(new ModifyListener() {
-    
+
                 @Override
                 public void modifyText(final ModifyEvent event) {
                     searchResults.clear();
@@ -496,7 +525,7 @@ public class ModelViewer extends Composite {
             super.update(cell);
         }
     }
-    
+
     /**
      * Provides a method implementers can override to hide certain items.
      */

@@ -58,11 +58,13 @@ public final class SourceTabFolder extends ModelTabFolder {
      */
     @Override
     ModelViewer constructModelViewer(final TransformationConfig config,
-                                     List<PotentialDropTarget> potentialDropTargets) {
-        final ModelViewer viewer = super.constructModelViewer(config, potentialDropTargets);
+                                     List<PotentialDropTarget> potentialDropTargets,
+                                     String preferenceId) {
+        final ModelViewer viewer =
+            super.constructModelViewer(config, potentialDropTargets, preferenceId);
         viewer.treeViewer.addDropSupport(DND.DROP_MOVE,
-                new Transfer[] {LocalSelectionTransfer.getTransfer()},
-                new ViewerDropAdapter(viewer.treeViewer) {
+                                         new Transfer[] {LocalSelectionTransfer.getTransfer()},
+                                         new ViewerDropAdapter(viewer.treeViewer) {
 
             @Override
             public boolean performDrop(final Object data) {
