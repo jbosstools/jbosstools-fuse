@@ -9,6 +9,7 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,7 @@ import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
+import org.eclipse.swt.widgets.FileDialog;
 
 /**
  *
@@ -187,7 +189,22 @@ public class ExpressionDialog extends BaseDialog {
         browseBtn.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                String path = selectResourceFromWorkspace(browseBtn.getShell(), "");
+                IStructuredSelection selection =
+                        (IStructuredSelection)scriptTypeComboViewer.getSelection();
+                String value = (String) selection.getFirstElement();
+                String path = null;
+                if (value.equalsIgnoreCase("classpath")) {
+                    path = selectResourceFromWorkspace(browseBtn.getShell(), "");
+                } else if (value.equalsIgnoreCase("file")) {
+                    FileDialog dialog = new FileDialog(browseBtn.getShell());
+                    dialog.setText("Select Script File");
+                    String[] filterExt = { "*.*" };
+                    dialog.setFilterExtensions(filterExt);
+                    path = dialog.open();
+                    if (path != null) {
+                        path = convertToFileURL(path);
+                    }
+                }
                 if (path != null) {
                     pathText.setText(path);
                     pathText.notifyListeners(SWT.Modify, null);
@@ -215,6 +232,8 @@ public class ExpressionDialog extends BaseDialog {
                 final IStructuredSelection selection =
                     (IStructuredSelection)languageComboViewer.getSelection();
                 language = (Language)selection.getFirstElement();
+                valueOption.setEnabled(true);
+                scriptOption.setEnabled(true);
                 expressionText.setFocus();
                 validate();
                 if (scriptOption.getSelection() == false && valueOption.getSelection() == false) {
@@ -246,11 +265,18 @@ public class ExpressionDialog extends BaseDialog {
         if (language != null) {
             languageComboViewer.setSelection(new StructuredSelection(language));
         }
+        
+        valueOption.setSelection(false);
+        valueOption.setEnabled(false);
+        scriptOption.setSelection(false);
+        scriptOption.setEnabled(false);
 
         if (expression != null) {
             String part0 = getParameterPart(expression, 0);
             valueOption.setSelection(true);
+            valueOption.setEnabled(true);
             scriptOption.setSelection(false);
+            scriptOption.setEnabled(true);
             if (part0.contentEquals("resource")) {
                 valueOption.setSelection(false);
                 scriptOption.setSelection(true);
@@ -262,6 +288,23 @@ public class ExpressionDialog extends BaseDialog {
         }
     }
 
+    private static String convertToFileURL ( String filename ) {
+        String path = new File(filename).toURI().toString();
+        if ( File.separatorChar != '/' ) {
+            path = path.replace ( File.separatorChar, '/' );
+        }
+        if (path.startsWith("file:")) {
+            path = path.replace("file:", "");
+        }
+        if (path.indexOf(':') > -1) {
+            path = path.replace(":", "");
+        }
+        if ( !path.startsWith ( "/" ) ) {
+            path = "/" + path;
+        }
+        return path;
+    }    
+    
     private void updateExpression() {
         if (expression != null) {
             if (scriptOption.getSelection()) {
@@ -294,7 +337,7 @@ public class ExpressionDialog extends BaseDialog {
 
     private String getParameterPart(String expression, int idx) {
         String part = null;
-        String[] parts = expression.split(":");
+        String[] parts = expression.split(":", 3);
         if (parts.length > idx) {
             part = parts[idx];
         }
@@ -316,7 +359,9 @@ public class ExpressionDialog extends BaseDialog {
             final IStructuredSelection selection =
                     (IStructuredSelection)scriptTypeComboViewer.getSelection();
             String value = (String) selection.getFirstElement();
-            browseBtn.setEnabled(value != null && value.equalsIgnoreCase("classpath") && scriptOption.getSelection());
+            browseBtn.setEnabled(value != null 
+                    && (value.equalsIgnoreCase("classpath") || value.equalsIgnoreCase("file")) 
+                    && scriptOption.getSelection());
         }
     }
 
