@@ -561,7 +561,7 @@ public final class MappingDetailViewer extends MappingViewer {
         @Override
         protected void constructContents(final Composite parent) {
             parent.setLayout(GridLayoutFactory.swtDefaults().create());
-            final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel, null);
+            final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel, null, null);
             modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
             if (field != null) {
                 modelViewer.select(field);
