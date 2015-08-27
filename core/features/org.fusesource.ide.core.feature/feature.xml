@@ -66,6 +66,36 @@
    </requires>
 
    <plugin
+         id="org.fusesource.ide.foundation.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.foundation.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.model.service.v2_15_2"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+
+
+   <plugin
          id="org.fusesource.ide.camel.model"
          download-size="0"
          install-size="0"

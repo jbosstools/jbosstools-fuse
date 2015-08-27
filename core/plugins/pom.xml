@@ -11,6 +11,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<name>JBoss Fuse Tooling :: Core :: Plugins</name>
 	<packaging>pom</packaging>
 	<modules>
+		<module>org.fusesource.ide.foundation.core</module>
+		<module>org.fusesource.ide.foundation.ui</module>
+		<module>org.fusesource.ide.camel.model.service.core</module>
+		<module>org.fusesource.ide.camel.model.service.v2_15_2</module>
                 <module>org.fusesource.ide.camel.model</module>
                 <module>org.fusesource.ide.commons</module>
                 <module>org.fusesource.ide.cheatsheets</module>

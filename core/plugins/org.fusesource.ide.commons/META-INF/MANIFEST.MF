@@ -22,12 +22,9 @@ Require-Bundle: org.fusesource.ide.preferences;bundle-version="8.0.0",
  org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.jboss.tools.jmx.ui;bundle-version="1.6.0",
  org.jboss.ide.eclipse.as.dmr;bundle-version="3.0.0",
- org.apache.commons.io;bundle-version="2.0.1"
-Export-Package: de.pdark.decentxml,
- de.pdark.decentxml.dtd,
- de.pdark.decentxml.mapping,
- de.pdark.decentxml.validation,
- org.apache.camel;x-friends:="org.jboss.tools.fuse.transformation.editor",
+ org.apache.commons.io;bundle-version="2.0.1",
+ org.fusesource.ide.foundation.core;bundle-version="8.0.0";visibility:=reexport
+Export-Package: org.apache.camel;x-friends:="org.jboss.tools.fuse.transformation.editor",
  org.apache.camel.api.management;x-friends:="org.jboss.tools.fuse.transformation.editor",
  org.apache.camel.api.management.mbean;x-friends:="org.jboss.tools.fuse.transformation.editor",
  org.apache.camel.blueprint;x-friends:="org.jboss.tools.fuse.transformation.editor",
@@ -145,7 +142,6 @@ Export-Package: de.pdark.decentxml,
 Bundle-Activator: org.fusesource.ide.commons.Activator
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- libs/decentxml-1.4.jar,
  libs/log4j-over-slf4j-1.7.5.jar,
  libs/slf4j-api-1.7.5.jar,
  libs/slf4j-simple-1.7.5.jar,

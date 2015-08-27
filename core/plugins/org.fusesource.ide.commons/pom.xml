@@ -33,11 +33,6 @@
 				<configuration>
 					<artifactItems>
 						<artifactItem>
-				            <groupId>de.pdark</groupId>
-				            <artifactId>decentxml</artifactId>
-				            <version>1.4</version>
-						</artifactItem>
-						<artifactItem>
 							<groupId>org.apache.camel</groupId>
             				<artifactId>camel-core</artifactId>
 							<version>${camel.version}</version>
