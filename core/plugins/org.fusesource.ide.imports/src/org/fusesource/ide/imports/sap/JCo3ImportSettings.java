@@ -40,6 +40,8 @@ public class JCo3ImportSettings extends SAPImportSettings {
 	private static final String JAR_EXTENTION = ".jar"; //$NON-NLS-1$
 
 	private static final String UNDERSCORE = "_"; //$NON-NLS-1$
+	
+	private static final String PATH_SEPARATOR ="/"; //$NON-NLS-1$
 
 	private String jco3ArchiveFilename;
 
@@ -97,7 +99,7 @@ public class JCo3ImportSettings extends SAPImportSettings {
 	}
 	
 	public String getBundleNativeDirEntry() {
-		return NATIVE_DIRECTORY_NAME + File.separator;
+		return NATIVE_DIRECTORY_NAME + PATH_SEPARATOR;
 	}
 	
 	public String getBundleJCoJarEntry() {
@@ -105,7 +107,7 @@ public class JCo3ImportSettings extends SAPImportSettings {
 	}
 
 	public String getBundleNativeLibraryEntry() {
-		return NATIVE_DIRECTORY_NAME + File.separator + jco3Archive.getType().getNativeArchiveName();
+		return NATIVE_DIRECTORY_NAME + PATH_SEPARATOR + jco3Archive.getType().getNativeArchiveName();
 	}
 
 	public String getFragmentHost() {
