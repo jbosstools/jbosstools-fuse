@@ -29,7 +29,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 
 
 public class DynamicPropertySheetTracker {

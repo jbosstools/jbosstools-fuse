@@ -31,7 +31,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import org.fusesource.ide.commons.properties.BooleanPropertyDescriptor;
 import org.fusesource.ide.commons.properties.ComplexPropertyDescriptor;
 import org.fusesource.ide.commons.properties.ListPropertyDescriptor;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 
 public class CompositeDataPropertySource implements IPropertySource {

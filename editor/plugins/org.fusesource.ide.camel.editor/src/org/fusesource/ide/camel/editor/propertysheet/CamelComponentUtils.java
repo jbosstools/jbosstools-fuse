@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.propertysheet;
 
-import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -23,9 +22,6 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-
 import org.apache.maven.artifact.Artifact;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -35,15 +31,14 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.catalog.Dependency;
-import org.fusesource.ide.camel.model.catalog.components.Component;
-import org.fusesource.ide.camel.model.catalog.components.ComponentModel;
-import org.fusesource.ide.camel.model.catalog.components.ComponentProperty;
-import org.fusesource.ide.camel.model.catalog.components.UriParameter;
-import org.fusesource.ide.commons.util.IOUtils;
-import org.fusesource.ide.commons.util.JsonHelper;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentProperty;
+import org.fusesource.ide.foundation.core.util.IOUtils;
+import org.fusesource.ide.foundation.core.util.JsonHelper;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.jboss.dmr.ModelNode;
 
 /**
@@ -78,12 +73,12 @@ public final class CamelComponentUtils {
     
     
     
-    public static boolean isBooleanProperty(UriParameter p) {
+    public static boolean isBooleanProperty(Parameter p) {
         return  p.getJavaType().equalsIgnoreCase("boolean") || 
                 p.getJavaType().equalsIgnoreCase("java.lang.Boolean");
     }
     
-    public static boolean isTextProperty(UriParameter p) {
+    public static boolean isTextProperty(Parameter p) {
         return  p.getChoice() == null && (
         		p.getJavaType().equalsIgnoreCase("String") || 
                 p.getJavaType().equalsIgnoreCase("java.lang.String") || 
@@ -92,7 +87,7 @@ public final class CamelComponentUtils {
                 p.getJavaType().equalsIgnoreCase("Text"));
     }
     
-    public static boolean isNumberProperty(UriParameter p) {
+    public static boolean isNumberProperty(Parameter p) {
         return  p.getChoice() == null && (
         		p.getJavaType().equalsIgnoreCase("int") || 
                 p.getJavaType().equalsIgnoreCase("Integer") ||
@@ -106,44 +101,44 @@ public final class CamelComponentUtils {
                 p.getJavaType().equalsIgnoreCase("Number"));
     }
     
-    public static boolean isChoiceProperty(UriParameter p) {
+    public static boolean isChoiceProperty(Parameter p) {
         return p.getChoice() != null && p.getChoice().trim().length()>0;
     }
     
-    public static boolean isFileProperty(UriParameter p) {
+    public static boolean isFileProperty(Parameter p) {
         return  p.getJavaType().equalsIgnoreCase("file") ||
                 p.getJavaType().equalsIgnoreCase("java.io.file");
     }
     
-    public static boolean isExpressionProperty(UriParameter p) {
+    public static boolean isExpressionProperty(Parameter p) {
         return  p.getJavaType().equalsIgnoreCase("expression") ||
                 p.getJavaType().equalsIgnoreCase("org.apache.camel.Expression");
     }
     
-    public static boolean isListProperty(UriParameter p) {
+    public static boolean isListProperty(Parameter p) {
         return p.getJavaType().toLowerCase().startsWith("java.util.list") ||
                p.getJavaType().toLowerCase().startsWith("java.util.collection"); 
     }
     
-    public static boolean isMapProperty(UriParameter p) {
+    public static boolean isMapProperty(Parameter p) {
         return p.getJavaType().toLowerCase().startsWith("java.util.map"); 
     }
     
-    public static boolean isUriPathParameter(UriParameter p) {
+    public static boolean isUriPathParameter(Parameter p) {
     	return p.getKind() != null && p.getKind().equalsIgnoreCase("path");
     }
     
-    public static boolean isUriOptionParameter(UriParameter p) {
+    public static boolean isUriOptionParameter(Parameter p) {
     	return p.getKind() != null && p.getKind().equalsIgnoreCase("parameter");
     }
         
-    public static boolean isUnsupportedProperty(UriParameter p) {
+    public static boolean isUnsupportedProperty(Parameter p) {
     	return isListProperty(p) ||
     		   isMapProperty(p) || 
     		   p.getJavaType().toLowerCase().startsWith("java.util.date");
     }
     
-    public static String[] getChoices(UriParameter p) {
+    public static String[] getChoices(Parameter p) {
         String[] choices = p.getChoice().split(",");
         ArrayList<String> res = new ArrayList<String>();
         res.add(" "); // empty entry
@@ -283,7 +278,7 @@ public final class CamelComponentUtils {
     	knownComponents.put(component.getClazz(), component);
     	try {
             // create JAXB context and instantiate marshaller
-//        	JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, Dependency.class, ComponentProperty.class, UriParameter.class);
+//        	JAXBContext context = JAXBContext.newInstance(ComponentModel.class, Component.class, Dependency.class, ComponentProperty.class, Parameter.class);
 //		    Marshaller m = context.createMarshaller();
 //            m.marshal(component, new File("/var/tmp/model.xml"));
         } catch (Exception ex) {
@@ -408,12 +403,12 @@ public final class CamelComponentUtils {
             props = JsonHelper.getAsMap(propsNode);    
             it = props.keySet().iterator();
             
-            ArrayList<UriParameter> uriParams = new ArrayList<UriParameter>();
+            ArrayList<Parameter> uriParams = new ArrayList<Parameter>();
             
             while (it.hasNext()) {
                 String propName = it.next();
                 ModelNode valueNode = propsNode.get(propName);
-                UriParameter param = new UriParameter();
+                Parameter param = new Parameter();
                 
                 param.setName(propName);
                 

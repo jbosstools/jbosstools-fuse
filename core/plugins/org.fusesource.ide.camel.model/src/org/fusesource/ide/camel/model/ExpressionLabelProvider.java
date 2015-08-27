@@ -11,11 +11,10 @@
 
 package org.fusesource.ide.camel.model;
 
-import static org.fusesource.ide.commons.util.Strings.getOrElse;
-
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author lhein
@@ -37,7 +36,7 @@ public class ExpressionLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element instanceof ExpressionDefinition) {
 			ExpressionDefinition expression = (ExpressionDefinition) element;
-			String language = getOrElse(expression.getLanguage());
+			String language = Strings.getOrElse(expression.getLanguage());
 			String expr = expression.getExpression();
 			return String.format("%s:  %s", language, expr);
 		}

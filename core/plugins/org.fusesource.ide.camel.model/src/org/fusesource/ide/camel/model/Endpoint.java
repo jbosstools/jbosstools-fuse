@@ -20,7 +20,7 @@ import org.apache.camel.model.ToDefinition;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import org.fusesource.ide.camel.model.generated.Messages;
-import org.fusesource.ide.commons.util.XmlUtilities;
+import org.fusesource.ide.foundation.core.xml.XmlEscapeUtility;
 
 /**
  * @author lhein
@@ -66,7 +66,7 @@ public class Endpoint extends AbstractNode {
 
 	public Endpoint(String uri) {
 		this.uri = uri;
-		this.uri = XmlUtilities.unescape(uri);
+		this.uri = XmlEscapeUtility.unescape(uri);
 	}
 
 	public Endpoint(Endpoint endpoint) {
@@ -87,7 +87,7 @@ public class Endpoint extends AbstractNode {
 	 */
 	public void setUri(String uri) {
 		String oldUri = this.uri;
-		this.uri = XmlUtilities.unescape(uri);
+		this.uri = XmlEscapeUtility.unescape(uri);
 		if (!isSame(uri, oldUri)) {
 			clearImages();
 			firePropertyChange(PROPERTY_URI, oldUri, uri);	

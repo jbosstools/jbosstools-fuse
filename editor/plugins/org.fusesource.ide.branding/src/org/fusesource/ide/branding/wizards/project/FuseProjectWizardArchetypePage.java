@@ -66,8 +66,8 @@ import org.fusesource.ide.branding.wizards.WizardMessages;
 import org.fusesource.ide.commons.camel.tools.Archetype;
 import org.fusesource.ide.commons.camel.tools.Archetypes;
 import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.util.IOUtils;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.IOUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.osgi.framework.Bundle;
 
 /**

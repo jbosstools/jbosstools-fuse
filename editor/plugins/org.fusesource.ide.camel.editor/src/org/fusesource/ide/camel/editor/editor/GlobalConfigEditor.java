@@ -40,8 +40,8 @@ import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
-import org.fusesource.ide.commons.camel.tools.Strings;
 import org.fusesource.ide.commons.ui.Selections;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author lhein

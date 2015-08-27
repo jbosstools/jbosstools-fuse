@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.util.Function1;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.functions.Function1;
 
 
 public class TypeConverters {

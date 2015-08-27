@@ -22,10 +22,10 @@ import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.util.ObjectHelper;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.HasValue;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 
-public class Objects extends org.fusesource.ide.commons.util.Objects {
+public class Objects extends org.fusesource.ide.foundation.core.util.Objects {
 
 	/**
 	 * A helper method for comparing objects for equality while handling nulls

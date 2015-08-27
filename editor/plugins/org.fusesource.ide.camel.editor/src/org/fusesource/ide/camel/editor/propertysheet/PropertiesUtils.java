@@ -29,21 +29,21 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.corext.util.JavaConventionsUtil;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.catalog.components.Component;
-import org.fusesource.ide.camel.model.catalog.components.UriParameter;
-import org.fusesource.ide.camel.model.catalog.components.UriParameterKind;
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 
 /**
  * @author lhein
  */
 public class PropertiesUtils {
 	
-	public static UriParameter getUriParam(String name, Component c) {
+	public static Parameter getUriParam(String name, Component c) {
 		return getUriParam(name, c.getUriParameters());
 	}
 	
-	public static UriParameter getUriParam(String name, List<UriParameter> uriParams) {
-		for (UriParameter p : uriParams) {
+	public static Parameter getUriParam(String name, List<Parameter> uriParams) {
+		for (Parameter p : uriParams) {
 			if (p.getName().equals(name)) {
 				return p;
 			}
@@ -61,15 +61,15 @@ public class PropertiesUtils {
 		return null;
 	}
 	
-	public static List<UriParameter> getPathProperties(Endpoint selectedEP) {
-		ArrayList<UriParameter> result = new ArrayList<UriParameter>();
+	public static List<Parameter> getPathProperties(Endpoint selectedEP) {
+		ArrayList<Parameter> result = new ArrayList<Parameter>();
 
         if (selectedEP != null && selectedEP.getUri() != null) {
             int protocolSeparatorIdx = selectedEP.getUri().indexOf(":");
             if (protocolSeparatorIdx != -1) {
                 Component componentModel = CamelComponentUtils.getComponentModel(selectedEP.getUri().substring(0, protocolSeparatorIdx));
                 if (componentModel != null) {
-                    for (UriParameter p : componentModel.getUriParameters()) {
+                    for (Parameter p : componentModel.getUriParameters()) {
                         if (p.getKind() != null && p.getKind().equalsIgnoreCase("path")) {
                         	result.add(p);
                         }
@@ -86,15 +86,15 @@ public class PropertiesUtils {
      * @param kind
      * @return
      */
-    public static List<UriParameter> getPropertiesFor(Endpoint selectedEP, UriParameterKind kind) {
-        ArrayList<UriParameter> result = new ArrayList<UriParameter>();
+    public static List<Parameter> getPropertiesFor(Endpoint selectedEP, UriParameterKind kind) {
+        ArrayList<Parameter> result = new ArrayList<Parameter>();
 
         if (selectedEP != null && selectedEP.getUri() != null) {
             int protocolSeparatorIdx = selectedEP.getUri().indexOf(":");
             if (protocolSeparatorIdx != -1) {
                 Component componentModel = CamelComponentUtils.getComponentModel(selectedEP.getUri().substring(0, protocolSeparatorIdx));
                 if (componentModel != null) {
-                    for (UriParameter p : componentModel.getUriParameters()) {
+                    for (Parameter p : componentModel.getUriParameters()) {
                         if (kind == UriParameterKind.CONSUMER) {
                         	if (p.getLabel() != null && p.getLabel().equalsIgnoreCase("consumer")) {
                         		result.add(p);
@@ -121,7 +121,7 @@ public class PropertiesUtils {
      * @param p
      * @return
      */
-    public static String getPropertyFromUri(Endpoint selectedEP, UriParameter p, Component c) {
+    public static String getPropertyFromUri(Endpoint selectedEP, Parameter p, Component c) {
     	// we need to distinguish between parameters in the uri part after the ? char
     	if (p.getKind() != null && p.getKind().equalsIgnoreCase("parameter")) {
 	    	int idx = selectedEP.getUri().indexOf(p.getName() + "=");
@@ -169,25 +169,25 @@ public class PropertiesUtils {
      * @param params
      * @return
      */
-    private static String getDelimitersAsString(String syntax, List<UriParameter> params) {
+    private static String getDelimitersAsString(String syntax, List<Parameter> params) {
     	String delimiterString = syntax;
     	final String syntaxWithoutScheme = delimiterString.substring(delimiterString.indexOf(":")+1);
     	
     	// first strip off the <scheme>:
     	delimiterString = syntaxWithoutScheme;
     	
-    	Collections.sort(params, new Comparator<UriParameter>() {
+    	Collections.sort(params, new Comparator<Parameter>() {
     		/* (non-Javadoc)
     		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
     		 */
     		@Override
-    		public int compare(UriParameter o1, UriParameter o2) {
+    		public int compare(Parameter o1, Parameter o2) {
     			return o2.getName().length() - o1.getName().length();
     		}
     	});
     	
     	// then strip off the remaining variable names
-    	for (UriParameter p : params) {
+    	for (Parameter p : params) {
     		if (CamelComponentUtils.isUriPathParameter(p)) {
     			delimiterString = delimiterString.replace(p.getName(), "");
     		}
@@ -206,14 +206,14 @@ public class PropertiesUtils {
     	HashMap<String, String> retVal = new HashMap<String, String>();
 
     	// get all path params
-    	List<UriParameter> pathParams = getPathProperties(selectedEP);
+    	List<Parameter> pathParams = getPathProperties(selectedEP);
     	// get all delimiters
     	String delimiters = getDelimitersAsString(c.getSyntax(), pathParams);
     	// now get the uri without scheme and options
     	String uri = selectedEP.getUri().substring(selectedEP.getUri().indexOf(":") + 1, selectedEP.getUri().indexOf("?") != -1 ? selectedEP.getUri().indexOf("?") : selectedEP.getUri().length());
     	
-    	Map<Integer, UriParameter> fieldMapping = new HashMap<Integer, UriParameter>();
-    	for (UriParameter param : pathParams) {
+    	Map<Integer, Parameter> fieldMapping = new HashMap<Integer, Parameter>();
+    	for (Parameter param : pathParams) {
     		int idx = getFieldIndex(delimiters, c.getSyntax().substring(c.getSyntax().indexOf(":")+1), param.getName());
     		fieldMapping.put(idx, param);
     	}
@@ -221,7 +221,7 @@ public class PropertiesUtils {
     	int lastPos = 0;
 		int skippedDelimiters = 0;
     	for (int field=0; field < delimiters.length()+1; field++) {
-    		UriParameter uriParam = fieldMapping.get(field);
+    		Parameter uriParam = fieldMapping.get(field);
     		boolean required = uriParam.getRequired() != null && uriParam.getRequired().equalsIgnoreCase("true");
     		if (skippedDelimiters>0) {
     			if (!required) {
@@ -270,7 +270,7 @@ public class PropertiesUtils {
      * @param p
      * @return
      */
-    public static Object getTypedPropertyFromUri(Endpoint selectedEP, UriParameter p, Component c) {
+    public static Object getTypedPropertyFromUri(Endpoint selectedEP, Parameter p, Component c) {
         String val = getPropertyFromUri(selectedEP, p, c);
 
         if (CamelComponentUtils.isBooleanProperty(p)) {
@@ -294,7 +294,7 @@ public class PropertiesUtils {
      * @param p
      * @param value
      */
-    public static void updateURIParams(Endpoint selectedEP, UriParameter p, Object value, Component c, IObservableMap modelMap) {
+    public static void updateURIParams(Endpoint selectedEP, Parameter p, Object value, Component c, IObservableMap modelMap) {
     	if (p.getKind().equalsIgnoreCase("path")) {
     		// simply rebuild the uri
     		String newUri = "";
@@ -349,7 +349,7 @@ public class PropertiesUtils {
     		
     		
     		// now build the options
-    		for (UriParameter uriParam : c.getUriParameters()) {
+    		for (Parameter uriParam : c.getUriParameters()) {
     			if (uriParam.getKind().equalsIgnoreCase("path")) continue;
     			String pName = uriParam.getName();
     			String pValue = getPropertyFromUri(selectedEP, uriParam, c);

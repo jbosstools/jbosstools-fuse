@@ -17,9 +17,9 @@ import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.model.catalog.CamelModel;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 
 /**
  * NOTE - this file is auto-generated using Velocity.

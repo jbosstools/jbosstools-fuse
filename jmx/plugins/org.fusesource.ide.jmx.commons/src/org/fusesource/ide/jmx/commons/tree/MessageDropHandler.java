@@ -24,8 +24,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.fusesource.ide.commons.ui.Workbenches;
 import org.fusesource.ide.commons.ui.drop.DropHandlerSupport;
 import org.fusesource.ide.commons.ui.views.ColumnViewSupport;
-import org.fusesource.ide.commons.util.IFiles;
-import org.fusesource.ide.commons.util.IOUtils;
+import org.fusesource.ide.foundation.core.util.ResourceModelUtils;
+import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.jmx.commons.Activator;
 import org.fusesource.ide.jmx.commons.messages.Exchanges;
 import org.fusesource.ide.jmx.commons.messages.IMessage;
@@ -63,12 +63,12 @@ public class MessageDropHandler extends DropHandlerSupport {
 		} else {
 
 			// TODO deal with binary....
-			File file = IFiles.toFile(resource);
+			File file = ResourceModelUtils.toFile(resource);
 			if (file != null) {
 				Message m = new Message();
 				message = m;
 
-				setMessageBody(m, file, !IFiles.isTextContentType(resource));
+				setMessageBody(m, file, !ResourceModelUtils.isTextContentType(resource));
 				// TODO should we add MIME type and whatnot headers...
 
 				

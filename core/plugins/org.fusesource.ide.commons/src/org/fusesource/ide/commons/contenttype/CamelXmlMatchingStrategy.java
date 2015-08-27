@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.commons.contenttype;
 
+import org.fusesource.ide.foundation.core.xml.namespace.FindCamelNamespaceHandler;
 
 /**
  * Detects the Camel namespace in an XML document to determine if we should open

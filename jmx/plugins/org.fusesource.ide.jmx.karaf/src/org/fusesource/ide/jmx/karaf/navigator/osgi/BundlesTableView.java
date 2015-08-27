@@ -13,7 +13,7 @@ package org.fusesource.ide.jmx.karaf.navigator.osgi;
 
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableView;
-import org.fusesource.ide.commons.util.Function1;
+import org.fusesource.ide.foundation.core.functions.Function1;
 
 
 public class BundlesTableView extends PropertySourceTableView {

@@ -13,7 +13,7 @@ package org.fusesource.ide.camel.editor.propertysheet;
 import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
 import org.eclipse.jface.viewers.IFilter;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 
 /**
  * @author lhein

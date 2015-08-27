@@ -11,9 +11,6 @@
 
 package org.fusesource.ide.camel.editor.propertysheet;
 
-import static org.fusesource.ide.commons.camel.tools.Strings.splitCamelCase;
-import static org.fusesource.ide.commons.util.Strings.capitalize;
-
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -108,8 +105,9 @@ import org.fusesource.ide.commons.properties.UnionTypeValue;
 import org.fusesource.ide.commons.tree.Refreshable;
 import org.fusesource.ide.commons.ui.actions.RunnableAction;
 import org.fusesource.ide.commons.ui.form.Forms;
-import org.fusesource.ide.commons.util.Sorts;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.Sorts;
 
 
 /**
@@ -547,7 +545,7 @@ public class DetailsSection extends NodeSectionSupport {
 		String labelText;
 		String propertyName = property.getName();
 		Class<?> propertyType = property.getPropertyType();
-		labelText = capitalize(splitCamelCase(propertyName));
+		labelText = Strings.capitalize(Strings.splitCamelCase(propertyName));
 		if (complexProperty instanceof ComplexUnionPropertyDescriptor) {
 			// lets fix up the background colour!
 			Label label = new Label(parent, SWT.NONE);

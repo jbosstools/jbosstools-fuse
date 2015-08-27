@@ -29,7 +29,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench.texteditor;bundle-version="3.9.0",
  org.eclipse.jface.text;bundle-version="3.9.0",
  org.fusesource.ide.commons;bundle-version="8.0.0",
- org.fusesource.ide.launcher;bundle-version="8.0.0"
+ org.fusesource.ide.launcher;bundle-version="8.0.0",
+ org.fusesource.ide.foundation.core;bundle-version="8.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.ui.Activator
 Bundle-ClassPath: .

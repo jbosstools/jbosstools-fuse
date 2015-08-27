@@ -14,7 +14,7 @@ package org.fusesource.ide.commons.ui.label;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.HasOwner;
 import org.fusesource.ide.commons.ui.propsrc.BeanPropertySource;
-import org.fusesource.ide.commons.util.Function1;
+import org.fusesource.ide.foundation.core.functions.Function1;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 

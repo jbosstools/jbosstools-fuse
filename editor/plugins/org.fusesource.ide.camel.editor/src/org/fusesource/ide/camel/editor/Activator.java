@@ -25,7 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.help.IWorkbenchHelpSystem;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.editor.RiderEditor;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
 import org.fusesource.ide.commons.ui.UIHelper;

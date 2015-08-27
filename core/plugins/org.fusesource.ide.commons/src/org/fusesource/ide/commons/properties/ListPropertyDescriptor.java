@@ -14,7 +14,7 @@ package org.fusesource.ide.commons.properties;
 import java.util.List;
 
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.fusesource.ide.commons.util.ReturnType;
+import org.fusesource.ide.foundation.core.functions.ReturnType;
 
 
 /**

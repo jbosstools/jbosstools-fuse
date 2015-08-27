@@ -14,7 +14,7 @@ package org.fusesource.ide.jmx.camel.navigator;
 import java.util.List;
 
 import org.fusesource.ide.camel.model.Activator;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.jmx.camel.internal.CamelFacade;
 import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 

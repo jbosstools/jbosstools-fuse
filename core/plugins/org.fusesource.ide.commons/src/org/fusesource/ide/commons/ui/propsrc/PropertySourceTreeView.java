@@ -33,8 +33,8 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.fusesource.ide.commons.properties.PropertyDescriptors;
 import org.fusesource.ide.commons.ui.label.FunctionColumnLabelProvider;
 import org.fusesource.ide.commons.ui.views.TreeViewSupport;
-import org.fusesource.ide.commons.util.Function1;
-import org.fusesource.ide.commons.util.Function1WithReturnType;
+import org.fusesource.ide.foundation.core.functions.Function1;
+import org.fusesource.ide.foundation.core.functions.Function1WithReturnType;
 
 
 /**

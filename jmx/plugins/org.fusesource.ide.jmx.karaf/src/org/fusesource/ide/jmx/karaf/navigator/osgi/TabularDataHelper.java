@@ -19,7 +19,7 @@ import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 
 

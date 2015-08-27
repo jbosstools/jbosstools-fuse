@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.fusesource.ide.commons.util.BundleResourceUtils;
+import org.fusesource.ide.foundation.core.util.BundleUtils;
 import org.fusesource.ide.server.karaf.core.runtime.integration.AbstractStacksDownloadRuntimesProvider;
 import org.fusesource.ide.server.servicemix.core.Activator;
 import org.jboss.jdf.stacks.model.Stacks;
@@ -47,7 +47,7 @@ public class ServiceMixDownloadRuntimesProvider extends AbstractStacksDownloadRu
 	@Override
 	protected Stacks[] getStacks(IProgressMonitor monitor) {
 		try {
-			File f = BundleResourceUtils.getFileFromBundle(Activator.PLUGIN_ID, "resources/servicemix.yaml");
+			File f = BundleUtils.getFileFromBundle(Activator.PLUGIN_ID, "resources/servicemix.yaml");
 			CustomStacksManager csm = new CustomStacksManager();
 			Stacks s = csm.getStacksFromFile(f);
 			return new Stacks[]{s};

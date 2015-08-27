@@ -13,10 +13,10 @@ package org.fusesource.ide.commons.ui.label;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.util.Function1;
-import org.fusesource.ide.commons.util.Function1WithReturnType;
-import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.functions.Function1;
+import org.fusesource.ide.foundation.core.functions.Function1WithReturnType;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 

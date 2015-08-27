@@ -40,7 +40,7 @@ import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
 import org.fusesource.ide.commons.ui.views.IViewPage;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.fusesource.ide.jmx.karaf.Messages;
 

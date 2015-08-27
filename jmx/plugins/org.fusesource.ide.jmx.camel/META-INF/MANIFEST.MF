@@ -24,7 +24,8 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.fusesource.ide.preferences;bundle-version="8.0.0",
  org.jboss.tools.jmx.jvmmonitor.core;bundle-version="1.6.0",
  org.jboss.tools.jmx.local;bundle-version="1.6.0",
- org.jboss.tools.foundation.ui;bundle-version="1.1.0"
+ org.jboss.tools.foundation.ui;bundle-version="1.1.0",
+ org.fusesource.ide.foundation.core;bundle-version="8.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.jmx.camel.CamelJMXPlugin
 Bundle-ClassPath: .

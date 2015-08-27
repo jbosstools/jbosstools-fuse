@@ -33,7 +33,7 @@ import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 

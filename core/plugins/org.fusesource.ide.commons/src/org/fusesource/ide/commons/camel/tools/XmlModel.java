@@ -31,6 +31,8 @@ import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.RoutesDefinition;
 import org.apache.camel.spring.CamelContextFactoryBean;
 import org.apache.camel.spring.CamelEndpointFactoryBean;
+import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
+import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.commons.Activator;
 import org.xml.sax.SAXException;
 

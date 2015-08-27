@@ -48,12 +48,12 @@ import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 
 public abstract class AbstractAddNodeMenuFactory {
@@ -201,7 +201,7 @@ public abstract class AbstractAddNodeMenuFactory {
 			String description = "bean '" + name + "' of type " + aClass;
 			
 			String version =  CamelModelFactory.getCamelVersion(null); 
-			final Eip eip = CamelModelFactory.getModelForVersion(version).getEipModel().getEIPByClass("bean");
+			final Eip eip = CamelModelFactory.getModelForVersion(version).getEipModel().getEIPByName("bean");
 			
 			CreateNodeConnectionFeature f = new CreateNodeConnectionFeature(fp, eip) {
 				@Override

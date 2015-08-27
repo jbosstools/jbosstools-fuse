@@ -38,7 +38,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.jobs.Jobs;
 import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.fusesource.ide.jmx.karaf.Messages;
 

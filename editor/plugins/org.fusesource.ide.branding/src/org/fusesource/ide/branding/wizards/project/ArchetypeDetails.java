@@ -14,9 +14,8 @@ package org.fusesource.ide.branding.wizards.project;
 import java.net.URL;
 
 import org.fusesource.ide.commons.camel.tools.Archetype;
-import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.commons.util.Strings;
-
+import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 public class ArchetypeDetails implements Comparable<ArchetypeDetails> {
 

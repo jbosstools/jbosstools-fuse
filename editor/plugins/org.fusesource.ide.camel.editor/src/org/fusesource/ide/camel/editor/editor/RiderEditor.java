@@ -64,6 +64,8 @@ import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.camel.model.io.ICamelEditorInput;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.util.Objects;
 import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -761,6 +763,13 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 
 	public void onFileLoading(IFile file) {
 		if (file instanceof IResource) {
+			try {
+				CamelIOHandler ioHandler = new CamelIOHandler();
+				CamelFile cf = ioHandler.loadCamelModel(file, new NullProgressMonitor());
+				System.err.println("CamelFile loaded!");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 			setPartName(((IResource)file).getLocation().lastSegment());
 		} else {
 			setPartName(file.getName());			

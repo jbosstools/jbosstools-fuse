@@ -20,9 +20,9 @@ import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.catalog.CamelModel;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 
@@ -79,7 +79,7 @@ public class StubContainerMarshaller extends ContainerMarshallerSupport {
 
 	protected RouteContainer createDummyModel() {
 		CamelModel model = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null));
-		Eip eip = model.getEipModel().getEIPByClass("bean");
+		Eip eip = model.getEipModel().getEIPByName("bean");
 		
 		
 		RouteContainer c = new RouteContainer();

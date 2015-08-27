@@ -16,8 +16,8 @@ import org.apache.camel.model.DescriptionDefinition;
 import org.apache.camel.model.FromDefinition;
 import org.apache.camel.model.ToDefinition;
 import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
-import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
 

@@ -21,7 +21,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.fusesource.ide.camel.model.LanguageExpressionBean;
 import org.fusesource.ide.commons.ui.views.TableViewSupport;
-import org.fusesource.ide.commons.util.Function1;
+import org.fusesource.ide.foundation.core.functions.Function1;
 
 
 /**

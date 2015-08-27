@@ -14,7 +14,7 @@ package org.fusesource.ide.commons.ui.label;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import org.fusesource.ide.commons.util.Function1;
+import org.fusesource.ide.foundation.core.functions.Function1;
 
 
 public class TimeThenDateFunctionLabelProvider extends FormatFunctionLabelProvider {

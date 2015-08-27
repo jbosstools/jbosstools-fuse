@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.fusesource.ide.commons.camel.tools.XmlHelper;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.commons.util.TextFilter;
 import org.fusesource.ide.commons.util.TextFilters;
+import org.fusesource.ide.foundation.core.xml.XmlEscapeUtility;
 
 
 @XmlRootElement(name = "message")
@@ -115,7 +115,7 @@ public class Message implements IMessage, TextFilter, PreMarshalHook {
 				String text = textBodyMarkup.getValue();
 				if (text != null) {
 					// TODO should we always XML unescape when extracting from the body
-					text = XmlHelper.unescape(text);
+					text = XmlEscapeUtility.unescape(text);
 				}
 				bodyValue = text;
 			} else if (binaryBodyMarkup != null) {

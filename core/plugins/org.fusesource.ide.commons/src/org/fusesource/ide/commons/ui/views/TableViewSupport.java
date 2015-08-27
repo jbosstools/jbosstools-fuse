@@ -47,8 +47,8 @@ import org.fusesource.ide.commons.ui.config.ColumnConfiguration;
 import org.fusesource.ide.commons.ui.config.TableConfiguration;
 import org.fusesource.ide.commons.ui.label.FunctionColumnLabelProvider;
 import org.fusesource.ide.commons.ui.label.WrappedCellLabelProvider;
-import org.fusesource.ide.commons.util.Function1;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.functions.Function1;
+import org.fusesource.ide.foundation.core.util.Objects;
 
 
 public abstract class TableViewSupport extends ColumnViewSupport {

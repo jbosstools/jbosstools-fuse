@@ -36,7 +36,7 @@ import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Flow;
 import org.fusesource.ide.commons.tree.HasName;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
 import org.fusesource.ide.jmx.commons.Activator;
 import org.fusesource.ide.jmx.commons.messages.INodeStatistics;

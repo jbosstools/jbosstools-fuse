@@ -11,6 +11,9 @@
 
 package org.fusesource.ide.commons.contenttype;
 
+import org.fusesource.ide.foundation.core.xml.namespace.FindNamespaceHandlerSupport;
+import org.fusesource.ide.foundation.core.xml.namespace.SpringNamespaceHandler;
+
 /**
  * @author lhein
  */

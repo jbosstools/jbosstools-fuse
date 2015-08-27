@@ -54,7 +54,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.jboss.tools.fuse.transformation.MapperConfiguration;
 import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder.MarshalType;

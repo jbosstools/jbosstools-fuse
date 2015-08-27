@@ -11,17 +11,13 @@
 
 package org.fusesource.ide.commons.contenttype;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorMatchingStrategy;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
-import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.util.IFiles;
-import org.xml.sax.InputSource;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.foundation.core.xml.namespace.FindNamespaceHandlerSupport;
 
 
 public abstract class XmlMatchingStrategySupport implements IEditorMatchingStrategy {
@@ -36,18 +32,8 @@ public abstract class XmlMatchingStrategySupport implements IEditorMatchingStrat
 	}
 
 	public boolean matches(IFile ifile) {
-		try {
-			File file = IFiles.toFile(ifile);
-			if (file != null) {
-				// lets parse the XML and look for the namespaces 
-				FindNamespaceHandlerSupport handler = createNamespaceFinder();
-				handler.parseContents(new InputSource(new FileInputStream(file)));
-				return handler.isNamespaceFound();
-			}
-		} catch (Exception e) {
-			Activator.getLogger().error("** Load failed. Using default model. **", e);
-		}
-		return false;
+		FindNamespaceHandlerSupport handler = createNamespaceFinder();
+		return CamelUtils.matches(handler, ifile);
 	}
 
 	protected abstract FindNamespaceHandlerSupport createNamespaceFinder();

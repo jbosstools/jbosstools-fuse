@@ -11,15 +11,11 @@
 
 package org.fusesource.ide.camel.model;
 
-import java.net.URL;
-
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.commons.camel.tools.CamelNamespaces;
-import org.fusesource.ide.commons.camel.tools.SchemaFinder;
-import org.fusesource.ide.commons.camel.tools.XsdDetails;
 import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
-import org.osgi.framework.Bundle;
+import org.fusesource.ide.foundation.core.xml.BundleSchemaFinder;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -47,25 +43,7 @@ public class Activator extends ImagesActivatorSupport {
 
 		// initialize the connector models
 		CamelModelFactory.initializeModels();
-	
-		// 
-		CamelNamespaces.loadSchemasWith(new SchemaFinder() {
-
-			@Override
-			public URL findSchema(XsdDetails xsd) {
-				String path = xsd.getPath();
-				URL answer = null;
-				Bundle[] bundles = Activator.getDefault().getBundle().getBundleContext().getBundles();
-				for (Bundle bundle : bundles) {
-					answer = bundle.getResource(path);
-					if (answer != null) {
-						break;
-					}
-				}
-				//Activator.getLogger().debug("for path: " + path + " xsd " + xsd + " found: " + answer);
-				return answer;
-			}
-		});
+		CamelNamespaces.loadSchemasWith(new BundleSchemaFinder());
 	}
 
 	/*

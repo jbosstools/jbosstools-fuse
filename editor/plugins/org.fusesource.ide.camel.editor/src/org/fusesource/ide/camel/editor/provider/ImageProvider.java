@@ -23,7 +23,7 @@ import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
 import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.camel.model.generated.UniversalEIPUtility;
 import org.osgi.framework.Bundle;

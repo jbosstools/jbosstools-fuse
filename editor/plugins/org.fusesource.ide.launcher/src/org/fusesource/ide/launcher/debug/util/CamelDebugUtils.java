@@ -28,7 +28,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;

@@ -20,7 +20,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author lhein

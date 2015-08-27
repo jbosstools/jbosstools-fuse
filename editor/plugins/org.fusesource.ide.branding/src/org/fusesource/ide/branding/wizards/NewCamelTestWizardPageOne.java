@@ -87,9 +87,8 @@ import org.fusesource.ide.camel.model.CamelModelHelper;
 import org.fusesource.ide.camel.model.util.Objects;
 import org.fusesource.ide.commons.contenttype.CamelXmlMatchingStrategy;
 import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
-import org.fusesource.ide.commons.util.IFiles;
-import org.fusesource.ide.commons.util.Predicate;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.ResourceModelUtils;
 
 
 /**
@@ -97,7 +96,6 @@ import org.fusesource.ide.commons.util.Strings;
  */
 @SuppressWarnings("restriction")
 public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
-
 	private static final String BUILD_PATH_BLOCK = "block_until_buildpath_applied"; //$NON-NLS-1$
 
 	private static final String BUILD_PATH_KEY_ADD_ENTRY = "add_classpath_entry"; //$NON-NLS-1$
@@ -672,7 +670,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 		builder.append("@Override").append(delimiter);
 		builder.append("protected String getBlueprintDescriptor() {");
 		builder.append(delimiter);
-		builder.append("return \"" + IFiles.getRelativeFileUri(camelXmlFile) + "\";");
+		builder.append("return \"" + ResourceModelUtils.getRelativeFileUri(camelXmlFile) + "\";");
 		builder.append(delimiter);
 		builder.append("}");
 		builder.append(delimiter);
@@ -688,7 +686,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 		builder.append("@Override").append(delimiter);
 		builder.append("protected ClassPathXmlApplicationContext createApplicationContext() {");
 		builder.append(delimiter);
-		builder.append("return new ClassPathXmlApplicationContext(\"" + IFiles.getRelativeFileUri(camelXmlFile)
+		builder.append("return new ClassPathXmlApplicationContext(\"" + ResourceModelUtils.getRelativeFileUri(camelXmlFile)
 				+ "\");");
 		builder.append(delimiter);
 		builder.append("}");
@@ -1038,7 +1036,8 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 				try {
 					// if we have no file selected yet, lets see if there's a
 					// single one available
-					List<IFile> files = IFiles.filter(resourceContainer, new Predicate<IFile>() {
+					List<IFile> files = ResourceModelUtils.filter(resourceContainer, 
+							new org.fusesource.ide.foundation.core.util.Filter<IFile>() {
 						@Override
 						public boolean matches(IFile file) {
 							if (Objects.equal(file.getFileExtension(), "xml")) {

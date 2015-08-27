@@ -57,7 +57,7 @@ import org.apache.camel.spring.CamelContextFactoryBean;
 import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.apache.camel.spring.CamelRouteContextFactoryBean;
 import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.camel.tools.parser.PatchedXMLParser;
+import org.fusesource.ide.foundation.core.xml.internal.parser.PatchedXMLParser;
 import org.xml.sax.ErrorHandler;
 
 import de.pdark.decentxml.Attribute;

@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.commons.util.IFiles;
+import org.fusesource.ide.foundation.core.util.ResourceModelUtils;
 
 
 public abstract class ContainerMarshallerSupport implements ContainerMarshaler  {
@@ -27,7 +27,7 @@ public abstract class ContainerMarshallerSupport implements ContainerMarshaler  
 
 	@Override
 	public RouteContainer loadRoutes(IFile ifile) {
-		return loadRoutes(IFiles.toFile(ifile));
+		return loadRoutes(ResourceModelUtils.toFile(ifile));
 	}
 
 	public void save(IFile ifile, RouteContainer model) throws CoreException {

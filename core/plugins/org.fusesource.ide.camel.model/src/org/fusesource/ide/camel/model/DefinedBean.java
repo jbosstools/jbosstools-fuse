@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.model;
 
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 
 /**
  * @author lhein
@@ -22,7 +22,7 @@ public class DefinedBean extends UniversalEIPNode {
      * 
      */
     public DefinedBean() {
-        super(CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null)).getEipModel().getEIPByClass("bean"));
+        super(CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null)).getEipModel().getEIPByName("bean"));
     }
     
     // Takes a UniversalEIPNode representing a 'bean' element

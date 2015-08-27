@@ -8,7 +8,6 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.camel.model.service.internal;
 
 import org.eclipse.core.runtime.Platform;

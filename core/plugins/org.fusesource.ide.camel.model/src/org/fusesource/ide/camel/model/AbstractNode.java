@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,9 +66,9 @@ import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 import org.fusesource.ide.camel.model.generated.UniversalEIPUtility;
 import org.fusesource.ide.camel.model.util.Expressions;
 import org.fusesource.ide.commons.camel.tools.CamelModelUtils;
-import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.commons.util.Predicate;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Filter;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -865,7 +866,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		}
 
 		if (conn.getSource() == this) {
-			Predicate<Flow> before = createBeforePredicate(target);
+			Filter<Flow> before = createBeforePredicate(target);
 			boolean added = false;
 			if (before != null) {
 				int idx = 0;
@@ -903,13 +904,13 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 	 * Creates a predicate to decide if a flow for the given target should be added
 	 * before a flow
 	 */
-	protected Predicate<Flow> createBeforePredicate(AbstractNode target) {
+	protected Filter<Flow> createBeforePredicate(AbstractNode target) {
 		String targetType = target.getNodeTypeId();
 		String thisType = getNodeTypeId();
 		if ("choice".equals(thisType)) {
 			// when is first
 			if ("when".equals(targetType)) {
-				return new Predicate<Flow>() {
+				return new Filter<Flow>() {
 					@Override
 					public boolean matches(Flow f) {
 						return "otherwise".equals(f.getTarget().getNodeTypeId()) 
@@ -917,7 +918,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 					}
 				};
 			} else if ("otherwise".equals(targetType)) {
-				return new Predicate<Flow>() {
+				return new Filter<Flow>() {
 					@Override
 					public boolean matches(Flow f) {
 						return !("when".equals(f.getTarget().getNodeTypeId()));
@@ -927,7 +928,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		} else if ("try".equals(thisType)) {
 			if ("catch".equals(targetType)) {
 				// add before finally
-				return new Predicate<Flow>() {
+				return new Filter<Flow>() {
 					@Override
 					public boolean matches(Flow f) {
 						return "finally".equals(f.getTarget().getNodeTypeId());
@@ -935,7 +936,7 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 				};
 			} else if (!("finally".equals(targetType))) {
 				// add before catch/finally
-				return new Predicate<Flow>() {
+				return new Filter<Flow>() {
 					@Override
 					public boolean matches(Flow f) {
 						return "catch".equals(f.getTarget().getNodeTypeId())
@@ -1230,7 +1231,20 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 		if (processor instanceof ChoiceDefinition) {
 			ChoiceDefinition choice = (ChoiceDefinition) processor;
 			if (toNode instanceof WhenDefinition) {
-				choice.getWhenClauses().add((WhenDefinition) toNode);
+				List<WhenDefinition> defs = choice.getWhenClauses();
+				boolean found = false;
+				Iterator<WhenDefinition> it = defs.iterator();
+				while(it.hasNext() && !found) {
+					WhenDefinition t = it.next();
+					if( t.getLabel().equals(toNode.getLabel())) {
+						// Two nodes have the same 'when'
+						found = true;
+					}
+				}
+				if( !found) {
+					// avoid duplicates
+					choice.getWhenClauses().add((WhenDefinition) toNode);
+				}
 			} else if (toNode instanceof OtherwiseDefinition) {
 				choice.setOtherwise((OtherwiseDefinition) toNode);
 			} else {
@@ -1296,15 +1310,6 @@ public abstract class AbstractNode implements IPropertySource, IAdaptable {
 			if (!processedNodes.contains(target)) {
 				addCamelOutput(processor, toNode);
 				processedNodes.add(target);
-			}
-
-
-			// Convert any expressions to the real underlying XML
-			IPropertyDescriptor[] propertyDescriptors = getPropertyDescriptors();
-			for (IPropertyDescriptor descriptor : propertyDescriptors) {
-				if (descriptor instanceof ExpressionPropertyDescriptor) {
-
-				}
 			}
 
 

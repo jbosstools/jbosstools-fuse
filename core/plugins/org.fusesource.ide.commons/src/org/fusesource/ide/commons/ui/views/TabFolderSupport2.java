@@ -34,7 +34,7 @@ import org.eclipse.ui.views.properties.tabbed.TabContents;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.commons.Activator;
 import org.fusesource.ide.commons.PreferencesHelper;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.osgi.service.prefs.Preferences;
 
 

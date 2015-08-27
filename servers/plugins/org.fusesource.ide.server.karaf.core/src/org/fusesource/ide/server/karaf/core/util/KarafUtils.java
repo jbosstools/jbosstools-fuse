@@ -38,7 +38,7 @@ import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.BaseConfigPropertyProvider;
 import org.fusesource.ide.server.karaf.core.server.subsystems.Karaf2xPublishController;

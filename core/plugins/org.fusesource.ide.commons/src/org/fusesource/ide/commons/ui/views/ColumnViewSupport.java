@@ -54,8 +54,8 @@ import org.fusesource.ide.commons.ui.label.ImageLabelProvider;
 import org.fusesource.ide.commons.ui.label.LongTimestampAsTimeThenDateLabelProvider;
 import org.fusesource.ide.commons.ui.label.TimeThenDateFunctionLabelProvider;
 import org.fusesource.ide.commons.ui.label.TimeThenDateLabelProvider;
-import org.fusesource.ide.commons.util.Function1;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.functions.Function1;
+import org.fusesource.ide.foundation.core.util.Objects;
 
 
 public abstract class ColumnViewSupport extends ViewPart implements IConfigurableColumns, IViewPage, ISection, Refreshable {

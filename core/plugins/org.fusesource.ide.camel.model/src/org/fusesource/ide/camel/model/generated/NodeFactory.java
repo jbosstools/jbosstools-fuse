@@ -21,9 +21,9 @@ import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.catalog.CamelModel;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 
 /**
  * Provides a factory method to create the Eclipse model for a given Camel node
@@ -42,7 +42,7 @@ public class NodeFactory {
     public static AbstractNode createNode(ProcessorDefinition processor, RouteContainer parent, String version) {
     	String s = processor.getShortName();
     	CamelModel model = CamelModelFactory.getModelForVersion(version);
-    	Eip eip = model.getEipModel().getEIPByClass(s);
+    	Eip eip = model.getEipModel().getEIPByName(s);
     	if( eip == null ) {
     		// TODO error?
     		Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "org.fusesource.ide.camel.model", 

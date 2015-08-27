@@ -22,7 +22,7 @@ import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
 import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.Shells;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
 import org.fusesource.ide.jmx.activemq.Messages;
 import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;

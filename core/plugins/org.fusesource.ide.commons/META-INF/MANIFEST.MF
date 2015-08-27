@@ -23,7 +23,8 @@ Require-Bundle: org.fusesource.ide.preferences;bundle-version="8.0.0",
  org.jboss.tools.jmx.ui;bundle-version="1.6.0",
  org.jboss.ide.eclipse.as.dmr;bundle-version="3.0.0",
  org.apache.commons.io;bundle-version="2.0.1",
- org.fusesource.ide.foundation.core;bundle-version="8.0.0";visibility:=reexport
+ org.fusesource.ide.foundation.core;bundle-version="8.0.0",
+ org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0"
 Export-Package: org.apache.camel;x-friends:="org.jboss.tools.fuse.transformation.editor",
  org.apache.camel.api.management;x-friends:="org.jboss.tools.fuse.transformation.editor",
  org.apache.camel.api.management.mbean;x-friends:="org.jboss.tools.fuse.transformation.editor",
@@ -123,7 +124,6 @@ Export-Package: org.apache.camel;x-friends:="org.jboss.tools.fuse.transformation
  org.apache.camel.view;x-friends:="org.jboss.tools.fuse.transformation.editor",
  org.fusesource.ide.commons,
  org.fusesource.ide.commons.camel.tools,
- org.fusesource.ide.commons.camel.tools.parser,
  org.fusesource.ide.commons.contenttype,
  org.fusesource.ide.commons.jobs,
  org.fusesource.ide.commons.logging,

@@ -15,10 +15,10 @@ import java.beans.PropertyDescriptor;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-import org.fusesource.ide.commons.camel.tools.Strings;
 import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.commons.util.ReturnType;
+import org.fusesource.ide.foundation.core.functions.ReturnType;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.Objects;
 
 
 public class PropertyDescriptors {

@@ -25,7 +25,7 @@ import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.Shells;
 import org.fusesource.ide.commons.ui.drop.DropHandler;
 import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
-import org.fusesource.ide.commons.util.URIs;
+import org.fusesource.ide.foundation.core.util.URIs;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
 import org.fusesource.ide.jmx.camel.internal.CamelBrowsableEndpointMBean;

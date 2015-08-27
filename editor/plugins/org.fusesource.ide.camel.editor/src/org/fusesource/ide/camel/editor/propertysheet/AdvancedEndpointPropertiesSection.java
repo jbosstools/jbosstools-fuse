@@ -81,11 +81,11 @@ import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.catalog.components.Component;
-import org.fusesource.ide.camel.model.catalog.components.UriParameter;
-import org.fusesource.ide.camel.model.catalog.components.UriParameterKind;
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author lhein
@@ -178,23 +178,23 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
      * @param props
      * @param page
      */
-    protected void generateTabContents(List<UriParameter> props, final Composite page, boolean ignorePathProperties) {
+    protected void generateTabContents(List<Parameter> props, final Composite page, boolean ignorePathProperties) {
         // display all the properties in alphabetic order - sorting needed
-        Collections.sort(props, new Comparator<UriParameter>() {
+        Collections.sort(props, new Comparator<Parameter>() {
             /* (non-Javadoc)
              * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
              */
             @Override
-            public int compare(UriParameter o1, UriParameter o2) {
+            public int compare(Parameter o1, Parameter o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         }); 
         
-        for (UriParameter p : props) {
+        for (Parameter p : props) {
         	// atm we don't want to care about path parameters
         	if (ignorePathProperties && p.getKind() != null && p.getKind().equalsIgnoreCase("path")) continue;
             
-        	final UriParameter prop = p;
+        	final Parameter prop = p;
             
             ISWTObservableValue uiObservable = null;
             IObservableValue modelObservable = null;
@@ -624,7 +624,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     }
     
     private void createPathTab(CTabFolder folder) {
-    	List<UriParameter> props = PropertiesUtils.getPathProperties(selectedEP);
+    	List<Parameter> props = PropertiesUtils.getPathProperties(selectedEP);
 
         if (props.isEmpty()) return;
         
@@ -640,7 +640,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     }
         
     private void createCommonsTab(CTabFolder folder) {
-        List<UriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.BOTH);
+        List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.BOTH);
 
         if (props.isEmpty()) return;
         
@@ -656,7 +656,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     }
 
     private void createConsumerTab(CTabFolder folder) {
-        List<UriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.CONSUMER);
+        List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.CONSUMER);
         
         if (props.isEmpty()) return;
         
@@ -672,7 +672,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     }
 
     private void createProducerTab(CTabFolder folder) {
-        List<UriParameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.PRODUCER);
+        List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.PRODUCER);
         
         if (props.isEmpty()) return;
         

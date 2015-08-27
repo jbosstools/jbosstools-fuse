@@ -6,8 +6,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
-import org.fusesource.ide.commons.camel.tools.XmlHelper;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.xml.XmlEscapeUtility;
+
 
 
 @XmlRootElement(name="body")
@@ -25,7 +26,7 @@ public class Body implements BodyType {
 	public Body(Object value) {
 		String text = Strings.getOrElse(value, "");
 		// lets encode the text
-		text = XmlHelper.escape(text);
+		text = XmlEscapeUtility.escape(text);
 		this.value = text;
 		if (value != null) {
 			this.type = value.getClass().getCanonicalName();

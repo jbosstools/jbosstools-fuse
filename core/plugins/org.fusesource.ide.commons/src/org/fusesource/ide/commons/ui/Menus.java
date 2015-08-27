@@ -21,7 +21,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 
 
 public class Menus {

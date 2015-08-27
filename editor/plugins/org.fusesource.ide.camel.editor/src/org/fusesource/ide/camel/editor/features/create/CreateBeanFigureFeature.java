@@ -14,8 +14,8 @@ package org.fusesource.ide.camel.editor.features.create;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 
 
@@ -24,13 +24,13 @@ public class CreateBeanFigureFeature extends CreateFigureFeature {
 
 	public CreateBeanFigureFeature(IFeatureProvider fp, String name, 
 			String description, UniversalEIPNode endpoint) {
-		super(fp, name, description, CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null)).getEipModel().getEIPByClass("bean"));
+		super(fp, name, description, CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null)).getEipModel().getEIPByName("bean"));
 		this.bean = endpoint;
 	}
 
 	@Override
 	protected AbstractNode createNode() {
-		Eip eip = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null)).getEipModel().getEIPByClass("bean");
+		Eip eip = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null)).getEipModel().getEIPByName("bean");
 		UniversalEIPNode answer = new UniversalEIPNode(eip);
     	answer.setShortPropertyValue("ref", bean.getShortPropertyValue("ref"));
     	answer.setShortPropertyValue("beanType", bean.getShortPropertyValue("beanType"));

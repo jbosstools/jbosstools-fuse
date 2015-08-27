@@ -81,12 +81,12 @@ import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
 import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.Flow;
-import org.fusesource.ide.camel.model.catalog.CamelModel;
-import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 
 /**
@@ -155,7 +155,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 			processedBeans.add(name);
 			
 			CamelModel model = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null));
-			Eip eip = model.getEipModel().getEIPByClass("bean");
+			Eip eip = model.getEipModel().getEIPByName("bean");
 			UniversalEIPNode bean = new UniversalEIPNode(eip);
 			bean.setName(name);
 			bean.setShortPropertyValue("ref", name); 

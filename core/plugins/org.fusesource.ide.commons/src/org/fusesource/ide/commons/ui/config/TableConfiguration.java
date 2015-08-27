@@ -36,7 +36,7 @@ import org.fusesource.ide.commons.IFlushable;
 import org.fusesource.ide.commons.PreferencesHelper;
 import org.fusesource.ide.commons.ui.IConfigurableColumns;
 import org.fusesource.ide.commons.ui.Tables;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.osgi.service.prefs.Preferences;
 
 

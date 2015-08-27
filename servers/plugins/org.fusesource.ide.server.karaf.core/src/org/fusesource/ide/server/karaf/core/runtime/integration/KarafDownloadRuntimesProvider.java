@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.fusesource.ide.commons.util.BundleResourceUtils;
+import org.fusesource.ide.foundation.core.util.BundleUtils;
 import org.fusesource.ide.server.karaf.core.Activator;
 import org.jboss.jdf.stacks.model.Stacks;
 import org.jboss.tools.runtime.core.model.DownloadRuntime;
@@ -45,7 +45,7 @@ public class KarafDownloadRuntimesProvider extends AbstractStacksDownloadRuntime
 	@Override
 	protected Stacks[] getStacks(IProgressMonitor monitor) {
 		try {
-			File f = BundleResourceUtils.getFileFromBundle(Activator.PLUGIN_ID, "resources/karaf.yaml");
+			File f = BundleUtils.getFileFromBundle(Activator.PLUGIN_ID, "resources/karaf.yaml");
 			CustomStacksManager csm = new CustomStacksManager();
 			Stacks s = csm.getStacksFromFile(f);
 			return new Stacks[]{s};

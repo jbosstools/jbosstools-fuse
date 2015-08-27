@@ -39,7 +39,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.fusesource.ide.commons.Viewers;
 import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.jmx.commons.Messages;
 import org.fusesource.ide.jmx.commons.messages.Exchange;
 import org.fusesource.ide.jmx.commons.messages.Exchanges;

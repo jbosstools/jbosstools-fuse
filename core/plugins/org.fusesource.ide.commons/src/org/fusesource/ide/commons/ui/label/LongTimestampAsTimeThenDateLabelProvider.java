@@ -14,7 +14,7 @@ package org.fusesource.ide.commons.ui.label;
 import java.util.Date;
 
 import org.eclipse.jface.viewers.ViewerCell;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 
 public class LongTimestampAsTimeThenDateLabelProvider extends TimeThenDateLabelProvider {

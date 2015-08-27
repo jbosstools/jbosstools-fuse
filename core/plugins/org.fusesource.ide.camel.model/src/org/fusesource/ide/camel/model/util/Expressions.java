@@ -12,8 +12,7 @@
 package org.fusesource.ide.camel.model.util;
 
 import org.apache.camel.model.language.ExpressionDefinition;
-import org.fusesource.ide.commons.util.Strings;
-
+import org.fusesource.ide.foundation.core.util.Strings;
 
 public class Expressions {
 

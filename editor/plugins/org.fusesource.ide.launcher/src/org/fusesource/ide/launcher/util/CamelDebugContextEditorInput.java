@@ -26,11 +26,11 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.io.ICamelEditorInput;
 import org.fusesource.ide.camel.model.io.XmlContainerMarshaller;
-import org.fusesource.ide.commons.util.IOUtils;
+import org.fusesource.ide.foundation.core.util.IOUtils;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelDebugFacade;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
@@ -76,7 +76,7 @@ public class CamelDebugContextEditorInput  implements ICamelEditorInput {
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		return Activator.getDefault().getImageDescriptor("camel.png");
+		return null; // TODO: fix this ! Activator.getDefault().getImageDescriptor("camel.png");
 	}
 
 	@Override

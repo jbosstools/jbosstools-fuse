@@ -2,9 +2,9 @@ package org.fusesource.ide.jmx.commons.messages.contenttype;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.fusesource.ide.commons.contenttype.FindNamespaceHandlerSupport;
-import org.fusesource.ide.commons.contenttype.NamespaceXmlContentDescriberSupport;
-import org.fusesource.ide.commons.util.IFiles;
+import org.fusesource.ide.foundation.core.util.ResourceModelUtils;
+import org.fusesource.ide.foundation.core.xml.namespace.FindNamespaceHandlerSupport;
+import org.fusesource.ide.foundation.core.xml.namespace.NamespaceXmlContentDescriberSupport;
 
 
 /**
@@ -19,6 +19,6 @@ public final class MessagesNamespaceXmlContentDescriber extends NamespaceXmlCont
 	}
 
 	public static boolean isXmlFormat(IFile file) throws CoreException {
-		return IFiles.isContentTypeId(file, ID);
+		return ResourceModelUtils.isContentTypeId(file, ID);
 	}
 }

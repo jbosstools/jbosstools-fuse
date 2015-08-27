@@ -23,8 +23,8 @@ import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.commons.camel.tools.RouteXml;
 import org.fusesource.ide.commons.camel.tools.XmlModel;
-import org.fusesource.ide.commons.util.IOUtils;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.IOUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 import de.pdark.decentxml.Attribute;
 import de.pdark.decentxml.Element;

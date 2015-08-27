@@ -36,7 +36,7 @@ import org.apache.camel.model.language.SqlExpression;
 import org.apache.camel.model.language.TokenizerExpression;
 import org.apache.camel.model.language.XPathExpression;
 import org.apache.camel.model.language.XQueryExpression;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 
 

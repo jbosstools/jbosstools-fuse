@@ -64,7 +64,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.run.util.MavenLaunchUtils;
 import org.fusesource.ide.launcher.ui.Activator;

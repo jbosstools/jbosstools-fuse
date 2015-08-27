@@ -17,7 +17,6 @@ package org.fusesource.ide.commons.camel.tools;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,10 +32,13 @@ import javax.xml.validation.SchemaFactory;
 
 import org.apache.camel.spring.CamelEndpointFactoryBean;
 import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.util.IOUtils;
+import org.fusesource.ide.foundation.core.util.IOUtils;
+import org.fusesource.ide.foundation.core.xml.ClassloaderSchemaFinder;
+import org.fusesource.ide.foundation.core.xml.SchemaFinder;
+import org.fusesource.ide.foundation.core.xml.XmlNodeUtilities;
+import org.fusesource.ide.foundation.core.xml.XsdDetails;
 import org.xml.sax.SAXException;
 
-import de.pdark.decentxml.Attribute;
 import de.pdark.decentxml.Comment;
 import de.pdark.decentxml.Document;
 import de.pdark.decentxml.Element;
@@ -47,10 +49,14 @@ import de.pdark.decentxml.NodeWithChildren;
 import de.pdark.decentxml.Parent;
 import de.pdark.decentxml.Text;
 import de.pdark.decentxml.Token;
-import de.pdark.decentxml.XMLWriter;
 
 public class CamelNamespaces {
     // All these statics are the sign, that Scala's "object" is not that excellent after all...
+
+    private static final String CAMEL_SPRING_XSD_URI = "http://camel.apache.org/schema/spring/camel-spring.xsd";
+    private static final String CAMEL_BLUEPRINT_XSD_URI = "http://camel.apache.org/schema/blueprint/camel-blueprint.xsd";
+    private static final String CAMEL_SPRING_XSD = "camel-spring.xsd";
+    private static final String CAMEL_BLUEPRINT_XSD = "camel-blueprint.xsd";
 
     public static final String springNS = "http://camel.apache.org/schema/spring";
     public static final String blueprintNS = "http://camel.apache.org/schema/blueprint";
@@ -90,35 +96,11 @@ public class CamelNamespaces {
     }
 
     public static List<Node> nodesByNamespace(Document doc, final String namespaceUri, final String localName) {
-        NodeFilter<Node> filter = new NodeFilter<Node>() {
-            @Override
-            public boolean matches(Node n) {
-                if (n instanceof Element) {
-                    Namespace ns = ((Element) n).getNamespace();
-                    // TODO this doesn't work with empty prefixes!
-                    if (!((Element) n).getName().equals(localName)) {
-                        return false;
-                    } else {
-                        String uri = getNamespaceURI(n);
-                        return ns != null;// && namespaceUri.equals(uri); // (!)
-                    }
-                }
-                return false;
-            }
-        };
-        return findNodes(doc, filter);
+    	return XmlNodeUtilities.nodesByNamespace(doc, namespaceUri, localName);
     }
 
     public static List<Node> findNodes(NodeWithChildren node, NodeFilter<Node> filter) {
-        List<Node> answer = node.getNodes(filter);
-        List<Node> children = node.getNodes();
-        for (Node child: children) {
-            if (child instanceof Element) {
-                List<Node> childMatched = findNodes((Element) child, filter);
-                answer.addAll(childMatched);
-            }
-        }
-        return answer;
+    	return XmlNodeUtilities.findNodes(node, filter);
     }
 
     public static String nodeWithNamespacesToText(Node parseNode, Element namespacesNode) throws IOException {
@@ -208,64 +190,23 @@ public class CamelNamespaces {
     }
 
     public static String xmlToText(Node node) throws IOException {
-        StringWriter buffer = new StringWriter();
-        XMLWriter writer = new XMLWriter(buffer);
-        node.toXML(writer);
-        writer.close();
-
-        return buffer.toString();
+    	return XmlNodeUtilities.xmlToText(node);
     }
 
     public static String getNamespaceURI(Node node) {
-        if (node instanceof Element) {
-            Namespace ns = ((Element) node).getNamespace();
-            if (ns != null) {
-                String uri = ns.getURI();
-                if (uri == null || uri.length() == 0) {
-                    String uriAttr = ns.getPrefix().equals("") ? ((Element) node).getAttributeValue("xmlns") : null;
-                    if (uriAttr != null) {
-                        return uriAttr;
-                    } else {
-                        return getNamespaceURI(((Element) node).getParent());
-                    }
-                } else {
-                    return uri;
-                }
-            }
-        }
-        return null;
+    	return XmlNodeUtilities.getNamespaceURI(node);
     }
 
     public static void addParentNamespaces(Element element, Parent parent) {
-        if (parent instanceof Element) {
-            for (Attribute attr : ((Element) parent).getAttributes()) {
-                String name = attr.getName();
-                if (name.startsWith("xmlns") && element.getAttribute(name) == null) {
-                    element.setAttribute(name, attr.getValue());
-                }
-            }
-            addParentNamespaces(element, ((Element) parent).getParent());
-        }
-        if (parent == null && !Strings.isEmpty(element.getAttribute("xmlns").getValue()) && element.getBeginName().indexOf(":") != -1) element.setAttribute("xmlns:" + element.getBeginName().substring(0, element.getBeginName().indexOf(":")), element.getAttribute("xmlns").getValue());
+    	XmlNodeUtilities.addParentNamespaces(element, parent);
     }
 
     public static Document getOwnerDocument(Node node) {
-        if (node instanceof Element) {
-            return ((Element) node).getDocument();
-        } else if (node instanceof Document) {
-            return (Document) node;
-        }
-        return null;
+    	return XmlNodeUtilities.getOwnerDocument(node);
     }
 
     public static void replaceChild(Parent parent, Node newChild, Node oldNode) {
-        int idx = parent.nodeIndexOf(oldNode);
-        if (idx < 0) {
-            parent.addNode(newChild);
-        } else {
-            parent.removeNode(idx);
-            parent.addNode(idx, newChild);
-        }
+    	XmlNodeUtilities.replaceChild(parent, newChild, oldNode);
     }
 
     public static URL findResource(String name, Iterable<ClassLoader> classLoaders) {
@@ -294,20 +235,15 @@ public class CamelNamespaces {
     }
 
     public static void loadSchemasWith(final SchemaFinder finder) throws IOException, SAXException {
-        loadSchemas(new SchemaFinder() {
-            @Override
-            public URL findSchema(XsdDetails xsd) {
-                return finder.findSchema(xsd);
-            }
-        });
+        loadSchemas(finder);
     }
-
+    
     private static void loadSchemas(SchemaFinder loader) throws SAXException, IOException {
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
         XsdDetails[] xsds = new XsdDetails[] {
-            new XsdDetails("camel-spring.xsd", "http://camel.apache.org/schema/spring/camel-spring.xsd", CamelEndpointFactoryBean.class),
-            new XsdDetails("camel-blueprint.xsd", "http://camel.apache.org/schema/blueprint/camel-blueprint.xsd", org.apache.camel.blueprint.CamelEndpointFactoryBean.class)
+            new XsdDetails(CAMEL_SPRING_XSD, CAMEL_SPRING_XSD_URI, CamelEndpointFactoryBean.class),
+            new XsdDetails(CAMEL_BLUEPRINT_XSD, CAMEL_BLUEPRINT_XSD_URI, org.apache.camel.blueprint.CamelEndpointFactoryBean.class)
         };
 
         List<Source> sources = new ArrayList<Source>(xsds.length);
@@ -327,12 +263,7 @@ public class CamelNamespaces {
 
     public static Schema camelSchemas() throws IOException, SAXException {
         if (_schema == null) {
-            loadSchemas(new SchemaFinder() {
-                @Override
-                public URL findSchema(XsdDetails details) {
-                    return details.getClassLoader().getResource(details.getPath());
-                }
-            });
+            loadSchemas(new ClassloaderSchemaFinder());
         }
         return _schema;
     }

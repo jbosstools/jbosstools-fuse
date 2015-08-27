@@ -11,8 +11,6 @@
 
 package org.fusesource.ide.camel.model;
 
-import static org.fusesource.ide.commons.util.Strings.getOrElse;
-
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.model.language.LanguageExpression;
 import org.eclipse.jface.viewers.CellEditor;
@@ -26,6 +24,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
  * @author jstrachan
@@ -145,7 +144,7 @@ public class ExpressionCellEditor extends CellEditor {
 			this.value = new LanguageExpression(expr.getLanguage(), expr.getExpression());
 			
 //			textExpression.setText(getOrElse(this.value.getExpression()));
-			String language = getOrElse(this.value.getLanguage());
+			String language = Strings.getOrElse(this.value.getLanguage());
 //			comboLanguage.setText(language);
 		} else {
 			Activator.getLogger().warning("Bad value ignored: " + value);

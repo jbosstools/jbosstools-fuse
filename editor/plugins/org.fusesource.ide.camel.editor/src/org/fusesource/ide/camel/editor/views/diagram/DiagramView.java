@@ -28,7 +28,7 @@ import org.fusesource.ide.camel.model.RouteContainer;
 import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.graph.GraphFilter;
 import org.fusesource.ide.graph.GraphLabelProviderSupport;
 import org.fusesource.ide.graph.GraphViewSupport;

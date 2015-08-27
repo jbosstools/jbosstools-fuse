@@ -31,7 +31,7 @@ import org.fusesource.ide.camel.model.generated.Route;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
 import org.fusesource.ide.commons.camel.tools.ValidationHandler;
 import org.fusesource.ide.commons.camel.tools.XmlModel;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
 
 /**
  * @author lhein

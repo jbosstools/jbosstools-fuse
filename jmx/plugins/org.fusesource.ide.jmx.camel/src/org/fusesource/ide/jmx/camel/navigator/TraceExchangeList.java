@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.xml.bind.JAXBException;
 
 import org.apache.camel.api.management.mbean.BacklogTracerEventMessage;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.jmx.commons.messages.Exchange;
 import org.fusesource.ide.jmx.commons.messages.Exchanges;
 import org.fusesource.ide.jmx.commons.messages.IExchange;
