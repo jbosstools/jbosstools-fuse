@@ -20,8 +20,8 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 		"in a particular case may include the Eclipse Public License, the GNU\n" +
 		"Lesser General Public License, and/or certain other open source\n" +
 		"licenses. For precise licensing details, consult the corresponding\n" +
-		"source code, or contact Red Hat Legal Affairs, 1801 Varsity Drive,\n" +
-		"Raleigh NC 27606 USA.\n";
+		"source code, or contact Red Hat, Attn: General Counsel,\n" + 
+		"100 East Davie St., Raleigh NC 27601 USA.\n";
 
 	private static final String FEATURE_DESCRIPTION = "Provides SAP JCo3 and IDoc3 Libraries for JBoss Fuse SAP Tooling Suite installations.";
 
@@ -79,8 +79,8 @@ public class SapLibrariesFeatureArchive extends SAPArchive {
 			"in a particular case may include the Eclipse Public License, the GNU\n" +
 			"Lesser General Public License, and/or certain other open source\n" +
 			"licenses. For precise licensing details, consult the corresponding\n" +
-			"source code, or contact Red Hat Legal Affairs, 1801 Varsity Drive,\n" +
-			"Raleigh NC 27606 USA.\n" +
+			"source code, or contact Red Hat, Attn: General Counsel,\n" + 
+			"100 East Davie St., Raleigh NC 27601 USA.\n" + 
 			"</p>\n" +
 			"</body>\n" +
 			"</html>";
