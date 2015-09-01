@@ -14,15 +14,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.databinding.property;bundle-version="1.4.200",
  org.eclipse.core.databinding.beans;bundle-version="1.2.200",
  org.eclipse.jface.databinding;bundle-version="1.6.200",
- org.fusesource.ide.camel.editor,
- org.fusesource.ide.camel.model,
- org.eclipse.graphiti,
- org.eclipse.graphiti.mm,
- org.eclipse.graphiti.ui,
- org.fusesource.ide.commons,
- org.fusesource.ide.project,
+ org.eclipse.graphiti;bundle-version="0.11.2",
+ org.eclipse.graphiti.mm;bundle-version="0.11.2",
+ org.eclipse.graphiti.ui;bundle-version="0.11.2",
  org.eclipse.m2e.core;bundle-version="1.5.0",
- org.eclipse.m2e.maven.runtime;bundle-version="1.5.0"
+ org.eclipse.m2e.maven.runtime;bundle-version="1.5.0",
+ org.fusesource.ide.commons,
+ org.fusesource.ide.camel.model,
+ org.fusesource.ide.camel.editor,
+ org.fusesource.ide.project
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
