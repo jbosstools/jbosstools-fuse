@@ -101,6 +101,7 @@ public class Downloader {
         ignoredArtifacts.add("camel-archetype-scr");
         ignoredArtifacts.add("camel-archetype-war");
         ignoredArtifacts.add("camel-archetype-webconsole");
+        ignoredArtifacts.add("wildfly-camel-archetype-cdi");
         
     }
 
@@ -166,13 +167,14 @@ public class Downloader {
 
     public void start() throws Exception {
         indexer = new MavenIndexerFacade();
-        String[] repositories = { "http://repository.jboss.org/nexus/content/groups/ea/", "http://repo1.maven.org/maven2" };
+        String[] repositories = { "http://origin-repository.jboss.org/nexus/content/groups/ea", "http://repository.jboss.org/nexus/content/groups/ea/", "http://repository.jboss.org/nexus/content/groups/fs-public/", "http://repo1.maven.org/maven2" };
         indexer.setRepositories(repositories);
         indexer.setCacheDirectory(new File(targetDir(), "mavenIndexer"));
         indexer.start();
 
         List<Repository> repos = Aether.defaultRepositories();
         repos.add(new Repository("ea.repository.jboss.org", "http://repository.jboss.org/nexus/content/groups/ea"));
+        repos.add(new Repository("releases.repository.jboss.org", "http://repository.jboss.org/nexus/content/groups/fs-public/"));
         aether = new Aether(Aether.USER_REPOSITORY, repos);
     }
 
@@ -198,8 +200,7 @@ public class Downloader {
         try {
             downloadArchetypesForGroup(out, "org.apache.camel.archetypes", System.getProperty("camel.version"));
             downloadArchetypesForGroup(out, "org.apache.cxf.archetype", System.getProperty("cxf.version"));
-            // removed fabric8 archetypes
-//            downloadArchetypesForGroup(out, "io.fabric8.archetypes", System.getProperty("fabric.version"));
+            downloadArchetypesForGroup(out, "org.wildfly.camel.archetypes", System.getProperty("wildfly.version"));
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);
         } finally {

@@ -101,6 +101,10 @@
 							<key>cxf.version</key>
 							<value>${cxf.version}</value>
 						</systemProperty>
+						<systemProperty>
+							<key>wildfly.version</key>
+							<value>${wildfly.version}</value>
+						</systemProperty>
 					</systemProperties>
 				</configuration>
 			</plugin>

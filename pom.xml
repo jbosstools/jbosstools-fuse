@@ -64,6 +64,9 @@
 
     <!-- codegen/buildtools fabric8 versions (only build time deps) -->
     <fabric.version>1.2.0.redhat-133</fabric.version>
+
+    <!-- wildfly archetypes version -->
+    <wildfly.version>2.3.0.redhat-621031</wildfly.version>
     
     <!-- data transformation versions -->
     <version.fasterxml>2.2.0</version.fasterxml>
@@ -83,7 +86,6 @@
     <json-simple.version>1.1.1</json-simple.version>
     <apache.http.version>4.3.6</apache.http.version>
     <apache.httpcore.version>4.3.3</apache.httpcore.version>
-
   </properties>
 
   <modules>
