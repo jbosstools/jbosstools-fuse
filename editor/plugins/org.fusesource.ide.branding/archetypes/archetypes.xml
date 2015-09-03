@@ -9,4 +9,5 @@
 <archetype groupId='org.apache.camel.archetypes' artifactId='camel-archetype-web' version='2.15.1.redhat-620133'>Creates a new Camel web project that deploys the Camel routes as a WAR</archetype>
 <archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxrs-service' version='3.0.4.redhat-620133'>Simple CXF JAX-RS webapp service using Spring configuration</archetype>
 <archetype groupId='org.apache.cxf.archetype' artifactId='cxf-jaxws-javafirst' version='3.0.4.redhat-620133'>Creates a project for developing a Web service starting from Java code</archetype>
+<archetype groupId='org.wildfly.camel.archetypes' artifactId='wildfly-camel-archetype-spring' version='2.3.0.redhat-621031'>Creates a WildFly Camel Spring application</archetype>
 </archetypes>
