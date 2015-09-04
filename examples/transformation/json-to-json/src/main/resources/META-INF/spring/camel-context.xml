@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+   <!-- Camel route -->
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+  <endpoint uri="dozer:json2json?sourceModel=abcorderschema.AbcOrderSchema&amp;targetModel=xyzorderschema.XyzOrderSchema&amp;marshalId=transform-json&amp;unmarshalId=abcorderschemaAbcOrderSchema&amp;mappingFile=transformation.xml" id="json2json"/>
+  <dataFormats>
+    <json library="Jackson" unmarshalTypeName="abcorderschema.AbcOrderSchema" id="abcorderschemaAbcOrderSchema"/>
+    <json library="Jackson" id="transform-json"/>
+  </dataFormats>
+  <route>
+    <from uri="file:src/data?fileName=abc-order.xml&amp;noop=true"/>
+    <setHeader headerName="approval">
+      <constant>AUTO</constant>
+    </setHeader>
+    <to ref="json2json"/>
+    <to uri="file:target/messages?fileName=xyz-order.json"/>
+  </route>
+</camelContext>
+</beans>
