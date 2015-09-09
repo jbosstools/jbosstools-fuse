@@ -9,12 +9,12 @@
     <json library="Jackson" id="transform-json"/>
   </dataFormats>
   <route>
-    <from uri="file:src/data?fileName=abc-order.xml&amp;noop=true"/>
+    <from uri="file:/tmp/inbox?fileName=abc-order.json"/>
     <setHeader headerName="approval">
       <constant>AUTO</constant>
     </setHeader>
     <to ref="json2json"/>
-    <to uri="file:target/messages?fileName=xyz-order.json"/>
+    <to uri="file:/tmp/outbox?fileName=xyz-order.json"/>
   </route>
 </camelContext>
 </beans>

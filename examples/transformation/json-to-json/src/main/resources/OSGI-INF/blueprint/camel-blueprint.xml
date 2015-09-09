@@ -3,18 +3,18 @@
 	<endpoint
 		uri="dozer:json2json?sourceModel=abcorderschema.AbcOrderSchema&amp;targetModel=xyzorderschema.XyzOrderSchema&amp;marshalId=transform-json&amp;unmarshalId=abcorderschemaAbcOrderSchema&amp;mappingFile=transformation.xml"
 		id="json2json" />
-	<dataFormats>
+  <dataFormats>
 		<json library="Jackson" unmarshalTypeName="abcorderschema.AbcOrderSchema"
 			id="abcorderschemaAbcOrderSchema" />
-		<json library="Jackson" id="transform-json" />
-	</dataFormats>
-	<route>
-		<from uri="file:/tmp/inbox?fileName=abc-order.xml" />
-		<setHeader headerName="approval">
-			<constant>AUTO</constant>
-		</setHeader>
-		<to ref="json2json" />
-		<to uri="file:/tmp/outbox?fileName=xyz-order.json" />
-	</route>
+    <json library="Jackson" id="transform-json"/>
+  </dataFormats>
+  <route>
+    <from uri="file:/tmp/inbox?fileName=abc-order.json"/>
+    <setHeader headerName="approval">
+      <constant>AUTO</constant>
+    </setHeader>
+    <to ref="json2json"/>
+    <to uri="file:/tmp/outbox?fileName=xyz-order.json"/>
+  </route>
 	</camelContext>
 </blueprint>

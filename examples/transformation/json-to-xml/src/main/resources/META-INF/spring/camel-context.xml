@@ -9,12 +9,12 @@
     <jaxb contextPath="xyzorder" id="xyzorder"/>
   </dataFormats>
   <route>
-    <from uri="file:src/data?fileName=abc-order.xml&amp;noop=true"/>
+    <from uri="file:/tmp/inbox?fileName=abc-order.json"/>
     <setHeader headerName="approval">
       <constant>AUTO</constant>
     </setHeader>
     <to ref="json2xml"/>
-    <to uri="file:target/messages?fileName=xyz-order.json"/>
+    <to uri="file:/tmp/outbox?fileName=xyz-order.xml"/>
   </route>
 </camelContext>
 </beans>
