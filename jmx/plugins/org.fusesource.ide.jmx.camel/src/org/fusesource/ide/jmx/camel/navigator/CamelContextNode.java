@@ -397,6 +397,7 @@ ImageProvider {
 
 	@Override
 	public List<IExchange> browseExchanges() {
+		if (isTracing() == false) return new ArrayList<IExchange>();
 		// String nodeId = getContextId();
 		// TODO remove when we can browse by context ID
 		String nodeId = null;
@@ -471,6 +472,7 @@ ImageProvider {
 				}
 			}			
 		} catch (Exception e) {
+			e.printStackTrace();
 			CamelJMXPlugin.showUserError("Failed to get tracing messages",
 					"Failed to get tracing messages on CamelContext " + this, e);
 		}
