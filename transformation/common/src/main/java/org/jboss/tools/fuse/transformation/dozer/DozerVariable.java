@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -22,7 +22,7 @@ public class DozerVariable implements org.jboss.tools.fuse.transformation.Variab
 
     /**
      * Create a new Variable.
-     * 
+     *
      * @param variable dozer variable
      */
     public DozerVariable(Variable variable) {
@@ -33,17 +33,17 @@ public class DozerVariable implements org.jboss.tools.fuse.transformation.Variab
     public String getValue() {
         return variable.getContent();
     }
-    
+
     @Override
     public void setValue(String value) {
         variable.setContent(value);
     }
-    
+
     @Override
     public String getName() {
         return variable.getName();
     }
-    
+
     @Override
     public void setName(String name) {
         variable.setName(name);
@@ -51,7 +51,7 @@ public class DozerVariable implements org.jboss.tools.fuse.transformation.Variab
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof DozerVariable) || obj == null) {
+        if (!(obj instanceof DozerVariable)) {
             return false;
         }
         if (obj == this) {
@@ -71,7 +71,7 @@ public class DozerVariable implements org.jboss.tools.fuse.transformation.Variab
     public String toString() {
         return "variable[name:" + variable.getName() + ",value:" + variable.getContent() + "]";
     }
-    
+
     Variable getVariable() {
         return variable;
     }

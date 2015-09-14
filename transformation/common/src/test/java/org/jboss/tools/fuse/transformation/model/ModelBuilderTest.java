@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,  
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -36,37 +36,37 @@ public class ModelBuilderTest {
         Model model = ModelBuilder.fromJavaClass(SuperSuper.class);
         Assert.assertEquals(3, model.listFields().size());
     }
-    
+
     @Test
     public void screenForNumbers() {
         Model model = ModelBuilder.fromJavaClass(ContainsNumber.class);
         Assert.assertEquals(1, model.listFields().size());
     }
-    
+
     @Test
     public void buildWithEnum() {
         Model model = ModelBuilder.fromJavaClass(ClassWithEnum.class);
         Assert.assertEquals(1, model.listFields().size());
     }
-    
+
     @Test
     public void buildWithDateEtc() {
         Model model = ModelBuilder.fromJavaClass(ClassWithDateEtc.class);
         Assert.assertEquals(4, model.listFields().size());
     }
-    
+
     @Test
     public void selfReferenceCycle() {
         Model model = ModelBuilder.fromJavaClass(SelfReference.class);
         Assert.assertEquals(2, model.listFields().size());
     }
-    
+
     @Test
     public void childAncestorCycle() {
         Model model = ModelBuilder.fromJavaClass(Parent.class);
         Assert.assertEquals(7, model.listFields().size());
     }
-    
+
     @Test
     public void listsOfStringsAndNumbers() {
         Model model = ModelBuilder.fromJavaClass(ListOfStringsAndNumbers.class);
@@ -83,19 +83,19 @@ class ListOfStringsAndNumbers {
 class NoSuper {
     private String fieldOne;
     private String fieldTwo;
-    
+
     public String getFieldOne() {
         return fieldOne;
     }
-    
+
     public void setFieldOne(String fieldOne) {
         this.fieldOne = fieldOne;
     }
-    
+
     public String getFieldTwo() {
         return fieldTwo;
     }
-    
+
     public void setFieldTwo(String fieldTwo) {
         this.fieldTwo = fieldTwo;
     }
@@ -109,13 +109,13 @@ class ClassWithDateEtc {
 }
 
 class ClassWithEnum {
-    enum MY_ENUM {one, two, three};
+    enum MY_ENUM {one, two, three}
     private MY_ENUM myEnum;
-    
+
     public MY_ENUM getEnum() {
         return myEnum;
     }
-    
+
     public void setEnum(MY_ENUM myEnum) {
         this.myEnum = myEnum;
     }
@@ -131,7 +131,7 @@ class SuperSuper extends NoSuper {
     public void setFieldThree(String fieldThree) {
         this.fieldThree = fieldThree;
     }
-    
+
 }
 
 class ContainsNumber {
@@ -144,7 +144,7 @@ class ContainsNumber {
     public void setBigNum(BigDecimal bigNum) {
         this.bigNum = bigNum;
     }
-    
+
 }
 
 class SelfReference {

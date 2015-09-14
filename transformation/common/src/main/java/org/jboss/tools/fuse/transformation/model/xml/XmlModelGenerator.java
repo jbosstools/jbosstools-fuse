@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -17,10 +17,12 @@ import java.io.FileInputStream;
 import java.io.PrintStream;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -42,10 +44,13 @@ import com.sun.codemodel.JAnnotationValue;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JFormatter;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JPackage;
+import com.sun.codemodel.JPrimitiveType;
 import com.sun.codemodel.JType;
+import com.sun.codemodel.JVar;
 import com.sun.tools.xjc.api.Mapping;
 import com.sun.tools.xjc.api.S2JJAXBModel;
 import com.sun.tools.xjc.api.SchemaCompiler;
@@ -57,98 +62,60 @@ import com.sun.tools.xjc.api.XJC;
  */
 public class XmlModelGenerator {
 
-    /**
-     * Generates Java classes in targetPath directory given an XML schema.
-     * 
-     * @param schemaFile file reference to the XML schema
-     * @param packageName package name for generated model classes
-     * @param targetPath directory where class source will be generated
-     * @return the generated code model
-     * @throws Exception failure during model generation
-     */
-    public JCodeModel generateFromSchema(final File schemaFile, final String packageName,
-            final File targetPath) throws Exception {
-
-        final SchemaCompiler sc = createSchemaCompiler(schemaFile);
-        sc.forcePackageName(packageName);
-
-        final S2JJAXBModel s2 = sc.bind();
-        if (s2 == null) {
-            throw new Exception("Failed to parse schema into JAXB Model");
+    void addMissingSettersForLists(Iterator<JDefinedClass> iterator,
+                                   JPrimitiveType voidType) {
+        while (iterator.hasNext()) {
+            JDefinedClass definedClass = iterator.next();
+            addMissingSettersForLists(definedClass.classes(), voidType);
+            Set<JMethod> listGetMethods = new HashSet<>();
+            // Collect getters for all list fields
+            for (JMethod method : definedClass.methods()) {
+                if (method.name().startsWith("get") && method.type().name().startsWith("List<"))
+                    listGetMethods.add(method);
+            }
+            if (!listGetMethods.isEmpty()) {
+                // Remove getters w/ matching setters
+                for (JMethod method : definedClass.methods()) {
+                    if (method.name().startsWith("set")) {
+                        for (Iterator<JMethod> iter = listGetMethods.iterator(); iter.hasNext();) {
+                            JMethod getMethod = iter.next();
+                            if (method.name().substring(3).equals(getMethod.name().substring(3))) {
+                                iter.remove();
+                                break;
+                            }
+                        }
+                    }
+                }
+                // Add missing setters
+                for (JMethod getMethod : listGetMethods) {
+                    String name = getMethod.name().substring(3);
+                    JMethod setMethod = definedClass.method(getMethod.mods().getValue(),
+                                                            voidType,
+                                                            "set" + name);
+                    name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
+                    JVar prm = setMethod.param(0, getMethod.type(), name);
+                    setMethod.body().assign(JExpr._this().ref(name), prm);
+                }
+            }
         }
-        final JCodeModel jcm = s2.generateCode(null, null);
-        try (PrintStream status = new PrintStream(new ByteArrayOutputStream())) {
-            jcm.build(targetPath, status);
-        }
+    }
 
-        return jcm;
+    @SuppressWarnings("resource")
+    private SchemaCompiler createSchemaCompiler(final File schemaFile) throws Exception {
+        final SchemaCompiler sc = XJC.createSchemaCompiler();
+        final FileInputStream schemaStream = new FileInputStream(schemaFile);
+        final InputSource is = new InputSource(schemaStream);
+
+        // to work around windows platform issue
+        String id = schemaFile.getAbsolutePath().replace('\\', '/');
+        is.setSystemId(id);
+
+        sc.parseSchema(is);
+        return sc;
     }
 
     /**
-     * Generates Java classes in targetPath directory given an XML instance
-     * document. This method generates a schema at the path specified by
-     * schemaFile and then calls generateFromSchema to generate Java classes.
-     * 
-     * @param instanceFile file containing xml instance document
-     * @param schemaFile a file reference where the schema should be generated
-     * @param packageName package name for generated model classes
-     * @param targetPath directory where class source will be generated
-     * @return the generated code model
-     * @throws Exception failure during model generation
-     */
-    public JCodeModel generateFromInstance(final File instanceFile, final File schemaFile,
-            final String packageName, final File targetPath) throws Exception {
-        // Step 1 - generate schema from instance doc
-        final Inst2XsdOptions options = new Inst2XsdOptions();
-        options.setDesign(Inst2XsdOptions.DESIGN_RUSSIAN_DOLL);
-        final XmlObject[] xml = new XmlObject[] {XmlObject.Factory.parse(instanceFile)};
-        final SchemaDocument[] schemaDocs = Inst2Xsd.inst2xsd(xml, options);
-        schemaDocs[0].save(schemaFile, new XmlOptions().setSavePrettyPrint());
-
-        // Step 2 - call generateFromSchema with generated schema
-        return generateFromSchema(schemaFile, packageName, targetPath);
-    }
-    
-    /**
-     * Returns a list of top-level element definitions for a given schema. 
-     * @param schemaFile the schema to check for top-level elements
-     * @return list of elements 
-     * @throws Exception
-     */
-    public List<QName> getElementsFromSchema(final File schemaFile) throws Exception {
-        List<QName> elements = new LinkedList<QName>();
-        SchemaCompiler sc = createSchemaCompiler(schemaFile);
-        final S2JJAXBModel s2 = sc.bind();
-        if (s2 == null) {
-            throw new Exception("Failed to parse schema into JAXB Model");
-        }
-        for (Mapping mapping : s2.getMappings()) {
-            elements.add(mapping.getElement());
-        }
-        
-        return elements;
-    }
-    
-    /**
-     * Returns the qualified name of the root element in the specified XML instance
-     * document.
-     * @param instanceFile XML instance doc
-     * @return root element name
-     * @throws Exception failed to parse instance document
-     */
-    public QName getRootElementName(final File instanceFile) throws Exception {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        Document doc = dbf.newDocumentBuilder().parse(instanceFile);
-        Element root = doc.getDocumentElement();
-        if (root == null) {
-            throw new Exception("Invalid instance document : no root element");
-        }
-        return new QName(root.getNamespaceURI(), root.getLocalName());
-    }
-    
-    /**
-     * Returns a mapping of element names to generated Java classes for a given 
+     * Returns a mapping of element names to generated Java classes for a given
      * JCodeModel.  Note that the element names are not qualfied, they are all the
      * local name of the element.
      * @param model generated model from a schema or instance document
@@ -157,7 +124,7 @@ public class XmlModelGenerator {
     public Map<String, String> elementToClassMapping(JCodeModel model) {
         Map<String, String> mappings = new HashMap<String, String>();
         Iterator<JPackage> packageIt = model.packages();
-        
+
         // We need to search through all generated classes of generated packages
         while (packageIt.hasNext()) {
             Iterator<JDefinedClass> classIt = packageIt.next().classes();
@@ -188,20 +155,62 @@ public class XmlModelGenerator {
         }
         return mappings;
     }
-    
-    private SchemaCompiler createSchemaCompiler(final File schemaFile) throws Exception {
-        final SchemaCompiler sc = XJC.createSchemaCompiler();
-        final FileInputStream schemaStream = new FileInputStream(schemaFile);
-        final InputSource is = new InputSource(schemaStream);
 
-        // to work around windows platform issue
-        String id = schemaFile.getAbsolutePath().replace('\\', '/');
-        is.setSystemId(id);
-        
-        sc.parseSchema(is);
-        return sc;
+    /**
+     * Generates Java classes in targetPath directory given an XML instance
+     * document. This method generates a schema at the path specified by
+     * schemaFile and then calls generateFromSchema to generate Java classes.
+     *
+     * @param instanceFile file containing xml instance document
+     * @param schemaFile a file reference where the schema should be generated
+     * @param packageName package name for generated model classes
+     * @param targetPath directory where class source will be generated
+     * @return the generated code model
+     * @throws Exception failure during model generation
+     */
+    public JCodeModel generateFromInstance(final File instanceFile, final File schemaFile,
+            final String packageName, final File targetPath) throws Exception {
+        // Step 1 - generate schema from instance doc
+        final Inst2XsdOptions options = new Inst2XsdOptions();
+        options.setDesign(Inst2XsdOptions.DESIGN_RUSSIAN_DOLL);
+        final XmlObject[] xml = new XmlObject[] {XmlObject.Factory.parse(instanceFile)};
+        final SchemaDocument[] schemaDocs = Inst2Xsd.inst2xsd(xml, options);
+        schemaDocs[0].save(schemaFile, new XmlOptions().setSavePrettyPrint());
+
+        // Step 2 - call generateFromSchema with generated schema
+        return generateFromSchema(schemaFile, packageName, targetPath);
     }
-    
+
+    /**
+     * Generates Java classes in targetPath directory given an XML schema.
+     *
+     * @param schemaFile file reference to the XML schema
+     * @param packageName package name for generated model classes
+     * @param targetPath directory where class source will be generated
+     * @return the generated code model
+     * @throws Exception failure during model generation
+     */
+    public JCodeModel generateFromSchema(final File schemaFile, final String packageName,
+            final File targetPath) throws Exception {
+
+        final SchemaCompiler sc = createSchemaCompiler(schemaFile);
+        sc.forcePackageName(packageName);
+
+        final S2JJAXBModel s2 = sc.bind();
+        if (s2 == null) {
+            throw new Exception("Failed to parse schema into JAXB Model");
+        }
+        final JCodeModel jcm = s2.generateCode(null, null);
+        for (Iterator<JPackage> iter = jcm.packages(); iter.hasNext();) {
+            addMissingSettersForLists(iter.next().classes(), jcm.VOID);
+        }
+        try (PrintStream status = new PrintStream(new ByteArrayOutputStream())) {
+            jcm.build(targetPath, status);
+        }
+
+        return jcm;
+    }
+
     private JAnnotationUse getAnnotation(JAnnotatable annotated, String type) {
         JAnnotationUse annotation = null;
         for (JAnnotationUse ann : annotated.annotations()) {
@@ -212,7 +221,7 @@ public class XmlModelGenerator {
         }
         return annotation;
     }
-    
+
     private String getAnnotationValue(JAnnotationUse annotation, String elementName) {
         JAnnotationValue jaVal = annotation.getAnnotationMembers().get(elementName);
         if (jaVal == null) {
@@ -221,5 +230,43 @@ public class XmlModelGenerator {
         StringWriter sw = new StringWriter();
         jaVal.generate(new JFormatter(sw));
         return sw.toString().replaceAll("\"", "");
+    }
+
+    /**
+     * Returns a list of top-level element definitions for a given schema.
+     * @param schemaFile the schema to check for top-level elements
+     * @return list of elements
+     * @throws Exception
+     */
+    public List<QName> getElementsFromSchema(final File schemaFile) throws Exception {
+        List<QName> elements = new LinkedList<QName>();
+        SchemaCompiler sc = createSchemaCompiler(schemaFile);
+        final S2JJAXBModel s2 = sc.bind();
+        if (s2 == null) {
+            throw new Exception("Failed to parse schema into JAXB Model");
+        }
+        for (Mapping mapping : s2.getMappings()) {
+            elements.add(mapping.getElement());
+        }
+
+        return elements;
+    }
+
+    /**
+     * Returns the qualified name of the root element in the specified XML instance
+     * document.
+     * @param instanceFile XML instance doc
+     * @return root element name
+     * @throws Exception failed to parse instance document
+     */
+    public QName getRootElementName(final File instanceFile) throws Exception {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        Document doc = dbf.newDocumentBuilder().parse(instanceFile);
+        Element root = doc.getDocumentElement();
+        if (root == null) {
+            throw new Exception("Invalid instance document : no root element");
+        }
+        return new QName(root.getNamespaceURI(), root.getLocalName());
     }
 }
