@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,  
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -26,7 +26,7 @@ import org.junit.Test;
 import com.sun.codemodel.JCodeModel;
 
 public class XmlModelGeneratorTest {
-    
+
     private static String XML_INST_PATH =
             "src/test/resources/org/jboss/tools/fuse/transformation/model/xml/abc-order.xml";
     private static String XML_INST_PATH_2 =
@@ -47,7 +47,7 @@ public class XmlModelGeneratorTest {
         modelGen.generateFromInstance(
                 xmlInst, genSchema, "test.generateFromInstance",
                 new File("target"));
-        
+
         // Check for generated schema
         Assert.assertTrue(genSchema.exists());
         // Check for generated classes
@@ -55,7 +55,7 @@ public class XmlModelGeneratorTest {
         Assert.assertTrue(new File(genDir, "ObjectFactory.java").exists());
         Assert.assertTrue(new File(genDir, "ABCOrder.java").exists());
     }
-    
+
     @Test
     public void listElementsFromSchema() throws Exception {
         XmlModelGenerator modelGen = new XmlModelGenerator();
@@ -65,21 +65,21 @@ public class XmlModelGeneratorTest {
         Assert.assertTrue(elements.contains(new QName("urn:abc", "ZABCOrder")));
         Assert.assertTrue(elements.contains(new QName("urn:abc", "header")));
     }
-    
+
     @Test
     public void getRootElement() throws Exception {
         XmlModelGenerator modelGen = new XmlModelGenerator();
         QName rootName = modelGen.getRootElementName(new File(XML_INST_PATH));
         Assert.assertEquals(new QName("ABCOrder"), rootName);
     }
-    
+
     @Test
     public void getRootElementNamespace() throws Exception {
         XmlModelGenerator modelGen = new XmlModelGenerator();
         QName rootName = modelGen.getRootElementName(new File(XML_INST_PATH_2));
         Assert.assertEquals(new QName("http://example.org", "ABCOrder"), rootName);
     }
-    
+
     @Test
     public void getGeneratedElementsMultipleElements() throws Exception {
         File xmlSchema = new File(XML_SCHEMA_PATH);
@@ -91,9 +91,9 @@ public class XmlModelGeneratorTest {
         Assert.assertEquals("test.getGeneratedElementsMultipleElements.Header", mappings.get("header"));
         Assert.assertEquals("test.getGeneratedElementsMultipleElements.OrderItems", mappings.get("order-items"));
         Assert.assertEquals("test.getGeneratedElementsMultipleElements.ZABCOrder", mappings.get("ZABCOrder"));
-        
+
     }
-    
+
     @Test
     public void getGeneratedElementsXmlElementDecl() throws Exception {
         File xmlSchema = new File(XML_SCHEMA_PATH_3);
@@ -104,9 +104,9 @@ public class XmlModelGeneratorTest {
         Assert.assertEquals(2, mappings.size());
         Assert.assertEquals("test.getGeneratedElementsXmlElementDecl.ApplicationType", mappings.get("Application"));
         //Assert.assertEquals("test.getGeneratedElementsXmlElementDecl.ApplicationType", mappings.get("Application"));
-        
+
     }
-    
+
     @Test
     public void getGeneratedElementsSingleElement() throws Exception {
         File xmlSchema = new File(XML_SCHEMA_PATH_2);
@@ -116,6 +116,6 @@ public class XmlModelGeneratorTest {
         Map<String, String> mappings = modelGen.elementToClassMapping(codeModel);
         Assert.assertEquals(1, mappings.size());
         Assert.assertEquals("test.getGeneratedElementsSingleElement.ABCOrder", mappings.get("ABCOrder"));
-        
+
     }
 }

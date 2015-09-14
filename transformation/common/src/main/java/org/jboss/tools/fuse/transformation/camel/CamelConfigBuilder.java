@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -49,12 +49,12 @@ public abstract class CamelConfigBuilder {
 
     protected Element camelConfig;
     private JAXBContext jaxbCtx;
-    public enum MarshalType {MARSHALLER, UNMARSHALLER};
+    public enum MarshalType {MARSHALLER, UNMARSHALLER}
 
     /**
      * Load a Spring application context containing Camel configuration from the
      * specified file.
-     * 
+     *
      * @param file reference to a file containing Camel configuration
      * @return a config builder loaded with camel configuration
      * @throws Exception failed to read/parse configuration file
@@ -72,7 +72,7 @@ public abstract class CamelConfigBuilder {
     /**
      * Returns the root element in the Spring application context which contains
      * bean definitions as well as the Camel Context configuration.
-     * 
+     *
      * @return the <beans> element from the application context
      */
     public Element getConfiguration() {
@@ -87,7 +87,7 @@ public abstract class CamelConfigBuilder {
         }
         return camelConfig;
     }
-    
+
     public DataFormatDefinition createDataFormat(
             TransformType type, String className, MarshalType marshalType) throws Exception {
         DataFormatDefinition dataFormat;
@@ -110,14 +110,14 @@ public abstract class CamelConfigBuilder {
 
         return dataFormat;
     }
-    
-    public CamelEndpoint createEndpoint(String transformId, 
+
+    public CamelEndpoint createEndpoint(String transformId,
             String dozerConfigPath,
-            String sourceClass, 
-            String targetClass, 
+            String sourceClass,
+            String targetClass,
             DataFormatDefinition unmarshaller,
             DataFormatDefinition marshaller) {
-        
+
         String unmarshallerId = unmarshaller != null ? unmarshaller.getId() : null;
         String marshallerId = marshaller != null ? marshaller.getId() : null;
         String endpointUri = EndpointHelper.createEndpointUri(dozerConfigPath,
@@ -129,7 +129,7 @@ public abstract class CamelConfigBuilder {
      * Add a transformation to the Camel configuration. This method adds all
      * required data formats, Dozer configuration, and the camel-transform
      * endpoint definition to the Camel config.
-     * 
+     *
      * @param transformId id for the transformation
      * @param dozerConfigPath path to Dozer config for transformation
      * @param source type of the source data
@@ -159,7 +159,7 @@ public abstract class CamelConfigBuilder {
     /**
      * Persists the in-memory state of Camel configuration to the specified
      * output stream.
-     * 
+     *
      * @param output stream to write config to
      * @throws Exception failed to save configuration
      */
@@ -170,7 +170,7 @@ public abstract class CamelConfigBuilder {
         tf.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         tf.transform(new DOMSource(camelConfig.getOwnerDocument()), new StreamResult(output));
     }
-    
+
     public CamelEndpoint getEndpoint(String endpointId) {
         CamelEndpoint endpoint = null;
         for (CamelEndpoint ep : getEndpoints()) {
@@ -181,7 +181,7 @@ public abstract class CamelConfigBuilder {
         }
         return endpoint;
     }
-    
+
     public List<String> getTransformEndpointIds() {
         List<String> endpointIds = new LinkedList<String>();
         for (CamelEndpoint ep : getEndpoints()) {
@@ -202,26 +202,26 @@ public abstract class CamelConfigBuilder {
         }
         return dataFormat;
     }
-    
+
     public abstract List<DataFormatDefinition> getDataFormats();
-    
+
     public abstract List<CamelEndpoint> getEndpoints();
 
     // If the JAXB config model for CamelContext was changed, call this method
     // to marshal those changes into the DOM for the Spring application context
     protected abstract void updateCamelContext() throws Exception;
-    
+
     protected abstract CamelEndpoint addEndpoint(String id, String uri);
-    
+
     protected abstract Class<?> getCamelContextType();
-    
+
     protected String getPackage(String type) {
         int idx = type.lastIndexOf('.');
         return idx > 0 ? type.substring(0, idx) : type;
     }
-    
+
     protected DataFormatDefinition createJsonDataFormat(String className) throws Exception {
-        final String id = className != null 
+        final String id = className != null
                 ? className.replaceAll("\\.", "") : "transform-json";
 
         DataFormatDefinition dataFormat = getDataFormat(id);
@@ -237,7 +237,7 @@ public abstract class CamelConfigBuilder {
         return dataFormat;
     }
 
-    
+
     protected DataFormatDefinition createJaxbDataFormat(String contextPath) throws Exception {
         final String id = contextPath.replaceAll("\\.", "");
         DataFormatDefinition dataFormat = getDataFormat(id);
@@ -251,7 +251,7 @@ public abstract class CamelConfigBuilder {
         }
         return dataFormat;
     }
-    
+
     protected synchronized JAXBContext getJAXBContext() {
         if (jaxbCtx == null) {
             try {
@@ -262,7 +262,7 @@ public abstract class CamelConfigBuilder {
         }
         return jaxbCtx;
     }
-    
+
     private static Element loadCamelConfig(File configFile) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);

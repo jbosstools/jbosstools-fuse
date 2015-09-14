@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -13,7 +13,6 @@ package org.jboss.tools.fuse.transformation.test;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -32,7 +31,7 @@ public class TestGenerator {
     /**
      * Creates a test class for a transformation endpoint with the specified
      * transformid.
-     * 
+     *
      * @param transformId id of a transform endpoint to test
      * @param packageName package name for the generated test class
      * @param className class name for the generated test class
@@ -48,7 +47,7 @@ public class TestGenerator {
                 .replaceAll(ENDPOINT_KEY, transformId)
                 .replaceAll(PACKAGE_KEY, packageName)
                 .replaceAll(CLASSNAME_KEY, className);
-        
+
         File testPath = new File(targetPath, createTestPath(packageName, className));
         // Check for collision on the path given for the test class
         if (testPath.exists()) {
@@ -64,35 +63,22 @@ public class TestGenerator {
     }
 
     private static String readTemplate() throws Exception {
-        InputStreamReader reader = null;
         StringBuilder templateStr = new StringBuilder();
-        try {
-            InputStream is =
-                    TestGenerator.class.getClassLoader().getResourceAsStream(TEST_TEMPLATE);
-            reader = new InputStreamReader(is, StandardCharsets.UTF_8);
+        try (InputStreamReader reader =
+                 new InputStreamReader(TestGenerator.class.getClassLoader().getResourceAsStream(TEST_TEMPLATE),
+                                                                                                StandardCharsets.UTF_8)) {
             char[] buf = new char[1024];
             int count = 0;
             while ((count = reader.read(buf)) != -1) {
                 templateStr.append(buf, 0, count);
-            }
-        } finally {
-            if (reader != null) {
-                reader.close();
             }
         }
         return templateStr.toString();
     }
 
     private static void writeTemplate(String content, File target) throws Exception {
-        OutputStreamWriter writer = null;
-
-        try {
-            writer = new OutputStreamWriter(new FileOutputStream(target));
+        try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(target))) {
             writer.write(content);
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
         }
     }
 
