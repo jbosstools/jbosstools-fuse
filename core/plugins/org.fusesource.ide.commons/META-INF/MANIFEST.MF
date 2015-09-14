@@ -3644,7 +3644,7 @@ Bundle-ClassPath: .,
  libs/spring-beans-4.1.5.RELEASE.jar,
  libs/spring-context-4.1.5.RELEASE.jar,
  libs/spring-core-4.1.5.RELEASE.jar,
- libs/camel-blueprint-2.15.1.redhat-621031.jar,
- libs/camel-core-2.15.1.redhat-621031.jar,
- libs/camel-spring-2.15.1.redhat-621031.jar
+ libs/camel-blueprint-2.15.1.redhat-621032.jar,
+ libs/camel-core-2.15.1.redhat-621032.jar,
+ libs/camel-spring-2.15.1.redhat-621032.jar
 
