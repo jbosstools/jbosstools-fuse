@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.ui,
  org.fusesource.ide.commons,
  org.fusesource.ide.camel.model,
  org.fusesource.ide.camel.editor,
- org.fusesource.ide.project
+ org.fusesource.ide.project,
+ org.eclipse.jdt.launching
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
