@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.jboss.tools.fuse.examples.transformation</groupId>
-  <artifactId>xml-to-xml</artifactId>
+  <artifactId>csv-to-fixed</artifactId>
   <packaging>bundle</packaging>
   <version>1.0.0-SNAPSHOT</version>
 
-  <name>Fuse Data Transformation - XML to XML</name>
+  <name>Fuse Data Transformation - CSV to Fixed Length Record</name>
   <url>http://jboss.org</url>
 
   <properties>
@@ -31,12 +31,12 @@
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jaxb</artifactId>
+      <artifactId>camel-dozer</artifactId>
       <version>${version.camel}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-dozer</artifactId>
+      <artifactId>camel-bindy</artifactId>
       <version>${version.camel}</version>
     </dependency>
 
