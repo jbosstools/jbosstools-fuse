@@ -432,13 +432,31 @@ public class Util {
     public static IType selectClass(final Shell shell,
                                     final IProject project,
                                     final Filter filter) {
+        return selectClass(shell, project, filter, 
+                "Select Custom Operation(s) Class",
+                "Select a custom operation(s) class");
+    }
+
+    /**
+     * @param shell
+     * @param project
+     * @param filter
+     * @param title
+     * @param message 
+     * @return the selected file
+     */
+    public static IType selectClass(final Shell shell,
+                                    final IProject project,
+                                    final Filter filter,
+                                    final String title,
+                                    final String message) {
         final int flags = JavaElementLabelProvider.SHOW_DEFAULT
                           | JavaElementLabelProvider.SHOW_POST_QUALIFIED
                           | JavaElementLabelProvider.SHOW_ROOT;
         final ElementListSelectionDialog dlg =
                 new ElementListSelectionDialog(shell, new JavaElementLabelProvider(flags));
-        dlg.setTitle("Select Custom Operation(s) Class");
-        dlg.setMessage("Select a custom operation(s) class");
+        dlg.setTitle(title);
+        dlg.setMessage(message);
         dlg.setMatchEmptyString(true);
         dlg.setHelpAvailable(false);
         final List<IType> types = new ArrayList<>();
