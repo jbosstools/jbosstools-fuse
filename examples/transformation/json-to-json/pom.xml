@@ -31,11 +31,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jaxb</artifactId>
-      <version>${version.camel}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
       <artifactId>camel-dozer</artifactId>
       <version>${version.camel}</version>
     </dependency>

@@ -3,8 +3,7 @@
     <feature version="${version.camel}">camel-blueprint</feature>
     <feature version="${version.camel}">camel-core</feature>
     <feature version="${version.camel}">camel-dozer</feature>
-    <feature version="${version.camel}">camel-xstream</feature>
     <feature version="${version.camel}">camel-bindy</feature>
-    <bundle>mvn:org.jboss.tools.fuse.examples.transformation/xml-to-csv/${project.version}</bundle>
+    <bundle>mvn:org.jboss.tools.fuse.examples.transformation/csv-to-fixed/${project.version}</bundle>
   </feature>
 </features>
