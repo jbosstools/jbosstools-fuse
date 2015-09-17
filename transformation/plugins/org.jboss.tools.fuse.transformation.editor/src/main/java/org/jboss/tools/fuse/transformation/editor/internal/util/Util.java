@@ -76,6 +76,8 @@ public class Util {
      */
     public static final String RESOURCES_PATH = MAIN_PATH + "resources/";
 
+    public static final String JAVA_PATH = MAIN_PATH + "java/";
+
     /**
      * @return the object being dragged
      */
@@ -101,7 +103,7 @@ public class Util {
         if (type(model)) {
             return false;
         }
-        return config.root(model).equals(config.getSourceModel());
+        return root(model).equals(config.getSourceModel());
     }
 
     /**
@@ -117,7 +119,25 @@ public class Util {
         if (type(model)) {
             return false;
         }
-        return config.root(model).equals(config.getTargetModel());
+        return root(model).equals(config.getTargetModel());
+    }
+
+    /**
+     * @param model
+     * @return the fully-qualified name of the supplied model
+     */
+    public static String fullyQualifiedName(final Model model) {
+        return fullyQualifiedName(model, new StringBuilder());
+    }
+
+    private static String fullyQualifiedName(final Model model,
+                                             final StringBuilder builder) {
+        if (model.getParent() != null) {
+            fullyQualifiedName(model.getParent(), builder);
+            builder.append('.');
+        }
+        builder.append(model.getName());
+        return builder.toString();
     }
 
     private static ArrayList<IResource> getAllXMLFilesInProject(final IProject project) {
@@ -126,6 +146,41 @@ public class Util {
         IPath path = project.getLocation();
         recursivelyFindFilesWithExtension(allFiles, path, wsRoot, "xml");
         return allFiles;
+    }
+
+    public static String getCamelVersion(IProject project) {
+        IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml"));
+        String pomPath = pomPathValue.toOSString();
+        final File pomFile = new File(pomPath);
+        try {
+	        final org.apache.maven.model.Model model = MavenPlugin.getMaven().readModel(pomFile);
+	        List<org.apache.maven.model.Dependency> deps = model.getDependencies();
+	        for (Iterator<org.apache.maven.model.Dependency> iterator = deps.iterator(); iterator.hasNext();) {
+	        	org.apache.maven.model.Dependency dependency = iterator.next();
+				if (dependency.getArtifactId().equals("camel-core")) {
+					return dependency.getVersion();
+				}
+			}
+        } catch (CoreException e) {
+        	// not found, go with default
+        }
+        return org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion();
+    }
+
+    public static String getDateFormat(final Shell shell,
+            final MappingOperation<?, ?> mappingOp,
+            final boolean isSource) {
+        final DateFormatInputDialog dlg = new DateFormatInputDialog(shell, mappingOp);
+        BaseDozerMapping dMapping = (BaseDozerMapping) mappingOp;
+        if (dMapping.getSourceDateFormat() != null && isSource) {
+            dlg.setFormatString(dMapping.getSourceDateFormat());
+        } else if (dMapping.getTargetDateFormat() != null && !isSource) {
+            dlg.setFormatString(dMapping.getTargetDateFormat());
+        }
+        if (dlg.open() != Window.OK) {
+            return null;
+        }
+        return dlg.getFormatString();
     }
 
     public static List<Integer> indexes(final Shell shell,
@@ -139,25 +194,8 @@ public class Util {
         return null;
     }
 
-    public static FieldMapping updateDateFormat(final Shell shell,
-                                                final Model srcModel,
-                                                final Model tgtModel,
-                                                final TransformationConfig config) {
-
-        if (srcModel != null && tgtModel != null && config != null) {
-            FieldMapping mapping = config.mapField(srcModel, tgtModel);
-            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
-                String dateFormatStr = Util.getDateFormat(shell, mapping, true);
-                mapping.setSourceDateFormat(dateFormatStr);
-            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    srcModel.getType().equalsIgnoreCase("java.util.Date")) {
-                String dateFormatStr = Util.getDateFormat(shell, mapping, false);
-                mapping.setTargetDateFormat(dateFormatStr);
-            }
-            return mapping;
-        }
-        return null;
+    public static boolean isOrInCollection(final Model model) {
+        return model != null && (model.isCollection() || isOrInCollection(model.getParent()));
     }
 
     private static boolean isValidNonNullType(Model model) {
@@ -184,50 +222,6 @@ public class Util {
             }
         }
         return false;
-    }
-
-    public static void updateDateFormat(final Shell shell,
-                                        final MappingOperation<?, ?> mappingOp) {
-        if (mappingOp != null && mappingOp instanceof BaseDozerMapping) {
-
-            // if both sides of the equation are Models, we're good to check this out
-            if (!(mappingOp.getSource() instanceof Model &&
-                    mappingOp.getTarget() instanceof Model)) {
-                return;
-            }
-            Model srcModel = (Model) mappingOp.getSource();
-            Model tgtModel = (Model) mappingOp.getTarget();
-            BaseDozerMapping dMapping = (BaseDozerMapping) mappingOp;
-            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
-                String dateFormatStr = Util.getDateFormat(shell, mappingOp, true);
-                dMapping.setSourceDateFormat(dateFormatStr);
-            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    srcModel.getType().equalsIgnoreCase("java.util.Date")) {
-                String dateFormatStr = Util.getDateFormat(shell, mappingOp, false);
-                dMapping.setTargetDateFormat(dateFormatStr);
-            }
-        }
-    }
-
-    public static String getDateFormat(final Shell shell,
-            final MappingOperation<?, ?> mappingOp,
-            final boolean isSource) {
-        final DateFormatInputDialog dlg = new DateFormatInputDialog(shell, mappingOp);
-        BaseDozerMapping dMapping = (BaseDozerMapping) mappingOp;
-        if (dMapping.getSourceDateFormat() != null && isSource) {
-            dlg.setFormatString(dMapping.getSourceDateFormat());
-        } else if (dMapping.getTargetDateFormat() != null && !isSource) {
-            dlg.setFormatString(dMapping.getTargetDateFormat());
-        }
-        if (dlg.open() != Window.OK) {
-            return null;
-        }
-        return dlg.getFormatString();
-    }
-
-    public static boolean isOrInCollection(final Model model) {
-        return model != null && (model.isCollection() || isOrInCollection(model.getParent()));
     }
 
     /**
@@ -335,6 +329,14 @@ public class Util {
     }
 
     /**
+     * @param model
+     * @return the root model of the supplied model
+     */
+    public static Model root(final Model model) {
+        return model.getParent() == null ? model : root(model.getParent());
+    }
+
+    /**
      * @param arc
      * @param background
      * @return A paint listener that paints a border around a control. Useful
@@ -374,36 +376,6 @@ public class Util {
             dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
         }
         dialog.setTitle("Select Camel XML File from Project");
-        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
-        dialog.open();
-        final Object[] result = dialog.getResult();
-        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
-            return null;
-        }
-        return (IFile) result[0];
-    }
-
-    /**
-     * @param shell
-     * @param extension
-     * @param project
-     * @return The selected resource
-     */
-    public static IResource selectDozerResourceFromWorkspace(final Shell shell,
-                                                        final IProject project) {
-        IJavaProject javaProject = null;
-        if (project != null) {
-            javaProject = JavaCore.create(project);
-        }
-        DozerResourceClasspathSelectionDialog dialog;
-        if (javaProject == null) {
-            dialog = new DozerResourceClasspathSelectionDialog(shell,
-                                                          ResourcesPlugin.getWorkspace().getRoot(),
-                                                          "xml");
-        } else {
-            dialog = new DozerResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
-        }
-        dialog.setTitle("Select Transformation File from Project");
         dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
         dialog.open();
         final Object[] result = dialog.getResult();
@@ -463,6 +435,36 @@ public class Util {
         populateClasses(shell, JavaCore.create(project), types, filter);
         dlg.setElements(types.toArray());
         return dlg.open() == Window.OK ? (IType) dlg.getFirstResult() : null;
+    }
+
+    /**
+     * @param shell
+     * @param extension
+     * @param project
+     * @return The selected resource
+     */
+    public static IResource selectDozerResourceFromWorkspace(final Shell shell,
+                                                        final IProject project) {
+        IJavaProject javaProject = null;
+        if (project != null) {
+            javaProject = JavaCore.create(project);
+        }
+        DozerResourceClasspathSelectionDialog dialog;
+        if (javaProject == null) {
+            dialog = new DozerResourceClasspathSelectionDialog(shell,
+                                                          ResourcesPlugin.getWorkspace().getRoot(),
+                                                          "xml");
+        } else {
+            dialog = new DozerResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
+        }
+        dialog.setTitle("Select Transformation File from Project");
+        dialog.setInitialPattern("*.xml"); //$NON-NLS-1$
+        dialog.open();
+        final Object[] result = dialog.getResult();
+        if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
+            return null;
+        }
+        return (IFile) result[0];
     }
 
     /**
@@ -532,6 +534,51 @@ public class Util {
         return (!model.isCollection() && !model.getChildren().isEmpty());
     }
 
+    public static void updateDateFormat(final Shell shell,
+                                        final MappingOperation<?, ?> mappingOp) {
+        if (mappingOp != null && mappingOp instanceof BaseDozerMapping) {
+
+            // if both sides of the equation are Models, we're good to check this out
+            if (!(mappingOp.getSource() instanceof Model &&
+                    mappingOp.getTarget() instanceof Model)) {
+                return;
+            }
+            Model srcModel = (Model) mappingOp.getSource();
+            Model tgtModel = (Model) mappingOp.getTarget();
+            BaseDozerMapping dMapping = (BaseDozerMapping) mappingOp;
+            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
+                String dateFormatStr = Util.getDateFormat(shell, mappingOp, true);
+                dMapping.setSourceDateFormat(dateFormatStr);
+            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    srcModel.getType().equalsIgnoreCase("java.util.Date")) {
+                String dateFormatStr = Util.getDateFormat(shell, mappingOp, false);
+                dMapping.setTargetDateFormat(dateFormatStr);
+            }
+        }
+    }
+
+    public static FieldMapping updateDateFormat(final Shell shell,
+                                                final Model srcModel,
+                                                final Model tgtModel,
+                                                final TransformationConfig config) {
+
+        if (srcModel != null && tgtModel != null && config != null) {
+            FieldMapping mapping = config.mapField(srcModel, tgtModel);
+            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
+                String dateFormatStr = Util.getDateFormat(shell, mapping, true);
+                mapping.setSourceDateFormat(dateFormatStr);
+            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
+                    srcModel.getType().equalsIgnoreCase("java.util.Date")) {
+                String dateFormatStr = Util.getDateFormat(shell, mapping, false);
+                mapping.setTargetDateFormat(dateFormatStr);
+            }
+            return mapping;
+        }
+        return null;
+    }
+
     public static void updateMavenDependencies(final List<Dependency> dependencies,
                                                final IProject project) throws CoreException {
         final IFile pomIFile = project.getProject().getFile("pom.xml");
@@ -576,25 +623,6 @@ public class Util {
                 Activator.error(e);
             }
         }
-    }
-
-    public static String getCamelVersion(IProject project) {
-        IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml"));
-        String pomPath = pomPathValue.toOSString();
-        final File pomFile = new File(pomPath);
-        try {
-	        final org.apache.maven.model.Model model = MavenPlugin.getMaven().readModel(pomFile);
-	        List<org.apache.maven.model.Dependency> deps = model.getDependencies();
-	        for (Iterator<org.apache.maven.model.Dependency> iterator = deps.iterator(); iterator.hasNext();) {
-	        	org.apache.maven.model.Dependency dependency = iterator.next();
-				if (dependency.getArtifactId().equals("camel-core")) {
-					return dependency.getVersion();
-				}
-			}
-        } catch (CoreException e) {
-        	// not found, go with default
-        }
-        return org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion();
     }
 
     public static boolean validSourceAndTarget(final Object source,
@@ -710,6 +738,11 @@ public class Util {
          *
          */
         Color POTENTIAL_DROP_TARGET8 = Activator.color(32, 32, 160);
+
+        /**
+         *
+         */
+        Color SASH = Activator.color(0, 0, 0);
 
         /**
          *

@@ -278,7 +278,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
      */
     @Override
     protected String title() {
-        return "Add Custom Operation";
+        return "Add Custom Function";
     }
 
     boolean valid(final IMethod method) {

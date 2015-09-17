@@ -253,7 +253,7 @@ abstract class MappingViewer {
         text.setText(name(object));
         if (object instanceof Model) {
             final Model model = (Model)object;
-            text.setToolTipText(config.fullyQualifiedName(model));
+            text.setToolTipText(Util.fullyQualifiedName(model));
             if (mapping.getType() == MappingType.CUSTOM && text == sourceText) {
                 text.setBackground(Colors.FUNCTION);
             } else {

@@ -107,6 +107,15 @@ public final class MappingDetailViewer extends MappingViewer {
         config.save();
     }
 
+    void addFunction() throws Exception {
+        final AddFunctionDialog dlg = new AddFunctionDialog(scroller.getShell(), (Model)mapping.getSource(), config.project());
+        if (dlg.open() != Window.OK) return;
+        mapping = config.customizeMapping((FieldMapping) mapping,
+                                          dlg.method.getDeclaringClass().getName(),
+                                          dlg.method.getName());
+        config.save();
+    }
+
     void configEvent(final String eventType,
                      final Object oldValue,
                      final Object newValue) {
@@ -264,6 +273,22 @@ public final class MappingDetailViewer extends MappingViewer {
                         }
                     }
                 });
+                addMenuItem("Add function", new MenuItemHandler() {
+
+                    @Override
+                    boolean enabled() {
+                        return mapping.getType() == MappingType.FIELD;
+                    }
+
+                    @Override
+                    public void widgetSelected(final SelectionEvent event) {
+                        try {
+                            addFunction();
+                        } catch (final Exception e) {
+                            Activator.error(e);
+                        }
+                    }
+                });
                 addMenuItem("Add custom function", new MenuItemHandler() {
 
                     @Override
@@ -415,15 +440,10 @@ public final class MappingDetailViewer extends MappingViewer {
 
     void setField(final boolean source) throws Exception {
         final FieldDialog dlg =
-            new FieldDialog(source ? config.getSourceModel() : config.getTargetModel());
-        if (dlg.open() != Window.OK) {
-            return;
-        }
-        if (source) {
-            setSource(dlg.field);
-        } else {
-            setTarget(dlg.field);
-        }
+            new FieldDialog(sourceText.getShell(), source ? config.getSourceModel() : config.getTargetModel(), config, mapping);
+        if (dlg.open() != Window.OK) return;
+        if (source) setSource(dlg.field);
+        else setTarget(dlg.field);
     }
 
     void setVariable() throws Exception {
@@ -540,65 +560,6 @@ public final class MappingDetailViewer extends MappingViewer {
 
             @Override
             public abstract void widgetSelected(SelectionEvent event);
-        }
-    }
-
-    final class FieldDialog extends BaseDialog {
-
-        private final Model rootModel;
-        Model field;
-
-        FieldDialog(final Model rootModel) {
-            super(sourceText.getShell());
-            this.rootModel = rootModel;
-            if (mapping.getSource() instanceof Model) {
-                this.field = rootModel.equals(config.getSourceModel())
-                             ? (Model) mapping.getSource()
-                             : (Model) mapping.getTarget();
-            }
-        }
-
-        @Override
-        protected void constructContents(final Composite parent) {
-            parent.setLayout(GridLayoutFactory.swtDefaults().create());
-            final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel, null, null);
-            modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-            if (field != null) {
-                modelViewer.select(field);
-            }
-            modelViewer.treeViewer.getTree().addSelectionListener(new SelectionAdapter() {
-
-                @Override
-                public void widgetSelected(final SelectionEvent event) {
-                    final IStructuredSelection selection =
-                        (IStructuredSelection)modelViewer.treeViewer.getSelection();
-                    field = (Model)selection.getFirstElement();
-                    validate();
-                }
-            });
-        }
-
-        @Override
-        protected String message() {
-            return "Select a field.";
-        }
-
-        @Override
-        protected String title() {
-            return "Field";
-        }
-
-        void validate() {
-            boolean enabled = field != null && !Util.type(field);
-            if (enabled) {
-                if (rootModel.equals(config.getSourceModel())) {
-                    enabled = Util.validSourceAndTarget(field, mapping.getTarget(), config);
-                } else {
-                    enabled = Util.validSourceAndTarget(mapping.getSource(), field, config);
-                }
-            }
-            setErrorMessage(enabled ? null : "Invalid field");
-            getButton(IDialogConstants.OK_ID).setEnabled(enabled);
         }
     }
 

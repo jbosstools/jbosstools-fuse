@@ -64,7 +64,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
  *
  *
  */
-@SuppressWarnings("restriction")
 public class TransformTestWizardPage extends NewTypeWizardPage {
 
     protected static final String CAMEL_FILE_PATH = "TransformTestWizardPage.CamelFilePath"; //$NON-NLS-1$

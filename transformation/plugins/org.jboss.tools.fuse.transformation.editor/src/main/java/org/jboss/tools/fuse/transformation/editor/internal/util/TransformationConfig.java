@@ -174,24 +174,6 @@ public class TransformationConfig implements MapperConfiguration {
     }
 
     /**
-     * @param model
-     * @return the fully-qualified name of the supplied model
-     */
-    public String fullyQualifiedName(final Model model) {
-        return fullyQualifiedName(model, new StringBuilder());
-    }
-
-    private String fullyQualifiedName(final Model model,
-                                      final StringBuilder builder) {
-        if (model.getParent() != null) {
-            fullyQualifiedName(model.getParent(), builder);
-            builder.append('.');
-        }
-        builder.append(model.getName());
-        return builder.toString();
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -478,14 +460,6 @@ public class TransformationConfig implements MapperConfiguration {
         final boolean removed = delegate.removeVariable(variable);
         fireEvent(VARIABLE, variable, null);
         return removed;
-    }
-
-    /**
-     * @param model
-     * @return the root model of the supplied model
-     */
-    public Model root(final Model model) {
-        return model.getParent() == null ? model : root(model.getParent());
     }
 
     /**

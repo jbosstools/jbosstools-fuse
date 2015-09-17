@@ -83,7 +83,6 @@ import com.sun.codemodel.JPackage;
  */
 public class NewTransformationWizard extends Wizard implements INewWizard {
 
-    private static final String JAVA_PATH = Util.MAIN_PATH + "java/";
     public static final String CAMEL_CONFIG_PATH = Util.RESOURCES_PATH + "META-INF/spring/camel-context.xml";
     private static final String OBJECT_FACTORY_NAME = "ObjectFactory";
 
@@ -370,12 +369,12 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         // Build package name from class name
         int sequencer = 1;
         String pkgName = className.toString();
-        while (uiModel.getProject().exists(new Path(JAVA_PATH + pkgName))) {
+        while (uiModel.getProject().exists(new Path(Util.JAVA_PATH + pkgName))) {
             pkgName = className.toString() + sequencer++;
         }
         pkgName = pkgName.toLowerCase();
         // Generate model
-        final File targetClassesFolder = new File(uiModel.getProject().getFolder(JAVA_PATH).getLocationURI());
+        final File targetClassesFolder = new File(uiModel.getProject().getFolder(Util.JAVA_PATH).getLocationURI());
         switch (type) {
         case OTHER:
         case CLASS: {

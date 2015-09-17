@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="org.jboss.tools.fuse.transformation.editor.function" name="%extension-point.name" schema="schema/org.jboss.tools.fuse.transformation.editor.function.exsd"/>
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
@@ -64,5 +65,12 @@
       <DoubleClickHandler
             class="org.jboss.tools.fuse.transformation.extensions.TransformationDblClickHandler">
       </DoubleClickHandler>
+   </extension>
+   <extension
+         point="org.jboss.tools.fuse.transformation.editor.function">
+      <Function
+            class="org.jboss.tools.fuse.transformation.editor.function.StringFunctions"
+            source="src/main/resources/org/jboss/tools/fuse/transformation/editor/function/StringFunctions.java">
+      </Function>
    </extension>
 </plugin>

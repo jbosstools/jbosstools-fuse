@@ -68,7 +68,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
  */
 public class TransformationEditor extends EditorPart implements ISaveablePart2, IResourceChangeListener {
 
-    private static final int SASH_COLOR = SWT.COLOR_DARK_GRAY;
     private static final int SASH_WIDTH = 3;
 
     private static final String PREFERENCE_PREFIX = TransformationEditor.class.getName() + ".";
@@ -150,7 +149,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         prefs.setDefault(VERTICAL_SPLITTER_WEIGHT_BOTTOM_PREFERENCE, 25);
 
         final SashForm verticalSplitter = new SashForm(parent, SWT.VERTICAL);
-        verticalSplitter.setBackground(parent.getDisplay().getSystemColor(SASH_COLOR));
+        verticalSplitter.setBackground(Colors.SASH);
         verticalSplitter.setSashWidth(SASH_WIDTH);
         final Composite pane = new Composite(verticalSplitter, SWT.NONE);
         pane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
@@ -180,7 +179,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                                                         .span(3, 1)
                                                         .grab(true, true)
                                                         .create());
-        horizontalSplitter.setBackground(parent.getDisplay().getSystemColor(SASH_COLOR));
+        horizontalSplitter.setBackground(Colors.SASH);
         horizontalSplitter.setSashWidth(SASH_WIDTH);
         // Create source tab folder
         sourceTabFolder = new SourceTabFolder(config, horizontalSplitter, potentialDropTargets);
