@@ -28,8 +28,8 @@ public class Activator extends AbstractUIPlugin {
 
     // The shared instance
     private static Activator plugin;
-    
-    public static String PLUGIN_ID = "org.jboss.tools.fuse.transformation.editor";
+
+    public static final String PLUGIN_ID = "org.jboss.tools.fuse.transformation.editor";
 
     /**
      * @param red

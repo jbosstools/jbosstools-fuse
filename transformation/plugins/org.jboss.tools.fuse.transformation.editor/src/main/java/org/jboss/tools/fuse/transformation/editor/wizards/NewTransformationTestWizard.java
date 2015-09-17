@@ -44,7 +44,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.TransformTest
 /**
  *
  */
-@SuppressWarnings("restriction")
 public class NewTransformationTestWizard extends NewElementWizard {
 
     static final String DEFAULT_DOZER_CONFIG_FILE_NAME = "dozerBeanMapping.xml";
