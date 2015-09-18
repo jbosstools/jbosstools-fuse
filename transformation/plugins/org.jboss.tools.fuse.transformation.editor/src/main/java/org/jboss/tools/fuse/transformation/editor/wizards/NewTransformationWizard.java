@@ -299,6 +299,18 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 iter.remove();
             }
         }
+        // we really want to respond to the initial selection when the wizard
+        // was launched. if there's a project in there, we want to use it to
+        // pre- populate the project selection. This only seems to be an issue
+        // on Luna for FUSETOOLS-1443
+        if (selection != null && selection instanceof IStructuredSelection) {
+            IStructuredSelection resourceSelection = (IStructuredSelection) selection;
+            if (resourceSelection.getFirstElement() instanceof IProject) {
+                uiModel.projects.clear();
+                uiModel.projects.add((IProject) resourceSelection.getFirstElement());
+            }
+        }
+
         if (uiModel.projects.size() == 1) {
             uiModel.setProject(uiModel.projects.get(0));
         } else {
