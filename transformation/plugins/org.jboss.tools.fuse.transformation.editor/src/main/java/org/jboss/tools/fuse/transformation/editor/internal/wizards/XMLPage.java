@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,6 +25,8 @@ import javax.xml.namespace.QName;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
@@ -214,6 +217,12 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
+                    isXML = false;
+                    if (path.endsWith("xml")) {
+                        isXML = true;
+                    }
+                    _xmlInstanceOption.setSelection(isXML);
+                    _xmlSchemaOption.setSelection(!isXML);
                     if (isSourcePage()) {
                         if (isXML) {
                             model.setSourceType(ModelType.XML);
@@ -243,13 +252,19 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                                 }
                             }
                             _xmlPreviewText.setText(buffer.toString());
+                            if (isSourcePage()) {
+                                model.setSourceClassName(null);
+                            } else {
+                                model.setTargetClassName(null);
+                            }
+                            
                         } catch (CoreException e1) {
                             e1.printStackTrace();
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
                     }
-                    _xmlFileText.notifyListeners(SWT.Modify, null);
+                    pingBinding();
                 }
             }
         });
@@ -269,7 +284,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         group2.setLayout(new FillLayout());
         group2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        _xmlPreviewText = new Text(group2, SWT.V_SCROLL | SWT.READ_ONLY);
+        _xmlPreviewText = new Text(group2, SWT.V_SCROLL | SWT.READ_ONLY | SWT.H_SCROLL );
         _xmlPreviewText.setBackground(_page.getBackground());
 
         bindControls();
@@ -357,6 +372,13 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         });
         _binding = context.bindValue(widgetValue, modelValue, strategy, null);
+        _binding.getModel().addChangeListener(new IChangeListener() {
+            
+            @Override
+            public void handleChange(ChangeEvent event) {
+                pingBinding();
+            }
+        });
         ControlDecorationSupport.create(_binding, decoratorPosition, _xmlFileText.getParent());
 
         IObservableValue comboWidgetValue = ViewerProperties.singleSelection().observe(_xmlRootsCombo);
@@ -439,12 +461,15 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 WritableList elementList = new WritableList();
                 if (elements != null && !elements.isEmpty()) {
+                    ArrayList<String> tempList = new ArrayList<String>();
                     Iterator<QName> iter = elements.iterator();
                     while (iter.hasNext()) {
                         QName qname = iter.next();
-                        elementList.add(qname.getLocalPart());
+                        tempList.add(qname.getLocalPart());
                         _xmlRootsCombo.setData(qname.getLocalPart(), qname.getNamespaceURI());
                     }
+                    Collections.sort(tempList);
+                    elementList.addAll(tempList);
                 }
                 _xmlRootsCombo.setInput(elementList);
                 if (!elementList.isEmpty()) {

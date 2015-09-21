@@ -308,6 +308,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             if (resourceSelection.getFirstElement() instanceof IProject) {
                 uiModel.projects.clear();
                 uiModel.projects.add((IProject) resourceSelection.getFirstElement());
+            } else if (resourceSelection.getFirstElement() instanceof IJavaProject) {
+                IJavaProject jProject = (IJavaProject) resourceSelection.getFirstElement();
+                uiModel.projects.clear();
+                uiModel.projects.add(jProject.getProject());
             }
         }
 

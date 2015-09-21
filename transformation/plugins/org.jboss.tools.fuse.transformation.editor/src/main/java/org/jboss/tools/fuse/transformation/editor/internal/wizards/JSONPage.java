@@ -266,7 +266,7 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         group2.setLayout(new FillLayout());
         group2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        _jsonPreviewText = new Text(group2, SWT.V_SCROLL | SWT.READ_ONLY);
+        _jsonPreviewText = new Text(group2, SWT.V_SCROLL | SWT.READ_ONLY | SWT.H_SCROLL );
         _jsonPreviewText.setBackground(_page.getBackground());
 
         bindControls();
