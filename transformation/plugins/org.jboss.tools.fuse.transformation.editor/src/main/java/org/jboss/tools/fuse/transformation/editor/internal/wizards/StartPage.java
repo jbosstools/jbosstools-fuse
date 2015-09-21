@@ -75,7 +75,10 @@ public class StartPage extends XformWizardPage {
     private Text _camelFilePathText;
     private ComboViewer _sourceCV;
     private ComboViewer _targetCV;
-
+    private Binding _filePathBinding;
+    private Binding _camelPathBinding;
+    private Binding _endpointIdBinding;
+    
     /**
      * @param model
      */
@@ -187,6 +190,7 @@ public class StartPage extends XformWizardPage {
                     }
 
                     _camelFilePathText.notifyListeners(SWT.Modify, new Event());
+                    _endpointIdBinding.validateTargetToModel();
                 }
             }
         });
@@ -284,10 +288,15 @@ public class StartPage extends XformWizardPage {
 
     private void bindControls() {
 
-        // bind the project dropdown
         _projectCombo.setContentProvider(new ObservableListContentProvider());
-        IObservableValue widgetValue = ViewerProperties.singleSelection().observe(_projectCombo);
-        IObservableValue modelValue = BeanProperties.value(Model.class, "project").observe(model);
+
+        IObservableValue projectComboValue = ViewerProperties.singleSelection().observe(_projectCombo);
+        IObservableValue projectValue = BeanProperties.value(Model.class, "project").observe(model);
+        
+        IObservableValue dozerPathTextValue = WidgetProperties.text(SWT.Modify).observe(_dozerPathText);
+        IObservableValue dozerPathValue = BeanProperties.value(Model.class, "filePath").observe(model);
+        
+        // bind the project dropdown
         UpdateValueStrategy strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
@@ -299,12 +308,23 @@ public class StartPage extends XformWizardPage {
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                _projectCombo.getControl().getParent());
+        
+        projectValue.addChangeListener(new IChangeListener() {
+            
+            @Override
+            public void handleChange(ChangeEvent event) {
+                _filePathBinding.validateTargetToModel();
+            }
+        });
+
+        Binding projectBinding = 
+                context.bindValue(projectComboValue, projectValue, strategy, null);
+        ControlDecorationSupport.create(projectBinding, decoratorPosition, _projectCombo.getControl().getParent());
 
         // Bind transformation ID widget to UI model
-        widgetValue = WidgetProperties.text(SWT.Modify).observe(_idText);
-        modelValue = BeanProperties.value(Model.class, "id").observe(model);
+        IObservableValue idTextValue = WidgetProperties.text(SWT.Modify).observe(_idText);
+        IObservableValue idValue = BeanProperties.value(Model.class, "id").observe(model);
+
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
@@ -324,19 +344,17 @@ public class StartPage extends XformWizardPage {
                 if (model.camelConfig != null && model.camelConfig.getConfigBuilder() != null) {
                     for (final String endpointId : model.camelConfig.getConfigBuilder().getTransformEndpointIds()) {
                         if (id.equalsIgnoreCase(endpointId)) {
-                            return ValidationStatus.error("A transformation with the supplied ID already exists");
+                            return ValidationStatus.error("A transformation endpoint with the supplied ID already exists");
                         }
                     }
                 }
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                _idText.getParent());
+        _endpointIdBinding = context.bindValue(idTextValue, idValue, strategy, null);
+        ControlDecorationSupport.create(_endpointIdBinding, decoratorPosition, _idText.getParent());
 
         // Bind file path widget to UI model
-        widgetValue = WidgetProperties.text(SWT.Modify).observe(_dozerPathText);
-        modelValue = BeanProperties.value(Model.class, "filePath").observe(model);
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
@@ -356,12 +374,14 @@ public class StartPage extends XformWizardPage {
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                null);
+        _filePathBinding = 
+                context.bindValue(dozerPathTextValue, dozerPathValue, strategy, null);
+        ControlDecorationSupport.create(
+                _filePathBinding, decoratorPosition, _dozerPathText.getParent());
 
         // Bind camel file path widget to UI model
-        widgetValue = WidgetProperties.text(SWT.Modify).observe(_camelFilePathText);
-        modelValue = BeanProperties.value(Model.class, "camelFilePath").observe(model);
+        IObservableValue camelFileTextValue = WidgetProperties.text(SWT.Modify).observe(_camelFilePathText);
+        IObservableValue camelFileValue = BeanProperties.value(Model.class, "camelFilePath").observe(model);
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
@@ -389,13 +409,20 @@ public class StartPage extends XformWizardPage {
                 return ValidationStatus.ok();
             }
         });
-        ControlDecorationSupport.create(context.bindValue(widgetValue, modelValue, strategy, null), decoratorPosition,
-                null);
+        _camelPathBinding = context.bindValue(camelFileTextValue, camelFileValue, strategy, null);
+        _camelPathBinding.getModel().addChangeListener(new IChangeListener() {
+            
+            @Override
+            public void handleChange(ChangeEvent event) {
+                _endpointIdBinding.validateTargetToModel();
+            }
+        });
+        ControlDecorationSupport.create(_camelPathBinding, decoratorPosition, _camelFilePathText.getParent());
 
         // bind the source type string dropdown
         _sourceCV.setContentProvider(new ObservableListContentProvider());
-        widgetValue = ViewerProperties.singleSelection().observe(_sourceCV);
-        modelValue = BeanProperties.value(Model.class, "sourceTypeStr").observe(model);
+        IObservableValue widgetValue = ViewerProperties.singleSelection().observe(_sourceCV);
+        IObservableValue modelValue = BeanProperties.value(Model.class, "sourceTypeStr").observe(model);
         strategy = new UpdateValueStrategy();
         strategy.setBeforeSetValidator(new IValidator() {
 
