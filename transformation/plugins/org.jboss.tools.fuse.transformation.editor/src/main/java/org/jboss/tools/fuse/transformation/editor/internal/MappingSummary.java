@@ -60,7 +60,7 @@ final class MappingSummary extends MappingViewer {
         mapsToLabel.setBackground(mapsToPane.getBackground());
         final StringBuilder builder = new StringBuilder();
         if (mapping.getType() == MappingType.CUSTOM) {
-            builder.append(((CustomMapping)mapping).getMappingOperation());
+            builder.append(((CustomMapping)mapping).getFunctionName());
             builder.append('(');
         }
         builder.append(name(mapping.getSource()));

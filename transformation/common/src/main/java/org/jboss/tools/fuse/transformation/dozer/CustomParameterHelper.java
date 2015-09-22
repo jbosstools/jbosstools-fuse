@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -15,7 +15,15 @@ import org.jboss.tools.fuse.transformation.dozer.config.Field;
 
 public final class CustomParameterHelper {
 
-    public static String getParameterPart(Field field, String separator, int idx) {
+    static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    public static String emptyForNull(String str) {
+        return str == null ? "" : str;
+    }
+
+    public static String getParameterPart(Field field,
+                                          String separator,
+                                          int idx) {
         String part = null;
         if (field.getCustomConverterParam() != null) {
             String[] parts = field.getCustomConverterParam().split(separator);
@@ -26,7 +34,9 @@ public final class CustomParameterHelper {
         return part;
     }
 
-    public static String emptyForNull(String str) {
-        return str == null ? "" : str;
+    public static String[] getParameterParts(Field field,
+                                             String separator) {
+        if (field.getCustomConverterParam() == null) return EMPTY_STRING_ARRAY;
+        return field.getCustomConverterParam().split(separator);
     }
 }

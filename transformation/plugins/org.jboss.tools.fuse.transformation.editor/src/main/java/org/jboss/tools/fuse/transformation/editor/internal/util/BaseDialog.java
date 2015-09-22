@@ -55,7 +55,7 @@ public abstract class BaseDialog extends TitleAreaDialog {
         setTitle(title());
         setMessage(message());
         setHelpAvailable(false);
-        final Composite area = new Composite(parent, SWT.NONE);
+        final Composite area = new Composite(parent, SWT.BORDER);
         area.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         constructContents(area);
         return area;

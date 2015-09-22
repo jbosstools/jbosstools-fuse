@@ -1,6 +1,6 @@
 /*
  * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
@@ -12,36 +12,58 @@
 package org.jboss.tools.fuse.transformation;
 
 /**
- * Custom mappings are field mappings with a user-supplied class which is used
- * to customize the mapping from source to target.
+ * Custom mappings are field mappings with a user-supplied class which is used to customize the mapping from source to target.
  */
 public interface CustomMapping extends FieldMapping {
 
     /**
-     * Returns the mapping class used for this custom mapping.
-     * 
-     * @return mapping class name
+     * Adds an argument to the function used for this custom mapping in the form <code>&lt;type>=&lt;value></code>
      */
-    String getMappingClass();
+    void addFunctionArgument(String type,
+                             String value);
 
     /**
-     * Returns the operation in the mapping class used for this custom mapping.
-     * 
-     * @return mapping operation name
+     * Adds arguments to the function used for this custom mapping, where each supplied argument must be in the form
+     * <code>&lt;type>=&lt;value></code>
      */
-    String getMappingOperation();
-    
+    void addFunctionArguments(String... arguments);
+
     /**
-     * Set the name of the operation used for this custom mapping.
-     * 
-     * @param operationName operation name
+     * Returns the function arguments as an array of strings in the form <code>&lt;type>=&lt;value></code>. Note, the first function
+     * argument, the source field value, is not referenceable, so the first string refers to the first argument <em>after</em> the
+     * source field argument.
      */
-    void setMappingOperation(String operationName);
-    
+    String[] getFunctionArguments();
+
     /**
-     * Set the name of the mapping class used in this custom mapping.
-     * 
-     * @param className name of the class
+     * Returns the name of the function class used for this custom mapping.
+     *
+     * @return the function class name
+     * @see #setFunctionClass(String)
      */
-    void setMappingClass(String className);
+    String getFunctionClass();
+
+    /**
+     * Returns the name of the function in the {@link #getFunctionClass() function class} used for this custom mapping.
+     *
+     * @return the function name
+     * @see #setFunctionName(String)
+     */
+    String getFunctionName();
+
+    /**
+     * Set the name of the {@link #getFunctionClass() function class} used for this custom mapping.
+     *
+     * @param name
+     *            the function class name
+     */
+    void setFunctionClass(String name);
+
+    /**
+     * Set the name of the {@link #getFunctionName() function} used for this custom mapping.
+     *
+     * @param name
+     *            the function name
+     */
+    void setFunctionName(String name);
 }

@@ -11,7 +11,6 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -273,6 +272,8 @@ abstract class MappingViewer {
             text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.FOREGROUND);
         }
+        text.redraw();
+        text.update();
     }
 
     String variableToolTip(final Variable variable) {

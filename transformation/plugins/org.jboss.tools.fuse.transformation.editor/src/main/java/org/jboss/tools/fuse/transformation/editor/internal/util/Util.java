@@ -16,7 +16,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -58,33 +57,29 @@ import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.function.Function.Arg;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
 import org.jboss.tools.fuse.transformation.model.Model;
 
-/**
- *
- */
 public class Util {
 
-    /**
-     *
-     */
     public static final String MAIN_PATH = "src/main/";
 
-    /**
-     *
-     */
     public static final String RESOURCES_PATH = MAIN_PATH + "resources/";
 
     public static final String JAVA_PATH = MAIN_PATH + "java/";
+
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    public static final String FUNCTIONS_FOLDER = ".functions";
 
     /**
      * @return the object being dragged
      */
     public static Object draggedObject() {
-        return ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
-                                                             .getSelection())
-                                                             .getFirstElement();
+        return ((IStructuredSelection)LocalSelectionTransfer.getTransfer()
+                                                            .getSelection())
+                                                                            .getFirstElement();
     }
 
     /**
@@ -153,25 +148,25 @@ public class Util {
         String pomPath = pomPathValue.toOSString();
         final File pomFile = new File(pomPath);
         try {
-	        final org.apache.maven.model.Model model = MavenPlugin.getMaven().readModel(pomFile);
-	        List<org.apache.maven.model.Dependency> deps = model.getDependencies();
-	        for (Iterator<org.apache.maven.model.Dependency> iterator = deps.iterator(); iterator.hasNext();) {
-	        	org.apache.maven.model.Dependency dependency = iterator.next();
-				if (dependency.getArtifactId().equals("camel-core")) {
-					return dependency.getVersion();
-				}
-			}
+            final org.apache.maven.model.Model model = MavenPlugin.getMaven().readModel(pomFile);
+            List<org.apache.maven.model.Dependency> deps = model.getDependencies();
+            for (Iterator<org.apache.maven.model.Dependency> iterator = deps.iterator(); iterator.hasNext();) {
+                org.apache.maven.model.Dependency dependency = iterator.next();
+                if (dependency.getArtifactId().equals("camel-core")) {
+                    return dependency.getVersion();
+                }
+            }
         } catch (CoreException e) {
-        	// not found, go with default
+            // not found, go with default
         }
         return org.fusesource.ide.camel.editor.Activator.getDefault().getCamelVersion();
     }
 
     public static String getDateFormat(final Shell shell,
-            final MappingOperation<?, ?> mappingOp,
-            final boolean isSource) {
+                                       final MappingOperation<?, ?> mappingOp,
+                                       final boolean isSource) {
         final DateFormatInputDialog dlg = new DateFormatInputDialog(shell, mappingOp);
-        BaseDozerMapping dMapping = (BaseDozerMapping) mappingOp;
+        BaseDozerMapping dMapping = (BaseDozerMapping)mappingOp;
         if (dMapping.getSourceDateFormat() != null && isSource) {
             dlg.setFormatString(dMapping.getSourceDateFormat());
         } else if (dMapping.getTargetDateFormat() != null && !isSource) {
@@ -206,22 +201,45 @@ public class Util {
     }
 
     public static boolean modelsNeedDateFormat(final Object source,
-                        final Object target, final boolean isSource) {
+                                               final Object target,
+                                               final boolean isSource) {
         if (!(source instanceof Model && target instanceof Model)) {
             return false;
         }
-        Model srcModel = (Model) source;
-        Model tgtModel = (Model) target;
+        Model srcModel = (Model)source;
+        Model tgtModel = (Model)target;
         if (isValidNonNullType(srcModel) && isValidNonNullType(tgtModel)) {
             if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    tgtModel.getType().equalsIgnoreCase("java.util.Date") && isSource) {
+                tgtModel.getType().equalsIgnoreCase("java.util.Date") && isSource) {
                 return true;
             } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    srcModel.getType().equalsIgnoreCase("java.util.Date") && !isSource) {
+                       srcModel.getType().equalsIgnoreCase("java.util.Date") && !isSource) {
                 return true;
             }
         }
         return false;
+    }
+
+    public static String nonPrimitiveClassName(String type) {
+        // Return wrapper class if type is primitive
+        switch (type) {
+            case "int":
+                return Integer.class.getName();
+            case "long":
+                return Long.class.getName();
+            case "double":
+                return Double.class.getName();
+            case "float":
+                return Float.class.getName();
+            case "short":
+                return Short.class.getName();
+            case "boolean":
+                return Boolean.class.getName();
+            case "char":
+            case "byte":
+                return String.class.getName();
+        }
+        return type;
     }
 
     /**
@@ -234,7 +252,7 @@ public class Util {
             public void paintControl(final PaintEvent event) {
                 final Color oldForeground = event.gc.getForeground();
                 event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_GRAY));
-                final Rectangle bounds = ((Control) event.widget).getBounds();
+                final Rectangle bounds = ((Control)event.widget).getBounds();
                 event.gc.drawRoundRectangle(0, 0,
                                             bounds.width - 1, bounds.height - 1,
                                             bounds.height, bounds.height);
@@ -250,18 +268,19 @@ public class Util {
         try {
             for (final IJavaElement element : parent.getChildren()) {
                 if (element instanceof IType) {
-                    final IType type = (IType) element;
+                    final IType type = (IType)element;
                     if (type.isClass() && type.isStructureKnown() && !type.isAnonymous()
                         && !type.isLocal() && !Flags.isAbstract(type.getFlags())
                         && Flags.isPublic(type.getFlags())
                         && (filter == null || filter.accept(type))) {
-                            types.add(type);
+                        types.add(type);
                     }
                 } else if (element instanceof IParent
                            && !element.getPath().toString().contains("/test/")
+                           && !element.getPath().toString().endsWith("/" + FUNCTIONS_FOLDER)
                            && (!(element instanceof IPackageFragmentRoot)
-                                 || !((IPackageFragmentRoot) element).isExternal())) {
-                    populateClasses(shell, (IParent) element, types, filter);
+                           || !((IPackageFragmentRoot)element).isExternal())) {
+                    populateClasses(shell, (IParent)element, types, filter);
                 }
             }
         } catch (final JavaModelException e) {
@@ -275,7 +294,7 @@ public class Util {
         try {
             for (final IResource resource : container.members()) {
                 if (resource instanceof IContainer) {
-                    populateResources(shell, (IContainer) resource, resources);
+                    populateResources(shell, (IContainer)resource, resources);
                 } else {
                     resources.add(resource);
                 }
@@ -293,8 +312,8 @@ public class Util {
                 File testFile = new File(item.getLocationURI());
                 if (testFile.exists()) {
                     boolean isValidCamel = CamelFileTypeHelper
-                            .isSupportedCamelFile(project,
-                                    item.getProjectRelativePath().toPortableString());
+                                                              .isSupportedCamelFile(project,
+                                                                                    item.getProjectRelativePath().toPortableString());
                     if (isValidCamel) {
                         return true;
                     }
@@ -307,9 +326,11 @@ public class Util {
         return false;
     }
 
-    private static void recursivelyFindFilesWithExtension(ArrayList<IResource> allFiles, IPath path,
-            IWorkspaceRoot wsRoot, String extension) {
-        IContainer  container =  wsRoot.getContainerForLocation(path);
+    private static void recursivelyFindFilesWithExtension(ArrayList<IResource> allFiles,
+                                                          IPath path,
+                                                          IWorkspaceRoot wsRoot,
+                                                          String extension) {
+        IContainer container = wsRoot.getContainerForLocation(path);
 
         try {
             IResource[] resources = container.members();
@@ -339,8 +360,7 @@ public class Util {
     /**
      * @param arc
      * @param background
-     * @return A paint listener that paints a border around a control. Useful
-     *         for borders around labels
+     * @return A paint listener that paints a border around a control. Useful for borders around labels
      */
     public static final PaintListener roundedRectanglePainter(final int arc,
                                                               final Color background) {
@@ -349,7 +369,7 @@ public class Util {
             @Override
             public void paintControl(final PaintEvent event) {
                 event.gc.setBackground(background);
-                final Rectangle bounds = ((Composite) event.widget).getClientArea();
+                final Rectangle bounds = ((Composite)event.widget).getClientArea();
                 event.gc.fillRoundRectangle(0, 0, bounds.width - 1, bounds.height - 1, arc, arc);
             }
         };
@@ -362,7 +382,7 @@ public class Util {
      * @return The selected resource
      */
     public static IResource selectCamelResourceFromWorkspace(final Shell shell,
-                                                        final IProject project) {
+                                                             final IProject project) {
         IJavaProject javaProject = null;
         if (project != null) {
             javaProject = JavaCore.create(project);
@@ -370,8 +390,8 @@ public class Util {
         CamelResourceClasspathSelectionDialog dialog;
         if (javaProject == null) {
             dialog = new CamelResourceClasspathSelectionDialog(shell,
-                                                          ResourcesPlugin.getWorkspace().getRoot(),
-                                                          "xml");
+                                                               ResourcesPlugin.getWorkspace().getRoot(),
+                                                               "xml");
         } else {
             dialog = new CamelResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
         }
@@ -382,7 +402,7 @@ public class Util {
         if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
             return null;
         }
-        return (IFile) result[0];
+        return (IFile)result[0];
     }
 
     /**
@@ -404,9 +424,9 @@ public class Util {
     public static IType selectClass(final Shell shell,
                                     final IProject project,
                                     final Filter filter) {
-        return selectClass(shell, project, filter, 
-                "Select Custom Operation(s) Class",
-                "Select a custom operation(s) class");
+        return selectClass(shell, project, filter,
+                           "Select Custom Function(s) Class",
+                           "Select a custom function(s) class");
     }
 
     /**
@@ -414,7 +434,7 @@ public class Util {
      * @param project
      * @param filter
      * @param title
-     * @param message 
+     * @param message
      * @return the selected file
      */
     public static IType selectClass(final Shell shell,
@@ -425,8 +445,7 @@ public class Util {
         final int flags = JavaElementLabelProvider.SHOW_DEFAULT
                           | JavaElementLabelProvider.SHOW_POST_QUALIFIED
                           | JavaElementLabelProvider.SHOW_ROOT;
-        final ElementListSelectionDialog dlg =
-                new ElementListSelectionDialog(shell, new JavaElementLabelProvider(flags));
+        final ElementListSelectionDialog dlg = new ElementListSelectionDialog(shell, new JavaElementLabelProvider(flags));
         dlg.setTitle(title);
         dlg.setMessage(message);
         dlg.setMatchEmptyString(true);
@@ -434,7 +453,7 @@ public class Util {
         final List<IType> types = new ArrayList<>();
         populateClasses(shell, JavaCore.create(project), types, filter);
         dlg.setElements(types.toArray());
-        return dlg.open() == Window.OK ? (IType) dlg.getFirstResult() : null;
+        return dlg.open() == Window.OK ? (IType)dlg.getFirstResult() : null;
     }
 
     /**
@@ -444,7 +463,7 @@ public class Util {
      * @return The selected resource
      */
     public static IResource selectDozerResourceFromWorkspace(final Shell shell,
-                                                        final IProject project) {
+                                                             final IProject project) {
         IJavaProject javaProject = null;
         if (project != null) {
             javaProject = JavaCore.create(project);
@@ -452,8 +471,8 @@ public class Util {
         DozerResourceClasspathSelectionDialog dialog;
         if (javaProject == null) {
             dialog = new DozerResourceClasspathSelectionDialog(shell,
-                                                          ResourcesPlugin.getWorkspace().getRoot(),
-                                                          "xml");
+                                                               ResourcesPlugin.getWorkspace().getRoot(),
+                                                               "xml");
         } else {
             dialog = new DozerResourceClasspathSelectionDialog(shell, javaProject.getProject(), "xml");
         }
@@ -464,7 +483,7 @@ public class Util {
         if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
             return null;
         }
-        return (IFile) result[0];
+        return (IFile)result[0];
     }
 
     /**
@@ -480,14 +499,14 @@ public class Util {
                           | JavaElementLabelProvider.SHOW_POST_QUALIFIED
                           | JavaElementLabelProvider.SHOW_ROOT;
         final ElementListSelectionDialog dlg =
-                new ElementListSelectionDialog(shell, new JavaElementLabelProvider(flags) {
+            new ElementListSelectionDialog(shell, new JavaElementLabelProvider(flags) {
 
-                    @Override
-                    public String getText(final Object element) {
-                        return super.getText(element) + " - "
-                               + ((IResource) element).getParent().getFullPath().makeRelative();
-                    }
-                });
+                @Override
+                public String getText(final Object element) {
+                    return super.getText(element) + " - "
+                           + ((IResource)element).getParent().getFullPath().makeRelative();
+                }
+            });
         dlg.setTitle("Select " + schemaType);
         dlg.setMessage("Select the " + schemaType + " file for the transformation");
         dlg.setMatchEmptyString(true);
@@ -496,7 +515,7 @@ public class Util {
         populateResources(shell, project, resources);
         dlg.setElements(resources.toArray());
         return dlg.open() == Window.OK
-               ? ((IFile) dlg.getFirstResult()).getProjectRelativePath().toString() : null;
+            ? ((IFile)dlg.getFirstResult()).getProjectRelativePath().toString() : null;
     }
 
     /**
@@ -527,7 +546,7 @@ public class Util {
         if (result == null || result.length == 0 || !(result[0] instanceof IFile)) {
             return null;
         }
-        return (IFile) result[0];
+        return (IFile)result[0];
     }
 
     public static boolean type(final Model model) {
@@ -539,19 +558,18 @@ public class Util {
         if (mappingOp != null && mappingOp instanceof BaseDozerMapping) {
 
             // if both sides of the equation are Models, we're good to check this out
-            if (!(mappingOp.getSource() instanceof Model &&
-                    mappingOp.getTarget() instanceof Model)) {
+            if (!(mappingOp.getSource() instanceof Model && mappingOp.getTarget() instanceof Model)) {
                 return;
             }
-            Model srcModel = (Model) mappingOp.getSource();
-            Model tgtModel = (Model) mappingOp.getTarget();
-            BaseDozerMapping dMapping = (BaseDozerMapping) mappingOp;
+            Model srcModel = (Model)mappingOp.getSource();
+            Model tgtModel = (Model)mappingOp.getTarget();
+            BaseDozerMapping dMapping = (BaseDozerMapping)mappingOp;
             if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
+                tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
                 String dateFormatStr = Util.getDateFormat(shell, mappingOp, true);
                 dMapping.setSourceDateFormat(dateFormatStr);
             } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    srcModel.getType().equalsIgnoreCase("java.util.Date")) {
+                       srcModel.getType().equalsIgnoreCase("java.util.Date")) {
                 String dateFormatStr = Util.getDateFormat(shell, mappingOp, false);
                 dMapping.setTargetDateFormat(dateFormatStr);
             }
@@ -566,11 +584,11 @@ public class Util {
         if (srcModel != null && tgtModel != null && config != null) {
             FieldMapping mapping = config.mapField(srcModel, tgtModel);
             if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
+                tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
                 String dateFormatStr = Util.getDateFormat(shell, mapping, true);
                 mapping.setSourceDateFormat(dateFormatStr);
             } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                    srcModel.getType().equalsIgnoreCase("java.util.Date")) {
+                       srcModel.getType().equalsIgnoreCase("java.util.Date")) {
                 String dateFormatStr = Util.getDateFormat(shell, mapping, false);
                 mapping.setTargetDateFormat(dateFormatStr);
             }
@@ -616,13 +634,37 @@ public class Util {
 
         if (!missingDependencies.isEmpty()) {
             try (final OutputStream stream =
-                     new BufferedOutputStream(new FileOutputStream(pomFile))) {
+                new BufferedOutputStream(new FileOutputStream(pomFile))) {
                 MavenPlugin.getMaven().writeModel(pom, stream);
                 pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
             } catch (final Exception e) {
                 Activator.error(e);
             }
         }
+    }
+
+    /**
+     * @return <code>true</code> if the supplied value is valid for the supplied function argument's annotation and type
+     * @param value
+     *        An argument value to be validated
+     * @param arg
+     *        the function argument's annotation
+     * @param type
+     *        the function argument's type
+     */
+    public static boolean valid(String value,
+                                Arg annotation,
+                                Class<?> type) {
+        if (value == null || value.isEmpty()) {
+            if (type == Boolean.class) return true;
+            return annotation == null ? false : !annotation.defaultValue().isEmpty();
+        }
+        try {
+            type.getConstructor(String.class).newInstance(value);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean validSourceAndTarget(final Object source,
@@ -742,7 +784,7 @@ public class Util {
         /**
          *
          */
-        Color SASH = Activator.color(0, 0, 0);
+        Color SASH = Activator.color(64, 64, 64);
 
         /**
          *
@@ -782,15 +824,14 @@ public class Util {
     }
 
     /**
-     * Provides users with the ability to further filter which classes appear in
-     * the dialog shown by {@link Util#selectClass(Shell, IProject, Filter)}
+     * Provides users with the ability to further filter which classes appear in the dialog shown by
+     * {@link Util#selectClass(Shell, IProject, Filter)}
      */
     public static interface Filter {
 
         /**
          * @param type
-         * @return <code>true</code> if the supplied type should appear in the
-         *         dialog shown by
+         * @return <code>true</code> if the supplied type should appear in the dialog shown by
          *         {@link Util#selectClass(Shell, IProject, Filter)}
          */
         boolean accept(IType type);

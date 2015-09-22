@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -102,7 +101,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
 
             @Override
             public String getText(final Object element) {
-                final IMethod method = (IMethod) element;
+                final IMethod method = (IMethod)element;
                 try {
                     final StringBuilder builder = new StringBuilder();
                     builder.append(Signature.getSignatureSimpleName(method.getReturnType()));
@@ -139,8 +138,8 @@ final class AddCustomFunctionDialog extends BaseDialog {
             public int compare(final Viewer viewer,
                                final Object object1,
                                final Object object2) {
-                final IMethod method1 = (IMethod) object1;
-                final IMethod method2 = (IMethod) object2;
+                final IMethod method1 = (IMethod)object1;
+                final IMethod method2 = (IMethod)object2;
                 int comparison = method1.getElementName().compareTo(method2.getElementName());
                 if (comparison != 0) {
                     return comparison;
@@ -152,8 +151,8 @@ final class AddCustomFunctionDialog extends BaseDialog {
                     return comparison;
                 }
                 for (int ndx = 0; ndx < types1.length; ndx++) {
-                    comparison = Signature.getSignatureSimpleName(types1[ndx]).compareTo(
-                                 Signature.getSignatureSimpleName(types2[ndx]));
+                    comparison =
+                        Signature.getSignatureSimpleName(types1[ndx]).compareTo(Signature.getSignatureSimpleName(types2[ndx]));
                     if (comparison != 0) {
                         return comparison;
                     }
@@ -192,19 +191,19 @@ final class AddCustomFunctionDialog extends BaseDialog {
         page.init(new StructuredSelection(project));
         action.setConfiguredWizardPage(page);
         action.run();
-        final IType type = (IType) action.getCreatedElement();
+        final IType type = (IType)action.getCreatedElement();
         if (type != null) {
             try {
                 type.createMethod("public " + page.returnType + " " + page.methodName + "("
                                   + page.prmType + " input) {\n"
                                   + "\treturn null;\n"
                                   + "}",
-                        null, false, null);
+                                  null, false, null);
                 if (type.getCompilationUnit().isWorkingCopy()) {
                     type.getCompilationUnit().commitWorkingCopy(true, null);
                 }
                 setClass(type, classButton, methodComboViewer);
-            } catch (final JavaModelException e) {
+            } catch (final Exception e) {
                 Activator.error(e);
             }
         }
@@ -222,8 +221,8 @@ final class AddCustomFunctionDialog extends BaseDialog {
 
     void methodSelected(final ComboViewer methodComboViewer) {
         final IStructuredSelection selection =
-            (IStructuredSelection) methodComboViewer.getSelection();
-        method = (IMethod) selection.getFirstElement();
+            (IStructuredSelection)methodComboViewer.getSelection();
+        method = (IMethod)selection.getFirstElement();
     }
 
     void selectClass(final Button classButton,
@@ -238,8 +237,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
                             return true;
                         }
                     }
-                } catch (final JavaModelException ignored) {
-                }
+                } catch (final JavaModelException ignored) {}
                 return false;
             }
         };
@@ -284,7 +282,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
     boolean valid(final IMethod method) {
         try {
             return !Signature.getSignatureSimpleName(method.getReturnType()).equals("void")
-                    && method.getParameters().length == 1;
+                   && method.getParameters().length == 1;
         } catch (final JavaModelException e) {
             return false;
         }
@@ -314,17 +312,17 @@ final class AddCustomFunctionDialog extends BaseDialog {
                                                .align(SWT.FILL, SWT.CENTER)
                                                .grab(true, false).create());
             combo.setItems(new String[] {
-                    "boolean",
-                    "byte",
-                    "char",
-                    "double",
-                    "float",
-                    "int",
-                    "java.util.List< ? >",
-                    "long",
-                    "Object",
-                    "short",
-                    "String",
+                "boolean",
+                "byte",
+                "char",
+                "double",
+                "float",
+                "int",
+                "java.util.List< ? >",
+                "long",
+                "Object",
+                "short",
+                "String",
             });
             combo.addSelectionListener(new SelectionAdapter() {
 
@@ -432,31 +430,27 @@ final class AddCustomFunctionDialog extends BaseDialog {
             // checking for Java reserved keywords
             if (name == null || name.isEmpty()) {
                 return new Status(IStatus.ERROR,
-                                   Activator.plugin().getBundle().getSymbolicName(),
-                                   "A " + nameName
-                                   + " name for the custom operation must be provided");
+                                  Activator.plugin().getBundle().getSymbolicName(),
+                                  "A " + nameName + " name for the custom operation must be provided");
             }
             final char[] chars = name.toCharArray();
             final char firstChar = chars[0];
             if (!Character.isJavaIdentifierStart(firstChar)) {
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "The " + nameName
-                                  + " name for the custom operation begins with an invalid character");
+                                  "The " + nameName + " name for the custom operation begins with an invalid character");
             }
             for (int ndx = 1; ndx < chars.length; ++ndx) {
                 if (!Character.isJavaIdentifierPart(chars[ndx])) {
                     return new Status(IStatus.ERROR,
                                       Activator.plugin().getBundle().getSymbolicName(),
-                                      "The " + nameName
-                                      + " name for the custom operation contains at least one invalid character");
+                                      "The " + nameName + " name for the custom operation contains at least one invalid character");
                 }
             }
             if (Character.isUpperCase(firstChar)) {
                 return new Status(IStatus.WARNING,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "The " + nameName
-                                  + " name for the custom operation begins with an uppercase letter");
+                                  "The " + nameName + " name for the custom operation begins with an uppercase letter");
             }
             return Status.OK_STATUS;
         }
@@ -471,19 +465,18 @@ final class AddCustomFunctionDialog extends BaseDialog {
             if (type == null) {
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "A " + typeName
-                                  + " type for the custom operation must be selected");
+                                  "A " + typeName + " type for the custom operation must be selected");
             }
             return Status.OK_STATUS;
         }
 
         void updateStatus() {
             updateStatus(new IStatus[] {
-                    fContainerStatus,
-                    fPackageStatus,
-                    fTypeNameStatus,
-                    fSuperClassStatus,
-                    fSuperInterfacesStatus
+                fContainerStatus,
+                fPackageStatus,
+                fTypeNameStatus,
+                fSuperClassStatus,
+                fSuperInterfacesStatus
             });
         }
 

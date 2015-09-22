@@ -11,11 +11,13 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -29,6 +31,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -36,7 +40,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -48,21 +55,31 @@ import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.function.Function;
+import org.jboss.tools.fuse.transformation.editor.function.Function.Arg;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.CanceledDialogException;
+import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser;
+import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser.FormatSpecifier;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 import org.jboss.tools.fuse.transformation.model.Model;
 
-/**
- *
- */
 public final class MappingDetailViewer extends MappingViewer {
+
+    private static final String PREFERENCE_PREFIX = MappingDetailViewer.class.getName() + ".";
+
+    private static final String STANDARD_FORMAT_PREFERENCE = PREFERENCE_PREFIX + "standardFormat";
 
     final ScrolledComposite scroller;
     final Point imageButtonLabelSize;
+    final Map<Integer, Text> textById = new HashMap<>();
+    int nextFocusedTextId;
+    transient int focusedTextId = -1;
+    transient int focusedTextOffset;
+    boolean standardFormat;
 
     /**
      * @param config
@@ -91,28 +108,28 @@ public final class MappingDetailViewer extends MappingViewer {
                 configEvent(event.getPropertyName(), event.getOldValue(), event.getNewValue());
             }
         });
+
+        standardFormat = Activator.plugin().getPreferenceStore().getBoolean(STANDARD_FORMAT_PREFERENCE);
     }
 
     void addCustomFunction() throws Exception {
         final AddCustomFunctionDialog dlg =
-            new AddCustomFunctionDialog(scroller.getShell(),
-                                        config.project(),
-                                        ((Model)mapping.getSource()).getType());
-        if (dlg.open() != Window.OK) {
-            return;
-        }
-        mapping = config.customizeMapping((FieldMapping) mapping,
-                                          dlg.type.getFullyQualifiedName(),
-                                          dlg.method.getElementName());
+            new AddCustomFunctionDialog(scroller.getShell(), config.project(), ((Model)mapping.getSource()).getType());
+        if (dlg.open() != Window.OK) return;
+        mapping = config.customizeMapping((FieldMapping)mapping, dlg.type.getFullyQualifiedName(), dlg.method.getElementName());
         config.save();
     }
 
-    void addFunction() throws Exception {
-        final AddFunctionDialog dlg = new AddFunctionDialog(scroller.getShell(), (Model)mapping.getSource(), config.project());
+    void addOrEditFunction() throws Exception {
+        final FunctionDialog dlg = new FunctionDialog(scroller.getShell(), mapping, config.project());
         if (dlg.open() != Window.OK) return;
-        mapping = config.customizeMapping((FieldMapping) mapping,
-                                          dlg.method.getDeclaringClass().getName(),
-                                          dlg.method.getName());
+        String[] args = new String[dlg.argumentValues.length];
+        Class<?>[] types = dlg.function.getParameterTypes();
+        for (int ndx = 0; ndx < dlg.argumentValues.length; ++ndx) {
+            args[ndx] = types[ndx + 1].getName() + "=" + dlg.argumentValues[ndx];
+        }
+        mapping = config.customizeMapping((FieldMapping)mapping, dlg.function.getDeclaringClass().getName(),
+                                          dlg.function.getName(), args);
         config.save();
     }
 
@@ -121,26 +138,30 @@ public final class MappingDetailViewer extends MappingViewer {
                      final Object newValue) {
         switch (eventType) {
             case TransformationConfig.MAPPING: {
-                if (equals(mapping, oldValue)) {
-                    scroller.setContent(null);
-                } else if (newValue != null) {
-                    update((MappingOperation<?, ?>)newValue);
+                if (equals(mapping, oldValue)) scroller.setContent(null);
+                else if (newValue != null) update((MappingOperation<?, ?>)newValue);
+                break;
+            }
+            case TransformationConfig.MAPPING_CUSTOMIZE: {
+                if (equals(mapping, oldValue)) update((MappingOperation<?, ?>)newValue);
+                if (oldValue instanceof CustomMapping && newValue instanceof CustomMapping) {
+                    Text text = textById.get(focusedTextId);
+                    if (text != null) {
+                        text.setFocus();
+                        text.setSelection(focusedTextOffset);
+                    }
                 }
                 break;
             }
-            case TransformationConfig.MAPPING_CUSTOMIZE:
             case TransformationConfig.MAPPING_SOURCE:
             case TransformationConfig.MAPPING_TARGET: {
-                if (equals(mapping, oldValue)) {
-                    update((MappingOperation<?, ?>)newValue);
-                }
+                if (equals(mapping, oldValue)) update((MappingOperation<?, ?>)newValue);
                 break;
             }
             case TransformationConfig.VARIABLE_VALUE: {
                 variableValueUpdated((Variable)newValue);
                 break;
             }
-            default: // ignore other cases
         }
     }
 
@@ -151,22 +172,15 @@ public final class MappingDetailViewer extends MappingViewer {
         parent = createContainerPane(parent, model.getParent(), parentIndexes(indexes));
         final Color color;
         if (model.getParent() == null) color = Colors.CONTAINER;
-        else if (parent.getForeground().equals(Colors.CONTAINER))
-            color = Colors.CONTAINER_ALTERNATE;
+        else if (parent.getForeground().equals(Colors.CONTAINER)) color = Colors.CONTAINER_ALTERNATE;
         else color = Colors.CONTAINER;
         final Composite pane = createRoundedPane(parent, color);
         if (model.getParent() == null) {
             pane.setLayoutData(GridDataFactory.swtDefaults()
-                                              .align(model == config.getSourceModel()
-                                                     ? SWT.RIGHT
-                                                     : SWT.LEFT,
-                                                     SWT.CENTER)
+                                              .align(model == config.getSourceModel() ? SWT.RIGHT : SWT.LEFT, SWT.CENTER)
                                               .grab(true, true)
                                               .create());
-        } else pane.setLayoutData(GridDataFactory.swtDefaults()
-                                                 .align(SWT.CENTER, SWT.CENTER)
-                                                 .grab(true, true)
-                                                 .create());
+        } else pane.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, true).create());
         final Label label = new Label(pane, SWT.NONE);
         label.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
         final Integer index = indexes == null ? null : indexes.get(indexes.size() - 1);
@@ -175,41 +189,125 @@ public final class MappingDetailViewer extends MappingViewer {
         return pane;
     }
 
-    @SuppressWarnings("unused")
-    private void createCustomSourcePane(final Composite parent) {
-        final Composite pane =
-            createRoundedPane(createContainerPane(parent,
-                                                  ((Model)mapping.getSource()).getParent(),
-                                                  parentIndexes(mapping.getSourceIndex())),
-                              Colors.FUNCTION);
-        pane.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
-        new ControlWithMenuPane(pane) {
+    private void createFunctionArgumentControl(Composite parent,
+                                               final Class<?> type,
+                                               final Arg argAnno,
+                                               final CustomMapping customMapping,
+                                               final String[] mappingArgs,
+                                               final int argNdx) {
+        String val = mappingArgs[argNdx].split("=")[1];
+        Control control;
+        if (type == Boolean.class) {
+            final Button checkBox = new Button(parent, SWT.CHECK);
+            checkBox.setSelection(Boolean.valueOf(val));
+            checkBox.addSelectionListener(new SelectionAdapter() {
 
-            @Override
-            void constructControl() {
-                final Label functionLabel = new Label(this, SWT.NONE);
-                final CustomMapping customMapping = (CustomMapping)mapping;
-                functionLabel.setText(customMapping.getMappingOperation());
-                functionLabel.setToolTipText(customMapping.getMappingClass() + '.'
-                                             + customMapping.getMappingOperation());
-                addMenuItem("Remove custom function", new MenuItemHandler() {
+                @Override
+                public void widgetSelected(SelectionEvent event) {
+                    updateFunctionArgument(customMapping, mappingArgs, argNdx, argAnno, type,
+                                           String.valueOf(checkBox.getSelection()));
+                }
+            });
+            control = checkBox;
+        } else {
+            final Text text = new Text(parent, SWT.BORDER);
+            if (argAnno == null || !argAnno.hideDefault() || !val.equals(argAnno.defaultValue())) text.setText(val);
+            text.addModifyListener(new ModifyListener() {
 
-                    @Override
-                    public void widgetSelected(final SelectionEvent event) {
-                        try {
-                            removeCustomFunction();
-                        } catch (final Exception e) {
-                            Activator.error(e);
-                        }
+                @Override
+                public void modifyText(ModifyEvent event) {
+                    focusedTextOffset = text.getCaretPosition();
+                    updateFunctionArgument(customMapping, mappingArgs, argNdx, argAnno, type, text.getText());
+                }
+            });
+            final int id = nextFocusedTextId++;
+            textById.put(id, text);
+            text.addFocusListener(new FocusAdapter() {
+
+                @Override
+                public void focusGained(FocusEvent event) {
+                    focusedTextId = id;
+                }
+
+                @Override
+                public void focusLost(FocusEvent event) {
+                    focusedTextId = -1;
+                }
+            });
+            control = text;
+        }
+        if (argAnno == null) control.setToolTipText(type.getName());
+        else {
+            StringBuilder builder = new StringBuilder(argAnno.name());
+            builder.append(" <");
+            builder.append(type.getName());
+            builder.append(">");
+            if (!argAnno.defaultValue().isEmpty()) builder.append(" (optional)");
+            builder.append(": ");
+            builder.append(argAnno.description());
+            control.setToolTipText(builder.toString());
+        }
+    }
+
+    private void createFunctionSourcePane(Composite parent) {
+        Model sourceModel = ((Model)mapping.getSource());
+        parent = createContainerPane(parent, sourceModel.getParent(), parentIndexes(mapping.getSourceIndex()));
+        final CustomMapping customMapping = (CustomMapping)mapping;
+        Method function = function(customMapping, sourceModel);
+        final Function annotation = function.getAnnotation(Function.class);
+        final String[] mappingArgs = customMapping.getFunctionArguments();
+        final Class<?>[] types = function.getParameterTypes();
+        if (standardFormat || annotation == null || annotation.format().isEmpty()) {
+            FunctionControl functionPane = new FunctionControl(parent, customMapping, annotation) {
+
+                @Override
+                void createFunction(Composite parent,
+                                    GridLayout layout) {
+                    layout.numColumns = 4 + mappingArgs.length * 2;
+                    Label label = new Label(parent, SWT.NONE);
+                    label.setText(customMapping.getFunctionName());
+                    setToolTipToFunctionDescription(label);
+                    new Label(parent, SWT.NONE).setText("(");
+                    createSourcePane(parent);
+                    for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
+                        new Label(parent, SWT.NONE).setText(",");
+                        int argNdx = typeNdx - 1;
+                        Arg argAnno =
+                            annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
+                        createFunctionArgumentControl(parent, types[typeNdx], argAnno, customMapping, mappingArgs, argNdx);
                     }
-                });
-            }
-        };
-        Label label = new Label(pane, SWT.NONE);
-        label.setText("(");
-        createSourcePane(pane);
-        label = new Label(pane, SWT.NONE);
-        label.setText(")");
+                    new Label(parent, SWT.NONE).setText(")");
+                }
+            };
+            functionPane.create();
+        } else {
+            FunctionControl functionPane = new FunctionControl(parent, customMapping, annotation) {
+
+                @Override
+                void createFunction(Composite parent,
+                                    GridLayout layout) {
+                    Object[] parts = FormatParser.parse(annotation.format());
+                    for (int ndx = 0; ndx < parts.length; ndx++) {
+                        Object part = parts[ndx];
+                        if (part instanceof FormatSpecifier) {
+                            int typeNdx = ((FormatSpecifier)part).index() - 1;
+                            if (typeNdx == 0) createSourcePane(parent);
+                            else {
+                                int argNdx = typeNdx - 1;
+                                Arg argAnno = argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
+                                createFunctionArgumentControl(parent, types[typeNdx], argAnno, customMapping, mappingArgs, argNdx);
+                            }
+                        } else {
+                            Label label = new Label(parent, SWT.NONE);
+                            label.setText(part.toString().trim());
+                            setToolTipToFunctionDescription(label);
+                        }
+                        layout.numColumns++;
+                    }
+                }
+            };
+            functionPane.create();
+        }
     }
 
     private Composite createRoundedPane(final Composite parent,
@@ -222,152 +320,153 @@ public final class MappingDetailViewer extends MappingViewer {
         return pane;
     }
 
-    @SuppressWarnings("unused")
-    private void createSourcePane(final Composite parent) {
-        new ControlWithMenuPane(parent) {
+    private void createSourcePane(Composite parent) {
+        ControlWithMenuPane fieldPane = new ControlWithMenuPane(parent) {
 
             @Override
-            void constructControl() {
+            void createControl() {
                 createSourceText(this, SWT.NONE);
                 sourceText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-                addMenuItem("Set field", new MenuItemHandler() {
-
-                    @Override
-                    public void widgetSelected(final SelectionEvent event) {
-                        try {
-                            setField(true);
-                        } catch (final Exception e) {
-                            Activator.error(e);
-                        }
-                    }
-                });
-                addMenuItem("Set variable", new MenuItemHandler() {
-
-                    @Override
-                    boolean enabled() {
-                        return mapping.getType() != MappingType.CUSTOM;
-                    }
-
-                    @Override
-                    public void widgetSelected(final SelectionEvent event) {
-                        try {
-                            setVariable();
-                        } catch (final Exception e) {
-                            Activator.error(e);
-                        }
-                    }
-                });
-                addMenuItem("Set expression", new MenuItemHandler() {
-
-                    @Override
-                    boolean enabled() {
-                        return mapping.getType() != MappingType.CUSTOM;
-                    }
-
-                    @Override
-                    public void widgetSelected(final SelectionEvent event) {
-                        try {
-                            setExpression();
-                        } catch (final Exception e) {
-                            Activator.error(e);
-                        }
-                    }
-                });
-                addMenuItem("Add function", new MenuItemHandler() {
-
-                    @Override
-                    boolean enabled() {
-                        return mapping.getType() == MappingType.FIELD;
-                    }
-
-                    @Override
-                    public void widgetSelected(final SelectionEvent event) {
-                        try {
-                            addFunction();
-                        } catch (final Exception e) {
-                            Activator.error(e);
-                        }
-                    }
-                });
-                addMenuItem("Add custom function", new MenuItemHandler() {
-
-                    @Override
-                    boolean enabled() {
-                        return mapping.getType() == MappingType.FIELD;
-                    }
-
-                    @Override
-                    public void widgetSelected(final SelectionEvent event) {
-                        try {
-                            addCustomFunction();
-                        } catch (final Exception e) {
-                            Activator.error(e);
-                        }
-                    }
-                });
-                if (mapping != null && mapping.getSource() != null) {
-                    if (Util.modelsNeedDateFormat(mapping.getSource(),
-                            mapping.getTarget(), true)) {
-                        addMenuItem("Set date format", new MenuItemHandler() {
-                            @Override
-                            public void widgetSelected(final SelectionEvent event) {
-                                try {
-                                    // open dialog to select date format
-                                    setDateFormat(true);
-                                } catch (final Exception e) {
-                                    Activator.error(e);
-                                }
-                            }
-                        });
-                    }
-                }
             }
         };
+        fieldPane.create();
+        fieldPane.addMenuItem("Set field", new MenuItemHandler() {
+
+            @Override
+            public void widgetSelected(final SelectionEvent event) {
+                try {
+                    setField(true);
+                } catch (final Exception e) {
+                    Activator.error(e);
+                }
+            }
+        });
+        fieldPane.addMenuItem("Set variable", new MenuItemHandler() {
+
+            @Override
+            boolean enabled() {
+                return mapping.getType() != MappingType.CUSTOM;
+            }
+
+            @Override
+            public void widgetSelected(final SelectionEvent event) {
+                try {
+                    setVariable();
+                } catch (final Exception e) {
+                    Activator.error(e);
+                }
+            }
+        });
+        fieldPane.addMenuItem("Set expression", new MenuItemHandler() {
+
+            @Override
+            boolean enabled() {
+                return mapping.getType() != MappingType.CUSTOM;
+            }
+
+            @Override
+            public void widgetSelected(final SelectionEvent event) {
+                try {
+                    setExpression();
+                } catch (final Exception e) {
+                    Activator.error(e);
+                }
+            }
+        });
+        fieldPane.addMenuItem("Add function", new MenuItemHandler() {
+
+            @Override
+            boolean enabled() {
+                return mapping.getType() == MappingType.FIELD;
+            }
+
+            @Override
+            public void widgetSelected(final SelectionEvent event) {
+                try {
+                    addOrEditFunction();
+                } catch (final Exception e) {
+                    Activator.error(e);
+                }
+            }
+        });
+        fieldPane.addMenuItem("Add custom function", new MenuItemHandler() {
+
+            @Override
+            boolean enabled() {
+                return mapping.getType() == MappingType.FIELD;
+            }
+
+            @Override
+            public void widgetSelected(final SelectionEvent event) {
+                try {
+                    addCustomFunction();
+                } catch (final Exception e) {
+                    Activator.error(e);
+                }
+            }
+        });
+        if (mapping != null && mapping.getSource() != null) {
+            if (Util.modelsNeedDateFormat(mapping.getSource(),
+                                          mapping.getTarget(), true)) {
+                fieldPane.addMenuItem("Set date format", new MenuItemHandler() {
+
+                    @Override
+                    public void widgetSelected(final SelectionEvent event) {
+                        try {
+                            // open dialog to select date format
+                            setDateFormat(true);
+                        } catch (final Exception e) {
+                            Activator.error(e);
+                        }
+                    }
+                });
+            }
+        }
     }
 
-    @SuppressWarnings("unused")
     private void createTargetPane(final Composite parent) {
         final Composite pane;
-        if (mapping.getTarget() == null)
-            pane = createContainerPane(parent, config.getTargetModel(), null);
+        if (mapping.getTarget() == null) pane = createContainerPane(parent, config.getTargetModel(), null);
         else pane = createContainerPane(parent,
                                         ((Model)mapping.getTarget()).getParent(),
                                         parentIndexes(mapping.getTargetIndex()));
-        new ControlWithMenuPane(pane) {
+        ControlWithMenuPane fieldPane = new ControlWithMenuPane(pane) {
 
             @Override
-            void constructControl() {
+            void createControl() {
                 createTargetText(this);
                 targetText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-                addMenuItem("Set field", new MenuItemHandler() {
+            }
+        };
+        fieldPane.create();
+        fieldPane.addMenuItem("Set field", new MenuItemHandler() {
+
+            @Override
+            public void widgetSelected(final SelectionEvent event) {
+                try {
+                    setField(false);
+                } catch (final Exception e) {
+                    Activator.error(e);
+                }
+            }
+        });
+        if (mapping != null && mapping.getTarget() != null) {
+            if (Util.modelsNeedDateFormat(mapping.getSource(),
+                                          mapping.getTarget(), false)) {
+                fieldPane.addMenuItem("Set date format", new MenuItemHandler() {
 
                     @Override
                     public void widgetSelected(final SelectionEvent event) {
                         try {
-                            setField(false);
+                            // open dialog to select date format
+                            setDateFormat(false);
                         } catch (final Exception e) {
                             Activator.error(e);
                         }
                     }
                 });
-                if (mapping != null && mapping.getTarget() != null) {
-                    if (Util.modelsNeedDateFormat(mapping.getSource(),
-                            mapping.getTarget(), false)) {
-                        addMenuItem("Set date format", new MenuItemHandler() {
-                            @Override
-                            public void widgetSelected(final SelectionEvent event) {
-                                try {
-                                    // open dialog to select date format
-                                    setDateFormat(false);
-                                } catch (final Exception e) {
-                                    Activator.error(e);
-                                }
-                            }
-                        });
-                    }
-                }
             }
-        };
+        }
     }
 
     @Override
@@ -396,21 +495,38 @@ public final class MappingDetailViewer extends MappingViewer {
         super.finalize();
     }
 
-    private List<Integer> parentIndexes(final List<Integer> indexes) {
-        return indexes != null && indexes.size() > 1
-               ? indexes.subList(0, indexes.size() - 1)
-               : null;
+    private Method function(CustomMapping customMapping,
+                            Model sourceModel) {
+        try {
+            for (Method method : Class.forName(customMapping.getFunctionClass()).getDeclaredMethods()) {
+                Class<?>[] types = method.getParameterTypes();
+                if (Modifier.isPublic(method.getModifiers())
+                    && method.getName().equals(customMapping.getFunctionName())
+                    && types.length > 0 && sourceModel.getType().equals(types[0].getName())) {
+                    return method;
+                }
+            }
+        } catch (SecurityException | ClassNotFoundException e) {
+            Activator.error(e);
+        }
+        return null; // Should never happen
     }
 
-    void removeCustomFunction() throws Exception {
-        config.uncustomizeMapping((CustomMapping) mapping);
+    private List<Integer> parentIndexes(final List<Integer> indexes) {
+        return indexes != null && indexes.size() > 1
+            ? indexes.subList(0, indexes.size() - 1)
+            : null;
+    }
+
+    private void removeFunction() throws Exception {
+        config.uncustomizeMapping((CustomMapping)mapping);
         config.save();
     }
 
-    void setDateFormat(boolean isSource) throws Exception {
+    private void setDateFormat(boolean isSource) throws Exception {
         String dateFormatStr = Util.getDateFormat(sourceText.getShell(), mapping, isSource);
         if (dateFormatStr != null && !dateFormatStr.trim().isEmpty()) {
-            BaseDozerMapping dMapping = (BaseDozerMapping) mapping;
+            BaseDozerMapping dMapping = (BaseDozerMapping)mapping;
             if (isSource) {
                 dMapping.setSourceDateFormat(dateFormatStr);
             } else if (!isSource) {
@@ -420,7 +536,7 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    void setExpression() throws Exception {
+    private void setExpression() throws Exception {
         final ExpressionDialog dlg = new ExpressionDialog(sourceText.getShell(), mapping, config.project());
         if (dlg.open() != Window.OK) {
             return;
@@ -430,8 +546,8 @@ public final class MappingDetailViewer extends MappingViewer {
         try {
             final List<Integer> indexes =
                 targetModel != null && Util.isOrInCollection(targetModel)
-                ? Util.indexes(sourceText.getShell(), targetModel, false)
-                : null;
+                    ? Util.indexes(sourceText.getShell(), targetModel, false)
+                    : null;
             mapping =
                 config.setSourceExpression(mapping, dlg.getLanguage().getName(), dlg.getExpression(), indexes);
             config.save();
@@ -441,7 +557,8 @@ public final class MappingDetailViewer extends MappingViewer {
     void setField(final boolean source) throws Exception {
         final FieldDialog dlg =
             new FieldDialog(sourceText.getShell(), source ? config.getSourceModel() : config.getTargetModel(), config, mapping);
-        if (dlg.open() != Window.OK) return;
+        if (dlg.open() != Window.OK)
+            return;
         if (source) setSource(dlg.field);
         else setTarget(dlg.field);
     }
@@ -455,8 +572,8 @@ public final class MappingDetailViewer extends MappingViewer {
         try {
             final List<Integer> indexes =
                 targetModel != null && Util.isOrInCollection(targetModel)
-                ? Util.indexes(sourceText.getShell(), targetModel, false)
-                : null;
+                    ? Util.indexes(sourceText.getShell(), targetModel, false)
+                    : null;
             mapping = config.setSource(mapping, dlg.variable, null, indexes);
             config.save();
         } catch (CanceledDialogException ignored) {}
@@ -468,18 +585,19 @@ public final class MappingDetailViewer extends MappingViewer {
     public void update(final MappingOperation<?, ?> mapping) {
         this.mapping = mapping;
         if (sourceDropTarget != null) dispose();
+        textById.clear();
+        nextFocusedTextId = 0;
         final Composite contentPane = new Composite(scroller, SWT.NONE);
         scroller.setContent(contentPane);
         contentPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
         contentPane.setBackground(scroller.getBackground());
         contentPane.setForeground(contentPane.getBackground());
-        if (mapping.getType() == MappingType.CUSTOM) createCustomSourcePane(contentPane);
+        if (mapping.getType() == MappingType.CUSTOM) createFunctionSourcePane(contentPane);
         else {
             final Composite pane;
-            if (mapping.getSource() instanceof Model)
-                pane = createContainerPane(contentPane,
-                                           ((Model)mapping.getSource()).getParent(),
-                                           parentIndexes(mapping.getSourceIndex()));
+            if (mapping.getSource() instanceof Model) pane = createContainerPane(contentPane,
+                                                                                 ((Model)mapping.getSource()).getParent(),
+                                                                                 parentIndexes(mapping.getSourceIndex()));
             else pane = createContainerPane(contentPane, config.getSourceModel(), null);
             createSourcePane(pane);
         }
@@ -491,6 +609,23 @@ public final class MappingDetailViewer extends MappingViewer {
         contentPane.layout();
     }
 
+    private void updateFunctionArgument(CustomMapping mapping,
+                                        String[] functionArguments,
+                                        int index,
+                                        Arg argAnnotation,
+                                        Class<?> type,
+                                        String value) {
+        if (Util.valid(value, argAnnotation, type)) {
+            functionArguments[index] = type.getName() + "=" + (value.isEmpty() ? argAnnotation.defaultValue() : value);
+            mapping = config.customizeMapping(mapping, mapping.getFunctionClass(), mapping.getFunctionName(), functionArguments);
+            try {
+                config.save();
+            } catch (Exception e) {
+                Activator.error(e);
+            }
+        }
+    }
+
     private abstract class ControlWithMenuPane extends Composite {
 
         final Map<String, MenuItemHandler> menuItems = new LinkedHashMap<>();
@@ -498,28 +633,8 @@ public final class MappingDetailViewer extends MappingViewer {
         ControlWithMenuPane(final Composite parent) {
             super(parent, SWT.NONE);
             setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-            setLayout(GridLayoutFactory.fillDefaults().numColumns(3).spacing(1, 5).create());
+            setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
             setBackground(parent.getForeground());
-            final Label spacer = new Label(this, SWT.NONE);
-            spacer.setLayoutData(GridDataFactory.swtDefaults()
-                                                .hint(imageButtonLabelSize)
-                                                .create());
-            spacer.setBackground(getBackground());
-            constructControl();
-            final Label menuLabel = new Label(this, SWT.NONE);
-            menuLabel.setLayoutData(GridDataFactory.swtDefaults()
-                                                   .hint(imageButtonLabelSize)
-                                                   .align(SWT.BEGINNING, SWT.BOTTOM)
-                                                   .create());
-            menuLabel.setBackground(getBackground());
-            menuLabel.setImage(Images.MENU);
-            menuLabel.addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mouseUp(final MouseEvent event) {
-                    popupMenu(menuLabel, event.x, event.y);
-                }
-            });
         }
 
         void addMenuItem(final String item,
@@ -527,7 +642,30 @@ public final class MappingDetailViewer extends MappingViewer {
             menuItems.put(item, handler);
         }
 
-        abstract void constructControl();
+        void create() {
+            createControl();
+            createMenu();
+        }
+
+        abstract void createControl();
+
+        Label createMenu() {
+            final Label menu = new Label(this, SWT.NONE);
+            menu.setLayoutData(GridDataFactory.swtDefaults()
+                                              .hint(imageButtonLabelSize)
+                                              .align(SWT.BEGINNING, SWT.BOTTOM)
+                                              .create());
+            menu.setBackground(getBackground());
+            menu.setImage(Images.MENU);
+            menu.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseUp(final MouseEvent event) {
+                    popupMenu(menu, event.x, event.y);
+                }
+            });
+            return menu;
+        }
 
         void popupMenu(final Label menuLabel,
                        final int xPos,
@@ -548,19 +686,96 @@ public final class MappingDetailViewer extends MappingViewer {
                                             menuLabel.getLocation().y + size.y + 5));
             popupMenu.setVisible(true);
         }
+    }
 
-        abstract class MenuItemHandler extends SelectionAdapter {
+    private abstract class FunctionControl extends ControlWithMenuPane {
 
-            boolean enabled() {
-                return true;
-            }
+        CustomMapping customMapping;
+        Function annotation;
 
-            @Override
-            public final void widgetDefaultSelected(final SelectionEvent event) {}
-
-            @Override
-            public abstract void widgetSelected(SelectionEvent event);
+        FunctionControl(Composite parent,
+                        CustomMapping customMapping,
+                        Function annotation) {
+            super(parent);
+            this.customMapping = customMapping;
+            this.annotation = annotation;
         }
+
+        @Override
+        void createControl() {
+            final Composite pane = createRoundedPane(this, Colors.FUNCTION);
+            pane.setBackground(pane.getParent().getBackground());
+            GridLayout layout = GridLayoutFactory.swtDefaults().create();
+            pane.setLayout(layout);
+            setToolTipToFunctionDescription(pane);
+            createFunction(pane, layout);
+        }
+
+        abstract void createFunction(Composite parent,
+                                     GridLayout layout);
+
+        @Override
+        Label createMenu() {
+            final Label menu = super.createMenu();
+            setToolTipToFunctionDescription(menu);
+            if (annotation != null) {
+                addMenuItem("Edit function", new MenuItemHandler() {
+
+                    @Override
+                    public void widgetSelected(final SelectionEvent event) {
+                        try {
+                            addOrEditFunction();
+                        } catch (final Exception e) {
+                            Activator.error(e);
+                        }
+                    }
+                });
+                addMenuItem("Show " + (standardFormat ? "user-friendly" : "standard") + " formatting", new MenuItemHandler() {
+
+                    @Override
+                    public void widgetSelected(final SelectionEvent event) {
+                        try {
+                            standardFormat = !standardFormat;
+                            Activator.plugin().getPreferenceStore().setValue(STANDARD_FORMAT_PREFERENCE, standardFormat);
+                            update(mapping);
+                        } catch (final Exception e) {
+                            Activator.error(e);
+                        }
+                    }
+                });
+            }
+            addMenuItem("Remove function", new MenuItemHandler() {
+
+                @Override
+                public void widgetSelected(final SelectionEvent event) {
+                    try {
+                        removeFunction();
+                    } catch (final Exception e) {
+                        Activator.error(e);
+                    }
+                }
+            });
+            return menu;
+        }
+
+        void setToolTipToFunctionDescription(Control control) {
+            if (annotation == null) {
+                control.setToolTipText(customMapping.getFunctionClass() + "." + customMapping.getFunctionName());
+            } else control.setToolTipText(annotation.description());
+        }
+    }
+
+    abstract class MenuItemHandler extends SelectionAdapter {
+
+        boolean enabled() {
+            return true;
+        }
+
+        @Override
+        public final void widgetDefaultSelected(final SelectionEvent event) {}
+
+        @Override
+        public abstract void widgetSelected(SelectionEvent event);
     }
 
     final class VariableDialog extends BaseDialog {
@@ -570,7 +785,7 @@ public final class MappingDetailViewer extends MappingViewer {
         VariableDialog() {
             super(sourceText.getShell());
             if (mapping.getSource() instanceof Variable) {
-                this.variable = (Variable) mapping.getSource();
+                this.variable = (Variable)mapping.getSource();
             }
         }
 
@@ -590,7 +805,7 @@ public final class MappingDetailViewer extends MappingViewer {
 
                 @Override
                 public String getText(final Object element) {
-                    return ((Variable) element).getName();
+                    return ((Variable)element).getName();
                 }
             });
 
