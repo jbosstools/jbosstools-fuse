@@ -140,13 +140,11 @@ public class SapToolSuiteInstaller implements IRunnableWithProgress {
 			job.addJobChangeListener(new JobChangeAdapter() {
 				@Override
 				public void done(IJobChangeEvent event) {
-					// Remove SAP Tooling and SAP Libraries repository from Repository manager's list of known repositories.
+					// Remove Temporary SAP Libraries repository from Repository manager's list of known repositories.
 					IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager) provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME);
 					IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager) provisioningAgent.getService(IMetadataRepositoryManager.SERVICE_NAME);
 					artifactRepositoryManager.removeRepository(librariesRepositoryURI);
 					metadataRepositoryManager.removeRepository(librariesRepositoryURI);
-					artifactRepositoryManager.removeRepository(sapToolingSuiteRepositoryURI);
-					metadataRepositoryManager.removeRepository(sapToolingSuiteRepositoryURI);
 					
 					// Delete SAP Library repository
 					ImportUtils.deleteTemporarySapLibrariesRepository();
