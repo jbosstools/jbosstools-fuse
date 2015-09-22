@@ -15,7 +15,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <version.camel>2.15.1</version.camel>
+    <version.camel>2.15.1.redhat-621032</version.camel>
   </properties>
 
   <dependencies>

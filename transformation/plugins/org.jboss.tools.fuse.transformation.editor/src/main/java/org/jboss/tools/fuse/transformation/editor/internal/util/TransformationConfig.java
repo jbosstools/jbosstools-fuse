@@ -18,7 +18,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -126,27 +125,23 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration
-     *          #customizeMapping(org.jboss.tools.fuse.transformation.FieldMapping, java.lang.String)
+     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#customizeMapping(org.jboss.tools.fuse.transformation.FieldMapping, java.lang.String, java.lang.String, java.lang.String[])
      */
     @Override
-    public CustomMapping customizeMapping(final FieldMapping mapping,
-                                          final String mappingClass) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see MapperConfiguration#customizeMapping(FieldMapping, String, String)
-     */
-    @Override
-    public CustomMapping customizeMapping(final FieldMapping fieldMapping,
-                                          final String mappingClass,
-                                          final String mappingOperation) {
-        final CustomMapping customMapping = delegate.customizeMapping(
-                fieldMapping, mappingClass, mappingOperation);
-        fireEvent(MAPPING_CUSTOMIZE, fieldMapping, customMapping);
+    public CustomMapping customizeMapping(FieldMapping fieldMapping,
+                                          String functionClass,
+                                          String functionName,
+                                          String... functionArguments) {
+        FieldMapping origFieldMapping = fieldMapping;
+        if (fieldMapping.getType() == MappingType.CUSTOM) {
+            delegate.removeMapping(fieldMapping);
+            fieldMapping = delegate.mapField(fieldMapping.getSource(),
+                                             fieldMapping.getTarget(),
+                                             fieldMapping.getSourceIndex(),
+                                             fieldMapping.getTargetIndex());
+        }
+        final CustomMapping customMapping = delegate.customizeMapping(fieldMapping, functionClass, functionName, functionArguments);
+        fireEvent(MAPPING_CUSTOMIZE, origFieldMapping, customMapping);
         return customMapping;
     }
 
@@ -549,12 +544,14 @@ public class TransformationConfig implements MapperConfiguration {
 
     /**
      * @param customMapping
-     * @return a new (uncustomized) field mapping
+     * @return a new (non-custom) field mapping
      */
     public FieldMapping uncustomizeMapping(final CustomMapping customMapping) {
         delegate.removeMapping(customMapping);
-        final FieldMapping fieldMapping =
-            delegate.mapField(customMapping.getSource(), customMapping.getTarget());
+        final FieldMapping fieldMapping = delegate.mapField(customMapping.getSource(),
+                                                            customMapping.getTarget(),
+                                                            customMapping.getSourceIndex(),
+                                                            customMapping.getTargetIndex());
         fireEvent(MAPPING_CUSTOMIZE, customMapping, fieldMapping);
         return fieldMapping;
     }
@@ -589,8 +586,9 @@ public class TransformationConfig implements MapperConfiguration {
                 if (mapping.getType() == MappingType.CUSTOM) {
                     final CustomMapping customMapping = (CustomMapping)mapping;
                     resultMapping = delegate.customizeMapping((FieldMapping)resultMapping,
-                                                              customMapping.getMappingClass(),
-                                                              customMapping.getMappingOperation());
+                                                              customMapping.getFunctionClass(),
+                                                              customMapping.getFunctionName(),
+                                                              customMapping.getFunctionArguments());
                 }
             } else if (source instanceof Variable) {
                 if (mapping.getType() == MappingType.VARIABLE

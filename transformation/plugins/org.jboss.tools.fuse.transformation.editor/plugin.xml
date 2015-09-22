@@ -72,5 +72,13 @@
             class="org.jboss.tools.fuse.transformation.editor.function.StringFunctions"
             source="src/main/resources/org/jboss/tools/fuse/transformation/editor/function/StringFunctions.java">
       </Function>
+      <Function
+            class="org.jboss.tools.fuse.transformation.editor.function.BooleanFunctions"
+            source="src/main/resources/org/jboss/tools/fuse/transformation/editor/function/BooleanFunctions.java">
+      </Function>
+      <Function
+            class="org.jboss.tools.fuse.transformation.editor.function.NumericFunctions"
+            source="src/main/resources/org/jboss/tools/fuse/transformation/editor/function/NumericFunctions.java">
+      </Function>
    </extension>
 </plugin>

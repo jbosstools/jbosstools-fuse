@@ -11,7 +11,6 @@ package org.jboss.tools.fuse.transformation.editor;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -30,6 +29,7 @@ public class Activator extends AbstractUIPlugin {
     private static Activator plugin;
 
     public static final String PLUGIN_ID = "org.jboss.tools.fuse.transformation.editor";
+    public static final String FUNCTION_EXTENSION_POINT = PLUGIN_ID + ".function";
 
     /**
      * @param red
@@ -53,16 +53,16 @@ public class Activator extends AbstractUIPlugin {
     /**
      * @param error
      */
-    public static void error(final Throwable error) {
-        final Status status = new Status(Status.ERROR,
-                                         plugin.getBundle().getSymbolicName(),
-                                         "Unexpected error: " + error.getMessage(),
-                                         error);
+    public static void error(Throwable error) {
+        Status status = new Status(Status.ERROR,
+                                   plugin.getBundle().getSymbolicName(),
+                                   "Unexpected error: " + error.getMessage(),
+                                   error);
         ErrorDialog.openError(Display.getCurrent().getActiveShell(),
                               "Error",
                               status.getMessage(),
                               status);
-        plugin.getLog().log(status);
+        log(status);
     }
 
     /**
@@ -78,6 +78,18 @@ public class Activator extends AbstractUIPlugin {
         img = ImageDescriptor.createFromURL(plugin.getBundle().getEntry("icons/" + name));
         plugin.getImageRegistry().put(key, img);
         return img;
+    }
+
+    public static void log(int status,
+                           String message) {
+        log(new Status(status, plugin.getBundle().getSymbolicName(), message));
+    }
+
+    /**
+     * @param status
+     */
+    public static void log(Status status) {
+        plugin.getLog().log(status);
     }
 
     /**

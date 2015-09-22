@@ -17,11 +17,9 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-
 import org.jboss.tools.fuse.transformation.CustomMapping;
 import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.FieldMapping;
@@ -239,14 +237,14 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     public DozerFieldMapping mapField(final Model source, final Model target) {
         return mapField(source, target, DozerUtil.noIndex(source), DozerUtil.noIndex(target));
     }
-    
+
     @Override
-    public DozerFieldMapping mapField(Model source, Model target, 
+    public DozerFieldMapping mapField(Model source, Model target,
             List<Integer> sourceIndex, List<Integer> targetIndex) {
-        
+
         validateIndex(source, sourceIndex);
         validateIndex(target, targetIndex);
-        
+
         // Only add a class mapping if one has not been created already
         if (getClassMapping(source, target, sourceIndex, targetIndex) == null) {
             addClassMapping(getRootType(source, sourceIndex), getRootType(target, targetIndex));
@@ -255,7 +253,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         // Add field mapping details for the source and target
         return addFieldMapping(source, target, sourceIndex, targetIndex);
     }
-    
+
     @Override
     public DozerVariableMapping mapVariable(final Variable variable, final Model target) {
         return mapVariable(variable, target, DozerUtil.noIndex(target));
@@ -275,7 +273,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
         return new DozerVariableMapping(variable, target, mapping, field);
     }
-    
+
     @Override
     public DozerExpressionMapping mapExpression(String language, String expression, Model target) {
         return mapExpression(language, expression, target, DozerUtil.noIndex(target));
@@ -350,23 +348,20 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     }
 
     @Override
-    public CustomMapping customizeMapping(FieldMapping mapping, String mappingClass) {
-        return customizeMapping(mapping, mappingClass, null);
-    }
-
-    @Override
-    public CustomMapping customizeMapping(FieldMapping mapping, String mappingClass,
-            String mappingOperation) {
+    public CustomMapping customizeMapping(FieldMapping mapping,
+                                          String functionClass,
+                                          String functionName,
+                                          String... functionArguments) {
 
         DozerFieldMapping fieldMapping = (DozerFieldMapping)mapping;
         fieldMapping.getField().setCustomConverterId(CUSTOM_MAPPER_ID);
         DozerCustomMapping customMapping = new DozerCustomMapping(fieldMapping);
-        customMapping.setMappingClass(mappingClass);
-        customMapping.setMappingOperation(mappingOperation);
-
+        customMapping.setFunctionClass(functionClass);
+        customMapping.setFunctionName(functionName);
+        customMapping.addFunctionArguments(functionArguments);
         return customMapping;
     }
-    
+
     @Override
     public MappingOperation<?, ?> getMapping(Model source, Model target) {
         MappingOperation<?, ?> mapping = null;
@@ -378,11 +373,11 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         }
         return mapping;
     }
-    
+
     String getRootType(Model field) {
         return getRootType(field, DozerUtil.noIndex(field));
     }
-    
+
     String getRootType(Model field, List<Integer> index) {
         Model root = field.getParent();
         for (int i = index.size() - 2; i >= 0; i--) {
@@ -392,7 +387,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             }
             root = root.getParent();
         }
-        
+
         return root.isCollection() ? ModelBuilder.getListType(root.getType()) : root.getType();
     }
 
@@ -432,7 +427,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     Mappings getDozerConfig() {
         return mapConfig;
     }
-    
+
     FieldDefinition createField(final Model model, final String rootType) {
         return createField(model, rootType, DozerUtil.noIndex(model));
     }
@@ -459,12 +454,12 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
         return new DozerFieldMapping(source, target, mapping, field);
     }
-    
+
     Mapping getClassMapping(final Model source, final Model target) {
         return getClassMapping(getRootType(source), getRootType(target));
     }
-    
-    Mapping getClassMapping(final Model source, final Model target, 
+
+    Mapping getClassMapping(final Model source, final Model target,
             final List<Integer> sourceIndex, final List<Integer> targetIndex) {
         return getClassMapping(getRootType(source, sourceIndex), getRootType(target, targetIndex));
     }
@@ -558,20 +553,20 @@ public class DozerMapperConfiguration implements MapperConfiguration {
 
         return found;
     }
-    
+
     private void validateIndex(Model model, List<Integer> index) throws RuntimeException {
         int nodes = DozerUtil.numberOfNodes(model);
         if (nodes != index.size()) {
-            throw new RuntimeException("Invalid index size for model, expected " 
+            throw new RuntimeException("Invalid index size for model, expected "
                     + nodes + " but index size is " + index.size());
         }
     }
-    
+
     private void mapParentCollection(Model source, Model target) {
         Model sourceParent = source.getParent();
         Model targetParent = target.getParent();
         if (getMapping(sourceParent, targetParent) == null) {
-            addFieldMapping(source.getParent(), target.getParent(), 
+            addFieldMapping(source.getParent(), target.getParent(),
                 DozerUtil.noIndex(source.getParent()), DozerUtil.noIndex(target.getParent()));
         }
     }

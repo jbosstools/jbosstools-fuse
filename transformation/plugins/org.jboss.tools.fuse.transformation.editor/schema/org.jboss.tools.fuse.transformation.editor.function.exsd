@@ -55,7 +55,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.jboss.tools.fuse.transformation.editor.Function"/>
+                  <meta.attribute kind="java"/>
                </appinfo>
             </annotation>
          </attribute>
