@@ -23,12 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.impl.inst2xsd.Inst2Xsd;
@@ -37,7 +35,6 @@ import org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
-
 import com.sun.codemodel.JAnnotatable;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JAnnotationValue;
@@ -192,10 +189,7 @@ public class XmlModelGenerator {
      */
     public JCodeModel generateFromSchema(final File schemaFile, final String packageName,
             final File targetPath) throws Exception {
-
         final SchemaCompiler sc = createSchemaCompiler(schemaFile);
-        sc.forcePackageName(packageName);
-
         final S2JJAXBModel s2 = sc.bind();
         if (s2 == null) {
             throw new Exception("Failed to parse schema into JAXB Model");
@@ -207,7 +201,6 @@ public class XmlModelGenerator {
         try (PrintStream status = new PrintStream(new ByteArrayOutputStream())) {
             jcm.build(targetPath, status);
         }
-
         return jcm;
     }
 
