@@ -611,7 +611,7 @@ public class Util {
                 if (pomDependency.getGroupId().equalsIgnoreCase(dependency.getGroupId())
                     && pomDependency.getArtifactId().equalsIgnoreCase(dependency.getArtifactId())) {
                     // check for correct version
-                    if (!pomDependency.getVersion().equalsIgnoreCase(dependency.getVersion())) {
+                    if (!dependency.getVersion().equalsIgnoreCase(pomDependency.getVersion())) {
                         pomDependency.setVersion(dependency.getVersion());
                     }
                     found = true;
