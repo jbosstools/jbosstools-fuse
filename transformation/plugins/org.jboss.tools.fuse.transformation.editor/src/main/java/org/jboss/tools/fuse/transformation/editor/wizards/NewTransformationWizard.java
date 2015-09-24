@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.dataformat.DataFormatsDefinition;
 import org.apache.camel.spring.CamelContextFactoryBean;
@@ -72,7 +71,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
 import org.jboss.tools.fuse.transformation.model.json.JsonModelGenerator;
 import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
-
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JPackage;
@@ -303,8 +301,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         // was launched. if there's a project in there, we want to use it to
         // pre- populate the project selection. This only seems to be an issue
         // on Luna for FUSETOOLS-1443
-        if (selection != null && selection instanceof IStructuredSelection) {
-            IStructuredSelection resourceSelection = (IStructuredSelection) selection;
+        if (selection != null) {
+            IStructuredSelection resourceSelection = selection;
             if (resourceSelection.getFirstElement() instanceof IProject) {
                 uiModel.projects.clear();
                 uiModel.projects.add((IProject) resourceSelection.getFirstElement());
@@ -424,7 +422,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         case XSD: {
             final XmlModelGenerator generator = new XmlModelGenerator();
             final File schemaFile = new File(uiModel.getProject().findMember(filePath).getLocationURI());
-            final JCodeModel model = generator.generateFromSchema(schemaFile, pkgName, targetClassesFolder);
+            final JCodeModel model = generator.generateFromSchema(schemaFile, null, targetClassesFolder);
             String elementName = null;
             if (isSource) {
                 elementName = uiModel.getSourceClassName();
@@ -447,7 +445,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             final XmlModelGenerator generator = new XmlModelGenerator();
             final File schemaPath = new File(uiModel.getProject().getFile(filePath + ".xsd").getLocationURI());
             final JCodeModel model = generator.generateFromInstance(new File(uiModel.getProject().findMember(filePath)
-                    .getLocationURI()), schemaPath, pkgName, targetClassesFolder);
+                    .getLocationURI()), schemaPath, null, targetClassesFolder);
             String elementName = null;
             if (isSource) {
                 elementName = uiModel.getSourceClassName();

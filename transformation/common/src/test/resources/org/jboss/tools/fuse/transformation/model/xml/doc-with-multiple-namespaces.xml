@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c:root 
+      xmlns:a="http://bogus.com/a" 
+      xmlns:b="http://bogus.com/b" 
+      xmlns:c="http://bogus.com/c">
+    <a:element1>
+        <a:child></a:child>
+    </a:element1>
+    <b:element2>
+        <b:child></b:child>
+    </b:element2>
+</c:root>
