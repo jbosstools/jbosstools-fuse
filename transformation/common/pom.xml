@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jboss.tools.fuse</groupId>
     <artifactId>transformation</artifactId>
-    <version>7.3.1-SNAPSHOT</version>
+    <version>7.3.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <groupId>org.jboss.tools.fuse.transformation</groupId>
