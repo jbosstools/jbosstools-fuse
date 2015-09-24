@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.xml.namespace.QName;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -252,12 +250,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                                 }
                             }
                             _xmlPreviewText.setText(buffer.toString());
-                            if (isSourcePage()) {
-                                model.setSourceClassName(null);
-                            } else {
-                                model.setTargetClassName(null);
-                            }
-                            
+
                         } catch (CoreException e1) {
                             e1.printStackTrace();
                         } catch (IOException e1) {
@@ -373,7 +366,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         });
         _binding = context.bindValue(widgetValue, modelValue, strategy, null);
         _binding.getModel().addChangeListener(new IChangeListener() {
-            
+
             @Override
             public void handleChange(ChangeEvent event) {
                 pingBinding();
@@ -461,7 +454,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 WritableList elementList = new WritableList();
                 if (elements != null && !elements.isEmpty()) {
-                    ArrayList<String> tempList = new ArrayList<String>();
+                    ArrayList<String> tempList = new ArrayList<>();
                     Iterator<QName> iter = elements.iterator();
                     while (iter.hasNext()) {
                         QName qname = iter.next();
