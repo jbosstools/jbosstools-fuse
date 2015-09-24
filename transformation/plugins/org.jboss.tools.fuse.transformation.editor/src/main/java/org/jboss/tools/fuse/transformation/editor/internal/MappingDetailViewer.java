@@ -253,60 +253,73 @@ public final class MappingDetailViewer extends MappingViewer {
         Model sourceModel = ((Model)mapping.getSource());
         parent = createContainerPane(parent, sourceModel.getParent(), parentIndexes(mapping.getSourceIndex()));
         final CustomMapping customMapping = (CustomMapping)mapping;
-        Method function = function(customMapping, sourceModel);
-        final Function annotation = function.getAnnotation(Function.class);
-        final String[] mappingArgs = customMapping.getFunctionArguments();
-        final Class<?>[] types = function.getParameterTypes();
-        if (standardFormat || annotation == null || annotation.format().isEmpty()) {
-            FunctionControl functionPane = new FunctionControl(parent, customMapping, annotation) {
+        try {
+            Method function = function(customMapping, sourceModel);
+            final Function annotation = function.getAnnotation(Function.class);
+            final String[] mappingArgs = customMapping.getFunctionArguments();
+            final Class<?>[] types = function.getParameterTypes();
+            if (standardFormat || annotation == null || annotation.format().isEmpty()) {
+                new FunctionControl(parent, customMapping, annotation) {
+
+                    @Override
+                    void createFunction(Composite parent,
+                                        GridLayout layout) {
+                        layout.numColumns = 4 + mappingArgs.length * 2;
+                        Label label = new Label(parent, SWT.NONE);
+                        label.setText(customMapping.getFunctionName() + "(");
+                        setToolTipToFunctionDescription(label);
+                        createSourcePane(parent);
+                        for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
+                            new Label(parent, SWT.NONE).setText(",");
+                            int argNdx = typeNdx - 1;
+                            Arg argAnno =
+                                annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
+                            createFunctionArgumentControl(parent, types[typeNdx], argAnno, customMapping, mappingArgs, argNdx);
+                        }
+                        new Label(parent, SWT.NONE).setText(")");
+                    }
+                }.create();
+            } else {
+                new FunctionControl(parent, customMapping, annotation) {
+
+                    @Override
+                    void createFunction(Composite parent,
+                                        GridLayout layout) {
+                        Object[] parts = FormatParser.parse(annotation.format());
+                        for (int ndx = 0; ndx < parts.length; ndx++) {
+                            Object part = parts[ndx];
+                            if (part instanceof FormatSpecifier) {
+                                int typeNdx = ((FormatSpecifier)part).index() - 1;
+                                if (typeNdx == 0) createSourcePane(parent);
+                                else {
+                                    int argNdx = typeNdx - 1;
+                                    Arg argAnno = argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
+                                    createFunctionArgumentControl(parent, types[typeNdx], argAnno, customMapping, mappingArgs, argNdx);
+                                }
+                            } else {
+                                Label label = new Label(parent, SWT.NONE);
+                                label.setText(part.toString().trim());
+                                setToolTipToFunctionDescription(label);
+                            }
+                            layout.numColumns++;
+                        }
+                    }
+                }.create();
+            }
+        } catch (ClassNotFoundException e) {
+            new FunctionControl(parent, customMapping, null) {
 
                 @Override
                 void createFunction(Composite parent,
                                     GridLayout layout) {
-                    layout.numColumns = 4 + mappingArgs.length * 2;
+                    layout.numColumns = 4;
                     Label label = new Label(parent, SWT.NONE);
-                    label.setText(customMapping.getFunctionName());
-                    setToolTipToFunctionDescription(label);
-                    new Label(parent, SWT.NONE).setText("(");
+                    label.setText(customMapping.getFunctionName() + "(");
+                    label.setToolTipText(customMapping.getFunctionClass() + '.' + customMapping.getFunctionName());
                     createSourcePane(parent);
-                    for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
-                        new Label(parent, SWT.NONE).setText(",");
-                        int argNdx = typeNdx - 1;
-                        Arg argAnno =
-                            annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
-                        createFunctionArgumentControl(parent, types[typeNdx], argAnno, customMapping, mappingArgs, argNdx);
-                    }
                     new Label(parent, SWT.NONE).setText(")");
                 }
-            };
-            functionPane.create();
-        } else {
-            FunctionControl functionPane = new FunctionControl(parent, customMapping, annotation) {
-
-                @Override
-                void createFunction(Composite parent,
-                                    GridLayout layout) {
-                    Object[] parts = FormatParser.parse(annotation.format());
-                    for (int ndx = 0; ndx < parts.length; ndx++) {
-                        Object part = parts[ndx];
-                        if (part instanceof FormatSpecifier) {
-                            int typeNdx = ((FormatSpecifier)part).index() - 1;
-                            if (typeNdx == 0) createSourcePane(parent);
-                            else {
-                                int argNdx = typeNdx - 1;
-                                Arg argAnno = argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
-                                createFunctionArgumentControl(parent, types[typeNdx], argAnno, customMapping, mappingArgs, argNdx);
-                            }
-                        } else {
-                            Label label = new Label(parent, SWT.NONE);
-                            label.setText(part.toString().trim());
-                            setToolTipToFunctionDescription(label);
-                        }
-                        layout.numColumns++;
-                    }
-                }
-            };
-            functionPane.create();
+            }.create();
         }
     }
 
@@ -496,20 +509,16 @@ public final class MappingDetailViewer extends MappingViewer {
     }
 
     private Method function(CustomMapping customMapping,
-                            Model sourceModel) {
-        try {
-            for (Method method : Class.forName(customMapping.getFunctionClass()).getDeclaredMethods()) {
-                Class<?>[] types = method.getParameterTypes();
-                if (Modifier.isPublic(method.getModifiers())
-                    && method.getName().equals(customMapping.getFunctionName())
-                    && types.length > 0 && sourceModel.getType().equals(types[0].getName())) {
-                    return method;
-                }
+                            Model sourceModel) throws ClassNotFoundException {
+        for (Method method : Class.forName(customMapping.getFunctionClass()).getDeclaredMethods()) {
+            Class<?>[] types = method.getParameterTypes();
+            if (Modifier.isPublic(method.getModifiers())
+                && method.getName().equals(customMapping.getFunctionName())
+                && types.length > 0 && sourceModel.getType().equals(types[0].getName())) {
+                return method;
             }
-        } catch (SecurityException | ClassNotFoundException e) {
-            Activator.error(e);
         }
-        return null; // Should never happen
+        return null;
     }
 
     private List<Integer> parentIndexes(final List<Integer> indexes) {
