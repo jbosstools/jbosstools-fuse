@@ -29,13 +29,23 @@ public class CamelPaletteBehaviour extends DefaultPaletteBehavior {
 		super(riderDesignEditor.getDiagramBehavior());
 		this.riderDesignEditor = riderDesignEditor;
 	}
+	
+    @Override
+    public void refreshPalette() {
+        PaletteRoot pr = getPaletteRoot();
+        if (pr instanceof CamelPaletteRoot) {
+            ((CamelPaletteRoot)pr).setFilter(riderDesignEditor.getPaletteFilter());
+            ((CamelPaletteRoot)pr).updatePaletteEntries();
+        }
+    }	
+	
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.editor.DefaultPaletteBehavior#createPaletteRoot()
 	 */
 	@Override
 	protected PaletteRoot createPaletteRoot() {
-		return new CamelPaletteRoot(riderDesignEditor.getConfigurationProvider());
+		return new CamelPaletteRoot(riderDesignEditor.getConfigurationProvider(), riderDesignEditor.getPaletteFilter());
 	}
 	
 	/* (non-Javadoc)

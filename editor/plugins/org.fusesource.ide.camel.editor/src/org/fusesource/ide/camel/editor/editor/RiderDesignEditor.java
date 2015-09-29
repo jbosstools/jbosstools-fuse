@@ -50,6 +50,7 @@ import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
@@ -71,6 +72,9 @@ import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
@@ -145,6 +149,8 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 	private Map<RouteSupport, DesignerCache> cache = new HashMap<RouteSupport, DesignerCache>();
 
 	private AbstractNode highlightedNodeInDebugger;
+	
+	private RiderDesignEditorFlyoutPaletteComposite paletteComposite;
 	
 	public class DesignerCache {
 		public Diagram diagram;
@@ -255,6 +261,13 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 		return this.editor;
 	}
 	
+    public String getPaletteFilter() {
+        if (paletteComposite != null) {
+            return paletteComposite.getFilter().getText();
+        }
+        return null;
+    }
+	
 	@Override
 	protected void setInput(IEditorInput input) {
 		
@@ -337,7 +350,27 @@ public class RiderDesignEditor extends DiagramEditor implements INodeViewer, IDe
 		super.createPartControl(parent);
 	}
 
-	protected void contributeToActionBars() {
+    /**
+      * Create a FlyoutPaletteComposite the will used to show a flyout palette
+      * alongside the editor.
+      * 
+      * @param parent
+      *            The parent composite hosting the FlyoutPaletteComposite.
+      * @return a newly-created {@link FlyoutPaletteComposite}
+      */
+     protected FlyoutPaletteComposite createPaletteComposite(Composite parent) {
+         paletteComposite = new RiderDesignEditorFlyoutPaletteComposite(parent, SWT.NONE, getSite()
+                 .getPage(), getPaletteViewerProvider(), getPalettePreferences());
+         paletteComposite.getFilter().addModifyListener(new ModifyListener() {
+             @Override
+             public void modifyText(ModifyEvent e) {
+                 getDiagramBehavior().refreshPalette();
+             }
+         });
+         return paletteComposite;
+     }
+ 
+protected void contributeToActionBars() {
 		IActionBars bars = null;
 		if (editorSite != null) {
 			bars = editorSite.getActionBars();

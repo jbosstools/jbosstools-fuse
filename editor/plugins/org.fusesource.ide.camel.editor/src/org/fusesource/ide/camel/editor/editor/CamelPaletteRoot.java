@@ -58,6 +58,8 @@ public class CamelPaletteRoot extends PaletteRoot {
 													// possible
 
 	private IConfigurationProvider cfgProvider;
+	
+	private String filter;
 
 	/**
 	 * Creates a new GenericPaletteRoot for the given Model. It is constructed
@@ -66,8 +68,9 @@ public class CamelPaletteRoot extends PaletteRoot {
 	 * @param configurationProvider
 	 *            the configuration provider
 	 */
-	public CamelPaletteRoot(IConfigurationProvider configurationProvider) {
+	public CamelPaletteRoot(IConfigurationProvider configurationProvider, String filter) {
 		cfgProvider = configurationProvider;
+		setFilter(filter);
 		updatePaletteEntries();
 	}
 	
@@ -98,10 +101,11 @@ public class CamelPaletteRoot extends PaletteRoot {
 
 		for (IPaletteCompartmentEntry compartmentEntry : paletteCompartments) {
 			PaletteDrawer drawer = new PaletteDrawer(compartmentEntry.getLabel(), getImageDescriptor(compartmentEntry));
-			if (!compartmentEntry.isInitiallyOpen()) {
+			if (isFiltered()) {
+				drawer.setInitialState(PaletteDrawer.INITIAL_STATE_PINNED_OPEN);
+			} else if (!compartmentEntry.isInitiallyOpen()) {
 				drawer.setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 			}
-			add(drawer);
 
 			List<IToolEntry> toolEntries = compartmentEntry.getToolEntries();
 
@@ -111,7 +115,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 					ICreationToolEntry creationToolEntry = (ICreationToolEntry) toolEntry;
 
 					PaletteEntry createTool = createTool(creationToolEntry);
-					if (createTool != null) {
+					if (createTool != null && filter(createTool)) {
 						drawer.add(createTool);
 					}
 
@@ -123,7 +127,7 @@ public class CamelPaletteRoot extends PaletteRoot {
 					List<ICreationToolEntry> creationToolEntries = stackToolEntry.getCreationToolEntries();
 					for (ICreationToolEntry creationToolEntry : creationToolEntries) {
 						PaletteEntry createTool = createTool(creationToolEntry);
-						if (createTool != null) {
+						if (createTool != null && filter(createTool)) {
 							stack.add(createTool);
 						}
 					}
@@ -132,7 +136,10 @@ public class CamelPaletteRoot extends PaletteRoot {
 				}
 
 			}
-
+			
+			if (drawer.getChildren().size() > 0) {
+				add(drawer);
+			}
 		}
 
 		// PaletteEntry creationTools = createCreationTools();
@@ -140,6 +147,44 @@ public class CamelPaletteRoot extends PaletteRoot {
 		// add(creationTools);
 	}
 
+    public boolean isFiltered() {
+        return filter!= null && filter.length() > 0;
+    }
+    public String getFilter() {
+        return filter;
+    }
+    public void setFilter(String filter) {
+        if (filter == null) {
+            this.filter = null;
+        } else {
+            this.filter = filter.toLowerCase().trim();
+        }
+    }
+    /**
+     * Return <code>true</code> if <em>label</em> or <em>description</em> of
+     * <code>paletteEntry</code> contains the current palette root's filter; returns
+     * <code>false</code> otherwise.
+     * 
+     * @param paletteEntry
+     *            - the palette entry to filter.
+     * @return <code>true</code> if <em>label</em> or <em>description</em> of
+     *         <code>paletteEntry</code> contains the current palette root's filter;
+     *         returns <code>false</code> otherwise.
+     */
+    protected boolean filter(PaletteEntry paletteEntry) {
+        if (filter == null || filter.length() == 0) {
+            return true;
+        }
+        if (paletteEntry.getLabel() != null && paletteEntry.getLabel().toLowerCase().contains(filter)) {
+            return true;
+        }
+        if (paletteEntry.getDescription() != null && paletteEntry.getDescription().toLowerCase().contains(filter)) {
+            return true;
+        }
+        return false;
+    }
+		 	
+	
 	/**
 	 * Creates and adds the model-independent tools to a new PaletteContainer.
 	 * Those are for example: selection-tool, marque-tool, connection-tool.
