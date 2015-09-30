@@ -117,9 +117,7 @@ abstract class MappingViewer {
 
     Text createText(final Composite parent,
                     final int style) {
-        final Text text = new Text(parent, style | SWT.BORDER);
-        text.setEditable(false);
-        return text;
+        return new Text(parent, style | SWT.BORDER | SWT.READ_ONLY);
     }
 
     void dispose() {
@@ -253,11 +251,8 @@ abstract class MappingViewer {
         if (object instanceof Model) {
             final Model model = (Model)object;
             text.setToolTipText(Util.fullyQualifiedName(model));
-            if (mapping.getType() == MappingType.CUSTOM && text == sourceText) {
-                text.setBackground(Colors.FUNCTION);
-            } else {
-                text.setBackground(Colors.BACKGROUND);
-            }
+            if (mapping.getType() == MappingType.CUSTOM && text == sourceText) text.setBackground(Colors.FUNCTION);
+            else text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.FOREGROUND);
         } else if (object instanceof Variable) {
             text.setToolTipText(variableToolTip((Variable)object));
@@ -272,8 +267,6 @@ abstract class MappingViewer {
             text.setBackground(Colors.BACKGROUND);
             text.setForeground(Colors.FOREGROUND);
         }
-        text.redraw();
-        text.update();
     }
 
     String variableToolTip(final Variable variable) {

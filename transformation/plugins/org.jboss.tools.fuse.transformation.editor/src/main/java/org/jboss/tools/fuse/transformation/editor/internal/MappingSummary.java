@@ -3,7 +3,6 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -128,9 +127,7 @@ final class MappingSummary extends MappingViewer {
             variableValueUpdated((Variable)newValue);
             return;
         }
-        if (!equals(mapping, oldValue)) {
-            return;
-        }
+        if (!equals(mapping, oldValue)) return;
         if (eventType.equals(TransformationConfig.MAPPING)) {
             dispose((MappingOperation<?, ?>)oldValue);
         } else if (eventType.equals(TransformationConfig.MAPPING_SOURCE)) {
@@ -146,6 +143,10 @@ final class MappingSummary extends MappingViewer {
         } else if (eventType.equals(TransformationConfig.MAPPING_CUSTOMIZE)) {
             mapping = (MappingOperation<?, ?>)newValue;
             setSourceText();
+            mappingSourcePane.layout();
+            // Below is a trick to get the source field's background to update
+            targetText.setFocus();
+            sourceText.setFocus();
         }
     }
 
@@ -171,9 +172,7 @@ final class MappingSummary extends MappingViewer {
 
             @Override
             public void focusLost(final FocusEvent event) {
-                if (mappingsViewer.selectedMappingSummary == MappingSummary.this) {
-                    setBackground(Colors.SELECTED_NO_FOCUS);
-                }
+                if (mappingsViewer.selectedMappingSummary == MappingSummary.this) setBackground(Colors.SELECTED_NO_FOCUS);
             }
         } );
         // Create key listener to make up and down arrow navigate selection up and down
@@ -217,7 +216,6 @@ final class MappingSummary extends MappingViewer {
     }
 
     void selected(final Text text) {
-        text.selectAll();
         setBackground(Colors.SELECTED);
         mappingsViewer.selected(this);
     }

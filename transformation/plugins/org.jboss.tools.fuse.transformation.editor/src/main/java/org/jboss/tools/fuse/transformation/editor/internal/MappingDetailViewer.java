@@ -482,20 +482,6 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    @Override
-    Text createText(final Composite parent,
-                    final int style) {
-        final Text text = super.createText(parent, style);
-        text.addFocusListener(new FocusAdapter() {
-
-            @Override
-            public void focusGained(final FocusEvent event) {
-                text.selectAll();
-            }
-        });
-        return text;
-    }
-
     /**
      * {@inheritDoc}
      *
