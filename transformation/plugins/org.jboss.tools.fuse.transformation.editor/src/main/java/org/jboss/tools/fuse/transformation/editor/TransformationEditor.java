@@ -177,9 +177,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         sourceViewerButton = new ToolItem(toolBar, SWT.CHECK);
         sourceViewerButton.setImage(Images.TREE);
         // Create help text
-        helpText = new Text(pane, SWT.MULTI | SWT.WRAP);
+        helpText = new Text(pane, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
         helpText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        helpText.setEditable(false);
         helpText.setBackground(pane.getBackground());
         // Create target model toggle button
         toolBar = new ToolBar(pane, SWT.NONE);
@@ -320,20 +319,33 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                                                                     getClass().getClassLoader());
             config = new TransformationConfig(configFile, loader);
             CamelModelFactory.initializeModels();
+            // Add contributed functions if missing or a different version
+            String version = Activator.plugin().getBundle().getVersion().toString();
+            IPreferenceStore prefs = Activator.plugin().getPreferenceStore();
+            boolean latestVersion = version.equals(prefs.getString(VERSION_PREFERENCE));
+            copySourceToProject(Util.RESOURCES_PATH + Function.class.getName().replace('.', '/') + ".java",
+                                Function.class,
+                                latestVersion);
+            for (IConfigurationElement element : Platform.getExtensionRegistry().getConfigurationElementsFor(Activator.FUNCTION_EXTENSION_POINT)) {
+                copySourceToProject(element.getAttribute("source"),
+                                    element.createExecutableExtension("class").getClass(),
+                                    latestVersion);
+            }
+            if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
             // Ensure Maven will compile functions folder
             File pomFile = config.project().getLocation().append("pom.xml").toFile();
             org.apache.maven.model.Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
             List<Resource> resources = pomModel.getBuild().getResources();
             boolean exists = false;
             for (Resource resource : resources) {
-                if (resource.getDirectory().endsWith("/" + Util.FUNCTIONS_FOLDER)) {
+                if (resource.getDirectory().endsWith(Util.FUNCTIONS_FOLDER)) {
                     exists = true;
                     break;
                 }
             }
             if (!exists) {
                 Resource resource = new Resource();
-                resource.setDirectory(config.project().getLocation().append(Util.FUNCTIONS_FOLDER).toOSString());
+                resource.setDirectory(Util.FUNCTIONS_FOLDER);
                 pomModel.getBuild().addResource(resource);
                 try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(pomFile))) {
                     MavenPlugin.getMaven().writeModel(pomModel, stream);
@@ -354,19 +366,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 newEntries[entries.length] = JavaCore.newSourceEntry(path);
                 javaProject.setRawClasspath(newEntries, null);
             }
-            // Add contributed functions if missing or a different version
-            String version = Activator.plugin().getBundle().getVersion().toString();
-            IPreferenceStore prefs = Activator.plugin().getPreferenceStore();
-            boolean latestVersion = version.equals(prefs.getString(VERSION_PREFERENCE));
-            copySourceToProject(Util.RESOURCES_PATH + Function.class.getName().replace('.', '/') + ".java",
-                                Function.class,
-                                latestVersion);
-            for (IConfigurationElement element : Platform.getExtensionRegistry().getConfigurationElementsFor(Activator.FUNCTION_EXTENSION_POINT)) {
-                copySourceToProject(element.getAttribute("source"),
-                                    element.createExecutableExtension("class").getClass(),
-                                    latestVersion);
-            }
-            if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
             config.project().refreshLocal(IResource.DEPTH_INFINITE, null);
         } catch (final Exception e) {
             throw new PartInitException("Error initializing editor", e);
@@ -522,6 +521,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         } else {
             helpText.setText("");
         }
+        helpText.getParent().layout();
     }
-
 }

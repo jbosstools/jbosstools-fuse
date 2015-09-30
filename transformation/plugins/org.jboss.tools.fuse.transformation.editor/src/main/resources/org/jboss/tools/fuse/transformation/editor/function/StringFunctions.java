@@ -69,7 +69,7 @@ public class StringFunctions {
 
     @Function(description = "Formats the source string to match the supplied pattern.  "
                             + "The source string can be specified in the pattern using <code>%s</code>."
-                            + "<p><string>Example</strong></p>"
+                            + "<p style='text-decoration: underline; font-weight: bold;'>Example</p>"
                             + "<code>format(\"text\", \"[%s]\")</code> transforms source string <code>\"text\"</code> to <code>\"[text]\"</code>",
               format = "Format %1$s using pattern %2$s?",
               args = @Arg(name = "pattern",

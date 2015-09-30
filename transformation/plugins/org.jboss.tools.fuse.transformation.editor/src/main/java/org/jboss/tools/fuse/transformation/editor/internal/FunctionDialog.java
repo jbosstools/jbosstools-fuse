@@ -38,6 +38,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -84,18 +85,6 @@ class FunctionDialog extends BaseDialog {
                 Activator.error(e);
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog#create()
-     */
-    @Override
-    public void create() {
-        super.create();
-        // Select applicable method if editing a custom mapping
-        if (origFunction != null) listViewer.setSelection(new StructuredSelection(origFunction));
     }
 
     /**
@@ -153,6 +142,7 @@ class FunctionDialog extends BaseDialog {
         descGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         descGroup.setLayout(GridLayoutFactory.fillDefaults().create());
         descGroup.setText("Description");
+        maximizeDescription(pane, true);
         pane = new Composite(splitter, SWT.NONE);
         pane.setLayout(GridLayoutFactory.fillDefaults().create());
         final Group argsGroup = new Group(pane, SWT.NONE);
@@ -185,6 +175,18 @@ class FunctionDialog extends BaseDialog {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @see org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog#create()
+     */
+    @Override
+    public void create() {
+        super.create();
+        // Select applicable method if editing a custom mapping
+        if (origFunction != null) listViewer.setSelection(new StructuredSelection(origFunction));
+    }
+
     private void functionSelected(Group descGroup,
                                   Group argsGroup,
                                   final Composite parent) {
@@ -197,6 +199,7 @@ class FunctionDialog extends BaseDialog {
         description.setText(annotation == null ? "" : annotation.description());
 
         if (types.length > 1) {
+            maximizeDescription(description, false);
             argScroller = new ScrolledComposite(argsGroup, SWT.V_SCROLL);
             argScroller.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
             argScroller.setExpandHorizontal(true);
@@ -260,7 +263,7 @@ class FunctionDialog extends BaseDialog {
                     if (mappingArgs != null) {
                         String val = mappingArgs[argNdx].split("=")[1];
                         argumentValues[argNdx] = val;
-                        text.setText(val);
+                        if (argAnno == null || !argAnno.hideDefault() || !val.equals(argAnno.defaultValue())) text.setText(val);
                     }
                     text.addModifyListener(new ModifyListener() {
 
@@ -289,22 +292,23 @@ class FunctionDialog extends BaseDialog {
                 }
             });
             validate(annotation, types);
-        } else getButton(IDialogConstants.OK_ID).setEnabled(true);
+        } else {
+            maximizeDescription(description, true);
+            getButton(IDialogConstants.OK_ID).setEnabled(true);
+        }
         descGroup.layout();
         argsGroup.layout();
     }
 
-    private void validate(Function annotation,
-                          Class<?>[] types) {
-        boolean valid = true;
-        for (int ndx = 0; ndx < argumentValues.length; ndx++) {
-            final Arg arg = annotation == null ? null : ndx < annotation.args().length ? annotation.args()[ndx] : null;
-            if (!Util.valid(argumentValues[ndx], arg, types[ndx + 1])) {
-                valid = false;
+    private void maximizeDescription(Control control,
+                                     boolean maximize) {
+        // Find splitter, then maximize its description pane accordingly
+        for (Composite parent = control.getParent(); parent != null; parent = parent.getParent()) {
+            if (parent instanceof SashForm) {
+                ((SashForm)parent).setMaximizedControl(maximize ? parent.getChildren()[0] : null);
                 break;
             }
         }
-        getButton(IDialogConstants.OK_ID).setEnabled(valid);
     }
 
     /**
@@ -326,5 +330,18 @@ class FunctionDialog extends BaseDialog {
     @Override
     protected String title() {
         return (origFunction == null ? "Add" : "Edit") + " Function";
+    }
+
+    private void validate(Function annotation,
+                          Class<?>[] types) {
+        boolean valid = true;
+        for (int ndx = 0; ndx < argumentValues.length; ndx++) {
+            final Arg arg = annotation == null ? null : ndx < annotation.args().length ? annotation.args()[ndx] : null;
+            if (!Util.valid(argumentValues[ndx], arg, types[ndx + 1])) {
+                valid = false;
+                break;
+            }
+        }
+        getButton(IDialogConstants.OK_ID).setEnabled(valid);
     }
 }
