@@ -343,7 +343,7 @@ public final class MappingDetailViewer extends MappingViewer {
             }
         };
         fieldPane.create();
-        fieldPane.addMenuItem("Set field", new MenuItemHandler() {
+        fieldPane.addMenuItem("Set property", new MenuItemHandler() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
@@ -452,7 +452,7 @@ public final class MappingDetailViewer extends MappingViewer {
             }
         };
         fieldPane.create();
-        fieldPane.addMenuItem("Set field", new MenuItemHandler() {
+        fieldPane.addMenuItem("Set property", new MenuItemHandler() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
