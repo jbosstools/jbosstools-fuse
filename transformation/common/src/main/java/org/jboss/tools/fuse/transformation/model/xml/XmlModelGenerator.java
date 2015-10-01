@@ -70,6 +70,8 @@ public class XmlModelGenerator {
 
     private static final String XSI_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
     private static final String XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
+    
+    private String _accessExternalSchemaValue = null;
 
     void addMissingSettersForLists(Iterator<JDefinedClass> iterator,
                                    JPrimitiveType voidType) {
@@ -214,6 +216,12 @@ public class XmlModelGenerator {
                                            File schemaFile,
                                            String packageName,
                                            File targetPath) throws Exception {
+    	// Step 0 - avoid issue with schema loading on Java 8
+    	if (System.getProperty("java.xml.accessExternalSchema") != null) {
+    		_accessExternalSchemaValue = System.getProperty("java.xml.accessExternalSchema");
+    	}
+        System.setProperty("javax.xml.accessExternalSchema", "all");        
+    	
         // Step 1 - generate schema from instance doc
         Inst2XsdOptions options = new Inst2XsdOptions();
         options.setDesign(Inst2XsdOptions.DESIGN_RUSSIAN_DOLL);
@@ -280,7 +288,14 @@ public class XmlModelGenerator {
         }
 
         // Step 2 - call generateFromSchema with generated schema
-        return generateFromSchema(schemaFile, packageName, targetPath);
+        JCodeModel generatedSchemaModel = generateFromSchema(schemaFile, packageName, targetPath);
+        
+        // last step - reset the access external schema value
+        if (_accessExternalSchemaValue != null) {
+        	System.setProperty("javax.xml.accessExternalSchema", _accessExternalSchemaValue);
+        }
+        
+        return generatedSchemaModel;
     }
 
     /**
