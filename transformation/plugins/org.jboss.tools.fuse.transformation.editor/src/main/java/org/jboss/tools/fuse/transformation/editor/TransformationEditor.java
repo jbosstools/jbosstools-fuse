@@ -31,6 +31,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -375,34 +376,23 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     void copySourceToProject(String sourcePath,
                              Class<?> sourceClass,
                              boolean latestVersion) throws FileNotFoundException, IOException {
-        // jpav: remove
-        System.out.println("sourcePath: " + sourcePath);
-        // jpav: remove
-        System.out.println("sourceClass: " + sourceClass);
+        Activator.log(IStatus.INFO, "sourcePath: " + sourcePath);
+        Activator.log(IStatus.INFO, "sourceClass: " + sourceClass);
         IPath path = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
-        // jpav: remove
-        System.out.println("IPath: " + path);
+        Activator.log(IStatus.INFO, "IPath: " + path);
         File file = path.append(sourceClass.getPackage().getName().replace('.', '/')).toFile();
-        // jpav: remove
-        System.out.println("Functions folder: " + path);
-        if (!file.exists()) {
-            // jpav: remove
-            System.out.println("Created folder? " + file.mkdirs());
-        }
+        Activator.log(IStatus.INFO, "Functions folder: " + path);
+        if (!file.exists()) Activator.log(IStatus.INFO, "Created folder? " + file.mkdirs());
         file = new File(file, sourceClass.getSimpleName() + ".java");
-        // jpav: remove
-        System.out.println("Source file: " + file);
+        Activator.log(IStatus.INFO, "Source file: " + file);
         if (file.exists() && latestVersion) return;
         try (InputStream in = sourceClass.getClassLoader().getResourceAsStream(sourcePath)) {
-            // jpav: remove
-            System.out.println("in: " + in);
+            Activator.log(IStatus.INFO, "in: " + in);
             byte[] buf = new byte[4096];
             try (OutputStream out = new FileOutputStream(file)) {
-                // jpav: remove
-                System.out.println("out: " + out);
+                Activator.log(IStatus.INFO, "out: " + out);
                 for (int len = in.read(buf); len > 0; len = in.read(buf)) {
-                    // jpav: remove
-                    System.out.println("len: " + len);
+                    Activator.log(IStatus.INFO, "len: " + len);
                     out.write(buf, 0, len);
                 }
             }
