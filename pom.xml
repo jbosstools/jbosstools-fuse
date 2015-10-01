@@ -53,7 +53,7 @@
     <ide-version>${project.version}</ide-version>
     
     <!-- camel version -->
-    <camel.version>2.15.1.redhat-620133</camel.version>
+    <camel.version>2.15.1.redhat-621032</camel.version>
 
     <!-- AMQ JMX plugin -->
     <activemq.version>5.11.0.redhat-620133</activemq.version>
