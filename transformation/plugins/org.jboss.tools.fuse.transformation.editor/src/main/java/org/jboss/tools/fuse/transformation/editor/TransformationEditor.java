@@ -31,9 +31,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -368,6 +368,8 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 javaProject.setRawClasspath(newEntries, null);
             }
             config.project().refreshLocal(IResource.DEPTH_INFINITE, null);
+            // Ensure build of Java classes has completed
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
         } catch (final Exception e) {
             throw new PartInitException("Error initializing editor", e);
         }
@@ -376,23 +378,48 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     void copySourceToProject(String sourcePath,
                              Class<?> sourceClass,
                              boolean latestVersion) throws FileNotFoundException, IOException {
-        Activator.log(IStatus.INFO, "sourcePath: " + sourcePath);
-        Activator.log(IStatus.INFO, "sourceClass: " + sourceClass);
         IPath path = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
-        Activator.log(IStatus.INFO, "IPath: " + path);
         File file = path.append(sourceClass.getPackage().getName().replace('.', '/')).toFile();
-        Activator.log(IStatus.INFO, "Functions folder: " + path);
-        if (!file.exists()) Activator.log(IStatus.INFO, "Created folder? " + file.mkdirs());
+        if (!file.exists()) file.mkdirs();
         file = new File(file, sourceClass.getSimpleName() + ".java");
-        Activator.log(IStatus.INFO, "Source file: " + file);
         if (file.exists() && latestVersion) return;
+        try (InputStream in = sourceClass.getResourceAsStream(sourcePath)) {
+            // jpav: remove
+            System.out.println(sourcePath + " sourceClass: " + in);
+        }
         try (InputStream in = sourceClass.getClassLoader().getResourceAsStream(sourcePath)) {
-            Activator.log(IStatus.INFO, "in: " + in);
+            // jpav: remove
+            System.out.println(sourcePath + " sourceClass.getClassLoader(): " + in);
+        }
+        try (InputStream in = sourceClass.getResourceAsStream('/' + sourcePath)) {
+            // jpav: remove
+            System.out.println(sourcePath + " sourceClass /: " + in);
+        }
+        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream('/' + sourcePath)) {
+            // jpav: remove
+            System.out.println(sourcePath + " sourceClass.getClassLoader() /: " + in);
+        }
+        String s = sourceClass.getPackage().getName().replace('.', '/') + '/' + sourcePath.substring(sourcePath.indexOf('/') + 1);
+        try (InputStream in = sourceClass.getResourceAsStream(sourcePath)) {
+            // jpav: remove
+            System.out.println(s + " sourceClass: " + in);
+        }
+        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream(s)) {
+            // jpav: remove
+            System.out.println(s + " sourceClass.getClassLoader(): " + in);
+        }
+        try (InputStream in = sourceClass.getResourceAsStream('/' + s)) {
+            // jpav: remove
+            System.out.println(s + " sourceClass /: " + in);
+        }
+        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream('/' + s)) {
+            // jpav: remove
+            System.out.println(s + " sourceClass.getClassLoader() /: " + in);
+        }
+        try (InputStream in = sourceClass.getResourceAsStream('/' + sourcePath)) {
             byte[] buf = new byte[4096];
             try (OutputStream out = new FileOutputStream(file)) {
-                Activator.log(IStatus.INFO, "out: " + out);
                 for (int len = in.read(buf); len > 0; len = in.read(buf)) {
-                    Activator.log(IStatus.INFO, "len: " + len);
                     out.write(buf, 0, len);
                 }
             }
