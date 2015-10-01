@@ -128,7 +128,7 @@ public class ModelViewer extends Composite {
         if (showMappedFieldsButton) {
             filterMappedFieldsButton = new ToolItem(toolBar, SWT.CHECK);
             filterMappedFieldsButton.setImage(Images.HIDE_MAPPED);
-            filterMappedFieldsButton.setToolTipText("Hide mapped fields");
+            filterMappedFieldsButton.setToolTipText("Hide mapped properties");
         }
 
         if (showSearchField) {
@@ -284,7 +284,7 @@ public class ModelViewer extends Composite {
                 public void widgetSelected(final SelectionEvent event) {
                     hideMappedFields = filterMappedFieldsButton.getSelection();
                     filterMappedFieldsButton.setToolTipText((hideMappedFields ? "Show" : "Hide")
-                                                            + " mapped fields");
+                                                            + " mapped properties");
                     treeViewer.refresh();
                     if (preferenceId != null)
                         prefs.setValue(PREFERENCE_PREFIX

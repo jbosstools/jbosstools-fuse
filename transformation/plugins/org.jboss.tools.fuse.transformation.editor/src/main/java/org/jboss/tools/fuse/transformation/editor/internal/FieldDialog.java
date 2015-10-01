@@ -67,12 +67,12 @@ class FieldDialog extends BaseDialog {
 
     @Override
     protected String message() {
-        return "Select a field.";
+        return "Select a property.";
     }
 
     @Override
     protected String title() {
-        return "Field";
+        return "Property";
     }
 
     void validate() {
@@ -84,7 +84,7 @@ class FieldDialog extends BaseDialog {
                 enabled = Util.validSourceAndTarget(mapping.getSource(), field, config);
             }
         }
-        setErrorMessage(enabled ? null : "Invalid field");
+        setErrorMessage(enabled ? null : "Invalid property");
         getButton(IDialogConstants.OK_ID).setEnabled(enabled);
     }
 }

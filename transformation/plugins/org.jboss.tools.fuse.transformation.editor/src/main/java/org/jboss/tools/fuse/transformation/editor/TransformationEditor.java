@@ -13,7 +13,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +30,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -323,13 +324,10 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             String version = Activator.plugin().getBundle().getVersion().toString();
             IPreferenceStore prefs = Activator.plugin().getPreferenceStore();
             boolean latestVersion = version.equals(prefs.getString(VERSION_PREFERENCE));
-            copySourceToProject(Util.RESOURCES_PATH + Function.class.getName().replace('.', '/') + ".java",
-                                Function.class,
-                                latestVersion);
-            for (IConfigurationElement element : Platform.getExtensionRegistry().getConfigurationElementsFor(Activator.FUNCTION_EXTENSION_POINT)) {
-                copySourceToProject(element.getAttribute("source"),
-                                    element.createExecutableExtension("class").getClass(),
-                                    latestVersion);
+            copySourceToProject(Function.class, latestVersion);
+            for (IConfigurationElement element : Platform.getExtensionRegistry()
+                                                         .getConfigurationElementsFor(Activator.FUNCTION_EXTENSION_POINT)) {
+                copySourceToProject(element.createExecutableExtension("class").getClass(), latestVersion);
             }
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
             // Ensure Maven will compile functions folder
@@ -367,24 +365,42 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 javaProject.setRawClasspath(newEntries, null);
             }
             config.project().refreshLocal(IResource.DEPTH_INFINITE, null);
+            // Ensure build of Java classes has completed
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
         } catch (final Exception e) {
             throw new PartInitException("Error initializing editor", e);
         }
     }
 
-    void copySourceToProject(String sourcePath,
-                             Class<?> sourceClass,
-                             boolean latestVersion) throws FileNotFoundException, IOException {
-        IPath path = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
-        File file = path.append(sourceClass.getPackage().getName().replace('.', '/')).toFile();
+    void copySourceToProject(Class<?> sourceClass,
+                             boolean latestVersion) throws IOException {
+        IPath pkgPath = new Path(sourceClass.getPackage().getName().replace('.', '/'));
+        IPath functionsFolderPath = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
+        File file = functionsFolderPath.append(pkgPath).toFile();
         if (!file.exists()) file.mkdirs();
-        file = new File(file, sourceClass.getSimpleName() + ".java");
+        IPath resourcePath = pkgPath.append(sourceClass.getSimpleName()).addFileExtension("java");
+        file = functionsFolderPath.append(resourcePath).toFile();
         if (file.exists() && latestVersion) return;
-        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream(sourcePath)) {
-            byte[] buf = new byte[4096];
-            try (OutputStream out = new FileOutputStream(file)) {
-                for (int len = in.read(buf); len > 0; len = in.read(buf)) {
-                    out.write(buf, 0, len);
+        byte[] buf = null;
+        try (InputStream in = sourceClass.getResourceAsStream(resourcePath.makeAbsolute().toString())) {
+            if (in != null) {
+                buf = new byte[4096];
+                try (OutputStream out = new FileOutputStream(file)) {
+                    for (int len = in.read(buf); len > 0; len = in.read(buf)) {
+                        out.write(buf, 0, len);
+                    }
+                }
+            }
+        }
+        // Below is necessary when running from within development Eclipse
+        if (buf == null) {
+            try (InputStream in =
+                    sourceClass.getResourceAsStream(new Path(Util.RESOURCES_PATH).append(resourcePath).makeAbsolute().toString())) {
+                buf = new byte[4096];
+                try (OutputStream out = new FileOutputStream(file)) {
+                    for (int len = in.read(buf); len > 0; len = in.read(buf)) {
+                        out.write(buf, 0, len);
+                    }
                 }
             }
         }
@@ -509,13 +525,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     void updateHelpText() {
         if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
             if (sourceTabFolder.getSelectionIndex() == 0) {
-                helpText.setText("Create a new mapping below by dragging a field in source "
+                helpText.setText("Create a new mapping below by dragging a property in source "
                                  + config.getSourceModel().getName()
-                                 + " on the left to a field in target "
+                                 + " on the left to a property in target "
                                  + config.getTargetModel().getName() + " on the right.");
             } else {
                 helpText.setText("Create a new mapping below by dragging a variable from the list"
-                                 + " of variables on the left to a field in target "
+                                 + " of variables on the left to a property in target "
                                  + config.getTargetModel().getName() + " on the right.");
             }
         } else {
