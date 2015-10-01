@@ -319,7 +319,7 @@ class FunctionDialog extends BaseDialog {
     @Override
     protected String message() {
         return "Select a function to transform the " + ((Model)mapping.getSource()).getName()
-               + " field's value, along with any applicable arguments";
+               + " property's value, along with any applicable arguments";
     }
 
     /**

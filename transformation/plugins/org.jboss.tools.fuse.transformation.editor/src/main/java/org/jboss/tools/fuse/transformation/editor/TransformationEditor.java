@@ -509,13 +509,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     void updateHelpText() {
         if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
             if (sourceTabFolder.getSelectionIndex() == 0) {
-                helpText.setText("Create a new mapping below by dragging a field in source "
+                helpText.setText("Create a new mapping below by dragging a property in source "
                                  + config.getSourceModel().getName()
-                                 + " on the left to a field in target "
+                                 + " on the left to a property in target "
                                  + config.getTargetModel().getName() + " on the right.");
             } else {
                 helpText.setText("Create a new mapping below by dragging a variable from the list"
-                                 + " of variables on the left to a field in target "
+                                 + " of variables on the left to a property in target "
                                  + config.getTargetModel().getName() + " on the right.");
             }
         } else {
