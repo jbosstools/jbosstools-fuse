@@ -30,7 +30,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.jobs.Job;
@@ -324,13 +324,10 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             String version = Activator.plugin().getBundle().getVersion().toString();
             IPreferenceStore prefs = Activator.plugin().getPreferenceStore();
             boolean latestVersion = version.equals(prefs.getString(VERSION_PREFERENCE));
-            copySourceToProject(Util.RESOURCES_PATH + Function.class.getName().replace('.', '/') + ".java",
-                                Function.class,
-                                latestVersion);
-            for (IConfigurationElement element : Platform.getExtensionRegistry().getConfigurationElementsFor(Activator.FUNCTION_EXTENSION_POINT)) {
-                copySourceToProject(element.getAttribute("source"),
-                                    element.createExecutableExtension("class").getClass(),
-                                    latestVersion);
+            copySourceToProject(Function.class, latestVersion);
+            for (IConfigurationElement element : Platform.getExtensionRegistry()
+                                                         .getConfigurationElementsFor(Activator.FUNCTION_EXTENSION_POINT)) {
+                copySourceToProject(element.createExecutableExtension("class").getClass(), latestVersion);
             }
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
             // Ensure Maven will compile functions folder
@@ -375,42 +372,37 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         }
     }
 
-    void copySourceToProject(String sourcePath,
-                             Class<?> sourceClass,
+    void copySourceToProject(Class<?> sourceClass,
                              boolean latestVersion) throws IOException {
-        IPath path = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
-        File file = path.append(sourceClass.getPackage().getName().replace('.', '/')).toFile();
+        IPath pkgPath = new Path(sourceClass.getPackage().getName().replace('.', '/'));
+        IPath functionsFolderPath = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
+        File file = functionsFolderPath.append(pkgPath).toFile();
         if (!file.exists()) file.mkdirs();
-        file = new File(file, sourceClass.getSimpleName() + ".java");
+        IPath resourcePath = pkgPath.append(sourceClass.getSimpleName()).addFileExtension("java");
+        file = functionsFolderPath.append(resourcePath).toFile();
         if (file.exists() && latestVersion) return;
-        debug(sourcePath, sourceClass);
-        debug('/' + sourcePath, sourceClass);
-        debug(sourceClass.getName().replace('.', '/') + ".java", sourceClass);
-        debug('/' + sourceClass.getName().replace('.', '/') + ".java", sourceClass);
-        try (InputStream in = sourceClass.getResourceAsStream('/' + sourcePath)) {
-            byte[] buf = new byte[4096];
-            try (OutputStream out = new FileOutputStream(file)) {
-                for (int len = in.read(buf); len > 0; len = in.read(buf)) {
-                    out.write(buf, 0, len);
+        byte[] buf = null;
+        try (InputStream in = sourceClass.getResourceAsStream(resourcePath.makeAbsolute().toString())) {
+            if (in != null) {
+                buf = new byte[4096];
+                try (OutputStream out = new FileOutputStream(file)) {
+                    for (int len = in.read(buf); len > 0; len = in.read(buf)) {
+                        out.write(buf, 0, len);
+                    }
                 }
             }
         }
-    }
-
-    private void debug(String sourcePath,
-                       Class<?> sourceClass) throws IOException {
-        Activator.log(IStatus.INFO, sourcePath);
-        try (InputStream in = sourceClass.getResourceAsStream(sourcePath)) {
-            Activator.log(IStatus.INFO, "\tsourceClass.getResourceAsStream(): " + in);
-        }
-        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream(sourcePath)) {
-            Activator.log(IStatus.INFO, "\tsourceClass.getClassLoader().getResourceAsStream(): " + in);
-        }
-        try (InputStream in = getClass().getResourceAsStream(sourcePath)) {
-            Activator.log(IStatus.INFO, "\tgetClass().getResourceAsStream(): " + in);
-        }
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream(sourcePath)) {
-            Activator.log(IStatus.INFO, "\tgetClass().getClassLoader().getResourceAsStream(): " + in);
+        // Below is necessary when running from within development Eclipse
+        if (buf == null) {
+            try (InputStream in =
+                    sourceClass.getResourceAsStream(new Path(Util.RESOURCES_PATH).append(resourcePath).makeAbsolute().toString())) {
+                buf = new byte[4096];
+                try (OutputStream out = new FileOutputStream(file)) {
+                    for (int len = in.read(buf); len > 0; len = in.read(buf)) {
+                        out.write(buf, 0, len);
+                    }
+                }
+            }
         }
     }
 
