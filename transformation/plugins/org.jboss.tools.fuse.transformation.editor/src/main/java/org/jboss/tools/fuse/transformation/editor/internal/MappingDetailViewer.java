@@ -74,7 +74,6 @@ public final class MappingDetailViewer extends MappingViewer {
     private static final String STANDARD_FORMAT_PREFERENCE = PREFERENCE_PREFIX + "standardFormat";
 
     final ScrolledComposite scroller;
-    final Point imageButtonLabelSize;
     final Map<Integer, Text> textById = new HashMap<>();
     int nextFocusedTextId;
     transient int focusedTextId = -1;
@@ -95,11 +94,6 @@ public final class MappingDetailViewer extends MappingViewer {
         scroller.setExpandHorizontal(true);
         scroller.setExpandVertical(true);
         scroller.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-
-        final Label label = new Label(parent.getShell(), SWT.NONE);
-        label.setImage(Images.MENU);
-        imageButtonLabelSize = label.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-        label.dispose();
 
         config.addListener(new PropertyChangeListener() {
 
@@ -628,7 +622,7 @@ public final class MappingDetailViewer extends MappingViewer {
         ControlWithMenuPane(final Composite parent) {
             super(parent, SWT.NONE);
             setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-            setLayout(GridLayoutFactory.fillDefaults().numColumns(2).create());
+            setLayout(GridLayoutFactory.fillDefaults().spacing(1, 0).numColumns(2).create());
             setBackground(parent.getForeground());
         }
 
@@ -639,46 +633,44 @@ public final class MappingDetailViewer extends MappingViewer {
 
         void create() {
             createControl();
-            createMenu();
+            createMenuArrow();
         }
 
         abstract void createControl();
 
-        Label createMenu() {
-            final Label menu = new Label(this, SWT.NONE);
-            menu.setLayoutData(GridDataFactory.swtDefaults()
-                                              .hint(imageButtonLabelSize)
-                                              .align(SWT.BEGINNING, SWT.BOTTOM)
-                                              .create());
-            menu.setBackground(getBackground());
-            menu.setImage(Images.MENU);
-            menu.addMouseListener(new MouseAdapter() {
+        Label createMenuArrow() {
+            Label menuArrow = new Label(this, SWT.NONE);
+            menuArrow.setImage(Images.MENU);
+            menuArrow.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.BOTTOM).create());
+            menuArrow.setBackground(getBackground());
+            menuArrow.setImage(Images.MENU);
+            MouseAdapter listener = new MouseAdapter() {
 
                 @Override
                 public void mouseUp(final MouseEvent event) {
-                    popupMenu(menu, event.x, event.y);
+                    popupMenu(menuArrow, (Control)event.getSource(), event.x, event.y);
                 }
-            });
-            return menu;
+            };
+            menuArrow.addMouseListener(listener);
+            addMouseListener(listener);
+            return menuArrow;
         }
 
-        void popupMenu(final Label menuLabel,
-                       final int xPos,
-                       final int yPos) {
-            final Point size = menuLabel.getSize();
-            if (xPos < 0 || xPos > size.x || yPos < 0 || yPos > size.y) {
-                return;
-            }
-            final Menu popupMenu = new Menu(menuLabel);
-            menuLabel.setMenu(popupMenu);
+        void popupMenu(Label menuArrow,
+                       Control source,
+                       int x,
+                       int y) {
+            Point size = source.getSize();
+            if (x < 0 || x > size.x || y < 0 || y > size.y) return;
+            Menu popupMenu = new Menu(menuArrow);
+            menuArrow.setMenu(popupMenu);
             for (final Entry<String, MenuItemHandler> entry : menuItems.entrySet()) {
                 final MenuItem item = new MenuItem(popupMenu, SWT.NONE);
                 item.setText(entry.getKey());
                 item.addSelectionListener(entry.getValue());
                 item.setEnabled(entry.getValue().enabled());
             }
-            popupMenu.setLocation(toDisplay(menuLabel.getLocation().x,
-                                            menuLabel.getLocation().y + size.y + 5));
+            popupMenu.setLocation(toDisplay(menuArrow.getBounds().x, getBounds().height + 5));
             popupMenu.setVisible(true);
         }
     }
@@ -710,8 +702,8 @@ public final class MappingDetailViewer extends MappingViewer {
                                      GridLayout layout);
 
         @Override
-        Label createMenu() {
-            final Label menu = super.createMenu();
+        Label createMenuArrow() {
+            final Label menu = super.createMenuArrow();
             setToolTipToFunctionDescription(menu);
             if (annotation != null) {
                 addMenuItem("Edit function", new MenuItemHandler() {

@@ -29,16 +29,16 @@
         <class-a>abcorder.ABCOrder$OrderItems$Item</class-a>
         <class-b>xyzorder.LineItem</class-b>
         <field>
-            <a>id</a>
-            <b>itemId</b>
-        </field>
-        <field>
             <a>price</a>
             <b>cost</b>
         </field>
         <field>
             <a>quantity</a>
             <b>amount</b>
+        </field>
+        <field>
+            <a>id</a>
+            <b>itemId</b>
         </field>
     </mapping>
     <mapping>

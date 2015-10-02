@@ -36,6 +36,9 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -64,7 +67,7 @@ class FunctionDialog extends BaseDialog {
 
     ListViewer listViewer;
     Browser description;
-    ScrolledComposite argScroller;
+    Composite argsPane;
     TableViewer tableViewer;
 
     FunctionDialog(Shell shell,
@@ -157,9 +160,9 @@ class FunctionDialog extends BaseDialog {
                     description.dispose();
                     description = null;
                 }
-                if (argScroller != null) {
-                    argScroller.dispose();
-                    argScroller = null;
+                if (argsPane != null) {
+                    argsPane.dispose();
+                    argsPane = null;
                 }
 
                 if (event.getSelection().isEmpty()) {
@@ -200,36 +203,35 @@ class FunctionDialog extends BaseDialog {
 
         if (types.length > 1) {
             maximizeDescription(description, false);
-            argScroller = new ScrolledComposite(argsGroup, SWT.V_SCROLL);
-            argScroller.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-            argScroller.setExpandHorizontal(true);
-            argScroller.setExpandVertical(true);
-            argScroller.setShowFocusedControl(true);
-            final Composite argsPane = new Composite(argScroller, SWT.NONE);
-            argScroller.setContent(argsPane);
+            argsPane = new Composite(argsGroup, SWT.NONE);
             argsPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-            argsPane.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
+            argsPane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
+            argsPane.setBackground(argsPane.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+            Composite headerPane = new Composite(argsPane, SWT.NONE);
+            headerPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+            headerPane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).numColumns(4).create());
+            headerPane.addPaintListener(Util.tableHeaderBorderPainter());
+            GridData nameData = GridDataFactory.fillDefaults().create();
+            newTableHeader(headerPane, "Name").setLayoutData(nameData);
+            GridData valData = GridDataFactory.fillDefaults().create();
+            newTableHeader(headerPane, "Value").setLayoutData(valData);
+            GridData typeData = GridDataFactory.fillDefaults().create();
+            newTableHeader(headerPane, "Type").setLayoutData(typeData);
+            GridData descData = GridDataFactory.fillDefaults().grab(true, false).create();
+            newTableHeader(headerPane, "Description").setLayoutData(descData);
+            int headerPaneHeight = headerPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+            ScrolledComposite scroller = new ScrolledComposite(argsPane, SWT.V_SCROLL);
+            scroller.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+            scroller.setExpandHorizontal(true);
+            scroller.setExpandVertical(true);
+            scroller.setShowFocusedControl(true);
+            Composite scrollerPane = new Composite(scroller, SWT.BORDER);
+            scroller.setContent(scrollerPane);
+            GridLayout layout = GridLayoutFactory.swtDefaults().numColumns(4).create();
+            scrollerPane.setLayout(layout);
+            layout.marginLeft = layout.marginRight = 0;
+            scrollerPane.setBackground(argsPane.getBackground());
             // Create new components for selected function's arguments
-            Label label = new Label(argsPane, SWT.NONE);
-            label.setLayoutData(GridDataFactory.fillDefaults().create());
-            label.setText("Name");
-            label.setBackground(label.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-            label.setForeground(label.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-            label = new Label(argsPane, SWT.NONE);
-            label.setLayoutData(GridDataFactory.fillDefaults().create());
-            label.setText("Value");
-            label.setBackground(label.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-            label.setForeground(label.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-            label = new Label(argsPane, SWT.NONE);
-            label.setLayoutData(GridDataFactory.fillDefaults().create());
-            label.setText("Type");
-            label.setBackground(label.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-            label.setForeground(label.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-            label = new Label(argsPane, SWT.NONE);
-            label.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-            label.setText("Description");
-            label.setBackground(label.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-            label.setForeground(label.getDisplay().getSystemColor(SWT.COLOR_WHITE));
             String[] mappingArgs = function.equals(origFunction) ? ((CustomMapping)mapping).getFunctionArguments() : null;
             for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
                 final Class<?> type = types[typeNdx];
@@ -237,12 +239,14 @@ class FunctionDialog extends BaseDialog {
                 final Arg argAnno =
                     annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
                 if (argAnno != null) argumentValues[argNdx] = argAnno.defaultValue();
-                label = new Label(argsPane, SWT.NONE);
+                Label label = new Label(scrollerPane, SWT.NONE);
                 label.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
                 if (argAnno == null) label.setText("argument" + (argNdx + 1));
                 else label.setText(argAnno.name() + (argAnno.defaultValue().isEmpty() ? "" : " (optional)"));
+                nameData.widthHint =
+                    Math.max(nameData.widthHint, label.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
                 if (type == Boolean.class) {
-                    final Button checkBox = new Button(argsPane, SWT.CHECK);
+                    final Button checkBox = new Button(scrollerPane, SWT.CHECK);
                     checkBox.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.TOP).create());
                     if (mappingArgs != null) {
                         String val = mappingArgs[argNdx].split("=")[1];
@@ -257,8 +261,10 @@ class FunctionDialog extends BaseDialog {
                             validate(annotation, types);
                         }
                     });
+                    valData.widthHint =
+                        Math.max(valData.widthHint, checkBox.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
                 } else {
-                    final Text text = new Text(argsPane, SWT.BORDER);
+                    final Text text = new Text(scrollerPane, SWT.BORDER);
                     text.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.TOP).create());
                     if (mappingArgs != null) {
                         String val = mappingArgs[argNdx].split("=")[1];
@@ -274,20 +280,28 @@ class FunctionDialog extends BaseDialog {
                             validate(annotation, types);
                         }
                     });
+                    valData.widthHint =
+                        Math.max(valData.widthHint, text.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
                 }
-                label = new Label(argsPane, SWT.NONE);
+                label = new Label(scrollerPane, SWT.NONE);
                 label.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
                 label.setText(type.getSimpleName());
                 label.setToolTipText(type.getName());
-                label = new Label(argsPane, SWT.WRAP);
+                typeData.widthHint =
+                    Math.max(typeData.widthHint, label.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
+                label = new Label(scrollerPane, SWT.WRAP);
                 label.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
                 if (argAnno != null) label.setText(argAnno.description());
+                descData.widthHint =
+                    Math.max(descData.widthHint, label.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
             }
-            argScroller.addControlListener(new ControlAdapter() {
+            scroller.addControlListener(new ControlAdapter() {
 
                 @Override
                 public void controlResized(ControlEvent event) {
-                    argScroller.setMinSize(argsPane.computeSize(argScroller.getClientArea().width, SWT.DEFAULT));
+                    Point size = argsPane.computeSize(scroller.getClientArea().width, SWT.DEFAULT);
+                    size.y -= headerPaneHeight;
+                    scroller.setMinSize(size);
                     parent.layout();
                 }
             });
@@ -320,6 +334,14 @@ class FunctionDialog extends BaseDialog {
     protected String message() {
         return "Select a function to transform the " + ((Model)mapping.getSource()).getName()
                + " property's value, along with any applicable arguments";
+    }
+
+    private Label newTableHeader(Composite parent,
+                                 String text) {
+        Label label = new Label(parent, SWT.NONE);
+        label.setText(text);
+        label.addPaintListener(Util.tableColumnHeaderBorderPainter());
+        return label;
     }
 
     /**
