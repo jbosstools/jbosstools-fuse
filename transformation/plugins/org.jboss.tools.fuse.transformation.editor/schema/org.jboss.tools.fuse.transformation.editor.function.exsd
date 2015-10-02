@@ -59,16 +59,6 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="source" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="resource"/>
-               </appinfo>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 
