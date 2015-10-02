@@ -13,7 +13,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +30,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.jobs.Job;
@@ -377,45 +377,16 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 
     void copySourceToProject(String sourcePath,
                              Class<?> sourceClass,
-                             boolean latestVersion) throws FileNotFoundException, IOException {
+                             boolean latestVersion) throws IOException {
         IPath path = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
         File file = path.append(sourceClass.getPackage().getName().replace('.', '/')).toFile();
         if (!file.exists()) file.mkdirs();
         file = new File(file, sourceClass.getSimpleName() + ".java");
         if (file.exists() && latestVersion) return;
-        try (InputStream in = sourceClass.getResourceAsStream(sourcePath)) {
-            // jpav: remove
-            System.out.println(sourcePath + " sourceClass: " + in);
-        }
-        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream(sourcePath)) {
-            // jpav: remove
-            System.out.println(sourcePath + " sourceClass.getClassLoader(): " + in);
-        }
-        try (InputStream in = sourceClass.getResourceAsStream('/' + sourcePath)) {
-            // jpav: remove
-            System.out.println(sourcePath + " sourceClass /: " + in);
-        }
-        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream('/' + sourcePath)) {
-            // jpav: remove
-            System.out.println(sourcePath + " sourceClass.getClassLoader() /: " + in);
-        }
-        String s = sourceClass.getPackage().getName().replace('.', '/') + '/' + sourcePath.substring(sourcePath.indexOf('/') + 1);
-        try (InputStream in = sourceClass.getResourceAsStream(sourcePath)) {
-            // jpav: remove
-            System.out.println(s + " sourceClass: " + in);
-        }
-        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream(s)) {
-            // jpav: remove
-            System.out.println(s + " sourceClass.getClassLoader(): " + in);
-        }
-        try (InputStream in = sourceClass.getResourceAsStream('/' + s)) {
-            // jpav: remove
-            System.out.println(s + " sourceClass /: " + in);
-        }
-        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream('/' + s)) {
-            // jpav: remove
-            System.out.println(s + " sourceClass.getClassLoader() /: " + in);
-        }
+        debug(sourcePath, sourceClass);
+        debug('/' + sourcePath, sourceClass);
+        debug(sourceClass.getName().replace('.', '/') + ".java", sourceClass);
+        debug('/' + sourceClass.getName().replace('.', '/') + ".java", sourceClass);
         try (InputStream in = sourceClass.getResourceAsStream('/' + sourcePath)) {
             byte[] buf = new byte[4096];
             try (OutputStream out = new FileOutputStream(file)) {
@@ -423,6 +394,23 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                     out.write(buf, 0, len);
                 }
             }
+        }
+    }
+
+    private void debug(String sourcePath,
+                       Class<?> sourceClass) throws IOException {
+        Activator.log(IStatus.INFO, sourcePath);
+        try (InputStream in = sourceClass.getResourceAsStream(sourcePath)) {
+            Activator.log(IStatus.INFO, "\tsourceClass.getResourceAsStream(): " + in);
+        }
+        try (InputStream in = sourceClass.getClassLoader().getResourceAsStream(sourcePath)) {
+            Activator.log(IStatus.INFO, "\tsourceClass.getClassLoader().getResourceAsStream(): " + in);
+        }
+        try (InputStream in = getClass().getResourceAsStream(sourcePath)) {
+            Activator.log(IStatus.INFO, "\tgetClass().getResourceAsStream(): " + in);
+        }
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream(sourcePath)) {
+            Activator.log(IStatus.INFO, "\tgetClass().getClassLoader().getResourceAsStream(): " + in);
         }
     }
 
