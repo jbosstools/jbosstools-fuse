@@ -328,7 +328,7 @@ public final class MappingDetailViewer extends MappingViewer {
     }
 
     private void createSourcePane(Composite parent) {
-        ControlWithMenuPane fieldPane = new ControlWithMenuPane(parent) {
+        ControlWithMenuPane propPane = new ControlWithMenuPane(parent) {
 
             @Override
             void createControl() {
@@ -336,19 +336,19 @@ public final class MappingDetailViewer extends MappingViewer {
                 sourceText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             }
         };
-        fieldPane.create();
-        fieldPane.addMenuItem("Set property", new MenuItemHandler() {
+        propPane.create();
+        propPane.addMenuItem("Set property", new MenuItemHandler() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 try {
-                    setField(true);
+                    setProperty(true);
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
             }
         });
-        fieldPane.addMenuItem("Set variable", new MenuItemHandler() {
+        propPane.addMenuItem("Set variable", new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -364,7 +364,7 @@ public final class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        fieldPane.addMenuItem("Set expression", new MenuItemHandler() {
+        propPane.addMenuItem("Set expression", new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -380,7 +380,7 @@ public final class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        fieldPane.addMenuItem("Add function", new MenuItemHandler() {
+        propPane.addMenuItem("Add function", new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -396,7 +396,7 @@ public final class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        fieldPane.addMenuItem("Add custom function", new MenuItemHandler() {
+        propPane.addMenuItem("Add custom function", new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -415,7 +415,7 @@ public final class MappingDetailViewer extends MappingViewer {
         if (mapping != null && mapping.getSource() != null) {
             if (Util.modelsNeedDateFormat(mapping.getSource(),
                                           mapping.getTarget(), true)) {
-                fieldPane.addMenuItem("Set date format", new MenuItemHandler() {
+                propPane.addMenuItem("Set date format", new MenuItemHandler() {
 
                     @Override
                     public void widgetSelected(final SelectionEvent event) {
@@ -451,7 +451,7 @@ public final class MappingDetailViewer extends MappingViewer {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 try {
-                    setField(false);
+                    setProperty(false);
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
@@ -543,11 +543,10 @@ public final class MappingDetailViewer extends MappingViewer {
         } catch (CanceledDialogException ignored) {}
     }
 
-    void setField(final boolean source) throws Exception {
-        final FieldDialog dlg =
-            new FieldDialog(sourceText.getShell(), source ? config.getSourceModel() : config.getTargetModel(), config, mapping);
-        if (dlg.open() != Window.OK)
-            return;
+    void setProperty(final boolean source) throws Exception {
+        final PropertyDialog dlg =
+            new PropertyDialog(sourceText.getShell(), source ? config.getSourceModel() : config.getTargetModel(), config, mapping);
+        if (dlg.open() != Window.OK) return;
         if (source) setSource(dlg.field);
         else setTarget(dlg.field);
     }

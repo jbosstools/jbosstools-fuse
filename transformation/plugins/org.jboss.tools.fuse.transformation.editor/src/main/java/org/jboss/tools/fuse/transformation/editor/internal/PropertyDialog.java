@@ -18,19 +18,20 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.fuse.transformation.MappingOperation;
+import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.model.Model;
 
-class FieldDialog extends BaseDialog {
+class PropertyDialog extends BaseDialog {
 
     final Model rootModel;
     final TransformationConfig config;
     final MappingOperation<?, ?> mapping;
     Model field;
 
-    FieldDialog(Shell shell,
+    PropertyDialog(Shell shell,
                 Model rootModel,
                 TransformationConfig config,
                 MappingOperation<?, ?> mapping) {
@@ -38,17 +39,19 @@ class FieldDialog extends BaseDialog {
         this.rootModel = rootModel;
         this.config = config;
         this.mapping = mapping;
-        if (mapping.getSource() instanceof Model) {
-            this.field = rootModel.equals(config.getSourceModel())
-                         ? (Model) mapping.getSource()
-                         : (Model) mapping.getTarget();
-        }
+        field = Util.sourceModel(rootModel, config) ? (Model)mapping.getSource() : (Model)mapping.getTarget();
     }
 
     @Override
     protected void constructContents(final Composite parent) {
         parent.setLayout(GridLayoutFactory.swtDefaults().create());
-        final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel, null, null);
+        final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel, null, null) {
+
+            @Override
+            boolean eligible(Model model) {
+                return valid(model);
+            }
+        };
         modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         if (field != null) {
             modelViewer.select(field);
@@ -75,15 +78,18 @@ class FieldDialog extends BaseDialog {
         return "Property";
     }
 
-    void validate() {
-        boolean enabled = field != null && !Util.type(field);
-        if (enabled) {
-            if (rootModel.equals(config.getSourceModel())) {
-                enabled = Util.validSourceAndTarget(field, mapping.getTarget(), config);
-            } else {
-                enabled = Util.validSourceAndTarget(mapping.getSource(), field, config);
-            }
-        }
+    private boolean valid(Model model) {
+        if (Util.sourceModel(rootModel, config)) {
+            if (!Util.validSourceAndTarget(model, mapping.getTarget(), config)) return false;
+        } else if (!Util.validSourceAndTarget(mapping.getSource(), model, config)) return false;
+        // Ensure property types are the same if old property is in custom mapping
+        if (Util.sourceModel(rootModel, config) && mapping.getType() == MappingType.CUSTOM)
+            return model.getType().equals(((Model)mapping.getSource()).getType());
+        return true;
+    }
+
+    private void validate() {
+        boolean enabled = field != null && valid(field);
         setErrorMessage(enabled ? null : "Invalid property");
         getButton(IDialogConstants.OK_ID).setEnabled(enabled);
     }

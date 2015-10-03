@@ -549,7 +549,7 @@ public class Util {
      * @return A paint listener that paints a border around a control that's being used as a table's column header. Should be used
      *         in conjunction with {@link #tableHeaderBorderPainter()}
      */
-    public static final PaintListener tableColumnHeaderBorderPainter() {
+    public static PaintListener tableColumnHeaderBorderPainter() {
         return new PaintListener() {
 
             @Override
@@ -561,11 +561,16 @@ public class Util {
         };
     }
 
+    public static boolean sourceModel(Model model,
+                                     TransformationConfig config) {
+        return root(model).equals(config.getSourceModel());
+    }
+
     /**
      * @return A paint listener that paints a border around a composite that's being used as a table. Should be used in conjunction
      *         with {@link #tableColumnHeaderBorderPainter()}
      */
-    public static final PaintListener tableHeaderBorderPainter() {
+    public static PaintListener tableHeaderBorderPainter() {
         return new PaintListener() {
 
             @Override

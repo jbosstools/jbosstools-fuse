@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -52,8 +53,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
@@ -74,6 +77,13 @@ public class ModelViewer extends Composite {
     private static final String PREFERENCE_PREFIX = ModelViewer.class.getName() + ".";
     private static final String FILTER_MAPPED_FIELDS_PREFERENCE = ".filterMappedFields";
     private static final String FILTER_TYPES_PREFERENCE = ".filterTypes";
+    private static final Styler INELIGIBLE_STYLER = new Styler() {
+
+        @Override
+        public void applyStyles(TextStyle textStyle) {
+            textStyle.foreground = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+        }
+    };
 
     final TransformationConfig config;
     Model rootModel;
@@ -354,6 +364,10 @@ public class ModelViewer extends Composite {
         }
     }
 
+    boolean eligible(Model model) {
+        return true;
+    }
+
     private void expand(final Model model) {
         if (model == null) {
             return;
@@ -362,7 +376,7 @@ public class ModelViewer extends Composite {
         treeViewer.expandToLevel(model, 0);
     }
 
-    boolean mapped(final Model model) {
+    private boolean mapped(final Model model) {
         if (config == null) {
             return false;
         }
@@ -407,15 +421,23 @@ public class ModelViewer extends Composite {
         }
     }
 
-    boolean show(final Object element,
-                 final boolean searching) {
+    /**
+     * Provides a method implementers can override to hide certain items.
+     */
+    protected void setViewOptions() {
+        // anything that needs to be overridden, like showMappedFieldsButton
+        // can be overridden here in an extender.
+    }
+
+    private boolean show(final Object element,
+                         final boolean searching) {
         if (hideMappedFields && mappedOrFullyMappedParent((Model)element)) {
             return false;
         }
         return !searching || searchResults.contains(element);
     }
 
-    void updateSearchMap(final Model model) {
+    private void updateSearchMap(final Model model) {
         if (model == null) {
             return;
         }
@@ -493,8 +515,8 @@ public class ModelViewer extends Composite {
         private String getText(final Object element,
                                final StyledString text,
                                final boolean showFieldTypesInLabel) {
-            final Model model = (Model) element;
-            text.append(model.getName());
+            final Model model = (Model)element;
+            text.append(model.getName(), eligible(model) ? null : INELIGIBLE_STYLER);
             if (showFieldTypesInLabel) {
                 final String type = model.getType();
                 if (type.startsWith("[")) {
@@ -523,13 +545,5 @@ public class ModelViewer extends Composite {
             cell.setStyleRanges(text.getStyleRanges());
             super.update(cell);
         }
-    }
-
-    /**
-     * Provides a method implementers can override to hide certain items.
-     */
-    protected void setViewOptions() {
-        // anything that needs to be overridden, like showMappedFieldsButton
-        // can be overridden here in an extender.
     }
 }
