@@ -30,27 +30,27 @@ public final class CamelFileTypeHelper {
     private static XmlMatchingStrategySupport springXmlMatcher = new SpringXmlMatchingStrategy();
 
     /**
-     * checks if the given file is a blueprint file or not
+     * @param project
      * @param filePath
-     * @return
+     * @return <code>true</code> if the file with the supplied filePath is a Blueprint file
      */
     public static boolean isBlueprintFile(IProject project, String filePath) {
         return fileMatches(project, filePath, blueprintXmlMatcher);
     }
 
     /**
-     * checks if the given file is a spring file or not
+     * @param project
      * @param filePath
-     * @return
+     * @return <code>true</code> if the file with the supplied filePath is a Spring file
      */
     public static boolean isSpringFile(IProject project, String filePath) {
         return fileMatches(project, filePath, springXmlMatcher);
     }
 
     /**
-     * checks if the given file is a spring or blueprint file or not
+     * @param project
      * @param filePath
-     * @return
+     * @return <code>true</code> if the file with the supplied filePath is a Spring or Blueprint file
      */
     public static boolean isSupportedCamelFile(IProject project, String filePath) {
         boolean isSpring = isSpringFile(project, filePath);

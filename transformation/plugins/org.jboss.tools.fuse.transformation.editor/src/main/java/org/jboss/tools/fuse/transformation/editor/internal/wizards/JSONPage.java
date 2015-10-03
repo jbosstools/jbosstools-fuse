@@ -14,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -65,7 +64,9 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
     private Binding _binding;
 
     /**
+     * @param pageName
      * @param model
+     * @param isSource
      */
     public JSONPage(final String pageName, final Model model, final boolean isSource) {
         super(pageName, model);

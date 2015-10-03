@@ -11,7 +11,6 @@ package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.model.Model;
@@ -28,11 +27,6 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
     private String sourceDateFormat;
     private String targetDateFormat;
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#getSource()
-     */
     @Override
     public Object getSource() {
         return source;
@@ -43,11 +37,6 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         return sourceDateFormat;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#getSourceIndex()
-     */
     @Override
     public List<Integer> getSourceIndex() {
         if (sourceIndexes != null)
@@ -55,11 +44,6 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#getTarget()
-     */
     @Override
     public Model getTarget() {
         return target;
@@ -70,11 +54,6 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         return targetDateFormat;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#getTargetIndex()
-     */
     @Override
     public List<Integer> getTargetIndex() {
         if (targetIndexes != null)
@@ -82,11 +61,6 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#getType()
-     */
     @Override
     public MappingType getType() {
         return null;
@@ -101,11 +75,6 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         sourceDateFormat = format;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#setSourceIndex()
-     */
     @Override
     public void setSourceIndex(List<Integer> indexes) {
         sourceIndexes = indexes;
@@ -120,11 +89,6 @@ public class MappingPlaceholder implements MappingOperation<Object, Model> {
         targetDateFormat = format;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MappingOperation#setTargetIndex()
-     */
     @Override
     public void setTargetIndex(List<Integer> indexes) {
         targetIndexes = indexes;

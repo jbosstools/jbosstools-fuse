@@ -83,7 +83,9 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
     private Binding _binding2;
 
     /**
+     * @param pageName
      * @param model
+     * @param isSource
      */
     public XMLPage(String pageName, final Model model, boolean isSource) {
         super(pageName, model);

@@ -483,6 +483,8 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * @param mapping
      * @param source
+     * @param sourceIndexes
+     * @param targetIndexes
      * @return The supplied mapping if it remains incomplete, else a new mapping mapped via the delegate
      */
     public MappingOperation<?, ?> setSource(final MappingOperation<?, ?> mapping,
@@ -500,6 +502,7 @@ public class TransformationConfig implements MapperConfiguration {
      * @param mapping
      * @param language
      * @param expression
+     * @param targetIndexes
      * @return The supplied mapping if it remains incomplete, else a new mapping mapped via the delegate
      */
     public MappingOperation<?, ?> setSourceExpression(final MappingOperation<?, ?> mapping,
@@ -519,6 +522,8 @@ public class TransformationConfig implements MapperConfiguration {
     /**
      * @param mapping
      * @param target
+     * @param sourceIndexes
+     * @param targetIndexes
      * @return The supplied mapping if it remains incomplete, else a new mapping mapped via the delegate
      */
     public MappingOperation<?, ?> setTarget(final MappingOperation<?, ?> mapping,

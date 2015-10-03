@@ -13,7 +13,6 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -54,7 +53,7 @@ public final class SourceTabFolder extends ModelTabFolder {
     /**
      * {@inheritDoc}
      *
-     * @see org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder#constructModelViewer(org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig, java.util.List)
+     * @see org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder#constructModelViewer(org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig, java.util.List, java.lang.String)
      */
     @Override
     ModelViewer constructModelViewer(final TransformationConfig config,

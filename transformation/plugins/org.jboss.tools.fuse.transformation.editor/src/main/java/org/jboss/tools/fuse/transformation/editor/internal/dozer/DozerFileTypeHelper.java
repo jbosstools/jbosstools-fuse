@@ -9,6 +9,7 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.dozer;
 
+import java.io.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -26,9 +27,9 @@ public final class DozerFileTypeHelper {
     private static XmlMatchingStrategySupport dozerXmlMatcher = new DozerXmlMatchingStrategy();
 
     /**
-     * checks if the given file is a dozer file or not
+     * @param project
      * @param filePath
-     * @return
+     * @return <code>true</code> if the file with the supplied filePath is a Dozer configuration file
      */
     public static boolean isDozerFile(IProject project, String filePath) {
         return fileMatches(project, filePath, dozerXmlMatcher);
@@ -46,12 +47,11 @@ public final class DozerFileTypeHelper {
                 rawPath = wholePath.toPortableString();
             }
             Path fp = new Path(rawPath);
-            java.io.File nf = new java.io.File(fp.toOSString());
+            File nf = new File(fp.toOSString());
             if (nf.exists() && nf.isFile()) {
-                // file exists, now check if its blueprint or spring
                 IWorkspace workspace = ResourcesPlugin.getWorkspace();
-                IPath location = Path. fromOSString(nf.getAbsolutePath());
-                IFile file = workspace .getRoot().getFileForLocation(location);
+                IPath location = Path.fromOSString(nf.getAbsolutePath());
+                IFile file = workspace.getRoot().getFileForLocation(location);
                 matches = matcher.matches(file);
             }
         }

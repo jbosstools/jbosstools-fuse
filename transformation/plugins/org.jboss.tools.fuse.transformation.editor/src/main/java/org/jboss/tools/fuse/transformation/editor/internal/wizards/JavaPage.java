@@ -73,7 +73,9 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     private Binding _binding;
 
     /**
+     * @param pageName
      * @param model
+     * @param isSource
      */
     public JavaPage(String pageName, final Model model, boolean isSource) {
         super(pageName, model);
@@ -148,7 +150,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
                             model.setTargetFilePath(selected.getFullyQualifiedName());
                         }
                         final IType inner = selected;
-    
+
                         UIJob uiJob = new UIJob("open error") {
                             @Override
                             public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -275,11 +277,8 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     class SimplerModelViewer extends ModelViewer {
 
         /**
-         * Constructor
-         * @param config
          * @param parent
          * @param rootModel
-         * @param potentialDropTargets
          */
         public SimplerModelViewer(Composite parent,
                                   org.jboss.tools.fuse.transformation.model.Model rootModel) {

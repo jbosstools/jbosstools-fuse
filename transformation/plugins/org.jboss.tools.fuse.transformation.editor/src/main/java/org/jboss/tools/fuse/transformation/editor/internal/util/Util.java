@@ -373,7 +373,6 @@ public class Util {
 
     /**
      * @param shell
-     * @param extension
      * @param project
      * @return The selected resource
      */
@@ -454,7 +453,6 @@ public class Util {
 
     /**
      * @param shell
-     * @param extension
      * @param project
      * @return The selected resource
      */
@@ -545,9 +543,55 @@ public class Util {
         return (IFile)result[0];
     }
 
+    public static boolean sourceModel(Model model,
+                                     TransformationConfig config) {
+        return root(model).equals(config.getSourceModel());
+    }
+
     /**
-     * @return A paint listener that paints a border around a control that's being used as a table's column header. Should be used
-     *         in conjunction with {@link #tableHeaderBorderPainter()}
+     * @return A paint listener that paints a border around a composite that's being used as a table.
+     * @see #tableColumnHeaderBorderPainter()
+     * @see #tableCellBorderPainter(boolean, boolean)
+     */
+    public static PaintListener tableBorderPainter() {
+        return new PaintListener() {
+
+            @Override
+            public void paintControl(final PaintEvent event) {
+                event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_GRAY));
+                final Rectangle bounds = ((Control)event.widget).getBounds();
+                event.gc.drawLine(0, 0, 0, bounds.height - 1); // Left border
+                event.gc.drawLine(bounds.width - 1, 0, bounds.width - 1, bounds.height - 1); // Right border
+            }
+        };
+    }
+
+    /**
+     * @param leftBorder <code>true</code> if the left border should be painted
+     * @param rightBorder <code>true</code> if the right border should be painted
+     * @return A paint listener that paints a border around a composite that's being used as a table cell.
+     * @see #tableBorderPainter()
+     * @see #tableColumnHeaderBorderPainter()
+     */
+    public static PaintListener tableCellBorderPainter(final boolean leftBorder,
+                                                       final boolean rightBorder) {
+        return new PaintListener() {
+
+            @Override
+            public void paintControl(final PaintEvent event) {
+                event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_GRAY));
+                final Rectangle bounds = ((Control)event.widget).getBounds();
+                event.gc.drawLine(0, bounds.height - 1, bounds.width, bounds.height - 1); // Bottom border
+                if (leftBorder) event.gc.drawLine(0, 0, 0, bounds.height - 1); // Left border
+                if (rightBorder) event.gc.drawLine(bounds.width - 1, 0, bounds.width - 1, bounds.height - 1); // Right border
+            }
+        };
+    }
+
+    /**
+     * @return A paint listener that paints a border around a control that's being used as a table's column header.
+     * @see #tableBorderPainter()
+     * @see #tableCellBorderPainter(boolean, boolean)
      */
     public static PaintListener tableColumnHeaderBorderPainter() {
         return new PaintListener() {
@@ -557,30 +601,6 @@ public class Util {
                 event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_GRAY));
                 final Rectangle bounds = ((Control)event.widget).getBounds();
                 event.gc.drawLine(bounds.width - 1, 0, bounds.width - 1, bounds.height - 1); // Right border
-            }
-        };
-    }
-
-    public static boolean sourceModel(Model model,
-                                     TransformationConfig config) {
-        return root(model).equals(config.getSourceModel());
-    }
-
-    /**
-     * @return A paint listener that paints a border around a composite that's being used as a table. Should be used in conjunction
-     *         with {@link #tableColumnHeaderBorderPainter()}
-     */
-    public static PaintListener tableHeaderBorderPainter() {
-        return new PaintListener() {
-
-            @Override
-            public void paintControl(final PaintEvent event) {
-                event.gc.setForeground(event.display.getSystemColor(SWT.COLOR_GRAY));
-                final Rectangle bounds = ((Composite)event.widget).getClientArea();
-                event.gc.drawLine(0, 0, bounds.width - 1, 0); // Top border
-                event.gc.drawLine(0, 0, 0, bounds.height - 1); // Left border
-                event.gc.drawLine(bounds.width - 1, 0, bounds.width - 1, bounds.height - 1); // Right border
-                // Bottom border is not drawn since we're assuming this is being used with tableColumnHeaderBorderPainer()
             }
         };
     }
@@ -683,7 +703,7 @@ public class Util {
      * @return <code>true</code> if the supplied value is valid for the supplied function argument's annotation and type
      * @param value
      *        An argument value to be validated
-     * @param arg
+     * @param annotation
      *        the function argument's annotation
      * @param type
      *        the function argument's type

@@ -38,7 +38,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -207,30 +206,26 @@ class FunctionDialog extends BaseDialog {
             argsPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
             argsPane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
             argsPane.setBackground(argsPane.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-            Composite headerPane = new Composite(argsPane, SWT.NONE);
+            Composite headerPane = new Composite(argsPane, SWT.BORDER);
             headerPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             headerPane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).numColumns(4).create());
-            headerPane.addPaintListener(Util.tableHeaderBorderPainter());
             GridData nameData = GridDataFactory.fillDefaults().create();
-            newTableHeader(headerPane, "Name").setLayoutData(nameData);
+            newTableColumnHeader(headerPane, "Name").setLayoutData(nameData);
             GridData valData = GridDataFactory.fillDefaults().create();
-            newTableHeader(headerPane, "Value").setLayoutData(valData);
+            newTableColumnHeader(headerPane, "Value").setLayoutData(valData);
             GridData typeData = GridDataFactory.fillDefaults().create();
-            newTableHeader(headerPane, "Type").setLayoutData(typeData);
-            GridData descData = GridDataFactory.fillDefaults().grab(true, false).create();
-            newTableHeader(headerPane, "Description").setLayoutData(descData);
+            newTableColumnHeader(headerPane, "Type").setLayoutData(typeData);
+            newTableColumnHeader(headerPane, "Description").setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             final int headerPaneHeight = headerPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
             final ScrolledComposite scroller = new ScrolledComposite(argsPane, SWT.V_SCROLL);
             scroller.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
             scroller.setExpandHorizontal(true);
             scroller.setExpandVertical(true);
             scroller.setShowFocusedControl(true);
-            Composite scrollerPane = new Composite(scroller, SWT.BORDER);
+            Composite scrollerPane = new Composite(scroller, SWT.NONE);
             scroller.setContent(scrollerPane);
-            GridLayout layout = GridLayoutFactory.swtDefaults().numColumns(4).create();
-            scrollerPane.setLayout(layout);
-            layout.marginLeft = layout.marginRight = 0;
-            scrollerPane.setBackground(argsPane.getBackground());
+            scrollerPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).spacing(0, 0).create());
+            scrollerPane.setBackground(scroller.getBackground());
             // Create new components for selected function's arguments
             String[] mappingArgs = function.equals(origFunction) ? ((CustomMapping)mapping).getFunctionArguments() : null;
             for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
@@ -239,14 +234,15 @@ class FunctionDialog extends BaseDialog {
                 final Arg argAnno =
                     annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
                 if (argAnno != null) argumentValues[argNdx] = argAnno.defaultValue();
-                Label label = new Label(scrollerPane, SWT.NONE);
+                Composite cell = newTableCell(scrollerPane, false, true, false);
+                Label label = new Label(cell, SWT.NONE);
                 label.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
                 if (argAnno == null) label.setText("argument" + (argNdx + 1));
                 else label.setText(argAnno.name() + (argAnno.defaultValue().isEmpty() ? "" : " (optional)"));
-                nameData.widthHint =
-                    Math.max(nameData.widthHint, label.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
+                nameData.widthHint = Math.max(nameData.widthHint, cell.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
+                cell = newTableCell(scrollerPane, false, false, false);
                 if (type == Boolean.class) {
-                    final Button checkBox = new Button(scrollerPane, SWT.CHECK);
+                    final Button checkBox = new Button(cell, SWT.CHECK);
                     checkBox.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.TOP).create());
                     if (mappingArgs != null) {
                         String val = mappingArgs[argNdx].split("=")[1];
@@ -261,10 +257,8 @@ class FunctionDialog extends BaseDialog {
                             validate(annotation, types);
                         }
                     });
-                    valData.widthHint =
-                        Math.max(valData.widthHint, checkBox.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
                 } else {
-                    final Text text = new Text(scrollerPane, SWT.BORDER);
+                    final Text text = new Text(cell, SWT.BORDER);
                     text.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.TOP).create());
                     if (mappingArgs != null) {
                         String val = mappingArgs[argNdx].split("=")[1];
@@ -280,20 +274,18 @@ class FunctionDialog extends BaseDialog {
                             validate(annotation, types);
                         }
                     });
-                    valData.widthHint =
-                        Math.max(valData.widthHint, text.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
                 }
-                label = new Label(scrollerPane, SWT.NONE);
+                valData.widthHint = Math.max(valData.widthHint, cell.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
+                cell = newTableCell(scrollerPane, false, false, false);
+                label = new Label(cell, SWT.NONE);
                 label.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
                 label.setText(type.getSimpleName());
                 label.setToolTipText(type.getName());
-                typeData.widthHint =
-                    Math.max(typeData.widthHint, label.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
-                label = new Label(scrollerPane, SWT.WRAP);
+                typeData.widthHint = Math.max(typeData.widthHint, cell.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
+                cell = newTableCell(scrollerPane, true, false, true);
+                label = new Label(cell, SWT.WRAP);
                 label.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
                 if (argAnno != null) label.setText(argAnno.description());
-                descData.widthHint =
-                    Math.max(descData.widthHint, label.computeSize(SWT.DEFAULT, SWT.DEFAULT).x + layout.horizontalSpacing);
             }
             scroller.addControlListener(new ControlAdapter() {
 
@@ -336,7 +328,19 @@ class FunctionDialog extends BaseDialog {
                + " property's value, along with any applicable arguments";
     }
 
-    private Label newTableHeader(Composite parent,
+    private Composite newTableCell(Composite parent,
+                                   boolean grabHorizontally,
+                                   boolean leftBorder,
+                                   boolean rightBorder) {
+        Composite cell = new Composite(parent, SWT.NONE);
+        cell.setLayoutData(GridDataFactory.fillDefaults().grab(grabHorizontally, false).create());
+        cell.setLayout(GridLayoutFactory.swtDefaults().create());
+        cell.setBackground(argsPane.getBackground());
+        cell.addPaintListener(Util.tableCellBorderPainter(leftBorder, rightBorder));
+        return cell;
+    }
+
+    private Label newTableColumnHeader(Composite parent,
                                  String text) {
         Label label = new Label(parent, SWT.NONE);
         label.setText(text);

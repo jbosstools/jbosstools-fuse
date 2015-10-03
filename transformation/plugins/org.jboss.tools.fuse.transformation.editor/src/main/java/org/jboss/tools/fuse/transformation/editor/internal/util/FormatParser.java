@@ -37,34 +37,36 @@ public class FormatParser {
 
     /**
      * Finds format specifiers in the format string.
+     * @param string
+     * @return The parsed components of the supplied string, either simple substrings or {@link FormatSpecifier FormatSpecifiers}
      */
-    public static Object[] parse(String s) {
-        ArrayList<Object> al = new ArrayList<>();
-        Matcher m = fsPattern.matcher(s);
-        for (int i = 0, len = s.length(); i < len; ) {
-            if (m.find(i)) {
+    public static Object[] parse(String string) {
+        ArrayList<Object> parts = new ArrayList<>();
+        Matcher matcher = fsPattern.matcher(string);
+        for (int ndx = 0, len = string.length(); ndx < len; ) {
+            if (matcher.find(ndx)) {
                 // Anything between the start of the string and the beginning
                 // of the format specifier is either fixed text or contains
                 // an invalid format string.
-                if (m.start() != i) {
+                if (matcher.start() != ndx) {
                     // Make sure we didn't miss any invalid format specifiers
-                    checkText(s, i, m.start());
+                    checkText(string, ndx, matcher.start());
                     // Assume previous characters were fixed text
-                    al.add(s.substring(i, m.start()));
+                    parts.add(string.substring(ndx, matcher.start()));
                 }
 
-                al.add(PARSER.new FormatSpecifier(m));
-                i = m.end();
+                parts.add(PARSER.new FormatSpecifier(matcher));
+                ndx = matcher.end();
             } else {
                 // No more valid format specifiers.  Check for possible invalid
                 // format specifiers.
-                checkText(s, i, len);
+                checkText(string, ndx, len);
                 // The rest of the string is fixed text
-                al.add(s.substring(i));
+                parts.add(string.substring(ndx));
                 break;
             }
         }
-        return al.toArray(new Object[al.size()]);
+        return parts.toArray(new Object[parts.size()]);
     }
 
     private static class Conversion {

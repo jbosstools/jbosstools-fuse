@@ -28,13 +28,14 @@ public class TestGenerator {
     private static final String FILENAME_KEY = "\\$\\[camel-name\\]";
 
     /**
-     * Creates a test class for a transformation endpoint with the specified
-     * transformid.
+     * Creates a test class for a transformation endpoint with the specified transform ID.
      *
      * @param transformId id of a transform endpoint to test
      * @param packageName package name for the generated test class
      * @param className class name for the generated test class
+     * @param fileName
      * @param isSpring boolean flag indicating this is spring or blueprint
+     * @return The contents of the test class
      * @throws Exception failed to create the test class
      */
     public static String createTransformTestText(String transformId,

@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.camel.model.DataFormatDefinition;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -85,7 +84,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     private IObservableValue idModelValue;
 
     /**
+     * @param pageName
      * @param model
+     * @param isSource
      */
     public OtherPage(String pageName, final Model model, boolean isSource) {
         super(pageName, model);
@@ -160,7 +161,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                             model.setTargetFilePath(selected.getFullyQualifiedName());
                         }
                         final IType inner = selected;
-    
+
                         UIJob uiJob = new UIJob("open error") {
                             @Override
                             public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -310,7 +311,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     public boolean isTargetPage() {
         return !isSource;
     }
- 
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
