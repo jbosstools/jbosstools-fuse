@@ -263,6 +263,24 @@ public class DozerMapperConfigurationTest {
         Assert.assertEquals(source, mapping.getSource());
         Assert.assertEquals(target, mapping.getTarget());
     }
+    
+    @Test
+    public void mapListItemGrandparentCollection() throws Exception {
+        DozerMapperConfiguration config = DozerMapperConfiguration.newConfig();
+        config.addClassMapping(ListOfC.class.getName(), ListOfC.class.getName());
+        Model modelE = ModelBuilder.fromJavaClass(ListOfC.class);
+        Model field = modelE.get("listOfCs").get("d").get("data");
+        config.mapField(field, field);
+        // Verify auto mapping of parent collection
+        FieldMapping parentMapping = (FieldMapping)config.getMappings().get(0);
+        Assert.assertEquals(field.getParent().getParent(), parentMapping.getSource());
+        Assert.assertEquals(field.getParent().getParent(), parentMapping.getTarget());
+
+        // Verify field mapping
+        FieldMapping mapping = (FieldMapping)config.getMappings().get(1);
+        Assert.assertEquals(field, mapping.getSource());
+        Assert.assertEquals(field, mapping.getTarget());
+    }
 
     @Test
     public void getSourceMappings() throws Exception {
@@ -500,4 +518,3 @@ class ListOfC {
 class ListOfD {
     private List<D> listOfDs = new ArrayList<D>(1);
 }
-

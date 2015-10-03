@@ -443,7 +443,7 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             final List<Integer> sourceIndex, final List<Integer> targetIndex) {
         // If the source and target fields are part of a collection, make sure there's
         // a mapping for the parent field
-        if (source.getParent().isCollection() && target.getParent().isCollection()) {
+        if (hasCollectionAncestor(source) && hasCollectionAncestor(target)) {
             mapParentCollection(source, target);
         }
         Mapping mapping = getClassMapping(source, target, sourceIndex, targetIndex);
@@ -563,11 +563,25 @@ public class DozerMapperConfiguration implements MapperConfiguration {
     }
 
     private void mapParentCollection(Model source, Model target) {
-        Model sourceParent = source.getParent();
-        Model targetParent = target.getParent();
+        Model sourceParent = getParentCollection(source);
+        Model targetParent = getParentCollection(target);
         if (getMapping(sourceParent, targetParent) == null) {
-            addFieldMapping(source.getParent(), target.getParent(),
-                DozerUtil.noIndex(source.getParent()), DozerUtil.noIndex(target.getParent()));
+            addFieldMapping(sourceParent, targetParent,
+                DozerUtil.noIndex(sourceParent), DozerUtil.noIndex(targetParent));
+        }
+    }
+    
+    private boolean hasCollectionAncestor(Model model) {
+        return getParentCollection(model) != null;
+    }
+    
+    private Model getParentCollection(Model model) {
+        if (model.getParent() == null) {
+            return null;
+        } else {
+            return model.getParent().isCollection() 
+                    ? model.getParent()
+                    : getParentCollection(model.getParent());
         }
     }
 }
