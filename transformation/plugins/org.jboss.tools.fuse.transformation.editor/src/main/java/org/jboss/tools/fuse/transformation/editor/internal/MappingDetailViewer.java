@@ -639,7 +639,7 @@ public final class MappingDetailViewer extends MappingViewer {
         abstract void createControl();
 
         Label createMenuArrow() {
-            Label menuArrow = new Label(this, SWT.NONE);
+            final Label menuArrow = new Label(this, SWT.NONE);
             menuArrow.setImage(Images.MENU);
             menuArrow.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.BOTTOM).create());
             menuArrow.setBackground(getBackground());

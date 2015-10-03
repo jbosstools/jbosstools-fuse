@@ -219,8 +219,8 @@ class FunctionDialog extends BaseDialog {
             newTableHeader(headerPane, "Type").setLayoutData(typeData);
             GridData descData = GridDataFactory.fillDefaults().grab(true, false).create();
             newTableHeader(headerPane, "Description").setLayoutData(descData);
-            int headerPaneHeight = headerPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-            ScrolledComposite scroller = new ScrolledComposite(argsPane, SWT.V_SCROLL);
+            final int headerPaneHeight = headerPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+            final ScrolledComposite scroller = new ScrolledComposite(argsPane, SWT.V_SCROLL);
             scroller.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
             scroller.setExpandHorizontal(true);
             scroller.setExpandVertical(true);
