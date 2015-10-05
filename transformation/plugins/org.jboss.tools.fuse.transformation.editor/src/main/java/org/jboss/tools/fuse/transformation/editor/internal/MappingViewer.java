@@ -178,7 +178,8 @@ abstract class MappingViewer {
     String name(final Object object) {
         if (object instanceof Model) return ((Model)object).getName();
         if (object instanceof Variable) return ((Variable)object).getName();
-        return ((Expression)object).getLanguage();
+        if (object instanceof Expression) return ((Expression)object).getLanguage();
+        return "";
     }
 
     void setSource(Object source) throws Exception {

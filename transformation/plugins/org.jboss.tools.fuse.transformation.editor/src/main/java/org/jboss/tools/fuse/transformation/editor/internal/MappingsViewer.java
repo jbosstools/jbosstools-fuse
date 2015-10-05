@@ -64,9 +64,9 @@ public class MappingsViewer extends Composite {
      * @param potentialDropTargets
      */
     public MappingsViewer(final TransformationConfig config,
-                          final TransformationEditor editor,
-                          final Composite parent,
-                          final List<PotentialDropTarget> potentialDropTargets) {
+                          TransformationEditor editor,
+                          Composite parent,
+                          List<PotentialDropTarget> potentialDropTargets) {
         super(parent, SWT.NONE);
         this.editor = editor;
         this.potentialDropTargets = potentialDropTargets;
@@ -99,12 +99,7 @@ public class MappingsViewer extends Composite {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                try {
-                    config.removeMapping(selectedMappingSummary.mapping);
-                    config.save();
-                } catch (final Exception e) {
-                    Activator.error(e);
-                }
+                deleteSelectedMappingSummary(config);
             }
         });
         scroller = new ScrolledComposite(this, SWT.V_SCROLL);
@@ -154,7 +149,7 @@ public class MappingsViewer extends Composite {
             public void propertyChange(final PropertyChangeEvent event) {
                 if (!event.getPropertyName().equals(TransformationConfig.MAPPING)) return;
                 final MappingOperation<?, ?> mapping = (MappingOperation<?, ?>)event.getNewValue();
-                if (mapping != null) addMappingSummary(config, mapping);
+                if (mapping != null) mappingSummaryAdded(config, mapping);
             }
         });
 
@@ -177,13 +172,27 @@ public class MappingsViewer extends Composite {
                 if (selectedMappingSummary.mapsToLabel.getBackground().equals(Colors.SELECTED_NO_FOCUS)) return;
                 switch (event.keyCode) {
                     case SWT.ARROW_UP: {
-                        if ((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0) selectMappingSummary(0);
+                        if ((event.stateMask & (SWT.COMMAND)) != 0) selectMappingSummary(0);
                         else selectPreviousMappingSummary();
                         break;
                     }
                     case SWT.ARROW_DOWN: {
-                        if ((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0) selectMappingSummary(mappingSummaries.size() - 1);
+                        if ((event.stateMask & (SWT.COMMAND)) != 0) selectMappingSummary(mappingSummaries.size() - 1);
                         else selectNextMappingSummary();
+                        break;
+                    }
+                    case SWT.BS:
+                    case SWT.DEL: {
+                        deleteSelectedMappingSummary(config);
+                        break;
+                    }
+                    case '=': {
+                        if ((event.stateMask & (SWT.SHIFT)) == 0) break;
+                    }
+                    // $FALL-THROUGH$ if SHIFT-EQUAL ('+')
+                    case '+':
+                    case SWT.KEYPAD_ADD: {
+                        if ((event.stateMask & (SWT.SHIFT)) != 0) config.newMapping();
                         break;
                     }
                 }
@@ -193,21 +202,19 @@ public class MappingsViewer extends Composite {
         getDisplay().addFilter(SWT.KeyDown, keyListener);
     }
 
-    void addMappingSummary(final TransformationConfig config,
-                           final MappingOperation<?, ?> mapping) {
-        final MappingSummary mappingSummary =
-            new MappingSummary(config, mapping, this, potentialDropTargets);
-        mappingSummaries.add(mappingSummary);
-        layoutPanes();
-        scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-        scroller.setOrigin(0, scroller.getSize().y);
-        selected(mappingSummary);
-    }
-
     private boolean child(Control control) {
         if (control.getParent() == null) return false;
         if (control.getParent() == this) return true;
         return child(control.getParent());
+    }
+
+    private void deleteSelectedMappingSummary(TransformationConfig config) {
+        try {
+            config.removeMapping(selectedMappingSummary.mapping);
+            config.save();
+        } catch (final Exception e) {
+            Activator.error(e);
+        }
     }
 
     @Override
@@ -224,12 +231,22 @@ public class MappingsViewer extends Composite {
         targetPane.layout();
     }
 
+    void mappingSummaryAdded(final TransformationConfig config,
+                             final MappingOperation<?, ?> mapping) {
+        final MappingSummary mappingSummary =
+            new MappingSummary(config, mapping, this, potentialDropTargets);
+        mappingSummaries.add(mappingSummary);
+        layoutPanes();
+        scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        selected(mappingSummary);
+    }
+
     /**
      * Called by {@link MappingSummary#dispose(MappingOperation)}
      *
      * @param mappingSummary
      */
-    void removeMappingSummary(final MappingSummary mappingSummary) {
+    void mappingSummaryDeleted(final MappingSummary mappingSummary) {
         mappingSummaries.remove(mappingSummary);
         if (mappingSummary == selectedMappingSummary) {
             selectedMappingSummary = null;
@@ -246,6 +263,7 @@ public class MappingsViewer extends Composite {
         selectedMappingSummary.select();
         deleteButton.setEnabled(true);
         editor.selected(mappingSummary.mapping);
+        scroller.showControl(selectedMappingSummary.mapsToLabel);
     }
 
     private void selectMappingSummary(final int index) {

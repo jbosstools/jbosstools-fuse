@@ -144,7 +144,7 @@ final class MappingSummary extends MappingViewer {
         mapsToLabel.dispose();
         mappingTargetPane.dispose();
         config.removeListener(configListener);
-        mappingsViewer.removeMappingSummary(this);
+        mappingsViewer.mappingSummaryDeleted(this);
     }
 
     void select() {
