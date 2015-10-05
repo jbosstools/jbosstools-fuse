@@ -29,7 +29,7 @@ class PropertyDialog extends BaseDialog {
     final Model rootModel;
     final TransformationConfig config;
     final MappingOperation<?, ?> mapping;
-    Model field;
+    Model property;
 
     PropertyDialog(Shell shell,
                 Model rootModel,
@@ -39,7 +39,7 @@ class PropertyDialog extends BaseDialog {
         this.rootModel = rootModel;
         this.config = config;
         this.mapping = mapping;
-        field = Util.sourceModel(rootModel, config) ? (Model)mapping.getSource() : (Model)mapping.getTarget();
+        property = Util.sourceModel(rootModel, config) ? (Model)mapping.getSource() : (Model)mapping.getTarget();
     }
 
     @Override
@@ -53,8 +53,8 @@ class PropertyDialog extends BaseDialog {
             }
         };
         modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
-        if (field != null) {
-            modelViewer.select(field);
+        if (property != null) {
+            modelViewer.select(property);
         }
         modelViewer.treeViewer.getTree().addSelectionListener(new SelectionAdapter() {
 
@@ -62,7 +62,7 @@ class PropertyDialog extends BaseDialog {
             public void widgetSelected(final SelectionEvent event) {
                 final IStructuredSelection selection =
                     (IStructuredSelection)modelViewer.treeViewer.getSelection();
-                field = (Model)selection.getFirstElement();
+                property = (Model)selection.getFirstElement();
                 validate();
             }
         });
@@ -82,14 +82,14 @@ class PropertyDialog extends BaseDialog {
         if (Util.sourceModel(rootModel, config)) {
             if (!Util.validSourceAndTarget(model, mapping.getTarget(), config)) return false;
         } else if (!Util.validSourceAndTarget(mapping.getSource(), model, config)) return false;
-        // Ensure property types are the same if old property is in custom mapping
-        if (Util.sourceModel(rootModel, config) && mapping.getType() == MappingType.CUSTOM)
+        // Ensure property types are the same if old property is in transformation mapping
+        if (Util.sourceModel(rootModel, config) && mapping.getType() == MappingType.TRANSFORMATION)
             return model.getType().equals(((Model)mapping.getSource()).getType());
         return true;
     }
 
     private void validate() {
-        boolean enabled = field != null && valid(field);
+        boolean enabled = property != null && valid(property);
         setErrorMessage(enabled ? null : "Invalid property");
         getButton(IDialogConstants.OK_ID).setEnabled(enabled);
     }

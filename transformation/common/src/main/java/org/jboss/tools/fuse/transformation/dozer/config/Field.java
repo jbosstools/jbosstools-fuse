@@ -414,7 +414,7 @@ public class Field {
      *     {@link String }
      *     
      */
-    public String getCustomConverterParam() {
+    public String getCustomConverterArgument() {
         return customConverterParam;
     }
 
@@ -426,7 +426,7 @@ public class Field {
      *     {@link String }
      *     
      */
-    public void setCustomConverterParam(String value) {
+    public void setCustomConverterArgument(String value) {
         this.customConverterParam = value;
     }
 

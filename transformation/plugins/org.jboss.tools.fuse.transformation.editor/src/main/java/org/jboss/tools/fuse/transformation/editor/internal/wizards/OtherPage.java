@@ -77,7 +77,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     private Text _javaClassText;
     private ComboViewer _dataFormatIdCombo;
     private org.jboss.tools.fuse.transformation.model.Model _javaModel = null;
-    private SimplerModelViewer _modelViewer;
+    private ModelViewer _modelViewer;
     private Label _dfErrorLabel;
     private Binding _binding;
     private Binding _binding2;
@@ -202,7 +202,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         group.setLayout(new GridLayout(3, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        _modelViewer = new SimplerModelViewer(group, _javaModel);
+        _modelViewer = new ModelViewer(group, _javaModel);
         _modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         _modelViewer.layout();
 
@@ -351,29 +351,6 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         if (_binding2 != null) {
             _binding2.validateTargetToModel();
         }
-    }
-
-    /**
-     * Hide the search field and mapped fields buttons.
-     * @author brianf
-     */
-    class SimplerModelViewer extends ModelViewer {
-
-        /**
-         * @param parent
-         * @param rootModel
-         */
-        public SimplerModelViewer(Composite parent,
-                                  org.jboss.tools.fuse.transformation.model.Model rootModel) {
-            super(null, parent, rootModel, null, null);
-        }
-
-        @Override
-        protected void setViewOptions() {
-            this.showMappedFieldsButton = false;
-            this.showSearchField = false;
-        }
-
     }
 
     /**

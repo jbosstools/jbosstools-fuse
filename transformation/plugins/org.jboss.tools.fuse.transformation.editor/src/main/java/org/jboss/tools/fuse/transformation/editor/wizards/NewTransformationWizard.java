@@ -321,8 +321,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             if (resourceSelection == null || resourceSelection.size() != 1) {
                 return;
             }
-            final IProject project = ((IResource) ((IAdaptable) resourceSelection.getFirstElement())
-                    .getAdapter(IResource.class)).getProject();
+            final IProject project = ((IAdaptable)resourceSelection.getFirstElement()).getAdapter(IResource.class).getProject();
             if (uiModel.projects.contains(project)) {
                 uiModel.setProject(project);
             }

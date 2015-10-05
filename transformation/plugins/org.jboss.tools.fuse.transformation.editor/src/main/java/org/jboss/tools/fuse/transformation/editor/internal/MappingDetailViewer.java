@@ -26,9 +26,11 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -47,47 +49,47 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.tools.fuse.transformation.CustomMapping;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
+import org.jboss.tools.fuse.transformation.TransformationMapping;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.function.Function;
-import org.jboss.tools.fuse.transformation.editor.function.Function.Arg;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
-import org.jboss.tools.fuse.transformation.editor.internal.util.CanceledDialogException;
 import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser;
 import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser.FormatSpecifier;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
+import org.jboss.tools.fuse.transformation.editor.transformations.Function;
+import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
 import org.jboss.tools.fuse.transformation.model.Model;
 
-public final class MappingDetailViewer extends MappingViewer {
+public class MappingDetailViewer extends MappingViewer {
 
     private static final String PREFERENCE_PREFIX = MappingDetailViewer.class.getName() + ".";
 
     private static final String STANDARD_FORMAT_PREFERENCE = PREFERENCE_PREFIX + "standardFormat";
 
-    final ScrolledComposite scroller;
-    final Map<Integer, Text> textById = new HashMap<>();
-    int nextFocusedTextId;
-    transient int focusedTextId = -1;
-    transient int focusedTextOffset;
-    boolean standardFormat;
+    private final ScrolledComposite scroller;
+    private final Map<Integer, Text> textById = new HashMap<>();
+    private int nextFocusedTextId;
+    private transient int focusedTextId = -1;
+    private transient int focusedTextOffset;
+    private boolean standardFormat;
 
     /**
      * @param config
      * @param parent
      * @param potentialDropTargets
      */
-    public MappingDetailViewer(final TransformationConfig config,
-                               final Composite parent,
-                               final List<PotentialDropTarget> potentialDropTargets) {
+    public MappingDetailViewer(TransformationConfig config,
+                               Composite parent,
+                               List<PotentialDropTarget> potentialDropTargets) {
         super(config, potentialDropTargets);
 
         scroller = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
@@ -106,39 +108,37 @@ public final class MappingDetailViewer extends MappingViewer {
         standardFormat = Activator.plugin().getPreferenceStore().getBoolean(STANDARD_FORMAT_PREFERENCE);
     }
 
-    void addCustomFunction() throws Exception {
-        final AddCustomFunctionDialog dlg =
-            new AddCustomFunctionDialog(scroller.getShell(), config.project(), ((Model)mapping.getSource()).getType());
+    private void addCustomTransformation() throws Exception {
+        final AddCustomTransformationDialog dlg = new AddCustomTransformationDialog(scroller.getShell(), config.project(), ((Model)mapping.getSource()).getType());
         if (dlg.open() != Window.OK) return;
-        mapping = config.customizeMapping((FieldMapping)mapping, dlg.type.getFullyQualifiedName(), dlg.method.getElementName());
+        mapping = config.setTransformation((FieldMapping)mapping, dlg.type.getFullyQualifiedName(), dlg.method.getElementName());
         config.save();
     }
 
-    void addOrEditFunction() throws Exception {
-        final FunctionDialog dlg = new FunctionDialog(scroller.getShell(), mapping, config.project());
+    private void addOrEditTransformation() throws Exception {
+        final TransformationDialog dlg = new TransformationDialog(scroller.getShell(), mapping, config.project());
         if (dlg.open() != Window.OK) return;
         String[] args = new String[dlg.argumentValues.length];
-        Class<?>[] types = dlg.function.getParameterTypes();
+        Class<?>[] types = dlg.transformation.getParameterTypes();
         for (int ndx = 0; ndx < dlg.argumentValues.length; ++ndx) {
             args[ndx] = types[ndx + 1].getName() + "=" + dlg.argumentValues[ndx];
         }
-        mapping = config.customizeMapping((FieldMapping)mapping, dlg.function.getDeclaringClass().getName(),
-                                          dlg.function.getName(), args);
+        mapping = config.setTransformation((FieldMapping)mapping, dlg.transformation.getDeclaringClass().getName(), dlg.transformation.getName(), args);
         config.save();
     }
 
-    void configEvent(final String eventType,
-                     final Object oldValue,
-                     final Object newValue) {
+    private void configEvent(String eventType,
+                             Object oldValue,
+                             Object newValue) {
         switch (eventType) {
             case TransformationConfig.MAPPING: {
                 if (equals(mapping, oldValue)) scroller.setContent(null);
                 else if (newValue != null) update((MappingOperation<?, ?>)newValue);
                 break;
             }
-            case TransformationConfig.MAPPING_CUSTOMIZE: {
+            case TransformationConfig.MAPPING_TRANSFORMATION: {
                 if (equals(mapping, oldValue)) update((MappingOperation<?, ?>)newValue);
-                if (oldValue instanceof CustomMapping && newValue instanceof CustomMapping) {
+                if (oldValue instanceof TransformationMapping && newValue instanceof TransformationMapping) {
                     Text text = textById.get(focusedTextId);
                     if (text != null) {
                         text.setFocus();
@@ -159,166 +159,76 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    private Composite createContainerPane(Composite parent,
+    private Composite createContainerPane(Composite parentPane,
+                                          final boolean source,
                                           final Model model,
-                                          List<Integer> indexes) {
-        if (model == null) return parent;
-        parent = createContainerPane(parent, model.getParent(), parentIndexes(indexes));
-        final Color color;
-        if (model.getParent() == null) color = Colors.CONTAINER;
-        else if (parent.getForeground().equals(Colors.CONTAINER)) color = Colors.CONTAINER_ALTERNATE;
+                                          Model parentModel,
+                                          final List<Integer> indexes,
+                                          final int indexesIndex) {
+        if (parentModel == null) return parentPane;
+        parentPane = createContainerPane(parentPane, source, model, parentModel.getParent(), indexes, indexesIndex - 1);
+        Color color;
+        if (parentModel.getParent() == null) color = Colors.CONTAINER;
+        else if (parentPane.getForeground().equals(Colors.CONTAINER)) color = Colors.CONTAINER_ALTERNATE;
         else color = Colors.CONTAINER;
-        final Composite pane = createRoundedPane(parent, color);
-        if (model.getParent() == null) {
-            pane.setLayoutData(GridDataFactory.swtDefaults()
-                                              .align(model == config.getSourceModel() ? SWT.RIGHT : SWT.LEFT, SWT.CENTER)
-                                              .grab(true, true)
-                                              .create());
-        } else pane.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, true).create());
-        final Label label = new Label(pane, SWT.NONE);
-        label.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
-        final Integer index = indexes == null ? null : indexes.get(indexes.size() - 1);
-        label.setText(model.getName() + (index == null ? "" : "[" + index + "]"));
-        label.setBackground(pane.getForeground());
-        return pane;
-    }
+        parentPane = createRoundedPane(parentPane, color);
+        if (parentModel.getParent() == null) parentPane.setLayoutData(GridDataFactory.swtDefaults().align(parentModel == config.getSourceModel() ? SWT.RIGHT : SWT.LEFT, SWT.CENTER).grab(true, true).create());
+        else parentPane.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, true).create());
+        Composite pane = new Composite(parentPane, SWT.NONE);
+        pane.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.CENTER).create());
+        GridLayout layout = GridLayoutFactory.fillDefaults().spacing(0, 0).create();
+        pane.setLayout(layout);
+        StyledText text = new StyledText(pane, SWT.READ_ONLY) {
 
-    private void createFunctionArgumentControl(Composite parent,
-                                               final Class<?> type,
-                                               final Arg argAnno,
-                                               final CustomMapping customMapping,
-                                               final String[] mappingArgs,
-                                               final int argNdx) {
-        String val = mappingArgs[argNdx].split("=")[1];
-        Control control;
-        if (type == Boolean.class) {
-            final Button checkBox = new Button(parent, SWT.CHECK);
-            checkBox.setSelection(Boolean.valueOf(val));
-            checkBox.addSelectionListener(new SelectionAdapter() {
-
-                @Override
-                public void widgetSelected(SelectionEvent event) {
-                    updateFunctionArgument(customMapping, mappingArgs, argNdx, argAnno, type,
-                                           String.valueOf(checkBox.getSelection()));
-                }
-            });
-            control = checkBox;
-        } else {
-            final Text text = new Text(parent, SWT.BORDER);
-            if (argAnno == null || !argAnno.hideDefault() || !val.equals(argAnno.defaultValue())) text.setText(val);
-            text.addModifyListener(new ModifyListener() {
-
-                @Override
-                public void modifyText(ModifyEvent event) {
-                    focusedTextOffset = text.getCaretPosition();
-                    updateFunctionArgument(customMapping, mappingArgs, argNdx, argAnno, type, text.getText());
-                }
-            });
-            final int id = nextFocusedTextId++;
-            textById.put(id, text);
-            text.addFocusListener(new FocusAdapter() {
-
-                @Override
-                public void focusGained(FocusEvent event) {
-                    focusedTextId = id;
-                }
-
-                @Override
-                public void focusLost(FocusEvent event) {
-                    focusedTextId = -1;
-                }
-            });
-            control = text;
-        }
-        if (argAnno == null) control.setToolTipText(type.getName());
-        else {
-            StringBuilder builder = new StringBuilder(argAnno.name());
-            builder.append(" <");
-            builder.append(type.getName());
-            builder.append(">");
-            if (!argAnno.defaultValue().isEmpty()) builder.append(" (optional)");
-            builder.append(": ");
-            builder.append(argAnno.description());
-            control.setToolTipText(builder.toString());
-        }
-    }
-
-    private void createFunctionSourcePane(Composite parent) {
-        Model sourceModel = ((Model)mapping.getSource());
-        parent = createContainerPane(parent, sourceModel.getParent(), parentIndexes(mapping.getSourceIndex()));
-        final CustomMapping customMapping = (CustomMapping)mapping;
-        try {
-            Method function = function(customMapping, sourceModel);
-            final Function annotation = function.getAnnotation(Function.class);
-            final String[] mappingArgs = customMapping.getFunctionArguments();
-            final Class<?>[] types = function.getParameterTypes();
-            if (standardFormat || annotation == null || annotation.format().isEmpty()) {
-                new FunctionControl(parent, customMapping, annotation) {
-
-                    @Override
-                    void createFunction(Composite parent,
-                                        GridLayout layout) {
-                        layout.numColumns = 4 + mappingArgs.length * 2;
-                        Label label = new Label(parent, SWT.NONE);
-                        label.setText(customMapping.getFunctionName() + "(");
-                        setToolTipToFunctionDescription(label);
-                        createSourcePane(parent);
-                        for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
-                            new Label(parent, SWT.NONE).setText(",");
-                            int argNdx = typeNdx - 1;
-                            Arg argAnno =
-                                annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
-                            createFunctionArgumentControl(parent, types[typeNdx], argAnno, customMapping, mappingArgs, argNdx);
-                        }
-                        new Label(parent, SWT.NONE).setText(")");
-                    }
-                }.create();
-            } else {
-                new FunctionControl(parent, customMapping, annotation) {
-
-                    @Override
-                    void createFunction(Composite parent,
-                                        GridLayout layout) {
-                        Object[] parts = FormatParser.parse(annotation.format());
-                        for (int ndx = 0; ndx < parts.length; ndx++) {
-                            Object part = parts[ndx];
-                            if (part instanceof FormatSpecifier) {
-                                int typeNdx = ((FormatSpecifier)part).index() - 1;
-                                if (typeNdx == 0) createSourcePane(parent);
-                                else {
-                                    int argNdx = typeNdx - 1;
-                                    Arg argAnno = argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
-                                    createFunctionArgumentControl(parent, types[typeNdx], argAnno, customMapping, mappingArgs, argNdx);
-                                }
-                            } else {
-                                Label label = new Label(parent, SWT.NONE);
-                                label.setText(part.toString().trim());
-                                setToolTipToFunctionDescription(label);
-                            }
-                            layout.numColumns++;
-                        }
-                    }
-                }.create();
+            @Override
+            public boolean isFocusControl() {
+                return false;
             }
-        } catch (ClassNotFoundException e) {
-            new FunctionControl(parent, customMapping, null) {
+        };
+        StyledString string = new StyledString(parentModel.getName());
+        if (parentModel.isCollection()) {
+            string.append('[', StyledString.QUALIFIER_STYLER);
+            Integer index = indexes.get(indexesIndex);
+            if (index == null) {
+                string.append(" ]", StyledString.QUALIFIER_STYLER);
+                text.setText(string.toString());
+                text.setStyleRanges(string.getStyleRanges());
+                text.setBackground(parentPane.getForeground());
+            } else {
+                layout.numColumns = 3;
+                text.setText(string.toString());
+                text.setStyleRanges(string.getStyleRanges());
+                text.setBackground(parentPane.getForeground());
+                final Spinner spinner = new Spinner(pane, SWT.BORDER);
+                spinner.setSelection(index);
+                spinner.addModifyListener(new ModifyListener() {
 
-                @Override
-                void createFunction(Composite parent,
-                                    GridLayout layout) {
-                    layout.numColumns = 4;
-                    Label label = new Label(parent, SWT.NONE);
-                    label.setText(customMapping.getFunctionName() + "(");
-                    label.setToolTipText(customMapping.getFunctionClass() + '.' + customMapping.getFunctionName());
-                    createSourcePane(parent);
-                    new Label(parent, SWT.NONE).setText(")");
-                }
-            }.create();
+                    @Override
+                    public void modifyText(ModifyEvent event) {
+                        updateIndex(source, model, indexes, indexesIndex, spinner.getSelection());
+                    }
+                });
+                text = new StyledText(pane, SWT.READ_ONLY) {
+
+                    @Override
+                    public boolean isFocusControl() {
+                        return false;
+                    }
+                };
+                string = new StyledString("]", StyledString.QUALIFIER_STYLER);
+                text.setText(string.toString());
+                text.setStyleRanges(string.getStyleRanges());
+                text.setBackground(parentPane.getForeground());
+            }
+        } else {
+            text.setText(string.toString());
+            text.setBackground(parentPane.getForeground());
         }
+        return parentPane;
     }
 
-    private Composite createRoundedPane(final Composite parent,
-                                        final Color color) {
+    private Composite createRoundedPane(Composite parent,
+                                        Color color) {
         final Composite pane = new Composite(parent, SWT.NONE);
         pane.setLayout(GridLayoutFactory.swtDefaults().create());
         pane.setBackground(parent.getForeground());
@@ -332,8 +242,8 @@ public final class MappingDetailViewer extends MappingViewer {
 
             @Override
             void createControl() {
-                createSourceText(this, SWT.NONE);
-                sourceText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+                createSourcePropertyPane(this, SWT.NONE);
+                sourcePropPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             }
         };
         propPane.create();
@@ -352,7 +262,7 @@ public final class MappingDetailViewer extends MappingViewer {
 
             @Override
             boolean enabled() {
-                return mapping.getType() != MappingType.CUSTOM;
+                return mapping.getType() != MappingType.TRANSFORMATION;
             }
 
             @Override
@@ -368,7 +278,7 @@ public final class MappingDetailViewer extends MappingViewer {
 
             @Override
             boolean enabled() {
-                return mapping.getType() != MappingType.CUSTOM;
+                return mapping.getType() != MappingType.TRANSFORMATION;
             }
 
             @Override
@@ -380,7 +290,7 @@ public final class MappingDetailViewer extends MappingViewer {
                 }
             }
         });
-        propPane.addMenuItem("Add function", new MenuItemHandler() {
+        propPane.addMenuItem("Add transformation", new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -390,13 +300,13 @@ public final class MappingDetailViewer extends MappingViewer {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 try {
-                    addOrEditFunction();
+                    addOrEditTransformation();
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
             }
         });
-        propPane.addMenuItem("Add custom function", new MenuItemHandler() {
+        propPane.addMenuItem("Add custom transformation", new MenuItemHandler() {
 
             @Override
             boolean enabled() {
@@ -406,15 +316,14 @@ public final class MappingDetailViewer extends MappingViewer {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 try {
-                    addCustomFunction();
+                    addCustomTransformation();
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
             }
         });
         if (mapping != null && mapping.getSource() != null) {
-            if (Util.modelsNeedDateFormat(mapping.getSource(),
-                                          mapping.getTarget(), true)) {
+            if (Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), true)) {
                 propPane.addMenuItem("Set date format", new MenuItemHandler() {
 
                     @Override
@@ -431,22 +340,24 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    private void createTargetPane(final Composite parent) {
+    private void createTargetPane(Composite parent) {
         final Composite pane;
-        if (mapping.getTarget() == null) pane = createContainerPane(parent, config.getTargetModel(), null);
-        else pane = createContainerPane(parent,
-                                        ((Model)mapping.getTarget()).getParent(),
-                                        parentIndexes(mapping.getTargetIndex()));
-        ControlWithMenuPane fieldPane = new ControlWithMenuPane(pane) {
+        if (mapping.getTarget() == null) pane = createContainerPane(parent, false, null, config.getTargetModel(), null, -1);
+        else {
+            Model model = (Model)mapping.getTarget();
+            List<Integer> updateIndexes = Util.updateIndexes(mapping, model, mapping.getTargetIndex());
+            pane = createContainerPane(parent, false, model, model.getParent(), updateIndexes, updateIndexes.size() - 1);
+        }
+        ControlWithMenuPane propPane = new ControlWithMenuPane(pane) {
 
             @Override
             void createControl() {
-                createTargetText(this);
-                targetText.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+                createTargetPropertyPane(this);
+                targetPropPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             }
         };
-        fieldPane.create();
-        fieldPane.addMenuItem("Set property", new MenuItemHandler() {
+        propPane.create();
+        propPane.addMenuItem("Set property", new MenuItemHandler() {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
@@ -458,9 +369,8 @@ public final class MappingDetailViewer extends MappingViewer {
             }
         });
         if (mapping != null && mapping.getTarget() != null) {
-            if (Util.modelsNeedDateFormat(mapping.getSource(),
-                                          mapping.getTarget(), false)) {
-                fieldPane.addMenuItem("Set date format", new MenuItemHandler() {
+            if (Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), false)) {
+                propPane.addMenuItem("Set date format", new MenuItemHandler() {
 
                     @Override
                     public void widgetSelected(final SelectionEvent event) {
@@ -476,6 +386,139 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
+    private void createTransformationParameterControl(Composite parent,
+                                                      final Class<?> type,
+                                                      final Arg argAnno,
+                                                      final TransformationMapping transformationMapping,
+                                                      final String[] mappingArgs,
+                                                      final int argNdx) {
+        String val = mappingArgs[argNdx].split("=")[1];
+        Control control;
+        if (type == Boolean.class) {
+            final Button checkBox = new Button(parent, SWT.CHECK);
+            checkBox.setSelection(Boolean.valueOf(val));
+            checkBox.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent event) {
+                    updateTransformationArgument(transformationMapping, mappingArgs, argNdx, argAnno, type, String.valueOf(checkBox.getSelection()));
+                }
+            });
+            control = checkBox;
+        } else {
+            final Text text = new Text(parent, SWT.BORDER);
+            if (argAnno == null || !argAnno.hideDefault() || !val.equals(argAnno.defaultValue())) text.setText(val);
+            text.addModifyListener(new ModifyListener() {
+
+                @Override
+                public void modifyText(ModifyEvent event) {
+                    focusedTextOffset = text.getCaretPosition();
+                    updateTransformationArgument(transformationMapping, mappingArgs, argNdx, argAnno, type, text.getText());
+                }
+            });
+            final int id = nextFocusedTextId++;
+            textById.put(id, text);
+            text.addFocusListener(new FocusAdapter() {
+
+                @Override
+                public void focusGained(FocusEvent event) {
+                    focusedTextId = id;
+                }
+
+                @Override
+                public void focusLost(FocusEvent event) {
+                    focusedTextId = -1;
+                }
+            });
+            control = text;
+        }
+        if (argAnno == null) control.setToolTipText(Util.name(type));
+        else {
+            StringBuilder builder = new StringBuilder(argAnno.name());
+            builder.append(" <");
+            builder.append(Util.name(type));
+            builder.append(">");
+            if (!argAnno.defaultValue().isEmpty()) builder.append(" (optional)");
+            builder.append(": ");
+            builder.append(argAnno.description());
+            control.setToolTipText(builder.toString());
+        }
+    }
+
+    private void createTransformationSourcePane(Composite parent) {
+        Model sourceModel = ((Model)mapping.getSource());
+        List<Integer> updateIndexes = Util.updateIndexes(mapping, sourceModel, mapping.getSourceIndex());
+        parent = createContainerPane(parent, true, sourceModel, sourceModel.getParent(), updateIndexes, updateIndexes.size() - 1);
+        final TransformationMapping xformMapping = (TransformationMapping)mapping;
+        try {
+            Method xform = transformation(xformMapping, sourceModel);
+            final Function annotation = xform.getAnnotation(Function.class);
+            final String[] mappingArgs = xformMapping.getTransformationArguments();
+            final Class<?>[] types = xform.getParameterTypes();
+            if (standardFormat || annotation == null || annotation.format().isEmpty()) {
+                new TransformationControl(parent, xformMapping, annotation) {
+
+                    @Override
+                    void createTransformation(Composite parent,
+                                              GridLayout layout) {
+                        layout.numColumns = 4 + mappingArgs.length * 2;
+                        Label label = new Label(parent, SWT.NONE);
+                        label.setText(transformationMapping.getTransformationName() + "(");
+                        setToolTipToTransformationDescription(label);
+                        createSourcePane(parent);
+                        for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
+                            new Label(parent, SWT.NONE).setText(",");
+                            int argNdx = typeNdx - 1;
+                            Arg argAnno = annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
+                            createTransformationParameterControl(parent, types[typeNdx], argAnno, transformationMapping, mappingArgs, argNdx);
+                        }
+                        new Label(parent, SWT.NONE).setText(")");
+                    }
+                }.create();
+            } else {
+                new TransformationControl(parent, xformMapping, annotation) {
+
+                    @Override
+                    void createTransformation(Composite parent,
+                                              GridLayout layout) {
+                        Object[] parts = FormatParser.parse(annotation.format());
+                        for (int ndx = 0; ndx < parts.length; ndx++) {
+                            Object part = parts[ndx];
+                            if (part instanceof FormatSpecifier) {
+                                int typeNdx = ((FormatSpecifier)part).index() - 1;
+                                if (typeNdx == 0) createSourcePane(parent);
+                                else {
+                                    int argNdx = typeNdx - 1;
+                                    Arg argAnno = argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
+                                    createTransformationParameterControl(parent, types[typeNdx], argAnno, transformationMapping, mappingArgs, argNdx);
+                                }
+                            } else {
+                                Label label = new Label(parent, SWT.NONE);
+                                label.setText(part.toString().trim());
+                                setToolTipToTransformationDescription(label);
+                            }
+                            layout.numColumns++;
+                        }
+                    }
+                }.create();
+            }
+        } catch (ClassNotFoundException e) {
+            new TransformationControl(parent, xformMapping, null) {
+
+                @Override
+                void createTransformation(Composite parent,
+                                          GridLayout layout) {
+                    layout.numColumns = 4;
+                    Label label = new Label(parent, SWT.NONE);
+                    label.setText(transformationMapping.getTransformationName() + "(");
+                    label.setToolTipText(transformationMapping.getTransformationClass() + '.' + transformationMapping.getTransformationName());
+                    createSourcePane(parent);
+                    new Label(parent, SWT.NONE).setText(")");
+                }
+            }.create();
+        }
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -483,37 +526,17 @@ public final class MappingDetailViewer extends MappingViewer {
      */
     @Override
     protected void finalize() throws Throwable {
-        sourceDropTarget.dispose();
-        targetDropTarget.dispose();
+        dispose();
         super.finalize();
     }
 
-    private Method function(CustomMapping customMapping,
-                            Model sourceModel) throws ClassNotFoundException {
-        for (Method method : Class.forName(customMapping.getFunctionClass()).getDeclaredMethods()) {
-            Class<?>[] types = method.getParameterTypes();
-            if (Modifier.isPublic(method.getModifiers())
-                && method.getName().equals(customMapping.getFunctionName())
-                && types.length > 0 && sourceModel.getType().equals(types[0].getName())) {
-                return method;
-            }
-        }
-        return null;
-    }
-
-    private List<Integer> parentIndexes(final List<Integer> indexes) {
-        return indexes != null && indexes.size() > 1
-            ? indexes.subList(0, indexes.size() - 1)
-            : null;
-    }
-
-    private void removeFunction() throws Exception {
-        config.uncustomizeMapping((CustomMapping)mapping);
+    private void removeTransformation() throws Exception {
+        config.removeTransformation((TransformationMapping)mapping);
         config.save();
     }
 
     private void setDateFormat(boolean isSource) throws Exception {
-        String dateFormatStr = Util.getDateFormat(sourceText.getShell(), mapping, isSource);
+        String dateFormatStr = Util.getDateFormat(sourcePropPane.getShell(), mapping, isSource);
         if (dateFormatStr != null && !dateFormatStr.trim().isEmpty()) {
             BaseDozerMapping dMapping = (BaseDozerMapping)mapping;
             if (isSource) {
@@ -526,51 +549,50 @@ public final class MappingDetailViewer extends MappingViewer {
     }
 
     private void setExpression() throws Exception {
-        final ExpressionDialog dlg = new ExpressionDialog(sourceText.getShell(), mapping, config.project());
-        if (dlg.open() != Window.OK) {
-            return;
-        }
-        Util.updateMavenDependencies(dlg.getLanguage().getDependencies(), config.project());
-        final Model targetModel = (Model)mapping.getTarget();
-        try {
-            final List<Integer> indexes =
-                targetModel != null && Util.isOrInCollection(targetModel)
-                    ? Util.indexes(sourceText.getShell(), targetModel, false)
-                    : null;
-            mapping =
-                config.setSourceExpression(mapping, dlg.getLanguage().getName(), dlg.getExpression(), indexes);
-            config.save();
-        } catch (CanceledDialogException ignored) {}
-    }
-
-    void setProperty(final boolean source) throws Exception {
-        final PropertyDialog dlg =
-            new PropertyDialog(sourceText.getShell(), source ? config.getSourceModel() : config.getTargetModel(), config, mapping);
+        final ExpressionDialog dlg = new ExpressionDialog(sourcePropPane.getShell(), mapping, config.project());
         if (dlg.open() != Window.OK) return;
-        if (source) setSource(dlg.field);
-        else setTarget(dlg.field);
+        Util.updateMavenDependencies(dlg.getLanguage().getDependencies(), config.project());
+        Model targetModel = (Model)mapping.getTarget();
+        List<Integer> indexes =
+            targetModel != null && Util.isOrInCollection(targetModel)
+                ? Util.updateIndexes(mapping, targetModel, mapping.getTargetIndex()) : null;
+        mapping = config.setSourceExpression(mapping, dlg.getLanguage().getName(), dlg.getExpression(), indexes);
+        config.save();
     }
 
-    void setVariable() throws Exception {
+    private void setProperty(boolean source) throws Exception {
+        final PropertyDialog dlg = new PropertyDialog(sourcePropPane.getShell(), source ? config.getSourceModel() : config.getTargetModel(), config, mapping);
+        if (dlg.open() != Window.OK) return;
+        if (source) setSource(dlg.property);
+        else setTarget(dlg.property);
+    }
+
+    private void setVariable() throws Exception {
         final VariableDialog dlg = new VariableDialog();
-        if (dlg.open() != Window.OK) {
-            return;
+        if (dlg.open() != Window.OK) return;
+        Model targetModel = (Model)mapping.getTarget();
+        List<Integer> indexes =
+            targetModel != null && Util.isOrInCollection(targetModel)
+                ? Util.updateIndexes(mapping, targetModel, mapping.getTargetIndex()) : null;
+        mapping = config.setSource(mapping, dlg.variable, null, indexes);
+        config.save();
+    }
+
+    private Method transformation(TransformationMapping transformationMapping,
+                                  Model sourceModel) throws ClassNotFoundException {
+        for (Method method : Class.forName(transformationMapping.getTransformationClass()).getDeclaredMethods()) {
+            Class<?>[] types = method.getParameterTypes();
+            if (Modifier.isPublic(method.getModifiers()) && method.getName().equals(transformationMapping.getTransformationName()) && types.length > 0 && sourceModel.getType().equals(types[0].getName())) {
+                return method;
+            }
         }
-        final Model targetModel = (Model)mapping.getTarget();
-        try {
-            final List<Integer> indexes =
-                targetModel != null && Util.isOrInCollection(targetModel)
-                    ? Util.indexes(sourceText.getShell(), targetModel, false)
-                    : null;
-            mapping = config.setSource(mapping, dlg.variable, null, indexes);
-            config.save();
-        } catch (CanceledDialogException ignored) {}
+        return null;
     }
 
     /**
      * @param mapping
      */
-    public void update(final MappingOperation<?, ?> mapping) {
+    public void update(MappingOperation<?, ?> mapping) {
         this.mapping = mapping;
         if (sourceDropTarget != null) dispose();
         textById.clear();
@@ -580,13 +602,14 @@ public final class MappingDetailViewer extends MappingViewer {
         contentPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
         contentPane.setBackground(scroller.getBackground());
         contentPane.setForeground(contentPane.getBackground());
-        if (mapping.getType() == MappingType.CUSTOM) createFunctionSourcePane(contentPane);
+        if (mapping.getType() == MappingType.TRANSFORMATION) createTransformationSourcePane(contentPane);
         else {
             final Composite pane;
-            if (mapping.getSource() instanceof Model) pane = createContainerPane(contentPane,
-                                                                                 ((Model)mapping.getSource()).getParent(),
-                                                                                 parentIndexes(mapping.getSourceIndex()));
-            else pane = createContainerPane(contentPane, config.getSourceModel(), null);
+            if (mapping.getSource() instanceof Model) {
+                Model sourceModel = ((Model)mapping.getSource());
+                List<Integer> updateIndexes = Util.updateIndexes(mapping, sourceModel, mapping.getSourceIndex());
+                pane = createContainerPane(contentPane, true, sourceModel, sourceModel.getParent(), updateIndexes, updateIndexes.size() - 1);
+            } else pane = createContainerPane(contentPane, true, null, config.getSourceModel(), null, -1);
             createSourcePane(pane);
         }
         final Label mapsToLabel = new Label(contentPane, SWT.NONE);
@@ -597,15 +620,33 @@ public final class MappingDetailViewer extends MappingViewer {
         contentPane.layout();
     }
 
-    private void updateFunctionArgument(CustomMapping mapping,
-                                        String[] functionArguments,
-                                        int index,
-                                        Arg argAnnotation,
-                                        Class<?> type,
-                                        String value) {
+    private void updateIndex(boolean source,
+                             Model model,
+                             List<Integer> indexes,
+                             int indexesIndex,
+                             int index) {
+        int origIndex = indexes.get(indexesIndex);
+        if (index == origIndex) return;
+        indexes.set(indexesIndex, index);
+        if (source)
+            config.setSource(mapping, model, indexes, Util.updateIndexes(mapping, mapping.getTarget(), mapping.getTargetIndex()));
+        else config.setTarget(mapping, model, Util.updateIndexes(mapping, mapping.getSource(), mapping.getSourceIndex()), indexes);
+        try {
+            config.save();
+        } catch (Exception e) {
+            Activator.error(e);
+        }
+    }
+
+    private void updateTransformationArgument(TransformationMapping mapping,
+                                              String[] transformationArguments,
+                                              int index,
+                                              Arg argAnnotation,
+                                              Class<?> type,
+                                              String value) {
         if (Util.valid(value, argAnnotation, type)) {
-            functionArguments[index] = type.getName() + "=" + (value.isEmpty() ? argAnnotation.defaultValue() : value);
-            mapping = config.customizeMapping(mapping, mapping.getFunctionClass(), mapping.getFunctionName(), functionArguments);
+            transformationArguments[index] = type.getName() + "=" + (value.isEmpty() ? argAnnotation.defaultValue() : value);
+            mapping = config.setTransformation(mapping, mapping.getTransformationClass(), mapping.getTransformationName(), transformationArguments);
             try {
                 config.save();
             } catch (Exception e) {
@@ -674,43 +715,53 @@ public final class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    private abstract class FunctionControl extends ControlWithMenuPane {
+    abstract class MenuItemHandler extends SelectionAdapter {
 
-        CustomMapping customMapping;
+        boolean enabled() {
+            return true;
+        }
+
+        @Override
+        public final void widgetDefaultSelected(final SelectionEvent event) {}
+
+        @Override
+        public abstract void widgetSelected(SelectionEvent event);
+    }
+
+    private abstract class TransformationControl extends ControlWithMenuPane {
+
+        TransformationMapping transformationMapping;
         Function annotation;
 
-        FunctionControl(Composite parent,
-                        CustomMapping customMapping,
-                        Function annotation) {
+        TransformationControl(Composite parent,
+                              TransformationMapping transformationMapping,
+                              Function annotation) {
             super(parent);
-            this.customMapping = customMapping;
+            this.transformationMapping = transformationMapping;
             this.annotation = annotation;
         }
 
         @Override
         void createControl() {
-            final Composite pane = createRoundedPane(this, Colors.FUNCTION);
+            final Composite pane = createRoundedPane(this, Colors.TRANSFORMATION);
             pane.setBackground(pane.getParent().getBackground());
             GridLayout layout = GridLayoutFactory.swtDefaults().create();
             pane.setLayout(layout);
-            setToolTipToFunctionDescription(pane);
-            createFunction(pane, layout);
+            setToolTipToTransformationDescription(pane);
+            createTransformation(pane, layout);
         }
-
-        abstract void createFunction(Composite parent,
-                                     GridLayout layout);
 
         @Override
         Label createMenuArrow() {
             final Label menu = super.createMenuArrow();
-            setToolTipToFunctionDescription(menu);
+            setToolTipToTransformationDescription(menu);
             if (annotation != null) {
-                addMenuItem("Edit function", new MenuItemHandler() {
+                addMenuItem("Edit transformation", new MenuItemHandler() {
 
                     @Override
                     public void widgetSelected(final SelectionEvent event) {
                         try {
-                            addOrEditFunction();
+                            addOrEditTransformation();
                         } catch (final Exception e) {
                             Activator.error(e);
                         }
@@ -730,12 +781,12 @@ public final class MappingDetailViewer extends MappingViewer {
                     }
                 });
             }
-            addMenuItem("Remove function", new MenuItemHandler() {
+            addMenuItem("Remove transformation", new MenuItemHandler() {
 
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
                     try {
-                        removeFunction();
+                        removeTransformation();
                     } catch (final Exception e) {
                         Activator.error(e);
                     }
@@ -744,24 +795,14 @@ public final class MappingDetailViewer extends MappingViewer {
             return menu;
         }
 
-        void setToolTipToFunctionDescription(Control control) {
+        abstract void createTransformation(Composite parent,
+                                           GridLayout layout);
+
+        void setToolTipToTransformationDescription(Control control) {
             if (annotation == null) {
-                control.setToolTipText(customMapping.getFunctionClass() + "." + customMapping.getFunctionName());
+                control.setToolTipText(transformationMapping.getTransformationClass() + "." + transformationMapping.getTransformationName());
             } else control.setToolTipText(annotation.description());
         }
-    }
-
-    abstract class MenuItemHandler extends SelectionAdapter {
-
-        boolean enabled() {
-            return true;
-        }
-
-        @Override
-        public final void widgetDefaultSelected(final SelectionEvent event) {}
-
-        @Override
-        public abstract void widgetSelected(SelectionEvent event);
     }
 
     final class VariableDialog extends BaseDialog {
@@ -769,7 +810,7 @@ public final class MappingDetailViewer extends MappingViewer {
         Variable variable;
 
         VariableDialog() {
-            super(sourceText.getShell());
+            super(sourcePropPane.getShell());
             if (mapping.getSource() instanceof Variable) {
                 this.variable = (Variable)mapping.getSource();
             }
@@ -799,8 +840,7 @@ public final class MappingDetailViewer extends MappingViewer {
 
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
-                    final IStructuredSelection selection =
-                        (IStructuredSelection)comboViewer.getSelection();
+                    final IStructuredSelection selection = (IStructuredSelection)comboViewer.getSelection();
                     variable = (Variable)selection.getFirstElement();
                     validate();
                 }
@@ -819,7 +859,7 @@ public final class MappingDetailViewer extends MappingViewer {
 
         @Override
         protected String title() {
-            return "Variable";
+            return "Set Variable";
         }
 
         void validate() {

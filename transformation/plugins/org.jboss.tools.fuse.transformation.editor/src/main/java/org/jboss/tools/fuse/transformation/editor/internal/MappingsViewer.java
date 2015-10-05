@@ -13,7 +13,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
@@ -22,12 +21,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.tools.fuse.transformation.MappingOperation;
@@ -35,6 +34,7 @@ import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.TransformationEditor;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 import org.jboss.tools.fuse.transformation.model.Model;
@@ -44,18 +44,18 @@ import org.jboss.tools.fuse.transformation.model.Model;
  */
 public class MappingsViewer extends Composite {
 
-    final TransformationEditor editor;
-    final ToolItem deleteButton;
-    ScrolledComposite scroller;
-    Composite summaryPane;
+    private final TransformationEditor editor;
+    private final ToolItem deleteButton;
+    private ScrolledComposite scroller;
+    private Composite summaryPane;
     Composite sourcePane;
     Composite mapsToPane;
     Composite targetPane;
-    Text prevTargetText;
-    TraversalListener prevTraversalListener;
-    MappingSummary selectedMappingSummary;
-    final List<MappingSummary> mappingSummaries = new ArrayList<>();
+    private MappingSummary selectedMappingSummary;
+    private final List<MappingSummary> mappingSummaries = new ArrayList<>();
     private final List<PotentialDropTarget> potentialDropTargets;
+    private final Listener focusListener;
+    private final Listener keyListener;
 
     /**
      * @param config
@@ -75,7 +75,7 @@ public class MappingsViewer extends Composite {
         setBackground(parent.getParent().getBackground());
         final Label title = new Label(this, SWT.CENTER);
         title.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-        title.setText("Transformations");
+        title.setText("Mappings");
 
         // Create tool bar
         final ToolBar toolBar = new ToolBar(this, SWT.NONE);
@@ -121,23 +121,8 @@ public class MappingsViewer extends Composite {
         sourcePane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
         sourcePane.setBackground(getBackground());
         mapsToPane = new Composite(summaryPane, SWT.NONE);
-        final int margin = sourcePane.computeSize(SWT.DEFAULT, SWT.DEFAULT).y / 2;
-        mapsToPane.setLayout(GridLayoutFactory.fillDefaults()
-                                              .margins(margin, margin)
-                                              .spacing(0, 0)
-                                              .create());
-        final Composite tempPane = new Composite(mapsToPane, SWT.NONE);
-        tempPane.setLayoutData(GridDataFactory.swtDefaults().create());
-        tempPane.setLayout(GridLayoutFactory.swtDefaults().create());
-        final Label tempLabel = new Label(tempPane, SWT.NONE);
-        tempLabel.setImage(Images.MAPPED);
-        final int mapsToPaneWidth = mapsToPane.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-        tempLabel.dispose();
-        tempPane.dispose();
-        mapsToPane.setLayoutData(GridDataFactory.fillDefaults()
-                                                .grab(false, true)
-                                                .hint(mapsToPaneWidth, SWT.DEFAULT)
-                                                .create());
+        mapsToPane.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
+        mapsToPane.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
         mapsToPane.setBackground(getBackground());
         targetPane = new Composite(summaryPane, SWT.NONE);
         targetPane.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
@@ -167,15 +152,45 @@ public class MappingsViewer extends Composite {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                if (!event.getPropertyName().equals(TransformationConfig.MAPPING)) {
-                    return;
-                }
-                final MappingOperation<?, ?> mapping = (MappingOperation<?, ?>) event.getNewValue();
-                if (mapping != null) {
-                    addMappingSummary(config, mapping);
-                }
+                if (!event.getPropertyName().equals(TransformationConfig.MAPPING)) return;
+                final MappingOperation<?, ?> mapping = (MappingOperation<?, ?>)event.getNewValue();
+                if (mapping != null) addMappingSummary(config, mapping);
             }
         });
+
+        focusListener = new Listener() {
+
+            @Override
+            public void handleEvent(Event event) {
+                if (selectedMappingSummary == null) return;
+                if (selectedMappingSummary.mapsToLabel.isDisposed()) return;
+                selectedMappingSummary.setBackground(child((Control)event.widget) ? Colors.SELECTED : Colors.SELECTED_NO_FOCUS);
+            }
+        };
+        getDisplay().addFilter(SWT.FocusIn, focusListener);
+        getDisplay().addFilter(SWT.MouseDown, focusListener);
+        keyListener = new Listener() {
+
+            @Override
+            public void handleEvent(Event event) {
+                if (selectedMappingSummary == null) return;
+                if (selectedMappingSummary.mapsToLabel.getBackground().equals(Colors.SELECTED_NO_FOCUS)) return;
+                switch (event.keyCode) {
+                    case SWT.ARROW_UP: {
+                        if ((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0) selectMappingSummary(0);
+                        else selectPreviousMappingSummary();
+                        break;
+                    }
+                    case SWT.ARROW_DOWN: {
+                        if ((event.stateMask & (SWT.CTRL | SWT.COMMAND)) != 0) selectMappingSummary(mappingSummaries.size() - 1);
+                        else selectNextMappingSummary();
+                        break;
+                    }
+                }
+                event.type = SWT.NONE;
+            }
+        };
+        getDisplay().addFilter(SWT.KeyDown, keyListener);
     }
 
     void addMappingSummary(final TransformationConfig config,
@@ -186,16 +201,21 @@ public class MappingsViewer extends Composite {
         layoutPanes();
         scroller.setMinSize(summaryPane.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         scroller.setOrigin(0, scroller.getSize().y);
-        mappingSummary.sourceText.setFocus(); // This will call selected()
+        selected(mappingSummary);
     }
 
-    private void focusOnMappingSummary(final int index) {
-        final MappingSummary mappingSummary = mappingSummaries.get(index);
-        if (selectedMappingSummary.sourceText.isFocusControl()) {
-            mappingSummary.sourceText.setFocus();
-        } else {
-            mappingSummary.targetText.setFocus();
-        }
+    private boolean child(Control control) {
+        if (control.getParent() == null) return false;
+        if (control.getParent() == this) return true;
+        return child(control.getParent());
+    }
+
+    @Override
+    public void dispose() {
+        getDisplay().removeFilter(SWT.FocusIn, focusListener);
+        getDisplay().removeFilter(SWT.MouseDown, focusListener);
+        getDisplay().removeFilter(SWT.KeyDown, keyListener);
+        super.dispose();
     }
 
     void layoutPanes() {
@@ -220,61 +240,25 @@ public class MappingsViewer extends Composite {
     }
 
     void selected(final MappingSummary mappingSummary) {
-        if (selectedMappingSummary != null && mappingSummary != selectedMappingSummary) {
-            selectedMappingSummary.deselect();
-        }
+        forceFocus();
+        if (selectedMappingSummary != null && mappingSummary != selectedMappingSummary) selectedMappingSummary.deselect();
         selectedMappingSummary = mappingSummary;
+        selectedMappingSummary.select();
         deleteButton.setEnabled(true);
         editor.selected(mappingSummary.mapping);
     }
 
-    void selectNextMappingSummary() {
-        final int ndx = mappingSummaries.indexOf(this) + 1;
-        if (ndx < mappingSummaries.size()) {
-            focusOnMappingSummary(ndx);
-        }
+    private void selectMappingSummary(final int index) {
+        selected(mappingSummaries.get(index));
     }
 
-    void selectPreviousMappingSummary() {
-        final int ndx = mappingSummaries.indexOf(this) - 1;
-        if (ndx >= 0) {
-            focusOnMappingSummary(ndx);
-        }
+    private void selectNextMappingSummary() {
+        final int ndx = mappingSummaries.indexOf(selectedMappingSummary) + 1;
+        if (ndx < mappingSummaries.size()) selectMappingSummary(ndx);
     }
 
-    interface CustomFunctionListener {
-
-        void functionChanged(String text);
-    }
-
-    static final class TraversalListener implements TraverseListener {
-
-        Text prevText;
-        Text nextText;
-        TraversalListener prevTraversalListener;
-        TraversalListener nextTraversalListener;
-
-        TraversalListener(final Text prevText,
-                          final Text nextText) {
-            this.prevText = prevText;
-            this.nextText = nextText;
-        }
-
-        @Override
-        public void keyTraversed(final TraverseEvent event) {
-            if (event.detail == SWT.TRAVERSE_TAB_NEXT) {
-                if (nextText != null) {
-                    event.detail = SWT.TRAVERSE_NONE;
-                    event.doit = false;
-                    nextText.setFocus();
-                }
-            } else if (event.detail == SWT.TRAVERSE_TAB_PREVIOUS) {
-                if (prevText != null) {
-                    event.detail = SWT.TRAVERSE_NONE;
-                    event.doit = false;
-                    prevText.setFocus();
-                }
-            }
-        }
+    private void selectPreviousMappingSummary() {
+        final int ndx = mappingSummaries.indexOf(selectedMappingSummary) - 1;
+        if (ndx >= 0) selectMappingSummary(ndx);
     }
 }

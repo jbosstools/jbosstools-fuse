@@ -11,8 +11,8 @@
  */
 package org.jboss.tools.fuse.transformation.dozer;
 
-import static org.jboss.tools.fuse.transformation.dozer.CustomParameterHelper.emptyForNull;
-import static org.jboss.tools.fuse.transformation.dozer.CustomParameterHelper.getParameterPart;
+import static org.jboss.tools.fuse.transformation.dozer.TransformationArgumentHelper.emptyForNull;
+import static org.jboss.tools.fuse.transformation.dozer.TransformationArgumentHelper.getArgumentPart;
 
 import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.dozer.config.Field;
@@ -36,20 +36,20 @@ public class DozerExpression implements Expression {
 
     @Override
     public String getLanguage() {
-        return getParameterPart(field, SEP, 0);
+        return getArgumentPart(field, SEP, 0);
     }
 
     @Override
     public void setLanguage(String language) {
-        field.setCustomConverterParam(language + SEP + emptyForNull(getExpression()));
+        field.setCustomConverterArgument(language + SEP + emptyForNull(getExpression()));
     }
 
     @Override
     public String getExpression() {
-        String nextPart = getParameterPart(field, SEP, 1);
+        String nextPart = getArgumentPart(field, SEP, 1);
         if (nextPart.equalsIgnoreCase("resource")) {
-            String scheme = getParameterPart(field, SEP, 2);
-            String path = getParameterPart(field, SEP, 3);
+            String scheme = getArgumentPart(field, SEP, 2);
+            String path = getArgumentPart(field, SEP, 3);
             if (scheme != null && path != null) {
                 return nextPart + SEP + scheme + SEP + path;
             }
@@ -59,7 +59,7 @@ public class DozerExpression implements Expression {
 
     @Override
     public void setExpression(String expression) {
-        field.setCustomConverterParam(emptyForNull(getLanguage()) + SEP + expression);
+        field.setCustomConverterArgument(emptyForNull(getLanguage()) + SEP + expression);
     }
 
     @Override

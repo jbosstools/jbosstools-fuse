@@ -7,9 +7,9 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.tools.fuse.transformation.editor.function;
+package org.jboss.tools.fuse.transformation.editor.transformations;
 
-import org.jboss.tools.fuse.transformation.editor.function.Function.Arg;
+import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
 
 /**
  * Deployments of this source code to design-time Fuse projects must not be altered by users!

@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.util.CanceledDialogException;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
@@ -66,44 +65,29 @@ public final class SourceTabFolder extends ModelTabFolder {
                                          new ViewerDropAdapter(viewer.treeViewer) {
 
             @Override
-            public boolean performDrop(final Object data) {
+            public boolean performDrop(Object data) {
                 try {
                     final Object target =
-                        ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
-                                                                      .getSelection())
-                                                                      .getFirstElement();
+                        ((IStructuredSelection)LocalSelectionTransfer.getTransfer().getSelection()).getFirstElement();
                     FieldMapping mapping = null;
-                    final Model sourceModel = (Model)getCurrentTarget();
-                    final Model targetModel = (Model)target;
-                    final boolean sourceIsOrInCollection = Util.isOrInCollection(sourceModel);
-                    final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
+                    Model sourceModel = (Model)getCurrentTarget();
+                    Model targetModel = (Model)target;
+                    boolean sourceIsOrInCollection = Util.isOrInCollection(sourceModel);
+                    boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
 
-                    if (sourceIsOrInCollection == targetIsOrInCollection) {
+                    if (sourceIsOrInCollection == targetIsOrInCollection)
                         mapping = config.mapField(sourceModel, targetModel, null, null);
-                    } else try {
-                        final List<Integer> sourceIndexes = sourceIsOrInCollection
-                                                            ? Util.indexes(getShell(),
-                                                                           sourceModel, true)
-                                                            : null;
-                        final List<Integer> targetIndexes = targetIsOrInCollection
-                                                            ? Util.indexes(getShell(),
-                                                                           targetModel, false)
-                                                            : null;
-                        mapping =
-                            config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
-                    } catch (CanceledDialogException e) {
-                        return false;
+                    else {
+                        List<Integer> sourceIndexes = sourceIsOrInCollection ? Util.updateIndexes(null, sourceModel, null) : null;
+                        List<Integer> targetIndexes = targetIsOrInCollection ? Util.updateIndexes(null, targetModel, null) : null;
+                        mapping = config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
                     }
 
-                    if (mapping != null
-                        && Util.modelsNeedDateFormat(mapping.getSource(),
-                                                     mapping.getTarget(),
-                                                     true)) {
+                    if (mapping != null && Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), true))
                         Util.updateDateFormat(getShell(), mapping);
-                    }
                     config.save();
                     return true;
-                } catch (final Exception e) {
+                } catch (Exception e) {
                     Activator.error(e);
                     return false;
                 }

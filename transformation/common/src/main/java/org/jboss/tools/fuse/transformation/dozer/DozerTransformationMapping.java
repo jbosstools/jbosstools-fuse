@@ -11,27 +11,27 @@
  */
 package org.jboss.tools.fuse.transformation.dozer;
 
-import static org.jboss.tools.fuse.transformation.dozer.CustomParameterHelper.EMPTY_STRING_ARRAY;
-import static org.jboss.tools.fuse.transformation.dozer.CustomParameterHelper.emptyForNull;
-import static org.jboss.tools.fuse.transformation.dozer.CustomParameterHelper.getParameterPart;
-import static org.jboss.tools.fuse.transformation.dozer.CustomParameterHelper.getParameterParts;
+import static org.jboss.tools.fuse.transformation.dozer.TransformationArgumentHelper.EMPTY_STRING_ARRAY;
+import static org.jboss.tools.fuse.transformation.dozer.TransformationArgumentHelper.emptyForNull;
+import static org.jboss.tools.fuse.transformation.dozer.TransformationArgumentHelper.getArgumentPart;
+import static org.jboss.tools.fuse.transformation.dozer.TransformationArgumentHelper.getArgumentParts;
 import java.util.Arrays;
-import org.jboss.tools.fuse.transformation.CustomMapping;
 import org.jboss.tools.fuse.transformation.MappingType;
+import org.jboss.tools.fuse.transformation.TransformationMapping;
 
 /**
- * Dozer implementation of a custom mapping.
+ * Dozer implementation of a transformation mapping.
  */
-public class DozerCustomMapping extends DozerFieldMapping implements CustomMapping {
+public class DozerTransformationMapping extends DozerFieldMapping implements TransformationMapping {
 
     private static final String SEP = ",";
 
     /**
-     * Create a new DozerCustomMapping.
+     * Create a new DozerTransformationMapping.
      *
      * @param fieldMapping field mapping being customized
      */
-    public DozerCustomMapping(DozerFieldMapping fieldMapping) {
+    public DozerTransformationMapping(DozerFieldMapping fieldMapping) {
 
         super(fieldMapping.getSource(),
               fieldMapping.getTarget(),
@@ -39,15 +39,10 @@ public class DozerCustomMapping extends DozerFieldMapping implements CustomMappi
               fieldMapping.getField());
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.CustomMapping#addFunctionArgument(java.lang.String, java.lang.String)
-     */
     @Override
-    public void addFunctionArgument(String type,
-                                    String value) {
-        String[] parts = getParameterParts(getField(), SEP);
+    public void addTransformationArgument(String type,
+                                          String value) {
+        String[] parts = getArgumentParts(getField(), SEP);
         StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : "");
         builder.append(SEP);
         builder.append(parts.length > 1 ? parts[1] : "");
@@ -59,17 +54,12 @@ public class DozerCustomMapping extends DozerFieldMapping implements CustomMappi
         builder.append(emptyForNull(type));
         builder.append("=");
         builder.append(emptyForNull(value));
-        getField().setCustomConverterParam(builder.toString());
+        getField().setCustomConverterArgument(builder.toString());
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.CustomMapping#addFunctionArguments(java.lang.String[])
-     */
     @Override
-    public void addFunctionArguments(String... arguments) {
-        String[] parts = getParameterParts(getField(), SEP);
+    public void addTransformationArguments(String... arguments) {
+        String[] parts = getArgumentParts(getField(), SEP);
         StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : "");
         builder.append(SEP);
         builder.append(parts.length > 1 ? parts[1] : "");
@@ -77,38 +67,33 @@ public class DozerCustomMapping extends DozerFieldMapping implements CustomMappi
             builder.append(SEP);
             builder.append(arg);
         }
-        getField().setCustomConverterParam(builder.toString());
+        getField().setCustomConverterArgument(builder.toString());
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.CustomMapping#getFunctionArguments()
-     */
     @Override
-    public String[] getFunctionArguments() {
-        String[] parts = getParameterParts(getField(), SEP);
+    public String[] getTransformationArguments() {
+        String[] parts = getArgumentParts(getField(), SEP);
         return parts.length < 2 ? EMPTY_STRING_ARRAY : Arrays.copyOfRange(parts, 2, parts.length);
     }
 
     @Override
-    public String getFunctionClass() {
-        return getParameterPart(getField(), SEP, 0);
+    public String getTransformationClass() {
+        return getArgumentPart(getField(), SEP, 0);
     }
 
     @Override
-    public String getFunctionName() {
-        return getParameterPart(getField(), SEP, 1);
+    public String getTransformationName() {
+        return getArgumentPart(getField(), SEP, 1);
     }
 
     @Override
     public MappingType getType() {
-        return MappingType.CUSTOM;
+        return MappingType.TRANSFORMATION;
     }
 
     @Override
-    public void setFunctionClass(String name) {
-        String[] parts = getParameterParts(getField(), SEP);
+    public void setTransformationClass(String name) {
+        String[] parts = getArgumentParts(getField(), SEP);
         StringBuilder builder = new StringBuilder(emptyForNull(name));
         builder.append(SEP);
         builder.append(parts.length > 1 ? parts[1] : "");
@@ -116,12 +101,12 @@ public class DozerCustomMapping extends DozerFieldMapping implements CustomMappi
             builder.append(SEP);
             builder.append(parts[ndx]);
         }
-        getField().setCustomConverterParam(builder.toString());
+        getField().setCustomConverterArgument(builder.toString());
     }
 
     @Override
-    public void setFunctionName(String name) {
-        String[] parts = getParameterParts(getField(), SEP);
+    public void setTransformationName(String name) {
+        String[] parts = getArgumentParts(getField(), SEP);
         StringBuilder builder = new StringBuilder(parts.length > 0 ? parts[0] : "");
         builder.append(SEP);
         builder.append(emptyForNull(name));
@@ -129,6 +114,6 @@ public class DozerCustomMapping extends DozerFieldMapping implements CustomMappi
             builder.append(SEP);
             builder.append(parts[ndx]);
         }
-        getField().setCustomConverterParam(builder.toString());
+        getField().setCustomConverterArgument(builder.toString());
     }
 }

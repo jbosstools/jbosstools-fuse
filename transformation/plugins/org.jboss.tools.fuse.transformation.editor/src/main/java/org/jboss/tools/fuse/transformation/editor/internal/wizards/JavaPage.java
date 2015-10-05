@@ -69,7 +69,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     private boolean isSource = true;
     private Text _javaClassText;
     private org.jboss.tools.fuse.transformation.model.Model _javaModel = null;
-    private SimplerModelViewer _modelViewer;
+    private ModelViewer _modelViewer;
     private Binding _binding;
 
     /**
@@ -180,7 +180,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         group.setLayout(new GridLayout(3, false));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 3));
 
-        _modelViewer = new SimplerModelViewer(group, _javaModel);
+        _modelViewer = new ModelViewer(group, _javaModel);
         _modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         _modelViewer.layout();
 
@@ -263,34 +263,11 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     @Override
     public void clearControls() {
         if (_javaClassText != null && !_javaClassText.isDisposed()) {
-            _javaModel = null; //new org.jboss.tools.fuse.transformation.model.Model("", "");
+            _javaModel = null;
             _modelViewer.setModel(_javaModel);
             _javaClassText.setText("");
         }
         notifyListeners();
-    }
-
-    /**
-     * Hide the search field and mapped fields buttons.
-     * @author brianf
-     */
-    class SimplerModelViewer extends ModelViewer {
-
-        /**
-         * @param parent
-         * @param rootModel
-         */
-        public SimplerModelViewer(Composite parent,
-                                  org.jboss.tools.fuse.transformation.model.Model rootModel) {
-            super(null, parent, rootModel, null, null);
-        }
-
-        @Override
-        protected void setViewOptions() {
-            this.showMappedFieldsButton = false;
-            this.showSearchField = false;
-        }
-
     }
 
     @Override

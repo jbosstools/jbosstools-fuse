@@ -52,21 +52,20 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer.CustomFunctionListener;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 
-final class AddCustomFunctionDialog extends BaseDialog {
+final class AddCustomTransformationDialog extends BaseDialog {
 
     IProject project;
     String sourceType;
     IType type;
     IMethod method;
 
-    AddCustomFunctionDialog(final Shell shell,
-                            final IProject project,
-                            final String sourceType) {
+    AddCustomTransformationDialog(final Shell shell,
+                                  final IProject project,
+                                  final String sourceType) {
         super(shell);
         this.project = project;
         this.sourceType = "java.lang.String".equals(sourceType) ? "String" : sourceType;
@@ -216,7 +215,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
      */
     @Override
     protected String message() {
-        return "Select or create the Java class and method that implements the custom operation";
+        return "Select or create the Java class and method that implements the custom transformation";
     }
 
     void methodSelected(final ComboViewer methodComboViewer) {
@@ -241,7 +240,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
                 return false;
             }
         };
-        final IType type = Util.selectClass(getShell(), project, filter);
+        final IType type = Util.selectCustomTransformationClass(getShell(), project, filter);
         if (type != null) {
             setClass(type, classButton, methodComboViewer);
         }
@@ -276,7 +275,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
      */
     @Override
     protected String title() {
-        return "Add Custom Function";
+        return "Add Custom Transformation";
     }
 
     boolean valid(final IMethod method) {
@@ -306,7 +305,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
         private void createComboPane(final Composite parent,
                                      final String initialText,
                                      final String labelText,
-                                     final CustomFunctionListener listener) {
+                                     final CustomTransformationListener listener) {
             final Combo combo = new Combo(parent, SWT.READ_ONLY);
             combo.setLayoutData(GridDataFactory.swtDefaults()
                                                .align(SWT.FILL, SWT.CENTER)
@@ -328,11 +327,11 @@ final class AddCustomFunctionDialog extends BaseDialog {
 
                 @Override
                 public void widgetSelected(final SelectionEvent event) {
-                    listener.functionChanged(combo.getText());
+                    listener.transformationChanged(combo.getText());
                 }
             });
             combo.select(combo.indexOf(initialText));
-            listener.functionChanged(initialText);
+            listener.transformationChanged(initialText);
             final Label label = new Label(parent, SWT.NONE);
             label.setText(labelText);
         }
@@ -370,32 +369,32 @@ final class AddCustomFunctionDialog extends BaseDialog {
                                                .grab(true, false)
                                                .create());
             group.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).numColumns(6).create());
-            group.setText("Custom Function");
+            group.setText("Custom Transformation");
             createLabelPane(group, "Return Type");
             createLabelPane(group, "Method Name");
             createLabelPane(group, "Parameter Type");
-            createComboPane(group, sourceType, " ", new CustomFunctionListener() {
+            createComboPane(group, sourceType, " ", new CustomTransformationListener() {
 
                 @Override
-                public void functionChanged(final String text) {
+                public void transformationChanged(final String text) {
                     returnType = text;
                     returnTypeStatus = typeStatus(returnType, "return");
                     updateStatus();
                 }
             });
-            createTextPane(group, "map", "(", new CustomFunctionListener() {
+            createTextPane(group, "map", "(", new CustomTransformationListener() {
 
                 @Override
-                public void functionChanged(final String text) {
+                public void transformationChanged(final String text) {
                     methodName = text.trim();
                     methodNameStatus = nameStatus(methodName, "method");
                     updateStatus();
                 }
             });
-            createComboPane(group, sourceType, " input)", new CustomFunctionListener() {
+            createComboPane(group, sourceType, " input)", new CustomTransformationListener() {
 
                 @Override
-                public void functionChanged(final String text) {
+                public void transformationChanged(final String text) {
                     prmType = text;
                     prmTypeStatus = typeStatus(prmType, "parameter");
                     updateStatus();
@@ -406,7 +405,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
         private Text createTextPane(final Composite parent,
                                     final String initialText,
                                     final String labelText,
-                                    final CustomFunctionListener listener) {
+                                    final CustomTransformationListener listener) {
             final Text text = new Text(parent, SWT.BORDER);
             text.setLayoutData(GridDataFactory.swtDefaults()
                                               .align(SWT.FILL, SWT.CENTER)
@@ -415,7 +414,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
 
                 @Override
                 public void modifyText(final ModifyEvent event) {
-                    listener.functionChanged(text.getText());
+                    listener.transformationChanged(text.getText());
                 }
             });
             text.setText(initialText);
@@ -431,26 +430,27 @@ final class AddCustomFunctionDialog extends BaseDialog {
             if (name == null || name.isEmpty()) {
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "A " + nameName + " name for the custom operation must be provided");
+                                  "A " + nameName + " name for the custom transformation must be provided");
             }
             final char[] chars = name.toCharArray();
             final char firstChar = chars[0];
             if (!Character.isJavaIdentifierStart(firstChar)) {
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "The " + nameName + " name for the custom operation begins with an invalid character");
+                                  "The " + nameName + " name for the custom transformation begins with an invalid character");
             }
             for (int ndx = 1; ndx < chars.length; ++ndx) {
                 if (!Character.isJavaIdentifierPart(chars[ndx])) {
                     return new Status(IStatus.ERROR,
                                       Activator.plugin().getBundle().getSymbolicName(),
-                                      "The " + nameName + " name for the custom operation contains at least one invalid character");
+                                      "The " + nameName
+                                      + " name for the custom transformation contains at least one invalid character");
                 }
             }
             if (Character.isUpperCase(firstChar)) {
                 return new Status(IStatus.WARNING,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "The " + nameName + " name for the custom operation begins with an uppercase letter");
+                                  "The " + nameName + " name for the custom transformation begins with an uppercase letter");
             }
             return Status.OK_STATUS;
         }
@@ -465,7 +465,7 @@ final class AddCustomFunctionDialog extends BaseDialog {
             if (type == null) {
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
-                                  "A " + typeName + " type for the custom operation must be selected");
+                                  "A " + typeName + " type for the custom transformation must be selected");
             }
             return Status.OK_STATUS;
         }
@@ -488,5 +488,10 @@ final class AddCustomFunctionDialog extends BaseDialog {
             list.add(prmTypeStatus);
             super.updateStatus(list.toArray(new IStatus[list.size()]));
         }
+    }
+
+    private interface CustomTransformationListener {
+
+        void transformationChanged(String text);
     }
 }

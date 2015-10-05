@@ -65,7 +65,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.model.catalog.CamelModelFactory;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.camel.CamelEndpoint;
-import org.jboss.tools.fuse.transformation.editor.function.Function;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
@@ -76,6 +75,7 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationCo
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
+import org.jboss.tools.fuse.transformation.editor.transformations.Function;
 
 /**
  *
@@ -205,7 +205,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 updateHelpText();
             }
         });
-        // Create transformation viewer
+        // Create mappings viewer
         mappingsViewer = new MappingsViewer(config, this, horizontalSplitter, potentialDropTargets);
         // Create target tab folder
         targetTabFolder = new TargetTabFolder(config, horizontalSplitter, potentialDropTargets);
@@ -320,39 +320,39 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                                                                     getClass().getClassLoader());
             config = new TransformationConfig(configFile, loader);
             CamelModelFactory.initializeModels();
-            // Add contributed functions if missing or a different version
+            // Add contributed transformations if missing or a different version
             String version = Activator.plugin().getBundle().getVersion().toString();
             IPreferenceStore prefs = Activator.plugin().getPreferenceStore();
             boolean latestVersion = version.equals(prefs.getString(VERSION_PREFERENCE));
             copySourceToProject(Function.class, latestVersion);
             for (IConfigurationElement element : Platform.getExtensionRegistry()
-                                                         .getConfigurationElementsFor(Activator.FUNCTION_EXTENSION_POINT)) {
+                                                         .getConfigurationElementsFor(Activator.TRANSFORMATION_EXTENSION_POINT)) {
                 copySourceToProject(element.createExecutableExtension("class").getClass(), latestVersion);
             }
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
-            // Ensure Maven will compile functions folder
+            // Ensure Maven will compile transformations folder
             File pomFile = config.project().getLocation().append("pom.xml").toFile();
             org.apache.maven.model.Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
             List<Resource> resources = pomModel.getBuild().getResources();
             boolean exists = false;
             for (Resource resource : resources) {
-                if (resource.getDirectory().endsWith(Util.FUNCTIONS_FOLDER)) {
+                if (resource.getDirectory().endsWith(Util.TRANSFORMATIONS_FOLDER)) {
                     exists = true;
                     break;
                 }
             }
             if (!exists) {
                 Resource resource = new Resource();
-                resource.setDirectory(Util.FUNCTIONS_FOLDER);
+                resource.setDirectory(Util.TRANSFORMATIONS_FOLDER);
                 pomModel.getBuild().addResource(resource);
                 try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(pomFile))) {
                     MavenPlugin.getMaven().writeModel(pomModel, stream);
                 }
             }
-            // Ensure Java project source classpath entry exists for functions folder
+            // Ensure Java project source classpath entry exists for transformations folder
             exists = false;
             IClasspathEntry[] entries = javaProject.getRawClasspath();
-            IPath path = javaProject.getPath().append(Util.FUNCTIONS_FOLDER);
+            IPath path = javaProject.getPath().append(Util.TRANSFORMATIONS_FOLDER);
             for (IClasspathEntry entry : entries) {
                 if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().equals(path)) {
                     exists = true;
@@ -375,11 +375,11 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     void copySourceToProject(Class<?> sourceClass,
                              boolean latestVersion) throws IOException {
         IPath pkgPath = new Path(sourceClass.getPackage().getName().replace('.', '/'));
-        IPath functionsFolderPath = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
-        File file = functionsFolderPath.append(pkgPath).toFile();
+        IPath xformsFolderPath = config.project().getLocation().append(Util.TRANSFORMATIONS_FOLDER);
+        File file = xformsFolderPath.append(pkgPath).toFile();
         if (!file.exists()) file.mkdirs();
         IPath resourcePath = pkgPath.append(sourceClass.getSimpleName()).addFileExtension("java");
-        file = functionsFolderPath.append(resourcePath).toFile();
+        file = xformsFolderPath.append(resourcePath).toFile();
         if (file.exists() && latestVersion) return;
         byte[] buf = null;
         try (InputStream in = sourceClass.getResourceAsStream(resourcePath.makeAbsolute().toString())) {
@@ -458,11 +458,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             case IResourceChangeEvent.PRE_CLOSE:
                 Display.getDefault().asyncExec(new Runnable() {
 
-                    /*
-                     * (non-Javadoc)
-                     *
-                     * @see java.lang.Runnable#run()
-                     */
                     @Override
                     public void run() {
                         IWorkbenchPage[] pages = getSite().getWorkbenchWindow()
@@ -480,29 +475,17 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                     }
                 });
                 break;
-            default:
-                // do nothing
         }
     }
 
-    /**
-     * @param mapping
-     */
     public void selected(final MappingOperation<?, ?> mapping) {
         sourceTabFolder.select(mapping.getSource());
         targetTabFolder.select(mapping.getTarget());
         mappingDetailViewer.update(mapping);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
-     */
     @Override
-    public void setFocus() {
-        mappingsViewer.setFocus();
-    }
+    public void setFocus() {}
 
     void toggleSourceViewer(SashForm horizontalSplitter) {
         sourceTabFolder.setVisible(sourceViewerButton.getSelection());
@@ -525,7 +508,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     void updateHelpText() {
         if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
             if (sourceTabFolder.getSelectionIndex() == 0) {
-                helpText.setText("Create a new mapping below by dragging a property in source "
+                helpText.setText("Create a new mapping below by dragging a property from source "
                                  + config.getSourceModel().getName()
                                  + " on the left to a property in target "
                                  + config.getTargetModel().getName() + " on the right.");

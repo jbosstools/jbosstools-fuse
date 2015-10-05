@@ -45,23 +45,23 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.tools.fuse.transformation.CustomMapping;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
+import org.jboss.tools.fuse.transformation.TransformationMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.function.Function;
-import org.jboss.tools.fuse.transformation.editor.function.Function.Arg;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
+import org.jboss.tools.fuse.transformation.editor.transformations.Function;
+import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
 import org.jboss.tools.fuse.transformation.model.Model;
 
 // TODO handle variable length args
-class FunctionDialog extends BaseDialog {
+class TransformationDialog extends BaseDialog {
 
     final MappingOperation<?, ?> mapping;
     final IProject project;
-    Method origFunction, function;
+    Method origTransformation, transformation;
     String[] argumentValues;
 
     ListViewer listViewer;
@@ -69,19 +69,20 @@ class FunctionDialog extends BaseDialog {
     Composite argsPane;
     TableViewer tableViewer;
 
-    FunctionDialog(Shell shell,
+    TransformationDialog(Shell shell,
                    MappingOperation<?, ?> mapping,
                    IProject project) {
         super(shell);
         this.mapping = mapping;
         this.project = project;
-        if (mapping.getType() == MappingType.CUSTOM) {
-            CustomMapping customMapping = (CustomMapping)mapping;
+        if (mapping.getType() == MappingType.TRANSFORMATION) {
+            TransformationMapping xformMapping = (TransformationMapping)mapping;
             try {
-                Class<?> functionClass = Class.forName(customMapping.getFunctionClass());
-                for (Method method : functionClass.getMethods()) {
-                    if (method.getAnnotation(Function.class) != null && method.getName().equals(customMapping.getFunctionName()))
-                        origFunction = method;
+                Class<?> xformClass = Class.forName(xformMapping.getTransformationClass());
+                for (Method method : xformClass.getMethods()) {
+                    if (method.getAnnotation(Function.class) != null
+                        && method.getName().equals(xformMapping.getTransformationName()))
+                        origTransformation = method;
                 }
             } catch (ClassNotFoundException e) {
                 Activator.error(e);
@@ -100,7 +101,7 @@ class FunctionDialog extends BaseDialog {
         Group group = new Group(parent, SWT.SHADOW_ETCHED_OUT);
         group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
         group.setLayout(GridLayoutFactory.swtDefaults().create());
-        group.setText("Functions");
+        group.setText("Transformations");
         listViewer = new ListViewer(group, SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
         listViewer.getList().setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
         listViewer.setLabelProvider(new LabelProvider() {
@@ -120,9 +121,10 @@ class FunctionDialog extends BaseDialog {
             }
         });
         try {
-            // Add all contributed functions
+            // Add all contributed transformations
             String sourceType = ((Model)mapping.getSource()).getType();
-            for (IConfigurationElement element : Platform.getExtensionRegistry().getConfigurationElementsFor(Activator.FUNCTION_EXTENSION_POINT)) {
+            for (IConfigurationElement element
+                 : Platform.getExtensionRegistry().getConfigurationElementsFor(Activator.TRANSFORMATION_EXTENSION_POINT)) {
                 Object instance = element.createExecutableExtension("class");
                 for (Method method : instance.getClass().getDeclaredMethods()) {
                     Class<?>[] types = method.getParameterTypes();
@@ -165,14 +167,14 @@ class FunctionDialog extends BaseDialog {
                 }
 
                 if (event.getSelection().isEmpty()) {
-                    function = null;
+                    transformation = null;
                     argumentValues = null;
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                     return;
                 }
 
-                function = (Method)((IStructuredSelection)event.getSelection()).getFirstElement();
-                functionSelected(descGroup, argsGroup, parent);
+                transformation = (Method)((IStructuredSelection)event.getSelection()).getFirstElement();
+                transformationSelected(descGroup, argsGroup, parent);
             }
         });
     }
@@ -185,16 +187,16 @@ class FunctionDialog extends BaseDialog {
     @Override
     public void create() {
         super.create();
-        // Select applicable method if editing a custom mapping
-        if (origFunction != null) listViewer.setSelection(new StructuredSelection(origFunction));
+        // Select applicable method if editing a transformation mapping
+        if (origTransformation != null) listViewer.setSelection(new StructuredSelection(origTransformation));
     }
 
-    private void functionSelected(Group descGroup,
-                                  Group argsGroup,
-                                  final Composite parent) {
-        final Class<?>[] types = function.getParameterTypes();
+    private void transformationSelected(Group descGroup,
+                                        Group argsGroup,
+                                        final Composite parent) {
+        final Class<?>[] types = transformation.getParameterTypes();
         argumentValues = new String[types.length - 1];
-        final Function annotation = function.getAnnotation(Function.class);
+        final Function annotation = transformation.getAnnotation(Function.class);
 
         description = new Browser(descGroup, SWT.BORDER);
         description.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -226,8 +228,9 @@ class FunctionDialog extends BaseDialog {
             scroller.setContent(scrollerPane);
             scrollerPane.setLayout(GridLayoutFactory.fillDefaults().numColumns(4).spacing(0, 0).create());
             scrollerPane.setBackground(scroller.getBackground());
-            // Create new components for selected function's arguments
-            String[] mappingArgs = function.equals(origFunction) ? ((CustomMapping)mapping).getFunctionArguments() : null;
+            // Create new components for selected transformation's arguments
+            String[] mappingArgs =
+                transformation.equals(origTransformation) ? ((TransformationMapping)mapping).getTransformationArguments() : null;
             for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
                 final Class<?> type = types[typeNdx];
                 final int argNdx = typeNdx - 1;
@@ -280,7 +283,7 @@ class FunctionDialog extends BaseDialog {
                 label = new Label(cell, SWT.NONE);
                 label.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
                 label.setText(type.getSimpleName());
-                label.setToolTipText(type.getName());
+                label.setToolTipText(Util.name(type));
                 typeData.widthHint = Math.max(typeData.widthHint, cell.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
                 cell = newTableCell(scrollerPane, true, false, true);
                 label = new Label(cell, SWT.WRAP);
@@ -324,8 +327,8 @@ class FunctionDialog extends BaseDialog {
      */
     @Override
     protected String message() {
-        return "Select a function to transform the " + ((Model)mapping.getSource()).getName()
-               + " property's value, along with any applicable arguments";
+        return "Select a transformation for the " + ((Model)mapping.getSource()).getName()
+               + " property, along with any applicable arguments";
     }
 
     private Composite newTableCell(Composite parent,
@@ -355,7 +358,7 @@ class FunctionDialog extends BaseDialog {
      */
     @Override
     protected String title() {
-        return (origFunction == null ? "Add" : "Edit") + " Function";
+        return (origTransformation == null ? "Add" : "Edit") + " Transformation";
     }
 
     private void validate(Function annotation,

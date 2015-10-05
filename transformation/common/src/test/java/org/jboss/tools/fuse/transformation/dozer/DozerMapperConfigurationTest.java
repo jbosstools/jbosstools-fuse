@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.jboss.tools.fuse.transformation.CustomMapping;
+import org.jboss.tools.fuse.transformation.TransformationMapping;
 import org.jboss.tools.fuse.transformation.ExpressionMapping;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.MappingOperation;
@@ -316,36 +316,36 @@ public class DozerMapperConfigurationTest {
     }
 
     @Test
-    public void customMappingClassAndOperation() throws Exception {
-        final String functionClass = "org.foo.TestCustomizer";
-        final String functionName = "customMap";
+    public void setTransformation() throws Exception {
+        final String transformationClass = "org.foo.TestCustomizer";
+        final String transformationName = "customMap";
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model source = modelA.get("A1");
         Model target = modelB.get("B1");
         FieldMapping mapping = config.mapField(source, target);
-        config.customizeMapping(mapping, functionClass, functionName);
+        config.setTransformation(mapping, transformationClass, transformationName);
         Assert.assertEquals(1, config.getMappings().size());
-        CustomMapping custom = (CustomMapping)config.getMappings().get(0);
-        Assert.assertEquals(functionClass, custom.getFunctionClass());
-        Assert.assertEquals(functionName, custom.getFunctionName());
-        Assert.assertEquals(0, custom.getFunctionArguments().length);
+        TransformationMapping custom = (TransformationMapping)config.getMappings().get(0);
+        Assert.assertEquals(transformationClass, custom.getTransformationClass());
+        Assert.assertEquals(transformationName, custom.getTransformationName());
+        Assert.assertEquals(0, custom.getTransformationArguments().length);
     }
 
     @Test
-    public void customMappingFunctionWithArguments() throws Exception {
-        final String functionClass = "org.foo.TestCustomizer";
-        final String functionName = "customMap";
+    public void setTransformationWithArguments() throws Exception {
+        final String transformationClass = "org.foo.TestCustomizer";
+        final String transformationName = "customMap";
         final String arg = Boolean.class.getName() + "=" + "true";
         DozerMapperConfiguration config = loadConfig("emptyDozerMapping.xml");
         Model source = modelA.get("A1");
         Model target = modelB.get("B1");
         FieldMapping mapping = config.mapField(source, target);
-        config.customizeMapping(mapping, functionClass, functionName, arg);
+        config.setTransformation(mapping, transformationClass, transformationName, arg);
         Assert.assertEquals(1, config.getMappings().size());
-        CustomMapping custom = (CustomMapping)config.getMappings().get(0);
-        Assert.assertEquals(functionClass, custom.getFunctionClass());
-        Assert.assertEquals(functionName, custom.getFunctionName());
-        String[] args = custom.getFunctionArguments();
+        TransformationMapping custom = (TransformationMapping)config.getMappings().get(0);
+        Assert.assertEquals(transformationClass, custom.getTransformationClass());
+        Assert.assertEquals(transformationName, custom.getTransformationName());
+        String[] args = custom.getTransformationArguments();
         Assert.assertEquals(1, args.length);
         Assert.assertEquals(arg, args[0]);
     }
@@ -362,10 +362,10 @@ public class DozerMapperConfigurationTest {
 
         // Edit mappings
         for (MappingOperation<?,?> mapping : config.getMappings()) {
-            if (mapping instanceof CustomMapping) {
-                CustomMapping custom = (CustomMapping)mapping;
-                custom.setFunctionClass(custom.getFunctionClass() + "Edited");
-                custom.setFunctionName(custom.getFunctionName() + "Edited");
+            if (mapping instanceof TransformationMapping) {
+                TransformationMapping custom = (TransformationMapping)mapping;
+                custom.setTransformationClass(custom.getTransformationClass() + "Edited");
+                custom.setTransformationName(custom.getTransformationName() + "Edited");
             } else if (mapping instanceof ExpressionMapping) {
                 ExpressionMapping expression = (ExpressionMapping)mapping;
                 expression.getSource().setExpression("customerNumber");
@@ -383,9 +383,9 @@ public class DozerMapperConfigurationTest {
     @Test
     public void loadCustomMappingConfig() throws Exception {
         DozerMapperConfiguration config = loadConfig("customMapping.xml");
-        CustomMapping custom = (CustomMapping)config.getMappings().get(0);
-        Assert.assertEquals(CUSTOM_CLASS, custom.getFunctionClass());
-        Assert.assertEquals(CUSTOM_OPERATION, custom.getFunctionName());
+        TransformationMapping custom = (TransformationMapping)config.getMappings().get(0);
+        Assert.assertEquals(CUSTOM_CLASS, custom.getTransformationClass());
+        Assert.assertEquals(CUSTOM_OPERATION, custom.getTransformationName());
     }
 
     @Test

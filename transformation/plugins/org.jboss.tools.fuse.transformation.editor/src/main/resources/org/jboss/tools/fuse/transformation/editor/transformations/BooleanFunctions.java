@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.tools.fuse.transformation.editor.function;
+package org.jboss.tools.fuse.transformation.editor.transformations;
 
 public class BooleanFunctions {
 

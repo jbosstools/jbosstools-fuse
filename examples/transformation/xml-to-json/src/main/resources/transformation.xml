@@ -13,16 +13,16 @@
             <b>custId</b>
         </field>
         <field>
-            <a>header.orderNum</a>
-            <b>orderId</b>
-        </field>
-        <field>
             <a>header.status</a>
             <b>priority</b>
         </field>
         <field>
             <a>orderItems.item</a>
             <b>lineItems</b>
+        </field>
+        <field>
+            <a>header.orderNum</a>
+            <b>orderId</b>
         </field>
     </mapping>
     <mapping>

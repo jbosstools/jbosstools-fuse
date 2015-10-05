@@ -29,7 +29,7 @@ public class Activator extends AbstractUIPlugin {
     private static Activator plugin;
 
     public static final String PLUGIN_ID = "org.jboss.tools.fuse.transformation.editor";
-    public static final String FUNCTION_EXTENSION_POINT = PLUGIN_ID + ".function";
+    public static final String TRANSFORMATION_EXTENSION_POINT = PLUGIN_ID + ".function";
 
     /**
      * @param red

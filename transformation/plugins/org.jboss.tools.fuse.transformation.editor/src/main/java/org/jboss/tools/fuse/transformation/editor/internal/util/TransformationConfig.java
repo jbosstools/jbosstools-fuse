@@ -21,13 +21,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.jboss.tools.fuse.transformation.CustomMapping;
 import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.ExpressionMapping;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.MapperConfiguration;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
+import org.jboss.tools.fuse.transformation.TransformationMapping;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.VariableMapping;
 import org.jboss.tools.fuse.transformation.dozer.DozerMapperConfiguration;
@@ -44,9 +44,9 @@ public class TransformationConfig implements MapperConfiguration {
     public static final String MAPPING = "mapping";
 
     /**
-     * Property change event type for changing a mapping's customization
+     * Property change event type for changing a mapping's transformation
      */
-    public static final String MAPPING_CUSTOMIZE = "mappingCustomize";
+    public static final String MAPPING_TRANSFORMATION = "mappingTransformation";
 
     /**
      * Property change event type for changing a mapping's source
@@ -107,41 +107,12 @@ public class TransformationConfig implements MapperConfiguration {
         listeners.add(listener);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration #addVariable(java.lang.String, java.lang.String)
-     */
     @Override
     public Variable addVariable(final String name,
                                 final String value) {
         final Variable variable = delegate.addVariable(name, value);
         fireEvent(VARIABLE, null, variable);
         return variable;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.MapperConfiguration#customizeMapping(org.jboss.tools.fuse.transformation.FieldMapping,
-     *      java.lang.String, java.lang.String, java.lang.String[])
-     */
-    @Override
-    public CustomMapping customizeMapping(FieldMapping fieldMapping,
-                                          String functionClass,
-                                          String functionName,
-                                          String... functionArguments) {
-        FieldMapping origFieldMapping = fieldMapping;
-        if (fieldMapping.getType() == MappingType.CUSTOM) {
-            delegate.removeMapping(fieldMapping);
-            fieldMapping = delegate.mapField(fieldMapping.getSource(),
-                                             fieldMapping.getTarget(),
-                                             indexes(fieldMapping.getSource(), fieldMapping.getSourceIndex()),
-                                             indexes(fieldMapping.getTarget(), fieldMapping.getTargetIndex()));
-        }
-        final CustomMapping customMapping = delegate.customizeMapping(fieldMapping, functionClass, functionName, functionArguments);
-        fireEvent(MAPPING_CUSTOMIZE, origFieldMapping, customMapping);
-        return customMapping;
     }
 
     Model find(final Object object,
@@ -443,6 +414,40 @@ public class TransformationConfig implements MapperConfiguration {
         fireEvent(MAPPING, mapping, null);
     }
 
+    @Override
+    public TransformationMapping setTransformation(FieldMapping fieldMapping,
+                                                   String transformationClass,
+                                                   String transformationName,
+                                                   String... transformationArguments) {
+        FieldMapping origFieldMapping = fieldMapping;
+        if (fieldMapping.getType() == MappingType.TRANSFORMATION) {
+            delegate.removeMapping(fieldMapping);
+            fieldMapping = delegate.mapField(fieldMapping.getSource(),
+                                             fieldMapping.getTarget(),
+                                             indexes(fieldMapping.getSource(), fieldMapping.getSourceIndex()),
+                                             indexes(fieldMapping.getTarget(), fieldMapping.getTargetIndex()));
+        }
+        final TransformationMapping xformMapping =
+            delegate.setTransformation(fieldMapping, transformationClass, transformationName, transformationArguments);
+        fireEvent(MAPPING_TRANSFORMATION, origFieldMapping, xformMapping);
+        return xformMapping;
+    }
+
+    /**
+     * @param transformationMapping
+     * @return a new (non-transformation) field mapping
+     */
+    public FieldMapping removeTransformation(final TransformationMapping transformationMapping) {
+        delegate.removeMapping(transformationMapping);
+        final FieldMapping fieldMapping =
+            delegate.mapField(transformationMapping.getSource(),
+                              transformationMapping.getTarget(),
+                              indexes(transformationMapping.getSource(), transformationMapping.getSourceIndex()),
+                              indexes(transformationMapping.getTarget(), transformationMapping.getTargetIndex()));
+        fireEvent(MAPPING_TRANSFORMATION, transformationMapping, fieldMapping);
+        return fieldMapping;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -547,20 +552,6 @@ public class TransformationConfig implements MapperConfiguration {
         fireEvent(VARIABLE_VALUE, null, variable);
     }
 
-    /**
-     * @param customMapping
-     * @return a new (non-custom) field mapping
-     */
-    public FieldMapping uncustomizeMapping(final CustomMapping customMapping) {
-        delegate.removeMapping(customMapping);
-        final FieldMapping fieldMapping = delegate.mapField(customMapping.getSource(),
-                                                            customMapping.getTarget(),
-                                                            indexes(customMapping.getSource(), customMapping.getSourceIndex()),
-                                                            indexes(customMapping.getTarget(), customMapping.getTargetIndex()));
-        fireEvent(MAPPING_CUSTOMIZE, customMapping, fieldMapping);
-        return fieldMapping;
-    }
-
     private MappingOperation<?, ?> update(final MappingOperation<?, ?> mapping,
                                           final Object source,
                                           List<Integer> sourceIndexes,
@@ -578,12 +569,12 @@ public class TransformationConfig implements MapperConfiguration {
                 final Model sourceModel = (Model)source;
                 resultMapping =
                     delegate.mapField(sourceModel, target, indexes(sourceModel, sourceIndexes), indexes(target, targetIndexes));
-                if (mapping.getType() == MappingType.CUSTOM) {
-                    final CustomMapping customMapping = (CustomMapping)mapping;
-                    resultMapping = delegate.customizeMapping((FieldMapping)resultMapping,
-                                                              customMapping.getFunctionClass(),
-                                                              customMapping.getFunctionName(),
-                                                              customMapping.getFunctionArguments());
+                if (mapping.getType() == MappingType.TRANSFORMATION) {
+                    final TransformationMapping xformMapping = (TransformationMapping)mapping;
+                    resultMapping = delegate.setTransformation((FieldMapping)resultMapping,
+                                                               xformMapping.getTransformationClass(),
+                                                               xformMapping.getTransformationName(),
+                                                               xformMapping.getTransformationArguments());
                 }
             } else if (source instanceof Variable) {
                 if (mapping.getType() == MappingType.VARIABLE

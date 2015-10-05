@@ -12,7 +12,6 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -38,6 +37,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -48,7 +48,6 @@ import org.jboss.tools.fuse.transformation.Expression;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
-import org.eclipse.swt.widgets.FileDialog;
 
 /**
  *
@@ -265,7 +264,7 @@ public class ExpressionDialog extends BaseDialog {
         if (language != null) {
             languageComboViewer.setSelection(new StructuredSelection(language));
         }
-        
+
         valueOption.setSelection(false);
         valueOption.setEnabled(false);
         scriptOption.setSelection(false);
@@ -303,8 +302,8 @@ public class ExpressionDialog extends BaseDialog {
             path = "/" + path;
         }
         return path;
-    }    
-    
+    }
+
     private void updateExpression() {
         if (expression != null) {
             if (scriptOption.getSelection()) {
@@ -332,7 +331,7 @@ public class ExpressionDialog extends BaseDialog {
 
     @Override
     protected String title() {
-        return "Expression";
+        return "Set Expression";
     }
 
     private String getParameterPart(String expression, int idx) {
@@ -359,8 +358,8 @@ public class ExpressionDialog extends BaseDialog {
             final IStructuredSelection selection =
                     (IStructuredSelection)scriptTypeComboViewer.getSelection();
             String value = (String) selection.getFirstElement();
-            browseBtn.setEnabled(value != null 
-                    && (value.equalsIgnoreCase("classpath") || value.equalsIgnoreCase("file")) 
+            browseBtn.setEnabled(value != null
+                    && (value.equalsIgnoreCase("classpath") || value.equalsIgnoreCase("file"))
                     && scriptOption.getSelection());
         }
     }
@@ -405,7 +404,7 @@ public class ExpressionDialog extends BaseDialog {
     @Override
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
-        shell.setText("Fuse Transformation");
+        shell.setText("Set Expression");
      }
 
 }

@@ -13,7 +13,6 @@ package org.jboss.tools.fuse.transformation.editor.internal;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
@@ -24,7 +23,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.util.CanceledDialogException;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.model.Model;
@@ -51,54 +49,39 @@ public final class TargetTabFolder extends ModelTabFolder {
                                          new ViewerDropAdapter(viewer.treeViewer) {
 
             @Override
-            public boolean performDrop(final Object data) {
+            public boolean performDrop(Object data) {
                 try {
                     final Object source =
-                        ((IStructuredSelection) LocalSelectionTransfer.getTransfer()
-                                                                      .getSelection())
-                                                                      .getFirstElement();
+                        ((IStructuredSelection)LocalSelectionTransfer.getTransfer().getSelection()).getFirstElement();
                     FieldMapping mapping = null;
                     if (source instanceof Model) {
-                        final Model sourceModel = (Model)source;
-                        final Model targetModel = (Model)getCurrentTarget();
-                        final boolean sourceIsOrInCollection = Util.isOrInCollection(sourceModel);
-                        final boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
+                        Model sourceModel = (Model)source;
+                        Model targetModel = (Model)getCurrentTarget();
+                        boolean sourceIsOrInCollection = Util.isOrInCollection(sourceModel);
+                        boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
 
-                        if (sourceIsOrInCollection == targetIsOrInCollection) {
+                        if (sourceIsOrInCollection == targetIsOrInCollection)
                             mapping = config.mapField(sourceModel, targetModel, null, null);
-                        } else try {
-                            final List<Integer> sourceIndexes = sourceIsOrInCollection
-                                                                ? Util.indexes(getShell(),
-                                                                               sourceModel, true)
-                                                                : null;
-                            final List<Integer> targetIndexes = targetIsOrInCollection
-                                                                ? Util.indexes(getShell(),
-                                                                               targetModel, false)
-                                                                : null;
-                            mapping =
-                                config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
-                        } catch (CanceledDialogException e) {
-                            return false;
+                        else {
+                            List<Integer> sourceIndexes =
+                                sourceIsOrInCollection ? Util.updateIndexes(null, sourceModel, null) : null;
+                            List<Integer> targetIndexes =
+                                targetIsOrInCollection ? Util.updateIndexes(null, targetModel, null) : null;
+                            mapping = config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
                         }
                     } else {
-                        final Variable variable = (Variable)source;
-                        final Model targetModel = (Model)getCurrentTarget();
-                        final List<Integer> indexes =
-                                Util.isOrInCollection(targetModel)
-                                ? Util.indexes(getShell(), targetModel, false)
-                                : null;
+                        Variable variable = (Variable)source;
+                        Model targetModel = (Model)getCurrentTarget();
+                        List<Integer> indexes =
+                            Util.isOrInCollection(targetModel) ? Util.updateIndexes(null, targetModel, null) : null;
                         config.mapVariable(variable, targetModel, indexes);
                     }
 
-                    if (mapping != null
-                        && Util.modelsNeedDateFormat(mapping.getSource(),
-                                                     mapping.getTarget(),
-                                                     false)) {
+                    if (mapping != null && Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), false))
                         Util.updateDateFormat(getShell(), mapping);
-                    }
                     config.save();
                     return true;
-                } catch (final Exception e) {
+                } catch (Exception e) {
                     Activator.error(e);
                     return false;
                 }

@@ -69,13 +69,13 @@
    <extension
          point="org.jboss.tools.fuse.transformation.editor.function">
       <Function
-            class="org.jboss.tools.fuse.transformation.editor.function.StringFunctions">
+            class="org.jboss.tools.fuse.transformation.editor.transformations.StringFunctions">
       </Function>
       <Function
-            class="org.jboss.tools.fuse.transformation.editor.function.BooleanFunctions">
+            class="org.jboss.tools.fuse.transformation.editor.transformations.BooleanFunctions">
       </Function>
       <Function
-            class="org.jboss.tools.fuse.transformation.editor.function.NumericFunctions">
+            class="org.jboss.tools.fuse.transformation.editor.transformations.NumericFunctions">
       </Function>
    </extension>
 </plugin>

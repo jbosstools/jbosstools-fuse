@@ -10,7 +10,6 @@
 package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.util.Iterator;
-
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,7 +39,6 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
@@ -50,7 +48,6 @@ import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
-import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
@@ -102,18 +99,10 @@ public final class VariablesViewer extends Composite {
         nameColumn.setLabelProvider(new ColumnLabelProvider() {
 
             @Override
-            public Color getForeground(Object element) {
-                return Colors.VARIABLE;
-            }
-
-            @Override
             public Image getImage(final Object element) {
                 final Image img = Images.VARIABLE;
-                if (config.mapped((Variable) element)) {
-                    return new DecorationOverlayIcon(img,
-                                                     Decorations.MAPPED,
-                                                     IDecoration.BOTTOM_RIGHT).createImage();
-                }
+                if (config.mapped((Variable) element))
+                    return new DecorationOverlayIcon(img, Decorations.MAPPED, IDecoration.BOTTOM_RIGHT).createImage();
                 return img;
             }
 

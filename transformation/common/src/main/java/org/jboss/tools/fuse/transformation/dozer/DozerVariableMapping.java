@@ -75,7 +75,7 @@ public class DozerVariableMapping extends BaseDozerMapping implements VariableMa
     public void setVariable(Variable variable) {
         source = variable;
         // update the dozer config to reference the new variable name
-        getField().setCustomConverterParam(
+        getField().setCustomConverterArgument(
                 DozerVariableMapping.qualifyName(variable.getName()));
     }
     

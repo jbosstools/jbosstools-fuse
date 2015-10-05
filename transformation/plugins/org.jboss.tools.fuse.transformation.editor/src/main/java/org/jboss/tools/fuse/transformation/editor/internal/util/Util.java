@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.eclipse.core.resources.IContainer;
@@ -57,8 +58,8 @@ import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.function.Function.Arg;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
+import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
 import org.jboss.tools.fuse.transformation.model.Model;
 
 public class Util {
@@ -71,15 +72,13 @@ public class Util {
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
-    public static final String FUNCTIONS_FOLDER = ".functions";
+    public static final String TRANSFORMATIONS_FOLDER = ".transformations";
 
     /**
      * @return the object being dragged
      */
     public static Object draggedObject() {
-        return ((IStructuredSelection)LocalSelectionTransfer.getTransfer()
-                                                            .getSelection())
-                                                                            .getFirstElement();
+        return ((IStructuredSelection)LocalSelectionTransfer.getTransfer().getSelection()).getFirstElement();
     }
 
     /**
@@ -129,7 +128,7 @@ public class Util {
                                              final StringBuilder builder) {
         if (model.getParent() != null) {
             fullyQualifiedName(model.getParent(), builder);
-            builder.append('.');
+            builder.append('/');
         }
         builder.append(model.getName());
         return builder.toString();
@@ -178,15 +177,37 @@ public class Util {
         return dlg.getFormatString();
     }
 
-    public static List<Integer> indexes(final Shell shell,
-                                        final Model model,
-                                        final boolean source) throws CanceledDialogException {
-        if (Util.isOrInCollection(model)) {
-            final IndexesDialog dlg = new IndexesDialog(shell, model, source);
-            if (dlg.open() == Window.OK) return dlg.indexes;
-            throw new CanceledDialogException();
-        }
-        return null;
+    public static boolean indexed(MappingOperation<?, ?> mapping) {
+        if (mapping == null) return false;
+        if (mapping.getSource() instanceof Model && mapping.getTarget() instanceof Model)
+            return isOrInCollection((Model)mapping.getSource()) != isOrInCollection((Model)mapping.getTarget());
+        return false;
+    }
+
+    public static List<Integer> updateIndexes(MappingOperation<?, ?> mapping,
+                                              Object object,
+                                              List<Integer> indexes) {
+        if (!(object instanceof Model)) return null;
+        List<Integer> updateIndexes = new ArrayList<>();
+        updateIndexes(((Model)object).getParent(),
+                      indexes,
+                      indexes == null ? -1 : indexes.size() - 1,
+                      updateIndexes,
+                      indexed(mapping));
+        return updateIndexes;
+    }
+
+    private static void updateIndexes(Model model,
+                                      List<Integer> indexes,
+                                      int indexesIndex,
+                                      List<Integer> updateIndexes,
+                                      boolean indexed) {
+        if (model == null) return;
+        updateIndexes(model.getParent(), indexes, indexesIndex - 1, updateIndexes, indexed);
+        if (model.isCollection() && indexed) {
+            Integer index = indexes.get(indexesIndex);
+            updateIndexes.add(index == null ? 0 : index);
+        } else updateIndexes.add(null);
     }
 
     public static boolean isOrInCollection(final Model model) {
@@ -218,6 +239,12 @@ public class Util {
             }
         }
         return false;
+    }
+
+    public static String name(Class<?> type) {
+        if (type == String.class) return "string";
+        if (type == Date.class) return "date";
+        return type.getName().replace('.', '/');
     }
 
     public static String nonPrimitiveClassName(String type) {
@@ -273,7 +300,7 @@ public class Util {
                     }
                 } else if (element instanceof IParent
                            && !element.getPath().toString().contains("/test/")
-                           && !element.getPath().toString().endsWith("/" + FUNCTIONS_FOLDER)
+                           && !element.getPath().toString().endsWith("/" + TRANSFORMATIONS_FOLDER)
                            && (!(element instanceof IPackageFragmentRoot)
                            || !((IPackageFragmentRoot)element).isExternal())) {
                     populateClasses(shell, (IParent)element, types, filter);
@@ -403,30 +430,6 @@ public class Util {
     /**
      * @param shell
      * @param project
-     * @return the selected file
-     */
-    public static IType selectClass(final Shell shell,
-                                    final IProject project) {
-        return selectClass(shell, project, null);
-    }
-
-    /**
-     * @param shell
-     * @param project
-     * @param filter
-     * @return the selected file
-     */
-    public static IType selectClass(final Shell shell,
-                                    final IProject project,
-                                    final Filter filter) {
-        return selectClass(shell, project, filter,
-                           "Select Custom Function(s) Class",
-                           "Select a custom function(s) class");
-    }
-
-    /**
-     * @param shell
-     * @param project
      * @param filter
      * @param title
      * @param message
@@ -449,6 +452,30 @@ public class Util {
         populateClasses(shell, JavaCore.create(project), types, filter);
         dlg.setElements(types.toArray());
         return dlg.open() == Window.OK ? (IType)dlg.getFirstResult() : null;
+    }
+
+    /**
+     * @param shell
+     * @param project
+     * @return the selected file
+     */
+    public static IType selectCustomTransformationClass(final Shell shell,
+                                                        final IProject project) {
+        return selectCustomTransformationClass(shell, project, null);
+    }
+
+    /**
+     * @param shell
+     * @param project
+     * @param filter
+     * @return the selected file
+     */
+    public static IType selectCustomTransformationClass(final Shell shell,
+                                                        final IProject project,
+                                                        final Filter filter) {
+        return selectClass(shell, project, filter,
+                           "Select custom transformation(s) Class",
+                           "Select a custom transformation(s) class");
     }
 
     /**
@@ -700,13 +727,13 @@ public class Util {
     }
 
     /**
-     * @return <code>true</code> if the supplied value is valid for the supplied function argument's annotation and type
+     * @return <code>true</code> if the supplied value is valid for the supplied transformation argument's annotation and type
      * @param value
      *        An argument value to be validated
      * @param annotation
-     *        the function argument's annotation
+     *        the transformation argument's annotation
      * @param type
-     *        the function argument's type
+     *        the transformation argument's type
      */
     public static boolean valid(String value,
                                 Arg annotation,
@@ -747,232 +774,108 @@ public class Util {
 
     private Util() {}
 
-    /**
-     *
-     */
     public static interface Colors {
 
-        /**
-         *
-         */
         Color BACKGROUND = Activator.color(255, 255, 255);
 
-        /**
-         *
-         */
         Color CONTAINER = Activator.color(192, 192, 192);
 
-        /**
-         *
-         */
         Color CONTAINER_ALTERNATE = Activator.color(224, 224, 224);
 
-        /**
-         *
-         */
         Color DROP_TARGET_BACKGROUND = Activator.color(0, 0, 255);
 
-        /**
-         *
-         */
         Color DROP_TARGET_FOREGROUND = Activator.color(255, 255, 255);
 
-        /**
-         *
-         */
         Color EXPRESSION = Activator.color(192, 0, 192);
 
-        /**
-         *
-         */
         Color FOREGROUND = Activator.color(0, 0, 0);
 
-        /**
-         *
-         */
-        Color FUNCTION = Activator.color(192, 255, 192);
-
-        /**
-         *
-         */
-        Color FUNCTION_ALTERNATE = Activator.color(128, 255, 128);
-
-        /**
-         *
-         */
         Color POTENTIAL_DROP_TARGET1 = Activator.color(0, 0, 128);
 
-        /**
-         *
-         */
         Color POTENTIAL_DROP_TARGET2 = Activator.color(32, 32, 160);
 
-        /**
-         *
-         */
         Color POTENTIAL_DROP_TARGET3 = Activator.color(64, 64, 192);
 
-        /**
-         *
-         */
         Color POTENTIAL_DROP_TARGET4 = Activator.color(92, 92, 224);
 
-        /**
-         *
-         */
         Color POTENTIAL_DROP_TARGET5 = Activator.color(128, 128, 255);
 
-        /**
-         *
-         */
         Color POTENTIAL_DROP_TARGET6 = Activator.color(92, 92, 224);
 
-        /**
-         *
-         */
         Color POTENTIAL_DROP_TARGET7 = Activator.color(64, 64, 192);
 
-        /**
-         *
-         */
         Color POTENTIAL_DROP_TARGET8 = Activator.color(32, 32, 160);
 
-        /**
-         *
-         */
         Color SASH = Activator.color(64, 64, 64);
 
-        /**
-         *
-         */
-        Color SELECTED = Activator.color(180, 213, 255);
+        Color SELECTED = Activator.color(21, 81, 207);
 
-        /**
-         *
-         */
         Color SELECTED_NO_FOCUS = Activator.color(212, 212, 212);
 
-        /**
-         *
-         */
-        Color VARIABLE = Activator.color(0, 0, 192);
+        Color TRANSFORMATION = Activator.color(192, 255, 192);
+
+        Color TRANSFORMATION_ALTERNATE = Activator.color(128, 255, 128);
     }
 
-    /**
-     *
-     */
     public static interface Decorations {
 
-        /**
-         *
-         */
         ImageDescriptor ADD = Activator.imageDescriptor("addOverlay.gif");
 
-        /**
-         *
-         */
-        ImageDescriptor COLLECTION = Activator.imageDescriptor("collectionOverlay.gif");
+        ImageDescriptor LIST = Activator.imageDescriptor("listOverlay.gif");
 
-        /**
-         *
-         */
         ImageDescriptor MAPPED = Activator.imageDescriptor("mappedOverlay.gif");
     }
 
     /**
      * Provides users with the ability to further filter which classes appear in the dialog shown by
-     * {@link Util#selectClass(Shell, IProject, Filter)}
+     * {@link Util#selectClass(Shell, IProject, Filter, String, String)}
      */
     public static interface Filter {
 
         /**
          * @param type
          * @return <code>true</code> if the supplied type should appear in the dialog shown by
-         *         {@link Util#selectClass(Shell, IProject, Filter)}
+         *         {@link Util#selectClass(Shell, IProject, Filter, String, String)}
          */
         boolean accept(IType type);
     }
 
-    /**
-     *
-     */
     public static interface Images {
 
-        /**
-         *
-         */
-        Image ADD_FUNCTION = Activator.imageDescriptor("addFunction16.gif").createImage();
+        Image ADD = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 
-        /**
-         *
-         */
-        Image ADD =
-            PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
+        Image ADD_TRANSFORMATION = Activator.imageDescriptor("addTransformation16.gif").createImage();
 
-        /**
-         *
-         */
-        Image ATTRIBUTE = Activator.imageDescriptor("attribute16.gif").createImage();
-
-        /**
-         *
-         */
         Image CHANGE = Activator.imageDescriptor("change16.gif").createImage();
 
-        /**
-         *
-         */
         Image CLEAR = Activator.imageDescriptor("clear16.gif").createImage();
 
-        /**
-         *
-         */
         Image COLLAPSE_ALL = Activator.imageDescriptor("collapseAll16.gif").createImage();
 
-        /**
-         *
-         */
-        Image DELETE =
-            PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE);
+        Image DELETE = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE);
 
-        /**
-         *
-         */
-        Image ELEMENT = Activator.imageDescriptor("element16.gif").createImage();
-
-        /**
-         *
-         */
-        Image FILTER = Activator.imageDescriptor("filter16.gif").createImage();
-
-        /**
-         *
-         */
         Image HIDE_MAPPED = Activator.imageDescriptor("hideMapped16.gif").createImage();
 
-        /**
-         *
-         */
         Image MAPPED = Activator.imageDescriptor("mapped16.gif").createImage();
 
-        /**
-         *
-         */
+        Image MAPPED_NODE = Activator.imageDescriptor("mappedNode16.gif").createImage();
+
+        Image MAPPED_PROPERTY = Activator.imageDescriptor("mappedProperty16.gif").createImage();
+
         Image MENU = Activator.imageDescriptor("menu10x5.gif").createImage();
 
-        /**
-         *
-         */
+        Image NODE = Activator.imageDescriptor("node16.gif").createImage();
+
+        Image PROPERTY = Activator.imageDescriptor("property16.gif").createImage();
+
         Image SEARCH = Activator.imageDescriptor("search16.gif").createImage();
 
-        /**
-         *
-         */
+        Image SHOW_TYPES = Activator.imageDescriptor("showTypes32x16.gif").createImage();
+
+        Image TRANSFORMATION = Activator.imageDescriptor("transformation16.gif").createImage();
+
         Image TREE = Activator.imageDescriptor("tree16.gif").createImage();
 
-        /**
-         *
-         */
         Image VARIABLE = Activator.imageDescriptor("variable16.gif").createImage();
     }
 }
