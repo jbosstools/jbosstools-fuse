@@ -562,7 +562,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private void addDataFormatDefinitionDependency(DataFormatDefinition dataFormat) {
         Dependency dep = null;
 
-        if (dataFormat != null) {
+        if (dataFormat != null && dataFormat.getDataFormatName() != null) {
             if (dataFormat.getDataFormatName().equalsIgnoreCase("json-jackson")) {
                 dep = createDependency("org.apache.camel", "camel-jackson", org.fusesource.ide.camel.editor.Activator
                         .getDefault().getCamelVersion());
