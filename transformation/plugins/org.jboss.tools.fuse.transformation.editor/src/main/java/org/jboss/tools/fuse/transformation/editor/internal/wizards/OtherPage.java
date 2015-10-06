@@ -153,10 +153,10 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
                     if (selected != null) {
                         _javaClassText.setText(selected.getFullyQualifiedName());
                         if (isSourcePage()) {
-                            model.setSourceType(ModelType.CLASS);
+                            model.setSourceType(ModelType.OTHER);
                             model.setSourceFilePath(selected.getFullyQualifiedName());
                         } else {
-                            model.setTargetType(ModelType.CLASS);
+                            model.setTargetType(ModelType.OTHER);
                             model.setTargetFilePath(selected.getFullyQualifiedName());
                         }
                         final IType inner = selected;
