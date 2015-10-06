@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.graphiti.mm,
  org.eclipse.graphiti.ui,
  org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
- org.fusesource.ide.foundation.core;bundle-version="8.0.0"
+ org.fusesource.ide.foundation.core;bundle-version="8.0.0",
  org.fusesource.ide.camel.editor,
  org.fusesource.ide.commons,
  org.fusesource.ide.project,
