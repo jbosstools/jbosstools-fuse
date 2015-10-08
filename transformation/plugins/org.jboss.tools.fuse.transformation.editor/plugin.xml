@@ -29,7 +29,7 @@
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.core.runtime.xml"
-            describer="org.jboss.tools.fuse.transformation.editor.DozerConfigContentTypeDescriber"
+            describer="org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber"
             file-extensions="xml"
             id="org.jboss.tools.fuse.transformation.editor.dozer-config-content-type"
             name="%dozer-content-type.name"

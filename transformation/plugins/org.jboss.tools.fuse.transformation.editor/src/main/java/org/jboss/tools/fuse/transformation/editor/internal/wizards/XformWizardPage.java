@@ -16,7 +16,7 @@ import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.swt.DisplayRealm;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
@@ -34,7 +34,7 @@ import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizar
  */
 public abstract class XformWizardPage extends WizardPage {
 
-    final DataBindingContext context = new DataBindingContext(SWTObservables.getRealm(Display.getCurrent()));
+    final DataBindingContext context = new DataBindingContext(DisplayRealm.getRealm(Display.getCurrent()));
     final ObservablesManager observablesManager = new ObservablesManager();
     final Model model;
 

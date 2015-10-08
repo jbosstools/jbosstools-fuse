@@ -20,32 +20,32 @@ import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.model.Model;
 
 class PropertyDialog extends BaseDialog {
 
     final Model rootModel;
-    final TransformationConfig config;
+    final TransformationManager manager;
     final MappingOperation<?, ?> mapping;
     Model property;
 
     PropertyDialog(Shell shell,
-                Model rootModel,
-                TransformationConfig config,
-                MappingOperation<?, ?> mapping) {
+                   Model rootModel,
+                   TransformationManager manager,
+                   MappingOperation<?, ?> mapping) {
         super(shell);
         this.rootModel = rootModel;
-        this.config = config;
+        this.manager = manager;
         this.mapping = mapping;
-        property = Util.sourceModel(rootModel, config) ? (Model)mapping.getSource() : (Model)mapping.getTarget();
+        property = manager.source(rootModel) ? (Model)mapping.getSource() : (Model)mapping.getTarget();
     }
 
     @Override
     protected void constructContents(final Composite parent) {
         parent.setLayout(GridLayoutFactory.swtDefaults().create());
-        final ModelViewer modelViewer = new ModelViewer(config, parent, rootModel, null, null) {
+        final ModelViewer modelViewer = new ModelViewer(manager, parent, rootModel, null, null) {
 
             @Override
             boolean eligible(Model model) {
@@ -79,11 +79,12 @@ class PropertyDialog extends BaseDialog {
     }
 
     private boolean valid(Model model) {
-        if (Util.sourceModel(rootModel, config)) {
-            if (!Util.validSourceAndTarget(model, mapping.getTarget(), config)) return false;
-        } else if (!Util.validSourceAndTarget(mapping.getSource(), model, config)) return false;
+        boolean source = manager.source(rootModel);
+        if (source) {
+            if (!Util.validSourceAndTarget(model, mapping.getTarget(), manager)) return false;
+        } else if (!Util.validSourceAndTarget(mapping.getSource(), model, manager)) return false;
         // Ensure property types are the same if old property is in transformation mapping
-        if (Util.sourceModel(rootModel, config) && mapping.getType() == MappingType.TRANSFORMATION)
+        if (source && mapping.getType() == MappingType.TRANSFORMATION)
             return model.getType().equals(((Model)mapping.getSource()).getType());
         return true;
     }

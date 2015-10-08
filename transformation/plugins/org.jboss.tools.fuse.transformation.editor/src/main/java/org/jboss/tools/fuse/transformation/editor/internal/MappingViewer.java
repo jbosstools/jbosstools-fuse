@@ -28,7 +28,7 @@ import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
@@ -36,22 +36,22 @@ import org.jboss.tools.fuse.transformation.model.Model;
 
 abstract class MappingViewer {
 
-    final TransformationConfig config;
+    final TransformationManager manager;
     MappingOperation<?, ?> mapping;
     Composite sourcePropPane;
     Composite targetPropPane;
     DropTarget sourceDropTarget;
-    DropTarget targetDropTarget;
-    final List<PotentialDropTarget> potentialDropTargets;
+    private DropTarget targetDropTarget;
+    private final List<PotentialDropTarget> potentialDropTargets;
 
-    MappingViewer(final TransformationConfig config,
-                  final List<PotentialDropTarget> potentialDropTargets) {
-        this.config = config;
+    MappingViewer(TransformationManager manager,
+                  List<PotentialDropTarget> potentialDropTargets) {
+        this.manager = manager;
         this.potentialDropTargets = potentialDropTargets;
     }
 
-    Composite createPropertyPane(final Composite parent,
-                                 final int style) {
+    Composite createPropertyPane(Composite parent,
+                                 int style) {
         Composite pane = new Composite(parent, SWT.BORDER);
         pane.setLayout(GridLayoutFactory.fillDefaults().create());
         CLabel label = new CLabel(pane, style);
@@ -60,8 +60,8 @@ abstract class MappingViewer {
         return pane;
     }
 
-    void createSourcePropertyPane(final Composite parent,
-                                  final int style) {
+    void createSourcePropertyPane(Composite parent,
+                                  int style) {
         sourcePropPane = createPropertyPane(parent, style);
         setSourceText();
         CLabel label = (CLabel)sourcePropPane.getChildren()[0];
@@ -71,10 +71,13 @@ abstract class MappingViewer {
 
             @Override
             boolean draggingFromValidObject() {
-                return Util.draggingFromValidSource(config)
-                       && Util.validSourceAndTarget(Util.draggedObject(),
-                                                    mapping.getTarget(),
-                                                    config);
+                Object source = Util.draggedObject();
+                boolean valid = Util.draggingFromValidSource(manager)
+                                && Util.validSourceAndTarget(source, mapping.getTarget(), manager);
+                // Ensure property types are the same if old property is in transformation mapping
+                if (valid && mapping.getType() == MappingType.TRANSFORMATION)
+                    return source instanceof Model && ((Model)source).getType().equals(((Model)mapping.getSource()).getType());
+                return valid;
             }
 
             @Override
@@ -87,15 +90,13 @@ abstract class MappingViewer {
             @Override
             public boolean valid() {
                 return mapping.getType() != MappingType.TRANSFORMATION
-                       && Util.draggingFromValidSource(config)
-                       && Util.validSourceAndTarget(Util.draggedObject(),
-                                                    mapping.getTarget(),
-                                                    config);
+                       && Util.draggingFromValidSource(manager)
+                       && Util.validSourceAndTarget(Util.draggedObject(), mapping.getTarget(), manager);
             }
         });
     }
 
-    void createTargetPropertyPane(final Composite parent) {
+    void createTargetPropertyPane(Composite parent) {
         targetPropPane = createPropertyPane(parent, SWT.NONE);
         setTargetText();
         CLabel label = (CLabel)targetPropPane.getChildren()[0];
@@ -105,10 +106,8 @@ abstract class MappingViewer {
 
             @Override
             boolean draggingFromValidObject() {
-                return Util.draggingFromValidTarget(config)
-                       && Util.validSourceAndTarget(mapping.getSource(),
-                                                    Util.draggedObject(),
-                                                    config);
+                return Util.draggingFromValidTarget(manager)
+                       && Util.validSourceAndTarget(mapping.getSource(), Util.draggedObject(), manager);
             }
 
             @Override
@@ -121,10 +120,10 @@ abstract class MappingViewer {
             @Override
             public boolean valid() {
                 return mapping.getType() != MappingType.TRANSFORMATION
-                       && Util.draggingFromValidTarget(config)
+                       && Util.draggingFromValidTarget(manager)
                        && Util.validSourceAndTarget(mapping.getSource(),
                                                     Util.draggedObject(),
-                                                    config);
+                                                    manager);
             }
         });
     }
@@ -132,9 +131,9 @@ abstract class MappingViewer {
     void dispose() {
         sourceDropTarget.dispose();
         targetDropTarget.dispose();
-        for (final Iterator<PotentialDropTarget> iter = potentialDropTargets.iterator();
+        for (Iterator<PotentialDropTarget> iter = potentialDropTargets.iterator();
              iter.hasNext();) {
-               final PotentialDropTarget potentialDropTarget = iter.next();
+               PotentialDropTarget potentialDropTarget = iter.next();
                if (potentialDropTarget.control == sourcePropPane.getChildren()[0]
                    || potentialDropTarget.control == targetPropPane.getChildren()[0]) {
                    iter.remove();
@@ -142,40 +141,27 @@ abstract class MappingViewer {
         }
     }
 
-    void dropOnSource() throws Exception {
+    private void dropOnSource() throws Exception {
         setSource(Util.draggedObject());
     }
 
-    void dropOnTarget() throws Exception {
+    private void dropOnTarget() throws Exception {
         setTarget((Model)Util.draggedObject());
     }
 
-    boolean equals(final MappingOperation<?, ?> mapping,
-                   final Object object) {
-        if (mapping == object) {
-            return true;
-        }
-        if (mapping == null || object == null) {
-            return false;
-        }
-        if (!(object instanceof MappingOperation<?, ?>)) {
-            return false;
-        }
-        final MappingOperation<?, ?> mapping2 = (MappingOperation<?, ?>)object;
-        if (mapping.getSource() == mapping2.getSource()
-            && mapping.getTarget() == mapping2.getTarget()) {
-            return true;
-        }
-        if (mapping.getSource() != null && !mapping.getSource().equals(mapping2.getSource())) {
-            return false;
-        }
-        if (mapping.getTarget() != null && !mapping.getTarget().equals(mapping2.getTarget())) {
-            return false;
-        }
+    boolean equals(MappingOperation<?, ?> mapping,
+                   Object object) {
+        if (mapping == object) return true;
+        if (mapping == null || object == null) return false;
+        if (!(object instanceof MappingOperation<?, ?>)) return false;
+        MappingOperation<?, ?> mapping2 = (MappingOperation<?, ?>)object;
+        if (mapping.getSource() == mapping2.getSource() && mapping.getTarget() == mapping2.getTarget()) return true;
+        if (mapping.getSource() != null && !mapping.getSource().equals(mapping2.getSource())) return false;
+        if (mapping.getTarget() != null && !mapping.getTarget().equals(mapping2.getTarget())) return false;
         return true;
     }
 
-    String name(final Object object) {
+    String name(Object object) {
         if (object instanceof Model) return ((Model)object).getName();
         if (object instanceof Variable) return ((Variable)object).getName();
         if (object instanceof Expression) return ((Expression)object).getLanguage();
@@ -183,54 +169,27 @@ abstract class MappingViewer {
     }
 
     void setSource(Object source) throws Exception {
-        Model targetModel = (Model)mapping.getTarget();
-        if (targetModel == null) mapping = config.setSource(mapping, source, null, null);
-        else {
-            boolean sourceIsOrInCollection = source instanceof Model && Util.isOrInCollection((Model)source);
-            boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
-            if (sourceIsOrInCollection == targetIsOrInCollection) {
-                mapping = config.setSource(mapping, source, null, null);
-            } else {
-                List<Integer> sourceIndexes =
-                    sourceIsOrInCollection ? Util.updateIndexes(mapping, source, mapping.getSourceIndex()) : null;
-                List<Integer> targetIndexes =
-                    targetIsOrInCollection ? Util.updateIndexes(mapping, targetModel, mapping.getTargetIndex()) : null;
-                mapping = config.setSource(mapping, source, sourceIndexes, targetIndexes);
-            }
-        }
-        if (mapping != null) Util.updateDateFormat(sourcePropPane.getShell(), mapping);
-        config.save();
+        mapping = manager.setSource(mapping, source);
+        Util.updateDateFormat(sourcePropPane.getShell(), mapping);
+        manager.save();
     }
 
     void setSourceText() {
         setText(sourcePropPane, mapping.getSource());
     }
 
-    void setTarget(final Model targetModel) throws Exception {
-        Object source = mapping.getSource();
-        if (source == null) mapping = config.setTarget(mapping, targetModel, null, null);
-        else {
-            boolean sourceIsOrInCollection = source instanceof Model && Util.isOrInCollection((Model)source);
-            boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
-            if (sourceIsOrInCollection == targetIsOrInCollection) mapping = config.setTarget(mapping, targetModel, null, null);
-            else {
-                List<Integer> sourceIndexes =
-                    sourceIsOrInCollection ? Util.updateIndexes(mapping, source, mapping.getSourceIndex()) : null;
-                List<Integer> targetIndexes =
-                    targetIsOrInCollection ? Util.updateIndexes(mapping, targetModel, mapping.getTargetIndex()) : null;
-                mapping = config.setTarget(mapping, targetModel, sourceIndexes, targetIndexes);
-            }
-        }
-        if (mapping != null) Util.updateDateFormat(sourcePropPane.getShell(), mapping);
-        config.save();
+    void setTarget(Model target) throws Exception {
+        mapping = manager.setTarget(mapping, target);
+        Util.updateDateFormat(sourcePropPane.getShell(), mapping);
+        manager.save();
     }
 
     void setTargetText() {
         setText(targetPropPane, mapping.getTarget());
     }
 
-    private void setText(final Composite propPane,
-                         final Object object) {
+    private void setText(Composite propPane,
+                         Object object) {
         CLabel label = (CLabel)propPane.getChildren()[0];
         label.setText(name(object));
         if (object instanceof Model) {
@@ -254,23 +213,21 @@ abstract class MappingViewer {
         }
     }
 
-    String variableToolTip(final Variable variable) {
+    private String variableToolTip(Variable variable) {
         return "\"" + variable.getValue() + "\"";
     }
 
-    void variableValueUpdated(final Variable variable) {
-        if (mapping != null && variable.equals(mapping.getSource())) {
-            sourcePropPane.setToolTipText(variableToolTip(variable));
-        }
+    void variableValueUpdated(Variable variable) {
+        if (mapping != null && variable.equals(mapping.getSource())) sourcePropPane.setToolTipText(variableToolTip(variable));
     }
 
-    abstract class DropListener extends DropTargetAdapter {
+    private abstract class DropListener extends DropTargetAdapter {
 
         private final CLabel dropLabel;
         private Color background;
         private Color foreground;
 
-        DropListener(final CLabel dropLabel) {
+        private DropListener(final CLabel dropLabel) {
             this.dropLabel = dropLabel;
         }
 
@@ -278,7 +235,7 @@ abstract class MappingViewer {
         public final void dragEnter(final DropTargetEvent event) {
             background = dropLabel.getBackground();
             foreground = dropLabel.getForeground();
-            if (mapping.getType() != MappingType.TRANSFORMATION && draggingFromValidObject()) {
+            if (draggingFromValidObject()) {
                 dropLabel.setBackground(Colors.DROP_TARGET_BACKGROUND);
                 dropLabel.setForeground(Colors.DROP_TARGET_FOREGROUND);
             } else {
@@ -299,9 +256,7 @@ abstract class MappingViewer {
         @Override
         public final void drop(final DropTargetEvent event) {
             try {
-                if (draggingFromValidObject()) {
-                    drop();
-                }
+                if (draggingFromValidObject()) drop();
             } catch (final Exception e) {
                 Activator.error(e);
             }

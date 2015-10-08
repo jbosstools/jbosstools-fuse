@@ -23,7 +23,6 @@ import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -47,48 +46,35 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
-/**
- *
- */
-public final class VariablesViewer extends Composite {
+public class VariablesViewer extends Composite {
 
     final TableViewer tableViewer;
 
-    /**
-     * @param config
-     * @param parent
-     */
-    public VariablesViewer(final TransformationConfig config,
-                           final Composite parent) {
+    public VariablesViewer(final TransformationManager manager,
+                           Composite parent) {
         super(parent, SWT.NONE);
 
         setLayout(GridLayoutFactory.fillDefaults().create());
         setBackground(parent.getParent().getParent().getBackground());
 
         // Create tool bar
-        final ToolBar toolBar = new ToolBar(this, SWT.NONE);
-        final ToolItem addButton = new ToolItem(toolBar, SWT.PUSH);
-        addButton.setImage(new DecorationOverlayIcon(Images.VARIABLE,
-                                                     Decorations.ADD,
-                                                     IDecoration.TOP_RIGHT).createImage());
+        ToolBar toolBar = new ToolBar(this, SWT.NONE);
+        ToolItem addButton = new ToolItem(toolBar, SWT.PUSH);
+        addButton.setImage(new DecorationOverlayIcon(Images.VARIABLE, Decorations.ADD, IDecoration.TOP_RIGHT).createImage());
         addButton.setToolTipText("Add a new variable");
         final ToolItem deleteButton = new ToolItem(toolBar, SWT.PUSH);
-        deleteButton.setImage(PlatformUI.getWorkbench()
-                                        .getSharedImages()
-                                        .getImage(ISharedImages.IMG_ETOOL_DELETE));
+        deleteButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE));
         deleteButton.setToolTipText("Delete the selected variable(s)");
         deleteButton.setEnabled(false);
 
         // Create table
         tableViewer = new TableViewer(this);
         tableViewer.getTable().setHeaderVisible(true);
-        tableViewer.getTable().setLayoutData(GridDataFactory.fillDefaults()
-                                                            .grab(true, true)
-                                                            .create());
+        tableViewer.getTable().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         tableViewer.setComparator(new ViewerComparator());
         tableViewer.setContentProvider(ArrayContentProvider.getInstance());
         // Create columns
@@ -99,15 +85,15 @@ public final class VariablesViewer extends Composite {
         nameColumn.setLabelProvider(new ColumnLabelProvider() {
 
             @Override
-            public Image getImage(final Object element) {
-                final Image img = Images.VARIABLE;
-                if (config.mapped((Variable) element))
+            public Image getImage(Object element) {
+                Image img = Images.VARIABLE;
+                if (manager.mapped((Variable) element))
                     return new DecorationOverlayIcon(img, Decorations.MAPPED, IDecoration.BOTTOM_RIGHT).createImage();
                 return img;
             }
 
             @Override
-            public String getText(final Object element) {
+            public String getText(Object element) {
                 return ((Variable) element).getName();
             }
         });
@@ -125,28 +111,28 @@ public final class VariablesViewer extends Composite {
             private final TextCellEditor cellEditor = new TextCellEditor(tableViewer.getTable());
 
             @Override
-            protected boolean canEdit(final Object element) {
+            protected boolean canEdit(Object element) {
                 return true;
             }
 
             @Override
-            protected CellEditor getCellEditor(final Object element) {
+            protected CellEditor getCellEditor(Object element) {
                 return cellEditor;
             }
 
             @Override
-            protected Object getValue(final Object element) {
-                return ((Variable) element).getValue();
+            protected Object getValue(Object element) {
+                return ((Variable)element).getValue();
             }
 
             @Override
-            protected void setValue(final Object element,
-                                    final Object value) {
-                Variable variable = (Variable) element;
-                config.setValue(variable, value.toString());
+            protected void setValue(Object element,
+                                    Object value) {
+                Variable variable = (Variable)element;
+                manager.setValue(variable, value.toString());
                 try {
-                    config.save();
-                    tableViewer.setInput(config.getVariables());
+                    manager.save();
+                    tableViewer.setInput(manager.variables());
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
@@ -154,42 +140,33 @@ public final class VariablesViewer extends Composite {
         });
 
         // Wire
-        tableViewer.addDragSupport(DND.DROP_MOVE,
-                new Transfer[] {LocalSelectionTransfer.getTransfer()}, new DragSourceAdapter() {
+        tableViewer.addDragSupport(DND.DROP_MOVE, new Transfer[] {LocalSelectionTransfer.getTransfer()}, new DragSourceAdapter() {
 
-                    @Override
-                    public void dragStart(final DragSourceEvent event) {
-                        LocalSelectionTransfer.getTransfer()
-                                              .setSelection(tableViewer.getSelection());
-                    }
-                });
+            @Override
+            public void dragStart(final DragSourceEvent event) {
+                LocalSelectionTransfer.getTransfer().setSelection(tableViewer.getSelection());
+            }
+        });
         addButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(final SelectionEvent event) {
-                final InputDialog dlg = new InputDialog(getShell(),
-                                                        "Add Variable",
-                                                        "Enter a new variable name",
-                                                        null,
-                                                        new IInputValidator() {
+            public void widgetSelected(SelectionEvent event) {
+                InputDialog dlg =
+                    new InputDialog(getShell(), "Add Variable", "Enter a new variable name", null, new IInputValidator() {
 
                     @Override
-                    public String isValid(final String text) {
-                        for (final Variable variable : config.getVariables()) {
-                            if (variable.getName().equals(text)) {
-                                return "Variable already exists";
-                            }
+                    public String isValid(String text) {
+                        for (final Variable variable : manager.variables()) {
+                            if (variable.getName().equals(text)) return "Variable already exists";
                         }
                         return null;
                     }
                 });
-                if (dlg.open() != Window.OK) {
-                    return;
-                }
-                config.addVariable(dlg.getValue(), dlg.getValue());
+                if (dlg.open() != Window.OK) return;
+                manager.addVariable(dlg.getValue(), dlg.getValue());
                 try {
-                    config.save();
-                    tableViewer.setInput(config.getVariables());
+                    manager.save();
+                    tableViewer.setInput(manager.variables());
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
@@ -198,52 +175,45 @@ public final class VariablesViewer extends Composite {
         tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             @Override
-            public void selectionChanged(final SelectionChangedEvent event) {
+            public void selectionChanged(SelectionChangedEvent event) {
                 deleteButton.setEnabled(!event.getSelection().isEmpty());
             }
         });
         deleteButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(final SelectionEvent event) {
+            public void widgetSelected(SelectionEvent event) {
                 boolean deleteAll = false;
                 try {
-                    for (final Iterator<?> iter =
-                            ((IStructuredSelection) tableViewer.getSelection()).iterator();
-                         iter.hasNext();) {
-                        final Variable variable = (Variable) iter.next();
-                        if (config.mapped(variable)) {
+                    for (Iterator<?> iter = tableViewer.getStructuredSelection().iterator(); iter.hasNext();) {
+                        Variable variable = (Variable) iter.next();
+                        if (manager.mapped(variable)) {
                             if (!deleteAll) {
-                                final MessageDialog dlg =
-                                        new MessageDialog(getShell(),
-                                                          "Confirm",
-                                                          null,
-                                                          "Variable \"" + variable.getName()
-                                                          + "\" is being used in one or more mappings.\n\n"
-                                                          + "Are you sure you want to delete it?",
-                                                          MessageDialog.WARNING,
-                                                          new String[] {
-                                                              "Cancel",
-                                                              "Yes",
-                                                              "Yes For All",
-                                                              "No"
-                                                          },
-                                                          3);
-                                final int button = dlg.open();
-                                if (button == 2) {
-                                    deleteAll = true;
-                                } else if (button == 3) {
-                                    continue;
-                                } else if (button < 1) {
-                                    return;
-                                }
+                                MessageDialog dlg = new MessageDialog(getShell(),
+                                                                      "Confirm",
+                                                                      null,
+                                                                      "Variable \"" + variable.getName()
+                                                                      + "\" is being used in one or more mappings.\n\n"
+                                                                      + "Are you sure you want to delete it?",
+                                                                      MessageDialog.WARNING,
+                                                                      new String[] {
+                                                                          "Cancel",
+                                                                          "Yes",
+                                                                          "Yes For All",
+                                                                          "No"
+                                                                      },
+                                                                      3);
+                                int button = dlg.open();
+                                if (button == 2) deleteAll = true;
+                                else if (button == 3) continue;
+                                else if (button < 1) return;
                             }
                         }
-                        config.removeVariable(variable);
+                        manager.removeVariable(variable);
                         tableViewer.remove(variable);
                     }
-                    config.save();
-                    tableViewer.setInput(config.getVariables());
+                    manager.save();
+                    tableViewer.setInput(manager.variables());
                 } catch (final Exception e) {
                     Activator.error(e);
                 }
@@ -251,14 +221,14 @@ public final class VariablesViewer extends Composite {
         });
 
         // Populate
-        tableViewer.setInput(config.getVariables());
+        tableViewer.setInput(manager.variables());
 
         // Expand name and value columns to fill initial width of table each time table is resized
         tableViewer.getTable().addControlListener(new ControlAdapter() {
 
             @Override
-            public void controlResized(final ControlEvent event) {
-                final int width = tableViewer.getTable().getSize().x / 2;
+            public void controlResized(ControlEvent event) {
+                int width = tableViewer.getTable().getSize().x / 2;
                 nameColumn.getColumn().setWidth(width);
                 valueColumn.getColumn().setWidth(width);
             }

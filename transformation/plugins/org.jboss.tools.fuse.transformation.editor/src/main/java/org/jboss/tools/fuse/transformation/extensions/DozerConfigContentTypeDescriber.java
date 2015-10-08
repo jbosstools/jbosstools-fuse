@@ -7,7 +7,7 @@
  *
  * Contributors: JBoss by Red Hat - Initial implementation.
  *****************************************************************************/
-package org.jboss.tools.fuse.transformation.editor;
+package org.jboss.tools.fuse.transformation.extensions;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -58,33 +59,43 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Decorations
 
 final class AddCustomTransformationDialog extends BaseDialog {
 
-    IProject project;
-    String sourceType;
+    private static final String[] TYPES = {
+        "java.lang.String",
+        "java.lang.Integer",
+        "java.lang.Boolean",
+        "java.lang.Long",
+        "java.lang.Double",
+        "java.lang.Float",
+        "java.util.Date",
+        "java.lang.Short",
+        "java.lang.Character",
+        "java.lang.Byte",
+    };
+
+    private final IProject project;
+    private final String sourceType;
     IType type;
     IMethod method;
 
-    AddCustomTransformationDialog(final Shell shell,
-                                  final IProject project,
-                                  final String sourceType) {
+    AddCustomTransformationDialog(Shell shell,
+                                  IProject project,
+                                  String sourceType) {
         super(shell);
         this.project = project;
-        this.sourceType = "java.lang.String".equals(sourceType) ? "String" : sourceType;
+        this.sourceType = Util.nonPrimitiveClassName(sourceType);
     }
 
     @Override
-    protected void constructContents(final Composite parent) {
+    protected void constructContents(Composite parent) {
         parent.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
         Label label = new Label(parent, SWT.NONE);
         label.setText("Class:");
         final Button classButton = new Button(parent, SWT.NONE);
-        classButton.setLayoutData(GridDataFactory.swtDefaults()
-                                                 .align(SWT.FILL, SWT.CENTER)
-                                                 .grab(true, false).create());
+        classButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).create());
         classButton.setAlignment(SWT.LEFT);
         classButton.setText("< Click to select an existing class >");
-        final Button newClassButton = new Button(parent, SWT.NONE);
-        newClassButton.setImage(new DecorationOverlayIcon(JavaUI.getSharedImages()
-                                                                .getImage(ISharedImages.IMG_OBJS_CLASS),
+        Button newClassButton = new Button(parent, SWT.NONE);
+        newClassButton.setImage(new DecorationOverlayIcon(JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_CLASS),
                                                           Decorations.ADD,
                                                           IDecoration.TOP_RIGHT).createImage());
         label = new Label(parent, SWT.NONE);
@@ -99,21 +110,20 @@ final class AddCustomTransformationDialog extends BaseDialog {
         methodComboViewer.setLabelProvider(new LabelProvider() {
 
             @Override
-            public String getText(final Object element) {
-                final IMethod method = (IMethod)element;
+            public String getText(Object element) {
+                IMethod method = (IMethod)element;
                 try {
-                    final StringBuilder builder = new StringBuilder();
+                    StringBuilder builder = new StringBuilder();
                     builder.append(Signature.getSignatureSimpleName(method.getReturnType()));
                     builder.append(" ");
                     builder.append(method.getElementName());
                     builder.append("(");
-                    final String[] types = method.getParameterTypes();
-                    final String[] names = method.getParameterNames();
+                    String[] types = method.getParameterTypes();
+                    String[] names = method.getParameterNames();
                     boolean hasPrm = false;
                     for (int ndx = 0; ndx < types.length; ndx++) {
-                        if (hasPrm) {
-                            builder.append(", ");
-                        } else {
+                        if (hasPrm) builder.append(", ");
+                        else {
                             builder.append(" ");
                             hasPrm = true;
                         }
@@ -121,12 +131,10 @@ final class AddCustomTransformationDialog extends BaseDialog {
                         builder.append(" ");
                         builder.append(names[ndx]);
                     }
-                    if (hasPrm) {
-                        builder.append(" ");
-                    }
+                    if (hasPrm) builder.append(" ");
                     builder.append(")");
                     return builder.toString();
-                } catch (final JavaModelException e) {
+                } catch (JavaModelException e) {
                     return "";
                 }
             }
@@ -134,27 +142,21 @@ final class AddCustomTransformationDialog extends BaseDialog {
         methodComboViewer.setComparator(new ViewerComparator() {
 
             @Override
-            public int compare(final Viewer viewer,
-                               final Object object1,
-                               final Object object2) {
-                final IMethod method1 = (IMethod)object1;
-                final IMethod method2 = (IMethod)object2;
+            public int compare(Viewer viewer,
+                               Object object1,
+                               Object object2) {
+                IMethod method1 = (IMethod)object1;
+                IMethod method2 = (IMethod)object2;
                 int comparison = method1.getElementName().compareTo(method2.getElementName());
-                if (comparison != 0) {
-                    return comparison;
-                }
-                final String[] types1 = method1.getParameterTypes();
-                final String[] types2 = method2.getParameterTypes();
+                if (comparison != 0) return comparison;
+                String[] types1 = method1.getParameterTypes();
+                String[] types2 = method2.getParameterTypes();
                 comparison = types1.length - types2.length;
-                if (comparison != 0) {
-                    return comparison;
-                }
+                if (comparison != 0) return comparison;
                 for (int ndx = 0; ndx < types1.length; ndx++) {
                     comparison =
                         Signature.getSignatureSimpleName(types1[ndx]).compareTo(Signature.getSignatureSimpleName(types2[ndx]));
-                    if (comparison != 0) {
-                        return comparison;
-                    }
+                    if (comparison != 0) return comparison;
                 }
                 return 0;
             }
@@ -162,212 +164,181 @@ final class AddCustomTransformationDialog extends BaseDialog {
         methodComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             @Override
-            public void selectionChanged(final SelectionChangedEvent event) {
+            public void selectionChanged(SelectionChangedEvent event) {
                 methodSelected(methodComboViewer);
             }
         });
         classButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(final SelectionEvent event) {
-                selectClass(classButton, methodComboViewer);
+            public void widgetSelected(SelectionEvent event) {
+                try {
+                    selectClass(classButton, methodComboViewer);
+                } catch (JavaModelException e) {
+                    Activator.error(e);
+                }
             }
         });
         newClassButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(final SelectionEvent event) {
+            public void widgetSelected(SelectionEvent event) {
                 createNewClass(classButton, methodComboViewer);
             }
         });
     }
 
-    void createNewClass(final Button classButton,
-                        final ComboViewer methodComboViewer) {
-        final OpenNewClassWizardAction action = new OpenNewClassWizardAction();
+    private void createNewClass(Button classButton,
+                                ComboViewer methodComboViewer) {
+        OpenNewClassWizardAction action = new OpenNewClassWizardAction();
         action.setSelection(new StructuredSelection(project));
-        final Page page = new Page(sourceType);
+        Page page = new Page(sourceType);
         page.init(new StructuredSelection(project));
         action.setConfiguredWizardPage(page);
         action.run();
-        final IType type = (IType)action.getCreatedElement();
+        IType type = (IType)action.getCreatedElement();
         if (type != null) {
             try {
-                type.createMethod("public " + page.returnType + " " + page.methodName + "("
-                                  + page.prmType + " input) {\n"
-                                  + "\treturn null;\n"
-                                  + "}",
+                if (page.returnType.equals("Date")) page.returnType = "java.util.Date";
+                if (page.prmType.equals("Date")) page.prmType = "java.util.Date";
+                type.createMethod("public " + page.returnType + " " + page.methodName + "(" + page.prmType + " input) {\n"
+                                  + "\treturn null;\n" + "}",
                                   null, false, null);
-                if (type.getCompilationUnit().isWorkingCopy()) {
-                    type.getCompilationUnit().commitWorkingCopy(true, null);
-                }
+                if (type.getCompilationUnit().isWorkingCopy()) type.getCompilationUnit().commitWorkingCopy(true, null);
                 setClass(type, classButton, methodComboViewer);
-            } catch (final Exception e) {
+            } catch (Exception e) {
                 Activator.error(e);
             }
         }
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog#message()
-     */
     @Override
     protected String message() {
         return "Select or create the Java class and method that implements the custom transformation";
     }
 
-    void methodSelected(final ComboViewer methodComboViewer) {
-        final IStructuredSelection selection =
-            (IStructuredSelection)methodComboViewer.getSelection();
+    private void methodSelected(ComboViewer methodComboViewer) {
+        IStructuredSelection selection = (IStructuredSelection)methodComboViewer.getSelection();
         method = (IMethod)selection.getFirstElement();
     }
 
-    void selectClass(final Button classButton,
-                     final ComboViewer methodComboViewer) {
-        final Util.Filter filter = new Util.Filter() {
+    private void selectClass(Button classButton,
+                             ComboViewer methodComboViewer) throws JavaModelException {
+        Util.Filter filter = new Util.Filter() {
 
             @Override
-            public boolean accept(final IType type) {
+            public boolean accept(IType type) {
                 try {
-                    for (final IMethod method : type.getMethods()) {
-                        if (valid(method)) {
-                            return true;
-                        }
+                    for (IMethod method : type.getMethods()) {
+                        if (valid(method)) return true;
                     }
-                } catch (final JavaModelException ignored) {}
+                } catch (JavaModelException ignored) {}
                 return false;
             }
         };
-        final IType type = Util.selectCustomTransformationClass(getShell(), project, filter);
-        if (type != null) {
-            setClass(type, classButton, methodComboViewer);
-        }
+        IType type = Util.selectCustomTransformationClass(getShell(), project, filter);
+        if (type != null) setClass(type, classButton, methodComboViewer);
     }
 
-    void setClass(final IType type,
-                  final Button classButton,
-                  final ComboViewer methodComboViewer) {
-        try {
-            classButton.setText(type.getFullyQualifiedName());
-            final List<IMethod> methods = new ArrayList<>(Arrays.asList(type.getMethods()));
-            for (final Iterator<IMethod> iter = methods.iterator(); iter.hasNext();) {
-                if (!valid(iter.next())) {
-                    iter.remove();
-                }
-            }
-            methodComboViewer.setInput(methods.toArray());
-            if (!methods.isEmpty()) {
-                methodComboViewer.setSelection(new StructuredSelection(methods.get(0)));
-            }
-            this.type = type;
-            getButton(IDialogConstants.OK_ID).setEnabled(true);
-        } catch (final JavaModelException e) {
-            Activator.error(e);
+    private void setClass(IType type,
+                          Button classButton,
+                          ComboViewer methodComboViewer) throws JavaModelException {
+        classButton.setText(type.getFullyQualifiedName());
+        List<IMethod> methods = new ArrayList<>(Arrays.asList(type.getMethods()));
+        for (Iterator<IMethod> iter = methods.iterator(); iter.hasNext();) {
+            if (!valid(iter.next())) iter.remove();
         }
+        methodComboViewer.setInput(methods.toArray());
+        if (!methods.isEmpty()) methodComboViewer.setSelection(new StructuredSelection(methods.get(0)));
+        this.type = type;
+        getButton(IDialogConstants.OK_ID).setEnabled(true);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog#title()
-     */
     @Override
     protected String title() {
         return "Add Custom Transformation";
     }
 
-    boolean valid(final IMethod method) {
-        try {
-            return !Signature.getSignatureSimpleName(method.getReturnType()).equals("void")
-                   && method.getParameters().length == 1;
-        } catch (final JavaModelException e) {
-            return false;
+    private boolean valid(IMethod method) throws JavaModelException {
+        String[] types = method.getParameterTypes();
+        return Arrays.asList(TYPES).contains(resolvedTypeName(method, method.getReturnType()))
+               && types.length == 1
+               && resolvedTypeName(method, types[0]).equals(sourceType);
+    }
+
+    private String resolvedTypeName(IMethod method,
+                                    String typeName) throws JavaModelException {
+        typeName = Signature.toString(typeName);
+        if (typeName.contains(".")) return typeName;
+        for (IImportDeclaration decl : method.getCompilationUnit().getImports()) {
+            if (decl.getElementName().endsWith("." + typeName)) return decl.getElementName();
         }
+        return "java.lang." + typeName;
     }
 
     private class Page extends NewClassWizardPage {
 
-        String sourceType;
-        String returnType;
-        String methodName;
-        String prmType;
-        IStatus returnTypeStatus = typeStatus(null, "return");
-        IStatus methodNameStatus = nameStatus(null, "method");
-        IStatus prmTypeStatus = typeStatus(null, "parameter");
-        Control pkgText;
+        private final String sourceType;
+        private String returnType;
+        private String methodName;
+        private String prmType;
+        private IStatus returnTypeStatus = typeStatus(null, "return");
+        private IStatus methodNameStatus = nameStatus(null, "method");
+        private IStatus prmTypeStatus = typeStatus(null, "parameter");
+        private Control pkgText;
 
-        Page(final String sourceType) {
+        private Page(final String sourceType) {
             this.sourceType = sourceType;
         }
 
-        private void createComboPane(final Composite parent,
-                                     final String initialText,
-                                     final String labelText,
+        private void createComboPane(Composite parent,
+                                     String initialText,
+                                     String labelText,
                                      final CustomTransformationListener listener) {
             final Combo combo = new Combo(parent, SWT.READ_ONLY);
-            combo.setLayoutData(GridDataFactory.swtDefaults()
-                                               .align(SWT.FILL, SWT.CENTER)
-                                               .grab(true, false).create());
-            combo.setItems(new String[] {
-                "boolean",
-                "byte",
-                "char",
-                "double",
-                "float",
-                "int",
-                "java.util.List< ? >",
-                "long",
-                "Object",
-                "short",
-                "String",
-            });
+            combo.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).create());
+            combo.setItems(TYPES);
             combo.addSelectionListener(new SelectionAdapter() {
 
                 @Override
-                public void widgetSelected(final SelectionEvent event) {
+                public void widgetSelected(SelectionEvent event) {
                     listener.transformationChanged(combo.getText());
                 }
             });
             combo.select(combo.indexOf(initialText));
             listener.transformationChanged(initialText);
-            final Label label = new Label(parent, SWT.NONE);
-            label.setText(labelText);
+            new Label(parent, SWT.NONE).setText(labelText);
         }
 
         @Override
-        protected void createEnclosingTypeControls(final Composite composite,
-                                                   final int columns) {}
+        protected void createEnclosingTypeControls(Composite composite,
+                                                   int columns) {}
 
-        private void createLabelPane(final Composite parent,
-                                     final String text) {
-            final Label label = new Label(parent, SWT.NONE);
+        private void createLabelPane(Composite parent,
+                                     String text) {
+            Label label = new Label(parent, SWT.NONE);
             label.setLayoutData(GridDataFactory.swtDefaults().span(2, 1).create());
             label.setText(text);
         }
 
         @Override
-        protected void createModifierControls(final Composite composite,
-                                              final int columns) {}
+        protected void createModifierControls(Composite composite,
+                                              int columns) {}
 
         @Override
-        protected void createPackageControls(final Composite composite,
-                                             final int nColumns) {
+        protected void createPackageControls(Composite composite,
+                                             int nColumns) {
             super.createPackageControls(composite, nColumns);
             pkgText = composite.getChildren()[4];
         }
 
         @Override
-        protected void createSuperInterfacesControls(final Composite composite,
-                                                     final int columns) {
+        protected void createSuperInterfacesControls(Composite composite,
+                                                     int columns) {
             super.createSuperInterfacesControls(composite, columns);
 
-            final Group group = new Group(composite, SWT.NONE);
-            group.setLayoutData(GridDataFactory.fillDefaults()
-                                               .span(columns, 1)
-                                               .grab(true, false)
-                                               .create());
+            Group group = new Group(composite, SWT.NONE);
+            group.setLayoutData(GridDataFactory.fillDefaults().span(columns, 1).grab(true, false).create());
             group.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).numColumns(6).create());
             group.setText("Custom Transformation");
             createLabelPane(group, "Return Type");
@@ -376,7 +347,7 @@ final class AddCustomTransformationDialog extends BaseDialog {
             createComboPane(group, sourceType, " ", new CustomTransformationListener() {
 
                 @Override
-                public void transformationChanged(final String text) {
+                public void transformationChanged(String text) {
                     returnType = text;
                     returnTypeStatus = typeStatus(returnType, "return");
                     updateStatus();
@@ -385,7 +356,7 @@ final class AddCustomTransformationDialog extends BaseDialog {
             createTextPane(group, "map", "(", new CustomTransformationListener() {
 
                 @Override
-                public void transformationChanged(final String text) {
+                public void transformationChanged(String text) {
                     methodName = text.trim();
                     methodNameStatus = nameStatus(methodName, "method");
                     updateStatus();
@@ -394,7 +365,7 @@ final class AddCustomTransformationDialog extends BaseDialog {
             createComboPane(group, sourceType, " input)", new CustomTransformationListener() {
 
                 @Override
-                public void transformationChanged(final String text) {
+                public void transformationChanged(String text) {
                     prmType = text;
                     prmTypeStatus = typeStatus(prmType, "parameter");
                     updateStatus();
@@ -402,14 +373,12 @@ final class AddCustomTransformationDialog extends BaseDialog {
             });
         }
 
-        private Text createTextPane(final Composite parent,
-                                    final String initialText,
-                                    final String labelText,
+        private Text createTextPane(Composite parent,
+                                    String initialText,
+                                    String labelText,
                                     final CustomTransformationListener listener) {
             final Text text = new Text(parent, SWT.BORDER);
-            text.setLayoutData(GridDataFactory.swtDefaults()
-                                              .align(SWT.FILL, SWT.CENTER)
-                                              .grab(true, false).create());
+            text.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).create());
             text.addModifyListener(new ModifyListener() {
 
                 @Override
@@ -418,40 +387,33 @@ final class AddCustomTransformationDialog extends BaseDialog {
                 }
             });
             text.setText(initialText);
-            final Label label = new Label(parent, SWT.NONE);
-            label.setText(labelText);
+            new Label(parent, SWT.NONE).setText(labelText);
             return text;
         }
 
-        IStatus nameStatus(final String name,
-                           final String nameName) {
-            // TODO I think there is an Apache library that does this along with
-            // checking for Java reserved keywords
-            if (name == null || name.isEmpty()) {
+        private IStatus nameStatus(String name,
+                                   String nameName) {
+            if (name == null || name.isEmpty())
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
                                   "A " + nameName + " name for the custom transformation must be provided");
-            }
-            final char[] chars = name.toCharArray();
-            final char firstChar = chars[0];
-            if (!Character.isJavaIdentifierStart(firstChar)) {
+            char[] chars = name.toCharArray();
+            char firstChar = chars[0];
+            if (!Character.isJavaIdentifierStart(firstChar))
                 return new Status(IStatus.ERROR,
                                   Activator.plugin().getBundle().getSymbolicName(),
                                   "The " + nameName + " name for the custom transformation begins with an invalid character");
-            }
             for (int ndx = 1; ndx < chars.length; ++ndx) {
-                if (!Character.isJavaIdentifierPart(chars[ndx])) {
+                if (!Character.isJavaIdentifierPart(chars[ndx]))
                     return new Status(IStatus.ERROR,
                                       Activator.plugin().getBundle().getSymbolicName(),
                                       "The " + nameName
                                       + " name for the custom transformation contains at least one invalid character");
-                }
             }
-            if (Character.isUpperCase(firstChar)) {
+            if (Character.isUpperCase(firstChar))
                 return new Status(IStatus.WARNING,
                                   Activator.plugin().getBundle().getSymbolicName(),
                                   "The " + nameName + " name for the custom transformation begins with an uppercase letter");
-            }
             return Status.OK_STATUS;
         }
 
@@ -460,17 +422,15 @@ final class AddCustomTransformationDialog extends BaseDialog {
             pkgText.setFocus();
         }
 
-        IStatus typeStatus(final String type,
-                           final String typeName) {
-            if (type == null) {
-                return new Status(IStatus.ERROR,
-                                  Activator.plugin().getBundle().getSymbolicName(),
-                                  "A " + typeName + " type for the custom transformation must be selected");
-            }
-            return Status.OK_STATUS;
+        private IStatus typeStatus(String type,
+                                   String typeName) {
+            return type == null ? new Status(IStatus.ERROR,
+                                             Activator.plugin().getBundle().getSymbolicName(),
+                                             "A " + typeName + " type for the custom transformation must be selected")
+                                : Status.OK_STATUS;
         }
 
-        void updateStatus() {
+        private void updateStatus() {
             updateStatus(new IStatus[] {
                 fContainerStatus,
                 fPackageStatus,
@@ -481,8 +441,8 @@ final class AddCustomTransformationDialog extends BaseDialog {
         }
 
         @Override
-        protected void updateStatus(final IStatus[] status) {
-            final List<IStatus> list = new ArrayList<>(Arrays.asList(status));
+        protected void updateStatus(IStatus[] status) {
+            List<IStatus> list = new ArrayList<>(Arrays.asList(status));
             list.add(returnTypeStatus);
             list.add(methodNameStatus);
             list.add(prmTypeStatus);

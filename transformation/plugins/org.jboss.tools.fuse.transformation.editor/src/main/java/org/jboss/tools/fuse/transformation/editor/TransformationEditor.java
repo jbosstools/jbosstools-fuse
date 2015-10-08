@@ -71,11 +71,12 @@ import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
 import org.jboss.tools.fuse.transformation.editor.internal.SourceTabFolder;
 import org.jboss.tools.fuse.transformation.editor.internal.TargetTabFolder;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function;
+import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
 
 /**
  *
@@ -99,7 +100,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
 
     private static final String VERSION_PREFERENCE = PREFERENCE_PREFIX + "version";
 
-    TransformationConfig config;
+    TransformationManager manager;
     URLClassLoader loader;
     File camelConfigFile;
     CamelEndpoint camelEndpoint;
@@ -144,8 +145,38 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         });
     }
 
-    void configEvent() {
-        firePropertyChange(IEditorPart.PROP_DIRTY);
+    void copySourceToProject(Class<?> sourceClass,
+                             boolean latestVersion) throws IOException {
+        IPath pkgPath = new Path(sourceClass.getPackage().getName().replace('.', '/'));
+        IPath xformsFolderPath = manager.project().getLocation().append(Util.TRANSFORMATIONS_FOLDER);
+        File file = xformsFolderPath.append(pkgPath).toFile();
+        if (!file.exists()) file.mkdirs();
+        IPath resourcePath = pkgPath.append(sourceClass.getSimpleName()).addFileExtension("java");
+        file = xformsFolderPath.append(resourcePath).toFile();
+        if (file.exists() && latestVersion) return;
+        byte[] buf = null;
+        try (InputStream in = sourceClass.getResourceAsStream(resourcePath.makeAbsolute().toString())) {
+            if (in != null) {
+                buf = new byte[4096];
+                try (OutputStream out = new FileOutputStream(file)) {
+                    for (int len = in.read(buf); len > 0; len = in.read(buf)) {
+                        out.write(buf, 0, len);
+                    }
+                }
+            }
+        }
+        // Below is necessary when running from within development Eclipse
+        if (buf == null) {
+            try (InputStream in =
+                    sourceClass.getResourceAsStream(new Path(Util.RESOURCES_PATH).append(resourcePath).makeAbsolute().toString())) {
+                buf = new byte[4096];
+                try (OutputStream out = new FileOutputStream(file)) {
+                    for (int len = in.read(buf); len > 0; len = in.read(buf)) {
+                        out.write(buf, 0, len);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -197,7 +228,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         horizontalSplitter.setBackground(Colors.SASH);
         horizontalSplitter.setSashWidth(SASH_WIDTH);
         // Create source tab folder
-        sourceTabFolder = new SourceTabFolder(config, horizontalSplitter, potentialDropTargets);
+        sourceTabFolder = new SourceTabFolder(manager, horizontalSplitter, potentialDropTargets);
         sourceTabFolder.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -206,12 +237,12 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             }
         });
         // Create mappings viewer
-        mappingsViewer = new MappingsViewer(config, this, horizontalSplitter, potentialDropTargets);
+        mappingsViewer = new MappingsViewer(manager, this, horizontalSplitter, potentialDropTargets);
         // Create target tab folder
-        targetTabFolder = new TargetTabFolder(config, horizontalSplitter, potentialDropTargets);
+        targetTabFolder = new TargetTabFolder(manager, horizontalSplitter, potentialDropTargets);
         // Create detail area
         mappingDetailViewer =
-            new MappingDetailViewer(config, verticalSplitter, potentialDropTargets);
+            new MappingDetailViewer(manager, verticalSplitter, potentialDropTargets);
         // Configure size of components in splitters
         verticalSplitter.setWeights(new int[] {prefs.getInt(VERTICAL_SPLITTER_WEIGHT_TOP_PREFERENCE),
             prefs.getInt(VERTICAL_SPLITTER_WEIGHT_BOTTOM_PREFERENCE)});
@@ -252,11 +283,11 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         });
         targetViewerButton.setSelection(prefs.getBoolean(TARGET_VIEWER_PREFERENCE));
         if (!targetViewerButton.getSelection()) toggleTargetViewer(horizontalSplitter);
-        config.addListener(new PropertyChangeListener() {
+        manager.addListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                configEvent();
+                managerEvent();
             }
         });
         updateHelpText();
@@ -301,10 +332,9 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
      * @see EditorPart#init(IEditorSite, IEditorInput)
      */
     @Override
-    public void init(final IEditorSite site,
-                     final IEditorInput input) throws PartInitException {
-        final IContentType contentType =
-            Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID);
+    public void init(IEditorSite site,
+                     IEditorInput input) throws PartInitException {
+        IContentType contentType = Platform.getContentTypeManager().getContentType(DozerConfigContentTypeDescriber.ID);
         if (!contentType.isAssociatedWith(input.getName())) {
             throw new PartInitException("The Fuse Transformation editor can only be opened with a"
                                         + " Dozer configuration file.");
@@ -313,12 +343,12 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         setInput(input);
         setPartName(input.getName());
 
-        final IFile configFile = ((FileEditorInput)getEditorInput()).getFile();
-        final IJavaProject javaProject = JavaCore.create(configFile.getProject());
+        IFile configFile = ((FileEditorInput)getEditorInput()).getFile();
+        IJavaProject javaProject = JavaCore.create(configFile.getProject());
         try {
             loader = (URLClassLoader)JavaUtil.getProjectClassLoader(javaProject,
                                                                     getClass().getClassLoader());
-            config = new TransformationConfig(configFile, loader);
+            manager = new TransformationManager(configFile, loader);
             CamelModelFactory.initializeModels();
             // Add contributed transformations if missing or a different version
             String version = Activator.plugin().getBundle().getVersion().toString();
@@ -331,7 +361,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
             }
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
             // Ensure Maven will compile transformations folder
-            File pomFile = config.project().getLocation().append("pom.xml").toFile();
+            File pomFile = manager.project().getLocation().append("pom.xml").toFile();
             org.apache.maven.model.Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
             List<Resource> resources = pomModel.getBuild().getResources();
             boolean exists = false;
@@ -364,45 +394,11 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 newEntries[entries.length] = JavaCore.newSourceEntry(path);
                 javaProject.setRawClasspath(newEntries, null);
             }
-            config.project().refreshLocal(IResource.DEPTH_INFINITE, null);
+            manager.project().refreshLocal(IResource.DEPTH_INFINITE, null);
             // Ensure build of Java classes has completed
             Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
         } catch (final Exception e) {
             throw new PartInitException("Error initializing editor", e);
-        }
-    }
-
-    void copySourceToProject(Class<?> sourceClass,
-                             boolean latestVersion) throws IOException {
-        IPath pkgPath = new Path(sourceClass.getPackage().getName().replace('.', '/'));
-        IPath xformsFolderPath = config.project().getLocation().append(Util.TRANSFORMATIONS_FOLDER);
-        File file = xformsFolderPath.append(pkgPath).toFile();
-        if (!file.exists()) file.mkdirs();
-        IPath resourcePath = pkgPath.append(sourceClass.getSimpleName()).addFileExtension("java");
-        file = xformsFolderPath.append(resourcePath).toFile();
-        if (file.exists() && latestVersion) return;
-        byte[] buf = null;
-        try (InputStream in = sourceClass.getResourceAsStream(resourcePath.makeAbsolute().toString())) {
-            if (in != null) {
-                buf = new byte[4096];
-                try (OutputStream out = new FileOutputStream(file)) {
-                    for (int len = in.read(buf); len > 0; len = in.read(buf)) {
-                        out.write(buf, 0, len);
-                    }
-                }
-            }
-        }
-        // Below is necessary when running from within development Eclipse
-        if (buf == null) {
-            try (InputStream in =
-                    sourceClass.getResourceAsStream(new Path(Util.RESOURCES_PATH).append(resourcePath).makeAbsolute().toString())) {
-                buf = new byte[4096];
-                try (OutputStream out = new FileOutputStream(file)) {
-                    for (int len = in.read(buf); len > 0; len = in.read(buf)) {
-                        out.write(buf, 0, len);
-                    }
-                }
-            }
         }
     }
 
@@ -413,7 +409,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
      */
     @Override
     public boolean isDirty() {
-        return config.hasMappingPlaceholders();
+        return manager.hasMappingPlaceholders();
     }
 
     /**
@@ -426,6 +422,10 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         return false;
     }
 
+    void managerEvent() {
+        firePropertyChange(IEditorPart.PROP_DIRTY);
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -433,7 +433,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
      */
     @Override
     public int promptToSaveOnClose() {
-        return config.hasMappingPlaceholders()
+        return manager.hasMappingPlaceholders()
                && !MessageDialog.openConfirm(mappingsViewer.getShell(), "Confirm",
                                              "Are you sure?\n\n"
                                                  + "All incomplete mappings will be lost when the "
@@ -509,13 +509,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         if (sourceViewerButton.getSelection() && targetViewerButton.getSelection()) {
             if (sourceTabFolder.getSelectionIndex() == 0) {
                 helpText.setText("Create a new mapping below by dragging a property from source "
-                                 + config.getSourceModel().getName()
+                                 + manager.rootSourceModel().getName()
                                  + " on the left to a property in target "
-                                 + config.getTargetModel().getName() + " on the right.");
+                                 + manager.rootTargetModel().getName() + " on the right.");
             } else {
                 helpText.setText("Create a new mapping below by dragging a variable from the list"
                                  + " of variables on the left to a property in target "
-                                 + config.getTargetModel().getName() + " on the right.");
+                                 + manager.rootTargetModel().getName() + " on the right.");
             }
         } else {
             helpText.setText("");

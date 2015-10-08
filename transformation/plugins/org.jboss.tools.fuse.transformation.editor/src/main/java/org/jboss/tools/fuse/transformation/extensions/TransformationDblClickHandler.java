@@ -27,7 +27,6 @@ import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.RouteContainer;
 import org.jboss.tools.fuse.transformation.camel.EndpointHelper;
-import org.jboss.tools.fuse.transformation.editor.DozerConfigContentTypeDescriber;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**

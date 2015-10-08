@@ -283,7 +283,7 @@ class TransformationDialog extends BaseDialog {
                 label = new Label(cell, SWT.NONE);
                 label.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).create());
                 label.setText(type.getSimpleName());
-                label.setToolTipText(Util.name(type));
+                label.setToolTipText(Util.displayName(type));
                 typeData.widthHint = Math.max(typeData.widthHint, cell.computeSize(SWT.DEFAULT, SWT.DEFAULT).x);
                 cell = newTableCell(scrollerPane, true, false, true);
                 label = new Label(cell, SWT.WRAP);

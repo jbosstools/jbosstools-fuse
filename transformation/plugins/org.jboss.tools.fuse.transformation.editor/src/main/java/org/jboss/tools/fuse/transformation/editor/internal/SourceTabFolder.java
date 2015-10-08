@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import org.eclipse.jface.util.LocalSelectionTransfer;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
@@ -26,40 +25,35 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 import org.jboss.tools.fuse.transformation.model.Model;
 
-public final class SourceTabFolder extends ModelTabFolder {
+public class SourceTabFolder extends ModelTabFolder {
 
     private final CTabItem variablesTab;
     private final VariablesViewer variablesViewer;
+    private PropertyChangeListener managerListener;
 
-    public SourceTabFolder(final TransformationConfig config,
-                           final Composite parent,
-                           final List<PotentialDropTarget> potentialDropTargets) {
-        super(config, parent, "Source", config.getSourceModel(), potentialDropTargets);
+    public SourceTabFolder(TransformationManager manager,
+                           Composite parent,
+                           List<PotentialDropTarget> potentialDropTargets) {
+        super(manager, parent, "Source", manager.rootSourceModel(), potentialDropTargets);
 
         // Create variables tab
         variablesTab = new CTabItem(this, SWT.NONE);
         variablesTab.setText("Variables");
-        variablesViewer = new VariablesViewer(config, this);
+        variablesViewer = new VariablesViewer(manager, this);
         variablesTab.setControl(variablesViewer);
         variablesTab.setImage(Images.VARIABLE);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder#constructModelViewer(org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig, java.util.List, java.lang.String)
-     */
     @Override
-    ModelViewer constructModelViewer(final TransformationConfig config,
-                                     List<PotentialDropTarget> potentialDropTargets,
+    ModelViewer constructModelViewer(List<PotentialDropTarget> potentialDropTargets,
                                      String preferenceId) {
-        final ModelViewer viewer =
-            super.constructModelViewer(config, potentialDropTargets, preferenceId);
+        final ModelViewer viewer = super.constructModelViewer(potentialDropTargets, preferenceId);
         viewer.treeViewer.addDropSupport(DND.DROP_MOVE,
                                          new Transfer[] {LocalSelectionTransfer.getTransfer()},
                                          new ViewerDropAdapter(viewer.treeViewer) {
@@ -67,25 +61,10 @@ public final class SourceTabFolder extends ModelTabFolder {
             @Override
             public boolean performDrop(Object data) {
                 try {
-                    final Object target =
-                        ((IStructuredSelection)LocalSelectionTransfer.getTransfer().getSelection()).getFirstElement();
-                    FieldMapping mapping = null;
-                    Model sourceModel = (Model)getCurrentTarget();
-                    Model targetModel = (Model)target;
-                    boolean sourceIsOrInCollection = Util.isOrInCollection(sourceModel);
-                    boolean targetIsOrInCollection = Util.isOrInCollection(targetModel);
-
-                    if (sourceIsOrInCollection == targetIsOrInCollection)
-                        mapping = config.mapField(sourceModel, targetModel, null, null);
-                    else {
-                        List<Integer> sourceIndexes = sourceIsOrInCollection ? Util.updateIndexes(null, sourceModel, null) : null;
-                        List<Integer> targetIndexes = targetIsOrInCollection ? Util.updateIndexes(null, targetModel, null) : null;
-                        mapping = config.mapField(sourceModel, targetModel, sourceIndexes, targetIndexes);
-                    }
-
+                    FieldMapping mapping = manager.map((Model)getCurrentTarget(), (Model)Util.draggedObject());
                     if (mapping != null && Util.modelsNeedDateFormat(mapping.getSource(), mapping.getTarget(), true))
                         Util.updateDateFormat(getShell(), mapping);
-                    config.save();
+                    manager.save();
                     return true;
                 } catch (Exception e) {
                     Activator.error(e);
@@ -94,42 +73,41 @@ public final class SourceTabFolder extends ModelTabFolder {
             }
 
             @Override
-            public boolean validateDrop(final Object source,
-                                        final int operation,
-                                        final TransferData transferType) {
+            public boolean validateDrop(Object source,
+                                        int operation,
+                                        TransferData transferType) {
                 return getCurrentLocation() == ViewerDropAdapter.LOCATION_ON
-                                               && Util.draggingFromValidTarget(config)
-                                               && Util.validSourceAndTarget(source,
-                                                                            Util.draggedObject(),
-                                                                            config);
+                                               && Util.draggingFromValidTarget(manager)
+                                               && Util.validSourceAndTarget(source, Util.draggedObject(), manager);
             }
         });
         potentialDropTargets.add(new PotentialDropTarget(viewer.treeViewer.getTree()) {
 
             @Override
             public boolean valid() {
-                return Util.draggingFromValidTarget(config);
+                return Util.draggingFromValidTarget(manager);
             }
         });
-        config.addListener(new PropertyChangeListener() {
+        managerListener = new PropertyChangeListener() {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                if (event.getPropertyName().equals(TransformationConfig.MAPPING_SOURCE)) {
-                    if (!viewer.treeViewer.getControl().isDisposed()) {
-                        viewer.treeViewer.refresh();
-                    }
-                }
+                if (event.getPropertyName().equals(Event.MAPPING_SOURCE.name())) viewer.treeViewer.refresh();
+                if (event.getPropertyName().equals(Event.VARIABLE.name())
+                    || event.getPropertyName().equals(Event.VARIABLE_NAME.name())
+                    || event.getPropertyName().equals(Event.VARIABLE_VALUE.name())) variablesViewer.tableViewer.refresh();
             }
-        });
+        };
+        manager.addListener(managerListener);
         return viewer;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see org.jboss.tools.fuse.transformation.editor.internal.ModelTabFolder#select(java.lang.Object)
-     */
+    @Override
+    public void dispose() {
+        manager.removeListener(managerListener);
+        super.dispose();
+    }
+
     @Override
     public void select(Object object) {
         super.select(object);

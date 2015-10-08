@@ -10,37 +10,36 @@
 package org.jboss.tools.fuse.transformation.editor.internal;
 
 import java.util.List;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.model.Model;
 
 abstract class ModelTabFolder extends CTabFolder {
 
-    final Model model;
-
-    final CTabItem modelTab;
-    final ModelViewer modelViewer;
+    final TransformationManager manager;
+    private final Model model;
+    private final CTabItem modelTab;
+    private final ModelViewer modelViewer;
 
     /**
-     * @param config
+     * @param manager
      * @param parent
      * @param title
      * @param model
      * @param potentialDropTargets
      */
-    ModelTabFolder(final TransformationConfig config,
+    ModelTabFolder(final TransformationManager manager,
                    final Composite parent,
                    final String title,
                    final Model model,
                    final List<PotentialDropTarget> potentialDropTargets) {
         super(parent, SWT.BORDER);
-
+        this.manager = manager;
         this.model = model;
 
         setBackground(parent.getDisplay()
@@ -51,17 +50,16 @@ abstract class ModelTabFolder extends CTabFolder {
 
         modelTab = new CTabItem(this, SWT.NONE);
         modelTab.setText(title + (model == null ? "" : ": " + model.getName()));
-        modelViewer = constructModelViewer(config, potentialDropTargets, title);
+        modelViewer = constructModelViewer(potentialDropTargets, title);
         modelTab.setControl(modelViewer);
         modelViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
         modelViewer.layout();
         setSelection(modelTab);
     }
 
-    ModelViewer constructModelViewer(TransformationConfig config,
-                                     List<PotentialDropTarget> potentialDropTargets,
+    ModelViewer constructModelViewer(List<PotentialDropTarget> potentialDropTargets,
                                      String preferenceId) {
-        return new ModelViewer(config, this, model, potentialDropTargets, preferenceId);
+        return new ModelViewer(manager, this, model, potentialDropTargets, preferenceId);
     }
 
     /**

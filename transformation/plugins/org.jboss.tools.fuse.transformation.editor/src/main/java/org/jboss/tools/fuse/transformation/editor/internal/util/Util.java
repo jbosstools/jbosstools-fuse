@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -53,10 +54,9 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.fusesource.ide.camel.model.catalog.Dependency;
-import org.jboss.tools.fuse.transformation.FieldMapping;
 import org.jboss.tools.fuse.transformation.MappingOperation;
+import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.Variable;
-import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
@@ -74,6 +74,13 @@ public class Util {
 
     public static final String TRANSFORMATIONS_FOLDER = ".transformations";
 
+    public static String displayName(Class<?> type) {
+        String name = type.getName();
+        if (name.startsWith("java.lang.") && name.lastIndexOf('.') == 9) return "String";
+        if (type == Date.class) return "Date";
+        return type.getName().replace('.', '/');
+    }
+
     /**
      * @return the object being dragged
      */
@@ -82,38 +89,28 @@ public class Util {
     }
 
     /**
-     * @param config
+     * @param manager
      * @return <code>true</code> if the object being dragged is a valid source object
      */
-    public static boolean draggingFromValidSource(final TransformationConfig config) {
+    public static boolean draggingFromValidSource(TransformationManager manager) {
         final Object object = draggedObject();
-        if (object instanceof Variable) {
-            return true;
-        }
-        if (!(object instanceof Model)) {
-            return false;
-        }
+        if (object instanceof Variable) return true;
+        if (!(object instanceof Model)) return false;
         final Model model = (Model)object;
-        if (type(model)) {
-            return false;
-        }
-        return root(model).equals(config.getSourceModel());
+        if (type(model)) return false;
+        return root(model).equals(manager.rootSourceModel());
     }
 
     /**
-     * @param config
+     * @param manager
      * @return <code>true</code> if the object being dragged is a valid target object
      */
-    public static boolean draggingFromValidTarget(final TransformationConfig config) {
+    public static boolean draggingFromValidTarget(TransformationManager manager) {
         final Object object = draggedObject();
-        if (!(object instanceof Model)) {
-            return false;
-        }
+        if (!(object instanceof Model)) return false;
         final Model model = (Model)object;
-        if (type(model)) {
-            return false;
-        }
-        return root(model).equals(config.getTargetModel());
+        if (type(model)) return false;
+        return root(model).equals(manager.rootTargetModel());
     }
 
     /**
@@ -162,14 +159,13 @@ public class Util {
     }
 
     public static String getDateFormat(final Shell shell,
-                                       final MappingOperation<?, ?> mappingOp,
+                                       final MappingOperation<?, ?> mapping,
                                        final boolean isSource) {
-        final DateFormatInputDialog dlg = new DateFormatInputDialog(shell, mappingOp);
-        BaseDozerMapping dMapping = (BaseDozerMapping)mappingOp;
-        if (dMapping.getSourceDateFormat() != null && isSource) {
-            dlg.setFormatString(dMapping.getSourceDateFormat());
-        } else if (dMapping.getTargetDateFormat() != null && !isSource) {
-            dlg.setFormatString(dMapping.getTargetDateFormat());
+        final DateFormatInputDialog dlg = new DateFormatInputDialog(shell, mapping);
+        if (mapping.getSourceDateFormat() != null && isSource) {
+            dlg.setFormatString(mapping.getSourceDateFormat());
+        } else if (mapping.getTargetDateFormat() != null && !isSource) {
+            dlg.setFormatString(mapping.getTargetDateFormat());
         }
         if (dlg.open() != Window.OK) {
             return null;
@@ -177,40 +173,17 @@ public class Util {
         return dlg.getFormatString();
     }
 
-    public static boolean indexed(MappingOperation<?, ?> mapping) {
-        if (mapping == null) return false;
-        if (mapping.getSource() instanceof Model && mapping.getTarget() instanceof Model)
-            return isOrInCollection((Model)mapping.getSource()) != isOrInCollection((Model)mapping.getTarget());
-        return false;
+    public static boolean inCollection(final Model model) {
+        return model == null ? false : isOrInCollection(model.getParent());
     }
 
-    public static List<Integer> updateIndexes(MappingOperation<?, ?> mapping,
-                                              Object object,
-                                              List<Integer> indexes) {
-        if (!(object instanceof Model)) return null;
-        List<Integer> updateIndexes = new ArrayList<>();
-        updateIndexes(((Model)object).getParent(),
-                      indexes,
-                      indexes == null ? -1 : indexes.size() - 1,
-                      updateIndexes,
-                      indexed(mapping));
-        return updateIndexes;
+    private static boolean indexed(MappingOperation<?, ?> mapping) {
+        if (mapping.getSource() instanceof Model)
+            return inCollection((Model)mapping.getSource()) != inCollection((Model)mapping.getTarget());
+        return inCollection((Model)mapping.getTarget());
     }
 
-    private static void updateIndexes(Model model,
-                                      List<Integer> indexes,
-                                      int indexesIndex,
-                                      List<Integer> updateIndexes,
-                                      boolean indexed) {
-        if (model == null) return;
-        updateIndexes(model.getParent(), indexes, indexesIndex - 1, updateIndexes, indexed);
-        if (model.isCollection() && indexed) {
-            Integer index = indexes.get(indexesIndex);
-            updateIndexes.add(index == null ? 0 : index);
-        } else updateIndexes.add(null);
-    }
-
-    public static boolean isOrInCollection(final Model model) {
+    private static boolean isOrInCollection(final Model model) {
         return model != null && (model.isCollection() || isOrInCollection(model.getParent()));
     }
 
@@ -241,12 +214,6 @@ public class Util {
         return false;
     }
 
-    public static String name(Class<?> type) {
-        if (type == String.class) return "string";
-        if (type == Date.class) return "date";
-        return type.getName().replace('.', '/');
-    }
-
     public static String nonPrimitiveClassName(String type) {
         // Return wrapper class if type is primitive
         switch (type) {
@@ -258,13 +225,14 @@ public class Util {
                 return Double.class.getName();
             case "float":
                 return Float.class.getName();
-            case "short":
-                return Short.class.getName();
             case "boolean":
                 return Boolean.class.getName();
+            case "short":
+                return Short.class.getName();
             case "char":
+                return Character.class.getName();
             case "byte":
-                return String.class.getName();
+                return Byte.class.getName();
         }
         return type;
     }
@@ -298,12 +266,12 @@ public class Util {
                         && (filter == null || filter.accept(type))) {
                         types.add(type);
                     }
-                } else if (element instanceof IParent
-                           && !element.getPath().toString().contains("/test/")
-                           && !element.getPath().toString().endsWith("/" + TRANSFORMATIONS_FOLDER)
-                           && (!(element instanceof IPackageFragmentRoot)
-                           || !((IPackageFragmentRoot)element).isExternal())) {
-                    populateClasses(shell, (IParent)element, types, filter);
+                } else if (element instanceof IParent) {
+                    String path = element.getPath().toString();
+                    if (!path.contains("/test/")
+                        && !path.endsWith("/.functions") && !path.endsWith("/" + TRANSFORMATIONS_FOLDER)
+                        && (!(element instanceof IPackageFragmentRoot) || !((IPackageFragmentRoot)element).isExternal()))
+                        populateClasses(shell, (IParent)element, types, filter);
                 }
             }
         } catch (final JavaModelException e) {
@@ -474,8 +442,8 @@ public class Util {
                                                         final IProject project,
                                                         final Filter filter) {
         return selectClass(shell, project, filter,
-                           "Select custom transformation(s) Class",
-                           "Select a custom transformation(s) class");
+                           "Custom Transformation Class",
+                           "Select a custom transformation class");
     }
 
     /**
@@ -570,9 +538,9 @@ public class Util {
         return (IFile)result[0];
     }
 
-    public static boolean sourceModel(Model model,
-                                     TransformationConfig config) {
-        return root(model).equals(config.getSourceModel());
+    public static List<Integer> sourceUpdateIndexes(MappingOperation<?, ?> mapping) {
+        if (mapping == null) return Collections.emptyList();
+        return updateIndexes(mapping, mapping.getSource(), mapping.getSourceIndex());
     }
 
     /**
@@ -632,52 +600,56 @@ public class Util {
         };
     }
 
+    public static List<Integer> targetUpdateIndexes(MappingOperation<?, ?> mapping) {
+        if (mapping == null) return Collections.emptyList();
+        return updateIndexes(mapping, mapping.getTarget(), mapping.getTargetIndex());
+    }
+
     public static boolean type(final Model model) {
         return (!model.isCollection() && !model.getChildren().isEmpty());
     }
 
-    public static void updateDateFormat(final Shell shell,
-                                        final MappingOperation<?, ?> mappingOp) {
-        if (mappingOp != null && mappingOp instanceof BaseDozerMapping) {
-
-            // if both sides of the equation are Models, we're good to check this out
-            if (!(mappingOp.getSource() instanceof Model && mappingOp.getTarget() instanceof Model)) {
-                return;
-            }
-            Model srcModel = (Model)mappingOp.getSource();
-            Model tgtModel = (Model)mappingOp.getTarget();
-            BaseDozerMapping dMapping = (BaseDozerMapping)mappingOp;
-            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-                tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
-                String dateFormatStr = Util.getDateFormat(shell, mappingOp, true);
-                dMapping.setSourceDateFormat(dateFormatStr);
-            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                       srcModel.getType().equalsIgnoreCase("java.util.Date")) {
-                String dateFormatStr = Util.getDateFormat(shell, mappingOp, false);
-                dMapping.setTargetDateFormat(dateFormatStr);
-            }
+    public static void updateDateFormat(Shell shell,
+                                        MappingOperation<?, ?> mapping) {
+        // if both sides of the equation are Models, we're good to check this out
+        if (mapping.getType() != MappingType.FIELD) return;
+        Model srcModel = (Model)mapping.getSource();
+        Model tgtModel = (Model)mapping.getTarget();
+        if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
+            tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
+            String dateFormatStr = Util.getDateFormat(shell, mapping, true);
+            mapping.setSourceDateFormat(dateFormatStr);
+        } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
+                   srcModel.getType().equalsIgnoreCase("java.util.Date")) {
+            String dateFormatStr = Util.getDateFormat(shell, mapping, false);
+            mapping.setTargetDateFormat(dateFormatStr);
         }
     }
 
-    public static FieldMapping updateDateFormat(final Shell shell,
-                                                final Model srcModel,
-                                                final Model tgtModel,
-                                                final TransformationConfig config) {
+    private static List<Integer> updateIndexes(MappingOperation<?, ?> mapping,
+                                               Object object,
+                                               List<Integer> indexes) {
+        if (!(object instanceof Model)) return null;
+        List<Integer> updateIndexes = new ArrayList<>();
+        updateIndexes(((Model)object).getParent(),
+                      indexes,
+                      indexes == null ? -1 : indexes.size() - 1,
+                      updateIndexes,
+                      indexed(mapping));
+        return updateIndexes;
+    }
 
-        if (srcModel != null && tgtModel != null && config != null) {
-            FieldMapping mapping = config.mapField(srcModel, tgtModel);
-            if (srcModel.getType().equalsIgnoreCase("java.lang.String") &&
-                tgtModel.getType().equalsIgnoreCase("java.util.Date")) {
-                String dateFormatStr = Util.getDateFormat(shell, mapping, true);
-                mapping.setSourceDateFormat(dateFormatStr);
-            } else if (tgtModel.getType().equalsIgnoreCase("java.lang.String") &&
-                       srcModel.getType().equalsIgnoreCase("java.util.Date")) {
-                String dateFormatStr = Util.getDateFormat(shell, mapping, false);
-                mapping.setTargetDateFormat(dateFormatStr);
-            }
-            return mapping;
-        }
-        return null;
+    private static void updateIndexes(Model model,
+                                      List<Integer> indexes,
+                                      int indexesIndex,
+                                      List<Integer> updateIndexes,
+                                      boolean indexed) {
+        if (model == null) return;
+        updateIndexes(model.getParent(), indexes, indexesIndex - 1, updateIndexes, indexed);
+        if (model.isCollection() && indexed) {
+            Integer index = indexesIndex < 0 ? null : indexes.get(indexesIndex);
+            updateIndexes.add(index == null ? 0 : index);
+        } else updateIndexes.add(null);
     }
 
     public static void updateMavenDependencies(final List<Dependency> dependencies,
@@ -750,24 +722,16 @@ public class Util {
         return true;
     }
 
-    public static boolean validSourceAndTarget(final Object source,
-                                               final Object target,
-                                               final TransformationConfig config) {
-        final Model sourceModel = source instanceof Model ? (Model)source : null;
-        final Model targetModel = target instanceof Model ? (Model)target : null;
-        if (sourceModel != null && Util.type(sourceModel)) {
-            return false;
-        }
-        if (targetModel != null && Util.type(targetModel)) {
-            return false;
-        }
+    public static boolean validSourceAndTarget(Object source,
+                                               Object target,
+                                               TransformationManager manager) {
+        Model sourceModel = source instanceof Model ? (Model)source : null;
+        Model targetModel = target instanceof Model ? (Model)target : null;
+        if (sourceModel != null && Util.type(sourceModel)) return false;
+        if (targetModel != null && Util.type(targetModel)) return false;
         if (sourceModel != null && targetModel != null) {
-            if (config.getMapping(sourceModel, targetModel) != null) {
-                return false;
-            }
-            if (sourceModel.isCollection() && targetModel.isCollection()) {
-                return false;
-            }
+            if (manager.mapped(sourceModel, targetModel)) return false;
+            if (sourceModel.isCollection() || targetModel.isCollection()) return false;
         }
         return true;
     }

@@ -18,7 +18,8 @@ import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.MappingType;
 import org.jboss.tools.fuse.transformation.TransformationMapping;
 import org.jboss.tools.fuse.transformation.Variable;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 
@@ -28,7 +29,7 @@ final class MappingSummary extends MappingViewer {
     final Composite mappingSourcePane;
     final Label mapsToLabel;
     final Composite mappingTargetPane;
-    final PropertyChangeListener configListener;
+    final PropertyChangeListener managerListener;
     final MouseListener mouseListener = new MouseAdapter() {
 
         @Override
@@ -37,11 +38,11 @@ final class MappingSummary extends MappingViewer {
         }
     };
 
-    MappingSummary(final TransformationConfig config,
+    MappingSummary(final TransformationManager manager,
                    final MappingOperation<?, ?> mapping,
                    final MappingsViewer mappingsViewer,
                    final List<PotentialDropTarget> potentialDropTargets) {
-        super(config, potentialDropTargets);
+        super(manager, potentialDropTargets);
         this.mapping = mapping;
         this.mappingsViewer = mappingsViewer;
 
@@ -81,39 +82,14 @@ final class MappingSummary extends MappingViewer {
         mapsToLabel.addMouseListener(mouseListener);
         mappingTargetPane.addMouseListener(mouseListener);
 
-        configListener = new PropertyChangeListener() {
+        managerListener = new PropertyChangeListener() {
 
             @Override
             public void propertyChange(final PropertyChangeEvent event) {
-                configEvent(event.getPropertyName(), event.getOldValue(), event.getNewValue());
+                managerEvent(event.getPropertyName(), event.getOldValue(), event.getNewValue());
             }
         };
-        config.addListener(configListener);
-    }
-
-    private void configEvent(final String eventType,
-                             final Object oldValue,
-                             final Object newValue) {
-        if (eventType.equals(TransformationConfig.VARIABLE_VALUE)) {
-            variableValueUpdated((Variable)newValue);
-            return;
-        }
-        if (!equals(mapping, oldValue)) return;
-        if (eventType.equals(TransformationConfig.MAPPING)) {
-            dispose((MappingOperation<?, ?>)oldValue);
-        } else if (eventType.equals(TransformationConfig.MAPPING_SOURCE)) {
-            mapping = (MappingOperation<?, ?>)newValue;
-            setSourceText();
-            mappingSourcePane.layout();
-        } else if (eventType.equals(TransformationConfig.MAPPING_TARGET)) {
-            mapping = (MappingOperation<?, ?>)newValue;
-            setTargetText();
-            mappingTargetPane.layout();
-        } else if (eventType.equals(TransformationConfig.MAPPING_TRANSFORMATION)) {
-            mapping = (MappingOperation<?, ?>)newValue;
-            setSourceText();
-            mappingSourcePane.layout();
-        }
+        manager.addListener(managerListener);
     }
 
     private Composite createMappingPane(final Composite parent) {
@@ -143,8 +119,33 @@ final class MappingSummary extends MappingViewer {
         mappingSourcePane.dispose();
         mapsToLabel.dispose();
         mappingTargetPane.dispose();
-        config.removeListener(configListener);
+        manager.removeListener(managerListener);
         mappingsViewer.mappingSummaryDeleted(this);
+    }
+
+    private void managerEvent(final String eventType,
+                             final Object oldValue,
+                             final Object newValue) {
+        if (eventType.equals(Event.VARIABLE_VALUE.name())) {
+            variableValueUpdated((Variable)newValue);
+            return;
+        }
+        if (!equals(mapping, oldValue)) return;
+        if (eventType.equals(Event.MAPPING.name())) {
+            dispose((MappingOperation<?, ?>)oldValue);
+        } else if (eventType.equals(Event.MAPPING_SOURCE.name())) {
+            mapping = (MappingOperation<?, ?>)newValue;
+            setSourceText();
+            mappingSourcePane.layout();
+        } else if (eventType.equals(Event.MAPPING_TARGET.name())) {
+            mapping = (MappingOperation<?, ?>)newValue;
+            setTargetText();
+            mappingTargetPane.layout();
+        } else if (eventType.equals(Event.MAPPING_TRANSFORMATION.name())) {
+            mapping = (MappingOperation<?, ?>)newValue;
+            setSourceText();
+            mappingSourcePane.layout();
+        }
     }
 
     void select() {

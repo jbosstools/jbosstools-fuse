@@ -57,7 +57,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.tools.fuse.transformation.editor.Activator;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationConfig;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
@@ -74,7 +75,7 @@ public class ModelViewer extends Composite {
     private static final String FILTER_TYPES_PREFERENCE = ".filterTypes";
     private static final String SHOW_TYPES_PREFERENCE = ".showTypes";
 
-    final TransformationConfig config;
+    final TransformationManager manager;
     Model rootModel;
     boolean showTypes;
     boolean hideMappedProperties;
@@ -96,13 +97,13 @@ public class ModelViewer extends Composite {
     }
 
     /**
-     * @param config
+     * @param manager
      * @param parent
      * @param rootModel
      * @param potentialDropTargets
      * @param preferenceId
      */
-    ModelViewer(final TransformationConfig config,
+    ModelViewer(final TransformationManager manager,
                 final Composite parent,
                 final Model rootModel,
                 final List<PotentialDropTarget> potentialDropTargets,
@@ -110,7 +111,7 @@ public class ModelViewer extends Composite {
         super(parent, SWT.BORDER);
         setBackground(Colors.BACKGROUND);
 
-        this.config = config;
+        this.manager = manager;
         this.rootModel = rootModel;
 
         updateSearchMap(rootModel);
@@ -340,11 +341,11 @@ public class ModelViewer extends Composite {
             treeViewer.setInput("root");
         }
 
-        if (config != null) {
-            config.addListener(new PropertyChangeListener() {
+        if (manager != null) {
+            manager.addListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(final PropertyChangeEvent event) {
-                    if (event.getPropertyName().equals(TransformationConfig.MAPPING)) {
+                    if (event.getPropertyName().equals(Event.MAPPING)) {
                         if (!treeViewer.getControl().isDisposed()) {
                             treeViewer.refresh();
                         }
@@ -366,15 +367,6 @@ public class ModelViewer extends Composite {
         treeViewer.expandToLevel(model, 0);
     }
 
-    private boolean mapped(final Model model) {
-        if (config == null) {
-            return false;
-        }
-        return rootModel.equals(config.getSourceModel())
-               ? !config.getMappingsForSource(model).isEmpty()
-               : !config.getMappingsForTarget(model).isEmpty();
-    }
-
     private boolean mappedOrFullyMappedParent(final Model model) {
         final List<Model> children = model.getChildren();
         for (final Model child : children) {
@@ -382,7 +374,7 @@ public class ModelViewer extends Composite {
                 return false;
             }
         }
-        return (mapped(model)) ? true : !children.isEmpty();
+        return (manager.mapped(model)) ? true : !children.isEmpty();
     }
 
     void select(final Model model) {
@@ -474,8 +466,8 @@ public class ModelViewer extends Composite {
         private Image getImage(final Object element) {
             final Model model = (Model)element;
             if (model.getChildren() != null && model.getChildren().size() > 0)
-                return mapped(model) ? Images.MAPPED_NODE : Images.NODE;
-            return mapped(model) ? Images.MAPPED_PROPERTY : Images.PROPERTY;
+                return manager.mapped(model) ? Images.MAPPED_NODE : Images.NODE;
+            return manager.mapped(model) ? Images.MAPPED_PROPERTY : Images.PROPERTY;
         }
 
         private String getText(final Object element,
