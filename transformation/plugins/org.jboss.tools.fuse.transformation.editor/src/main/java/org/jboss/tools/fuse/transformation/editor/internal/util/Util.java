@@ -349,18 +349,18 @@ public class Util {
     }
 
     /**
+     * @param pane
      * @param arc
-     * @param background
-     * @return A paint listener that paints a border around a control. Useful for borders around labels
+     * @return A paint listener that paints a border around the supplied composite.
      */
-    public static final PaintListener roundedRectanglePainter(final int arc,
-                                                              final Color background) {
+    public static final PaintListener roundedRectanglePainter(final Composite pane,
+                                                              final int arc) {
         return new PaintListener() {
 
             @Override
             public void paintControl(final PaintEvent event) {
-                event.gc.setBackground(background);
-                final Rectangle bounds = ((Composite)event.widget).getClientArea();
+                event.gc.setBackground(pane.getForeground());
+                Rectangle bounds = ((Composite)event.widget).getClientArea();
                 event.gc.fillRoundRectangle(0, 0, bounds.width - 1, bounds.height - 1, arc, arc);
             }
         };
@@ -775,10 +775,6 @@ public class Util {
         Color SELECTED = Activator.color(21, 81, 207);
 
         Color SELECTED_NO_FOCUS = Activator.color(212, 212, 212);
-
-        Color TRANSFORMATION = Activator.color(192, 255, 192);
-
-        Color TRANSFORMATION_ALTERNATE = Activator.color(128, 255, 128);
     }
 
     public static interface Decorations {

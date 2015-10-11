@@ -13,11 +13,14 @@ import java.util.HashMap;
 import java.util.Map;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -48,6 +51,10 @@ public class Activator extends AbstractUIPlugin {
         color = new Color(null, rgb);
         plugin.colorRegistry.put(rgb, color);
         return color;
+    }
+
+    public static IPreferenceStore preferences() {
+        return plugin.getPreferenceStore();
     }
 
     /**
@@ -117,6 +124,13 @@ public class Activator extends AbstractUIPlugin {
     public void start(final BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
+        PreferenceConverter.setDefault(getPreferenceStore(),
+                                       MappingDetailViewer.TRANSFORMATION_FOREGROUND_PREFERENCE,
+                                       new RGB(0, 0, 0));
+        PreferenceConverter.setDefault(getPreferenceStore(),
+                                       MappingDetailViewer.TRANSFORMATION_BACKGROUND_PREFERENCE,
+                                       new RGB(255, 255, 0));
+        preferences().setDefault(MappingDetailViewer.TRANSFORMATION_USER_FRIENDLY_FORMAT_PREFERENCE, true);
     }
 
     /**

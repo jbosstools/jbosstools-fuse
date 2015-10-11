@@ -31,7 +31,6 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -70,9 +69,7 @@ import org.jboss.tools.fuse.transformation.model.Model;
 public class ModelViewer extends Composite {
 
     private static final String PREFERENCE_PREFIX = ModelViewer.class.getName() + ".";
-    private static final String FILTER_MAPPED_FIELDS_PREFERENCE = ".filterMappedFields";
     private static final String HIDE_MAPPED_PROPERTIES_PREFERENCE = ".hideMappedProperties";
-    private static final String FILTER_TYPES_PREFERENCE = ".filterTypes";
     private static final String SHOW_TYPES_PREFERENCE = ".showTypes";
 
     final TransformationManager manager;
@@ -256,13 +253,7 @@ public class ModelViewer extends Composite {
             }
         });
         if (preferenceId != null) {
-            String oldPref = PREFERENCE_PREFIX + preferenceId + FILTER_TYPES_PREFERENCE;
-            if (prefs.contains(oldPref)) {
-                showTypes = prefs.getBoolean(oldPref);
-                prefs.setToDefault(oldPref);
-            } else {
-                showTypes = prefs.getBoolean(PREFERENCE_PREFIX + preferenceId + SHOW_TYPES_PREFERENCE);
-            }
+            showTypes = prefs.getBoolean(PREFERENCE_PREFIX + preferenceId + SHOW_TYPES_PREFERENCE);
             filterTypesButton.setSelection(showTypes);
         }
         if (filterMappedPropertiesButton != null) {
@@ -280,13 +271,7 @@ public class ModelViewer extends Composite {
                 }
             });
             if (preferenceId != null) {
-                String oldPref = PREFERENCE_PREFIX + preferenceId + FILTER_MAPPED_FIELDS_PREFERENCE;
-                if (prefs.contains(oldPref)) {
-                    hideMappedProperties = prefs.getBoolean(oldPref);
-                    prefs.setToDefault(oldPref);
-                } else {
-                    hideMappedProperties = prefs.getBoolean(PREFERENCE_PREFIX + preferenceId + HIDE_MAPPED_PROPERTIES_PREFERENCE);
-                }
+                hideMappedProperties = prefs.getBoolean(PREFERENCE_PREFIX + preferenceId + HIDE_MAPPED_PROPERTIES_PREFERENCE);
                 filterMappedPropertiesButton.setSelection(hideMappedProperties);
             }
         }

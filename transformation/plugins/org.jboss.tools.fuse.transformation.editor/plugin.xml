@@ -78,4 +78,13 @@
             class="org.jboss.tools.fuse.transformation.editor.transformations.NumericFunctions">
       </Function>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.fusesource.ide.branding.preferences.root"
+            class="org.jboss.tools.fuse.transformation.extensions.PreferencePage"
+            id="org.jboss.tools.fuse.transformation.editor.page1"
+            name="%preference-page.name">
+      </page>
+   </extension>
 </plugin>

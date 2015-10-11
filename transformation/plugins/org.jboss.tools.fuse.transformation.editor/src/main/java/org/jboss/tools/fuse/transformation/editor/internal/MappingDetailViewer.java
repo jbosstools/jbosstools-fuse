@@ -21,6 +21,8 @@ import java.util.Map.Entry;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -30,17 +32,23 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -72,14 +80,16 @@ public class MappingDetailViewer extends MappingViewer {
 
     private static final String PREFERENCE_PREFIX = MappingDetailViewer.class.getName() + ".";
 
-    private static final String STANDARD_FORMAT_PREFERENCE = PREFERENCE_PREFIX + "standardFormat";
+    public static final String TRANSFORMATION_BACKGROUND_PREFERENCE = PREFERENCE_PREFIX + "transformationBackground";
+    public static final String TRANSFORMATION_FOREGROUND_PREFERENCE = PREFERENCE_PREFIX + "transformationForeground";
+    public static final String TRANSFORMATION_USER_FRIENDLY_FORMAT_PREFERENCE =
+        PREFERENCE_PREFIX + "transformationUserFriendlyFormat";
 
     private final ScrolledComposite scroller;
     private final Map<Integer, Text> textById = new HashMap<>();
     private int nextFocusedTextId;
     private transient int focusedTextId = -1;
     private transient int focusedTextOffset;
-    private boolean standardFormat;
 
     /**
      * @param manager
@@ -103,8 +113,6 @@ public class MappingDetailViewer extends MappingViewer {
                 managerEvent(event.getPropertyName(), event.getOldValue(), event.getNewValue());
             }
         });
-
-        standardFormat = Activator.plugin().getPreferenceStore().getBoolean(STANDARD_FORMAT_PREFERENCE);
     }
 
     private void addCustomTransformation() throws Exception {
@@ -205,12 +213,12 @@ public class MappingDetailViewer extends MappingViewer {
         pane.setLayout(GridLayoutFactory.swtDefaults().create());
         pane.setBackground(parent.getForeground());
         pane.setForeground(color);
-        pane.addPaintListener(Util.roundedRectanglePainter(10, pane.getForeground()));
+        pane.addPaintListener(Util.roundedRectanglePainter(pane, 10));
         return pane;
     }
 
-    private void createSourcePane(Composite parent) {
-        ControlWithMenuPane propPane = new ControlWithMenuPane(parent) {
+    private ControlWithMenuPane createSourcePane(Composite parent) {
+        final ControlWithMenuPane propPane = new ControlWithMenuPane(parent) {
 
             @Override
             void createControl() {
@@ -310,6 +318,7 @@ public class MappingDetailViewer extends MappingViewer {
                 });
             }
         }
+        return propPane;
     }
 
     private void createTargetPane(Composite parent) {
@@ -421,12 +430,15 @@ public class MappingDetailViewer extends MappingViewer {
         List<Integer> indexes = Util.sourceUpdateIndexes(mapping);
         parent = createContainerPane(parent, true, sourceModel.getParent(), indexes, indexes.size() - 1);
         final TransformationMapping xformMapping = (TransformationMapping)mapping;
+        RGB rgb = PreferenceConverter.getColor(Activator.preferences(), TRANSFORMATION_FOREGROUND_PREFERENCE);
+        final Color foreground = Activator.color(rgb.red, rgb.green, rgb.blue);
         try {
             Method xform = transformation(xformMapping, sourceModel);
             final Function annotation = xform.getAnnotation(Function.class);
             final String[] mappingArgs = xformMapping.getTransformationArguments();
             final Class<?>[] types = xform.getParameterTypes();
-            if (standardFormat || annotation == null || annotation.format().isEmpty()) {
+            if (!Activator.preferences().getBoolean(TRANSFORMATION_USER_FRIENDLY_FORMAT_PREFERENCE)
+                || annotation == null || annotation.format().isEmpty()) {
                 new TransformationControl(parent, xformMapping, annotation) {
 
                     @Override
@@ -436,14 +448,17 @@ public class MappingDetailViewer extends MappingViewer {
                         Label label = new Label(parent, SWT.NONE);
                         label.setText(transformationMapping.getTransformationName() + "(");
                         setToolTipToTransformationDescription(label);
-                        createSourcePane(parent);
+                        label.setForeground(foreground);
+                        createSourcePane(parent).setMenuArrowColor(foreground);
                         for (int typeNdx = 1; typeNdx < types.length; typeNdx++) {
                             new Label(parent, SWT.NONE).setText(",");
                             int argNdx = typeNdx - 1;
                             Arg argAnno = annotation == null ? null : argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
                             createTransformationParameterControl(parent, types[typeNdx], argAnno, transformationMapping, mappingArgs, argNdx);
                         }
-                        new Label(parent, SWT.NONE).setText(")");
+                        label = new Label(parent, SWT.NONE);
+                        label.setText(")");
+                        label.setForeground(foreground);
                     }
                 }.create();
             } else {
@@ -457,7 +472,7 @@ public class MappingDetailViewer extends MappingViewer {
                             Object part = parts[ndx];
                             if (part instanceof FormatSpecifier) {
                                 int typeNdx = ((FormatSpecifier)part).index() - 1;
-                                if (typeNdx == 0) createSourcePane(parent);
+                                if (typeNdx == 0) createSourcePane(parent).setMenuArrowColor(foreground);
                                 else {
                                     int argNdx = typeNdx - 1;
                                     Arg argAnno = argNdx < annotation.args().length ? annotation.args()[argNdx] : null;
@@ -466,6 +481,7 @@ public class MappingDetailViewer extends MappingViewer {
                             } else {
                                 Label label = new Label(parent, SWT.NONE);
                                 label.setText(part.toString().trim());
+                                label.setForeground(foreground);
                                 setToolTipToTransformationDescription(label);
                             }
                             layout.numColumns++;
@@ -483,8 +499,11 @@ public class MappingDetailViewer extends MappingViewer {
                     Label label = new Label(parent, SWT.NONE);
                     label.setText(transformationMapping.getTransformationName() + "(");
                     label.setToolTipText(transformationMapping.getTransformationClass() + '.' + transformationMapping.getTransformationName());
-                    createSourcePane(parent);
-                    new Label(parent, SWT.NONE).setText(")");
+                    label.setForeground(foreground);
+                    createSourcePane(parent).setMenuArrowColor(foreground);
+                    label = new Label(parent, SWT.NONE);
+                    label.setText(")");
+                    label.setForeground(foreground);
                 }
             }.create();
         }
@@ -646,17 +665,19 @@ public class MappingDetailViewer extends MappingViewer {
 
     private abstract class ControlWithMenuPane extends Composite {
 
-        final Map<String, MenuItemHandler> menuItems = new LinkedHashMap<>();
+        private final Map<String, MenuItemHandler> menuItems = new LinkedHashMap<>();
+        Label menuArrow;
+        private Color menuArrowColor;
 
-        ControlWithMenuPane(final Composite parent) {
+        private ControlWithMenuPane(Composite parent) {
             super(parent, SWT.NONE);
             setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
             setLayout(GridLayoutFactory.fillDefaults().spacing(1, 0).numColumns(2).create());
             setBackground(parent.getForeground());
         }
 
-        void addMenuItem(final String item,
-                         final MenuItemHandler handler) {
+        void addMenuItem(String item,
+                         MenuItemHandler handler) {
             menuItems.put(item, handler);
         }
 
@@ -667,8 +688,8 @@ public class MappingDetailViewer extends MappingViewer {
 
         abstract void createControl();
 
-        Label createMenuArrow() {
-            final Label menuArrow = new Label(this, SWT.NONE);
+        void createMenuArrow() {
+            menuArrow = new Label(this, SWT.NONE);
             menuArrow.setImage(Images.MENU);
             menuArrow.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.BOTTOM).create());
             menuArrow.setBackground(getBackground());
@@ -682,13 +703,24 @@ public class MappingDetailViewer extends MappingViewer {
             };
             menuArrow.addMouseListener(listener);
             addMouseListener(listener);
-            return menuArrow;
+            menuArrow.addPaintListener(new PaintListener() {
+
+                @Override
+                public void paintControl(PaintEvent event) {
+                    if (menuArrowColor == null) return;
+                    event.gc.setForeground(menuArrowColor);
+                    Rectangle bounds = ((Control)event.widget).getBounds();
+                    for (int x = bounds.width / 2, x2 = x, y = bounds.height - 1; x >= 0; x--, x2++, y--) {
+                        event.gc.drawLine(x, y, x2, y);
+                    }
+                }
+            });
         }
 
-        void popupMenu(Label menuArrow,
-                       Control source,
-                       int x,
-                       int y) {
+        private void popupMenu(Label menuArrow,
+                               Control source,
+                               int x,
+                               int y) {
             Point size = source.getSize();
             if (x < 0 || x > size.x || y < 0 || y > size.y) return;
             Menu popupMenu = new Menu(menuArrow);
@@ -701,6 +733,10 @@ public class MappingDetailViewer extends MappingViewer {
             }
             popupMenu.setLocation(toDisplay(menuArrow.getBounds().x, getBounds().height + 5));
             popupMenu.setVisible(true);
+        }
+
+        void setMenuArrowColor(Color menuArrowColor) {
+            this.menuArrowColor = menuArrowColor;
         }
     }
 
@@ -720,11 +756,11 @@ public class MappingDetailViewer extends MappingViewer {
     private abstract class TransformationControl extends ControlWithMenuPane {
 
         TransformationMapping transformationMapping;
-        Function annotation;
+        private Function annotation;
 
-        TransformationControl(Composite parent,
-                              TransformationMapping transformationMapping,
-                              Function annotation) {
+        private TransformationControl(Composite parent,
+                                      TransformationMapping transformationMapping,
+                                      Function annotation) {
             super(parent);
             this.transformationMapping = transformationMapping;
             this.annotation = annotation;
@@ -732,18 +768,37 @@ public class MappingDetailViewer extends MappingViewer {
 
         @Override
         void createControl() {
-            Composite pane = createRoundedPane(this, Colors.TRANSFORMATION);
+            RGB rgb = PreferenceConverter.getColor(Activator.preferences(), TRANSFORMATION_BACKGROUND_PREFERENCE);
+            final Composite pane = createRoundedPane(this, Activator.color(rgb.red, rgb.green, rgb.blue));
             pane.setBackground(pane.getParent().getBackground());
             GridLayout layout = GridLayoutFactory.swtDefaults().create();
             pane.setLayout(layout);
             setToolTipToTransformationDescription(pane);
             createTransformation(pane, layout);
+            final IPropertyChangeListener listener = new IPropertyChangeListener() {
+
+                @Override
+                public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+                    if (event.getProperty().equals(TRANSFORMATION_USER_FRIENDLY_FORMAT_PREFERENCE)
+                        || event.getProperty().equals(TRANSFORMATION_BACKGROUND_PREFERENCE)
+                        || event.getProperty().equals(TRANSFORMATION_FOREGROUND_PREFERENCE))
+                        update(mapping);
+                }
+            };
+            Activator.preferences().addPropertyChangeListener(listener);
+            addDisposeListener(new DisposeListener() {
+
+                @Override
+                public void widgetDisposed(DisposeEvent event) {
+                    Activator.preferences().removePropertyChangeListener(listener);
+                }
+            });
         }
 
         @Override
-        Label createMenuArrow() {
-            Label menu = super.createMenuArrow();
-            setToolTipToTransformationDescription(menu);
+        void createMenuArrow() {
+            super.createMenuArrow();
+            setToolTipToTransformationDescription(menuArrow);
             if (annotation != null) {
                 addMenuItem("Edit transformation", new MenuItemHandler() {
 
@@ -751,19 +806,6 @@ public class MappingDetailViewer extends MappingViewer {
                     public void widgetSelected(SelectionEvent event) {
                         try {
                             addOrEditTransformation();
-                        } catch (final Exception e) {
-                            Activator.error(e);
-                        }
-                    }
-                });
-                addMenuItem("Show " + (standardFormat ? "user-friendly" : "standard") + " formatting", new MenuItemHandler() {
-
-                    @Override
-                    public void widgetSelected(SelectionEvent event) {
-                        try {
-                            standardFormat = !standardFormat;
-                            Activator.plugin().getPreferenceStore().setValue(STANDARD_FORMAT_PREFERENCE, standardFormat);
-                            update(mapping);
                         } catch (final Exception e) {
                             Activator.error(e);
                         }
@@ -781,7 +823,6 @@ public class MappingDetailViewer extends MappingViewer {
                     }
                 }
             });
-            return menu;
         }
 
         abstract void createTransformation(Composite parent,
@@ -795,7 +836,7 @@ public class MappingDetailViewer extends MappingViewer {
         }
     }
 
-    final class VariableDialog extends BaseDialog {
+    class VariableDialog extends BaseDialog {
 
         Variable variable;
 
