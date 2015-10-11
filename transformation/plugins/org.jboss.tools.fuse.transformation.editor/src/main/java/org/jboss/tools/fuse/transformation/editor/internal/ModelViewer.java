@@ -153,23 +153,8 @@ public class ModelViewer extends Composite {
         clearSearchLabel.setBackground(getBackground());
         searchPane.addPaintListener(Util.ovalBorderPainter());
 
-        treeViewer = new TreeViewer(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-        treeViewer.getTree().setLayoutData(GridDataFactory.fillDefaults()
-                                                          .span(2, 1)
-                                                          .grab(true, true)
-                                                          .create());
-        treeViewer.setComparator(new ViewerComparator() {
-
-            @Override
-            public int compare(final Viewer viewer,
-                               final Object model1,
-                               final Object model2) {
-                if (model1 instanceof Model && model2 instanceof Model) {
-                    return ((Model) model1).getName().compareTo(((Model) model2).getName());
-                }
-                return 0;
-            }
-        });
+        treeViewer = new TreeViewer(this, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
+        treeViewer.getTree().setLayoutData(GridDataFactory.fillDefaults().span(2, 1).grab(true, true).create());
         treeViewer.setLabelProvider(new LabelProvider());
         ColumnViewerToolTipSupport.enableFor(treeViewer);
         treeViewer.setContentProvider(new ContentProvider());
