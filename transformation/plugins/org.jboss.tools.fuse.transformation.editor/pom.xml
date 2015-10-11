@@ -10,13 +10,13 @@
     <packaging>eclipse-plugin</packaging>
     <name>JBoss Fuse Tooling :: Data Transformation :: Plugins :: Editor</name>
     <dependencies>
+	    <dependency>
+	      <groupId>com.sun.xml.bind</groupId>
+	      <artifactId>jaxb-xjc</artifactId>
+	    </dependency>
         <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-xjc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
+            <groupId>org.jboss.tools.fuse.transformation</groupId>
+            <artifactId>data-transform-common</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -43,51 +43,22 @@
 					    <goals>
 					        <goal>copy</goal>
 					    </goals>
-                        <configuration>
-                        	<skip>false</skip>
-						    <outputDirectory>${basedir}/libs/</outputDirectory>
-              				<stripVersion>true</stripVersion>
-						    <artifactItems>
-								<artifactItem>
-								    <groupId>org.jboss.tools.fuse.transformation</groupId>
-								    <artifactId>data-transform-common</artifactId>
-								</artifactItem>
-                                <artifactItem>
-                                    <groupId>com.sun.xml.bind</groupId>
-                                    <artifactId>jaxb-xjc</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-									<groupId>com.sun.xml.bind</groupId>
-									<artifactId>jaxb-impl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-									<groupId>org.jsonschema2pojo</groupId>
-									<artifactId>jsonschema2pojo-core</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.fasterxml.jackson.core</groupId>
-                                    <artifactId>jackson-core</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.fasterxml.jackson.core</groupId>
-                                    <artifactId>jackson-annotations</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.fasterxml.jackson.core</groupId>
-                                    <artifactId>jackson-databind</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-							        <groupId>org.apache.commons</groupId>
-							        <artifactId>commons-lang3</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-							        <groupId>org.apache.xmlbeans</groupId>
-							        <artifactId>xmlbeans</artifactId>
-                                </artifactItem>
-						    </artifactItems>
-                        </configuration>
                     </execution>
 		        </executions>
+                <configuration>
+                    <skip>false</skip>
+                    <outputDirectory>${basedir}/libs/</outputDirectory>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>org.jboss.tools.fuse.transformation</groupId>
+                            <artifactId>data-transform-common</artifactId>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>com.sun.xml.bind</groupId>
+                            <artifactId>jaxb-xjc</artifactId>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
             </plugin>
 	    </plugins>
     </build>

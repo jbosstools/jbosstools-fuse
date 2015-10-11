@@ -4,14 +4,7 @@
 	<classpathentry kind="src" path="src/main/java/"/>
 	<classpathentry kind="src" path="src/main/resources/"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="libs/data-transform-common.jar" sourcepath="/data-transform-common"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-impl.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-xjc.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jsonschema2pojo-core.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jackson-annotations.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jackson-core.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jackson-databind.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-lang3.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/xmlbeans.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/data-transform-common-8.0.0-SNAPSHOT.jar" sourcepath="/data-transform-common"/>
+    <classpathentry exported="true" kind="lib" path="libs/jaxb-xjc-2.2.6.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

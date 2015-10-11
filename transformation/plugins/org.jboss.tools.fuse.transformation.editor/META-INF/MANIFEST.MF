@@ -28,12 +28,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .,
- libs/data-transform-common.jar,
- libs/jaxb-impl.jar,
- libs/jaxb-xjc.jar,
- libs/jsonschema2pojo-core.jar,
- libs/jackson-annotations.jar,
- libs/jackson-core.jar,
- libs/jackson-databind.jar,
- libs/commons-lang3.jar,
- libs/xmlbeans.jar
+ libs/data-transform-common-8.0.0-SNAPSHOT.jar,
+ libs/jaxb-xjc-2.2.6.jar

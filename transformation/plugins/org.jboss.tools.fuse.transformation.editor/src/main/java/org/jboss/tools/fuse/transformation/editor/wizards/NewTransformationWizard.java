@@ -20,6 +20,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JPackage;
 import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.model.dataformat.DataFormatsDefinition;
 import org.apache.camel.spring.CamelContextFactoryBean;
@@ -71,9 +74,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPa
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
 import org.jboss.tools.fuse.transformation.model.json.JsonModelGenerator;
 import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JPackage;
 
 /**
  * @author brianf

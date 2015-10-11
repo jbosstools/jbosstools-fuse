@@ -301,7 +301,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
         if (superTypeName == null) {
         	superTypeName = "java.lang.Object"; //$NONNLS-1$
         }
-        if (superTypeName != null && model.getProject() != null) {
+        if (model.getProject() != null) {
             if (project == null) {
                 project = model.getProject();
             }
