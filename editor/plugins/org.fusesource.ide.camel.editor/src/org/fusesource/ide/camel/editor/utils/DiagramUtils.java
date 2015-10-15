@@ -20,14 +20,21 @@ import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.AnchorContainer;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
-
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 /**
  * @author lhein
  */
 public class DiagramUtils {
+	
+	public static final String PROP_ORIGINAL_SECTION_HEIGHT = "originalSectionHeight";
+	public static final String PROP_IMG_WIDTH = "imgWidth";
+	public static final String PROP_SHAPE_KIND = "shapeKind";
+	public static final String PROP_SHAPE_KIND_EXPANDABLE = "expandable";
+	public static final String PROP_SHAPE_KIND_HEADER = "header";
+	public static final String PROP_SHAPE_KIND_TITLE = "title";
+	
 	
 	private static int TEXT_MAX_LENGTH = 20;
 	private static String TEXT_FILL_CHARS = "...";
@@ -50,9 +57,9 @@ public class DiagramUtils {
 		return null;
 	}
 	
-	public static void setGridVisible(boolean visible, RiderDesignEditor editor) {
+	public static void setGridVisible(boolean visible, CamelDesignEditor editor) {
 		if (editor == null) {
-			editor = Activator.getDiagramEditor();
+			editor = CamelEditorUIActivator.getDiagramEditor();
 		}
 		if (editor != null) {
 			GraphicalViewer graphicalViewer = editor.getGraphicalViewer();
@@ -74,7 +81,7 @@ public class DiagramUtils {
 	 */
 	public static String filterFigureLabel(String originalLabel) {
 		String label = originalLabel;
-		if (label.length()>TEXT_MAX_LENGTH) {
+		if (TEXT_MAX_LENGTH != -1 && label.length()>TEXT_MAX_LENGTH) {
 			label = label.substring(0, TEXT_MAX_LENGTH - TEXT_FILL_CHARS.length());
 			label += TEXT_FILL_CHARS;
 		}

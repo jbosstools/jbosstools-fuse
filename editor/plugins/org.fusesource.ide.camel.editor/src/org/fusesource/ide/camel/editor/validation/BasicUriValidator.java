@@ -13,8 +13,7 @@ package org.fusesource.ide.camel.editor.validation;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.Endpoint;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
  * @author lhein
@@ -23,16 +22,16 @@ public class BasicUriValidator implements ValidationSupport {
     
     /*
      * (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.validation.BasicNodeValidator#validate(org.fusesource.ide.camel.model.AbstractNode)
+     * @see org.fusesource.ide.camel.editor.validation.ValidationSupport#validate(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
      */
     @Override
-    public ValidationResult validate(AbstractNode node) {
+    public ValidationResult validate(CamelModelElement node) {
         ValidationResult res = new ValidationResult();
         
-        if (node instanceof Endpoint) {
-            Endpoint ep = (Endpoint)node;
+        if (node.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("from") ||
+        	node.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("to")) {
             try {
-                new URI(ep.getUri());
+                new URI(node.getParameter("uri").toString());
             } catch (URISyntaxException ex) {
                 res.addError(ex.getMessage());
             }

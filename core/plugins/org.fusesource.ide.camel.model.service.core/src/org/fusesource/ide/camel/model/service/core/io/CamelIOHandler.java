@@ -44,15 +44,8 @@ public class CamelIOHandler {
     
     private Document document;
 
-    /**
-     * creates a new io handler using the Camel Namespace Mapper
-     */
-    public CamelIOHandler() {
-        
-    }
-
 	/**
-     * loads the camel xml
+     * loads the camel xml from a resource
      * 
      * @param res
      * @param monitor
@@ -69,33 +62,67 @@ public class CamelIOHandler {
 
 			DocumentBuilder db = createDocumentBuilder();
 	        document = db.parse(xmlFile);
-			cf = new CamelFile(res);
-	        cf.setDocument(document);
-	        NodeList childNodes = document.getDocumentElement().getChildNodes();
-	        for (int i = 0; i<childNodes.getLength(); i++) {
-	        	Node child = childNodes.item(i);
-
-	        	String name = child.getNodeName();
-	        	if (name.equals("#text")) continue;
-	        	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : UUID.randomUUID().toString();
-	        	if (name.equals(CAMEL_CONTEXT)) {
-	        		// found a camel context
-	        		CamelContextElement cce = new CamelContextElement(cf, child);
-	        		cce.setId(id);
-	        		// then add the context to the file
-	        		cf.addChildElement(cce);
-	        	} else {
-	        		// found a global configuration element
-	        		cf.addGlobalDefinition(id, child);
-	        	}	        	
-	        }
+	        cf = readDocumentToModel(document, res);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML file from " + res.getFullPath().toOSString(), ex);
 		}
 
 		return cf;
 	}
 
+    /**
+     * loads the camel xml from a string
+     * 
+     * @param text
+     * @param monitor
+     * @return	the camel file object representation or null on errors
+     */
+    public CamelFile loadCamelModel(String text, IProgressMonitor monitor) {
+    	CamelFile cf = null;
+    	try {
+			DocumentBuilder db = createDocumentBuilder();
+	        document = db.parse(text);
+			cf = readDocumentToModel(document, null);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML from string", ex);
+		}
+
+		return cf;
+	}
+
+    /**
+     * reads the document into internal model
+     * 
+     * @param document
+     * @return
+     */
+    protected CamelFile readDocumentToModel(Document document, IResource res) {
+        CamelFile cf = new CamelFile(null);
+        cf.setResource(res);
+        cf.setDocument(document);
+        NodeList childNodes = document.getDocumentElement().getChildNodes();
+        for (int i = 0; i<childNodes.getLength(); i++) {
+        	Node child = childNodes.item(i);
+
+        	String name = child.getNodeName();
+        	if (child.getNodeType() != Node.ELEMENT_NODE) continue;
+        	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : UUID.randomUUID().toString();
+        	if (name.equals(CAMEL_CONTEXT)) {
+        		// found a camel context
+        		CamelContextElement cce = new CamelContextElement(cf, child);
+        		cce.setId(id);
+        		cce.initialize();
+        		// then add the context to the file
+        		cf.addChildElement(cce);
+        	} else {
+        		// found a global configuration element
+        		cf.addGlobalDefinition(id, child);
+        	}	        	
+        }
+        return cf;
+    }
     
     /**
      * saves the camel model to file

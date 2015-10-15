@@ -11,7 +11,6 @@
 
 package org.fusesource.ide.camel.editor.provider.ext;
 
-
 /**
  * @author lhein
  */

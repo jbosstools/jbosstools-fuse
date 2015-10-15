@@ -1,13 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2015 Red Hat, Inc.
- * Distributed under license by Red Hat, Inc. All rights reserved.
- * This program is made available under the terms of the
- * Eclipse Public License v1.0 which accompanies this distribution,
- * and is available at http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     Red Hat, Inc. - initial API and implementation
- ******************************************************************************/
+/******************************************************************************* 
+ * Copyright (c) 2015 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/ 
 
 package org.fusesource.ide.camel.editor.features.custom;
 
@@ -20,9 +20,9 @@ import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.fusesource.ide.camel.editor.Activator;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
  * @author lhein
@@ -71,8 +71,8 @@ public class DoubleClickFeature extends AbstractCustomFeature {
                 .getStart().getParent() : context.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        if (bo instanceof AbstractNode) {
-        	AbstractNode _ep = (AbstractNode) bo;
+        if (bo instanceof CamelModelElement) {
+        	CamelModelElement _ep = (CamelModelElement) bo;
         	
         	// inject palette entries delivered via extension points
             IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(DBL_CLICK_HANDLER_EXT_POINT_ID);
@@ -85,7 +85,7 @@ public class DoubleClickFeature extends AbstractCustomFeature {
                     }
                 }
             } catch (CoreException ex) {
-                Activator.getLogger().error(ex);
+                CamelEditorUIActivator.pluginLog().logError(ex);
             }
         	
         }

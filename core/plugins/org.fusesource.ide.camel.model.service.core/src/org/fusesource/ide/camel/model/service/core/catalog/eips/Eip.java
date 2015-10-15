@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.model.service.core.catalog.eips;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -49,6 +50,21 @@ public class Eip implements ICamelCatalogElement {
 	 */
 	public void setParameters(ArrayList<Parameter> parameters) {
 		this.parameters = parameters;
+	}
+	
+	/**
+	 * returns the parameter with the given name
+	 * 
+	 * @param name
+	 * @return the parameter or null if not found
+	 */
+	public Parameter getParameter(String name) {
+		for (Parameter p : getParameters()) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -170,5 +186,38 @@ public class Eip implements ICamelCatalogElement {
 	 */
 	public void setTags(ArrayList<String> tags) {
 		this.tags = tags;
+	}
+	
+	/**
+	 * returns true if this element can have child elements
+	 * 
+	 * @return
+	 */
+	public boolean canHaveChildren() {
+		for (Parameter p : getParameters()) {
+			if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase("element")) return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * returns the list of allowed node type id values for child elements
+	 * 
+	 * @return	a list of allowed node type ids or an empty list if not a container
+	 */
+	public List<String> getAllowedChildrenNodeTypes() {
+		ArrayList<String> allowedNodeTypes = new ArrayList<String>();
+		if (canHaveChildren()) {
+			for (Parameter p : getParameters()) {
+				if (p.getType().equalsIgnoreCase("array") && p.getKind().equalsIgnoreCase("element") && p.getOneOf() != null) {
+					String oneOfList = p.getOneOf();
+					String[] types = oneOfList.split(",");
+					for (String type : types) {
+						allowedNodeTypes.add(type.trim());
+					}
+				}
+			}
+		}
+		return allowedNodeTypes;
 	}
 }

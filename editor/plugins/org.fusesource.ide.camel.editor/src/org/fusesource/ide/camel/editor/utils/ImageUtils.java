@@ -13,8 +13,7 @@ package org.fusesource.ide.camel.editor.utils;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.editor.Activator;
-
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 /**
  * @author lhein
@@ -33,7 +32,7 @@ public final class ImageUtils {
 	 */
 	public static Dimension getImageSize(String imageId) {
 		Dimension dim = null;
-		Image img = Activator.getDefault().getImage(imageId);
+		Image img = CamelEditorUIActivator.getDefault().getImage(imageId);
 		if (img != null) 
 			dim = new Dimension(img); 
 		else 

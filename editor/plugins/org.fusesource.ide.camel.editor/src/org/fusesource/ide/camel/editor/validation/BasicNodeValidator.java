@@ -14,11 +14,10 @@ package org.fusesource.ide.camel.editor.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
-import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 
@@ -29,30 +28,29 @@ public class BasicNodeValidator implements ValidationSupport {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.validation.ValidationSupport#validate(org.fusesource.ide.camel.model.AbstractNode)
+	 * @see org.fusesource.ide.camel.editor.validation.ValidationSupport#validate(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
     @Override
-    public ValidationResult validate(AbstractNode node) {
+    public ValidationResult validate(CamelModelElement node) {
 		ValidationResult result = new ValidationResult();
-
-		// we check if all mandatory fields are filled
-		for (IPropertyDescriptor pd : node.getPropertyDescriptors()) {
-			if( pd == null ) {
-				continue;
-			}
-			String property = NodeUtils.getPropertyName(pd.getId());
-			if (NodeUtils.isMandatory(node, property)) {
-				Object val = node.getPropertyValue(pd.getId());
-				if (val == null || val.toString().trim().length()<1) {
-					result.addError("There are mandatory fields which are not filled. Please check the properties view for more details.");
+		
+		if (node != null && node.getCamelContext() != null) { // TODO: check why camel context can be null?!?
+			// we check if all mandatory fields are filled
+			for (Parameter pd : node.getUnderlyingMetaModelObject().getParameters()) {
+				String property = pd.getName();
+				if (pd.getRequired().equalsIgnoreCase("true")) {
+					Object val = node.getParameter(property);
+					if (val == null || val.toString().trim().length()<1) {
+						result.addError("There are mandatory fields which are not filled. Please check the properties view for more details.");
+					}
 				}
-			}
-			// check if the ID is unique
-			if (property.equalsIgnoreCase("id")) {
-				RiderDesignEditor editor = Activator.getDiagramEditor();
-				if (editor != null) {
-					if (!checkAllUniqueIDs(node, editor.getModel().getChildren(), new ArrayList<String>())) {
-						result.addError("The id property is not unique!");
+				// check if the ID is unique
+				if (property.equalsIgnoreCase("id")) {
+					CamelDesignEditor editor = CamelEditorUIActivator.getDiagramEditor();
+					if (editor != null) {
+						if (!checkAllUniqueIDs(node, node.getCamelContext().getChildElements(), new ArrayList<String>())) {
+							result.addError("The id property is not unique!");
+						}
 					}
 				}
 			}
@@ -69,11 +67,11 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @param processedNodeIDs
 	 * @return
 	 */
-	protected boolean checkAllUniqueIDs(AbstractNode nodeUnderValidation, List<AbstractNode> nodes, ArrayList<String> processedNodeIDs) {
+	protected boolean checkAllUniqueIDs(CamelModelElement nodeUnderValidation, List<CamelModelElement> nodes, ArrayList<String> processedNodeIDs) {
 		boolean noDoubledIDs = true;
-		for (AbstractNode node : nodes) {
-			if (node.getChildren() != null) {
-				noDoubledIDs = checkAllUniqueIDs(nodeUnderValidation, node.getChildren(), processedNodeIDs);
+		for (CamelModelElement node : nodes) {
+			if (node.getChildElements() != null) {
+				noDoubledIDs = checkAllUniqueIDs(nodeUnderValidation, node.getChildElements(), processedNodeIDs);
 				if (noDoubledIDs == false) return false;
 			}
 			if (noDoubledIDs) {

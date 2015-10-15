@@ -162,4 +162,12 @@ public class CamelFile extends CamelModelElement {
 	public boolean isSpring() {
 		return this.schemaType != null && schemaType.equals(CamelSchemaType.SPRING);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#getCamelFile()
+	 */
+	@Override
+	public CamelFile getCamelFile() {
+		return this;
+	}
 }

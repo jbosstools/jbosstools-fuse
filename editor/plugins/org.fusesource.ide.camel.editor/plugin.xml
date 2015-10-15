@@ -3,22 +3,86 @@
 <plugin>
    <extension-point id="org.fusesource.ide.editor.paletteContributor" name="Fuse Camel Editor Palette Contributor" schema="schema/org.fusesource.ide.editor.paletteContributor.exsd"/>
    <extension-point id="org.fusesource.ide.editor.dblClickHandler" name="Fuse Camel Editor Double Click Handler" schema="schema/org.fusesource.ide.editor.dblClickHandler.exsd"/>
+
+   <!-- definition for the camel editor -->
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.fusesource.ide.camel.editor.editor.RiderEditor"
-            contributorClass="org.fusesource.ide.camel.editor.editor.RiderEditorActionBarContributor"
+            class="org.fusesource.ide.camel.editor.CamelEditor"
+            
             default="false"
             extensions="xml"
             icon="icons/camel_context_icon.png"
             id="org.fusesource.ide.camel.editor"
-            name="%rider.editor.label">
+            name="%integration.editor.label">
          <contentTypeBinding
                contentTypeId="org.fusesource.ide.camel.editor.camelContentType">
          </contentTypeBinding>
       </editor>
    </extension>
+   <!--
+   contributorClass="org.fusesource.ide.camel.editor.editor.RiderEditorActionBarContributor"
+   -->
    
+   <!-- definition for the camel xml content type -->
+   <extension point="org.eclipse.core.contenttype.contentTypes"> 
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            describer="org.fusesource.ide.foundation.core.xml.namespace.CamelNamespaceXmlContentDescriber"
+            file-extensions="xml"
+            id="org.fusesource.ide.camel.editor.camelContentType"
+            name="Camel XML"
+            priority="high">
+      </content-type> 
+   </extension>
+   
+   <!-- Graphiti related definitions -->
+   <extension
+         point="org.eclipse.graphiti.ui.diagramTypes">
+      <diagramType
+            description="%integration.editor.diagram.type.description"
+            id="org.fusesource.ide.camel.editor.diagramtype.id"
+            name="%integration.editor.diagram.type.name"
+            type="CamelContext">
+      </diagramType>
+   </extension>
+
+   <extension
+         point="org.eclipse.graphiti.ui.imageProviders">
+      <imageProvider
+            class="org.fusesource.ide.camel.editor.provider.ImageProvider"
+            id="org.fusesource.ide.camel.editor.imageprovider.id">
+      </imageProvider>
+   </extension>
+
+   <extension
+         point="org.eclipse.graphiti.ui.diagramTypeProviders">
+      <diagramTypeProvider
+            class="org.fusesource.ide.camel.editor.provider.DiagramTypeProvider"
+            description="%integration.editor.dtp.description"
+            id="org.fusesource.ide.camel.editor.dtp.id"
+            name="%integration.editor.dtp.name">
+         <diagramType
+               id="org.fusesource.ide.camel.editor.diagramtype.id">
+         </diagramType>
+         <imageProvider
+               id="org.fusesource.ide.camel.editor.imageprovider.id">
+         </imageProvider>
+      </diagramTypeProvider>
+   </extension>
+   
+   
+
+
+
+
+
+
+
+
+   
+   <!-- TODO: why not simply move that view to JMX where it belongs? -->
+<!--
    <extension
          point="org.eclipse.ui.views">
       <category
@@ -179,16 +243,7 @@
             name="%rider.preferences.editor.colors">
       </page>
    </extension>
-   <extension point="org.eclipse.core.contenttype.contentTypes"> 
-      <content-type
-            base-type="org.eclipse.core.runtime.xml"
-            describer="org.fusesource.ide.commons.contenttype.CamelNamespaceXmlContentDescriber"
-            file-extensions="xml"
-            id="org.fusesource.ide.camel.editor.camelContentType"
-            name="Camel XML"
-            priority="high">
-      </content-type> 
-   </extension>
+   
       <extension
             point="org.eclipse.help.contexts">
          <contexts
@@ -312,4 +367,7 @@
             paletteIcon="icons/endpointQueue16.png">
       </PaletteContribution>
    </extension>
+
+-->
+
 </plugin>

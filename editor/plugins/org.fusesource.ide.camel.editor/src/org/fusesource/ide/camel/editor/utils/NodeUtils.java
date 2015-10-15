@@ -11,23 +11,16 @@
 
 package org.fusesource.ide.camel.editor.utils;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-
-import org.apache.camel.model.ExpressionNode;
-import org.apache.camel.model.language.ExpressionDefinition;
-import org.apache.camel.spi.Required;
-import org.fusesource.ide.camel.model.AbstractNode;
-
+import org.eclipse.core.resources.IProject;
+import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
  * @author lhein
@@ -47,101 +40,60 @@ public class NodeUtils {
 	public static boolean isMandatory(Object bean, String propertyName) {
 		// lets look at the setter method and see if its got a @Required
 		// annotation
-		if (bean instanceof AbstractNode) {
-			AbstractNode node = (AbstractNode) bean;
-			Class<?> camelClass = node.getCamelDefinitionClass();
-			if (camelClass != null) {
-				XmlAccessorType accessorType = camelClass.getAnnotation(XmlAccessorType.class);
-				boolean useMethods = true;
-				if (accessorType != null) {
-					if (accessorType.value().equals(XmlAccessType.FIELD)) {
-						useMethods = false;
-					}
-				}
-				try {
-					BeanInfo beanInfo = Introspector.getBeanInfo(camelClass);
-					PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-					if (propertyDescriptors != null) {
-						for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-							if (propertyName.equals(propertyDescriptor.getName())) {
-								Method writeMethod = propertyDescriptor.getWriteMethod();
-								if (writeMethod != null) {
-									Required annotation = writeMethod.getAnnotation(Required.class);
-									if (annotation != null) {
-										return true;
-									}
-									if (useMethods) {
-										XmlElement element = writeMethod.getAnnotation(XmlElement.class);
-										if (element != null && element.required()) {
-											return true;
-										}
-										XmlAttribute attribute = writeMethod.getAnnotation(XmlAttribute.class);
-										if (attribute != null && attribute.required()) {
-											return true;
-										}
-									}
-								}
-								break;
-							}
-						}
-					}
-					if (!useMethods) {
-						Field[] fields = camelClass.getDeclaredFields();
-						for (Field field : fields) {
-							if (propertyName.equals(field.getName())) {
-								Required annotation = field.getAnnotation(Required.class);
-								if (annotation != null) {
-									return true;
-								}
-								XmlElement element = field.getAnnotation(XmlElement.class);
-								if (element != null && element.required()) {
-									return true;
-								}
-								XmlAttribute attribute = field.getAnnotation(XmlAttribute.class);
-								if (attribute != null && attribute.required()) {
-									return true;
-								}
-							}
-						}
-					}
-				} catch (IntrospectionException e) {
-					// ignore
-				}
+		if (bean instanceof CamelModelElement) {
+			CamelModelElement node = (CamelModelElement) bean;
+			Eip eip = node.getUnderlyingMetaModelObject();
+			Parameter p = eip.getParameter(propertyName);
+			if (p != null) {
+				return p.getRequired().equals("true");
 			}
 		}
-		
-		String type = null;
-		if( bean instanceof AbstractNode ) {
-			AbstractNode bean2 = (AbstractNode)bean;
-			type = bean2.getNodeTypeId();
-			if ("resequence".equals(type) && "expression".equals(propertyName)) {
-				return true;
-			}
-		}
-
-		// expression is mandatory on resequence
-
-		// lets make all URI properties mandatory by default to avoid complex
-		// validation with ref v uri
-		
-		boolean answer = ("uri".equals(propertyName) || propertyName.endsWith("Uri"))
-				|| ("aggregate".equals(type) && "strategyRef".equals(propertyName))
-				|| ("convertBody".equals(type) && "type".equals(propertyName))
-				|| (bean instanceof ExpressionDefinition && isMandatoryExpression(((AbstractNode)bean)))
-				|| ("log".equals(type) && "message".equals(propertyName))
-				|| (bean instanceof Process && "ref".equals(propertyName))
-				|| ("removeHeader".equals(type) && "headerName".equals(propertyName))
-				|| ("removeProperty".equals(type) && "propertyName".equals(propertyName))
-				|| ("setHeader".equals(type) && "headerName".equals(propertyName))
-				|| ("setOutHeader".equals(type) && "headerName".equals(propertyName))
-				|| ("setProperty".equals(type) && "propertyName".equals(propertyName));
-		return answer;
-	}
-
-	public static boolean isMandatoryExpression(AbstractNode node) {
-		// is this expression mandatory?
-		Class<?> camelClass = node.getCamelDefinitionClass();
-		return ExpressionNode.class.isAssignableFrom(camelClass);
+		return false;
 	}
 	
+	/**
+	 * checks if the given parent can host the given child element
+	 * 
+	 * @param parent	the parent / container element
+	 * @param child		the child element
+	 * @return			true if the child is valid for the given container, otherwise false
+	 */
+	public static boolean isValidChild(CamelModelElement parent, CamelModelElement child) {
+		if (parent != null && child != null) {
+			IProject project = parent.getCamelFile().getResource().getProject();
+    		String camelVersion = CamelModelFactory.getCamelVersion(project);
+    		CamelModel metaModel = CamelModelFactory.getModelForVersion(camelVersion);
+    		
+			if (parent.getNodeTypeId().equalsIgnoreCase("choice")) {
+				// special case for choice
+				return child.getNodeTypeId().equalsIgnoreCase("when") || child.getNodeTypeId().equalsIgnoreCase("otherwise");
+			} else {
+				Eip containerEip = parent.getUnderlyingMetaModelObject();
+	        	if (containerEip == null) {
+	        		containerEip = metaModel.getEipModel().getEIPByName(parent.getNodeTypeId());
+	        	}
+	        	return containerEip != null && containerEip.canHaveChildren() && containerEip.getAllowedChildrenNodeTypes().contains(child.getNodeTypeId());
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * collects all container figures recursively
+	 * 
+	 * @param fp
+	 * @param context
+	 * @param pes
+	 */
+    public static void getAllContainers(IFeatureProvider fp, CamelModelElement context, ArrayList<PictogramElement> pes) {
+		for (CamelModelElement cme : context.getChildElements()) {
+			if (cme.getUnderlyingMetaModelObject().canHaveChildren()) {
+				pes.add(fp.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(cme));
+			}
+			if (cme.getChildElements().size() > 0) {
+				getAllContainers(fp, cme, pes);
+			}
+		}
+	}
+
 }

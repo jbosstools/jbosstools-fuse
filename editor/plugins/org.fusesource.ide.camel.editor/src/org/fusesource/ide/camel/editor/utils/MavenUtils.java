@@ -29,12 +29,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 /**
  * @author lhein
- *
  */
 public class MavenUtils {
 
@@ -43,15 +42,15 @@ public class MavenUtils {
      * and inserts it into the pom.xml if needed
      */
     public static void updateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
-        RiderDesignEditor editor = Activator.getDiagramEditor();
+        CamelDesignEditor editor = CamelEditorUIActivator.getDiagramEditor();
         if (editor == null) {
-            Activator.getLogger().error("Unable to add component dependencies because Editor instance can't be determined.");
+            CamelEditorUIActivator.pluginLog().logError("Unable to add component dependencies because Editor instance can't be determined.");
             return;
         }
         
-        IProject project = editor.getCamelContextFile().getProject();
+        IProject project = editor.getWorkspaceProject();
         if (project == null) {
-            Activator.getLogger().error("Unable to add component dependencies because selected project can't be determined.");
+            CamelEditorUIActivator.pluginLog().logWarning("Unable to add component dependencies because selected project can't be determined. Maybe this is a remote camel context.");
             return;
         }
         
@@ -100,14 +99,14 @@ public class MavenUtils {
                     pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
                 }
             } catch (Exception ex) {
-                Activator.getLogger().error(ex);
+                CamelEditorUIActivator.pluginLog().logError(ex);
             } finally {
                 try {
                     if (os != null) {
                         os.close();
                     }
                 } catch (IOException e) {
-                    Activator.getLogger().error(e);
+                	CamelEditorUIActivator.pluginLog().logError(e);
                 }
             }
         }

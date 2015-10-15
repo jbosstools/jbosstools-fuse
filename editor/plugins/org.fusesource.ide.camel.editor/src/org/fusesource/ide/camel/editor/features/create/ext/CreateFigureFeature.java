@@ -17,19 +17,20 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateFeature;
+import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
-import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.fusesource.ide.camel.editor.Activator;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
+import org.fusesource.ide.camel.editor.provider.ProviderHelper;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
-import org.fusesource.ide.camel.model.generated.UniversalEIPUtility;
-
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.w3c.dom.Node;
 
 /**
  * @author lhein
@@ -37,49 +38,84 @@ import org.fusesource.ide.camel.model.generated.UniversalEIPUtility;
 public class CreateFigureFeature extends AbstractCreateFeature implements PaletteCategoryItemProvider {
 
 	private Eip eip;
-	private Class<? extends AbstractNode> clazz;
+	private Class<? extends CamelModelElement> clazz;
+	
+	/**
+	 * 
+	 * @param fp
+	 * @param name
+	 * @param description
+	 * @param eip
+	 */
 	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Eip eip) {
 		super(fp, name, description);
 		this.eip = eip;
 	}
-	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Class<? extends AbstractNode> clazz) {
+	
+	/**
+	 * 
+	 * @param fp
+	 * @param name
+	 * @param description
+	 * @param clazz
+	 */
+	public CreateFigureFeature(IFeatureProvider fp, String name, String description, Class<? extends CamelModelElement> clazz) {
 		super(fp, name, description);
 		this.clazz = clazz;;
 	}
-
 
 	public Eip getEip() {
 		return eip;
 	}
 	
-	public Class<? extends AbstractNode> getClazz() {
+	public Class<? extends CamelModelElement> getClazz() {
 		return clazz;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider#getCategoryName()
+	 */
+	@Override
+	public String getCategoryName() {
+		if (eip != null) {
+			return ProviderHelper.getCategoryFromTags(eip.getTags());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider#getCategoryType()
+	 */
 	@Override
 	public CATEGORY_TYPE getCategoryType() {
 		return CATEGORY_TYPE.getCategoryType(getCategoryName());
 	}
-
-
-	@Override
-	public String getCategoryName() {
-		if( eip != null )
-			return UniversalEIPUtility.getCategoryName(eip.getName());
-		AbstractNode an = createNode();
-		if( an != null ) {
-			return an.getCategoryName();
-		}
-		return null;
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.graphiti.func.ICreate#canCreate(org.eclipse.graphiti.features.context.ICreateContext)
 	 */
 	@Override
 	public boolean canCreate(ICreateContext context) {
-		return context.getTargetContainer() instanceof Diagram;
+		ContainerShape container = context.getTargetContainer();
+		Object bo = getBusinessObjectForPictogramElement(container);
+		if (container instanceof Diagram) {
+			// we want to create something on the diagram rather than inside a container element - thats only allowed on camelContexts
+			CamelModelElement cme = createNode();
+			if (cme.getCamelContext() == null) {
+				CamelFile cf = null;
+				if (cme.getCamelFile() != null) {
+					cf = cme.getCamelFile();
+				} else {
+					cf = ((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel();
+				}
+				if (cf.getCamelContext() == null && cf.getChildElements().size()==0) {
+					cf.addChildElement(new CamelContextElement(cf, null));
+				}
+			}
+			return (cme.getNodeTypeId().equals("route"));
+		}
+		return (bo != null && bo instanceof CamelModelElement && ((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
 	}
 
 	/*
@@ -111,46 +147,43 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 */
 	protected String getIconName() {
 		String ret = null;
-		if( eip != null )
-			ret = UniversalEIPUtility.getIconName(eip.getName());
-		if( ret == null ) {
-			AbstractNode an = createNode();
-			if( an != null ) {
-				ret = an.getIconName();
-			}
+		CamelModelElement node = createNode();
+		if(node != null ) {
+			ret = node.getIconName();
 		}
 		return ret != null ? ret : "generic.png";
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.graphiti.func.ICreate#create(org.eclipse.graphiti.features.context.ICreateContext)
 	 */
 	@Override
 	public Object[] create(ICreateContext context) {
-		AbstractNode node = createNode();
-
-		RouteSupport selectedRoute = Activator.getDiagramEditor().getSelectedRoute();
-		Diagram diagram = getDiagram();
-
-		if (selectedRoute != null) {
-			selectedRoute.addChild(node);
+		CamelModelElement node = createNode();
+		ContainerShape container = context.getTargetContainer();
+		CamelModelElement selectedContainer = null;
+		if (container instanceof Diagram) {
+			selectedContainer = node.getCamelContext();
 		} else {
-			Activator.getLogger().warning("Warning! Could not find currently selectedNode, so can't associate this node with the route!: " + node);
+			selectedContainer = (CamelModelElement)getBusinessObjectForPictogramElement(container);
+		}
+
+		if (selectedContainer != null) {
+			selectedContainer.addChildElement(node);
+		} else {
+			CamelEditorUIActivator.pluginLog().logWarning("Warning! Could not find currently selected node, so can't associate this node with the container!: " + node);
 		}
 
 		// do the add
-		PictogramElement pe = addGraphicalRepresentation(context, node);
+        addGraphicalRepresentation(context, node);
 
-		getFeatureProvider().link(pe, node);
-		
-		// activate direct editing after object creation
-		getFeatureProvider().getDirectEditingInfo().setActive(true);
-		
+        // activate direct editing after object creation
+        getFeatureProvider().getDirectEditingInfo().setActive(true);
+        
 		// return newly created business object(s)
 		return new Object[] { node };
 	}
-
 
 	/**
 	 * Create a new node of this figure feature's underlying node. 
@@ -159,13 +192,20 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 * 
 	 * @return
 	 */
-	protected AbstractNode createNode() {
-		if( eip != null )
-			return new UniversalEIPNode(eip);
+	protected CamelModelElement createNode() {
+		if( eip != null ) {
+			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
+			if (editor.getModel() != null) { 
+				Node newNode = editor.getModel().getDocument().createElement(eip.getName());
+				// TODO: find out how to inject the new node at the correct position in DOM
+//				editor.getDisplayedContainer().getCamelFile().getDocument().appendChild(newNode);
+				return new CamelModelElement(editor.getModel().getCamelContext(), newNode);
+			}
+		}
 		if( clazz != null ) {
 			Object o = newInstance(clazz);
-			if( o instanceof AbstractNode ) {
-				return ((AbstractNode)o);
+			if( o instanceof CamelModelElement ) {
+				return ((CamelModelElement)o);
 			}
 		}
 		return null;
@@ -178,7 +218,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		try {
 			return aClass.newInstance();
 		} catch (Exception e) {
-			Activator.getLogger().warning("Failed to create instance of " + aClass.getName() + ". " + e, e);
+			CamelEditorUIActivator.pluginLog().logWarning("Failed to create instance of " + aClass.getName() + ". " + e, e);
 			return null;
 		}
 	}

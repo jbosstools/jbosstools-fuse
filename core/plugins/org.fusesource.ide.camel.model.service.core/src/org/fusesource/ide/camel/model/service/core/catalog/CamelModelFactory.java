@@ -102,7 +102,7 @@ public class CamelModelFactory {
 	 * @return
 	 */
 	public static String getCamelVersion(IProject p) {
-		// TODO stubbed out for now. We should check the facets if possible. 
+		// TODO stubbed out for now. We should check the facets if possible and fallback to the latest version
 		return getLatestCamelVersion();
 	}
 }

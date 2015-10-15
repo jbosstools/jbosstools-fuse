@@ -153,15 +153,42 @@ public class CamelContextElement extends CamelModelElement {
 		NodeList children = getXmlNode().getChildNodes();
 		for (int i=0; i<children.getLength(); i++) {
 			Node tmp = children.item(i);
-			if (tmp.getNodeName().equals("#text")) continue;
-			CamelModelElement cme = new CamelModelElement(this, tmp);
-			if (cme.getUnderlyingMetaModelObject() != null && cme.getUnderlyingMetaModelObject().getName().equals("dataformat")) {
-				this.dataformats.put(cme.getId(), cme);
-			} else if (cme.getUnderlyingMetaModelObject() != null && cme.getUnderlyingMetaModelObject().getName().equals("endpoint")) {
+			if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
+			if (tmp.getNodeName().equals("dataformats")) {
+				NodeList dfs = tmp.getChildNodes();
+				for (int y=0; y<dfs.getLength(); y++) {
+					Node tmp_df = dfs.item(y);
+					CamelModelElement cme = new CamelModelElement(this, tmp_df);
+					cme.initialize();
+					this.dataformats.put(cme.getId(), cme);
+				}
+			} else if (tmp.getNodeName().equals("endpoint")) {
+				CamelModelElement cme = new CamelModelElement(this, tmp);
+				cme.initialize();
 				this.endpointDefinitions.put(cme.getId(), cme);
-			} else {
+			} else if (tmp.getNodeName().equals("route")) {
+				CamelRouteElement cme = new CamelRouteElement(this, tmp);
+				cme.initialize();
 				addChildElement(cme);
+			} else {
+				System.err.println("Unexpected child element of the context: " + tmp.getNodeName());
 			}
 		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#getCamelContext()
+	 */
+	@Override
+	public CamelContextElement getCamelContext() {
+		return this;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#getNodeTypeId()
+	 */
+	@Override
+	public String getNodeTypeId() {
+		return "camelContext";
 	}
 }

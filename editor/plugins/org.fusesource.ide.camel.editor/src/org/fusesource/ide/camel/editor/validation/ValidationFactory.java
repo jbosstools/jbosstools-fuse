@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 
 /**
@@ -23,12 +23,12 @@ import org.fusesource.ide.camel.model.AbstractNode;
  */
 public final class ValidationFactory {
 	
-	private static Map<Class<? extends AbstractNode>, ValidationSupport> registeredValidators = new HashMap<Class<? extends AbstractNode>, ValidationSupport>();
+	private static Map<Class<? extends CamelModelElement>, ValidationSupport> registeredValidators = new HashMap<Class<? extends CamelModelElement>, ValidationSupport>();
 	private static ValidationFactory instance;
 	
 	static {
 		// register a general validator which should basically work for mandatory field checking
-		registeredValidators.put(AbstractNode.class, new BasicNodeValidator());
+		registeredValidators.put(CamelModelElement.class, new BasicNodeValidator());
 		// you may register special validators for specific model classes here but they all need to inherit from BasicNodeValidator
 		// ...
         //registeredValidators.put(Endpoint.class, new BasicUriValidator());
@@ -53,17 +53,17 @@ public final class ValidationFactory {
      * @param node
      * @return
      */
-    public ValidationResult validate(AbstractNode node) {
+    public ValidationResult validate(CamelModelElement node) {
     	ValidationResult result = null;
     	
-    	Iterator<Class<? extends AbstractNode>> it = registeredValidators.keySet().iterator();
+    	Iterator<Class<? extends CamelModelElement>> it = registeredValidators.keySet().iterator();
     	while (it.hasNext()) {
     	    Class c = it.next();
     	    
     	    if (c.isInstance(node)) {
                 ValidationSupport validator = registeredValidators.get(c);
                 if (validator == null) {
-                    validator = registeredValidators.get(AbstractNode.class);
+                    validator = registeredValidators.get(CamelModelElement.class);
                 } 
                 result = validator.validate(node);
     	    }

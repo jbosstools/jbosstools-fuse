@@ -12,6 +12,7 @@
 package org.fusesource.ide.camel.model.service.core.internal;
 
 import org.eclipse.core.runtime.Platform;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 import org.jboss.tools.foundation.ui.plugin.BaseUIPlugin;
@@ -51,6 +52,7 @@ public class CamelModelServiceCoreActivator extends BaseUIPlugin {
         super.start(context);
         myContext = context;
         registerDebugOptionsListener(PLUGIN_ID, new Trace(this), context);
+        CamelModelFactory.initializeModels();
 	}
     
     @Override

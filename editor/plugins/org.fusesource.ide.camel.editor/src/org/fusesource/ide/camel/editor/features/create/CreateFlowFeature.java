@@ -18,15 +18,10 @@ import org.eclipse.graphiti.features.context.impl.AddConnectionContext;
 import org.eclipse.graphiti.features.impl.AbstractCreateConnectionFeature;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.Connection;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.Flow;
-import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 
 /**
@@ -39,25 +34,36 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		super(fp, "Flow", "Create Flow"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider#getCategoryName()
+	 */
+	@Override
+	public String getCategoryName() {
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider#getCategoryType()
+	 */
 	@Override
 	public CATEGORY_TYPE getCategoryType() {
-		String name = getCategoryName();
-		return CATEGORY_TYPE.getCategoryType(name);
+		return CATEGORY_TYPE.getCategoryType(getCategoryName());
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.func.ICreateConnection#canCreate(org.eclipse.graphiti.features.context.ICreateConnectionContext)
+	 */
 	@Override
 	public boolean canCreate(ICreateConnectionContext context) {
 		// return true if both anchors belong to a EClass
 		// and those EClasses are not identical
-		AbstractNode source = getNode(context.getSourceAnchor());
-		AbstractNode target = getNode(context.getTargetAnchor());
+		CamelModelElement source = getNode(context.getSourceAnchor());
+		CamelModelElement target = getNode(context.getTargetAnchor());
 		
 		if (target != null && source != target) {
 			// if we only support a single output and we already have one then we can't connect to another output
-			if (this.canHaveMultipleOutputs(source) == false && !source.getOutputs().isEmpty()) return false;
-
-			// source == null indicates its a new node with the route being the source
-			return source == null || source.canConnectTo(target);
+			return source.getOutputElement() == null;
 		}
 		return false;
 	}
@@ -86,30 +92,17 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		Connection newConnection = null;
 
 		// get EClasses which should be connected
-		AbstractNode source = getNode(context.getSourceAnchor());
-		AbstractNode target = getNode(context.getTargetAnchor());
+		CamelModelElement source = getNode(context.getSourceAnchor());
+		CamelModelElement target = getNode(context.getTargetAnchor());
 
 		if (target != null) {
-			if (source == null) {
-				// lets add the target to the diagram
-				RiderDesignEditor editor = RiderDesignEditor.toRiderDesignEditor(getDiagramBehavior());
-				if (editor != null) {
-					RouteSupport route = editor.getSelectedRoute();
-					if (route != null) {
-						route.addChild(target);
-					}
-				}
-			} else {
-				// create new business object
-				Flow eReference = createFlow(source, target);
+			// create new business object
+			CamelElementConnection eReference = createFlow(source, target);
 
-				// add connection for business object
-				AddConnectionContext addContext = new AddConnectionContext(
-						context.getSourceAnchor(), context.getTargetAnchor());
-				addContext.setNewObject(eReference);
-				newConnection = (Connection) getFeatureProvider().addIfPossible(
-						addContext);
-			}
+			// add connection for business object
+			AddConnectionContext addContext = new AddConnectionContext(context.getSourceAnchor(), context.getTargetAnchor());
+			addContext.setNewObject(eReference);
+			newConnection = (Connection) getFeatureProvider().addIfPossible(addContext);
 		}
 
 		return newConnection;
@@ -118,12 +111,12 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	/**
 	 * Returns the EClass belonging to the anchor, or null if not available.
 	 */
-	private AbstractNode getNode(Anchor anchor) {
+	private CamelModelElement getNode(Anchor anchor) {
 		if (anchor != null) {
 			Object obj = getBusinessObjectForPictogramElement(anchor
 					.getParent());
-			if (obj instanceof AbstractNode) {
-				return (AbstractNode) obj;
+			if (obj instanceof CamelModelElement) {
+				return (CamelModelElement) obj;
 			}
 		}
 		return null;
@@ -132,32 +125,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	/**
 	 * Creates a EReference between two EClasses.
 	 */
-	private Flow createFlow(AbstractNode source, AbstractNode target) {
-		Flow flow = new Flow(source, target);
-		flow.setName("new Flow"); //$NON-NLS-1$
-
-		return flow;
+	private CamelElementConnection createFlow(CamelModelElement source, CamelModelElement target) {
+		return new CamelElementConnection(source, target);
 	}
-
-	@Override
-	public String getCategoryName() {
-		return null;
-	}
-	
-
-	/**
-	 * flags the node to allow multiple outputs or not
-	 * 
-	 * @param source	the source node
-	 * @return	true if the node can have more than one output
-	 */
-	protected boolean canHaveMultipleOutputs(AbstractNode source) {
-		String camelVersion=Activator.getDefault().getCamelVersion();
-		Eip eip = CamelModelFactory.getModelForVersion(camelVersion).getEipModel().getEIPByName(source.getPatternName());
-		if (eip != null) {
-			return eip.getOutput().equalsIgnoreCase("true") || "choice".equals(source.getNodeTypeId()); // special case choice
-		}
-		return false;
-	}
-
 }
