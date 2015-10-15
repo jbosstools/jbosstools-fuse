@@ -562,79 +562,82 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
     public IDecorator[] getDecorators(PictogramElement pe) {
         List<IDecorator> decorators = new LinkedList<IDecorator>();
 
-        // first we add super decorators
-        IDecorator[] superDecorators = super.getDecorators(pe);
-        for (IDecorator d : superDecorators)
-            decorators.add(d);
-
-        // and then our own
-        IFeatureProvider featureProvider = getFeatureProvider();
-        Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
-        if (bo instanceof CamelModelElement) {
-            CamelModelElement node = (CamelModelElement) bo;
-
-            ValidationResult res = ValidationFactory.getInstance().validate(node);
-            if (res.getInformationCount() > 0) {
-                for (String message : res.getInformations()) {
-                    IDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_INFORMATION_TSK);
-                    imageRenderingDecorator.setMessage(message);
-                    decorators.add(imageRenderingDecorator);
-                }
-            }
-            if (res.getWarningCount() > 0) {
-                for (String message : res.getWarnings()) {
-                    IDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_WARNING_TSK);
-                    imageRenderingDecorator.setMessage(message);
-                    decorators.add(imageRenderingDecorator);
-                }
-            }
-            if (res.getErrorCount() > 0) {
-                for (String message : res.getErrors()) {
-                    IDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_ERROR_TSK);
-                    imageRenderingDecorator.setMessage(message);
-                    decorators.add(imageRenderingDecorator);
-                }
-            }
-
-            // decorate breakpoints on endpoints
-            if (getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() != null && 
-            	getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() instanceof CamelDesignEditor) {
-            	
-            	CamelDesignEditor editor = (CamelDesignEditor) getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-            	IResource file = editor.getModel().getResource();
-                String projectName = editor.getWorkspaceProject().getName();
-                IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(node.getId(), file.getName(), projectName);
-                if (bp != null && bp instanceof CamelEndpointBreakpoint) {
-                    CamelEndpointBreakpoint cep = (CamelEndpointBreakpoint) bp;
-
-                    // we only want to decorate breakpoints which belong to this
-                    // project
-                    if (cep.getProjectName().equals(projectName)) {
-                        try {
-                            if (cep.isEnabled() && bp instanceof CamelConditionalBreakpoint) {
-                                // show enabled breakpoint decorator
-                                IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_YELLOWDOT);
-                                imageRenderingDecorator.setMessage("");
-                                decorators.add(imageRenderingDecorator);
-                            } else if (cep.isEnabled() && bp instanceof CamelEndpointBreakpoint) {
-                                // show enabled breakpoint decorator
-                                IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_REDDOT);
-                                imageRenderingDecorator.setMessage("");
-                                decorators.add(imageRenderingDecorator);
-                            } else {
-                                // show disabled breakpoint decorator
-                                IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_GRAYDOT);
-                                imageRenderingDecorator.setMessage("");
-                                decorators.add(imageRenderingDecorator);
-                            }
-                        } catch (CoreException e) {
-                            CamelEditorUIActivator.pluginLog().logError(e);
-                        }
-                    }
-                }
-            }
-
-            return decorators.toArray(new IDecorator[decorators.size()]);
+        // decorators only for visible elements
+        if (pe.isVisible()) {
+	        // first we add super decorators
+	        IDecorator[] superDecorators = super.getDecorators(pe);
+	        for (IDecorator d : superDecorators)
+	            decorators.add(d);
+	
+	        // and then our own
+	        IFeatureProvider featureProvider = getFeatureProvider();
+	        Object bo = featureProvider.getBusinessObjectForPictogramElement(pe);
+	        if (bo instanceof CamelModelElement) {
+	            CamelModelElement node = (CamelModelElement) bo;
+	
+	            ValidationResult res = ValidationFactory.getInstance().validate(node);
+	            if (res.getInformationCount() > 0) {
+	                for (String message : res.getInformations()) {
+	                    IDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_INFORMATION_TSK);
+	                    imageRenderingDecorator.setMessage(message);
+	                    decorators.add(imageRenderingDecorator);
+	                }
+	            }
+	            if (res.getWarningCount() > 0) {
+	                for (String message : res.getWarnings()) {
+	                    IDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_WARNING_TSK);
+	                    imageRenderingDecorator.setMessage(message);
+	                    decorators.add(imageRenderingDecorator);
+	                }
+	            }
+	            if (res.getErrorCount() > 0) {
+	                for (String message : res.getErrors()) {
+	                    IDecorator imageRenderingDecorator = new ImageDecorator(IPlatformImageConstants.IMG_ECLIPSE_ERROR_TSK);
+	                    imageRenderingDecorator.setMessage(message);
+	                    decorators.add(imageRenderingDecorator);
+	                }
+	            }
+	
+	            // decorate breakpoints on endpoints
+	            if (getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() != null && 
+	            	getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer() instanceof CamelDesignEditor) {
+	            	
+	            	CamelDesignEditor editor = (CamelDesignEditor) getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
+	            	IResource file = editor.getModel().getResource();
+	                String projectName = editor.getWorkspaceProject().getName();
+	                IBreakpoint bp = CamelDebugUtils.getBreakpointForSelection(node.getId(), file.getName(), projectName);
+	                if (bp != null && bp instanceof CamelEndpointBreakpoint) {
+	                    CamelEndpointBreakpoint cep = (CamelEndpointBreakpoint) bp;
+	
+	                    // we only want to decorate breakpoints which belong to this
+	                    // project
+	                    if (cep.getProjectName().equals(projectName)) {
+	                        try {
+	                            if (cep.isEnabled() && bp instanceof CamelConditionalBreakpoint) {
+	                                // show enabled breakpoint decorator
+	                                IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_YELLOWDOT);
+	                                imageRenderingDecorator.setMessage("");
+	                                decorators.add(imageRenderingDecorator);
+	                            } else if (cep.isEnabled() && bp instanceof CamelEndpointBreakpoint) {
+	                                // show enabled breakpoint decorator
+	                                IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_REDDOT);
+	                                imageRenderingDecorator.setMessage("");
+	                                decorators.add(imageRenderingDecorator);
+	                            } else {
+	                                // show disabled breakpoint decorator
+	                                IDecorator imageRenderingDecorator = new ImageDecorator(ImageProvider.IMG_GRAYDOT);
+	                                imageRenderingDecorator.setMessage("");
+	                                decorators.add(imageRenderingDecorator);
+	                            }
+	                        } catch (CoreException e) {
+	                            CamelEditorUIActivator.pluginLog().logError(e);
+	                        }
+	                    }
+	                }
+	            }
+	
+	            return decorators.toArray(new IDecorator[decorators.size()]);
+	        }
         }
 
         return super.getDecorators(pe);

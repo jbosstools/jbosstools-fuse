@@ -169,6 +169,9 @@ public class FigureUIFactory {
 		// add a chopbox anchor to the shape
 		ChopboxAnchor ca = peCreateService.createChopboxAnchor(containerShape);
 		fp.link(ca, element); 
+		
+		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_WIDTH, "" + containerShape.getGraphicsAlgorithm().getWidth());
+		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, "" + containerShape.getGraphicsAlgorithm().getHeight());
 	}
 	
 	/**
@@ -205,13 +208,12 @@ public class FigureUIFactory {
 	}
 	
 	/**
-	 * marks the shape to be in collapsed state and saves the original size of the shape
+	 * stores the width and height of the given shape as the new collapsed width/height
 	 * 
 	 * @param containerShape
 	 */
-	public static void markFigureCollapsed(ContainerShape containerShape) {
-		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_INITIAL_WIDTH, String.valueOf(containerShape.getGraphicsAlgorithm().getWidth()));
-		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_INITIAL_HEIGHT, String.valueOf(containerShape.getGraphicsAlgorithm().getHeight()));
-		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_STATE, Boolean.toString(true));
+	public static void storeCollapsedSize(ContainerShape containerShape) {
+		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_WIDTH, String.valueOf(containerShape.getGraphicsAlgorithm().getWidth()));
+		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, String.valueOf(containerShape.getGraphicsAlgorithm().getHeight()));
 	}
 }

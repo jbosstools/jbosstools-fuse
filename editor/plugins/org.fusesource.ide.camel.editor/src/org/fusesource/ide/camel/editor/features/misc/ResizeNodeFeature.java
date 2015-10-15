@@ -17,6 +17,7 @@ import org.eclipse.graphiti.features.impl.DefaultResizeShapeFeature;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
+import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 
@@ -49,8 +50,26 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 		Shape shape = context.getShape();
 		int x = context.getX();
 		int y = context.getY();
-		int w = context.getWidth()-1;
-		int h = context.getHeight()-1;
+		int w = context.getWidth(); // -1
+		int h = context.getHeight(); // -1
+				
+		if (w == 0) {
+			w = Graphiti.getPeService().getPropertyValue(shape, CollapseFeature.PROP_COLLAPSED_WIDTH) != null ?
+					Integer.parseInt(Graphiti.getPeService().getPropertyValue(shape, CollapseFeature.PROP_COLLAPSED_WIDTH)) :
+						shape.getGraphicsAlgorithm().getWidth();
+		}
+		if (h == 0) {
+			h = Graphiti.getPeService().getPropertyValue(shape, CollapseFeature.PROP_COLLAPSED_HEIGHT) != null ?
+					Integer.parseInt(Graphiti.getPeService().getPropertyValue(shape, CollapseFeature.PROP_COLLAPSED_HEIGHT)) :
+						shape.getGraphicsAlgorithm().getHeight();
+		}
+		
+// we don't save user made resizing of collapsed shapes for now
+//		boolean collapsed = Graphiti.getPeService().getPropertyValue(shape, CollapseFeature.PROP_COLLAPSED_STATE) != null && 
+//							Graphiti.getPeService().getPropertyValue(shape, CollapseFeature.PROP_COLLAPSED_STATE).equalsIgnoreCase("true");
+//		if (collapsed) {
+//			FigureUIFactory.storeCollapsedSize((ContainerShape)shape);
+//		}
 		
 		for (GraphicsAlgorithm ga : shape.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
 			if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND) != null && Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_TITLE)) {

@@ -20,8 +20,6 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**

@@ -31,10 +31,11 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
  */
 public class CollapseFeature extends AbstractCustomFeature {
 
-	public static String PROP_COLLAPSED_STATE = "isCollapsed";
-	public static String PROP_INITIAL_WIDTH  = "initial_width";
-	public static String PROP_INITIAL_HEIGHT  = "initial_height";
-	
+	public static String PROP_COLLAPSED_STATE 	= "isCollapsed";
+	public static String PROP_EXPANDED_WIDTH  	= "expandedWidth";
+	public static String PROP_EXPANDED_HEIGHT 	= "expandedHeight";
+	public static String PROP_COLLAPSED_WIDTH 	= "collapsedWidth";
+	public static String PROP_COLLAPSED_HEIGHT 	= "collapsedHeight";
 	
 	/**
 	 * 
@@ -73,6 +74,7 @@ public class CollapseFeature extends AbstractCustomFeature {
 	 	   		collapseShape(pes[0]);
 	 	   	}
 		}
+		getDiagramBehavior().getDiagramContainer().selectPictogramElements(pes);
 	}
 	
 	/**
@@ -89,16 +91,15 @@ public class CollapseFeature extends AbstractCustomFeature {
 		int changeHeight = 0;
 
 		boolean visible = false;
-
-		if(Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE) == null || 
-		   Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE).equals("false")) {
-	 	   Graphiti.getPeService().setPropertyValue(pe, PROP_INITIAL_WIDTH, String.valueOf(width));
-	 	   Graphiti.getPeService().setPropertyValue(pe, PROP_INITIAL_HEIGHT, String.valueOf(height));
-	 	   visible = false;
-		} else if(Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE) != null && 
-				  Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE).equals("true")) {
-			changeWidth = Integer.parseInt(Graphiti.getPeService().getPropertyValue(pe, PROP_INITIAL_WIDTH));
-			changeHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(pe, PROP_INITIAL_HEIGHT));
+		if (Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE) == null || 
+			Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE).equals("false")) {
+			Graphiti.getPeService().setPropertyValue(pe, PROP_EXPANDED_WIDTH, String.valueOf(width));
+			Graphiti.getPeService().setPropertyValue(pe, PROP_EXPANDED_HEIGHT, String.valueOf(height));
+			visible = false;
+		} else if (	Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE) != null && 
+					Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE).equals("true")) {
+			changeWidth = Integer.parseInt(Graphiti.getPeService().getPropertyValue(pe, PROP_EXPANDED_WIDTH));
+			changeHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(pe, PROP_EXPANDED_HEIGHT));
 			Graphiti.getPeService().setPropertyValue(pe, PROP_COLLAPSED_STATE, "false");
 			visible = true;
 		}
@@ -133,7 +134,8 @@ public class CollapseFeature extends AbstractCustomFeature {
 			while (iter.hasNext()) {
 				Shape shape = iter.next();
 				if(shape instanceof ContainerShape) {
-					makeChildrenInvisible((ContainerShape) shape, visible);
+					// we only want to hide 1 level nested elements
+//					makeChildrenInvisible((ContainerShape) shape, visible);
 					shape.setVisible(visible);
 					Anchor anchr = shape.getAnchors().get(0);
 					boolean initVisible = false;

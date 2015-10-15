@@ -57,7 +57,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	/**
 	 * Minimal distance between nodes.
 	 */
-	private static final int PADDING = 30;
+	private static final int PADDING = 20;
 
 	public LayoutDiagramFeature(IFeatureProvider fp) {
 		super(fp);
