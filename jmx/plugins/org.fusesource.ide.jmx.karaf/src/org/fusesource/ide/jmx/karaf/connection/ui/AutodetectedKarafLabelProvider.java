@@ -94,7 +94,12 @@ public class AutodetectedKarafLabelProvider implements JVMLabelProviderDelegate 
 	static String getKarafHomeFolder(IActiveJvm jvm) {
 		String karafHomeFolder = null;
 		if (!jvm.isRemote()) {
-			String pInfo = ProcessInformationStore.getDefault().queryProcessInformation(jvm.getPid());
+			String pInfo = null;
+			try {
+				pInfo= ToolsCore.getMainArgs(jvm.getHost().getName(), jvm.getPid());
+			} catch(ToolsCoreException tce) {
+				// Ignore
+			}
 			if (pInfo != null) {
 				int start = pInfo.indexOf(KARAF_HOME_PREFIX);
 				if (start != -1) {
