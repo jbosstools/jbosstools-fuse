@@ -20,6 +20,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
@@ -124,6 +125,7 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 				// if no  - fresh install
 				bundleId = installBundle(server, module[0]);
 			}			
+			
 			if (bundleId != -1) {
 				// a final check if the bundle is really installed
 				return this.jmxPublisher.getBundleStatus(mbsc, bundleId);
@@ -144,6 +146,10 @@ public class KarafJMXPublisher implements IPublishBehaviour {
 		if (this.jmxc == null) connect(server);
 		boolean unpublished = false;
 		try {
+			// insert a project refresh here
+			IProject project = module[0].getProject();
+			project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+			
 			String version = KarafUtils.getBundleVersion(module[0], null);
 			// first check if there is a bundle installed with that name already
 			long bundleId = this.jmxPublisher.getBundleId(mbsc, KarafUtils.getBundleSymbolicName(module[0]), version);
