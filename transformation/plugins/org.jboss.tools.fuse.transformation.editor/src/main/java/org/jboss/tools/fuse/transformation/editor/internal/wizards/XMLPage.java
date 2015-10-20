@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.namespace.QName;
@@ -64,6 +65,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
+import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathXMLResourceSelectionDialog;
 import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
 
 /**
@@ -317,13 +319,17 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             }
         }
         ClasspathResourceSelectionDialog dialog = null;
+        HashSet<String> extensions = new HashSet<String>();
+        extensions.add("xml");
+        extensions.add("xsd");
+        extensions.add("wsdl");
         if (javaProject == null) {
-            dialog = new ClasspathResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extension);
+            dialog = new ClasspathXMLResourceSelectionDialog(shell, ResourcesPlugin.getWorkspace().getRoot(), extensions, "Select XML file in Project Classpath");
         } else {
-            dialog = new ClasspathResourceSelectionDialog(shell, javaProject.getProject(), extension);
+            dialog = new ClasspathXMLResourceSelectionDialog(shell, javaProject.getProject(), extensions, "Select XML file in Project Classpath");
         }
         dialog.setTitle("Select " + extension.toUpperCase() + " From Project");
-        dialog.setInitialPattern("*." + extension); //$NON-NLS-1$
+        dialog.setInitialPattern("*.*");//" + extension); //$NON-NLS-1$
         dialog.open();
         Object[] result = dialog.getResult();
         if (result == null || result.length == 0 || !(result[0] instanceof IResource)) {

@@ -29,4 +29,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .,
  libs/data-transform-common-8.0.0-SNAPSHOT.jar,
- libs/jaxb-xjc-2.2.6.jar
+ libs/jaxb-xjc-2.2.6.jar,
+ libs/jaxb-impl-2.2.6.jar
