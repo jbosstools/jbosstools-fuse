@@ -20,7 +20,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.xml.namespace.QName;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -66,6 +68,7 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathXMLResourceSelectionDialog;
+import org.jboss.tools.fuse.transformation.editor.internal.util.XmlMatchingStrategy;
 import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
 
 /**
@@ -118,6 +121,52 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         setErrorMessage(null); // clear any error messages at first
         setMessage(null); // now that we're using info messages, we must reset
                           // this too
+    }
+    
+    private void updatePreview(String path) {
+        IPath tempPath = new Path(path);
+        IFile xmlFile = model.getProject().getFile(tempPath);
+        if (xmlFile != null && xmlFile.exists()) {
+            try (InputStream istream = xmlFile.getContents()) {
+                StringBuffer buffer = new StringBuffer();
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        buffer.append(inputLine + "\n");
+                    }
+                }
+                _xmlPreviewText.setText(buffer.toString());
+
+            } catch (CoreException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    
+    private void updateSettingsBasedOnFilePath(String path) {
+        boolean isXML = false;
+        if (path.endsWith("xml")) {
+            isXML = true;
+        }
+        _xmlInstanceOption.setSelection(isXML);
+        _xmlSchemaOption.setSelection(!isXML);
+    	if (model != null) {
+	        if (isSourcePage()) {
+	            if (isXML) {
+	                model.setSourceType(ModelType.XML);
+	            } else {
+	                model.setSourceType(ModelType.XSD);
+	            }
+	        } else {
+	            if (isXML) {
+	                model.setTargetType(ModelType.XML);
+	            } else {
+	                model.setTargetType(ModelType.XSD);
+	            }
+	        }
+        }
     }
 
     private void createPage(Composite parent) {
@@ -209,58 +258,20 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
             @Override
             public void widgetSelected(final SelectionEvent event) {
                 String extension = "xml";
-                boolean isXML = true;
                 if (_xmlInstanceOption.getSelection()) {
                     extension = "xml";
-                    isXML = true;
                 } else if (_xmlSchemaOption.getSelection()) {
                     extension = "xsd";
-                    isXML = false;
                 }
                 String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
-                    isXML = false;
-                    if (path.endsWith("xml")) {
-                        isXML = true;
-                    }
-                    _xmlInstanceOption.setSelection(isXML);
-                    _xmlSchemaOption.setSelection(!isXML);
-                    if (isSourcePage()) {
-                        if (isXML) {
-                            model.setSourceType(ModelType.XML);
-                        } else {
-                            model.setSourceType(ModelType.XSD);
-                        }
-                        model.setSourceFilePath(path);
-                    } else {
-                        if (isXML) {
-                            model.setTargetType(ModelType.XML);
-                        } else {
-                            model.setTargetType(ModelType.XSD);
-                        }
-                        model.setTargetFilePath(path);
+                    IResource resource = model.getProject().findMember(path);
+                    if (resource != null && resource.exists()) {
+                    	updateSettingsBasedOnFilePath(resource.getLocation().makeAbsolute().toOSString());
                     }
                     _xmlFileText.setText(path);
 
-                    IPath tempPath = new Path(path);
-                    IFile xmlFile = model.getProject().getFile(tempPath);
-                    if (xmlFile != null) {
-                        try (InputStream istream = xmlFile.getContents()) {
-                            StringBuffer buffer = new StringBuffer();
-                            try (BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
-                                String inputLine;
-                                while ((inputLine = in.readLine()) != null) {
-                                    buffer.append(inputLine + "\n");
-                                }
-                            }
-                            _xmlPreviewText.setText(buffer.toString());
-
-                        } catch (CoreException e1) {
-                            e1.printStackTrace();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
+                    updatePreview(resource.getProjectRelativePath().toString());
                     pingBinding();
                 }
             }
@@ -338,6 +349,12 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
         return ((IResource) result[0]).getProjectRelativePath().toPortableString();
     }
 
+    private void clearSelection() {
+        _xmlRootsCombo.setSelection(null);
+        _xmlRootsCombo.getCombo().setEnabled(false);
+        _xmlPreviewText.setText("");
+    }
+    
     private void bindControls() {
 
         // Bind source file path widget to UI model
@@ -356,59 +373,44 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 final String path = value == null ? null : value.toString().trim();
                 String pathEmptyError = null;
                 String unableToFindError = null;
+                String unableToParseXMLError = null;
                 if (isSourcePage()) {
                     pathEmptyError = "A source file path must be supplied for the transformation.";
                     unableToFindError = "Unable to find a source file with the supplied path";
+                    unableToParseXMLError = "Unable to parse source file specified as an XML file.";
                 } else {
                     pathEmptyError = "A target file path must be supplied for the transformation.";
                     unableToFindError = "Unable to find a target file with the supplied path";
+                    unableToParseXMLError = "Unable to parse target file specified as an XML file.";
                 }
                 if (path == null || path.isEmpty()) {
-                    return ValidationStatus.error(pathEmptyError);
+                	clearSelection();
+                	return ValidationStatus.error(pathEmptyError);
                 }
                 if (model.getProject().findMember(path) == null) {
+                	clearSelection();
                     return ValidationStatus.error(unableToFindError);
                 }
-                return ValidationStatus.ok();
-            }
-        });
-        _binding = context.bindValue(widgetValue, modelValue, strategy, null);
-        _binding.getModel().addChangeListener(new IChangeListener() {
-
-            @Override
-            public void handleChange(ChangeEvent event) {
-                pingBinding();
-            }
-        });
-        ControlDecorationSupport.create(_binding, decoratorPosition, _xmlFileText.getParent());
-
-        IObservableValue comboWidgetValue = ViewerProperties.singleSelection().observe(_xmlRootsCombo);
-        IObservableValue comboModelValue = null;
-        if (isSourcePage()) {
-            comboModelValue = BeanProperties.value(Model.class, "sourceClassName").observe(model);
-        } else {
-            comboModelValue = BeanProperties.value(Model.class, "targetClassName").observe(model);
-        }
-
-        UpdateValueStrategy combostrategy = new UpdateValueStrategy();
-        combostrategy.setBeforeSetValidator(new IValidator() {
-
-            @Override
-            public IStatus validate(final Object value) {
-                final String name = value == null ? null : value.toString().trim();
-                if (name == null || name.isEmpty()) {
-                    return ValidationStatus.error("A root element name must be supplied for the transformation.");
+                IResource resource = model.getProject().findMember(path);
+                if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
+                	clearSelection();
+                	return ValidationStatus.error(unableToFindError);
+                }
+                XmlMatchingStrategy strategy = new XmlMatchingStrategy();
+                if (!strategy.matches((IFile) resource)) {
+                	clearSelection();
+                	return ValidationStatus.error(unableToParseXMLError);
                 }
                 return ValidationStatus.ok();
             }
         });
-        _binding2 = context.bindValue(comboWidgetValue, comboModelValue, combostrategy, null);
-        ControlDecorationSupport.create(_binding2, decoratorPosition, _xmlRootsCombo.getControl().getParent());
+        widgetValue.addValueChangeListener(new IValueChangeListener() {
 
-        modelValue.addValueChangeListener(new IValueChangeListener() {
-
-            @Override
-            public void handleValueChange(ValueChangeEvent event) {
+			@Override
+			public void handleValueChange(ValueChangeEvent event) {
+				if (!XMLPage.this.isCurrentPage()) {
+					return;
+				}
                 Object value = event.diff.getNewValue();
                 String path = null;
                 if (value != null && !value.toString().trim().isEmpty()) {
@@ -419,9 +421,14 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                 }
                 XmlModelGenerator modelGen = new XmlModelGenerator();
                 List<QName> elements = null;
-                IPath filePath = model.getProject().getLocation().makeAbsolute().append(path);
+                IResource resource = model.getProject().findMember(path);
+                if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
+                	return;
+                }
+                IPath filePath = resource.getLocation();
                 path = filePath.makeAbsolute().toPortableString();
                 if (model != null) {
+                	updateSettingsBasedOnFilePath(path);
                     if (isSourcePage() && model.getSourceType() != null) {
                         if (model.getSourceType().equals(ModelType.XSD)) {
                             try {
@@ -459,6 +466,7 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                             }
                         }
                     }
+                    updatePreview(resource.getProjectRelativePath().toString());
                 }
                 WritableList elementList = new WritableList();
                 if (elements != null && !elements.isEmpty()) {
@@ -489,7 +497,39 @@ public class XMLPage extends XformWizardPage implements TransformationTypePage {
                     }
                 }
             }
+		});
+        _binding = context.bindValue(widgetValue, modelValue, strategy, null);
+        _binding.getModel().addChangeListener(new IChangeListener() {
+
+            @Override
+            public void handleChange(ChangeEvent event) {
+                pingBinding();
+            }
         });
+        ControlDecorationSupport.create(_binding, decoratorPosition, _xmlFileText.getParent());
+
+        IObservableValue comboWidgetValue = ViewerProperties.singleSelection().observe(_xmlRootsCombo);
+        IObservableValue comboModelValue = null;
+        if (isSourcePage()) {
+            comboModelValue = BeanProperties.value(Model.class, "sourceClassName").observe(model);
+        } else {
+            comboModelValue = BeanProperties.value(Model.class, "targetClassName").observe(model);
+        }
+
+        UpdateValueStrategy combostrategy = new UpdateValueStrategy();
+        combostrategy.setBeforeSetValidator(new IValidator() {
+
+            @Override
+            public IStatus validate(final Object value) {
+                final String name = value == null ? null : value.toString().trim();
+                if (name == null || name.isEmpty()) {
+                    return ValidationStatus.error("A root element name must be supplied for the transformation.");
+                }
+                return ValidationStatus.ok();
+            }
+        });
+        _binding2 = context.bindValue(comboWidgetValue, comboModelValue, combostrategy, null);
+        ControlDecorationSupport.create(_binding2, decoratorPosition, _xmlRootsCombo.getControl().getParent());
 
         listenForValidationChanges();
     }

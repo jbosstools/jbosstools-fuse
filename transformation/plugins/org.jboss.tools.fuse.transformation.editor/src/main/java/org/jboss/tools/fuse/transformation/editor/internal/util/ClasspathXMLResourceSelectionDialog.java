@@ -9,18 +9,11 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.widgets.Shell;
-import org.fusesource.ide.commons.contenttype.FindNamespaceHandlerSupport;
-import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
-import org.fusesource.ide.commons.util.IFiles;
-import org.xml.sax.InputSource;
 
 /**
  * Present a file chooser dialog that only lists those files that are on
@@ -57,36 +50,5 @@ public class ClasspathXMLResourceSelectionDialog extends ClasspathResourceSelect
         public boolean equalsFilter(ItemsFilter filter) {
             return filter instanceof XMLClasspathResourceFilter && super.equalsFilter(filter);
         }
-    }
-	
-    /**
-     * Matcher to see if the file parses as XML. 
-     * @author brianf
-     *
-     */
-    class XmlMatchingStrategy extends XmlMatchingStrategySupport {
-
-		@Override
-		protected FindNamespaceHandlerSupport createNamespaceFinder() {
-			return new FindNamespaceHandlerSupport(new HashSet<String>());
-		}
-    	
-		/* (non-Javadoc)
-		 * @see org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport#matches(org.eclipse.core.resources.IFile)
-		 */
-		public boolean matches(IFile ifile) {
-			try {
-				File file = IFiles.toFile(ifile);
-				if (file != null) {
-					// lets parse the XML and look for the namespaces 
-					FindNamespaceHandlerSupport handler = createNamespaceFinder();
-					boolean canParse = handler.parseContents(new InputSource(new FileInputStream(file)));
-					return canParse;
-				}
-			} catch (Exception e) {
-				// ignore anything that's not XML
-			}
-			return false;
-		}
     }
 }
