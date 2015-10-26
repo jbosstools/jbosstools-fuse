@@ -30,4 +30,9 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .,
  libs/data-transform-common-8.0.0-SNAPSHOT.jar,
  libs/jaxb-xjc-2.2.6.jar,
- libs/jaxb-impl-2.2.6.jar
+ libs/jaxb-impl-2.2.6.jar,
+ libs/jsonschema2pojo-core-0.4.5.jar,
+ libs/jackson-annotations-2.2.0.jar,
+ libs/jackson-core-2.2.0.jar,
+ libs/jackson-databind-2.2.0.jar,
+ libs/commons-lang3-3.2.1.jar
