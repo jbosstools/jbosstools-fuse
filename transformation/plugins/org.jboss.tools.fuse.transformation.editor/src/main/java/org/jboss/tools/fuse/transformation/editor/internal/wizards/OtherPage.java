@@ -338,7 +338,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
             _javaClassText.setText("");
             _dataFormatIdCombo.getCombo().deselectAll();
             _dataFormatIdCombo.getCombo().clearSelection();
-            idModelValue.setValue("");
+            if (idModelValue != null) {
+            	idModelValue.setValue("");
+            }
         }
         notifyListeners();
     }
