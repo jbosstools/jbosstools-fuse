@@ -264,6 +264,11 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 					facade.importProjects(monitor, pomFile, projectName,
 							groupId, artifactId, version);
 
+					enforceNatures(project, new NullProgressMonitor());
+					MavenUpdateRequest mur = new MavenUpdateRequest(false, true);
+					mur.addPomFile(project);
+					MavenPlugin.getMavenProjectRegistry().refresh(mur);
+					
 					return Arrays.asList(project);
 				} catch (IOException e) {
 					Status status = new Status(IStatus.ERROR,
@@ -294,24 +299,15 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 					});
 				} else {
 					final IProject project = root.getProject(projectName);
-					try {
-						if (switchPerspective) {
-							// switch to Fuse perspective if necessary.
-							switchToFusePerspective(workbenchWindow);
-						}
-						enforceNatures(project, new NullProgressMonitor());
-						MavenUpdateRequest mur = new MavenUpdateRequest(false, true);
-						mur.addPomFile(project);
-						MavenPlugin.getMavenProjectRegistry().refresh(mur);
-					} catch (CoreException ex) {
-						Activator.getLogger().error(ex);
+					if (switchPerspective) {
+						// switch to Fuse perspective if necessary.
+						switchToFusePerspective(workbenchWindow);
 					}
 				}
 			}
 		});
 
-		ISchedulingRule rule = ResourcesPlugin.getWorkspace().getRuleFactory()
-				.buildRule();
+		ISchedulingRule rule = ResourcesPlugin.getWorkspace().getRuleFactory().buildRule();
 		job.setRule(rule);
 		job.schedule();
 
@@ -327,51 +323,47 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 	 */
 	private void enforceNatures(final IProject project, final IProgressMonitor monitor)
 			throws CoreException {
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				try {
-					IProjectDescription projectDescription = project.getDescription();
-					String[] ids = projectDescription.getNatureIds();
-					boolean camelNatureFound = false;
-					boolean javaNatureFound = false;
-					for (String id : ids) {
-						if (id.equals(JavaCore.NATURE_ID)) {
-							javaNatureFound = true;
-						} else if (id.equals(Activator.CAMEL_NATURE_ID)) {
-							camelNatureFound = true;
-						}
-					}
-					int toAdd = 0;
-					if (!camelNatureFound) {
-						toAdd++;
-					}
-					if (!javaNatureFound) {
-						toAdd++;
-					}
-					String[] newIds = new String[ids.length + toAdd];
-					System.arraycopy(ids, 0, newIds, 0, ids.length);
-					if (!camelNatureFound && !javaNatureFound) {
-						newIds[ids.length] = Activator.CAMEL_NATURE_ID;
-						newIds[newIds.length - 1] = JavaCore.NATURE_ID;
-					} else if (!camelNatureFound) {
-						newIds[ids.length] = Activator.CAMEL_NATURE_ID;
-					} else if (!javaNatureFound) {
-						newIds[ids.length] = JavaCore.NATURE_ID;
-					}
-					projectDescription.setNatureIds(newIds);
-					project.setDescription(projectDescription, monitor);
-					
-					IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
-				    @SuppressWarnings("unused")
-					IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
-					MavenUpdateRequest request = new MavenUpdateRequest(false, true);
-					request.addPomFile(project.getFile("pom.xml"));
-					configurationManager.updateProjectConfiguration(request, monitor);
-				} catch (CoreException ex) {
-					Activator.getLogger().error(ex);
+		try {
+			IProjectDescription projectDescription = project.getDescription();
+			String[] ids = projectDescription.getNatureIds();
+			boolean camelNatureFound = false;
+			boolean javaNatureFound = false;
+			for (String id : ids) {
+				if (id.equals(JavaCore.NATURE_ID)) {
+					javaNatureFound = true;
+				} else if (id.equals(Activator.CAMEL_NATURE_ID)) {
+					camelNatureFound = true;
 				}
 			}
-		});
+			int toAdd = 0;
+			if (!camelNatureFound) {
+				toAdd++;
+			}
+			if (!javaNatureFound) {
+				toAdd++;
+			}
+			String[] newIds = new String[ids.length + toAdd];
+			System.arraycopy(ids, 0, newIds, 0, ids.length);
+			if (!camelNatureFound && !javaNatureFound) {
+				newIds[ids.length] = Activator.CAMEL_NATURE_ID;
+				newIds[newIds.length - 1] = JavaCore.NATURE_ID;
+			} else if (!camelNatureFound) {
+				newIds[ids.length] = Activator.CAMEL_NATURE_ID;
+			} else if (!javaNatureFound) {
+				newIds[ids.length] = JavaCore.NATURE_ID;
+			}
+			projectDescription.setNatureIds(newIds);
+			project.setDescription(projectDescription, monitor);
+			
+			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
+		    @SuppressWarnings("unused")
+			IMavenProjectRegistry projectRegistry = MavenPlugin.getMavenProjectRegistry();
+			MavenUpdateRequest request = new MavenUpdateRequest(false, true);
+			request.addPomFile(project.getFile("pom.xml"));
+			configurationManager.updateProjectConfiguration(request, monitor);
+		} catch (CoreException ex) {
+			Activator.getLogger().error(ex);
+		}
 	}
 	
 	public String getProjectName() {
