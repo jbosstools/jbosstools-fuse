@@ -8,8 +8,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.fusesource.ide.camel.editor.CamelEditor"
-            
+            class="org.fusesource.ide.camel.editor.CamelEditor"            
             default="false"
             extensions="xml"
             icon="icons/camel_context_icon.png"
@@ -71,7 +70,71 @@
       </diagramTypeProvider>
    </extension>
    
-   
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+      <propertyContributor contributorId="org.fusesource.ide.camel.editor" typeMapper="org.fusesource.ide.camel.editor.properties.CamelTypeMapper">
+         <propertyCategory category="FuseTooling"/>
+      </propertyContributor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs contributorId="org.fusesource.ide.camel.editor">
+	     <propertyTab
+               category="FuseTooling"
+               id="DefaultCamelPropertiesTab"
+               indented="false"
+               label="%integration.properties.tab.generic.title"/>
+         <propertyTab
+               afterTab="GenericPropertiesTab"
+               category="FuseTooling"
+               id="AdvancedEndpointPropertiesTab"
+               indented="false"
+               label="%integration.properties.tab.advanced.title">
+         </propertyTab>
+         <propertyTab
+               afterTab="DefaultCamelPropertiesTab"
+               category="FuseTooling"
+               id="DocumentationTab"
+               indented="false"
+               label="%integration.properties.tab.documentation.title"/> 
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections contributorId="org.fusesource.ide.camel.editor">
+         <propertySection
+               class="org.fusesource.ide.camel.editor.properties.DetailsSection"
+               id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
+               tab="DefaultCamelPropertiesTab">
+            <input type="org.fusesource.ide.camel.model.service.core.model.CamelModelElement"/>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
+            </input>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
+            </input>
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.camel.editor.properties.AdvancedEndpointPropertiesSection"
+               filter="org.fusesource.ide.camel.editor.properties.AdvancedPropertiesFilter"
+               id="AdvancedEndpointPropertiesSection"
+               tab="AdvancedEndpointPropertiesTab">
+         </propertySection>
+         <propertySection
+               afterSection="DefaultEndpointPropertiesSection"
+               class="org.fusesource.ide.camel.editor.properties.DocumentationSection"
+               id="DocumentationSection"
+               tab="DocumentationTab">
+            <input type="org.fusesource.ide.camel.model.service.core.model.CamelModelElement"/>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
+            </input>
+            <input
+                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
+            </input>
+         </propertySection>
+      </propertySections>
+   </extension>   
 
 
 
@@ -148,86 +211,7 @@
       </key>
    </extension>
 
-   <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
-         
-      <propertyContributor contributorId="org.fusesource.ide.camel.editor" typeMapper="org.fusesource.ide.camel.editor.propertysheet.RiderTypeMapper">
-         <propertyCategory category="sample"/>
-      </propertyContributor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
-      <propertyTabs contributorId="org.fusesource.ide.camel.editor">
-         <propertyTab
-               category="sample"
-               id="FileBindingTab"
-               label="File Binding">
-         </propertyTab>
-         <propertyTab
-               category="sample"
-               id="JMSBindingTab"
-               label="Destination">
-         </propertyTab>
-         <propertyTab
-               afterTab="DetailsTab"
-               category="sample"
-               id="AdvancedEndpointPropertiesSectionTab"
-               indented="false"
-               label="Advanced">
-         </propertyTab>
-         <propertyTab
-               afterTab="FileBindingTab"
-               category="sample"
-               id="DetailsTab"
-               indented="false"
-               label="Generic"/>
-         <propertyTab
-               afterTab="AdvancedEndpointPropertiesSectionTab"
-               category="sample"
-               id="DocumentationTab"
-               indented="false"
-               label="Documentation"/> 
-      </propertyTabs>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertySections">
-      <propertySections contributorId="org.fusesource.ide.camel.editor">
-         <propertySection
-               afterSection="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
-               class="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
-               filter="org.fusesource.ide.camel.editor.propertysheet.AdvancedPropertiesFilter"
-               id="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
-               tab="AdvancedEndpointPropertiesSectionTab">
-         </propertySection>
-         <propertySection
-               afterSection="org.fusesource.ide.camel.editor.propertysheet.FileBindingSection"
-               class="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
-               id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
-               tab="DetailsTab">
-            <input type="org.fusesource.ide.camel.model.AbstractNode"/>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
-            </input>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
-            </input>
-         </propertySection>
 
-         <propertySection
-               afterSection="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
-               class="org.fusesource.ide.camel.editor.propertysheet.DocumentationSection"
-               id="org.fusesource.ide.camel.editor.propertysheet.DocumentationSection"
-               tab="DocumentationTab">
-            <input type="org.fusesource.ide.camel.model.AbstractNode"/>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
-            </input>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
-            </input>
-         </propertySection>
-      </propertySections>
-   </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page

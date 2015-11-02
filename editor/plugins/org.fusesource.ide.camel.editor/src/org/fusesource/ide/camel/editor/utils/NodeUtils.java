@@ -14,13 +14,22 @@ package org.fusesource.ide.camel.editor.utils;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.mm.pictograms.ContainerShape;
+import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.commons.tree.HasOwner;
 
 /**
  * @author lhein
@@ -96,4 +105,51 @@ public class NodeUtils {
 		}
 	}
 
+    public static CamelModelElement toCamelElement(Object input) {
+		CamelModelElement answer = null;
+		if (input instanceof CamelModelElement) {
+			return (CamelModelElement) input;
+// TODO: check what AbstractNodeFacade is about and how to migrate if needed
+//		} else if (input instanceof AbstractNodeFacade) {
+//			AbstractNodeFacade facade = (AbstractNodeFacade) input;
+//			answer = facade.getAbstractNode();
+		} else if (input instanceof ContainerShapeEditPart) {
+			ContainerShapeEditPart editPart = (ContainerShapeEditPart) input;
+			PictogramElement element = editPart.getPictogramElement();
+			if (CamelEditorUIActivator.getDiagramEditor() != null) {
+				if (element != null && element instanceof Diagram) {
+					// route selected - this makes properties view work when route is
+					// selected in the diagram view
+					answer = CamelEditorUIActivator.getDiagramEditor().getSelectedRoute() != null ? CamelEditorUIActivator.getDiagramEditor().getSelectedRoute() : CamelEditorUIActivator.getDiagramEditor().getModel();				
+				} else {
+					// select the node
+					answer = (CamelModelElement)CamelEditorUIActivator.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(element);
+				}
+			}
+		} else if (input instanceof AbstractEditPart) {
+			AbstractEditPart editPart = (AbstractEditPart) input;
+			Object model = editPart.getModel();
+			answer = toCamelElement(model);
+		} else if (input instanceof ContainerShape) {
+			ContainerShape shape = (ContainerShape) input;
+			answer = (CamelModelElement)CamelEditorUIActivator.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(shape);
+		}
+		if (input != null && answer == null) {
+			answer = (CamelModelElement) Platform.getAdapterManager().getAdapter(input, CamelModelElement.class);
+		}
+		if (answer == null && input instanceof HasOwner) {
+			HasOwner ho = (HasOwner) input;
+			answer = toCamelElement(ho.getOwner());
+		}
+		return answer;
+	}
+    
+    public static CamelModelElement getSelectedNode(ISelection selection) {
+    	CamelModelElement answer = null;
+		if (selection instanceof IStructuredSelection) {
+			Object input = ((IStructuredSelection) selection).getFirstElement();
+			answer = toCamelElement(input);
+		}
+		return answer;
+	}
 }

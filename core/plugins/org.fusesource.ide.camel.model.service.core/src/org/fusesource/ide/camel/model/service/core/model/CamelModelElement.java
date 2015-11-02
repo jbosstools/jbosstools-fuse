@@ -439,15 +439,12 @@ public class CamelModelElement {
 	}
 	
 	/**
-	 * creates an empty node object
+	 * creates an empty node object with the name of the element
 	 * 
-	 * @return	the new node object
+	 * @return	the new node object which can be injected to the dom afterwards
 	 */
 	protected Node createNode() {
-		/**
-		 * TODO: obtain the document from some parent and create a new Node object
-		 */
-		return null;
+		return getCamelFile() != null && getCamelFile().getDocument() != null ? getCamelFile().getDocument().createElement(name) : null;
 	}
 	
 	/**
@@ -589,7 +586,6 @@ public class CamelModelElement {
 	 */
 	protected void linkChildrenToAttributes() {
 		if (getUnderlyingMetaModelObject() == null) return;
-		System.err.println("Checking linkable child attributes of: " + getNodeTypeId());
 		for (Parameter p : getUnderlyingMetaModelObject().getParameters()) {
 			if (p.getKind().equalsIgnoreCase("expression") || 
 				p.getKind().equalsIgnoreCase("element")) {
@@ -597,7 +593,6 @@ public class CamelModelElement {
 					if (child.getNodeTypeId().equalsIgnoreCase(p.getName()) && p.getType().equalsIgnoreCase("object")) {
 						// so we have a child of type element or expression which should be handled as an attribute
 						parameters.put(p.getName(), child);
-						System.err.println("assigned child node " + child.getNodeTypeId() + " as attribute of element " + getNodeTypeId());
 					}					
 				}
 			}
@@ -727,7 +722,7 @@ public class CamelModelElement {
 	 * @return
 	 */
 	public String getNodeTypeId() {
-		return underlyingMetaModelObject.getName();
+		return underlyingMetaModelObject != null ? underlyingMetaModelObject.getName() : "camelContext";
 	}
     
 	/**

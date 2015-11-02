@@ -39,6 +39,7 @@ import org.fusesource.ide.camel.editor.internal.CamelDesignEditorFlyoutPaletteCo
 import org.fusesource.ide.camel.model.io.ICamelEditorInput;
 import org.fusesource.ide.camel.model.io.IRemoteCamelEditorInput;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 
 /*
@@ -51,6 +52,7 @@ public class CamelDesignEditor extends DiagramEditor {
 	private CamelDiagramBehaviour camelDiagramBehaviour;
 	private CamelDesignEditorFlyoutPaletteComposite paletteComposite;
 	private CamelFile model;
+	private CamelRouteElement selectedRoute;
 	
 	/**
 	 * 
@@ -229,5 +231,19 @@ public class CamelDesignEditor extends DiagramEditor {
 	 */
 	public CamelEditor getParent() {
 		return this.parent;
+	}
+	
+	/**
+	 * @return the selectedRoute
+	 */
+	public CamelRouteElement getSelectedRoute() {
+		return this.selectedRoute;
+	}
+	
+	/**
+	 * @param selectedRoute the selectedRoute to set
+	 */
+	public void setSelectedRoute(CamelRouteElement selectedRoute) {
+		this.selectedRoute = selectedRoute;
 	}
 }

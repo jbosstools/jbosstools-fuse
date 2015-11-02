@@ -37,6 +37,10 @@ public class UIMessages extends NLS {
     public static String moveConnectionStartpointCommandLabel;
     public static String moveConnectionEndpointCommandLabel;
     public static String createFlowCommandLabel;
+    
+    public static String propertiesDetailsTitle;
+    public static String propertiesDocumentationTitle;
+
 
     static {
         // initialize resource bundle
