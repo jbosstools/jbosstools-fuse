@@ -86,6 +86,16 @@
     <json-simple.version>1.1.1</json-simple.version>
     <apache.http.version>4.3.6</apache.http.version>
     <apache.httpcore.version>4.3.3</apache.httpcore.version>
+    
+    <!-- Tycho test run properties -->
+    <memoryOptions1>-Xms512m -Xmx1024m -XX:PermSize=256m</memoryOptions1>
+    <memoryOptions2>-XX:MaxPermSize=256m</memoryOptions2>
+    <systemProperties></systemProperties>
+    <platformSystemProperties></platformSystemProperties>
+    <applejdkProperties></applejdkProperties>
+    <skipRequirements>${skipTests}</skipRequirements>
+    <skipPrivateRequirements>true</skipPrivateRequirements>
+        
   </properties>
 
   <modules>
@@ -230,6 +240,45 @@
                 </goals>
             </execution>
         </executions>
+      </plugin>
+
+      <!-- to skip running tests (compile only) use commandline flag: -Dmaven.test.skip
+              To allow all tests in a pom to pass/fail, use commandline flag: -fae (fail
+              at end) -->
+      <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>tycho-surefire-plugin</artifactId>
+          <version>${tychoVersion}</version>
+          <configuration>
+              <useUIHarness>true</useUIHarness>
+              <useUIThread>true</useUIThread>
+              <!-- THE FOLLOWING LINE MUST NOT BE BROKEN BY AUTOFORMATTING -->
+              <!-- tycho.testArgLine repeated to keep jacoco configuration for jacoco-maven-plugin -->
+              <argLine>${tycho.testArgLine} ${memoryOptions1} ${memoryOptions2} ${applejdkProperties} ${platformSystemProperties} ${systemProperties} -Dusage_reporting_enabled=false -Dorg.jboss.tools.tests.skipPrivateRequirements=${skipPrivateRequirements} -Djavax.xml.accessExternalSchema=all -Dorg.eclipse.ui.testsDisableWorkbenchAutoSave=true</argLine>
+              <!-- https://docs.sonatype.org/display/TYCHO/How+to+run+SWTBot+tests+with+Tycho -->
+              <!-- set useUIThread=true for regular ui tests -->
+              <!-- set useUIThread=false for swtbot tests -->
+              <includes>
+                  <include>**/AllTests.class</include>
+                  <include>**/*AllTests*.class</include>
+                  <include>**/*AllBotTests*.class</include>
+                  <include>**/*TestSuite*.class</include>
+              </includes>
+              <!-- Workaround for JBIDE-16161/Eclipse bug 424104 -->
+              <dependencies>
+                  <dependency>
+                      <type>eclipse-feature</type>
+                      <artifactId>org.eclipse.e4.rcp</artifactId>
+                      <version>0.0.0</version>
+                  </dependency>
+                  <!-- This feature is required for correct Installed JRE initialization on Mac OS X -->
+                  <dependency>
+                      <type>eclipse-feature</type>
+                      <artifactId>org.eclipse.jdt</artifactId>
+                      <version>0.0.0</version>
+                  </dependency>
+              </dependencies>
+          </configuration>
       </plugin>
 
       <!-- needed for building the source features -->
