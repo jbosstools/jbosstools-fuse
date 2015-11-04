@@ -19,6 +19,8 @@ import java.util.Map;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.fusesource.ide.jmx.karaf.KarafJMXSharedImages;
+import org.jboss.tools.common.jdt.debug.tools.ToolsCore;
+import org.jboss.tools.common.jdt.debug.tools.ToolsCoreException;
 import org.jboss.tools.jmx.jvmmonitor.core.IActiveJvm;
 import org.jboss.tools.jmx.local.ProcessInformationStore;
 import org.jboss.tools.jmx.local.ui.JVMLabelProviderDelegate;
@@ -94,18 +96,19 @@ public class AutodetectedKarafLabelProvider implements JVMLabelProviderDelegate 
 	static String getKarafHomeFolder(IActiveJvm jvm) {
 		String karafHomeFolder = null;
 		if (!jvm.isRemote()) {
-			String pInfo = null;
+			
+			String vmArgs = null;
 			try {
-				pInfo= ToolsCore.getMainArgs(jvm.getHost().getName(), jvm.getPid());
+				vmArgs = ToolsCore.getJvmArgs(jvm.getHost().getName(), jvm.getPid());
 			} catch(ToolsCoreException tce) {
 				// Ignore
 			}
-			if (pInfo != null) {
-				int start = pInfo.indexOf(KARAF_HOME_PREFIX);
+			if (vmArgs != null) {
+				int start = vmArgs.indexOf(KARAF_HOME_PREFIX);
 				if (start != -1) {
-					int end   = pInfo.indexOf(KARAF_HOME_POSTFIX, start+KARAF_HOME_PREFIX.length()+1);
+					int end   = vmArgs.indexOf(KARAF_HOME_POSTFIX, start+KARAF_HOME_PREFIX.length()+1);
 					if (end != -1) {
-						karafHomeFolder = pInfo.substring(start + KARAF_HOME_PREFIX.length(), end);
+						karafHomeFolder = vmArgs.substring(start + KARAF_HOME_PREFIX.length(), end);
 					}
 				}
 			}
