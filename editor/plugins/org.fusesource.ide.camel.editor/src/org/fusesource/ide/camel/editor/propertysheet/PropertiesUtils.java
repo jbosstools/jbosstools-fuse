@@ -301,7 +301,18 @@ public class PropertiesUtils {
     		
     		// first build the path part
     		String syntax = c.getSyntax();
+    		String protocol = syntax.substring(0, syntax.indexOf(":"));
+    		syntax = syntax.substring(syntax.indexOf(":")+1);
     		List<UriParameter> pathParams = getPathProperties(selectedEP);
+    		Collections.sort(pathParams, new Comparator<UriParameter>() {
+        		/* (non-Javadoc)
+        		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+        		 */
+        		@Override
+        		public int compare(UriParameter o1, UriParameter o2) {
+        			return o2.getName().length() - o1.getName().length();
+        		}
+        	});
     		for (UriParameter pparam : pathParams) {
     			String val = "";
     			if (p.getName().equals(pparam.getName())) {
@@ -313,7 +324,7 @@ public class PropertiesUtils {
     			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
     			if (val != null) syntax = syntax.replace(pparam.getName(), val);
     		}
-    		newUri += syntax + "?";
+    		newUri += String.format("%s:%s?", protocol, syntax);;
     		
     		// now build the options
     		for (UriParameter uriParam : c.getUriParameters()) {
