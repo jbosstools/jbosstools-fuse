@@ -322,7 +322,8 @@ public class PropertiesUtils {
     			}
     			if (val.trim().length()<1) val = pparam.getDefaultValue();
     			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
-    			if (val != null) syntax = syntax.replace(pparam.getName(), val);
+    			// Workaround for FUSETOOLS-1369
+    			if (val != null) syntax = replace(syntax, pparam.getName(), val, syntax.indexOf(':'));
     		}
     		newUri += String.format("%s:%s?", protocol, syntax);;
     		
@@ -378,6 +379,16 @@ public class PropertiesUtils {
 	        }
     	}
     }
+    
+	private static String replace(String string, String target, String replacement, int index) {
+		if (index > 0) {
+			String prefix = string.substring(0, index);
+			String suffix = string.substring(index);
+			return prefix + suffix.replace(target, replacement);
+		} else {
+			return string.replace(target, replacement);
+		}
+	}
     
     public static String getUsedProtocol(Endpoint selectedEP) {
         return selectedEP.getUri().substring(0, selectedEP.getUri().indexOf(':'));
