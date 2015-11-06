@@ -107,6 +107,25 @@ public class KarafUtils {
 	public static final String SERVER_PASSWORD			= "fuse-server-password";
 	
 	/**
+	 * variable substitution
+	 */
+	public static final String VAR_GROUP_ID				= "${groupId}";
+	public static final String VAR_PROJECT_GROUP_ID  	= "${project.groupId}";
+	public static final String VAR_ARTIFACT_ID			= "${artifactId}";
+	public static final String VAR_PROJECT_ARTIFACT_ID  = "${project.artifactId}";
+	public static final String VAR_VERSION				= "${version}";
+	public static final String VAR_PROJECT_VERSION  	= "${project.version}";
+	
+	public static final String[] VARIABLES = new String[] {
+			VAR_GROUP_ID,
+			VAR_PROJECT_GROUP_ID,
+			VAR_ARTIFACT_ID,
+			VAR_PROJECT_ARTIFACT_ID,
+			VAR_VERSION,
+			VAR_PROJECT_VERSION
+	};
+	
+	/**
 	 * retrieves the version of the runtime installation
 	 * 
 	 * @param installFolder	the installation folder
@@ -287,7 +306,29 @@ public class KarafUtils {
 	
 	private static String getOutputFilename(IModule module) throws CoreException {
 		Model model = MavenPlugin.getMavenModelManager().readMavenModel(getModelFile(module));
-		return model.getBuild().getFinalName() != null ? model.getBuild().getFinalName() : getArtifactId(module);
+		String finalName = model.getBuild().getFinalName() != null ? model.getBuild().getFinalName() : getArtifactId(module);
+		finalName = substituteVariables(finalName, model);
+		return finalName;
+	}
+	
+	private static String substituteVariables(String originalString, Model model) {
+		String returnValue = "";
+		
+		for (String var : VARIABLES) {
+			int pos = originalString.indexOf(var);
+			int len = var.length();
+			if (pos != -1) {
+				returnValue = originalString.substring(0, pos);
+				
+				if (var.equals(VAR_GROUP_ID) 	|| var.equals(VAR_PROJECT_GROUP_ID)) 	returnValue += model.getGroupId();
+				if (var.equals(VAR_ARTIFACT_ID) || var.equals(VAR_PROJECT_ARTIFACT_ID)) returnValue += model.getArtifactId();
+				if (var.equals(VAR_VERSION) 	|| var.equals(VAR_PROJECT_VERSION)) 	returnValue += model.getVersion();
+				
+				returnValue += originalString.substring(pos+len);
+			}
+		}
+		
+		return returnValue;
 	}
 	
 	private static String getOutputFilePath(IModule module) throws CoreException {
