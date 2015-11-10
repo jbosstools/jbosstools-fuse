@@ -49,7 +49,7 @@ public interface ICamelDebugConstants {
 	// prefixes for auto generated ID fields
 	public static final String PREFIX_GENERAL		= ""; // "debugger_";
 	public static final String PREFIX_CONTEXT_ID	= PREFIX_GENERAL + "context-";
-	public static final String PREFIX_NODE_ID		= PREFIX_GENERAL + ""; //"breakpoint_";
+	public static final String PREFIX_NODE_ID		= PREFIX_GENERAL + "_"; //"breakpoint_";
 	
 	public static final String DEFAULT_JMX_URI 		= "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi/camel";
 }
