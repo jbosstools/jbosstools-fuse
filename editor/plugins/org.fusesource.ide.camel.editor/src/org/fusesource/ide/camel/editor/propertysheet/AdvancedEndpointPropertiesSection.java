@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -104,6 +103,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
     private DataBindingContext dbc;
     private IObservableMap modelMap = new WritableMap();
     private Component component;
+    private AbstractNode selectedNode;
     
     /*
      * (non-Javadoc)
@@ -118,6 +118,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
             toolkit = null;
         }
         this.component = null;
+        this.selectedNode = null;
         super.dispose();
     }
 
@@ -133,13 +134,17 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         super.setInput(part, selection);
         
         this.dbc = new DataBindingContext();
-//        this.modelMap.clear();
         
         Object o = Selections.getFirstSelection(selection);
-        AbstractNode n = AbstractNodes.toAbstractNode(o);
+        AbstractNode newNode = AbstractNodes.toAbstractNode(o);
         
-        if (n instanceof Endpoint) {
-            this.selectedEP = (Endpoint) n;
+        // if we selected another node we better clear the model map
+        if (newNode.equals(this.selectedNode) == false) this.modelMap.clear();
+        	
+        this.selectedNode = newNode;
+        
+        if (this.selectedNode instanceof Endpoint) {
+            this.selectedEP = (Endpoint) this.selectedNode;
             this.component = PropertiesUtils.getComponentFor(selectedEP);
             form.setText("Advanced Properties - " + DiagramUtils.filterFigureLabel(selectedEP.getDisplayText()));
         } else {
