@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.DocumentEvent;
@@ -371,17 +372,22 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 			sourceEditor.doSave(monitor);
 		}
 		
-		IDocument document = getDocument();
-		if (document != null) {
-			designEditor.clearCache();
-			String text = document.get();
-			Activator.getLogger().debug("Updating the design model from the updated text");
-			designEditor.loadEditorText(text);
-			designEditor.refreshDiagramContents();
-			designEditor.fireModelChanged(); // will update the outline view
-			sourceEditor.doRevertToSaved();
+// TODO: investigate why the below code was here - it caused loss of the selected pictogram
+// 		 element on save which caused an issue with updating endpoint properties -> see FUSETOOLS-1517
+// 		 
+//		IDocument document = getDocument();
+//		if (document != null) {
+//			PictogramElement[] selection = designEditor.getSelectedPictogramElements();
+//			designEditor.clearCache();
+//			String text = document.get();
+//			Activator.getLogger().debug("Updating the design model from the updated text");
+//			designEditor.loadEditorText(text);
+//			designEditor.refreshDiagramContents();
+//			designEditor.fireModelChanged(); // will update the outline view
+//			sourceEditor.doRevertToSaved();
+//			designEditor.selectPictogramElements(selection);
 			designEditor.clearChangedFlags();
-		}
+//		}
 	}
 
 	/*
@@ -405,16 +411,19 @@ ITabbedPropertySheetPageContributor, IPrefersPerspective, IPropertyChangeListene
 		// then we call the save method of the text editor
 		sourceEditor.doSaveAs();
 		
-		IDocument document = getDocument();
-		if (document != null) {
-			designEditor.clearCache();
-			String text = document.get();
-			Activator.getLogger().debug("Updating the design model from the updated text");
-			designEditor.loadEditorText(text);
-			designEditor.refreshDiagramContents();
-			designEditor.fireModelChanged(); // will update the outline view
+// TODO: investigate why the below code was here - it caused loss of the selected pictogram
+//		 element on save which caused an issue with updating endpoint properties -> see FUSETOOLS-1517
+//		
+//		IDocument document = getDocument();
+//		if (document != null) {
+//			designEditor.clearCache();
+//			String text = document.get();
+//			Activator.getLogger().debug("Updating the design model from the updated text");
+//			designEditor.loadEditorText(text);
+//			designEditor.refreshDiagramContents();
+//			designEditor.fireModelChanged(); // will update the outline view
 			designEditor.clearChangedFlags();
-		}
+//		}
 	}
 
 	protected void saveAsFile(IFile file) {
