@@ -300,31 +300,52 @@ public class PropertiesUtils {
     		String newUri = "";
     		
     		// first build the path part
+    		List<UriParameter> pathParams = getPathProperties(selectedEP);
     		String syntax = c.getSyntax();
+    		// get all separators
+    		String delims = getDelimitersAsString(syntax, pathParams);
     		String protocol = syntax.substring(0, syntax.indexOf(":"));
     		syntax = syntax.substring(syntax.indexOf(":")+1);
-    		List<UriParameter> pathParams = getPathProperties(selectedEP);
-    		Collections.sort(pathParams, new Comparator<UriParameter>() {
-        		/* (non-Javadoc)
-        		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-        		 */
-        		@Override
-        		public int compare(UriParameter o1, UriParameter o2) {
-        			return o2.getName().length() - o1.getName().length();
-        		}
-        	});
-    		for (UriParameter pparam : pathParams) {
-    			String val = "";
-    			if (p.getName().equals(pparam.getName())) {
+
+    		// add protocol to new uri
+    		newUri += String.format("%s:", protocol);
+    		
+    		int lastIdx = -1;
+    		for (char sep : delims.toCharArray()) {
+    			int idx = syntax.indexOf(sep, lastIdx+1);
+    			if (idx == -1) break;
+    			String varName = syntax.substring(lastIdx+1, idx);
+    			String val = null;
+    			if (varName.equals(p.getName())) {
     				val = value.toString();
     			} else {
-    				val = modelMap.get(pparam.getName()).toString();
+    				for (UriParameter pparam : pathParams) {
+    	    			if (varName.equals(pparam.getName())) {
+    	    				val = modelMap.get(pparam.getName()).toString();
+        	    			if (val.trim().length()<1) val = pparam.getDefaultValue();
+        	    			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
+        	    			break;
+    	    			}
+    	    		}
     			}
-    			if (val.trim().length()<1) val = pparam.getDefaultValue();
-    			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
-    			if (val != null) syntax = syntax.replace(pparam.getName(), val);
+    			if (val != null) newUri += String.format("%s%c", val, sep);
+    			lastIdx = idx;
     		}
-    		newUri += String.format("%s:%s?", protocol, syntax);;
+    		String varName = syntax.substring(lastIdx+1);
+			String val = null;
+			if (varName.equals(p.getName())) {
+				val = value.toString();
+			} else {
+				for (UriParameter pparam : pathParams) {
+	    			if (varName.equals(pparam.getName())) {
+	    				val = modelMap.get(pparam.getName()).toString();
+	    			}
+	    			if (val.trim().length()<1) val = pparam.getDefaultValue();
+	    			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
+	    		}
+			}
+			if (val != null) newUri += String.format("%s?", val);
+    		
     		
     		// now build the options
     		for (UriParameter uriParam : c.getUriParameters()) {
