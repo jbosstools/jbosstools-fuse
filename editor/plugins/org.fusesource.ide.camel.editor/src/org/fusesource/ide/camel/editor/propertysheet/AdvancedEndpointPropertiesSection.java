@@ -139,7 +139,10 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         AbstractNode newNode = AbstractNodes.toAbstractNode(o);
         
         // if we selected another node we better clear the model map
-        if (newNode.equals(this.selectedNode) == false) this.modelMap.clear();
+        if (newNode.equals(this.selectedNode) == false) { 
+        	this.modelMap.dispose();
+        	this.modelMap = new WritableMap();
+        }
         	
         this.selectedNode = newNode;
         
