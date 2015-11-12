@@ -11,6 +11,7 @@
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,6 +20,8 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.resources.IFile;
@@ -93,12 +96,15 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 final String path = value == null ? null : value.toString().trim();
                 String pathEmptyError = null;
                 String unableToFindError = null;
+                String fileEmptyError = null;
                 if (isSourcePage()) {
                     pathEmptyError = "A source file path must be supplied for the transformation.";
                     unableToFindError = "Unable to find a source file with the supplied path";
+                    fileEmptyError = "Source file selected is empty.";
                 } else {
                     pathEmptyError = "A target file path must be supplied for the transformation.";
                     unableToFindError = "Unable to find a target file with the supplied path";
+                    fileEmptyError = "Target file selected is empty.";
                 }
                 if (path == null || path.isEmpty()) {
                     return ValidationStatus.error(pathEmptyError);
@@ -106,15 +112,114 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 if (model.getProject().findMember(path) == null) {
                     return ValidationStatus.error(unableToFindError);
                 }
+                IResource resource = model.getProject().findMember(path);
+                if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
+                	_jsonPreviewText.setText("");
+                	return ValidationStatus.error(unableToFindError);
+                }
+                try {
+                    if (fileIsEmpty(path)) {
+                        _jsonPreviewText.setText("");
+                        return ValidationStatus.error(fileEmptyError);
+                    }
+                } catch (Exception e) {
+                    // empty
+                    e.printStackTrace();
+                }
                 return ValidationStatus.ok();
             }
         });
         _binding = context.bindValue(widgetValue, modelValue, strategy, null);
         ControlDecorationSupport.create(_binding, decoratorPosition, _jsonFileText.getParent());
 
+        widgetValue.addValueChangeListener(new IValueChangeListener() {
+
+			@Override
+			public void handleValueChange(ValueChangeEvent event) {
+				if (!JSONPage.this.isCurrentPage()) {
+					return;
+				}
+                Object value = event.diff.getNewValue();
+                String path = null;
+                if (value != null && !value.toString().trim().isEmpty()) {
+                    path = value.toString().trim();
+                }
+                if (path != null) {
+                    try {
+                        IResource resource = model.getProject().findMember(path);
+                        if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
+                        	return;
+                        }
+                        if (fileIsEmpty(path)) {
+                            return;
+                        }
+                        IPath filePath = resource.getLocation();
+                        String fullpath = filePath.makeAbsolute().toPortableString();
+                        updateSettingsBasedOnFilePath(fullpath);
+                        if (isSourcePage()) {
+                            model.setSourceFilePath(path);
+                        } else {
+                            model.setTargetFilePath(path);
+                        }
+                        updatePreview(resource.getProjectRelativePath().toString());
+                        _jsonFileText.notifyListeners(SWT.Modify, new Event());
+                    } catch (final Exception e) {
+                        Activator.error(e);
+                    }
+                }
+			};
+        });
+        
         listenForValidationChanges();
     }
 
+    private void updatePreview(String path) {
+        IPath tempPath = new Path(path);
+        IFile xmlFile = model.getProject().getFile(tempPath);
+        if (xmlFile != null && xmlFile.exists()) {
+            try (InputStream istream = xmlFile.getContents()) {
+                StringBuffer buffer = new StringBuffer();
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        buffer.append(inputLine + "\n");
+                    }
+                }
+                _jsonPreviewText.setText(buffer.toString());
+
+            } catch (CoreException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    
+    private void updateSettingsBasedOnFilePath(String path) throws Exception {
+        final IPath tempPath = new Path(path);
+        final IFile xmlFile = model.getProject().getFile(tempPath);
+        if (xmlFile == null || !xmlFile.exists()) {
+            return;
+        }
+        final boolean schema = jsonSchema(path);
+        _jsonInstanceOption.setSelection(!schema);
+        _jsonSchemaOption.setSelection(schema);
+        if (isSourcePage()) {
+            if (schema) {
+                model.setSourceType(ModelType.JSON_SCHEMA);
+            } else {
+                model.setSourceType(ModelType.JSON);
+            }
+        } else {
+            if (schema) {
+                model.setTargetType(ModelType.JSON_SCHEMA);
+            } else {
+                model.setTargetType(ModelType.JSON);
+            }
+        }
+    }
+      
+    
     @Override
     public void createControl(final Composite parent) {
         if (this.isSource) {
@@ -215,6 +320,11 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 final String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
                     try {
+                        if (fileIsEmpty(path)) {
+                            _jsonFileText.setText(path);
+                            _jsonFileText.notifyListeners(SWT.Modify, new Event());
+                            return;
+                        }
                         final boolean schema = jsonSchema(path);
                         _jsonInstanceOption.setSelection(!schema);
                         _jsonSchemaOption.setSelection(schema);
@@ -281,6 +391,19 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
     @Override
     public boolean isTargetPage() {
         return !isSource;
+    }
+    
+    boolean fileIsEmpty(final String path) throws Exception {
+        IFile testIFile = model.getProject().getFile(path);
+        if (testIFile.exists()) {
+            File testFile = testIFile.getRawLocation().makeAbsolute().toFile();
+            if (testFile.length() == 0) {
+                return true;
+            }
+        } else {
+            return true;
+        }
+        return false;
     }
 
     boolean jsonSchema(final String path) throws Exception {
