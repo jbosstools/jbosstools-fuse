@@ -339,9 +339,10 @@ public class PropertiesUtils {
 				for (UriParameter pparam : pathParams) {
 	    			if (varName.equals(pparam.getName())) {
 	    				val = modelMap.get(pparam.getName()).toString();
-	    			}
-	    			if (val.trim().length()<1) val = pparam.getDefaultValue();
-	    			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
+	    				if (val.trim().length()<1) val = pparam.getDefaultValue();
+		    			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
+		    			break;
+	    			}	    			
 	    		}
 			}
 			if (val != null) newUri += String.format("%s?", val);
