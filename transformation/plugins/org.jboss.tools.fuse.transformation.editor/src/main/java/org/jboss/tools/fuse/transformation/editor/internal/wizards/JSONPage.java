@@ -11,6 +11,7 @@
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -96,12 +97,15 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 final String path = value == null ? null : value.toString().trim();
                 String pathEmptyError = null;
                 String unableToFindError = null;
+                String fileEmptyError = null;
                 if (isSourcePage()) {
                     pathEmptyError = "A source file path must be supplied for the transformation.";
                     unableToFindError = "Unable to find a source file with the supplied path";
+                    fileEmptyError = "Source file selected is empty.";
                 } else {
                     pathEmptyError = "A target file path must be supplied for the transformation.";
                     unableToFindError = "Unable to find a target file with the supplied path";
+                    fileEmptyError = "Target file selected is empty.";
                 }
                 if (path == null || path.isEmpty()) {
                 	_jsonPreviewText.setText("");
@@ -115,6 +119,15 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
                 	_jsonPreviewText.setText("");
                 	return ValidationStatus.error(unableToFindError);
+                }
+                try {
+                    if (fileIsEmpty(path)) {
+                        _jsonPreviewText.setText("");
+                        return ValidationStatus.error(fileEmptyError);
+                    }
+                } catch (Exception e) {
+                    // empty
+                    e.printStackTrace();
                 }
                 return ValidationStatus.ok();
             }
@@ -139,6 +152,9 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                         IResource resource = model.getProject().findMember(path);
                         if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
                         	return;
+                        }
+                        if (fileIsEmpty(path)) {
+                            return;
                         }
                         IPath filePath = resource.getLocation();
                         String fullpath = filePath.makeAbsolute().toPortableString();
@@ -307,6 +323,11 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 final String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
                     try {
+                        if (fileIsEmpty(path)) {
+                            _jsonFileText.setText(path);
+                            _jsonFileText.notifyListeners(SWT.Modify, new Event());
+                            return;
+                        }
                         final boolean schema = jsonSchema(path);
                         _jsonInstanceOption.setSelection(!schema);
                         _jsonSchemaOption.setSelection(schema);
@@ -373,6 +394,19 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
     @Override
     public boolean isTargetPage() {
         return !isSource;
+    }
+    
+    boolean fileIsEmpty(final String path) throws Exception {
+        IFile testIFile = model.getProject().getFile(path);
+        if (testIFile.exists()) {
+            File testFile = testIFile.getRawLocation().makeAbsolute().toFile();
+            if (testFile.length() == 0) {
+                return true;
+            }
+        } else {
+            return true;
+        }
+        return false;
     }
 
     boolean jsonSchema(final String path) throws Exception {
