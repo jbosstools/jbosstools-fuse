@@ -109,7 +109,7 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
         CONNECTORS_WHITELIST.add("sftp");
         CONNECTORS_WHITELIST.add("imap");
         CONNECTORS_WHITELIST.add("imaps");
-        CONNECTORS_WHITELIST.add("infinispan");
+//        CONNECTORS_WHITELIST.add("infinispan"); // abandoned since fuse 6.2.0
         CONNECTORS_WHITELIST.add("jdbc");
         CONNECTORS_WHITELIST.add("jgroups");
         CONNECTORS_WHITELIST.add("jms");
