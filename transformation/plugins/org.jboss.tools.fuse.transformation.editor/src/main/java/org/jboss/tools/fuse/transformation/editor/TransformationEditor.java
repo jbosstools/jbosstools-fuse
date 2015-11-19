@@ -11,7 +11,6 @@ package org.jboss.tools.fuse.transformation.editor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,11 +18,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.apache.maven.model.Resource;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -34,14 +30,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -330,41 +324,6 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 copySourceToProject(element.createExecutableExtension("class").getClass(), latestVersion);
             }
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
-            // Ensure Maven will compile functions folder
-            File pomFile = config.project().getLocation().append("pom.xml").toFile();
-            org.apache.maven.model.Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
-            List<Resource> resources = pomModel.getBuild().getResources();
-            boolean exists = false;
-            for (Resource resource : resources) {
-                if (resource.getDirectory().endsWith(Util.FUNCTIONS_FOLDER)) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                Resource resource = new Resource();
-                resource.setDirectory(Util.FUNCTIONS_FOLDER);
-                pomModel.getBuild().addResource(resource);
-                try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(pomFile))) {
-                    MavenPlugin.getMaven().writeModel(pomModel, stream);
-                }
-            }
-            // Ensure Java project source classpath entry exists for functions folder
-            exists = false;
-            IClasspathEntry[] entries = javaProject.getRawClasspath();
-            IPath path = javaProject.getPath().append(Util.FUNCTIONS_FOLDER);
-            for (IClasspathEntry entry : entries) {
-                if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().equals(path)) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                IClasspathEntry[] newEntries = Arrays.copyOf(entries, entries.length + 1);
-                newEntries[entries.length] = JavaCore.newSourceEntry(path);
-                javaProject.setRawClasspath(newEntries, null);
-            }
-            config.project().refreshLocal(IResource.DEPTH_INFINITE, null);
             // Ensure build of Java classes has completed
             Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
         } catch (final Exception e) {
@@ -375,7 +334,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     void copySourceToProject(Class<?> sourceClass,
                              boolean latestVersion) throws IOException {
         IPath pkgPath = new Path(sourceClass.getPackage().getName().replace('.', '/'));
-        IPath functionsFolderPath = config.project().getLocation().append(Util.FUNCTIONS_FOLDER);
+        IPath functionsFolderPath = config.project().getLocation().append(Util.JAVA_PATH);
         File file = functionsFolderPath.append(pkgPath).toFile();
         if (!file.exists()) file.mkdirs();
         IPath resourcePath = pkgPath.append(sourceClass.getSimpleName()).addFileExtension("java");
