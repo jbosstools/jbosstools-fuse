@@ -57,6 +57,7 @@ import org.jboss.tools.fuse.transformation.MappingOperation;
 import org.jboss.tools.fuse.transformation.Variable;
 import org.jboss.tools.fuse.transformation.dozer.BaseDozerMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.function.Function;
 import org.jboss.tools.fuse.transformation.editor.function.Function.Arg;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
 import org.jboss.tools.fuse.transformation.model.Model;
@@ -70,8 +71,6 @@ public class Util {
     public static final String JAVA_PATH = MAIN_PATH + "java/";
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
-    public static final String FUNCTIONS_FOLDER = ".functions";
 
     /**
      * @return the object being dragged
@@ -273,13 +272,17 @@ public class Util {
                         && !type.isLocal() && !Flags.isAbstract(type.getFlags())
                         && Flags.isPublic(type.getFlags())
                         && (filter == null || filter.accept(type))) {
+                        // jpav: remove
+                        System.out.println(type.getFullyQualifiedName());
                         types.add(type);
                     }
                 } else if (element instanceof IParent
                            && !element.getPath().toString().contains("/test/")
-                           && !element.getPath().toString().endsWith("/" + FUNCTIONS_FOLDER)
+                           && !element.getElementName().equals(Function.class.getPackage().getName())
                            && (!(element instanceof IPackageFragmentRoot)
                            || !((IPackageFragmentRoot)element).isExternal())) {
+                    // jpav: remove
+                    System.out.println("path: " + element.getElementName());
                     populateClasses(shell, (IParent)element, types, filter);
                 }
             }
