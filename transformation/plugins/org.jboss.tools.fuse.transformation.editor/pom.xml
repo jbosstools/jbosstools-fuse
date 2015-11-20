@@ -84,6 +84,10 @@
 							        <groupId>org.apache.xmlbeans</groupId>
 							        <artifactId>xmlbeans</artifactId>
                                 </artifactItem>
+								<artifactItem>
+									<groupId>com.google.code.gson</groupId>
+									<artifactId>gson</artifactId>
+								</artifactItem>
 						    </artifactItems>
                         </configuration>
                     </execution>

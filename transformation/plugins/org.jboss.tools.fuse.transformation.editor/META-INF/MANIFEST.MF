@@ -36,4 +36,6 @@ Bundle-ClassPath: .,
  libs/jackson-core.jar,
  libs/jackson-databind.jar,
  libs/commons-lang3.jar,
- libs/xmlbeans.jar
+ libs/xmlbeans.jar,
+ libs/gson-2.2.4.jar,
+ libs/gson.jar

@@ -14,8 +14,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -62,6 +64,11 @@ import org.jboss.tools.fuse.transformation.editor.function.Function.Arg;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
 import org.jboss.tools.fuse.transformation.model.Model;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class Util {
 
     public static final String MAIN_PATH = "src/main/";
@@ -71,6 +78,32 @@ public class Util {
     public static final String JAVA_PATH = MAIN_PATH + "java/";
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    public static boolean isJSONValid(String incomingJSON) {
+        try {
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(incomingJSON); // throws JsonSyntaxException
+            if (incomingJSON.trim().isEmpty() || element instanceof JsonNull) {
+                return false;
+            }
+            if (element instanceof JsonObject) {
+                JsonObject jObj = (JsonObject) element;
+                if (jObj.entrySet().size() < 1) {
+                    return false;
+                }
+            }
+            return true;
+        } catch(com.google.gson.JsonSyntaxException ex) { 
+            return false;
+        }
+    }
+
+    public static String displayName(Class<?> type) {
+        String name = type.getName();
+        if (name.startsWith("java.lang.") && name.lastIndexOf('.') == 9) return "String";
+        if (type == Date.class) return "Date";
+        return type.getName().replace('.', '/');
+    }
 
     /**
      * @return the object being dragged

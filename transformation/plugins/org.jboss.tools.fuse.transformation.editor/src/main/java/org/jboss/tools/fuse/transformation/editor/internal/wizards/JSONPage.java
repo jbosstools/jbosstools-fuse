@@ -12,6 +12,7 @@ package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -52,6 +53,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CompoundValidator;
+import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 
 /**
  * @author brianf
@@ -89,46 +92,12 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
             modelValue = BeanProperties.value(Model.class, "targetFilePath").observe(model);
         }
         final UpdateValueStrategy strategy = new UpdateValueStrategy();
-        strategy.setBeforeSetValidator(new IValidator() {
-
-            @Override
-            public IStatus validate(final Object value) {
-                final String path = value == null ? null : value.toString().trim();
-                String pathEmptyError = null;
-                String unableToFindError = null;
-                String fileEmptyError = null;
-                if (isSourcePage()) {
-                    pathEmptyError = "A source file path must be supplied for the transformation.";
-                    unableToFindError = "Unable to find a source file with the supplied path";
-                    fileEmptyError = "Source file selected is empty.";
-                } else {
-                    pathEmptyError = "A target file path must be supplied for the transformation.";
-                    unableToFindError = "Unable to find a target file with the supplied path";
-                    fileEmptyError = "Target file selected is empty.";
-                }
-                if (path == null || path.isEmpty()) {
-                    return ValidationStatus.error(pathEmptyError);
-                }
-                if (model.getProject().findMember(path) == null) {
-                    return ValidationStatus.error(unableToFindError);
-                }
-                IResource resource = model.getProject().findMember(path);
-                if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
-                	_jsonPreviewText.setText("");
-                	return ValidationStatus.error(unableToFindError);
-                }
-                try {
-                    if (fileIsEmpty(path)) {
-                        _jsonPreviewText.setText("");
-                        return ValidationStatus.error(fileEmptyError);
-                    }
-                } catch (Exception e) {
-                    // empty
-                    e.printStackTrace();
-                }
-                return ValidationStatus.ok();
-            }
-        });
+        PathValidator pathValidator = new PathValidator();
+        FileEmptyValidator fileEmptyValidator = new FileEmptyValidator();
+        JSONValidator jsonValidator = new JSONValidator();
+        CompoundValidator compoundJSONTextValidator = new CompoundValidator(
+                pathValidator, fileEmptyValidator, jsonValidator);
+        strategy.setBeforeSetValidator(compoundJSONTextValidator);
         _binding = context.bindValue(widgetValue, modelValue, strategy, null);
         ControlDecorationSupport.create(_binding, decoratorPosition, _jsonFileText.getParent());
 
@@ -148,9 +117,13 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                     try {
                         IResource resource = model.getProject().findMember(path);
                         if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
-                        	return;
+                            return;
                         }
                         if (fileIsEmpty(path)) {
+                            return;
+                        }
+                        String jsonText = getJsonText((IFile) resource);
+                        if (!Util.isJSONValid(jsonText)) {
                             return;
                         }
                         IPath filePath = resource.getLocation();
@@ -320,12 +293,22 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                 final String path = selectResourceFromWorkspace(_page.getShell(), extension);
                 if (path != null) {
                     try {
+                        _jsonPreviewText.setText("");
                         if (fileIsEmpty(path)) {
                             _jsonFileText.setText(path);
-                            _jsonFileText.notifyListeners(SWT.Modify, new Event());
+                            notifyControl(_jsonFileText, SWT.Modify);
                             return;
                         }
-                        final boolean schema = jsonSchema(path);
+                        IPath tempPath = new Path(path);
+                        IFile xmlFile = model.getProject().getFile(tempPath);
+                        String jsonText = getJsonText(xmlFile);
+                        if (!Util.isJSONValid(jsonText)) {
+                            _jsonFileText.setText(path);
+                            notifyControl(_jsonFileText, SWT.Modify);
+                            return;
+                        }
+
+                        boolean schema = jsonSchema(path);
                         _jsonInstanceOption.setSelection(!schema);
                         _jsonSchemaOption.setSelection(schema);
                         if (isSourcePage()) {
@@ -344,26 +327,8 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
                             model.setTargetFilePath(path);
                         }
                         _jsonFileText.setText(path);
-
-                        final IPath tempPath = new Path(path);
-                        final IFile xmlFile = model.getProject().getFile(tempPath);
-                        if (xmlFile != null) {
-                            try (final InputStream istream = xmlFile.getContents()) {
-                                final StringBuffer buffer = new StringBuffer();
-                                try (final BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
-                                    String inputLine;
-                                    while ((inputLine = in.readLine()) != null) {
-                                        buffer.append(inputLine + "\n");
-                                    }
-                                }
-                                _jsonPreviewText.setText(buffer.toString());
-                            } catch (final CoreException e1) {
-                                e1.printStackTrace();
-                            } catch (final IOException e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-                        _jsonFileText.notifyListeners(SWT.Modify, new Event());
+                        _jsonPreviewText.setText(jsonText);
+                        notifyControl(_jsonFileText, SWT.Modify);
                     } catch (final Exception e) {
                         Activator.error(e);
                     }
@@ -383,6 +348,26 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         validatePage();
     }
 
+    private String getJsonText(IFile jsonFile) {
+        if (jsonFile != null && jsonFile.exists()) {
+            try (final InputStream istream = jsonFile.getContents()) {
+                final StringBuffer buffer = new StringBuffer();
+                try (final BufferedReader in = new BufferedReader(new InputStreamReader(istream))) {
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        buffer.append(inputLine + "\n");
+                    }
+                }
+                return buffer.toString();
+            } catch (final CoreException e1) {
+                e1.printStackTrace();
+            } catch (final IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean isSourcePage() {
         return isSource;
@@ -393,49 +378,65 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         return !isSource;
     }
     
-    boolean fileIsEmpty(final String path) throws Exception {
-        IFile testIFile = model.getProject().getFile(path);
-        if (testIFile.exists()) {
-            File testFile = testIFile.getRawLocation().makeAbsolute().toFile();
-            if (testFile.length() == 0) {
+    boolean fileIsEmpty(final String path) {
+        try {
+            IFile testIFile = model.getProject().getFile(path);
+            if (testIFile.exists()) {
+                File testFile = testIFile.getRawLocation().makeAbsolute().toFile();
+                if (testFile.length() == 0) {
+                    return true;
+                }
+                String jsonText = getJsonText(testIFile);
+                if (jsonText != null && jsonText.trim().isEmpty()) {
+                    return true;
+                }
+            } else {
                 return true;
             }
-        } else {
-            return true;
+        } catch (Exception e) {
+            // ignore
         }
         return false;
     }
 
     boolean jsonSchema(final String path) throws Exception {
-        try (InputStream stream = model.getProject().getFile(path).getContents()) {
-            char quote = '\0';
-            final StringBuilder builder = new StringBuilder();
-            for (char chr = (char) stream.read(); chr != -1; chr = (char) stream.read()) {
-                // Find quote
-                if (quote == '\0') {
-                    if (chr == '"' || chr == '\'') {
-                        quote = chr;
-                    }
-                } else if (chr == quote) {
-                    final String keyword = builder.toString();
-                    switch (keyword) {
-                    case "$schema":
-                    case "title":
-                    case "type":
-                    case "id":
-                        return true;
-                    default:
-                        // all other cases ignored
-                    }
-                    break;
-                } else {
-                    builder.append(chr);
+        final IPath tempPath = new Path(path);
+        final IFile jsonFile = model.getProject().getFile(tempPath);
+        if (fileIsEmpty(path)) {
+            return false;
+        }
+        File testFile = jsonFile.getRawLocation().makeAbsolute().toFile();
+        FileInputStream fileInput = new FileInputStream(testFile);
+        char quote = '\0';
+        final StringBuilder builder = new StringBuilder();
+        int r;
+        while ((r = fileInput.read()) != -1) {
+            char chr = (char) r;
+            // Find quote
+            if (quote == '\0') {
+                if (chr == '"' || chr == '\'') {
+                    quote = chr;
                 }
+            } else if (chr == quote) {
+                final String keyword = builder.toString();
+                switch (keyword) {
+                case "$schema":
+                case "title":
+                case "type":
+                case "id":
+                    return true;
+                default:
+                    // all other cases ignored
+                }
+                break;
+            } else {
+                builder.append(chr);
             }
         }
+        fileInput.close();
         return false;
     }
-
+    
     private String selectResourceFromWorkspace(final Shell shell, final String extension) {
         IJavaProject javaProject = null;
         if (getModel() != null) {
@@ -487,6 +488,81 @@ public class JSONPage extends XformWizardPage implements TransformationTypePage 
         super.setVisible(visible);
         if (visible) {
             notifyListeners();
+        }
+    }
+
+    class PathValidator implements IValidator {
+
+        @Override
+        public IStatus validate(final Object value) {
+            final String path = value == null ? null : value.toString().trim();
+            String pathEmptyError = null;
+            String unableToFindError = null;
+            if (isSourcePage()) {
+                pathEmptyError = "A source file path must be supplied for the transformation.";
+                unableToFindError = "Unable to find a source file with the supplied path";
+            } else {
+                pathEmptyError = "A target file path must be supplied for the transformation.";
+                unableToFindError = "Unable to find a target file with the supplied path";
+            }
+            if (path == null || path.isEmpty()) {
+                _jsonPreviewText.setText("");
+                return ValidationStatus.error(pathEmptyError);
+            }
+            if (model.getProject().findMember(path) == null) {
+                _jsonPreviewText.setText("");
+                return ValidationStatus.error(unableToFindError);
+            }
+            IResource resource = model.getProject().findMember(path);
+            if (resource == null || !resource.exists() || !(resource instanceof IFile)) {
+                _jsonPreviewText.setText("");
+                return ValidationStatus.error(unableToFindError);
+            }
+            return ValidationStatus.ok();
+        }
+    }
+
+    class FileEmptyValidator implements IValidator {
+
+        @Override
+        public IStatus validate(final Object value) {
+            final String path = value == null ? null : value.toString().trim();
+            String fileEmptyError = null;
+            if (isSourcePage()) {
+                fileEmptyError = "Source file selected is empty.";
+            } else {
+                fileEmptyError = "Target file selected is empty.";
+            }
+            if (fileIsEmpty(path)) {
+                _jsonPreviewText.setText("");
+                return ValidationStatus.error(fileEmptyError);
+            }
+            IResource resource = model.getProject().findMember(path);
+            if (resource instanceof IFile) {
+                String jsonText = getJsonText((IFile) resource);
+                if (jsonText == null || jsonText.trim().isEmpty()) {
+                    _jsonPreviewText.setText("");
+                    return ValidationStatus.error(fileEmptyError);
+                }
+            }
+            return ValidationStatus.ok();
+        }
+    }
+
+    class JSONValidator implements IValidator {
+
+        @Override
+        public IStatus validate(final Object value) {
+            final String path = value == null ? null : value.toString().trim();
+            IResource resource = model.getProject().findMember(path);
+            if (resource instanceof IFile) {
+                String jsonText = getJsonText((IFile) resource);
+                if (!Util.isJSONValid(jsonText)) {
+                    _jsonPreviewText.setText("");
+                    return ValidationStatus.error("Invalid JSON");
+                }
+            }
+            return ValidationStatus.ok();
         }
     }
 }
