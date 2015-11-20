@@ -112,6 +112,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <artifactId>commons-lang3</artifactId>
         <version>${version.commons}</version>
       </dependency>
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.2.4</version>
+    </dependency>
 
       <!--  Internal Dependencies -->
       <dependency>

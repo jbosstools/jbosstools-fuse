@@ -62,6 +62,11 @@ import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceCl
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
 import org.jboss.tools.fuse.transformation.model.Model;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class Util {
 
     public static final String MAIN_PATH = "src/main/";
@@ -73,6 +78,25 @@ public class Util {
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     public static final String TRANSFORMATIONS_FOLDER = ".transformations";
+
+    public static boolean isJSONValid(String incomingJSON) {
+        try {
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(incomingJSON); // throws JsonSyntaxException
+            if (incomingJSON.trim().isEmpty() || element instanceof JsonNull) {
+                return false;
+            }
+            if (element instanceof JsonObject) {
+                JsonObject jObj = (JsonObject) element;
+                if (jObj.entrySet().size() < 1) {
+                    return false;
+                }
+            }
+            return true;
+        } catch(com.google.gson.JsonSyntaxException ex) { 
+            return false;
+        }
+    }
 
     public static String displayName(Class<?> type) {
         String name = type.getName();
