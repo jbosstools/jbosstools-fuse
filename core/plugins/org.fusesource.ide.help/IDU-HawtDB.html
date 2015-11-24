@@ -1,13 +1,13 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>HawtDB</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-GuavaEventBus.html" title="Guava EventBus"><link rel="next" href="IDU-HazelcastComponent.html" title="Hazelcast Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-HawtDB"></a>HawtDB</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HawtDB_HSH_HawtDB"></a>HawtDB</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.3</strong></span>
+   <title>HawtDB</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-GuavaEventBus.html" title="Guava EventBus"><link rel="next" href="IDU-HazelcastComponent.html" title="Hazelcast Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-HawtDB"></a>HawtDB</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HawtDB_HSH_HawtDB"></a>HawtDB</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.3</strong></span>
     </p><p>
       <a class="link" href="http://hawtdb.fusesource.org/" target="_top">HawtDB</a> is a very lightweight and
       embeddable key value database. It allows together with Apache Camel to provide persistent support
-      for various Apache Camel features such as <span class="olink">????</span>. </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Deprecated"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Deprecated</th></tr><tr><td align="left" valign="top"><p>The <a class="link" href="http://hawtdb.fusesource.org/" target="_top">HawtDB</a>  project is being deprecated and replaced by <a class="link" href="https://code.google.com/p/leveldb/" target="_top">leveldb</a> as the lightweight and embedable key value database. To make using leveldb easy there is a <a class="link" href="https://github.com/fusesource/leveldbjni" target="_top">leveldbjni</a> project for that. The Apache ActiveMQ project is planning on using leveldb as their primary file based message store in the future, to replace kahadb.</p><p>There os a <span class="olink">camel-leveldb</span> component we recommend to use instead of this.</p></td></tr></table></div><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>HawtDBAggregationRepository</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HawtDB_HSH_UsingHawtDBAggregationRepository"></a>Using HawtDBAggregationRepository</h2></div></div></div><p><code class="literal">HawtDBAggregationRepository</code> is an
+      for various Apache Camel features. </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Deprecated"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Deprecated</th></tr><tr><td align="left" valign="top"><p>The <a class="link" href="http://hawtdb.fusesource.org/" target="_top">HawtDB</a>  project is being deprecated and replaced by <a class="link" href="https://code.google.com/p/leveldb/" target="_top">leveldb</a> as the lightweight and embedable key value database. To make using leveldb easy there is a <a class="link" href="https://github.com/fusesource/leveldbjni" target="_top">leveldbjni</a> project for that. The Apache ActiveMQ project is planning on using leveldb as their primary file based message store in the future, to replace kahadb.</p><p>There os a <a href="IDU-LevelDB.html" class="olink">camel-leveldb</a> component we recommend to use instead of this.</p></td></tr></table></div><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>HawtDBAggregationRepository</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HawtDB_HSH_UsingHawtDBAggregationRepository"></a>Using HawtDBAggregationRepository</h2></div></div></div><p><code class="literal">HawtDBAggregationRepository</code> is an
         <code class="literal">AggregationRepository</code> which on the fly persists the aggregated messages.
       This ensures that you will not loose messages, as the default aggregator will use an in memory
-      only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e60358"><tr>
+      only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e77234"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Description </th>
@@ -59,9 +59,9 @@
         <td><code class="literal">useRecovery</code>
         </td>
         <td> boolean </td>
-        <td> Whether or not recovery is enabled. This option is by default <code class="literal">true</code>.
-          When enabled the Apache Camel <span class="olink">????</span>
-          automatic recover failed aggregated exchange and have them resubmitted. </td>
+        <td>Whether or not recovery is enabled. This option is by default <code class="literal">true</code>.
+                    When enabled, the Apache Camel 
+                    automatically recoveres failed aggregated exchanges and has them resubmitted. </td>
       </tr><tr>
         <td><code class="literal">recoveryInterval</code>
         </td>
@@ -80,9 +80,9 @@
         <td><code class="literal">deadLetterUri</code>
         </td>
         <td> String </td>
-        <td> An endpoint uri for a <span class="olink">Dead
-            Letter Channel</span> where exhausted recovered Exchanges will be moved. If this option
-          is used then the <code class="literal">maximumRedeliveries</code> option must also be provided. </td>
+        <td> An endpoint uri for a Dead
+            Letter Channel where exhausted recovered exchanges will be moved. If this option
+          is used, the <code class="literal">maximumRedeliveries</code> option must also be supplied.</td>
       </tr><tr>
         <td><code class="literal">optimisticLocking</code>
         </td>
@@ -101,10 +101,9 @@
       scans for failed <a class="link" href="Exchange" target="_top">Exchange</a>s in the persistent store. You can
       use the <code class="literal">checkInterval</code> option to set how often this task runs. The recovery
       works as transactional which ensures that Apache Camel will try to recover and redeliver the
-      failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a>
-      which was found to be recovered will be restored from the persistent store and resubmitted and
+      failed <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a>. Any Exchange which was found to be recovered will be restored from the persistent store and resubmitted and
       send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being
-      recovered/redelivered:</p><table id="d0e60625"><tr>
+      recovered/redelivered:</p><table id="d0e77493"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -160,7 +159,7 @@
         &lt;/aggregate&gt;
     &lt;/route&gt;
 
-&lt;/camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HawtDB_HSH_Dependencies"></a>Dependencies</h2></div></div></div><p>To use <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HawtDB.html" class="olink">HawtDB</a> in your Apache Camel routes you need to
+&lt;/camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HawtDB_HSH_Dependencies"></a>Dependencies</h2></div></div></div><p>To use <a href="IDU-HawtDB.html" class="olink">HawtDB</a> in your Apache Camel routes you need to
       add the a dependency on <span class="bold"><strong>camel-hawtdb</strong></span>. </p><p>If you use maven you could just add the following to your pom.xml, substituting the
       version number for the latest &amp; greatest release (see <a class="link" href="Download" target="_top">the
         download page for the latest versions</a>).</p><pre class="programlisting">&lt;dependency&gt;
@@ -168,8 +167,6 @@
   &lt;artifactId&gt;camel-hawtdb&lt;/artifactId&gt;
   &lt;version&gt;2.3.0&lt;/version&gt;
 &lt;/dependency&gt;</pre><p>
-       See Also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-          <span class="olink">????</span>
-        </p></li><li class="listitem"><p><a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-SQLComponent.html" class="olink">SQL</a></p></li><li class="listitem"><p>
-          <span class="olink">Components</span>
+       See Also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"></li><li class="listitem"><p><a href="IDU-SQLComponent.html" class="olink">SQL</a></p></li><li class="listitem"><p>
+          <a href="IDU-Components.html" class="olink">Components</a>
         </p></li></ul></div></div></div></body></html>

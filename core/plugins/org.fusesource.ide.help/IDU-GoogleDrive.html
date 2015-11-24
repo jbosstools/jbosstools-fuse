@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>GoogleDrive</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-GoogleCalenda.html" title="GoogleCalendar"><link rel="next" href="IDU-GoogleMail.html" title="GoogleMail"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GoogleDrive"></a>GoogleDrive</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56741"></a>GoogleDrive Component</h2></div></div></div><p>
+   <title>GoogleDrive</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-GoogleCalendar.html" title="GoogleCalendar"><link rel="next" href="IDU-GoogleMail.html" title="GoogleMail"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GoogleDrive"></a>GoogleDrive</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73619"></a>GoogleDrive Component</h2></div></div></div><p>
         <span class="bold"><strong>Available as of Camel 2.14</strong></span>
     </p><p>The Google Drive component provides access to the <a class="link" href="http://drive.google.com" target="_top">Google
             Drive file storage service</a> via the <a class="link" href="https://developers.google.com/drive/v2/reference" target="_top">Google Drive Web APIs</a>.</p><p>
@@ -15,9 +15,9 @@
         &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
         &lt;artifactId&gt;camel-google-drive&lt;/artifactId&gt;
         &lt;version&gt;2.14-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56772"></a>URI Format</h2></div></div></div><p>The GoogleDrive Component uses the following URI format:</p><pre class="programlisting">google-drive://endpoint-prefix/endpoint?[options]</pre><p>Endpoint prefix can be one of:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="code">drive-about</code></p></li><li class="listitem"><p><code class="code">drive-apps</code></p></li><li class="listitem"><p><code class="code">drive-changes</code></p></li><li class="listitem"><p><code class="code">drive-channels</code></p></li><li class="listitem"><p><code class="code">drive-children</code></p></li><li class="listitem"><p><code class="code">drive-comments</code></p></li><li class="listitem"><p><code class="code">drive-files</code></p></li><li class="listitem"><p><code class="code">drive-parents</code></p></li><li class="listitem"><p><code class="code">drive-permissions</code></p></li><li class="listitem"><p><code class="code">drive-properties</code></p></li><li class="listitem"><p><code class="code">drive-realtime</code></p></li><li class="listitem"><p><code class="code">drive-replies</code></p></li><li class="listitem"><p><code class="code">drive-revisions</code></p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56834"></a>GoogleDriveComponent</h2></div></div></div><p>The GoogleDrive Component can be configured with the options below. These options can be
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73650"></a>URI Format</h2></div></div></div><p>The GoogleDrive Component uses the following URI format:</p><pre class="programlisting">google-drive://endpoint-prefix/endpoint?[options]</pre><p>Endpoint prefix can be one of:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="code">drive-about</code></p></li><li class="listitem"><p><code class="code">drive-apps</code></p></li><li class="listitem"><p><code class="code">drive-changes</code></p></li><li class="listitem"><p><code class="code">drive-channels</code></p></li><li class="listitem"><p><code class="code">drive-children</code></p></li><li class="listitem"><p><code class="code">drive-comments</code></p></li><li class="listitem"><p><code class="code">drive-files</code></p></li><li class="listitem"><p><code class="code">drive-parents</code></p></li><li class="listitem"><p><code class="code">drive-permissions</code></p></li><li class="listitem"><p><code class="code">drive-properties</code></p></li><li class="listitem"><p><code class="code">drive-realtime</code></p></li><li class="listitem"><p><code class="code">drive-replies</code></p></li><li class="listitem"><p><code class="code">drive-revisions</code></p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73712"></a>GoogleDriveComponent</h2></div></div></div><p>The GoogleDrive Component can be configured with the options below. These options can be
         provided using the component's bean property <code class="code">configuration</code> of type
-            <code class="code">org.apache.camel.component.google.drive.GoogleDriveConfiguration</code>.</p><table id="d0e56845"><tbody><tr>
+            <code class="code">org.apache.camel.component.google.drive.GoogleDriveConfiguration</code>.</p><table id="d0e73723"><tbody><tr>
                 <th>Option</th>
                 <th>Type</th>
                 <th>Description</th>
@@ -50,7 +50,7 @@
                 <td><code class="code">List&lt;String&gt;</code></td>
                 <td>Specifies the level of permissions you want a
                     drive application to have to a user account. See <a class="link" href="https://developers.google.com/drive/web/scopes" target="_top">https://developers.google.com/drive/web/scopes</a> for more info.</td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56949"></a>Producer Endpoints</h2></div></div></div><p>Producer endpoints can use endpoint prefixes followed by endpoint names and associated
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73827"></a>Producer Endpoints</h2></div></div></div><p>Producer endpoints can use endpoint prefixes followed by endpoint names and associated
         options described next. A shorthand alias can be used for some endpoints. The endpoint URI
         MUST contain a prefix.</p><p>Endpoint options that are not mandatory are denoted by []. When there are no mandatory
         options for an endpoint, one of the set of [] options MUST be provided. Producer endpoints
@@ -60,8 +60,8 @@
         message header. The message header name must be of the format
             <code class="code">CamelGoogleDrive.&lt;option&gt;</code>. Note that the <code class="code">inBody</code> option
         overrides message header, i.e. the endpoint option <code class="code">inBody=option</code> would override
-        a <code class="code">CamelGoogleDrive.option</code> header.</p><p>For more information on the endpoints and options see API documentation at: <a class="link" href="https://developers.google.com/drive/v2/reference/" target="_top">https://developers.google.com/drive/v2/reference/</a></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e56978"></a>1. Endpoint Prefix drive-about</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-about</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-about/endpoint?[options]</pre><table id="d0e56988"><tbody><tr>
+        a <code class="code">CamelGoogleDrive.option</code> header.</p><p>For more information on the endpoints and options see API documentation at: <a class="link" href="https://developers.google.com/drive/v2/reference/" target="_top">https://developers.google.com/drive/v2/reference/</a></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73856"></a>1. Endpoint Prefix drive-about</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-about</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-about/endpoint?[options]</pre><table id="d0e73866"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -71,11 +71,11 @@
                 <td> </td>
                 <td> </td>
                 <td><code class="code">com.google.api.services.drive.model.About</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57020"></a>URI Options for drive-about</h2></div></div></div><table id="d0e57023"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73898"></a>URI Options for drive-about</h2></div></div></div><table id="d0e73901"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57033"></a>2. Endpoint Prefix drive-apps</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-apps</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-apps/endpoint?[options]</pre><table id="d0e57043"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73911"></a>2. Endpoint Prefix drive-apps</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-apps</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-apps/endpoint?[options]</pre><table id="d0e73921"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -90,15 +90,15 @@
                 <td> </td>
                 <td> </td>
                 <td><code class="code">com.google.api.services.drive.model.AppList</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57092"></a>URI Options for drive-apps</h2></div></div></div><table id="d0e57095"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73970"></a>URI Options for drive-apps</h2></div></div></div><table id="d0e73973"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
                 <td><code class="code">appId</code></td>
                 <td><code class="code">String</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57115"></a>3. Endpoint Prefix drive-changes</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-changes</code> as
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73993"></a>3. Endpoint Prefix drive-changes</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-changes</code> as
         follows:</p><pre class="programlisting">        google-drive://drive-changes/endpoint?[options]
-    </pre><table id="d0e57125"><tbody><tr>
+    </pre><table id="d0e74003"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -118,7 +118,7 @@
                 <td> </td>
                 <td><code class="code">contentChannel</code></td>
                 <td><code class="code">com.google.api.services.drive.model.Channel</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57191"></a>URI Options for drive-changes</h2></div></div></div><table id="d0e57194"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74069"></a>URI Options for drive-changes</h2></div></div></div><table id="d0e74072"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -127,8 +127,8 @@
             </tr><tr>
                 <td><code class="code">contentChannel</code></td>
                 <td><code class="code">com.google.api.services.drive.model.Channel</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57224"></a>4. Endpoint Prefix drive-channels</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-channels</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-channels/endpoint?[options]</pre><table id="d0e57234"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74102"></a>4. Endpoint Prefix drive-channels</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-channels</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-channels/endpoint?[options]</pre><table id="d0e74112"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -138,14 +138,14 @@
                 <td> </td>
                 <td><code class="code">contentChannel</code></td>
                 <td> </td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57266"></a>URI Options for drive-channels</h2></div></div></div><table id="d0e57269"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74144"></a>URI Options for drive-channels</h2></div></div></div><table id="d0e74147"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
                 <td><code class="code">contentChannel</code></td>
                 <td><code class="code">com.google.api.services.drive.model.Channel</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57289"></a>5. Endpoint Prefix drive-children</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-children</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-children/endpoint?[options]</pre><table id="d0e57299"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74167"></a>5. Endpoint Prefix drive-children</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-children</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-children/endpoint?[options]</pre><table id="d0e74177"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -170,7 +170,7 @@
                 <td> </td>
                 <td><code class="code">folderId</code></td>
                 <td><code class="code">com.google.api.services.drive.model.ChildList</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57391"></a>URI Options for drive-children</h2></div></div></div><table id="d0e57394"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74269"></a>URI Options for drive-children</h2></div></div></div><table id="d0e74272"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -182,8 +182,8 @@
             </tr><tr>
                 <td><code class="code">folderId</code></td>
                 <td><code class="code">String</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57434"></a>6. Endpoint Prefix drive-comments</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-comments</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-comments/endpoint?[options]</pre><table id="d0e57444"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74312"></a>6. Endpoint Prefix drive-comments</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-comments</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-comments/endpoint?[options]</pre><table id="d0e74322"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -218,7 +218,7 @@
                 <td> </td>
                 <td><code class="code">commentId</code>, <code class="code">content</code>, <code class="code">fileId</code></td>
                 <td><code class="code">com.google.api.services.drive.model.Comment</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57582"></a>URI Options for drive-comments</h2></div></div></div><table id="d0e57585"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74460"></a>URI Options for drive-comments</h2></div></div></div><table id="d0e74463"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -230,8 +230,8 @@
             </tr><tr>
                 <td><code class="code">fileId</code></td>
                 <td><code class="code">String</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57625"></a>7. Endpoint Prefix drive-files</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-files</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-files/endpoint?[options]</pre><table id="d0e57635"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74503"></a>7. Endpoint Prefix drive-files</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-files</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-files/endpoint?[options]</pre><table id="d0e74513"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -291,7 +291,7 @@
                 <td> </td>
                 <td><code class="code">contentChannel</code>, <code class="code">fileId</code></td>
                 <td><code class="code">com.google.api.services.drive.model.Channel</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57854"></a>URI Options for drive-files</h2></div></div></div><table id="d0e57857"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74732"></a>URI Options for drive-files</h2></div></div></div><table id="d0e74735"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -306,8 +306,8 @@
             </tr><tr>
                 <td><code class="code">mediaContent</code></td>
                 <td><code class="code">com.google.api.client.http.AbstractInputStreamContent</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e57907"></a>8. Endpoint Prefix drive-parents</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-parents</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-parents/endpoint?[options]</pre><table id="d0e57917"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74785"></a>8. Endpoint Prefix drive-parents</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-parents</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-parents/endpoint?[options]</pre><table id="d0e74795"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -332,7 +332,7 @@
                 <td> </td>
                 <td><code class="code">fileId</code></td>
                 <td><code class="code">com.google.api.services.drive.model.ParentList</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58009"></a>URI Options for drive-parents</h2></div></div></div><table id="d0e58012"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74887"></a>URI Options for drive-parents</h2></div></div></div><table id="d0e74890"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -344,8 +344,8 @@
             </tr><tr>
                 <td><code class="code">parentId</code></td>
                 <td><code class="code">String</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58052"></a>9. Endpoint Prefix drive-permissions</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-permissions</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-permissions/endpoint?[options]</pre><table id="d0e58062"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e74930"></a>9. Endpoint Prefix drive-permissions</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-permissions</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-permissions/endpoint?[options]</pre><table id="d0e74940"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -385,7 +385,7 @@
                 <td> </td>
                 <td><code class="code">content</code>, <code class="code">fileId</code>, <code class="code">permissionId</code></td>
                 <td><code class="code">com.google.api.services.drive.model.Permission</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58217"></a>URI Options for drive-permissions</h2></div></div></div><table id="d0e58220"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75095"></a>URI Options for drive-permissions</h2></div></div></div><table id="d0e75098"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -400,8 +400,8 @@
             </tr><tr>
                 <td><code class="code">permissionId</code></td>
                 <td><code class="code">String</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58270"></a>10. Endpoint Prefix drive-properties</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-properties</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-properties/endpoint?[options]</pre><table id="d0e58280"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75148"></a>10. Endpoint Prefix drive-properties</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-properties</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-properties/endpoint?[options]</pre><table id="d0e75158"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -436,7 +436,7 @@
                 <td> </td>
                 <td><code class="code">content</code>, <code class="code">fileId</code>, <code class="code">propertyKey</code></td>
                 <td><code class="code">com.google.api.services.drive.model.Property</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58418"></a>URI Options for drive-properties</h2></div></div></div><table id="d0e58421"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75296"></a>URI Options for drive-properties</h2></div></div></div><table id="d0e75299"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -448,8 +448,8 @@
             </tr><tr>
                 <td><code class="code">propertyKey</code></td>
                 <td><code class="code">String</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58461"></a>11. Endpoint Prefix drive-realtime</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-realtime</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-realtime/endpoint?[options]</pre><table id="d0e58471"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75339"></a>11. Endpoint Prefix drive-realtime</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-realtime</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-realtime/endpoint?[options]</pre><table id="d0e75349"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -464,7 +464,7 @@
                 <td> </td>
                 <td><code class="code">[mediaContent]</code>, <code class="code">fileId</code></td>
                 <td> </td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58522"></a>URI Options for drive-realtime</h2></div></div></div><table id="d0e58525"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75400"></a>URI Options for drive-realtime</h2></div></div></div><table id="d0e75403"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -473,8 +473,8 @@
             </tr><tr>
                 <td><code class="code">mediaContent</code></td>
                 <td><code class="code">com.google.api.client.http.AbstractInputStreamContent</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58555"></a>12. Endpoint Prefix drive-replies</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-replies</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-replies/endpoint?[options]</pre><table id="d0e58565"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75433"></a>12. Endpoint Prefix drive-replies</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-replies</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-replies/endpoint?[options]</pre><table id="d0e75443"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -511,7 +511,7 @@
                 <td><code class="code">commentId</code>, <code class="code">content</code>, <code class="code">fileId</code>,
                             <code class="code">replyId</code></td>
                 <td><code class="code">com.google.api.services.drive.model.CommentReply</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58721"></a>URI Options for drive-replies</h2></div></div></div><table id="d0e58724"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75599"></a>URI Options for drive-replies</h2></div></div></div><table id="d0e75602"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -526,8 +526,8 @@
             </tr><tr>
                 <td><code class="code">replyId</code></td>
                 <td><code class="code">String</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58774"></a>13. Endpoint Prefix drive-revisions</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-revisions</code> as
-        follows:</p><pre class="programlisting">google-drive://drive-revisions/endpoint?[options]</pre><table id="d0e58784"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75652"></a>13. Endpoint Prefix drive-revisions</h2></div></div></div><p>The following endpoints can be invoked with the prefix <code class="code">drive-revisions</code> as
+        follows:</p><pre class="programlisting">google-drive://drive-revisions/endpoint?[options]</pre><table id="d0e75662"><tbody><tr>
                 <th>Endpoint</th>
                 <th>Shorthand Alias</th>
                 <th>Options</th>
@@ -557,7 +557,7 @@
                 <td> </td>
                 <td><code class="code">content</code>, <code class="code">fileId</code>, <code class="code">revisionId</code></td>
                 <td><code class="code">com.google.api.services.drive.model.Revision</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58902"></a>URI Options for drive-revisions</h2></div></div></div><table id="d0e58905"><tbody><tr>
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75780"></a>URI Options for drive-revisions</h2></div></div></div><table id="d0e75783"><tbody><tr>
                 <th>Name</th>
                 <th>Type</th>
             </tr><tr>
@@ -569,11 +569,11 @@
             </tr><tr>
                 <td><code class="code">revisionId</code></td>
                 <td><code class="code">String</code></td>
-            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58945"></a>Consumer Endpoints</h2></div></div></div><p>Any of the producer endpoints can be used as a consumer endpoint. Consumer endpoints can use
+            </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75823"></a>Consumer Endpoints</h2></div></div></div><p>Any of the producer endpoints can be used as a consumer endpoint. Consumer endpoints can use
             <a class="link" href="http://camel.apache.org/polling-consumer.html#PollingConsumer-ScheduledPollConsumerOptions" target="_top">Scheduled Poll Consumer Options</a> with a <code class="code">consumer.</code> prefix to schedule
         endpoint invocation. Consumer endpoints that return an array or collection will generate one
-        exchange per element, and their routes will be executed once for each exchange.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58956"></a>Message Headers</h2></div></div></div><p>Any URI option can be provided in a message header for producer endpoints with a
-            <code class="code">CamelGoogleDrive.</code> prefix.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e58964"></a>Message Body</h2></div></div></div><p>All result message bodies utilize objects provided by the underlying APIs used by the
+        exchange per element, and their routes will be executed once for each exchange.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75834"></a>Message Headers</h2></div></div></div><p>Any URI option can be provided in a message header for producer endpoints with a
+            <code class="code">CamelGoogleDrive.</code> prefix.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e75842"></a>Message Body</h2></div></div></div><p>All result message bodies utilize objects provided by the underlying APIs used by the
         GoogleDriveComponent. Producer endpoints can specify the option name for incoming message
         body in the <code class="code">inBody</code> endpoint URI parameter. For endpoints that return an array
         or collection, a consumer endpoint will map every element to distinct messages. </p></div></div></body></html>

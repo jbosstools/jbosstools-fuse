@@ -1,11 +1,11 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Netty4-HTTP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-NettyHTTP.html" title="Netty HTTP"><link rel="next" href="IDU-Olingo2.html" title="Olingo2"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Netty4-HTTP"></a>Netty4-HTTP</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty4-HTTP_HSH_Netty4HTTPComponent"></a>Netty4 HTTP Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.14</strong></span></p><p>The <span class="strong"><strong>netty4-http</strong></span> component is an extension to <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty4.html" class="olink">Netty4</a> component to facilitiate HTTP transport with
+   <title>Netty4-HTTP</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-NettyHTTP.html" title="Netty HTTP"><link rel="next" href="IDU-Olingo2.html" title="Olingo2"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Netty4-HTTP"></a>Netty4-HTTP</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Netty4-HTTP_HSH_Netty4HTTPComponent"></a>Netty4 HTTP Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.14</strong></span></p><p>The <span class="strong"><strong>netty4-http</strong></span> component is an extension to <a href="IDU-Netty4.html" class="olink">Netty4</a> component to facilitiate HTTP transport with
             Netty4.</p><p>This camel component supports both producer and consumer endpoints.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Stream"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Stream</th></tr><tr><td align="left" valign="top"><p>Netty is stream based, which means the input it receives is submitted to Camel as
                 a stream. That means you will only be able to read the content of the stream
                     <span class="strong"><strong>once</strong></span>. If you find a situation where the
                 message body appears to be empty or you need to access the data multiple times (eg:
-                doing multicasting, or redelivery error handling) you should use <a class="link" href="http://localhost:8090/display/CAMEL/Stream+caching" target="_top">Stream
+                doing multicasting, or redelivery error handling) you should use <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/StreamCache.html" target="_top">Stream
                     caching</a> or convert the message body to a <code class="code">String</code> which is
                 safe to be re-read multiple times.</p></td></tr></table></div><p>Maven users will need to add the following dependency to their <code class="code">pom.xml</code>
             for this component:</p><div class="informalexample"><pre class="programlisting">&lt;dependency&gt;
@@ -28,10 +28,10 @@
                 (like <code class="code">CamelHttpQuery</code>). Endpoint options can be specified only at the
                 endpoint URI definition level (like <code class="code">to</code> or <code class="code">from</code> DSL
                 elements).</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-363"></a>HTTP Options</h2></div></div></div><p></p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: A lot more options"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">A lot more options</th></tr><tr><td align="left" valign="top"><p><span class="strong"><strong>Important:</strong></span> This component inherits all the
-                options from <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty4.html" class="olink">Netty4</a>. So make sure to look at
-                the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Netty4.html" class="olink">Netty4</a> documentation as well. Notice that
+                options from <a href="IDU-Netty4.html" class="olink">Netty4</a>. So make sure to look at
+                the <a href="IDU-Netty4.html" class="olink">Netty4</a> documentation as well. Notice that
                 some options from Netty4 are not applicable when using this Netty4 HTTP component,
-                such as options related to UDP transport.</p></td></tr></table></div><table class="confluenceTable" id="d0e97660"><tbody><tr>
+                such as options related to UDP transport.</p></td></tr></table></div><table class="confluenceTable" id="d0e115212"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Default Value</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -61,8 +61,8 @@
                     <td class="confluenceTd"><p><code class="code">mapHeaders</code></p></td>
                     <td class="confluenceTd"><p><code class="code">true</code></p></td>
                     <td class="confluenceTd"><p>If this option is enabled, then during binding
-                            from Netty to Camel <a class="link" href="/confluence/display/CAMEL/Message" target="_top">Message</a> then the headers will be mapped as well (eg added as
-                            header to the Camel <a class="link" href="/confluence/display/CAMEL/Message" target="_top">Message</a> as well). You can turn off this option to disable
+                            from Netty to Camel <a class="link" href="http://camel.apache.org/message.html" target="_top">Message</a> then the headers will be mapped as well (eg added as
+                            header to the Camel <a class="link" href="http://camel.apache.org/message.html" target="_top">Message</a> as well). You can turn off this option to disable
                             this. The headers can still be accessed from the
                                 <code class="code">org.apache.camel.component.netty4.http.NettyHttpMessage</code>
                             message with the method <code class="code">getHttpRequest()</code> that returns the
@@ -103,7 +103,7 @@
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">transferException</code></p></td>
                     <td class="confluenceTd"><p><code class="code">false</code></p></td>
-                    <td class="confluenceTd"><p>If enabled and an <a class="link" href="/confluence/display/CAMEL/Exchange" target="_top">Exchange</a> failed
+                    <td class="confluenceTd"><p>If enabled and an <a class="link" href="http://camel.apache.org/exchange.html" target="_top">Exchange</a> failed
                             processing on the consumer side, and if the caused Exception was send
                             back serialized in the response as a
                                 <code class="code">application/x-java-serialized-object</code> content type. On
@@ -114,7 +114,7 @@
                     <td class="confluenceTd"><p><code class="code">urlDecodeHeaders</code></p></td>
                     <td class="confluenceTd"><p> </p></td>
                     <td class="confluenceTd"><p>If this option is enabled, then during binding
-                            from Netty to Camel <a class="link" href="/confluence/display/CAMEL/Message" target="_top">Message</a> then the header values will be URL decoded (eg %20
+                            from Netty to Camel <a class="link" href="http://camel.apache.org/message.html" target="_top">Message</a> then the header values will be URL decoded (eg %20
                             will be a space character. Notice this option is used by the default
                                 <code class="code">org.apache.camel.component.netty4.http.NettyHttpBinding</code>
                             and therefore if you implement a custom
@@ -125,7 +125,7 @@
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">nettySharedHttpServer</code></p></td>
                     <td class="confluenceTd"><p><code class="code">null</code></p></td>
-                    <td class="confluenceTd"><p>To use a shared Netty4 HTTP server. See <a class="link" href="/confluence/display/CAMEL/Netty+HTTP+Server+Example" target="_top">Netty
+                    <td class="confluenceTd"><p>To use a shared Netty4 HTTP server. See <a class="link" href="http://camel.apache.org/netty-http-server-example.html" target="_top">Netty
                                 HTTP Server Example</a> for more details.</p></td>
                 </tr><tr>
                     <td class="confluenceTd"><p><code class="code">disableStreamCache</code></p></td>
@@ -155,7 +155,7 @@
                             the option is <code class="code">false</code> then the Netty Acceptor is unbound when
                             the consumer is suspended, so clients cannot connect
                         anymore.</p></td>
-                </tr></tbody></table><p>The <code class="code">NettyHttpSecurityConfiguration</code> has the following options:</p><table class="confluenceTable" id="d0e98012"><tbody><tr>
+                </tr></tbody></table><p>The <code class="code">NettyHttpSecurityConfiguration</code> has the following options:</p><table class="confluenceTable" id="d0e115564"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Default Value</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -200,7 +200,7 @@
                             assume a <code class="code">Principal</code> is role based if its FQN classname has
                             the lower-case word <code class="code">role</code> in its classname. You can specify
                             multiple class names separated by comma.</p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-364"></a>Message Headers</h2></div></div></div><p>The following headers can be used on the producer to control the HTTP request.</p><table class="confluenceTable" id="d0e98160"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-364"></a>Message Headers</h2></div></div></div><p>The following headers can be used on the producer to control the HTTP request.</p><table class="confluenceTable" id="d0e115712"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Type</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -239,7 +239,7 @@
                         success, and 500 for failure.</td>
                 </tr></tbody></table><p>The following headers is provided as meta-data when a route starts from an Netty4 HTTP
             endpoint:</p><p>The description in the table takes offset in a route having:
-                <code class="code">from("netty4-http:http:0.0.0.0:8080/myapp")...</code></p><table class="confluenceTable" id="d0e98275"><tbody><tr>
+                <code class="code">from("netty4-http:http:0.0.0.0:8080/myapp")...</code></p><table class="confluenceTable" id="d0e115827"><tbody><tr>
                     <th class="confluenceTh"><p>Name</p></th>
                     <th class="confluenceTh"><p>Type</p></th>
                     <th class="confluenceTh"><p>Description</p></th>
@@ -310,7 +310,7 @@
                 <code class="code">org.apache.camel.component.netty4.NettyServerBootstrapConfiguration</code>
             configuration class. If you have configured another route with different options, Camel
             will throw an exception on startup, indicating the options is not identical. To mitigate
-            this ensure all options is identical.</p><p>Here is an example with two routes that share the same port.</p><div class="example"><a name="d0e98546"></a><p class="title"><b>Example&nbsp;9.&nbsp;Two routes sharing the same port</b></p><div class="example-contents"><pre class="programlisting">from("netty4-http:http://0.0.0.0:{{port}}/foo")
+            this ensure all options is identical.</p><p>Here is an example with two routes that share the same port.</p><div class="example"><a name="d0e116098"></a><p class="title"><b>Example&nbsp;9.&nbsp;Two routes sharing the same port</b></p><div class="example-contents"><pre class="programlisting">from("netty4-http:http://0.0.0.0:{{port}}/foo")
   .to("mock:foo")
   .transform().constant("Bye World");
 
@@ -318,7 +318,7 @@ from("netty4-http:http://0.0.0.0:{{port}}/bar")
   .to("mock:bar")
   .transform().constant("Bye Camel");</pre></div></div><br class="example-break"><p>And here is an example of a mis configured 2nd route that do not have identical
                 <code class="code">org.apache.camel.component.netty4.NettyServerBootstrapConfiguration</code>
-            option as the 1st route. This will cause Camel to fail on startup.</p><div class="example"><a name="d0e98556"></a><p class="title"><b>Example&nbsp;10.&nbsp;Two routes sharing the same port, but the 2nd route is misconfigured and will
+            option as the 1st route. This will cause Camel to fail on startup.</p><div class="example"><a name="d0e116108"></a><p class="title"><b>Example&nbsp;10.&nbsp;Two routes sharing the same port, but the 2nd route is misconfigured and will
                 fail on starting</b></p><div class="example-contents"><pre class="programlisting">from("netty4-http:http://0.0.0.0:{{port}}/foo")
   .to("mock:foo")
   .transform().constant("Bye World");

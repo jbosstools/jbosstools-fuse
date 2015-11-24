@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Weather</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-VM.html" title="VM"><link rel="next" href="IDU-Websocket.html" title="Websocket"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Weather"></a>Weather</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_WeatherComponent"></a>Weather Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.12</strong></span>
+   <title>Weather</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-VM.html" title="VM"><link rel="next" href="IDU-Websocket.html" title="Websocket"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Weather"></a>Weather</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_WeatherComponent"></a>Weather Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.12</strong></span>
     </p><p>The <span class="bold"><strong>weather:</strong></span> component is used for polling weather information from <a class="link" href="http://openweathermap.org" target="_top">Open Weather Map</a> - a site that provides free global weather and forecast information. The information is returned as a json String object.</p><p>Camel will poll for updates to the current weather and forecasts once per hour by default.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -12,7 +12,7 @@
 weather://&lt;unused name&gt;[?options]
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_Options"></a>Options</h2></div></div></div><p></p><p>
 
-    </p><table id="d0e128077"><tr>
+    </p><table id="d0e147391"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -81,7 +81,7 @@ weather://&lt;unused name&gt;[?options]
       </tr></table><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_Exchangedataformat"></a>Exchange data format</h2></div></div></div><p></p><p>Camel will deliver the body as a json formatted java.lang.String (see the <code class="literal">mode</code> option above).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Weather_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p></p><p>
 
-    </p><table id="d0e128284"><tr>
+    </p><table id="d0e147598"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>

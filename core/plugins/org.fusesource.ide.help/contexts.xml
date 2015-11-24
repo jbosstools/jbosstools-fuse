@@ -557,6 +557,11 @@
         <description>Mail Component Options</description>
         <topic href="IDU-Mail.html" label="IMap"/>
     </context>
+   <!-- not supported as of 6.2.0 -->
+   <!-- <context id="infinispan">
+        <description>Infinispan Component Options</description>
+        <topic href="IDU-Infinispan.html" label="Infinispan"/>
+    </context> -->
     <context id="irc">
         <description>IRC Component Options</description>
         <topic href="IDU-IRC.html" label="IRC"/>

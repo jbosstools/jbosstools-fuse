@@ -1,12 +1,12 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>SSH</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-SQLComponent.html" title="SQL Component"><link rel="next" href="IDU-StAX.html" title="StAX"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-SSH"></a>SSH</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SSH_HSH_SSH"></a>SSH</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.10</strong></span>
+   <title>SSH</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-SQLComponent.html" title="SQL Component"><link rel="next" href="IDU-StAX.html" title="StAX"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-SSH"></a>SSH</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SSH_HSH_SSH"></a>SSH</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.10</strong></span>
     </p><p>The SSH component enables access to SSH servers such that you can send an SSH command, and process the response.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-ssh&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SSH_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">ssh:[username[:password]@]host[:port][?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SSH_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e124371"><tr>
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SSH_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">ssh:[username[:password]@]host[:port][?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SSH_HSH_Options"></a>Options</h2></div></div></div><p></p><table id="d0e143218"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -69,7 +69,7 @@
         <td> Milliseconds to wait beforing timing out connection to SSH Server. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-SSH_HSH_ConsumerOnlyOptions"></a>Consumer Only Options</h2></div></div></div><p></p><p>
       
-    </p><table id="d0e124554"><tr>
+    </p><table id="d0e143401"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>

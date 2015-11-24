@@ -1,10 +1,10 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>RSS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Routebox.html" title="Routebox"><link rel="next" href="IDU-Salesforce.html" title="Salesforce"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-RSS"></a>RSS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_RSSComponent"></a>RSS Component</h2></div></div></div><p>The <span class="bold"><strong>rss:</strong></span> component is used for polling RSS feeds.
+   <title>RSS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Routebox.html" title="Routebox"><link rel="next" href="IDU-Salesforce.html" title="Salesforce"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-RSS"></a>RSS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_RSSComponent"></a>RSS Component</h2></div></div></div><p>The <span class="bold"><strong>rss:</strong></span> component is used for polling RSS feeds.
       Apache Camel will default poll the feed every 60th seconds.</p><p><span class="bold"><strong>Note:</strong></span> The component currently only supports polling
       (consuming) feeds.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Camel-rss internally uses a <a class="link" href="http://svn.apache.org/repos/asf/servicemix/smx4/bundles/trunk/rome-1.0/" target="_top">patched version</a> of <a class="link" href="http://rometools.org/" target="_top">ROME</a> hosted on ServiceMix to solve some OSGi <a class="link" href="https://issues.apache.org/jira/browse/SMX4-510" target="_top">class loading issues</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">rss:rssUri</pre><p>Where <code class="literal">rssUri</code> is the URI to the RSS feed to poll. </p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e105438"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e123537"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -81,7 +81,7 @@
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Exchangedatatypes"></a>Exchange data types</h2></div></div></div><p>Apache Camel initializes the In body on the Exchange with a ROME <code class="literal">SyndFeed</code>.
       Depending on the value of the <code class="literal">splitEntries</code> flag, Apache Camel returns either a
         <code class="literal">SyndFeed</code> with one <code class="literal">SyndEntry</code> or a
-        <code class="literal">java.util.List</code> of <code class="literal">SyndEntrys</code>.</p><table id="d0e105650"><tr>
+        <code class="literal">java.util.List</code> of <code class="literal">SyndEntrys</code>.</p><table id="d0e123749"><tr>
         <th> Option </th>
         <th> Value </th>
         <th> Behavior </th>
@@ -97,7 +97,7 @@
         <td><code class="literal">false</code>
         </td>
         <td> The entire list of entries from the current feed is set in the exchange. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e105696"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e123795"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -115,7 +115,7 @@ from("rss:file:src/test/data/rss20.xml?splitEntries=true&amp;consumer.delay=100"
     .marshal().rss().filter().xpath("//item/title[contains(.,'Camel')]").to("mock:result");</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Query parameters"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Query parameters</th></tr><tr><td align="left" valign="top"><p>If the URL for the RSS feed uses query parameters, this component will understand them as well, for example if the feed uses <code class="literal">alt=rss</code>, then you can for example do
         <code class="literal">from("rss:http://someserver.com/feeds/posts/default?alt=rss&amp;splitEntries=false&amp;consumer.delay=1000").to("bean:rss");</code>
       </p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Filteringentries"></a>Filtering entries</h2></div></div></div><p>You can filter out entries quite easily using XPath, as shown in the data format section
-      above. You can also exploit Apache Camel's <a class="link" href="Bean Integration" target="_top">Bean
+      above. You can also exploit Apache Camel's <a class="link" href="http://camel.apache.org/bean-integration.html" target="_top">Bean
         Integration</a> to implement your own conditions. For instance, a filter equivalent to
       the XPath example above would be:</p><pre class="programlisting">// only entries with Camel in the title will get through the filter
 from("rss:file:src/test/data/rss20.xml?splitEntries=true&amp;consumer.delay=100").
@@ -125,5 +125,5 @@ from("rss:file:src/test/data/rss20.xml?splitEntries=true&amp;consumer.delay=100"
         return firstEntry.getTitle().contains("Camel");
     }
 }</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="topic-38575"></a>See also</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-          <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Atom.html" class="olink">Atom</a>
+          <a href="IDU-Atom.html" class="olink">Atom</a>
         </p></li></ul></div></div></div></body></html>

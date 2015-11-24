@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Olingo2</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Netty4-HTTP.html" title="Netty4-HTTP"><link rel="next" href="IDU-Pax-Logging.html" title="Pax-Logging"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Olingo2"></a>Olingo2</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Olingo2_HSH_Olingo2Component"></a>Olingo2 Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.14</strong></span></p><p>The Olingo2 component utilizes <a class="link" href="http://olingo.apache.org/" target="_top">Apache
+   <title>Olingo2</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Netty4-HTTP.html" title="Netty4-HTTP"><link rel="next" href="IDU-Openshift.html" title="Openshift"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Olingo2"></a>Olingo2</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Olingo2_HSH_Olingo2Component"></a>Olingo2 Component</h2></div></div></div><p><span class="strong"><strong>Available as of Camel 2.14</strong></span></p><p>The Olingo2 component utilizes <a class="link" href="http://olingo.apache.org/" target="_top">Apache
                 Olingo</a> version 2.0 APIs to interact with OData 2.0 and 3.0 compliant
             services. A number of popular commercial and enterprise vendors and products support the
             OData protocol. A sample list of supporting products can be found on the OData <a class="link" href="http://www.odata.org/ecosystem/" target="_top">website</a>.</p><p>The Olingo2 component supports reading feeds, delta feeds, entities, simple and
@@ -14,7 +14,7 @@
     	&lt;artifactId&gt;camel-olingo2&lt;/artifactId&gt;
     	&lt;version&gt;${camel-version}&lt;/version&gt;
 	&lt;/dependency&gt;</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-332"></a>URI format</h2></div></div></div><div class="informalexample"><pre class="programlisting">olingo2://endpoint/&lt;resource-path&gt;?[options]</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-333"></a>Olingo2Component</h2></div></div></div><p>The Olingo2 Component can be configured with the options below. These options can
-                be provided using the component's bean property <span class="strong"><strong><code class="code">configuration</code></strong></span> of type <span class="strong"><strong><code class="code">org.apache.camel.component.olingo2.Olingo2Configuration</code></strong></span>.</p><table id="d0e98681"><colgroup> </colgroup><thead><tr>
+                be provided using the component's bean property <span class="strong"><strong><code class="code">configuration</code></strong></span> of type <span class="strong"><strong><code class="code">org.apache.camel.component.olingo2.Olingo2Configuration</code></strong></span>.</p><table id="d0e116233"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Option</p>
                         </td>
@@ -123,7 +123,7 @@
                 the URI path, as an endpoint option ?resourcePath=&lt;resource-path&gt; or as a
                 header value CamelOlingo2.resourcePath. The OData entity key predicate can either be
                 a part of the resource path, e.g. <span class="italics">Manufacturers('1')</span>, where <span class="italics">'</span><span class="italics">1'</span> is the key predicate, or be
-                specified separately with resource path <span class="italics">Manufacturers</span> and keyPredicate option <span class="italics">'1'</span>.</p><table id="d0e98922"><colgroup> </colgroup><thead><tr>
+                specified separately with resource path <span class="italics">Manufacturers</span> and keyPredicate option <span class="italics">'1'</span>.</p><table id="d0e116474"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Endpoint</p>
                         </td>
@@ -230,7 +230,7 @@
                         </td>
                     </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-335"></a>OData Resource Type Mapping</h2></div></div></div><p>The result of <span class="strong"><strong>read</strong></span> endpoint and data type of
                     <span class="strong"><strong>data</strong></span> option depends on the OData resource
-                being queried, created or modified.</p><table id="d0e99149"><colgroup> </colgroup><thead><tr>
+                being queried, created or modified.</p><table id="d0e116701"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>OData Resource Type</p>
                         </td>
@@ -347,7 +347,7 @@
                     </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scroll-bookmark-336"></a>URI Options</h2></div></div></div><p>If a value is not provided for <span class="strong"><strong>queryParams</strong></span>
                 either in the endpoint URI or in a message header, it will be assumed to be
                     <span class="strong"><strong><code class="code">null</code></strong></span>. Note that the <span class="strong"><strong><code class="code">null</code></strong></span> value will only be used if other
-                options do not satisfy matching endpoints.</p><table id="d0e99405"><colgroup> </colgroup><thead><tr>
+                options do not satisfy matching endpoints.</p><table id="d0e116957"><colgroup> </colgroup><thead><tr>
                         <td>
                             <p>Name</p>
                         </td>
@@ -430,7 +430,7 @@
                 incoming <span class="strong"><strong>id</strong></span> header.</p><pre class="programlisting">from("direct:...")
     .setHeader("CamelOlingo2.keyPredicate", header("id"))
     .to("olingo2://read/Manufacturers");</pre><p>The following route creates Manufacturer entry using the <span class="strong"><strong>java.util.Map&lt;String, Object&gt;</strong></span> in body message.</p><pre class="programlisting">from("direct:...")
-    .to("olingo2://create/Manufacturers");</pre><p>The following route polls Manufacturer <a class="link" href="http://olingo.apache.org/doc/tutorials/deltaClient.html" target="_top">delta
+    .to("olingo2://create/Manufacturers");</pre><p>The following route polls Manufacturer <a class="link" href="https://olingo.apache.org/doc/odata2/tutorials/deltaClient.html" target="_top">delta
                     feed</a> every 30 seconds. The bean <span class="strong"><strong>blah</strong></span>
                 updates the bean <span class="strong"><strong>paramsBean</strong></span> to add an updated
                     <span class="strong"><strong>!deltatoken</strong></span> property with the value returned

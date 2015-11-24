@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Jetty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-JDBC.html" title="JDBC"><link rel="next" href="IDU-JGroups.html" title="JGroups"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Jetty"></a>Jetty</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_JettyComponent"></a>Jetty Component</h2></div></div></div><p>The <span class="bold"><strong>jetty</strong></span> component provides HTTP-based <a class="link" href="Endpoint" target="_top">endpoints</a> for consuming and producing HTTP requests. That
+   <title>Jetty</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-JDBC.html" title="JDBC"><link rel="next" href="IDU-JGroups.html" title="JGroups"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Jetty"></a>Jetty</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_JettyComponent"></a>Jetty Component</h2></div></div></div><p>The <span class="bold"><strong>jetty</strong></span> component provides HTTP-based endpoints for consuming and producing HTTP requests. That
             is, the Jetty component behaves as a simple Web server. Jetty can also be used as a http
             client which mean you can also use it with Camel as a producer.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Stream"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Stream</th></tr><tr><td align="left" valign="top"><p>Jetty is stream based, which means the input it receives is submitted to Camel as
                 a stream. That means you will only be able to read the content of the stream
@@ -17,7 +17,7 @@
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">jetty:http://hostname[:port][/resourceUri][?options]</pre><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_Options"></a>Options</h2></div></div></div><table id="d0e71907"><tr>
+        </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_Options"></a>Options</h2></div></div></div><table id="d0e89003"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -128,7 +128,7 @@
                 <td>
                     <span class="bold"><strong>Camel 2.3:</strong></span> Determines whether or not the raw
                     input stream from Jetty is cached or not (Camel will read the stream into a in
-                    memory/overflow to file, <a class="link" href="Stream caching" target="_top">Stream caching</a>)
+                    memory/overflow to file, <a class="link" href="http://camel.apache.org/stream-caching.html" target="_top">Stream caching</a>)
                     cache. By default Camel will cache the Jetty input stream to support reading it
                     multiple times to ensure it Camel can retrieve all data from the stream. However
                     you can set this option to <code class="literal">true</code> when you for example need to
@@ -136,7 +136,7 @@
                     persistent store. DefaultHttpBinding will copy the request input stream into a
                     stream cache and put it into message body if this option is
                         <code class="literal">false</code> to support reading the stream multiple times. If
-                    you use <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Jetty.html" class="olink">Jetty</a> to bridge/proxy an endpoint
+                    you use <a href="IDU-Jetty.html" class="olink">Jetty</a> to bridge/proxy an endpoint
                     then consider enabling this option to improve performance, in case you do not
                     need to read the message payload multiple times. </td>
             </tr><tr>
@@ -208,11 +208,11 @@
                 </td>
                 <td>
                     <span class="bold"><strong>Camel 2.6:</strong></span> Allows to set a timeout in millis
-                    when using <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Jetty.html" class="olink">Jetty</a> as consumer (server). By
+                    when using <a href="IDU-Jetty.html" class="olink">Jetty</a> as consumer (server). By
                     default Jetty uses 30000. You can use a value of <code class="literal">&lt;= 0</code> to
                     never expire. If a timeout occurs then the request will be expired and Jetty
                     will return back a http error 503 to the client. This option is only in use when
-                    using <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Jetty.html" class="olink">Jetty</a> with the <a class="link" href="Asynchronous Routing Engine" target="_top">Asynchronous Routing Engine</a>.
+                    using <a href="IDU-Jetty.html" class="olink">Jetty</a> with the <a class="link" href="http://camel.apache.org/asynchronous-routing-engine.html" target="_top">Asynchronous Routing Engine</a>.
                 </td>
             </tr><tr>
                 <td><code class="literal">useContinuation</code>
@@ -230,9 +230,8 @@
                 <td>
                     <span class="bold"><strong>Camel 2.8:</strong></span> Reference to a
                         <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> in the
-                        <span class="olink">CAMEL:Registry</span>.&nbsp;This reference overrides
-                    any configured SSLContextParameters at the component level.&nbsp;See <a class="link" href="IDU-Jetty.html#IDU-Jetty_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE
-                        Configuration Utility</a>. </td>
+                        Registry. This reference overrides
+                    any configured SSLContextParameters at the component level. See <a class="xref" href="IDU-Jetty.html#IDU-Jetty_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE Configuration Utility</a>. </td>
             </tr><tr>
                 <td><code class="literal">traceEnabled</code>
                 </td>
@@ -260,16 +259,6 @@
                         if the <code class="code">HttpMethod</code> matches, such as
                             <code class="code">GET</code>/<code class="code">POST</code>/<code class="code">PUT</code> etc. From <span class="bold"><strong>Camel 2.15</strong></span> onwards multiple methods can be
                         specified separated by comma.</p></td>
-            </tr><tr>
-                <td><code class="literal">urlRewrite</code>
-                </td>
-                <td><code class="literal">null</code>
-                </td>
-                <td><span class="bold"><strong>Camel 2.11:</strong></span><span class="bold"><strong>Producer
-                        only</strong></span> Refers to a custom
-                        <code class="literal">org.apache.camel.component.http.UrlRewrite</code> which allows
-                    you to rewrite urls when you bridge/proxy endpoints. See more details at <span class="olink">UrlRewrite</span> and <a class="link" href="How to use Camel as a HTTP proxy between a client and server" target="_top">How
-                        to use Camel as a HTTP proxy between a client and server</a>. </td>
             </tr><tr>
                 <td><code class="literal">responseBufferSize</code>
                 </td>
@@ -340,18 +329,18 @@
                         server will set up the <code class="code">CrossOriginFilter</code> which supports the
                         CORS out of box.</p>
                 </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Camel uses the same message headers as the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HTTP.html" class="olink">HTTP</a>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Camel uses the same message headers as the <a href="IDU-HTTP.html" class="olink">HTTP</a>
             component. From Camel 2.2, it also uses (Exchange.HTTP_CHUNKED,CamelHttpChunked) header
             to turn on or turn off the chuched encoding on the camel-jetty consumer.</p><p>Camel also populates <span class="bold"><strong>all</strong></span> request.parameter and
             request.headers. For example, given a client request with the URL, <code class="literal">
                 <a class="link" href="http://myserver/myserver?orderid=123" target="_top">http://myserver/myserver?orderid=123</a></code>, the exchange will
             contain a header named <code class="literal">orderid</code> with the value 123. </p><p>Starting with Camel 2.2.0, you can get the request.parameter from the message header
             not only from Get Method, but also other HTTP method.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_Usage"></a>Usage</h2></div></div></div><p>The Jetty component supports both consumer and producer endpoints. Another option for
-            producing to other HTTP endpoints, is to use the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HTTP.html" class="olink">HTTP
+            producing to other HTTP endpoints, is to use the <a href="IDU-HTTP.html" class="olink">HTTP
                 Component</a>
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_ComponentOptions"></a>Component Options</h2></div></div></div><p>The <code class="literal">JettyHttpComponent</code> provides the following options:
             
-        </p><table id="d0e72701"><tr>
+        </p><table id="d0e89766"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -495,8 +484,7 @@
                 <td><code class="literal">null</code>
                 </td>
                 <td><span class="bold"><strong>Camel 2.8:</strong></span> To configure a custom SSL/TLS
-                    configuration options at the component level.&nbsp;See&nbsp;Using the JSSE Configuration
-                        Utility for more details. </td>
+                    configuration options at the component level. For details, see <a class="xref" href="IDU-Jetty.html#IDU-Jetty_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE Configuration Utility</a>.</td>
             </tr><tr>
                 <td><code class="literal">requestBufferSize</code>
                 </td>
@@ -591,9 +579,9 @@
             request parameter, <code class="literal">one</code> to the exchange's
             <code class="literal">in.header</code>. We can then use the <code class="literal">simple</code> language to
             route exchanges that contain this header to a specific endpoint and all others to
-            another. If we used a language more powerful than <a class="link" href="Simple" target="_top">Simple</a>\-\--such as- <span class="del">
-                <a class="link" href="El" target="_top">El</a></span> or <span class="del">
-                <a class="link" href="OGNL" target="_top">OGNL</a></span>\--we could also test for the parameter
+            another. If we used a language more powerful than <a class="link" href="http://camel.apache.org/simple.html" target="_top">Simple</a>\-\--such as- <span class="del">
+                <a class="link" href="http://camel.apache.org/el.html" target="_top">El</a></span> or <span class="del">
+                <a class="link" href="https://struts.apache.org/docs/ognl.html" target="_top">OGNL</a></span>\--we could also test for the parameter
             value and do routing based on the header value as well.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_SessionSupport"></a>Session Support</h2></div></div></div><p>The session support option, <code class="literal">sessionSupport</code>, can be used to enable a
                 <code class="literal">HttpSession</code> object and access the session object while processing
             the exchange. For example, the following route enables sessions:</p><pre class="programlisting">
@@ -611,7 +599,8 @@ public void process(Exchange exchange) throws Exception {
     HttpSession session = exchange.getIn(HttpMessage.class).getRequest().getSession();
     ...
 }
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_UsingtheJSSEConfigurationUtility"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of Camel 2.8, the Jetty component supports SSL/TLS configuration through the <span class="olink">Camel JSSE Configuration Utility</span>.&nbsp; This utility greatly
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_UsingtheJSSEConfigurationUtility"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of Camel 2.8, the Jetty component supports SSL/TLS configuration through the <a href="IDU-HTTP.html#IDU-HTTP_HSH_UsingtheJSSEConfigurationUtility" class="olink">Camel JSSE Configuration
+            Utility</a>. This utility greatly
             decreases the amount of component specific code you need to write and is configurable at
             the endpoint and component levels.&nbsp;The following examples demonstrate how to use
             the utility with the Jetty component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_Programmaticconfigurationofthecomponent"></a>Programmatic configuration of the component</h2></div></div></div><pre class="programlisting">
@@ -753,7 +742,7 @@ X509Certificate cert = (X509Certificate) req.getAttribute("javax.servlet.request
             &lt;entry key="maxIdleTime" value="300000"/&gt;
         &lt;/map&gt;
     &lt;/property&gt;
-&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e73505"></a>Obtaining X-Forwarded-For header with HttpServletRequest.getRemoteAddr()</h2></div></div></div><p>If the HTTP requests are handled by an Apache server and forwarded to Jetty with
+&lt;/bean&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e90569"></a>Obtaining X-Forwarded-For header with HttpServletRequest.getRemoteAddr()</h2></div></div></div><p>If the HTTP requests are handled by an Apache server and forwarded to Jetty with
                 <code class="code">mod_proxy</code>, the original client IP address is in the
                 <code class="code">X-Forwarded-For</code> header and the
                 <code class="code">HttpServletRequest.getRemoteAddr()</code> will return the address of the
@@ -844,9 +833,9 @@ X509Certificate cert = (X509Certificate) req.getAttribute("javax.servlet.request
     &lt;/property&gt;
 &lt;/bean&gt;</pre><p>You can then define the endpoint as:</p><pre class="programlisting">from("jetty:http://0.0.0.0:9080/myservice?handlers=securityHandler")</pre><p>If you need more handlers, set the <code class="literal">handlers</code> option equal to a
             comma-separated list of bean IDs.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jetty_HSH_HowtoreturnacustomHTTP500replymessage"></a>How to return a custom HTTP 500 reply message</h2></div></div></div><p>You may want to return a custom reply message when something goes wrong, instead of
-            the default reply message Camel <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Jetty.html" class="olink">Jetty</a> replies with.
+            the default reply message Camel <a href="IDU-Jetty.html" class="olink">Jetty</a> replies with.
             You could use a custom <code class="literal">HttpBinding</code> to be in control of the message
-            mapping, but often it may be easier to use Camel's <a class="link" href="Exception Clause" target="_top">Exception Clause</a> to construct the custom reply message. For example as show
+            mapping, but often it may be easier to use Camel's <a class="link" href="http://camel.apache.org/exception-clause.html" target="_top">Exception Clause</a> to construct the custom reply message. For example as show
             here, where we return <code class="literal">Dude something went wrong</code> with HTTP error code
             500:</p><pre class="programlisting">from("jetty://http://localhost:{{port}}/myserver")
     // use onException to catch all exceptions and return a custom reply message
@@ -905,5 +894,5 @@ from("jetty://http://localhost:{{port}}/test").process(new Processor() {
             MBeanContainer in order to avoid name collisions when registering Jetty MBeans.</p><p>
             
         </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HTTP.html" class="olink">HTTP</a>
+                    <a href="IDU-HTTP.html" class="olink">HTTP</a>
                 </p></li></ul></div></div></div></body></html>

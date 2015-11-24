@@ -1,0 +1,17 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>camel-script</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s35.html" title="camel-saxon"><link rel="next" href="bk04ch02s01s37.html" title="camel-servlet"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34710"></a>camel-script</h3></div></div></div><p>
+The <code class="varname">camel-script</code> component supports a number of scripting languages which can be used to create an Expression or Predicate via the standard JSR 223.
+</p><pre class="programlisting">
+CamelContext camelctx = new DefaultCamelContext();
+    camelctx.addRoutes(new RouteBuilder() {
+        @Override
+        public void configure() throws Exception {
+            from("direct:start").choice()
+            .when(script("beanshell", "request.getHeaders().get(\"foo\").equals(\"bar\")")).to("mock:result")
+            .otherwise().transform(body().append(" unmatched")).to("mock:unmatched");
+        }
+    }); 
+
+</pre><p>
+</p></div></body></html>

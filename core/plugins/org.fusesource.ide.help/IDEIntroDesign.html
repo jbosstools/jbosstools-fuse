@@ -1,0 +1,57 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>JBoss Perspective</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderIntroPart.html" title="Part&nbsp;I.&nbsp;Introducing the Fuse Tooling User Interface"><link rel="prev" href="RiderIntroPart.html" title="Part&nbsp;I.&nbsp;Introducing the Fuse Tooling User Interface"><link rel="next" href="DebugPerspective.html" title="Debug Perspective"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h2 class="title"><a name="IDEIntroDesign"></a>JBoss Perspective</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e166"></a>Overview</h2></div></div></div><p>By default, Red Hat JBoss Developer Studio starts up in <span class="guilabel">JBoss</span>
+            perspective. To access the design time tooling, you select <span class="guimenu">File</span> &gt; <span class="guisubmenu">New</span> &gt; <span class="guimenuitem">Fuse Project</span> on the menu bar.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Though you can also do all of your development in <span class="guilabel">Fuse Integration</span>
+                    perspective, <span class="guilabel">JBoss</span> perspective provides more space for the
+                    route editor to expand to accommodate complex routes.</p></td></tr></table></div><p>Creating a new Fuse project provides access to the route
+                editor, the main design time tooling, shown in <a class="xref" href="IDEIntroDesign.html#GSEclipseImg010" title="Figure&nbsp;1.&nbsp;route editor">Figure&nbsp;1</a>.</p><div class="figure"><a name="GSEclipseImg010"></a><p class="title"><b>Figure&nbsp;1.&nbsp;route editor</b></p><div class="figure-contents"><div class="mediaobject"><img src="./images/RouteEditor.png" alt="four sections of the route editor"></div></div></div><br class="figure-break"><p>It consists of four main areas:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Canvas&#8212;the large grid area on which routes are constructed</p></li><li class="listitem"><p>Palette&#8212;the pane to the right of the canvas from which Enterprise
+                        Integration Patterns (EIPs) are selected</p></li><li class="listitem"><p>Project view&#8212;the pane on the left side of the canvas, which can
+                        display multiple views of the active project. The pane defaults to
+                            <span class="guilabel">Project Explorer</span>, which displays the project's
+                        folders and files in an hierarchical tree format.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Red Hat recommends you to close the <span class="guilabel">JMX Navigator</span> view and then drag <span class="guilabel">Outline</span> view from the
+                            upper right side of the workspace to the lower left side, beneath
+                                <span class="guilabel">Project Explorer</span>, to provide optimal space for
+                            the route editor. <span class="guilabel">Outline</span> view displays, in an
+                            outline of EIP icons, the contents of the current
+                                <code class="filename">&lt;camelContext&gt;</code> element in the routing
+                            context file. </p></td></tr></table></div></li><li class="listitem"><p>Properties editor&#8212;the editor in which you configure the selected
+                        node's properties. It opens in a tab in the pane below the canvas.</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e243"></a>Canvas</h2></div></div></div><p>The canvas is route editor's workbench and where you do most of your work. It
+                displays a graphical representation of a route, which is made up of one or more
+                connected EIP patterns (called <span class="italic">nodes</span> once they
+                are placed on the canvas). Because the canvas displays only one route at a time, it
+                delineates one route from another. You can add additional routes to your project,
+                but each is displayed separately on its own slice of canvas.</p><p>Patterns are typically placed on the canvas by dragging them from the palette.
+                Once on the canvas, a node's properties can be edited in the
+                    <span class="guilabel">Properties</span> editor. To do so, you need only select a node to
+                open and populate the <span class="guilabel">Properties</span> editor with the properties
+                that apply to that node. You can also edit a route's properties by clicking the
+                canvas, which opens and populates the Properties editor with the properties that
+                correspond to a single route in the routing context file.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Clicking the <span class="guilabel">Source</span> tab at the lower, left of the canvas
+                    displays the XML code generated for the route, which you can then edit. The
+                    edits you make in <span class="guilabel">Source</span> view appear on the canvas when you
+                    switch back to <span class="guilabel">Design</span> View. </p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e271"></a>Palette</h2></div></div></div><p>The Palette contains all of the patterns needed to construct a route. The Palette
+                groups the patterns into categories according to function:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="guilabel">Components</span>&#8212;endpoint patterns that start or end
+                    a route</p></li><li class="listitem"><p><span class="guilabel">Defined Endpoints</span>&#8212;endpoint nodes that have been defined in the
+                    routing context</p></li><li class="listitem"><p><span class="guilabel">Routing</span>&#8212;patterns that direct the flow of
+                        messages based on specified criteria</p></li><li class="listitem"><p><span class="guilabel">Control Flow</span>&#8212;patterns that behave like control
+                        functions in a programming language. For example, some define loops, some
+                        handle error conditions, some handle transactions, and so on.</p></li><li class="listitem"><p><span class="guilabel">Transformation</span>&#8212;patterns that change the
+                        contents of a message as it passes through a route</p></li><li class="listitem"><p><span class="guilabel">Miscellaneous</span>&#8212;patterns that control the
+                        environment in which a route executes. For example, the
+                        <code class="filename">Threads</code> pattern
+                        specifies the number of threads available.</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e310"></a>Project Explorer</h2></div></div></div><p><span class="guilabel">Project Explorer</span> provides access to all of the components
+                that make up a project. It provides the tools for managing, configuring, running,
+                and debugging your project. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e317"></a>Outline view</h2></div></div></div><p><span class="guilabel">Outline</span> view provides a graphical outline of your route
+                components. It enables you to switch easily between routes in a multiroute project.
+                Clicking on a route in <span class="guilabel">Outline</span> view displays it on the route
+                editor's canvas.</p><p>Outline view also provides a viewing portal when the route extends beyond the
+                viewable area on the canvas. Sliding the view portal in <span class="guilabel">Outline</span>
+                view over outlier nodes moves the canvas accordingly to bring those nodes into
+                view.</p><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e333"></a>Properties editor</h2></div></div></div><p>You use the <span class="guilabel">Properties</span> editor to configure the route and each
+                node in it. Each type of node has a set of properties that can or must be set. The
+                    <span class="guilabel">Properties</span> editor opens populated with fields that apply to
+                the selected node.</p><p>The <span class="guilabel">Properties</span> editor makes it clear which fields are
+                required. <span class="inlinemediaobject"><img src="./images/error.gif" width="14.4"></span> marks any required property that is not set, and the
+                    <span class="guilabel">Properties</span> editor displays an error message stating the
+                number of required properties that still must be set, as shown in <a class="xref" href="IDEIntroDesign.html#WhenPropertiesEditor" title="Figure&nbsp;2.&nbsp;Properties editor's error reporting">Figure&nbsp;2</a>.</p><div class="figure"><a name="WhenPropertiesEditor"></a><p class="title"><b>Figure&nbsp;2.&nbsp;Properties editor's error reporting</b></p><div class="figure-contents"><div class="mediaobject"><img src="./images/whenEIP.png" alt="properties of the When node"></div></div></div><br class="figure-break"><p>The <span class="guilabel">Properties</span> editor's <span class="guilabel">Documentation</span>
+                tab displays information about how to configure the selected node.</p></div></div></body></html>

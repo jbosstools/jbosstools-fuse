@@ -1,9 +1,9 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Unmarshal</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderTransformRef.html" title="Transformation"><link rel="prev" href="transform.html" title="Transform"><link rel="next" href="RiderMiscRef.html" title="Miscellaneous"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="unmarshal"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Unmarshal &#8212; Converts the message data received from the wire into a format that Apache Camel
-            processors can consume</p></div><div class="refsection"><a name="d0e18754"></a><h2>Usage</h2><p>The Unmarshal pattern uses Apache Camel's pluggable data format mechanism to convert
+   <title>Unmarshal</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderTransformRef.html" title="Transformation"><link rel="prev" href="transform.html" title="Transform"><link rel="next" href="RiderMiscRef.html" title="Miscellaneous"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry"><a name="unmarshal"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>Unmarshal &#8212; Converts the message data received from the wire into a format that Apache Camel
+            processors can consume</p></div><div class="refsection"><a name="d0e27492"></a><h2>Usage</h2><p>The Unmarshal pattern uses Apache Camel's pluggable data format mechanism to convert
             messages into a format appropriate for processing by Apache Camel.</p><p>The Unmarshal pattern can be placed anywhere in the body of a route. However, it is
-            typically placed after endpoints that receive the message.</p></div><div class="refsection"><a name="d0e18761"></a><h2>Properties</h2><p><a class="xref" href="unmarshal.html#RiderUnmarshalRefTbl1" title="Table&nbsp;84.&nbsp;Unmarshal Properties">Table&nbsp;84</a> describes the
+            typically placed after endpoints that receive the message.</p></div><div class="refsection"><a name="d0e27499"></a><h2>Properties</h2><p><a class="xref" href="unmarshal.html#RiderUnmarshalRefTbl1" title="Table&nbsp;84.&nbsp;Unmarshal Properties">Table&nbsp;84</a> describes the
             properties you can specify using the properties editor.</p><div class="table"><a name="RiderUnmarshalRefTbl1"></a><p class="title"><b>Table&nbsp;84.&nbsp;Unmarshal Properties</b></p><div class="table-contents"><table summary="Unmarshal Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Data Format Type</span>
                         </td><td>
@@ -67,12 +67,12 @@
                             <span class="property">Description</span>
                         </td><td>Specifies a text description for the node. This description is
                             included in the generated XML file, but it is informational only. It is
-                            not used by Apache Camel.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e18950"></a><h2>avro</h2><p><a class="xref" href="unmarshal.html#avro2DFTbl" title="Table&nbsp;85.&nbsp;avro Properties">Table&nbsp;85</a> describes the properties
+                            not used by Apache Camel.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e27688"></a><h2>avro</h2><p><a class="xref" href="unmarshal.html#avro2DFTbl" title="Table&nbsp;85.&nbsp;avro Properties">Table&nbsp;85</a> describes the properties
             needed to configure the avro unmarshaller.</p><div class="table"><a name="avro2DFTbl"></a><p class="title"><b>Table&nbsp;85.&nbsp;avro Properties</b></p><div class="table-contents"><table summary="avro Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Instance Class Name</span>
                         </td><td>Specifies the name of the instance class to use for unmarshalling.
                             This is the class defined by your schema
-                                <code class="code">.apache.camel.dataformat.avro.&lt;nameOfInstanceClass&gt;</code>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e18978"></a><h2>base64</h2><p><a class="xref" href="unmarshal.html#base64DFTb2" title="Table&nbsp;86.&nbsp;base64 Properties">Table&nbsp;86</a> describes the
+                                <code class="code">.apache.camel.dataformat.avro.&lt;nameOfInstanceClass&gt;</code>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e27716"></a><h2>base64</h2><p><a class="xref" href="unmarshal.html#base64DFTb2" title="Table&nbsp;86.&nbsp;base64 Properties">Table&nbsp;86</a> describes the
             properties needed to configure the base64 unmarshaller.</p><div class="table"><a name="base64DFTb2"></a><p class="title"><b>Table&nbsp;86.&nbsp;base64 Properties</b></p><div class="table-contents"><table summary="base64 Properties" width="100%" border="1"><colgroup><col width="33%"><col width="33%"><col width="34%"></colgroup><thead><tr><th>Name</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Line Length</span>
                         </td><td><em class="replaceable"><code>76</code></em></td><td>
@@ -85,7 +85,7 @@
                             <span class="property">Url Safe</span>
                         </td><td><em class="replaceable"><code>Disabled</code></em></td><td>When disabled, decodes <code class="literal">-</code> and <code class="literal">_</code>.
                             When enabled, decodes <code class="literal">+</code> (not <code class="literal">-</code>)
-                            and <code class="literal">/</code> (not <code class="literal">_</code>).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19054"></a><h2>beanio</h2><p><a class="xref" href="unmarshal.html#beanio2DFTb1" title="Table&nbsp;87.&nbsp;beanio Properties">Table&nbsp;87</a> describes the
+                            and <code class="literal">/</code> (not <code class="literal">_</code>).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e27792"></a><h2>beanio</h2><p><a class="xref" href="unmarshal.html#beanio2DFTb1" title="Table&nbsp;87.&nbsp;beanio Properties">Table&nbsp;87</a> describes the
             properties needed to configure the beanio unmarshaller.</p><div class="table"><a name="beanio2DFTb1"></a><p class="title"><b>Table&nbsp;87.&nbsp;beanio Properties</b></p><div class="table-contents"><table summary="beanio Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Encoding</span>
                         </td><td>
@@ -110,7 +110,7 @@
                                 <code class="code">classpath:</code>&#8212;to specify the location from which to
                             load this file.</td></tr><tr><td>
                             <span class="property">Stream Name</span>
-                        </td><td>Specifies the name of the stream to use.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19143"></a><h2>bindy</h2><p><a class="xref" href="unmarshal.html#bindy2DFTbl" title="Table&nbsp;88.&nbsp;bindy Properties">Table&nbsp;88</a> describes the
+                        </td><td>Specifies the name of the stream to use.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e27881"></a><h2>bindy</h2><p><a class="xref" href="unmarshal.html#bindy2DFTbl" title="Table&nbsp;88.&nbsp;bindy Properties">Table&nbsp;88</a> describes the
             properties needed to configure the bindy unmarshaller.</p><div class="table"><a name="bindy2DFTbl"></a><p class="title"><b>Table&nbsp;88.&nbsp;bindy Properties</b></p><div class="table-contents"><table summary="bindy Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Class Type</span>
                         </td><td>
@@ -145,7 +145,7 @@
                         </td><td>Specifies the field type. Select <span class="guimenuitem">Csv</span>
                             (comma-separated value fields), <span class="guimenuitem">Fixed</span>
                             (fixed-length records), or <span class="guimenuitem">KeyValue</span>
-                            (key/value pair fields).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19271"></a><h2>castor</h2><p><a class="xref" href="unmarshal.html#castor2DFTbl" title="Table&nbsp;89.&nbsp;castor Properties">Table&nbsp;89</a> describes the
+                            (key/value pair fields).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28009"></a><h2>castor</h2><p><a class="xref" href="unmarshal.html#castor2DFTbl" title="Table&nbsp;89.&nbsp;castor Properties">Table&nbsp;89</a> describes the
             properties needed to configure the castor unmarshaller.</p><div class="table"><a name="castor2DFTbl"></a><p class="title"><b>Table&nbsp;89.&nbsp;castor Properties</b></p><div class="table-contents"><table summary="castor Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Classes</span>
                         </td><td>Specifies additional classes to add to the Castor XmlContext. Enter
@@ -160,7 +160,7 @@
                             <span class="property">Packages</span>
                         </td><td>Specifies any additional packages to add to the Castor XmlContext.
                             Enter the fully qualified path. When specifying multiple packages,
-                            separate them with a comma (<strong class="userinput"><code>,</code></strong>).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19326"></a><h2>crypto</h2><p><a class="xref" href="unmarshal.html#crypto2DFTbl" title="Table&nbsp;90.&nbsp;crypto Properties">Table&nbsp;90</a> describes the
+                            separate them with a comma (<strong class="userinput"><code>,</code></strong>).</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28064"></a><h2>crypto</h2><p><a class="xref" href="unmarshal.html#crypto2DFTbl" title="Table&nbsp;90.&nbsp;crypto Properties">Table&nbsp;90</a> describes the
             properties needed to configure the crypto unmarshaller.</p><div class="table"><a name="crypto2DFTbl"></a><p class="title"><b>Table&nbsp;90.&nbsp;crypto Properties</b></p><div class="table-contents"><table summary="crypto Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Algorithm</span>
                         </td><td>Specifies the name of the JCE cryptographic algorithm to use. Default
@@ -199,7 +199,7 @@
                                 <a class="link" href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/StandardNames.html#Mac" target="_top">Java Standard Names Reference</a>.</td></tr><tr><td>
                             <span class="property">Should Append HMAC</span>
                         </td><td>Enables calculating and appending a Message Authentication Code to
-                            the decrypted data. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19448"></a><h2>csv</h2><p><a class="xref" href="unmarshal.html#csv2DFTbl" title="Table&nbsp;91.&nbsp;csv Properties">Table&nbsp;91</a> describes the properties
+                            the decrypted data. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28186"></a><h2>csv</h2><p><a class="xref" href="unmarshal.html#csv2DFTbl" title="Table&nbsp;91.&nbsp;csv Properties">Table&nbsp;91</a> describes the properties
             needed to configure the csv unmarshaller.</p><div class="table"><a name="csv2DFTbl"></a><p class="title"><b>Table&nbsp;91.&nbsp;csv Properties</b></p><div class="table-contents"><table summary="csv Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Config Ref</span>
                         </td><td>Reference to a custom CSVConfig object.</td></tr><tr><td>
@@ -209,11 +209,11 @@
                             character, such as <span class="bold"><strong><code class="code">.</code></strong></span>,
                                 <span class="bold"><strong><code class="code">|</code></strong></span>, <span class="bold"><strong><code class="code">;</code></strong></span>, <span class="bold"><strong><code class="code">#</code></strong></span>, and so on.</td></tr><tr><td>
                             <span class="property">Strategy Ref</span>
-                        </td><td>Reference to a custom CSVStrategy. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19508"></a><h2>custom</h2><p><a class="xref" href="unmarshal.html#custom2DFTbl" title="Table&nbsp;92.&nbsp;custom Properties">Table&nbsp;92</a> describes the
+                        </td><td>Reference to a custom CSVStrategy. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28246"></a><h2>custom</h2><p><a class="xref" href="unmarshal.html#custom2DFTbl" title="Table&nbsp;92.&nbsp;custom Properties">Table&nbsp;92</a> describes the
             properties needed to configure the custom unmarshaller.</p><div class="table"><a name="custom2DFTbl"></a><p class="title"><b>Table&nbsp;92.&nbsp;custom Properties</b></p><div class="table-contents"><table summary="custom Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Ref</span>
                         </td><td>Reference to the file that implements your custom data format using
-                            the DataFormat interface.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19533"></a><h2>jaxb</h2><p><a class="xref" href="unmarshal.html#jaxb2DFTbl" title="Table&nbsp;93.&nbsp;jaxb Properties">Table&nbsp;93</a> describes the properties
+                            the DataFormat interface.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28271"></a><h2>jaxb</h2><p><a class="xref" href="unmarshal.html#jaxb2DFTbl" title="Table&nbsp;93.&nbsp;jaxb Properties">Table&nbsp;93</a> describes the properties
             needed to configure the jaxb unmarshaller.</p><div class="table"><a name="jaxb2DFTbl"></a><p class="title"><b>Table&nbsp;93.&nbsp;jaxb Properties</b></p><div class="table-contents"><table summary="jaxb Properties" width="100%" border="1"><colgroup><col width="21%" class="c1"><col width="79%" class="c2"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Context Path</span>
                         </td><td>Specifies the context path for the jaxb data format. For example,
@@ -253,7 +253,7 @@
                             namespace.</td></tr><tr><td>
                             <span class="property">Pretty Print</span>
                         </td><td>Enables pretty printing, which adds white space as needed to tidy up
-                            the resulting XML for easy reading.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19659"></a><h2>json</h2><p><a class="xref" href="unmarshal.html#json2DFTbl" title="Table&nbsp;94.&nbsp;json Properties">Table&nbsp;94</a> describes the properties
+                            the resulting XML for easy reading.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28397"></a><h2>json</h2><p><a class="xref" href="unmarshal.html#json2DFTbl" title="Table&nbsp;94.&nbsp;json Properties">Table&nbsp;94</a> describes the properties
             needed to configure the json unmarshaller.</p><div class="table"><a name="json2DFTbl"></a><p class="title"><b>Table&nbsp;94.&nbsp;json Properties</b></p><div class="table-contents"><table summary="json Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Json View</span>
                         </td><td>Specifies the marker class to use for including/excluding specific
@@ -269,7 +269,7 @@
                         </td><td>Specifies the class type to use when unmarshalling; for example
                                 <code class="code">org.apache.camel.component.jackson.&lt;typeName&gt;</code>.
                             Defaults to using a map-based type. You can define a custom type to use
-                            with <code class="code">org.codehaus.jackson.map.OblectMapper</code>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19714"></a><h2>pgp</h2><p><a class="xref" href="unmarshal.html#pgpDFTb2" title="Table&nbsp;95.&nbsp;pgp Properties">Table&nbsp;95</a> describes the properties
+                            with <code class="code">org.codehaus.jackson.map.OblectMapper</code>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28452"></a><h2>pgp</h2><p><a class="xref" href="unmarshal.html#pgpDFTb2" title="Table&nbsp;95.&nbsp;pgp Properties">Table&nbsp;95</a> describes the properties
             needed to configure the pgp unmarshaller.</p><div class="table"><a name="pgpDFTb2"></a><p class="title"><b>Table&nbsp;95.&nbsp;pgp Properties</b></p><div class="table-contents"><table summary="pgp Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Armored</span>
                         </td><td>Specifies whether the encrypted file was encoded using base64. The
@@ -287,13 +287,13 @@
                             encryption.</td></tr><tr><td>
                             <span class="property">Password</span>
                         </td><td>Specifies the password to use for opening the private key. This
-                            password is not used for encryption.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19783"></a><h2>protobuf</h2><p><a class="xref" href="unmarshal.html#protobuf2DFTbl" title="Table&nbsp;96.&nbsp;protobuf Properties">Table&nbsp;96</a> describes the
+                            password is not used for encryption.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28521"></a><h2>protobuf</h2><p><a class="xref" href="unmarshal.html#protobuf2DFTbl" title="Table&nbsp;96.&nbsp;protobuf Properties">Table&nbsp;96</a> describes the
             properties needed to configure the protobuf unmarshaller.</p><div class="table"><a name="protobuf2DFTbl"></a><p class="title"><b>Table&nbsp;96.&nbsp;protobuf Properties</b></p><div class="table-contents"><table summary="protobuf Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Instance Class</span>
                         </td><td>Specifies the name of the instance class to use. This is one of the
                             classes generated when you compiled your <code class="code">.proto</code> file.
                             Include the builder <code class="code">generated</code> in the uri; for example,
-                                <code class="code">org.apache.camel.dataformat.protobuf.generated.&lt;nameOfInstanceClass&gt;</code>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19817"></a><h2>secureXML</h2><p><a class="xref" href="unmarshal.html#secureXML2DFTbl" title="Table&nbsp;97.&nbsp;secureXML Properties">Table&nbsp;97</a> describes the
+                                <code class="code">org.apache.camel.dataformat.protobuf.generated.&lt;nameOfInstanceClass&gt;</code>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28555"></a><h2>secureXML</h2><p><a class="xref" href="unmarshal.html#secureXML2DFTbl" title="Table&nbsp;97.&nbsp;secureXML Properties">Table&nbsp;97</a> describes the
             properties needed to configure the secureXML unmarshaller.</p><div class="table"><a name="secureXML2DFTbl"></a><p class="title"><b>Table&nbsp;97.&nbsp;secureXML Properties</b></p><div class="table-contents"><table summary="secureXML Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Key Cipher Algorithm</span>
                             <a href="#ftn.async2Keycrypt" class="footnote"><sup class="footnote"><a name="async2Keycrypt"></a>[a]</sup></a>
@@ -330,7 +330,7 @@
                             <p>Specifies the cipher algorithm to use for decrypting message
                                 content. Valid values are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><strong class="userinput"><code>XMLCipher.TRIPLIDES</code></strong>
                                             [Default]</p></li><li class="listitem"><p><strong class="userinput"><code>XMLCipher.AES_128</code></strong></p></li><li class="listitem"><p><strong class="userinput"><code>XMLCipher.AES_192</code></strong></p></li><li class="listitem"><p><strong class="userinput"><code>XMLCipher.AES_256</code></strong></p></li></ul></div>
-                        </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div id="ftn.async2Keycrypt" class="footnote"><p><a href="#async2Keycrypt" class="para"><sup class="para">[a] </sup></a>Used for asymmetric key encryption</p></div></td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e19937"></a><h2>soapjaxb</h2><p><a class="xref" href="unmarshal.html#soapjaxb2DFTbl" title="Table&nbsp;98.&nbsp;soapjaxb Properties">Table&nbsp;98</a> describes the
+                        </td></tr></tbody><tbody class="footnotes"><tr><td colspan="2"><div id="ftn.async2Keycrypt" class="footnote"><p><a href="#async2Keycrypt" class="para"><sup class="para">[a] </sup></a>Used for asymmetric key encryption</p></div></td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28675"></a><h2>soapjaxb</h2><p><a class="xref" href="unmarshal.html#soapjaxb2DFTbl" title="Table&nbsp;98.&nbsp;soapjaxb Properties">Table&nbsp;98</a> describes the
             properties needed to configure the soapjaxb unmarshaller.</p><div class="table"><a name="soapjaxb2DFTbl"></a><p class="title"><b>Table&nbsp;98.&nbsp;soapjaxb Properties</b></p><div class="table-contents"><table summary="soapjaxb Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Context Path</span>
                         </td><td>Specifies the path of the package to use for initializing the JAXB
@@ -348,23 +348,23 @@
                             <span class="property">Version</span>
                         </td><td>Specifies the version of soap to use. Options are
                                 <em class="replaceable"><code>1.1</code></em> or <em class="replaceable"><code>1.2</code></em>;
-                            the default is <em class="replaceable"><code>1.1</code></em>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20014"></a><h2>string</h2><p><a class="xref" href="unmarshal.html#string2DFTbl" title="Table&nbsp;99.&nbsp;string Properties">Table&nbsp;99</a> describes the
+                            the default is <em class="replaceable"><code>1.1</code></em>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28752"></a><h2>string</h2><p><a class="xref" href="unmarshal.html#string2DFTbl" title="Table&nbsp;99.&nbsp;string Properties">Table&nbsp;99</a> describes the
             properties needed to configure the string unmarshaller.</p><div class="table"><a name="string2DFTbl"></a><p class="title"><b>Table&nbsp;99.&nbsp;string Properties</b></p><div class="table-contents"><table summary="string Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Charset</span>
                         </td><td>
                             <p>Specifies the character set to use for encoding. Valid values include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><strong class="userinput"><code>ISO-8859-1</code></strong></p></li><li class="listitem"><p><strong class="userinput"><code>US-ASCII</code></strong></p></li><li class="listitem"><p><strong class="userinput"><code>UTF-8</code></strong></p></li></ul></div>
                             <p>With no value specified, Red Hat JBoss Fuse Tooling for Eclipse defaults to the encoding used by
                                 the platform.</p>
-                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20058"></a><h2>tidyMarkup</h2><p><a class="xref" href="unmarshal.html#tidyMarkupDFTbl" title="Table&nbsp;100.&nbsp;tidyMarkup Properties">Table&nbsp;100</a> describes the
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28796"></a><h2>tidyMarkup</h2><p><a class="xref" href="unmarshal.html#tidyMarkupDFTbl" title="Table&nbsp;100.&nbsp;tidyMarkup Properties">Table&nbsp;100</a> describes the
             properties needed to configure the tidyMarkup unmarshaller.</p><div class="table"><a name="tidyMarkupDFTbl"></a><p class="title"><b>Table&nbsp;100.&nbsp;tidyMarkup Properties</b></p><div class="table-contents"><table summary="tidyMarkup Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Data Object Type Name</span>
                         </td><td>Specifies the type of Object the unmarshaller outputs. Valid values
                             are <strong class="userinput"><code>String</code></strong> and
-                                <strong class="userinput"><code>org.w3c.dom.Node</code></strong>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20089"></a><h2>XmlBeans</h2><p><a class="xref" href="unmarshal.html#XmlBeans2DFTbl" title="Table&nbsp;101.&nbsp;XmlBeans Properties">Table&nbsp;101</a> describes the
+                                <strong class="userinput"><code>org.w3c.dom.Node</code></strong>.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28827"></a><h2>XmlBeans</h2><p><a class="xref" href="unmarshal.html#XmlBeans2DFTbl" title="Table&nbsp;101.&nbsp;XmlBeans Properties">Table&nbsp;101</a> describes the
             properties needed to configure the XmlBeans unmarshaller.</p><div class="table"><a name="XmlBeans2DFTbl"></a><p class="title"><b>Table&nbsp;101.&nbsp;XmlBeans Properties</b></p><div class="table-contents"><table summary="XmlBeans Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Pretty Print</span>
                         </td><td>Enables pretty printing, which adds white space as needed to tidy up
-                            the input XML for easy reading.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20114"></a><h2>Xmljson</h2><p><a class="xref" href="unmarshal.html#xmljson2DFTbl" title="Table&nbsp;102.&nbsp;xmljson Properties">Table&nbsp;102</a> describes the
+                            the input XML for easy reading.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e28852"></a><h2>Xmljson</h2><p><a class="xref" href="unmarshal.html#xmljson2DFTbl" title="Table&nbsp;102.&nbsp;xmljson Properties">Table&nbsp;102</a> describes the
             properties needed to configure the xmljson unmarshaller.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>An asterisk (<span class="bold"><strong>*</strong></span>) to the right of a property name
                 (unmarshaller properties only) indicates that the default value for that property is
                 set by <code class="filename">json-lib</code>, not by the code of the data format.</p></td></tr></table></div><div class="table"><a name="xmljson2DFTbl"></a><p class="title"><b>Table&nbsp;102.&nbsp;xmljson Properties</b></p><div class="table-contents"><table summary="xmljson Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
@@ -463,23 +463,23 @@
                                             prefixed with <code class="code">json_</code></p></li><li class="listitem"><p><strong class="userinput"><code>NO</code></strong>&#8212;disable type
                                             hints</p></li><li class="listitem"><p><strong class="userinput"><code>WITH_PREFIX</code></strong>&#8212;enable type
                                             hints, with no prefix</p></li></ul></div>
-                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20400"></a><h2>Xmlrpc</h2><p><a class="xref" href="unmarshal.html#XmlRpcDFTb2" title="Table&nbsp;103.&nbsp;Xmlrpc Properties">Table&nbsp;103</a> describes the
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e29138"></a><h2>Xmlrpc</h2><p><a class="xref" href="unmarshal.html#XmlRpcDFTb2" title="Table&nbsp;103.&nbsp;Xmlrpc Properties">Table&nbsp;103</a> describes the
             properties needed to configure the Xmlrpc unmarshaller.</p><div class="table"><a name="XmlRpcDFTb2"></a><p class="title"><b>Table&nbsp;103.&nbsp;Xmlrpc Properties</b></p><div class="table-contents"><table summary="Xmlrpc Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Request</span>
                         </td><td>When enabled, specifies the message is a request. When disabled,
                             specifies the message is a response. The default is
-                                <em class="replaceable"><code>Disabled</code></em>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20428"></a><h2>zip</h2><p><a class="xref" href="unmarshal.html#zip2DFTbl" title="Table&nbsp;104.&nbsp;zip Properties">Table&nbsp;104</a> describes the properties
+                                <em class="replaceable"><code>Disabled</code></em>. </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e29166"></a><h2>zip</h2><p><a class="xref" href="unmarshal.html#zip2DFTbl" title="Table&nbsp;104.&nbsp;zip Properties">Table&nbsp;104</a> describes the properties
             needed to configure the zip unmarshaller.</p><div class="table"><a name="zip2DFTbl"></a><p class="title"><b>Table&nbsp;104.&nbsp;zip Properties</b></p><div class="table-contents"><table summary="zip Properties" width="100%" border="1"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Compression Level</span>
                         </td><td>
                             <p>Not Applicable.</p>
-                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20456"></a><h2>zipFile</h2><p><a class="xref" href="unmarshal.html#zipFileDFTb2" title="Table&nbsp;105.&nbsp;zipFile Properties">Table&nbsp;105</a> describes the
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e29194"></a><h2>zipFile</h2><p><a class="xref" href="unmarshal.html#zipFileDFTb2" title="Table&nbsp;105.&nbsp;zipFile Properties">Table&nbsp;105</a> describes the
             properties needed to configure the zipFile unmarshaller.</p><div class="table"><a name="zipFileDFTb2"></a><p class="title"><b>Table&nbsp;105.&nbsp;zipFile Properties</b></p><div class="table-contents"><table summary="zipFile Properties" width="100%" border="1"><colgroup><col width="19%" class="c1"><col width="81%" class="c2"></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>
                             <span class="property">Using Iterator</span>
                         </td><td>
                             <p>When enabled, iteratively unmarshals multiple entries in a zip
                                 file to their original file format. The default is
                                 <code class="literal">Disabled</code>. </p>
-                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e20489"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
-                <a href="PLUGINS_ROOT/org.fusesource.ide.help/RiderAddBeans.html" class="olink">Adding beans and configuration</a>
+                        </td></tr></tbody></table></div></div><br class="table-break"></div><div class="refsection"><a name="d0e29227"></a><h2>Related topics</h2><table border="0" summary="Simple list" class="simplelist"><tr><td>
+                <a href="RiderAddBeans.html" class="olink">Adding beans and configuration</a>
             </td></tr></table></div></div></body></html>

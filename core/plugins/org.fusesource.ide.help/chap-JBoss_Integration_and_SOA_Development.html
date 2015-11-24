@@ -1,0 +1,24 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>JBoss Integration and SOA Development</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderSwitchyard.html" title="Using the Switchyard Tooling"><link rel="prev" href="RiderSwitchyard.html" title="Using the Switchyard Tooling"><link rel="next" href="SetupFuseServer.html" title="Running a SwitchYard Project on a JBoss Fuse Server"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="chap-JBoss_Integration_and_SOA_Development"></a>JBoss Integration and SOA Development</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="SwitchYard_Eclipse_Tooling"></a>JBoss Integration and SOA Development</h3></div></div></div><p>The <span class="application">JBoss SwitchYard Tooling</span> for JBoss Developer Studio supports
+            integration and SOA development by providing these features: </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Creation of SwitchYard projects
+			</p></li><li class="listitem"><p>Configuration of SwitchYard capabilities
+			</p></li><li class="listitem"><p>Editing SwitchYard application configuration using a graphical editor </p></li><li class="listitem"><p>Java2WSDL transformation</p></li><li class="listitem"><p>XML catalog entries for SwitchYard configuration schema
+			</p></li><li class="listitem"><p>Support for workspace deployment of SwitchYard projects
+			</p></li></ul></div><p> The <span class="application">JBoss SwitchYard Tooling</span> plug-in is provided by the JBoss
+            Development Studio Integration Stack. </p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="Installing_JBoss_Developer_Studio_Integration_Stack1"></a>Installing JBoss Developer Studio Integration Stack</h3></div></div></div><p>JBoss Developer Studio Integration Stack (JBDSIS) is packaged as a plug-in for JBoss
+            Developer Studio installations. It contains numerous, individual plug-ins, including the
+            Fuse and SwitchYard tooling. You can download JBDSIS through JBoss Central, and then
+            install all of the plug-ins it contains or only a select few. For more details, see
+                <a class="link" href="https://access.redhat.com/documentation/en/red-hat-jboss-developer-studio-integration-stack/" target="_top">Product Documentation for Red Hat JBoss Developer Studio Integration
+            Stack</a>.</p><p>Once installed, you may need to complete additional configuration tasks before you can use
+            the individual JBoss Developer Studio Integration Stack components. </p><p>Here are some general tips to follow:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Honor all XML schema locations</p><p>After installation, go to <span class="guimenuitem">XML</span> &gt; <span class="guimenuitem">XML Files</span> &gt; <span class="guimenuitem">Validation</span> &gt; <span class="guimenuitem">Preferences</span> and disable <code class="filename">Honor all XML schema locations</code>.
+	                This prevents erroneous XML validation errors from appearing on
+	                <code class="filename">switchyard.xml</code> files. </p></li><li class="listitem"><p>DTD warning</p><p>Importing SwitchYard quickstarts into JBoss Developer Studio results in non-fatal
+                    warnings regarding <code class="filename">log4j.dtd</code>. You can safely ignore them.
+                    To stop receiving the warning, make sure that either the
+                        <code class="filename">log4j.xml</code> or  <code class="filename">log4j.properties</code>
+                    file is present before starting a project. </p></li><li class="listitem"><p>JavaSE-1.6 error message</p><p>When commencing a project, the warning "Build path specifies execution
+                    environment JavaSE-1.6" may appear. To disable this warning, go to your Java
+                    preferences and ensure that JavaSE-1.7 or JavaSE-1.8  is checked to support
+                    JavaSE-1.6 environments. </p></li></ul></div></div></div></body></html>
