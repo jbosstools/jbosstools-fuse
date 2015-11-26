@@ -1,0 +1,31 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>camel-hl7</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s14.html" title="camel-http"><link rel="next" href="bk04ch02s01s16.html" title="camel-jasypt"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34441"></a>camel-hl7</h3></div></div></div><p>
+The <code class="varname">camel-hl7</code> component allows you to work with the HL7 MLLP protocol and HL7 v2 messages, using the HAPI library.
+</p><pre class="programlisting">
+
+final String msg = "MSH|^~\\&amp;|MYSENDER|MYRECEIVER|MYAPPLICATION||200612211200||QRY^A19|1234|P|2.4\r";
+final HL7DataFormat format = new HL7DataFormat();
+
+CamelContext camelctx = new DefaultCamelContext();
+camelctx.addRoutes(new RouteBuilder() {
+    @Override
+    public void configure() throws Exception {
+        from("direct:start")
+        .marshal(format)
+        .unmarshal(format)
+        .to("mock:result");
+    }
+});
+camelctx.start();
+
+HapiContext context = new DefaultHapiContext();
+Parser p = context.getGenericParser();
+Message hapimsg = p.parse(msg);
+
+ProducerTemplate producer = camelctx.createProducerTemplate();
+Message result = (Message) producer.requestBody("direct:start", hapimsg);
+Assert.assertEquals(hapimsg.toString(), result.toString());
+
+</pre><p>
+</p></div></body></html>

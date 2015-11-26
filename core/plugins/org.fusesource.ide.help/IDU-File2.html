@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>File2</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Facebook.html" title="Facebook"><link rel="next" href="IDU-Flatpack.html" title="Flatpack"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-File2"></a>File2</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_FileComponentCamel20onwards"></a>File Component - Apache Camel 2.0 onwards</h2></div></div></div><p>The File component provides access to file systems, allowing files to be processed by
-            any other Apache Camel <span class="olink">Components</span> or messages from
+   <title>File2</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Facebook.html" title="Facebook"><link rel="next" href="IDU-Flatpack.html" title="Flatpack"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-File2"></a>File2</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_FileComponentCamel20onwards"></a>File Component - Apache Camel 2.0 onwards</h2></div></div></div><p>The File component provides access to file systems, allowing files to be processed by
+            any other Apache Camel <a href="IDU-Components.html" class="olink">Components</a> or messages from
             other components to be saved to disk.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">file:directoryName[?options]</pre><p>or</p><pre class="programlisting">file://directoryName[?options]</pre><p>Where <span class="bold"><strong>directoryName</strong></span> represents the underlying file
             directory.</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
@@ -17,7 +17,7 @@
                 the file is not locked by another process and start consuming it. Therefore you have
                 to do you own investigation as to what suits your environment. To help with this,
                 Apache Camel provides different <code class="literal">readLock</code> options and the
-                    <code class="code">doneFileOption</code> option that you can use. See also the section <a class="xref" href="IDU-File2.html#IDU-File2_HSH_Consumingfilesfromfolderswhereothersdropfilesdirectly" title="Consuming files from folders where others drop files directly">Consuming files from folders where others drop files directly</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_URIOptions"></a>URI Options</h2></div></div></div><table id="d0e46976"><tr>
+                    <code class="code">doneFileOption</code> option that you can use. See also the section <a class="xref" href="IDU-File2.html#IDU-File2_HSH_Consumingfilesfromfolderswhereothersdropfilesdirectly" title="Consuming files from folders where others drop files directly">Consuming files from folders where others drop files directly</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_URIOptions"></a>URI Options</h2></div></div></div><table id="d0e63871"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -39,7 +39,7 @@
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td> Use <a class="link" href="Expression" target="_top">Expression</a> such as <a class="link" href="File Language" target="_top">File Language</a> to dynamically set the
+                <td> Use <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a> such as <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> to dynamically set the
                     filename. For consumers, it's used as a filename filter. For producers, it's
                     used to evaluate the filename to write. If an expression is set, it take
                     precedence over the <code class="literal">CamelFileName</code> header. (<span class="bold"><strong>Note:</strong></span> The header itself can also be an <a class="link" href="Expression" target="_top">Expression</a>). The expression options support both
@@ -82,7 +82,7 @@
                 </td>
                 <td><span class="bold"><strong>Camel 2.9</strong></span>: whether to fallback and do a copy
                     and delete file, in case the file could not be renamed directly. This option is
-                    not available for the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-FTP2.html" class="olink">FTP</a> component. </td>
+                    not available for the <a href="IDU-FTP2.html" class="olink">FTP</a> component. </td>
             </tr><tr>
                 <td><code class="code">renameUsingCopy</code></td>
                 <td><code class="code">false</code></td>
@@ -93,7 +93,7 @@
                             <code class="code">copyAndDeleteOnRenameFail</code> parameter that will automatically
                         fall back to the copy and delete strategy, but only after additional
                         delays.</p></td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Consumeronly"></a>Consumer only</h2></div></div></div><table id="d0e47172"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Consumeronly"></a>Consumer only</h2></div></div></div><table id="d0e64067"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -143,7 +143,7 @@
                 <td><code class="literal">false</code>
                 </td>
                 <td> If <code class="literal">true</code>, the file is not moved or deleted in any way. This
-                    option is good for readonly data, or for <a class="link" href="ETL" target="_top">ETL</a> type
+                    option is good for readonly data, or for <a class="link" href="http://camel.apache.org/etl-example.html" target="_top">ETL</a> type
                     requirements. If <code class="literal">noop=true</code>, Apache Camel will set
                         <code class="literal">idempotent=true</code> as well, to avoid consuming the same
                     files over and over again. </td>
@@ -152,7 +152,7 @@
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td> Use <a class="link" href="Expression" target="_top">Expression</a> such as <a class="link" href="File Language" target="_top">File Language</a> to dynamically set the filename
+                <td> Use <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a> such as <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> to dynamically set the filename
                     when moving it <span class="bold"><strong>before</strong></span> processing. For example
                     to move in-progress files into the <code class="literal">order</code> directory set this
                     value to <code class="literal">order</code>. </td>
@@ -161,7 +161,7 @@
                 </td>
                 <td><code class="literal">.camel</code>
                 </td>
-                <td> Use <a class="link" href="Expression" target="_top">Expression</a> such as <a class="link" href="File Language" target="_top">File Language</a> to dynamically set the filename
+                <td> Use <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a> such as <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> to dynamically set the filename
                     when moving it <span class="bold"><strong>after</strong></span> processing. To move files
                     into a <code class="literal">.done</code> subdirectory just enter
                     <code class="literal">.done</code>. </td>
@@ -170,7 +170,7 @@
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td> Use <a class="link" href="Expression" target="_top">Expression</a> such as <a class="link" href="File Language" target="_top">File Language</a> to dynamically set the filename
+                <td> Use <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a> such as <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> to dynamically set the filename
                     when moving <span class="bold"><strong>failed files after</strong></span> processing. To
                     move files into a <code class="literal">error</code> subdirectory just enter
                         <code class="literal">error</code>. <span class="bold"><strong>Note:</strong></span> When moving
@@ -196,7 +196,7 @@
                 <td><span class="bold"><strong>Camel 2.10:</strong></span> Ant style filter inclusion, for
                     example
                         <code class="literal">antInclude=\*</code><code class="literal">{}*/*{}</code><code class="literal">.txt</code>.
-                    Multiple inclusions may be specified in comma-delimited format. See below for more details about
+                    Multiple inclusions may be specified in comma-delimited format. See <a class="xref" href="IDU-File2.html#IDU-File2_HSH_FilteringusingANTpathmatcher" title="Filtering using ANT path matcher">Filtering using ANT path matcher</a> for more details about
                     ant path filters. </td>
             </tr><tr>
                 <td><code class="literal">antExclude</code>
@@ -207,7 +207,7 @@
                         <code class="literal">antInclude</code> and <code class="literal">antExclude</code> are used,
                         <code class="literal">antExclude</code> takes precedence over
                         <code class="literal">antInclude</code>. Multiple exclusions may be specified in
-                    comma-delimited format. See below for more details about ant path filters. </td>
+                    comma-delimited format. See <a class="xref" href="IDU-File2.html#IDU-File2_HSH_FilteringusingANTpathmatcher" title="Filtering using ANT path matcher">Filtering using ANT path matcher</a> for more details about ant path filters. </td>
             </tr><tr>
                 <td><code class="literal">antFilterCaseSensitive</code>
                 </td>
@@ -220,7 +220,7 @@
                 </td>
                 <td><code class="literal">false</code>
                 </td>
-                <td> Option to use the <span class="olink">Idempotent Consumer</span> EIP pattern to let Apache Camel skip already
+                <td> Option to use the Idempotent Consumer EIP pattern to let Apache Camel skip already
                     processed files. Will by default use a memory based LRUCache that holds 1000
                     entries. If <code class="literal">noop=true</code> then idempotent will be enabled as well
                     to avoid consuming the same files over and over again. </td>
@@ -230,7 +230,7 @@
                 <td><code class="literal">Expression</code>
                 </td>
                 <td><span class="bold"><strong>Camel 2.11:</strong></span> To use a custom idempotent key. By
-                    default the absolute path of the file is used. You can use the <a class="link" href="File Language" target="_top">File Language</a>, for example to use the file
+                    default the absolute path of the file is used. You can use the <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a>, for example to use the file
                     name and file size, you can do: idempotentKey=$-$
                     . </td>
             </tr><tr>
@@ -238,7 +238,7 @@
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td> Pluggable repository as a <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/processor/idempotent/MessageIdRepository.html" target="_top">org.apache.camel.processor.idempotent.MessageIdRepository</a> class.
+                <td> Pluggable repository as a <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/IdempotentRepository.html" target="_top">org.apache.camel.processor.idempotent.MessageIdRepository</a> class.
                     Will by default use <code class="literal">MemoryMessageIdRepository</code> if none is
                     specified and <code class="literal">idempotent</code> is <code class="literal">true</code>. </td>
             </tr><tr>
@@ -246,7 +246,7 @@
                 </td>
                 <td><code class="literal">memory</code>
                 </td>
-                <td> Pluggable in-progress repository as a <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/processor/idempotent/MessageIdRepository.html" target="_top">org.apache.camel.processor.idempotent.MessageIdRepository</a> class. The
+                <td> Pluggable in-progress repository as a <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/spi/IdempotentRepository.html" target="_top">org.apache.camel.processor.idempotent.MessageIdRepository</a> class. The
                     in-progress repository is used to account the current in progress files being
                     consumed. By default a memory based repository is used. </td>
             </tr><tr>
@@ -272,7 +272,7 @@
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td> Built-in sort using the <a class="link" href="File Language" target="_top">File Language</a>.
+                <td> Built-in sort using the <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a>.
                     Supports nested sorts, so you can have a sort by file name and as a 2nd group
                     sort by modified date. See sorting section below for details. </td>
             </tr><tr>
@@ -398,14 +398,14 @@
                     processing when recursively processing a directory. Using
                         <code class="literal">minDepth=1</code> means the base directory. Using
                         <code class="literal">minDepth=2</code> means the first sub directory. This option is
-                        <span class="bold"><strong>not</strong></span> supported by <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-FTP2.html" class="olink">FTP</a> consumer. </td>
+                        <span class="bold"><strong>not</strong></span> supported by <a href="IDU-FTP2.html" class="olink">FTP</a> consumer. </td>
             </tr><tr>
                 <td><code class="literal">maxDepth</code>
                 </td>
                 <td><code class="literal">Integer.MAX_VALUE</code>
                 </td>
                 <td><span class="bold"><strong>Camel 2.8:</strong></span> The maximum depth to traverse when
-                    recursively processing a directory. This option is <span class="bold"><strong>not</strong></span> supported by <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-FTP2.html" class="olink">FTP</a>
+                    recursively processing a directory. This option is <span class="bold"><strong>not</strong></span> supported by <a href="IDU-FTP2.html" class="olink">FTP</a>
                     consumer. </td>
             </tr><tr>
                 <td><code class="literal">processStrategy</code>
@@ -470,23 +470,21 @@
                 </td>
                 <td><code class="literal">null</code>
                 </td>
-                <td><span class="bold"><strong>Camel 2.12:</strong></span> To use a custom scheduler to
-                    trigger the consumer to run. See more details at <span class="olink">Polling Consumer</span>,
-                    for example there is a <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Quartz2.html" class="olink">Quartz2</a>, and <a class="link" href="Spring" target="_top">Spring</a> based scheduler that supports CRON
-                    expressions. </td>
+                <td><span class="bold"><strong>Camel 2.12:</strong></span> Use a custom scheduler to trigger
+                    the consumer to run.  For example, there is a
+                        <a href="IDU-Quartz2.html" class="olink">Quartz2</a>, and <a class="link" href="http://camel.apache.org/spring.html" target="_top">Spring</a>-based scheduler
+                    that supports CRON expressions.</td>
             </tr><tr>
                 <td><code class="literal">backoffMultiplier</code>
                 </td>
                 <td><code class="literal">0</code>
                 </td>
-                <td><span class="bold"><strong>Camel 2.12:</strong></span> To let the scheduled polling
-                    consumer backoff if there has been a number of subsequent idles/errors in a row.
+                <td><span class="bold"><strong>Camel 2.12:</strong></span> Let the scheduled polling
+                    consumer backoff if a number of subsequent idles/errors occurred in a row.
                     The multiplier is then the number of polls that will be skipped before the next
-                    actual attempt is happening again. When this option is in use then
+                    attempt is made. When this option is set, 
                         <code class="literal">backoffIdleThreshold</code> and/or
-                        <code class="literal">backoffErrorThreshold</code> must also be configured. See more
-                    details at <span class="olink">Polling
-                        Consumer</span>. </td>
+                        <code class="literal">backoffErrorThreshold</code> must also be configured.  </td>
             </tr><tr>
                 <td><code class="literal">backoffIdleThreshold</code>
                 </td>
@@ -510,7 +508,7 @@
                         <code class="literal">.groovy</code>.</p></li><li class="listitem"><p>Only files (not directories) are matched for valid filename, if options such
                     as: <code class="literal">includeNamePrefix</code>, <code class="literal">includeNamePostfix</code>,
                         <code class="literal">excludeNamePrefix</code>, <code class="literal">excludeNamePostfix</code>,
-                        <code class="literal">regexPattern</code> are used. </p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Produceronly"></a>Producer only</h2></div></div></div><table id="d0e48249"><tr>
+                        <code class="literal">regexPattern</code> are used. </p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Produceronly"></a>Producer only</h2></div></div></div><table id="d0e65133"><tr>
                 <th> Name </th>
                 <th> Default Value </th>
                 <th> Description </th>
@@ -548,7 +546,7 @@
                 <td> This option is used to write the file using a temporary name and then, after
                     the write is complete, rename it to the real name. Can be used to identify files
                     being written and also avoid consumers (not using exclusive read locks) reading
-                    in progress files. Is often used by <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-FTP2.html" class="olink">FTP</a> when
+                    in progress files. Is often used by <a href="IDU-FTP2.html" class="olink">FTP</a> when
                     uploading big files. </td>
             </tr><tr>
                 <td><code class="literal">tempFileName</code>
@@ -557,7 +555,7 @@
                 </td>
                 <td><span class="bold"><strong>Camel 2.1:</strong></span> The <span class="bold"><strong>same</strong></span> as <code class="literal">tempPrefix</code> option but offering a more
                     fine grained control on the naming of the temporary filename as it uses the
-                        <a class="link" href="File Language" target="_top">File Language</a>.</td>
+                        <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a>.</td>
             </tr><tr>
                 <td><code class="literal">keepLastModified</code>
                 </td>
@@ -625,7 +623,7 @@
                         <code class="literal">Append</code> is the default for the file producer. <span class="phrase">We
                         have changed this to <code class="literal">Override</code> in Apache Camel 2.0 as this is
                         also the default file operation using <code class="literal">java.io.File</code>. And
-                        also the default for the FTP library we use in the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-FTP2.html" class="olink">camel-ftp</a> component.</span>
+                        also the default for the FTP library we use in the <a href="IDU-FTP2.html" class="olink">camel-ftp</a> component.</span>
                     
                 </p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_MoveandDeleteoperations"></a>Move and Delete operations</h2></div></div></div><p>Any move or delete operations is executed after (post command) the routing has
             completed; so during processing of the <code class="literal">Exchange</code> the file is still
@@ -636,9 +634,9 @@
             the <code class="literal">inbox</code> folder. After the bean completes, and thus the route is
             completed, the file consumer will perform the move operation and move the file to the
                 <code class="literal">.done</code> sub-folder.</p><p>The <span class="bold"><strong>move</strong></span> and <span class="bold"><strong>preMove</strong></span>
-            options is considered as a directory name (though if you use an expression such as <a class="link" href="File Language" target="_top">File Language</a>, or <a class="link" href="Simple" target="_top">Simple</a> then the result of the expression evaluation is the file name to be
+            options is considered as a directory name (though if you use an expression such as <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a>, or <a class="link" href="http://camel.apache.org/simple.html" target="_top">Simple</a> then the result of the expression evaluation is the file name to be
             used - eg if you set </p><pre class="programlisting">move=../backup/copy-of-${file:name}
-</pre><p> then that's using the <a class="link" href="File Language" target="_top">File Language</a> which we use
+</pre><p> then that's using the <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> which we use
             return the file name to be used), which can be either relative or absolute. If relative,
             the directory is created as a sub-folder from within the folder where the file was
             consumed.</p><p>By default, Apache Camel will move consumed files to the <code class="literal">.camel</code>
@@ -649,7 +647,7 @@
             move:</p><pre class="programlisting">    from("file://inbox?preMove=inprogress&amp;move=.done").to("bean:handleOrder");</pre><p>So in this situation, the file is in the <code class="literal">inprogress</code> folder when
             being processed and after it's processed, it's moved to the <code class="literal">.done</code>
             folder.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_FinegrainedcontroloverMoveandPreMoveoption"></a>Fine grained control over Move and PreMove option</h2></div></div></div><p>The <span class="bold"><strong>move</strong></span> and <span class="bold"><strong>preMove</strong></span>
-            option is <a class="link" href="Expression" target="_top">Expression</a>-based, so we have the full power
+            option is <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a>-based, so we have the full power
             of the <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a>
             to do advanced configuration of the directory and name pattern. Apache Camel will, in fact,
             internally convert the directory name you enter into a <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a>
@@ -662,7 +660,7 @@
             as a error folder of your choice. For example to move the files in an error folder with
             a timestamp you can use
                 <code class="code">moveFailed=/error/${file:name.noext}-${date:now:yyyyMMddHHmmssSSS}.${file:name.ext}</code>.</p><p>See more examples at <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File
-                Language</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following headers are supported by this component:</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Fileproduceronly"></a>File producer only</h2></div></div></div><table id="d0e48700"><tr>
+                Language</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The following headers are supported by this component:</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Fileproduceronly"></a>File producer only</h2></div></div></div><table id="d0e65584"><tr>
                 <th> Header </th>
                 <th> Description </th>
             </tr><tr>
@@ -670,7 +668,7 @@
                 </td>
                 <td> Specifies the name of the file to write (relative to the endpoint directory).
                     The name can be a <code class="literal">String</code>; a <code class="literal">String</code> with a
-                        <a class="link" href="File Language" target="_top">File Language</a> or <a class="link" href="Simple" target="_top">Simple</a> expression; or an <a class="link" href="Expression" target="_top">Expression</a> object. If it's <code class="literal">null</code> then Apache Camel
+                        <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> or <a class="link" href="http://camel.apache.org/simple.html" target="_top">Simple</a> expression; or an <a class="link" href="http://camel.apache.org/expression.html" target="_top">Expression</a> object. If it's <code class="literal">null</code> then Apache Camel
                     will auto-generate a filename based on the message unique ID. </td>
             </tr><tr>
                 <td><code class="literal">CamelFileNameProduced</code>
@@ -686,7 +684,7 @@
                     once, as the producer will remove this header after writing the file). The value
                     can be only be a String. Notice that if the option <code class="literal">fileName</code>
                     has been configured, then this is still being evaluated. </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Fileconsumeronly"></a>File consumer only</h2></div></div></div><table id="d0e48769"><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Fileconsumeronly"></a>File consumer only</h2></div></div></div><table id="d0e65653"><tr>
                 <th> Header </th>
                 <th> Description </th>
             </tr><tr>
@@ -733,10 +731,10 @@
                 </td>
                 <td> A <code class="literal">long</code> value containing the last modified timestamp of the
                     file. </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_BatchConsumer"></a>Batch Consumer</h2></div></div></div><p>This component implements the <a class="link" href="Batch Consumer" target="_top">Batch Consumer</a>.
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_BatchConsumer"></a>Batch Consumer</h2></div></div></div><p>This component implements the <a class="link" href="http://camel.apache.org/batch-consumer.html" target="_top">Batch Consumer</a>.
         </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_ExchangePropertiesfileconsumeronly"></a>Exchange Properties, file consumer only</h2></div></div></div><p>As the file consumer is <code class="literal">BatchConsumer</code> it supports batching the
             files it polls. By batching it means that Apache Camel will add some properties to the <a class="link" href="Exchange" target="_top">Exchange</a> so you know the number of files polled the
-            current index in that order.</p><table id="d0e48901"><tr>
+            current index in that order.</p><table id="d0e65785"><tr>
                 <th> Property </th>
                 <th> Description </th>
             </tr><tr>
@@ -752,8 +750,9 @@
                 </td>
                 <td> A <code class="literal">boolean</code> value indicating the last <a class="link" href="Exchange" target="_top">Exchange</a> in the batch. Is only <code class="literal">true</code> for the last
                     entry. </td>
-            </tr></table><p>This allows you for instance to know how many files exists in this batch and for
-            instance let the <span class="olink">Aggregator</span> aggregate this number of files.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Commongotchaswithfolderandfilenames"></a>Common gotchas with folder and filenames</h2></div></div></div><p>When Apache Camel is producing files (writing files) there are a few gotchas affecting how
+            </tr></table><p>This allows you, for example, to know how many files exists in this batch and let the
+                Aggregator
+            aggregate this number of files.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Commongotchaswithfolderandfilenames"></a>Common gotchas with folder and filenames</h2></div></div></div><p>When Apache Camel is producing files (writing files) there are a few gotchas affecting how
             to set a filename of your choice. By default, Apache Camel will use the message ID as the
             filename, and since the message ID is normally a unique generated ID, you will end up
             with filenames such as: <code class="literal">ID-MACHINENAME-2443-1211718892437-1-0</code>. If
@@ -893,8 +892,8 @@ Exchange.FILE_NAME = foo/bye.txt =&gt; /rootDirectory/foo/bye.txt </pre><p>This 
             directory and after data transfer is done, they will be atomically moved to the<code class="code">
                 /var/myapp/finalDirectory </code>directory.</p><div class="informalexample"><pre class="programlisting">from("direct:start").
   to("file:///var/myapp/finalDirectory?tempPrefix=/../filesInProgress/");</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Usingexpressionforfilenames"></a>Using expression for filenames</h2></div></div></div><p>In this sample we want to move consumed files to a backup folder using today's date as
-            a sub-folder name:</p><pre class="programlisting">from("file://inbox?move=backup/${date:now:yyyyMMdd}/${file:name}").to("...");</pre><p>See <a class="link" href="File Language" target="_top">File Language</a> for more samples.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Avoidingreadingthesamefilemorethanonceidempotentconsumer"></a>Avoiding reading the same file more than once (idempotent consumer)</h2></div></div></div><p>Apache Camel supports <span class="olink">Idempotent
-                Consumer</span> directly within the component so it will skip already processed
+            a sub-folder name:</p><pre class="programlisting">from("file://inbox?move=backup/${date:now:yyyyMMdd}/${file:name}").to("...");</pre><p>See <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> for more samples.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Avoidingreadingthesamefilemorethanonceidempotentconsumer"></a>Avoiding reading the same file more than once (idempotent consumer)</h2></div></div></div><p>Apache Camel supports Idempotent
+            Consumer directly within the component, so it will skip already processed
             files. This feature can be enabled by setting the <code class="literal">idempotent=true</code>
             option.</p><pre class="programlisting">from("file://inbox?idempotent=true").to("...");</pre><p>Camel uses the absolute file name as the idempotent key, to detect duplicate files.
             From <span class="bold"><strong>Camel 2.11</strong></span> onwards you can customize this key by
@@ -1032,10 +1031,10 @@ Exchange.FILE_NAME = foo/bye.txt =&gt; /rootDirectory/foo/bye.txt </pre><p>This 
   &lt;/route&gt;</pre><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: URI options can reference beans using the # syntax"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">URI options can reference beans using the # syntax</th></tr><tr><td align="left" valign="top"><p>In the Spring DSL route about notice that we can reference beans in the <a class="link" href="Registry" target="_top">Registry</a> by prefixing the id with
                 <code class="literal">#</code>. So writing <code class="literal">sorter=#mySorter</code>, will instruct
                 Apache Camel to go look in the <a class="link" href="Registry" target="_top">Registry</a> for a bean with
-                the ID, <code class="literal">mySorter</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_SortingusingsortBy"></a>Sorting using sortBy</h2></div></div></div><p>Apache Camel supports pluggable sorting strategies. This strategy it to use the <a class="link" href="File Language" target="_top">File Language</a> to configure the sorting. The
+                the ID, <code class="literal">mySorter</code>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_SortingusingsortBy"></a>Sorting using sortBy</h2></div></div></div><p>Apache Camel supports pluggable sorting strategies. This strategy it to use the <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> to configure the sorting. The
                 <code class="literal">sortBy</code> option is configured as follows:</p><pre class="programlisting">sortBy=group 1;group 2;group 3;...</pre><p>Where each group is separated with semi colon. In the simple situations you just use
             one group, so a simple example could be:</p><pre class="programlisting">sortBy=file:name</pre><p>This will sort by file name, you can reverse the order by prefixing
-                <code class="literal">reverse:</code> to the group, so the sorting is now Z..A:</p><pre class="programlisting">sortBy=reverse:file:name</pre><p>As we have the full power of <a class="link" href="File Language" target="_top">File Language</a> we can
+                <code class="literal">reverse:</code> to the group, so the sorting is now Z..A:</p><pre class="programlisting">sortBy=reverse:file:name</pre><p>As we have the full power of <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a> we can
             use some of the other parameters, so if we want to sort by file size we do:</p><pre class="programlisting">sortBy=file:length</pre><p>You can configure to ignore the case, using <code class="literal">ignoreCase:</code> for string
             comparison, so if you want to use file name sorting but to ignore the case then we
             do:</p><pre class="programlisting">sortBy=ignoreCase:file:name</pre><p>You can combine ignore case and reverse, however reverse must be specified
@@ -1054,11 +1053,12 @@ Exchange.FILE_NAME = foo/bye.txt =&gt; /rootDirectory/foo/bye.txt </pre><p>This 
                         <span class="emphasis"><em>ready</em></span> file exists. The begin method returns a
                         <code class="literal">boolean</code> to indicate if we can consume the file or
                     not.</p></li><li class="listitem"><p>in the <code class="literal">commit()</code> method we can move the actual file and also
-                    delete the <span class="emphasis"><em>ready</em></span> file.</p></li></ul></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Important when using consumer.bridgeErrorHandler"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important when using <code class="code">consumer.bridgeErrorHandler</code></th></tr><tr><td align="left" valign="top"><p>When using <code class="code">consumer.bridgeErrorHandler</code>, then <a class="link" href="Intercept" target="_top">interceptors</a>, <a class="link" href="OnCompletion" target="_top">OnCompletion</a>s does <span class="bold"><strong>not</strong></span> apply. The <a class="link" href="Exchange" target="_top">Exchange</a> is processed directly by the Camel <a class="link" href="error handler" target="_top">Erro Handler</a>, and does not allow prior actions
+                    delete the <span class="emphasis"><em>ready</em></span> file.</p></li></ul></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Important when using consumer.bridgeErrorHandler"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Important when using <code class="code">consumer.bridgeErrorHandler</code></th></tr><tr><td align="left" valign="top"><p>When using <code class="code">consumer.bridgeErrorHandler</code>, then <a class="link" href="http://camel.apache.org/intercept.html" target="_top">interceptors</a>, 
+                  <a class="link" href="http://camel.apache.org/oncompletion.html" target="_top">OnCompletion</a> does <span class="bold"><strong>not</strong></span> apply. The <a class="link" href="Exchange" target="_top">Exchange</a> is processed directly by the Camel <a class="link" href="http://camel.apache.org/error-handler.html" target="_top">Error Handler</a>, and does not allow prior actions
                 such as interceptors, onCompletion to take action.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-File2_HSH_Debuglogging"></a>Debug logging</h2></div></div></div><p>This component has log level <span class="bold"><strong>TRACE</strong></span> that can be
             helpful if you have problems.</p><p>
             See also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
                     <a class="link" href="http://camel.apache.org/file-language.html" target="_top">File Language</a>
                 </p></li><li class="listitem"><p>
-                    <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-FTP2.html" class="olink">FTP2</a>
+                    <a href="IDU-FTP2.html" class="olink">FTP2</a>
                 </p></li></ul></div></div></div></body></html>

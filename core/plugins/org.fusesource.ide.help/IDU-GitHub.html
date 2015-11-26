@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>GitHub</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Geocoder.html" title="Geocoder"><link rel="next" href="IDU-GoogleCalenda.html" title="GoogleCalendar"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GitHub"></a>GitHub</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-GitHub_HSH_GitHubComponent"></a>GitHub component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.15</strong></span></p><p>The GitHub component interacts with the GitHub API by encapsulating <a class="link" href="http://org.eclipse.egit.github.core" target="_top">egit-github</a>. It currently
+   <title>GitHub</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Geocoder.html" title="Geocoder"><link rel="next" href="IDU-GoogleCalendar.html" title="GoogleCalendar"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-GitHub"></a>GitHub</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-GitHub_HSH_GitHubComponent"></a>GitHub component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.15</strong></span></p><p>The GitHub component interacts with the GitHub API by encapsulating <a class="link" href="http://org.eclipse.egit.github.core" target="_top">egit-github</a>. It currently
             provides polling for new pull requests, pull request comments, tags, and commits. It is
             also able to produce comments on pull requests, as well as close the pull request
             entirely.</p><p>Rather than webhooks, this endpoint relies on simple polling. Reasons include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Concern for reliability/stability</p></li><li class="listitem"><p>The types of payloads we're polling aren't typically large (plus, paging is
@@ -11,7 +11,7 @@
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-github&lt;/artifactId&gt;
     &lt;version&gt;${camel-version}&lt;/version&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55262"></a>URI format</h2></div></div></div><pre class="programlisting">gihub://endpoint[?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55267"></a>Mandatory Options:</h2></div></div></div><p>Note that these can be configured directly through the endpoint.</p><table id="d0e55272"><tbody><tr>
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72140"></a>URI format</h2></div></div></div><pre class="programlisting">gihub://endpoint[?options]</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72145"></a>Mandatory Options:</h2></div></div></div><p>Note that these can be configured directly through the endpoint.</p><table id="d0e72150"><tbody><tr>
                     <th><p>Option</p></th>
                     <th><p>Description</p></th>
                 </tr><tr>
@@ -30,7 +30,7 @@
                 </tr><tr>
                     <td>repoName</td>
                     <td>GitHub repository name</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55332"></a>Consumer Endpoints:</h2></div></div></div><table id="d0e55335"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72210"></a>Consumer Endpoints:</h2></div></div></div><table id="d0e72213"><tbody><tr>
                     <th><p>Endpoint</p></th>
                     <th><p>Context</p></th>
                     <th><p>Body Type</p></th>
@@ -52,7 +52,7 @@
                     <td><p>commit</p></td>
                     <td><p>polling</p></td>
                     <td><p>org.eclipse.egit.github.core.RepositoryCommit</p></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55407"></a>Producer Endpoints:</h2></div></div></div><table id="d0e55410"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72285"></a>Producer Endpoints:</h2></div></div></div><table id="d0e72288"><tbody><tr>
                     <th><p>Endpoint</p></th>
                     <th><p>Body</p></th>
                     <th>Message Headers</th>
@@ -69,7 +69,7 @@
                     <td><p>none</p></td>
                     <td><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>GitHubPullRequest (integer) (REQUIRED): Pull request
                                     number.</p></li></ul></div></td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e55460"></a>URI Options</h2></div></div></div><table id="d0e55463"><tbody><tr>
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e72338"></a>URI Options</h2></div></div></div><table id="d0e72341"><tbody><tr>
                     <th><p>Name</p></th>
                     <th><p>Default Value</p></th>
                     <th><p>Description</p></th>

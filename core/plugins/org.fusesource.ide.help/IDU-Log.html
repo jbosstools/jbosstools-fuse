@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Log</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-List.html" title="List"><link rel="next" href="IDU-Lucene.html" title="Lucene"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Log"></a>Log</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Log_HSH_LogComponent"></a>Log Component</h2></div></div></div><p>The <span class="bold"><strong>log:</strong></span> component logs message exchanges to the
+   <title>Log</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-List.html" title="List"><link rel="next" href="IDU-Lucene.html" title="Lucene"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Log"></a>Log</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Log_HSH_LogComponent"></a>Log Component</h2></div></div></div><p>The <span class="bold"><strong>log:</strong></span> component logs message exchanges to the
             underlying logging mechanism.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Log_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">log:loggingCategory[?options]</pre><p>Where <span class="bold"><strong>loggingCategory</strong></span> is the name of the logging
             category to use. You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code></p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Using Logger instance from the the Registry"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Using Logger instance from the the Registry</th></tr><tr><td align="left" valign="top"><p>As of <span class="strong"><strong>Camel 2.12.4/2.13.1</strong></span>, if there's single
@@ -12,7 +12,7 @@
                 <code class="literal">level</code> option, as follows:</p><pre class="programlisting">log:org.apache.camel.example?level=DEBUG</pre><p>The default logger logs every exchange (<span class="emphasis"><em>regular logging</em></span>). But
             Apache Camel also ships with the <code class="literal">Throughput</code> logger, which is used
             whenever the <code class="literal">groupSize</code> option is specified.</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Also a log in the DSL"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Also a log in the DSL</th></tr><tr><td align="left" valign="top"><p>There is also a <code class="literal">log</code> directly in the DSL, but it has a different
-                purpose. Its meant for lightweight and human logs. See more details at <span class="olink">LogEIP</span>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Log_HSH_Options"></a>Options</h2></div></div></div><table id="d0e85040"><tr>
+                purpose. Its meant for lightweight and human logs. </p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Log_HSH_Options"></a>Options</h2></div></div></div><table id="d0e102643"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Type </th>
@@ -77,7 +77,7 @@
                         <code class="code">org.slf4j.Logger</code> from Registry to use. </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Log_HSH_Formatting"></a>Formatting</h2></div></div></div><p>The log formats the execution of exchanges to log lines. By default, the log uses
                 <code class="literal">LogFormatter</code> to format the log output, where
-                <code class="literal">LogFormatter</code> has the following options:</p><table id="d0e85229"><tr>
+                <code class="literal">LogFormatter</code> has the following options:</p><table id="d0e102832"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -157,7 +157,7 @@
                 <td><span class="bold"><strong>Apache Camel 2.0:</strong></span> If the exchange has a caught
                     exception, show the exception message (no stack trace). A caught exception is
                     stored as a property on the exchange and for instance a
-                        <code class="literal">doCatch</code> can catch exceptions. See <a class="link" href="Try Catch Finally" target="_top">Try Catch Finally</a>. </td>
+                        <code class="literal">doCatch</code> can catch exceptions. See <a class="link" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/finally.html" target="_top">Try Catch Finally</a>. </td>
             </tr><tr>
                 <td><code class="literal">showStackTrace</code>
                 </td>
@@ -190,7 +190,7 @@
                 <td><span class="bold"><strong>Camel 2.8:</strong></span> Whether Camel should show stream
                     bodies or not (eg such as java.io.InputStream). Beware if you enable this option
                     then you may not be able later to access the message body as the stream have
-                    already been read by this logger. To remedy this you will have to use <a class="link" href="Stream Caching" target="_top">Stream Caching</a>. </td>
+                    already been read by this logger. To remedy this you will have to use <a class="link" href="http://camel.apache.org/maven/current/camel-core/apidocs/org/apache/camel/StreamCache.html" target="_top">Stream Caching</a>. </td>
             </tr><tr>
                 <td><code class="literal">multiline</code>
                 </td>
@@ -206,7 +206,7 @@
                         <code class="literal">10000</code> from <span class="bold"><strong>Camel 2.9</strong></span>
                     onwards. </td>
             </tr></table><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip: Logging stream bodies"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="imagesdb/tip.png"></td><th align="left">Logging stream bodies</th></tr><tr><td align="left" valign="top"><p>For older versions of Camel that do not support the showFiles or showStreams
-                properties above, you can set the following property instead on the <a class="link" href="CamelContext" target="_top">CamelContext</a> to log both stream and file
+                properties above, you can set the following property instead on the <a class="link" href="http://camel.apache.org/camelcontext.html" target="_top">CamelContext</a> to log both stream and file
                 bodies:</p><pre class="programlisting">
  camelContext.getProperties().put(Exchange.LOG_DEBUG_BODY_STREAMS, true);
  
@@ -223,7 +223,7 @@
             and stats should be displayed even if there isn't any message traffic.</p><pre class="programlisting">from("activemq:orders")
     .to("log:com.mycompany.order?level=DEBUG&amp;groupInterval=10000&amp;groupDelay=60000&amp;groupActiveOnly=false")
     .to("bean:processOrder");</pre><p>The following will be logged:</p><pre class="programlisting">"Received: 1000 new messages, with total 2000 so far. Last group took: 10000 millis which is: 100 messages per second. average: 100"</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Log_HSH_Fullcustomizationoftheloggingoutput"></a>Full customization of the logging output</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.11</strong></span>
-        </p><p>With the options outlined in the Formatting
+        </p><p>With the options outlined in the <a class="link" href="http://camel.apache.org/log.html" target="_top">Formatting</a>
             section, you can control much of the output of the logger. However, log lines will
             always follow this structure:</p><pre class="programlisting">
 Exchange[Id:ID-machine-local-50656-1234567901234-1-2, ExchangePattern:InOut, 

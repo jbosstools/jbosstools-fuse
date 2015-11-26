@@ -1,0 +1,47 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>JSonPath</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderExLang.html" title="Expression and Predicates Languages"><link rel="prev" href="JavaScript.html" title="JavaScript"><link rel="next" href="JXPath.html" title="JXPath"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="JSonPath"></a>JSonPath</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e15229"></a>Overview</h2></div></div></div><p>The JSonPath language provides a convenient syntax for extracting portions of a JSon
+            message. The syntax of JSon is similar to XPath, but it is used to extract JSon objects
+            from a JSon message, instead of acting on XML. The <code class="code">jsonpath</code> DSL command can
+            be used either as an expression or as a predicate (where an empty result gets
+            interpreted as boolean <code class="code">false</code>).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e15240"></a>Adding the JSonPath package</h2></div></div></div><p>To use JSonPath in your Camel routes, you need to add a dependency on
+                <code class="code">camel-jsonpath</code> to your project, as follows:</p><pre class="programlisting">&lt;dependency&gt;
+  &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
+  &lt;artifactId&gt;camel-jsonpath&lt;/artifactId&gt;
+  &lt;version&gt;${camel-version}&lt;/version&gt;
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e15250"></a>Java example</h2></div></div></div><p>The following Java example shows how to use the <code class="code">jsonpath()</code> DSL command to
+            select items in a certain price range:</p><pre class="programlisting">from("queue:books.new")
+  .choice()
+    .when().jsonpath("$.store.book[?(@.price &lt; 10)]")
+      .to("jms:queue:book.cheap")
+    .when().jsonpath("$.store.book[?(@.price &lt; 30)]")
+      .to("jms:queue:book.average")
+    .otherwise()
+      .to("jms:queue:book.expensive")</pre><p>If the JSonPath query returns an empty set, the result is interpreted as
+                <code class="code">false</code>. In this way, you can use a JSonPath query as a predicate.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e15265"></a>XML example</h2></div></div></div><p>The following XML example shows how to use the <code class="code">jsonpath</code> DSL element to
+            define predicates in a route:</p><pre class="programlisting">&lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
+  &lt;route&gt;
+    &lt;from uri="direct:start"/&gt;
+    &lt;choice&gt;
+      &lt;when&gt;
+        &lt;jsonpath&gt;$.store.book[?(@.price &amp;lt; 10)]&lt;/jsonpath&gt;
+        &lt;to uri="mock:cheap"/&gt;
+      &lt;/when&gt;
+      &lt;when&gt;
+        &lt;jsonpath&gt;$.store.book[?(@.price &amp;lt; 30)]&lt;/jsonpath&gt;
+        &lt;to uri="mock:average"/&gt;
+      &lt;/when&gt;
+      &lt;otherwise&gt;
+        &lt;to uri="mock:expensive"/&gt;
+      &lt;/otherwise&gt;
+    &lt;/choice&gt;
+  &lt;/route&gt;
+&lt;/camelContext&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e15275"></a>JSonPath injection</h2></div></div></div><p>When using bean integration to invoke a bean method, you can use JSonPath to extract a
+            value from the message and bind it to a method parameter. For example:</p><pre class="programlisting">// Java
+public class Foo {
+     
+    @Consume(uri = "activemq:queue:books.new")
+    public void doSomething(@JsonPath("$.store.book[*].author") String author, @Body String json) {
+      // process the inbound message here
+    }
+}</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e15282"></a>Reference</h2></div></div></div><p>For more details about JSonPath, see the <a class="link" href="https://code.google.com/p/json-path/" target="_top">JSonPath project page</a>.</p></div></div></body></html>

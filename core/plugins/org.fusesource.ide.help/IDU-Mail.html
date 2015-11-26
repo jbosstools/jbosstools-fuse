@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Mail</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Lucene.html" title="Lucene"><link rel="next" href="Master.html" title="Master Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Mail"></a>Mail</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_MailComponent"></a>Mail Component</h2></div></div></div><p>The mail component provides access to Email via Spring's Mail support and the
+   <title>Mail</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Lucene.html" title="Lucene"><link rel="next" href="Master.html" title="Master Component"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Mail"></a>Mail</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_MailComponent"></a>Mail Component</h2></div></div></div><p>The mail component provides access to Email via Spring's Mail support and the
             underlying JavaMail system.</p><p>Maven users will need to add the following dependency to their
                 <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -37,7 +37,7 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
             options:</p><pre class="programlisting">smtp://host[:port]?password=somepwd&amp;username=someuser</pre><p>For example:</p><pre class="programlisting">smtp://mycompany.mailserver:30?password=tiger&amp;username=scott</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_anchorDefaultPortsDefaultports"></a>Default ports</h2></div></div></div><p>Default port numbers are supported. If the port number is omitted, Camel determines
             the port number to use based on the protocol.
             
-        </p><table id="d0e86092"><tr>
+        </p><table id="d0e103695"><tr>
                 <th> Protocol </th>
                 <th> Default Port Number </th>
             </tr><tr>
@@ -72,7 +72,7 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Options"></a>Options</h2></div></div></div><p>
             
-        </p><table id="d0e86181"><tr>
+        </p><table id="d0e103784"><tr>
                 <th> Property </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -84,7 +84,7 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
             </tr><tr>
                 <td><code class="literal">port</code>
                 </td>
-                <td> See DefaultPorts
+                <td> See <a class="xref" href="IDU-Mail.html#IDU-Mail_HSH_anchorDefaultPortsDefaultports" title="Default ports">Default ports</a>.
                 </td>
                 <td> The TCP port number to connect on. </td>
             </tr><tr>
@@ -343,7 +343,7 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
                 <td><span class="bold"><strong>Camel 2.10:</strong></span> Reference to a
                         <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> in the
                         <a class="link" href="http://camel.apache.org/registry.html" target="_top">Registry</a>.&nbsp;This reference overrides any configured
-                    SSLContextParameters at the component level.&nbsp;See <a class="link" href="http://camel.apache.org/http4.html#HTTP4-UsingtheJSSEConfigurationUtility" target="_top">Using the JSSE Configuration Utility</a>. </td>
+                    SSLContextParameters at the component level. See <a class="link" href="http://camel.apache.org/http4.html#HTTP4-UsingtheJSSEConfigurationUtility" target="_top">Using the JSSE Configuration Utility</a>. </td>
             </tr><tr>
                 <td><code class="literal">searchTerm</code>
                 </td>
@@ -403,8 +403,8 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
             either configure SSL/TLS support by completely specifying the necessary Java Mail API
             configuration options, or you may provide a configured SSLContextParameters through the
             component or endpoint configuration.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_UsingtheJSSEConfigurationUtility"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of <span class="bold"><strong>Camel 2.10</strong></span>, the mail component supports SSL/TLS
-            configuration through the <span class="olink">Camel JSSE Configuration
-            Utility</span>.&nbsp;This utility greatly decreases the amount of component specific
+            configuration through the <a class="link" href="http://camel.apache.org/http4.html#HTTP4-UsingtheJSSEConfigurationUtility" target="_top">Camel JSSE Configuration
+            Utility</a>.&nbsp;This utility greatly decreases the amount of component specific
             code you need to write and is configurable at the endpoint and component
             levels.&nbsp;The following examples demonstrate how to use the utility with the mail
             component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Programmaticconfigurationoftheendpoint"></a>Programmatic configuration of the endpoint</h2></div></div></div><pre class="programlisting">
@@ -469,7 +469,7 @@ template.sendBodyAndHeaders("smtp://davsclaus@apache.org", body, map);
         headers.put("to", "davsclaus@apache.org ; jstrachan@apache.org ; ningjiang@apache.org");
 </pre><p>The preceding example uses a semicolon, <code class="literal">;</code>, as the separator
             character.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Settingsendernameandemail"></a>Setting sender name and email</h2></div></div></div><p>You can specify recipients in the format, <code class="literal">name &lt;email&gt;</code>, to
-            include both the name and the email address of the recipient.</p><p>For example, you define the following headers on the a <span class="olink">Message</span>:</p><pre class="programlisting">
+            include both the name and the email address of the recipient.</p><p>For example, you define the following headers on the Message:</p><pre class="programlisting">
 Map headers = new HashMap();
 map.put("To", "Claus Ibsen &lt;davsclaus@apache.org&gt;");
 map.put("From", "James Strachan &lt;jstrachan@apache.org&gt;");
@@ -479,10 +479,10 @@ map.put("Subject", "Camel is cool");
             the hood for consuming and producing mails. We encourage end-users to consult these
             references when using either POP3 or IMAP protocol. Note particularly that POP3 has a
             much more limited set of features than IMAP.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-                    <a class="link" href="http://java.sun.com/products/javamail/javadocs/com/sun/mail/pop3/package-summary.html" target="_top">SUN POP3 API</a>
+                    <a class="link" href="https://javamail.java.net/nonav/docs/api/com/sun/mail/pop3/package-summary.html" target="_top">SUN POP3 API</a>
                 </p></li><li class="listitem"><p>
-                    <a class="link" href="http://java.sun.com/products/javamail/javadocs/com/sun/mail/imap/package-summary.html" target="_top">SUN IMAP API</a>
-                </p></li><li class="listitem"><p>And generally about the <a class="link" href="http://java.sun.com/products/javamail/javadocs/javax/mail/Flags.html" target="_top">MAIL Flags</a>
+                    <a class="link" href="https://javamail.java.net/nonav/docs/api/com/sun/mail/imap/package-summary.html" target="_top">SUN IMAP API</a>
+                </p></li><li class="listitem"><p>And generally about the <a class="link" href="http://camel.apache.org/mail.html" target="_top">MAIL Flags</a>
                 </p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Samples"></a>Samples</h2></div></div></div><p>We start with a simple route that sends the messages received from a JMS queue as
             emails. The email account is the <code class="literal">admin</code> account on
                 <code class="literal">mymailserver.com</code>.</p><pre class="programlisting">
@@ -568,9 +568,9 @@ from("imaps://imap.gmail.com?username=YOUR_USERNAME@gmail.com&amp;password=YOUR_
 </pre><p>As you can see the API to handle attachments is a bit clunky but it's there so you can
             get the <code class="literal">javax.activation.DataHandler</code> so you can handle the
             attachments using standard API.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Howtosplitamailmessagewithattachments"></a>How to split a mail message with attachments</h2></div></div></div><p>In this example we consume mail messages which may have a number of attachments. What
-            we want to do is to use the <span class="olink">Splitter</span> EIP per individual attachment, to process the attachments
-            separately. For example if the mail message has 5 attachments, we want the <span class="olink">Splitter</span> to process five
-            messages, each having a single attachment. To do this we need to provide a custom <a class="link" href="Expression" target="_top">Expression</a> to the <span class="olink">Splitter</span> where we provide a List&lt;Message&gt; that
+            we want to do is to use the Splitter EIP per individual attachment, to process the attachments
+            separately. For example if the mail message has 5 attachments, we want the Splitter to process five
+            messages, each having a single attachment. To do this we need to provide a custom <a class="link" href="Expression" target="_top">Expression</a> to the Splitter, where we provide a List&lt;Message&gt; that
             contains the five messages with the single attachment.</p><p>The code is provided out of the box in Camel 2.10 onwards in the
                 <code class="literal">camel-mail</code> component. The code is in the class:
                 <code class="literal">org.apache.camel.component.mail.SplitAttachmentsExpression</code>, which
@@ -582,7 +582,7 @@ from("imaps://imap.gmail.com?username=YOUR_USERNAME@gmail.com&amp;password=YOUR_
         // each message going to this mock has a single attachment
         .to("mock:split")
     .end();
-</pre><p>If you use XML DSL then you need to declare a method call expression in the <span class="olink">Splitter</span> as shown
+</pre><p>If you use XML DSL then you need to declare a method call expression in the Splitter, as shown
             below</p><pre class="programlisting">&lt;split&gt;
   &lt;method beanType="org.apache.camel.component.mail.SplitAttachmentsExpression"/&gt;
   &lt;to uri="mock:split"/&gt;
@@ -613,7 +613,7 @@ from("imaps://imap.gmail.com?username=YOUR_USERNAME@gmail.com&amp;password=YOUR_
 &lt;/route&gt;
 </pre><p>
             
-        </p><table id="d0e87263"><tr>
+        </p><table id="d0e104850"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Description </th>

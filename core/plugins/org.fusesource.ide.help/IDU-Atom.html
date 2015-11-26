@@ -1,7 +1,8 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Atom</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Atmosphere-Websocket.html" title="Atmosphere-Websocket"><link rel="next" href="IDU-avro.html" title="avro"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Atom"></a>Atom</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_AtomComponent"></a>Atom Component</h2></div></div></div><p>The <span class="bold"><strong>atom:</strong></span> component is used for polling atom
-      feeds.</p><p>Apache Camel will poll the feed every 60 seconds by default. <span class="bold"><strong>Note:</strong></span> The component currently only supports polling (consuming) feeds.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code>
+   <title>Atom</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Atmosphere-Websocket.html" title="Atmosphere-Websocket"><link rel="next" href="IDU-avro.html" title="avro"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Atom"></a>Atom</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_AtomComponent"></a>Atom Component</h2></div></div></div><p>The <span class="bold"><strong>atom:</strong></span> component is used for polling atom
+      feeds.</p><p>Apache Camel will poll the feed every 500 milliseconds by default. <span class="bold"><strong>Note:</strong></span> The component currently supports only polling (consuming)
+            feeds.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code>
       for this component:</p><pre class="programlisting">
 &lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
@@ -11,7 +12,7 @@
 &lt;/dependency&gt;
 
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">atom://atomUri[?options]</pre><p>Where <span class="bold"><strong>atomUri</strong></span> is the URI to the Atom feed to poll.
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_Options"></a>Options</h2></div></div></div><table id="d0e22932"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_Options"></a>Options</h2></div></div></div><table id="d0e36462"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -68,8 +69,8 @@
       </tr><tr>
         <td><code class="literal">consumer.delay</code>
         </td>
-        <td><code class="literal">60000</code>
-        </td>
+        <td><code class="literal">500</code>
+                </td>
         <td> Delay in millis between each poll. </td>
       </tr><tr>
         <td><code class="literal">consumer.initialDelay</code>
@@ -88,7 +89,7 @@
         <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_Exchangedataformat"></a>Exchange data format</h2></div></div></div><p>Apache Camel will set the In body on the returned <code class="literal">Exchange</code> with the
       entries. Depending on the <code class="literal">splitEntries</code> flag Apache Camel will either return one
-        <code class="literal">Entry</code> or a <code class="literal">List&lt;Entry&gt;</code>.</p><table id="d0e23146"><tr>
+        <code class="literal">Entry</code> or a <code class="literal">List&lt;Entry&gt;</code>.</p><table id="d0e36676"><tr>
         <th> Option </th>
         <th> Value </th>
         <th> Behavior </th>
@@ -109,7 +110,7 @@
             <code class="literal">exchange.in.body(List&lt;Entry&gt;)</code>
         </td>
       </tr></table><p>Apache Camel can set the <code class="literal">Feed</code> object on the in header (see
-        <code class="literal">feedHeader</code> option to disable this):</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel atom uses these headers.</p><table id="d0e23208"><tr>
+        <code class="literal">feedHeader</code> option to disable this):</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Atom_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Apache Camel atom uses these headers.</p><table id="d0e36738"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
@@ -143,13 +144,12 @@ protected RouteBuilder createMyRoutes() throws Exception {
     return new RouteBuilder() {
         public void configure() throws Exception {
             // We pool the atom feeds from the source for further processing in the seda queue
-            // we set the delay to 1 second for each pool as this is a unit test also and we can
-            // not wait the default poll interval of 60 seconds.
+            // we set the delay to 1 second for each pool.
             // Using splitEntries=true will during polling only fetch one Atom Entry at any given time.
             // As the feed.atom file contains 7 entries, using this will require 7 polls to fetch the entire
             // content. When Camel have reach the end of entries it will refresh the atom feed from URI source
             // and restart - but as Camel by default uses the UpdatedDateFilter it will only deliver new
-            // blog entries to "seda:feeds". So only when James Straham updates his blog with a new entry
+            // blog entries to "seda:feeds". So only when James Strachan updates his blog with a new entry
             // Camel will create an exchange for the seda:feeds.
             from("atom:file:src/test/data/feed.atom?splitEntries=true&amp;consumer.delay=1000").to("seda:feeds");
 

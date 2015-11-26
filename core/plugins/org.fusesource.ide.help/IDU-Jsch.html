@@ -1,8 +1,8 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Jsch</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-JPA.html" title="JPA"><link rel="next" href="IDU-JT400.html" title="JT400"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Jsch"></a>Jsch</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jsch_HSH_Jsch"></a>Jsch</h2></div></div></div><p>The <span class="bold"><strong>camel-jsch</strong></span> component supports the <a class="link" href="http://en.wikipedia.org/wiki/Secure_copy" target="_top">SCP protocol</a> using the Client API
+   <title>Jsch</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-JPA.html" title="JPA"><link rel="next" href="IDU-JT400.html" title="JT400"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Jsch"></a>Jsch</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jsch_HSH_Jsch"></a>Jsch</h2></div></div></div><p>The <span class="bold"><strong>camel-jsch</strong></span> component supports the <a class="link" href="http://en.wikipedia.org/wiki/Secure_copy" target="_top">SCP protocol</a> using the Client API
       of the <a class="link" href="http://www.jcraft.com/jsch/" target="_top">Jsch</a> project. Jsch is already used
-      in camel by the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-FTP2.html" class="olink">FTP</a> component for the <span class="bold"><strong>sftp:</strong></span> protocol.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
+      in camel by the <a href="IDU-FTP2.html" class="olink">FTP</a> component for the <span class="bold"><strong>sftp:</strong></span> protocol.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-jsch&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
@@ -10,7 +10,7 @@
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jsch_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">scp://host[:port]/destination[?options]</pre><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p><p>The file name can be specified either in the &lt;path&gt; part of the URI or as a "CamelFileName" header on the message (<code class="literal">Exchange.FILE_NAME</code> if used in code).</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Jsch_HSH_Options"></a>Options</h2></div></div></div><p></p><p>
 
-    </p><table id="d0e79424"><tr>
+    </p><table id="d0e96482"><tr>
         <th> Name </th>
         <th> Description </th>
         <th> Example </th>
@@ -61,7 +61,7 @@
                 <td></td>
                 <td><code class="literal">true</code>
                 </td>
-            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e79562"></a>Component options</h2></div></div></div><p>The JschComponent supports the following options:</p><table frame="void" id="d0e79567"><col width="23%"><col width="58%"><col width="19%"><thead><tr>
+            </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e96620"></a>Component options</h2></div></div></div><p>The JschComponent supports the following options:</p><table frame="void" id="d0e96625"><col width="23%"><col width="58%"><col width="19%"><thead><tr>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Default Value</th>

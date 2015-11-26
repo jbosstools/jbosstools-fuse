@@ -1,9 +1,9 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>CMIS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Class.html" title="Class"><link rel="next" href="IDU-Cometd.html" title="Cometd"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-CMIS"></a>CMIS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CMIS_HSH_CMISComponent"></a>CMIS Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.11</strong></span>
+   <title>CMIS</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Class.html" title="Class"><link rel="next" href="IDU-Cometd.html" title="Cometd"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-CMIS"></a>CMIS</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CMIS_HSH_CMISComponent"></a>CMIS Component</h2></div></div></div><p></p><p><span class="bold"><strong>Available as of Camel 2.11</strong></span>
 The cmis component uses the <a class="link" href="http://chemistry.apache.org/java/opencmis.html" target="_top">Apache Chemistry</a> client API and allows you to add/read nodes to/from a CMIS compliant content repositories.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CMIS_HSH_URIFormat"></a>URI Format</h2></div></div></div><p></p><pre class="programlisting">
 cmis://cmisServerUrl[?options]
-</pre><p>You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CMIS_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e32368"><tr>
+</pre><p>You can append query options to the URI in the following format, ?options=value&amp;option2=value&amp;...</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CMIS_HSH_URIOptions"></a>URI Options</h2></div></div></div><p></p><table id="d0e49303"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Context </th>
@@ -58,7 +58,7 @@ cmis://cmisServerUrl[?options]
         <td> If set to true, the content of document node will be retrieved in addition to the properties</td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CMIS_HSH_Usage"></a>Usage</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CMIS_HSH_Messageheadersevaluatedbytheproducer"></a>Message headers evaluated by the producer</h2></div></div></div><p></p><p>
 
-    </p><table id="d0e32525"><tr>
+    </p><table id="d0e49460"><tr>
         <th> Header </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -106,7 +106,7 @@ cmis://cmisServerUrl[?options]
         <td> The mimetype to set for a document </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CMIS_HSH_MessageheaderssetduringqueryingProduceroperation"></a>Message headers set during querying Producer operation</h2></div></div></div><p></p><p>
 
-    </p><table id="d0e32660"><tr>
+    </p><table id="d0e49595"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

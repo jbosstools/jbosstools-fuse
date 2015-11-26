@@ -1,0 +1,23 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>camel-cdi</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s05.html" title="camel-bindy"><link rel="next" href="bk04ch02s01s07.html" title="camel-crypto"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34315"></a>camel-cdi</h3></div></div></div><p>
+ The <code class="varname">camel-cdi</code> component provides CDI integration.</p><p>The following example illustrates how to provide and consume a context with an associated route.
+	</p><pre class="programlisting">
+@Startup
+@ApplicationScoped
+@ContextName("cdi-context")
+public class MyRouteBuilder extends RouteBuilder {
+    @Override
+    public void configure() throws Exception {
+        from("direct:start").transform(body().prepend("Hi"));
+    }
+}
+
+</pre><p>
+
+</p><pre class="programlisting">
+    @Inject
+    @ContextName("cdi-context")
+    private CamelContext camelctx;
+</pre><p>
+ </p></div></body></html>

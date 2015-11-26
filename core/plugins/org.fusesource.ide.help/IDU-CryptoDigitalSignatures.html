@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Crypto (Digital Signatures)</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-CouchDB.html" title="CouchDB"><link rel="next" href="IDU-CXF.html" title="CXF"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-CryptoDigitalSignatures"></a>Crypto (Digital Signatures)</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CryptoDigitalSignatures_HSH_CryptocomponentforDigitalSignatures"></a>Crypto component for Digital Signatures</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.3</strong></span>
+   <title>Crypto (Digital Signatures)</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-CouchDB.html" title="CouchDB"><link rel="next" href="IDU-CXF.html" title="CXF"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-CryptoDigitalSignatures"></a>Crypto (Digital Signatures)</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CryptoDigitalSignatures_HSH_CryptocomponentforDigitalSignatures"></a>Crypto component for Digital Signatures</h2></div></div></div><p><span class="bold"><strong>Available as of Apache Camel 2.3</strong></span>
     </p><p>Using Apache Camel cryptographic endpoints and Java's Cryptographic extension it is easy to
       create Digital Signatures for <a class="link" href="Exchange" target="_top">Exchange</a>s. Apache Camel provides a
       pair of flexible endpoints which get used in concert to create a signature for an exchange in
@@ -37,7 +37,7 @@ crypto:verify:name[?options]</pre><div class="itemizedlist"><ul class="itemizedl
       examples they appear one after the other. It goes without saying that both sign and verify
       should be configured identically.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CryptoDigitalSignatures_HSH_Options"></a>Options</h2></div></div></div><p>
       
-    </p><table id="d0e33891"><tr>
+    </p><table id="d0e50816"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Default </th>
@@ -135,8 +135,7 @@ crypto:verify:name[?options]</pre><div class="itemizedlist"><ul class="itemizedl
         <td> Remove camel crypto headers from Message after a verify operation (value can be <code class="literal">"true"</code>/{{"false"}}). </td>
       </tr></table><p>
       
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CryptoDigitalSignatures_HSH_a1Rawkeys"></a>1) Raw keys</h2></div></div></div><p>The most basic way to way to sign and verify an exchange is with a KeyPair as follows. </p><pre class="programlisting">from("direct:keypair").to("crypto:sign://basic?privateKey=#myPrivateKey", "crypto:verify://basic?publicKey=#myPublicKey", "mock:result");</pre><p>The same can be achieved with the <a class="link" href="Spring XML Extensions" target="_top">Spring XML
-        Extensions</a> using references to keys </p><pre class="programlisting">&lt;route&gt;
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CryptoDigitalSignatures_HSH_a1Rawkeys"></a>1) Raw keys</h2></div></div></div><p>The most basic way to way to sign and verify an exchange is with a KeyPair as follows. </p><pre class="programlisting">from("direct:keypair").to("crypto:sign://basic?privateKey=#myPrivateKey", "crypto:verify://basic?publicKey=#myPublicKey", "mock:result");</pre><p>The same can be achieved with the <a class="link" href="http://camel.apache.org/spring-xml-extensions.html" target="_top">Spring XML Extensions</a> using references to keys </p><pre class="programlisting">&lt;route&gt;
     &lt;from uri="direct:keypair"/&gt;
     &lt;to uri="crypto:sign://basic?privateKey=#myPrivateKey" /&gt;
     &lt;to uri="crypto:verify://basic?publicKey=#myPublicKey" /&gt;
@@ -229,5 +228,5 @@ signed.getIn().copyFrom(unsigned.getOut());
 signed.getIn().setHeader(KEYSTORE_ALIAS, "bob");
 template.send("direct:alias-verify", signed);</pre><p>
        See also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
-          <a class="link" href="Crypto" target="_top">Crypto</a> Crypto is also available as a <a class="link" href="Data Format" target="_top">Data Format</a>
+          Crypto is also available as a <a class="link" href="http://camel.apache.org/crypto.html" target="_top">Data Format</a>
         </p></li></ul></div></div></div></body></html>

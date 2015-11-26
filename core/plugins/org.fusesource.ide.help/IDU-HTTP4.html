@@ -1,17 +1,17 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>HTTP4</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-HTTP.html" title="HTTP"><link rel="next" href="IDU-iBATIS.html" title="iBATIS"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-HTTP4"></a>HTTP4</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_HTTP4Component"></a>HTTP4 Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.3</strong></span>
-    </p><p>The <span class="bold"><strong>http4:</strong></span> component provides HTTP based <a class="link" href="Endpoint" target="_top">endpoints</a> for calling external HTTP resources (as a client to call
-      external servers using HTTP).</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
+   <title>HTTP4</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-HTTP.html" title="HTTP"><link rel="next" href="IDU-iBATIS.html" title="iBATIS"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-HTTP4"></a>HTTP4</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_HTTP4Component"></a>HTTP4 Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.3</strong></span>
+    </p><p>The <span class="bold"><strong>http4:</strong></span> component provides HTTP-based endpoints for calling external
+            HTTP resources (as a client to call external servers using HTTP).</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-http4&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: camel-http4 vs camel-http"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">camel-http4 vs camel-http</th></tr><tr><td align="left" valign="top"><p>Camel-http4 uses Apache HttpClient 4.x while camel-http uses Apache HttpClient
                 3.x.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">http4:hostname[:port][/resourceUri][?options]</pre><p>Will by default use port 80 for HTTP and 443 for HTTPS.</p><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: camel-http4 vs camel-jetty"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">camel-http4 vs camel-jetty</th></tr><tr><td align="left" valign="top"><p>You can only produce to endpoints generated by the HTTP4 component. Therefore it should never be used as input into your Camel Routes. To bind/expose an HTTP endpoint via a HTTP server as input to a Camel route, use the <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Jetty.html" class="olink">Jetty Component</a> instead.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_HttpComponentOptions"></a>HttpComponent Options</h2></div></div></div><p>
+    </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: camel-http4 vs camel-jetty"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">camel-http4 vs camel-jetty</th></tr><tr><td align="left" valign="top"><p>You can only produce to endpoints generated by the HTTP4 component. Therefore it should never be used as input into your Camel Routes. To bind/expose an HTTP endpoint via a HTTP server as input to a Camel route, use the <a href="IDU-Jetty.html" class="olink">Jetty Component</a> instead.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_HttpComponentOptions"></a>HttpComponent Options</h2></div></div></div><p>
 
-    </p><table id="d0e67973"><tr>
+    </p><table id="d0e84794"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -62,7 +62,8 @@
         </td>
         <td><code class="literal">null</code>
         </td>
-        <td> <span class="bold"><strong>Camel 2.8:</strong></span> To use a custom <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code>. See <a class="link" href="IDU-HTTP4.html#IDU-HTTP4_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE Configuration Utility</a>. </td>
+        <td> <span class="bold"><strong>Camel 2.8:</strong></span> To use a custom
+            <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code>. See <a class="xref" href="IDU-HTTP4.html#IDU-HTTP4_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE Configuration Utility</a> </td>
       </tr><tr>
         <td><code class="literal">x509HostnameVerifier</code>
         </td>
@@ -77,7 +78,7 @@
         <td><span class="bold"><strong>Camel 2.11.0:</strong></span> The time for connection to live, the time unit is millisecond, the default value is always keep alive. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_HttpEndpointOptions"></a>HttpEndpoint Options</h2></div></div></div><p>
 
-    </p><table id="d0e68198"><tr>
+    </p><table id="d0e85018"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -181,7 +182,7 @@
                     consumer side, and if the caused <code class="literal">Exception</code> was send back
                     serialized in the response as a
                         <code class="literal">application/x-java-serialized-object</code> content type (for
-                    example using <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-Jetty.html" class="olink">Jetty</a> or <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-SERVLET.html" class="olink">SERVLET</a> Camel components). On the producer
+                    example using <a href="IDU-Jetty.html" class="olink">Jetty</a> or <a href="IDU-SERVLET.html" class="olink">SERVLET</a> Camel components). On the producer
                     side the exception will be deserialized and thrown as is, instead of the
                         <code class="literal">HttpOperationFailedException</code>. The caused exception is
                     required to be serialized. </td>
@@ -190,25 +191,19 @@
         </td>
         <td><code class="literal">null</code>
         </td>
-        <td><span class="bold"><strong>Deprecated and will be removed in Camel 3.0:</strong></span><span class="bold"><strong>Camel 2.8:</strong></span> Reference to a <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> in the <a class="link" href="Registry" target="_top">Registry</a>.  <span class="bold"><strong>Important:</strong></span> Only one instance of <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. See further below for more details. See Using the JSSE Configuration Utility. Use the <code class="literal">sslContextParameters</code> option instead. </td>
+          <td><span class="bold"><strong>Deprecated and will be removed in Camel 3.0:</strong></span><span class="bold"><strong>Camel 2.8:</strong></span> Reference to a <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> in the <a class="link" href="Registry" target="_top">Registry</a>.  <span class="bold"><strong>Important:</strong></span> Only one instance of <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. See further below for more details. See <a class="xref" href="IDU-HTTP4.html#IDU-HTTP4_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE Configuration Utility</a>. Use the <code class="literal">sslContextParameters</code> option instead. </td>
       </tr><tr>
         <td><code class="literal">sslContextParameters</code>
         </td>
         <td><code class="literal">null</code>
         </td>
-        <td><span class="bold"><strong>Camel 2.11.1:</strong></span> Reference to a <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> in the <a class="link" href="Registry" target="_top">Registry</a>.  <span class="bold"><strong>Important:</strong></span> Only one instance of <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. See further below for more details. See Using the JSSE Configuration Utility. </td>
+          <td><span class="bold"><strong>Camel 2.11.1:</strong></span> Reference to a <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> in the <a class="link" href="Registry" target="_top">Registry</a>.  <span class="bold"><strong>Important:</strong></span> Only one instance of <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. See further below for more details. See <a class="xref" href="IDU-HTTP4.html#IDU-HTTP4_HSH_UsingtheJSSEConfigurationUtility" title="Using the JSSE Configuration Utility">Using the JSSE Configuration Utility</a>. </td>
       </tr><tr>
         <td><code class="literal">x509HostnameVerifier</code>
         </td>
         <td><code class="literal">BrowserCompatHostnameVerifier</code>
         </td>
         <td><span class="bold"><strong>Camel 2.7:</strong></span> You can refer to a different <code class="literal">org.apache.http.conn.ssl.X509HostnameVerifier</code> instance in the <a class="link" href="Registry" target="_top">Registry</a> such as <code class="literal">org.apache.http.conn.ssl.StrictHostnameVerifier</code> or <code class="literal">org.apache.http.conn.ssl.AllowAllHostnameVerifier</code>. </td>
-      </tr><tr>
-        <td><code class="literal">urlRewrite</code>
-        </td>
-        <td><code class="literal">null</code>
-        </td>
-        <td><span class="bold"><strong>Camel 2.11:</strong></span><span class="bold"><strong>Producer only</strong></span> Refers to a custom <code class="literal">org.apache.camel.component.http4.UrlRewrite</code> which allows you to rewrite urls when you bridge/proxy endpoints. See more details at <span class="olink">UrlRewrite</span> and <a class="link" href="How to use Camel as a HTTP proxy between a client and server" target="_top">How to use Camel as a HTTP proxy between a client and server</a>. </td>
       </tr><tr>
             <td>
                 <p><code class="code">maxTotalConnections</code></p>
@@ -246,7 +241,7 @@
             </td>
         </tr></table><p>The following authentication options can also be set on the HttpEndpoint:</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_SettingBasicAuthenticationandProxy"></a>Setting Basic Authentication and Proxy</h2></div></div></div><p><span class="bold"><strong>Before Camel 2.8.0</strong></span>
 
-    </p><table id="d0e68790"><tr>
+    </p><table id="d0e85581"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -382,7 +377,7 @@
         <td> The proxy Nt host name </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>
 
-    </p><table id="d0e69136"><tr>
+    </p><table id="d0e85927"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>
@@ -450,7 +445,7 @@ from("direct:start")
 &lt;/camelContext&gt;
 </pre><p>You can override the HTTP endpoint URI by adding a header with the key, <code class="literal">Exchange.HTTP_URI</code>, on the message.</p><pre class="programlisting">from("direct:start")
   .setHeader(Exchange.HTTP_URI, constant("http://newhost"))
-  .to("http4://oldhost");</pre><p>In the sample above Camel will call the <a class="link" href="http://newhost" target="_top">http://newhost</a> despite the endpoint is configured with <a class="link" href="http4://oldhost" target="_top">http4://oldhost</a>. If the http4 endpoint is working in bridge
+  .to("http4://oldhost");</pre><p>In the sample above Camel will call the http://newhost despite the endpoint is configured with http4://oldhost. If the http4 endpoint is working in bridge
       mode, it will ignore the message header of <code class="literal">Exchange.HTTP_URI</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_ConfiguringURIParameters"></a>Configuring URI Parameters</h2></div></div></div><p>The <span class="bold"><strong>http</strong></span> producer supports URI parameters to be sent to the HTTP server. The URI parameters can either be set directly on the endpoint URI or as a header with the key <code class="literal">Exchange.HTTP_QUERY</code> on the message.</p><pre class="programlisting">
 from("direct:start")
  .to("http4://oldhost?order=123&amp;detail=short");
@@ -515,7 +510,9 @@ template.sendBody("http4://www.google.com/search", null, headers);
 Message out = exchange.getOut();
 int responseCode = out.getHeader(Exchange.HTTP_RESPONSE_CODE, Integer.class);</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_DisablingCookies"></a>Disabling Cookies</h2></div></div></div><p>To disable cookies you can set the HTTP Client to ignore cookies by adding this URI option:
 <code class="literal">httpClient.cookiePolicy=ignoreCookies</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_AdvancedUsage"></a>Advanced Usage</h2></div></div></div><p>If you need more control over the HTTP producer you should use the <code class="literal">HttpComponent</code> where you can set various classes to give you custom behavior.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_UsingtheJSSEConfigurationUtility"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of Camel 2.8, the HTTP4 component supports SSL/TLS configuration through the <span class="olink">Camel JSSE Configuration Utility</span>.&nbsp;This utility greatly decreases the amount of component specific code you need to write and is configurable at the endpoint and component levels.&nbsp;The following examples demonstrate how to use the utility with the HTTP4 component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_Programmaticconfigurationofthecomponent"></a>Programmatic configuration of the component</h2></div></div></div><pre class="programlisting">KeyStoreParameters ksp = new KeyStoreParameters();
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_AdvancedUsage"></a>Advanced Usage</h2></div></div></div><p>If you need more control over the HTTP producer you should use the <code class="literal">HttpComponent</code> where you can set various classes to give you custom behavior.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_UsingtheJSSEConfigurationUtility"></a>Using the JSSE Configuration Utility</h2></div></div></div><p>As of Camel 2.8, the HTTP4 component supports SSL/TLS configuration through the <a href="IDU-HTTP.html#IDU-HTTP_HSH_UsingtheJSSEConfigurationUtility" class="olink">Camel JSSE Configuration Utility</a>. 
+          This utility greatly decreases the amount of component specific code you need to write and is configurable 
+          at the endpoint and component levels.&nbsp;The following examples demonstrate how to use the utility with the HTTP4 component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_Programmaticconfigurationofthecomponent"></a>Programmatic configuration of the component</h2></div></div></div><pre class="programlisting">KeyStoreParameters ksp = new KeyStoreParameters();
 ksp.setResource("/users/home/server/keystore.jks");
 ksp.setPassword("keystorePassword");
 
@@ -582,7 +579,7 @@ public class HttpContextFactory {
 &lt;bean id="myHttpContext" factory-bean="httpContextFactory" factory-method="getObject"/&gt;
 </pre><p>3. Reference the context in the http4 URL:</p><pre class="programlisting">
 &lt;to uri="https4://myhostname.com:443/myURL?httpContext=myHttpContext"/&gt;
-</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_UsingdifferentSSLContextParameters"></a>Using different SSLContextParameters</h2></div></div></div><p>The <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HTTP4.html" class="olink">HTTP4</a> component only support one instance of <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> per component. If you need to use 2 or more different instances, then you need to setup multiple <a href="PLUGINS_ROOT/org.fusesource.ide.help/IDU-HTTP4.html" class="olink">HTTP4</a> components as shown below. Where we have 2 components, each using their own instance of <code class="literal">sslContextParameters</code> property.</p><pre class="programlisting">&lt;bean id="http4-foo" class="org.apache.camel.component.http4.HttpComponent"&gt;
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HTTP4_HSH_UsingdifferentSSLContextParameters"></a>Using different SSLContextParameters</h2></div></div></div><p>The <a href="IDU-HTTP4.html" class="olink">HTTP4</a> component only support one instance of <code class="literal">org.apache.camel.util.jsse.SSLContextParameters</code> per component. If you need to use 2 or more different instances, then you need to setup multiple <a href="IDU-HTTP4.html" class="olink">HTTP4</a> components as shown below. Where we have 2 components, each using their own instance of <code class="literal">sslContextParameters</code> property.</p><pre class="programlisting">&lt;bean id="http4-foo" class="org.apache.camel.component.http4.HttpComponent"&gt;
    &lt;property name="sslContextParameters" ref="sslContextParams1"/&gt;
    &lt;property name="x509HostnameVerifier" ref="hostnameVerifier"/&gt;
 &lt;/bean&gt;

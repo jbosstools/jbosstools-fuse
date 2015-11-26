@@ -1,0 +1,47 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Using Variables and Functions</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="XPath.html" title="The XPath Language"><link rel="prev" href="Xpath-Predicates.html" title="Predicates"><link rel="next" href="Xpath-VarNspc.html" title="Variable Namespaces"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Xpath-VarsAndFuncs"></a>Using Variables and Functions</h2></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33485"></a>Evaluating variables in a route</h3></div></div></div><p>When evaluating XPath expressions inside a route, you can use XPath variables to
+                access the contents of the current exchange, as well as O/S environment variables
+                and Java system properties. The syntax to access a variable value is
+                        <code class="code">$<em class="replaceable"><code>VarName</code></em></code> or
+                        <code class="code">$<em class="replaceable"><code>Prefix</code></em>:<em class="replaceable"><code>VarName</code></em></code>,
+                if the variable is accessed through an XML namespace.</p><p>For example, you can access the <span class="emphasis"><em>In</em></span> message's body as
+                    <code class="code">$in:body</code> and the <span class="emphasis"><em>In</em></span> message's header value as
+                        <code class="code">$in:<em class="replaceable"><code>HeaderName</code></em></code>. O/S environment
+                variables can be accessed as <code class="code">$env:<em class="replaceable"><code>EnvVar</code></em></code> and
+                Java system properties can be accessed as
+                        <code class="code">$system:<em class="replaceable"><code>SysVar</code></em></code>.</p><p>In the following example, the first route extracts the value of the
+                    <code class="code">/person/city</code> element and inserts it into the <code class="code">city</code>
+                header. The second route filters exchanges using the XPath expression,
+                    <code class="code">$in:city = 'London'</code>, where the <code class="code">$in:city</code> variable is
+                replaced by the value of the <code class="code">city</code> header.</p><pre class="programlisting">from("file:src/data?noop=true")
+    .setHeader("city").xpath("/person/city/text()")
+    .to("direct:tie");
+        
+from("direct:tie")
+    .filter().xpath("$in:city = 'London'").to("file:target/messages/uk");
+</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33486"></a>Evaluating functions in a route</h3></div></div></div><p>In addition to the standard XPath functions, the XPath language defines additional
+                functions. These additional functions (which are listed in <a class="xref" href="Xpath-FuncRef.html#Xpath-FuncRef-TableXPCF" title="Table&nbsp;21.&nbsp;XPath Custom Functions">Table&nbsp;21, &#8220;XPath Custom Functions&#8221;</a>) can be used to access the underlying
+                exchange, to evaluate a simple expression or to look up a property in the Apache Camel
+                property placeholder component.</p><p>For example, the following example uses the <code class="code">in:header()</code> function and
+                the <code class="code">in:body()</code> function to access a head and the body from the
+                underlying exchange:</p><pre class="programlisting">from("direct:start").choice()
+  .when().xpath("in:header('foo') = 'bar'").to("mock:x")
+  .when().xpath("in:body() = '&lt;two/&gt;'").to("mock:y")
+  .otherwise().to("mock:z");</pre><p>Notice the similarity between theses functions and the corresponding
+                        <code class="code">in:<em class="replaceable"><code>HeaderName</code></em></code> or
+                    <code class="code">in:body</code> variables. The functions have a slightly different syntax
+                however: <code class="code">in:header(<em class="replaceable"><code>'HeaderName'</code></em>)</code> instead of
+                        <code class="code">in:<em class="replaceable"><code>HeaderName</code></em></code>; and
+                    <code class="code">in:body()</code> instead of <code class="code">in:body</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="topic-33487"></a>Evaluating variables in XPathBuilder</h3></div></div></div><p>You can also use variables in expressions that are evaluated using the
+                    <code class="code">XPathBuilder</code> class. In this case, you cannot use variables such as
+                    <code class="code">$in:body</code> or <code class="code">$in:<em class="replaceable"><code>HeaderName</code></em></code>,
+                because there is no exchange object to evaluate against. But you
+                    <span class="emphasis"><em>can</em></span> use variables that are defined inline using the
+                        <code class="code">variable(<em class="replaceable"><code>Name</code></em>,
+                        <em class="replaceable"><code>Value</code></em>)</code> fluent builder method.</p><p>For example, the following XPathBuilder construction evaluates the
+                    <code class="code">$test</code> variable, which is defined to have the value,
+                    <code class="code">London</code>:</p><pre class="programlisting">String var = XPathBuilder.xpath("$test")
+               .variable("test", "London")
+               .evaluate(getContext(), "&lt;name&gt;foo&lt;/name&gt;");</pre><p>Note that variables defined in this way are automatically entered into the global
+                namespace (for example, the variable, <code class="code">$test</code>, uses no prefix).</p></div></div></body></html>

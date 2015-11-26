@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>Quickfix</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><meta name="keywords" content="Apache Camel, Open Source, open source, Fuse, Red Hat, EIP, Enterprise Integration Patterns"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="RiderCompRef.html" title="Endpoint Reference"><link rel="prev" href="IDU-Quartz2.html" title="Quartz2"><link rel="next" href="IDU-RabbitMQ.html" title="RabbitMQ"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Quickfix"></a>Quickfix</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_QuickFIXJComponent"></a>QuickFIX/J Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.0</strong></span>
+   <title>Quickfix</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Quartz2.html" title="Quartz2"><link rel="next" href="IDU-RabbitMQ.html" title="RabbitMQ"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Quickfix"></a>Quickfix</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_QuickFIXJComponent"></a>QuickFIX/J Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.0</strong></span>
     </p><p>The <span class="bold"><strong>quickfix</strong></span> component adapts the <a class="link" href="http://www.quickfixj.org/" target="_top">QuickFIX/J</a> FIX engine for using in Camel . This
       component uses the standard <a class="link" href="http://www.fixprotocol.org/" target="_top">Financial Interchange
         (FIX) protocol</a> for message transport.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Previous Versions"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Previous Versions</th></tr><tr><td align="left" valign="top"><p>The <span class="bold"><strong>quickfix</strong></span> component was rewritten for Camel 2.5. For
@@ -31,7 +31,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
       must include the session-related fields in the FIX message being sent. If a session is
       specified in the URI then the component will automatically inject the session-related fields
       into the FIX message.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_ExchangeFormat"></a>Exchange Format</h2></div></div></div><p>The exchange headers include information to help with exchange filtering, routing and
-      other processing. The following headers are available:</p><table id="d0e102113"><tr>
+      other processing. The following headers are available:</p><table id="d0e120033"><tr>
         <th> Header Name </th>
         <th> Description </th>
       </tr><tr>
@@ -72,7 +72,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
         manual</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_CommunicationConnectors"></a>Communication Connectors</h2></div></div></div><p>When the component detects an initiator or acceptor session setting in the QuickFIX/J
       configuration file it will automatically create the corresponding initiator and/or acceptor
       connector. These settings can be in the default or in a specific session section of the
-      configuration file.</p><table id="d0e102215"><tr>
+      configuration file.</p><table id="d0e120135"><tr>
         <th> Session Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -85,7 +85,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
         <td> Create an acceptor connector </td>
       </tr></table><p>The threading model for the QuickFIX/J session connectors can also be specified. These
       settings affect all sessions in the configuration file and must be placed in the settings
-      default section.</p><table id="d0e102246"><tr>
+      default section.</p><table id="d0e120166"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -102,7 +102,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_Logging"></a>Logging</h2></div></div></div><p>The QuickFIX/J logger implementation can be specified by including the following settings
       in the default section of the configuration file. The <code class="literal">ScreenLog</code> is the
       default if none of the following settings are present in the configuration. It's an error to
-      include settings that imply more than one log implementation.</p><table id="d0e102296"><tr>
+      include settings that imply more than one log implementation.</p><table id="d0e120216"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -138,7 +138,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_MessageStore"></a>Message Store</h2></div></div></div><p>The QuickFIX/J message store implementation can be specified by including the following
       settings in the default section of the configuration file. The <code class="literal">MemoryStore</code>
       is the default if none of the following settings are present in the configuration. It's an
-      error to include settings that imply more than one message store implementation.</p><table id="d0e102394"><tr>
+      error to include settings that imply more than one message store implementation.</p><table id="d0e120314"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -158,7 +158,7 @@ quickfix:config.cfg?sessionID=FIX.4.2:MyTradingCompany-&gt;SomeExchange&amp;lazy
         </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_MessageFactory"></a>Message Factory</h2></div></div></div><p>A message factory is used to construct domain objects from raw FIX messages. The default
       message factory is <code class="literal">DefaultMessageFactory</code>. However, advanced applications
-      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e102455"><tr>
+      may require a custom message factory. This can be set on the QuickFIX/J component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_JMX"></a>JMX</h2></div></div></div><table id="d0e120375"><tr>
         <th> Default/Global Setting </th>
         <th> Component Action </th>
       </tr><tr>
@@ -187,7 +187,7 @@ TargetCompID=YOUR_TARGET</pre></div><div class="simplesect"><div class="titlepag
  </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quickfix_HSH_ImplementingInOutExchangesforProducers"></a>Implementing InOut Exchanges for Producers</h2></div></div></div><p>For producers, sending a message will block until a reply is received or a timeout occurs. There
       is no standard way to correlate reply messages in FIX. Therefore, a correlation criteria must be
       defined for each type of InOut exchange. The correlation criteria and timeout can be specified
-      using <code class="literal">Exchange</code> properties.</p><table id="d0e102528"><tr>
+      using <code class="literal">Exchange</code> properties.</p><table id="d0e120448"><tr>
         <th> Description </th>
         <th> Key String </th>
         <th> Key Constant </th>
