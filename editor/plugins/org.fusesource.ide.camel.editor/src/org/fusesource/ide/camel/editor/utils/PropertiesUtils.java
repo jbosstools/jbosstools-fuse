@@ -31,6 +31,7 @@ import org.eclipse.jdt.internal.corext.util.JavaConventionsUtil;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
@@ -61,6 +62,13 @@ public class PropertiesUtils {
 		return null;
 	}
 	
+	public static Eip getEipFor(CamelModelElement selectedEP) {
+		if (selectedEP != null && selectedEP.getUnderlyingMetaModelObject() != null) {
+            return selectedEP.getUnderlyingMetaModelObject();
+		}
+		return null;
+	}
+		
 	public static List<Parameter> getPathProperties(CamelModelElement selectedEP) {
 		ArrayList<Parameter> result = new ArrayList<Parameter>();
 
@@ -116,6 +124,23 @@ public class PropertiesUtils {
         return result;
     }
 
+    /**
+     * 
+     * @param kind
+     * @return
+     */
+    public static List<Parameter> getPropertiesFor(CamelModelElement selectedEP) {
+        ArrayList<Parameter> result = new ArrayList<Parameter>();
+
+        if (selectedEP != null && selectedEP.getUnderlyingMetaModelObject() != null) {
+        	Eip eip = selectedEP.getUnderlyingMetaModelObject();
+        	result = eip.getParameters();
+        }
+
+        return result;
+    }
+
+    
     /**
      * 
      * @param p
