@@ -227,6 +227,9 @@ public class DetailsSection extends AbstractPropertySection {
         for (Parameter p : props) {
         	final Parameter prop = p;
             
+        	// we don't want to display properties for internal element attributes like inputs or outputs
+        	if (p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array")) continue;
+        	
             ISWTObservableValue uiObservable = null;
             IObservableValue modelObservable = null;
             IValidator validator = null;
@@ -248,7 +251,7 @@ public class DetailsSection extends AbstractPropertySection {
             // BOOLEAN PROPERTIES
             if (CamelComponentUtils.isBooleanProperty(prop)) {
                 Button checkBox = getWidgetFactory().createButton(page, "", SWT.CHECK | SWT.BORDER);
-                Boolean b = (Boolean)(this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue());
+                Boolean b = Boolean.parseBoolean( (this.selectedEP.getParameter(p.getName()) != null ? (String)this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue()));
                 checkBox.setSelection(b);
                 checkBox.addSelectionListener(new SelectionAdapter() {
                     /* (non-Javadoc)
