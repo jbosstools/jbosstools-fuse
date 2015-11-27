@@ -19,11 +19,15 @@ import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IAddFeature;
 import org.eclipse.graphiti.features.ICreateConnectionFeature;
 import org.eclipse.graphiti.features.ICreateFeature;
+import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.IFeature;
+import org.eclipse.graphiti.features.IRemoveFeature;
 import org.eclipse.graphiti.features.IResizeShapeFeature;
 import org.eclipse.graphiti.features.context.IAddContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
+import org.eclipse.graphiti.features.context.IDeleteContext;
 import org.eclipse.graphiti.features.context.IPictogramElementContext;
+import org.eclipse.graphiti.features.context.IRemoveContext;
 import org.eclipse.graphiti.features.context.IResizeShapeContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Shape;
@@ -36,6 +40,8 @@ import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.custom.GEFLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.ZestLayoutDiagramFeature;
+import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
+import org.fusesource.ide.camel.editor.features.delete.RemoveFigureFeature;
 import org.fusesource.ide.camel.editor.features.misc.ResizeNodeFeature;
 import org.fusesource.ide.camel.editor.internal.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.model.AbstractNode;
@@ -152,21 +158,21 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 //		return super.getUpdateFeature(context);
 //	}
 
-//	/* (non-Javadoc)
-//	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getDeleteFeature(org.eclipse.graphiti.features.context.IDeleteContext)
-//	 */
-//	@Override
-//	public IDeleteFeature getDeleteFeature(IDeleteContext context) {
-//		return new DeleteNodeFeature(this);
-//	}
-//
-//	/* (non-Javadoc)
-//	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getRemoveFeature(org.eclipse.graphiti.features.context.IRemoveContext)
-//	 */
-//	@Override
-//	public IRemoveFeature getRemoveFeature(IRemoveContext context) {
-//		return new RemoveNodeFeature(this);
-//	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getDeleteFeature(org.eclipse.graphiti.features.context.IDeleteContext)
+	 */
+	@Override
+	public IDeleteFeature getDeleteFeature(IDeleteContext context) {
+		return new DeleteFigureFeature(this);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getRemoveFeature(org.eclipse.graphiti.features.context.IRemoveContext)
+	 */
+	@Override
+	public IRemoveFeature getRemoveFeature(IRemoveContext context) {
+		return new RemoveFigureFeature(this);
+	}
 	
 	@Override
 	public IResizeShapeFeature getResizeShapeFeature(IResizeShapeContext context) {
