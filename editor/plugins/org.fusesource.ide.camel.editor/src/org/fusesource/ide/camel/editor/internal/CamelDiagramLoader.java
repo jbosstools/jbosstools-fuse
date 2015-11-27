@@ -135,7 +135,7 @@ public class CamelDiagramLoader {
 					} else {
 						subY = res;
 					}
-					if (subNode.getUnderlyingMetaModelObject().canHaveChildren() == false) lastSub = subNode;
+					lastSub = subNode;
 				}
 			}
 			if (this.orientation == PositionConstants.EAST) {

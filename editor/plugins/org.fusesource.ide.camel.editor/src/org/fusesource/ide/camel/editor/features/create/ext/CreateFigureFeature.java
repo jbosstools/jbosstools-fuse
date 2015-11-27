@@ -171,6 +171,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 
 		if (selectedContainer != null) {
 			selectedContainer.addChildElement(node);
+			node.setParent(selectedContainer);
 		} else {
 			CamelEditorUIActivator.pluginLog().logWarning("Warning! Could not find currently selected node, so can't associate this node with the container!: " + node);
 		}
