@@ -1,7 +1,7 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>AHC</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-ActiveMQ.html" title="ActiveMQ"><link rel="next" href="IDU-AHC-WS.html" title="AHC-WS"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-AHC"></a>AHC</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AsyncHttpClientAHCComponent"></a>Async Http Client (AHC) Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.8</strong></span>
-    </p><p>The <span class="bold"><strong>ahc:</strong></span> component provides HTTP-based  endpoints for consuming external HTTP resources (as a client to call external servers using HTTP).
+    </p><p>The <span class="bold"><strong>ahc:</strong></span> component provides HTTP-based  <span class="phrase">endpoints</span> for consuming external HTTP resources (as a client to call external servers using HTTP).
 The component uses the <a class="link" href="https://github.com/AsyncHttpClient/async-http-client" target="_top">Async Http Client</a> library.</p><p>Maven users will need to add the following dependency to their <code class="literal">pom.xml</code> for this component:</p><pre class="programlisting">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-ahc&lt;/artifactId&gt;
@@ -9,7 +9,7 @@ The component uses the <a class="link" href="https://github.com/AsyncHttpClient/
     &lt;!-- use the same version as your Camel core version --&gt;
 &lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">ahc:http://hostname[:port][/resourceUri][?options]
 ahc:https://hostname[:port][/resourceUri][?options]</pre><p>Will by default use port 80 for HTTP and 443 for HTTPS.</p><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AhcEndpointOptions"></a>AhcEndpoint Options</h2></div></div></div><table id="d0e35151"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AhcEndpointOptions"></a>AhcEndpoint Options</h2></div></div></div><table id="d0e34612"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -81,7 +81,7 @@ ahc:https://hostname[:port][/resourceUri][?options]</pre><p>Will by default use 
         <td><span class="bold"><strong>Camel 2.10.3:</strong></span> The initial in-memory buffer size used when transferring data between Camel and AHC Client. </td>
       </tr></table><p>
 
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AhcComponentOptions"></a>AhcComponent Options</h2></div></div></div><table id="d0e35384"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_AhcComponentOptions"></a>AhcComponent Options</h2></div></div></div><table id="d0e34845"><tr>
         <th> Name </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -115,7 +115,7 @@ ahc:https://hostname[:port][/resourceUri][?options]</pre><p>Will by default use 
           or component level. </td>
       </tr></table><p>
 
-    </p><p>Notice that setting any of the options on the <code class="literal">AhcComponent</code> will propagate those options to <code class="literal">AhcEndpoint</code>s being created. However the <code class="literal">AhcEndpoint</code> can also configure/override a custom option. Options set on endpoints will always take precedence over options from the <code class="literal">AhcComponent</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e35495"><tr>
+    </p><p>Notice that setting any of the options on the <code class="literal">AhcComponent</code> will propagate those options to <code class="literal">AhcEndpoint</code>s being created. However the <code class="literal">AhcEndpoint</code> can also configure/override a custom option. Options set on endpoints will always take precedence over options from the <code class="literal">AhcComponent</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-AHC_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e34956"><tr>
         <th> Name </th>
         <th> Type </th>
         <th> Description </th>

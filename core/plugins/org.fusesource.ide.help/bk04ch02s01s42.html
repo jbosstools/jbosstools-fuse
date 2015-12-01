@@ -1,25 +1,14 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>camel-xstream</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s41.html" title="camel-weather"><link rel="next" href="bk04ch02s01s43.html" title="camel-zookeeper"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34800"></a>camel-xstream</h3></div></div></div><p>
-The <code class="varname">camel-xstream</code> component provides the XStream Data Format, which uses the XStream library to marshal and unmarshal Java objects via XML.
-</p><pre class="programlisting">
-
-CamelContext camelctx = new DefaultCamelContext();
-camelctx.addRoutes(new RouteBuilder() {
-    @Override
-    public void configure() throws Exception {
-        from("direct:start")
-        .marshal().xstream();
-    }
-});
-
-camelctx.start();
-try {
-    ProducerTemplate producer = camelctx.createProducerTemplate();
-    String customer = producer.requestBody("direct:start", new Customer("John", "Doe"), String.class);
-} finally {
-    camelctx.stop();
-}
-
-</pre><p>
+   <title>camel-zookeeper</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s41.html" title="camel-xstream"><link rel="next" href="IDU-ActiveMQ.html" title="ActiveMQ"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34269"></a>camel-zookeeper</h3></div></div></div><p>
+The <code class="varname">camel-zookeeper</code> component allows interaction with the ZooKeeper Cluster and exposes the following features to Camel:
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  Creation of nodes in any of the ZooKeeper create modes  
+    </p></li><li class="listitem"><p>
+  Set the data contents of arbitrary cluster nodes 
+    </p></li><li class="listitem"><p>
+   Create and retrieve the list the child nodes
+    </p></li><li class="listitem"><p>
+  A distributed <code class="varname">RoutePolicy</code> that leverages a leader election.
+    </p></li></ul></div><p>
 </p></div></body></html>

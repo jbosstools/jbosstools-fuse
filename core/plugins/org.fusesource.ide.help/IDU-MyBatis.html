@@ -10,7 +10,7 @@
     </p><p>This component will by default load the MyBatis SqlMapConfig file from the root of the classpath with the expected name of <code class="literal">SqlMapConfig.xml</code>.
 If the file is located in another location, you will need to configure the <code class="literal">configurationUri</code> option on the <code class="literal">MyBatisComponent</code> component.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MyBatis_HSH_Options"></a>Options</h2></div></div></div><p>
 
-    </p><table id="d0e110240"><tr>
+    </p><table id="d0e109773"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Default </th>
@@ -90,7 +90,7 @@ If the file is located in another location, you will need to configure the <code
                 <td><span class="bold"><strong>Camel 2.15:</strong></span> To use a header value as input to
                     the component instead of the body. </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-MyBatis_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>Camel will populate the result message, either IN or OUT with a header with the statement used:
-    </p><table id="d0e110483"><tr>
+    </p><table id="d0e110016"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -201,7 +201,7 @@ from("direct:start")
 	&lt;property name="mapperLocations" value="classpath*:META-INF/mappers/**/*.xml"/&gt;
     &lt;/bean&gt;</pre><p>The camel-mybatis component is then configured with that factory:</p><pre class="programlisting">    &lt;bean id="mybatis" class="org.apache.camel.component.mybatis.MyBatisComponent"&gt;
         &lt;property name="sqlSessionFactory" ref="sqlSessionFactory"/&gt;
-    &lt;/bean&gt;</pre><p>Finally, a transaction policy is defined over the top of the transaction manager, which can then be used as usual:</p><pre class="programlisting">    &lt;bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy"&gt;
+    &lt;/bean&gt;</pre><p>Finally, a <span class="phrase">transaction</span> policy is defined over the top of the transaction manager, which can then be used as usual:</p><pre class="programlisting">    &lt;bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy"&gt;
         &lt;property name="transactionManager" ref="txManager"/&gt;
         &lt;property name="propagationBehaviorName" value="PROPAGATION_REQUIRED"/&gt;
     &lt;/bean&gt;

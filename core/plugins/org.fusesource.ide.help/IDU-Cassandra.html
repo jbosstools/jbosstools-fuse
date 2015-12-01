@@ -13,7 +13,7 @@
     &lt;artifactId&gt;camel-cassandraql&lt;/artifactId&gt;
     &lt;version&gt;x.y.z&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48116"></a>URI format</h2></div></div></div><p>The endpoint can initiate the Cassandra connection or use an existing one.</p><table id="d0e48121"><thead><tr>
+&lt;/dependency&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47583"></a>URI format</h2></div></div></div><p>The endpoint can initiate the Cassandra connection or use an existing one.</p><table id="d0e47588"><thead><tr>
                     <th class="confluenceTh">URI</th>
                     <th class="confluenceTh">Description</th>
                 </tr></thead><tbody><tr>
@@ -36,7 +36,7 @@
                     <td class="confluenceTd">Provided Cluster reference</td>
                 </tr></tbody></table><p>To fine tune the Cassandra connection (SSL options, pooling options, load balancing
             policy, retry policy, reconnection policy...), create your own Cluster instance and give
-            it to the Camel endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48188"></a>Endpoint Options</h2></div></div></div><table id="d0e48191"><thead><tr>
+            it to the Camel endpoint.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47655"></a>Endpoint Options</h2></div></div></div><table id="d0e47658"><thead><tr>
                     <th class="confluenceTh">Option</th>
                     <th class="confluenceTh">Default</th>
                     <th class="confluenceTh">Description</th>
@@ -88,19 +88,19 @@
                                 <code class="code">ALL</code>, <code class="code">ONE</code>, <code class="code">LIMIT_10</code>,
                                 <code class="code">LIMIT_100</code>...</p>
                     </td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48335"></a>Messages</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48339"></a>Incoming Message</h2></div></div></div><p>The Camel Cassandra endpoint expects a bunch of simple objects (<code class="code">Object</code> or
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47802"></a>Messages</h2></div></div></div><p></p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47806"></a>Incoming Message</h2></div></div></div><p>The Camel Cassandra endpoint expects a bunch of simple objects (<code class="code">Object</code> or
                 <code class="code">Object[]</code> or <code class="code">Collection&lt;Object&gt;</code>) which will be bound
             to the CQL statement as query parameters. If message body is null or empty, then CQL
             query will be executed without binding parameters.</p><p>Headers:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="code">CamelCqlQuery</code> (optional, <code class="code">String</code> or
                         <code class="code">RegularStatement</code>): CQL query either as a plain String or built
-                    using the <code class="code">QueryBuilder</code>.</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48370"></a>Outgoing Message</h2></div></div></div><p>The Camel Cassandra endpoint produces one or many a Cassandra Row objects depending on
+                    using the <code class="code">QueryBuilder</code>.</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47837"></a>Outgoing Message</h2></div></div></div><p>The Camel Cassandra endpoint produces one or many a Cassandra Row objects depending on
             the <code class="code">resultSetConversionStrategy</code>:</p><p> </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><code class="code">List&lt;Row&gt;</code> if <code class="code">resultSetConversionStrategy</code> is
                         <code class="code">ALL</code> or <code class="code">LIMIT_[0-9]+</code></p></li><li class="listitem"><p>Single<code class="code"> Row</code> if <code class="code">resultSetConversionStrategy</code> is
                         <code class="code">ONE</code></p></li><li class="listitem"><p>Anything else, if <code class="code">resultSetConversionStrategy</code> is a custom
-                    implementation of the <code class="code">ResultSetConversionStrategy</code></p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48413"></a>Repositories</h2></div></div></div><p>Cassandra can be used to store message keys or messages for the idempotent and
+                    implementation of the <code class="code">ResultSetConversionStrategy</code></p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47880"></a>Repositories</h2></div></div></div><p>Cassandra can be used to store message keys or messages for the idempotent and
             aggregation EIP.</p><p>Cassandra might not be the best tool for queuing use cases yet, read <a class="link" href="http://www.datastax.com/dev/blog/cassandra-anti-patterns-queues-and-queue-like-datasets" target="_top">Cassandra anti-patterns queues and queue like datasets</a>. It's advised to use
             LeveledCompaction and a small GC grace setting for these tables to allow tombstoned rows
-            to be removed quickly.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48423"></a>Idempotent repository</h2></div></div></div><p>The <code class="code">NamedCassandraIdempotentRepository</code> stores messages keys in a
+            to be removed quickly.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e47890"></a>Idempotent repository</h2></div></div></div><p>The <code class="code">NamedCassandraIdempotentRepository</code> stores messages keys in a
             Cassandra table like this:</p><pre class="programlisting">CREATE TABLE CAMEL_IDEMPOTENT (
   NAME varchar,   -- Repository name
   KEY varchar,    -- Message key
@@ -108,7 +108,7 @@
 ) WITH compaction = {'class':'LeveledCompactionStrategy'}
   AND gc_grace_seconds = 86400;</pre><p>This repository implementation uses lightweight transactions (also known as Compare
             and Set) and requires Cassandra 2.0.7+.</p><p>Alternatively, the <code class="code">CassandraIdempotentRepository</code> does not have a
-                <code class="code">NAME</code> column and can be extended to use a different data model.</p><table id="d0e48443"><tbody><tr>
+                <code class="code">NAME</code> column and can be extended to use a different data model.</p><table id="d0e47910"><tbody><tr>
                     <th class="confluenceTh">Option</th>
                     <th class="confluenceTh">Default</th>
                     <th class="confluenceTh">Description</th>
@@ -141,7 +141,7 @@
                     <td class="confluenceTd">Consistency level used to read/check key:
                             <code class="code">ONE</code>, <code class="code">TWO</code>, <code class="code">QUORUM</code>,
                             <code class="code">LOCAL_QUORUM</code>&#8230;</td>
-                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48563"></a>Aggregation repository</h2></div></div></div><p>The <code class="code">NamedCassandraAggregationRepository</code> stores exchanges by correlation
+                </tr></tbody></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e48030"></a>Aggregation repository</h2></div></div></div><p>The <code class="code">NamedCassandraAggregationRepository</code> stores exchanges by correlation
             key in a Cassandra table like this:</p><pre class="programlisting">CREATE TABLE CAMEL_AGGREGATION (
   NAME varchar,        -- Repository name
   KEY varchar,         -- Correlation id
@@ -150,7 +150,7 @@
   PRIMARY KEY (NAME, KEY)
 ) WITH compaction = {'class':'LeveledCompactionStrategy'}
   AND gc_grace_seconds = 86400;</pre><p>Alternatively, the <code class="code">CassandraAggregationRepository</code> does not have a
-                <code class="code">NAME</code> column and can be extended to use a different data model.</p><table id="d0e48581"><tbody><tr>
+                <code class="code">NAME</code> column and can be extended to use a different data model.</p><table id="d0e48048"><tbody><tr>
                     <th class="confluenceTh">Option</th>
                     <th class="confluenceTh">Default</th>
                     <th class="confluenceTh">Description</th>

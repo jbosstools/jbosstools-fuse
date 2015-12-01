@@ -17,7 +17,7 @@
             references a bean in the Spring bean registry. With this URI format, most of the
             endpoint details are specified in the bean definition.</p><pre class="programlisting">cxf://someAddress[?options]</pre><p>Where <span class="bold"><strong>someAddress</strong></span> specifies the CXF endpoint's
             address. With this URI format, most of the endpoint details are specified using
-            options.</p><p>For either style above, you can append options to the URI as follows:</p><pre class="programlisting">cxf:bean:cxfEndpoint?wsdlURL=wsdl/hello_world.wsdl&amp;dataFormat=PAYLOAD</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Options"></a>Options</h2></div></div></div><table id="d0e51264"><tr>
+            options.</p><p>For either style above, you can append options to the URI as follows:</p><pre class="programlisting">cxf:bean:cxfEndpoint?wsdlURL=wsdl/hello_world.wsdl&amp;dataFormat=PAYLOAD</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Options"></a>Options</h2></div></div></div><table id="d0e50729"><tr>
                 <th> Name </th>
                 <th>Required</th>
                 <th> Description </th>
@@ -273,7 +273,7 @@
                 </td>
             </tr></table><p> The <code class="code">serviceName</code> and <code class="code">portName</code> are <a class="link" href="http://en.wikipedia.org/wiki/QName" target="_top">QNames</a>, so if you provide them
             be sure to prefix them with their <code class="literal">{namespace}</code> as shown in the
-            examples above. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Thedescriptionsofthedataformats"></a>The descriptions of the dataformats</h2></div></div></div><table id="d0e51907"><tr>
+            examples above. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-CXF_HSH_Thedescriptionsofthedataformats"></a>The descriptions of the dataformats</h2></div></div></div><table id="d0e51372"><tr>
                 <th> DataFormat </th>
                 <th> Description </th>
             </tr><tr>
@@ -453,7 +453,7 @@
     &lt;/property&gt;
 &lt;/bean&gt;
 </pre></li><li class="listitem"><p>Other than <code class="literal">relayHeaders</code>, there are new properties that can
-                    be configured in <code class="literal">CxfHeaderFilterStrategy</code>.</p></li></ul></div><table id="d0e52181"><tr>
+                    be configured in <code class="literal">CxfHeaderFilterStrategy</code>.</p></li></ul></div><table id="d0e51646"><tr>
                 <th> Name </th>
                 <th> Description </th>
                 <th> type </th>
@@ -509,7 +509,7 @@
             the namespace declarations at the end of the <code class="literal">&lt;cxf:cxfEndpoint/&gt;</code>
             tag--these are required because the combined <code class="code">{namespace}localName</code> syntax is
             presently not supported for this tag's attribute values.</p><p>The <code class="literal">cxf:cxfEndpoint</code> element supports many additional
-            attributes:</p><table id="d0e52338"><tr>
+            attributes:</p><table id="d0e51803"><tr>
                 <th> Name </th>
                 <th> Value </th>
             </tr><tr>
@@ -548,7 +548,7 @@
                 </td>
                 <td> The class name of the SEI (Service Endpoint Interface) class which could have
                     JSR181 annotation or not. </td>
-            </tr></table><p>It also supports many child elements:</p><table id="d0e52440"><tr>
+            </tr></table><p>It also supports many child elements:</p><table id="d0e51905"><tr>
                 <th> Name </th>
                 <th> Value </th>
             </tr><tr>

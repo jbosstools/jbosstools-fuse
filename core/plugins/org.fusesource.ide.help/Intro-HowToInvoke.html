@@ -66,9 +66,9 @@
 &lt;/choice&gt;</pre><p>Alternatively, you can specify a language expression using the
                     <code class="code">language</code> element, where you specify the name of the language in the
                     <code class="code">language</code> attribute. For example, you can define an XPath expression
-                using the <code class="code">language</code> element as follows:</p><pre class="programlisting">&lt;language language="xpath"&gt;/order/address/countryCode = 'us'&lt;/language&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="Intro-HowToInvoke-Annotation"></a>As an annotation</h3></div></div></div><p>Language annotations are used in the context of bean integration (see <span class="olink">????</span>). The
+                using the <code class="code">language</code> element as follows:</p><pre class="programlisting">&lt;language language="xpath"&gt;/order/address/countryCode = 'us'&lt;/language&gt;</pre></div><div class="simplesect"><div class="titlepage"><div><div><h3 class="title"><a name="Intro-HowToInvoke-Annotation"></a>As an annotation</h3></div></div></div><p>Language annotations are used in the context of bean integration . The
                 annotations provide a convenient way of extracting information from a message or
-                header and then injecting the extracted data into a bean's method parameters.</p><p>For example, consider the bean, <code class="code">myBeanProc</code>, which is invoked as a
+                header and then injecting the extracted data into a bean's method parmeters.</p><p>For example, consider the bean, <code class="code">myBeanProc</code>, which is invoked as a
                 predicate of the <code class="code">filter()</code> EIP. If the bean's
                     <code class="code">checkCredentials</code> method returns <code class="code">true</code>, the message is
                 allowed to proceed; but if the method returns <code class="code">false</code>, the message is

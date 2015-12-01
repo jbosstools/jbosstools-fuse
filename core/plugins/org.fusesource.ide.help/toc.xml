@@ -302,28 +302,27 @@
             <topic label="camel-jms" href="bk04ch02s01s19.html"/>
             <topic label="camel-jmx" href="bk04ch02s01s20.html"/>
             <topic label="camel-jpa" href="bk04ch02s01s21.html"/>
-            <topic label="camel-kafka" href="bk04ch02s01s22.html"/>
-            <topic label="camel-lucene" href="bk04ch02s01s23.html"/>
-            <topic label="camel-mail" href="bk04ch02s01s24.html"/>
-            <topic label="camel-mina2" href="bk04ch02s01s25.html"/>
-            <topic label="camel-mqtt" href="bk04ch02s01s26.html"/>
-            <topic label="camel-mvel" href="bk04ch02s01s27.html"/>
-            <topic label="camel-netty4" href="bk04ch02s01s28.html"/>
-            <topic label="camel-ognl" href="bk04ch02s01s29.html"/>
-            <topic label="camel-quartz" href="bk04ch02s01s30.html"/>
-            <topic label="camel-rest" href="bk04ch02s01s31.html"/>
-            <topic label="camel-rss" href="bk04ch02s01s32.html"/>
-            <topic label="camel-salesforce" href="bk04ch02s01s33.html"/>
-            <topic label="camel-sap" href="bk04ch02s01s34.html"/>
-            <topic label="camel-saxon" href="bk04ch02s01s35.html"/>
-            <topic label="camel-script" href="bk04ch02s01s36.html"/>
-            <topic label="camel-servlet" href="bk04ch02s01s37.html"/>
-            <topic label="camel-sql" href="bk04ch02s01s38.html"/>
-            <topic label="camel-stream" href="bk04ch02s01s39.html"/>
-            <topic label="camel-undertow" href="bk04ch02s01s40.html"/>
-            <topic label="camel-weather" href="bk04ch02s01s41.html"/>
-            <topic label="camel-xstream" href="bk04ch02s01s42.html"/>
-            <topic label="camel-zookeeper" href="bk04ch02s01s43.html"/>
+            <topic label="camel-lucene" href="bk04ch02s01s22.html"/>
+            <topic label="camel-mail" href="bk04ch02s01s23.html"/>
+            <topic label="camel-mina2" href="bk04ch02s01s24.html"/>
+            <topic label="camel-mqtt" href="bk04ch02s01s25.html"/>
+            <topic label="camel-mvel" href="bk04ch02s01s26.html"/>
+            <topic label="camel-netty4" href="bk04ch02s01s27.html"/>
+            <topic label="camel-ognl" href="bk04ch02s01s28.html"/>
+            <topic label="camel-quartz" href="bk04ch02s01s29.html"/>
+            <topic label="camel-rest" href="bk04ch02s01s30.html"/>
+            <topic label="camel-rss" href="bk04ch02s01s31.html"/>
+            <topic label="camel-salesforce" href="bk04ch02s01s32.html"/>
+            <topic label="camel-sap" href="bk04ch02s01s33.html"/>
+            <topic label="camel-saxon" href="bk04ch02s01s34.html"/>
+            <topic label="camel-script" href="bk04ch02s01s35.html"/>
+            <topic label="camel-servlet" href="bk04ch02s01s36.html"/>
+            <topic label="camel-sql" href="bk04ch02s01s37.html"/>
+            <topic label="camel-stream" href="bk04ch02s01s38.html"/>
+            <topic label="camel-undertow" href="bk04ch02s01s39.html"/>
+            <topic label="camel-weather" href="bk04ch02s01s40.html"/>
+            <topic label="camel-xstream" href="bk04ch02s01s41.html"/>
+            <topic label="camel-zookeeper" href="bk04ch02s01s42.html"/>
          </topic>
       </topic>
       <topic label="ActiveMQ" href="IDU-ActiveMQ.html"/>
