@@ -71,6 +71,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IFormColors;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.events.IExpansionListener;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.forms.widgets.FormsResources;
@@ -81,8 +84,11 @@ import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.editor.utils.PropertiesUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -100,6 +106,8 @@ public class DetailsSection extends AbstractPropertySection {
     private DataBindingContext dbc;
     private IObservableMap modelMap = new WritableMap();
     private Eip eip;
+    private Composite parent;
+    private TabbedPropertySheetPage aTabbedPropertySheetPage;
     
     /*
      * (non-Javadoc)
@@ -166,6 +174,9 @@ public class DetailsSection extends AbstractPropertySection {
         this.toolkit = new FormToolkit(parent.getDisplay());
         super.createControls(parent, aTabbedPropertySheetPage);
 
+        this.parent = parent;
+        this.aTabbedPropertySheetPage = aTabbedPropertySheetPage;
+        
         // now setup the file binding properties page
         parent.setLayout(new GridLayout());
         parent.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -228,7 +239,7 @@ public class DetailsSection extends AbstractPropertySection {
         	final Parameter prop = p;
             
         	// we don't want to display properties for internal element attributes like inputs or outputs
-        	if (p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array")) continue;
+        	if ((p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array")) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
         	
             ISWTObservableValue uiObservable = null;
             IObservableValue modelObservable = null;
@@ -248,8 +259,56 @@ public class DetailsSection extends AbstractPropertySection {
             
             Control c = null;
             
+            // DESCRIPTION PROPERTIES
+            if (CamelComponentUtils.isDescriptionProperty(prop)) {
+            	String description = null;
+            	if (this.selectedEP.getParameter(p.getName()) != null) {
+            		description = this.eip.getDescription();
+            	} else {
+            		description = this.eip.getParameter(p.getName()).getDefaultValue();
+            	}
+            	
+            	Text txtField = getWidgetFactory().createText(page, description, SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+                txtField.addModifyListener(new ModifyListener() {
+                    @Override
+                    public void modifyText(ModifyEvent e) {
+                        Text txt = (Text)e.getSource();
+                        selectedEP.setParameter(prop.getName(), txt.getText());
+                        if (prop.getName().equalsIgnoreCase("description")) selectedEP.setDescription(txt.getText());
+                    }
+                });
+                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = txtField;
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
+								// check for broken refs
+								String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
+								if (refId == null || refId.trim().length()<1 || selectedEP.getCamelContext().getEndpointDefinitions().get(refId) == null) {
+									return ValidationStatus.error("The entered reference does not exist in your context!");
+								}
+							}
+							
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+            	
             // BOOLEAN PROPERTIES
-            if (CamelComponentUtils.isBooleanProperty(prop)) {
+            } else if (CamelComponentUtils.isBooleanProperty(prop)) {
                 Button checkBox = getWidgetFactory().createButton(page, "", SWT.CHECK | SWT.BORDER);
                 Boolean b = Boolean.parseBoolean( (this.selectedEP.getParameter(p.getName()) != null ? (String)this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue()));
                 checkBox.setSelection(b);
@@ -451,16 +510,71 @@ public class DetailsSection extends AbstractPropertySection {
 
             // EXPRESSION PROPERTIES
             } else if (CamelComponentUtils.isExpressionProperty(prop)) {
-                Text txtField = getWidgetFactory().createText(page, (String)(this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
-                txtField.addModifyListener(new ModifyListener() {
+            	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+                getWidgetFactory().adapt(choiceCombo, true, true);
+                choiceCombo.setEditable(false);
+                choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                
+                final ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+                eform.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
+                eform.setText("Expression Settings...");
+                eform.setLayout(new GridLayout(1, true));
+                eform.addExpansionListener(new IExpansionListener() {
+                	/*
+                	 * (non-Javadoc)
+                	 * @see org.eclipse.ui.forms.events.IExpansionListener#expansionStateChanging(org.eclipse.ui.forms.events.ExpansionEvent)
+                	 */
+					@Override
+					public void expansionStateChanging(ExpansionEvent e) {
+					}
+					
+					/*
+					 * (non-Javadoc)
+					 * @see org.eclipse.ui.forms.events.IExpansionListener#expansionStateChanged(org.eclipse.ui.forms.events.ExpansionEvent)
+					 */
+					@Override
+					public void expansionStateChanged(ExpansionEvent e) {
+						page.layout(true);
+						refresh();
+						aTabbedPropertySheetPage.resizeScrolledComposite();
+					}
+				});
+                final CamelModelElement expressionElement = this.selectedEP.getChildElements().isEmpty() ? null : this.selectedEP.getChildElements().get(0);
+                choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
+                choiceCombo.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent e) {
+                        CCombo choice = (CCombo)e.getSource();
+                        String language = choice.getText();
+                        languageChanged(language, eform, expressionElement, page);
+                    }
+				});
+                choiceCombo.addSelectionListener(new SelectionAdapter() {
+                	/* (non-Javadoc)
+                     * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+                     */
                     @Override
-                    public void modifyText(ModifyEvent e) {
-                        Text txt = (Text)e.getSource();
-                        selectedEP.setParameter(prop.getName(), txt.getText());
+                    public void widgetSelected(SelectionEvent e) {
+                        CCombo choice = (CCombo)e.getSource();
+                        String language = choice.getText();
+                        languageChanged(language, eform, expressionElement, page);
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
-                c = txtField;
+                if (expressionElement != null) {
+                    String value = expressionElement.getNodeTypeId();
+                    for (int i=0; i < choiceCombo.getItems().length; i++) {
+                        if (choiceCombo.getItem(i).equalsIgnoreCase(value)) {
+                            choiceCombo.select(i);
+                            choiceCombo.update();
+                            break;
+                        }
+                    }
+                }
+                c = choiceCombo;
+                //initialize the map entry
+                modelMap.put(p.getName(), choiceCombo.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
                 if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
 					validator = new IValidator() {
 						/*
@@ -476,11 +590,7 @@ public class DetailsSection extends AbstractPropertySection {
 						}
 					};
                 }
-                //initialize the map entry
-                modelMap.put(p.getName(), txtField.getText());
-                // create observables for the control
-                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
-                
+
             // UNSUPPORTED PROPERTIES / REFS
             } else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
             	
@@ -657,5 +767,151 @@ public class DetailsSection extends AbstractPropertySection {
             
             if (p.getDescription() != null) c.setToolTipText(p.getDescription());
         }
+        page.layout();
+    }
+    
+    private void languageChanged(String language, ExpandableComposite eform, CamelModelElement expressionElement, Composite page) {
+    	eform.setText(language);
+        for (Control co : eform.getChildren()) if (co.getData("fuseExpressionClient") != null) co.dispose();
+        Composite client = getWidgetFactory().createComposite(eform);
+        client.setData("fuseExpressionClient", true);
+        client.setLayoutData(new GridData(GridData.FILL_BOTH));
+        client.setLayout(new GridLayout(4, false));
+        eform.setClient(client);
+        prepareExpressionUIForLanguage(language, expressionElement, client);
+		page.layout(true);
+		refresh();
+		eform.layout(true);
+		aTabbedPropertySheetPage.resizeScrolledComposite();
+    }
+    
+    private void prepareExpressionUIForLanguage(String language, CamelModelElement expressionElement, Composite parent) {
+    	CamelModel model = getCamelModel(expressionElement);
+    	
+    	// now create the new fields
+    	Language lang = model.getLanguageModel().getLanguageByName(language);
+    	if (lang != null) {
+    		List<Parameter> props = lang.getParameters();
+    		// display all the properties in alphabetic order - sorting needed
+            Collections.sort(props, new Comparator<Parameter>() {
+                /* (non-Javadoc)
+                 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+                 */
+                @Override
+                public int compare(Parameter o1, Parameter o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            }); 
+    		
+    		for (Parameter p : props) {
+                // Label
+    			String s = Strings.humanize(p.getName());
+                if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
+                
+                Label l = getWidgetFactory().createLabel(parent, s);            
+                l.setLayoutData(new GridData());
+                if (p.getDescription() != null) {
+                	l.setToolTipText(p.getDescription());
+                }
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                	l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+                }
+                
+                // Field
+                Control field = getControlForParameter(p, parent, expressionElement, lang);
+                field.setToolTipText(p.getDescription());
+    		}
+    	}
+    }
+    
+    private Control getControlForParameter(Parameter p, Composite parent, CamelModelElement expressionElement, Language lang) {
+    	Control c = null;
+    	
+    	// BOOLEAN PROPERTIES
+    	if (CamelComponentUtils.isBooleanProperty(p)) {
+    		Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
+    		Boolean b = Boolean.parseBoolean( (expressionElement.getParameter(p.getName()) != null ? (String)expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()));
+    		checkBox.setSelection(b);
+    		checkBox.addSelectionListener(new SelectionAdapter() {
+	            /* (non-Javadoc)
+	             * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+	             */
+	            @Override
+	            public void widgetSelected(SelectionEvent e) {
+	                expressionElement.setParameter(p.getName(), checkBox.getSelection());
+	            }
+	        });
+    		checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+    		c = checkBox;
+        
+    		// TEXT PROPERTIES
+    	} else if (CamelComponentUtils.isTextProperty(p)) {
+	        Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+	        txtField.addModifyListener(new ModifyListener() {
+	            @Override
+	            public void modifyText(ModifyEvent e) {
+	                Text txt = (Text)e.getSource();
+	                expressionElement.setParameter(p.getName(), txt.getText());
+	            }
+	        });
+	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+	        c = txtField;
+        
+	    // NUMBER PROPERTIES
+	    } else if (CamelComponentUtils.isNumberProperty(p)) {
+	        Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+	        txtField.addModifyListener(new ModifyListener() {
+	            @Override
+	            public void modifyText(ModifyEvent e) {
+	                Text txt = (Text)e.getSource();
+	                String val = txt.getText();
+	                try {
+	                	Double.parseDouble(val);
+	                	txt.setBackground(ColorConstants.white);
+	                    expressionElement.setParameter(p.getName(), txt.getText());
+	                } catch (NumberFormatException ex) {
+	                	// invalid character found
+	                    txt.setBackground(ColorConstants.red);
+	                    return;
+	                }
+	            }
+	        });
+	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+	        c = txtField;
+
+        // OTHER
+	    } else {
+	    	Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+	        txtField.addModifyListener(new ModifyListener() {
+	            @Override
+	            public void modifyText(ModifyEvent e) {
+	                Text txt = (Text)e.getSource();
+	                expressionElement.setParameter(p.getName(), txt.getText());
+	            }
+	        });
+	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+	        c = txtField;
+	    }
+    	
+    	return c;
+    }
+    
+    private CamelModel getCamelModel(CamelModelElement modelElement) {
+    	String prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
+		if (modelElement != null && modelElement.getCamelFile() != null) {
+			// get the project from the camel file resource
+			IProject prj = modelElement.getCamelFile().getResource().getProject();
+			// now try to determine the configured camel version from the project
+			prjCamelVersion = CamelModelFactory.getCamelVersion(prj);
+			// if project doesn't define a camel version we grab the latest supported
+			if (prjCamelVersion == null) prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
+		}
+		// then get the meta model for the given camel version
+		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
+		if (model == null) {
+			// if we don't support the defined camel version we take the latest supported instead
+			model = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		}
+		return model;
     }
 }

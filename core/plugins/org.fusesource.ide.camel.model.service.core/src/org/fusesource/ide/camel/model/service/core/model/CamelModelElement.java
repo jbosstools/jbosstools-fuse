@@ -480,12 +480,21 @@ public class CamelModelElement {
 		Eip eip = getEipByName(nodename);
 		if (eip != null) {
 			for (Parameter param : eip.getParameters()) {
-				if (param.getKind().equalsIgnoreCase("attribute") == false) continue; // we only process attributes
-				// now loop all meta model parameter and check if we have them in the node
-				Node tmp = getXmlNode().getAttributes().getNamedItem(param.getName());
-				if (tmp != null) {
-					// now map the node attribute into our EIP parameters
-					setParameter(param.getName(), tmp.getNodeValue());
+				if (param.getKind().equalsIgnoreCase("attribute")) {
+					// now loop all meta model parameter and check if we have them in the node
+					Node tmp = getXmlNode().getAttributes().getNamedItem(param.getName());
+					if (tmp != null) {
+						// now map the node attribute into our EIP parameters
+						setParameter(param.getName(), tmp.getNodeValue());
+					}
+				} else if (param.getKind().equalsIgnoreCase("value")) {
+					String val = getXmlNode().getTextContent();
+					if (val != null) {
+						setParameter(param.getName(), val);
+						if (param.getName().equalsIgnoreCase("description")) setDescription(val);
+					}
+				} else {
+					// ignore the other kinds
 				}
 			}
 		} else {

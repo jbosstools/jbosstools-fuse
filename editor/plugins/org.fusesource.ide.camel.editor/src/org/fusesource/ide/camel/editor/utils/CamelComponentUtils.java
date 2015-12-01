@@ -79,6 +79,10 @@ public final class CamelComponentUtils {
                 p.getJavaType().equalsIgnoreCase("java.lang.Boolean");
     }
     
+    public static boolean isDescriptionProperty(Parameter p) {
+    	return p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DescriptionDefinition");
+    }
+    
     public static boolean isTextProperty(Parameter p) {
         return  p.getChoice() == null && (
         		p.getJavaType().equalsIgnoreCase("String") || 
@@ -112,8 +116,8 @@ public final class CamelComponentUtils {
     }
     
     public static boolean isExpressionProperty(Parameter p) {
-        return  p.getJavaType().equalsIgnoreCase("expression") ||
-                p.getJavaType().equalsIgnoreCase("org.apache.camel.Expression");
+        return  p.getKind().equalsIgnoreCase("expression") ||
+                p.getJavaType().equalsIgnoreCase("org.apache.camel.model.language.ExpressionDefinition");
     }
     
     public static boolean isListProperty(Parameter p) {
@@ -146,7 +150,15 @@ public final class CamelComponentUtils {
         for (String choice : choices) res.add(choice);
         return res.toArray(new String[res.size()]);
     }
-    
+
+    public static String[] getOneOfList(Parameter p) {
+        String[] choices = p.getOneOf().split(",");
+        ArrayList<String> res = new ArrayList<String>();
+        res.add(" "); // empty entry
+        for (String choice : choices) res.add(choice);
+        return res.toArray(new String[res.size()]);
+    }
+
     /**
      * returns the component class for the given scheme
      * 

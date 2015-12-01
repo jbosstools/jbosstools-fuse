@@ -62,6 +62,19 @@ public class LanguageModel {
 	public void setSupportedLanguages(ArrayList<Language> supportedLanguages) {
 		this.supportedLanguages = supportedLanguages;
 	}
+	
+	/**
+	 * looks up the language for the given language name
+	 * 
+	 * @param language
+	 * @return
+	 */
+	public Language getLanguageByName(String language) {
+	    for (Language l : supportedLanguages) {
+            if (l.getName().equals(language)) return l;
+        }
+        return null;
+	}
 		
 	/**
 	 * creates the model from the given input stream 
