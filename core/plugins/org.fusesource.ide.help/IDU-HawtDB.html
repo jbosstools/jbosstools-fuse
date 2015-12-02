@@ -4,10 +4,10 @@
     </p><p>
       <a class="link" href="http://hawtdb.fusesource.org/" target="_top">HawtDB</a> is a very lightweight and
       embeddable key value database. It allows together with Apache Camel to provide persistent support
-      for various Apache Camel features. </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Deprecated"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Deprecated</th></tr><tr><td align="left" valign="top"><p>The <a class="link" href="http://hawtdb.fusesource.org/" target="_top">HawtDB</a>  project is being deprecated and replaced by <a class="link" href="https://code.google.com/p/leveldb/" target="_top">leveldb</a> as the lightweight and embedable key value database. To make using leveldb easy there is a <a class="link" href="https://github.com/fusesource/leveldbjni" target="_top">leveldbjni</a> project for that. The Apache ActiveMQ project is planning on using leveldb as their primary file based message store in the future, to replace kahadb.</p><p>There os a <a href="IDU-LevelDB.html" class="olink">camel-leveldb</a> component we recommend to use instead of this.</p></td></tr></table></div><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>HawtDBAggregationRepository</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HawtDB_HSH_UsingHawtDBAggregationRepository"></a>Using HawtDBAggregationRepository</h2></div></div></div><p><code class="literal">HawtDBAggregationRepository</code> is an
+      for various Apache Camel features, such as <span class="phrase">Aggregator</span>.</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning: Deprecated"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="imagesdb/warning.png"></td><th align="left">Deprecated</th></tr><tr><td align="left" valign="top"><p>The <a class="link" href="http://hawtdb.fusesource.org/" target="_top">HawtDB</a>  project is being deprecated and replaced by <a class="link" href="https://code.google.com/p/leveldb/" target="_top">leveldb</a> as the lightweight and embedable key value database. To make using leveldb easy there is a <a class="link" href="https://github.com/fusesource/leveldbjni" target="_top">leveldbjni</a> project for that. The Apache ActiveMQ project is planning on using leveldb as their primary file based message store in the future, to replace kahadb.</p><p>There os a <a href="IDU-LevelDB.html" class="olink">camel-leveldb</a> component we recommend to use instead of this.</p></td></tr></table></div><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>HawtDBAggregationRepository</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-HawtDB_HSH_UsingHawtDBAggregationRepository"></a>Using HawtDBAggregationRepository</h2></div></div></div><p><code class="literal">HawtDBAggregationRepository</code> is an
         <code class="literal">AggregationRepository</code> which on the fly persists the aggregated messages.
       This ensures that you will not loose messages, as the default aggregator will use an in memory
-      only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e77234"><tr>
+      only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e76719"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Description </th>
@@ -60,8 +60,7 @@
         </td>
         <td> boolean </td>
         <td>Whether or not recovery is enabled. This option is by default <code class="literal">true</code>.
-                    When enabled, the Apache Camel 
-                    automatically recoveres failed aggregated exchanges and has them resubmitted. </td>
+            When enabled, the Apache Camel <span class="phrase">Aggregator</span> automatically recoveres failed aggregated exchanges and has them resubmitted. </td>
       </tr><tr>
         <td><code class="literal">recoveryInterval</code>
         </td>
@@ -80,8 +79,8 @@
         <td><code class="literal">deadLetterUri</code>
         </td>
         <td> String </td>
-        <td> An endpoint uri for a Dead
-            Letter Channel where exhausted recovered exchanges will be moved. If this option
+        <td> An endpoint uri for a <span class="phrase">Dead
+            Letter</span> Channel where exhausted recovered exchanges will be moved. If this option
           is used, the <code class="literal">maximumRedeliveries</code> option must also be supplied.</td>
       </tr><tr>
         <td><code class="literal">optimisticLocking</code>
@@ -103,7 +102,7 @@
       works as transactional which ensures that Apache Camel will try to recover and redeliver the
       failed <a class="link" href="http://camel.apache.org/maven/camel-2.15.0/camel-core/apidocs/org/apache/camel/Exchange.html" target="_top">Exchange</a>. Any Exchange which was found to be recovered will be restored from the persistent store and resubmitted and
       send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being
-      recovered/redelivered:</p><table id="d0e77493"><tr>
+      recovered/redelivered:</p><table id="d0e76984"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -167,6 +166,6 @@
   &lt;artifactId&gt;camel-hawtdb&lt;/artifactId&gt;
   &lt;version&gt;2.3.0&lt;/version&gt;
 &lt;/dependency&gt;</pre><p>
-       See Also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"></li><li class="listitem"><p><a href="IDU-SQLComponent.html" class="olink">SQL</a></p></li><li class="listitem"><p>
+       See Also:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a href="IDU-SQLComponent.html" class="olink">SQL</a></p></li><li class="listitem"><p>
           <a href="IDU-Components.html" class="olink">Components</a>
         </p></li></ul></div></div></div></body></html>

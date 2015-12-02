@@ -1,11 +1,11 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
    <title>Websocket</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="IDU-Components.html" title="Apache Camel Component Reference"><link rel="prev" href="IDU-Weather.html" title="Weather"><link rel="next" href="IDU-XmlRpc.html" title="XmlRpc"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="IDU-Websocket"></a>Websocket</h1></div></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_WebsocketComponent"></a>Websocket Component</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.10</strong></span>
-    </p><p>The <span class="bold"><strong>websocket</strong></span> component provides websocket endpoints for communicating with clients using websocket. The component uses Eclipse Jetty Server which implements the <a class="link" href="http://tools.ietf.org/html/rfc6455" target="_top">IETF</a> specification (drafts and RFC 6455). It supports the protocols ws:// and wss://. To use wss:// protocol, the SSLContextParameters must be defined.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Version currently supported"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Version currently supported</th></tr><tr><td align="left" valign="top"><p>As Camel 2.10 uses Jetty 7.5.4.v20111024, only the D00 to <a class="link" href="http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-13" target="_top">D13</a> IETF implementations are available.
+    </p><p>The <span class="bold"><strong>websocket</strong></span> component provides websocket <span class="phrase">endpoints</span> for communicating with clients using websocket. The component uses Eclipse Jetty Server which implements the <a class="link" href="http://tools.ietf.org/html/rfc6455" target="_top">IETF</a> specification (drafts and RFC 6455). It supports the protocols ws:// and wss://. To use wss:// protocol, the SSLContextParameters must be defined.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Version currently supported"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Version currently supported</th></tr><tr><td align="left" valign="top"><p>As Camel 2.10 uses Jetty 7.5.4.v20111024, only the D00 to <a class="link" href="http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-13" target="_top">D13</a> IETF implementations are available.
 Camel 2.11 uses Jetty 7.6.7.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_URIformat"></a>URI format</h2></div></div></div><p></p><pre class="programlisting">websocket://hostname[:port][/resourceUri][?options]</pre><p>You can append query options to the URI in the following format, <code class="literal">?option=value&amp;option=value&amp;...</code>
     </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_ComponentOptions"></a>Component Options</h2></div></div></div><p>The <code class="literal">WebsocketComponent</code> can be configured prior to use, to setup host, to act as a websocket server. </p><p>
 
-    </p><table id="d0e147704"><tr>
+    </p><table id="d0e147315"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -82,7 +82,7 @@ Camel 2.11 uses Jetty 7.6.7.</p></td></tr></table></div></div><div class="simple
         <td> <span class="bold"><strong>Consumer only</strong></span>: To use a custom thread pool for the server. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_EndpointOptions"></a>Endpoint Options</h2></div></div></div><p>The <code class="literal">WebsocketEndpoint</code> can be configured prior to use</p><p>
 
-    </p><table id="d0e147918"><tr>
+    </p><table id="d0e147529"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -207,7 +207,7 @@ Camel 2.11 uses Jetty 7.6.7.</p></td></tr></table></div></div><div class="simple
             </td>
         </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Websocket_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><p>The websocket component uses 2 headers to indicate to either send messages back to a single/current client, or to all clients.</p><p>
 
-    </p><table id="d0e148223"><tr>
+    </p><table id="d0e147834"><tr>
         <th> Key</th>
         <th> Description </th>
       </tr><tr>

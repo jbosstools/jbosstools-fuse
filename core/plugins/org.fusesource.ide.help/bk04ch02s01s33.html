@@ -1,50 +1,8 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>camel-salesforce</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s32.html" title="camel-rss"><link rel="next" href="bk04ch02s01s34.html" title="camel-sap"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34650"></a>camel-salesforce</h3></div></div></div><p>
-The <code class="varname">camel-salesforce</code> component provides producer and consumer endpoints to communicate with Salesforce.</p><p>In order to use the component, you need a valid Salesforce account along with credentials for accessing the Salesforce API:
-</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p> 
-  Client ID
-    </p></li><li class="listitem"><p> 
-  Client Secret
-    </p></li><li class="listitem"><p> 
-  Password
-    </p></li><li class="listitem"><p> 
-  Username
-    </p></li></ul></div><p>
-</p><p>
-Before you start, generate the necessary Salesforce DTO objects. You can automate it with the Camel Salesforce Maven plugin.</p><pre class="programlisting">
-mvn camel-salesforce:generate -DcamelSalesforce.clientId=&lt;clientid&gt; -DcamelSalesforce.clientSecret=&lt;clientsecret&gt; -DcamelSalesforce.userName=&lt;username&gt; -DcamelSalesforce.password=&lt;password&gt;
-
-</pre><p>
-</p><p>
-The following example queries the Salesforce Opportunity objects.
-</p><pre class="programlisting">
-SalesforceLoginConfig loginConfig = new SalesforceLoginConfig();
-loginConfig.setClientId("your-client-id");
-loginConfig.setPassword("your-password");
-loginConfig.setClientSecret("your-client-secret");
-loginConfig.setUserName("your-username");
-
-SalesforceComponent component = new SalesforceComponent();
-// The package path to the generated DTO classes
-component.setPackages("org.wildfly.camel.test.salesforce.dto");
-component.setLoginConfig(loginConfig);
-
-CamelContext camelctx = new DefaultCamelContext();
-camelctx.addComponent("salesforce",  component);
-camelctx.addRoutes(new RouteBuilder() {
-    @Override
-    public void configure() throws Exception {
-        from("direct:query")
-        .to("salesforce:query?sObjectQuery=SELECT id,name from Opportunity&amp;sObjectClass=" + QueryRecordsOpportunity.class.getName())
-        .to("log:salesforce?showAll=true");
-    }
-});
-
-camelctx.start();
-
-ProducerTemplate producer = ctx.createProducerTemplate();
-QueryRecordsOpportunity queryRecords = producer.requestBody("direct:query", null, QueryRecordsOpportunity.class);
-
-</pre><p>
+   <title>camel-sap</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s32.html" title="camel-salesforce"><link rel="next" href="bk04ch02s01s34.html" title="camel-saxon"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34142"></a>camel-sap</h3></div></div></div><p>
+The <code class="varname">camel-sap</code> package consists of ten different SAP components.
+</p><p>The Remote Function Call (RFC) components support the sRFC, tRFC, and qRFC protocols. However, the IDoc components facilitate communication using the messages in IDoc format. 
+Each component uses the SAP Java Connector (SAP JCo) library to facilitate bidirectional communication with SAP and the SAP IDoc library to facilitate the transmission of documents in the Intermediate Document (IDoc) format.
+</p><p>For more information, refer the section <a class="link" href="https://wildflyext.gitbooks.io/wildfly-camel/content/components/camel-sap.html" target="_top">Configuring the camel-sap module</a>
 </p></div></body></html>

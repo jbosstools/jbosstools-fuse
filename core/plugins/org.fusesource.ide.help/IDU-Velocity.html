@@ -7,7 +7,7 @@
             template to invoke; or the complete URL of the remote template (for example,
                 <code class="code">file://folder/myfile.vm</code>).</p><p>You can append query options to the URI in the following format,
                 <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Velocity_HSH_Options"></a>Options</h2></div></div></div><table id="d0e146776"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Velocity_HSH_Options"></a>Options</h2></div></div></div><table id="d0e146384"><tr>
         <th> Option </th>
         <th> Default </th>
         <th> Description </th>
@@ -37,7 +37,7 @@
         </td>
         <td> New option in Camel 2.1: The URI of the properties file which is used for
                     VelocityEngine initialization. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e146851"></a>Message headers</h2></div></div></div><p>The velocity component sets a couple headers on the message (you can't set these
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e146459"></a>Message headers</h2></div></div></div><p>The velocity component sets a couple headers on the message (you can't set these
             yourself and from Camel 2.1 velocity component will not set these headers which will
             cause some side effect on the dynamic template support):</p><div class="informaltable"><table border="1"><colgroup><col width="50%" class="c1"><col width="50%" class="c2"></colgroup><thead><tr><th>Header</th><th>Description</th></tr></thead><tbody><tr><td><code class="code">CamelVelocityResourceUri</code></td><td>The <code class="code">templateName</code> as a <code class="code">String</code>
                             object.</td></tr></tbody></table></div><p>Headers set during the Velocity evaluation are returned to the message and added as
@@ -45,7 +45,7 @@
             For example, to set the header value of <code class="code">fruit</code> in the Velocity template,
                 <code class="code">template.tm</code>:</p><pre class="programlisting">$in.setHeader("fruit", "Apple")</pre><p>The <code class="code">fruit</code> header is now accessible from the
                 <code class="code">message.out.headers</code>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Velocity_HSH_VelocityContext"></a>Velocity Context</h2></div></div></div><p>Apache Camel will provide exchange information in the Velocity context (just a
-                <code class="literal">Map</code>). The <code class="literal">Exchange</code> is transfered as:</p><table id="d0e146909"><tr>
+                <code class="literal">Map</code>). The <code class="literal">Exchange</code> is transfered as:</p><table id="d0e146517"><tr>
         <th> key </th>
         <th> value </th>
       </tr><tr>
@@ -93,7 +93,7 @@ exchange.getIn().setHeader("CamelVelocityContext", velocityContext);</pre></div>
             scenario can be used in production, when the resource never changes.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Velocity_HSH_Dynamictemplates"></a>Dynamic templates</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.1</strong></span> Camel provides two headers
             by which you can define a different resource location for a template or the template
             content itself. If any of these headers is set then Camel uses this over the endpoint
-            configured resource. This allows you to provide a dynamic template at runtime.</p><table id="d0e147039"><tr>
+            configured resource. This allows you to provide a dynamic template at runtime.</p><table id="d0e146647"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>

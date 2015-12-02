@@ -4,7 +4,7 @@
     </p><p>
             <a class="link" href="https://code.google.com/p/leveldb/" target="_top">Leveldb</a> is a very lightweight
             and embedable key value database. With Camel, it  provides persistent support for
-            various Camel features, such as Aggregator. </p><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p></p><p>LevelDBAggregationRepository</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_UsingLevelDBAggregationRepository"></a>Using LevelDBAggregationRepository</h2></div></div></div><p></p><p><code class="literal">LevelDBAggregationRepository</code> is an <code class="literal">AggregationRepository</code> which on the fly persists the aggregated messages. This ensures that you will not loose messages, as the default aggregator will use an in memory only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e99101"><tr>
+            various Camel features, such as <span class="phrase">Aggregator</span>. </p><p>Current features it provides:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p></p><p>LevelDBAggregationRepository</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_UsingLevelDBAggregationRepository"></a>Using LevelDBAggregationRepository</h2></div></div></div><p></p><p><code class="literal">LevelDBAggregationRepository</code> is an <code class="literal">AggregationRepository</code> which on the fly persists the aggregated messages. This ensures that you will not loose messages, as the default aggregator will use an in memory only <code class="literal">AggregationRepository</code>.</p><p>It has the following options:</p><table id="d0e98617"><tr>
         <th> Option </th>
         <th> Type </th>
         <th> Description </th>
@@ -38,7 +38,7 @@
         </td>
         <td> boolean </td>
         <td> Whether or not recovery is enabled. This option is by default <code class="literal">true</code>.
-                    When enabled, the Camel Aggregator automatically recovers failed
+            When enabled, the Camel <span class="phrase">Aggregator</span> automatically recovers failed
                     aggregated exchanges and has them resubmitted. </td>
       </tr><tr>
         <td><code class="literal">recoveryInterval</code>
@@ -54,9 +54,10 @@
         <td><code class="literal">deadLetterUri</code>
         </td>
         <td> String </td>
-        <td> An endpoint uri for a Dead Letter Channel, where exhausted recovered exchanges will be moved. 
+        <td> An endpoint uri for a <span class="phrase">Dead
+                Letter</span> Channel, where exhausted recovered exchanges will be moved. 
             If this option is used then the <code class="literal">maximumRedeliveries</code> option must also be provided. </td>
-      </tr></table><p>The <code class="literal">repositoryName</code> option must be provided. Then either the <code class="literal">persistentFileName</code> or the <code class="literal">levelDBFile</code> must be provided.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_Whatispreservedwhenpersisting"></a>What is preserved when persisting</h2></div></div></div><p></p><p><code class="literal">LevelDBAggregationRepository</code> will only preserve any <code class="literal">Serializable</code> compatible data types. If a data type is not such a type its dropped and a <code class="literal">WARN</code> is logged. And it only persists the <code class="literal">Message</code> body and the <code class="literal">Message</code> headers. The <code class="literal">Exchange</code> properties are <span class="bold"><strong>not</strong></span> persisted. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_Recovery"></a>Recovery</h2></div></div></div><p></p><p>The <code class="literal">LevelDBAggregationRepository</code> will by default recover any failed <a class="link" href="Exchange" target="_top">Exchange</a>. It does this by having a background tasks that scans for failed <a class="link" href="Exchange" target="_top">Exchange</a>s in the persistent store. You can use the <code class="literal">checkInterval</code> option to set how often this task runs. The recovery works as transactional which ensures that Camel will try to recover and redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being recovered/redelivered:</p><table id="d0e99321"><tr>
+      </tr></table><p>The <code class="literal">repositoryName</code> option must be provided. Then either the <code class="literal">persistentFileName</code> or the <code class="literal">levelDBFile</code> must be provided.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_Whatispreservedwhenpersisting"></a>What is preserved when persisting</h2></div></div></div><p></p><p><code class="literal">LevelDBAggregationRepository</code> will only preserve any <code class="literal">Serializable</code> compatible data types. If a data type is not such a type its dropped and a <code class="literal">WARN</code> is logged. And it only persists the <code class="literal">Message</code> body and the <code class="literal">Message</code> headers. The <code class="literal">Exchange</code> properties are <span class="bold"><strong>not</strong></span> persisted. </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-LevelDB_HSH_Recovery"></a>Recovery</h2></div></div></div><p></p><p>The <code class="literal">LevelDBAggregationRepository</code> will by default recover any failed <a class="link" href="Exchange" target="_top">Exchange</a>. It does this by having a background tasks that scans for failed <a class="link" href="Exchange" target="_top">Exchange</a>s in the persistent store. You can use the <code class="literal">checkInterval</code> option to set how often this task runs. The recovery works as transactional which ensures that Camel will try to recover and redeliver the failed <a class="link" href="Exchange" target="_top">Exchange</a>. Any <a class="link" href="Exchange" target="_top">Exchange</a> which was found to be recovered will be restored from the persistent store and resubmitted and send out again. </p><p>The following headers is set when an <a class="link" href="Exchange" target="_top">Exchange</a> is being recovered/redelivered:</p><table id="d0e98843"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -116,8 +117,8 @@
 &lt;/dependency&gt;
 </pre><p>
 
-    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p></p></li><li class="listitem"><p></p><p>
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <a href="IDU-HawtDB.html" class="olink">HawtDB</a>
-        </p></li><li class="listitem"><p></p><p>
+        </p></li><li class="listitem"><p>
           <a href="IDU-Components.html" class="olink">Components</a>
         </p></li></ul></div></div></div></body></html>

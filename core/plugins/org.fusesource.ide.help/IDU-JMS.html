@@ -25,7 +25,7 @@ If you are consuming messages and using transactions (<code class="literal">tran
 If you are using XA transactions then you cannot cache as it can cause the XA transaction to not work properly.</p><p>If you are <span class="bold"><strong>not</strong></span> using XA, then you should consider caching as it speeds up performance, such as setting <code class="literal">cacheLevelName=CACHE_CONSUMER</code>.</p><p>Through Camel 2.7.x, the default setting for <code class="literal">cacheLevelName</code> is <code class="literal">CACHE_CONSUMER</code>. You will need to explicitly set <code class="literal">cacheLevelName=CACHE_NONE</code>.
 In Camel 2.8 onwards, the default setting for <code class="literal">cacheLevelName</code> is <code class="literal">CACHE_AUTO</code>. This default auto detects the mode and sets the cache level accordingly to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>CACHE_CONSUMER = if transacted=false</p></li><li class="listitem"><p>CACHE_NONE = if transacted=true</p></li></ul></div><p>So you can say the default setting is conservative. Consider using <code class="literal">cacheLevelName=CACHE_CONSUMER</code> if you are using non-XA transactions.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_DurableSubscriptions"></a>Durable Subscriptions</h2></div></div></div><p>If you wish to use durable topic subscriptions, you need to specify both <span class="bold"><strong>clientId</strong></span> and <span class="bold"><strong>durableSubscriptionName</strong></span>. The value of the <code class="literal">clientId</code> must be unique and can only be used by a single JMS connection instance in your entire network. You may prefer to use <a class="link" href="http://activemq.apache.org/virtual-destinations.html" target="_top">Virtual Topics</a> instead to avoid this limitation. More background on durable messaging <a class="link" href="http://activemq.apache.org/how-do-durable-queues-and-topics-work.html" target="_top">here</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_MessageHeaderMapping"></a>Message Header Mapping</h2></div></div></div><p>When using message headers, the JMS specification states that header names must be valid Java identifiers. So try to name your headers to be valid Java identifiers. One benefit of doing this is that you can then use your headers inside a JMS Selector (whose SQL92 syntax mandates Java identifier syntax for headers).</p><p>A simple strategy for mapping header names is used by default. The strategy is to replace any dots and hyphens in the header name as shown below and to reverse the replacement when the header name is restored from a JMS message sent over the wire. What does this mean? No more losing method names to invoke on a bean component, no more losing the filename header for the File Component, and so on.</p><p>The current header name strategy for accepting header names in Camel is as follows:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Dots are replaced by <code class="literal">\_DOT\_</code> and the replacement is reversed when Camel consume the message</p></li><li class="listitem"><p>Hyphen is replaced by <code class="literal">\_HYPHEN\_</code> and the replacement is reversed when Camel consumes the message</p></li></ul></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_Options"></a>Options</h2></div></div></div><p>You can configure many different properties on the JMS endpoint which map to properties on the <a class="link" href="http://camel.apache.org/maven/current/camel-jms/apidocs/org/apache/camel/component/jms/JmsConfiguration.html" target="_top">JMSConfiguration POJO</a>.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note: Mapping to Spring JMS"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Mapping to Spring JMS</th></tr><tr><td align="left" valign="top"><p>Many of these properties map to properties on Spring JMS, which Camel uses for sending and receiving messages. So you can get more information about these properties by consulting the relevant Spring documentation.</p></td></tr></table></div><p>The options are divided into two tables, the first one with the most common options used. The latter contains the rest.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_Mostcommonlyusedoptions"></a>Most commonly used options</h2></div></div></div><p>
 
-    </p><table id="d0e91450"><tr>
+    </p><table id="d0e90957"><tr>
         <th> Option </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -135,7 +135,7 @@ In Camel 2.8 onwards, the default setting for <code class="literal">cacheLevelNa
         <td> <span class="bold"><strong>Camel 2.1:</strong></span> Specifies whether to test the connection on startup. This ensures that when Camel starts that all the JMS consumers have a valid connection to the JMS broker. If a connection cannot be granted then Camel throws an exception on startup. This ensures that Camel is not started with failed connections. From <span class="bold"><strong>Camel 2.8</strong></span> onwards also the JMS producers is tested as well. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_Alltheotheroptions"></a>All the other options</h2></div></div></div><p>
 
-    </p><table id="d0e91833"><tr>
+    </p><table id="d0e91340"><tr>
         <th> Option </th>
         <th> Default Value </th>
         <th> Description </th>
@@ -534,7 +534,7 @@ In Camel 2.8 onwards, the default setting for <code class="literal">cacheLevelNa
         <td> <span class="bold"><strong>@deprecated (removed from Camel 2.5 onwards):</strong></span> Specifies whether the old JMS API should be used. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_MessageMappingbetweenJMSandCamel"></a>Message Mapping between JMS and Camel</h2></div></div></div><p>Camel automatically maps messages between <code class="literal">javax.jms.Message</code> and <code class="literal">org.apache.camel.Message</code>.</p><p>When sending a JMS message, Camel converts the message body to the following JMS message types:</p><p>
 
-    </p><table id="d0e93337"><tr>
+    </p><table id="d0e92844"><tr>
         <th> Body Type </th>
         <th> JMS Message </th>
         <th> Comment </th>
@@ -594,7 +594,7 @@ In Camel 2.8 onwards, the default setting for <code class="literal">cacheLevelNa
         <td></td>
       </tr></table><p>When receiving a JMS message, Camel converts the JMS message to the following body type:
 
-    </p><table id="d0e93483"><tr>
+    </p><table id="d0e92990"><tr>
         <th> JMS Message </th>
         <th> Body Type </th>
       </tr><tr>
@@ -631,7 +631,7 @@ In the route below, we poll files from a folder and send them as <code class="li
   - Ignoring non primitive header: order of class: org.apache.camel.component.jms.issues.DummyOrder with value: DummyOrder{orderId=333, itemId=4444, quantity=2}
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_Messageformatwhenreceiving"></a>Message format when receiving</h2></div></div></div><p>Camel adds the following properties to the <code class="literal">Exchange</code> when it receives a message:
 
-    </p><table id="d0e93715"><tr>
+    </p><table id="d0e93222"><tr>
         <th> Property </th>
         <th> Type </th>
         <th> Description </th>
@@ -643,7 +643,7 @@ In the route below, we poll files from a folder and send them as <code class="li
         <td> The reply destination. </td>
       </tr></table><p>Camel adds the following JMS properties to the In message headers when it receives a JMS message:
 
-    </p><table id="d0e93746"><tr>
+    </p><table id="d0e93253"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -715,7 +715,7 @@ In the route below, we poll files from a folder and send them as <code class="li
         <td> The JMS group ID. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_AboutusingCameltosendandreceivemessagesandJMSReplyTo"></a>About using Camel to send and receive messages and JMSReplyTo</h2></div></div></div><p>The JMS component is complex and you have to pay close attention to how it works in some cases. So this is a short summary of some of the areas/pitfalls to look for.</p><p>When Camel sends a message using its <code class="literal">JMSProducer</code>, it checks the following conditions:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>The message exchange pattern,</p></li><li class="listitem"><p>Whether a <code class="literal">JMSReplyTo</code> was set in the endpoint or in the message headers,</p></li><li class="listitem"><p>Whether any of the following options have been set on the JMS endpoint: <code class="literal">disableReplyTo</code>, <code class="literal">preserveMessageQos</code>, <code class="literal">explicitQosEnabled</code>.</p></li></ul></div><p>All this can be a tad complex to understand and configure to support your use case.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_JmsProducer"></a>JmsProducer</h2></div></div></div><p>The <code class="literal">JmsProducer</code> behaves as follows, depending on configuration:
 
-    </p><table id="d0e93969"><tr>
+    </p><table id="d0e93476"><tr>
         <th> Exchange Pattern </th>
         <th> Other options </th>
         <th> Description </th>
@@ -737,7 +737,7 @@ In the route below, we poll files from a folder and send them as <code class="li
         <td> By default, Camel discards the <code class="literal">JMSReplyTo</code> destination and clears the <code class="literal">JMSReplyTo</code> header before sending the message. Camel then sends the message and does <span class="bold"><strong>not</strong></span> expect a reply. Camel logs this in the log at <code class="literal">WARN</code> level (changed to <code class="literal">DEBUG</code> level from <span class="bold"><strong>Camel 2.6</strong></span> onwards. You can use <code class="literal">preserveMessageQuo=true</code> to instruct Camel to keep the <code class="literal">JMSReplyTo</code>. In all situations the <code class="literal">JmsProducer</code> does <span class="bold"><strong>not</strong></span> expect any reply and thus continue after sending the message. </td>
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_JmsConsumer"></a>JmsConsumer</h2></div></div></div><p>The <code class="literal">JmsConsumer</code> behaves as follows, depending on configuration:
 
-    </p><table id="d0e94091"><tr>
+    </p><table id="d0e93598"><tr>
         <th> Exchange Pattern </th>
         <th> Other options </th>
         <th> Description </th>
@@ -762,7 +762,7 @@ from("activemq:queue:in")
    .to("bean:handleOrder");
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_Reuseendpointandsendtodifferentdestinationscomputedatruntime"></a>Reuse endpoint and send to different destinations computed at runtime</h2></div></div></div><p>If you need to send messages to a lot of different JMS destinations, it makes sense to reuse a JMS endpoint and specify the real destination in a message header. This allows Camel to reuse the same endpoint, but send to different destinations. This greatly reduces the number of endpoints created and economizes on memory and thread resources.</p><p>You can specify the destination in the following headers:
 
-    </p><table id="d0e94172"><tr>
+    </p><table id="d0e93679"><tr>
         <th> Header </th>
         <th> Type </th>
         <th> Description </th>
@@ -807,7 +807,7 @@ public void setJmsHeader(Exchange exchange) {
 </pre><p>Basically, you can configure as many JMS component instances as you wish and give them
 <span class="bold"><strong>a unique name using the</strong></span><code class="literal">id</code> attribute. The preceding example configures an <code class="literal">activemq</code>
 component. You could do the same to configure MQSeries, TibCo, BEA, Sonic and so on.</p><p>Once you have a named JMS component, you can then refer to endpoints within that component using URIs. For example for the component name, <code class="literal">activemq</code>, you can then refer to destinations using the URI format, <code class="literal">activemq:[queue:|topic:]destinationName</code>. You can use the same approach for all other JMS providers.</p><p>This works by the SpringCamelContext lazily fetching components from the spring context for the scheme 
-        name you use for Endpoint <a class="link" href="URIs" target="_top">URIs</a> and having the <a class="link" href="Component" target="_top">Component</a> resolve the endpoint URIs.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_UsingJNDItofindtheConnectionFactory"></a>Using JNDI to find the ConnectionFactory</h2></div></div></div><p>If you are using a J2EE container, you might need to look up JNDI to find the JMS <code class="literal">ConnectionFactory</code> rather than use the usual <code class="literal">&lt;bean&gt;</code> mechanism in Spring. You can do this using Spring's factory bean or the new Spring XML namespace. For example:</p><pre class="programlisting">
+        name you use for <span class="phrase">endpoint</span> <a class="link" href="URIs" target="_top">URIs</a> and having the <a class="link" href="Component" target="_top">Component</a> resolve the endpoint URIs.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_UsingJNDItofindtheConnectionFactory"></a>Using JNDI to find the ConnectionFactory</h2></div></div></div><p>If you are using a J2EE container, you might need to look up JNDI to find the JMS <code class="literal">ConnectionFactory</code> rather than use the usual <code class="literal">&lt;bean&gt;</code> mechanism in Spring. You can do this using Spring's factory bean or the new Spring XML namespace. For example:</p><pre class="programlisting">
 &lt;bean id="weblogic" class="org.apache.camel.component.jms.JmsComponent"&gt;
   &lt;property name="connectionFactory" ref="myConnectionFactory"/&gt;
 &lt;/bean&gt;
@@ -824,7 +824,7 @@ from("jms:SomeQueue?concurrentConsumers=20").
             of the page about the <code class="code">asyncConsumer</code> option.</p><div class="informalexample"><pre class="programlisting">from("jms:SomeQueue?concurrentConsumers=20&amp;asyncConsumer=true").
   bean(MyClass.class);</pre></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_RequestreplyoverJMS"></a>Request-reply over JMS</h2></div></div></div><p>Camel supports <a class="link" href="http://camel.apache.org/request-reply.html" target="_top">Request Reply</a> over JMS. In essence the MEP of the Exchange should be <code class="literal">InOut</code> when you send a message to a JMS queue.</p><p>Camel offers a number of options to configure request/reply over JMS that influence performance and clustered environments. The table below summaries the options.</p><p>
 
-    </p><table id="d0e94381"><tr>
+    </p><table id="d0e93891"><tr>
         <th> Option </th>
         <th> Performance </th>
         <th> Cluster </th>
@@ -954,7 +954,7 @@ from("file://orders").
 &lt;/route&gt;
 </pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_Othersamples"></a>Other samples</h2></div></div></div><p>JMS appears in many of the examples for other components and EIP patterns, as well in this Camel documentation. So feel free to browse the documentation. If you have time, check out the this tutorial that uses JMS but focuses on how well Spring Remoting and Camel works together <a class="link" href="http://camel.apache.org/tutorial-jmsremoting.html" target="_top">Tutorial-JmsRemoting</a>.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-JMS_HSH_UsingJMSasaDeadLetterQueuestoringExchange"></a>Using JMS as a Dead Letter Queue storing Exchange</h2></div></div></div><p>Normally, when using <a href="IDU-JMS.html" class="olink">JMS</a> as the transport, it only transfers the body 
         and headers as the payload. If you want to use <a href="IDU-JMS.html" class="olink">JMS</a> with a 
-        Dead Letter Channel, using a JMS 
+        <span class="phrase">Dead Letter</span> Channel, using a JMS 
         queue as the Dead Letter Queue, then normally the caused Exception is not stored in the JMS message. 
         You can, however, use the <span class="bold"><strong>transferExchange</strong></span> option on the JMS dead 
         letter queue to instruct Camel to store the entire <a class="link" href="Exchange" target="_top">Exchange</a> in the 

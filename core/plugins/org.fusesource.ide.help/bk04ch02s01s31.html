@@ -1,20 +1,19 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>camel-rest</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s30.html" title="camel-quartz"><link rel="next" href="bk04ch02s01s32.html" title="camel-rss"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34624"></a>camel-rest</h3></div></div></div><p>
-The <code class="varname">camel-rest</code> component allows you to define REST endpoints, using the Rest DSL and plugin to other Camel components as the REST transport.
+   <title>camel-rss</title><link rel="stylesheet" type="text/css" href="eclipse_book.css"><meta name="generator" content="DocBook XSL Stylesheets V1.77.1"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><meta name="keywords" content="ESB, Apache ServiceMix, Open Source, open source, integration, OSGi, enterprise service bus, Apache ServiceMix documentation, Apache Karaf, Red Hat JBoss Fuse, Red Hat JBoss Fuse documentation"><link rel="home" href="index.html" title="Red Hat JBoss Fuse Tooling for Eclipse"><link rel="up" href="bk04ch02s01.html" title="List of Supported Camel Components"><link rel="prev" href="bk04ch02s01s30.html" title="camel-rest"><link rel="next" href="bk04ch02s01s32.html" title="camel-salesforce"><link rel="copyright" href="tmdisclaim.html" title="Trademark Disclaimer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e34097"></a>camel-rss</h3></div></div></div><p>
+The <code class="varname">camel-rss</code> component is used for polling RSS feeds.
 </p><pre class="programlisting">
 
- CamelContext camelctx = new DefaultCamelContext();
+CamelContext camelctx = new DefaultCamelContext();
     camelctx.addRoutes(new RouteBuilder() {
-        @Override
         public void configure() throws Exception {
-            restConfiguration().component("servlet").contextPath("camel/rest").port(8080);
-            rest("/hello").get("/{name}").to("direct:hello");
-            from("direct:hello").transform(simple("Hello ${header.name}"));
+            from("rss://https://developer.jboss.org/blogs/feeds/posts?splitEntries=true&amp;consumer.initialDelay=200&amp;consumer.delay=1000")
+            .process(new Processor() {
+                public void process(Exchange exchange) throws Exception {
+                    latch.countDown();
+                }})
+            .to("mock:result");
         }
     });
 </pre><p>
-</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
-The Camel on EAP subsystem supports only camel-servlet for use with the REST DSL.
-</p></td></tr></table></div><p>
 </p></div></body></html>

@@ -37,7 +37,7 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
             options:</p><pre class="programlisting">smtp://host[:port]?password=somepwd&amp;username=someuser</pre><p>For example:</p><pre class="programlisting">smtp://mycompany.mailserver:30?password=tiger&amp;username=scott</pre></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_anchorDefaultPortsDefaultports"></a>Default ports</h2></div></div></div><p>Default port numbers are supported. If the port number is omitted, Camel determines
             the port number to use based on the protocol.
             
-        </p><table id="d0e103695"><tr>
+        </p><table id="d0e103213"><tr>
                 <th> Protocol </th>
                 <th> Default Port Number </th>
             </tr><tr>
@@ -72,7 +72,7 @@ imaps://[username@]host[:port][?options]</pre><p>You can append query options to
                 </td>
             </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Options"></a>Options</h2></div></div></div><p>
             
-        </p><table id="d0e103784"><tr>
+        </p><table id="d0e103302"><tr>
                 <th> Property </th>
                 <th> Default </th>
                 <th> Description </th>
@@ -469,7 +469,7 @@ template.sendBodyAndHeaders("smtp://davsclaus@apache.org", body, map);
         headers.put("to", "davsclaus@apache.org ; jstrachan@apache.org ; ningjiang@apache.org");
 </pre><p>The preceding example uses a semicolon, <code class="literal">;</code>, as the separator
             character.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Settingsendernameandemail"></a>Setting sender name and email</h2></div></div></div><p>You can specify recipients in the format, <code class="literal">name &lt;email&gt;</code>, to
-            include both the name and the email address of the recipient.</p><p>For example, you define the following headers on the Message:</p><pre class="programlisting">
+            include both the name and the email address of the recipient.</p><p>For example, you define the following headers on the <span class="phrase">Message</span>:</p><pre class="programlisting">
 Map headers = new HashMap();
 map.put("To", "Claus Ibsen &lt;davsclaus@apache.org&gt;");
 map.put("From", "James Strachan &lt;jstrachan@apache.org&gt;");
@@ -568,9 +568,9 @@ from("imaps://imap.gmail.com?username=YOUR_USERNAME@gmail.com&amp;password=YOUR_
 </pre><p>As you can see the API to handle attachments is a bit clunky but it's there so you can
             get the <code class="literal">javax.activation.DataHandler</code> so you can handle the
             attachments using standard API.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Mail_HSH_Howtosplitamailmessagewithattachments"></a>How to split a mail message with attachments</h2></div></div></div><p>In this example we consume mail messages which may have a number of attachments. What
-            we want to do is to use the Splitter EIP per individual attachment, to process the attachments
-            separately. For example if the mail message has 5 attachments, we want the Splitter to process five
-            messages, each having a single attachment. To do this we need to provide a custom <a class="link" href="Expression" target="_top">Expression</a> to the Splitter, where we provide a List&lt;Message&gt; that
+            we want to do is to use the <span class="phrase">Splitter</span> EIP per individual attachment, to process the attachments
+            separately. For example if the mail message has 5 attachments, we want the <span class="phrase">Splitter</span> to process five
+            messages, each having a single attachment. To do this we need to provide a custom <a class="link" href="Expression" target="_top">Expression</a> to the <span class="phrase">Splitter</span>, where we provide a List&lt;Message&gt; that
             contains the five messages with the single attachment.</p><p>The code is provided out of the box in Camel 2.10 onwards in the
                 <code class="literal">camel-mail</code> component. The code is in the class:
                 <code class="literal">org.apache.camel.component.mail.SplitAttachmentsExpression</code>, which
@@ -582,7 +582,7 @@ from("imaps://imap.gmail.com?username=YOUR_USERNAME@gmail.com&amp;password=YOUR_
         // each message going to this mock has a single attachment
         .to("mock:split")
     .end();
-</pre><p>If you use XML DSL then you need to declare a method call expression in the Splitter, as shown
+</pre><p>If you use XML DSL then you need to declare a method call expression in the <span class="phrase">Splitter</span>, as shown
             below</p><pre class="programlisting">&lt;split&gt;
   &lt;method beanType="org.apache.camel.component.mail.SplitAttachmentsExpression"/&gt;
   &lt;to uri="mock:split"/&gt;
@@ -613,7 +613,7 @@ from("imaps://imap.gmail.com?username=YOUR_USERNAME@gmail.com&amp;password=YOUR_
 &lt;/route&gt;
 </pre><p>
             
-        </p><table id="d0e104850"><tr>
+        </p><table id="d0e104383"><tr>
                 <th> Option </th>
                 <th> Default </th>
                 <th> Description </th>

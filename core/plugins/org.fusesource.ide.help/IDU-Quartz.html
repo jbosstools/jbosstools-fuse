@@ -9,7 +9,7 @@ quartz://timerName?cron=expression</pre><p>The component uses either a <code cla
       simple trigger. If no <code class="literal">groupName</code> is provided, the quartz component uses the
         <code class="literal">Camel</code> group name.</p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quartz_HSH_Options"></a>Options</h2></div></div></div><table id="d0e118424"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quartz_HSH_Options"></a>Options</h2></div></div></div><table id="d0e117975"><tr>
         <th> Parameter </th>
         <th> Default </th>
         <th> Description </th>
@@ -98,7 +98,7 @@ quartz://timerName?cron=expression</pre><p>The component uses either a <code cla
         <code class="literal">mock:results</code> endpoint:</p><pre class="programlisting">from("quartz://myGroup/myTimerName?trigger.repeatInterval=2&amp;trigger.repeatCount=1").routeId("myRoute").to("mock:result");</pre><p>When using a <a class="link" href="http://quartz-scheduler.org/api/2.2.0/org/quartz/StatefulJob.html" target="_top">StatefulJob</a>, the <a class="link" href="http://quartz-scheduler.org/api/2.2.0/org/quartz/JobDataMap.html" target="_top">JobDataMap</a> is re-persisted after every execution of the job, thus preserving state for the next execution.</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important: Running in OSGi and having multiple bundles with quartz routes"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="imagesdb/important.png"></td><th align="left">Running in OSGi and having multiple bundles with quartz routes</th></tr><tr><td align="left" valign="top"><p>If you run in OSGi such as Apache ServiceMix, or Apache Karaf, and have multiple bundles with Camel routes that start from <a href="IDU-Quartz.html" class="olink">Quartz</a> endpoints, then make sure if you assign
         an <code class="literal">id</code> to the &lt;camelContext&gt; that this id is unique, as this is required by the <code class="literal">QuartzScheduler</code> in the OSGi container. If you do not set any <code class="literal">id</code> on &lt;camelContext&gt; then
         a unique id is auto assigned, and there is no problem.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quartz_HSH_Configuringquartzpropertiesfile"></a>Configuring quartz.properties file</h2></div></div></div><p>By default Quartz will look for a <code class="literal">quartz.properties</code> file in the <code class="literal">org/quartz</code> directory of the classpath. If you are using WAR deployments this means just drop the quartz.properties in <code class="literal">WEB-INF/classes/org/quartz</code>.</p><p>However the Camel <a href="IDU-Quartz.html" class="olink">Quartz</a> component also allows you
-      to configure properties:</p><table id="d0e118737"><tr>
+      to configure properties:</p><table id="d0e118288"><tr>
         <th> Parameter </th>
         <th> Default </th>
         <th> Type </th>
@@ -128,7 +128,7 @@ quartz://timerName?cron=expression</pre><p>The component uses either a <code cla
             value in the configuration file.</p><p>From Camel 2.13 onwards Camel will automatic set this option to <code class="code">true</code>,
             unless explicit disabled.</p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-Quartz_HSH_StartingtheQuartzscheduler"></a>Starting the Quartz scheduler</h2></div></div></div><p><span class="bold"><strong>Available as of Camel 2.4</strong></span>
     </p><p>The <a href="IDU-Quartz.html" class="olink">Quartz</a> component offers an option to let the
-      Quartz scheduler be started delayed, or not auto started at all.</p><table id="d0e118832"><tr>
+      Quartz scheduler be started delayed, or not auto started at all.</p><table id="d0e118383"><tr>
         <th> Parameter </th>
         <th> Default </th>
         <th> Type </th>
@@ -174,7 +174,7 @@ quartz://timerName?cron=expression</pre><p>The component uses either a <code cla
       be used instead of spaces. Quartz provides a <a class="link" href="http://www.quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger" target="_top">little
         tutorial</a> on how to use cron expressions.</p><p>For example the following will fire a message every five minutes starting at 12pm (noon)
       to 6pm on weekdays:</p><pre class="programlisting">from("quartz://myGroup/myTimerName?cron=0+0/5+12-18+?+*+MON-FRI").to("activemq:Totally.Rocks");</pre><p>which is equivalent to using the cron expression</p><pre class="programlisting">0 0/5 12-18 ? * MON-FRI</pre><p>The following table shows the URI character encodings we use to preserve valid URI
-      syntax:</p><table id="d0e119003"><tr>
+      syntax:</p><table id="d0e118554"><tr>
         <th>URI Character</th>
         <th>Cron character</th>
       </tr><tr>

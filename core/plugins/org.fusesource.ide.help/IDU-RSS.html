@@ -4,7 +4,7 @@
       Apache Camel will default poll the feed every 60th seconds.</p><p><span class="bold"><strong>Note:</strong></span> The component currently only supports polling
       (consuming) feeds.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="imagesdb/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Camel-rss internally uses a <a class="link" href="http://svn.apache.org/repos/asf/servicemix/smx4/bundles/trunk/rome-1.0/" target="_top">patched version</a> of <a class="link" href="http://rometools.org/" target="_top">ROME</a> hosted on ServiceMix to solve some OSGi <a class="link" href="https://issues.apache.org/jira/browse/SMX4-510" target="_top">class loading issues</a>.</p></td></tr></table></div></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_URIformat"></a>URI format</h2></div></div></div><pre class="programlisting">rss:rssUri</pre><p>Where <code class="literal">rssUri</code> is the URI to the RSS feed to poll. </p><p>You can append query options to the URI in the following format,
         <code class="literal">?option=value&amp;option=value&amp;...</code>
-    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e123537"><tr>
+    </p></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Options"></a>Options</h2></div></div></div><table id="d0e123097"><tr>
         <th> Property </th>
         <th> Default </th>
         <th> Description </th>
@@ -81,7 +81,7 @@
       </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_Exchangedatatypes"></a>Exchange data types</h2></div></div></div><p>Apache Camel initializes the In body on the Exchange with a ROME <code class="literal">SyndFeed</code>.
       Depending on the value of the <code class="literal">splitEntries</code> flag, Apache Camel returns either a
         <code class="literal">SyndFeed</code> with one <code class="literal">SyndEntry</code> or a
-        <code class="literal">java.util.List</code> of <code class="literal">SyndEntrys</code>.</p><table id="d0e123749"><tr>
+        <code class="literal">java.util.List</code> of <code class="literal">SyndEntrys</code>.</p><table id="d0e123309"><tr>
         <th> Option </th>
         <th> Value </th>
         <th> Behavior </th>
@@ -97,7 +97,7 @@
         <td><code class="literal">false</code>
         </td>
         <td> The entire list of entries from the current feed is set in the exchange. </td>
-      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e123795"><tr>
+      </tr></table></div><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="IDU-RSS_HSH_MessageHeaders"></a>Message Headers</h2></div></div></div><table id="d0e123355"><tr>
         <th> Header </th>
         <th> Description </th>
       </tr><tr>
