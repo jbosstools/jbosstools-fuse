@@ -8385,6 +8385,7 @@ matches the message.
       <xs:attribute name='findAllDestinationsStatement' type='xs:string'/>
       <xs:attribute name='findAllDurableSubMessagesStatement' type='xs:string'/>
       <xs:attribute name='findAllDurableSubsStatement' type='xs:string'/>
+      <xs:attribute name='findAllMessageIdsStatement' type='xs:string'/>
       <xs:attribute name='findAllMessagesStatement' type='xs:string'/>
       <xs:attribute name='findDurableSubMessagesStatement' type='xs:string'/>
       <xs:attribute name='findDurableSubStatement' type='xs:string'/>
@@ -8393,6 +8394,7 @@ matches the message.
       <xs:attribute name='findMessageByIdStatement' type='xs:string'/>
       <xs:attribute name='findMessageSequenceIdStatement' type='xs:string'/>
       <xs:attribute name='findMessageStatement' type='xs:string'/>
+      <xs:attribute name='findNextMessagesByPriorityStatement' type='xs:string'/>
       <xs:attribute name='findNextMessagesStatement' type='xs:string'/>
       <xs:attribute name='findOpsPendingOutcomeStatement' type='xs:string'/>
       <xs:attribute name='findXidByIdStatement' type='xs:string'/>
@@ -9698,6 +9700,13 @@ match.
       ]]></xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name='concurrentSend' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            When true, dispatch to matching destinations in parallel (in multiple threads)
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name='local' type='xs:boolean'/>
       <xs:attribute name='name' type='xs:string'/>
       <xs:attribute name='postfix' type='xs:string'>
@@ -9721,6 +9730,13 @@ topic
             Indicates whether the selectors of consumers are used to determine
 dispatch to a virtual destination, when true only messages matching an
 existing consumer will be dispatched.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name='transactedSend' type='xs:boolean'>
+        <xs:annotation>
+          <xs:documentation><![CDATA[
+            When true, dispatch to matching destinations always uses a transaction.
           ]]></xs:documentation>
         </xs:annotation>
       </xs:attribute>

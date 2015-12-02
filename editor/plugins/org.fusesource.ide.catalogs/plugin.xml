@@ -5,28 +5,28 @@
     <catalogContribution id="default">
       <uri
           name="http://activemq.apache.org/schema/spring"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/activemq-spring-5.11.0.redhat-620133.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/activemq-spring-5.11.0.redhat-621084.xsd" />
       <uri
           name="http://activemq.apache.org/schema/ra"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/activemq-ra-5.11.0.redhat-620133.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/activemq-ra-5.11.0.redhat-621084.xsd" />
       <uri
           name="http://camel.apache.org/schema/blueprint"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-blueprint-2.15.1.redhat-620133.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-blueprint-2.15.1.redhat-621084.xsd" />
       <uri
           name="http://camel.apache.org/schema/blueprint/cxf"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-cxf-2.15.1.redhat-620133-blueprint.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-cxf-2.15.1.redhat-621084-blueprint.xsd" />
       <uri
           name="http://camel.apache.org/schema/spring/cxf"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-cxf-2.15.1.redhat-620133-spring.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-cxf-2.15.1.redhat-621084-spring.xsd" />
       <uri
           name="http://camel.apache.org/schema/spring"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-2.15.1.redhat-620133.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-2.15.1.redhat-621084.xsd" />
       <uri
           name="http://camel.apache.org/schema/spring-integration"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-integration-2.15.1.redhat-620133.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-integration-2.15.1.redhat-621084.xsd" />
       <uri
           name="http://camel.apache.org/schema/spring-security"
-          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-security-2.15.1.redhat-620133.xsd" />
+          uri="platform:/plugin/org.fusesource.ide.catalogs/xsd/fuse/camel-spring-security-2.15.1.redhat-621084.xsd" />
     </catalogContribution>
   </extension>
 </plugin>
