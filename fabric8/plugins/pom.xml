@@ -4,7 +4,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
                 <artifactId>fabric8</artifactId>
-		<version>7.3.2-SNAPSHOT</version>
+		<version>7.3.2.FINAL</version>
 	</parent>
 
 	<groupId>org.fusesource.ide.fabric8</groupId>

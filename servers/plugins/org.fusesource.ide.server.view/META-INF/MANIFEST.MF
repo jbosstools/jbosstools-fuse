@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.server.view;singleton:=true
-Bundle-Version: 7.3.2.qualifier
+Bundle-Version: 7.3.2.FINAL
 Bundle-Activator: org.fusesource.ide.server.view.ServerViewPlugin
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,

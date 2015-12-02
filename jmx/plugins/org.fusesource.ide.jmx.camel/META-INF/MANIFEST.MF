@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.fusesource.ide.jmx.camel;singleton:=true
-Bundle-Version: 7.3.2.qualifier
+Bundle-Version: 7.3.2.FINAL
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
