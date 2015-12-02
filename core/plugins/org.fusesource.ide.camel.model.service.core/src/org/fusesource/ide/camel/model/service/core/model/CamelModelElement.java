@@ -493,6 +493,20 @@ public class CamelModelElement {
 						setParameter(param.getName(), val);
 						if (param.getName().equalsIgnoreCase("description")) setDescription(val);
 					}
+				} else if (param.getKind().equalsIgnoreCase("expression")) {
+					CamelModelElement expNode = null;
+					String[] langs = param.getOneOf().split(",");
+					ArrayList<String> langList = new ArrayList<String>();
+			        for (String lang : langs) langList.add(lang);
+					for (int i = 0; i<getXmlNode().getChildNodes().getLength(); i++) {
+						Node subNode = getXmlNode().getChildNodes().item(i);
+						if (subNode != null && langList.contains(subNode.getNodeName())) {
+							expNode = new CamelModelElement(this, subNode);
+							expNode.initialize();
+							expNode.setParent(this);
+							setParameter(param.getName(), expNode);
+						}
+					}
 				} else {
 					// ignore the other kinds
 				}

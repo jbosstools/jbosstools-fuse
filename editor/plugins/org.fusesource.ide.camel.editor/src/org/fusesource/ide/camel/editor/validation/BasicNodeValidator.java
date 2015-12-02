@@ -38,6 +38,7 @@ public class BasicNodeValidator implements ValidationSupport {
 			// we check if all mandatory fields are filled
 			for (Parameter pd : node.getUnderlyingMetaModelObject().getParameters()) {
 				String property = pd.getName();
+				if ((pd.getKind().equalsIgnoreCase("element") && pd.getType().equalsIgnoreCase("array")) || pd.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
 				if (pd.getRequired().equalsIgnoreCase("true")) {
 					Object val = node.getParameter(property);
 					if (val == null || val.toString().trim().length()<1) {

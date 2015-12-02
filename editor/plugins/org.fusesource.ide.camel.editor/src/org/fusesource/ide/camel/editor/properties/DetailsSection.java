@@ -353,7 +353,7 @@ public class DetailsSection extends AbstractPropertySection {
 						 */
 						@Override
 						public IStatus validate(Object value) {
-							if (((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
+							if (selectedEP.getParameter("uri") != null && ((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
 								// check for broken refs
 								String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
 								if (refId == null || refId.trim().length()<1 || selectedEP.getCamelContext().getEndpointDefinitions().get(refId) == null) {
