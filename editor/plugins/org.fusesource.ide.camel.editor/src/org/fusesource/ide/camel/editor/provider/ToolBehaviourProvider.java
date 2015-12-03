@@ -50,9 +50,11 @@ import org.eclipse.graphiti.tb.ImageDecorator;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
+import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
 import org.fusesource.ide.camel.editor.features.custom.DoubleClickFeature;
 import org.fusesource.ide.camel.editor.features.custom.GEFLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
+import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.ZestLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
@@ -281,6 +283,21 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
          * 
          */
 
+        // add buttons for breakpoint manipulation
+        cc = new CustomContext(new PictogramElement[] { pe });
+        cf = getFeatureProvider().getCustomFeatures(cc);
+        for (ICustomFeature f : cf) {
+            if (f instanceof DeleteAllEndpointBreakpointsFeature)
+                continue;
+            if (f instanceof SetEndpointBreakpointFeature) {
+                if (f.isAvailable(cc)) {
+                    IContextButtonEntry button = new ContextButtonEntry(f, cc);
+                    data.getDomainSpecificContextButtons().add(button);
+
+                }
+            }
+        }
+        
         return data;
     }
 

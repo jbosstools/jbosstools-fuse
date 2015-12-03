@@ -69,4 +69,13 @@ public interface ICamelManagerService {
 	 * @throws URISyntaxException
 	 */
 	String createEndpointXml(String scheme, Map<String, String> properties) throws URISyntaxException;
+	
+	/**
+	 * tests an expression in a default camel context ran locally
+	 * 
+	 * @param language
+	 * @param expression
+	 * @return	null if test ok otherwise the exception text
+	 */
+	String testExpression(String language, String expression);
 }

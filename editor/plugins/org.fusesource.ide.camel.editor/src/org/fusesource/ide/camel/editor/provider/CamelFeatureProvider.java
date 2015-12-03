@@ -32,19 +32,24 @@ import org.eclipse.graphiti.features.context.IResizeShapeContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.ui.features.DefaultFeatureProvider;
-import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
 import org.fusesource.ide.camel.editor.features.add.AddNodeFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
+import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
+import org.fusesource.ide.camel.editor.features.custom.DeleteEndpointBreakpointFeature;
+import org.fusesource.ide.camel.editor.features.custom.DisableCamelBreakpointFeature;
+import org.fusesource.ide.camel.editor.features.custom.EditConditionalBreakpoint;
+import org.fusesource.ide.camel.editor.features.custom.EnableCamelBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.GEFLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
+import org.fusesource.ide.camel.editor.features.custom.SetConditionalBreakpointFeature;
+import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.ZestLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.features.delete.RemoveFigureFeature;
 import org.fusesource.ide.camel.editor.features.misc.ResizeNodeFeature;
 import org.fusesource.ide.camel.editor.internal.CamelModelIndependenceSolver;
-import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -80,8 +85,8 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 	@Override
 	public ICreateFeature[] getCreateFeatures() {
 		ICreateFeature[] features = ProviderHelper.getCreateFeatures(this);
-		AbstractNode selectedNode = null;
-		CamelDesignEditor editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
+//		AbstractNode selectedNode = null;
+//		CamelDesignEditor editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
 //		selectedNode = editor.getSelectedNode();
 //		if (selectedNode == null) {
 //			selectedNode = rider.getSelectedRoute();
@@ -212,13 +217,13 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 		return new ICustomFeature[]
 				{
 				new LayoutDiagramFeature(this),
-//				new SetEndpointBreakpointFeature(this),
-//				new SetConditionalBreakpointFeature(this),
-//				new EditConditionalBreakpoint(this),
-//				new EnableCamelBreakpointFeature(this),
-//				new DisableCamelBreakpointFeature(this),
-//				new DeleteEndpointBreakpointFeature(this),
-//				new DeleteAllEndpointBreakpointsFeature(this),
+				new SetEndpointBreakpointFeature(this),
+				new SetConditionalBreakpointFeature(this),
+				new EditConditionalBreakpoint(this),
+				new EnableCamelBreakpointFeature(this),
+				new DisableCamelBreakpointFeature(this),
+				new DeleteEndpointBreakpointFeature(this),
+				new DeleteAllEndpointBreakpointsFeature(this),
 				new GEFLayoutDiagramFeature(this),
 				new ZestLayoutDiagramFeature(this),
 				new CollapseFeature(this)

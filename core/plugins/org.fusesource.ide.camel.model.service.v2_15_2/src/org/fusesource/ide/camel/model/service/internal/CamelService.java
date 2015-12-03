@@ -99,6 +99,29 @@ public class CamelService implements ICamelManagerService {
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#testExpression(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String testExpression(String language, String expression) {
+		String result = null;
+		org.apache.camel.impl.DefaultCamelContext ctx = new org.apache.camel.impl.DefaultCamelContext();
+		try {
+			ctx.resolveLanguage(language).createPredicate(expression.replaceAll("\n", "").replaceAll("\r", "").trim());
+			result = null;
+		} catch (Exception ex) {
+			result = ex.getMessage();
+		} finally {
+			try {
+				ctx.shutdown();
+			} catch (Exception ex) {
+				// ignore
+			}
+			ctx = null;
+		}
+		return result;
+	}
+	
 	/**
 	 * TODO :	IMPROVE CODE
 	 * 

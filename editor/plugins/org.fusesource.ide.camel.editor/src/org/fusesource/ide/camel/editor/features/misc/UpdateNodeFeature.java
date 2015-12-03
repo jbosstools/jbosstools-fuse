@@ -1,6 +1,3 @@
-/**
- * 
- */
 /*******************************************************************************
  * Copyright (c) 2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.

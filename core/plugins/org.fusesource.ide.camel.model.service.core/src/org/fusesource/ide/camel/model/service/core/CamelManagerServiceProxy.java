@@ -96,4 +96,13 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
     public String getEndpointScheme(String uri) {
     	return checkedGetService().getEndpointScheme(uri);
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#testExpression(java.lang.String, java.lang.String)
+     */
+    @Override
+    public String testExpression(String language, String expression) {
+    	return checkedGetService().testExpression(language, expression);
+    }
 }

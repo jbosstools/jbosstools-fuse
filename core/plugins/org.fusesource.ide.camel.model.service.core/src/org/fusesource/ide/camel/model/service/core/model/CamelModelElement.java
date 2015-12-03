@@ -802,4 +802,86 @@ public class CamelModelElement {
     	}
     	return this.context;
     }
+    
+	/**
+	 * creates a random id
+	 * 
+	 * @return a random id
+	 */
+	public String getNewID() {
+		String answer = null;
+		int i = 1;
+		answer = String.format("%s%d", getNodeTypeId(), i++);
+		while (getCamelContext().isUniqueId(answer) == false) {
+			answer = String.format("%s%d", getNodeTypeId(), i++);
+		}
+		return answer;
+	}
+	
+	/**
+	 * tests if the given id is context wide unique
+	 * 
+	 * @param newId
+	 * @return
+	 */
+	public boolean isUniqueId(String newId) {
+		if (newId == null || newId.trim().length()<1) return false;
+		
+		if (containsId(getCamelContext(), newId)) return false;
+		
+		return true;
+	}
+	
+	private boolean containsId(CamelModelElement elem, String newId) {
+		// if the element has the same id the new id is not unique
+		if (elem.getId() != null && elem.getId().equals(newId)) return true;
+		
+		// now check the children
+		if (elem.getChildElements() != null) {
+			for (CamelModelElement e : elem.getChildElements()) {
+				if (containsId(e, newId)) return false;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * searches the model for a node with the given id
+	 * 
+	 * @param nodeId
+	 * @return	the node or null
+	 */
+	public CamelModelElement findNode(String nodeId) {
+		if (getId() != null && getId().equals(nodeId)) return this;
+		
+		if (getChildElements() != null) {
+			for (CamelModelElement e : getChildElements()) {
+				if (e.findNode(nodeId) != null) return e;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * checks if the node is the from node and therefore
+	 * the first node in my route
+	 * 
+	 * @return
+	 */
+	public boolean isFirstNodeInRoute() {
+		return getInputElement() == null && getParent() instanceof CamelRouteElement;
+	}
+	
+	/**
+	 * checks if the node can handle breakpoints
+	 * 
+	 * @return
+	 */
+	public boolean supportsBreakpoint() {
+		return  !isFirstNodeInRoute() && 				// not working on the From node
+				!"when".equals(getNodeTypeId()) && 		// not working for When nodes
+				!"otherwise".equals(getNodeTypeId());	// not working for Otherwise nodes
+	}
 }
