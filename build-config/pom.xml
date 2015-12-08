@@ -20,5 +20,5 @@
     <groupId>org.fusesource.ide</groupId>
     <artifactId>build-config</artifactId>
     <name>JBoss Fuse Tooling :: Build Configuration</name>
-    <version>7.3.2.FINAL</version>
+    <version>7.3.3-SNAPSHOT</version>
 </project>

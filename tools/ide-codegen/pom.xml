@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.fusesource.ide</groupId>
     <artifactId>tools</artifactId>
-    <version>7.3.2.FINAL</version>
+    <version>7.3.3-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 

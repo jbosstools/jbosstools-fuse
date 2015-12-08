@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.fusesource.ide</groupId>
 		<artifactId>project</artifactId>
-		<version>7.3.2.FINAL</version>
+		<version>7.3.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>org.fusesource.ide.updatesite</artifactId>

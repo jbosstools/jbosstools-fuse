@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse Commons Plugin
 Bundle-SymbolicName: org.fusesource.ide.commons;singleton:=true
-Bundle-Version: 7.3.2.FINAL
+Bundle-Version: 7.3.3.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.fusesource.ide.preferences;bundle-version="7.3.0",

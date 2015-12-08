@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.fusesource.ide.fabric8</groupId>
     <artifactId>plugins</artifactId>
-    <version>7.3.2.FINAL</version>
+    <version>7.3.3-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   
