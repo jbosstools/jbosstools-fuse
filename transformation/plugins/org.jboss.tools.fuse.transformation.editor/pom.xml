@@ -62,25 +62,9 @@
                             <artifactId>jaxb-impl</artifactId>
                         </artifactItem>
                         <artifactItem>
-                            <groupId>org.jsonschema2pojo</groupId>
-                            <artifactId>jsonschema2pojo-core</artifactId>
+                            <groupId>com.google.code.gson</groupId>
+                            <artifactId>gson</artifactId>
                         </artifactItem>
-                        <artifactItem>
-                            <groupId>com.fasterxml.jackson.core</groupId>
-                            <artifactId>jackson-core</artifactId>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>com.fasterxml.jackson.core</groupId>
-                            <artifactId>jackson-databind</artifactId>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>com.fasterxml.jackson.core</groupId>
-                            <artifactId>jackson-annotations</artifactId>
-                        </artifactItem>
-						<artifactItem>
-							<groupId>com.google.code.gson</groupId>
-							<artifactId>gson</artifactId>
-						</artifactItem>
 <!--                         <artifactItem> -->
 <!--                             <groupId>commons-lang</groupId> -->
 <!--                             <artifactId>commons-lang</artifactId> -->
