@@ -11,6 +11,7 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.api.management.mbean.BacklogTracerEventMessage;
 import org.apache.camel.api.management.mbean.ManagedBacklogTracerMBean;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
@@ -38,6 +44,7 @@ import org.fusesource.ide.commons.ui.ContextMenuProvider;
 import org.fusesource.ide.commons.ui.Workbenches;
 import org.fusesource.ide.commons.util.Nodes;
 import org.fusesource.ide.foundation.core.functions.Function1;
+import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
@@ -54,10 +61,11 @@ import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 
-public class CamelContextNode extends NodeSupport implements Refreshable, AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser,
-ImageProvider {
+public class CamelContextNode 	extends NodeSupport 
+							 	implements Refreshable, AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider {
 
 	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
+	
 	private final CamelContextsNode camelContextsNode;
 	private final CamelFacade facade;
 	private final CamelContextMBean camelContextMBean;
@@ -65,7 +73,8 @@ ImageProvider {
 	private final RoutesNode routes;
 	private static Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<String, TraceExchangeList>();
 	private NodeStatisticsContainer runtimeNodeStatisticsContainer;
-
+	private File tempContextFile = null;
+	
 	public CamelContextNode(CamelContextsNode camelContextsNode, CamelFacade facade, CamelContextMBean camelContext) throws Exception {
 		super(camelContextsNode);
 		this.camelContextsNode = camelContextsNode;
@@ -225,42 +234,45 @@ ImageProvider {
 		if (page == null) {
 			Activator.getLogger().warning("No active page!");
 		} else {
-			IEditorInput input = new CamelContextNodeEditorInput(this);
-			try {
-				page.openEditor(input, CAMEL_EDITOR_ID, true);
-			} catch (PartInitException e) {
-				Activator.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
-			}
-			/*
-			IViewPart view = page.findView(CAMEL_EDITOR_ID);
-			if (view == null) {
+			IFile camelContextFile = createTempContextFile();
+			if (camelContextFile != null) {
+				IEditorInput input = new CamelContextNodeEditorInput(this, camelContextFile);
 				try {
-					view = page.showView(CAMEL_EDITOR_ID);
+					page.openEditor(input, CAMEL_EDITOR_ID, true);
 				} catch (PartInitException e) {
-					Activator.getLogger().warning("Could not find editor: " + CAMEL_EDITOR_ID);
+					Activator.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
 				}
+			} else {
+				Activator.getLogger().error("Unable to store the remote camel context " + getContextId() + " locally");
 			}
-			if (view != null) {
-				if (view instanceof IEditorPart) {
-					IEditorPart editor = (IEditorPart) view;
-					IEditorInput input = new CamelContextNodeEditorInput(this);
-					IEditorSite site = null;
-					try {
-						editor.init(site , input);
-						editor.setFocus();
-					} catch (PartInitException e) {
-						Activator.getLogger().warning("Could not initialise editor: " + view);
-					}
-				} else {
-					Activator.getLogger().warning("View is not an IEditorPart: " + view);
-				}
-			}
-			 */
 		}
-
-
 	}
 
+	protected IFile createTempContextFile() {
+		try {
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(".FuseRemoteCamelContextData");
+			if (!project.exists()) {
+			    project.create(new NullProgressMonitor());
+			    project.open(new NullProgressMonitor());
+			}
+			if (tempContextFile == null) {
+				tempContextFile = File.createTempFile("camelContext--" + getContextId() + "--", ".xml", project.getLocation().toFile());
+				tempContextFile.deleteOnExit();
+			}
+
+			String xml = getXmlString();
+			IOUtils.writeText(tempContextFile, xml);
+
+			IFile camelContextFile = project.getFile(tempContextFile.getName());
+			
+			return camelContextFile;
+		} catch (Exception e) {
+			Activator.getLogger().warning("Failed to create temporary file: " + e, e);
+		}
+
+		return null;
+	}
+	
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
 		provideContextMenu(menu, null);

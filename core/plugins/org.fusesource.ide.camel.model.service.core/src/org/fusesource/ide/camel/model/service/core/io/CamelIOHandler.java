@@ -25,7 +25,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -41,6 +43,7 @@ public class CamelIOHandler {
 
     protected static final int INDENTION_VALUE 	= 3;
     protected static final String CAMEL_CONTEXT = "camelContext";
+    protected static final String CAMEL_ROUTES  = "routes";
     
     private Document document;
 
@@ -71,6 +74,28 @@ public class CamelIOHandler {
 		return cf;
 	}
 
+    /**
+     * loads the camel xml from a file
+     * 
+     * @param xmlFile
+     * @param monitor
+     * @return	the camel file object representation or null on errors
+     */
+    public CamelFile loadCamelModel(File xmlFile, IProgressMonitor monitor) {
+		if (xmlFile == null) return null;
+
+		CamelFile cf = null;
+    	try {
+			DocumentBuilder db = createDocumentBuilder();
+	        document = db.parse(xmlFile);
+	        cf = readDocumentToModel(document, ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(xmlFile.getPath())));
+		} catch (Exception ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML file from " + xmlFile.getPath(), ex);
+		}
+
+		return cf;
+	}
+    
     /**
      * loads the camel xml from a string
      * 
@@ -103,24 +128,40 @@ public class CamelIOHandler {
         cf.setResource(res);
         cf.setDocument(document);
         NodeList childNodes = document.getDocumentElement().getChildNodes();
-        for (int i = 0; i<childNodes.getLength(); i++) {
-        	Node child = childNodes.item(i);
+        if (document.getDocumentElement().getNodeName().equals(CAMEL_ROUTES)) {
+        	// found a routes element
+    		CamelContextElement cce = new CamelContextElement(cf, document.getDocumentElement());
+    		String contextId = document.getDocumentElement().getAttributes().getNamedItem("id") != null ? document.getDocumentElement().getAttributes().getNamedItem("id").getNodeValue() : document.getDocumentElement().getNodeName() + "-" + UUID.randomUUID().toString();
+    		int startIdx 	= res.getFullPath().toOSString().indexOf("--");
+    		int endIdx 		= res.getFullPath().toOSString().indexOf("--", startIdx+1);
+    		if (startIdx != endIdx && startIdx != -1) {
+    			contextId = res.getFullPath().toOSString().substring(startIdx+2, endIdx);
+    		}
+    		cce.setId(contextId);
+    		cce.initialize();
+    		// then add the context to the file
+    		cf.addChildElement(cce);
+        } else {
+            for (int i = 0; i<childNodes.getLength(); i++) {
+            	Node child = childNodes.item(i);
 
-        	String name = child.getNodeName();
-        	if (child.getNodeType() != Node.ELEMENT_NODE) continue;
-        	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : UUID.randomUUID().toString();
-        	if (name.equals(CAMEL_CONTEXT)) {
-        		// found a camel context
-        		CamelContextElement cce = new CamelContextElement(cf, child);
-        		cce.setId(id);
-        		cce.initialize();
-        		// then add the context to the file
-        		cf.addChildElement(cce);
-        	} else {
-        		// found a global configuration element
-        		cf.addGlobalDefinition(id, child);
-        	}	        	
+            	String name = child.getNodeName();
+            	if (child.getNodeType() != Node.ELEMENT_NODE) continue;
+            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : child.getNodeName() + "-" + UUID.randomUUID().toString();
+            	if (name.equals(CAMEL_CONTEXT)) {
+            		// found a camel context
+            		CamelContextElement cce = new CamelContextElement(cf, child);
+            		cce.setId(id);
+            		cce.initialize();
+            		// then add the context to the file
+            		cf.addChildElement(cce);
+            	} else {
+            		// found a global configuration element
+            		cf.addGlobalDefinition(id, child);
+            	}	        	
+            }
         }
+
         return cf;
     }
     
@@ -179,7 +220,7 @@ public class CamelIOHandler {
      * @return
      */
     protected File getFileFromResource(IResource res) {
-    	return res.getRawLocation().toFile();
+    	return new File(res.getLocationURI() != null ? res.getLocationURI().getPath() : res.getFullPath().toOSString());
     }
 	
     /**

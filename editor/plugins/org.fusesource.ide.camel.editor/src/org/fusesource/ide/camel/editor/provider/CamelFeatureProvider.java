@@ -23,13 +23,17 @@ import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.IFeature;
 import org.eclipse.graphiti.features.IRemoveFeature;
 import org.eclipse.graphiti.features.IResizeShapeFeature;
+import org.eclipse.graphiti.features.IUpdateFeature;
 import org.eclipse.graphiti.features.context.IAddContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.context.IDeleteContext;
 import org.eclipse.graphiti.features.context.IPictogramElementContext;
 import org.eclipse.graphiti.features.context.IRemoveContext;
 import org.eclipse.graphiti.features.context.IResizeShapeContext;
+import org.eclipse.graphiti.features.context.IUpdateContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
+import org.eclipse.graphiti.mm.pictograms.ContainerShape;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.ui.features.DefaultFeatureProvider;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
@@ -49,6 +53,7 @@ import org.fusesource.ide.camel.editor.features.custom.ZestLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.features.delete.RemoveFigureFeature;
 import org.fusesource.ide.camel.editor.features.misc.ResizeNodeFeature;
+import org.fusesource.ide.camel.editor.features.misc.UpdateNodeFeature;
 import org.fusesource.ide.camel.editor.internal.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
@@ -151,17 +156,17 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 
 	}
 
-//	@Override
-//	public IUpdateFeature getUpdateFeature(IUpdateContext context) {
-//		PictogramElement pictogramElement = context.getPictogramElement();
-//		if (pictogramElement instanceof ContainerShape) {
-//			Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-//			if (bo instanceof CamelModelElement) {
-//				return new UpdateNodeFeature(this);
-//			}
-//		}
-//		return super.getUpdateFeature(context);
-//	}
+	@Override
+	public IUpdateFeature getUpdateFeature(IUpdateContext context) {
+		PictogramElement pictogramElement = context.getPictogramElement();
+		if (pictogramElement instanceof ContainerShape) {
+			Object bo = getBusinessObjectForPictogramElement(pictogramElement);
+			if (bo instanceof CamelModelElement) {
+				return new UpdateNodeFeature(this);
+			}
+		}
+		return super.getUpdateFeature(context);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getDeleteFeature(org.eclipse.graphiti.features.context.IDeleteContext)

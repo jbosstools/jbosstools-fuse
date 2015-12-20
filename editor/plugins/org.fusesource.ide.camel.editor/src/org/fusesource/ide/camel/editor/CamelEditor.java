@@ -10,10 +10,12 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -26,6 +28,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -41,8 +44,10 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.camel.model.io.ICamelEditorInput;
+import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
+import org.fusesource.ide.camel.model.util.Objects;
 import org.fusesource.ide.commons.ui.UIHelper;
+import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -52,7 +57,8 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  */
 public class CamelEditor extends MultiPageEditorPart implements IResourceChangeListener,
 																ITabbedPropertySheetPageContributor, 
-																IPropertyChangeListener {
+																IPropertyChangeListener,
+																ICamelModelListener {
 
 	public static final String INTEGRATION_PERSPECTIVE_ID = "org.fusesource.ide.branding.perspective";
 	
@@ -67,11 +73,12 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	private CamelDesignEditor designEditor;	
 	
 	/** The global configuration elements editor */
-//	private GlobalConfigEditor globalConfigEditor;
+	private CamelGlobalConfigEditor globalConfigEditor;
 
 	/** stores the last selection before saving and restores it after saving **/
 	private ISelection savedSelection;
 	private int lastActivePageIdx = DESIGN_PAGE_INDEX;
+	private CamelXMLEditorInput editorInput;
 
 	
 	/**
@@ -157,7 +164,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	protected void createPages() {
 		createDesignPage(DESIGN_PAGE_INDEX);
 		createSourcePage(SOURCE_PAGE_INDEX);
-//		createGlobalConfPage(GLOBAL_CONF_INDEX);
+		createGlobalConfPage(GLOBAL_CONF_INDEX);
 
 		IDocument document = getDocument();
 		if (document == null) {
@@ -193,7 +200,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	public IEditorPart getActiveEditor() {
 		return super.getActiveEditor();
 	}
-
+	
 	/**
 	 * creates the source page
 	 * 
@@ -203,11 +210,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	private void createSourcePage(int index) {
 		try {
 			sourceEditor = new StructuredTextEditor();
-			IEditorInput editorInput = getEditorInput();
-			if (editorInput instanceof ICamelEditorInput) {
-				ICamelEditorInput camelEditorInput = (ICamelEditorInput) editorInput;
-				editorInput = camelEditorInput.getFileEditorInput();
-			}
+			IEditorInput editorInput = designEditor.asFileEditorInput(getEditorInput());
 			addPage(index, sourceEditor, editorInput);
 			setPageText(index, UIMessages.editorSourcePageTitle);
 		} catch (PartInitException e) {
@@ -241,34 +244,17 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * 			  the page index
 	 */
 	private void createGlobalConfPage(int index) {
-//		try {
-//			// TODO: code me
-//			globalConfigEditor = new GlobalConfigEditor(this);
-//			IEditorInput editorInput = getEditorInput();
-//			addPage(index, globalConfigEditor, editorInput);
-//			setPageText(index, Messages.editorGlobalConfigurationPageTitle);
-//		} catch (PartInitException e) {
-//			ErrorDialog.openError(getSite().getShell(),
-//					"Error creating nested global configuration page", null, e.getStatus());
-//		}
+		try {
+			globalConfigEditor = new CamelGlobalConfigEditor(this);
+			IEditorInput editorInput = getEditorInput();
+			addPage(index, globalConfigEditor, editorInput);
+			setPageText(index, UIMessages.editorGlobalConfigurationPageTitle);
+		} catch (PartInitException e) {
+			ErrorDialog.openError(getSite().getShell(),
+					"Error creating nested global configuration page", null, e.getStatus());
+		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.IProgressMonitor)
-	 */
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
-	 */
-	@Override
-	public void doSaveAs() {
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
@@ -278,6 +264,57 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.IProgressMonitor)
+	 */
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		if (getActivePage() == DESIGN_PAGE_INDEX) {
+			this.designEditor.getModel().saveChanges();
+			getDesignEditor().doSave(monitor);
+		} else if (getActivePage() == SOURCE_PAGE_INDEX) {
+			this.sourceEditor.doSave(monitor);
+		} else if (getActivePage() == GLOBAL_CONF_INDEX) {
+			this.globalConfigEditor.doSave(monitor);
+		} else {
+			// unknown tab -> ignore
+		}
+		if (getEditorInput() instanceof CamelXMLEditorInput) {
+			((CamelXMLEditorInput)getEditorInput()).onEditorInputSave();
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
+	 */
+	@Override
+	public void doSaveAs() {
+		if (getActivePage() == DESIGN_PAGE_INDEX) {
+			this.designEditor.getModel().saveChanges();
+			getDesignEditor().doSaveAs();
+		} else if (getActivePage() == SOURCE_PAGE_INDEX) {
+			this.sourceEditor.doSaveAs();			
+		} else if (getActivePage() == GLOBAL_CONF_INDEX) {
+			this.globalConfigEditor.doSaveAs();
+		} else {
+			// unknown tab -> ignore
+		}
+		
+		// TODO: activate this for saving remote camel contexts via JMX
+		// but check what that means for the stored temp file in CamelContextNode and its EditorInput
+//		if (getEditorInput() instanceof CamelXMLEditorInput) {
+//			((CamelXMLEditorInput)getEditorInput()).onEditorInputSave();
+//		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.WorkbenchPart#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return this.designEditor != null && this.designEditor.getModel() != null ? this.designEditor.getModel().getResource().getName() : "noname";
+	}
+	
 	/**
 	 * saves the current selection in the active editor
 	 */
@@ -294,6 +331,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		.setSelection(this.savedSelection);
 	}
 
+	public void onFileLoading(String fileName) {
+		setPartName(fileName);
+	}
+		
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#dispose()
@@ -537,9 +578,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		return designEditor;
 	}
 
-//	public GlobalConfigEditor getGlobalConfigEditor() {
-//		return globalConfigEditor;
-//	}
+	public CamelGlobalConfigEditor getGlobalConfigEditor() {
+		return globalConfigEditor;
+	}
 	
 //	public CamelModelElement getSelectedNode() {
 //		return designEditor.getSelectedNode();
@@ -581,7 +622,20 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		super.init(site, input);
+System.err.println("CamelEditor.init(" + input.getClass().getName() + ")");
+		CamelXMLEditorInput camelInput = null;
+		
+		if (input instanceof IFileEditorInput) {
+			camelInput = new CamelXMLEditorInput(((IFileEditorInput)input).getFile());
+		} else if (input instanceof DiagramEditorInput) {
+			IFile f = (IFile)((DiagramEditorInput)input).getAdapter(IFile.class);
+			camelInput = new CamelXMLEditorInput(f);
+		} else if (input instanceof CamelXMLEditorInput) {
+			camelInput = (CamelXMLEditorInput)input;
+		} else {
+			throw new PartInitException("Unknown input type: " + input.getClass().getName());
+		}
+		super.init(site, camelInput);
 	}
 
 	/* (non-Javadoc)
@@ -589,6 +643,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void setInput(IEditorInput input) {
+		System.err.println("CamelEditor.setInput(" + input.getClass().getName() + ")");
 		super.setInput(input);
 		setPartName(input.getName());
 	}
@@ -633,9 +688,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-//				setActiveEditor(getGlobalConfigEditor());
-//				setActivePage(GLOBAL_CONF_INDEX);
-//				getGlobalConfigEditor().setFocus();
+				setActiveEditor(getGlobalConfigEditor());
+				setActivePage(GLOBAL_CONF_INDEX);
+				getGlobalConfigEditor().setFocus();
 			}
 		});
 	}
@@ -662,5 +717,35 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
 //			designEditor.setupGridVisibilityAsync();
 		} 	
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.ICamelModelListener#modelChanged()
+	 */
+	@Override
+	public void modelChanged() {
+		// we only update if the correct editor tab is selected
+		if (getActivePage() != SOURCE_PAGE_INDEX) return;
+		Display.getDefault().asyncExec(new Runnable() {
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				IDocument document = getDocument();
+				if (document != null) {
+					String text = document.get();
+
+					// lets update the text with the latest from the model..
+					String newText = designEditor.getModel().getDocumentAsXML();
+					if (!Objects.equal(newText, text)) {
+						// only update the document if its actually different
+						// to avoid setting the dirty flag unnecessarily
+						document.set(newText);
+					}
+				}
+			}
+		});
 	}
 }

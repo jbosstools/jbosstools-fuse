@@ -11,27 +11,18 @@
 
 package org.fusesource.ide.camel.editor.behaviours;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.graphiti.dt.IDiagramTypeProvider;
-import org.eclipse.graphiti.features.IFeatureProvider;
-import org.eclipse.graphiti.features.context.impl.CustomContext;
-import org.eclipse.graphiti.features.context.impl.LayoutContext;
-import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
-import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.ui.editor.DefaultPersistencyBehavior;
-import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
-import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.io.IRemoteCamelEditorInput;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -66,8 +57,27 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
         // add the diagram contents
         ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(editor, editor.getEditingDomain(), editor.getModel());
         editor.getEditingDomain().getCommandStack().execute(importCommand);
+        this.camelFile = editor.getModel();
+        
+        // name the editor tab correctly
+        this.editor.getParent().onFileLoading(camelFile.getResource().getName());
         
         return importCommand.getDiagram();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DefaultPersistencyBehavior#saveDiagram(org.eclipse.core.runtime.IProgressMonitor)
+	 */
+	@Override
+	public void saveDiagram(IProgressMonitor monitor) {
+		// save the model
+		try {
+			CamelIOHandler ioHandler = new CamelIOHandler();
+			ioHandler.setDocument(camelFile.getDocument());
+			ioHandler.saveCamelModel(camelFile, camelFile.getResource(), monitor);
+		} catch (Exception ex) {
+			CamelEditorUIActivator.pluginLog().logError("Unable to save Camel context file: " + camelFile.getResource().getRawLocation().toOSString(), ex);
+		}
 	}
 	
 	/**
@@ -79,12 +89,16 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
 		IFileEditorInput fileEditorInput = editor.asFileEditorInput(input);
 		if (fileEditorInput != null) {
 			camelContextFile = fileEditorInput.getFile();
-			editor.setWorkspaceProject(camelContextFile.getProject());
+			if (camelContextFile.getFullPath().toOSString().indexOf(".FuseRemoteCamelContextData") == -1) {
+				// don't set a project for temporary remote context files
+				editor.setWorkspaceProject(camelContextFile.getProject());
+			}
 			
 			// load the model
 			try {
 				CamelIOHandler ioHandler = new CamelIOHandler();
 				editor.setModel(ioHandler.loadCamelModel(camelContextFile, new NullProgressMonitor()));
+				camelFile = editor.getModel();
 			} catch (Exception ex) {
 				CamelEditorUIActivator.pluginLog().logError("Unable to load Camel context file: " + camelContextFile.getRawLocation().toOSString(), ex);
 			}
@@ -99,6 +113,7 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
 					String text = remoteEditorInput.getXml();
 					CamelIOHandler ioHandler = new CamelIOHandler();
 					editor.setModel(ioHandler.loadCamelModel(text, new NullProgressMonitor()));
+					camelFile = editor.getModel();
 				} catch (Exception ex) {
 					CamelEditorUIActivator.pluginLog().logError("Unable to load Camel context string", ex);
 				}
@@ -107,4 +122,6 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
 		}
 		return false;
 	}
+	
+	
 }

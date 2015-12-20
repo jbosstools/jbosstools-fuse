@@ -34,7 +34,6 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
-import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.swt.graphics.Rectangle;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -130,6 +129,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	private CompoundDirectedGraph mapDiagramToGraph(PictogramElement container) {
 		Map<AnchorContainer, Node> shapeToNode = new HashMap<AnchorContainer, Node>();
 		CompoundDirectedGraph dg = new CompoundDirectedGraph();
+		if (container == null) return dg;
 		EdgeList edgeList = new EdgeList();
 		NodeList nodeList = new NodeList();
 		EList<Shape> children = ((ContainerShape)container).getChildren();

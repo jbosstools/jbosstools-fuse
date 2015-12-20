@@ -43,8 +43,10 @@ public class FigureUIFactory {
 	
 	// the additional size of the invisible rectangle at the right border
 	// (this also equals the half width of the anchor to paint there)
+	public static final int CONTAINER_BORDER_SIZE = 2;
 	public static final int SECTION_OFFSET_X = 5;
 	public static final int SECTION_OFFSET_Y = 5;
+	public static final int ICON_OFFSET_X = 10;
 	public static final int LABEL_SPACER_X = 5;
 	public static final int TEXT_LABEL_SIZE = 20;
 	public static final int DEFAULT_FIGURE_CONTENT_WIDTH = 140;
@@ -81,10 +83,10 @@ public class FigureUIFactory {
 		int label_height = Math.max(fontDimension.getHeight(), TEXT_LABEL_SIZE);
 
 		Dimension imageDimension = ImageUtils.getImageSize(ImageProvider.getKeyForSmallIcon(element.getIconName()));
-		int image_width = imageDimension.width;
+		int image_width = imageDimension.width + ICON_OFFSET_X;
 		int image_height = imageDimension.height;
 
-		int contentWidth = Math.max(image_width + label_width + SECTION_OFFSET_X + SECTION_OFFSET_X, DEFAULT_FIGURE_CONTENT_WIDTH);
+		int contentWidth = Math.max(image_width + label_width + SECTION_OFFSET_X + SECTION_OFFSET_X + CONTAINER_BORDER_SIZE + CONTAINER_BORDER_SIZE, DEFAULT_FIGURE_CONTENT_WIDTH);
 		int upperSectionHeight = Math.max(image_height + SECTION_OFFSET_Y + SECTION_OFFSET_Y, label_height + SECTION_OFFSET_Y + SECTION_OFFSET_Y);
 		int lowerSectionHeight = upperSectionHeight;
 		
@@ -117,25 +119,33 @@ public class FigureUIFactory {
 		
 		// create invisible outer rectangle expanded by the width needed for the anchor
 		Rectangle baseFigure = gaService.createInvisibleRectangle(containerShape);
-		gaService.setLocationAndSize(baseFigure, baseRect.x, baseRect.y, baseRect.width, baseRect.height);
+		gaService.setLocationAndSize(baseFigure, baseRect.x + CONTAINER_BORDER_SIZE, baseRect.y + CONTAINER_BORDER_SIZE, baseRect.width, baseRect.height);
 		baseFigure.setFilled(false);
-		baseFigure.setLineVisible(true);
+		baseFigure.setLineVisible(false);
+		
+		// rearrange container
+		containerShape.getGraphicsAlgorithm().setLineVisible(true);
+		containerShape.getGraphicsAlgorithm().setLineWidth(CONTAINER_BORDER_SIZE);
+		containerShape.getGraphicsAlgorithm().setWidth(baseFigure.getWidth() + CONTAINER_BORDER_SIZE + CONTAINER_BORDER_SIZE);
+		containerShape.getGraphicsAlgorithm().setHeight(baseFigure.getHeight() + CONTAINER_BORDER_SIZE + CONTAINER_BORDER_SIZE);
 		
 		// the upper section figure
-		Rectangle upperRectangle = gaService.createPlainRectangle(baseFigure);
+		Rectangle upperRectangle = gaService.createRectangle(baseFigure);
 		upperRectangle.setParentGraphicsAlgorithm(baseFigure);
 		upperRectangle.setStyle(StyleUtil.getStyleForCamelClass(diagram));
-		gaService.setLocationAndSize(upperRectangle, upperSection.x, upperSection.y, upperSection.width, upperSection.height);
+		gaService.setLocationAndSize(upperRectangle, upperSection.x + CONTAINER_BORDER_SIZE-1, upperSection.y + CONTAINER_BORDER_SIZE-1, upperSection.width+1, upperSection.height+1);
 		upperRectangle.setBackground(upperSectionColor);
-		upperRectangle.setLineVisible(true);
+		upperRectangle.setLineVisible(false);
 		upperRectangle.setFilled(true);
 		markFigureHeaderArea(upperRectangle, upperSectionHeight);
 
 		// create and set image
 		Image image = gaService.createImage(upperRectangle, ImageProvider.getKeyForSmallIcon(element.getIconName()));
-		gaService.setLocationAndSize(image, upperSection.x + SECTION_OFFSET_X, upperSection.y + SECTION_OFFSET_Y, image_width, image_height);
+		gaService.setLocationAndSize(image, upperSection.x + SECTION_OFFSET_X + ICON_OFFSET_X, upperSection.y + SECTION_OFFSET_Y, image_width, image_height);
 
 		// create and set text graphics algorithm
+//		Shape shape = peCreateService.createShape(containerShape, false);
+//		Text text = gaService.createDefaultText(diagram, shape, defaultLabel);
 		Text text = gaService.createDefaultText(diagram, upperRectangle, defaultLabel);
 		Style style = StyleUtil.getStyleForCamelText(diagram);
 		text.setParentGraphicsAlgorithm(baseFigure);
@@ -147,10 +157,10 @@ public class FigureUIFactory {
 		markFigureTitleArea(text, image_width);
 		
 		// the lower section figure
-		Rectangle lowerRectangle = gaService.createPlainRectangle(baseFigure);
+		Rectangle lowerRectangle = gaService.createRectangle(baseFigure);
 		lowerRectangle.setParentGraphicsAlgorithm(baseFigure);
 		lowerRectangle.setStyle(StyleUtil.getStyleForCamelClass(diagram));
-		gaService.setLocationAndSize(lowerRectangle, lowerSection.x, lowerSection.y, lowerSection.width, lowerSection.height);
+		gaService.setLocationAndSize(lowerRectangle, lowerSection.x + CONTAINER_BORDER_SIZE-1, lowerSection.y + CONTAINER_BORDER_SIZE-1, lowerSection.width+1, lowerSection.height+1);
 		lowerRectangle.setBackground(lowerSectionColor);
 		lowerRectangle.setLineVisible(false);
 		lowerRectangle.setFilled(true);

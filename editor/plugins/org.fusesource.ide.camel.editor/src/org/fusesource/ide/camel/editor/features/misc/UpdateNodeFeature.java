@@ -15,11 +15,11 @@ import org.eclipse.graphiti.features.IReason;
 import org.eclipse.graphiti.features.context.IUpdateContext;
 import org.eclipse.graphiti.features.impl.AbstractUpdateFeature;
 import org.eclipse.graphiti.features.impl.Reason;
+import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.algorithms.Image;
 import org.eclipse.graphiti.mm.algorithms.Text;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -45,10 +45,11 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 		PictogramElement pictogramElement = context.getPictogramElement();
 		if (pictogramElement instanceof ContainerShape) {
 			ContainerShape cs = (ContainerShape) pictogramElement;
-			for (Shape shape : cs.getChildren()) {
-				if (shape.getGraphicsAlgorithm() instanceof Text) {
-					Text text = (Text) shape.getGraphicsAlgorithm();
+			for (GraphicsAlgorithm shape : cs.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
+				if (shape instanceof Text) {
+					Text text = (Text) shape;
 					pictogramName = text.getValue();
+					break;
 				}
 			}
 		}
@@ -92,21 +93,21 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 			boolean finished_label = false;
 			boolean finished_icon = false;
 			// now also adapt the text label of the figure
-			for (Shape shape : cs.getChildren()) {
+			for (GraphicsAlgorithm shape : cs.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
 				// special handling for the text shape as its the figures label
-				if (shape.getGraphicsAlgorithm() instanceof Text) {
-					Text text = (Text) shape.getGraphicsAlgorithm();
+				if (shape instanceof Text) {
+					Text text = (Text) shape;
 					// set the new figure label
 					text.setValue(businessName);
 					
 					finished_label = true;
-				} else if (shape.getGraphicsAlgorithm() instanceof Image) {
+				} else if (shape instanceof Image) {
 					// update the icon image
 					CamelModelElement addedClass = (CamelModelElement)bo;
 					
 					// set the new icon id - refresh will to the rest
 					String iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());
-					((Image)shape.getGraphicsAlgorithm()).setId(iconKey);
+					((Image)shape).setId(iconKey);
 					
 					finished_icon = true;
 				}

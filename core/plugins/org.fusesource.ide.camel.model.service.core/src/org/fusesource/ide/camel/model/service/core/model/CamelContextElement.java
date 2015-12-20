@@ -67,6 +67,7 @@ public class CamelContextElement extends CamelModelElement {
 	public void addEndpointDefinition(CamelModelElement def) {
 		if (this.endpointDefinitions.containsKey(def.getId())) return;
 		this.endpointDefinitions.put(def.getId(), def);
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -75,7 +76,10 @@ public class CamelContextElement extends CamelModelElement {
 	 * @param def
 	 */
 	public void removeEndpointDefinition(CamelModelElement def) {
-		this.endpointDefinitions.remove(def.getId());
+		if (this.endpointDefinitions.containsKey(def.getId())) {
+			this.endpointDefinitions.remove(def.getId());
+			if (getCamelFile() != null) getCamelFile().fireModelChanged();
+		}
 	}
 	
 	/**
@@ -107,6 +111,7 @@ public class CamelContextElement extends CamelModelElement {
 	public void addDataFormat(CamelModelElement df) {
 		if (this.dataformats.containsKey(df.getId())) return;
 		this.dataformats.put((String)df.getId(), df);
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -115,7 +120,10 @@ public class CamelContextElement extends CamelModelElement {
 	 * @param df
 	 */
 	public void removeDataFormat(CamelModelElement df) {
-		this.dataformats.remove(df.getId());
+		if (this.dataformats.containsKey(df.getId())) {
+			this.dataformats.remove(df.getId());
+			if (getCamelFile() != null) getCamelFile().fireModelChanged();
+		}
 	}
 	
 	/**
@@ -125,15 +133,31 @@ public class CamelContextElement extends CamelModelElement {
 		this.dataformats.clear();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#parseNode()
+	 */
+	@Override
+	protected void parseNode() {
+		super.parseNode();
+		ensureUniqueID(this);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#ensureUniqueID(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
+	 */
+	@Override
+	protected void ensureUniqueID(CamelModelElement elem) {
+		super.ensureUniqueID(elem);
+	}
+	
 	/**
 	 * parses direct attributes of the node
 	 */
 	protected void parseAttributes() {
 		Node tmp = this.getXmlNode().getAttributes().getNamedItem(ATTR_Id);
-		if (tmp != null) {
+		if (tmp != null && tmp.getNodeValue() != null && tmp.getNodeValue().trim().length()>0) {
 			setId(tmp.getNodeValue());
-			
-		}
+		} 
 		tmp = this.getXmlNode().getAttributes().getNamedItem(ATTR_UseMDCLogging);
 		if (tmp != null) {
 			setParameter(ATTR_UseMDCLogging, tmp.getNodeValue());

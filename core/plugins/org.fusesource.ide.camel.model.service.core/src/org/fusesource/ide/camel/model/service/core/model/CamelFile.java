@@ -11,11 +11,21 @@
 
 package org.fusesource.ide.camel.model.service.core.model;
 
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.eclipse.core.resources.IResource;
+import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -50,6 +60,8 @@ public class CamelFile extends CamelModelElement {
 	 */
 	private Document document;
 
+	private List<ICamelModelListener> modelListeners = new ArrayList<ICamelModelListener>();
+	
 	/**
 	 * 
 	 */
@@ -80,7 +92,7 @@ public class CamelFile extends CamelModelElement {
 	 * @return the id used for adding the definition or null if not added
 	 */
 	public String addGlobalDefinition(String id, Node def) {
-		String usedId = id != null ? id : UUID.randomUUID().toString();
+		String usedId = id != null ? id : "_def" + UUID.randomUUID().toString();
 		if (id != null && this.globalDefinitions.containsKey(id)) return null;
 		if (id == null && this.globalDefinitions.containsValue(def)) return null;
 		this.globalDefinitions.put(usedId, def);
@@ -169,5 +181,91 @@ public class CamelFile extends CamelModelElement {
 	@Override
 	public CamelFile getCamelFile() {
 		return this;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#createNode()
+	 */
+	@Override
+	protected Node createNode() {
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#updateUnderlyingNode()
+	 */
+	@Override
+	protected void updateUnderlyingNode() {
+		super.updateUnderlyingNode();
+		System.err.println(getDocumentAsXML());
+	}
+	
+	/**
+	 * returns the string representing the dom model
+	 * 
+	 * @return	the dom model as string or null on error
+	 */
+	public String getDocumentAsXML() {
+    	try {
+    		DOMSource domSource = new DOMSource(getDocument());
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+	        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+	        transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
+	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + 3);
+	        tf.setAttribute("indent-number", 3);
+            transformer.transform(domSource, result);
+            writer.flush();
+            return writer.toString();
+    	} catch (Exception ex) {
+    		CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + getResource().getFullPath().toOSString(), ex);
+    	}
+    	return null;
+	}
+	
+	/**
+	 * adds a model listener
+	 * 
+	 * @param listener
+	 */
+	public void addModelListener(ICamelModelListener listener) {
+		if (this.modelListeners.contains(listener) == false) {
+			this.modelListeners.add(listener);
+		}
+	}
+	
+	/**
+	 * removes a listener
+	 * 
+	 * @param listener
+	 */
+	public void removeModelListener(ICamelModelListener listener) {
+		if (this.modelListeners.contains(listener)) {
+			this.modelListeners.remove(listener);
+		}
+	}
+	
+	/**
+	 * notifies all listeners that the model has been changed
+	 */
+	public void fireModelChanged() {
+		for (ICamelModelListener listener : this.modelListeners) {
+			listener.modelChanged();
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#getCamelContext()
+	 */
+	@Override
+	public CamelContextElement getCamelContext() {
+		for (CamelModelElement e : getChildElements()) {
+			if (e.getXmlNode().getNodeName().equalsIgnoreCase("camelContext")) return (CamelContextElement)e;
+		}
+		return null;
 	}
 }

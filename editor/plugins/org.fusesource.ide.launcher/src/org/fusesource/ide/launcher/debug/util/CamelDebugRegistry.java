@@ -13,8 +13,8 @@ package org.fusesource.ide.launcher.debug.util;
 import java.util.HashMap;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.ui.IEditorInput;
 import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
-import org.fusesource.ide.launcher.util.CamelDebugContextEditorInput;
 
 /**
  * @author lhein
@@ -37,7 +37,7 @@ public final class CamelDebugRegistry {
 		return instance;
 	}
 	
-	public void createEntry(CamelDebugTarget debugTarget, String fileName, CamelDebugContextEditorInput editorInput, ILaunchConfiguration launchConfig) {
+	public void createEntry(CamelDebugTarget debugTarget, String fileName, IEditorInput editorInput, ILaunchConfiguration launchConfig) {
 		entries.put(launchConfig, new CamelDebugRegistryEntry(debugTarget, fileName, editorInput, launchConfig));
 	}
 	

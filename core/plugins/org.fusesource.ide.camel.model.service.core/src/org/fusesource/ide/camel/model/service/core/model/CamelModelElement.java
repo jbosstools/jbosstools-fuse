@@ -93,6 +93,7 @@ public class CamelModelElement {
 	 */
 	public void setParent(CamelModelElement parent) {
 		this.parent = parent;
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -107,6 +108,7 @@ public class CamelModelElement {
 	 */
 	public void setId(String id) {
 		this.parameters.put(ID_ATTRIBUTE, id);
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -121,6 +123,7 @@ public class CamelModelElement {
 	 */
 	public void setName(String name) {
 		this.name = name;
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -135,6 +138,7 @@ public class CamelModelElement {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -283,6 +287,7 @@ public class CamelModelElement {
 	 */
 	public void setInputElement(CamelModelElement inputElement) {
 		this.inputElement = inputElement;
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -297,6 +302,7 @@ public class CamelModelElement {
 	 */
 	public void setOutputElement(CamelModelElement outputElement) {
 		this.outputElement = outputElement;
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -328,6 +334,7 @@ public class CamelModelElement {
 	public void addChildElement(CamelModelElement element) {
 		if (this.childElements.contains(element) == false) {
 			this.childElements.add(element);
+			if (getCamelFile() != null) getCamelFile().fireModelChanged();
 		}			
 	}
 	
@@ -337,7 +344,11 @@ public class CamelModelElement {
 	 * @param element
 	 */
 	public void removeChildElement(CamelModelElement element) {
-		childElements.remove(element);
+		if (childElements.contains(element)) {
+			childElements.remove(element);
+//			getXmlNode().getParentNode().removeChild(getXmlNode());
+			if (getCamelFile() != null) getCamelFile().fireModelChanged();
+		}
 	}
 	
 	/**
@@ -360,7 +371,10 @@ public class CamelModelElement {
 	 * @param name
 	 */
 	public void removeParameter(String name) {
-		this.parameters.remove(name);
+		if (this.parameters.containsKey(name)) {
+			this.parameters.remove(name);
+			if (getCamelFile() != null) getCamelFile().fireModelChanged();
+		}
 	}
 	
 	/**
@@ -381,7 +395,9 @@ public class CamelModelElement {
 	 * @param value
 	 */
 	public void setParameter(String name, Object value) {
+		Object oldValue = this.parameters.get(name);
 		this.parameters.put(name, value);
+		if (getCamelFile() != null && oldValue != value) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -403,6 +419,7 @@ public class CamelModelElement {
 	 */
 	public void setXmlNode(Node xmlNode) {
 		this.xmlNode = xmlNode;
+		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -470,6 +487,15 @@ public class CamelModelElement {
 		linkChildrenToAttributes();
 	}
 	
+	protected void ensureUniqueID(CamelModelElement elem) {
+		if (elem.getId() == null || elem.getId().trim().length()<1) {
+			elem.setId(elem.getNewID());
+		}
+		for (CamelModelElement e : elem.getChildElements()) {
+			ensureUniqueID(e);
+		}
+	}
+	
 	/**
 	 * parses direct attributes of the node
 	 */
@@ -512,7 +538,7 @@ public class CamelModelElement {
 				}
 			}
 		} else {
-			CamelModelServiceCoreActivator.pluginLog().logWarning("Unsupported EIP will be ignored: " + nodename);
+			CamelModelServiceCoreActivator.pluginLog().logWarning("ParseAttributes: Unsupported EIP will be ignored: " + nodename);
 		}
 	}
 	
@@ -633,20 +659,93 @@ public class CamelModelElement {
 			}
 		}
 		
-		// then update this
-		// first get the element name
-		String nodename = getXmlNode().getNodeName();
-		// now try to match with an EIP name
-		Eip eip = getEipByName(nodename);
-		if (eip != null && xmlNode instanceof Element) {
-			clearAttributes();
+		if (getXmlNode() != null) {
+			// then update this
+			// first get the element name
+			String nodename = getXmlNode().getNodeName();
+			// now try to match with an EIP name
+			Eip eip = getEipByName(nodename);
 			Element e = (Element)xmlNode;
-			for (String key : getParameters().keySet()) {
-				Object value = getParameter(key);
-				e.setAttribute(key, getMappedValue(value));
+			if (eip != null && xmlNode instanceof Element) {
+				clearAttributes();
+				for (String key : getParameters().keySet()) {
+					Object value = getParameter(key);
+					if (eip.getParameter(key).getKind().equalsIgnoreCase("attribute")) {
+						e.setAttribute(key, getMappedValue(value));
+					} else if (eip.getParameter(key).getKind().equalsIgnoreCase("element") &&
+							   key.equalsIgnoreCase("description")) {
+						// description element handling
+						Eip subEip = getEipByName(key);
+						if (subEip != null) {
+							// seems this parameter is another eip type -> we need to create/modify a subnode
+							boolean createSubNode = true;
+							Node subNode = null;
+							for (int c = 0; c < e.getChildNodes().getLength(); c++) {
+								subNode = e.getChildNodes().item(c);
+								if (subNode.getNodeName().equals(key)) {
+									createSubNode = false;
+									break;
+								}
+							}
+							if (createSubNode) {
+								subNode = getCamelFile().getDocument().createElement(key);
+								e.appendChild(subNode);
+							}
+							subNode.setTextContent(getMappedValue(value));
+						}
+					} else if (eip.getParameter(key).getKind().equalsIgnoreCase("expression")) {
+						// expression element handling
+						CamelModelElement exp = null;
+						if (value instanceof CamelModelElement) {
+							exp = (CamelModelElement)value;
+						}
+						Eip subEip = getEipByName(exp.getNodeTypeId());
+						if (subEip != null) {
+							// seems this parameter is another eip type -> we need to create/modify a subnode
+							boolean createSubNode = true;
+							Node subNode = null;
+							for (int c = 0; c < e.getChildNodes().getLength(); c++) {
+								subNode = e.getChildNodes().item(c);
+								if (subNode.getNodeName().equals(exp.getNodeTypeId())) {
+									createSubNode = false;
+									break;
+								}
+							}
+							if (createSubNode) {
+								subNode = getCamelFile().getDocument().createElement(key);
+								e.appendChild(subNode);
+							}
+							for (int i = 0; i<((Element)subNode).getAttributes().getLength(); i++) {
+								Node attrNode = ((Element)subNode).getAttributes().item(i);
+								((Element)subNode).removeAttribute(attrNode.getNodeName());
+							}
+							Iterator<String> pKeys = exp.getParameters().keySet().iterator();
+							while (pKeys.hasNext()) {
+								String pKey = pKeys.next();
+								Object oValue = exp.getParameter(pKey);
+								// expressions shouldn't have expression attributes but values
+								if (subEip.getParameter(pKey).getKind().equalsIgnoreCase("value")) {
+									if (oValue != null && oValue.toString().trim().length()>0) ((Element)subNode).setNodeValue(oValue.toString());
+								} else {
+									if (oValue != null && oValue.toString().trim().length()>0) ((Element)subNode).setAttribute(pKey, oValue.toString());									
+								}
+							}
+						}
+					} else {
+						// ignore the other kinds
+					}
+				}
+			} else {
+				if (this instanceof CamelContextElement) {
+					if (getId() != null && getId().trim().length()>0) {
+						e.setAttribute("id", getId());
+					}
+				} else {
+					CamelModelServiceCoreActivator.pluginLog().logWarning("UpdateUnderlyingNode: Unsupported EIP will be ignored: " + nodename);					
+				}
 			}
 		} else {
-			CamelModelServiceCoreActivator.pluginLog().logWarning("Unsupported EIP will be ignored: " + nodename);
+			// no xml node for this object -> CamelFile
 		}
 		
 		// finally update the output
@@ -672,7 +771,7 @@ public class CamelModelElement {
 		NamedNodeMap attribs = getXmlNode().getAttributes();
 		for (int i = 0; i < attribs.getLength(); i++) {
 			Node attr = attribs.item(i);
-			xmlNode.removeChild(attr);
+			if (attr != null) getXmlNode().getAttributes().removeNamedItem(attr.getNodeName());
 		}
 	}
 	
@@ -827,23 +926,9 @@ public class CamelModelElement {
 	public boolean isUniqueId(String newId) {
 		if (newId == null || newId.trim().length()<1) return false;
 		
-		if (containsId(getCamelContext(), newId)) return false;
+		if (getCamelContext().findNode(newId) != null) return false;
 		
 		return true;
-	}
-	
-	private boolean containsId(CamelModelElement elem, String newId) {
-		// if the element has the same id the new id is not unique
-		if (elem.getId() != null && elem.getId().equals(newId)) return true;
-		
-		// now check the children
-		if (elem.getChildElements() != null) {
-			for (CamelModelElement e : elem.getChildElements()) {
-				if (containsId(e, newId)) return false;
-			}
-		}
-		
-		return false;
 	}
 	
 	/**
@@ -857,7 +942,8 @@ public class CamelModelElement {
 		
 		if (getChildElements() != null) {
 			for (CamelModelElement e : getChildElements()) {
-				if (e.findNode(nodeId) != null) return e;
+				CamelModelElement cme = e.findNode(nodeId);
+				if (cme != null) return cme;
 			}
 		}
 		

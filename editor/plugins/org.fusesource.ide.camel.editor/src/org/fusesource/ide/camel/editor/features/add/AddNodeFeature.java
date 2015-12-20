@@ -65,7 +65,7 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 		Diagram diagram = Graphiti.getPeService().getDiagramForPictogramElement(targetContainer);
 		String label = DiagramUtils.filterFigureLabel(addedClass.getDisplayText());
 		
-		// CONTAINER SHAPE WITH ROUNDED RECTANGLE
+		// CONTAINER SHAPE
 		ContainerShape containerShape = Graphiti.getPeCreateService().createContainerShape(targetContainer, true);
 
 		// now paint the shape

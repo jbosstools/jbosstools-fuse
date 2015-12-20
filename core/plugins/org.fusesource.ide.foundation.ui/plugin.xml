@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension
+         point="org.eclipse.ui.elementFactories">
+      <factory
+            class="org.fusesource.ide.foundation.ui.io.CamelXMLEditorInputFactory"
+            id="org.fusesource.ide.foundation.ui.io.CamelXMLEditorInputFactory">
+      </factory>
+   </extension>
 </plugin>

@@ -88,7 +88,7 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 			}
 		}
 		if (shape.getGraphicsAlgorithm() != null) {
-			Graphiti.getGaService().setLocationAndSize(shape.getGraphicsAlgorithm(), x, y, w, h);
+			Graphiti.getGaService().setLocationAndSize(shape.getGraphicsAlgorithm(), x, y, w-1+FigureUIFactory.CONTAINER_BORDER_SIZE+FigureUIFactory.CONTAINER_BORDER_SIZE, h+FigureUIFactory.CONTAINER_BORDER_SIZE+FigureUIFactory.CONTAINER_BORDER_SIZE);
 		}
 		
 		layoutPictogramElement(shape);

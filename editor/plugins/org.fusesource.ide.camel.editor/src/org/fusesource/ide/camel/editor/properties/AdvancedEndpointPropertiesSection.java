@@ -244,7 +244,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), txtField.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true") || p.getName().equalsIgnoreCase("id")) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
