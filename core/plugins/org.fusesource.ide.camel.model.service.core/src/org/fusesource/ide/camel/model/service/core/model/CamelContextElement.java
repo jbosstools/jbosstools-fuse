@@ -215,4 +215,12 @@ public class CamelContextElement extends CamelModelElement {
 	public String getNodeTypeId() {
 		return "camelContext";
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#supportsBreakpoint()
+	 */
+	@Override
+	public boolean supportsBreakpoint() {
+		return false;
+	}
 }

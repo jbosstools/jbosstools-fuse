@@ -66,4 +66,12 @@ public class CamelRouteElement extends CamelModelElement {
 	public List<CamelModelElement> getOutputs() {
 		return this.outputs;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#supportsBreakpoint()
+	 */
+	@Override
+	public boolean supportsBreakpoint() {
+		return false;
+	}
 }
