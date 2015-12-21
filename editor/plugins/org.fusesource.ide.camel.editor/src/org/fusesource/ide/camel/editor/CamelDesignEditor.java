@@ -79,7 +79,11 @@ import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 /*
  * @author lhein
  */
-public class CamelDesignEditor extends DiagramEditor implements ISelectionListener, INodeViewer, ICamelModelListener, IDebugEventSetListener, IBreakpointsListener {
+public class CamelDesignEditor extends DiagramEditor implements ISelectionListener, 
+																INodeViewer, 
+																ICamelModelListener, 
+																IDebugEventSetListener, 
+																IBreakpointsListener {
 	
 	private CamelEditor parent;
 	private IProject workspaceProject;
@@ -238,7 +242,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		this.model = model;
 		if (model != null && model.getCamelFile() != null) {
 			model.getCamelFile().addModelListener(this);
-			model.getCamelFile().addModelListener(getParent());
+			model.getCamelFile().addModelListener(getParent().getGlobalConfigEditor());
 		}
 	}
 	

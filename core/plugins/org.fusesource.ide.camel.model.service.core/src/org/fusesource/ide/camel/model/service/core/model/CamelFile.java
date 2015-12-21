@@ -40,6 +40,8 @@ import org.w3c.dom.Node;
  */
 public class CamelFile extends CamelModelElement {
 	
+	public static final int XML_INDENT_VALUE = 3;
+	
 	/**
 	 * these maps contains endpoints and bean definitions stored using their ID value
 	 */
@@ -60,16 +62,31 @@ public class CamelFile extends CamelModelElement {
 	 */
 	private Document document;
 
+	/**
+	 * list of listeners looking for changes in the internal model
+	 */
 	private List<ICamelModelListener> modelListeners = new ArrayList<ICamelModelListener>();
 	
+	
 	/**
+	 * creates a camel file object for the given resource
 	 * 
+	 * @param resource
 	 */
 	public CamelFile(IResource resource) {
 		super(null, null);
 		this.resource = resource;
 	}
 
+	/**
+	 * 
+	 * @param xmlString
+	 */
+	public void reloadModelFromXML(String xmlString) {
+		// TODO: code me
+		System.err.println("Reloading model from xml string:\n " + xmlString );
+	}
+	
 	/**
 	 * @return the globalDefinitions
 	 */
@@ -96,6 +113,7 @@ public class CamelFile extends CamelModelElement {
 		if (id != null && this.globalDefinitions.containsKey(id)) return null;
 		if (id == null && this.globalDefinitions.containsValue(def)) return null;
 		this.globalDefinitions.put(usedId, def);
+		fireModelChanged();
 		return usedId;
 	}
 	
@@ -105,7 +123,7 @@ public class CamelFile extends CamelModelElement {
 	 * @param id
 	 */
 	public void removeBeanDefinition(String id) {
-		this.globalDefinitions.remove(id);
+		if (this.globalDefinitions.remove(id) != null) fireModelChanged();
 	}
 	
 	/**
@@ -191,14 +209,14 @@ public class CamelFile extends CamelModelElement {
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#updateUnderlyingNode()
-	 */
-	@Override
-	protected void updateUnderlyingNode() {
-		super.updateUnderlyingNode();
-		System.err.println(getDocumentAsXML());
-	}
+//	/* (non-Javadoc)
+//	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#updateUnderlyingNode()
+//	 */
+//	@Override
+//	protected void updateUnderlyingNode() {
+//		super.updateUnderlyingNode();
+//		System.err.println(getDocumentAsXML());
+//	}
 	
 	/**
 	 * returns the string representing the dom model
@@ -216,11 +234,11 @@ public class CamelFile extends CamelModelElement {
 	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 	        transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
-	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + 3);
-	        tf.setAttribute("indent-number", 3);
+	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + XML_INDENT_VALUE);
+	        tf.setAttribute("indent-number", XML_INDENT_VALUE);
             transformer.transform(domSource, result);
             writer.flush();
-            return writer.toString();
+            return writer.toString().trim();
     	} catch (Exception ex) {
     		CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + getResource().getFullPath().toOSString(), ex);
     	}
@@ -254,7 +272,7 @@ public class CamelFile extends CamelModelElement {
 	 */
 	public void fireModelChanged() {
 		for (ICamelModelListener listener : this.modelListeners) {
-			listener.modelChanged();
+			if (listener != null) listener.modelChanged();
 		}
 	}
 	
@@ -267,5 +285,13 @@ public class CamelFile extends CamelModelElement {
 			if (e.getXmlNode().getNodeName().equalsIgnoreCase("camelContext")) return (CamelContextElement)e;
 		}
 		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#supportsBreakpoint()
+	 */
+	@Override
+	public boolean supportsBreakpoint() {
+		return false;
 	}
 }

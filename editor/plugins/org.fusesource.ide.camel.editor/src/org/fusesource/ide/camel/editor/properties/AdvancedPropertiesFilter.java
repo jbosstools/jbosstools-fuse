@@ -28,7 +28,8 @@ public class AdvancedPropertiesFilter implements IFilter {
     public boolean select(Object toTest) {
         CamelModelElement ep = getSelectedEndpoint(toTest);
         if (ep != null && (ep.getNodeTypeId().equalsIgnoreCase("from") || ep.getNodeTypeId().equalsIgnoreCase("to"))) {
-            int protocolSeparatorIdx = ((String)ep.getParameter("uri")).indexOf(":");
+            if (ep.getParameter("uri") == null || ((String)ep.getParameter("uri")).trim().length()<1) return false;
+        	int protocolSeparatorIdx = ((String)ep.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
             	Component comp = CamelComponentUtils.getComponentModel(((String)ep.getParameter("uri")).substring(0, protocolSeparatorIdx));
                 return comp != null && comp.getUriParameters().isEmpty() == false;

@@ -262,8 +262,8 @@ public class DetailsSection extends AbstractPropertySection {
             // DESCRIPTION PROPERTIES
             if (CamelComponentUtils.isDescriptionProperty(prop)) {
             	String description = null;
-            	if (this.selectedEP.getParameter(p.getName()) != null) {
-            		description = this.eip.getDescription();
+            	if (this.selectedEP.getDescription() != null) {
+            		description = this.selectedEP.getDescription();
             	} else {
             		description = this.eip.getParameter(p.getName()).getDefaultValue();
             	}
@@ -273,8 +273,7 @@ public class DetailsSection extends AbstractPropertySection {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
-                        selectedEP.setParameter(prop.getName(), txt.getText());
-                        if (prop.getName().equalsIgnoreCase("description")) selectedEP.setDescription(txt.getText());
+                        selectedEP.setDescription(txt.getText());
                     }
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
@@ -291,18 +290,8 @@ public class DetailsSection extends AbstractPropertySection {
 						 */
 						@Override
 						public IStatus validate(Object value) {
-							if (((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
-								// check for broken refs
-								String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
-								if (refId == null || refId.trim().length()<1 || selectedEP.getCamelContext().getEndpointDefinitions().get(refId) == null) {
-									return ValidationStatus.error("The entered reference does not exist in your context!");
-								}
-							}
-							
-							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								return ValidationStatus.ok();
-							}
-							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+							// TODO: add validation for descriptions (xml escape chars etc)
+							return ValidationStatus.ok();
 						}
 					};
                 }

@@ -8,9 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.camel.editor.features.create;
-
 
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateConnectionContext;
@@ -22,7 +20,6 @@ import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
-
 
 /**
  * @author lhein
@@ -113,8 +110,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 	 */
 	private CamelModelElement getNode(Anchor anchor) {
 		if (anchor != null) {
-			Object obj = getBusinessObjectForPictogramElement(anchor
-					.getParent());
+			Object obj = getBusinessObjectForPictogramElement(anchor.getParent());
 			if (obj instanceof CamelModelElement) {
 				return (CamelModelElement) obj;
 			}

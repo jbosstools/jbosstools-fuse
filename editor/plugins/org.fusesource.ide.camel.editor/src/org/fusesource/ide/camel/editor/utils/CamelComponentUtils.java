@@ -80,7 +80,9 @@ public final class CamelComponentUtils {
     }
     
     public static boolean isDescriptionProperty(Parameter p) {
-    	return p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DescriptionDefinition");
+    	return 	p.getKind().equals("element") && 
+    			p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DescriptionDefinition") &&
+    			p.getName().equals("description");
     }
     
     public static boolean isTextProperty(Parameter p) {

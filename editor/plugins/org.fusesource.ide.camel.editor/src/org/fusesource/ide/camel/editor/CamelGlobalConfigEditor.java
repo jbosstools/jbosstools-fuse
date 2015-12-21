@@ -31,6 +31,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -38,6 +39,7 @@ import org.eclipse.ui.part.EditorPart;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Element;
@@ -46,7 +48,7 @@ import org.w3c.dom.Node;
 /**
  * @author lhein
  */
-public class CamelGlobalConfigEditor extends EditorPart {
+public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelListener {
 
 	private CamelEditor parentEditor;
 
@@ -224,6 +226,20 @@ public class CamelGlobalConfigEditor extends EditorPart {
 	@Override
 	public void setFocus() {
 		this.treeViewer.getControl().setFocus();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.model.ICamelModelListener#modelChanged()
+	 */
+	@Override
+	public void modelChanged() {
+		Display.getDefault().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				reload();
+			}
+		});
 	}
 	
 	public void reload() {

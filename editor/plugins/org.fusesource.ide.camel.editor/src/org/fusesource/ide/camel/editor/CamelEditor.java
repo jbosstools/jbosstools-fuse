@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -17,6 +19,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -44,8 +47,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
-import org.fusesource.ide.camel.model.util.Objects;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -57,8 +59,7 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  */
 public class CamelEditor extends MultiPageEditorPart implements IResourceChangeListener,
 																ITabbedPropertySheetPageContributor, 
-																IPropertyChangeListener,
-																ICamelModelListener {
+																IPropertyChangeListener {
 
 	public static final String INTEGRATION_PERSPECTIVE_ID = "org.fusesource.ide.branding.perspective";
 	
@@ -78,6 +79,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	/** stores the last selection before saving and restores it after saving **/
 	private ISelection savedSelection;
 	private int lastActivePageIdx = DESIGN_PAGE_INDEX;
+	
+	/** the editor input **/
 	private CamelXMLEditorInput editorInput;
 
 	
@@ -178,6 +181,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 				 */
 				@Override
 				public void documentChanged(DocumentEvent event) {
+					// TODO: source editor changed - check what to do
 					//designEditor.onTextEditorPropertyChange();
 				}
 
@@ -312,7 +316,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public String getTitle() {
-		return this.designEditor != null && this.designEditor.getModel() != null ? this.designEditor.getModel().getResource().getName() : "noname";
+		return this.designEditor != null && this.designEditor.getModel() != null ? this.designEditor.getModel().getResource().getName() : "";
 	}
 	
 	/**
@@ -395,30 +399,25 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void pageChange(int newPageIndex) {
-//		try {
-//			if (newPageIndex == SOURCE_PAGE_INDEX) {
+		try {
+			if (newPageIndex == SOURCE_PAGE_INDEX) {
 //				boolean doPageChange = continueWithUnconnectedFigures();
 //				if (doPageChange) {
-//					if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
-//					if (lastActivePageIdx == DESIGN_PAGE_INDEX) updatedDesignPage();
-//					if (lastActivePageIdx == GLOBAL_CONF_INDEX) updatedConfigPage();
+				if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
+				updateSourceFromModel();
 //				} else {
 //					setActivePage(DESIGN_PAGE_INDEX);
 //					newPageIndex = DESIGN_PAGE_INDEX;
 //				}
-//			} else if (newPageIndex == DESIGN_PAGE_INDEX){
-//				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updatedTextPage();
-//				if (lastActivePageIdx == GLOBAL_CONF_INDEX) updatedConfigPage();
-//			} else {
-//				// must be global config page
-//				if (lastActivePageIdx == DESIGN_PAGE_INDEX) updatedDesignPage();
-//				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updatedTextPage();
-//				globalConfigEditor.reload();
-//			}
-//		} finally {
-//			this.lastActivePageIdx = newPageIndex;
-//			super.pageChange(newPageIndex);
-//		}
+			} else if (newPageIndex == DESIGN_PAGE_INDEX){
+				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updateModelFromSource();
+			} else if (newPageIndex == GLOBAL_CONF_INDEX) {
+				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updateModelFromSource();
+			}
+		} finally {
+			this.lastActivePageIdx = newPageIndex;
+			super.pageChange(newPageIndex);
+		}
 	}
 	
 	/**
@@ -427,35 +426,40 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *  
 	 * @return	true if user wants to preserve unconnected figures, otherwise (or if no unconnected figures) returns false
 	 */
-//	private boolean continueWithUnconnectedFigures() {
+	private boolean continueWithUnconnectedFigures() {
 		// search for figures which have no connections - those would be lost when
 		// saving or switching the tabs
-//		boolean unconnectedNodeFound = false;
-//
-//		unconnectedNodeFound = findUnconnectedNode(designEditor.getModel().getChildren());
-//		
-//		if (!unconnectedNodeFound) return true;
-//		
-//		return MessageDialog.openQuestion(Display.getDefault().getActiveShell(), EditorMessages.unconnectedNodeFoundTitle, EditorMessages.unconnectedNodeFoundText);
-//	}
+		boolean unconnectedNodeFound = false;
+
+		unconnectedNodeFound = findUnconnectedNode(designEditor.getModel().getChildElements());
+		
+		if (!unconnectedNodeFound) return true;
+		
+		return MessageDialog.openQuestion(Display.getDefault().getActiveShell(), UIMessages.unconnectedNodeFoundTitle, UIMessages.unconnectedNodeFoundText);
+	}
 	
-//	/**
-//	 * searches for unconnected nodes
-//	 * 
-//	 * @param nodes
-//	 * @return
-//	 */
-//	private boolean findUnconnectedNode(List<AbstractNode> nodes) {
-//		boolean unconnected = false;
-//		for (AbstractNode node : nodes) {
-//			if (node instanceof Route == false && node.getAllConnections().isEmpty()) return true;
-//			if (!node.getChildren().isEmpty()) {
-//				unconnected = findUnconnectedNode(node.getChildren());
-//				if (unconnected) return true;
-//			}
-//		}
-//		return false;
-//	}
+	/**
+	 * searches for unconnected nodes
+	 * 
+	 * @param nodes
+	 * @return
+	 */
+	private boolean findUnconnectedNode(List<CamelModelElement> nodes) {
+		boolean unconnected = false;
+		int nodesWithoutInput = 0;
+		int nodesWithoutOutput = 0;
+		for (CamelModelElement node : nodes) {
+			if (!node.getChildElements().isEmpty()) {
+				unconnected = findUnconnectedNode(node.getChildElements());
+				if (unconnected) return true;
+			}
+			if (node.getInputElement() == null) nodesWithoutInput++;
+			if (node.getOutputElement() == null) nodesWithoutOutput++;
+		}
+		if (nodesWithoutInput > 1 || nodesWithoutOutput > 1) return true;
+		
+		return false;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -466,76 +470,76 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		return getSite().getId();
 	}
 
-//	/**
-//	 * this method is responsible for updating the design editor before
-//	 * displaying it
-//	 */
-//	void updatedDesignPage() {
-//		updatedDesignPage(true);
-//	}
-//
-//	/**
-//	 * 
-//	 * @param async
-//	 */
-//	void updatedDesignPage(boolean async) {
-//		// we are switching to the source page so lets update the text editor's
-//		// model with the latest diagram...
-//		designEditor.runIfDiagramModified(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				IDocument document = getDocument();
-//				if (document != null) {
-//					String text = document.get();
-//
-//					// lets update the text with the latest from the model..
-//					String newText = designEditor.updateEditorText(text);
-//					if (!Objects.equal(newText, text)) {
-//						// only update the document if its actually different
-//						// to avoid setting the dirty flag unnecessarily
-//						document.set(newText);
-//					}
-//				}
-//			}
-//		}, async);
-//// TODO: why do we update the design editor if we switched to source editor?
-//// 		 commented out the below line as it seems to make no sense here
-////		this.designEditor.update();
-//	}
-//
-//
-//	/**
-//	 * We are switching to the design page so lets update the design model if
-//	 * the text has been changed
-//	 */
-//	private void updatedTextPage() {
-//		designEditor.runIfTextModified(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				IDocument document = getDocument();
-//				if (document != null) {
-//					designEditor.clearCache();
-//					String text = document.get();
-//					Activator.getLogger().debug(
-//							"Updating the design model from the updated text");
-//					designEditor.loadEditorText(text);
-//					designEditor.refreshDiagramContents();
-//					designEditor.update();
-//					designEditor.setFocus();
-//					designEditor.fireModelChanged(); // will update the outline view
-//				}
-//
-//			}
-//		});
-//	}
-//	
-//	private void updatedConfigPage() {
-//		// we are switching from the config page so lets update the model for the other editors
-//		// TODO: make changes in Config tab visible on other tabs
-//	}
+	/**
+	 * this method is responsible for updating the design editor before
+	 * displaying it
+	 */
+	void updateSourceFromModel() {
+		updateSourceFromModel(true);
+	}
 
+	/**
+	 * 
+	 * @param async
+	 */
+	void updateSourceFromModel(boolean async) {
+		// we are switching to the source page so lets update the text editor's
+		// model with the latest diagram...
+		Runnable r = new Runnable() {
+			@Override
+			public void run() {
+				IDocument document = getDocument();
+				if (document != null) {
+					String text = document.get();
+					String newText = designEditor.getModel().getDocumentAsXML();
+					if (!text.equals(newText)) {
+						// only update the document if its actually different
+						// to avoid setting the dirty flag unnecessarily
+						document.set(newText);
+					}
+				}
+			}
+		};
+		
+		if (async) {
+			Display.getDefault().asyncExec(r);
+		} else {
+			Display.getDefault().syncExec(r);
+		}
+	}
+
+	/**
+	 * this method is responsible for updating the model from the XML source
+	 */
+	void updateModelFromSource() {
+		updateModelFromSource(true);
+	}
+
+	/**
+	 * We are switching from the text page so lets update the model if
+	 * the text has been changed
+	 */
+	private void updateModelFromSource(boolean async) {
+		Runnable r = new Runnable() {
+			@Override
+			public void run() {
+				IDocument document = getDocument();
+				if (document != null) {
+					String text = document.get();
+					designEditor.getModel().reloadModelFromXML(text);
+					designEditor.refreshDiagramContents();
+					designEditor.setFocus();
+				}
+			}
+		};
+		
+		if (async) {
+			Display.getDefault().asyncExec(r);
+		} else {
+			Display.getDefault().syncExec(r);
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -547,6 +551,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			return this.sourceEditor;
 		} else if (adapter == CamelDesignEditor.class) {
 			return this.designEditor;
+		} else if (adapter == CamelGlobalConfigEditor.class) {
+			return this.globalConfigEditor;
 		} else if (adapter == IPropertySheetPage.class) {
 			return new TabbedPropertySheetPage(this);
 //		} else if (adapter == ActionRegistry.class) {
@@ -582,26 +588,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		return globalConfigEditor;
 	}
 	
-//	public CamelModelElement getSelectedNode() {
-//		return designEditor.getSelectedNode();
-//	}
-
-//	public void setSelectedNode(AbstractNode newSelection) {
-//		designEditor.setSelectedNode(newSelection);
-//	}
-
-//	public RouteContainer getModel() {
-//		return designEditor.getModel();
-//	}
-//
-//	public RouteSupport getSelectedRoute() {
-//		return designEditor.getSelectedRoute();
-//	}
-//
-//	public void setSelectedRoute(RouteSupport selectedRoute) {
-//		designEditor.setSelectedRoute(selectedRoute);
-//	}
-
 	/**
 	 * returns the document
 	 * 
@@ -622,7 +608,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-System.err.println("CamelEditor.init(" + input.getClass().getName() + ")");
 		CamelXMLEditorInput camelInput = null;
 		
 		if (input instanceof IFileEditorInput) {
@@ -643,7 +628,6 @@ System.err.println("CamelEditor.init(" + input.getClass().getName() + ")");
 	 */
 	@Override
 	protected void setInput(IEditorInput input) {
-		System.err.println("CamelEditor.setInput(" + input.getClass().getName() + ")");
 		super.setInput(input);
 		setPartName(input.getName());
 	}
@@ -717,35 +701,5 @@ System.err.println("CamelEditor.init(" + input.getClass().getName() + ")");
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
 //			designEditor.setupGridVisibilityAsync();
 		} 	
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.ICamelModelListener#modelChanged()
-	 */
-	@Override
-	public void modelChanged() {
-		// we only update if the correct editor tab is selected
-		if (getActivePage() != SOURCE_PAGE_INDEX) return;
-		Display.getDefault().asyncExec(new Runnable() {
-			/*
-			 * (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
-			@Override
-			public void run() {
-				IDocument document = getDocument();
-				if (document != null) {
-					String text = document.get();
-
-					// lets update the text with the latest from the model..
-					String newText = designEditor.getModel().getDocumentAsXML();
-					if (!Objects.equal(newText, text)) {
-						// only update the document if its actually different
-						// to avoid setting the dirty flag unnecessarily
-						document.set(newText);
-					}
-				}
-			}
-		});
 	}
 }

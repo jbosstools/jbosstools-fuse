@@ -40,6 +40,9 @@ public class UIMessages extends NLS {
     
     public static String propertiesDetailsTitle;
     public static String propertiesDocumentationTitle;
+    
+    public static String unconnectedNodeFoundTitle;
+    public static String unconnectedNodeFoundText;
 
 
     static {

@@ -12,7 +12,6 @@
 package org.fusesource.ide.camel.editor.behaviours;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
@@ -23,7 +22,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.model.io.IRemoteCamelEditorInput;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 
@@ -103,22 +101,6 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
 				CamelEditorUIActivator.pluginLog().logError("Unable to load Camel context file: " + camelContextFile.getRawLocation().toOSString(), ex);
 			}
 			return true;
-		} else {
-			IRemoteCamelEditorInput remoteEditorInput = editor.asRemoteCamelEditorInput(input);
-			if (remoteEditorInput != null) {
-				camelContextFile = null;
-
-				// load the model
-				try {
-					String text = remoteEditorInput.getXml();
-					CamelIOHandler ioHandler = new CamelIOHandler();
-					editor.setModel(ioHandler.loadCamelModel(text, new NullProgressMonitor()));
-					camelFile = editor.getModel();
-				} catch (Exception ex) {
-					CamelEditorUIActivator.pluginLog().logError("Unable to load Camel context string", ex);
-				}
-				return true;
-			}
 		}
 		return false;
 	}

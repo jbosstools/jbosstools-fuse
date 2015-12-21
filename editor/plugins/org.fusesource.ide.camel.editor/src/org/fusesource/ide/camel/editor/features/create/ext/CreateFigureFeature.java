@@ -101,19 +101,16 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		Object bo = getBusinessObjectForPictogramElement(container);
 		if (container instanceof Diagram) {
 			// we want to create something on the diagram rather than inside a container element - thats only allowed on camelContexts
-			CamelModelElement cme = createNode();
-			if (cme.getCamelContext() == null) {
-				CamelFile cf = null;
-				if (cme.getCamelFile() != null) {
-					cf = cme.getCamelFile();
-				} else {
-					cf = ((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel();
-				}
-				if (cf.getCamelContext() == null && cf.getChildElements().size()==0) {
-					cf.addChildElement(new CamelContextElement(cf, null));
-				}
+			CamelFile cf = ((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel();
+			if (cf.getCamelContext() == null && cf.getChildElements().size()==0) {
+				cf.addChildElement(new CamelContextElement(cf, null));
 			}
-			return (cme.getNodeTypeId().equals("route"));
+			if (eip != null) return eip.getName().equalsIgnoreCase("route");
+			if (clazz != null) { 
+				Object obj = newInstance(clazz);
+				if (obj != null && obj instanceof CamelModelElement) return ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("route");
+				return false;
+			}
 		}
 		return (bo != null && bo instanceof CamelModelElement && ((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
 	}
@@ -147,7 +144,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 */
 	protected String getIconName() {
 		String ret = null;
-		CamelModelElement node = createNode();
+		CamelModelElement node = createNode(null, false);
 		if(node != null ) {
 			ret = node.getIconName();
 		}
@@ -160,20 +157,21 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 */
 	@Override
 	public Object[] create(ICreateContext context) {
-		CamelModelElement node = createNode();
+		CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 		ContainerShape container = context.getTargetContainer();
 		CamelModelElement selectedContainer = null;
 		if (container instanceof Diagram) {
-			selectedContainer = node.getCamelContext();
+			selectedContainer = editor.getModel().getCamelContext();
 		} else {
 			selectedContainer = (CamelModelElement)getBusinessObjectForPictogramElement(container);
 		}
 
+		CamelModelElement node = createNode(selectedContainer, selectedContainer != null);
 		if (selectedContainer != null) {
 			selectedContainer.addChildElement(node);
 			node.setParent(selectedContainer);
 		} else {
-			CamelEditorUIActivator.pluginLog().logWarning("Warning! Could not find currently selected node, so can't associate this node with the container!: " + node);
+			CamelEditorUIActivator.pluginLog().logWarning("Warning! Could not find currently selected node, so can't associate this node with the container! Node: " + node.getName());
 		}
 
 		// do the add
@@ -193,29 +191,29 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	 * 
 	 * @return
 	 */
-	protected CamelModelElement createNode() {
+	protected CamelModelElement createNode(CamelModelElement parent, boolean createDOMNode) {
 		if( eip != null ) {
 			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 			if (editor.getModel() != null) { 
-				Node newNode = editor.getModel().getDocument().createElement(eip.getName());
-				// TODO: find out how to inject the new node at the correct position in DOM
-//				editor.getDisplayedContainer().getCamelFile().getDocument().appendChild(newNode);
-				return new CamelModelElement(editor.getModel().getCamelContext(), newNode);
+				Node newNode = null;
+				if (createDOMNode) {
+					newNode = editor.getModel().getDocument().createElement(eip.getName());
+				}
+				return new CamelModelElement(parent, newNode);
 			}
 		}
 		if( clazz != null ) {
 			Object o = newInstance(clazz);
 			if( o instanceof CamelModelElement ) {
-				return ((CamelModelElement)o);
+				CamelModelElement e = (CamelModelElement)o;
+				e.setParent(parent);
+				return e;
 			}
 		}
 		return null;
 	}
 
 	protected Object newInstance(final Class<?> aClass) {
-		if( aClass == null ) {
-			System.out.println("Dead, left for POC debugging");
-		}
 		try {
 			return aClass.newInstance();
 		} catch (Exception e) {
