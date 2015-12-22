@@ -86,7 +86,8 @@ public final class CamelComponentUtils {
     }
     
     public static boolean isTextProperty(Parameter p) {
-        return  p.getChoice() == null && (
+        return  p.getChoice() == null && 
+        		p.getKind().equals("expression") == false && (
         		p.getJavaType().equalsIgnoreCase("String") || 
                 p.getJavaType().equalsIgnoreCase("java.lang.String") || 
                 p.getJavaType().equalsIgnoreCase("java.net.URL") ||

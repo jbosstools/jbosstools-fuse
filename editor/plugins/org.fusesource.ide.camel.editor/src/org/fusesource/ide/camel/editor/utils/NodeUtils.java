@@ -75,7 +75,8 @@ public class NodeUtils {
     		
 			if (parent.getNodeTypeId().equalsIgnoreCase("choice")) {
 				// special case for choice
-				return child.getNodeTypeId().equalsIgnoreCase("when") || child.getNodeTypeId().equalsIgnoreCase("otherwise");
+				return 	 child.getNodeTypeId().equalsIgnoreCase("when") || 
+						(child.getNodeTypeId().equalsIgnoreCase("otherwise") && parent.getParameter("otherwise") == child);
 			} else {
 				Eip containerEip = parent.getUnderlyingMetaModelObject();
 	        	if (containerEip == null) {

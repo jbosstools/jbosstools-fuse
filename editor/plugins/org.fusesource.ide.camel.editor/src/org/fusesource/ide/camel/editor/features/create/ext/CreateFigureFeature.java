@@ -111,6 +111,17 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 				if (obj != null && obj instanceof CamelModelElement) return ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("route");
 				return false;
 			}
+		} 
+		// make sure we only have a single otherwise per choice
+		if (bo instanceof CamelModelElement && ((CamelModelElement)bo).getNodeTypeId().equals("choice")) {
+			// only one otherwise per choice
+			CamelModelElement choice = (CamelModelElement)bo;
+			if (this.eip != null) {
+				if (this.eip.getName().equals("otherwise") && choice.getParameter("otherwise") != null) return false;
+			} else if (clazz != null) {
+				Object obj = newInstance(clazz);
+				if (obj instanceof CamelModelElement && ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
+			}
 		}
 		return (bo != null && bo instanceof CamelModelElement && ((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
 	}

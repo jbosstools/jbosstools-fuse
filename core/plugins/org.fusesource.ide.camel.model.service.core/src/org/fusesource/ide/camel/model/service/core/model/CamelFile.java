@@ -11,17 +11,12 @@
 package org.fusesource.ide.camel.model.service.core.model;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -29,6 +24,9 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 /**
  * this object represents the camel xml file. It can be of a schema type
@@ -223,15 +221,6 @@ public class CamelFile extends CamelModelElement {
 		return null;
 	}
 	
-//	/* (non-Javadoc)
-//	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#updateUnderlyingNode()
-//	 */
-//	@Override
-//	protected void updateUnderlyingNode() {
-//		super.updateUnderlyingNode();
-//		System.err.println(getDocumentAsXML());
-//	}
-	
 	/**
 	 * returns the string representing the dom model
 	 * 
@@ -239,20 +228,25 @@ public class CamelFile extends CamelModelElement {
 	 */
 	public String getDocumentAsXML() {
     	try {
-    		DOMSource domSource = new DOMSource(getDocument());
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
-	        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-	        transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
-	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + XML_INDENT_VALUE);
-	        tf.setAttribute("indent-number", XML_INDENT_VALUE);
-            transformer.transform(domSource, result);
-            writer.flush();
-            return writer.toString().trim();
+    		// TODO: set the output attributes as defined in eclipse properties!!! (INDENT, LINE WIDTH, etc)
+    		final Document document = getDocument();
+            OutputFormat format = new OutputFormat(document);
+            format.setIndenting(true);
+            format.setIndent(XML_INDENT_VALUE);
+            format.setEncoding("UTF-8");
+            format.setPreserveEmptyAttributes(false);
+            format.setMethod("xml");
+            format.setPreserveSpace(false);
+            format.setOmitComments(false);
+            format.setOmitDocumentType(false);
+            format.setOmitXMLDeclaration(false);
+            format.setLineWidth(0);
+            
+            Writer out = new StringWriter();
+            XMLSerializer serializer = new XMLSerializer(out, format);
+            serializer.serialize(document);
+
+            return out.toString();
     	} catch (Exception ex) {
     		CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + getResource().getFullPath().toOSString(), ex);
     	}

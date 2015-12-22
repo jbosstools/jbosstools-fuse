@@ -87,7 +87,26 @@ public class CamelModelElement {
 					break;
 				}
 			}
-			if (!alreadyChild) parent.getXmlNode().appendChild(underlyingNode);
+			if (!alreadyChild) {
+				if (parent.getNodeTypeId().equals("choice")) {
+					if (this.getNodeTypeId().equals("when")) {
+						Node otherwiseNode = null;
+						for (int i=0; i < parent.getXmlNode().getChildNodes().getLength(); i++) {
+							if (parent.getXmlNode().getChildNodes().item(i).getNodeName().equals("otherwise")) {
+								otherwiseNode = parent.getXmlNode().getChildNodes().item(i);
+								break;
+							}
+						}
+						// move all when nodes before the otherwise
+						parent.getXmlNode().insertBefore(getXmlNode(), otherwiseNode);
+					} else if (getNodeTypeId().equals("otherwise")) {
+						getXmlNode().appendChild(underlyingNode);
+					}
+				} else {
+					parent.getXmlNode().appendChild(underlyingNode);	
+				}
+				
+			}
 		}
 	}
 	
@@ -418,7 +437,7 @@ public class CamelModelElement {
 		Element e = (Element)getXmlNode();
 		String kind = getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getKind() : null;
 		if (this instanceof CamelContextElement) kind = "attribute";
-		if (value == null || value.toString().trim().length()<1) {
+		if (value == null || value.toString().length()<1) {
 			// seems the attribute has been deleted?
 			if (kind.equalsIgnoreCase("attribute") && e.hasAttribute(name)) {
 				e.removeAttribute(name);

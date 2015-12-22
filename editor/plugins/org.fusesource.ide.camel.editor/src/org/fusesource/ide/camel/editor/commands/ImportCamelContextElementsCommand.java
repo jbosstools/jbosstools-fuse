@@ -91,7 +91,6 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 			CamelContextElement context = (CamelContextElement)camelContextFile.getChildElements().get(0);
 			diagramReader.loadModel(context);
 		} catch (Exception e) {
-			e.printStackTrace();
 			CamelEditorUIActivator.pluginLog().logError("Failed to load model: " + e, e);
 		}
 		

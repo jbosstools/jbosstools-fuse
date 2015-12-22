@@ -580,7 +580,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			@Override
 			public void run() {
 				// reload model
-				designEditor.getModel().reloadModelFromXML(getDocument().get());
+				String text = getDocument().get();
+				if (text.indexOf("<?xml ") == -1) text = "<?xml version=\"1.0\"?>\n" + text;
+				designEditor.getModel().reloadModelFromXML(text);
 				// add the diagram contents
 		        ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(), designEditor.getModel());
 		        designEditor.getEditingDomain().getCommandStack().execute(importCommand);

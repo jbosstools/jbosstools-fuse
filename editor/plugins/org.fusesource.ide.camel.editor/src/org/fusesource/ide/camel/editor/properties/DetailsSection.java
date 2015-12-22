@@ -92,6 +92,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.w3c.dom.Node;
 
 /**
  * Shows the property details for the currently selected node
@@ -504,7 +505,18 @@ public class DetailsSection extends AbstractPropertySection {
                 choiceCombo.setEditable(false);
                 choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 
-                final ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+                CamelModelElement expressionElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
+                choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
+                choiceCombo.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent e) {
+//                        CCombo choice = (CCombo)e.getSource();
+//                        String language = choice.getText();
+//                        languageChanged(language, eform, expressionElement, page, prop);
+                    }
+				});
+
+                ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
                 eform.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
                 eform.setText("Expression Settings...");
                 eform.setLayout(new GridLayout(1, true));
@@ -528,16 +540,7 @@ public class DetailsSection extends AbstractPropertySection {
 						aTabbedPropertySheetPage.resizeScrolledComposite();
 					}
 				});
-                final CamelModelElement expressionElement = this.selectedEP.getChildElements().isEmpty() ? null : this.selectedEP.getChildElements().get(0);
-                choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
-                choiceCombo.addModifyListener(new ModifyListener() {
-					@Override
-					public void modifyText(ModifyEvent e) {
-                        CCombo choice = (CCombo)e.getSource();
-                        String language = choice.getText();
-                        languageChanged(language, eform, expressionElement, page);
-                    }
-				});
+
                 choiceCombo.addSelectionListener(new SelectionAdapter() {
                 	/* (non-Javadoc)
                      * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -546,19 +549,22 @@ public class DetailsSection extends AbstractPropertySection {
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
                         String language = choice.getText();
-                        languageChanged(language, eform, expressionElement, page);
+                        languageChanged(language, eform, expressionElement, page, prop);
                     }
                 });
-                if (expressionElement != null) {
+                
+				if (expressionElement != null) {
                     String value = expressionElement.getNodeTypeId();
+                    choiceCombo.deselectAll();
                     for (int i=0; i < choiceCombo.getItems().length; i++) {
                         if (choiceCombo.getItem(i).equalsIgnoreCase(value)) {
-                            choiceCombo.select(i);
-                            choiceCombo.update();
+                        	choiceCombo.select(i);
+                        	languageChanged(value, eform, expressionElement, page, prop);
                             break;
                         }
                     }
-                }
+                }		
+                
                 c = choiceCombo;
                 //initialize the map entry
                 modelMap.put(p.getName(), choiceCombo.getText());
@@ -759,7 +765,7 @@ public class DetailsSection extends AbstractPropertySection {
         page.layout();
     }
     
-    private void languageChanged(String language, ExpandableComposite eform, CamelModelElement expressionElement, Composite page) {
+    private void languageChanged(String language, ExpandableComposite eform, CamelModelElement expressionElement, Composite page, Parameter prop) {
     	eform.setText(language);
         for (Control co : eform.getChildren()) if (co.getData("fuseExpressionClient") != null) co.dispose();
         Composite client = getWidgetFactory().createComposite(eform);
@@ -767,6 +773,22 @@ public class DetailsSection extends AbstractPropertySection {
         client.setLayoutData(new GridData(GridData.FILL_BOTH));
         client.setLayout(new GridLayout(4, false));
         eform.setClient(client);
+        if (expressionElement != null && expressionElement.getXmlNode().getNodeName().equals(language) == false) {
+        	Node oldExpNode = null;
+        	for (int i=0; i<selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
+        		if (selectedEP.getXmlNode().getChildNodes().item(i).getNodeName().equals(expressionElement.getXmlNode().getNodeName())) {
+        			oldExpNode = selectedEP.getXmlNode().getChildNodes().item(i);
+        		}
+        	}
+        	Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+        	expressionElement = new CamelModelElement(this.selectedEP, expNode);
+        	selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
+    	} else if (expressionElement == null && language.trim().length()>0) {
+    		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+    		expressionElement = new CamelModelElement(this.selectedEP, expNode);
+        	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
+        	this.selectedEP.setParameter(prop.getName(), expressionElement);
+        } 
         prepareExpressionUIForLanguage(language, expressionElement, client);
 		page.layout(true);
 		refresh();
