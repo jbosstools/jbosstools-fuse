@@ -464,6 +464,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 						lastError = "";
 						this.lastActivePageIdx = newPageIndex;
 						super.pageChange(newPageIndex);
+						if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
 					} else {
 						rollBackActive = true;
 						newPageIndex = SOURCE_PAGE_INDEX;

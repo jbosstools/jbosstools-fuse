@@ -121,6 +121,15 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#dispose()
+	 */
+	@Override
+	public void dispose() {
+		getModel().removeModelListener(this);
+		super.dispose();
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#setInput(org.eclipse.ui.IEditorInput)
 	 */
 	@Override

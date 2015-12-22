@@ -216,8 +216,18 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 
 		this.treeViewer.setInput(this.parentEditor.getDesignEditor().getModel());
 		this.treeViewer.setSelection(this.treeViewer.getSelection());
+		parentEditor.getDesignEditor().getModel().addModelListener(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.WorkbenchPart#dispose()
+	 */
+	@Override
+	public void dispose() {
+		parentEditor.getDesignEditor().getModel().removeModelListener(this);
+		super.dispose();
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -244,7 +254,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	
 	public void reload() {
 		this.treeViewer.setInput(this.parentEditor.getDesignEditor().getModel());
-		this.treeViewer.refresh();
+		this.treeViewer.refresh(true);
 	}
 
 	/**

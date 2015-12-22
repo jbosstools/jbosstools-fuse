@@ -405,7 +405,6 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
                     	pcit = ((PaletteCategoryItemProvider)octe.getCreateFeature()).getCategoryType();
                     	catname = ProviderHelper.convertCamelCase(((CreateFigureFeature)octe.getCreateFeature()).getCategoryName());
                     }
-                    System.err.println(pcit.name() + " == " + catname);
                     switch (pcit) {
                         case COMPONENTS:
                             compartmentEntryComponents.addToolEntry(toolEntry);

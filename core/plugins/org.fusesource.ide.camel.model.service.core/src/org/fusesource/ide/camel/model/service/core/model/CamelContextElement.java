@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.model.service.core.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -195,7 +196,7 @@ public class CamelContextElement extends CamelModelElement {
 				cme.initialize();
 				addChildElement(cme);
 			} else {
-				System.err.println("Unexpected child element of the context: " + tmp.getNodeName());
+				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + tmp.getNodeName());
 			}
 		}
 	}
