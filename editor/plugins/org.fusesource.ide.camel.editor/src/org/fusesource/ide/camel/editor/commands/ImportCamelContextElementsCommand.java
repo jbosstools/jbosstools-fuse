@@ -52,10 +52,22 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 	 * @param camelContextFile
 	 */
 	public ImportCamelContextElementsCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, CamelFile camelContextFile) {
+		this(designEditor, editingDomain, camelContextFile, null);
+	}
+	
+	/**
+	 * 
+	 * @param project
+	 * @param editingDomain
+	 * @param diagramName
+	 * @param camelContextFile
+	 */
+	public ImportCamelContextElementsCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, CamelFile camelContextFile, Diagram diagram) {
 		super(editingDomain);
 		this.designEditor = designEditor;
 		this.editingDomain = editingDomain;
 		this.camelContextFile = camelContextFile;
+		this.diagram = diagram;
 	}
 
 	/*
@@ -64,12 +76,14 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 	 */
 	@Override
 	protected void doExecute() {
-		// Create the diagram and its file
-		String diagramName = "CamelContext";
-		diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", diagramName, true); //$NON-NLS-1$
-		URI uri = URI.createPlatformResourceURI(camelContextFile.getResource().getLocationURI() != null ? camelContextFile.getResource().getLocationURI().getPath() : camelContextFile.getResource().getFullPath().toOSString(), true);
-		createdResource = editingDomain.getResourceSet().createResource(uri);
-		createdResource.getContents().add(diagram);
+		if (this.diagram == null) {
+			// Create the diagram and its file
+			String diagramName = "CamelContext";
+			diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", diagramName, true); //$NON-NLS-1$
+			URI uri = URI.createPlatformResourceURI(camelContextFile.getResource().getLocationURI() != null ? camelContextFile.getResource().getLocationURI().getPath() : camelContextFile.getResource().getFullPath().toOSString(), true);
+			createdResource = editingDomain.getResourceSet().createResource(uri);
+			createdResource.getContents().add(diagram);
+		}
 		IDiagramTypeProvider dtp = GraphitiUi.getExtensionManager().createDiagramTypeProvider(diagram, "org.fusesource.ide.camel.editor.dtp.id"); //$NON-NLS-1$
 		IFeatureProvider featureProvider = dtp.getFeatureProvider();
 		CamelDiagramLoader diagramReader = new CamelDiagramLoader(diagram, featureProvider);

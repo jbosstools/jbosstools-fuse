@@ -11,9 +11,6 @@
 
 package org.fusesource.ide.camel.editor;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
 
@@ -34,10 +31,11 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
+import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.ui.editor.DiagramBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
-import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.graphiti.ui.editor.IDiagramEditorInput;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -50,7 +48,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
-import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
@@ -60,14 +57,11 @@ import org.fusesource.ide.camel.editor.internal.CamelDesignEditorFlyoutPaletteCo
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.INodeViewer;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.io.ICamelEditorInput;
-import org.fusesource.ide.camel.model.io.IRemoteCamelEditorInput;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
@@ -161,6 +155,14 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		getEditingDomain().getCommandStack().flush();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#isDirty()
+	 */
+	@Override
+	public boolean isDirty() {
+		return parent.isDirty();
+	}
+	
     /**
      * Create a FlyoutPaletteComposite the will used to show a flyout palette
      * alongside the editor.
@@ -226,6 +228,17 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				}
 			}
 		}
+	}
+	
+	public void initializeDiagram(Diagram diagram) {
+	    // set the diagram on the container
+		IDiagramTypeProvider diagramTypeProvider = getDiagramTypeProvider();
+		if (diagramTypeProvider == null)
+			return;
+		
+	    if (diagramTypeProvider.getDiagram() != diagram) {
+	    	diagramTypeProvider.resourceReloaded(diagram);
+	    }
 	}
     
 	/**
@@ -294,56 +307,6 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param input
-	 * @return
-	 */
-	public IRemoteCamelEditorInput asRemoteCamelEditorInput(IEditorInput input) {
-		if (input instanceof IRemoteCamelEditorInput) {
-			return (IRemoteCamelEditorInput) input;
-		} else if (input instanceof ICamelEditorInput) {
-			ICamelEditorInput camelEditorInput = (ICamelEditorInput) input;
-			IEditorInput fileEditorInput = camelEditorInput.getFileEditorInput();
-			if (fileEditorInput instanceof IRemoteCamelEditorInput) {
-				return (IRemoteCamelEditorInput) fileEditorInput;
-			}
-		} else if (input instanceof IURIEditorInput) {
-			final IURIEditorInput uriInput = (IURIEditorInput) input;
-			return new IRemoteCamelEditorInput() {
-
-				@Override
-				public String getUriText() {
-					return uriInput.getName();
-				}
-
-				@Override
-				public String getXml() throws IOException {
-					return IOUtils.loadText(uriInput.getURI().toURL().openStream(), "UTF-8");
-				}
-			};
-        } else if (input instanceof DiagramEditorInput) {
-            final DiagramEditorInput uriInput = (DiagramEditorInput) input;
-            return new IRemoteCamelEditorInput() {
-
-                @Override
-                public String getUriText() {
-                    return uriInput.getName();
-                }
-
-                @Override
-                public String getXml() throws IOException {
-                    try {
-                        return IOUtils.loadText(new URI(uriInput.getUri().toString()).toURL().openStream(), "UTF-8");
-                    } catch (URISyntaxException e) {
-                        throw new IOException("Unable to resolve resource.", e);
-                    }
-                }
-            };
-		}
-		return null;
-	}
-
 	public IFeatureProvider getFeatureProvider() {
 		if (getDiagramTypeProvider() != null) return getDiagramTypeProvider().getFeatureProvider();
 		return null;
@@ -370,8 +333,8 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		this.selectedRoute = selectedRoute;
 	}
 	
-	public void refreshDiagramContents() {
-		getDiagramTypeProvider().init(getDiagramTypeProvider().getDiagram(), getDiagramBehavior());
+	public void refreshDiagramContents(Diagram diagram) {
+		getDiagramTypeProvider().init(diagram != null ? diagram : getDiagramTypeProvider().getDiagram(), getDiagramBehavior());
 		getDiagramBehavior().getRefreshBehavior().initRefresh();
         setPictogramElementsForSelection(null);
         GraphicalViewer graphicalViewer = getGraphicalViewer();
@@ -420,7 +383,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				refreshDiagramContents();				
+				refreshDiagramContents(null);				
 			}
 		});
 	}
@@ -434,7 +397,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				refreshDiagramContents();				
+				refreshDiagramContents(null);				
 			}
 		});
 	}
@@ -448,7 +411,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				refreshDiagramContents();				
+				refreshDiagramContents(null);				
 			}
 		});
 	}

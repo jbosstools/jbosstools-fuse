@@ -1063,9 +1063,7 @@ public class CamelModelElement {
 	 * @return	the node or null
 	 */
 	public CamelModelElement findNode(String nodeId) {
-		System.err.println(this.getDisplayText(true) + "(" + getNodeTypeId() + ").findNode(" + nodeId + ")");
 		if (getId() != null && getId().equals(nodeId)) {
-			System.err.println(this.getDisplayText(true) + "(" + getNodeTypeId() + ").findNode(" + nodeId + ") FOUND!");
 			return this;
 		}
 		

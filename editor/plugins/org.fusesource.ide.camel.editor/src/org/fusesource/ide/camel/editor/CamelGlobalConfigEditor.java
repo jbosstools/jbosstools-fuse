@@ -107,7 +107,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	@Override
 	public boolean isDirty() {
-		return false;
+		return parentEditor.isDirty();
 	}
 
 	/*

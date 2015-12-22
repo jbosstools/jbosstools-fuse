@@ -8,7 +8,6 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-
 package org.fusesource.ide.camel.model.service.core.model;
 
 import java.io.StringWriter;
@@ -25,7 +24,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -79,12 +80,25 @@ public class CamelFile extends CamelModelElement {
 	}
 
 	/**
+	 * deletes all contents
+	 */
+	public void resetContents() {
+		getGlobalDefinitions().clear();
+		getChildElements().clear();
+	}
+	
+	/**
 	 * 
 	 * @param xmlString
 	 */
 	public void reloadModelFromXML(String xmlString) {
-		// TODO: code me
-		System.err.println("Reloading model from xml string:\n " + xmlString );
+		// load the model
+		try {
+			CamelIOHandler ioHandler = new CamelIOHandler();
+			ioHandler.loadCamelModel(xmlString, new NullProgressMonitor(), this);
+		} catch (Exception ex) {
+			CamelModelServiceCoreActivator.pluginLog().logError("Unable to load Camel context file from String: \n" + xmlString, ex);
+		}
 	}
 	
 	/**

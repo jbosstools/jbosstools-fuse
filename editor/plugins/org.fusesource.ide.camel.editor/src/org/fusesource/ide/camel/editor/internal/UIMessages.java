@@ -43,8 +43,10 @@ public class UIMessages extends NLS {
     
     public static String unconnectedNodeFoundTitle;
     public static String unconnectedNodeFoundText;
-
-
+    
+    public static String failedXMLValidationTitle;
+    public static String failedXMLValidationText;
+    
     static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, UIMessages.class);

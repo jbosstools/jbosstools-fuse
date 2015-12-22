@@ -10,7 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -26,6 +30,7 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -45,6 +50,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -83,6 +89,19 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	/** the editor input **/
 	private CamelXMLEditorInput editorInput;
 
+	/** contains the last xml validation error or an empty string if no error **/
+	private String lastError = "";
+	
+	/** the editor dirty flag **/
+	private boolean dirtyFlag = false;
+	
+	/** 
+	 * this flag is used when invalid xml is detected in source and then 
+	 * a tab switch is performed. if the user ignores the warning all changes 
+	 * in the source editor are lost, otherwise he will be set back into the 
+	 * source editor and the changes are still there.
+	 */
+	private boolean rollBackActive = false;
 	
 	/**
 	 * creates a new editor instance
@@ -203,6 +222,21 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public IEditorPart getActiveEditor() {
 		return super.getActiveEditor();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.MultiPageEditorPart#isDirty()
+	 */
+	@Override
+	public boolean isDirty() {
+		return this.dirtyFlag;
+	}
+	
+	/**
+	 * @param dirtyFlag the dirtyFlag to set
+	 */
+	public void setDirtyFlag(boolean dirtyFlag) {
+		this.dirtyFlag = dirtyFlag;
 	}
 	
 	/**
@@ -399,25 +433,47 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void pageChange(int newPageIndex) {
-		try {
-			if (newPageIndex == SOURCE_PAGE_INDEX) {
+		if (newPageIndex == SOURCE_PAGE_INDEX) {
 //				boolean doPageChange = continueWithUnconnectedFigures();
 //				if (doPageChange) {
-				if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
+			if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
+			if (rollBackActive == false) {
 				updateSourceFromModel();
+			} else {
+				rollBackActive = false;
+			}
+			this.lastActivePageIdx = newPageIndex;
+			super.pageChange(newPageIndex);
 //				} else {
 //					setActivePage(DESIGN_PAGE_INDEX);
 //					newPageIndex = DESIGN_PAGE_INDEX;
 //				}
-			} else if (newPageIndex == DESIGN_PAGE_INDEX){
-				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updateModelFromSource();
-			} else if (newPageIndex == GLOBAL_CONF_INDEX) {
-				if (lastActivePageIdx == SOURCE_PAGE_INDEX) updateModelFromSource();
+		} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX){
+			if (lastActivePageIdx == SOURCE_PAGE_INDEX) {
+				IDocument document = getDocument();
+				if (document != null) {
+					String text = document.get();
+					boolean ignoreError = true;
+					if (!isValidXML(text)) {
+						// invalid XML -> could result in data loss...
+						ignoreError = MessageDialog.openConfirm(getSite().getShell(), UIMessages.failedXMLValidationTitle, NLS.bind(UIMessages.failedXMLValidationText, lastError));
+					}
+					
+					if (ignoreError) {
+						updateModelFromSource();
+						lastError = "";
+						this.lastActivePageIdx = newPageIndex;
+						super.pageChange(newPageIndex);
+					} else {
+						rollBackActive = true;
+						newPageIndex = SOURCE_PAGE_INDEX;
+						setActivePage(SOURCE_PAGE_INDEX);
+						super.pageChange(newPageIndex);
+						getDocument().set(text);
+					}
+				}
 			}
-		} finally {
-			this.lastActivePageIdx = newPageIndex;
-			super.pageChange(newPageIndex);
-		}
+		} 
 	}
 	
 	/**
@@ -523,13 +579,13 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
-				IDocument document = getDocument();
-				if (document != null) {
-					String text = document.get();
-					designEditor.getModel().reloadModelFromXML(text);
-					designEditor.refreshDiagramContents();
-					designEditor.setFocus();
-				}
+				// reload model
+				designEditor.getModel().reloadModelFromXML(getDocument().get());
+				// add the diagram contents
+		        ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(), designEditor.getModel());
+		        designEditor.getEditingDomain().getCommandStack().execute(importCommand);
+		        designEditor.initializeDiagram(importCommand.getDiagram());
+		        designEditor.refreshDiagramContents(null);
 			}
 		};
 		
@@ -538,6 +594,28 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		} else {
 			Display.getDefault().syncExec(r);
 		}
+	}
+	
+	/**
+	 * checks if the text is xml compliant
+	 * 
+	 * @param text
+	 * @return	true if valid, otherwise false
+	 */
+	private boolean isValidXML(String text) {
+		try {
+			lastError = "";
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setValidating(false);
+			factory.setNamespaceAware(true);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			builder.parse(new ByteArrayInputStream(text.getBytes()));
+		} catch (Exception ex) {
+			String error = ex.getMessage();
+			lastError = error;
+			return false;
+		}
+		return true;
 	}
 	
 	/*
