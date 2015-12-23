@@ -141,8 +141,7 @@ public final class CamelComponentUtils {
     }
         
     public static boolean isUnsupportedProperty(Parameter p) {
-    	return isListProperty(p) ||
-    		   isMapProperty(p) || 
+    	return isMapProperty(p) || 
     		   p.getJavaType().toLowerCase().startsWith("java.util.date");
     }
     

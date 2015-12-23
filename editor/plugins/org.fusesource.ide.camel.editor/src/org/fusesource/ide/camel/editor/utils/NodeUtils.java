@@ -97,7 +97,7 @@ public class NodeUtils {
 	 */
     public static void getAllContainers(IFeatureProvider fp, CamelModelElement context, ArrayList<PictogramElement> pes) {
 		for (CamelModelElement cme : context.getChildElements()) {
-			if (cme.getUnderlyingMetaModelObject().canHaveChildren()) {
+			if (cme.getUnderlyingMetaModelObject() != null && cme.getUnderlyingMetaModelObject().canHaveChildren()) {
 				pes.add(fp.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(cme));
 			}
 			if (cme.getChildElements().size() > 0) {

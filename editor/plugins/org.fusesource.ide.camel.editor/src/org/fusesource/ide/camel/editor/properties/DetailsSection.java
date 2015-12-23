@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor.properties;
 
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,8 +19,10 @@ import java.util.List;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateListStrategy;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.Observables;
+import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -238,12 +241,14 @@ public class DetailsSection extends AbstractPropertySection {
         
         for (Parameter p : props) {
         	final Parameter prop = p;
-            
+
         	// we don't want to display properties for internal element attributes like inputs or outputs
-        	if ((p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array")) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
+        	if ((p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
         	
             ISWTObservableValue uiObservable = null;
+            IObservableList uiListObservable = null;
             IObservableValue modelObservable = null;
+            IObservableList modelListObservable = null;
             IValidator validator = null;
             
             String s = Strings.humanize(p.getName());
@@ -498,6 +503,36 @@ public class DetailsSection extends AbstractPropertySection {
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
 
+            // LIST PROPERTIES
+            } else if (CamelComponentUtils.isListProperty(prop)) {
+            	org.eclipse.swt.widgets.List list = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+                getWidgetFactory().adapt(list, true, true);
+                list.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                
+                ArrayList<String> listElements = this.selectedEP.getParameter(prop.getName()) != null ? (ArrayList<String>)this.selectedEP.getParameter(prop.getName()) : new ArrayList<String>();
+                list.setItems(listElements.toArray(new String[listElements.size()]));
+                
+                c = list;
+                //initialize the map entry
+                modelMap.put(p.getName(), Arrays.asList(list.getItems()));
+                // create observables for the control
+                uiListObservable = WidgetProperties.items().observe(list);                
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof List && ((List)value).isEmpty() == false) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                
             // EXPRESSION PROPERTIES
             } else if (CamelComponentUtils.isExpressionProperty(prop)) {
             	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
@@ -507,14 +542,6 @@ public class DetailsSection extends AbstractPropertySection {
                 
                 CamelModelElement expressionElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
                 choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
-                choiceCombo.addModifyListener(new ModifyListener() {
-					@Override
-					public void modifyText(ModifyEvent e) {
-//                        CCombo choice = (CCombo)e.getSource();
-//                        String language = choice.getText();
-//                        languageChanged(language, eform, expressionElement, page, prop);
-                    }
-				});
 
                 ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
                 eform.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
@@ -554,7 +581,11 @@ public class DetailsSection extends AbstractPropertySection {
                 });
                 
 				if (expressionElement != null) {
-                    String value = expressionElement.getNodeTypeId();
+					String value = expressionElement.getNodeTypeId();
+					if (expressionElement.getParameter("expression") != null && expressionElement.getParameter("expression") instanceof CamelModelElement ) {
+						CamelModelElement ex = (CamelModelElement)expressionElement.getParameter("expression");
+	                    value = (String)ex.getXmlNode().getNodeName();
+					}
                     choiceCombo.deselectAll();
                     for (int i=0; i < choiceCombo.getItems().length; i++) {
                         if (choiceCombo.getItem(i).equalsIgnoreCase(value)) {
@@ -750,14 +781,47 @@ public class DetailsSection extends AbstractPropertySection {
                 
             }
             
-            // create UpdateValueStrategy and assign to the binding
-            UpdateValueStrategy strategy = new UpdateValueStrategy();
-            strategy.setBeforeSetValidator(validator);
-            
-            // create observables for the Map entries
-            modelObservable = Observables.observeMapEntry(modelMap, p.getName());
             // bind the observables
-            Binding bindValue = dbc.bindValue(uiObservable, modelObservable, strategy, null);
+            Binding bindValue = null;
+            
+            if (uiObservable != null) {
+            	// create observables for the Map entries
+                modelObservable = Observables.observeMapEntry(modelMap, p.getName());
+                
+            	// create UpdateValueStrategy and assign to the binding
+                UpdateValueStrategy strategy = new UpdateValueStrategy();
+                strategy.setBeforeSetValidator(validator);
+
+                bindValue = dbc.bindValue(uiObservable, modelObservable, strategy, null);
+        	} else if (uiListObservable != null) {
+        		modelListObservable = Observables.staticObservableList((List)modelMap.get(p.getName()), String.class);
+        		UpdateListStrategy listStrategy = new UpdateListStrategy() {
+        			/* (non-Javadoc)
+        			 * @see org.eclipse.core.databinding.UpdateListStrategy#doAdd(org.eclipse.core.databinding.observable.list.IObservableList, java.lang.Object, int)
+        			 */
+        			@Override
+        			protected IStatus doAdd(IObservableList observableList, Object element, int index) {
+        				super.doAdd(observableList, element, index);
+        				if (prop.getRequired() != null && prop.getRequired().equalsIgnoreCase("true")) {
+        					if (observableList.size()<1) return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");	
+        				}
+        				return ValidationStatus.ok();
+        			}
+        			
+        			/* (non-Javadoc)
+        			 * @see org.eclipse.core.databinding.UpdateListStrategy#doRemove(org.eclipse.core.databinding.observable.list.IObservableList, int)
+        			 */
+        			@Override
+        			protected IStatus doRemove(IObservableList observableList, int index) {
+        				super.doRemove(observableList, index);
+        				if (prop.getRequired() != null && prop.getRequired().equalsIgnoreCase("true")) {
+        					if (observableList.size()<1) return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");	
+        				}
+        				return ValidationStatus.ok();
+        			}
+        		};
+        		bindValue = dbc.bindList(uiListObservable, modelListObservable, listStrategy, null);
+        	}
             ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT); 
             
             if (p.getDescription() != null) c.setToolTipText(p.getDescription());
@@ -765,31 +829,109 @@ public class DetailsSection extends AbstractPropertySection {
         page.layout();
     }
     
+    /**
+     * called when user switches the expression language
+     * 
+     * @param language				the new language for the expression
+     * @param eform					the expandable form to use
+     * @param expressionElement		the expression element if simple expression, otherwise it will be the container element which contains the expression element as parameter "expression"
+     * @param page					the page
+     * @param prop					the property which is currently used
+     */
     private void languageChanged(String language, ExpandableComposite eform, CamelModelElement expressionElement, Composite page, Parameter prop) {
-    	eform.setText(language);
+    	eform.setText(language.trim());
         for (Control co : eform.getChildren()) if (co.getData("fuseExpressionClient") != null) co.dispose();
         Composite client = getWidgetFactory().createComposite(eform);
         client.setData("fuseExpressionClient", true);
         client.setLayoutData(new GridData(GridData.FILL_BOTH));
         client.setLayout(new GridLayout(4, false));
         eform.setClient(client);
-        if (expressionElement != null && expressionElement.getXmlNode().getNodeName().equals(language) == false) {
-        	Node oldExpNode = null;
-        	for (int i=0; i<selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
-        		if (selectedEP.getXmlNode().getChildNodes().item(i).getNodeName().equals(expressionElement.getXmlNode().getNodeName())) {
-        			oldExpNode = selectedEP.getXmlNode().getChildNodes().item(i);
-        		}
+        
+        CamelModelElement uiExpressionElement = null;
+        
+        if (prop.getName().equalsIgnoreCase("expression")) {
+        	// normal expression subnode - no cascading -> when.<expression>
+        	// the content of expressionElement is the language node itself
+            if (expressionElement != null && expressionElement.getXmlNode().getNodeName().equals(language) == false) {
+            	Node oldExpNode = null;
+            	for (int i=0; i<selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
+            		if (selectedEP.getXmlNode().getChildNodes().item(i).getNodeName().equals(expressionElement.getXmlNode().getNodeName())) {
+            			oldExpNode = selectedEP.getXmlNode().getChildNodes().item(i);
+            			break;
+            		}
+            	}
+            	if (language.trim().length()>0) {
+	            	Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+	            	expressionElement = new CamelModelElement(this.selectedEP, expNode);
+	            	selectedEP.setParameter(prop.getName(), expressionElement);
+	            	selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
+            	} else {
+            		// user wants to delete the expression
+            		selectedEP.getXmlNode().removeChild(oldExpNode);
+            		selectedEP.removeParameter(prop.getName());
+            	}
+        	} else if (expressionElement == null && language.trim().length()>0) {
+        		// no expression set, but now we set one
+        		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+        		expressionElement = new CamelModelElement(this.selectedEP, expNode);
+            	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
+            	this.selectedEP.setParameter(prop.getName(), expressionElement);
+            } 
+            uiExpressionElement = expressionElement;
+
+        } else {
+        	
+        	// cascaded expression subnode -> onException.handled.<expression>
+        	// the content of expressionElement is the container element which holds the expression as parameter "expression"
+        	if (expressionElement != null && expressionElement.getParameter("expression") != null) {
+            	// 1. container element exists and expression element exists
+        		Node oldExpNode = null;
+            	List<String> langs = Arrays.asList(CamelComponentUtils.getOneOfList(prop));
+            	for (int i=0; i<expressionElement.getXmlNode().getChildNodes().getLength(); i++) {
+            		Node n = expressionElement.getXmlNode().getChildNodes().item(i);
+            		if (langs.contains(n.getNodeName())) {
+            			oldExpNode = n;
+            			break;
+            		}
+            	}
+            	CamelModelElement expElement = (CamelModelElement)expressionElement.getParameter("expression");
+            	if (expElement.getXmlNode().getNodeName().equals(language) == false) {
+            		if (language.trim().length()>0) {
+	            		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+	                	uiExpressionElement = new CamelModelElement(expressionElement, expNode);
+	                	expressionElement.getXmlNode().replaceChild(expNode, oldExpNode);
+	                	expressionElement.setParameter("expression", uiExpressionElement);
+            		} else {
+            			// user deletes the expression
+            			selectedEP.getXmlNode().removeChild(expressionElement.getXmlNode());
+            			selectedEP.removeParameter(prop.getName());
+            		}
+            	} else {
+            		uiExpressionElement = expElement;
+            	}
+        		
+        	} else if (expressionElement != null && expressionElement.getParameter("expression") == null) {
+        		// 2. container element exists but no expression element exists
+        		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+        		uiExpressionElement = new CamelModelElement(expressionElement, expNode);
+        		expressionElement.getXmlNode().appendChild(expNode);
+            	expressionElement.setParameter("expression", uiExpressionElement);
+        		
+        	} else if (expressionElement == null && language.trim().length()>0) {
+        		// 3. No container but language set
+        		Node expContainerNode = selectedEP.getCamelFile().getDocument().createElement(prop.getName());
+        		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+        		CamelModelElement expContainerElement = new CamelModelElement(selectedEP, expContainerNode);
+        		expressionElement = new CamelModelElement(expContainerElement, expNode);
+        		expContainerElement.getXmlNode().appendChild(expNode);
+            	selectedEP.getXmlNode().insertBefore(expContainerNode, selectedEP.getXmlNode().getFirstChild());
+            	expContainerElement.setParameter("expression", expressionElement);
+            	this.selectedEP.setParameter(prop.getName(), expContainerElement);
+            	uiExpressionElement = expressionElement;        		
         	}
-        	Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
-        	expressionElement = new CamelModelElement(this.selectedEP, expNode);
-        	selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
-    	} else if (expressionElement == null && language.trim().length()>0) {
-    		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
-    		expressionElement = new CamelModelElement(this.selectedEP, expNode);
-        	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
-        	this.selectedEP.setParameter(prop.getName(), expressionElement);
-        } 
-        prepareExpressionUIForLanguage(language, expressionElement, client);
+        }
+        
+        prepareExpressionUIForLanguage(language, uiExpressionElement, client);
 		page.layout(true);
 		refresh();
 		eform.layout(true);

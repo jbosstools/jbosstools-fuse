@@ -228,6 +228,21 @@ public class CamelFile extends CamelModelElement {
 	 */
 	public String getDocumentAsXML() {
     	try {
+//    		DOMSource domSource = new DOMSource(getDocument());
+//            StringWriter writer = new StringWriter();
+//            StreamResult result = new StreamResult(writer);
+//            TransformerFactory tf = TransformerFactory.newInstance();
+//            Transformer transformer = tf.newTransformer();
+//	        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+//	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//	        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+//	        transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
+//	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + XML_INDENT_VALUE);
+//	        tf.setAttribute("indent-number", XML_INDENT_VALUE);
+//            transformer.transform(domSource, result);
+//            writer.flush();
+//            return writer.toString();
+            
     		// TODO: set the output attributes as defined in eclipse properties!!! (INDENT, LINE WIDTH, etc)
     		final Document document = getDocument();
             OutputFormat format = new OutputFormat(document);

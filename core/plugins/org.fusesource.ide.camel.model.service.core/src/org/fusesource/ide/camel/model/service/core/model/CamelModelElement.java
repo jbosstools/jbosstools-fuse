@@ -78,6 +78,7 @@ public class CamelModelElement {
 	public CamelModelElement(CamelModelElement parent, Node underlyingNode) {
 		this.xmlNode = underlyingNode;
 		this.parent = parent;
+		
 		if (underlyingNode != null) setUnderlyingMetaModelObject(getEipByName(underlyingNode.getNodeName()));
 		if (parent != null && parent.getXmlNode() != null && underlyingNode != null) {
 			boolean alreadyChild = false;
@@ -454,7 +455,21 @@ public class CamelModelElement {
 				e.setTextContent(null);
 			}
 		} else {
-			if (kind.equalsIgnoreCase("attribute")) {
+			if (kind == null && value instanceof CamelModelElement == false) {
+				kind = "value";
+			} 
+			if (kind == null && value instanceof CamelModelElement) {
+				// special case for nested expressions
+				Node oldChild = null;
+				for (int i=0; i<e.getChildNodes().getLength(); i++) {
+					if (e.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
+						oldChild = e.getChildNodes().item(i);
+						break;
+					}
+				}
+				Node newChild = ((CamelModelElement)value).getXmlNode();
+				e.replaceChild(newChild, oldChild);
+			} else if (kind.equalsIgnoreCase("attribute")) {
 				String defaultValue = this.underlyingMetaModelObject != null ? this.underlyingMetaModelObject.getParameter(name).getDefaultValue() : null;
 				if (defaultValue != null && defaultValue.equals(getMappedValue(value))) {
 					// default value -> no need to explicitely set it -> delete existing
@@ -494,17 +509,26 @@ public class CamelModelElement {
 					// seems this parameter is another eip type -> we need to create/modify a subnode
 					boolean createSubNode = true;
 					Node subNode = null;
+					
+					String comparedNodeName = name.equals("expression") ? exp.getNodeTypeId() : name; 
+					
 					for (int c = 0; c < e.getChildNodes().getLength(); c++) {
 						subNode = e.getChildNodes().item(c);
-						if (subNode.getNodeName().equals(exp.getNodeTypeId())) {
+						if (subNode.getNodeType() == Node.ELEMENT_NODE && subNode.getNodeName().equals(comparedNodeName)) {
 							createSubNode = false;
 							break;
 						}
 					}
 					if (createSubNode) {
-						subNode = getCamelFile().getDocument().createElement(name);
+						subNode = getCamelFile().getDocument().createElement(comparedNodeName);
 						e.appendChild(subNode);
+						if (comparedNodeName.equals("expression") == false) {
+							Node subSubNode = getCamelFile().getDocument().createElement(exp.getNodeTypeId());
+							subNode.appendChild(subSubNode);
+							subNode = subSubNode;
+						}
 					}
+					
 					for (int i = 0; i<((Element)subNode).getAttributes().getLength(); i++) {
 						Node attrNode = ((Element)subNode).getAttributes().item(i);
 						((Element)subNode).removeAttribute(attrNode.getNodeName());
@@ -520,6 +544,19 @@ public class CamelModelElement {
 							if (oValue != null && oValue.toString().trim().length()>0) ((Element)subNode).setAttribute(pKey, oValue.toString());									
 						}
 					}
+				} else {
+					// special case for nested expressions
+					Node oldChild = null;
+					for (int i=0; i<e.getChildNodes().getLength(); i++) {
+						if (e.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
+							if (e.getChildNodes().item(i).getNodeName().equals(name)) {
+								oldChild = e.getChildNodes().item(i);
+								break;
+							}
+						}
+					}
+					Node newChild = ((CamelModelElement)value).getXmlNode();
+					e.replaceChild(newChild, oldChild);
 				}
 			} else if (kind.equalsIgnoreCase("value")) {
 				e.setTextContent(getMappedValue(value));
@@ -528,13 +565,6 @@ public class CamelModelElement {
 		if (getCamelFile() != null && oldValue != value) getCamelFile().fireModelChanged();
 	}
 	
-//	/**
-//	 * deletes all parameters
-//	 */
-//	public void clearParameters() {
-//		this.parameters.clear();
-//	}
-
 	/**
 	 * @return the xmlNode
 	 */
@@ -616,11 +646,19 @@ public class CamelModelElement {
 	}
 	
 	protected void ensureUniqueID(CamelModelElement elem) {
-		if (elem.getId() == null || elem.getId().trim().length()<1) {
-			elem.setId(elem.getNewID());
+		// if this element is also a parent element parameter then we don't 
+		// set ID values (example: parent = onException, element: exception)
+		if (elem.getParent().getParameter(elem.getXmlNode().getNodeName()) != null && elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getXmlNode().getNodeName()).getKind().equals("element")) return; 
+		
+		if (elem.getUnderlyingMetaModelObject() == null && elem instanceof CamelContextElement == false) {
+			// don't give ID for attributes
+		} else {
+			if (elem.getId() == null || elem.getId().trim().length()<1) {
+				elem.setId(elem.getNewID());
+			}
 		}
 		for (CamelModelElement e : elem.getChildElements()) {
-			ensureUniqueID(e);
+			e.ensureUniqueID(e);
 		}
 	}
 	
@@ -642,20 +680,36 @@ public class CamelModelElement {
 						setParameter(param.getName(), tmp.getNodeValue());
 					}
 				} else if (param.getKind().equalsIgnoreCase("element")) {
-					Node descNode = null;
-					for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
-						Node subNode = getXmlNode().getChildNodes().item(i);
-						if (subNode.getNodeName().equals(param.getName())) {
-							descNode = subNode;
-							break;
+					if (param.getType().equalsIgnoreCase("array")) {
+						ArrayList<String> list = new ArrayList<String>();
+						for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+							Node subNode = getXmlNode().getChildNodes().item(i);
+							if (subNode.getNodeName().equals(param.getName())) {
+								String val = subNode.getTextContent();
+								if (val != null && val.trim().length()>0 && list.contains(val) == false) {
+									list.add(val);
+								}
+							}
 						}
-					}
-					if (descNode != null) {
-						String val = descNode.getTextContent();
-						if (val != null) {
-							setParameter(param.getName(), val);
-							if (param.getName().equalsIgnoreCase("description")) setDescription(val);
-						}						
+						if (list.isEmpty() == false) {
+							setParameter(param.getName(), list);
+						}
+					} else {
+						Node descNode = null;
+						for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+							Node subNode = getXmlNode().getChildNodes().item(i);
+							if (subNode.getNodeName().equals(param.getName())) {
+								descNode = subNode;
+								break;
+							}
+						}
+						if (descNode != null) {
+							String val = descNode.getTextContent();
+							if (val != null) {
+								setParameter(param.getName(), val);
+								if (param.getName().equalsIgnoreCase("description")) setDescription(val);
+							}						
+						}
 					}
 				} else if (param.getKind().equalsIgnoreCase("value")) {
 					String val = getXmlNode().getTextContent();
@@ -670,11 +724,34 @@ public class CamelModelElement {
 			        for (String lang : langs) langList.add(lang);
 					for (int i = 0; i<getXmlNode().getChildNodes().getLength(); i++) {
 						Node subNode = getXmlNode().getChildNodes().item(i);
-						if (subNode != null && langList.contains(subNode.getNodeName())) {
+						if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
+						if (subNode != null && param.getName().equals("expression") && langList.contains(subNode.getNodeName())) {
+							// this case is for expressions which are directly 
+							// stored under the parent node
+							// for instance when.<expression>
 							expNode = new CamelModelElement(this, subNode);
 							expNode.initialize();
-							expNode.setParent(this);
+//							expNode.setParent(this);
 							setParameter(param.getName(), expNode);
+						} else if (subNode != null && param.getName().equals("expression") == false && param.getName().equals(subNode.getNodeName())) {
+							// this case is for expressions which are not directly 
+							// stored under the parent node but under another subnode
+							// for instance onException.handled.<expression>
+							for (int x=0; x<subNode.getChildNodes().getLength(); x++) {
+								Node subExpNode = subNode.getChildNodes().item(x);
+								if (subExpNode.getNodeType() == Node.ELEMENT_NODE && subExpNode != null && langList.contains(subExpNode.getNodeName())) {
+									// found the sub -> create container element
+									CamelModelElement expContainer = new CamelModelElement(this, subNode);
+//									expContainer.initialize();
+//									expContainer.setParent(this);
+									expNode = new CamelModelElement(expContainer, subExpNode);
+									expNode.initialize();
+//									expNode.setParent(this);
+									expContainer.setParameter("expression", expNode);
+									setParameter(param.getName(), expContainer);
+									break;
+								}
+							}
 						}
 					}
 				} else {
@@ -726,7 +803,7 @@ public class CamelModelElement {
 			Iterator<Parameter> it = eip.getParameters().iterator();
 			while (it.hasNext()) {
 				Parameter p = it.next();
-				if (p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array")) {
+				if (p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array") && p.getName().equals("exception") == false) {
 					return true;
 				}
 			}
@@ -760,18 +837,65 @@ public class CamelModelElement {
 			for (int i=0; i<children.getLength(); i++) {
 				Node tmp = children.item(i);
 				if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
-				CamelModelElement cme = new CamelModelElement(this, tmp);
-				addChildElement(cme);
-				cme.initialize();
-				boolean createLink = lastNode != null && this.getNodeTypeId().equals("choice") == false;
-				cme.setParent(this);
-				if (createLink) {
-					cme.setInputElement(lastNode);
-					lastNode.setOutputElement(cme);
+				if (!isUsedAsAttribute(tmp)) {
+					CamelModelElement cme = new CamelModelElement(this, tmp);
+					addChildElement(cme);
+					cme.initialize();
+					boolean createLink = lastNode != null && this.getNodeTypeId().equals("choice") == false;
+					cme.setParent(this);
+					if (createLink) {
+						cme.setInputElement(lastNode);
+						lastNode.setOutputElement(cme);
+					}
+					lastNode = cme;
 				}
-				lastNode = cme;
 			}
 		}
+	}
+	
+	protected boolean isSpecialCase(Node childNode) {
+		if (getXmlNode().getNodeName().equalsIgnoreCase("choice")) {
+			if (childNode.getNodeName().equalsIgnoreCase("otherwise")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * checks whether the node is used as attribute instead of child (expressions or alike)
+	 * 
+	 * @param childNode
+	 * @return
+	 */
+	protected boolean isUsedAsAttribute(Node childNode) {
+		String nodeName = childNode.getNodeName();
+		
+		if (isSpecialCase(childNode)) {
+			return false;
+		}
+		
+		if (getUnderlyingMetaModelObject() != null) {
+			Iterator<Parameter> it =  getUnderlyingMetaModelObject().getParameters().iterator();
+			while (it.hasNext()) {
+				Parameter p = it.next();
+				
+				// check if the node name equals a known parameter
+				if (p.getName().equals(nodeName)) {
+					return true;
+				}
+				
+				// check if node name equals the language of an expression
+				if (p.getKind().equals("expression")) {
+					List<String> langs = Arrays.asList(p.getOneOf().split(","));
+					if (langs.contains(nodeName)) {
+						return true;
+					}
+				}
+			}
+		}
+			
+		return false;
 	}
 	
 	/**
@@ -988,7 +1112,7 @@ public class CamelModelElement {
 	 * @return
 	 */
 	public String getNodeTypeId() {
-		return underlyingMetaModelObject != null ? underlyingMetaModelObject.getName() : "camelContext";
+		return underlyingMetaModelObject != null ? underlyingMetaModelObject.getName() : xmlNode != null ? xmlNode.getNodeName() : "camelContext";
 	}
     
 	/**
