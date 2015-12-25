@@ -112,6 +112,64 @@ public class CamelModelElement {
 	}
 	
 	/**
+	 * returns the first element node of the parent
+	 * 
+	 * @param parentNode
+	 * @return	the first element node or null if no elements found
+	 */
+	protected Node getFirstChild(Node parentNode) {
+		for (int i=0; i<parentNode.getChildNodes().getLength(); i++) {
+			Node n = parentNode.getChildNodes().item(i);
+			if (n.getNodeType() == Node.ELEMENT_NODE) return n;
+		}
+		return null;
+	}
+	
+	/**
+	 * returns the last element node of the parent
+	 * 
+	 * @param parentNode
+	 * @return	the last element node or null if no elements found
+	 */
+	protected Node getLastChild(Node parentNode) {
+		for (int i=parentNode.getChildNodes().getLength()-1; i>=0; i--) {
+			Node n = parentNode.getChildNodes().item(i);
+			if (n.getNodeType() == Node.ELEMENT_NODE) return n;
+		}
+		return null;
+	}
+	
+	/**
+	 * gets the previous element node if existing
+	 * 
+	 * @param node
+	 * @return	the previous element or null
+	 */
+	protected Node getPreviousNode(Node node) {
+		Node n = node.getPreviousSibling();
+		while (n != null) {
+			if (n.getNodeType() == Node.ELEMENT_NODE) return n;
+			n = n.getPreviousSibling();
+		}
+		return null;
+	}
+	
+	/**
+	 * returns the next element node
+	 * 
+	 * @param node
+	 * @return	the next element node or null
+	 */
+	protected Node getNextNode(Node node) {
+		Node n = node.getNextSibling();
+		while (n != null) {
+			if (n.getNodeType() == Node.ELEMENT_NODE) return n;
+			n = n.getNextSibling();
+		}
+		return null;
+	}
+	
+	/**
 	 * @return the parent
 	 */
 	public CamelModelElement getParent() {
@@ -123,7 +181,6 @@ public class CamelModelElement {
 	 */
 	public void setParent(CamelModelElement parent) {
 		this.parent = parent;
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -139,7 +196,6 @@ public class CamelModelElement {
 	 */
 	public void setId(String id) {
 		this.setParameter(ID_ATTRIBUTE, id);
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -154,7 +210,6 @@ public class CamelModelElement {
 	 */
 	public void setName(String name) {
 		this.name = name;
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -170,7 +225,6 @@ public class CamelModelElement {
 	public void setDescription(String description) {
 		this.description = description;
 		setParameter("description", description);
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -322,9 +376,9 @@ public class CamelModelElement {
 		// now move the node directly after inputElement in DOM tree
 		if (inputElement != null) {
 			Node inputNode = inputElement.getXmlNode();
-			inputNode.getParentNode().insertBefore(getXmlNode(), inputNode.getNextSibling());
+			Node insertPosNode = getNextNode(inputNode);
+			if (getXmlNode().isEqualNode(insertPosNode) == false) inputNode.getParentNode().insertBefore(getXmlNode(), insertPosNode);
 		}
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -339,7 +393,6 @@ public class CamelModelElement {
 	 */
 	public void setOutputElement(CamelModelElement outputElement) {
 		this.outputElement = outputElement;
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -371,7 +424,6 @@ public class CamelModelElement {
 	public void addChildElement(CamelModelElement element) {
 		if (this.childElements.contains(element) == false) {
 			this.childElements.add(element);
-			if (getCamelFile() != null) getCamelFile().fireModelChanged();
 		}			
 	}
 	
@@ -383,8 +435,14 @@ public class CamelModelElement {
 	public void removeChildElement(CamelModelElement element) {
 		if (childElements.contains(element)) {
 			childElements.remove(element);
-			getXmlNode().removeChild(element.getXmlNode());
-			if (getCamelFile() != null) getCamelFile().fireModelChanged();
+			boolean childFound = false;
+			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+				if (getXmlNode().getChildNodes().item(i).isEqualNode(element.getXmlNode())) {
+					childFound = true;
+					break;
+				}
+			}
+			if (childFound) getXmlNode().removeChild(element.getXmlNode());
 		}
 	}
 	
@@ -411,7 +469,6 @@ public class CamelModelElement {
 		if (this.parameters.containsKey(name)) {
 			this.parameters.remove(name);
 			((Element)getXmlNode()).removeAttribute(name);
-			if (getCamelFile() != null) getCamelFile().fireModelChanged();
 		}
 	}
 	
@@ -434,7 +491,15 @@ public class CamelModelElement {
 	 */
 	public void setParameter(String name, Object value) {
 		Object oldValue = this.parameters.get(name);
+		
+		if (oldValue == null && value == null) return;
+		if (oldValue != null && value != null && oldValue.equals(value)) return;
+		if (oldValue != null && oldValue.equals(value)) return;
+		if (value != null && value.equals(oldValue)) return;
+		
+		// save param in internal map
 		this.parameters.put(name, value);
+		
 		Element e = (Element)getXmlNode();
 		String kind = getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getKind() : null;
 		if (this instanceof CamelContextElement) kind = "attribute";
@@ -460,13 +525,7 @@ public class CamelModelElement {
 			} 
 			if (kind == null && value instanceof CamelModelElement) {
 				// special case for nested expressions
-				Node oldChild = null;
-				for (int i=0; i<e.getChildNodes().getLength(); i++) {
-					if (e.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
-						oldChild = e.getChildNodes().item(i);
-						break;
-					}
-				}
+				Node oldChild = getFirstChild(e);
 				Node newChild = ((CamelModelElement)value).getXmlNode();
 				e.replaceChild(newChild, oldChild);
 			} else if (kind.equalsIgnoreCase("attribute")) {
@@ -487,7 +546,7 @@ public class CamelModelElement {
 					Node subNode = null;
 					for (int c = 0; c < e.getChildNodes().getLength(); c++) {
 						subNode = e.getChildNodes().item(c);
-						if (subNode.getNodeName().equals(name)) {
+						if (subNode.getNodeType() == Node.ELEMENT_NODE && subNode.getNodeName().equals(name)) {
 							createSubNode = false;
 							break;
 						}
@@ -548,11 +607,9 @@ public class CamelModelElement {
 					// special case for nested expressions
 					Node oldChild = null;
 					for (int i=0; i<e.getChildNodes().getLength(); i++) {
-						if (e.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
-							if (e.getChildNodes().item(i).getNodeName().equals(name)) {
-								oldChild = e.getChildNodes().item(i);
-								break;
-							}
+						if (e.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE && e.getChildNodes().item(i).getNodeName().equals(name)) {
+							oldChild = e.getChildNodes().item(i);
+							break;
 						}
 					}
 					Node newChild = ((CamelModelElement)value).getXmlNode();
@@ -562,7 +619,6 @@ public class CamelModelElement {
 				e.setTextContent(getMappedValue(value));
 			}
 		}
-		if (getCamelFile() != null && oldValue != value) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -577,7 +633,6 @@ public class CamelModelElement {
 	 */
 	public void setXmlNode(Node xmlNode) {
 		this.xmlNode = xmlNode;
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
 	}
 	
 	/**
@@ -601,16 +656,6 @@ public class CamelModelElement {
 	 */
 	public void setUnderlyingMetaModelObject(Eip underlyingMetaModelObject) {
 		this.underlyingMetaModelObject = underlyingMetaModelObject;
-	}
-	
-	/**
-	 * puts back all changes to the underlying xml node to be saved to disc
-	 */
-	public void saveChanges() {
-//		if (!hasUnderlyingXmlNode()) {
-//			this.xmlNode = createNode();
-//		}
-//		updateUnderlyingNode();
 	}
 	
 	/**

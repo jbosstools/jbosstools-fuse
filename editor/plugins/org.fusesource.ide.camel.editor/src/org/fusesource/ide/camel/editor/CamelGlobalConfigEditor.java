@@ -248,6 +248,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			@Override
 			public void run() {
 				reload();
+				parentEditor.setDirtyFlag(true);
 			}
 		});
 	}

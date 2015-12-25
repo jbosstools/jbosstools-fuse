@@ -76,39 +76,45 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 	 */
 	@Override
 	protected void doExecute() {
-		if (this.diagram == null) {
-			// Create the diagram and its file
-			String diagramName = "CamelContext";
-			diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", diagramName, true); //$NON-NLS-1$
-			URI uri = URI.createPlatformResourceURI(camelContextFile.getResource().getLocationURI() != null ? camelContextFile.getResource().getLocationURI().getPath() : camelContextFile.getResource().getFullPath().toOSString(), true);
-			createdResource = editingDomain.getResourceSet().createResource(uri);
-			createdResource.getContents().add(diagram);
-		}
-		IDiagramTypeProvider dtp = GraphitiUi.getExtensionManager().createDiagramTypeProvider(diagram, "org.fusesource.ide.camel.editor.dtp.id"); //$NON-NLS-1$
-		IFeatureProvider featureProvider = dtp.getFeatureProvider();
-		CamelDiagramLoader diagramReader = new CamelDiagramLoader(diagram, featureProvider);
 		try {
-			CamelContextElement context = (CamelContextElement)camelContextFile.getChildElements().get(0);
-			diagramReader.loadModel(context);
-		} catch (Exception e) {
-			CamelEditorUIActivator.pluginLog().logError("Failed to load model: " + e, e);
-		}
-		
-        ArrayList<PictogramElement> containers = new ArrayList<PictogramElement>();
-        containers.add(diagram);
-        NodeUtils.getAllContainers(featureProvider, designEditor.getModel().getChildElements().get(0), containers);
-        for (int i=0; i<containers.size(); i++) {
-	        for (PictogramElement pe : containers) {
-	        	CustomContext cc = new CustomContext(new PictogramElement[] {pe});
-	        	ICustomFeature[] cfs = featureProvider.getCustomFeatures(null);
-	        	for (ICustomFeature cf : cfs) {
-	        		if (cf instanceof LayoutDiagramFeature) {
-	        			cf.execute(cc);		
-	        			break;
-	        		}
-	        	}        	
+			designEditor.getParent().stopDirtyListener();
+			
+			if (this.diagram == null) {
+				// Create the diagram and its file
+				String diagramName = "CamelContext";
+				diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", diagramName, true); //$NON-NLS-1$
+				URI uri = URI.createPlatformResourceURI(camelContextFile.getResource().getLocationURI() != null ? camelContextFile.getResource().getLocationURI().getPath() : camelContextFile.getResource().getFullPath().toOSString(), true);
+				createdResource = editingDomain.getResourceSet().createResource(uri);
+				createdResource.getContents().add(diagram);
+			}
+			IDiagramTypeProvider dtp = GraphitiUi.getExtensionManager().createDiagramTypeProvider(diagram, "org.fusesource.ide.camel.editor.dtp.id"); //$NON-NLS-1$
+			IFeatureProvider featureProvider = dtp.getFeatureProvider();
+			CamelDiagramLoader diagramReader = new CamelDiagramLoader(diagram, featureProvider);
+			try {
+				CamelContextElement context = (CamelContextElement)camelContextFile.getChildElements().get(0);
+				diagramReader.loadModel(context);
+			} catch (Exception e) {
+				CamelEditorUIActivator.pluginLog().logError("Failed to load model: " + e, e);
+			}
+			
+	        ArrayList<PictogramElement> containers = new ArrayList<PictogramElement>();
+	        containers.add(diagram);
+	        NodeUtils.getAllContainers(featureProvider, designEditor.getModel().getChildElements().get(0), containers);
+	        for (int i=0; i<containers.size(); i++) {
+		        for (PictogramElement pe : containers) {
+		        	CustomContext cc = new CustomContext(new PictogramElement[] {pe});
+		        	ICustomFeature[] cfs = featureProvider.getCustomFeatures(null);
+		        	for (ICustomFeature cf : cfs) {
+		        		if (cf instanceof LayoutDiagramFeature) {
+		        			cf.execute(cc);		
+		        			break;
+		        		}
+		        	}        	
+		        }
 	        }
-        }
+		} finally {
+			designEditor.getParent().startDirtyListener();
+		}
 	}
 	
 	/**

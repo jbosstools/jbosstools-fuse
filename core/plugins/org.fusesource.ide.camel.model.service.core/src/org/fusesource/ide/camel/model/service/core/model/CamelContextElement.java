@@ -68,7 +68,16 @@ public class CamelContextElement extends CamelModelElement {
 	public void addEndpointDefinition(CamelModelElement def) {
 		if (this.endpointDefinitions.containsKey(def.getId())) return;
 		this.endpointDefinitions.put(def.getId(), def);
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
+		boolean childExists = false;
+		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+			if(getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
+				childExists = true;
+				break;
+			}
+		}
+		if (!childExists) {
+			getXmlNode().insertBefore(def.getXmlNode(), getFirstChild(getXmlNode()));
+		}
 	}
 	
 	/**
@@ -79,7 +88,16 @@ public class CamelContextElement extends CamelModelElement {
 	public void removeEndpointDefinition(CamelModelElement def) {
 		if (this.endpointDefinitions.containsKey(def.getId())) {
 			this.endpointDefinitions.remove(def.getId());
-			if (getCamelFile() != null) getCamelFile().fireModelChanged();
+			boolean childExists = false;
+			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+				if(getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
+					childExists = true;
+					break;
+				}
+			}
+			if (childExists) {
+				getXmlNode().removeChild(def.getXmlNode());
+			}
 		}
 	}
 	
@@ -112,7 +130,16 @@ public class CamelContextElement extends CamelModelElement {
 	public void addDataFormat(CamelModelElement df) {
 		if (this.dataformats.containsKey(df.getId())) return;
 		this.dataformats.put((String)df.getId(), df);
-		if (getCamelFile() != null) getCamelFile().fireModelChanged();
+		boolean childExists = false;
+		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+			if(getXmlNode().getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
+				childExists = true;
+				break;
+			}
+		}
+		if (!childExists) {
+			getXmlNode().insertBefore(df.getXmlNode(), getFirstChild(getXmlNode()));
+		}
 	}
 	
 	/**
@@ -123,7 +150,16 @@ public class CamelContextElement extends CamelModelElement {
 	public void removeDataFormat(CamelModelElement df) {
 		if (this.dataformats.containsKey(df.getId())) {
 			this.dataformats.remove(df.getId());
-			if (getCamelFile() != null) getCamelFile().fireModelChanged();
+			boolean childExists = false;
+			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
+				if(getXmlNode().getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
+					childExists = true;
+					break;
+				}
+			}
+			if (childExists) {
+				getXmlNode().removeChild(df.getXmlNode());
+			}
 		}
 	}
 	

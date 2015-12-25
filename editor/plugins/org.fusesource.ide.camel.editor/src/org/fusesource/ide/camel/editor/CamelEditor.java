@@ -65,6 +65,7 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  */
 public class CamelEditor extends MultiPageEditorPart implements IResourceChangeListener,
 																ITabbedPropertySheetPageContributor, 
+																IDocumentListener,
 																IPropertyChangeListener {
 
 	public static final String INTEGRATION_PERSPECTIVE_ID = "org.fusesource.ide.branding.perspective";
@@ -94,6 +95,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	
 	/** the editor dirty flag **/
 	private boolean dirtyFlag = false;
+	
+	private boolean disableDirtyFlag = false;
 	
 	/** 
 	 * this flag is used when invalid xml is detected in source and then 
@@ -184,6 +187,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void createPages() {
+		stopDirtyListener();
+
 		createDesignPage(DESIGN_PAGE_INDEX);
 		createSourcePage(SOURCE_PAGE_INDEX);
 		createGlobalConfPage(GLOBAL_CONF_INDEX);
@@ -192,26 +197,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (document == null) {
 			throw new IllegalStateException("No Document available!");
 		} else {
-			document.addDocumentListener(new IDocumentListener() {
-
-				/*
-				 * (non-Javadoc)
-				 * @see org.eclipse.jface.text.IDocumentListener#documentChanged(org.eclipse.jface.text.DocumentEvent)
-				 */
-				@Override
-				public void documentChanged(DocumentEvent event) {
-					// TODO: source editor changed - check what to do
-					//designEditor.onTextEditorPropertyChange();
-				}
-
-				/*
-				 * (non-Javadoc)
-				 * @see org.eclipse.jface.text.IDocumentListener#documentAboutToBeChanged(org.eclipse.jface.text.DocumentEvent)
-				 */
-				@Override
-				public void documentAboutToBeChanged(DocumentEvent event) {
-				}
-			});
+			document.addDocumentListener(this);
 		}
 	}
 
@@ -223,7 +209,22 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	public IEditorPart getActiveEditor() {
 		return super.getActiveEditor();
 	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.text.IDocumentListener#documentAboutToBeChanged(org.eclipse.jface.text.DocumentEvent)
+	 */
+	@Override
+	public void documentAboutToBeChanged(DocumentEvent event) {
+	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.text.IDocumentListener#documentChanged(org.eclipse.jface.text.DocumentEvent)
+	 */
+	@Override
+	public void documentChanged(DocumentEvent event) {
+		if (getActivePage() == SOURCE_PAGE_INDEX) 	setDirtyFlag(true);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#isDirty()
 	 */
@@ -236,7 +237,18 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @param dirtyFlag the dirtyFlag to set
 	 */
 	public void setDirtyFlag(boolean dirtyFlag) {
-		this.dirtyFlag = dirtyFlag;
+		if (disableDirtyFlag == false) {
+			this.dirtyFlag = dirtyFlag;
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
+	}
+	
+	public void stopDirtyListener() {
+		this.disableDirtyFlag = true;
+	}
+	
+	public void startDirtyListener() {
+		this.disableDirtyFlag = false;
 	}
 	
 	/**
@@ -308,7 +320,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		if (getActivePage() == DESIGN_PAGE_INDEX) {
-			this.designEditor.getModel().saveChanges();
 			getDesignEditor().doSave(monitor);
 		} else if (getActivePage() == SOURCE_PAGE_INDEX) {
 			this.sourceEditor.doSave(monitor);
@@ -320,6 +331,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (getEditorInput() instanceof CamelXMLEditorInput) {
 			((CamelXMLEditorInput)getEditorInput()).onEditorInputSave();
 		}
+		setDirtyFlag(false);
 	}
 	
 	/* (non-Javadoc)
@@ -328,7 +340,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public void doSaveAs() {
 		if (getActivePage() == DESIGN_PAGE_INDEX) {
-			this.designEditor.getModel().saveChanges();
 			getDesignEditor().doSaveAs();
 		} else if (getActivePage() == SOURCE_PAGE_INDEX) {
 			this.sourceEditor.doSaveAs();			
@@ -343,6 +354,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 //		if (getEditorInput() instanceof CamelXMLEditorInput) {
 //			((CamelXMLEditorInput)getEditorInput()).onEditorInputSave();
 //		}
+		
+		setDirtyFlag(false);
 	}
 	
 	/* (non-Javadoc)
@@ -433,48 +446,54 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void pageChange(int newPageIndex) {
-		if (newPageIndex == SOURCE_PAGE_INDEX) {
-//				boolean doPageChange = continueWithUnconnectedFigures();
-//				if (doPageChange) {
-			if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
-			if (rollBackActive == false) {
-				updateSourceFromModel();
-			} else {
-				rollBackActive = false;
-			}
-			this.lastActivePageIdx = newPageIndex;
-			super.pageChange(newPageIndex);
-//				} else {
-//					setActivePage(DESIGN_PAGE_INDEX);
-//					newPageIndex = DESIGN_PAGE_INDEX;
-//				}
-		} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX){
-			if (lastActivePageIdx == SOURCE_PAGE_INDEX) {
-				IDocument document = getDocument();
-				if (document != null) {
-					String text = document.get();
-					boolean ignoreError = true;
-					if (!isValidXML(text)) {
-						// invalid XML -> could result in data loss...
-						ignoreError = MessageDialog.openConfirm(getSite().getShell(), UIMessages.failedXMLValidationTitle, NLS.bind(UIMessages.failedXMLValidationText, lastError));
-					}
-					
-					if (ignoreError) {
-						updateModelFromSource();
-						lastError = "";
-						this.lastActivePageIdx = newPageIndex;
-						super.pageChange(newPageIndex);
-						if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
-					} else {
-						rollBackActive = true;
-						newPageIndex = SOURCE_PAGE_INDEX;
-						setActivePage(SOURCE_PAGE_INDEX);
-						super.pageChange(newPageIndex);
-						getDocument().set(text);
+		try {
+//			stopDirtyListener();
+			
+			if (newPageIndex == SOURCE_PAGE_INDEX) {
+	//				boolean doPageChange = continueWithUnconnectedFigures();
+	//				if (doPageChange) {
+				if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
+				if (rollBackActive == false) {
+					updateSourceFromModel();
+				} else {
+					rollBackActive = false;
+				}
+				this.lastActivePageIdx = newPageIndex;
+				super.pageChange(newPageIndex);
+	//				} else {
+	//					setActivePage(DESIGN_PAGE_INDEX);
+	//					newPageIndex = DESIGN_PAGE_INDEX;
+	//				}
+			} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX){
+				if (lastActivePageIdx == SOURCE_PAGE_INDEX) {
+					IDocument document = getDocument();
+					if (document != null) {
+						String text = document.get();
+						boolean ignoreError = true;
+						if (!isValidXML(text)) {
+							// invalid XML -> could result in data loss...
+							ignoreError = MessageDialog.openConfirm(getSite().getShell(), UIMessages.failedXMLValidationTitle, NLS.bind(UIMessages.failedXMLValidationText, lastError));
+						}
+						
+						if (ignoreError) {
+							updateModelFromSource();
+							lastError = "";
+							this.lastActivePageIdx = newPageIndex;
+							super.pageChange(newPageIndex);
+							if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
+						} else {
+							rollBackActive = true;
+							newPageIndex = SOURCE_PAGE_INDEX;
+							setActivePage(SOURCE_PAGE_INDEX);
+							super.pageChange(newPageIndex);
+							getDocument().set(text);
+						}
 					}
 				}
 			}
-		} 
+		} finally {
+//			if (newPageIndex != DESIGN_PAGE_INDEX) startDirtyListener();
+		}
 	}
 	
 	/**
@@ -545,15 +564,20 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
-				IDocument document = getDocument();
-				if (document != null) {
-					String text = document.get();
-					String newText = designEditor.getModel().getDocumentAsXML();
-					if (!text.equals(newText)) {
-						// only update the document if its actually different
-						// to avoid setting the dirty flag unnecessarily
-						document.set(newText);
+				try {
+					stopDirtyListener();
+					IDocument document = getDocument();
+					if (document != null) {
+						String text = document.get();
+						String newText = designEditor.getModel().getDocumentAsXML();
+						if (!text.equals(newText)) {
+							// only update the document if its actually different
+							// to avoid setting the dirty flag unnecessarily
+							document.set(newText);
+						}
 					}
+				} finally {
+					startDirtyListener();
 				}
 			}
 		};
@@ -580,9 +604,9 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
+				stopDirtyListener();
 				// reload model
 				String text = getDocument().get();
-				if (text.indexOf("<?xml ") == -1) text = "<?xml version=\"1.0\"?>\n" + text;
 				designEditor.getModel().reloadModelFromXML(text);
 				// add the diagram contents
 		        ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(), designEditor.getModel());
@@ -713,53 +737,6 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		setPartName(input.getName());
 	}
 	
-	/**
-	 * 
-	 */
-	public void switchToDesignEditor() {
-		// lets switch async just in case we've not created the page yet
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-//				updatedDesignPage();
-				setActiveEditor(getDesignEditor());
-				setActivePage(DESIGN_PAGE_INDEX);
-				getDesignEditor().setFocus();
-			}
-		});
-	}
-
-	/**
-	 * 
-	 */
-	public void switchToSourceEditor() {
-		// lets switch async just in case we've not created the page yet
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-//				updatedDesignPage();
-				setActiveEditor(getSourceEditor());
-				setActivePage(SOURCE_PAGE_INDEX);
-				getSourceEditor().setFocus();
-			}
-		});
-	}
-
-	/**
-	 * 
-	 */
-	public void switchToGlobalConfigEditor() {
-		// lets switch async just in case we've not created the page yet
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				setActiveEditor(getGlobalConfigEditor());
-				setActivePage(GLOBAL_CONF_INDEX);
-				getGlobalConfigEditor().setFocus();
-			}
-		});
-	}
-
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
 	 */
@@ -782,5 +759,20 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
 //			designEditor.setupGridVisibilityAsync();
 		} 	
+	}
+	
+	/**
+	 * 
+	 */
+	public void switchToDesignEditor() {
+		// lets switch async just in case we've not created the page yet
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				setActiveEditor(getDesignEditor());
+				setActivePage(DESIGN_PAGE_INDEX);
+				getDesignEditor().setFocus();
+			}
+		});
 	}
 }

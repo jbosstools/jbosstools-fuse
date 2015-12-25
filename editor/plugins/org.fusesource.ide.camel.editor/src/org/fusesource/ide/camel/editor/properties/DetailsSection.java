@@ -138,7 +138,7 @@ public class DetailsSection extends AbstractPropertySection {
      */
     @Override
     public void setInput(IWorkbenchPart part, ISelection selection) {
-        super.setInput(part, selection);
+    	super.setInput(part, selection);
 
         this.dbc = new DataBindingContext();
 

@@ -372,16 +372,16 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			public void run() {
 				DiagramOperations.updateSelectedNode(CamelDesignEditor.this);
 				getDiagramTypeProvider().getDiagramBehavior().refresh();
+				if (selectedEditPart != null) {
+					selectedEditPart.refresh();
+				} else if (lastSelectedEditPart == null) {
+
+				} else {
+					lastSelectedEditPart.refresh();
+				}
+				parent.setDirtyFlag(true);
 			}
 		});
-
-		if (selectedEditPart != null) {
-			selectedEditPart.refresh();
-		} else if (lastSelectedEditPart == null) {
-
-		} else {
-			lastSelectedEditPart.refresh();
-		}
 	}
 
 	/* (non-Javadoc)

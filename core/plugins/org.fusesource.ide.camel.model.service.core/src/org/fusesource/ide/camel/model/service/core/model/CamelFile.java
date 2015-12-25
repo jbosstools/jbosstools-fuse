@@ -24,6 +24,9 @@ import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCor
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.events.Event;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.EventTarget;
 
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
@@ -37,7 +40,7 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
  * 
  * @author lhein
  */
-public class CamelFile extends CamelModelElement {
+public class CamelFile extends CamelModelElement implements EventListener {
 	
 	public static final int XML_INDENT_VALUE = 3;
 	
@@ -125,7 +128,7 @@ public class CamelFile extends CamelModelElement {
 		if (id != null && this.globalDefinitions.containsKey(id)) return null;
 		if (id == null && this.globalDefinitions.containsValue(def)) return null;
 		this.globalDefinitions.put(usedId, def);
-		fireModelChanged();
+		getDocument().getDocumentElement().insertBefore(def, getCamelContext().getXmlNode());
 		return usedId;
 	}
 	
@@ -135,7 +138,10 @@ public class CamelFile extends CamelModelElement {
 	 * @param id
 	 */
 	public void removeBeanDefinition(String id) {
-		if (this.globalDefinitions.remove(id) != null) fireModelChanged();
+		Node nodeToRemove = this.globalDefinitions.remove(id);
+		if (nodeToRemove != null) {
+			getDocument().getDocumentElement().removeChild(nodeToRemove);
+		}
 	}
 	
 	/**
@@ -184,7 +190,14 @@ public class CamelFile extends CamelModelElement {
 	 * @param document the document to set
 	 */
 	public void setDocument(Document document) {
+		// unregister event listener on old document
+		if (this.document != null && this.document.getDocumentElement() instanceof EventTarget) {
+			((EventTarget)this.document.getDocumentElement()).removeEventListener("DOMSubtreeModified", this, true);
+		}
 		this.document = document;
+		if (this.document != null && this.document.getDocumentElement() instanceof EventTarget) {
+			((EventTarget)this.document.getDocumentElement()).addEventListener("DOMSubtreeModified", this, true);
+		}
 	}
 	
 	/**
@@ -316,5 +329,14 @@ public class CamelFile extends CamelModelElement {
 	@Override
 	public boolean supportsBreakpoint() {
 		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.w3c.dom.events.EventListener#handleEvent(org.w3c.dom.events.Event)
+	 */
+	@Override
+	public void handleEvent(Event evt) {
+		System.err.println(evt);
+		fireModelChanged();
 	}
 }
