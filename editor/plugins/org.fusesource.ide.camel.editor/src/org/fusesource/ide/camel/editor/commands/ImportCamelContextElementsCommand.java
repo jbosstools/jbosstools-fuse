@@ -78,6 +78,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 	protected void doExecute() {
 		try {
 			designEditor.getParent().stopDirtyListener();
+			designEditor.getModel().unregisterDOMListener();
 			
 			if (this.diagram == null) {
 				// Create the diagram and its file
@@ -114,6 +115,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 	        }
 		} finally {
 			designEditor.getParent().startDirtyListener();
+			designEditor.getModel().registerDOMListener();
 		}
 	}
 	

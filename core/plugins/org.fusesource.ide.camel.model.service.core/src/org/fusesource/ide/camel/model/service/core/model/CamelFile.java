@@ -125,10 +125,10 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	 */
 	public String addGlobalDefinition(String id, Node def) {
 		String usedId = id != null ? id : "_def" + UUID.randomUUID().toString();
-		if (id != null && this.globalDefinitions.containsKey(id)) return null;
+		if (usedId != null && this.globalDefinitions.containsKey(usedId)) return null;
 		if (id == null && this.globalDefinitions.containsValue(def)) return null;
 		this.globalDefinitions.put(usedId, def);
-		getDocument().getDocumentElement().insertBefore(def, getCamelContext().getXmlNode());
+//		getDocument().getDocumentElement().insertBefore(def, getLastChild(getDocument().getDocumentElement()));
 		return usedId;
 	}
 	
@@ -190,13 +190,19 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	 * @param document the document to set
 	 */
 	public void setDocument(Document document) {
+		this.document = document;
+	}
+	
+	public void registerDOMListener() {
+		if (this.document != null && this.document.getDocumentElement() instanceof EventTarget) {
+			((EventTarget)this.document.getDocumentElement()).addEventListener("DOMSubtreeModified", this, true);
+		}
+	}
+	
+	public void unregisterDOMListener() {
 		// unregister event listener on old document
 		if (this.document != null && this.document.getDocumentElement() instanceof EventTarget) {
 			((EventTarget)this.document.getDocumentElement()).removeEventListener("DOMSubtreeModified", this, true);
-		}
-		this.document = document;
-		if (this.document != null && this.document.getDocumentElement() instanceof EventTarget) {
-			((EventTarget)this.document.getDocumentElement()).addEventListener("DOMSubtreeModified", this, true);
 		}
 	}
 	
@@ -336,7 +342,6 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	 */
 	@Override
 	public void handleEvent(Event evt) {
-		System.err.println(evt);
 		fireModelChanged();
 	}
 }
