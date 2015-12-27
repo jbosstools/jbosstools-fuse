@@ -60,7 +60,7 @@ public class CreateFlowFeature extends AbstractCreateConnectionFeature implement
 		
 		if (target != null && source != target) {
 			// if we only support a single output and we already have one then we can't connect to another output
-			return source.getOutputElement() == null && source.getParent().equals(target.getParent());
+			return source.getOutputElement() == null && source.getParent().equals(target.getParent()) && target.getInputElement() == null;
 		}
 		return false;
 	}
