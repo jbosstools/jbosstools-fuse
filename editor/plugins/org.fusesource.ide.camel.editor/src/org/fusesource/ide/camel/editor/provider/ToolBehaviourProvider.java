@@ -18,9 +18,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.ICreateConnectionFeature;
@@ -48,26 +50,28 @@ import org.eclipse.graphiti.tb.IContextButtonPadData;
 import org.eclipse.graphiti.tb.IDecorator;
 import org.eclipse.graphiti.tb.ImageDecorator;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
 import org.fusesource.ide.camel.editor.features.custom.DoubleClickFeature;
-import org.fusesource.ide.camel.editor.features.custom.GEFLayoutDiagramFeature;
-import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
-import org.fusesource.ide.camel.editor.features.custom.ZestLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.editor.validation.ValidationFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationResult;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentModel;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
-
 
 /**
  * @author lhein
@@ -356,7 +360,6 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
     @Override
     public IPaletteCompartmentEntry[] getPalette() {
         List<IPaletteCompartmentEntry> ret = new ArrayList<IPaletteCompartmentEntry>();
-
         
         // the folder for component types
         PaletteCompartmentEntry compartmentEntryComponents = new PaletteCompartmentEntry(UIMessages.connectorsDrawerTitle, null);
@@ -485,25 +488,25 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
     public ArrayList<IToolEntry> getExtensionPointToolEntries() {
         ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
         
-//        // inject palette entries delivered via extension points
-//        IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(PALETTE_ENTRY_PROVIDER_EXT_POINT_ID);
-//        try {
-//            for (IConfigurationElement e : extensions) {
-//                final Object o = e.createExecutableExtension("class");
-//                
-//                if (o instanceof ICustomPaletteEntry) {
-//                    ICustomPaletteEntry pe = (ICustomPaletteEntry)o;
-//                    ICreateFeature cf = pe.newCreateFeature(getFeatureProvider());
-//                    String paletteIcon = Strings.isBlank(e.getAttribute(PALETTE_ICON_ATTR)) ? cf.getCreateImageId() : ImageProvider.PREFIX + e.getAttribute(EXT_ID_ATTR) + ImageProvider.POSTFIX_SMALL;
-//                    String diagramImg = Strings.isBlank(e.getAttribute(DIAGRAM_IMAGE_ATTR)) ? cf.getCreateLargeImageId() : ImageProvider.PREFIX + e.getAttribute(EXT_ID_ATTR) + ImageProvider.POSTFIX_LARGE;
-//                    IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), paletteIcon, diagramImg, cf);
-//                    entries.add(te);
-//                    paletteItemExtensions.put(cf, e);
-//                }
-//            }
-//        } catch (CoreException ex) {
-//            CamelEditorUIActivator.pluginLog().logError(ex);
-//        }
+        // inject palette entries delivered via extension points
+        IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(PALETTE_ENTRY_PROVIDER_EXT_POINT_ID);
+        try {
+            for (IConfigurationElement e : extensions) {
+                final Object o = e.createExecutableExtension("class");
+                
+                if (o instanceof ICustomPaletteEntry) {
+                    ICustomPaletteEntry pe = (ICustomPaletteEntry)o;
+                    ICreateFeature cf = pe.newCreateFeature(getFeatureProvider());
+                    String paletteIcon = Strings.isBlank(e.getAttribute(PALETTE_ICON_ATTR)) ? cf.getCreateImageId() : ImageProvider.PREFIX + e.getAttribute(EXT_ID_ATTR) + ImageProvider.POSTFIX_SMALL;
+                    String diagramImg = Strings.isBlank(e.getAttribute(DIAGRAM_IMAGE_ATTR)) ? cf.getCreateLargeImageId() : ImageProvider.PREFIX + e.getAttribute(EXT_ID_ATTR) + ImageProvider.POSTFIX_LARGE;
+                    IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), paletteIcon, diagramImg, cf);
+                    entries.add(te);
+                    paletteItemExtensions.put(cf, e);
+                }
+            }
+        } catch (CoreException ex) {
+            CamelEditorUIActivator.pluginLog().logError(ex);
+        }
         
         // sort the palette entries
         Collections.sort(entries, new Comparator<IToolEntry>() {
@@ -522,15 +525,21 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
     public ArrayList<IToolEntry> getConnectorsToolEntries() {
         ArrayList<IToolEntry> entries = new ArrayList<IToolEntry>();
         
-//        // inject palette entries generated out of the component model file
-//        // TODO: use the projects camel version
-//        ComponentModel componentModel = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion()).getComponentModel();
-//        for (Component component : componentModel.getSupportedComponents()) {
-//            if (shouldBeIgnored(component.getSchemeTitle())) continue;
-//            ICreateFeature cf = new CreateConnectorFigureFeature(getFeatureProvider(), component);
-//            IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), cf.getCreateImageId(), cf.getCreateLargeImageId(), cf);
-//            entries.add(te);
-//        }
+        // inject palette entries generated out of the component model file
+        String camelVersion = null;
+        if (CamelEditorUIActivator.getDiagramEditor() != null) {
+        	camelVersion = CamelModelFactory.getCamelVersion(CamelEditorUIActivator.getDiagramEditor().getWorkspaceProject());
+        } else {
+        	camelVersion = CamelModelFactory.getLatestCamelVersion();
+        }
+        
+        ComponentModel componentModel = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel();
+        for (Component component : componentModel.getSupportedComponents()) {
+            if (shouldBeIgnored(component.getSchemeTitle())) continue;
+            ICreateFeature cf = new CreateConnectorFigureFeature(getFeatureProvider(), component);
+            IToolEntry te = new ObjectCreationToolEntry(cf.getName(), cf.getDescription(), cf.getCreateImageId(), cf.getCreateLargeImageId(), cf);
+            entries.add(te);
+        }
         
         // sort the palette entries
         Collections.sort(entries, new Comparator<IToolEntry>() {

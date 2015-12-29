@@ -68,7 +68,7 @@ public class CamelModelElement {
 	
 	private String name;
 	private String description;
-	
+		
 	/**
 	 * creates a camel node using the xml node
 	 * 
@@ -257,13 +257,12 @@ public class CamelModelElement {
 
 		// we only return the id if we are told so by the preference AND the
 		// value of the ID is set != null
-		if (preferID && getId() != null) {
+		if (preferID && getId() != null && getId().trim().length()>0) {
 			return getId();
 		}
 
-		if (this.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("from") ||
-			this.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("to")) {
-			String uri = (String)getParameter("uri");
+		if (this instanceof CamelEndpoint) {
+			String uri = ((CamelEndpoint)this).getUri();
 			if (uri != null && uri.trim().length()>0) {
 				// uri specified, use it
 				return uri;
@@ -377,7 +376,8 @@ public class CamelModelElement {
 		if (inputElement != null) {
 			Node inputNode = inputElement.getXmlNode();
 			Node insertPosNode = getNextNode(inputNode);
-			if (getXmlNode().isEqualNode(insertPosNode) == false) inputNode.getParentNode().insertBefore(getXmlNode(), insertPosNode);
+			if (insertPosNode != null && getXmlNode().isEqualNode(insertPosNode) == false) inputNode.getParentNode().insertBefore(getXmlNode(), insertPosNode);
+			if (insertPosNode == null) inputNode.getParentNode().appendChild(inputNode);
 		}
 	}
 	
@@ -490,17 +490,32 @@ public class CamelModelElement {
 	 * @param value
 	 */
 	public void setParameter(String name, Object value) {
+		setParameter(name, value, false);
+	}
+	
+	/**
+	 * sets the parameter with the given name to the given value. If the 
+	 * parameter doesn't exist it will be created
+	 * 
+	 * @param name
+	 * @param value
+	 * @param overrideChangeCheck	if true params are written regardless if changed or not
+	 */
+	protected void setParameter(String name, Object value, boolean overrideChangeCheck) {
 		Object oldValue = this.parameters.get(name);
-		
-		if (oldValue == null && value == null) return;
-		if (oldValue != null && value != null && oldValue.equals(value)) return;
-		if (oldValue != null && oldValue.equals(value)) return;
-		if (value != null && value.equals(oldValue)) return;
+
+		if (overrideChangeCheck == false) {
+			if (oldValue == null && value == null) return;
+			if (oldValue != null && value != null && oldValue.equals(value)) return;
+			if (oldValue != null && oldValue.equals(value)) return;
+			if (value != null && value.equals(oldValue)) return;
+		}
 		
 		// save param in internal map
 		this.parameters.put(name, value);
 		
 		Element e = (Element)getXmlNode();
+		if (e == null) return;
 		String kind = getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getKind() : null;
 		if (this instanceof CamelContextElement) kind = "attribute";
 		if (value == null || value.toString().length()<1) {
@@ -814,7 +829,8 @@ public class CamelModelElement {
 	 * @param name
 	 * @return	the eip or null if not found
 	 */
-	protected Eip getEipByName(String name) {
+	public Eip getEipByName(String name) {
+		// TODO: project camel version vs latest camel version
 		String prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
 		if (getCamelFile() != null) {
 			// get the project from the camel file resource
@@ -1175,7 +1191,6 @@ public class CamelModelElement {
      * @return
      */
     public String getCategoryName() {
-    	// TODO: find a good way to define categories
     	return getUnderlyingMetaModelObject().getTags().get(getUnderlyingMetaModelObject().getTags().size()-1);
     }
     

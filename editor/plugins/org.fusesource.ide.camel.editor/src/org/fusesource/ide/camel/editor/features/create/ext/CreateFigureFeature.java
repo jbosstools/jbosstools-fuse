@@ -68,6 +68,13 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		return eip;
 	}
 	
+	/**
+	 * @param eip the eip to set
+	 */
+	public void setEip(Eip eip) {
+		this.eip = eip;
+	}
+	
 	public Class<? extends CamelModelElement> getClazz() {
 		return clazz;
 	}
@@ -78,7 +85,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	@Override
 	public String getCategoryName() {
 		if (eip != null) {
-			return ProviderHelper.getCategoryFromTags(eip.getTags());
+			return ProviderHelper.getCategoryFromEip(eip);
 		}
 		return null;
 	}

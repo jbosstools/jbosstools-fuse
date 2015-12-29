@@ -1,0 +1,134 @@
+/*******************************************************************************
+ * Copyright (c) 2014 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
+package org.fusesource.ide.camel.editor.features.create.ext;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.graphiti.features.IFeatureProvider;
+import org.eclipse.graphiti.features.context.ICreateContext;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.w3c.dom.Node;
+
+/**
+ * @author lhein
+ */
+public class CreateConnectorFigureFeature extends CreateFigureFeature {
+    
+    protected final Component component;
+    
+    /**
+     * creates a component create feature
+     * 
+     * @param fp
+     * @param component
+     */
+    public CreateConnectorFigureFeature(IFeatureProvider fp, Component component) {
+    	super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), (Eip)null);
+        this.component = component;        
+        setEip(getEipByName("from"));
+    }
+        
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#canCreate(org.eclipse.graphiti.features.context.ICreateContext)
+     */
+    @Override
+    public boolean canCreate(ICreateContext context) {
+    	return true;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.features.create.CreateFigureFeature#getIconName()
+     */
+    @Override
+    protected String getIconName() {
+        return String.format("%s.png", this.component.getSchemeTitle().replaceAll("-", "_"));
+    }
+        
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#createNode(org.fusesource.ide.camel.model.service.core.model.CamelModelElement, boolean)
+     */
+    @Override
+    protected CamelModelElement createNode(CamelModelElement parent, boolean createDOMNode) {
+    	if( getEip() != null ) {
+			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
+			if (editor.getModel() != null) { 
+				Node newNode = null;
+				if (createDOMNode) {
+					newNode = editor.getModel().getDocument().createElement(getEip().getName());
+				}
+				CamelEndpoint ep = new CamelEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme())); // we use the first found protocol string
+				ep.setParent(parent);
+				ep.setUnderlyingMetaModelObject(getEip());
+				if (createDOMNode) ep.setXmlNode(newNode);
+				return ep;
+			}
+		}
+        return null;
+    }
+        
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.features.create.CreateFigureFeature#create(org.eclipse.graphiti.features.context.ICreateContext)
+     */
+    @Override
+    public Object[] create(ICreateContext context) {
+        // add maven dependency to pom.xml if needed
+        try {
+            updateMavenDependencies(component.getDependencies());
+        } catch (CoreException ex) {
+            CamelEditorUIActivator.pluginLog().logError("Unable to add the component dependency to the project maven configuration file.", ex);
+        }
+        // and then let the super class continue the work
+        return super.create(context);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#getCategoryName()
+     */
+    @Override
+    public String getCategoryName() {
+    	return "components";
+    }
+    
+    /**
+	 * @return the component
+	 */
+	public Component getConnector() {
+		return this.component;
+	}
+	
+	/**
+	 * retrieves the eip meta model for a given eip name
+	 * 
+	 * @param name
+	 * @return	the eip or null if not found
+	 */
+	public Eip getEipByName(String name) {
+		// TODO: project camel version vs latest camel version
+		String prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
+		// then get the meta model for the given camel version
+		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
+		if (model == null) {
+			// if we don't support the defined camel version we take the latest supported instead
+			model = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+		}
+		// then we get the eip meta model
+		Eip eip = model.getEipModel().getEIPByName(name);
+		// and return it
+		return eip;
+	}
+}
