@@ -31,5 +31,6 @@ Require-Bundle: org.jboss.tools.jmx.core;bundle-version="1.6.0",
  org.fusesource.ide.foundation.ui;bundle-version="8.0.0",
  org.fusesource.ide.graph;bundle-version="8.0.0",
  org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
- org.fusesource.ide.camel.editor;bundle-version="8.0.0"
+ org.fusesource.ide.camel.editor;bundle-version="8.0.0",
+ org.fusesource.ide.commons;bundle-version="8.0.0"
 Bundle-ClassPath: .

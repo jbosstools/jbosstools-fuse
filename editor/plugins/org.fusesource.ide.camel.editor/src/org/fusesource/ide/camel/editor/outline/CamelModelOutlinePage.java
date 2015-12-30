@@ -63,7 +63,7 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 * @param cme
 	 */
 	public void setOutlineSelection(CamelModelElement cme) {
-		getTreeViewer().setSelection(new StructuredSelection(cme), true);
+		if (getTreeViewer() != null) getTreeViewer().setSelection(new StructuredSelection(cme), true);
 	}
 	
 	/* (non-Javadoc)
@@ -71,6 +71,6 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 */
 	@Override
 	public void modelChanged() {
-		getTreeViewer().refresh(true);
+		if (getTreeViewer() != null) getTreeViewer().refresh(true);
 	}
 }

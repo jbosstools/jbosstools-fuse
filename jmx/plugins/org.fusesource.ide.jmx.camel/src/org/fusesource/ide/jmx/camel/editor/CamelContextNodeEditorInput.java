@@ -11,6 +11,8 @@
 package org.fusesource.ide.jmx.camel.editor;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.foundation.core.util.IOUtils;
@@ -53,6 +55,7 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 		super.onEditorInputSave();
 		String xml = null;
 		try {
+			getCamelContextFile().getProject().refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
 			xml = IOUtils.loadText(getCamelContextFile().getContents(), "utf-8");
 			pushbackToRemoteContext(xml);
 		} catch (Exception ex) {

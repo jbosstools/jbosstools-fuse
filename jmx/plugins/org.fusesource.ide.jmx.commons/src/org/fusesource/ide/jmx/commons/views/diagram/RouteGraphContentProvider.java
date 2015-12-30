@@ -88,18 +88,20 @@ public class RouteGraphContentProvider implements IGraphContentProvider {
 				getAllChildren(node.getChildElements(), descendents);
 			} else {
 				getAllChildren(parent.getChildElements(), descendents);
-//				for (CamelModelElement child : descendents) {
-//					set.addAll(child.getAllConnections());
-//				}
 			}
 			return set.toArray();
 		}
 		return null;
 	}
 	
+	private void getAllOutputs(CamelModelElement elem, Set<CamelModelElement> set) {
+		if (elem.getOutputElement() != null) set.add(elem.getOutputElement());
+	}
+	
 	private void getAllChildren(List<CamelModelElement> elems, Set<CamelModelElement> set) {
 		for (CamelModelElement e : elems) {
 			set.add(e);
+			getAllOutputs(e, set);
 			if (e.getChildElements().isEmpty() == false) {
 				getAllChildren(e.getChildElements(), set);
 			}
