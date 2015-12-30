@@ -53,6 +53,7 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
+import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
@@ -744,20 +745,20 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void propertyChange(PropertyChangeEvent event) {
 		if (event.getProperty().equals(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL)) {
 			// user switched the displaytext logic flag - refresh diagram and outline
-//			designEditor.update();
+			designEditor.update();
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION)) {
 			// user switched direction of diagram layout - relayout the diagram
-//			designEditor.autoLayoutRoute();
+			designEditor.autoLayoutRoute();
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_VISIBILITY)) {
 			// user switched grid visibility
-//			DiagramUtils.setGridVisible((Boolean)event.getNewValue(), designEditor);
+			DiagramUtils.setGridVisible((Boolean)event.getNewValue(), designEditor);
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_TEXT_COLOR) ||
 				   event.getProperty().equals(PreferencesConstants.EDITOR_CONNECTION_COLOR) ||
 				   event.getProperty().equals(PreferencesConstants.EDITOR_FIGURE_BG_COLOR) ||
 				   event.getProperty().equals(PreferencesConstants.EDITOR_FIGURE_FG_COLOR)) {
-//			designEditor.getDiagramBehavior().refresh();
+			designEditor.getDiagramBehavior().refresh();
 		} else if (event.getProperty().equals(PreferencesConstants.EDITOR_GRID_COLOR)) {
-//			designEditor.setupGridVisibilityAsync();
+			designEditor.setupGridVisibilityAsync();
 		} 	
 	}
 	

@@ -19,6 +19,7 @@ import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
@@ -153,7 +154,7 @@ public class ProviderHelper {
      * @param imageProvider the image provider to use
      */
     public static void addFigureIcons(ImageProvider imageProvider) {
-    	CamelModel model = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+    	CamelModel model = CamelModelFactory.getModelForVersion(CamelUtils.getCurrentProjectCamelVersion());
     	ArrayList<Eip> list = model.getEipModel().getSupportedEIPs();
     	Iterator<Eip> it = list.iterator();
     	while(it.hasNext()) {

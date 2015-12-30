@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -47,7 +47,7 @@ public class BasicNodeValidator implements ValidationSupport {
 				}
 				// check if the ID is unique
 				if (property.equalsIgnoreCase("id")) {
-					CamelDesignEditor editor = CamelEditorUIActivator.getDiagramEditor();
+					CamelDesignEditor editor = CamelUtils.getDiagramEditor();
 					if (editor != null) {
 						if (!checkAllUniqueIDs(node, node.getCamelContext().getChildElements(), new ArrayList<String>())) {
 							result.addError("The id property is not unique!");

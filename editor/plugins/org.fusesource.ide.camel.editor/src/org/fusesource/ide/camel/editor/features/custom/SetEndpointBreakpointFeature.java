@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
@@ -186,7 +187,7 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 	}
 	
 	protected IFile getContextFile() {
-		return CamelEditorUIActivator.getDiagramEditor().asFileEditorInput(CamelEditorUIActivator.getDiagramEditor().getEditorInput()).getFile();
+		return CamelUtils.getDiagramEditor().asFileEditorInput(CamelUtils.getDiagramEditor().getEditorInput()).getFile();
 	}
 	
 	/**

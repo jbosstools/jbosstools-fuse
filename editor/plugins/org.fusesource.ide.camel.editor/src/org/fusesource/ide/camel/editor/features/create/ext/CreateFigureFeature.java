@@ -24,7 +24,10 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.provider.ProviderHelper;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.MavenUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
+import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
@@ -247,4 +250,24 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
     public void updateMavenDependencies(List<Dependency> compDeps) throws CoreException {
     	MavenUtils.updateMavenDependencies(compDeps);
     }
+    
+	/**
+	 * retrieves the eip meta model for a given eip name
+	 * 
+	 * @param name
+	 * @return	the eip or null if not found
+	 */
+	public Eip getEipByName(String name) {
+		// TODO: project camel version vs latest camel version
+		String prjCamelVersion = CamelUtils.getCurrentProjectCamelVersion();
+		// then get the meta model for the given camel version
+		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
+		if (model == null) {
+			return null;
+		}
+		// then we get the eip meta model
+		Eip eip = model.getEipModel().getEIPByName(name);
+		// and return it
+		return eip;
+	}
 }

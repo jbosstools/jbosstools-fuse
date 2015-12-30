@@ -19,8 +19,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
-
-import old.org.fusesource.ide.camel.editor.IPrefersPerspective;
+import org.fusesource.ide.camel.editor.utils.IPrefersPerspective;
 
 /**
  * @author lhein

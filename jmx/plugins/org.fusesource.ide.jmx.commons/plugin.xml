@@ -17,6 +17,16 @@
             Displays a table of messages from an endpoint, a traced Camel route or an XML file
          </description>
       </view>
+      <view
+           category="org.fusesource.ide"
+           class="org.fusesource.ide.jmx.commons.views.diagram.DiagramView"
+           icon="icons/diagram_view.gif"
+           id="org.fusesource.ide.jmx.views.DiagramView"
+           name="Diagram View">
+        <description>
+           This view shows a graphical diagram view of the current selection for example to show a Camel Route or set of ActiveMQ destinations
+        </description>
+      </view>
    </extension>
     
     <extension point="org.eclipse.core.contenttype.contentTypes"> 

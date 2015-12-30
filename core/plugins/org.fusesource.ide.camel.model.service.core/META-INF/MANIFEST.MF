@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.10.0",
  org.fusesource.ide.preferences;bundle-version="8.0.0"
 Bundle-Activator: org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ libs/xercesImpl-2.11.0.jar
 Export-Package: org.fusesource.ide.camel.model.service.core,
  org.fusesource.ide.camel.model.service.core.adopters,
  org.fusesource.ide.camel.model.service.core.catalog,

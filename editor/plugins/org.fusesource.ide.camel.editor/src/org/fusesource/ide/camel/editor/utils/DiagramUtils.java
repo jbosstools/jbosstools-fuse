@@ -21,7 +21,6 @@ import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.AnchorContainer;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 /**
  * @author lhein
@@ -59,7 +58,7 @@ public class DiagramUtils {
 	
 	public static void setGridVisible(boolean visible, CamelDesignEditor editor) {
 		if (editor == null) {
-			editor = CamelEditorUIActivator.getDiagramEditor();
+			editor = CamelUtils.getDiagramEditor();
 		}
 		if (editor != null) {
 			GraphicalViewer graphicalViewer = editor.getGraphicalViewer();

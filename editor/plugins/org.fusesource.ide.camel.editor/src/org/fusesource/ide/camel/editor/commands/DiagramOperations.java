@@ -28,12 +28,12 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
  */
 public class DiagramOperations {
 
-//	public static LayoutCommand layoutDiagram(RiderDesignEditor designEditor) {
-//		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
-//		LayoutCommand operation = new LayoutCommand(designEditor, editingDomain);
-//		execute(editingDomain, operation, false);
-//		return operation;
-//	}
+	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor) {
+		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
+		LayoutCommand operation = new LayoutCommand(designEditor, editingDomain);
+		execute(editingDomain, operation, false);
+		return operation;
+	}
 
 	public static UpdateCommand updateSelectedNode(CamelDesignEditor designEditor) {
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
@@ -103,13 +103,13 @@ public class DiagramOperations {
 		return editingDomain;
 	}
 
-//	public static ChangeGridColorCommand updateGridColor(CamelDesignEditor designEditor) {
-//		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
-//		ChangeGridColorCommand operation = new ChangeGridColorCommand(designEditor, editingDomain);
-//		execute(editingDomain, operation, false);
-//
-//		return operation;
-//	}
+	public static ChangeGridColorCommand updateGridColor(CamelDesignEditor designEditor) {
+		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
+		ChangeGridColorCommand operation = new ChangeGridColorCommand(designEditor, editingDomain);
+		execute(editingDomain, operation, false);
+
+		return operation;
+	}
 	
 	public static void highlightNode(final CamelDesignEditor designEditor, final CamelModelElement node,  final boolean highlight) {
 		Display.getDefault().asyncExec(new Runnable() {

@@ -21,6 +21,7 @@ import org.eclipse.graphiti.ui.editor.IDiagramContainerUI;
 import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelModelChangeListener;
+import org.fusesource.ide.camel.editor.provider.CamelDiagramEditorContextMenuProvider;
 
 /**
  * @author lhein
@@ -95,8 +96,7 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	 */
 	@Override
 	protected ContextMenuProvider createContextMenuProvider() {
-		return null;
-//		return new CamelDiagramEditorContextMenuProvider(this.riderDesignEditor.getGraphicalViewer(), this.riderDesignEditor.getActionRegistry(), getConfigurationProvider());
+		return new CamelDiagramEditorContextMenuProvider(this.camelDesignEditor.getGraphicalViewer(), this.camelDesignEditor.getActionRegistry(), getConfigurationProvider());
 	}
 	
 	/* (non-Javadoc)

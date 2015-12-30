@@ -13,7 +13,6 @@ package org.fusesource.ide.camel.editor.utils;
 
 import java.util.ArrayList;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -23,7 +22,6 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -69,8 +67,7 @@ public class NodeUtils {
 	 */
 	public static boolean isValidChild(CamelModelElement parent, CamelModelElement child) {
 		if (parent != null && child != null) {
-			IProject project = parent.getCamelFile().getResource().getProject();
-    		String camelVersion = CamelModelFactory.getCamelVersion(project);
+    		String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
     		CamelModel metaModel = CamelModelFactory.getModelForVersion(camelVersion);
     		
 			if (parent.getNodeTypeId().equalsIgnoreCase("choice")) {
@@ -117,14 +114,14 @@ public class NodeUtils {
 		} else if (input instanceof ContainerShapeEditPart) {
 			ContainerShapeEditPart editPart = (ContainerShapeEditPart) input;
 			PictogramElement element = editPart.getPictogramElement();
-			if (CamelEditorUIActivator.getDiagramEditor() != null) {
+			if (CamelUtils.getDiagramEditor() != null) {
 				if (element != null && element instanceof Diagram) {
 					// route selected - this makes properties view work when route is
 					// selected in the diagram view
-					answer = CamelEditorUIActivator.getDiagramEditor().getSelectedRoute() != null ? CamelEditorUIActivator.getDiagramEditor().getSelectedRoute() : CamelEditorUIActivator.getDiagramEditor().getModel();				
+					answer = CamelUtils.getDiagramEditor().getSelectedRoute() != null ? CamelUtils.getDiagramEditor().getSelectedRoute() : CamelUtils.getDiagramEditor().getModel();				
 				} else {
 					// select the node
-					answer = (CamelModelElement)CamelEditorUIActivator.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(element);
+					answer = (CamelModelElement)CamelUtils.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(element);
 				}
 			}
 		} else if (input instanceof AbstractEditPart) {
@@ -133,7 +130,7 @@ public class NodeUtils {
 			answer = toCamelElement(model);
 		} else if (input instanceof ContainerShape) {
 			ContainerShape shape = (ContainerShape) input;
-			answer = (CamelModelElement)CamelEditorUIActivator.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(shape);
+			answer = (CamelModelElement)CamelUtils.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(shape);
 		}
 		if (input != null && answer == null) {
 			answer = (CamelModelElement) Platform.getAdapterManager().getAdapter(input, CamelModelElement.class);

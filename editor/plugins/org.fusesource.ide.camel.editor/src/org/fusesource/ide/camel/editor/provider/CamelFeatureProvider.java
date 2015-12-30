@@ -44,11 +44,9 @@ import org.fusesource.ide.camel.editor.features.custom.DeleteEndpointBreakpointF
 import org.fusesource.ide.camel.editor.features.custom.DisableCamelBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.EditConditionalBreakpoint;
 import org.fusesource.ide.camel.editor.features.custom.EnableCamelBreakpointFeature;
-import org.fusesource.ide.camel.editor.features.custom.GEFLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetConditionalBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
-import org.fusesource.ide.camel.editor.features.custom.ZestLayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
 import org.fusesource.ide.camel.editor.features.delete.RemoveFigureFeature;
 import org.fusesource.ide.camel.editor.features.misc.ResizeNodeFeature;
@@ -75,6 +73,10 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 		setIndependenceSolver(modelIndependenceSolver);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getAddFeature(org.eclipse.graphiti.features.context.IAddContext)
+	 */
 	@Override
 	public IAddFeature getAddFeature(IAddContext context) {
 		// is object for add request a EClass or EReference?
@@ -86,6 +88,10 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 		return super.getAddFeature(context);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getCreateFeatures()
+	 */
 	@Override
 	public ICreateFeature[] getCreateFeatures() {
 		ICreateFeature[] features = ProviderHelper.getCreateFeatures(this);
@@ -108,6 +114,95 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 //			return featureList.toArray(new ICreateFeature[featureList.size()]);
 //		}
 		return features;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getUpdateFeature(org.eclipse.graphiti.features.context.IUpdateContext)
+	 */
+	@Override
+	public IUpdateFeature getUpdateFeature(IUpdateContext context) {
+		PictogramElement pictogramElement = context.getPictogramElement();
+		if (pictogramElement instanceof ContainerShape) {
+			Object bo = getBusinessObjectForPictogramElement(pictogramElement);
+			if (bo instanceof CamelModelElement) {
+				return new UpdateNodeFeature(this);
+			}
+		}
+		return super.getUpdateFeature(context);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getDeleteFeature(org.eclipse.graphiti.features.context.IDeleteContext)
+	 */
+	@Override
+	public IDeleteFeature getDeleteFeature(IDeleteContext context) {
+		return new DeleteFigureFeature(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getRemoveFeature(org.eclipse.graphiti.features.context.IRemoveContext)
+	 */
+	@Override
+	public IRemoveFeature getRemoveFeature(IRemoveContext context) {
+		return new RemoveFigureFeature(this);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getResizeShapeFeature(org.eclipse.graphiti.features.context.IResizeShapeContext)
+	 */
+	@Override
+	public IResizeShapeFeature getResizeShapeFeature(IResizeShapeContext context) {
+		Shape shape = context.getShape();
+		Object bo = getBusinessObjectForPictogramElement(shape);
+		if (bo instanceof CamelModelElement) {
+			return new ResizeNodeFeature(this);
+		}
+		return super.getResizeShapeFeature(context);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getCustomFeatures(org.eclipse.graphiti.features.context.ICustomContext)
+	 */
+	@Override
+	public ICustomFeature[] getCustomFeatures(ICustomContext context) {
+		return new ICustomFeature[]
+				{
+				new LayoutDiagramFeature(this),
+				new SetEndpointBreakpointFeature(this),
+				new SetConditionalBreakpointFeature(this),
+				new EditConditionalBreakpoint(this),
+				new EnableCamelBreakpointFeature(this),
+				new DisableCamelBreakpointFeature(this),
+				new DeleteEndpointBreakpointFeature(this),
+				new DeleteAllEndpointBreakpointsFeature(this),
+//				new GEFLayoutDiagramFeature(this),
+//				new ZestLayoutDiagramFeature(this),
+				new CollapseFeature(this)
+				};
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getCreateConnectionFeatures()
+	 */
+	@Override
+	public ICreateConnectionFeature[] getCreateConnectionFeatures() {
+		return new ICreateConnectionFeature[] { new CreateFlowFeature(this) };
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getDragAndDropFeatures(org.eclipse.graphiti.features.context.IPictogramElementContext)
+	 */
+	@Override
+	public IFeature[] getDragAndDropFeatures(IPictogramElementContext context) {
+		// simply return all create connection features
+		return getCreateConnectionFeatures();
 	}
 
 	private void addBeanInstances(List<ICreateFeature> featureList, Map<String, BeanDef> beans) {
@@ -154,120 +249,6 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 //		}
 
 	}
-
-	@Override
-	public IUpdateFeature getUpdateFeature(IUpdateContext context) {
-		PictogramElement pictogramElement = context.getPictogramElement();
-		if (pictogramElement instanceof ContainerShape) {
-			Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-			if (bo instanceof CamelModelElement) {
-				return new UpdateNodeFeature(this);
-			}
-		}
-		return super.getUpdateFeature(context);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getDeleteFeature(org.eclipse.graphiti.features.context.IDeleteContext)
-	 */
-	@Override
-	public IDeleteFeature getDeleteFeature(IDeleteContext context) {
-		return new DeleteFigureFeature(this);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getRemoveFeature(org.eclipse.graphiti.features.context.IRemoveContext)
-	 */
-	@Override
-	public IRemoveFeature getRemoveFeature(IRemoveContext context) {
-		return new RemoveFigureFeature(this);
-	}
-	
-	@Override
-	public IResizeShapeFeature getResizeShapeFeature(IResizeShapeContext context) {
-		Shape shape = context.getShape();
-		Object bo = getBusinessObjectForPictogramElement(shape);
-		if (bo instanceof CamelModelElement) {
-			return new ResizeNodeFeature(this);
-		}
-		return super.getResizeShapeFeature(context);
-	}
-	
-//	/* (non-Javadoc)
-//	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getReconnectionFeature(org.eclipse.graphiti.features.context.IReconnectionContext)
-//	 */
-//	@Override
-//	public IReconnectionFeature getReconnectionFeature(
-//			IReconnectionContext context) {
-//		return new ReconnectNodesFeature(this);
-//	}
-
-//	@Override
-//	public ILayoutFeature getLayoutFeature(ILayoutContext context) {
-//		PictogramElement pictogramElement = context.getPictogramElement();
-//		Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-//		if (bo instanceof CamelModelElement) {
-//			return new LayoutNodeFeature(this);
-//		}
-//		return super.getLayoutFeature(context);
-//	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getCustomFeatures(org.eclipse.graphiti.features.context.ICustomContext)
-	 */
-	@Override
-	public ICustomFeature[] getCustomFeatures(ICustomContext context) {
-		return new ICustomFeature[]
-				{
-				new LayoutDiagramFeature(this),
-				new SetEndpointBreakpointFeature(this),
-				new SetConditionalBreakpointFeature(this),
-				new EditConditionalBreakpoint(this),
-				new EnableCamelBreakpointFeature(this),
-				new DisableCamelBreakpointFeature(this),
-				new DeleteEndpointBreakpointFeature(this),
-				new DeleteAllEndpointBreakpointsFeature(this),
-				new GEFLayoutDiagramFeature(this),
-				new ZestLayoutDiagramFeature(this),
-				new CollapseFeature(this)
-				};
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getCreateConnectionFeatures()
-	 */
-	@Override
-	public ICreateConnectionFeature[] getCreateConnectionFeatures() {
-		return new ICreateConnectionFeature[] { new CreateFlowFeature(this) };
-	}
-
-	@Override
-	public IFeature[] getDragAndDropFeatures(IPictogramElementContext context) {
-		// simply return all create connection features
-		return getCreateConnectionFeatures();
-	}
-
-//	@Override
-//	public IDirectEditingFeature getDirectEditingFeature(IDirectEditingContext context) {
-//		//		PictogramElement pe = context.getPictogramElement();
-//		//		Object bo = getBusinessObjectForPictogramElement(pe);
-//		//		if (bo instanceof AbstractNode) {
-//		//			return new DirectEditNodeFeature(this);
-//		//		}
-//		return super.getDirectEditingFeature(context);
-//	}
-//
-//	@Override
-//	public ICopyFeature getCopyFeature(ICopyContext context) {
-//		return new CopyNodeFeature(this);
-//	}
-//
-//	@Override
-//	public IPasteFeature getPasteFeature(IPasteContext context) {
-//		return new PasteNodeFeature(this);
-//	}
 	
 	public CamelModelIndependenceSolver getModelIndependenceSolver() {
 		return modelIndependenceSolver;

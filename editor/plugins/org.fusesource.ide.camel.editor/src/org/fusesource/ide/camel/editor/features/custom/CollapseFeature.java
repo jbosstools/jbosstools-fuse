@@ -14,6 +14,7 @@ import java.util.Iterator;
 
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.IResizeShapeFeature;
+import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.context.impl.ResizeShapeContext;
 import org.eclipse.graphiti.features.custom.AbstractCustomFeature;
@@ -37,6 +38,8 @@ public class CollapseFeature extends AbstractCustomFeature {
 	public static String PROP_COLLAPSED_WIDTH 	= "collapsedWidth";
 	public static String PROP_COLLAPSED_HEIGHT 	= "collapsedHeight";
 	
+	private PictogramElement lastPE;
+		
 	/**
 	 * 
 	 * @param fp
@@ -63,6 +66,17 @@ public class CollapseFeature extends AbstractCustomFeature {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#isAvailable(org.eclipse.graphiti.features.context.IContext)
+	 */
+	@Override
+	public boolean isAvailable(IContext context) {
+		if (context instanceof ICustomContext) {
+			this.lastPE = ((ICustomContext)context).getPictogramElements()[0];
+		}
+		return super.isAvailable(context);
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.features.custom.ICustomFeature#execute(org.eclipse.graphiti.features.context.ICustomContext)
 	 */
 	@Override
@@ -75,6 +89,30 @@ public class CollapseFeature extends AbstractCustomFeature {
 	 	   	}
 		}
 		getDiagramBehavior().getDiagramContainer().selectPictogramElements(pes);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#getName()
+	 */
+	@Override
+	public String getName() {
+		return isCollapsed() ? "Expand" : "Collapse";
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#getDescription()
+	 */
+	@Override
+	public String getDescription() {
+		return String.format("%s the selected node...", (isCollapsed() ? "Expands" : "Collapses"));
+	}
+	
+	private boolean isCollapsed() {
+		if (Graphiti.getPeService().getPropertyValue(lastPE, PROP_COLLAPSED_STATE) == null || 
+			Graphiti.getPeService().getPropertyValue(lastPE, PROP_COLLAPSED_STATE).equals("false")) {
+			return false;
+		} 
+		return true;
 	}
 	
 	/**

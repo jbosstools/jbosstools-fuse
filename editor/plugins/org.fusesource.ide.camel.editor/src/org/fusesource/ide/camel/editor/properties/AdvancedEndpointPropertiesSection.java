@@ -78,6 +78,7 @@ import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.editor.utils.PropertiesUtils;
@@ -499,7 +500,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                     classToLoad = null;
                 }
                 
-                final IProject project = CamelEditorUIActivator.getDiagramEditor().getModel().getResource().getProject();
+                final IProject project = CamelUtils.getDiagramEditor().getModel().getResource().getProject();
                 final Class fClass = classToLoad;
                 
                 Button btn_create = toolkit.createButton(page, " + ", SWT.BORDER | SWT.PUSH);

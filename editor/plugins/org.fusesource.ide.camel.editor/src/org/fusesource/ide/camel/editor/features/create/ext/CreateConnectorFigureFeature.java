@@ -74,7 +74,10 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature {
 				CamelEndpoint ep = new CamelEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme())); // we use the first found protocol string
 				ep.setParent(parent);
 				ep.setUnderlyingMetaModelObject(getEip());
-				if (createDOMNode) ep.setXmlNode(newNode);
+				if (createDOMNode) {
+					ep.setXmlNode(newNode);
+					ep.updateXMLNode();
+				}
 				return ep;
 			}
 		}
@@ -109,26 +112,5 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature {
 	 */
 	public Component getConnector() {
 		return this.component;
-	}
-	
-	/**
-	 * retrieves the eip meta model for a given eip name
-	 * 
-	 * @param name
-	 * @return	the eip or null if not found
-	 */
-	public Eip getEipByName(String name) {
-		// TODO: project camel version vs latest camel version
-		String prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
-		// then get the meta model for the given camel version
-		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
-		if (model == null) {
-			// if we don't support the defined camel version we take the latest supported instead
-			model = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
-		}
-		// then we get the eip meta model
-		Eip eip = model.getEipModel().getEIPByName(name);
-		// and return it
-		return eip;
 	}
 }

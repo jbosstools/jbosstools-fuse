@@ -26,17 +26,29 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointsListener;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractEditPart;
+import org.eclipse.gef.editparts.ScalableRootEditPart;
+import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
+import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.ui.editor.DiagramBehavior;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.graphiti.ui.editor.IDiagramEditorInput;
+import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
+import org.eclipse.graphiti.ui.internal.util.gef.ScalableRootEditPartAnimated;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -51,10 +63,14 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.fusesource.ide.camel.editor.behaviours.CamelDiagramBehaviour;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.internal.CamelDesignEditorFlyoutPaletteComposite;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.outline.CamelModelOutlinePage;
+import org.fusesource.ide.camel.editor.provider.CamelEditorContextMenuProvider;
+import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.INodeViewer;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
@@ -69,6 +85,8 @@ import org.fusesource.ide.launcher.debug.model.CamelThread;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
+import org.fusesource.ide.preferences.PreferenceManager;
+import org.fusesource.ide.preferences.PreferencesConstants;
 
 /*
  * @author lhein
@@ -88,6 +106,8 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	private CamelModelElement highlightedNodeInDebugger;
 	private AbstractEditPart selectedEditPart;
 	private AbstractEditPart lastSelectedEditPart;
+	private KeyHandler keyHandler;
+	private CamelModelOutlinePage outlinePage;
 	
 	/**
 	 * 
@@ -130,6 +150,17 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#configureGraphicalViewer()
+	 */
+	@Override
+	public void configureGraphicalViewer() {
+		super.configureGraphicalViewer();
+		GraphicalViewer viewer = getGraphicalViewer();
+		ContextMenuProvider provider = new CamelEditorContextMenuProvider(this, this, viewer, getActionRegistry());
+		viewer.setContextMenu(provider);
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#setInput(org.eclipse.ui.IEditorInput)
 	 */
 	@Override
@@ -141,7 +172,6 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
          */
         try {
 	        for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
-	        	IEditorInput ips = entry.getEditorInput();
 				IResource f = this.model.getResource();
 	        	if (f.getFullPath().toFile().getPath().equals(asFileEditorInput(input).getFile().getFullPath().toFile().getPath())) {
 	        		String endpointId = null;
@@ -160,6 +190,12 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
         /**
          * End of the highlighting code
          */
+        
+        // setup grid visibility
+        setupGridVisibilityAsync();
+        
+        // update outline view
+        this.outlinePage = new CamelModelOutlinePage(this);
         
 		getEditingDomain().getCommandStack().flush();
 	}
@@ -206,21 +242,22 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			if (selection instanceof StructuredSelection) {
 				StructuredSelection structuredSelection = (StructuredSelection) selection;
 				Object firstElement = structuredSelection.getFirstElement();
-				if (firstElement instanceof AbstractEditPart) {
-					this.selectedEditPart = (AbstractEditPart) firstElement;
+				
+				/** this handles selections in the outline view -> selects the node in diagram **/
+				if (firstElement instanceof CamelModelElement) {
+					CamelModelElement node = (CamelModelElement)firstElement;
+					if (node != null) {
+						setSelectedNode(node);
+					}
+				
+				/** this handles selections in the diagram -> selects node in outline view **/
+				} else if (firstElement instanceof ContainerShapeEditPart) {
 					CamelModelElement node = NodeUtils.toCamelElement(firstElement);
 					if (node != null) {
-//						if (data.selectedNode != null) {
-//							data.selectedNode
-//							.removePropertyChangeListener(nodePropertyListener);
-//						}
-//						data.selectedNode = node;
-//						data.selectedNode
-//						.addPropertyChangeListener(nodePropertyListener);
+						this.outlinePage.setOutlineSelection(node);
 					}
-					if (selectedEditPart != null) {
-						lastSelectedEditPart = selectedEditPart;
-					}
+					
+				/** this highlights endpoints currently hitting a breakpoint **/
 				} else if (firstElement instanceof CamelStackFrame) {
 					CamelStackFrame stackFrame = (CamelStackFrame)firstElement;
 					highlightBreakpointNodeWithID(stackFrame.getEndpointId());
@@ -237,6 +274,13 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				}
 			}
 		}
+	}
+	
+	/**
+	 * @return the keyHandler
+	 */
+	public KeyHandler getKeyHandler() {
+		return this.keyHandler;
 	}
 	
 	public void initializeDiagram(Diagram diagram) {
@@ -319,6 +363,44 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	public IFeatureProvider getFeatureProvider() {
 		if (getDiagramTypeProvider() != null) return getDiagramTypeProvider().getFeatureProvider();
 		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#getAdapter(java.lang.Class)
+	 */
+	@Override
+	public Object getAdapter(Class type) {
+		if (type == GraphicalViewer.class || 
+			type == GraphicalEditorWithFlyoutPalette.class || 
+			type == EditPartViewer.class) {
+			return getGraphicalViewer();
+	
+		/** this adapter is responsible for the outline page **/
+		} else if (type == IContentOutlinePage.class) {
+			return this.outlinePage;
+	
+		} else if (type == CommandStack.class) {
+			return getCommandStack();
+		} else if (type == EditDomain.class) {
+			return getEditDomain();
+		} else if (type == ActionRegistry.class) {
+			return getActionRegistry();
+		} else if (type == ZoomManager.class) {
+			GraphicalViewer graphicalViewer = getGraphicalViewer();
+			if (graphicalViewer == null)
+				return null;
+			
+			RootEditPart root = graphicalViewer.getRootEditPart();
+			if (root instanceof ScalableRootEditPartAnimated) {
+				ScalableRootEditPartAnimated scalableRoot = (ScalableRootEditPartAnimated) root;
+				return scalableRoot.getZoomManager();
+			} else if (root instanceof ScalableRootEditPart) {
+				return ((ScalableRootEditPart) root).getZoomManager();
+			}
+			return null;
+		}
+		
+		return super.getAdapter(type);
 	}
 	
 	/**
@@ -556,5 +638,58 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				CamelEditorUIActivator.pluginLog().logError("Could not find editPart for selection: " + newSelection, new Exception());
 			}
 		}
+	}
+	
+	/**
+	 * layouts the camel diagram elements
+	 */
+	public void autoLayoutRoute() {
+		Display.getCurrent().asyncExec(new Runnable() {
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				DiagramOperations.layoutDiagram(CamelDesignEditor.this);	
+			}
+		});		
+	}
+	
+	/**
+	 * changes the grid visibility
+	 */
+	public void setupGridVisibilityAsync() {
+		// this can't be invoked async as its causing dirty editor all the time then
+		DiagramOperations.updateGridColor(CamelDesignEditor.this);
+				
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+			    setupGridVisibility();
+	        }
+	    });
+	}
+	
+	/**
+	 * changes the grid visibility
+	 */
+	private void setupGridVisibility() {
+		// retrieve the grid visibility setting
+		boolean gridVisible = PreferenceManager.getInstance().loadPreferenceAsBoolean(PreferencesConstants.EDITOR_GRID_VISIBILITY);
+
+		// reset the grid visibility flag
+		DiagramUtils.setGridVisible(gridVisible, this);
+		
+		getDiagramBehavior().refresh();
+	}
+	
+	/**
+	 * refresh the editor contents
+	 */
+	public void update() {
+		DiagramOperations.updateDiagram(CamelDesignEditor.this);
+		getDiagramBehavior().refresh();
+		if (getDiagramTypeProvider().getDiagram() != null) selectPictogramElements(new PictogramElement[] { getDiagramTypeProvider().getDiagram().getContainer() });
 	}
 }

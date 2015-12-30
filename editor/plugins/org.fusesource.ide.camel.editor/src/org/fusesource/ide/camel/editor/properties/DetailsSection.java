@@ -84,6 +84,7 @@ import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.editor.utils.PropertiesUtils;
@@ -678,7 +679,7 @@ public class DetailsSection extends AbstractPropertySection {
                     classToLoad = null;
                 }
                 
-                final IProject project = CamelEditorUIActivator.getDiagramEditor().getModel().getResource().getProject();
+                final IProject project = CamelUtils.getDiagramEditor().getModel().getResource().getProject();
                 final Class fClass = classToLoad;
                 
                 Button btn_create = getWidgetFactory().createButton(page, " + ", SWT.BORDER | SWT.PUSH);
@@ -1050,20 +1051,11 @@ public class DetailsSection extends AbstractPropertySection {
     }
     
     private CamelModel getCamelModel(CamelModelElement modelElement) {
-    	String prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
-		if (modelElement != null && modelElement.getCamelFile() != null) {
-			// get the project from the camel file resource
-			IProject prj = modelElement.getCamelFile().getResource().getProject();
-			// now try to determine the configured camel version from the project
-			prjCamelVersion = CamelModelFactory.getCamelVersion(prj);
-			// if project doesn't define a camel version we grab the latest supported
-			if (prjCamelVersion == null) prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
-		}
+    	String prjCamelVersion = CamelUtils.getCurrentProjectCamelVersion();
 		// then get the meta model for the given camel version
 		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
 		if (model == null) {
-			// if we don't support the defined camel version we take the latest supported instead
-			model = CamelModelFactory.getModelForVersion(CamelModelFactory.getLatestCamelVersion());
+			return null;
 		}
 		return model;
     }

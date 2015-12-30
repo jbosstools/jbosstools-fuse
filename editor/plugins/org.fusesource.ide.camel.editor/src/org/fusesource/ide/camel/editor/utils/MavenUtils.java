@@ -42,7 +42,7 @@ public class MavenUtils {
      * and inserts it into the pom.xml if needed
      */
     public static void updateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
-        CamelDesignEditor editor = CamelEditorUIActivator.getDiagramEditor();
+        CamelDesignEditor editor = CamelUtils.getDiagramEditor();
         if (editor == null) {
             CamelEditorUIActivator.pluginLog().logError("Unable to add component dependencies because Editor instance can't be determined.");
             return;

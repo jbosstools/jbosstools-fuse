@@ -170,11 +170,8 @@ public final class CamelComponentUtils {
     protected static String getComponentClass(String scheme) {
         String compClass = null;
         
-        CamelDesignEditor editor = CamelEditorUIActivator.getDiagramEditor();
-        String camelVersion = CamelModelFactory.getLatestCamelVersion();
-        if (editor != null && editor.getModel() != null) {
-        	camelVersion = CamelModelFactory.getCamelVersion(editor.getModel().getResource().getProject());
-        }
+        CamelDesignEditor editor = CamelUtils.getDiagramEditor();
+        String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
         ArrayList<Component> components = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel().getSupportedComponents();
         for (Component c : components) {
             if (c.supportsScheme(scheme)) {
@@ -225,7 +222,7 @@ public final class CamelComponentUtils {
         String json = null;
 
         try {
-            IMavenProjectFacade m2facade = MavenPlugin.getMavenProjectRegistry().create(CamelEditorUIActivator.getDiagramEditor().getModel().getResource().getProject(), new NullProgressMonitor());
+            IMavenProjectFacade m2facade = MavenPlugin.getMavenProjectRegistry().create(CamelUtils.getDiagramEditor().getModel().getResource().getProject(), new NullProgressMonitor());
             Set<Artifact> deps = m2facade.getMavenProject(new NullProgressMonitor()).getArtifacts();
             ZipFile zf = null;
             ZipEntry ze = null;
@@ -262,11 +259,7 @@ public final class CamelComponentUtils {
     protected static Component buildModelForComponent(String scheme, String clazz) {
         Component resModel = null;
 
-        CamelDesignEditor editor = CamelEditorUIActivator.getDiagramEditor();
-        String camelVersion = CamelModelFactory.getLatestCamelVersion();
-        if (editor != null && editor.getModel() != null) {
-        	camelVersion = CamelModelFactory.getCamelVersion(editor.getModel().getResource().getProject());
-        }
+        String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
         
         // 1. take what we have in our model xml
         resModel = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel().getComponentForScheme(scheme);
@@ -314,7 +307,7 @@ public final class CamelComponentUtils {
     
     public static URLClassLoader getProjectClassLoader() {
         try {
-            IProject project = CamelEditorUIActivator.getDiagramEditor().getModel().getResource().getProject();
+            IProject project = CamelUtils.getDiagramEditor().getModel().getResource().getProject();
             IJavaProject javaProject = (IJavaProject)project.getNature(JavaCore.NATURE_ID);
             IPackageFragmentRoot[] pfroots = javaProject.getAllPackageFragmentRoots();
             ArrayList<URL> urls = new ArrayList<URL>();

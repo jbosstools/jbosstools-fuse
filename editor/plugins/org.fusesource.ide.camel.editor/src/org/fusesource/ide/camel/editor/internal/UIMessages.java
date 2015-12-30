@@ -47,6 +47,26 @@ public class UIMessages extends NLS {
     public static String failedXMLValidationTitle;
     public static String failedXMLValidationText;
     
+    public static String editorPreferencePageDescription;
+	public static String editorPreferencePageDefaultLanguageSetting;
+	public static String editorPreferencePagePreferIdAsLabelSetting;
+	public static String editorPreferencePageLayoutOrientationSetting;
+	public static String editorPreferencePageLayoutOrientationSOUTH;
+	public static String editorPreferencePageLayoutOrientationEAST;
+	public static String editorPreferencePageGridVisibilitySetting;
+
+	public static String colorPreferencePageDescription;
+	public static String colorPreferencePageGridColorSetting;
+	public static String colorPreferencePageTextColorSetting;
+	public static String colorPreferencePageConnectionColorSetting;
+	public static String colorPreferencePageFigureBGColorSetting;
+	public static String colorPreferencePageFigureFGColorSetting;
+	public static String colorPreferencePageTableChartBGColorSetting;
+	
+	public static String autoLayoutActionDescription;
+	public static String autoLayoutActionLabel;
+	public static String autoLayoutActionTooltip;
+    
     static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, UIMessages.class);
