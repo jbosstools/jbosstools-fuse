@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.jboss.tools.fuse.transformation.Expression;
@@ -76,7 +77,7 @@ public class ExpressionDialog extends BaseDialog {
             this.expression = expressionInstance.getExpression();
             languageName = expressionInstance.getLanguage();
         }
-        final String version = CamelModelFactory.getSupportedCamelVersions().get(0);
+        final String version = CamelUtils.getCurrentProjectCamelVersion();
         for (final Language language : CamelModelFactory.getModelForVersion(version)
                                                         .getLanguageModel()
                                                         .getSupportedLanguages()) {
