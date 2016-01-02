@@ -312,4 +312,47 @@
             paletteIcon="icons/endpointQueue16.png">
       </PaletteContribution>
    </extension>
+   <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+       <navigatorContent
+            activeByDefault="true"
+            contentProvider="org.fusesource.ide.camel.editor.navigator.CamelCtxNavContentProvider"
+            icon="icons/camel_context_icon.png"
+            id="org.fusesource.ide.camel.editor.navigator.CamelContextRouteContent"
+            labelProvider="org.fusesource.ide.camel.editor.navigator.CamelCtxNavLabelProvider"
+            name="Camel Context Model Content"
+            priority="normal">
+         <enablement>
+           <or>
+            <and>
+               <instanceof value="org.eclipse.core.resources.IFile"/>
+			   <test 
+					forcePluginActivation="true" 
+					property="org.eclipse.core.resources.contentTypeId" 
+					value="org.fusesource.ide.camel.editor.camelContentType"/> 
+            </and>
+	        <instanceof
+	                value="org.fusesource.ide.camel.editor.navigator.CamelCtxNavRouteNode"/>
+            </or>
+         </enablement>
+	     <actionProvider
+	          class="org.fusesource.ide.camel.editor.navigator.CamelCtxNavActionProvider"
+	          id="org.fusesource.ide.camel.editor.navigator.CamelContextActionProvider"
+	          overrides="org.eclipse.ui.navigator.resources.OpenActions">
+	       <enablement>
+	          <instanceof
+	                value="org.fusesource.ide.camel.editor.navigator.CamelCtxNavRouteNode"/>
+	       </enablement>
+	     </actionProvider>
+        </navigatorContent>         
+	</extension>
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+		<viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+			<includes>
+				<contentExtension isRoot="false"
+					pattern="org.fusesource.ide.camel.editor.navigator.CamelContextRouteContent" />
+			</includes>
+		</viewerContentBinding>
+	</extension>
 </plugin>
