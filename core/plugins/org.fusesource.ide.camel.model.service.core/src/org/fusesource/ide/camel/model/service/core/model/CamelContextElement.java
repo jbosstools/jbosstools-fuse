@@ -131,14 +131,28 @@ public class CamelContextElement extends CamelModelElement {
 		if (this.dataformats.containsKey(df.getId())) return;
 		this.dataformats.put((String)df.getId(), df);
 		boolean childExists = false;
+		Node dataFormatsNode = null;
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
-			if(getXmlNode().getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
+			Node n = getXmlNode().getChildNodes().item(i);
+			if (n.getNodeType() != Node.ELEMENT_NODE) continue;
+			if (n.getNodeName().equals(DATA_FORMATS_NODE_NAME)) {
+				dataFormatsNode = n;
+				break;
+			}
+		}
+		if (dataFormatsNode == null) {
+			// first create a dataFormats node
+			dataFormatsNode = getCamelFile().getDocument().createElement(DATA_FORMATS_NODE_NAME);
+			getXmlNode().insertBefore(getXmlNode().getFirstChild(), dataFormatsNode);
+		}
+		for (int i=0; i<dataFormatsNode.getChildNodes().getLength(); i++) {
+			if(dataFormatsNode.getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
 				childExists = true;
 				break;
 			}
 		}
 		if (!childExists) {
-			getXmlNode().insertBefore(df.getXmlNode(), getFirstChild(getXmlNode()));
+			dataFormatsNode.insertBefore(df.getXmlNode(), getFirstChild(dataFormatsNode));
 		}
 	}
 	
@@ -151,14 +165,38 @@ public class CamelContextElement extends CamelModelElement {
 		if (this.dataformats.containsKey(df.getId())) {
 			this.dataformats.remove(df.getId());
 			boolean childExists = false;
+			Node dataFormatsNode = null;
 			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
-				if(getXmlNode().getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
-					childExists = true;
+				Node n = getXmlNode().getChildNodes().item(i);
+				if (n.getNodeType() != Node.ELEMENT_NODE) continue;
+				if (n.getNodeName().equals(DATA_FORMATS_NODE_NAME)) {
+					dataFormatsNode = n;
 					break;
 				}
 			}
-			if (childExists) {
-				getXmlNode().removeChild(df.getXmlNode());
+			
+			if (dataFormatsNode == null) dataFormatsNode = df.getXmlNode().getParentNode();
+			
+			if (dataFormatsNode != null) { 
+				for (int i=0; i<dataFormatsNode.getChildNodes().getLength(); i++) {
+					if(dataFormatsNode.getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
+						childExists = true;
+						break;
+					}
+				}
+				if (childExists) {
+					dataFormatsNode.removeChild(df.getXmlNode());
+					int cnt = 0;
+					for (int i=0; i<dataFormatsNode.getChildNodes().getLength(); i++) {
+						Node n = dataFormatsNode.getChildNodes().item(i);
+						if (n.getNodeType() != Node.ELEMENT_NODE) continue;
+						cnt++;
+					}
+					if (cnt == 0) {
+						// no more dataformats left...clean up the parent node
+						dataFormatsNode.getParentNode().removeChild(dataFormatsNode);
+					}
+				}
 			}
 		}
 	}
@@ -215,19 +253,20 @@ public class CamelContextElement extends CamelModelElement {
 		for (int i=0; i<children.getLength(); i++) {
 			Node tmp = children.item(i);
 			if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
-			if (tmp.getNodeName().equals("dataformats")) {
+			if (tmp.getNodeName().equals(DATA_FORMATS_NODE_NAME)) {
 				NodeList dfs = tmp.getChildNodes();
 				for (int y=0; y<dfs.getLength(); y++) {
 					Node tmp_df = dfs.item(y);
+					if (tmp_df.getNodeType() != Node.ELEMENT_NODE) continue;
 					CamelModelElement cme = new CamelModelElement(this, tmp_df);
 					cme.initialize();
 					this.dataformats.put(cme.getId(), cme);
 				}
-			} else if (tmp.getNodeName().equals("endpoint")) {
+			} else if (tmp.getNodeName().equals(ENDPOINT_NODE_NAME)) {
 				CamelModelElement cme = new CamelModelElement(this, tmp);
 				cme.initialize();
 				this.endpointDefinitions.put(cme.getId(), cme);
-			} else if (tmp.getNodeName().equals("route")) {
+			} else if (tmp.getNodeName().equals(ROUTE_NODE_NAME)) {
 				CamelRouteElement cme = new CamelRouteElement(this, tmp);
 				cme.initialize();
 				addChildElement(cme);
@@ -250,7 +289,7 @@ public class CamelContextElement extends CamelModelElement {
 	 */
 	@Override
 	public String getNodeTypeId() {
-		return "camelContext";
+		return CAMEL_CONTEXT_NODE_NAME;
 	}
 	
 	/* (non-Javadoc)

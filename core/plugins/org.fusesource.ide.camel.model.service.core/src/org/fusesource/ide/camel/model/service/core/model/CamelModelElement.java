@@ -37,7 +37,11 @@ import org.w3c.dom.NodeList;
 public class CamelModelElement {
 
 	protected static final String ID_ATTRIBUTE = "id";
-
+	protected static final String DATA_FORMATS_NODE_NAME = "dataFormats";
+	protected static final String ENDPOINT_NODE_NAME = "endpoint";
+	protected static final String ROUTE_NODE_NAME = "route";
+	protected static final String CAMEL_CONTEXT_NODE_NAME = "camelContext";
+	
 	// children is a list of objects which are no route outputs
 	private List<CamelModelElement> childElements = new ArrayList<CamelModelElement>();
 
@@ -82,7 +86,7 @@ public class CamelModelElement {
 
 		if (underlyingNode != null)
 			setUnderlyingMetaModelObject(getEipByName(underlyingNode.getNodeName()));
-		if (parent != null && parent.getXmlNode() != null && underlyingNode != null) {
+		if (parent != null && parent.getXmlNode() != null && underlyingNode != null && getXmlNode().getParentNode().getNodeName().equals(DATA_FORMATS_NODE_NAME) == false) {
 			boolean alreadyChild = false;
 			for (int i = 0; i < parent.getXmlNode().getChildNodes().getLength(); i++) {
 				if (parent.getXmlNode().getChildNodes().item(i).isEqualNode(underlyingNode)) {
@@ -1026,6 +1030,8 @@ public class CamelModelElement {
 		}
 		// then we get the eip meta model
 		Eip eip = model.getEipModel().getEIPByName(name);
+		// special case for context wide endpoint definitions
+		if (eip == null && name.equals("endpoint")) eip = model.getEipModel().getEIPByName("to");
 		// and return it
 		return eip;
 	}

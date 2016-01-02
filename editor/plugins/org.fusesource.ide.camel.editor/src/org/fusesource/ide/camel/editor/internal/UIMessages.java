@@ -67,6 +67,17 @@ public class UIMessages extends NLS {
 	public static String autoLayoutActionLabel;
 	public static String autoLayoutActionTooltip;
     
+	public static String createGlobalElementDialogTitle;
+	public static String createGlobalElementDiaglogText;
+	
+	public static String globalElementsTabAddButtonLabel;
+	public static String globalElementsTabAddButtonTooltip;
+	public static String globalElementsTabEditButtonLabel;
+	public static String globalElementsTabEditButtonTooltip;
+	public static String globalElementsTabDeleteButtonLabel;
+	public static String globalElementsTabDeleteButtonTooltip;
+	
+	
     static {
         // initialize resource bundle
         NLS.initializeMessages(BUNDLE_NAME, UIMessages.class);

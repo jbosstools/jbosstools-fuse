@@ -127,7 +127,10 @@ public class CamelFile extends CamelModelElement implements EventListener {
 		if (usedId != null && this.globalDefinitions.containsKey(usedId)) return null;
 		if (id == null && this.globalDefinitions.containsValue(def)) return null;
 		this.globalDefinitions.put(usedId, def);
-//		getDocument().getDocumentElement().insertBefore(def, getLastChild(getDocument().getDocumentElement()));
+		if (def.getParentNode() == null || def.getParentNode().isEqualNode(getDocument().getDocumentElement()) == false) {
+			getDocument().getDocumentElement().insertBefore(def, getDocument().getDocumentElement().getChildNodes().item(0));	
+			fireModelChanged();
+		}		
 		return usedId;
 	}
 	
@@ -136,7 +139,7 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	 * 
 	 * @param id
 	 */
-	public void removeBeanDefinition(String id) {
+	public void removeGlobalDefinition(String id) {
 		Node nodeToRemove = this.globalDefinitions.remove(id);
 		if (nodeToRemove != null) {
 			getDocument().getDocumentElement().removeChild(nodeToRemove);

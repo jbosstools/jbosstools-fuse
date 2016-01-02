@@ -13,6 +13,7 @@ package org.fusesource.ide.camel.editor.outline;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -55,6 +56,7 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 		viewer.setLabelProvider(new CamelModelOutlineLabelProvider());
 		viewer.addSelectionChangedListener(this);
 		viewer.setInput(this.designEditor.getModel().getCamelContext());
+		viewer.expandAll();
 	}
 	
 	/**
@@ -63,7 +65,22 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 * @param cme
 	 */
 	public void setOutlineSelection(CamelModelElement cme) {
+		if (cme == null || cme.getId() == null) return;
 		if (getTreeViewer() != null) getTreeViewer().setSelection(new StructuredSelection(cme), true);
+		if (getTreeViewer() != null && getTreeViewer().getSelection().isEmpty()) {
+			Tree t = getTreeViewer().getTree();
+			for (int i=0; i<t.getItemCount(); i++) {
+				Object o = t.getItem(i).getData();
+				if (o instanceof CamelModelElement) {
+					CamelModelElement cme2 = (CamelModelElement)o;
+					if (cme.getId().equals(cme2.getId())) {
+						t.select(t.getItem(i));
+						getTreeViewer().reveal(cme2);
+						break;
+					}
+				}
+			}				
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -71,6 +88,9 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 */
 	@Override
 	public void modelChanged() {
-		if (getTreeViewer() != null) getTreeViewer().refresh(true);
+		if (getTreeViewer() != null) {
+			getTreeViewer().refresh(true);
+			getTreeViewer().expandAll();
+		}
 	}
 }

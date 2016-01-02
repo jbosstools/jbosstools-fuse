@@ -3,10 +3,10 @@
 <schema targetNamespace="org.fusesource.ide.camel.editor" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.fusesource.ide.camel.editor" id="org.fusesource.ide.editor.dblClickHandler" name="Fuse Camel Editor Double Click Handler"/>
+         <meta.schema plugin="org.fusesource.ide.camel.editor" id="org.fusesource.ide.editor.globalConfigContributor" name="Fuse Camel Editor Global Config Contributor"/>
       </appinfo>
       <documentation>
-         This extension point can be used to listen for double click events on diagram figures. If you want to handle a click on a specific figure / endpoint then you need to return true in the canHandle method.
+         [Enter description of this extension point.]
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
-            <element ref="DoubleClickHandler" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="GlobalConfigElementContribution"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,15 +47,42 @@
       </complexType>
    </element>
 
-   <element name="DoubleClickHandler">
+   <element name="GlobalConfigElementContribution">
       <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A unique ID for the extension
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  An image to be used when displaying the element type in a list.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A user readable name for the type this element represents.
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A class which implements the interface ICustomGlobalConfigElementContribution.
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler"/>
+                  <meta.attribute kind="java" basedOn=":org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -67,7 +94,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         7.3.0
+         [Enter the first release in which this extension point appears.]
       </documentation>
    </annotation>
 
@@ -98,16 +125,5 @@
       </documentation>
    </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="copyright"/>
-      </appinfo>
-      <documentation>
-         JBoss, Home of Professional Open Source
-Copyright (c) Red Hat, Inc., and individual contributors as indicated
-by the @authors tag, 2006-2014. See the copyright.txt in the distribution
-for a full listing of individual contributors.
-      </documentation>
-   </annotation>
 
 </schema>

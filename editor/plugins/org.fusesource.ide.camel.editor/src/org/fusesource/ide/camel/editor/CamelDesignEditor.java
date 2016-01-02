@@ -436,6 +436,8 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
         // set Diagram as contents for the graphical viewer and refresh
         graphicalViewer.setContents(getDiagramTypeProvider().getDiagram());	        
         getDiagramBehavior().refreshContent();
+        
+        refreshOutlineView();
 	}
 	
 	/* (non-Javadoc)
@@ -445,7 +447,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	public void modelChanged() {
 		// we only update if the correct editor tab is selected
 		if (getParent().getActivePage() != CamelEditor.DESIGN_PAGE_INDEX) return;
-		Display.getDefault().asyncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 			/*
 			 * (non-Javadoc)
 			 * @see java.lang.Runnable#run()
@@ -611,7 +613,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		if (part instanceof EditPart) {
 			EditPart nodeEditPart = part;
 			CamelModelElement modelNode = NodeUtils.toCamelElement(nodeEditPart);
-			if (Objects.equal(node, modelNode)) {
+			if (Objects.equal(node, modelNode) || node.getId().equals(modelNode.getId())) {
 				return nodeEditPart;
 			}
 		}
@@ -669,6 +671,13 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			    setupGridVisibility();
 	        }
 	    });
+	}
+	
+	/**
+	 * refreshes the outline view
+	 */
+	public void refreshOutlineView() {
+		this.outlinePage.modelChanged();
 	}
 	
 	/**
