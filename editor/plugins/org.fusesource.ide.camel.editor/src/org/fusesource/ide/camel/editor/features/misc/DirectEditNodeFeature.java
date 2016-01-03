@@ -19,8 +19,6 @@ import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.algorithms.Text;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
-import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 
@@ -81,17 +79,17 @@ public class DirectEditNodeFeature extends AbstractDirectEditingFeature {
 		//EClass eClass = (EClass) getBusinessObjectForPictogramElement(pe);
 		Object bo = getBusinessObjectForPictogramElement(pe);
 
-		// TODO: rework to fit new model
-		if (bo instanceof Endpoint) {
-			Endpoint ep = (Endpoint)getBusinessObjectForPictogramElement(pe);
-			ep.setUri(value);
-		} else if (bo instanceof UniversalEIPNode) {
-			UniversalEIPNode uNode = (UniversalEIPNode)bo;
-			if( uNode.getNodeTypeId().equals("bean")) {
-				UniversalEIPNode bean = (UniversalEIPNode)getBusinessObjectForPictogramElement(pe);
-				bean.setShortPropertyValue("ref", value);
-			}
-		}
+		// TODO: rework to fit new model - feature currently not in use
+//		if (bo instanceof Endpoint) {
+//			Endpoint ep = (Endpoint)getBusinessObjectForPictogramElement(pe);
+//			ep.setUri(value);
+//		} else if (bo instanceof UniversalEIPNode) {
+//			UniversalEIPNode uNode = (UniversalEIPNode)bo;
+//			if( uNode.getNodeTypeId().equals("bean")) {
+//				UniversalEIPNode bean = (UniversalEIPNode)getBusinessObjectForPictogramElement(pe);
+//				bean.setShortPropertyValue("ref", value);
+//			}
+//		}
 		
 		// Explicitly update the shape to display the new value in the diagram
 		// Note, that this might not be necessary in future versions of Graphiti

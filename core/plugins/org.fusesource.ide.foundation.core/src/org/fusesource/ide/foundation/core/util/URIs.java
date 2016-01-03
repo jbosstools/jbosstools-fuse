@@ -37,4 +37,12 @@ public class URIs {
 		return uri;
 	}
 
+	public static boolean isMockEndpointURI(String value) {
+		return value.startsWith("mock:");
+	}
+
+	public static boolean isTimerEndpointURI(String value) {
+		return value.startsWith("timer:") || value.startsWith("quartz:");
+	}
+
 }

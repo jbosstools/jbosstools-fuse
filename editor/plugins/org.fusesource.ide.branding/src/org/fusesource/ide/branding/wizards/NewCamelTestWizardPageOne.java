@@ -83,12 +83,12 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.fusesource.ide.branding.Activator;
 import org.fusesource.ide.branding.RiderHelpContextIds;
 import org.fusesource.ide.branding.wizards.NewCamelTestWizardPageTwo.EndpointMaps;
-import org.fusesource.ide.camel.model.CamelModelHelper;
-import org.fusesource.ide.camel.model.util.Objects;
 import org.fusesource.ide.commons.contenttype.CamelXmlMatchingStrategy;
 import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
-import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.core.util.ResourceModelUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.URIs;
 
 
 /**
@@ -206,7 +206,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 				+ WizardMessages.NewCamelTestWizardPageOne_mock_endpoint_fields + delimiter;
 
 		String uri = getMockEndpointUri(key);
-		if (CamelModelHelper.isMockEndpointURI(value)) {
+		if (URIs.isMockEndpointURI(value)) {
 			// lets consume directly from mock endpoints if they are the outputs in the real route to test
 			// typically users would never do this - but we use mocks in some archetypes
 			uri = value;
@@ -234,7 +234,7 @@ public class NewCamelTestWizardPageOne extends NewTypeWizardPage {
 		while (iter.hasNext()) {
 			Entry<String, String> entry = iter.next();
 			String value = entry.getValue();
-			if (CamelModelHelper.isMockEndpointURI(value)) {
+			if (URIs.isMockEndpointURI(value)) {
 				iter.remove();
 			}
 		}

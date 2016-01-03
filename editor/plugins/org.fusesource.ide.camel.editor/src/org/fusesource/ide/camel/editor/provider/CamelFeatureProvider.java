@@ -52,8 +52,8 @@ import org.fusesource.ide.camel.editor.features.delete.RemoveFigureFeature;
 import org.fusesource.ide.camel.editor.features.misc.ResizeNodeFeature;
 import org.fusesource.ide.camel.editor.features.misc.UpdateNodeFeature;
 import org.fusesource.ide.camel.editor.internal.CamelModelIndependenceSolver;
-import org.fusesource.ide.camel.model.Endpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.commons.camel.tools.BeanDef;
 
@@ -233,7 +233,7 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 //		}
 	}
 
-	private void addEndpointInstances(List<ICreateFeature> featureList, Set<Endpoint> endpoints) {
+	private void addEndpointInstances(List<ICreateFeature> featureList, Set<CamelEndpoint> endpoints) {
 //		ArrayList<String> processedURIs = new ArrayList<String>();
 //		for (Endpoint endpoint : endpoints) {
 //			String id = endpoint.getId();

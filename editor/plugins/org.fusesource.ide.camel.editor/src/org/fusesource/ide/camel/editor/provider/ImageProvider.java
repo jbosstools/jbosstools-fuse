@@ -22,10 +22,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.AbstractNode;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.generated.Route;
-import org.fusesource.ide.camel.model.generated.UniversalEIPUtility;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.osgi.framework.Bundle;
 
 
@@ -91,7 +90,7 @@ public class ImageProvider extends AbstractImageProvider {
 		// let the helper class fill all figure images
 		ProviderHelper.addFigureIcons(this);
 
-		addIconsForClass(new Route(), "route16.png", "route.png");
+		addIconsForClass(new CamelRouteElement(null, null), "route16.png", "route.png");
 
 		// add all images from the activator too
         String prefix = "/icons/";
@@ -159,7 +158,7 @@ public class ImageProvider extends AbstractImageProvider {
 	 * @param fileNameSmall	the file name of the small icon
 	 * @param fileNameLarge	the file name of the large icon
 	 */
-	public void addIconsForClass(AbstractNode node, String fileNameSmall, String fileNameLarge) {
+	public void addIconsForClass(CamelModelElement node, String fileNameSmall, String fileNameLarge) {
 		addIconsForIconName(node.getIconName(), fileNameSmall, fileNameLarge);
 	}
 
@@ -186,15 +185,15 @@ public class ImageProvider extends AbstractImageProvider {
 		CamelEditorUIActivator.getDefault().getImageRegistry().put(key, CamelEditorUIActivator.imageDescriptorFromPlugin(CamelEditorUIActivator.PLUGIN_ID, path));
 	}
 
-	public void addIconsForClass(AbstractNode node) {
-		addIconsForClass(node, node.getSmallIconName(), node.getIconName());
+	public void addIconsForClass(CamelModelElement node) {
+		addIconsForClass(node, node.getIconName().replaceAll(".png", "16.png"), node.getIconName());
 	}
 	
 	public void addIconsForEIP(Eip eip ) {
-		String eipName = eip.getName();
-		addIconsForIconName(UniversalEIPUtility.getIconName(eipName), 
-				UniversalEIPUtility.getSmallIconName(eipName), 
-				UniversalEIPUtility.getIconName(eipName));
+//		String eipName = eip.getName();
+//		addIconsForIconName(UniversalEIPUtility.getIconName(eipName), 
+//				UniversalEIPUtility.getSmallIconName(eipName), 
+//				UniversalEIPUtility.getIconName(eipName));
 	}
 
 	

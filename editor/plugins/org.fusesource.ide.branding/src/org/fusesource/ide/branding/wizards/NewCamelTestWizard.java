@@ -457,7 +457,9 @@ public class NewCamelTestWizard extends JUnitWizard {
 		boolean hasCamelTestDep = false;
 		List<Dependency> deps = model.getDependencies();
 		for (Dependency dep : deps) {
-			if (dep.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_WILDCARD)) {
+			if (dep.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_WILDCARD) && 
+				dep.getGroupId().equalsIgnoreCase(CAMEL_GROUP_ID) &&
+				this.camelVersion == null) {
 				this.camelVersion = dep.getVersion();
 			}
 			if (dep.getArtifactId().equalsIgnoreCase(CAMEL_TEST_ARTIFACT_ID)) {
