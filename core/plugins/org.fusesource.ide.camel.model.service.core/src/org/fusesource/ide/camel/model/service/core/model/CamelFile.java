@@ -143,6 +143,7 @@ public class CamelFile extends CamelModelElement implements EventListener {
 		Node nodeToRemove = this.globalDefinitions.remove(id);
 		if (nodeToRemove != null) {
 			getDocument().getDocumentElement().removeChild(nodeToRemove);
+			fireModelChanged();
 		}
 	}
 	

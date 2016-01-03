@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.provider.ext;
 
+import java.util.List;
+
+import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -31,6 +34,14 @@ public interface ICustomGlobalConfigElementContribution {
 	 * @return	the xml element or null if the user canceled
 	 */
 	Node createGlobalElement(Document document);
+	
+	/**
+	 * returns a list of dependencies to be injected into the maven pom file
+	 * in order to make the new element working
+	 * 
+	 * @return	a list of dependencies or an empty list if no dep required
+	 */
+	List<Dependency> getElementDependencies();
 	
 	/**
 	 * this method is invokes when a user tries to modify an existing global

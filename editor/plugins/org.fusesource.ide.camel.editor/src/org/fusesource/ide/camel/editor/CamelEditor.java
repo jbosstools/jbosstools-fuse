@@ -440,60 +440,55 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 		});
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#pageChange(int)
 	 */
 	@Override
 	protected void pageChange(int newPageIndex) {
-		try {
-//			stopDirtyListener();
-			
-			if (newPageIndex == SOURCE_PAGE_INDEX) {
-	//				boolean doPageChange = continueWithUnconnectedFigures();
-	//				if (doPageChange) {
-				if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
-				if (rollBackActive == false) {
-					updateSourceFromModel();
-				} else {
-					rollBackActive = false;
-				}
-				this.lastActivePageIdx = newPageIndex;
-				super.pageChange(newPageIndex);
-	//				} else {
-	//					setActivePage(DESIGN_PAGE_INDEX);
-	//					newPageIndex = DESIGN_PAGE_INDEX;
-	//				}
-			} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX){
-				if (lastActivePageIdx == SOURCE_PAGE_INDEX) {
-					IDocument document = getDocument();
-					if (document != null) {
-						String text = document.get();
-						boolean ignoreError = true;
-						if (!isValidXML(text)) {
-							// invalid XML -> could result in data loss...
-							ignoreError = MessageDialog.openConfirm(getSite().getShell(), UIMessages.failedXMLValidationTitle, NLS.bind(UIMessages.failedXMLValidationText, lastError));
-						}
-						
-						if (ignoreError) {
-							updateModelFromSource();
-							lastError = "";
-							this.lastActivePageIdx = newPageIndex;
-							super.pageChange(newPageIndex);
-							if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
-						} else {
-							rollBackActive = true;
-							newPageIndex = SOURCE_PAGE_INDEX;
-							setActivePage(SOURCE_PAGE_INDEX);
-							super.pageChange(newPageIndex);
-							getDocument().set(text);
-						}
+		if (newPageIndex == SOURCE_PAGE_INDEX) {
+			if (sourceEditor == null) sourceEditor = new StructuredTextEditor();
+			if (rollBackActive == false) {
+				updateSourceFromModel();
+			} else {
+				rollBackActive = false;
+			}
+			this.lastActivePageIdx = newPageIndex;
+			super.pageChange(newPageIndex);
+		} else if (newPageIndex == DESIGN_PAGE_INDEX || newPageIndex == GLOBAL_CONF_INDEX){
+			if (lastActivePageIdx == SOURCE_PAGE_INDEX) {
+				IDocument document = getDocument();
+				if (document != null) {
+					String text = document.get();
+					boolean ignoreError = true;
+					if (!isValidXML(text)) {
+						// invalid XML -> could result in data loss...
+						ignoreError = MessageDialog.openConfirm(getSite().getShell(), UIMessages.failedXMLValidationTitle, NLS.bind(UIMessages.failedXMLValidationText, lastError));
+					}
+					if (ignoreError) {
+						updateModelFromSource();
+						lastError = "";
+						this.lastActivePageIdx = newPageIndex;
+						super.pageChange(newPageIndex);
+						if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
+						if (newPageIndex == DESIGN_PAGE_INDEX) designEditor.refreshOutlineView();
+					} else {
+						rollBackActive = true;
+						newPageIndex = SOURCE_PAGE_INDEX;
+						setActivePage(SOURCE_PAGE_INDEX);
+						super.pageChange(newPageIndex);
+						getDocument().set(text);
 					}
 				}
+			} else {
+				if (newPageIndex == GLOBAL_CONF_INDEX) {
+					globalConfigEditor.reload();
+				} else {
+					designEditor.update();
+					designEditor.refreshOutlineView();
+				}
 			}
-		} finally {
-//			if (newPageIndex != DESIGN_PAGE_INDEX) startDirtyListener();
 		}
 	}
 	
@@ -714,19 +709,19 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		CamelXMLEditorInput camelInput = null;
+		this.editorInput = null;
 		
 		if (input instanceof IFileEditorInput) {
-			camelInput = new CamelXMLEditorInput(((IFileEditorInput)input).getFile());
+			this.editorInput = new CamelXMLEditorInput(((IFileEditorInput)input).getFile());
 		} else if (input instanceof DiagramEditorInput) {
 			IFile f = (IFile)((DiagramEditorInput)input).getAdapter(IFile.class);
-			camelInput = new CamelXMLEditorInput(f);
+			this.editorInput = new CamelXMLEditorInput(f);
 		} else if (input instanceof CamelXMLEditorInput) {
-			camelInput = (CamelXMLEditorInput)input;
+			this.editorInput = (CamelXMLEditorInput)input;
 		} else {
 			throw new PartInitException("Unknown input type: " + input.getClass().getName());
 		}
-		super.init(site, camelInput);
+		super.init(site, this.editorInput);
 	}
 
 	/* (non-Javadoc)

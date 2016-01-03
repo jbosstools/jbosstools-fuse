@@ -164,7 +164,6 @@ public class CamelContextElement extends CamelModelElement {
 	public void removeDataFormat(CamelModelElement df) {
 		if (this.dataformats.containsKey(df.getId())) {
 			this.dataformats.remove(df.getId());
-			boolean childExists = false;
 			Node dataFormatsNode = null;
 			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 				Node n = getXmlNode().getChildNodes().item(i);
@@ -177,15 +176,19 @@ public class CamelContextElement extends CamelModelElement {
 			
 			if (dataFormatsNode == null) dataFormatsNode = df.getXmlNode().getParentNode();
 			
+			Node nodeToDelete = null;
 			if (dataFormatsNode != null) { 
 				for (int i=0; i<dataFormatsNode.getChildNodes().getLength(); i++) {
-					if(dataFormatsNode.getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
-						childExists = true;
+					Node n = dataFormatsNode.getChildNodes().item(i);
+					if(n.getNodeType() == Node.ELEMENT_NODE && n.isEqualNode(df.getXmlNode())) {
+						nodeToDelete = n;
 						break;
 					}
 				}
-				if (childExists) {
-					dataFormatsNode.removeChild(df.getXmlNode());
+				if (nodeToDelete != null) {
+					dataFormatsNode.removeChild(nodeToDelete);
+					if (nodeToDelete.getParentNode() != null) nodeToDelete.getParentNode().removeChild(nodeToDelete);
+					if (df.getXmlNode().getParentNode() != null) df.getXmlNode().getParentNode().removeChild(df.getXmlNode());
 					int cnt = 0;
 					for (int i=0; i<dataFormatsNode.getChildNodes().getLength(); i++) {
 						Node n = dataFormatsNode.getChildNodes().item(i);

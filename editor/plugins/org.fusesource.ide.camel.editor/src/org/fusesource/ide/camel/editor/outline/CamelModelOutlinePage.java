@@ -13,7 +13,7 @@ package org.fusesource.ide.camel.editor.outline;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -68,19 +68,30 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 		if (cme == null || cme.getId() == null) return;
 		if (getTreeViewer() != null) getTreeViewer().setSelection(new StructuredSelection(cme), true);
 		if (getTreeViewer() != null && getTreeViewer().getSelection().isEmpty()) {
-			Tree t = getTreeViewer().getTree();
-			for (int i=0; i<t.getItemCount(); i++) {
-				Object o = t.getItem(i).getData();
-				if (o instanceof CamelModelElement) {
-					CamelModelElement cme2 = (CamelModelElement)o;
-					if (cme.getId().equals(cme2.getId())) {
-						t.select(t.getItem(i));
-						getTreeViewer().reveal(cme2);
-						break;
-					}
-				}
-			}				
+			getTreeViewer().expandAll();
+			TreeItem ti = findTreeItemForElement(cme, getTreeViewer().getTree().getItems());
+			if (ti != null) {
+				getTreeViewer().setSelection(new StructuredSelection(ti.getData()), true);
+			}
 		}
+	}
+
+	private TreeItem findTreeItemForElement(CamelModelElement cme, TreeItem[] treeItems) {
+		TreeItem tRes = null;
+		for (TreeItem ti : treeItems) {
+			if (tRes != null) break;
+			Object o = ti.getData();
+			if (o instanceof CamelModelElement) {
+				CamelModelElement cme2 = (CamelModelElement)o;
+				if (cme.getId().equals(cme2.getId())) {
+					tRes = ti;
+					break;
+				} else {
+					tRes = findTreeItemForElement(cme, ti.getItems());
+				}
+			}
+		}				
+		return tRes;
 	}
 	
 	/* (non-Javadoc)
