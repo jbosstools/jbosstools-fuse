@@ -872,9 +872,9 @@ public class CamelModelElement {
 	protected void ensureUniqueID(CamelModelElement elem) {
 		// if this element is also a parent element parameter then we don't
 		// set ID values (example: parent = onException, element: exception)
-		if (elem.getParent().getParameter(elem.getXmlNode().getNodeName()) != null
-				&& elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getXmlNode().getNodeName())
-						.getKind().equals("element"))
+		if (elem.getParent().getParameter(elem.getXmlNode().getNodeName()) != null && 
+			elem.getParent().getUnderlyingMetaModelObject().getParameter(elem.getXmlNode().getNodeName()).getKind().equals("element") &&
+			elem.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("otherwise") == false)
 			return;
 
 		if (elem.getUnderlyingMetaModelObject() == null && elem instanceof CamelContextElement == false) {

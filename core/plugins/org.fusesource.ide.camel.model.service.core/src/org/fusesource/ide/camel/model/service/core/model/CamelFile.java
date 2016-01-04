@@ -196,12 +196,18 @@ public class CamelFile extends CamelModelElement implements EventListener {
 		this.document = document;
 	}
 	
+	/**
+	 * registers a dom listener to the document
+	 */
 	public void registerDOMListener() {
 		if (this.document != null && this.document.getDocumentElement() instanceof EventTarget) {
 			((EventTarget)this.document.getDocumentElement()).addEventListener("DOMSubtreeModified", this, true);
 		}
 	}
 	
+	/**
+	 * unregisters the dom listener from the document
+	 */
 	public void unregisterDOMListener() {
 		// unregister event listener on old document
 		if (this.document != null && this.document.getDocumentElement() instanceof EventTarget) {
