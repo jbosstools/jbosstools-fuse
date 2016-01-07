@@ -48,3 +48,4 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
  org.fusesource.ide.graph;bundle-version="8.0.0",
  org.fusesource.ide.foundation.core;bundle-version="8.0.0",
  org.fusesource.ide.foundation.ui;bundle-version="8.0.0"
+Import-Package: org.fusesource.ide.jmx.camel.editor;resolution:=optional

@@ -217,14 +217,13 @@ public class CamelContextElement extends CamelModelElement {
 	@Override
 	protected void parseNode() {
 		super.parseNode();
-		ensureUniqueID(this);
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#ensureUniqueID(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
 	@Override
-	protected void ensureUniqueID(CamelModelElement elem) {
+	public void ensureUniqueID(CamelModelElement elem) {
 		super.ensureUniqueID(elem);
 	}
 	

@@ -38,14 +38,24 @@ public class UpdateCommand extends RecordingCommand {
 		CamelModelElement selectedNode = this.node == null ? designEditor.getSelectedNode() : node;
 		if (selectedNode == null) {
 			// use the route node in this case
-			selectedNode = designEditor.getSelectedRoute();
+			selectedNode = designEditor.getModel().getCamelContext();
 		}
-		PictogramElement pe = selectedNode instanceof CamelContextElement ? designEditor.getDiagramTypeProvider().getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(selectedNode);
+		updateFigure(selectedNode);
+	}
+	
+	private void updateFigure(CamelModelElement node) {
+		if (node == null) return;
+
+		PictogramElement pe = node instanceof CamelContextElement ? designEditor.getDiagramTypeProvider().getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
 		if (pe == null) {
-			CamelEditorUIActivator.pluginLog().logInfo("Warning could not find PictogramElement for selectedNode: " + selectedNode);
+			CamelEditorUIActivator.pluginLog().logInfo("Warning could not find PictogramElement for selectedNode: " + node);
+			return;
 		}
 		UpdateContext ctx = new UpdateContext(pe);
 		IUpdateFeature updateFeature = designEditor.getFeatureProvider().getUpdateFeature(ctx);
 		updateFeature.update(ctx);
+		for (CamelModelElement elem : node.getChildElements()) {
+			updateFigure(elem);
+		}
 	}
 }

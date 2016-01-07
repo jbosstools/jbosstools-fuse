@@ -86,7 +86,7 @@ public class CamelModelElement {
 
 		if (underlyingNode != null)
 			setUnderlyingMetaModelObject(getEipByName(underlyingNode.getNodeName()));
-		if (parent != null && parent.getXmlNode() != null && underlyingNode != null && getXmlNode().getParentNode().getNodeName().equals(DATA_FORMATS_NODE_NAME) == false) {
+		if (parent != null && parent.getXmlNode() != null && underlyingNode != null && (getXmlNode().getParentNode() == null || getXmlNode().getParentNode().getNodeName().equals(DATA_FORMATS_NODE_NAME) == false)) {
 			boolean alreadyChild = false;
 			for (int i = 0; i < parent.getXmlNode().getChildNodes().getLength(); i++) {
 				if (parent.getXmlNode().getChildNodes().item(i).isEqualNode(underlyingNode)) {
@@ -869,7 +869,7 @@ public class CamelModelElement {
 		linkChildrenToAttributes();
 	}
 
-	protected void ensureUniqueID(CamelModelElement elem) {
+	public void ensureUniqueID(CamelModelElement elem) {
 		// if this element is also a parent element parameter then we don't
 		// set ID values (example: parent = onException, element: exception)
 		if (elem.getParent().getParameter(elem.getXmlNode().getNodeName()) != null && 

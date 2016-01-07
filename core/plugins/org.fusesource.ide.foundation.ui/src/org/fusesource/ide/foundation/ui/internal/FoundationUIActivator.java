@@ -15,6 +15,8 @@ import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.foundation.core.plugin.log.IPluginLog;
 import org.jboss.tools.foundation.core.plugin.log.StatusFactory;
 import org.jboss.tools.foundation.ui.plugin.BaseUIPlugin;
+import org.jboss.tools.foundation.ui.plugin.BaseUISharedImages;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 
@@ -34,6 +36,8 @@ public class FoundationUIActivator extends BaseUIPlugin {
 		instance = this;
 	}
 
+	
+	
 	/**
 	 * returns the instance
 	 * 
@@ -59,6 +63,13 @@ public class FoundationUIActivator extends BaseUIPlugin {
     	super.stop(context);
     }
 
+    /* (non-Javadoc)
+     * @see org.jboss.tools.foundation.ui.plugin.BaseUIPlugin#createSharedImages()
+     */
+    @Override
+    protected BaseUISharedImages createSharedImages() {
+    	return new FoundationUISharedImages(getBundle());
+    }
 	
 	/**
 	 * Gets message from plugin.properties
@@ -89,4 +100,12 @@ public class FoundationUIActivator extends BaseUIPlugin {
 		return getDefault().statusFactoryInternal();
 	}
 	
+	public static final String IMAGE_CAMEL_ICON = "icons/camel.png";
+	
+	private static class FoundationUISharedImages extends BaseUISharedImages {
+		public FoundationUISharedImages(Bundle pluginBundle) {
+			super(pluginBundle);
+			addImage(IMAGE_CAMEL_ICON, IMAGE_CAMEL_ICON);
+		}
+	}
 }

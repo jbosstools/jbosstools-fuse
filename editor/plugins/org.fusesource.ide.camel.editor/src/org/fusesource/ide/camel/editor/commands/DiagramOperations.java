@@ -45,7 +45,7 @@ public class DiagramOperations {
 
 	public static UpdateCommand updateDiagram(CamelDesignEditor designEditor) {
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
-		UpdateCommand operation = new UpdateCommand(designEditor, editingDomain, designEditor.getSelectedRoute());
+		UpdateCommand operation = new UpdateCommand(designEditor, editingDomain, designEditor.getModel().getCamelContext());
 		execute(editingDomain, operation, true);
 
 		return operation;

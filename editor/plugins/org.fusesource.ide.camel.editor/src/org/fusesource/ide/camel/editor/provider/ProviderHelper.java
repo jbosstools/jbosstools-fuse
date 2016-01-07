@@ -114,9 +114,6 @@ public class ProviderHelper {
     }
 
     protected static String convertCamelCase(String original) {
-    	if (original == null) {
-    		System.err.println("BP");
-    	}
     	String display = original.replaceAll("(\\p{Ll})(\\p{Lu})","$1 $2");
     	return capitalizeFirstLetter(display);
     }

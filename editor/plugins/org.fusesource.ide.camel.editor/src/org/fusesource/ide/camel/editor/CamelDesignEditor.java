@@ -176,12 +176,14 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	        	if (f.getFullPath().toFile().getPath().equals(asFileEditorInput(input).getFile().getFullPath().toFile().getPath())) {
 	        		String endpointId = null;
 	        		
-	        		// first highligth the suspended node
-	        		Set<String> ids = entry.getDebugTarget().getDebugger().getSuspendedBreakpointNodeIds();
-	        		if (ids != null && ids.size()>0) {
-	        			endpointId = ids.iterator().next();
+	        		// first highlight the suspended node
+	        		if (entry != null && entry.getDebugTarget() != null && entry.getDebugTarget().getDebugger() != null) {
+		        		Set<String> ids = entry.getDebugTarget().getDebugger().getSuspendedBreakpointNodeIds();
+		        		if (ids != null && ids.size()>0) {
+		        			endpointId = ids.iterator().next();
+		        		}
+		        		highlightBreakpointNodeWithID(endpointId);
 	        		}
-	        		highlightBreakpointNodeWithID(endpointId);
 	        	}
 	        }
         } catch (Exception ex) {
@@ -197,7 +199,18 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
         // update outline view
         this.outlinePage = new CamelModelOutlinePage(this);
         
-		getEditingDomain().getCommandStack().flush();
+//		getEditingDomain().getCommandStack().flush();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#setFocus()
+	 */
+	@Override
+	public void setFocus() {
+		super.setFocus();
+		// whenever the design editor is focused we will check for unique id values
+		getModel().getCamelContext().ensureUniqueID(getModel().getCamelContext());
+		DiagramOperations.updateDiagram(this);
 	}
 	
 	/* (non-Javadoc)
@@ -425,7 +438,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	}
 	
 	public void refreshDiagramContents(Diagram diagram) {
-		getDiagramTypeProvider().init(diagram != null ? diagram : getDiagramTypeProvider().getDiagram(), getDiagramBehavior());
+		if (getDiagramTypeProvider() != null) {
+			getDiagramTypeProvider().init(diagram != null ? diagram : getDiagramTypeProvider().getDiagram(), getDiagramBehavior());
+		}
 		getDiagramBehavior().getRefreshBehavior().initRefresh();
         setPictogramElementsForSelection(null);
         GraphicalViewer graphicalViewer = getGraphicalViewer();

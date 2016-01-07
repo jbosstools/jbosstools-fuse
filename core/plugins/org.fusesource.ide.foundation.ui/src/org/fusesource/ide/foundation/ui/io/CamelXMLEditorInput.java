@@ -18,6 +18,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
+import org.fusesource.ide.foundation.ui.internal.FoundationUIActivator;
 
 /**
  * @author lhein
@@ -56,7 +57,7 @@ public class CamelXMLEditorInput implements IEditorInput, IPersistableElement {
 	 */
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		return null;
+		return FoundationUIActivator.getDefault().getSharedImages().descriptor(FoundationUIActivator.IMAGE_CAMEL_ICON);
 	}
 
 	/* (non-Javadoc)

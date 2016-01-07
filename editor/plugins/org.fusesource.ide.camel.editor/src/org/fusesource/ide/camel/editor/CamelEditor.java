@@ -56,6 +56,7 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.commons.ui.UIHelper;
+import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
@@ -716,6 +717,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		} else if (input instanceof DiagramEditorInput) {
 			IFile f = (IFile)((DiagramEditorInput)input).getAdapter(IFile.class);
 			this.editorInput = new CamelXMLEditorInput(f);
+		} else if (input instanceof CamelContextNodeEditorInput) {
+			this.editorInput = (CamelContextNodeEditorInput)input;
 		} else if (input instanceof CamelXMLEditorInput) {
 			this.editorInput = (CamelXMLEditorInput)input;
 		} else {
