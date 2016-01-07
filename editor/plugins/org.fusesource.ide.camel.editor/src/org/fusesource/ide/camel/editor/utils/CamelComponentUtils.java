@@ -37,6 +37,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentProperty;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.JsonHelper;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -72,7 +73,22 @@ public final class CamelComponentUtils {
         return null;
     }
     
+    public static String[] getRefs(CamelFile cf) {
+    	ArrayList<String> refs = new ArrayList<String>();
+    	
+    	refs.add("");
+    	refs.addAll(Arrays.asList(cf.getCamelContext().getEndpointDefinitions().keySet().toArray(new String[cf.getCamelContext().getEndpointDefinitions().size()])));
+    	refs.addAll(Arrays.asList(cf.getCamelContext().getDataformats().keySet().toArray(new String[cf.getCamelContext().getDataformats().size()])));
+    	
+    	return refs.toArray(new String[refs.size()]);
+    }
     
+    public static boolean isRefProperty(Parameter p) {
+        return  p.getName().equalsIgnoreCase("ref") && 
+                p.getType().equalsIgnoreCase("string") &&
+                p.getJavaType().equalsIgnoreCase("java.lang.String") &&
+                p.getKind().equalsIgnoreCase("attribute");
+    }
     
     public static boolean isBooleanProperty(Parameter p) {
         return  p.getJavaType().equalsIgnoreCase("boolean") || 
@@ -86,7 +102,8 @@ public final class CamelComponentUtils {
     }
     
     public static boolean isTextProperty(Parameter p) {
-        return  p.getChoice() == null && 
+        return  p.getChoice() == null &&
+        		p.getName().equalsIgnoreCase("ref") == false &&
         		p.getKind().equals("expression") == false && (
         		p.getJavaType().equalsIgnoreCase("String") || 
                 p.getJavaType().equalsIgnoreCase("java.lang.String") || 
@@ -121,6 +138,11 @@ public final class CamelComponentUtils {
     public static boolean isExpressionProperty(Parameter p) {
         return  p.getKind().equalsIgnoreCase("expression") ||
                 p.getJavaType().equalsIgnoreCase("org.apache.camel.model.language.ExpressionDefinition");
+    }
+    
+    public static boolean isDataFormatProperty(Parameter p) {
+    	return  p.getKind().equalsIgnoreCase("element") &&
+                p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition");
     }
     
     public static boolean isListProperty(Parameter p) {

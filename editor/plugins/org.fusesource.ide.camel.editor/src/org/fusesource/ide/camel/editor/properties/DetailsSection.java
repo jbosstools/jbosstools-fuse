@@ -91,6 +91,7 @@ import org.fusesource.ide.camel.editor.utils.PropertiesUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
+import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataFormat;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -456,6 +457,52 @@ public class DetailsSection extends AbstractPropertySection {
 						}
 					};
                 }
+                
+            // REF PROPERTIES
+            } else if (CamelComponentUtils.isRefProperty(prop)) {
+                CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+                getWidgetFactory().adapt(choiceCombo, true, true);
+                choiceCombo.setEditable(false);
+                choiceCombo.setItems(CamelComponentUtils.getRefs(this.selectedEP.getCamelFile()));
+                String value = (String)(this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue());
+                for (int i=0; i < choiceCombo.getItems().length; i++) {
+                    if (choiceCombo.getItem(i).equalsIgnoreCase(value)) {
+                        choiceCombo.select(i);
+                        break;
+                    }
+                }
+                choiceCombo.addSelectionListener(new SelectionAdapter() {
+                    /* (non-Javadoc)
+                     * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+                     */
+                    @Override
+                    public void widgetSelected(SelectionEvent e) {
+                        CCombo choice = (CCombo)e.getSource();
+                        selectedEP.setParameter(prop.getName(), choice.getText());
+                    }
+                });
+                choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = choiceCombo;
+                //initialize the map entry
+                modelMap.put(p.getName(), choiceCombo.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                
             // FILE PROPERTIES
             } else if (CamelComponentUtils.isFileProperty(prop)) {
                 final Text txtField = getWidgetFactory().createText(page, (String)(this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
@@ -618,6 +665,87 @@ public class DetailsSection extends AbstractPropertySection {
 					};
                 }
 
+             // DATAFORMAT PROPERTIES
+            } else if (CamelComponentUtils.isDataFormatProperty(prop)) {
+            	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
+                getWidgetFactory().adapt(choiceCombo, true, true);
+                choiceCombo.setEditable(false);
+                choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                
+                CamelModelElement dataformatElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
+                choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
+
+                ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+                eform.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
+                eform.setText("Data Format Settings...");
+                eform.setLayout(new GridLayout(1, true));
+                eform.addExpansionListener(new IExpansionListener() {
+                	/*
+                	 * (non-Javadoc)
+                	 * @see org.eclipse.ui.forms.events.IExpansionListener#expansionStateChanging(org.eclipse.ui.forms.events.ExpansionEvent)
+                	 */
+					@Override
+					public void expansionStateChanging(ExpansionEvent e) {
+					}
+					
+					/*
+					 * (non-Javadoc)
+					 * @see org.eclipse.ui.forms.events.IExpansionListener#expansionStateChanged(org.eclipse.ui.forms.events.ExpansionEvent)
+					 */
+					@Override
+					public void expansionStateChanged(ExpansionEvent e) {
+						page.layout(true);
+						refresh();
+						aTabbedPropertySheetPage.resizeScrolledComposite();
+					}
+				});
+
+                choiceCombo.addSelectionListener(new SelectionAdapter() {
+                	/* (non-Javadoc)
+                     * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+                     */
+                    @Override
+                    public void widgetSelected(SelectionEvent e) {
+                        CCombo choice = (CCombo)e.getSource();
+                        String dataformat = choice.getText();
+                        CamelModelElement dataFormatElement = selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)selectedEP.getParameter(prop.getName()) : null;
+                        dataFormatChanged(dataformat, eform, dataFormatElement, page, prop);
+                    }
+                });
+                
+				if (dataformatElement != null) {
+					String value = dataformatElement.getNodeTypeId();
+                    choiceCombo.deselectAll();
+                    for (int i=0; i < choiceCombo.getItems().length; i++) {
+                        if (choiceCombo.getItem(i).equalsIgnoreCase(value)) {
+                        	choiceCombo.select(i);
+                        	dataFormatChanged(value, eform, dataformatElement, page, prop);
+                            break;
+                        }
+                    }
+                }		
+                
+                c = choiceCombo;
+                //initialize the map entry
+                modelMap.put(p.getName(), choiceCombo.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.selection().observe(choiceCombo);                
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                
             // UNSUPPORTED PROPERTIES / REFS
             } else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
             	
@@ -1041,6 +1169,175 @@ public class DetailsSection extends AbstractPropertySection {
 	            public void modifyText(ModifyEvent e) {
 	                Text txt = (Text)e.getSource();
 	                expressionElement.setParameter(p.getName(), txt.getText());
+	            }
+	        });
+	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+	        c = txtField;
+	    }
+    	
+    	return c;
+    }
+    
+    /**
+     * called when user switches the expression language
+     * 
+     * @param language				the new language for the expression
+     * @param eform					the expandable form to use
+     * @param dataFormatElement		the expression element if simple expression, otherwise it will be the container element which contains the expression element as parameter "expression"
+     * @param page					the page
+     * @param prop					the property which is currently used
+     */
+    private void dataFormatChanged(String dataformat, ExpandableComposite eform, CamelModelElement dataFormatElement, Composite page, Parameter prop) {
+    	eform.setText(dataformat.trim());
+        for (Control co : eform.getChildren()) if (co.getData("fuseDataFormatClient") != null) co.dispose();
+        Composite client = getWidgetFactory().createComposite(eform);
+        client.setData("fuseDataFormatClient", true);
+        client.setLayoutData(new GridData(GridData.FILL_BOTH));
+        client.setLayout(new GridLayout(4, false));
+        eform.setClient(client);
+        
+        CamelModelElement uiDataFormatElement = null;
+        
+        if (dataFormatElement != null && dataFormatElement.getXmlNode().getNodeName().equals(dataformat) == false) {
+        	Node oldExpNode = null;
+        	for (int i=0; i<selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
+        		if (selectedEP.getXmlNode().getChildNodes().item(i).getNodeName().equalsIgnoreCase(dataFormatElement.getXmlNode().getNodeName())) {
+        			oldExpNode = selectedEP.getXmlNode().getChildNodes().item(i);
+        			break;
+        		}
+        	}
+        	if (dataformat.trim().length()>0) {
+            	Node expNode = selectedEP.getCamelFile().getDocument().createElement(dataformat);
+            	dataFormatElement = new CamelModelElement(this.selectedEP, expNode);
+            	selectedEP.setParameter(prop.getName(), dataFormatElement);
+            	if (oldExpNode == null) {
+            		System.err.println("pdd");
+            	}
+            	selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
+        	} else {
+        		// user wants to delete the expression
+        		selectedEP.getXmlNode().removeChild(oldExpNode);
+        		selectedEP.removeParameter(prop.getName());
+        	}
+    	} else if (dataFormatElement == null && dataformat.trim().length()>0) {
+    		// no expression set, but now we set one
+    		Node expNode = selectedEP.getCamelFile().getDocument().createElement(dataformat);
+    		dataFormatElement = new CamelModelElement(this.selectedEP, expNode);
+        	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
+        	this.selectedEP.setParameter(prop.getName(), dataFormatElement);
+        } 
+        uiDataFormatElement = dataFormatElement;
+        
+        prepareDataFormatUIForDataFormat(dataformat, uiDataFormatElement, client);
+		page.layout(true);
+		refresh();
+		eform.layout(true);
+		aTabbedPropertySheetPage.resizeScrolledComposite();
+    }
+    
+    private void prepareDataFormatUIForDataFormat(String dataformat, CamelModelElement dataFormatElement, Composite parent) {
+    	CamelModel model = getCamelModel(dataFormatElement);
+    	
+    	// now create the new fields
+    	DataFormat df = model.getDataformatModel().getDataFormatByName(dataformat);
+    	if (df != null) {
+    		List<Parameter> props = df.getParameters();
+    		// display all the properties in alphabetic order - sorting needed
+            Collections.sort(props, new Comparator<Parameter>() {
+                /* (non-Javadoc)
+                 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+                 */
+                @Override
+                public int compare(Parameter o1, Parameter o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            }); 
+    		
+    		for (Parameter p : props) {
+                // Label
+    			String s = Strings.humanize(p.getName());
+                if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
+                
+                Label l = getWidgetFactory().createLabel(parent, s);            
+                l.setLayoutData(new GridData());
+                if (p.getDescription() != null) {
+                	l.setToolTipText(p.getDescription());
+                }
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                	l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+                }
+                
+                // Field
+                Control field = getControlForParameter(p, parent, dataFormatElement, df);
+                field.setToolTipText(p.getDescription());
+    		}
+    	}
+    }
+    
+    private Control getControlForParameter(Parameter p, Composite parent, CamelModelElement dataFormatElement, DataFormat df) {
+    	Control c = null;
+    	
+    	// BOOLEAN PROPERTIES
+    	if (CamelComponentUtils.isBooleanProperty(p)) {
+    		Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
+    		String boolVal = dataFormatElement.getParameter(p.getName()) instanceof Boolean ? Boolean.toString((boolean)dataFormatElement.getParameter(p.getName())) : (String)dataFormatElement.getParameter(p.getName());
+    		Boolean b = Boolean.parseBoolean( (dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? boolVal : df.getParameter(p.getName()).getDefaultValue()));
+    		checkBox.setSelection(b);
+    		checkBox.addSelectionListener(new SelectionAdapter() {
+	            /* (non-Javadoc)
+	             * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+	             */
+	            @Override
+	            public void widgetSelected(SelectionEvent e) {
+	            	dataFormatElement.setParameter(p.getName(), checkBox.getSelection());
+	            }
+	        });
+    		checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+    		c = checkBox;
+        
+    		// TEXT PROPERTIES
+    	} else if (CamelComponentUtils.isTextProperty(p)) {
+	        Text txtField = getWidgetFactory().createText(parent, (String)(dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? dataFormatElement.getParameter(p.getName()) : df.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+	        txtField.addModifyListener(new ModifyListener() {
+	            @Override
+	            public void modifyText(ModifyEvent e) {
+	                Text txt = (Text)e.getSource();
+	                dataFormatElement.setParameter(p.getName(), txt.getText());
+	            }
+	        });
+	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+	        c = txtField;
+        
+	    // NUMBER PROPERTIES
+	    } else if (CamelComponentUtils.isNumberProperty(p)) {
+	        Text txtField = getWidgetFactory().createText(parent, (String)(dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? dataFormatElement.getParameter(p.getName()) : df.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+	        txtField.addModifyListener(new ModifyListener() {
+	            @Override
+	            public void modifyText(ModifyEvent e) {
+	                Text txt = (Text)e.getSource();
+	                String val = txt.getText();
+	                try {
+	                	Double.parseDouble(val);
+	                	txt.setBackground(ColorConstants.white);
+	                	dataFormatElement.setParameter(p.getName(), txt.getText());
+	                } catch (NumberFormatException ex) {
+	                	// invalid character found
+	                    txt.setBackground(ColorConstants.red);
+	                    return;
+	                }
+	            }
+	        });
+	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+	        c = txtField;
+
+        // OTHER
+	    } else {
+	    	Text txtField = getWidgetFactory().createText(parent, (String)(dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? dataFormatElement.getParameter(p.getName()) : df.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+	        txtField.addModifyListener(new ModifyListener() {
+	            @Override
+	            public void modifyText(ModifyEvent e) {
+	                Text txt = (Text)e.getSource();
+	                dataFormatElement.setParameter(p.getName(), txt.getText());
 	            }
 	        });
 	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));

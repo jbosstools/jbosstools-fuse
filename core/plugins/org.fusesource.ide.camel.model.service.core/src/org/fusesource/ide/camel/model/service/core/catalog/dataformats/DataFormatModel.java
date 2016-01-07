@@ -65,6 +65,19 @@ public class DataFormatModel {
 	}
 		
 	/**
+	 * looks up the language for the given language name
+	 * 
+	 * @param language
+	 * @return
+	 */
+	public DataFormat getDataFormatByName(String dataformat) {
+	    for (DataFormat df : supportedDataFormats) {
+            if (df.getName().equals(dataformat)) return df;
+        }
+        return null;
+	}
+	
+	/**
 	 * creates the model from the given input stream 
 	 * 
 	 * @param stream	the stream to parse

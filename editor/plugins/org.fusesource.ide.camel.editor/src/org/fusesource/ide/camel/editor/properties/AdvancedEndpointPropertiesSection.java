@@ -439,6 +439,38 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
                 
+            // DATAFORMAT PROPERTIES
+            } else if (CamelComponentUtils.isDataFormatProperty(prop)) {
+                Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+                txtField.addModifyListener(new ModifyListener() {
+                    @Override
+                    public void modifyText(ModifyEvent e) {
+                        Text txt = (Text)e.getSource();
+                        PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
+                    }
+                });
+                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                c = txtField;
+                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+					validator = new IValidator() {
+						/*
+						 * (non-Javadoc)
+						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+						 */
+						@Override
+						public IStatus validate(Object value) {
+							if (value != null && value instanceof String && value.toString().trim().length()>0) {
+								return ValidationStatus.ok();
+							}
+							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+						}
+					};
+                }
+                //initialize the map entry
+                modelMap.put(p.getName(), txtField.getText());
+                // create observables for the control
+                uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
+                
             // UNSUPPORTED PROPERTIES / REFS
             } else if (CamelComponentUtils.isUnsupportedProperty(prop)) {
             	

@@ -609,7 +609,10 @@ public class CamelModelElement {
 	 */
 	public void removeParameter(String name) {
 		if (this.parameters.containsKey(name)) {
-			this.parameters.remove(name);
+			Object removedItem = this.parameters.remove(name);
+			if (removedItem instanceof CamelModelElement) {
+				getXmlNode().removeChild(((CamelModelElement)removedItem).getXmlNode());
+			}
 			((Element) getXmlNode()).removeAttribute(name);
 		}
 	}
@@ -637,6 +640,22 @@ public class CamelModelElement {
 	}
 
 	/**
+	 * 
+	 */
+	private void removePossibleDataFormatsInFavorToREF() {
+		if (getUnderlyingMetaModelObject() != null) {
+			for (Parameter p : getUnderlyingMetaModelObject().getParameters()) {
+				if (p.getKind().equalsIgnoreCase("element") && p.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition")) {
+					if (getParameter(p.getName()) != null) {
+						removeParameter(p.getName());
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * sets the parameter with the given name to the given value. If the
 	 * parameter doesn't exist it will be created
 	 * 
@@ -661,14 +680,21 @@ public class CamelModelElement {
 
 		// save param in internal map
 		this.parameters.put(name, value);
+		
+		if (value instanceof CamelModelElement && getParameter("ref") != null) {
+			removeParameter("ref");
+		} else if (name.equalsIgnoreCase("ref")) {
+			removePossibleDataFormatsInFavorToREF();
+		}
 
 		Element e = (Element) getXmlNode();
 		if (e == null)
 			return;
-		String kind = getUnderlyingMetaModelObject() != null
-				? getUnderlyingMetaModelObject().getParameter(name).getKind() : null;
-		if (this instanceof CamelContextElement)
-			kind = "attribute";
+		String kind = getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getKind() : null;
+		String javaType = getUnderlyingMetaModelObject() != null ? getUnderlyingMetaModelObject().getParameter(name).getJavaType() : null;
+
+		if (this instanceof CamelContextElement) kind = "attribute";
+		
 		if (value == null || value.toString().length() < 1) {
 			// seems the attribute has been deleted?
 			if (kind.equalsIgnoreCase("attribute") && e.hasAttribute(name)) {
@@ -725,6 +751,51 @@ public class CamelModelElement {
 						e.appendChild(subNode);
 					}
 					subNode.setTextContent(getMappedValue(value));
+				}
+			} else if (kind.equalsIgnoreCase("element") && javaType.equals("org.apache.camel.model.DataFormatDefinition")) {
+				// expression element handling
+				CamelModelElement df = null;
+				if (value instanceof CamelModelElement) {
+					df = (CamelModelElement) value;
+				}
+				Eip subEip = getEipByName(df.getNodeTypeId());
+				if (subEip != null) {
+					// seems this parameter is another eip type -> we need to
+					// create/modify a subnode
+					boolean createSubNode = true;
+					Node subNode = null;
+
+					for (int c = 0; c < e.getChildNodes().getLength(); c++) {
+						subNode = e.getChildNodes().item(c);
+						if (subNode.getNodeType() == Node.ELEMENT_NODE
+								&& subNode.getNodeName().equals(df.getNodeTypeId())) {
+							createSubNode = false;
+							break;
+						}
+					}
+					if (createSubNode) {
+						subNode = getCamelFile().getDocument().createElement(df.getNodeTypeId());
+						e.appendChild(subNode);
+					}
+
+					for (int i = 0; i < ((Element) subNode).getAttributes().getLength(); i++) {
+						Node attrNode = ((Element) subNode).getAttributes().item(i);
+						((Element) subNode).removeAttribute(attrNode.getNodeName());
+					}
+					Iterator<String> pKeys = df.getParameters().keySet().iterator();
+					while (pKeys.hasNext()) {
+						String pKey = pKeys.next();
+						Object oValue = df.getParameter(pKey);
+						// expressions shouldn't have expression attributes but
+						// values
+						if (subEip.getParameter(pKey).getKind().equalsIgnoreCase("value")) {
+							if (oValue != null && oValue.toString().trim().length() > 0)
+								((Element) subNode).setNodeValue(oValue.toString());
+						} else {
+							if (oValue != null && oValue.toString().trim().length() > 0)
+								((Element) subNode).setAttribute(pKey, oValue.toString());
+						}
+					}
 				}
 			} else if (kind.equalsIgnoreCase("expression")) {
 				// expression element handling
@@ -907,7 +978,7 @@ public class CamelModelElement {
 						// now map the node attribute into our EIP parameters
 						setParameter(param.getName(), tmp.getNodeValue());
 					}
-				} else if (param.getKind().equalsIgnoreCase("element")) {
+				} else if (param.getKind().equalsIgnoreCase("element") && param.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition") == false) {
 					if (param.getType().equalsIgnoreCase("array")) {
 						ArrayList<String> list = new ArrayList<String>();
 						for (int i = 0; i < getXmlNode().getChildNodes().getLength(); i++) {
@@ -946,6 +1017,23 @@ public class CamelModelElement {
 						setParameter(param.getName(), val);
 						if (param.getName().equalsIgnoreCase("description"))
 							setDescription(val);
+					}
+				} else if (	param.getKind().equalsIgnoreCase("element") && 
+							param.getJavaType().equalsIgnoreCase("org.apache.camel.model.DataFormatDefinition")) {
+					CamelModelElement dfNode = null;
+					String[] dfs = param.getOneOf().split(",");
+					ArrayList<String> dfList = new ArrayList<String>();
+					for (String df : dfs)
+						dfList.add(df);
+					for (int i = 0; i < getXmlNode().getChildNodes().getLength(); i++) {
+						Node subNode = getXmlNode().getChildNodes().item(i);
+						if (subNode.getNodeType() != Node.ELEMENT_NODE) continue;
+						if (subNode != null && dfList.contains(subNode.getNodeName())) {
+							dfNode = new CamelModelElement(this, subNode);
+							dfNode.initialize();
+							// expNode.setParent(this);
+							setParameter(param.getName(), dfNode);
+						}
 					}
 				} else if (param.getKind().equalsIgnoreCase("expression")) {
 					CamelModelElement expNode = null;

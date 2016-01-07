@@ -190,4 +190,17 @@ public class DataFormat implements ICamelCatalogElement {
 	public void setDependencies(ArrayList<Dependency> dependencies) {
 		this.dependencies = dependencies;
 	}
+	
+	/**
+	 * returns the parameter with the given name or null if not found
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public Parameter getParameter(String name) {
+		for (Parameter p : getParameters()) {
+			if (p.getName().equals(name)) return p;
+		}
+		return null;
+	}
 }
