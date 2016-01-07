@@ -13,8 +13,8 @@ package org.fusesource.ide.jmx.camel.navigator;
 
 import java.util.List;
 
-import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.internal.CamelFacade;
 import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
@@ -31,7 +31,7 @@ public class CamelFacades {
 				}
 			}
 		} catch (Exception e) {
-			Activator.getLogger().warning(
+			CamelJMXPlugin.getLogger().warning(
 					"Failed to find statistics for node: " + nodeId + " in camelContext: " + camelContextId + ". " + e,
 					e);
 		}

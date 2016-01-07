@@ -24,7 +24,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
@@ -33,11 +32,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.AbstractNodeFacade;
-import org.fusesource.ide.camel.model.Activator;
-import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.io.XmlContainerMarshaller;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.commons.tree.NodeSupport;
 import org.fusesource.ide.commons.tree.Refreshable;
 import org.fusesource.ide.commons.ui.ContextMenuProvider;
@@ -62,14 +59,14 @@ import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class CamelContextNode 	extends NodeSupport 
-							 	implements Refreshable, AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider {
+							 	implements Refreshable, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider {
 
 	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
 	
 	private final CamelContextsNode camelContextsNode;
 	private final CamelFacade facade;
 	private final CamelContextMBean camelContextMBean;
-	private XmlContainerMarshaller marshaller = new XmlContainerMarshaller();
+	private CamelContextElement camelContext;
 	private final RoutesNode routes;
 	private static Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<String, TraceExchangeList>();
 	private NodeStatisticsContainer runtimeNodeStatisticsContainer;
@@ -87,6 +84,24 @@ public class CamelContextNode 	extends NodeSupport
 		setPropertyBean(camelContext);
 	}
 
+	public CamelContextElement getCamelContext() {
+		IFile camelContextFile = createTempContextFile();
+		if (camelContextFile != null) {
+			CamelIOHandler handler = new CamelIOHandler();
+			try {
+				camelContextFile.getProject().refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+				CamelFile cf = handler.loadCamelModel(camelContextFile, new NullProgressMonitor());
+				this.camelContext = cf.getCamelContext();
+			} catch (Exception ex) {
+				CamelJMXPlugin.getLogger().error(ex);
+			}			
+		} else {
+			CamelJMXPlugin.getLogger().error("Unable to store the remote camel context " + getContextId() + " locally");
+		}
+		
+		return this.camelContext;
+	}
+	
 	@Override
 	public String toString() {
 		return getContextId();
@@ -133,11 +148,6 @@ public class CamelContextNode 	extends NodeSupport
 		}
 	}
 
-	public RouteContainer getModelContainer() {
-		String xml = getXmlText();
-		return marshaller.loadRoutesFromText(xml);
-	}
-
 	public String getXmlText() {
 		String xml = getXmlString();
 		// TODO - REMOVE ASAP
@@ -154,19 +164,6 @@ public class CamelContextNode 	extends NodeSupport
 	public void updateXml(String xml) {
 		camelContextMBean.addOrUpdateRoutesFromXml(xml);
 		refresh();
-	}
-
-	@Override
-	public AbstractNode getAbstractNode() {
-		return getRoutes().getAbstractNode();
-	}
-
-	public XmlContainerMarshaller getMarshaller() {
-		return marshaller;
-	}
-
-	public void setMarshaller(XmlContainerMarshaller marshaller) {
-		this.marshaller = marshaller;
 	}
 
 	public RoutesNode getRoutes() {
@@ -232,7 +229,7 @@ public class CamelContextNode 	extends NodeSupport
 	public void editRoutes() {
 		IWorkbenchPage page = Workbenches.getActiveWorkbenchPage();
 		if (page == null) {
-			Activator.getLogger().warning("No active page!");
+			CamelJMXPlugin.getLogger().warning("No active page!");
 		} else {
 			IFile camelContextFile = createTempContextFile();
 			if (camelContextFile != null) {
@@ -240,10 +237,10 @@ public class CamelContextNode 	extends NodeSupport
 				try {
 					page.openEditor(input, CAMEL_EDITOR_ID, true);
 				} catch (PartInitException e) {
-					Activator.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
+					CamelJMXPlugin.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
 				}
 			} else {
-				Activator.getLogger().error("Unable to store the remote camel context " + getContextId() + " locally");
+				CamelJMXPlugin.getLogger().error("Unable to store the remote camel context " + getContextId() + " locally");
 			}
 		}
 	}
@@ -267,7 +264,7 @@ public class CamelContextNode 	extends NodeSupport
 			
 			return camelContextFile;
 		} catch (Exception e) {
-			Activator.getLogger().warning("Failed to create temporary file: " + e, e);
+			CamelJMXPlugin.getLogger().warning("Failed to create temporary file: " + e, e);
 		}
 
 		return null;

@@ -333,7 +333,8 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	@Override
 	public CamelContextElement getCamelContext() {
 		for (CamelModelElement e : getChildElements()) {
-			if (e.getXmlNode().getNodeName().equalsIgnoreCase("camelContext")) return (CamelContextElement)e;
+			if (e.getXmlNode().getNodeName().equalsIgnoreCase("camelContext") ||
+				e.getXmlNode().getNodeName().equalsIgnoreCase("routes")) return (CamelContextElement)e;
 		}
 		return null;
 	}

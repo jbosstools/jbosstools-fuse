@@ -14,7 +14,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.fusesource.ide.camel.model.Activator;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
@@ -59,7 +58,7 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 			xml = IOUtils.loadText(getCamelContextFile().getContents(), "utf-8");
 			pushbackToRemoteContext(xml);
 		} catch (Exception ex) {
-			Activator.getLogger().error("Error saving changes to remote camel context " + contextNode.getContextId(), ex);
+			CamelJMXPlugin.getLogger().error("Error saving changes to remote camel context " + contextNode.getContextId(), ex);
 		}
 	}
 	

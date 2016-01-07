@@ -15,7 +15,9 @@ import java.util.List;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.*;
+import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
+import org.fusesource.ide.jmx.camel.CamelJMXSharedImages;
 import org.jboss.tools.jmx.core.tree.Node;
 
 
@@ -23,9 +25,9 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	private static final boolean useCaching = true;
 
 	private final RouteNode routeNode;
-	private final AbstractNode node;
+	private final CamelModelElement node;
 
-	public ProcessorNode(RouteNode routeNode, Node parent, AbstractNode node) {
+	public ProcessorNode(RouteNode routeNode, Node parent, CamelModelElement node) {
 		super(parent, routeNode.getRoute());
 		this.routeNode = routeNode;
 		this.node = node;
@@ -37,19 +39,14 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	}
 
 	@Override
-	public AbstractNode getAbstractNode() {
-		return node;
-	}
-
-	@Override
 	public CamelContextNode getCamelContextNode() {
 		return routeNode.getCamelContextNode();
 	}
 
 	@Override
 	protected void loadChildren() {
-		List<AbstractNode> children = node.getOutputs();
-		for (AbstractNode node : children) {
+		List<CamelModelElement> children = node.getChildElements(); //getOutputs()
+		for (CamelModelElement node : children) {
 			addChild(new ProcessorNode(routeNode, this, node));
 		}
 	}
@@ -81,7 +78,7 @@ public class ProcessorNode extends ProcessorNodeSupport {
 
 	@Override
 	public Image getImage() {
-		return node.getSmallImage();
+		return CamelJMXPlugin.getDefault().getImage(node.getIconName().replaceAll(".png", "16.png"));
 	}
 	
 	/* (non-Javadoc)
