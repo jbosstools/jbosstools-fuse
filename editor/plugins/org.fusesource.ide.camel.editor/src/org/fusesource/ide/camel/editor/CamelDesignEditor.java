@@ -431,12 +431,30 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	}
 	
 	/**
-	 * @param selectedRoute the selectedRoute to set
+	 * sets the selected route
+	 * 
+	 * @param route
 	 */
-	public void setSelectedRoute(CamelRouteElement selectedRoute) {
-		this.selectedRoute = selectedRoute;
+	public void setSelectedRoute(CamelRouteElement route) {
+		this.selectedRoute = route;
+		switchRoute();
 	}
 	
+	/**
+	 * switches the selected route
+	 */
+	protected void switchRoute() {
+		// TODO: 	currently we have no support to dive into a single route.
+		// 			once we support that, we have to do the go into in that
+		//			method.
+		setSelectedNode(this.selectedRoute != null ? this.selectedRoute : null);
+	}
+
+	/**
+	 * refreshes the diagram contents
+	 * 
+	 * @param diagram
+	 */
 	public void refreshDiagramContents(Diagram diagram) {
 		if (getDiagramTypeProvider() != null) {
 			getDiagramTypeProvider().init(diagram != null ? diagram : getDiagramTypeProvider().getDiagram(), getDiagramBehavior());
@@ -648,11 +666,11 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	@Override
 	public void setSelectedNode(CamelModelElement newSelection) {
 		if (newSelection != null) {
-			Object selectEditPart = findEditPart(newSelection, getRootEditPart());
-			if (selectEditPart != null) {
+			EditPart selectEditPart = findEditPart(newSelection, getRootEditPart());
+			if (selectEditPart != null && selectEditPart.isSelectable()) {
 				getEditorSite().getSelectionProvider().setSelection(new StructuredSelection(selectEditPart));
 			} else {
-				CamelEditorUIActivator.pluginLog().logError("Could not find editPart for selection: " + newSelection, new Exception());
+				CamelEditorUIActivator.pluginLog().logError("Could not select editPart for selection: " + newSelection);
 			}
 		}
 	}

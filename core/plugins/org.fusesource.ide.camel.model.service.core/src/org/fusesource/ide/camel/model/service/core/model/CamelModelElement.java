@@ -117,6 +117,14 @@ public class CamelModelElement {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return getDisplayText();
+	}
+	
 	/**
 	 * finds the endpoint with the given uri in the route
 	 * 
