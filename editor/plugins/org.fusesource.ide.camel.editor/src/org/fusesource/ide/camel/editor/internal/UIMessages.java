@@ -30,14 +30,6 @@ public class UIMessages extends NLS {
     public static String transformationDrawerTitle;
     public static String miscellaneousDrawerTitle;
 
-    public static String addNodeCommandLabel;
-    public static String reOrderNodeCommandLabel;
-    public static String createNodeCommandLabel;
-    public static String deleteFlowCommandLabel;
-    public static String moveConnectionStartpointCommandLabel;
-    public static String moveConnectionEndpointCommandLabel;
-    public static String createFlowCommandLabel;
-    
     public static String propertiesDetailsTitle;
     public static String propertiesDocumentationTitle;
     

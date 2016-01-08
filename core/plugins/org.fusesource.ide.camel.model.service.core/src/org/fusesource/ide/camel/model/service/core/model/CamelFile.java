@@ -22,6 +22,7 @@ import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.w3c.dom.Document;
@@ -271,11 +272,20 @@ public class CamelFile extends CamelModelElement implements EventListener {
 //            writer.flush();
 //            return writer.toString();
             
-    		// TODO: set the output attributes as defined in eclipse properties!!! (INDENT, LINE WIDTH, etc)
+    		// taking line width and indentation size from xml / editor preferences of eclipse -> we always use spaces for indentation...
+    		int lineWidth = Integer.parseInt(XMLCorePlugin.getDefault().getPluginPreferences().getString("lineWidth"));
+    		int indentValue = XMLCorePlugin.getDefault().getPluginPreferences().getInt("indentationSize");
+    		String indentChar = XMLCorePlugin.getDefault().getPluginPreferences().getString("indentationChar");
+    		if (indentChar.equalsIgnoreCase("tab")) {
+    			// calculate tabWidth * indent
+    			int tabWidth = org.eclipse.ui.internal.editors.text.EditorsPlugin.getDefault().getPreferenceStore().getInt("tabWidth");
+    			indentValue = indentValue * tabWidth;
+    		}
+    		    		
     		final Document document = getDocument();
             OutputFormat format = new OutputFormat(document);
             format.setIndenting(true);
-            format.setIndent(XML_INDENT_VALUE);
+            format.setIndent(indentValue);
             format.setEncoding("UTF-8");
             format.setPreserveEmptyAttributes(false);
             format.setMethod("xml");
@@ -283,7 +293,7 @@ public class CamelFile extends CamelModelElement implements EventListener {
             format.setOmitComments(false);
             format.setOmitDocumentType(false);
             format.setOmitXMLDeclaration(false);
-            format.setLineWidth(0);
+            format.setLineWidth(lineWidth);
             
             Writer out = new StringWriter();
             XMLSerializer serializer = new XMLSerializer(out, format);

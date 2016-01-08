@@ -16,7 +16,6 @@ import org.eclipse.graphiti.features.IUpdateFeature;
 import org.eclipse.graphiti.features.context.impl.UpdateContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
@@ -48,7 +47,7 @@ public class UpdateCommand extends RecordingCommand {
 
 		PictogramElement pe = node instanceof CamelContextElement ? designEditor.getDiagramTypeProvider().getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
 		if (pe == null) {
-			CamelEditorUIActivator.pluginLog().logInfo("Warning could not find PictogramElement for selectedNode: " + node);
+//			CamelEditorUIActivator.pluginLog().logInfo("Warning could not find PictogramElement for selectedNode: " + node);
 			return;
 		}
 		UpdateContext ctx = new UpdateContext(pe);
