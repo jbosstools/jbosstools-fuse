@@ -19,8 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -40,6 +42,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
@@ -55,6 +58,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.ide.IDE;
@@ -303,6 +307,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 						// switch to Fuse perspective if necessary.
 						switchToFusePerspective(workbenchWindow);
 					}
+					openCamelContextFile(project);
 				}
 			}
 		});
@@ -444,5 +449,29 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 			PrefUtil.getAPIPreferenceStore().setValue(IDE.Preferences.PROJECT_OPEN_NEW_PERSPECTIVE,	preferenceValue);
 		}
 		return result == IDialogConstants.YES_ID;
+	}
+	
+	/**
+	 * Open the default camel context file in Camel Editor
+	 * @param project camel archetype java project
+	 */
+	private void openCamelContextFile(IProject project){
+		if(project!=null){
+			//file path copied from org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard.CAMEL_CONFIG_PATH
+			String defaultCamelContextFile = "src/main/resources/META-INF/spring/camel-context.xml";
+			final IResource camelContext = project.findMember(defaultCamelContextFile);
+			if(camelContext!=null && camelContext instanceof IFile){
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						try {
+							IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+									(IFile) camelContext, OpenStrategy.activateOnOpen());
+						} catch (PartInitException e) {
+							Activator.getLogger().error("Cannot open default camel context file in editor", e);
+						}
+					}
+				});				
+			}
+		}
 	}
 }
