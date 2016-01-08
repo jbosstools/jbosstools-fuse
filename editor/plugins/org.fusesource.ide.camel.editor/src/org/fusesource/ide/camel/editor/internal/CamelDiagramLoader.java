@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.draw2d.PositionConstants;
@@ -26,6 +27,7 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -62,7 +64,7 @@ public class CamelDiagramLoader {
 			return;
 		}
 		List<CamelModelElement> processedNodes = new ArrayList<CamelModelElement>();
-		List<CamelModelElement> children = container.getChildElements();
+		List<CamelModelElement> children = container instanceof CamelRouteElement ? Arrays.asList(container) : container.getChildElements();
 		int x = 40;
 		int y = 40;
 		CamelModelElement lastElem = container;

@@ -32,6 +32,7 @@ public class CamelXMLEditorInputFactory implements IElementFactory {
 		if (filePath == null) {
 			return null;
 		}
-		return new CamelXMLEditorInput(ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(filePath)).getAdapter(IFile.class));
+		final String containerId = memento.getString(CamelXMLEditorInput.KEY_SELECTED_CONTAINER_ID);
+		return new CamelXMLEditorInput(ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(filePath)).getAdapter(IFile.class), containerId);
 	}
 }

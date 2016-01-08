@@ -713,10 +713,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		this.editorInput = null;
 		
 		if (input instanceof IFileEditorInput) {
-			this.editorInput = new CamelXMLEditorInput(((IFileEditorInput)input).getFile());
+			this.editorInput = new CamelXMLEditorInput(((IFileEditorInput)input).getFile(), null);
 		} else if (input instanceof DiagramEditorInput) {
 			IFile f = (IFile)((DiagramEditorInput)input).getAdapter(IFile.class);
-			this.editorInput = new CamelXMLEditorInput(f);
+			this.editorInput = new CamelXMLEditorInput(f, null);
 		} else if (input instanceof CamelContextNodeEditorInput) {
 			this.editorInput = (CamelContextNodeEditorInput)input;
 		} else if (input instanceof CamelXMLEditorInput) {
@@ -733,6 +733,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void setInput(IEditorInput input) {
 		super.setInput(input);
+		if (input instanceof CamelXMLEditorInput && input.equals(this.editorInput) == false) this.editorInput = (CamelXMLEditorInput)input;
 		setPartName(input.getName());
 	}
 	
@@ -773,5 +774,13 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 				getDesignEditor().setFocus();
 			}
 		});
+	}
+	
+	public CamelXMLEditorInput getCamelXMLInput() {
+		return this.editorInput;
+	}
+	
+	public void updateSelectedContainer(String containerId) {
+		this.editorInput.setSelectedContainerId(containerId);
 	}
 }

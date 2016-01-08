@@ -55,7 +55,8 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 		viewer.setContentProvider(new CamelModelOutlineContentProvider());
 		viewer.setLabelProvider(new CamelModelOutlineLabelProvider());
 		viewer.addSelectionChangedListener(this);
-		viewer.setInput(this.designEditor.getModel().getCamelContext());
+		CamelModelElement[] container = new CamelModelElement[] { this.designEditor.getSelectedContainer() != null ? this.designEditor.getSelectedContainer() : this.designEditor.getModel().getCamelContext() };
+		viewer.setInput(container);
 		viewer.expandAll();
 	}
 	
@@ -103,5 +104,15 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 			getTreeViewer().refresh(true);
 			getTreeViewer().expandAll();
 		}
+	}
+	
+	/** 
+	 * should be called when the diagrams base node has been switched
+	 * 
+	 * @param container
+	 */
+	public void changeInput(CamelModelElement container) {
+		getTreeViewer().setInput(new CamelModelElement[] { container });
+		modelChanged();
 	}
 }

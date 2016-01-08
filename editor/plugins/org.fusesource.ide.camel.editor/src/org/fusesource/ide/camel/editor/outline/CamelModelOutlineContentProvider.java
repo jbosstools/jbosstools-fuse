@@ -48,7 +48,9 @@ public class CamelModelOutlineContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof CamelModelElement) {
+		if (parentElement instanceof CamelModelElement[]) {
+			return (CamelModelElement[])parentElement;
+		} else if (parentElement instanceof CamelModelElement) {
 			CamelModelElement e = (CamelModelElement)parentElement;
 			return e.getChildElements().toArray();
 		}

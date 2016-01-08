@@ -27,6 +27,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.commons.tree.HasOwner;
 
 /**
@@ -93,7 +94,10 @@ public class NodeUtils {
 	 * @param pes
 	 */
     public static void getAllContainers(IFeatureProvider fp, CamelModelElement context, ArrayList<PictogramElement> pes) {
-		for (CamelModelElement cme : context.getChildElements()) {
+		if (context instanceof CamelRouteElement) {
+			pes.add(fp.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(context));
+		}
+    	for (CamelModelElement cme : context.getChildElements()) {
 			if (cme.getUnderlyingMetaModelObject() != null && cme.getUnderlyingMetaModelObject().canHaveChildren()) {
 				pes.add(fp.getDiagramTypeProvider().getFeatureProvider().getPictogramElementForBusinessObject(cme));
 			}
@@ -118,7 +122,7 @@ public class NodeUtils {
 				if (element != null && element instanceof Diagram) {
 					// route selected - this makes properties view work when route is
 					// selected in the diagram view
-					answer = CamelUtils.getDiagramEditor().getSelectedRoute() != null ? CamelUtils.getDiagramEditor().getSelectedRoute() : CamelUtils.getDiagramEditor().getModel();				
+					answer = CamelUtils.getDiagramEditor().getSelectedContainer() != null ? CamelUtils.getDiagramEditor().getSelectedContainer() : CamelUtils.getDiagramEditor().getModel();				
 				} else {
 					// select the node
 					answer = (CamelModelElement)CamelUtils.getDiagramEditor().getFeatureProvider().getBusinessObjectForPictogramElement(element);

@@ -66,6 +66,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.fusesource.ide.camel.editor.behaviours.CamelDiagramBehaviour;
 import org.fusesource.ide.camel.editor.commands.DiagramOperations;
+import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsCommand;
 import org.fusesource.ide.camel.editor.internal.CamelDesignEditorFlyoutPaletteComposite;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.outline.CamelModelOutlinePage;
@@ -75,7 +76,6 @@ import org.fusesource.ide.camel.editor.utils.INodeViewer;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.foundation.core.util.Objects;
@@ -102,7 +102,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	private CamelDiagramBehaviour camelDiagramBehaviour;
 	private CamelDesignEditorFlyoutPaletteComposite paletteComposite;
 	private CamelFile model;
-	private CamelRouteElement selectedRoute;
+	private CamelModelElement selectedContainer;
 	private CamelModelElement highlightedNodeInDebugger;
 	private AbstractEditPart selectedEditPart;
 	private AbstractEditPart lastSelectedEditPart;
@@ -199,6 +199,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
         // update outline view
         this.outlinePage = new CamelModelOutlinePage(this);
         
+        setSelectedContainer(getModel().findNode(parent.getCamelXMLInput().getSelectedContainerId()));        
 //		getEditingDomain().getCommandStack().flush();
 	}
 	
@@ -424,10 +425,10 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	}
 	
 	/**
-	 * @return the selectedRoute
+	 * @return the selectedContainer
 	 */
-	public CamelRouteElement getSelectedRoute() {
-		return this.selectedRoute;
+	public CamelModelElement getSelectedContainer() {
+		return this.selectedContainer;
 	}
 	
 	/**
@@ -435,19 +436,30 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * 
 	 * @param route
 	 */
-	public void setSelectedRoute(CamelRouteElement route) {
-		this.selectedRoute = route;
-		switchRoute();
+	public void setSelectedContainer(CamelModelElement route) {
+		this.selectedContainer = route;
+		switchContainer();
 	}
 	
 	/**
-	 * switches the selected route
+	 * switches the selected container
 	 */
-	protected void switchRoute() {
-		// TODO: 	currently we have no support to dive into a single route.
-		// 			once we support that, we have to do the go into in that
-		//			method.
-		setSelectedNode(this.selectedRoute != null ? this.selectedRoute : null);
+	protected void switchContainer() {
+		Runnable r = new Runnable() {
+			@Override
+			public void run() {
+				parent.stopDirtyListener();
+				CamelModelElement container = getSelectedContainer() != null ? getSelectedContainer() : getModel();
+				// reimport diagram contents
+				ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(CamelDesignEditor.this, getEditingDomain(), container, null);
+		        getEditingDomain().getCommandStack().execute(importCommand);
+		        initializeDiagram(importCommand.getDiagram());
+		        refreshDiagramContents(null);
+		        parent.updateSelectedContainer(getSelectedContainer() != null ? getSelectedContainer().getId() : getModel().getCamelContext().getId());
+		        outlinePage.changeInput(container);
+			}
+		};
+		Display.getDefault().asyncExec(r);
 	}
 
 	/**

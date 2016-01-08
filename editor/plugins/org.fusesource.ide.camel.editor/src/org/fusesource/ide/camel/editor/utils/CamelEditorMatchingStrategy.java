@@ -51,7 +51,7 @@ public class CamelEditorMatchingStrategy implements IEditorMatchingStrategy {
 			toBeOpenedInput = (CamelXMLEditorInput)input;
 		} else if (input instanceof FileEditorInput) {
 			FileEditorInput fei = (FileEditorInput)input;
-			toBeOpenedInput = new CamelXMLEditorInput(fei.getFile());
+			toBeOpenedInput = new CamelXMLEditorInput(fei.getFile(), null);
 		} else {
 			return false;
 		}

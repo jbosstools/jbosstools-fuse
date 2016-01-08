@@ -623,7 +623,7 @@ public class CamelDebugTarget extends CamelDebugElement implements IDebugTarget 
 			// create the editor input
 			String fullPath = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(getLaunch().getLaunchConfiguration());
 			IFile contextFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(fullPath));
-			CamelXMLEditorInput input = new CamelXMLEditorInput(contextFile);
+			CamelXMLEditorInput input = new CamelXMLEditorInput(contextFile, camelContextId);
 			// and save it in the registry
 			CamelDebugRegistry.getInstance().createEntry(this, this.camelContextId, input, getLaunch().getLaunchConfiguration());
 		} catch (Exception ex) {

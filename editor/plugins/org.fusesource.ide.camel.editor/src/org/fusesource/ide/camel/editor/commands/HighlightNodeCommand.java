@@ -60,7 +60,7 @@ public class HighlightNodeCommand extends RecordingCommand {
 				// seems the next breakpoint is in a different route and we need to switch to that route now
 				if (node.getParent() instanceof CamelRouteElement) {
 					// switch the route
-					this.designEditor.setSelectedRoute((CamelRouteElement)node.getParent());											
+					this.designEditor.setSelectedContainer((CamelRouteElement)node.getParent());											
 				}
 			}
 		}

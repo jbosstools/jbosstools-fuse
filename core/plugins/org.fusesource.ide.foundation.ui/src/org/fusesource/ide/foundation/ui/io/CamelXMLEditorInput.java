@@ -26,11 +26,14 @@ import org.fusesource.ide.foundation.ui.internal.FoundationUIActivator;
 public class CamelXMLEditorInput implements IEditorInput, IPersistableElement {
 	
 	public static final String KEY_CONTEXT_FILE = "camel.context.file.path";
+	public static final String KEY_SELECTED_CONTAINER_ID = "camel.context.container.id";
 	
 	private IFile camelContextFile;
+	private String selectedContainerId;
 	
-	public CamelXMLEditorInput(IFile contextFile) {
+	public CamelXMLEditorInput(IFile contextFile, String containerId) {
 		this.camelContextFile = contextFile;
+		this.selectedContainerId = containerId;
 	}
 	
 	/* (non-Javadoc)
@@ -99,8 +102,9 @@ public class CamelXMLEditorInput implements IEditorInput, IPersistableElement {
 		}
 		// Store object name, URI and diagram type provider ID
 		memento.putString(KEY_CONTEXT_FILE, this.camelContextFile.getFullPath().toOSString());
+		memento.putString(KEY_SELECTED_CONTAINER_ID, this.selectedContainerId);
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IPersistableElement#getFactoryId()
 	 */
@@ -134,10 +138,27 @@ public class CamelXMLEditorInput implements IEditorInput, IPersistableElement {
 		return false;
 	}
 	
+	/**
+	 * @return the selectedContainerId
+	 */
+	public String getSelectedContainerId() {
+		return this.selectedContainerId;
+	}
+	
 	public IFile getCamelContextFile() {
 		return this.camelContextFile;
 	}
 	
+	/**
+	 * @param selectedContainerId the selectedContainerId to set
+	 */
+	public void setSelectedContainerId(String selectedContainerId) {
+		this.selectedContainerId = selectedContainerId;
+	}
+	
+	/**
+	 * 
+	 */
 	public void onEditorInputSave() {
 	}
 }

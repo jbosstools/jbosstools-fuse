@@ -29,7 +29,7 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 	private String contextId;
 
 	public CamelContextNodeEditorInput(Node contextNode, IFile camelContextTempFile) {
-		super(camelContextTempFile);
+		super(camelContextTempFile, null);
 		this.contextNode = contextNode;
 		if (contextNode.getClass().getName().equals("org.fusesource.ide.jmx.camel.navigator.CamelContextNode")) {
 			try {
@@ -37,6 +37,7 @@ public class CamelContextNodeEditorInput extends CamelXMLEditorInput {
 				Object result = m.invoke(contextNode, (Object[])null);
 				if (result instanceof String) {
 					this.contextId = (String)result;
+					setSelectedContainerId(contextId);
 				}
 			} catch (Exception ex) {
 				FoundationUIActivator.pluginLog().logError(ex.getCause() != null ? ex.getCause() : ex);
