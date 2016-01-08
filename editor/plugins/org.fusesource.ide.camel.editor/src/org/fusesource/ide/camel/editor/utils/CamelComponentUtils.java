@@ -289,6 +289,14 @@ public final class CamelComponentUtils {
         // 2. try to generate the model from json blob
         if (resModel == null) resModel = buildModelFromJSON(scheme, getComponentJSon(scheme), clazz);
         
+        // 3. handling special cases
+        if (resModel == null) {
+        	// while the activemq component still has no own json file we simply use the jms one for now
+        	if (scheme.equalsIgnoreCase("activemq")) {
+            	return CamelModelFactory.getModelForVersion(camelVersion).getComponentModel().getComponentForScheme("jms").duplicateFor(scheme, clazz);        	
+        	}
+        }
+        
         return resModel;        
     }
     

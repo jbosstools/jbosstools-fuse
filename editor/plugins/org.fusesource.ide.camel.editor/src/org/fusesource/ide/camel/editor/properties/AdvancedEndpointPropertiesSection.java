@@ -418,9 +418,13 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 toolkit.adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
                 choiceCombo.setItems(CamelComponentUtils.getChoices(prop));
+                String selectedValue = PropertiesUtils.getPropertyFromUri(selectedEP, prop, component);
                 for (int i=0; i < choiceCombo.getItems().length; i++) {
-                    if (choiceCombo.getItem(i).equalsIgnoreCase(PropertiesUtils.getPropertyFromUri(selectedEP, prop, component))) {
+                    if (selectedValue != null && choiceCombo.getItem(i).equalsIgnoreCase(selectedValue)) {
                         choiceCombo.select(i);
+                        break;
+                    } else if (selectedValue == null && p.getDefaultValue() != null && choiceCombo.getItem(i).equalsIgnoreCase(p.getDefaultValue())) {
+                    	choiceCombo.select(i);
                         break;
                     }
                 }

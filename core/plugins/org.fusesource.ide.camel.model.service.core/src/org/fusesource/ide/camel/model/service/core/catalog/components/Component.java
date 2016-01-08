@@ -267,4 +267,36 @@ public class Component implements ICamelCatalogElement {
 	public String getSchemeTitle() {
 		return getScheme();
 	}
+	
+	/**
+	 * duplicates the component
+	 * 
+	 * @return	a copy of the original component
+	 */
+	public Component duplicateFor(final String scheme, final String clazz) {
+		Component dup = new Component() {
+			/* (non-Javadoc)
+			 * @see org.fusesource.ide.camel.model.service.core.catalog.components.Component#supportsScheme(java.lang.String)
+			 */
+			@Override
+			public boolean supportsScheme(String testScheme) {
+				return scheme.equals(testScheme);
+			}
+		};
+		
+		dup.setScheme(scheme);
+		dup.setId(scheme);
+		dup.setClazz(clazz);
+		dup.setComponentProperties(getComponentProperties());
+		dup.setConsumerOnly(getConsumerOnly());
+		dup.setDescription(getDescription());
+		dup.setKind(getKind());
+		dup.setProducerOnly(getProducerOnly());
+		dup.setSyntax(getSyntax().replaceFirst(String.format("%s:", getScheme()), String.format("%s:", scheme)));
+		dup.setTags(getTags());
+		dup.setTitle(getTitle());
+		dup.setUriParameters(getUriParameters());
+		
+		return dup;
+	}
 }
