@@ -121,6 +121,7 @@ public class CamelXMLEditorInput implements IEditorInput, IPersistableElement {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((this.getCamelContextFile() == null) ? 0 : this.getCamelContextFile().getLocation().toOSString().hashCode());
+		result = prime * result + ((this.getSelectedContainerId() == null) ? 0 : this.getSelectedContainerId().hashCode());
 		return result;
 	}
 	
@@ -132,6 +133,12 @@ public class CamelXMLEditorInput implements IEditorInput, IPersistableElement {
 		if (obj instanceof CamelXMLEditorInput) {
 			CamelXMLEditorInput input2 = (CamelXMLEditorInput)obj;
 			if (this.getCamelContextFile() != null && input2.getCamelContextFile() != null) {
+				if (getSelectedContainerId() != null && input2.getSelectedContainerId() != null) {
+					if (getSelectedContainerId().equals(input2.getSelectedContainerId()) == false) return false;
+				} else if ((getSelectedContainerId() == null && input2.getSelectedContainerId() != null) ||
+						   (getSelectedContainerId() != null && input2.getSelectedContainerId() == null)) {
+					return false;
+				}
 				return this.getCamelContextFile().getLocation().toOSString().equals(input2.getCamelContextFile().getLocation().toOSString());
 			}
 		}

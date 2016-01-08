@@ -107,8 +107,9 @@ public class CamelCtxNavActionProvider extends CommonActionProvider {
 						} catch (PartInitException e) {
 							CamelEditorUIActivator.pluginLog().logError("Unable to load the file into camel editor.", e);
 						}
-					}
-				}};
+					}						
+				}
+			};
 		}
 	}
 }

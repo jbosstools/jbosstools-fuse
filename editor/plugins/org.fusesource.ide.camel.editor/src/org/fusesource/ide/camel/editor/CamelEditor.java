@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -30,6 +31,7 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -37,6 +39,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -58,6 +61,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
+import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -727,6 +731,29 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 		super.init(site, this.editorInput);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.MultiPageEditorPart#handlePropertyChange(int)
+	 */
+	@Override
+	protected void handlePropertyChange(int propertyId) {
+		super.handlePropertyChange(propertyId);
+		
+		// the following is needed otherwise we can't get back displaying the full context when clicking the context file once we showed a route
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IViewPart viewPart = page.findView("org.eclipse.ui.navigator.ProjectExplorer");
+		if (viewPart != null) {
+			ISelectionProvider selProvider = viewPart.getSite().getSelectionProvider();
+			Object o = Selections.getFirstSelection(selProvider.getSelection());
+			if (o != null && o instanceof IResource) {
+				IResource res = (IResource)o;
+				if (res.getLocationURI().getPath().equals(this.editorInput.getCamelContextFile().getLocationURI().getPath()) && editorInput.getSelectedContainerId() != null && editorInput.getSelectedContainerId().equals(getDesignEditor().getModel().getCamelContext().getId()) == false) {
+					editorInput.setSelectedContainerId(null);
+					getDesignEditor().setSelectedContainer(null);
+				}
+			}
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#setInput(org.eclipse.ui.IEditorInput)
 	 */
