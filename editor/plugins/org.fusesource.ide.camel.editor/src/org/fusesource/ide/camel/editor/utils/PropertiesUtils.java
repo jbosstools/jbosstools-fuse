@@ -104,15 +104,15 @@ public class PropertiesUtils {
                 if (componentModel != null) {
                     for (Parameter p : componentModel.getUriParameters()) {
                         if (kind == UriParameterKind.CONSUMER) {
-                        	if (p.getLabel() != null && p.getLabel().equalsIgnoreCase("consumer")) {
+                        	if (p.getLabel() != null && containsLabel("consumer", p)) {
                         		result.add(p);
                         	}
                         } else if (kind == UriParameterKind.PRODUCER) {
-                        	if (p.getLabel() != null && p.getLabel().equalsIgnoreCase("producer")) {
+                        	if (p.getLabel() != null && containsLabel("producer", p)) {
                         		result.add(p);
                         	}
                         } else if (kind == UriParameterKind.BOTH) {
-                        	if (p.getLabel() == null) {
+                        	if (p.getLabel() == null || p.getLabel().trim().length()<1) {
                         		result.add(p);
                         	}
                         }
@@ -123,7 +123,48 @@ public class PropertiesUtils {
 
         return result;
     }
+    
+    /**
+     * 
+     * @param selectedEP
+     * @return
+     */
+    public static List<Parameter> getComponentPropertiesFor(CamelModelElement selectedEP) {
+        if (selectedEP != null && selectedEP.getParameter("uri") != null) {
+            int protocolSeparatorIdx = ((String)selectedEP.getParameter("uri")).indexOf(":");
+            if (protocolSeparatorIdx != -1) {
+                Component componentModel = CamelComponentUtils.getComponentModel(((String)selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx));
+                if (componentModel != null) {
+                    return componentModel.getUriParameters();
+                }
+            }
+        }
+        return new ArrayList<Parameter>();
+    }
 
+    /**
+     * checks wether the parameter has the given label
+     * 
+     * @param label	the label to check for
+     * @param p	the parameter
+     * @return	true if parameter has this label
+     */
+    public static boolean containsLabel(String label, Parameter p) {
+    	if (p.getLabel() == null) return false;
+    	
+    	String pLabelString = p.getLabel();
+    	if (pLabelString.indexOf(",") != -1) {
+    		String[] labels = pLabelString.split(",");
+        	for (String lab : labels) {
+        		if (lab.trim().equalsIgnoreCase(label)) return true;
+        	}	
+    	} else {
+    		if (pLabelString.trim().equalsIgnoreCase(label)) return true;
+    	}
+    	
+    	return false;
+    }
+    
     /**
      * 
      * @param kind

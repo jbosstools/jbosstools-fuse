@@ -104,10 +104,12 @@ import org.w3c.dom.Node;
  */
 public class DetailsSection extends AbstractPropertySection {
 
+	public static final String DEFAULT_GROUP = "General";
+	
 	private FormToolkit toolkit;
     private Form form;
     private CTabFolder tabFolder;
-    private CTabItem contentTab;
+    private List<CTabItem> tabs = new ArrayList<CTabItem>();
     private CamelModelElement selectedEP;
     private DataBindingContext dbc;
     private IObservableMap modelMap = new WritableMap();
@@ -158,13 +160,18 @@ public class DetailsSection extends AbstractPropertySection {
 
         int idx = Math.max(tabFolder.getSelectionIndex(), 0);
 
-        if (contentTab != null)		contentTab.dispose();
+        if (this.tabs.isEmpty() == false) {
+        	for (CTabItem tab : this.tabs) {
+        		if (!tab.isDisposed()) tab.dispose();
+        	}
+        	tabs.clear();
+        }
 
         // now generate the tab contents
-        createContentTab(tabFolder);
+        createContentTabs(tabFolder);
         
         tabFolder.setSingle(tabFolder.getItemCount()==1);
-        tabFolder.setSelection(Math.min(idx, tabFolder.getItemCount()-1));
+        tabFolder.setSelection(idx >= tabFolder.getItemCount() ? 0 : idx);
     }
     
     /*
@@ -208,28 +215,27 @@ public class DetailsSection extends AbstractPropertySection {
         tabFolder.setSelection(0);
     }
     
-    private void createContentTab(CTabFolder folder) {
+    /**
+     * 
+     * @param folder
+     */
+    private void createContentTabs(CTabFolder folder) {
         List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP);
 
         if (props.isEmpty()) return;
+       
+        boolean createGeneralTab = false;
+        List<String> tabsToCreate = new ArrayList<String>();
+        for (Parameter p : props) {
+        	if (p.getGroup() != null && p.getGroup().trim().length() > 0 && tabsToCreate.contains(p.getGroup()) == false) {
+        		tabsToCreate.add(p.getGroup());
+        	} else if (p.getGroup() == null || p.getGroup().trim().length() < 1) {
+        		createGeneralTab = true;
+        	}
+        }
+        // groups were introduced in Camel 2.16.x -> earlier versions might not have it
+        if (tabsToCreate.isEmpty() || createGeneralTab) tabsToCreate.add(DEFAULT_GROUP);
         
-        contentTab = new CTabItem(tabFolder, SWT.NONE);
-        contentTab.setText("General");
-
-        Composite page = toolkit.createComposite(folder);
-        page.setLayout(new GridLayout(4, false));
-                
-        generateTabContents(props, page);
-
-        contentTab.setControl(page);
-    }
-    
-    /**
-     * 
-     * @param props
-     * @param page
-     */
-    protected void generateTabContents(List<Parameter> props, final Composite page) {
         // display all the properties in alphabetic order - sorting needed
         Collections.sort(props, new Comparator<Parameter>() {
             /* (non-Javadoc)
@@ -241,9 +247,48 @@ public class DetailsSection extends AbstractPropertySection {
             }
         }); 
         
+        if (tabsToCreate.size()>1) {
+        	// display all the properties in alphabetic order - sorting needed
+            Collections.sort(tabsToCreate, new Comparator<String>() {
+                /* (non-Javadoc)
+                 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+                 */
+                @Override
+                public int compare(String o1, String o2) {
+                    return o1.compareTo(o2);
+                }
+            }); 
+        }
+        
+        for (String group : tabsToCreate) {
+        	CTabItem contentTab = new CTabItem(this.tabFolder, SWT.NONE);
+            contentTab.setText(Strings.humanize(group));
+
+            Composite page = this.toolkit.createComposite(folder);
+            page.setLayout(new GridLayout(4, false));
+                    
+            generateTabContents(props, page, group);
+
+            contentTab.setControl(page);        	
+            
+            this.tabs.add(contentTab);
+        }
+    }
+    
+    /**
+     * 
+     * @param props
+     * @param page
+     * @param group
+     */
+    protected void generateTabContents(List<Parameter> props, final Composite page, final String group) {
         for (Parameter p : props) {
         	final Parameter prop = p;
 
+        	// we don't display items which don't fit the group
+        	if (group.equals(DEFAULT_GROUP) == false && group.equals(prop.getGroup()) == false) continue;
+        	if (group.equals(DEFAULT_GROUP) && prop.getGroup() != null && prop.getGroup().trim().length()>0) continue;
+        	
         	// we don't want to display properties for internal element attributes like inputs or outputs
         	if ((p.getKind().equalsIgnoreCase("element") && p.getType().equalsIgnoreCase("array") && p.getName().equalsIgnoreCase("exception") == false) || p.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
         	

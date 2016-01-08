@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor.properties;
 
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -94,13 +95,15 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
 
+	public static final String GROUP_PATH 		= "Path";
+	public static final String GROUP_COMMON		= "Common";
+	public static final String GROUP_CONSUMER 	= "Consumer";
+	public static final String GROUP_PRODUCER 	= "Producer";
+	
     private FormToolkit toolkit;
     private Form form;
     private CTabFolder tabFolder;
-    private CTabItem pathTab;
-    private CTabItem commonTab;
-    private CTabItem consumerTab;
-    private CTabItem producerTab;
+    private List<CTabItem> tabs = new ArrayList<CTabItem>();
     private CamelModelElement selectedEP;
     private DataBindingContext dbc;
     private IObservableMap modelMap = new WritableMap();
@@ -150,28 +153,69 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         
         int idx = Math.max(tabFolder.getSelectionIndex(), 0);
 
-        if (pathTab != null) 		pathTab.dispose();
-        if (commonTab != null)      commonTab.dispose();
-        if (consumerTab != null)    consumerTab.dispose();
-        if (producerTab != null)    producerTab.dispose();
-
+        if (this.tabs.isEmpty() == false) {
+        	for (CTabItem tab : this.tabs) {
+        		if (!tab.isDisposed()) tab.dispose();
+        	}
+        	tabs.clear();
+        }
+        
         // now generate the tab contents
-        createPathTab(tabFolder);
-        createCommonsTab(tabFolder);
-        createConsumerTab(tabFolder);
-        createProducerTab(tabFolder);
+        createContentTabs(tabFolder);
         
         tabFolder.setSingle(tabFolder.getItemCount()==1);
-        
-        tabFolder.setSelection(Math.min(idx, tabFolder.getItemCount()-1));
+        tabFolder.setSelection(idx >= tabFolder.getItemCount() ? 0 : idx);
     }
     
     /**
      * 
-     * @param props
-     * @param page
+     * @param folder
      */
-    protected void generateTabContents(List<Parameter> props, final Composite page, boolean ignorePathProperties) {
+    private void createContentTabs(CTabFolder folder) {
+        List<Parameter> props = PropertiesUtils.getComponentPropertiesFor(selectedEP);
+
+        if (props.isEmpty()) return;
+       
+        boolean createCommonsTab = false;
+        List<Parameter> commonProps = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.BOTH);
+        for (Parameter p : commonProps) {
+        	if (p.getGroup() == null || p.getGroup().trim().length() < 1) {
+        		createCommonsTab = true;
+        		break;
+        	}
+        }
+        
+        boolean createConsumerTab = false;
+        List<Parameter> consumerProps = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.CONSUMER);
+        for (Parameter p : consumerProps) {
+        	if (p.getGroup() == null || p.getGroup().trim().length() < 1) {
+        		createConsumerTab = true;
+        		break;
+        	}
+        }
+        
+        boolean createProducerTab = false;
+        List<Parameter> producerProps = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.PRODUCER);
+        for (Parameter p : producerProps) {
+        	if (p.getGroup() == null || p.getGroup().trim().length() < 1) {
+        		createProducerTab = true;
+        		break;
+        	}
+        }        
+        
+        List<String> tabsToCreate = new ArrayList<String>();
+        // path tab is always there
+        tabsToCreate.add(GROUP_PATH);
+        if (createCommonsTab) tabsToCreate.add(GROUP_COMMON);
+        if (createConsumerTab) tabsToCreate.add(GROUP_CONSUMER);
+        if (createProducerTab) tabsToCreate.add(GROUP_PRODUCER);
+        
+        for (Parameter p : props) {
+        	if (p.getGroup() != null && p.getGroup().trim().length() > 0 && tabsToCreate.contains(p.getGroup()) == false) {
+        		tabsToCreate.add(p.getGroup());
+        	}
+        }
+        
         // display all the properties in alphabetic order - sorting needed
         Collections.sort(props, new Comparator<Parameter>() {
             /* (non-Javadoc)
@@ -183,11 +227,63 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
             }
         }); 
         
-        for (Parameter p : props) {
-        	// atm we don't want to care about path parameters
-        	if (ignorePathProperties && p.getKind() != null && p.getKind().equalsIgnoreCase("path")) continue;
+        if (tabsToCreate.size()>1) {
+        	// display all the properties in alphabetic order - sorting needed
+            Collections.sort(tabsToCreate, new Comparator<String>() {
+                /* (non-Javadoc)
+                 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+                 */
+                @Override
+                public int compare(String o1, String o2) {
+                    return o1.compareTo(o2);
+                }
+            }); 
+        }
+        
+        for (String group : tabsToCreate) {
+        	CTabItem contentTab = new CTabItem(this.tabFolder, SWT.NONE);
+            contentTab.setText(Strings.humanize(group));
+
+            Composite page = this.toolkit.createComposite(folder);
+            page.setLayout(new GridLayout(4, false));
+
+            if (group.equalsIgnoreCase(GROUP_PATH)) {
+            	generateTabContents(PropertiesUtils.getPathProperties(selectedEP), page, false, group);
+            } else {
+                generateTabContents(props, page, true, group);            	
+            }	
+
+            contentTab.setControl(page);        	
             
+            this.tabs.add(contentTab);
+        }
+    }
+    
+    /**
+     * 
+     * @param props
+     * @param page
+     * @param ignorePathProperties
+     * @param group
+     */
+    protected void generateTabContents(List<Parameter> props, final Composite page, boolean ignorePathProperties, String group) {
+        for (Parameter p : props) {
         	final Parameter prop = p;
+        	
+        	// atm we don't want to care about path parameters if thats not the path tab
+        	if (ignorePathProperties && p.getKind() != null && p.getKind().equalsIgnoreCase("path")) continue;
+
+        	// we don't display items which don't fit the group
+        	if (p.getGroup() != null && p.getGroup().trim().length()>0) {
+        		// a group has been explicitely defined, so use it
+        		if (group.equalsIgnoreCase(p.getGroup()) == false && p.getKind().equalsIgnoreCase(GROUP_PATH) == false) continue;
+        	} else if (prop.getKind().equalsIgnoreCase(GROUP_PATH) && group.equalsIgnoreCase(GROUP_PATH)) {
+        		// special handling for path properties - otherwise the else would kick all props of type path
+        	} else {
+        		// no group defined, fall back to use label
+        		if (prop.getLabel() != null && PropertiesUtils.containsLabel(group, prop) == false) continue;
+        		if (prop.getLabel() == null && group.equalsIgnoreCase(GROUP_COMMON) == false) continue;
+        	}
             
             ISWTObservableValue uiObservable = null;
             IObservableValue modelObservable = null;
@@ -648,70 +744,6 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
         }
     }
     
-    private void createPathTab(CTabFolder folder) {
-    	List<Parameter> props = PropertiesUtils.getPathProperties(selectedEP);
-
-        if (props.isEmpty()) return;
-        
-        pathTab = new CTabItem(tabFolder, SWT.NONE);
-        pathTab.setText("Path");
-
-        Composite page = toolkit.createComposite(folder);
-        page.setLayout(new GridLayout(4, false));
-                
-        generateTabContents(props, page, false);
-
-        pathTab.setControl(page);
-    }
-        
-    private void createCommonsTab(CTabFolder folder) {
-        List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.BOTH);
-
-        if (props.isEmpty()) return;
-        
-        commonTab = new CTabItem(tabFolder, SWT.NONE);
-        commonTab.setText("General");
-
-        Composite page = toolkit.createComposite(folder);
-        page.setLayout(new GridLayout(4, false));
-                
-        generateTabContents(props, page, true);
-
-        commonTab.setControl(page);
-    }
-
-    private void createConsumerTab(CTabFolder folder) {
-        List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.CONSUMER);
-        
-        if (props.isEmpty()) return;
-        
-        consumerTab = new CTabItem(tabFolder, SWT.NONE);
-        consumerTab.setText("Consumer");
-
-        Composite page = toolkit.createComposite(folder);
-        page.setLayout(new GridLayout(4, false));
-                
-        generateTabContents(props, page, true);        
-        
-        consumerTab.setControl(page);
-    }
-
-    private void createProducerTab(CTabFolder folder) {
-        List<Parameter> props = PropertiesUtils.getPropertiesFor(selectedEP, UriParameterKind.PRODUCER);
-        
-        if (props.isEmpty()) return;
-        
-        producerTab = new CTabItem(tabFolder, SWT.NONE);
-        producerTab.setText("Producer");
-        
-        Composite page = toolkit.createComposite(folder);
-        page.setLayout(new GridLayout(4, false));
-                
-        generateTabContents(props, page, true);
-        
-        producerTab.setControl(page);
-    }
-
     /*
      * (non-Javadoc)
      * 

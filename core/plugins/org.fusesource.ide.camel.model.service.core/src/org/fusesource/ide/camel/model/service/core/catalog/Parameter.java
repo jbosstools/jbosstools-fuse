@@ -30,6 +30,15 @@ public class Parameter {
 	private String choice;
 	private String label;
 	private String oneOf;
+	private String group;
+	
+	/**
+	 * @return the group
+	 */
+	@XmlAttribute(name = "group")
+	public String getGroup() {
+		return this.group;
+	}
 	
 	/**
 	 * @return the oneOf
@@ -125,6 +134,13 @@ public class Parameter {
 	@XmlAttribute(name = "type")
 	public String getType() {
 		return this.type;
+	}
+	
+	/**
+	 * @param group the group to set
+	 */
+	public void setGroup(String group) {
+		this.group = group;
 	}
 	
 	/**
