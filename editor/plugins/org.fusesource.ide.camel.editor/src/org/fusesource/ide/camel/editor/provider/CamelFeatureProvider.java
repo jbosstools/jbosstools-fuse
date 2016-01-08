@@ -44,6 +44,7 @@ import org.fusesource.ide.camel.editor.features.custom.DeleteEndpointBreakpointF
 import org.fusesource.ide.camel.editor.features.custom.DisableCamelBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.EditConditionalBreakpoint;
 import org.fusesource.ide.camel.editor.features.custom.EnableCamelBreakpointFeature;
+import org.fusesource.ide.camel.editor.features.custom.GoIntoContainerFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetConditionalBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
@@ -182,7 +183,8 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 				new DeleteAllEndpointBreakpointsFeature(this),
 //				new GEFLayoutDiagramFeature(this),
 //				new ZestLayoutDiagramFeature(this),
-				new CollapseFeature(this)
+				new CollapseFeature(this),
+				new GoIntoContainerFeature(this)
 				};
 	}
 

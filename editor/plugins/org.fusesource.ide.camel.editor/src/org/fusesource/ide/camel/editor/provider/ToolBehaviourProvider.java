@@ -57,6 +57,7 @@ import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
 import org.fusesource.ide.camel.editor.features.custom.DoubleClickFeature;
+import org.fusesource.ide.camel.editor.features.custom.GoIntoContainerFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
@@ -196,6 +197,12 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 				collapseButton.setText(collapseExpand);
 				collapseButton.setIconId(image);
 				data.setCollapseContextButton(collapseButton);
+			} else if (f instanceof GoIntoContainerFeature && f.canExecute(cc)) {
+				IContextButtonEntry goIntoButton = new ContextButtonEntry(f, cc);
+				goIntoButton.setDescription(f.getDescription());
+				goIntoButton.setText(f.getName());
+				goIntoButton.setIconId(ImageProvider.IMG_OUTLINE_TREE);
+				data.getGenericContextButtons().add(goIntoButton);
 			}
 		}
 
