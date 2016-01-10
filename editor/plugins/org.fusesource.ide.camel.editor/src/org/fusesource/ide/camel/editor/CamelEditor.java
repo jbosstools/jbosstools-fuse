@@ -17,11 +17,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -325,19 +328,23 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		if (getActivePage() == DESIGN_PAGE_INDEX) {
-			getDesignEditor().doSave(monitor);
-		} else if (getActivePage() == SOURCE_PAGE_INDEX) {
-			this.sourceEditor.doSave(monitor);
-		} else if (getActivePage() == GLOBAL_CONF_INDEX) {
-			this.globalConfigEditor.doSave(monitor);
-		} else {
-			// unknown tab -> ignore
+		try {
+			if (getActivePage() == DESIGN_PAGE_INDEX) {
+				getDesignEditor().doSave(monitor);
+			} else if (getActivePage() == SOURCE_PAGE_INDEX) {
+				this.sourceEditor.doSave(monitor);
+			} else if (getActivePage() == GLOBAL_CONF_INDEX) {
+				this.globalConfigEditor.doSave(monitor);
+			} else {
+				// unknown tab -> ignore
+			}
+			if (getEditorInput() instanceof CamelXMLEditorInput) {
+				((CamelXMLEditorInput)getEditorInput()).onEditorInputSave();
+			}
+			setDirtyFlag(false);
+		} finally {
+			refreshProject(monitor);
 		}
-		if (getEditorInput() instanceof CamelXMLEditorInput) {
-			((CamelXMLEditorInput)getEditorInput()).onEditorInputSave();
-		}
-		setDirtyFlag(false);
 	}
 	
 	/* (non-Javadoc)
@@ -345,23 +352,26 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void doSaveAs() {
-		if (getActivePage() == DESIGN_PAGE_INDEX) {
-			getDesignEditor().doSaveAs();
-		} else if (getActivePage() == SOURCE_PAGE_INDEX) {
-			this.sourceEditor.doSaveAs();			
-		} else if (getActivePage() == GLOBAL_CONF_INDEX) {
-			this.globalConfigEditor.doSaveAs();
-		} else {
-			// unknown tab -> ignore
+		try {
+			if (getActivePage() == DESIGN_PAGE_INDEX) {
+				getDesignEditor().doSaveAs();
+			} else if (getActivePage() == SOURCE_PAGE_INDEX) {
+				this.sourceEditor.doSaveAs();			
+			} else if (getActivePage() == GLOBAL_CONF_INDEX) {
+				this.globalConfigEditor.doSaveAs();
+			} else {
+				// unknown tab -> ignore
+			}
+			
+			// TODO: activate this for saving remote camel contexts via JMX
+			// but check what that means for the stored temp file in CamelContextNode and its EditorInput
+//			if (getEditorInput() instanceof CamelXMLEditorInput) {
+//				((CamelXMLEditorInput)getEditorInput()).onEditorInputSave();
+//			}		
+			setDirtyFlag(false);
+		} finally {
+			refreshProject(new NullProgressMonitor());
 		}
-		
-		// TODO: activate this for saving remote camel contexts via JMX
-		// but check what that means for the stored temp file in CamelContextNode and its EditorInput
-//		if (getEditorInput() instanceof CamelXMLEditorInput) {
-//			((CamelXMLEditorInput)getEditorInput()).onEditorInputSave();
-//		}
-		
-		setDirtyFlag(false);
 	}
 	
 	/* (non-Javadoc)
@@ -370,6 +380,15 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public String getTitle() {
 		return this.designEditor != null && this.designEditor.getModel() != null ? this.designEditor.getModel().getResource().getName() : "";
+	}
+	
+	private void refreshProject(IProgressMonitor monitor) {
+		IProject prj = this.editorInput.getCamelContextFile().getProject();
+		try {
+			prj.refreshLocal(IProject.DEPTH_INFINITE, monitor);
+		} catch (CoreException ex) {
+			CamelEditorUIActivator.pluginLog().logError("Unable to refresh project after saving...", ex);
+		}
 	}
 	
 	/**
