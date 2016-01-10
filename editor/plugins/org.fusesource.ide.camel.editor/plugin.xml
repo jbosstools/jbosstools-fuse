@@ -188,12 +188,14 @@
             id="org.fusesource.ide.camel.editor.preferences.FusePreferencePage"
             name="%integration.preferences.editor">
       </page>
+<!--      
       <page
             category="org.fusesource.ide.branding.preferences.root"
             class="org.fusesource.ide.camel.editor.preferences.CamelEditorColorPreferencePage"
             id="org.fusesource.ide.camel.editor.preferences.FuseColorPreferencePage"
             name="%integration.preferences.editor.colors">
       </page>
+-->
    </extension>
 
    <extension
