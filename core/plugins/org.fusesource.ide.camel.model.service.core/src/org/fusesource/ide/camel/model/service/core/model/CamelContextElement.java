@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -135,14 +136,14 @@ public class CamelContextElement extends CamelModelElement {
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 			Node n = getXmlNode().getChildNodes().item(i);
 			if (n.getNodeType() != Node.ELEMENT_NODE) continue;
-			if (n.getNodeName().equals(DATA_FORMATS_NODE_NAME)) {
+			if (CamelUtils.getTranslatedNodeName(n).equals(DATA_FORMATS_NODE_NAME)) {
 				dataFormatsNode = n;
 				break;
 			}
 		}
 		if (dataFormatsNode == null) {
 			// first create a dataFormats node
-			dataFormatsNode = getCamelFile().getDocument().createElement(DATA_FORMATS_NODE_NAME);
+			dataFormatsNode = createElement(DATA_FORMATS_NODE_NAME, this != null && this.getXmlNode() != null ? this.getXmlNode().getPrefix() : null);
 			getXmlNode().insertBefore(getXmlNode().getFirstChild(), dataFormatsNode);
 		}
 		for (int i=0; i<dataFormatsNode.getChildNodes().getLength(); i++) {
@@ -168,7 +169,7 @@ public class CamelContextElement extends CamelModelElement {
 			for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
 				Node n = getXmlNode().getChildNodes().item(i);
 				if (n.getNodeType() != Node.ELEMENT_NODE) continue;
-				if (n.getNodeName().equals(DATA_FORMATS_NODE_NAME)) {
+				if (CamelUtils.getTranslatedNodeName(n).equals(DATA_FORMATS_NODE_NAME)) {
 					dataFormatsNode = n;
 					break;
 				}
@@ -255,7 +256,7 @@ public class CamelContextElement extends CamelModelElement {
 		for (int i=0; i<children.getLength(); i++) {
 			Node tmp = children.item(i);
 			if (tmp.getNodeType() != Node.ELEMENT_NODE) continue;
-			if (tmp.getNodeName().equals(DATA_FORMATS_NODE_NAME)) {
+			if (CamelUtils.getTranslatedNodeName(tmp).equals(DATA_FORMATS_NODE_NAME)) {
 				NodeList dfs = tmp.getChildNodes();
 				for (int y=0; y<dfs.getLength(); y++) {
 					Node tmp_df = dfs.item(y);
@@ -264,16 +265,16 @@ public class CamelContextElement extends CamelModelElement {
 					cme.initialize();
 					this.dataformats.put(cme.getId(), cme);
 				}
-			} else if (tmp.getNodeName().equals(ENDPOINT_NODE_NAME)) {
+			} else if (CamelUtils.getTranslatedNodeName(tmp).equals(ENDPOINT_NODE_NAME)) {
 				CamelModelElement cme = new CamelModelElement(this, tmp);
 				cme.initialize();
 				this.endpointDefinitions.put(cme.getId(), cme);
-			} else if (tmp.getNodeName().equals(ROUTE_NODE_NAME)) {
+			} else if (CamelUtils.getTranslatedNodeName(tmp).equals(ROUTE_NODE_NAME)) {
 				CamelRouteElement cme = new CamelRouteElement(this, tmp);
 				cme.initialize();
 				addChildElement(cme);
 			} else {
-				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + tmp.getNodeName());
+				CamelModelServiceCoreActivator.pluginLog().logWarning("Unexpected child element of the context: " + CamelUtils.getTranslatedNodeName(tmp));
 			}
 		}
 	}

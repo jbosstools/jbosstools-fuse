@@ -23,6 +23,7 @@ import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandle
 import org.fusesource.ide.foundation.core.xml.namespace.FindCamelNamespaceHandler;
 import org.fusesource.ide.foundation.core.xml.namespace.FindNamespaceHandlerSupport;
 import org.fusesource.ide.foundation.core.xml.namespace.SpringNamespaceHandler;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 /**
@@ -97,5 +98,14 @@ public class CamelUtils {
 		return false;
 	}
 
-	
+	public static String getTranslatedNodeName(Node node) {
+		if (node == null) return null;
+		String prefix = node.getPrefix();
+		String nodeName = node.getNodeName();
+		String resVal = nodeName;
+		if ((prefix != null && prefix.trim().length()>0) || nodeName.indexOf(":") != -1) {
+			resVal = nodeName.substring(nodeName.indexOf(":")+1);
+		}
+		return resVal;
+	}
 }

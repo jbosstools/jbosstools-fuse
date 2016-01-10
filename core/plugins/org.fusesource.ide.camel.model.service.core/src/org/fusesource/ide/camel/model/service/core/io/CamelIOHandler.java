@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.Path;
 import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -146,10 +147,10 @@ public class CamelIOHandler {
         cf.setDocument(document);
         cf.resetContents();
         NodeList childNodes = document.getDocumentElement().getChildNodes();
-        if (document.getDocumentElement().getNodeName().equals(CAMEL_ROUTES)) {
+        if (CamelUtils.getTranslatedNodeName(document.getDocumentElement()).equals(CAMEL_ROUTES)) {
         	// found a routes element
     		CamelContextElement cce = new CamelContextElement(cf, document.getDocumentElement());
-    		String contextId = document.getDocumentElement().getAttributes().getNamedItem("id") != null ? document.getDocumentElement().getAttributes().getNamedItem("id").getNodeValue() : document.getDocumentElement().getNodeName() + "-" + UUID.randomUUID().toString();
+    		String contextId = document.getDocumentElement().getAttributes().getNamedItem("id") != null ? document.getDocumentElement().getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
     		int startIdx 	= res.getFullPath().toOSString().indexOf("--");
     		int endIdx 		= res.getFullPath().toOSString().indexOf("--", startIdx+1);
     		if (startIdx != endIdx && startIdx != -1) {
@@ -163,9 +164,9 @@ public class CamelIOHandler {
             for (int i = 0; i<childNodes.getLength(); i++) {
             	Node child = childNodes.item(i);
 
-            	String name = child.getNodeName();
+            	String name = CamelUtils.getTranslatedNodeName(child);
             	if (child.getNodeType() != Node.ELEMENT_NODE) continue;
-            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : child.getNodeName() + "-" + UUID.randomUUID().toString();
+            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
             	if (name.equals(CAMEL_CONTEXT)) {
             		// found a camel context
             		CamelContextElement cce = new CamelContextElement(cf, child);
@@ -193,10 +194,10 @@ public class CamelIOHandler {
         cf.setResource(res);
         cf.setDocument(document);
         NodeList childNodes = document.getDocumentElement().getChildNodes();
-        if (document.getDocumentElement().getNodeName().equals(CAMEL_ROUTES)) {
+        if (CamelUtils.getTranslatedNodeName(document.getDocumentElement()).equals(CAMEL_ROUTES)) {
         	// found a routes element
     		CamelContextElement cce = new CamelContextElement(cf, document.getDocumentElement());
-    		String contextId = document.getDocumentElement().getAttributes().getNamedItem("id") != null ? document.getDocumentElement().getAttributes().getNamedItem("id").getNodeValue() : document.getDocumentElement().getNodeName() + "-" + UUID.randomUUID().toString();
+    		String contextId = document.getDocumentElement().getAttributes().getNamedItem("id") != null ? document.getDocumentElement().getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
     		int startIdx 	= res.getFullPath().toOSString().indexOf("--");
     		int endIdx 		= res.getFullPath().toOSString().indexOf("--", startIdx+1);
     		if (startIdx != endIdx && startIdx != -1) {
@@ -209,10 +210,9 @@ public class CamelIOHandler {
         } else {
             for (int i = 0; i<childNodes.getLength(); i++) {
             	Node child = childNodes.item(i);
-
-            	String name = child.getNodeName();
             	if (child.getNodeType() != Node.ELEMENT_NODE) continue;
-            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : child.getNodeName() + "-" + UUID.randomUUID().toString();
+            	String name = CamelUtils.getTranslatedNodeName(child);            	
+            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
             	if (name.equals(CAMEL_CONTEXT)) {
             		// found a camel context
             		CamelContextElement cce = new CamelContextElement(cf, child);

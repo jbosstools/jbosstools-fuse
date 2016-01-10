@@ -677,7 +677,7 @@ public class DetailsSection extends AbstractPropertySection {
 					String value = expressionElement.getNodeTypeId();
 					if (expressionElement.getParameter("expression") != null && expressionElement.getParameter("expression") instanceof CamelModelElement ) {
 						CamelModelElement ex = (CamelModelElement)expressionElement.getParameter("expression");
-	                    value = (String)ex.getXmlNode().getNodeName();
+	                    value = ex.getTranslatedNodeName();
 					}
                     choiceCombo.deselectAll();
                     for (int i=0; i < choiceCombo.getItems().length; i++) {
@@ -1026,16 +1026,16 @@ public class DetailsSection extends AbstractPropertySection {
         if (prop.getName().equalsIgnoreCase("expression")) {
         	// normal expression subnode - no cascading -> when.<expression>
         	// the content of expressionElement is the language node itself
-            if (expressionElement != null && expressionElement.getXmlNode().getNodeName().equals(language) == false) {
+            if (expressionElement != null && expressionElement.getTranslatedNodeName().equals(language) == false) {
             	Node oldExpNode = null;
             	for (int i=0; i<selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
-            		if (selectedEP.getXmlNode().getChildNodes().item(i).getNodeName().equals(expressionElement.getXmlNode().getNodeName())) {
+            		if (org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(selectedEP.getXmlNode().getChildNodes().item(i)).equals(expressionElement.getTranslatedNodeName())) {
             			oldExpNode = selectedEP.getXmlNode().getChildNodes().item(i);
             			break;
             		}
             	}
             	if (language.trim().length()>0) {
-	            	Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+	            	Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
 	            	expressionElement = new CamelModelElement(this.selectedEP, expNode);
 	            	selectedEP.setParameter(prop.getName(), expressionElement);
 	            	selectedEP.getXmlNode().replaceChild(expNode, oldExpNode);
@@ -1046,7 +1046,7 @@ public class DetailsSection extends AbstractPropertySection {
             	}
         	} else if (expressionElement == null && language.trim().length()>0) {
         		// no expression set, but now we set one
-        		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+        		Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
         		expressionElement = new CamelModelElement(this.selectedEP, expNode);
             	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
             	this.selectedEP.setParameter(prop.getName(), expressionElement);
@@ -1063,15 +1063,15 @@ public class DetailsSection extends AbstractPropertySection {
             	List<String> langs = Arrays.asList(CamelComponentUtils.getOneOfList(prop));
             	for (int i=0; i<expressionElement.getXmlNode().getChildNodes().getLength(); i++) {
             		Node n = expressionElement.getXmlNode().getChildNodes().item(i);
-            		if (langs.contains(n.getNodeName())) {
+            		if (langs.contains(org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(n))) {
             			oldExpNode = n;
             			break;
             		}
             	}
             	CamelModelElement expElement = (CamelModelElement)expressionElement.getParameter("expression");
-            	if (expElement.getXmlNode().getNodeName().equals(language) == false) {
+            	if (expElement.getTranslatedNodeName().equals(language) == false) {
             		if (language.trim().length()>0) {
-	            		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+	            		Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
 	                	uiExpressionElement = new CamelModelElement(expressionElement, expNode);
 	                	expressionElement.getXmlNode().replaceChild(expNode, oldExpNode);
 	                	expressionElement.setParameter("expression", uiExpressionElement);
@@ -1086,15 +1086,15 @@ public class DetailsSection extends AbstractPropertySection {
         		
         	} else if (expressionElement != null && expressionElement.getParameter("expression") == null) {
         		// 2. container element exists but no expression element exists
-        		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+        		Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
         		uiExpressionElement = new CamelModelElement(expressionElement, expNode);
         		expressionElement.getXmlNode().appendChild(expNode);
             	expressionElement.setParameter("expression", uiExpressionElement);
         		
         	} else if (expressionElement == null && language.trim().length()>0) {
         		// 3. No container but language set
-        		Node expContainerNode = selectedEP.getCamelFile().getDocument().createElement(prop.getName());
-        		Node expNode = selectedEP.getCamelFile().getDocument().createElement(language);
+        		Node expContainerNode = selectedEP.createElement(prop.getName(), selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
+        		Node expNode = selectedEP.createElement(language, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
         		CamelModelElement expContainerElement = new CamelModelElement(selectedEP, expContainerNode);
         		expressionElement = new CamelModelElement(expContainerElement, expNode);
         		expContainerElement.getXmlNode().appendChild(expNode);
@@ -1243,16 +1243,16 @@ public class DetailsSection extends AbstractPropertySection {
         
         CamelModelElement uiDataFormatElement = null;
         
-        if (dataFormatElement != null && dataFormatElement.getXmlNode().getNodeName().equals(dataformat) == false) {
+        if (dataFormatElement != null && dataFormatElement.getTranslatedNodeName().equals(dataformat) == false) {
         	Node oldExpNode = null;
         	for (int i=0; i<selectedEP.getXmlNode().getChildNodes().getLength(); i++) {
-        		if (selectedEP.getXmlNode().getChildNodes().item(i).getNodeName().equalsIgnoreCase(dataFormatElement.getXmlNode().getNodeName())) {
+        		if (org.fusesource.ide.foundation.core.util.CamelUtils.getTranslatedNodeName(selectedEP.getXmlNode().getChildNodes().item(i)).equalsIgnoreCase(dataFormatElement.getTranslatedNodeName())) {
         			oldExpNode = selectedEP.getXmlNode().getChildNodes().item(i);
         			break;
         		}
         	}
         	if (dataformat.trim().length()>0) {
-            	Node expNode = selectedEP.getCamelFile().getDocument().createElement(dataformat);
+            	Node expNode = selectedEP.createElement(dataformat, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
             	dataFormatElement = new CamelModelElement(this.selectedEP, expNode);
             	selectedEP.setParameter(prop.getName(), dataFormatElement);
             	if (oldExpNode == null) {
@@ -1266,7 +1266,7 @@ public class DetailsSection extends AbstractPropertySection {
         	}
     	} else if (dataFormatElement == null && dataformat.trim().length()>0) {
     		// no expression set, but now we set one
-    		Node expNode = selectedEP.getCamelFile().getDocument().createElement(dataformat);
+    		Node expNode = selectedEP.createElement(dataformat, selectedEP != null && selectedEP.getXmlNode() != null ? selectedEP.getXmlNode().getPrefix() : null);
     		dataFormatElement = new CamelModelElement(this.selectedEP, expNode);
         	selectedEP.getXmlNode().insertBefore(expNode, selectedEP.getXmlNode().getFirstChild());
         	this.selectedEP.setParameter(prop.getName(), dataFormatElement);

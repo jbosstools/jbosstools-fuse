@@ -15,14 +15,12 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 
 /**
  * @author lhein
@@ -67,9 +65,9 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature {
     	if( getEip() != null ) {
 			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
 			if (editor.getModel() != null) { 
-				Node newNode = null;
+				Element newNode = null;
 				if (createDOMNode) {
-					newNode = editor.getModel().getDocument().createElement(getEip().getName());
+					newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
 				}
 				CamelEndpoint ep = new CamelEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme())); // we use the first found protocol string
 				ep.setParent(parent);

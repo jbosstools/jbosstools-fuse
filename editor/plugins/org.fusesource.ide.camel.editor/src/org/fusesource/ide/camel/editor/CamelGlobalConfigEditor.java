@@ -56,6 +56,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
@@ -604,7 +605,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			if (element instanceof Element) {
 				Element node = (Element)element;
 				Image img = getIconForElement(node);
-				String type = Strings.capitalize(node.getNodeName());
+				String type = Strings.capitalize(CamelUtils.getTranslatedNodeName(node));
 				for (GlobalConfigElementItem item : elementContributions) {
 					if (item.getContributor().canHandle(node)) {
 						type = item.getName();
@@ -612,7 +613,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 						break;
 					}
 				}
-				text.append(!Strings.isEmpty(node.getAttribute("id")) ? node.getAttribute("id") : node.getNodeName());
+				text.append(!Strings.isEmpty(node.getAttribute("id")) ? node.getAttribute("id") : CamelUtils.getTranslatedNodeName(node));
 				cell.setImage(img);
 				if (!Strings.isEmpty(node.getAttribute("id"))) text.append(" (" + type + ") ", StyledString.COUNTER_STYLER);
 				cell.setText(text.toString());
@@ -620,7 +621,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			} else if (element instanceof CamelModelElement) {
 				CamelModelElement cme = (CamelModelElement)element;
 				Image img = getIconForElement(cme);
-				String type = Strings.capitalize(cme.getXmlNode().getNodeName());
+				String type = Strings.capitalize(cme.getTranslatedNodeName());
 				for (GlobalConfigElementItem item : elementContributions) {
 					if (item.getContributor().canHandle(cme.getXmlNode())) {
 						type = item.getName();
@@ -644,9 +645,9 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 				return CamelEditorUIActivator.getDefault().getImage("beandef.gif");
 			} else if (element instanceof CamelModelElement) {
 				CamelModelElement cme = (CamelModelElement)element;
-				if (cme.getXmlNode().getNodeName().equalsIgnoreCase("endpoint")) {
+				if (cme.getTranslatedNodeName().equalsIgnoreCase("endpoint")) {
 					return CamelEditorUIActivator.getDefault().getImage("endpointdef.png");	
-				} else if (cme.getXmlNode().getParentNode().getNodeName().equalsIgnoreCase("dataFormats")) {
+				} else if (CamelUtils.getTranslatedNodeName(cme.getXmlNode().getParentNode()).equalsIgnoreCase("dataFormats")) {
 					return CamelEditorUIActivator.getDefault().getImage("dataformat.gif");	
 				} else {
 					// unhandled

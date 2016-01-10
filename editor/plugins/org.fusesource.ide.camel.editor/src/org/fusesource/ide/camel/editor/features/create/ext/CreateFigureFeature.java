@@ -218,7 +218,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			if (editor.getModel() != null) { 
 				Node newNode = null;
 				if (createDOMNode) {
-					newNode = editor.getModel().getDocument().createElement(eip.getName());
+					newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
 				}
 				return new CamelModelElement(parent, newNode);
 			}

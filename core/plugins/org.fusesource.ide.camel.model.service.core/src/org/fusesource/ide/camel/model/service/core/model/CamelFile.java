@@ -242,14 +242,6 @@ public class CamelFile extends CamelModelElement implements EventListener {
 		return this;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#createNode()
-	 */
-	@Override
-	protected Node createNode() {
-		return null;
-	}
-	
 	/**
 	 * returns the string representing the dom model
 	 * 
@@ -343,8 +335,8 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	@Override
 	public CamelContextElement getCamelContext() {
 		for (CamelModelElement e : getChildElements()) {
-			if (e.getXmlNode().getNodeName().equalsIgnoreCase("camelContext") ||
-				e.getXmlNode().getNodeName().equalsIgnoreCase("routes")) return (CamelContextElement)e;
+			if (e.getTranslatedNodeName().equalsIgnoreCase("camelContext") ||
+				e.getTranslatedNodeName().equalsIgnoreCase("routes")) return (CamelContextElement)e;
 		}
 		return null;
 	}

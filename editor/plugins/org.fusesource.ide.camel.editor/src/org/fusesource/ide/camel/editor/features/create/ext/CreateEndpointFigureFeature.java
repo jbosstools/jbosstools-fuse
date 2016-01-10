@@ -60,7 +60,7 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 		if (editor.getModel() != null) { 
 			Node newNode = null;
 			if (createDOMNode) {
-				newNode = editor.getModel().getDocument().createElement(getEip().getName());
+				newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
 			}
 			CamelEndpoint ep = new CamelEndpoint(this.endpointUri);
 			ep.setParent(parent);

@@ -136,7 +136,7 @@ public class DataTransformationPaletteEntry implements ICustomPaletteEntry {
             	if (editor.getModel() != null) { 
             		Node newNode = null;
             		if (createDOMNode) {
-            			newNode = editor.getModel().getDocument().createElement(getEip().getName());
+            			newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
             		}
             		ep.setParent(parent);
             		ep.setUnderlyingMetaModelObject(getEip());
