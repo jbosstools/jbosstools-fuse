@@ -47,19 +47,8 @@
             
             <contextualLaunch>
                <enablement>
-                 <with variable="selection">
-                     <count value="1"/>
-                     <iterate>
-                         <adapt
-                               type="org.eclipse.core.resources.IFile">
-                            <test
-                                  property="org.eclipse.core.resources.contentTypeId"
-                                  value="org.fusesource.ide.camel.editor.camelContentType">
-                            </test>
-                         </adapt>
-                     </iterate>
-                 </with>
-             </enablement>
+               	<reference definitionId="org.fusesource.ide.launcher.ui.launchCamelEnable"/>
+               </enablement>
             </contextualLaunch>
             <configurationType
                   id="org.fusesource.ide.launcher.camelContext">
@@ -75,19 +64,8 @@
             
             <contextualLaunch>
                <enablement>
-                 <with variable="selection">
-                     <count value="1"/>
-                     <iterate>
-                         <adapt
-                               type="org.eclipse.core.resources.IFile">
-                            <test
-                                  property="org.eclipse.core.resources.contentTypeId"
-                                  value="org.fusesource.ide.camel.editor.camelContentType">
-                            </test>
-                         </adapt>
-                     </iterate>
-                 </with>
-             </enablement>
+               	<reference definitionId="org.fusesource.ide.launcher.ui.launchCamelEnable"/>
+               </enablement>
             </contextualLaunch>
             <configurationType
                   id="org.fusesource.ide.launcher.camelContext"> 
@@ -259,5 +237,29 @@
             icon="icons/delete.gif">
       </image>
    </extension>
+ 
+  <extension
+       point="org.eclipse.core.expressions.definitions">
+    	<definition id="org.fusesource.ide.launcher.ui.launchCamelEnable">
+                 <with variable="selection">
+                     <count value="1"/>
+                     <iterate>
+                       <or>
+                         <adapt
+                               type="org.eclipse.core.resources.IFile">
+                            <test
+                                  property="org.eclipse.core.resources.contentTypeId"
+                                  value="org.fusesource.ide.camel.editor.camelContentType">
+                            </test>
+                         </adapt>
+						 <and>
+							<instanceof value="org.eclipse.core.resources.IProject" />
+          					<test property="org.eclipse.core.resources.projectNature" value="org.fusesource.ide.project.RiderProjectNature" />
+						 </and>                         
+                       </or>  
+                     </iterate>
+                 </with>
+    	</definition>
+   </extension>   
    
 </plugin>
