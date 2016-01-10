@@ -66,7 +66,7 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 * @param cme
 	 */
 	public void setOutlineSelection(CamelModelElement cme) {
-		if (cme == null || cme.getId() == null) return;
+		if (cme == null || cme.getId() == null || getTreeViewer() == null || getTreeViewer().getTree().isDisposed()) return;
 		if (getTreeViewer() != null) getTreeViewer().setSelection(new StructuredSelection(cme), true);
 		if (getTreeViewer() != null && getTreeViewer().getSelection().isEmpty()) {
 			getTreeViewer().expandAll();
@@ -100,7 +100,7 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 */
 	@Override
 	public void modelChanged() {
-		if (getTreeViewer() != null) {
+		if (getTreeViewer() != null && getTreeViewer().getTree().isDisposed() == false) {
 			getTreeViewer().refresh(true);
 			getTreeViewer().expandAll();
 		}
@@ -112,7 +112,9 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 * @param container
 	 */
 	public void changeInput(CamelModelElement container) {
-		getTreeViewer().setInput(new CamelModelElement[] { container });
-		modelChanged();
+		if (getTreeViewer() != null && getTreeViewer().getTree().isDisposed() == false) {
+			getTreeViewer().setInput(new CamelModelElement[] { container });
+			modelChanged();
+		}
 	}
 }
