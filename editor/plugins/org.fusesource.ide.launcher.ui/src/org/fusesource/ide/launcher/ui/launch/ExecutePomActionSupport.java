@@ -13,6 +13,7 @@ package org.fusesource.ide.launcher.ui.launch;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -23,6 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugException;
@@ -64,7 +66,11 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
+import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.run.util.MavenLaunchUtils;
 import org.fusesource.ide.launcher.ui.Activator;
@@ -127,6 +133,8 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 
 			if (object instanceof IFile) {
 				launchCamelContext((IFile)object, mode);
+			} else if (object instanceof IProject) {
+				launchCamelContextOnProject((IProject)object, mode);					
 			}
 		}
 	}
@@ -586,4 +594,40 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 	protected IFile getPomFile(IContainer basedir) {
 		return basedir.getFile(Path.fromOSString("pom.xml"));		
 	}
+	
+	private void launchCamelContextOnProject(IProject project, String mode){
+		try{
+			final List<IFile> files = CamelUtils.getFilesWithCamelContentType(project);		
+			if (files.size() == 1) {
+				launchCamelContext(files.get(0), mode);
+			} else if (files.size() > 1) {
+				//org.jboss.tools.fuse.transformation.editor.internal.util.Util.selectCamelResourceFromWorkspace(Shell, IProject)
+				FilteredItemsSelectionDialog selector = new FilteredResourcesSelectionDialog(getShell(), false, project, IResource.FILE){
+							@Override
+							protected void fillContentProvider(final AbstractContentProvider contentProvider,
+									ItemsFilter itemsFilter, IProgressMonitor progressMonitor) throws CoreException {
+								super.fillContentProvider(new AbstractContentProvider(){
+									@Override
+									public void add(Object item, ItemsFilter itemsFilter) {
+										if(files.contains(item)){
+											contentProvider.add(item, itemsFilter);
+										}												
+									}}, itemsFilter, progressMonitor);
+							}					
+				};
+				selector.setTitle("Select Camel XML file");//NLS?
+				selector.setInitialPattern("*.xml");
+				if (selector.open() == Window.OK) {
+					Object[] resultArray = selector.getResult();
+					if (resultArray != null && resultArray.length > 0 && resultArray[0] instanceof IFile) {
+						launchCamelContext((IFile) resultArray[0],mode);
+					}
+				}
+			}
+		} catch (CoreException e) {
+			Activator.getLogger().error("Failed to launch camel context: " + e, e);
+		}
+	}
+
+
 }

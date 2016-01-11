@@ -13,11 +13,22 @@ package org.fusesource.ide.foundation.core.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceStatus;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.content.IContentDescription;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.fusesource.ide.foundation.core.internal.FoundationCoreActivator;
 import org.fusesource.ide.foundation.core.xml.namespace.BlueprintNamespaceHandler;
 import org.fusesource.ide.foundation.core.xml.namespace.FindCamelNamespaceHandler;
@@ -107,5 +118,63 @@ public class CamelUtils {
 			resVal = nodeName.substring(nodeName.indexOf(":")+1);
 		}
 		return resVal;
+	}
+	
+	/**
+	 * Fetch the list of files in the project that match the camel content type. 
+	 * This method looks at only the source folders if the project is a Java project.
+	 * @param project
+	 * @return list of camel files with content-type org.fusesource.ide.camel.editor.camelContentType
+	 * @throws CoreException
+	 */
+	public static List<IFile> getFilesWithCamelContentType(IProject project) throws CoreException{ 
+		final List<IFile> files = new ArrayList<IFile>();
+		if (project.hasNature(JavaCore.NATURE_ID)) {
+			//limit the search to source folders
+	        IJavaProject javaProject = JavaCore.create(project);
+	        if(javaProject!=null){
+	        	for(IPackageFragmentRoot ifr:javaProject.getAllPackageFragmentRoots()){
+	        		if(ifr.getKind()==IPackageFragmentRoot.K_SOURCE){
+	        			files.addAll(getFilesWithCamelContentType(ifr.getCorrespondingResource()));
+	        		}
+	        	}
+	        }
+	    } else {
+	    	files.addAll(getFilesWithCamelContentType(project));//most likely NA
+	    }	
+		return files;
+	}
+	
+	private static List<IFile> getFilesWithCamelContentType(IResource root) throws CoreException{ 
+		final List<IFile> files = new ArrayList<IFile>();
+		if(root!=null){			
+			root.accept(new IResourceVisitor() {		
+				@Override
+				public boolean visit(IResource resource) throws CoreException {
+					if(resource instanceof IFile){
+						IFile file = (IFile)resource;
+						IContentDescription contentDescription  = null;
+						try{
+							contentDescription  = file.getContentDescription();
+						} catch (CoreException e) {
+							if (e.getStatus().getCode() == IResourceStatus.OUT_OF_SYNC_LOCAL) {
+								//refresh and retry once
+								resource.refreshLocal(IResource.DEPTH_ONE, null);
+								contentDescription  = file.getContentDescription();
+							} else {
+								throw e;
+							}
+						}						
+						if (contentDescription != null
+								&& "org.fusesource.ide.camel.editor.camelContentType"
+										.equals(contentDescription.getContentType().getId())) {
+							files.add(file);
+						}
+					}
+					return true; //depth infinite
+				}
+			});
+		}
+		return files;
 	}
 }
