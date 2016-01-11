@@ -69,6 +69,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.CamelUtils;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.run.util.MavenLaunchUtils;
@@ -596,7 +597,7 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 	
 	private void launchCamelContextOnProject(IProject project, String mode){
 		try{
-			final List<IFile> files = CamelDebugUtils.getFilesWithCamelContentType(project);		
+			final List<IFile> files = CamelUtils.getFilesWithCamelContentType(project);		
 			if (files.size() == 1) {
 				launchCamelContext(files.get(0), mode);
 			} else if (files.size() > 1) {
