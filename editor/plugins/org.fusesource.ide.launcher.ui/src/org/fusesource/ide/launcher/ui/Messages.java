@@ -36,6 +36,7 @@ public class Messages extends NLS {
 	public static String mainTabName;
 	public static String pomDirectoryEmpty;
 	public static String pomDirectoryDoesntExist;
+	public static String xmlSelectionDialogOnRunAndDebugTitle;
 	
 	static {
         // initialize resource bundle

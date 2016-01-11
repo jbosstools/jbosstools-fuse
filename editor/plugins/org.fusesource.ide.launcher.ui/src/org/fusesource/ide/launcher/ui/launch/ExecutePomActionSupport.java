@@ -68,12 +68,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
-import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
-import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.run.util.CamelContextLaunchConfigConstants;
 import org.fusesource.ide.launcher.run.util.MavenLaunchUtils;
 import org.fusesource.ide.launcher.ui.Activator;
+import org.fusesource.ide.launcher.ui.Messages;
 
 public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExtension {
 
@@ -615,7 +615,7 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 									}}, itemsFilter, progressMonitor);
 							}					
 				};
-				selector.setTitle("Select Camel XML file");//NLS?
+				selector.setTitle(Messages.xmlSelectionDialogOnRunAndDebugTitle);
 				selector.setInitialPattern("*.xml");
 				if (selector.open() == Window.OK) {
 					Object[] resultArray = selector.getResult();
