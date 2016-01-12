@@ -360,7 +360,8 @@ public class DetailsSection extends AbstractPropertySection {
                      */
                     @Override
                     public void widgetSelected(SelectionEvent e) {
-                        selectedEP.setParameter(prop.getName(), checkBox.getSelection());
+                    	Button chkBox = (Button)e.getSource();
+                        selectedEP.setParameter(prop.getName(), chkBox.getSelection());
                     }
                 });
                 checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
