@@ -634,10 +634,10 @@ public class DetailsSection extends AbstractPropertySection {
                 choiceCombo.setEditable(false);
                 choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 
-                CamelModelElement expressionElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
+                final CamelModelElement expressionElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
                 choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
 
-                ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+                final ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
                 eform.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
                 eform.setText("Expression Settings...");
                 eform.setLayout(new GridLayout(1, true));
@@ -721,7 +721,7 @@ public class DetailsSection extends AbstractPropertySection {
                 CamelModelElement dataformatElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
                 choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
 
-                ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
+                final ExpandableComposite eform = getWidgetFactory().createExpandableComposite(page, ExpandableComposite.TREE_NODE | ExpandableComposite.CLIENT_INDENT);
                 eform.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
                 eform.setText("Data Format Settings...");
                 eform.setLayout(new GridLayout(1, true));
@@ -1152,12 +1152,12 @@ public class DetailsSection extends AbstractPropertySection {
     	}
     }
     
-    private Control getControlForParameter(Parameter p, Composite parent, CamelModelElement expressionElement, Language lang) {
+    private Control getControlForParameter(final Parameter p, Composite parent, final CamelModelElement expressionElement, Language lang) {
     	Control c = null;
     	
     	// BOOLEAN PROPERTIES
     	if (CamelComponentUtils.isBooleanProperty(p)) {
-    		Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
+    		final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
     		Boolean b = Boolean.parseBoolean( (expressionElement != null && expressionElement.getParameter(p.getName()) != null ? (String)expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()));
     		checkBox.setSelection(b);
     		checkBox.addSelectionListener(new SelectionAdapter() {
@@ -1166,6 +1166,7 @@ public class DetailsSection extends AbstractPropertySection {
 	             */
 	            @Override
 	            public void widgetSelected(SelectionEvent e) {
+	            	Button chkBox = (Button)e.getSource();
 	                expressionElement.setParameter(p.getName(), checkBox.getSelection());
 	            }
 	        });
@@ -1320,12 +1321,12 @@ public class DetailsSection extends AbstractPropertySection {
     	}
     }
     
-    private Control getControlForParameter(Parameter p, Composite parent, CamelModelElement dataFormatElement, DataFormat df) {
+    private Control getControlForParameter(final Parameter p, Composite parent, final CamelModelElement dataFormatElement, DataFormat df) {
     	Control c = null;
     	
     	// BOOLEAN PROPERTIES
     	if (CamelComponentUtils.isBooleanProperty(p)) {
-    		Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
+    		final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
     		String boolVal = dataFormatElement.getParameter(p.getName()) instanceof Boolean ? Boolean.toString((boolean)dataFormatElement.getParameter(p.getName())) : (String)dataFormatElement.getParameter(p.getName());
     		Boolean b = Boolean.parseBoolean( (dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? boolVal : df.getParameter(p.getName()).getDefaultValue()));
     		checkBox.setSelection(b);

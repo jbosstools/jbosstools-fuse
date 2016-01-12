@@ -28,7 +28,7 @@ public class PreferencesInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = PreferenceManager.getInstance().getUnderlyingStorage();
+		final IPreferenceStore store = PreferenceManager.getInstance().getUnderlyingStorage();
 
 		store.setDefault(PreferencesConstants.EDITOR_DEFAULT_LANGUAGE, "simple");
 		store.setDefault(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL, true);
