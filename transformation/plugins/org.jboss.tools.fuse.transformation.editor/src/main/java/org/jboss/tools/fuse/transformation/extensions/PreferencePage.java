@@ -15,11 +15,19 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         super(GRID);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+     */
     @Override
     public void init(IWorkbench workbench) {
         setPreferenceStore(Activator.preferences());
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
+     */
     @Override
     protected void createFieldEditors() {
         addField(new ColorFieldEditor(MappingDetailViewer.TRANSFORMATION_FOREGROUND_PREFERENCE,

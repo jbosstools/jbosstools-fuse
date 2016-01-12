@@ -11,34 +11,33 @@ package org.jboss.tools.fuse.transformation.editor.internal.util;
 
 import java.io.File;
 
-import org.fusesource.ide.commons.camel.tools.RouteXml;
-import org.fusesource.ide.commons.camel.tools.XmlModel;
-import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder;
-import org.jboss.tools.fuse.transformation.camel.CamelSpringBuilder;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 
 public final class CamelConfigurationHelper {
 
-    private RouteXml routeXml;
-    private XmlModel camelModel;
+    private CamelFile camelModel;
     private CamelConfigBuilder configBuilder;
-
-    private CamelConfigurationHelper(RouteXml routeXml, XmlModel camelModel) {
-        this.routeXml = routeXml;
-        this.camelModel = camelModel;
-        configBuilder = new CamelSpringBuilder(camelModel.getContextElement());
+    private CamelIOHandler handler;
+    
+    private CamelConfigurationHelper(CamelFile camelModel, CamelIOHandler handler) {
+    	this.camelModel = camelModel;
+    	this.handler = handler;
     }
 
     public static CamelConfigurationHelper load(File contextFile) throws Exception {
-        RouteXml routeXml = new RouteXml();
-        XmlModel camelModel = routeXml.unmarshal(contextFile);
-        return camelModel != null ? new CamelConfigurationHelper(routeXml, camelModel) : null;
+    	CamelIOHandler handler = new CamelIOHandler();
+    	CamelFile camelModel = handler.loadCamelModel(contextFile, new NullProgressMonitor());
+        return camelModel != null ? new CamelConfigurationHelper(camelModel, handler) : null;
     }
 
     public CamelConfigBuilder getConfigBuilder() {
         return configBuilder;
     }
 
-    public void save(File file) throws Exception {
-        routeXml.marshal(file, camelModel);
+    public void save() throws Exception {
+        handler.saveCamelModel(camelModel, camelModel.getResource(), new NullProgressMonitor());
     }
 }

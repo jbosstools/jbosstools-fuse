@@ -68,10 +68,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.fusesource.ide.branding.Activator;
-import org.fusesource.ide.commons.contenttype.BlueprintXmlMatchingStrategy;
-import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
-
-
+import org.fusesource.ide.foundation.core.contenttype.*;
 
 /**
  * A wizard for creating test cases.

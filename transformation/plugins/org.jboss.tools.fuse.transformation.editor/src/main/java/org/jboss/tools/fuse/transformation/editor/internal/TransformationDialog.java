@@ -45,16 +45,16 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.tools.fuse.transformation.MappingOperation;
-import org.jboss.tools.fuse.transformation.MappingType;
-import org.jboss.tools.fuse.transformation.TransformationMapping;
+import org.jboss.tools.fuse.transformation.core.MappingOperation;
+import org.jboss.tools.fuse.transformation.core.MappingType;
+import org.jboss.tools.fuse.transformation.core.TransformationMapping;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
-import org.jboss.tools.fuse.transformation.model.Model;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 
 // TODO handle variable length args
 class TransformationDialog extends BaseDialog {

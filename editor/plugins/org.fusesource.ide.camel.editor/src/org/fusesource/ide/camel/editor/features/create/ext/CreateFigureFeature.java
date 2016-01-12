@@ -188,21 +188,20 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		}
 
 		CamelModelElement node = createNode(selectedContainer, selectedContainer != null);
-		if (selectedContainer != null) {
+		if (selectedContainer != null && node != null) {
 			selectedContainer.addChildElement(node);
 			node.setParent(selectedContainer);
-		} else {
-			CamelEditorUIActivator.pluginLog().logWarning("Warning! Could not find currently selected node, so can't associate this node with the container! Node: " + node.getName());
+
+			// do the add
+	        addGraphicalRepresentation(context, node);
+
+	        // activate direct editing after object creation
+	        getFeatureProvider().getDirectEditingInfo().setActive(true);
+	        
+			// return newly created business object(s)
+			return new Object[] { node };
 		}
-
-		// do the add
-        addGraphicalRepresentation(context, node);
-
-        // activate direct editing after object creation
-        getFeatureProvider().getDirectEditingInfo().setActive(true);
-        
-		// return newly created business object(s)
-		return new Object[] { node };
+		return new Object[0];
 	}
 
 	/**

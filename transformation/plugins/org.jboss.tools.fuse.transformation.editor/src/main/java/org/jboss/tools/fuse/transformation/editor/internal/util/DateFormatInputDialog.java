@@ -15,7 +15,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.jboss.tools.fuse.transformation.MappingOperation;
+import org.jboss.tools.fuse.transformation.core.MappingOperation;
 
 public class DateFormatInputDialog extends BaseDialog {
     

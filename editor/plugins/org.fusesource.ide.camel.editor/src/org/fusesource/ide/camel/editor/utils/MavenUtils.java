@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Resource;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -95,6 +96,52 @@ public class MavenUtils {
                 os = new BufferedOutputStream(new FileOutputStream(pomFile));
                 MavenPlugin.getMaven().writeModel(model, os);
                 IFile pomIFile = project.getProject().getFile("pom.xml");
+                if (pomIFile != null){
+                    pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+                }
+            } catch (Exception ex) {
+                CamelEditorUIActivator.pluginLog().logError(ex);
+            } finally {
+                try {
+                    if (os != null) {
+                        os.close();
+                    }
+                } catch (IOException e) {
+                	CamelEditorUIActivator.pluginLog().logError(e);
+                }
+            }
+        }
+    }
+    
+    /**
+     * adds a resource folder to the maven pom file if not yet there
+     * 
+     * @param project	the eclipse project
+     * @param pomFile	the pom.xml file
+     * @param resourceFolderName	the name of the new resource folder
+     * @throws CoreException	on any errors
+     */
+    public static void addResourceFolder(IProject project, File pomFile, String resourceFolderName) throws CoreException {
+    	final Model model = MavenPlugin.getMaven().readModel(pomFile);
+        List<Resource> resources = model.getBuild().getResources();
+        
+        boolean exists = false;
+        for (Resource resource : resources) {
+            if (resource.getDirectory().equals(resourceFolderName)) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            Resource resource = new Resource();
+            resource.setDirectory(resourceFolderName);
+            model.getBuild().addResource(resource);
+
+            OutputStream os = null;
+            try {
+                os = new BufferedOutputStream(new FileOutputStream(pomFile));
+                MavenPlugin.getMaven().writeModel(model, os);
+                IFile pomIFile = project.getFile("pom.xml");
                 if (pomIFile != null){
                     pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
                 }

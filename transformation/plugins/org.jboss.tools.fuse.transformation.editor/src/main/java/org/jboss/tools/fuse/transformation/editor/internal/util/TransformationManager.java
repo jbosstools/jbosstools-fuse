@@ -21,16 +21,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.jboss.tools.fuse.transformation.Expression;
-import org.jboss.tools.fuse.transformation.FieldMapping;
-import org.jboss.tools.fuse.transformation.MapperConfiguration;
-import org.jboss.tools.fuse.transformation.MappingOperation;
-import org.jboss.tools.fuse.transformation.MappingType;
-import org.jboss.tools.fuse.transformation.TransformationMapping;
-import org.jboss.tools.fuse.transformation.Variable;
-import org.jboss.tools.fuse.transformation.VariableMapping;
-import org.jboss.tools.fuse.transformation.dozer.DozerMapperConfiguration;
-import org.jboss.tools.fuse.transformation.model.Model;
+import org.jboss.tools.fuse.transformation.core.Expression;
+import org.jboss.tools.fuse.transformation.core.FieldMapping;
+import org.jboss.tools.fuse.transformation.core.MapperConfiguration;
+import org.jboss.tools.fuse.transformation.core.MappingOperation;
+import org.jboss.tools.fuse.transformation.core.MappingType;
+import org.jboss.tools.fuse.transformation.core.TransformationMapping;
+import org.jboss.tools.fuse.transformation.core.Variable;
+import org.jboss.tools.fuse.transformation.core.VariableMapping;
+import org.jboss.tools.fuse.transformation.core.dozer.DozerMapperConfiguration;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 
 public class TransformationManager {
 

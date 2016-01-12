@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
+import org.fusesource.ide.foundation.core.contenttype.XmlMatchingStrategySupport;
 
 /**
  * A couple of utilities to check to see if a given XML configuration file

@@ -17,12 +17,12 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.jboss.tools.fuse.transformation.MappingOperation;
-import org.jboss.tools.fuse.transformation.MappingType;
+import org.jboss.tools.fuse.transformation.core.MappingOperation;
+import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
-import org.jboss.tools.fuse.transformation.model.Model;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 
 class PropertyDialog extends BaseDialog {
 

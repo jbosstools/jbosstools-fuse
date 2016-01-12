@@ -56,13 +56,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
-import org.jboss.tools.fuse.transformation.MappingOperation;
-import org.jboss.tools.fuse.transformation.MappingType;
-import org.jboss.tools.fuse.transformation.Variable;
+import org.jboss.tools.fuse.transformation.core.MappingOperation;
+import org.jboss.tools.fuse.transformation.core.MappingType;
+import org.jboss.tools.fuse.transformation.core.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.dozer.DozerResourceClasspathSelectionDialog;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
-import org.jboss.tools.fuse.transformation.model.Model;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;

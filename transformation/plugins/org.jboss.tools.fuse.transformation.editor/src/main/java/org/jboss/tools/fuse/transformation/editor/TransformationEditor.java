@@ -11,7 +11,6 @@ package org.jboss.tools.fuse.transformation.editor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,7 +20,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.maven.model.Resource;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -41,7 +40,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -62,9 +60,10 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
+import org.fusesource.ide.camel.editor.utils.MavenUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
-import org.jboss.tools.fuse.transformation.MappingOperation;
-import org.jboss.tools.fuse.transformation.camel.CamelEndpoint;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingDetailViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.MappingsViewer;
 import org.jboss.tools.fuse.transformation.editor.internal.PotentialDropTarget;
@@ -78,9 +77,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function;
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
 
-/**
- *
- */
 public class TransformationEditor extends EditorPart implements ISaveablePart2, IResourceChangeListener {
 
     private static final int SASH_WIDTH = 3;
@@ -103,7 +99,7 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
     TransformationManager manager;
     URLClassLoader loader;
     File camelConfigFile;
-    CamelEndpoint camelEndpoint;
+    CamelModelElement camelEndpoint;
 
     MappingsViewer mappingsViewer;
     Text helpText;
@@ -360,27 +356,13 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
                 copySourceToProject(element.createExecutableExtension("class").getClass(), latestVersion);
             }
             if (!latestVersion) prefs.setValue(VERSION_PREFERENCE, version);
+            
             // Ensure Maven will compile transformations folder
             File pomFile = manager.project().getLocation().append("pom.xml").toFile();
-            org.apache.maven.model.Model pomModel = MavenPlugin.getMaven().readModel(pomFile);
-            List<Resource> resources = pomModel.getBuild().getResources();
-            boolean exists = false;
-            for (Resource resource : resources) {
-                if (resource.getDirectory().endsWith(Util.TRANSFORMATIONS_FOLDER)) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                Resource resource = new Resource();
-                resource.setDirectory(Util.TRANSFORMATIONS_FOLDER);
-                pomModel.getBuild().addResource(resource);
-                try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(pomFile))) {
-                    MavenPlugin.getMaven().writeModel(pomModel, stream);
-                }
-            }
+            MavenUtils.addResourceFolder(manager.project(), pomFile, Util.TRANSFORMATIONS_FOLDER);
+            
             // Ensure Java project source classpath entry exists for transformations folder
-            exists = false;
+            boolean exists = false;
             IClasspathEntry[] entries = javaProject.getRawClasspath();
             IPath path = javaProject.getPath().append(Util.TRANSFORMATIONS_FOLDER);
             for (IClasspathEntry entry : entries) {
@@ -484,8 +466,14 @@ public class TransformationEditor extends EditorPart implements ISaveablePart2, 
         mappingDetailViewer.update(mapping);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
+     */
     @Override
-    public void setFocus() {}
+    public void setFocus() {
+    	
+    }
 
     void toggleSourceViewer(SashForm horizontalSplitter) {
         sourceTabFolder.setVisible(sourceViewerButton.getSelection());

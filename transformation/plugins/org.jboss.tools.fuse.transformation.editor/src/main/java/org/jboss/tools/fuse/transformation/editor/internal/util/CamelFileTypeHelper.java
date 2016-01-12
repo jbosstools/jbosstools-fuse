@@ -15,9 +15,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.fusesource.ide.commons.contenttype.BlueprintXmlMatchingStrategy;
-import org.fusesource.ide.commons.contenttype.SpringXmlMatchingStrategy;
-import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
+import org.fusesource.ide.foundation.core.contenttype.*;
 
 /**
  * A couple of utilities to check to see if a given Camel configuration file

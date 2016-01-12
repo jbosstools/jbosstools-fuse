@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.wizards;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import org.apache.camel.model.DataFormatDefinition;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -62,10 +62,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
-import org.jboss.tools.fuse.transformation.model.ModelBuilder;
 /**
  * @author brianf
  *
@@ -76,7 +77,7 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
     private boolean isSource = true;
     private Text _javaClassText;
     private ComboViewer _dataFormatIdCombo;
-    private org.jboss.tools.fuse.transformation.model.Model _javaModel = null;
+    private org.jboss.tools.fuse.transformation.core.model.Model _javaModel = null;
     private ModelViewer _modelViewer;
     private Label _dfErrorLabel;
     private Binding _binding;
@@ -265,9 +266,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         idModelValue = null;
 
         WritableList dfList = new WritableList();
-        List<DataFormatDefinition> dataFormats = getModel().camelConfig.getConfigBuilder().getDataFormats();
-        for (Iterator<DataFormatDefinition> iterator = dataFormats.iterator(); iterator.hasNext();) {
-            DataFormatDefinition df = iterator.next();
+        Collection<CamelModelElement> dataFormats = getModel().camelConfig.getConfigBuilder().getDataFormats();
+        for (Iterator<CamelModelElement> iterator = dataFormats.iterator(); iterator.hasNext();) {
+        	CamelModelElement df = iterator.next();
             if (df.getId() != null) {
                 dfList.add(df.getId());
             }

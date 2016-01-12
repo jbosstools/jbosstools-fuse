@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.ws.Endpoint;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -53,11 +51,12 @@ import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
-import org.jboss.tools.fuse.transformation.MapperConfiguration;
-import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder;
-import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder.MarshalType;
-import org.jboss.tools.fuse.transformation.camel.CamelEndpoint;
-import org.jboss.tools.fuse.transformation.dozer.DozerMapperConfiguration;
+import org.jboss.tools.fuse.transformation.core.MapperConfiguration;
+import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
+import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder.MarshalType;
+import org.jboss.tools.fuse.transformation.core.dozer.DozerMapperConfiguration;
+import org.jboss.tools.fuse.transformation.core.model.json.JsonModelGenerator;
+import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -70,8 +69,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.StartPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
-import org.jboss.tools.fuse.transformation.model.json.JsonModelGenerator;
-import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
 
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
@@ -89,7 +86,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private Model uiModel = new Model();
     private CamelModelElement sourceFormat;
     private CamelModelElement targetFormat;
-    private CamelEndpoint endpoint;
+    private CamelModelElement endpoint;
     private boolean saveCamelConfig = true;
     private CamelModelElement routeEndpoint;
 
@@ -155,9 +152,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                         if (saveCamelConfig) {
                             try {
-                                File camelFile = new File(uiModel.getProject()
-                                        .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath()).getLocationURI());
-                                uiModel.camelConfig.save(camelFile);
+                                uiModel.camelConfig.save();
                             } catch (final Exception e) {
                                 throw e;
                             }
@@ -172,7 +167,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                         // Wizard completed successfully; create the necessary
                         // config
-                        addCamelContextEndpoint(camelContext, endpoint.asSpringEndpoint());
+                        addCamelContextEndpoint(camelContext, endpoint);
                         if (sourceFormat != null) {
                             addDataFormat(camelContext, sourceFormat);
                         }
@@ -222,6 +217,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return routeEndpoint;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.jface.wizard.Wizard#addPages()
+     */
     @Override
     public void addPages() {
         if (start == null) {
@@ -262,6 +261,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         addPage(otherTarget);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.jface.wizard.Wizard#getWindowTitle()
+     */
     @Override
     public String getWindowTitle() {
         return "New Fuse Transformation";
@@ -289,6 +292,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         uiModel.setCamelFilePath(path);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+     */
     @Override
     public void init(IWorkbench workbench, IStructuredSelection selection) {
         for (final Iterator<IProject> iter = uiModel.projects.iterator(); iter.hasNext();) {
@@ -344,6 +351,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         resetPage(otherTarget);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.jface.wizard.Wizard#canFinish()
+     */
     @Override
     public boolean canFinish() {
         if (start != null && start.getSourcePage() != null && start.getTargetPage() != null) {
@@ -495,7 +506,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return targetFormat;
     }
 
-    public CamelEndpoint getEndpoint() {
+    public CamelModelElement getEndpoint() {
         return endpoint;
     }
 

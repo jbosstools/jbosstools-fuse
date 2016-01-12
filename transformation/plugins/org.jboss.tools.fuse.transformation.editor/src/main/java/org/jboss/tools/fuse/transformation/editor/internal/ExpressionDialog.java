@@ -45,8 +45,8 @@ import org.eclipse.swt.widgets.Text;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
-import org.jboss.tools.fuse.transformation.Expression;
-import org.jboss.tools.fuse.transformation.MappingOperation;
+import org.jboss.tools.fuse.transformation.core.Expression;
+import org.jboss.tools.fuse.transformation.core.MappingOperation;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
 

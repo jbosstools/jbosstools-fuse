@@ -17,7 +17,7 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
-import org.jboss.tools.fuse.transformation.model.Model;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 
 abstract class ModelTabFolder extends CTabFolder {
 

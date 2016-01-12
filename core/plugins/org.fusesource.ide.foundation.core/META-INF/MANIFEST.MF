@@ -10,18 +10,15 @@ Require-Bundle: org.jboss.tools.foundation.core;bundle-version="1.2.0",
  org.jboss.ide.eclipse.as.dmr;bundle-version="3.1.0",
  org.eclipse.core.resources;bundle-version="3.10.0",
  org.eclipse.jdt;bundle-version="3.11.0",
- org.eclipse.jdt.core;bundle-version="3.11.0"
-Export-Package: de.pdark.decentxml,
- de.pdark.decentxml.dtd,
- de.pdark.decentxml.mapping,
- de.pdark.decentxml.validation,
+ org.eclipse.jdt.core;bundle-version="3.11.0",
+ org.eclipse.ui;bundle-version="3.107.0",
+ org.eclipse.ui.ide;bundle-version="3.11.0"
+Export-Package: org.fusesource.ide.foundation.core.contenttype,
  org.fusesource.ide.foundation.core.functions,
  org.fusesource.ide.foundation.core.util,
  org.fusesource.ide.foundation.core.xml,
- org.fusesource.ide.foundation.core.xml.internal.parser,
  org.fusesource.ide.foundation.core.xml.namespace
 Bundle-Activator: org.fusesource.ide.foundation.core.internal.FoundationCoreActivator
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .,
- libs/decentxml-1.4.jar
+Bundle-ClassPath: .
 

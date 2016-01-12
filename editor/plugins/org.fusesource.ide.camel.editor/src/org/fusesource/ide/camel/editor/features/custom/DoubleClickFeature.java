@@ -81,7 +81,10 @@ public class DoubleClickFeature extends AbstractCustomFeature {
                     final Object o = e.createExecutableExtension("class");
                     if (o instanceof ICustomDblClickHandler) {
                     	ICustomDblClickHandler handler = (ICustomDblClickHandler)o;
-                    	if (handler.canHandle(_ep)) handler.handleDoubleClick(_ep);
+                    	if (handler.canHandle(_ep)) {
+                    		handler.handleDoubleClick(_ep);
+                    		break;
+                    	}
                     }
                 }
             } catch (CoreException ex) {

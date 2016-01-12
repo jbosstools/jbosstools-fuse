@@ -12,6 +12,7 @@
     <name>JBoss Fuse Tooling :: Data Transformation :: Plugins</name>
     
     <modules>
+        <module>org.jboss.tools.fuse.transformation.core</module>
         <module>org.jboss.tools.fuse.transformation.editor</module>
     </modules>
 </project>

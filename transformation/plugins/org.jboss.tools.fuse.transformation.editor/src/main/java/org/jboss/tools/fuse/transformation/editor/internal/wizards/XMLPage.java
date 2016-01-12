@@ -69,7 +69,7 @@ import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathResourceSelectionDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.ClasspathXMLResourceSelectionDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.XmlMatchingStrategy;
-import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
+import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 
 /**
  * @author brianf
