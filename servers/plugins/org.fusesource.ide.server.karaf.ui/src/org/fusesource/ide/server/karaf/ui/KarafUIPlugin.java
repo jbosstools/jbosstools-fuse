@@ -26,7 +26,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerEvent;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 import org.fusesource.ide.server.karaf.core.server.IKarafServerDelegate;
 import org.jboss.ide.eclipse.as.core.server.UnitedServerListener;
 import org.jboss.ide.eclipse.as.core.server.UnitedServerListenerManager;

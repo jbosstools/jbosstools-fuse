@@ -12,7 +12,7 @@
 package org.fusesource.ide.launcher;
 
 import org.eclipse.core.runtime.Plugin;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 
 /**
  * @author lhein

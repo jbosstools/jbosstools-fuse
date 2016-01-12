@@ -17,9 +17,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.fusesource.ide.commons.util.TextFilter;
-import org.fusesource.ide.commons.util.TextFilters;
 import org.fusesource.ide.foundation.core.xml.XmlEscapeUtility;
+import org.fusesource.ide.foundation.ui.util.TextFilter;
+import org.fusesource.ide.foundation.ui.util.TextFilters;
 
 
 @XmlRootElement(name = "message")

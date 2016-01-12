@@ -12,7 +12,7 @@ package org.fusesource.ide.jmx.servicemix.jmx.content.navigator.providers;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
 import org.fusesource.ide.jmx.servicemix.internal.JmxTemplateServiceMixFacade;
 import org.fusesource.ide.jmx.servicemix.internal.ServiceMixFacade;

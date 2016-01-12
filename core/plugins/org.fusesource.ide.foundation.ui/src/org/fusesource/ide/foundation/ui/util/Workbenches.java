@@ -19,7 +19,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.IPage;
+import org.eclipse.ui.views.properties.PropertySheet;
 import org.fusesource.ide.foundation.ui.internal.FoundationUIActivator;
+import org.fusesource.ide.foundation.ui.views.DynamicPropertySheetTracker;
 
 
 public class Workbenches {
@@ -88,6 +91,15 @@ public class Workbenches {
 			} catch (Exception ex) {
 				FoundationUIActivator.pluginLog().logError(ex);
 			}
+		}
+		return null;
+	}
+
+	public static IPage getPropertySheetPage() {
+		final IViewPart view = findView(DynamicPropertySheetTracker.PROPERTIES_VIEW_ID);
+		if (view instanceof PropertySheet) {
+			PropertySheet propertySheet = (PropertySheet) view;
+			return propertySheet.getCurrentPage();
 		}
 		return null;
 	}

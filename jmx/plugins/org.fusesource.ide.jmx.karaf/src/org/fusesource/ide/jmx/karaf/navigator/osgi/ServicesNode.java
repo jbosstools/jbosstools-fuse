@@ -18,8 +18,8 @@ import javax.management.openmbean.TabularData;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
+import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableSheetPage;
+import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;

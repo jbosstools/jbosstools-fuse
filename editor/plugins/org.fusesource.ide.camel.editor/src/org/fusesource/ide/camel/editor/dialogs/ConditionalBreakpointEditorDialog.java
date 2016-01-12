@@ -35,7 +35,7 @@ import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
-import org.fusesource.ide.commons.camel.tools.Languages;
+import org.fusesource.ide.camel.model.service.core.util.LanguageUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
@@ -45,7 +45,7 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  */
 public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 	
-	private static final String[] SUPPORTED_LANGUAGES = new Languages().languageArray();
+	private static final String[] SUPPORTED_LANGUAGES = LanguageUtils.languageArray();
 	
 	private static final String PATTERN_SIMPLE = "${%s}";
 	private static final String[] SIMPLE_VARS = new String[] {

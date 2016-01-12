@@ -12,7 +12,7 @@ package org.fusesource.ide.jmx.activemq.jmx.content.navigator.providers;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 public class ActiveMQNodeLabelProvider extends LabelProvider {

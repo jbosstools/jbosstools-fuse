@@ -61,10 +61,10 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
-import org.fusesource.ide.commons.ui.UIHelper;
 import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
+import org.fusesource.ide.foundation.ui.util.UIHelper;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 

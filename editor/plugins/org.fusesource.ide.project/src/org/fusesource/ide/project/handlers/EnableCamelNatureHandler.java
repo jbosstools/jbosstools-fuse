@@ -21,8 +21,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
-import org.fusesource.ide.commons.ui.Selections;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.project.Activator;
 import org.fusesource.ide.project.RiderProjectNature;
 

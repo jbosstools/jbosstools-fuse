@@ -15,10 +15,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.activemq.broker.jmx.ProducerViewMBean;
-import org.fusesource.ide.commons.tree.ConnectedNode;
-import org.fusesource.ide.commons.tree.HasRefreshableUI;
-import org.fusesource.ide.commons.tree.NodeSupport;
-import org.fusesource.ide.commons.tree.RefreshableUI;
+import org.fusesource.ide.foundation.ui.tree.ConnectedNode;
+import org.fusesource.ide.foundation.ui.tree.HasRefreshableUI;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.RefreshableUI;
 import org.jboss.tools.jmx.core.tree.Node;
 
 

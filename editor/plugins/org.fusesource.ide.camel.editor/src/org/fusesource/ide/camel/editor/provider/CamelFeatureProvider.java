@@ -56,7 +56,7 @@ import org.fusesource.ide.camel.editor.internal.CamelModelIndependenceSolver;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
-import org.fusesource.ide.commons.camel.tools.BeanDef;
+import org.fusesource.ide.foundation.ui.archetypes.BeanDef;
 
 /**
  * @author lhein

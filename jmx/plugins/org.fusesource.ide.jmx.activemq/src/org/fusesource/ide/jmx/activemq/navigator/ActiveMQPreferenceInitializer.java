@@ -11,8 +11,8 @@
 
 package org.fusesource.ide.jmx.activemq.navigator;
 
-import org.fusesource.ide.commons.ui.UIPreferencesInitialiserSupport;
-import org.fusesource.ide.commons.ui.config.TableConfiguration;
+import org.fusesource.ide.foundation.ui.config.TableConfiguration;
+import org.fusesource.ide.foundation.ui.util.UIPreferencesInitialiserSupport;
 
 public class ActiveMQPreferenceInitializer extends UIPreferencesInitialiserSupport {
 

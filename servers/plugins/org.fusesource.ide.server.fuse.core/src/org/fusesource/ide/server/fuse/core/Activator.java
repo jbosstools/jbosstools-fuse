@@ -12,7 +12,7 @@
 package org.fusesource.ide.server.fuse.core;
 
 import org.eclipse.core.runtime.Plugin;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 import org.fusesource.ide.preferences.PreferenceManager;
 
 /**

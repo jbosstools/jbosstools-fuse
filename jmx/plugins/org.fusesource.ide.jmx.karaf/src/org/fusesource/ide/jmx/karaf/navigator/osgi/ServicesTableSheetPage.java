@@ -14,8 +14,8 @@ package org.fusesource.ide.jmx.karaf.navigator.osgi;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IActionBars;
-import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
-import org.fusesource.ide.commons.ui.views.IViewPage;
+import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableSheetPage;
+import org.fusesource.ide.foundation.ui.views.IViewPage;
 
 
 public class ServicesTableSheetPage extends PropertySourceTableSheetPage {

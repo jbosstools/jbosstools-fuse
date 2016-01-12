@@ -12,7 +12,7 @@ package org.fusesource.ide.jmx.camel.jmx.content.navigator.providers;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.jmx.camel.internal.CamelFacade;
 import org.fusesource.ide.jmx.camel.internal.JmxTemplateCamelFacade;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextsNode;

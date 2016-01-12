@@ -14,7 +14,7 @@ package org.fusesource.ide.jmx.commons.properties;
 import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.IFilter;
-import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
+import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 
 /**
  * Filter for "Contents" tab section.

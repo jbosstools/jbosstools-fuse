@@ -11,8 +11,8 @@
 
 package org.fusesource.ide.launcher.ui;
 
-import org.fusesource.ide.commons.logging.RiderLogFacade;
-import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.util.ImagesActivatorSupport;
 
 
 /**

@@ -28,7 +28,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
-import org.fusesource.ide.commons.tree.HasOwner;
+import org.fusesource.ide.foundation.ui.tree.HasOwner;
 
 /**
  * @author lhein

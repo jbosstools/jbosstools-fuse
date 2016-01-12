@@ -16,7 +16,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.zest.core.viewers.EntityConnectionData;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.fusesource.ide.commons.util.TextFilters;
+import org.fusesource.ide.foundation.ui.util.TextFilters;
 
 
 public class GraphFilter extends ViewerFilter {

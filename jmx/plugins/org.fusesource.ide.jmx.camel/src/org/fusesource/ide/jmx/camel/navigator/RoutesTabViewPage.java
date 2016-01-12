@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.tabbed.ITabDescriptor;
-import org.fusesource.ide.commons.ui.views.TabFolderSupport2;
+import org.fusesource.ide.foundation.ui.views.TabFolderSupport2;
 
 
 public class RoutesTabViewPage extends TabFolderSupport2 {

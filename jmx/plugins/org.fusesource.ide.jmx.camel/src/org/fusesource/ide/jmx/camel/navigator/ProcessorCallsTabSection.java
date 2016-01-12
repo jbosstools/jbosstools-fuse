@@ -13,7 +13,7 @@ package org.fusesource.ide.jmx.camel.navigator;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
-import org.fusesource.ide.commons.ui.Selections;
+import org.fusesource.ide.foundation.ui.util.Selections;
 
 public class ProcessorCallsTabSection extends ProcessorCallView {
 

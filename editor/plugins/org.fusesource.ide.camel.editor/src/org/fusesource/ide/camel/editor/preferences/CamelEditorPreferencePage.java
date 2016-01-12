@@ -21,7 +21,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
-import org.fusesource.ide.commons.camel.tools.Languages;
+import org.fusesource.ide.camel.model.service.core.util.LanguageUtils;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -61,7 +61,7 @@ implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {
 	 */
 	@Override
 	public void createFieldEditors() {
-		String[][] namesAndValues = Languages.nameAndLanguageArray();
+		String[][] namesAndValues = LanguageUtils.nameAndLanguageArray();
 
 		this.defaultLanguageEditor = new ComboFieldEditor(
 				PreferencesConstants.EDITOR_DEFAULT_LANGUAGE,

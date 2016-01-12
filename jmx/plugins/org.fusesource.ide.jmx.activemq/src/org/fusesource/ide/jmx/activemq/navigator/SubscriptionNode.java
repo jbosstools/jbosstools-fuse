@@ -12,7 +12,7 @@
 package org.fusesource.ide.jmx.activemq.navigator;
 
 import org.apache.activemq.broker.jmx.SubscriptionViewMBean;
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.jboss.tools.jmx.core.tree.Node;
 
 

@@ -7,13 +7,40 @@ Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  org.eclipse.core.resources;bundle-version="3.10.0",
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.beans,
+ org.eclipse.core.databinding.property,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.core,
+ org.eclipse.jface.databinding,
  org.eclipse.ui;bundle-version="3.107.0",
+ org.eclipse.ui.ide,
+ org.eclipse.ui.views,
+ org.eclipse.ui.views.properties.tabbed,
+ org.eclipse.ui.navigator;bundle-version="3.5.400",
+ org.jboss.tools.jmx.core;bundle-version="1.7.0",
+ org.jboss.tools.jmx.ui;bundle-version="1.7.0",
+ org.jboss.ide.eclipse.as.dmr;bundle-version="3.0.0",
+ org.apache.commons.io;bundle-version="2.0.1",
  org.jboss.tools.foundation.core;bundle-version="1.2.0",
  org.jboss.tools.foundation.ui;bundle-version="1.2.0",
- org.jboss.tools.jmx.core;bundle-version="1.7.0",
- org.fusesource.ide.foundation.core;bundle-version="8.0.0"
+ org.fusesource.ide.foundation.core;bundle-version="8.0.0",
+ org.fusesource.ide.preferences;bundle-version="8.0.0"
 Bundle-Activator: org.fusesource.ide.foundation.ui.internal.FoundationUIActivator
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: org.fusesource.ide.foundation.ui.io,
- org.fusesource.ide.foundation.ui.util
+Export-Package: org.fusesource.ide.foundation.ui.actions,
+ org.fusesource.ide.foundation.ui.archetypes,
+ org.fusesource.ide.foundation.ui.chart,
+ org.fusesource.ide.foundation.ui.config,
+ org.fusesource.ide.foundation.ui.drop,
+ org.fusesource.ide.foundation.ui.form,
+ org.fusesource.ide.foundation.ui.io,
+ org.fusesource.ide.foundation.ui.jobs,
+ org.fusesource.ide.foundation.ui.label,
+ org.fusesource.ide.foundation.ui.logging,
+ org.fusesource.ide.foundation.ui.properties,
+ org.fusesource.ide.foundation.ui.propsrc,
+ org.fusesource.ide.foundation.ui.tree,
+ org.fusesource.ide.foundation.ui.util,
+ org.fusesource.ide.foundation.ui.views

@@ -34,7 +34,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.IWizardDescriptor;
-import org.fusesource.ide.commons.ui.ContextMenuProvider;
+import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
 import org.fusesource.ide.project.Activator;
 
 public class CamelVirtualFolder implements ContextMenuProvider {

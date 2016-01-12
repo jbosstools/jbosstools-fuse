@@ -15,8 +15,8 @@ import java.util.List;
 
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableView;
-import org.fusesource.ide.commons.ui.views.PageTabDescriptor;
+import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableView;
+import org.fusesource.ide.foundation.ui.views.PageTabDescriptor;
 import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
 

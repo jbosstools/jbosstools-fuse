@@ -17,8 +17,8 @@ import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.sax.SAXSource;
 
-import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
+import org.fusesource.ide.jmx.commons.Activator;
 import org.fusesource.ide.jmx.commons.messages.support.NamespaceFilter;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

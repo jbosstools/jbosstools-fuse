@@ -101,11 +101,17 @@ public class FoundationUIActivator extends BaseUIPlugin {
 	}
 	
 	public static final String IMAGE_CAMEL_ICON = "icons/camel.png";
-	
+	public static final String IMAGE_PROPS_ICON = "icons/prop_ps.gif";
+	public static final String IMAGE_REFRESH_ICON = "icons/refresh.gif";
+	public static final String IMAGE_CHART_ICON = "icons/chart.gif";
+		
 	private static class FoundationUISharedImages extends BaseUISharedImages {
 		public FoundationUISharedImages(Bundle pluginBundle) {
 			super(pluginBundle);
 			addImage(IMAGE_CAMEL_ICON, IMAGE_CAMEL_ICON);
+			addImage(IMAGE_PROPS_ICON, IMAGE_PROPS_ICON);
+			addImage(IMAGE_REFRESH_ICON, IMAGE_REFRESH_ICON);
+			addImage(IMAGE_CHART_ICON, IMAGE_CHART_ICON);
 		}
 	}
 }

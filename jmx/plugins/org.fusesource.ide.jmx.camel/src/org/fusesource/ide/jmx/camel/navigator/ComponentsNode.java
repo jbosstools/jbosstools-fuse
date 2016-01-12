@@ -11,7 +11,7 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
+import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 
 public class ComponentsNode extends RefreshableCollectionNode {
 	private final CamelContextNode camelContextNode;

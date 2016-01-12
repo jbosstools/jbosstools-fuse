@@ -20,8 +20,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
-import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.util.ImagesActivatorSupport;
 import org.osgi.framework.Bundle;
 
 /**

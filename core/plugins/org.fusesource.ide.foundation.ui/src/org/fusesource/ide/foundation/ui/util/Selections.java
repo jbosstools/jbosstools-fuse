@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
@@ -26,6 +27,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.part.IPageSite;
+import org.fusesource.ide.foundation.ui.tree.HasViewer;
+import org.fusesource.ide.foundation.ui.tree.RefreshableUI;
 
 public class Selections {
 
@@ -138,6 +141,29 @@ public class Selections {
 		return null;
 	}
 
+	public static void setSingleSelection(RefreshableUI refreshableUI, Object singleValue) {
+		if (refreshableUI instanceof HasViewer) {
+			HasViewer v = (HasViewer) refreshableUI;
+			Viewer viewer = v.getViewer();
+			if (viewer != null) {
+				viewer.setSelection(new StructuredSelection(singleValue));
+				Viewers.reveal(viewer, singleValue);
+
+			}
+		}
+	}
+
+
+	public static void setSelection(RefreshableUI refreshableUI, ISelection selection) {
+		if (refreshableUI instanceof HasViewer) {
+			HasViewer v = (HasViewer) refreshableUI;
+			Viewer viewer = v.getViewer();
+			if (viewer != null) {
+				viewer.setSelection(selection);
+			}
+		}
+	}
+
 	public static Object getFirstWorkbenchSelection() {
 		Object firstSelection = null;
 		IWorkbenchPage page = Workbenches.getActiveWorkbenchPage();
@@ -163,5 +189,4 @@ public class Selections {
 		}
 		return false;
 	}
-
 }

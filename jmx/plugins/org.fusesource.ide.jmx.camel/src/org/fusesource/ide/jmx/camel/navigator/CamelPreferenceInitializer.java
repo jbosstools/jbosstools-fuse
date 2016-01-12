@@ -11,8 +11,8 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import org.fusesource.ide.commons.ui.UIPreferencesInitialiserSupport;
-import org.fusesource.ide.commons.ui.config.TableConfiguration;
+import org.fusesource.ide.foundation.ui.config.TableConfiguration;
+import org.fusesource.ide.foundation.ui.util.UIPreferencesInitialiserSupport;
 import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
 

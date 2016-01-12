@@ -5,9 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.functions.Function1;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.jmx.commons.Activator;
 
 
 public class TypeConverters {

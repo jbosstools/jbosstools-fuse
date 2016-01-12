@@ -70,7 +70,7 @@
           id="org.fusesource.ide.commons.views.jmx.JMXContextMenuProvider">
        <enablement>
           <instanceof
-                value="org.fusesource.ide.commons.ui.ContextMenuProvider">
+                value="org.fusesource.ide.foundation.ui.util.ContextMenuProvider">
           </instanceof>
        </enablement>
     </actionProvider>
@@ -93,8 +93,8 @@
     <extension
          point="org.eclipse.core.runtime.adapters">
       <factory
-            adaptableType="org.fusesource.ide.commons.tree.NodeSupport"
-            class="org.fusesource.ide.commons.tree.NodeSupportPropertiesSourceAdapterFactory">
+            adaptableType="org.fusesource.ide.foundation.ui.tree.NodeSupport"
+            class="org.fusesource.ide.foundation.ui.tree.NodeSupportPropertiesSourceAdapterFactory">
          <adapter
                type="org.eclipse.ui.views.properties.IPropertySource">
          </adapter>

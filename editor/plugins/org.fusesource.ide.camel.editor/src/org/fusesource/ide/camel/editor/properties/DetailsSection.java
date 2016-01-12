@@ -95,8 +95,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.dataformats.DataForma
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.catalog.languages.Language;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
-import org.fusesource.ide.commons.ui.Selections;
 import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.util.Selections;
 import org.w3c.dom.Node;
 
 /**

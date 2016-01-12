@@ -28,7 +28,6 @@ Require-Bundle: org.eclipse.core.resources,
  org.eclipse.m2e.maven.indexer;bundle-version="1.6.0",
  org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
  org.fusesource.ide.foundation.core;bundle-version="8.0.0",
- org.fusesource.ide.commons;bundle-version="8.0.0",
  org.fusesource.ide.foundation.ui;bundle-version="8.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.fusesource.ide.launcher.Activator

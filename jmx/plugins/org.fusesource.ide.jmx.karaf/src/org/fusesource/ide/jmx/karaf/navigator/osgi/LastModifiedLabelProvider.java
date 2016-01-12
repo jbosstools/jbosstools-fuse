@@ -15,7 +15,7 @@ import java.util.Date;
 
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.fusesource.ide.commons.ui.label.TimeThenDateLabelProvider;
+import org.fusesource.ide.foundation.ui.label.TimeThenDateLabelProvider;
 
 
 public class LastModifiedLabelProvider extends TimeThenDateLabelProvider {

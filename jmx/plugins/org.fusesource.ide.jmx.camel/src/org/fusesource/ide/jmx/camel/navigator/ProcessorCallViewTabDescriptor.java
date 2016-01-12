@@ -12,7 +12,7 @@
 package org.fusesource.ide.jmx.camel.navigator;
 
 import org.eclipse.ui.part.IPage;
-import org.fusesource.ide.commons.ui.views.PageTabDescriptor;
+import org.fusesource.ide.foundation.ui.views.PageTabDescriptor;
 import org.jboss.tools.jmx.core.tree.Node;
 
 

@@ -14,7 +14,7 @@ package org.fusesource.ide.jmx.servicemix.navigator;
 
 import org.apache.servicemix.nmr.management.ManagedEndpointMBean;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.jmx.servicemix.ServiceMixJMXPlugin;
 import org.jboss.tools.jmx.ui.ImageProvider;
 

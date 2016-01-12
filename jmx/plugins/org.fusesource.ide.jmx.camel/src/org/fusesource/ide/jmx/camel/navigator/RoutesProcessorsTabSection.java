@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
-import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableView;
+import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableView;
+import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
 public class RoutesProcessorsTabSection extends PropertySourceTableView {

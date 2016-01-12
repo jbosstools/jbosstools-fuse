@@ -14,7 +14,7 @@ package org.fusesource.ide.jmx.camel.navigator;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
+import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.internal.CamelContextMBean;
 import org.fusesource.ide.jmx.camel.internal.CamelFacade;

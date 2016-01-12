@@ -12,9 +12,8 @@
 package org.fusesource.ide.branding;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.osgi.framework.BundleContext;
-
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 
 /**
  * @author lhein

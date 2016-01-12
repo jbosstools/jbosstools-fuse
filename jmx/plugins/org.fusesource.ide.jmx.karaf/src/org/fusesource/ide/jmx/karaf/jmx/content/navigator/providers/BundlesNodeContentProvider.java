@@ -14,7 +14,7 @@ import javax.management.MalformedObjectNameException;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.fusesource.ide.jmx.karaf.navigator.osgi.BundlesNode;
