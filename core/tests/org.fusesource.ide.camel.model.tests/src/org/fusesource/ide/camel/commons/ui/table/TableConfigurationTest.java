@@ -18,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import org.fusesource.ide.commons.ui.config.ColumnConfiguration;
-import org.fusesource.ide.commons.ui.config.TableConfiguration;
+import org.fusesource.ide.foundation.ui.config.ColumnConfiguration;
+import org.fusesource.ide.foundation.ui.config.TableConfiguration;
 import org.junit.Test;
 
 public class TableConfigurationTest  {

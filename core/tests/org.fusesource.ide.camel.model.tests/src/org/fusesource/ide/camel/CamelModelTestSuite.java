@@ -11,14 +11,6 @@
 package org.fusesource.ide.camel;
 
 import org.fusesource.ide.camel.commons.ui.table.TableConfigurationTest;
-import org.fusesource.ide.camel.model.AddOrderingTest;
-import org.fusesource.ide.camel.model.CanConnectTest;
-import org.fusesource.ide.camel.model.CanOutputTest;
-import org.fusesource.ide.camel.model.ContentBasedRouterTest;
-import org.fusesource.ide.camel.model.DisplayTextTest;
-import org.fusesource.ide.camel.model.EndpointSummaryTest;
-import org.fusesource.ide.camel.model.ModelTest;
-import org.fusesource.ide.camel.model.UnmarshalTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -26,14 +18,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 					TableConfigurationTest.class,
-					AddOrderingTest.class,
-					CanConnectTest.class,
-					CanOutputTest.class,
-					ContentBasedRouterTest.class,
-					DisplayTextTest.class,
-					EndpointSummaryTest.class,
-					ModelTest.class,
-					UnmarshalTest.class
 			 })
 public class CamelModelTestSuite {
 }

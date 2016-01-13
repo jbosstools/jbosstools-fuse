@@ -234,10 +234,10 @@ public class CamelIOHandler {
      * saves the camel model to file
      * 
      * @param camelFile
-     * @param res
+     * @param outputFile
      * @param monitor
      */
-    public void saveCamelModel(CamelFile camelFile, IResource res, IProgressMonitor monitor) {
+    public void saveCamelModel(CamelFile camelFile, File outputFile, IProgressMonitor monitor) {
     	if (this.document == null) this.document = createDocumentBuilder().newDocument();
 
     	try {
@@ -248,7 +248,6 @@ public class CamelIOHandler {
 	        Transformer transformer = tf.newTransformer();
 	
 	        // Save vs. Save as
-	        File outputFile = getFileFromResource((res != null && res != camelFile.getResource()) ? res : camelFile.getResource());
 	        Result output = new StreamResult(outputFile);
 	        Source input = new DOMSource(this.document);
 	
@@ -259,8 +258,20 @@ public class CamelIOHandler {
 	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "" + INDENTION_VALUE);
 	        transformer.transform(input, output);
     	} catch (Exception ex) {
-    		CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + res.getFullPath().toOSString(), ex);
+    		CamelModelServiceCoreActivator.pluginLog().logError("Unable to save the camel file to " + outputFile.getPath(), ex);
     	}
+    }
+    
+    /**
+     * saves the camel model to file
+     * 
+     * @param camelFile
+     * @param res
+     * @param monitor
+     */
+    public void saveCamelModel(CamelFile camelFile, IResource res, IProgressMonitor monitor) {
+    	File outputFile = getFileFromResource((res != null && res != camelFile.getResource()) ? res : camelFile.getResource());   	
+    	saveCamelModel(camelFile, outputFile, monitor);
     }
 	
 	/**
