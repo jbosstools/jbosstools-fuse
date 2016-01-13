@@ -27,5 +27,6 @@ Export-Package: org.fusesource.ide.camel.model.service.core,
  org.fusesource.ide.camel.model.service.core.catalog.eips,
  org.fusesource.ide.camel.model.service.core.catalog.languages,
  org.fusesource.ide.camel.model.service.core.io,
+ org.fusesource.ide.camel.model.service.core.jmx.camel,
  org.fusesource.ide.camel.model.service.core.model,
  org.fusesource.ide.camel.model.service.core.util

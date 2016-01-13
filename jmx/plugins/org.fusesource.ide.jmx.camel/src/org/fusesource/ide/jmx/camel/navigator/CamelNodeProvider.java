@@ -13,7 +13,7 @@ package org.fusesource.ide.jmx.camel.navigator;
 
 import java.util.List;
 
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
 import org.fusesource.ide.jmx.camel.internal.JmxTemplateCamelFacade;
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
 import org.jboss.tools.jmx.core.tree.NodeProvider;
@@ -25,7 +25,7 @@ public class CamelNodeProvider implements NodeProvider {
 	@Override
 	public void provide(final Root root) {
 		if (root.containsDomain("org.apache.camel")) {
-			CamelFacade facade = new JmxTemplateCamelFacade(new JmxPluginJmxTemplate(root.getConnection()));
+			CamelJMXFacade facade = new JmxTemplateCamelFacade(new JmxPluginJmxTemplate(root.getConnection()));
 			CamelContextsNode camel = new CamelContextsNode(root, facade);
 			root.addChild(camel);
 		}

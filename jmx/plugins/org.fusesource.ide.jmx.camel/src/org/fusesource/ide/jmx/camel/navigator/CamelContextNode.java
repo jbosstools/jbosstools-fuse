@@ -17,9 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.camel.RuntimeCamelException;
-import org.apache.camel.api.management.mbean.BacklogTracerEventMessage;
-import org.apache.camel.api.management.mbean.ManagedBacklogTracerMBean;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -33,6 +30,12 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.BacklogTracerMessage;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelBacklogTracerMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelFabricTracerMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelProcessorMBean;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.functions.Function1;
@@ -46,10 +49,6 @@ import org.fusesource.ide.foundation.ui.util.Nodes;
 import org.fusesource.ide.foundation.ui.util.Workbenches;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
-import org.fusesource.ide.jmx.camel.internal.CamelContextMBean;
-import org.fusesource.ide.jmx.camel.internal.CamelFabricTracerMBean;
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
-import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 import org.fusesource.ide.jmx.commons.messages.IExchange;
 import org.fusesource.ide.jmx.commons.messages.IMessage;
 import org.fusesource.ide.jmx.commons.messages.ITraceExchangeBrowser;
@@ -64,7 +63,7 @@ public class CamelContextNode 	extends NodeSupport
 	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
 	
 	private final CamelContextsNode camelContextsNode;
-	private final CamelFacade facade;
+	private final CamelJMXFacade facade;
 	private final CamelContextMBean camelContextMBean;
 	private CamelContextElement camelContext;
 	private final RoutesNode routes;
@@ -72,7 +71,7 @@ public class CamelContextNode 	extends NodeSupport
 	private NodeStatisticsContainer runtimeNodeStatisticsContainer;
 	private File tempContextFile = null;
 	
-	public CamelContextNode(CamelContextsNode camelContextsNode, CamelFacade facade, CamelContextMBean camelContext) throws Exception {
+	public CamelContextNode(CamelContextsNode camelContextsNode, CamelJMXFacade facade, CamelContextMBean camelContext) throws Exception {
 		super(camelContextsNode);
 		this.camelContextsNode = camelContextsNode;
 		this.facade = facade;
@@ -132,7 +131,7 @@ public class CamelContextNode 	extends NodeSupport
 		}
 	}
 
-	public CamelFacade getFacade() {
+	public CamelJMXFacade getFacade() {
 		return facade;
 	}
 
@@ -174,8 +173,8 @@ public class CamelContextNode 	extends NodeSupport
 		Object tracer = getTracer();
 		if (tracer == null) return false;
 		
-		if (tracer instanceof ManagedBacklogTracerMBean) {
-			return ((ManagedBacklogTracerMBean)tracer).isEnabled();
+		if (tracer instanceof CamelBacklogTracerMBean) {
+			return ((CamelBacklogTracerMBean)tracer).isEnabled();
 		} else {
 			return ((CamelFabricTracerMBean)tracer).isEnabled();
 		}
@@ -197,8 +196,8 @@ public class CamelContextNode 	extends NodeSupport
 	public void startTracing() {
 		try {
 			Object tracer = getTracer();
-			if (tracer instanceof ManagedBacklogTracerMBean) {
-				((ManagedBacklogTracerMBean)tracer).setEnabled(true);
+			if (tracer instanceof CamelBacklogTracerMBean) {
+				((CamelBacklogTracerMBean)tracer).setEnabled(true);
 			} else {
 				((CamelFabricTracerMBean)tracer).setEnabled(true);
 			}
@@ -216,8 +215,8 @@ public class CamelContextNode 	extends NodeSupport
 
 	public void stopTracing() {
 		Object tracer = getTracer();
-		if (tracer instanceof ManagedBacklogTracerMBean) {
-			((ManagedBacklogTracerMBean)tracer).setEnabled(false);
+		if (tracer instanceof CamelBacklogTracerMBean) {
+			((CamelBacklogTracerMBean)tracer).setEnabled(false);
 		} else {
 			((CamelFabricTracerMBean)tracer).setEnabled(false);
 		}
@@ -450,10 +449,10 @@ public class CamelContextNode 	extends NodeSupport
 			// TODO we should add trace messages for a specific route ID to the
 			// all routes
 			Object tracer = getTracer();
-			if (tracer instanceof ManagedBacklogTracerMBean) {
-				ManagedBacklogTracerMBean camelTracer = (ManagedBacklogTracerMBean)tracer;
+			if (tracer instanceof CamelBacklogTracerMBean) {
+				CamelBacklogTracerMBean camelTracer = (CamelBacklogTracerMBean)tracer;
 				if (camelTracer != null) {
-					List<BacklogTracerEventMessage> traceMessages = null;
+					List<BacklogTracerMessage> traceMessages = null;
 					if (id == null) {
 						traceMessages = camelTracer.dumpAllTracedMessages();
 					} else {
@@ -467,7 +466,7 @@ public class CamelContextNode 	extends NodeSupport
 				CamelFabricTracerMBean fabricTracer = (CamelFabricTracerMBean)tracer;
 				if (fabricTracer != null) {
 					String traceXml = fabricTracer.dumpAllTracedMessagesAsXml();
-					List<BacklogTracerEventMessage> traceMessages;
+					List<BacklogTracerMessage> traceMessages;
 					if (id == null) {
 						traceMessages = getTraceMessagesFromXml(traceXml);
 					} else {
@@ -485,8 +484,8 @@ public class CamelContextNode 	extends NodeSupport
 		return traceList;
 	}
 	
-	private List<BacklogTracerEventMessage> getTraceMessagesFromXml(String xmlDump) {
-		List<BacklogTracerEventMessage> events = new ArrayList<BacklogTracerEventMessage>();
+	private List<BacklogTracerMessage> getTraceMessagesFromXml(String xmlDump) {
+		List<BacklogTracerMessage> events = new ArrayList<BacklogTracerMessage>();
 		
 		// TODO: unmarshal events from the xml and put to the list of messages
 		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml()");
@@ -496,8 +495,8 @@ public class CamelContextNode 	extends NodeSupport
 		return events;
 	}
 
-	private List<BacklogTracerEventMessage> getTraceMessagesFromXml(String xmlDump, String id) {
-		List<BacklogTracerEventMessage> events = new ArrayList<BacklogTracerEventMessage>();
+	private List<BacklogTracerMessage> getTraceMessagesFromXml(String xmlDump, String id) {
+		List<BacklogTracerMessage> events = new ArrayList<BacklogTracerMessage>();
 		
 		// TODO: unmarshal events from the xml and put to the list of messages
 		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml(id)");
@@ -522,14 +521,14 @@ public class CamelContextNode 	extends NodeSupport
 
 	public Object getTracer() {
 		try {
-			ManagedBacklogTracerMBean mbean = getFacade().getCamelTracer(getManagementName());
+			CamelBacklogTracerMBean mbean = getFacade().getCamelTracer(getManagementName());
 			if (mbean != null) {
 				return mbean;
 			} else {
 				return getFacade().getFabricTracer(getManagementName());
 			}
 		} catch (Exception e) {
-			throw new RuntimeCamelException(e);
+			throw new RuntimeException(e);
 		}
 	}
 

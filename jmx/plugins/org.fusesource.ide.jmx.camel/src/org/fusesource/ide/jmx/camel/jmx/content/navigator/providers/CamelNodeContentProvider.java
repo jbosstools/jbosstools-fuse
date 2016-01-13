@@ -12,8 +12,8 @@ package org.fusesource.ide.jmx.camel.jmx.content.navigator.providers;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
 import org.fusesource.ide.jmx.camel.internal.JmxTemplateCamelFacade;
 import org.fusesource.ide.jmx.camel.navigator.CamelContextsNode;
 import org.fusesource.ide.jmx.commons.JmxPluginJmxTemplate;
@@ -47,7 +47,7 @@ public class CamelNodeContentProvider implements ITreeContentProvider {
 			Root r = w.getRoot();
 			if( r != null ) {
 				if (r.containsDomain("org.apache.camel")) {
-					CamelFacade facade = new JmxTemplateCamelFacade(new JmxPluginJmxTemplate(r.getConnection()));
+					CamelJMXFacade facade = new JmxTemplateCamelFacade(new JmxPluginJmxTemplate(r.getConnection()));
 					CamelContextsNode camel = new CamelContextsNode(r, facade);
 					return new Object[]{camel};
 				}
@@ -61,7 +61,6 @@ public class CamelNodeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

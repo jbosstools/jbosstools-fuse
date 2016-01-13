@@ -11,9 +11,9 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelProcessorMBean;
 import org.fusesource.ide.foundation.ui.config.TableConfiguration;
 import org.fusesource.ide.foundation.ui.util.UIPreferencesInitialiserSupport;
-import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
 
 public class CamelPreferenceInitializer extends UIPreferencesInitialiserSupport {

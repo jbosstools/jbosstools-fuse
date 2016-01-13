@@ -20,6 +20,7 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.CamelEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
@@ -53,8 +54,7 @@ public class HighlightNodeCommand extends RecordingCommand {
 		}
 		
 		// check if we need to switch to another route for highlighting
-		if (this.node != null && 
-			highlight) {
+		if (this.node != null && highlight) {
 			if (node.getParent() != null) {
 				// seems the next breakpoint is in a different route and we need to switch to that route now
 				if (node.getParent() instanceof CamelRouteElement) {
@@ -66,7 +66,7 @@ public class HighlightNodeCommand extends RecordingCommand {
 		
 		PictogramElement pe = designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
 		if (pe == null) {
-			//CamelEditorUIActivator.pluginLog().logInfo("Warning could not find PictogramElement for highlight node: " + node);
+			CamelEditorUIActivator.pluginLog().logWarning("Warning could not find PictogramElement for highlight node: " + node);
 			return;
 		}
 		
@@ -93,6 +93,7 @@ public class HighlightNodeCommand extends RecordingCommand {
 							// delete highlight
 							text.setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.E_CLASS_TEXT_FOREGROUND));
 						}
+						break;
 					}
 				}
 			}				

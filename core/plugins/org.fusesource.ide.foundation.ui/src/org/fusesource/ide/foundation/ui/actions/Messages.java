@@ -25,7 +25,7 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 
 	/** The bundle name. */
-	private static final String BUNDLE_NAME = "org.fusesource.ide.commons.ui.actions.messages";//$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.fusesource.ide.foundation.ui.actions.messages";//$NON-NLS-1$
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

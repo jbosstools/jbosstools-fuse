@@ -459,7 +459,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		        outlinePage.changeInput(container);
 			}
 		};
-		Display.getDefault().asyncExec(r);
+		Display.getDefault().syncExec(r);
 	}
 
 	/**

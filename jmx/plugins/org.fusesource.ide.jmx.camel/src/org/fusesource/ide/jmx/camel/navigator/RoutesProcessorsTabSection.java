@@ -16,9 +16,9 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelProcessorMBean;
 import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableView;
 import org.fusesource.ide.foundation.ui.util.Selections;
-import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
 public class RoutesProcessorsTabSection extends PropertySourceTableView {
     
@@ -35,10 +35,11 @@ public class RoutesProcessorsTabSection extends PropertySourceTableView {
             return;
         }
         current = routes;
-        List<?> propertySources = routes == null ? Collections.emptyList() : routes.getAllProcessorsPropertySourceList();
+        List<?> propertySources = (routes == null) ? Collections.emptyList() : routes.getAllProcessorsPropertySourceList();
         setPropertySources(propertySources);
         getViewer().setInput(propertySources);
         recreateColumns();
+        getViewer().getTable().update();
         getViewer().refresh(true);
     }
 

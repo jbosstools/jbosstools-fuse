@@ -95,7 +95,7 @@ public class Viewers {
 		boolean valid = false;
 		if (viewer != null) {
 			Control widget = viewer.getControl();
-			valid = Widgets.isValid(widget) && widget.isVisible();
+			valid = Widgets.isValid(widget);// && widget.isVisible();
 		}
 		return valid;
 	}

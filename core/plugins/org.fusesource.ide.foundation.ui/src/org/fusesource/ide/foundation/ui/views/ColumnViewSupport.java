@@ -440,6 +440,7 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 		refreshAction.setId(getClass().getName() + ".refresh");
 		refreshAction.setText("Refresh");
 		refreshAction.setToolTipText("Refreshes the view");
+		refreshAction.setImageDescriptor(FoundationUIActivator.getDefault().getSharedImages().descriptor(FoundationUIActivator.IMAGE_REFRESH_ICON));
 
 		configureColumnsAction = new ConfigureColumnsAction(this);
 
@@ -452,6 +453,7 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 		chartAction.setId(getClass().getName() + ".chart");
 		chartAction.setText("Create Chart");
 		chartAction.setToolTipText("Create a chart from the current table");
+		chartAction.setImageDescriptor(FoundationUIActivator.getDefault().getSharedImages().descriptor(FoundationUIActivator.IMAGE_CHART_ICON));
 
 		if (doubleClickAction == null) {
 			doubleClickAction = new Action() {

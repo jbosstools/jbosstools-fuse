@@ -13,6 +13,8 @@ package org.fusesource.ide.jmx.camel.internal;
 
 import javax.management.MBeanServerConnection;
 
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelFacadeSupport;
+
 /**
  * @author lhein
  *

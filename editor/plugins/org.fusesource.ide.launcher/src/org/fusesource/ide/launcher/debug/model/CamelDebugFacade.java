@@ -17,6 +17,7 @@ import javax.management.MBeanServerConnection;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
+import org.fusesource.ide.camel.model.service.core.jmx.camel.ICamelDebuggerMBeanFacade;
 import org.fusesource.ide.launcher.Activator;
 
 /**

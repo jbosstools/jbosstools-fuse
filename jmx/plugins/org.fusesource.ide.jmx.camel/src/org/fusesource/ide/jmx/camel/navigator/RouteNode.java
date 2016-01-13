@@ -17,14 +17,14 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.model.service.core.model.*;
-import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.functions.Function1;
 import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
-import org.fusesource.ide.jmx.camel.CamelJMXSharedImages;
 import org.fusesource.ide.jmx.camel.Messages;
-import org.fusesource.ide.jmx.camel.internal.CamelRouteMBean;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 
@@ -62,10 +62,11 @@ public class RouteNode extends ProcessorNodeSupport implements ImageProvider {
 	protected void loadChildren() {
 		List<CamelModelElement> children = route.getChildElements();
 		for (CamelModelElement node : children) {
-			addChild(new ProcessorNode(this, this, node));
+			if (node.getInputElement() == null) {
+				addChild(new ProcessorNode(this, this, node));
+			}
 		}
 	}
-
 
 	public CamelRouteMBean getRouteMBean() {
 		return routeMBean;

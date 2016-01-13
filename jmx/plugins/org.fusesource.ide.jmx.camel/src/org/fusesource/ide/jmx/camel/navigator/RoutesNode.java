@@ -21,12 +21,14 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.ide.camel.model.service.core.model.*;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
-import org.fusesource.ide.jmx.camel.internal.CamelRouteMBean;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.HasTotalStatistics;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.IProcessorStatistics;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.IProcessorStatisticsContainer;
@@ -67,7 +69,7 @@ public class RoutesNode extends RefreshableCollectionNode implements ContextMenu
         return false;
     }
 
-	public CamelFacade getFacade() {
+	public CamelJMXFacade getFacade() {
 		return camelContextNode.getFacade();
 	}
 

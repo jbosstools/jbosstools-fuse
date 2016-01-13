@@ -13,26 +13,20 @@ package org.fusesource.ide.camel.model.service.internal;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.camel.catalog.CamelCatalog;
 import org.apache.camel.catalog.DefaultCamelCatalog;
-import org.eclipse.core.resources.IResource;
 import org.fusesource.ide.camel.model.service.core.CamelSchemaProvider;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.adopters.CamelModelLoader;
 import org.fusesource.ide.camel.model.service.core.adopters.XmlCamelModelLoader;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
-import org.w3c.dom.Document;
 
 /**
  * @author lhein
  */
 public class CamelService implements ICamelManagerService {
-	
-	private Map<IResource, Document> docRegistry = Collections.synchronizedMap(new HashMap<IResource, Document>());
 	
 	private CamelModelLoader loader;
 	private CamelCatalog catalog;

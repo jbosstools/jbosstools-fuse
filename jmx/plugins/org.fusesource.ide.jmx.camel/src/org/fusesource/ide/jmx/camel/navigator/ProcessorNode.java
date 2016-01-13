@@ -15,9 +15,8 @@ import java.util.List;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.model.service.core.model.*;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
-import org.fusesource.ide.jmx.camel.CamelJMXSharedImages;
 import org.jboss.tools.jmx.core.tree.Node;
 
 
@@ -46,8 +45,13 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	@Override
 	protected void loadChildren() {
 		List<CamelModelElement> children = node.getChildElements(); //getOutputs()
-		for (CamelModelElement node : children) {
-			addChild(new ProcessorNode(routeNode, this, node));
+		if (node.getOutputElement() != null) {
+			addChild(new ProcessorNode(routeNode, this, node.getOutputElement()));
+		}
+		for (CamelModelElement pnode : children) {
+			if (pnode.getInputElement() == null) {
+				addChild(new ProcessorNode(routeNode, this, pnode));
+			}
 		}
 	}
 
@@ -78,7 +82,9 @@ public class ProcessorNode extends ProcessorNodeSupport {
 
 	@Override
 	public Image getImage() {
-		return CamelJMXPlugin.getDefault().getImage(node.getIconName().replaceAll(".png", "16.png"));
+		Image img = CamelJMXPlugin.getDefault().getImage(node.getIconName().replaceAll(".png", "16.png"));
+		if (img == null) img = CamelJMXPlugin.getDefault().getImage("generic16.png");
+		return img;
 	}
 	
 	/* (non-Javadoc)

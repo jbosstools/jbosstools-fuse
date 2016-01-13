@@ -13,15 +13,15 @@ package org.fusesource.ide.jmx.camel.navigator;
 
 import java.util.List;
 
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelProcessorMBean;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
-import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 
 
 public class CamelFacades {
 
-	public static CamelProcessorMBean getProcessorMBean(CamelFacade camelFacade, String camelContextId, String nodeId) {
+	public static CamelProcessorMBean getProcessorMBean(CamelJMXFacade camelFacade, String camelContextId, String nodeId) {
 		try {
 			List<CamelProcessorMBean> processors = camelFacade.getProcessors(camelContextId);
 			for (CamelProcessorMBean processorMBean : processors) {
