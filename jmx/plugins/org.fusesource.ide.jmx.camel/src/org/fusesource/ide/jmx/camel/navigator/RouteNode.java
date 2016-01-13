@@ -17,23 +17,23 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.commons.util.Function1;
-import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
+import org.fusesource.ide.foundation.core.functions.Function1;
+import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
-import org.fusesource.ide.jmx.camel.internal.CamelRouteMBean;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class RouteNode extends ProcessorNodeSupport implements ImageProvider {
 	private final RoutesNode routesNode;
-	private final RouteSupport route;
+	private final CamelRouteElement route;
 	private CamelRouteMBean routeMBean;
 
-	public RouteNode(RoutesNode routesNode, RouteSupport route) {
+	public RouteNode(RoutesNode routesNode, CamelRouteElement route) {
 		super(routesNode, route);
 		this.routesNode = routesNode;
 		this.route = route;
@@ -54,23 +54,19 @@ public class RouteNode extends ProcessorNodeSupport implements ImageProvider {
 	}
 
 	@Override
-	public AbstractNode getAbstractNode() {
-		return route;
-	}
-
-	@Override
 	public Image getImage() {
-		return route.getSmallImage();
+		return CamelJMXPlugin.getDefault().getImage(route.getIconName().replaceAll(".png", "16.png"));
 	}
 
 	@Override
 	protected void loadChildren() {
-		List<AbstractNode> children = route.getRootNodes();
-		for (AbstractNode node : children) {
-			addChild(new ProcessorNode(this, this, node));
+		List<CamelModelElement> children = route.getChildElements();
+		for (CamelModelElement node : children) {
+			if (node.getInputElement() == null) {
+				addChild(new ProcessorNode(this, this, node));
+			}
 		}
 	}
-
 
 	public CamelRouteMBean getRouteMBean() {
 		return routeMBean;

@@ -10,10 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.debug.launching;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -29,8 +30,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.ui.IEditorInput;
-import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
+import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**
  * Computes the default source lookup path for a Camel launch configuration.
@@ -51,15 +51,13 @@ public class CamelSourcePathComputerDelegate implements
 			ILaunchConfiguration configuration, IProgressMonitor monitor)
 			throws CoreException {
 		
-		IEditorInput input = CamelDebugRegistry.getInstance().getEntry(configuration).getEditorInput();
-		IFile file = (IFile)input.getAdapter(IFile.class);
+		String filePathUri = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(configuration);
+		String filePath = URI.create(filePathUri).getPath();
 		
-		// we store the context file to run in the ATTR_FILE
-//		IFile file = CamelDebugRegistry.getInstance().getEntry(configuration).getEditorInput().getFile();
-				
 		ISourceContainer sourceContainer = null;
-		if (file != null) {
-			sourceContainer = new DirectorySourceContainer(file.getLocation().toFile().getParentFile(), true);
+		if (filePath != null) {
+			File contextFile = new File(filePath);
+			sourceContainer = new DirectorySourceContainer(contextFile.getParentFile(), true);
 		}
 		
 		if (sourceContainer == null) {

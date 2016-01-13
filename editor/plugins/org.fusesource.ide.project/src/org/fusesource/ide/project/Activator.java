@@ -13,7 +13,7 @@ package org.fusesource.ide.project;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
 import org.osgi.framework.BundleContext;
 
 /**

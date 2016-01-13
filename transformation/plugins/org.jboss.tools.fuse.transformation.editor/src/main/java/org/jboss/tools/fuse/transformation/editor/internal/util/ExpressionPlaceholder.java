@@ -9,7 +9,7 @@
  *****************************************************************************/
 package org.jboss.tools.fuse.transformation.editor.internal.util;
 
-import org.jboss.tools.fuse.transformation.Expression;
+import org.jboss.tools.fuse.transformation.core.Expression;
 
 /**
  *

@@ -18,7 +18,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
-import org.fusesource.ide.commons.ui.drop.DropHandler;
+import org.fusesource.ide.foundation.ui.drop.DropHandler;
 import org.fusesource.ide.jmx.camel.navigator.EndpointNode;
 
 /**

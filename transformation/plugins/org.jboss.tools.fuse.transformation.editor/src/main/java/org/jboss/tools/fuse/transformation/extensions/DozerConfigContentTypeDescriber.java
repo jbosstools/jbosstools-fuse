@@ -18,26 +18,17 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.ITextContentDescriber;
 
-/**
- *
- */
 public class DozerConfigContentTypeDescriber implements ITextContentDescriber {
 
-    /**
-     *
-     */
     public static final String ID = "org.jboss.tools.fuse.transformation.editor.dozer-config-content-type";
 
-    private static final QualifiedName[] SUPPORTED_OPTIONS =
-            new QualifiedName[] {IContentDescription.CHARSET};
+    private static final QualifiedName[] SUPPORTED_OPTIONS = new QualifiedName[] {IContentDescription.CHARSET};
     private static final String ROOT_ELEMENT = "<mappingsxmlns=";
     private static final String XMLNS = "http://dozer.sourceforge.net";
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.eclipse.core.runtime.content.IContentDescriber#describe(java.io.InputStream,
-     *      org.eclipse.core.runtime.content.IContentDescription)
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.core.runtime.content.IContentDescriber#describe(java.io.InputStream, org.eclipse.core.runtime.content.IContentDescription)
      */
     @Override
     public int describe(final InputStream contents,
@@ -45,11 +36,9 @@ public class DozerConfigContentTypeDescriber implements ITextContentDescriber {
         return describe(new InputStreamReader(contents), description);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see org.eclipse.core.runtime.content.ITextContentDescriber#describe(java.io.Reader,
-     *      org.eclipse.core.runtime.content.IContentDescription)
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.core.runtime.content.ITextContentDescriber#describe(java.io.Reader, org.eclipse.core.runtime.content.IContentDescription)
      */
     @Override
     public int describe(final Reader contents,
@@ -62,9 +51,8 @@ public class DozerConfigContentTypeDescriber implements ITextContentDescriber {
                 : ITextContentDescriber.INVALID;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
+    /*
+     * (non-Javadoc)
      * @see org.eclipse.core.runtime.content.IContentDescriber#getSupportedOptions()
      */
     @Override

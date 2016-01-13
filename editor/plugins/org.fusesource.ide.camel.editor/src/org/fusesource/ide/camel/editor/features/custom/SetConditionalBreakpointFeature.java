@@ -27,13 +27,12 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.ConditionalBreakpointEditorDialog;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.dialogs.ConditionalBreakpointEditorDialog;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 
@@ -61,8 +60,8 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
         final Object bo = getBusinessObjectForPictogramElement(_pe);
         final IResource resource = getResource();
        
-        if (bo instanceof AbstractNode) {
-        	AbstractNode _ep = (AbstractNode) bo;
+        if (bo instanceof CamelModelElement) {
+        	CamelModelElement _ep = (CamelModelElement) bo;
             try {
             	Boolean userWantsUpdate = null;
             	IFile contextFile = getContextFile();
@@ -75,7 +74,7 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
         			String language = dlg.getLanguage();
         			String condition = dlg.getCondition();
         		
-	            	if (Strings.isBlank(_ep.getCamelContextId()) ||
+	            	if (Strings.isBlank(_ep.getCamelContext().getId()) ||
 	            		Strings.isBlank(_ep.getId()) ) {
 	            		// important ID fields are not yet set - ask the user if we
 	            		// can update those fields for him
@@ -83,9 +82,9 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
 
 	            		if (userWantsUpdate) {
 	            			// update the context id if needed
-	            			if (Strings.isBlank(_ep.getCamelContextId())) {
+	            			if (Strings.isBlank(_ep.getCamelContext().getId())) {
 	            				String newContextId = ICamelDebugConstants.PREFIX_CONTEXT_ID + UUID.randomUUID().toString();
-	            				((RouteContainer)_ep.getParent().getParent()).setContextId(newContextId);
+	            				_ep.getCamelContext().setId(newContextId);
 	            			}
 	            			
 	            			// update the node id if blank
@@ -95,14 +94,14 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
 	            				while (!foundUniqueId) {
 	            					newNodeId = ICamelDebugConstants.PREFIX_NODE_ID + _ep.getNewID();
 	            					// we need to check if the id is really unique in our context
-	            					if (((RiderDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel().getNode(newNodeId) == null) {
+	            					if (((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel().findNode(newNodeId) == null) {
 	            						foundUniqueId = true;
 	            					}
 	            				}
 	            				if (Strings.isBlank(newNodeId) == false) {
 	            					_ep.setId(newNodeId);
 	            				} else {
-	            					throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to determine a unique ID for node " + _ep));
+	            					throw new CoreException(new Status(IStatus.ERROR, CamelEditorUIActivator.PLUGIN_ID, "Unable to determine a unique ID for node " + _ep));
 	            				}
 	            			}
 	            			
@@ -118,8 +117,8 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
             } catch (CoreException e) {
                 final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
                 final Shell shell;
-                if (container instanceof RiderDesignEditor) {
-                    shell = ((RiderDesignEditor) container).getEditorSite().getShell();
+                if (container instanceof CamelDesignEditor) {
+                    shell = ((CamelDesignEditor) container).getEditorSite().getShell();
                 } else {
                     shell = Display.getCurrent().getActiveShell();
                 }
@@ -164,8 +163,8 @@ public class SetConditionalBreakpointFeature extends SetEndpointBreakpointFeatur
                 .getStart().getParent() : cc.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        if (bo instanceof AbstractNode) {
-        	AbstractNode _ep = (AbstractNode) bo;
+        if (bo instanceof CamelModelElement) {
+        	CamelModelElement _ep = (CamelModelElement) bo;
         	IFile contextFile = getContextFile();
         	String fileName = contextFile.getName();
         	String projectName = contextFile.getProject().getName();

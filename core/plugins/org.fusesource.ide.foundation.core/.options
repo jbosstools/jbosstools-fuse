@@ -1,0 +1,19 @@
+# Debugging options for the org.fusesource.ide.foundation.core plugin
+
+# Turn on general debugging
+org.fusesource.ide.foundation.core/debug=true
+
+# Tracing options
+org.fusesource.ide.foundation.core/config=false
+org.fusesource.ide.foundation.core/info=false
+org.fusesource.ide.foundation.core/warning=false
+org.fusesource.ide.foundation.core/severe=false
+org.fusesource.ide.foundation.core/finest=false
+org.fusesource.ide.foundation.core/finer=false
+
+# Loading of extension points
+org.fusesource.ide.foundation.core/extension_point=false
+
+# Performance of loading and calling delegates
+org.fusesource.ide.foundation.core/performance=false
+

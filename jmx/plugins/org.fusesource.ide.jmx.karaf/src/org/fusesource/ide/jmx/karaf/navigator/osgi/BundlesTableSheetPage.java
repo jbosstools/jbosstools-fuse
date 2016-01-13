@@ -35,12 +35,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.ide.commons.Viewers;
-import org.fusesource.ide.commons.jobs.Jobs;
-import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.ui.propsrc.PropertySourceTableSheetPage;
-import org.fusesource.ide.commons.ui.views.IViewPage;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.foundation.ui.jobs.Jobs;
+import org.fusesource.ide.foundation.ui.propsrc.PropertySourceTableSheetPage;
+import org.fusesource.ide.foundation.ui.util.Selections;
+import org.fusesource.ide.foundation.ui.util.Viewers;
+import org.fusesource.ide.foundation.ui.views.IViewPage;
 import org.fusesource.ide.jmx.karaf.KarafJMXPlugin;
 import org.fusesource.ide.jmx.karaf.Messages;
 

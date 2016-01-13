@@ -16,10 +16,9 @@ import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.ide.camel.model.AbstractNodeFacade;
-import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ContextMenuProvider;
+import org.fusesource.ide.camel.model.service.core.model.*;
+import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
+import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
 import org.fusesource.ide.jmx.commons.messages.IExchange;
 import org.fusesource.ide.jmx.commons.messages.IInvocationStatistics;
 import org.fusesource.ide.jmx.commons.messages.INodeStatistics;
@@ -30,16 +29,16 @@ import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 
-public abstract class ProcessorNodeSupport extends RefreshableCollectionNode implements AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider {
+public abstract class ProcessorNodeSupport extends RefreshableCollectionNode implements ContextMenuProvider, ITraceExchangeBrowser, ImageProvider {
 
-	private final RouteSupport route;
+	private final CamelRouteElement route;
 
-	public ProcessorNodeSupport(Node parent, RouteSupport route) {
+	public ProcessorNodeSupport(Node parent, CamelRouteElement route) {
 		super(parent);
 		this.route = route;
 	}
 
-	public RouteSupport getRoute() {
+	public CamelRouteElement getRoute() {
 		return route;
 	}
 

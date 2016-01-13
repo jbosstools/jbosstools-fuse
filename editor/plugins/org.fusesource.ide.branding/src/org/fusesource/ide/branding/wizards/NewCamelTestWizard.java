@@ -68,10 +68,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.fusesource.ide.branding.Activator;
-import org.fusesource.ide.commons.contenttype.BlueprintXmlMatchingStrategy;
-import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
-
-
+import org.fusesource.ide.foundation.core.contenttype.*;
 
 /**
  * A wizard for creating test cases.
@@ -457,7 +454,9 @@ public class NewCamelTestWizard extends JUnitWizard {
 		boolean hasCamelTestDep = false;
 		List<Dependency> deps = model.getDependencies();
 		for (Dependency dep : deps) {
-			if (dep.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_WILDCARD)) {
+			if (dep.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_WILDCARD) && 
+				dep.getGroupId().equalsIgnoreCase(CAMEL_GROUP_ID) &&
+				this.camelVersion == null) {
 				this.camelVersion = dep.getVersion();
 			}
 			if (dep.getArtifactId().equalsIgnoreCase(CAMEL_TEST_ARTIFACT_ID)) {

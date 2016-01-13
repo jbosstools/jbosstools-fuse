@@ -12,9 +12,8 @@
 package org.fusesource.ide.jmx.activemq.navigator;
 
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.Activator;
-import org.fusesource.ide.commons.tree.NodeSupport;
-import org.fusesource.ide.commons.tree.Refreshable;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.Refreshable;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
 import org.fusesource.ide.jmx.activemq.internal.BrokerFacade;
 import org.jboss.tools.jmx.core.tree.Node;
@@ -41,7 +40,7 @@ public class BrokerNode extends NodeSupport implements ImageProvider, Refreshabl
 		try {
 			setPropertyBean(facade.getBrokerAdmin());
 		} catch (Exception e) {
-			Activator.getLogger().warning("Failed to get broker admin: "+ e, e);
+			ActiveMQJMXPlugin.getLogger().warning("Failed to get broker admin: "+ e, e);
 		}
 	}
 

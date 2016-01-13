@@ -20,9 +20,9 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.fusesource.ide.camel.editor.editor.ConditionalBreakpointEditorDialog;
+import org.fusesource.ide.camel.editor.dialogs.ConditionalBreakpointEditorDialog;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
@@ -49,8 +49,8 @@ public class EditConditionalBreakpoint extends SetConditionalBreakpointFeature {
                 .getStart().getParent() : context.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        if (bo instanceof AbstractNode) {
-        	AbstractNode _ep = (AbstractNode) bo;
+        if (bo instanceof CamelModelElement) {
+        	CamelModelElement _ep = (CamelModelElement) bo;
         	IFile contextFile = getContextFile();
         	String fileName = contextFile.getName();
         	String projectName = contextFile.getProject().getName();
@@ -111,8 +111,8 @@ public class EditConditionalBreakpoint extends SetConditionalBreakpointFeature {
                 .getStart().getParent() : cc.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        if (bo instanceof AbstractNode) {
-        	AbstractNode _ep = (AbstractNode) bo;
+        if (bo instanceof CamelModelElement) {
+        	CamelModelElement _ep = (CamelModelElement) bo;
         	IFile contextFile = getContextFile();
         	String fileName = contextFile.getName();
         	String projectName = contextFile.getProject().getName();

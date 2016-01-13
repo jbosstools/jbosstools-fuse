@@ -13,19 +13,20 @@ package org.fusesource.ide.camel.editor.features.create.ext;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.ConnectorEndpoint;
-import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.catalog.components.Component;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.w3c.dom.Element;
 
 /**
  * @author lhein
  */
-public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> {
+public class CreateConnectorFigureFeature extends CreateFigureFeature {
     
-    private final ConnectorEndpoint endpoint;
     protected final Component component;
     
     /**
@@ -35,10 +36,17 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
      * @param component
      */
     public CreateConnectorFigureFeature(IFeatureProvider fp, Component component) {
-        super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), Endpoint.class);
-        this.endpoint = new ConnectorEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme())); // we use the first found protocol string
-        setExemplar(this.endpoint);
-        this.component = component;
+    	super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), (Eip)null);
+        this.component = component;        
+        setEip(getEipByName("from"));
+    }
+        
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#canCreate(org.eclipse.graphiti.features.context.ICreateContext)
+     */
+    @Override
+    public boolean canCreate(ICreateContext context) {
+    	return true;
     }
     
     /* (non-Javadoc)
@@ -50,11 +58,28 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
     }
         
     /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.features.create.CreateFigureFeature#createNode()
+     * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#createNode(org.fusesource.ide.camel.model.service.core.model.CamelModelElement, boolean)
      */
     @Override
-    protected AbstractNode createNode() {
-        return new ConnectorEndpoint(this.endpoint);
+    protected CamelModelElement createNode(CamelModelElement parent, boolean createDOMNode) {
+    	if( getEip() != null ) {
+			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
+			if (editor.getModel() != null) { 
+				Element newNode = null;
+				if (createDOMNode) {
+					newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+				}
+				CamelEndpoint ep = new CamelEndpoint(component.getSyntax() != null ? component.getSyntax() : String.format("%s:", component.getScheme())); // we use the first found protocol string
+				ep.setParent(parent);
+				ep.setUnderlyingMetaModelObject(getEip());
+				if (createDOMNode) {
+					ep.setXmlNode(newNode);
+					ep.updateXMLNode();
+				}
+				return ep;
+			}
+		}
+        return null;
     }
         
     /* (non-Javadoc)
@@ -66,10 +91,18 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature<Endpoint> 
         try {
             updateMavenDependencies(component.getDependencies());
         } catch (CoreException ex) {
-            Activator.getLogger().error("Unable to add the component dependency to the project maven configuration file.", ex);
+            CamelEditorUIActivator.pluginLog().logError("Unable to add the component dependency to the project maven configuration file.", ex);
         }
         // and then let the super class continue the work
         return super.create(context);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#getCategoryName()
+     */
+    @Override
+    public String getCategoryName() {
+    	return "components";
     }
     
     /**

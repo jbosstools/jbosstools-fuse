@@ -19,11 +19,11 @@ import org.eclipse.graphiti.features.context.IContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
@@ -53,11 +53,11 @@ public class DeleteAllEndpointBreakpointsFeature extends DeleteEndpointBreakpoin
     	String projectName = contextFile.getProject().getName();
     	IBreakpoint[] bps = CamelDebugUtils.getBreakpointsForContext(fileName, projectName);
 		for (IBreakpoint bp : bps) {
-			AbstractNode bo = ((RiderDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel().getNode(((CamelEndpointBreakpoint)bp).getEndpointNodeId());
+			CamelModelElement bo = ((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel().findNode(((CamelEndpointBreakpoint)bp).getEndpointNodeId());
 			try {
 				bp.delete();
 			} catch (CoreException ex) {
-				Activator.getLogger().error("Unable to delete breakpoint " + bp, ex);
+				CamelEditorUIActivator.pluginLog().logError("Unable to delete breakpoint " + bp, ex);
 			} finally {
 				// update the pictogram element
 				PictogramElement[] pes = getFeatureProvider().getAllPictogramElementsForBusinessObject(bo);
@@ -107,6 +107,6 @@ public class DeleteAllEndpointBreakpointsFeature extends DeleteEndpointBreakpoin
                 .getStart().getParent() : cc.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        return bo == null || bo instanceof RouteSupport;
+        return bo == null || bo instanceof CamelRouteElement;
 	}
 }

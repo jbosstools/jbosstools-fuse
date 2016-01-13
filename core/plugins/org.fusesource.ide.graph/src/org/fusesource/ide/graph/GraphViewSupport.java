@@ -59,7 +59,7 @@ import org.eclipse.zest.layouts.algorithms.HorizontalTreeLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
-import org.fusesource.ide.commons.Viewers;
+import org.fusesource.ide.foundation.ui.util.Viewers;
 
 
 public abstract class GraphViewSupport extends ViewPart implements IZoomableWorkbenchPart {

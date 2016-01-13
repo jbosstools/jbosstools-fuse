@@ -14,8 +14,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
-import org.fusesource.ide.commons.ui.ContextMenuProvider;
-import org.fusesource.ide.commons.ui.Selections;
+import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
+import org.fusesource.ide.foundation.ui.util.Selections;
 
 /**
  * @author lhein

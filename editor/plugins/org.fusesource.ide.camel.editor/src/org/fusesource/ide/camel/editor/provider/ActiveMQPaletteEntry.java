@@ -15,11 +15,10 @@ import java.util.List;
 
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
-import org.fusesource.ide.camel.editor.Activator;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
-import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.catalog.Dependency;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 
 /**
  * @author lhein
@@ -33,7 +32,7 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
      */
     @Override
     public ICreateFeature newCreateFeature(IFeatureProvider fp) {
-        return new CreateEndpointFigureFeature(fp, "ActiveMQ", "Creates an ActiveMQ endpoint...", new Endpoint("activemq:queue:foo"), getRequiredDependencies());
+        return new CreateEndpointFigureFeature(fp, "ActiveMQ", "Creates an ActiveMQ endpoint...", "activemq:queue:foo", getRequiredDependencies());
     }
 
     /* (non-Javadoc)
@@ -66,7 +65,7 @@ public class ActiveMQPaletteEntry implements ICustomPaletteEntry {
         dep = new Dependency();
         dep.setGroupId("org.apache.camel");
         dep.setArtifactId("camel-jms");
-        dep.setVersion(Activator.getDefault().getCamelVersion());
+        dep.setVersion(CamelUtils.getCurrentProjectCamelVersion());
         deps.add(dep);
         return deps;
     }

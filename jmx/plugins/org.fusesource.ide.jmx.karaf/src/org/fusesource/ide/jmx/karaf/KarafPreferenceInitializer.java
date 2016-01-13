@@ -11,8 +11,8 @@
 
 package org.fusesource.ide.jmx.karaf;
 
-import org.fusesource.ide.commons.ui.UIPreferencesInitialiserSupport;
-import org.fusesource.ide.commons.ui.config.TableConfiguration;
+import org.fusesource.ide.foundation.ui.config.TableConfiguration;
+import org.fusesource.ide.foundation.ui.util.UIPreferencesInitialiserSupport;
 import org.fusesource.ide.jmx.karaf.navigator.osgi.BundlesTableSheetPage;
 import org.fusesource.ide.jmx.karaf.navigator.osgi.ServicesTableSheetPage;
 

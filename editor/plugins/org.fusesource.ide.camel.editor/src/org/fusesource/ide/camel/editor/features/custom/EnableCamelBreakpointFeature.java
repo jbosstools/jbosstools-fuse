@@ -22,10 +22,10 @@ import org.eclipse.graphiti.platform.IDiagramContainer;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**
@@ -51,8 +51,8 @@ public class EnableCamelBreakpointFeature extends SetEndpointBreakpointFeature {
                 .getStart().getParent() : context.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        if (bo instanceof AbstractNode) {
-        	AbstractNode _ep = (AbstractNode) bo;
+        if (bo instanceof CamelModelElement) {
+        	CamelModelElement _ep = (CamelModelElement) bo;
             try {
             	IFile contextFile = getContextFile();
             	String fileName = contextFile.getName();
@@ -65,8 +65,8 @@ public class EnableCamelBreakpointFeature extends SetEndpointBreakpointFeature {
             } catch (CoreException e) {
                 final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
                 final Shell shell;
-                if (container instanceof RiderDesignEditor) {
-                    shell = ((RiderDesignEditor) container).getEditorSite().getShell();
+                if (container instanceof CamelDesignEditor) {
+                    shell = ((CamelDesignEditor) container).getEditorSite().getShell();
                 } else {
                     shell = Display.getCurrent().getActiveShell();
                 }
@@ -111,8 +111,8 @@ public class EnableCamelBreakpointFeature extends SetEndpointBreakpointFeature {
                 .getStart().getParent() : cc.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        if (bo instanceof AbstractNode) {
-        	AbstractNode _ep = (AbstractNode) bo;
+        if (bo instanceof CamelModelElement) {
+        	CamelModelElement _ep = (CamelModelElement) bo;
         	IFile contextFile = getContextFile();
         	String fileName = contextFile.getName();
         	String projectName = contextFile.getProject().getName();
@@ -121,7 +121,7 @@ public class EnableCamelBreakpointFeature extends SetEndpointBreakpointFeature {
         		try {
         			return bp != null && bp.isEnabled() == false;
         		} catch (CoreException ex) {
-        			Activator.getLogger().error(ex);
+        			CamelEditorUIActivator.pluginLog().logError(ex);
         		}
         	}
         }

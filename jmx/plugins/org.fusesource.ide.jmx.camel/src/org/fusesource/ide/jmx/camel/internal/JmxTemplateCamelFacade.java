@@ -8,21 +8,31 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.jmx.camel.internal;
 
-import org.apache.camel.api.management.mbean.ManagedBacklogTracerMBean;
-import org.fusesource.ide.jmx.commons.JmxTemplateSupport;
+import java.util.List;
 
 import javax.management.MBeanServerConnection;
 import javax.management.remote.JMXConnector;
-import java.util.List;
+
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelBacklogTracerMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelComponentMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelConsumerMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelEndpointMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelFabricTracerMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelFacadeCallback;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelProcessorMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelThreadPoolMBean;
+import org.fusesource.ide.jmx.commons.JmxTemplateSupport;
 
 /**
  * @author lhein
  *
  */
-public class JmxTemplateCamelFacade implements CamelFacade {
+public class JmxTemplateCamelFacade implements CamelJMXFacade {
     private final JmxTemplateSupport template;
 
     public JmxTemplateCamelFacade(JmxTemplateSupport template) {
@@ -36,7 +46,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
         return template.execute(new JmxTemplateSupport.JmxConnectorCallback<T>() {
             public T doWithJmxConnector(JMXConnector connector) throws Exception {
                 MBeanServerConnection connection = connector.getMBeanServerConnection();
-                CamelFacade camelFacade = new RemoteJMXCamelFacade(connection);
+                CamelJMXFacade camelFacade = new RemoteJMXCamelFacade(connection);
                 return callback.doWithCamelFacade(camelFacade);
             }
         });
@@ -44,7 +54,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public List<CamelContextMBean> getCamelContexts() throws Exception {
         return execute(new CamelFacadeCallback<List<CamelContextMBean>>() {
-           public List<CamelContextMBean> doWithCamelFacade(CamelFacade camel) throws Exception {
+           public List<CamelContextMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getCamelContexts();
             }
         });
@@ -52,7 +62,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public CamelContextMBean getCamelContext(final String managementName) {
         return execute(new CamelFacadeCallback<CamelContextMBean>() {
-           public CamelContextMBean doWithCamelFacade(CamelFacade camel) throws Exception {
+           public CamelContextMBean doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getCamelContext(managementName);
             }
         });
@@ -60,15 +70,15 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public CamelFabricTracerMBean getFabricTracer(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<CamelFabricTracerMBean>() {
-           public CamelFabricTracerMBean doWithCamelFacade(CamelFacade camel) throws Exception {
+           public CamelFabricTracerMBean doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getFabricTracer(managementName);
             }
         });
     }
 
-	public ManagedBacklogTracerMBean getCamelTracer(final String managementName) throws Exception {
-		return execute(new CamelFacadeCallback<ManagedBacklogTracerMBean>() {
-			public ManagedBacklogTracerMBean doWithCamelFacade(CamelFacade camel) throws Exception {
+	public CamelBacklogTracerMBean getCamelTracer(final String managementName) throws Exception {
+		return execute(new CamelFacadeCallback<CamelBacklogTracerMBean>() {
+			public CamelBacklogTracerMBean doWithCamelFacade(CamelJMXFacade camel) throws Exception {
 				return camel.getCamelTracer(managementName);
 			}
 		});
@@ -76,7 +86,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public List<CamelComponentMBean> getComponents(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelComponentMBean>>() {
-           public List<CamelComponentMBean> doWithCamelFacade(CamelFacade camel) throws Exception {
+           public List<CamelComponentMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getComponents(managementName);
             }
         });
@@ -84,7 +94,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public List<CamelRouteMBean> getRoutes(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelRouteMBean>>() {
-           public List<CamelRouteMBean> doWithCamelFacade(CamelFacade camel) throws Exception {
+           public List<CamelRouteMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getRoutes(managementName);
             }
         });
@@ -92,7 +102,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public List<CamelEndpointMBean> getEndpoints(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelEndpointMBean>>() {
-           public List<CamelEndpointMBean> doWithCamelFacade(CamelFacade camel) throws Exception {
+           public List<CamelEndpointMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getEndpoints(managementName);
             }
         });
@@ -100,7 +110,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public List<CamelConsumerMBean> getConsumers(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelConsumerMBean>>() {
-           public List<CamelConsumerMBean> doWithCamelFacade(CamelFacade camel) throws Exception {
+           public List<CamelConsumerMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getConsumers(managementName);
             }
         });
@@ -108,7 +118,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public List<CamelProcessorMBean> getProcessors(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelProcessorMBean>>() {
-           public List<CamelProcessorMBean> doWithCamelFacade(CamelFacade camel) throws Exception {
+           public List<CamelProcessorMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getProcessors(managementName);
             }
         });
@@ -116,7 +126,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public List<CamelThreadPoolMBean> getThreadPools(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<List<CamelThreadPoolMBean>>() {
-           public List<CamelThreadPoolMBean> doWithCamelFacade(CamelFacade camel) throws Exception {
+           public List<CamelThreadPoolMBean> doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.getThreadPools(managementName);
             }
         });
@@ -124,7 +134,7 @@ public class JmxTemplateCamelFacade implements CamelFacade {
 
     public String dumpRoutesStatsAsXml(final String managementName) throws Exception {
         return execute(new CamelFacadeCallback<String>() {
-            public String doWithCamelFacade(CamelFacade camel) throws Exception {
+            public String doWithCamelFacade(CamelJMXFacade camel) throws Exception {
                 return camel.dumpRoutesStatsAsXml(managementName);
             }
         });

@@ -20,11 +20,11 @@ import java.util.Set;
 
 import org.apache.activemq.broker.jmx.DestinationViewMBean;
 import org.eclipse.swt.dnd.DropTargetEvent;
-import org.fusesource.ide.commons.tree.NodeSupport;
-import org.fusesource.ide.commons.ui.drop.DropHandler;
-import org.fusesource.ide.commons.ui.drop.DropHandlerFactory;
-import org.fusesource.ide.commons.util.Objects;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.drop.DropHandler;
+import org.fusesource.ide.foundation.ui.drop.DropHandlerFactory;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
+import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
 import org.fusesource.ide.jmx.commons.messages.IExchange;
 import org.fusesource.ide.jmx.commons.messages.IMessage;

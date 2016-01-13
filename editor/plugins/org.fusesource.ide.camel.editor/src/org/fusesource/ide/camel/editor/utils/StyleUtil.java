@@ -32,6 +32,7 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  */
 public class StyleUtil {
 	public static final IColorConstant E_CLASS_TEXT_FOREGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_TEXT_COLOR));
+	public static final IColorConstant E_CLASS_TEXT_BACKGROUND = getColorConstant("10,10,10");
 	public static final IColorConstant E_CLASS_FOREGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_FIGURE_FG_COLOR));
 	public static final IColorConstant E_CLASS_BACKGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_FIGURE_BG_COLOR));
 	public static final IColorConstant E_CLASS_SHADOW_FOREGROUND = getColorConstant("128,128,128");

@@ -28,7 +28,7 @@ public class PreferencesInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = PreferenceManager.getInstance().getUnderlyingStorage();
+		final IPreferenceStore store = PreferenceManager.getInstance().getUnderlyingStorage();
 
 		store.setDefault(PreferencesConstants.EDITOR_DEFAULT_LANGUAGE, "simple");
 		store.setDefault(PreferencesConstants.EDITOR_PREFER_ID_AS_LABEL, true);
@@ -40,7 +40,16 @@ public class PreferencesInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferencesConstants.EDITOR_FIGURE_FG_COLOR, "128,128,128");
 		store.setDefault(PreferencesConstants.EDITOR_TEXT_COLOR, "0,0,0");
 
-		Color c = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
-		store.setDefault(PreferencesConstants.EDITOR_TABLE_CHART_BG_COLOR, String.format("%d,%d,%d", c.getRed(), c.getGreen(), c.getBlue()));
+		Display.getDefault().syncExec(new Runnable() {
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				Color c = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+				store.setDefault(PreferencesConstants.EDITOR_TABLE_CHART_BG_COLOR, String.format("%d,%d,%d", c.getRed(), c.getGreen(), c.getBlue()));				
+			}
+		});
 	}
 }

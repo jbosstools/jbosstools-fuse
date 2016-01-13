@@ -14,7 +14,7 @@ package org.fusesource.ide.camel.editor.provider;
 import org.eclipse.graphiti.dt.AbstractDiagramTypeProvider;
 import org.eclipse.graphiti.notification.INotificationService;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
-import org.fusesource.ide.camel.editor.CamelModelNotificationService;
+import org.fusesource.ide.camel.editor.internal.CamelModelNotificationService;
 
 /**
  * @author lhein

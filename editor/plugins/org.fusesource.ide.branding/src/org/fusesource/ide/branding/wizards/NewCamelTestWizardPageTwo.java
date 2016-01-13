@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.internal.junit.Messages;
 import org.eclipse.jdt.internal.junit.util.LayoutUtil;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
@@ -43,12 +43,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.fusesource.ide.branding.RiderHelpContextIds;
-import org.fusesource.ide.camel.model.CamelModelHelper;
-import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.EndpointSummary;
-import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.io.ContainerMarshaler;
-import org.fusesource.ide.camel.model.io.XmlContainerMarshaller;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
+import org.fusesource.ide.foundation.core.util.URIs;
 
 
 /**
@@ -306,7 +306,7 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 			String value = node.getUri();
 			if (node.isInput()) {
 				key = "input";
-				if (!CamelModelHelper.isTimerEndpointURI(value)) {
+				if (!URIs.isTimerEndpointURI(value)) {
 					if (inputCounter++ > 0) {
 						key += inputCounter;
 					}
@@ -357,9 +357,8 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 	}
 
 	protected TreeNode loadEndpointSummary() {
-		ContainerMarshaler marshaller = new XmlContainerMarshaller();
-		RouteContainer routeContainer = marshaller.loadRoutes(xmlFileUnderTest);
-		EndpointSummary summary = new EndpointSummary(routeContainer);
+		CamelIOHandler io = new CamelIOHandler();
+		CamelFile cf = io.loadCamelModel(xmlFileUnderTest, new NullProgressMonitor());
 
 		TreeNode root = new TreeNode("Endpoints");
 		TreeNode inputs = new TreeNode("Inputs");
@@ -368,12 +367,45 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		outputs.setParent(root);
 		root.setChildren(new TreeNode[] { inputs, outputs });
 
-		setChildren(inputs, summary.getInputEndpoints(), true);
-		setChildren(outputs, summary.getOutputEndpoints(), false);
+		setChildren(inputs, getInputs(cf.getCamelContext()), true);
+		setChildren(outputs, getOutputs(cf.getCamelContext()), false);
 
 		return root;
 	}
 
+	private List<CamelModelElement> getInputs(CamelContextElement context) {
+		ArrayList<CamelModelElement> eps = new ArrayList<CamelModelElement>();
+		
+		for (CamelModelElement route : context.getChildElements()) {
+			if (route instanceof CamelRouteElement) {
+				CamelRouteElement r = (CamelRouteElement)route;
+				eps.addAll(r.getInputs());				
+			}
+		}
+		
+		return eps;
+	}
+	
+	private List<CamelModelElement> getOutputs(CamelContextElement context) {
+		ArrayList<CamelModelElement> eps = new ArrayList<CamelModelElement>();
+		
+		for (CamelModelElement route : context.getChildElements()) {
+			if (route instanceof CamelRouteElement) {
+				CamelRouteElement r = (CamelRouteElement)route;
+				collectEndpoints(r.getOutputs(), eps);				
+			}
+		}
+		
+		return eps;
+	}
+	
+	private void collectEndpoints(List<CamelModelElement> searchList, List<CamelModelElement> resultList) {
+		for (CamelModelElement cme : searchList) {
+			if (cme.isEndpointElement()) resultList.add(cme);
+			if (cme.getChildElements().isEmpty() == false) collectEndpoints(cme.getChildElements(), resultList);
+		}
+	}
+	
 	protected void onXmlFileUnderTestChanged() {
 		// lets eagerly update the widgets in case we don't view this page
 		if (xmlFileUnderTest == null || fInputEndpointsTree == null) {
@@ -411,16 +443,15 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		fInputEndpointsTree.setCheckedElements((Object[]) fInputEndpointsTree.getInput());
 	}
 
-	private void setChildren(TreeNode node, Map<String, Endpoint> endpointMap, boolean input) {
-		Set<String> uris = endpointMap.keySet();
-		TreeNode[] children = new TreeNode[uris.size()];
-		int idx = 0;
-		for (String uri : uris) {
-			TreeNode child = new EndpointTreeNode(uri, input);
+	private void setChildren(TreeNode node, List<CamelModelElement> endpointList, boolean input) {
+		List<TreeNode> children = new ArrayList<TreeNode>();
+		for (CamelModelElement e : endpointList) {
+			if (e.isEndpointElement() == false) continue; 
+			TreeNode child = new EndpointTreeNode(e.getParameter("uri"), input);
 			child.setParent(node);
-			children[idx++] = child;
+			children.add(child);
 		}
-		node.setChildren(children);
+		node.setChildren(children.toArray(new TreeNode[children.size()]));
 	}
 
 	/*

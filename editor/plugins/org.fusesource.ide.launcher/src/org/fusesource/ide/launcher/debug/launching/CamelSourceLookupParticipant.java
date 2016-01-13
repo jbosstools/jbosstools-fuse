@@ -10,13 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.debug.launching;
 
-import org.eclipse.core.resources.IFile;
+import java.io.File;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupParticipant;
-import org.eclipse.ui.IEditorInput;
-import org.fusesource.ide.launcher.debug.model.CamelDebugTarget;
 import org.fusesource.ide.launcher.debug.model.CamelStackFrame;
-import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 
 /**
  * The Camel source lookup participant knows how to translate a 
@@ -34,10 +32,8 @@ public class CamelSourceLookupParticipant extends
 	public String getSourceName(Object object) throws CoreException {
 		if (object instanceof CamelStackFrame) {
 			CamelStackFrame stackFrame = (CamelStackFrame)object;
-			CamelDebugTarget dt = (CamelDebugTarget) stackFrame.getDebugTarget();
-			IEditorInput input = CamelDebugRegistry.getInstance().getEntry(dt.getLaunch().getLaunchConfiguration()).getEditorInput();
-			IFile f = (IFile)input.getAdapter(IFile.class);
-			return f.getName();
+			File contextFile = stackFrame.getContextFile();
+			return contextFile.getName();
 		}
 		return null;
 	}

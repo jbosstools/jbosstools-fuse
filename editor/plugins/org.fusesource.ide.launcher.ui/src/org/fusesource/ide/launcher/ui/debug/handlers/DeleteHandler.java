@@ -16,7 +16,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.fusesource.ide.commons.ui.Selections;
+import org.fusesource.ide.foundation.ui.util.Selections;
 import org.fusesource.ide.launcher.debug.model.variables.CamelBodyVariable;
 import org.fusesource.ide.launcher.debug.model.variables.CamelHeaderVariable;
 

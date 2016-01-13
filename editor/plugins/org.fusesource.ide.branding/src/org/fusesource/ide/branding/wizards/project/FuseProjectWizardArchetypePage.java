@@ -63,11 +63,11 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.branding.Activator;
 import org.fusesource.ide.branding.RiderHelpContextIds;
 import org.fusesource.ide.branding.wizards.WizardMessages;
-import org.fusesource.ide.commons.camel.tools.Archetype;
-import org.fusesource.ide.commons.camel.tools.Archetypes;
-import org.fusesource.ide.commons.ui.Selections;
-import org.fusesource.ide.commons.util.IOUtils;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.foundation.core.util.IOUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.ui.archetypes.Archetype;
+import org.fusesource.ide.foundation.ui.archetypes.Archetypes;
+import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
 
 /**

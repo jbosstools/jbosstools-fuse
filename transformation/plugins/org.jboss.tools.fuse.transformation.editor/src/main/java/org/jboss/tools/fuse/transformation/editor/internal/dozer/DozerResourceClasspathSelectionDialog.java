@@ -80,9 +80,8 @@ public class DozerResourceClasspathSelectionDialog extends FilteredResourcesSele
                         .singleton(fileExtension), title);
     }
 
-    /**
-     * {@inheritDoc}
-     * 
+    /*
+     * (non-Javadoc)
      * @see org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog#createFilter()
      */
     @Override

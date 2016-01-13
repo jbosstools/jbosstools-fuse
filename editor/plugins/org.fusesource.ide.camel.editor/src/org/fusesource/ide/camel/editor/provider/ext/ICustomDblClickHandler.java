@@ -11,7 +11,7 @@
 
 package org.fusesource.ide.camel.editor.provider.ext;
 
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
  * @author lhein
@@ -25,12 +25,12 @@ public interface ICustomDblClickHandler {
 	 * @param clickedNode	the node which has been dbl clicked
 	 * @return	true if your handler can handle the dbl click on that node, otherwise false
 	 */
-	boolean canHandle(AbstractNode clickedNode);
+	boolean canHandle(CamelModelElement clickedNode);
 	
 	/**
 	 * use this method to do whatever action you want to happen when dbl clicking the node
 	 * 
 	 * @param clickedNode	the node which has been dbl clicked
 	 */
-	void handleDoubleClick(AbstractNode clickedNode);
+	void handleDoubleClick(CamelModelElement clickedNode);
 }

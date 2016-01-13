@@ -22,7 +22,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkingSet;
 import org.fusesource.ide.branding.Activator;
-import org.fusesource.ide.commons.camel.tools.ArchetypeHelper;
+import org.fusesource.ide.foundation.ui.archetypes.ArchetypeHelper;
 
 public abstract class AbstractFuseProjectWizard extends Wizard {
 

@@ -57,7 +57,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
-import org.jboss.tools.fuse.transformation.model.ModelBuilder;
+import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 
 /**
  * @author brianf
@@ -68,7 +68,7 @@ public class JavaPage extends XformWizardPage implements TransformationTypePage 
     private Composite _page;
     private boolean isSource = true;
     private Text _javaClassText;
-    private org.jboss.tools.fuse.transformation.model.Model _javaModel = null;
+    private org.jboss.tools.fuse.transformation.core.model.Model _javaModel = null;
     private ModelViewer _modelViewer;
     private Binding _binding;
 

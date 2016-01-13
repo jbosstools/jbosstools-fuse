@@ -58,23 +58,23 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.tools.fuse.transformation.FieldMapping;
-import org.jboss.tools.fuse.transformation.MappingOperation;
-import org.jboss.tools.fuse.transformation.MappingType;
-import org.jboss.tools.fuse.transformation.TransformationMapping;
-import org.jboss.tools.fuse.transformation.Variable;
+import org.jboss.tools.fuse.transformation.core.FieldMapping;
+import org.jboss.tools.fuse.transformation.core.MappingOperation;
+import org.jboss.tools.fuse.transformation.core.MappingType;
+import org.jboss.tools.fuse.transformation.core.TransformationMapping;
+import org.jboss.tools.fuse.transformation.core.Variable;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.BaseDialog;
 import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser;
 import org.jboss.tools.fuse.transformation.editor.internal.util.FormatParser.FormatSpecifier;
 import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager;
-import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
+import org.jboss.tools.fuse.transformation.editor.internal.util.TransformationManager.Event;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Colors;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util.Images;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function;
 import org.jboss.tools.fuse.transformation.editor.transformations.Function.Arg;
-import org.jboss.tools.fuse.transformation.model.Model;
+import org.jboss.tools.fuse.transformation.core.model.Model;
 
 public class MappingDetailViewer extends MappingViewer {
 
@@ -782,7 +782,7 @@ public class MappingDetailViewer extends MappingViewer {
                     if (event.getProperty().equals(TRANSFORMATION_USER_FRIENDLY_FORMAT_PREFERENCE)
                         || event.getProperty().equals(TRANSFORMATION_BACKGROUND_PREFERENCE)
                         || event.getProperty().equals(TRANSFORMATION_FOREGROUND_PREFERENCE))
-                        update(mapping);
+                        MappingDetailViewer.this.update(mapping);
                 }
             };
             Activator.preferences().addPropertyChangeListener(listener);

@@ -23,17 +23,17 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.tree.RefreshableUI;
-import org.fusesource.ide.commons.ui.ContextMenuProvider;
-import org.fusesource.ide.commons.ui.Shells;
-import org.fusesource.ide.commons.util.Strings;
-import org.fusesource.ide.commons.util.URIs;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelEndpointMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.util.URIs;
+import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
+import org.fusesource.ide.foundation.ui.tree.RefreshableUI;
+import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
+import org.fusesource.ide.foundation.ui.util.Shells;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
-import org.fusesource.ide.jmx.camel.internal.CamelContextMBean;
-import org.fusesource.ide.jmx.camel.internal.CamelEndpointMBean;
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 
@@ -50,7 +50,7 @@ public class EndpointsNode extends RefreshableCollectionNode implements ImagePro
 		return camelContextNode;
 	}
 
-	public CamelFacade getFacade() {
+	public CamelJMXFacade getFacade() {
 		return getCamelContextNode().getFacade();
 	}
 	

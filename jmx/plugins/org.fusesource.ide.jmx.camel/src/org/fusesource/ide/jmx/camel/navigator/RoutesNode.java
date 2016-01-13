@@ -21,16 +21,14 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.AbstractNodeFacade;
-import org.fusesource.ide.camel.model.Activator;
-import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.RouteSupport;
-import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
-import org.fusesource.ide.commons.ui.ContextMenuProvider;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelRouteMBean;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
+import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
+import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
-import org.fusesource.ide.jmx.camel.internal.CamelRouteMBean;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.HasTotalStatistics;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.IProcessorStatistics;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.IProcessorStatisticsContainer;
@@ -43,9 +41,9 @@ import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 
-public class RoutesNode extends RefreshableCollectionNode implements AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider, HasTotalStatistics {
+public class RoutesNode extends RefreshableCollectionNode implements ContextMenuProvider, ITraceExchangeBrowser, ImageProvider, HasTotalStatistics {
 	private final CamelContextNode camelContextNode;
-	private RouteContainer routeContainer;
+	private CamelContextElement camelContext;
 
 	public RoutesNode(CamelContextNode camelContextNode) {
 		super(camelContextNode);
@@ -71,7 +69,7 @@ public class RoutesNode extends RefreshableCollectionNode implements AbstractNod
         return false;
     }
 
-	public CamelFacade getFacade() {
+	public CamelJMXFacade getFacade() {
 		return camelContextNode.getFacade();
 	}
 
@@ -82,12 +80,12 @@ public class RoutesNode extends RefreshableCollectionNode implements AbstractNod
 	@Override
 	protected void loadChildren() {
 		Map<String,RouteNode> routeMap = new HashMap<String, RouteNode>();
-		routeContainer = getCamelContextNode().getModelContainer();
-		if (routeContainer != null) {
-			List<AbstractNode> children = routeContainer.getChildren();
-			for (AbstractNode node : children) {
-				if (node instanceof RouteSupport) {
-					RouteSupport route = (RouteSupport) node;
+		camelContext = getCamelContextNode().getCamelContext();
+		if (camelContext != null) {
+			List<CamelModelElement> children = camelContext.getChildElements();
+			for (CamelModelElement node : children) {
+				if (node instanceof CamelRouteElement) {
+					CamelRouteElement route = (CamelRouteElement) node;
 					RouteNode routeNode = new RouteNode(this, route);
 					String id = route.getId();
 					if (id != null) {
@@ -109,7 +107,7 @@ public class RoutesNode extends RefreshableCollectionNode implements AbstractNod
 				}
 			}
 		} catch (Exception e) {
-			Activator.getLogger().warning(e);
+			CamelJMXPlugin.getLogger().warning(e);
 		}
 	}
 
@@ -147,12 +145,6 @@ public class RoutesNode extends RefreshableCollectionNode implements AbstractNod
 			return stats;
 		}
 		return null;
-	}
-
-	@Override
-	public AbstractNode getAbstractNode() {
-		checkLoaded();
-		return routeContainer;
 	}
 
 	@Override

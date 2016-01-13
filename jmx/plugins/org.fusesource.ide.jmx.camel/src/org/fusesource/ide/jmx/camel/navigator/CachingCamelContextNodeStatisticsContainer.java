@@ -19,7 +19,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import org.fusesource.ide.commons.ui.propsrc.BeanPropertySource;
+import org.fusesource.ide.foundation.ui.propsrc.BeanPropertySource;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.CamelContextStatistics;
 import org.fusesource.ide.jmx.camel.navigator.stats.model.IProcessorStatistics;

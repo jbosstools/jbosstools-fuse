@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.fusesource.ide.commons.contenttype.FindNamespaceHandlerSupport;
+import org.fusesource.ide.foundation.core.xml.namespace.FindNamespaceHandlerSupport;
 
 
 public class FindMessagesNamespaceHandler extends FindNamespaceHandlerSupport {

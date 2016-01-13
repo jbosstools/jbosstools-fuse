@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.fusesource.ide.graph;
 
-import org.fusesource.ide.commons.logging.RiderLogFacade;
-import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.util.ImagesActivatorSupport;
 import org.osgi.framework.BundleContext;
 
 /**

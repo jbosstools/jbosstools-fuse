@@ -12,30 +12,29 @@ package org.fusesource.ide.camel.editor.commands;
 
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.algorithms.Text;
-import org.eclipse.graphiti.mm.algorithms.styles.LineStyle;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
-import org.fusesource.ide.camel.editor.editor.RiderEditor;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.CamelEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.RouteSupport;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
  * @author lhein
  */
 public class HighlightNodeCommand extends RecordingCommand {
 	
-	private final RiderDesignEditor designEditor;
-	private AbstractNode node;
+	private final CamelDesignEditor designEditor;
+	private CamelModelElement node;
 	private boolean highlight;
 
-	public HighlightNodeCommand(RiderDesignEditor designEditor, TransactionalEditingDomain editingDomain, AbstractNode node, boolean highlight) {
+	public HighlightNodeCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, CamelModelElement node, boolean highlight) {
 		super(editingDomain);
 		this.designEditor = designEditor;
 		this.node = node;
@@ -50,25 +49,24 @@ public class HighlightNodeCommand extends RecordingCommand {
 		}
 
 		// check if we are in the design view mode - if not, then switch to it
-		if (this.designEditor.getMultiPageEditor().getActivePage() == RiderEditor.SOURCE_PAGE_INDEX) {
-			this.designEditor.getMultiPageEditor().switchToDesignEditor();
+		if (this.designEditor.getParent().getActivePage() == CamelEditor.SOURCE_PAGE_INDEX) {
+			this.designEditor.getParent().switchToDesignEditor();
 		}
 		
 		// check if we need to switch to another route for highlighting
-		if (this.node != null && 
-			highlight) {
+		if (this.node != null && highlight) {
 			if (node.getParent() != null) {
 				// seems the next breakpoint is in a different route and we need to switch to that route now
-				if (node.getParent() instanceof RouteSupport) {
+				if (node.getParent() instanceof CamelRouteElement) {
 					// switch the route
-					this.designEditor.setSelectedRoute((RouteSupport)node.getParent());											
+					this.designEditor.setSelectedContainer((CamelRouteElement)node.getParent());											
 				}
 			}
 		}
 		
 		PictogramElement pe = designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
 		if (pe == null) {
-			Activator.getLogger().debug("Warning could not find PictogramElement for highlight node: " + node);
+			CamelEditorUIActivator.pluginLog().logWarning("Warning could not find PictogramElement for highlight node: " + node);
 			return;
 		}
 		
@@ -78,33 +76,29 @@ public class HighlightNodeCommand extends RecordingCommand {
 			if (pe instanceof ContainerShape) {
 				ContainerShape cs = (ContainerShape) pe;
 				if (highlight) {
-					cs.getGraphicsAlgorithm().setLineVisible(true);
-					cs.getGraphicsAlgorithm().setLineStyle(LineStyle.DASH);
-					cs.getGraphicsAlgorithm().setLineWidth(cs.getGraphicsAlgorithm().getLineWidth() + 3);
-					cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagram(), StyleUtil.getColorConstant("255,0,0")));
+					cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.getColorConstant("255,0,0")));
 				} else {
-					cs.getGraphicsAlgorithm().setLineVisible(false);
-					cs.getGraphicsAlgorithm().setLineStyle(LineStyle.SOLID);
-					cs.getGraphicsAlgorithm().setLineWidth(cs.getGraphicsAlgorithm().getLineWidth() - 3);
-					cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagram(), StyleUtil.E_CLASS_FOREGROUND));
+					cs.getGraphicsAlgorithm().setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.E_CLASS_FOREGROUND));
 				}
 				
-				for (Shape shape : cs.getChildren()) {
-					if (shape.getGraphicsAlgorithm() instanceof Text) {
-						Text text = (Text) shape.getGraphicsAlgorithm();
-
+				for (GraphicsAlgorithm ga : pe.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
+					if (ga instanceof Text) {
+						Text text = (Text) ga;
+						
 						// now update node highlight
 						if (highlight) {
 							// set highlight
-							text.setForeground(gaService.manageColor(designEditor.getDiagram(), StyleUtil.getColorConstant("255,0,0")));
+							text.setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.getColorConstant("255,0,0")));
 						} else {
 							// delete highlight
-							text.setForeground(gaService.manageColor(designEditor.getDiagram(), StyleUtil.E_CLASS_TEXT_FOREGROUND));
+							text.setForeground(gaService.manageColor(designEditor.getDiagramTypeProvider().getDiagram(), StyleUtil.E_CLASS_TEXT_FOREGROUND));
 						}
+						break;
 					}
 				}
 			}				
 		} catch (Exception e) {
+			e.printStackTrace();
 			// ignore
 		}
 	}

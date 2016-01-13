@@ -14,9 +14,9 @@ import java.io.FileInputStream;
 import java.util.HashSet;
 
 import org.eclipse.core.resources.IFile;
-import org.fusesource.ide.commons.contenttype.FindNamespaceHandlerSupport;
-import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
-import org.fusesource.ide.commons.util.IFiles;
+import org.fusesource.ide.foundation.core.util.IFiles;
+import org.fusesource.ide.foundation.core.contenttype.XmlMatchingStrategySupport;
+import org.fusesource.ide.foundation.core.xml.namespace.FindNamespaceHandlerSupport;
 import org.xml.sax.InputSource;
 
 /**

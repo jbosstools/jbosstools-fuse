@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IBreakpoint;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
@@ -56,10 +56,10 @@ public class CamelConditionalBreakpoint extends CamelEndpointBreakpoint {
 	 * @param conditionPredicate
 	 * @throws CoreException
 	 */
-	public CamelConditionalBreakpoint(final IResource resource, final AbstractNode endpoint, final String projectName, final String fileName, String language, String conditionPredicate)
+	public CamelConditionalBreakpoint(final IResource resource, final CamelModelElement endpoint, final String projectName, final String fileName, String language, String conditionPredicate)
 			throws CoreException {
 		this.endpointNodeId = endpoint.getId();
-		this.contextId = endpoint.getCamelContextId();
+		this.contextId = endpoint.getCamelContext().getId();
 		this.projectName = projectName;
 		this.fileName = fileName;
 		this.language = language;

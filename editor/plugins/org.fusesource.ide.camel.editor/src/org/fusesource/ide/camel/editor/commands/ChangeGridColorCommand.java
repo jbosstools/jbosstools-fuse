@@ -22,7 +22,7 @@ import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.graphiti.util.IColorConstant;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
@@ -33,9 +33,9 @@ import org.fusesource.ide.preferences.PreferencesConstants;
  */
 public class ChangeGridColorCommand extends RecordingCommand {
 
-	private final RiderDesignEditor designEditor;
+	private final CamelDesignEditor designEditor;
 
-	public ChangeGridColorCommand(RiderDesignEditor designEditor, TransactionalEditingDomain editingDomain) {
+	public ChangeGridColorCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain) {
 		super(editingDomain);
 		this.designEditor = designEditor;
 	}
@@ -49,7 +49,7 @@ public class ChangeGridColorCommand extends RecordingCommand {
 				ScalableFreeformRootEditPart rootEditPart = (ScalableFreeformRootEditPart) graphicalViewer.getEditPartRegistry().get(LayerManager.ID);
 				IFigure gridFigure = ((LayerManager) rootEditPart).getLayer(LayerConstants.GRID_LAYER);
 				IColorConstant cc = StyleUtil.getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_GRID_COLOR));
-				Diagram diagram = designEditor.getDiagram();
+				Diagram diagram = designEditor.getDiagramTypeProvider().getDiagram();
 				if (cc != null && diagram != null) {
 					GraphicsAlgorithm ga = diagram.getGraphicsAlgorithm();
 					if (ga != null){

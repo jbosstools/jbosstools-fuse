@@ -13,7 +13,7 @@ package org.fusesource.ide.jmx.activemq.navigator;
 
 import org.apache.activemq.broker.jmx.ConnectionViewMBean;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.jmx.activemq.ActiveMQJMXPlugin;
 import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;

@@ -14,7 +14,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <name>JBoss Fuse Tooling :: Data Transformation</name>
 
   <modules>
+<!--
     <module>common</module>
+-->
     <module>plugins</module>
     <module>features</module>
   </modules>
@@ -119,11 +121,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     </dependency>
 
       <!--  Internal Dependencies -->
+<!--
       <dependency>
         <groupId>org.jboss.tools.fuse.transformation</groupId>
         <artifactId>data-transform-common</artifactId>
         <version>${project.version}</version>
       </dependency>
+-->
     </dependencies>
   </dependencyManagement>
 

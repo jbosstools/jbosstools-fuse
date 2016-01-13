@@ -27,8 +27,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IBreakpoint;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.commons.util.Strings;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.model.CamelConditionalBreakpoint;
 import org.fusesource.ide.launcher.debug.model.CamelEndpointBreakpoint;
@@ -128,7 +128,7 @@ public class CamelDebugUtils {
 	 * @return				the created breakpoint
 	 * @throws CoreException
 	 */
-	public static IBreakpoint createAndRegisterEndpointBreakpoint(IResource resource, AbstractNode endpoint, String projectName, String fileName) throws CoreException {
+	public static IBreakpoint createAndRegisterEndpointBreakpoint(IResource resource, CamelModelElement endpoint, String projectName, String fileName) throws CoreException {
     	CamelEndpointBreakpoint epb = new CamelEndpointBreakpoint(resource, endpoint, projectName, fileName);
     	DebugPlugin.getDefault().getBreakpointManager().addBreakpoint(epb);
     	return epb;
@@ -146,7 +146,7 @@ public class CamelDebugUtils {
 	 * @return				the created breakpoint
 	 * @throws CoreException
 	 */
-	public static IBreakpoint createAndRegisterConditionalBreakpoint(IResource resource, AbstractNode endpoint, String projectName, String fileName, String language, String condition) throws CoreException {
+	public static IBreakpoint createAndRegisterConditionalBreakpoint(IResource resource, CamelModelElement endpoint, String projectName, String fileName, String language, String condition) throws CoreException {
     	CamelConditionalBreakpoint epb = new CamelConditionalBreakpoint(resource, endpoint, projectName, fileName, language, condition);
     	DebugPlugin.getDefault().getBreakpointManager().addBreakpoint(epb);
     	return epb;

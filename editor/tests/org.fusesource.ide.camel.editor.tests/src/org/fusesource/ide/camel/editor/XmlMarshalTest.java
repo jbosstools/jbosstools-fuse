@@ -24,6 +24,7 @@ import org.fusesource.ide.camel.model.RouteSupport;
 import org.fusesource.ide.camel.model.generated.Choice;
 import org.fusesource.ide.camel.model.generated.Filter;
 import org.fusesource.ide.camel.model.generated.Otherwise;
+import org.fusesource.ide.camel.model.generated.UniversalEIPNode;
 import org.fusesource.ide.camel.model.generated.When;
 import org.fusesource.ide.camel.model.io.ContainerMarshaler;
 import org.fusesource.ide.camel.model.io.XmlContainerMarshaller;
@@ -86,8 +87,8 @@ public class XmlMarshalTest extends TestCase {
 		assertEquals("endpoint uri", "seda:choiceInput", endpoint.getUri());
 
 		System.out.println("Endpoint outputs: " + endpoint.getOutputs());
-		Choice choice = assertChildIsInstance(endpoint.getOutputs(), 0, Choice.class);
-
+		UniversalEIPNode choice = assertChildIsInstance(endpoint.getOutputs(), 0, UniversalEIPNode.class);
+		
 		System.out.println("Choice outputs: " + choice.getOutputs());
 		When filter = assertChildIsInstance(choice.getOutputs(), 0, When.class);
 		Otherwise otherwise = assertChildIsInstance(choice.getOutputs(), 1, Otherwise.class);

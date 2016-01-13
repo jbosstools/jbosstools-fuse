@@ -11,7 +11,7 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 
 public class TracerNode extends NodeSupport {
 	private final CamelContextNode camelContextNode;

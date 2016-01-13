@@ -19,8 +19,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -40,6 +43,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
@@ -55,6 +59,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.ide.IDE;
@@ -303,6 +308,7 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 						// switch to Fuse perspective if necessary.
 						switchToFusePerspective(workbenchWindow);
 					}
+					openCamelContextFile(project);
 				}
 			}
 		});
@@ -445,4 +451,44 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		}
 		return result == IDialogConstants.YES_ID;
 	}
+
+	/**
+	 * Open the first detected camel context file in the editor
+	 * @param project
+	 */
+	private void openCamelContextFile(IProject project){
+		if(project!=null){
+			final IFile[] holder = new IFile[1];
+			try {
+				project.accept(new IResourceVisitor() {	//look for camel content types in the project			
+					@Override
+					public boolean visit(IResource resource) throws CoreException {
+						if(resource instanceof IFile){
+							IFile file = (IFile)resource;
+							if (file.getContentDescription() != null
+									&& "org.fusesource.ide.camel.editor.camelContentType"
+											.equals(file.getContentDescription().getContentType().getId())) {
+								holder[0]=file;
+							}
+						}
+						return holder[0]==null;//keep looking if we haven't found one yet 
+					}
+				});
+			} catch (CoreException e1) {
+				Activator.getLogger().error(e1);
+			}
+			if(holder[0]!=null){
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						try {
+							IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+									holder[0], OpenStrategy.activateOnOpen());
+						} catch (PartInitException e) {
+							Activator.getLogger().error("Cannot open camel context file in editor", e);
+						}
+					}
+				});
+			}
+		}
+	}	
 }

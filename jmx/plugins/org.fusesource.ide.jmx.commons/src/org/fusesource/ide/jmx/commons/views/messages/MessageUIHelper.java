@@ -11,8 +11,8 @@
 
 package org.fusesource.ide.jmx.commons.views.messages;
 
-import org.fusesource.ide.commons.util.Strings;
-import org.fusesource.ide.commons.util.XmlUtilities;
+import org.fusesource.ide.foundation.core.util.Strings;
+import org.fusesource.ide.foundation.core.xml.XmlEscapeUtility;
 import org.fusesource.ide.jmx.commons.messages.Exchanges;
 import org.fusesource.ide.jmx.commons.messages.IExchange;
 
@@ -25,6 +25,6 @@ public class MessageUIHelper {
 		String body = Strings.getOrElse(Exchanges.getBody(selectedExchange), "");
 		
 		// lets XML unescape it...
-		return XmlUtilities.unescape(body);
+		return XmlEscapeUtility.unescape(body);
 	}		
 }

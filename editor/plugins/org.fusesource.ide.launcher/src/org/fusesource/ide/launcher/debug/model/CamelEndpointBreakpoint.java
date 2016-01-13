@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.Breakpoint;
 import org.eclipse.debug.core.model.IBreakpoint;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
@@ -60,10 +60,10 @@ public class CamelEndpointBreakpoint extends Breakpoint {
 	 * @param endpoint the endpoint
 	 * @throws CoreException if unable to create the breakpoint
 	 */
-	public CamelEndpointBreakpoint(final IResource resource, final AbstractNode endpoint, final String projectName, final String fileName)
+	public CamelEndpointBreakpoint(final IResource resource, final CamelModelElement endpoint, final String projectName, final String fileName)
 			throws CoreException {
 		this.endpointNodeId = endpoint.getId();
-		this.contextId = endpoint.getCamelContextId();
+		this.contextId = endpoint.getCamelContext().getId();
 		this.projectName = projectName;
 		this.fileName = fileName;
 		if (resource.getLocation().toFile().getPath().indexOf(String.format("%s%s%starget%s", File.separatorChar, projectName, File.separatorChar, File.separatorChar)) != -1) {

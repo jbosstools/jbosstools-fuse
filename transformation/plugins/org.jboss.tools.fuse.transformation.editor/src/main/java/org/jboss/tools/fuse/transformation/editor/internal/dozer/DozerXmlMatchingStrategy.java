@@ -11,8 +11,8 @@
 
 package org.jboss.tools.fuse.transformation.editor.internal.dozer;
 
-import org.fusesource.ide.commons.contenttype.XmlMatchingStrategySupport;
-import org.fusesource.ide.commons.contenttype.FindNamespaceHandlerSupport;
+import org.fusesource.ide.foundation.core.contenttype.XmlMatchingStrategySupport;
+import org.fusesource.ide.foundation.core.xml.namespace.FindNamespaceHandlerSupport;
 
 /**
  * @author bfitzpat

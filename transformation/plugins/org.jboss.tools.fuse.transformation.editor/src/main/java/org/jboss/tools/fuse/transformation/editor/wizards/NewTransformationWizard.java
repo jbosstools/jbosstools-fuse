@@ -16,17 +16,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URLClassLoader;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JPackage;
-import org.apache.camel.model.DataFormatDefinition;
-import org.apache.camel.model.dataformat.DataFormatsDefinition;
-import org.apache.camel.spring.CamelContextFactoryBean;
-import org.apache.camel.spring.CamelEndpointFactoryBean;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -38,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
@@ -52,14 +47,16 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
-import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.catalog.Dependency;
-import org.jboss.tools.fuse.transformation.MapperConfiguration;
-import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder;
-import org.jboss.tools.fuse.transformation.camel.CamelConfigBuilder.MarshalType;
-import org.jboss.tools.fuse.transformation.camel.CamelEndpoint;
-import org.jboss.tools.fuse.transformation.dozer.DozerMapperConfiguration;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.jboss.tools.fuse.transformation.core.MapperConfiguration;
+import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
+import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder.MarshalType;
+import org.jboss.tools.fuse.transformation.core.dozer.DozerMapperConfiguration;
+import org.jboss.tools.fuse.transformation.core.model.json.JsonModelGenerator;
+import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
@@ -72,8 +69,10 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.StartPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
-import org.jboss.tools.fuse.transformation.model.json.JsonModelGenerator;
-import org.jboss.tools.fuse.transformation.model.xml.XmlModelGenerator;
+
+import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JPackage;
 
 /**
  * @author brianf
@@ -85,11 +84,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private static final String OBJECT_FACTORY_NAME = "ObjectFactory";
 
     private Model uiModel = new Model();
-    private DataFormatDefinition sourceFormat;
-    private DataFormatDefinition targetFormat;
-    private CamelEndpoint endpoint;
+    private CamelModelElement sourceFormat;
+    private CamelModelElement targetFormat;
+    private CamelModelElement endpoint;
     private boolean saveCamelConfig = true;
-    private Endpoint routeEndpoint;
+    private CamelModelElement routeEndpoint;
 
     public StartPage start;
     public JavaPage javaSource;
@@ -153,9 +152,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                         if (saveCamelConfig) {
                             try {
-                                File camelFile = new File(uiModel.getProject()
-                                        .getFile(Util.RESOURCES_PATH + uiModel.getCamelFilePath()).getLocationURI());
-                                uiModel.camelConfig.save(camelFile);
+                                uiModel.camelConfig.save();
                             } catch (final Exception e) {
                                 throw e;
                             }
@@ -166,14 +163,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
 
                     if (!saveCamelConfig) {
                         // now update the camel config if we didn't already
-
-                        RouteContainer routeContainer = org.fusesource.ide.camel.editor.Activator.getDiagramEditor()
-                                .getModel();
-                        CamelContextFactoryBean camelContext = routeContainer.getModel().getContextElement();
+                        CamelContextElement camelContext = CamelUtils.getDiagramEditor().getModel().getCamelContext();
 
                         // Wizard completed successfully; create the necessary
                         // config
-                        addCamelContextEndpoint(camelContext, endpoint.asSpringEndpoint());
+                        addCamelContextEndpoint(camelContext, endpoint);
                         if (sourceFormat != null) {
                             addDataFormat(camelContext, sourceFormat);
                         }
@@ -181,7 +175,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                             addDataFormat(camelContext, targetFormat);
                         }
                         // Create the route endpoint
-                        routeEndpoint = new Endpoint("ref:" + endpoint.getId());
+                        routeEndpoint = new org.fusesource.ide.camel.model.service.core.model.CamelEndpoint("ref:" + endpoint.getId());
                     }
 
                     uiModel.getProject().refreshLocal(IProject.DEPTH_INFINITE, null);
@@ -219,10 +213,14 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return false;
     }
 
-    public Endpoint getRouteEndpoint() {
+    public CamelModelElement getRouteEndpoint() {
         return routeEndpoint;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.jface.wizard.Wizard#addPages()
+     */
     @Override
     public void addPages() {
         if (start == null) {
@@ -263,6 +261,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         addPage(otherTarget);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.jface.wizard.Wizard#getWindowTitle()
+     */
     @Override
     public String getWindowTitle() {
         return "New Fuse Transformation";
@@ -290,6 +292,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         uiModel.setCamelFilePath(path);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+     */
     @Override
     public void init(IWorkbench workbench, IStructuredSelection selection) {
         for (final Iterator<IProject> iter = uiModel.projects.iterator(); iter.hasNext();) {
@@ -345,6 +351,10 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         resetPage(otherTarget);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.jface.wizard.Wizard#canFinish()
+     */
     @Override
     public boolean canFinish() {
         if (start != null && start.getSourcePage() != null && start.getTargetPage() != null) {
@@ -488,15 +498,15 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         this.saveCamelConfig = saveCamelConfig;
     }
 
-    public DataFormatDefinition getSourceFormat() {
+    public CamelModelElement getSourceFormat() {
         return sourceFormat;
     }
 
-    public DataFormatDefinition getTargetFormat() {
+    public CamelModelElement getTargetFormat() {
         return targetFormat;
     }
 
-    public CamelEndpoint getEndpoint() {
+    public CamelModelElement getEndpoint() {
         return endpoint;
     }
 
@@ -504,39 +514,22 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return uiModel;
     }
 
-    private void addCamelContextEndpoint(CamelContextFactoryBean context, CamelEndpointFactoryBean endpoint) {
-        List<CamelEndpointFactoryBean> endpoints = context.getEndpoints();
+    private void addCamelContextEndpoint(CamelContextElement context, CamelModelElement endpoint) {
+        Map<String, CamelModelElement> endpoints = context.getEndpointDefinitions();
         if (endpoints == null) {
-            endpoints = new LinkedList<>();
+            endpoints = new HashMap<String, CamelModelElement>();
+            context.setEndpointDefinitions(endpoints);
         }
-        endpoints.add(endpoint);
-        context.setEndpoints(endpoints);
+        endpoints.put(endpoint.getId(), endpoint);
     }
 
-    private void addDataFormat(CamelContextFactoryBean context, DataFormatDefinition dataFormat) {
-        DataFormatsDefinition dataFormats = context.getDataFormats();
-        // create the parent element if it doesn't exist
+    private void addDataFormat(CamelContextElement context, CamelModelElement dataFormat) {
+    	Map<String, CamelModelElement> dataFormats = context.getDataformats();
         if (dataFormats == null) {
-            dataFormats = new DataFormatsDefinition();
+        	dataFormats = new HashMap<String, CamelModelElement>();
+            context.setDataformats(dataFormats);
         }
-
-        // add to the list of formats
-        if (dataFormats.getDataFormats() == null) {
-            dataFormats.setDataFormats(new LinkedList<DataFormatDefinition>());
-        }
-
-        // only add the data format if it's not present
-        boolean exists = false;
-        for (DataFormatDefinition dfd : dataFormats.getDataFormats()) {
-            if (dataFormat.getId().equals(dfd.getId())) {
-                exists = true;
-                break;
-            }
-        }
-        if (!exists) {
-            dataFormats.getDataFormats().add(dataFormat);
-            context.setDataFormats(dataFormats);
-        }
+        dataFormats.put(dataFormat.getId(), dataFormat);
     }
 
     private Dependency createDependency(String groupId, String artifactId, String version) {
@@ -548,27 +541,24 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     }
 
     private void addCamelDozerDependency() {
-        Dependency dep = createDependency("org.apache.camel", "camel-dozer", org.fusesource.ide.camel.editor.Activator
-                .getDefault().getCamelVersion());
+        Dependency dep = createDependency("org.apache.camel", "camel-dozer", CamelUtils.getCurrentProjectCamelVersion());
         List<Dependency> deps = new ArrayList<>();
         deps.add(dep);
         try {
             Util.updateMavenDependencies(deps, uiModel.getProject());
         } catch (CoreException e) {
-            org.fusesource.ide.camel.editor.Activator.getLogger().error(e);
+            Activator.log(new Status(Status.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
         }
     }
 
-    private void addDataFormatDefinitionDependency(DataFormatDefinition dataFormat) {
+    private void addDataFormatDefinitionDependency(CamelModelElement dataFormat) {
         Dependency dep = null;
-
-        if (dataFormat != null && dataFormat.getDataFormatName() != null) {
-            if (dataFormat.getDataFormatName().equalsIgnoreCase("json-jackson")) {
-                dep = createDependency("org.apache.camel", "camel-jackson", org.fusesource.ide.camel.editor.Activator
-                        .getDefault().getCamelVersion());
-            } else if (dataFormat.getDataFormatName().equalsIgnoreCase("jaxb")) {
-                dep = createDependency("org.apache.camel", "camel-jaxb", org.fusesource.ide.camel.editor.Activator
-                        .getDefault().getCamelVersion());
+        String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
+        if (dataFormat != null && dataFormat.getNodeTypeId() != null) {
+            if (dataFormat.getNodeTypeId().equalsIgnoreCase("json-jackson")) {
+                dep = createDependency("org.apache.camel", "camel-jackson", camelVersion);
+            } else if (dataFormat.getNodeTypeId().equalsIgnoreCase("jaxb")) {
+                dep = createDependency("org.apache.camel", "camel-jaxb", camelVersion);
             }
             if (dep != null) {
                 List<Dependency> deps = new ArrayList<>();
@@ -576,7 +566,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                 try {
                     Util.updateMavenDependencies(deps, uiModel.getProject());
                 } catch (CoreException e) {
-                    org.fusesource.ide.camel.editor.Activator.getLogger().error(e);
+                    Activator.log(new Status(Status.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
                 }
             }
         }

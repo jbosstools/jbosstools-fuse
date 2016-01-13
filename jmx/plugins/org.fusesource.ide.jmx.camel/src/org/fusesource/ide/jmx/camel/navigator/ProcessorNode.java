@@ -15,7 +15,8 @@ import java.util.List;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.jboss.tools.jmx.core.tree.Node;
 
 
@@ -23,9 +24,9 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	private static final boolean useCaching = true;
 
 	private final RouteNode routeNode;
-	private final AbstractNode node;
+	private final CamelModelElement node;
 
-	public ProcessorNode(RouteNode routeNode, Node parent, AbstractNode node) {
+	public ProcessorNode(RouteNode routeNode, Node parent, CamelModelElement node) {
 		super(parent, routeNode.getRoute());
 		this.routeNode = routeNode;
 		this.node = node;
@@ -37,20 +38,20 @@ public class ProcessorNode extends ProcessorNodeSupport {
 	}
 
 	@Override
-	public AbstractNode getAbstractNode() {
-		return node;
-	}
-
-	@Override
 	public CamelContextNode getCamelContextNode() {
 		return routeNode.getCamelContextNode();
 	}
 
 	@Override
 	protected void loadChildren() {
-		List<AbstractNode> children = node.getOutputs();
-		for (AbstractNode node : children) {
-			addChild(new ProcessorNode(routeNode, this, node));
+		List<CamelModelElement> children = node.getChildElements(); //getOutputs()
+		if (node.getOutputElement() != null) {
+			addChild(new ProcessorNode(routeNode, this, node.getOutputElement()));
+		}
+		for (CamelModelElement pnode : children) {
+			if (pnode.getInputElement() == null) {
+				addChild(new ProcessorNode(routeNode, this, pnode));
+			}
 		}
 	}
 
@@ -81,7 +82,9 @@ public class ProcessorNode extends ProcessorNodeSupport {
 
 	@Override
 	public Image getImage() {
-		return node.getSmallImage();
+		Image img = CamelJMXPlugin.getDefault().getImage(node.getIconName().replaceAll(".png", "16.png"));
+		if (img == null) img = CamelJMXPlugin.getDefault().getImage("generic16.png");
+		return img;
 	}
 	
 	/* (non-Javadoc)

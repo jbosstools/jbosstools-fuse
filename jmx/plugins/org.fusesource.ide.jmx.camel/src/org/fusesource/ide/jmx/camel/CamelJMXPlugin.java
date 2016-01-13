@@ -11,10 +11,8 @@
 
 package org.fusesource.ide.jmx.camel;
 
-import org.eclipse.core.runtime.IAdapterFactory;
-import org.eclipse.core.runtime.Platform;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
-import org.fusesource.ide.commons.ui.ImagesActivatorSupport;
+import org.fusesource.ide.foundation.ui.logging.RiderLogFacade;
+import org.fusesource.ide.foundation.ui.util.ImagesActivatorSupport;
 import org.fusesource.ide.jmx.camel.navigator.CamelNodeProvider;
 import org.fusesource.ide.jmx.camel.navigator.CamelPreferenceInitializer;
 import org.osgi.framework.BundleContext;
@@ -29,8 +27,6 @@ public class CamelJMXPlugin extends ImagesActivatorSupport {
 	public static final String PLUGIN_ID = "org.fusesource.ide.jmx.camel";
 	private static CamelJMXPlugin plugin;
 	private static CamelNodeProvider nodeProvider;
-	private static IAdapterFactory adapterFactory;
-	
 	private static CamelJMXSharedImages sharedImages;
 	
 	
@@ -47,11 +43,6 @@ public class CamelJMXPlugin extends ImagesActivatorSupport {
 		plugin = this;
 		new CamelPreferenceInitializer().initializeDefaultPreferences();
 		nodeProvider = new CamelNodeProvider();
-		adapterFactory = new JMXCamelAdapterFactory();
-		Class<?>[] classses = adapterFactory.getAdapterList();
-		for (Class<?> clazz : classses) {
-			Platform.getAdapterManager().registerAdapters(adapterFactory, clazz);
-		}
 	}
 
 	/*
@@ -64,10 +55,6 @@ public class CamelJMXPlugin extends ImagesActivatorSupport {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		Class<?>[] classses = adapterFactory.getAdapterList();
-		for (Class<?> clazz : classses) {
-			Platform.getAdapterManager().unregisterAdapters(adapterFactory, clazz);
-		}
 		super.stop(context);
 	}
 

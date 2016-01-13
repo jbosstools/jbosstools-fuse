@@ -20,10 +20,11 @@ import org.eclipse.graphiti.ui.platform.AbstractImageProvider;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.generated.Route;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.osgi.framework.Bundle;
 
 
@@ -89,17 +90,17 @@ public class ImageProvider extends AbstractImageProvider {
 		// let the helper class fill all figure images
 		ProviderHelper.addFigureIcons(this);
 
-		addIconsForClass(new Route(), "route16.png", "route.png");
+		addIconsForClass(new CamelRouteElement(null, null), "route16.png", "route.png");
 
 		// add all images from the activator too
         String prefix = "/icons/";
-        Enumeration<URL> enu = Activator.getDefault().getBundle().findEntries(prefix, "*", true);
+        Enumeration<URL> enu = CamelEditorUIActivator.getDefault().getBundle().findEntries(prefix, "*", true);
         while (enu.hasMoreElements()) {
             URL u = enu.nextElement();
             String file = u.getFile();
             String fileName = file;
             if (!file.startsWith(prefix)) {
-                Activator.getLogger().warning("Warning: image: " + fileName + " does not start with prefix: " + prefix);
+                CamelEditorUIActivator.pluginLog().logWarning("Warning: image: " + fileName + " does not start with prefix: " + prefix);
             }
             fileName = fileName.substring(prefix.length());
             addIconCustomImages(fileName);
@@ -119,19 +120,19 @@ public class ImageProvider extends AbstractImageProvider {
             	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_SMALL);
             	URL imgUrl = b.getEntry(paletteIconPath);
             	addImageFilePath(key, imgUrl.toString());
-            	Activator.getDefault().getImageRegistry().put(key, getExternalImage(b, paletteIconPath));
+            	CamelEditorUIActivator.getDefault().getImageRegistry().put(key, getExternalImage(b, paletteIconPath));
             }
             if (diagramImagePath != null && diagramImagePath.trim().length()>0) {
             	String key = String.format("%s%s%s", PREFIX, entryId, POSTFIX_LARGE);
             	URL imgUrl = b.getEntry(diagramImagePath);
             	addImageFilePath(key, imgUrl.toString());
-            	Activator.getDefault().getImageRegistry().put(key, getExternalImage(b, diagramImagePath));
+            	CamelEditorUIActivator.getDefault().getImageRegistry().put(key, getExternalImage(b, diagramImagePath));
             }
         }
 	}
 	
 	private Bundle getBundleById(String id) {
-		for (Bundle b : Activator.getDefault().getBundle().getBundleContext().getBundles()) {
+		for (Bundle b : CamelEditorUIActivator.getDefault().getBundle().getBundleContext().getBundles()) {
 			if (b.getSymbolicName().equals(id)) return b;
 		}
 		return null;
@@ -157,7 +158,7 @@ public class ImageProvider extends AbstractImageProvider {
 	 * @param fileNameSmall	the file name of the small icon
 	 * @param fileNameLarge	the file name of the large icon
 	 */
-	public void addIconsForClass(AbstractNode node, String fileNameSmall, String fileNameLarge) {
+	public void addIconsForClass(CamelModelElement node, String fileNameSmall, String fileNameLarge) {
 		addIconsForIconName(node.getIconName(), fileNameSmall, fileNameLarge);
 	}
 
@@ -181,12 +182,21 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 
 	private void addToImageRegistry(String key, String path) {
-		Activator.getDefault().getImageRegistry().put(key, Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, path));
+		CamelEditorUIActivator.getDefault().getImageRegistry().put(key, CamelEditorUIActivator.imageDescriptorFromPlugin(CamelEditorUIActivator.PLUGIN_ID, path));
 	}
 
-	public void addIconsForClass(AbstractNode node) {
-		addIconsForClass(node, node.getSmallIconName(), node.getIconName());
+	public void addIconsForClass(CamelModelElement node) {
+		addIconsForClass(node, node.getIconName().replaceAll(".png", "16.png"), node.getIconName());
 	}
+	
+	public void addIconsForEIP(Eip eip ) {
+//		String eipName = eip.getName();
+//		addIconsForIconName(UniversalEIPUtility.getIconName(eipName), 
+//				UniversalEIPUtility.getSmallIconName(eipName), 
+//				UniversalEIPUtility.getIconName(eipName));
+	}
+
+	
 
 	public static String getKeyForSmallIcon(String iconName) {
 	    if (isImageAvailable(iconName)) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_SMALL);
@@ -199,10 +209,10 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 	
 	protected static boolean isImageAvailable(String iconName) {
-		if (Activator.getDiagramEditor() != null) {
-			Image img = GraphitiUi.getImageService().getImageForId(Activator.getDiagramEditor().getDiagramTypeProvider().getProviderId(), iconName);
+		if (CamelUtils.getDiagramEditor() != null) {
+			Image img = GraphitiUi.getImageService().getImageForId(CamelUtils.getDiagramEditor().getDiagramTypeProvider().getProviderId(), iconName);
 			return img != null;
 		}
-	    return Activator.getDefault().getBundle().getEntry(String.format("%s%s", ROOT_FOLDER_FOR_IMG, iconName)) != null;
+	    return CamelEditorUIActivator.getDefault().getBundle().getEntry(String.format("%s%s", ROOT_FOLDER_FOR_IMG, iconName)) != null;
 	}
 }

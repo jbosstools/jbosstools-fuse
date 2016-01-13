@@ -1,0 +1,19 @@
+# Debugging options for the org.fusesource.ide.camel.model.service.core plugin
+
+# Turn on general debugging
+org.fusesource.ide.camel.model.service.core/debug=true
+
+# Tracing options
+org.fusesource.ide.camel.model.service.core/config=false
+org.fusesource.ide.camel.model.service.core/info=false
+org.fusesource.ide.camel.model.service.core/warning=false
+org.fusesource.ide.camel.model.service.core/severe=false
+org.fusesource.ide.camel.model.service.core/finest=false
+org.fusesource.ide.camel.model.service.core/finer=false
+
+# Loading of extension points
+org.fusesource.ide.camel.model.service.core/extension_point=false
+
+# Performance of loading and calling delegates
+org.fusesource.ide.camel.model.service.core/performance=false
+

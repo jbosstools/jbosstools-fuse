@@ -12,7 +12,7 @@
 package org.fusesource.ide.jmx.servicemix.navigator;
 
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
 import org.fusesource.ide.jmx.servicemix.ServiceMixJMXPlugin;
 import org.fusesource.ide.jmx.servicemix.internal.ServiceMixFacade;
 import org.jboss.tools.jmx.core.tree.Node;

@@ -20,7 +20,7 @@ import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
 import org.eclipse.wst.server.core.IServer;
-import org.fusesource.ide.commons.Activator;
+import org.fusesource.ide.server.karaf.core.Activator;
 import org.fusesource.ide.server.karaf.core.server.subsystems.OSGiBundleState;
 
 /**

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-impl-2.2.6.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/main/java/"/>
 	<classpathentry kind="src" path="src/main/resources/"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="libs/data-transform-common-8.0.0-SNAPSHOT.jar" sourcepath="/data-transform-common"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-xjc-2.2.6.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

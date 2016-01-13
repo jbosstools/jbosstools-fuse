@@ -14,18 +14,18 @@ package org.fusesource.ide.jmx.camel.navigator;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.commons.tree.RefreshableCollectionNode;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
+import org.fusesource.ide.foundation.ui.tree.RefreshableCollectionNode;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
-import org.fusesource.ide.jmx.camel.internal.CamelContextMBean;
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
 import org.jboss.tools.jmx.core.tree.Node;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 
 public class CamelContextsNode extends RefreshableCollectionNode implements ImageProvider {
-	private final CamelFacade facade;
+	private final CamelJMXFacade facade;
 
-	public CamelContextsNode(Node parent, CamelFacade facade) {
+	public CamelContextsNode(Node parent, CamelJMXFacade facade) {
 		super(parent);
 		this.facade = facade;
 	}
@@ -35,7 +35,7 @@ public class CamelContextsNode extends RefreshableCollectionNode implements Imag
 		return "Camel";
 	}
 
-	public CamelFacade getFacade() {
+	public CamelJMXFacade getFacade() {
 		return facade;
 	}
 
@@ -54,7 +54,7 @@ public class CamelContextsNode extends RefreshableCollectionNode implements Imag
 		}
 	}
 
-	public void addChildren(CamelFacade facade) throws Exception {
+	public void addChildren(CamelJMXFacade facade) throws Exception {
 	}
 
 

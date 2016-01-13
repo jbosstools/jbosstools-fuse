@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Resource;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -29,12 +30,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 
 /**
  * @author lhein
- *
  */
 public class MavenUtils {
 
@@ -42,16 +42,16 @@ public class MavenUtils {
      * checks if we need to add a maven dependency for the chosen component
      * and inserts it into the pom.xml if needed
      */
-    public static void updateMavenDependencies(List<org.fusesource.ide.camel.model.catalog.Dependency> compDeps) throws CoreException {
-        RiderDesignEditor editor = Activator.getDiagramEditor();
+    public static void updateMavenDependencies(List<org.fusesource.ide.camel.model.service.core.catalog.Dependency> compDeps) throws CoreException {
+        CamelDesignEditor editor = CamelUtils.getDiagramEditor();
         if (editor == null) {
-            Activator.getLogger().error("Unable to add component dependencies because Editor instance can't be determined.");
+            CamelEditorUIActivator.pluginLog().logError("Unable to add component dependencies because Editor instance can't be determined.");
             return;
         }
         
-        IProject project = editor.getCamelContextFile().getProject();
+        IProject project = editor.getWorkspaceProject();
         if (project == null) {
-            Activator.getLogger().error("Unable to add component dependencies because selected project can't be determined.");
+            CamelEditorUIActivator.pluginLog().logWarning("Unable to add component dependencies because selected project can't be determined. Maybe this is a remote camel context.");
             return;
         }
         
@@ -61,9 +61,9 @@ public class MavenUtils {
         final Model model = MavenPlugin.getMaven().readModel(pomFile);
 
         // then check if component dependency is already a dep
-        ArrayList<org.fusesource.ide.camel.model.catalog.Dependency> missingDeps = new ArrayList<org.fusesource.ide.camel.model.catalog.Dependency>();
+        ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency>();
         List<Dependency> deps = model.getDependencies();
-        for (org.fusesource.ide.camel.model.catalog.Dependency conDep : compDeps) {
+        for (org.fusesource.ide.camel.model.service.core.catalog.Dependency conDep : compDeps) {
             boolean found = false;
             for (Dependency pomDep : deps) {
                 if (pomDep.getGroupId().equalsIgnoreCase(conDep.getGroupId()) &&
@@ -82,7 +82,7 @@ public class MavenUtils {
             }
         }
 
-        for (org.fusesource.ide.camel.model.catalog.Dependency missDep : missingDeps) {
+        for (org.fusesource.ide.camel.model.service.core.catalog.Dependency missDep : missingDeps) {
             Dependency dep = new Dependency();
             dep.setGroupId(missDep.getGroupId());
             dep.setArtifactId(missDep.getArtifactId());
@@ -100,14 +100,60 @@ public class MavenUtils {
                     pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
                 }
             } catch (Exception ex) {
-                Activator.getLogger().error(ex);
+                CamelEditorUIActivator.pluginLog().logError(ex);
             } finally {
                 try {
                     if (os != null) {
                         os.close();
                     }
                 } catch (IOException e) {
-                    Activator.getLogger().error(e);
+                	CamelEditorUIActivator.pluginLog().logError(e);
+                }
+            }
+        }
+    }
+    
+    /**
+     * adds a resource folder to the maven pom file if not yet there
+     * 
+     * @param project	the eclipse project
+     * @param pomFile	the pom.xml file
+     * @param resourceFolderName	the name of the new resource folder
+     * @throws CoreException	on any errors
+     */
+    public static void addResourceFolder(IProject project, File pomFile, String resourceFolderName) throws CoreException {
+    	final Model model = MavenPlugin.getMaven().readModel(pomFile);
+        List<Resource> resources = model.getBuild().getResources();
+        
+        boolean exists = false;
+        for (Resource resource : resources) {
+            if (resource.getDirectory().equals(resourceFolderName)) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            Resource resource = new Resource();
+            resource.setDirectory(resourceFolderName);
+            model.getBuild().addResource(resource);
+
+            OutputStream os = null;
+            try {
+                os = new BufferedOutputStream(new FileOutputStream(pomFile));
+                MavenPlugin.getMaven().writeModel(model, os);
+                IFile pomIFile = project.getFile("pom.xml");
+                if (pomIFile != null){
+                    pomIFile.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+                }
+            } catch (Exception ex) {
+                CamelEditorUIActivator.pluginLog().logError(ex);
+            } finally {
+                try {
+                    if (os != null) {
+                        os.close();
+                    }
+                } catch (IOException e) {
+                	CamelEditorUIActivator.pluginLog().logError(e);
                 }
             }
         }

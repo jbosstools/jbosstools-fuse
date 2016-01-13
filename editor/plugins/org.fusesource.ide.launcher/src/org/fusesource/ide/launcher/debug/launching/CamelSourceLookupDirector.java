@@ -10,7 +10,11 @@
  ******************************************************************************/
 package org.fusesource.ide.launcher.debug.launching;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupDirector;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 import org.eclipse.debug.core.sourcelookup.containers.LocalFileStorage;
@@ -19,8 +23,10 @@ import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourceLookupPartici
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
+import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistry;
 import org.fusesource.ide.launcher.debug.util.CamelDebugRegistryEntry;
+import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
 
 /**
@@ -63,14 +69,30 @@ public class CamelSourceLookupDirector extends AbstractSourceLookupDirector impl
 		}
 		
 		// Differentiate Java and XML files.
-		else if (element instanceof IFile) {
-			IFile sourceFile = (IFile)element;
-			if (sourceFile.getFileExtension().contentEquals("java"))
-			   return new FileEditorInput(sourceFile); 
-			
+		else if (element instanceof File) {
+			File sourceFile = (File)element;
+			if (sourceFile.getName().toLowerCase().endsWith(".java")) {
+				IProject prj = CamelDebugUtils.getProjectForFilePath(sourceFile.getPath());
+				IPath fp = prj.findMember(sourceFile.getPath()).getFullPath();
+				IFile sourceFileResolved = prj.getFile(fp);
+				return new FileEditorInput(sourceFileResolved); 
+			}
 			for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
 				IFile f = (IFile)entry.getEditorInput().getAdapter(IFile.class);
 				if (f.getLocation().toFile().getName().equals(sourceFile.getName())) {
+					input = entry.getEditorInput();
+					break;
+				}
+			}	
+			return input;
+		} else if (element instanceof IFile) {
+			IFile sourceFile = (IFile)element;
+			if (sourceFile.getName().toLowerCase().endsWith(".java")) {
+				return new FileEditorInput(sourceFile); 
+			}
+			for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
+				IFile f = ((CamelXMLEditorInput)entry.getEditorInput()).getCamelContextFile(); 
+				if (f != null && f.getFullPath().equals(sourceFile.getFullPath())) {
 					input = entry.getEditorInput();
 					break;
 				}
@@ -81,6 +103,8 @@ public class CamelSourceLookupDirector extends AbstractSourceLookupDirector impl
 		return null;
 	}
 
+	
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.debug.ui.ISourcePresentation#getEditorId(org.eclipse.ui.IEditorInput, java.lang.Object)
 	 */

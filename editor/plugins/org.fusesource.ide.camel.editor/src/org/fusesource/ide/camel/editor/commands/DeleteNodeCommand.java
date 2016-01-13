@@ -16,18 +16,18 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.context.impl.DeleteContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 
 /**
  * @author lhein
  */
 public class DeleteNodeCommand extends RecordingCommand {
-	private final RiderDesignEditor designEditor;
-	private final AbstractNode selectedNode;
+	private final CamelDesignEditor designEditor;
+	private final CamelModelElement selectedNode;
 
-	public DeleteNodeCommand(RiderDesignEditor designEditor, TransactionalEditingDomain editingDomain, AbstractNode selectedNode) {
+	public DeleteNodeCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, CamelModelElement selectedNode) {
 		super(editingDomain);
 		this.designEditor = designEditor;
 		this.selectedNode = selectedNode;

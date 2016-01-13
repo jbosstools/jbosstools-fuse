@@ -8,41 +8,25 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.camel.editor.provider;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.IAddFeature;
-import org.eclipse.graphiti.features.ICopyFeature;
 import org.eclipse.graphiti.features.ICreateConnectionFeature;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IDeleteFeature;
-import org.eclipse.graphiti.features.IDirectEditingFeature;
 import org.eclipse.graphiti.features.IFeature;
-import org.eclipse.graphiti.features.ILayoutFeature;
-import org.eclipse.graphiti.features.IMoveShapeFeature;
-import org.eclipse.graphiti.features.IPasteFeature;
-import org.eclipse.graphiti.features.IReconnectionFeature;
 import org.eclipse.graphiti.features.IRemoveFeature;
 import org.eclipse.graphiti.features.IResizeShapeFeature;
 import org.eclipse.graphiti.features.IUpdateFeature;
 import org.eclipse.graphiti.features.context.IAddContext;
-import org.eclipse.graphiti.features.context.ICopyContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.context.IDeleteContext;
-import org.eclipse.graphiti.features.context.IDirectEditingContext;
-import org.eclipse.graphiti.features.context.ILayoutContext;
-import org.eclipse.graphiti.features.context.IMoveShapeContext;
-import org.eclipse.graphiti.features.context.IPasteContext;
 import org.eclipse.graphiti.features.context.IPictogramElementContext;
-import org.eclipse.graphiti.features.context.IReconnectionContext;
 import org.eclipse.graphiti.features.context.IRemoveContext;
 import org.eclipse.graphiti.features.context.IResizeShapeContext;
 import org.eclipse.graphiti.features.context.IUpdateContext;
@@ -51,48 +35,35 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.ui.features.DefaultFeatureProvider;
-import org.fusesource.ide.camel.editor.AbstractNodes;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.CamelModelIndependenceSolver;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
 import org.fusesource.ide.camel.editor.features.add.AddFlowFeature;
 import org.fusesource.ide.camel.editor.features.add.AddNodeFeature;
-import org.fusesource.ide.camel.editor.features.create.CreateDefinedBeanFigureFeature;
-import org.fusesource.ide.camel.editor.features.create.CreateDefinedEndpointFigureFeature;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
+import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.features.custom.DeleteAllEndpointBreakpointsFeature;
 import org.fusesource.ide.camel.editor.features.custom.DeleteEndpointBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.DisableCamelBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.EditConditionalBreakpoint;
 import org.fusesource.ide.camel.editor.features.custom.EnableCamelBreakpointFeature;
+import org.fusesource.ide.camel.editor.features.custom.GoIntoContainerFeature;
 import org.fusesource.ide.camel.editor.features.custom.LayoutDiagramFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetConditionalBreakpointFeature;
 import org.fusesource.ide.camel.editor.features.custom.SetEndpointBreakpointFeature;
-import org.fusesource.ide.camel.editor.features.delete.DeleteNodeFeature;
-import org.fusesource.ide.camel.editor.features.delete.RemoveNodeFeature;
-import org.fusesource.ide.camel.editor.features.other.CopyNodeFeature;
-import org.fusesource.ide.camel.editor.features.other.LayoutNodeFeature;
-import org.fusesource.ide.camel.editor.features.other.MoveNodeFeature;
-import org.fusesource.ide.camel.editor.features.other.PasteNodeFeature;
-import org.fusesource.ide.camel.editor.features.other.ReconnectNodesFeature;
-import org.fusesource.ide.camel.editor.features.other.ResizeNodeFeature;
-import org.fusesource.ide.camel.editor.features.other.UpdateNodeFeature;
-import org.fusesource.ide.camel.editor.provider.generated.AddNodeMenuFactory;
-import org.fusesource.ide.camel.editor.provider.generated.ProviderHelper;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.Endpoint;
-import org.fusesource.ide.camel.model.Flow;
-import org.fusesource.ide.camel.model.generated.Bean;
-import org.fusesource.ide.commons.camel.tools.BeanDef;
-import org.fusesource.ide.commons.util.Strings;
-
+import org.fusesource.ide.camel.editor.features.delete.DeleteFigureFeature;
+import org.fusesource.ide.camel.editor.features.delete.RemoveFigureFeature;
+import org.fusesource.ide.camel.editor.features.misc.ResizeNodeFeature;
+import org.fusesource.ide.camel.editor.features.misc.UpdateNodeFeature;
+import org.fusesource.ide.camel.editor.internal.CamelModelIndependenceSolver;
+import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
+import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.foundation.ui.archetypes.BeanDef;
 
 /**
  * @author lhein
  */
 public class CamelFeatureProvider extends DefaultFeatureProvider {
 
-	private AddNodeMenuFactory menuFactory = new AddNodeMenuFactory();
+//	private AddNodeMenuFactory menuFactory = new AddNodeMenuFactory();
 	private CamelModelIndependenceSolver modelIndependenceSolver;
 	
 	public CamelFeatureProvider(IDiagramTypeProvider dtp) {
@@ -103,157 +74,105 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 		setIndependenceSolver(modelIndependenceSolver);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getAddFeature(org.eclipse.graphiti.features.context.IAddContext)
+	 */
 	@Override
 	public IAddFeature getAddFeature(IAddContext context) {
 		// is object for add request a EClass or EReference?
-		if (context.getNewObject() instanceof Flow) {
+		if (context.getNewObject() instanceof CamelElementConnection) {
 			return new AddFlowFeature(this);
-		} else if (context.getNewObject() instanceof AbstractNode) {
+		} else if (context.getNewObject() instanceof CamelModelElement) {
 			return new AddNodeFeature(this);
 		}
 		return super.getAddFeature(context);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getCreateFeatures()
+	 */
 	@Override
 	public ICreateFeature[] getCreateFeatures() {
 		ICreateFeature[] features = ProviderHelper.getCreateFeatures(this);
-		AbstractNode selectedNode = null;
-		RiderDesignEditor rider = (RiderDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-		selectedNode = rider.getSelectedNode();
-		if (selectedNode == null) {
-			selectedNode = rider.getSelectedRoute();
-		}
-
-		if (selectedNode != null) {
-			List<ICreateFeature> featureList = new ArrayList<ICreateFeature>();
-			featureList.addAll(Arrays.asList(features));
-
-			Set<Endpoint> endpoints = AbstractNodes.getAllEndpoints(selectedNode);
-			Map<String, BeanDef> beans = AbstractNodes.getAllBeans(selectedNode);
-			addEndpointInstances(featureList, endpoints);
-			addBeanInstances(featureList, beans);
-
-			return featureList.toArray(new ICreateFeature[featureList.size()]);
-		}
+//		AbstractNode selectedNode = null;
+//		CamelDesignEditor editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
+//		selectedNode = editor.getSelectedNode();
+//		if (selectedNode == null) {
+//			selectedNode = rider.getSelectedRoute();
+//		}
+//
+//		if (selectedNode != null) {
+//			List<ICreateFeature> featureList = new ArrayList<ICreateFeature>();
+//			featureList.addAll(Arrays.asList(features));
+//
+//			Set<Endpoint> endpoints = AbstractNodes.getAllEndpoints(selectedNode);
+//			Map<String, BeanDef> beans = AbstractNodes.getAllBeans(selectedNode);
+//			addEndpointInstances(featureList, endpoints);
+//			addBeanInstances(featureList, beans);
+//
+//			return featureList.toArray(new ICreateFeature[featureList.size()]);
+//		}
 		return features;
 	}
 
-	private void addBeanInstances(List<ICreateFeature> featureList, Map<String, BeanDef> beans) {
-		ArrayList<String> processedBeans = new ArrayList<String>();
-		Set<Entry<String, BeanDef>> entrySet = beans.entrySet();
-		for (Entry<String, BeanDef> entry : entrySet) {
-			String name = entry.getKey();
-			String aClass = entry.getValue().getClassName();
-
-			if ((Strings.isBlank(name) && Strings.isBlank(aClass)) || !entry.getValue().getBeanType().equalsIgnoreCase("bean")) {
-				continue;
-			}
-
-			if (processedBeans.contains(name)) continue;
-			processedBeans.add(name);
-			
-			Bean bean = new Bean();
-			bean.setName(name);
-			bean.setRef(name);
-			bean.setBeanType(aClass);
-
-			String title = bean.getDisplayText();
-			String description = "bean '" + name + "' of type " + aClass;
-
-			featureList.add(new CreateDefinedBeanFigureFeature(this, title, description, bean));
-		}
-	}
-
-	private void addEndpointInstances(List<ICreateFeature> featureList, Set<Endpoint> endpoints) {
-		ArrayList<String> processedURIs = new ArrayList<String>();
-		for (Endpoint endpoint : endpoints) {
-			String id = endpoint.getId();
-			String url = endpoint.getUri();
-			if (Strings.isBlank(id) && Strings.isBlank(url)) {
-				continue;
-			}
-			if (processedURIs.contains(url)) continue;
-			processedURIs.add(url);
-			String description = endpoint.getDescription();
-			String title = endpoint.getDisplayText();
-			featureList.add(new CreateDefinedEndpointFigureFeature(this, title, description, endpoint));
-		}
-
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getUpdateFeature(org.eclipse.graphiti.features.context.IUpdateContext)
+	 */
 	@Override
 	public IUpdateFeature getUpdateFeature(IUpdateContext context) {
 		PictogramElement pictogramElement = context.getPictogramElement();
 		if (pictogramElement instanceof ContainerShape) {
 			Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-			if (bo instanceof AbstractNode) {
+			if (bo instanceof CamelModelElement) {
 				return new UpdateNodeFeature(this);
 			}
 		}
 		return super.getUpdateFeature(context);
 	}
 
-	@Override
-	public IMoveShapeFeature getMoveShapeFeature(IMoveShapeContext context) {
-		Shape shape = context.getShape();
-		Object bo = getBusinessObjectForPictogramElement(shape);
-		if (bo instanceof AbstractNode) {
-			return new MoveNodeFeature(this);
-		}
-		return super.getMoveShapeFeature(context);
-	}
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getDeleteFeature(org.eclipse.graphiti.features.context.IDeleteContext)
 	 */
 	@Override
 	public IDeleteFeature getDeleteFeature(IDeleteContext context) {
-		return new DeleteNodeFeature(this);
+		return new DeleteFigureFeature(this);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getRemoveFeature(org.eclipse.graphiti.features.context.IRemoveContext)
 	 */
 	@Override
 	public IRemoveFeature getRemoveFeature(IRemoveContext context) {
-		return new RemoveNodeFeature(this);
+		return new RemoveFigureFeature(this);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getResizeShapeFeature(org.eclipse.graphiti.features.context.IResizeShapeContext)
+	 */
 	@Override
 	public IResizeShapeFeature getResizeShapeFeature(IResizeShapeContext context) {
 		Shape shape = context.getShape();
 		Object bo = getBusinessObjectForPictogramElement(shape);
-		if (bo instanceof AbstractNode) {
+		if (bo instanceof CamelModelElement) {
 			return new ResizeNodeFeature(this);
 		}
 		return super.getResizeShapeFeature(context);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getReconnectionFeature(org.eclipse.graphiti.features.context.IReconnectionContext)
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getCustomFeatures(org.eclipse.graphiti.features.context.ICustomContext)
 	 */
-	@Override
-	public IReconnectionFeature getReconnectionFeature(
-			IReconnectionContext context) {
-		return new ReconnectNodesFeature(this);
-	}
-
-	@Override
-	public ILayoutFeature getLayoutFeature(ILayoutContext context) {
-		PictogramElement pictogramElement = context.getPictogramElement();
-		Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-		if (bo instanceof AbstractNode) {
-			return new LayoutNodeFeature(this);
-		}
-		return super.getLayoutFeature(context);
-	}
-
 	@Override
 	public ICustomFeature[] getCustomFeatures(ICustomContext context) {
 		return new ICustomFeature[]
-				{ /**new RenameNodeFeature(this),
-				new DrillDownNodeFeature(this),
-				new AssociateDiagramNodeFeature(this),**/
+				{
 				new LayoutDiagramFeature(this),
 				new SetEndpointBreakpointFeature(this),
 				new SetConditionalBreakpointFeature(this),
@@ -262,12 +181,10 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 				new DisableCamelBreakpointFeature(this),
 				new DeleteEndpointBreakpointFeature(this),
 				new DeleteAllEndpointBreakpointsFeature(this),
-				//				, new CollapseDummyFeature(this)
-				//				, new SetGridVisibilityFeature(this)
-				/*
-				, new AddRouteFeature(this)
-				, new DeleteRouteFeature(this)
-				 */
+//				new GEFLayoutDiagramFeature(this),
+//				new ZestLayoutDiagramFeature(this),
+				new CollapseFeature(this),
+				new GoIntoContainerFeature(this)
 				};
 	}
 
@@ -280,30 +197,59 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 		return new ICreateConnectionFeature[] { new CreateFlowFeature(this) };
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getDragAndDropFeatures(org.eclipse.graphiti.features.context.IPictogramElementContext)
+	 */
 	@Override
 	public IFeature[] getDragAndDropFeatures(IPictogramElementContext context) {
 		// simply return all create connection features
 		return getCreateConnectionFeatures();
 	}
 
-	@Override
-	public IDirectEditingFeature getDirectEditingFeature(IDirectEditingContext context) {
-		//		PictogramElement pe = context.getPictogramElement();
-		//		Object bo = getBusinessObjectForPictogramElement(pe);
-		//		if (bo instanceof AbstractNode) {
-		//			return new DirectEditNodeFeature(this);
-		//		}
-		return super.getDirectEditingFeature(context);
+	private void addBeanInstances(List<ICreateFeature> featureList, Map<String, BeanDef> beans) {
+//		ArrayList<String> processedBeans = new ArrayList<String>();
+//		Set<Entry<String, BeanDef>> entrySet = beans.entrySet();
+//		for (Entry<String, BeanDef> entry : entrySet) {
+//			String name = entry.getKey();
+//			String aClass = entry.getValue().getClassName();
+//
+//			if ((Strings.isBlank(name) && Strings.isBlank(aClass)) || !entry.getValue().getBeanType().equalsIgnoreCase("bean")) {
+//				continue;
+//			}
+//
+//			if (processedBeans.contains(name)) continue;
+//			processedBeans.add(name);
+//			
+//			CamelModel model = CamelModelFactory.getModelForVersion(CamelModelFactory.getCamelVersion(null));
+//			Eip eip = model.getEipModel().getEIPByName("bean");
+//			UniversalEIPNode bean = new UniversalEIPNode(eip);
+//			bean.setName(name);
+//			bean.setShortPropertyValue("ref", name); 
+//			bean.setShortPropertyValue("beanType", aClass); 
+//
+//			String title = bean.getDisplayText();
+//			String description = "bean '" + name + "' of type " + aClass;
+//
+//			featureList.add(new CreateDefinedBeanFigureFeature(this, title, description, bean));
+//		}
 	}
 
-	@Override
-	public ICopyFeature getCopyFeature(ICopyContext context) {
-		return new CopyNodeFeature(this);
-	}
+	private void addEndpointInstances(List<ICreateFeature> featureList, Set<CamelEndpoint> endpoints) {
+//		ArrayList<String> processedURIs = new ArrayList<String>();
+//		for (Endpoint endpoint : endpoints) {
+//			String id = endpoint.getId();
+//			String url = endpoint.getUri();
+//			if (Strings.isBlank(id) && Strings.isBlank(url)) {
+//				continue;
+//			}
+//			if (processedURIs.contains(url)) continue;
+//			processedURIs.add(url);
+//			String description = endpoint.getDescription();
+//			String title = endpoint.getDisplayText();
+//			featureList.add(new CreateDefinedEndpointFigureFeature(this, title, description, endpoint));
+//		}
 
-	@Override
-	public IPasteFeature getPasteFeature(IPasteContext context) {
-		return new PasteNodeFeature(this);
 	}
 	
 	public CamelModelIndependenceSolver getModelIndependenceSolver() {

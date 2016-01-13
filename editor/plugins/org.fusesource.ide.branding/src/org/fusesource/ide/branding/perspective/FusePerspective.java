@@ -16,7 +16,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
-import org.fusesource.ide.commons.ui.UIHelper;
+import org.fusesource.ide.foundation.ui.util.UIHelper;
 
 
 /**

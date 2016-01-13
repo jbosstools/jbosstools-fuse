@@ -8,7 +8,6 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.camel.editor.commands;
 
 import org.eclipse.emf.transaction.RecordingCommand;
@@ -16,20 +15,18 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.features.IUpdateFeature;
 import org.eclipse.graphiti.features.context.impl.UpdateContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.fusesource.ide.camel.editor.Activator;
-import org.fusesource.ide.camel.editor.editor.RiderDesignEditor;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.RouteSupport;
-
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
  * @author lhein
  */
 public class UpdateCommand extends RecordingCommand {
-	private final RiderDesignEditor designEditor;
-	private AbstractNode node;
+	private final CamelDesignEditor designEditor;
+	private CamelModelElement node;
 
-	public UpdateCommand(RiderDesignEditor designEditor, TransactionalEditingDomain editingDomain, AbstractNode node) {
+	public UpdateCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, CamelModelElement node) {
 		super(editingDomain);
 		this.designEditor = designEditor;
 		this.node = node;
@@ -37,17 +34,27 @@ public class UpdateCommand extends RecordingCommand {
 
 	@Override
 	protected void doExecute() {
-		AbstractNode selectedNode = this.node == null ? designEditor.getSelectedNode() : node;
+		CamelModelElement selectedNode = this.node == null ? designEditor.getSelectedNode() : node;
 		if (selectedNode == null) {
 			// use the route node in this case
-			selectedNode = designEditor.getSelectedRoute();
+			selectedNode = designEditor.getModel().getCamelContext();
 		}
-		PictogramElement pe = selectedNode instanceof RouteSupport ? designEditor.getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(selectedNode);
+		updateFigure(selectedNode);
+	}
+	
+	private void updateFigure(CamelModelElement node) {
+		if (node == null) return;
+
+		PictogramElement pe = node instanceof CamelContextElement ? designEditor.getDiagramTypeProvider().getDiagram() : designEditor.getFeatureProvider().getPictogramElementForBusinessObject(node);
 		if (pe == null) {
-			Activator.getLogger().debug("Warning could not find PictogramElement for selectedNode: " + selectedNode);
+//			CamelEditorUIActivator.pluginLog().logInfo("Warning could not find PictogramElement for selectedNode: " + node);
+			return;
 		}
 		UpdateContext ctx = new UpdateContext(pe);
 		IUpdateFeature updateFeature = designEditor.getFeatureProvider().getUpdateFeature(ctx);
 		updateFeature.update(ctx);
+		for (CamelModelElement elem : node.getChildElements()) {
+			updateFigure(elem);
+		}
 	}
 }

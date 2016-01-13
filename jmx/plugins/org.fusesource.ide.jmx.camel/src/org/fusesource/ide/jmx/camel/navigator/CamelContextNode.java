@@ -11,14 +11,16 @@
 
 package org.fusesource.ide.jmx.camel.navigator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.camel.RuntimeCamelException;
-import org.apache.camel.api.management.mbean.BacklogTracerEventMessage;
-import org.apache.camel.api.management.mbean.ManagedBacklogTracerMBean;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
@@ -27,25 +29,26 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.fusesource.ide.camel.model.AbstractNode;
-import org.fusesource.ide.camel.model.AbstractNodeFacade;
-import org.fusesource.ide.camel.model.Activator;
-import org.fusesource.ide.camel.model.RouteContainer;
-import org.fusesource.ide.camel.model.io.XmlContainerMarshaller;
-import org.fusesource.ide.commons.tree.NodeSupport;
-import org.fusesource.ide.commons.tree.Refreshable;
-import org.fusesource.ide.commons.ui.ContextMenuProvider;
-import org.fusesource.ide.commons.ui.Workbenches;
-import org.fusesource.ide.commons.util.Function1;
-import org.fusesource.ide.commons.util.Nodes;
-import org.fusesource.ide.commons.util.Objects;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.BacklogTracerMessage;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelBacklogTracerMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelContextMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelFabricTracerMBean;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelJMXFacade;
+import org.fusesource.ide.camel.model.service.core.jmx.camel.CamelProcessorMBean;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
+import org.fusesource.ide.foundation.core.functions.Function1;
+import org.fusesource.ide.foundation.core.util.IOUtils;
+import org.fusesource.ide.foundation.core.util.Objects;
+import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
+import org.fusesource.ide.foundation.ui.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.Refreshable;
+import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
+import org.fusesource.ide.foundation.ui.util.Nodes;
+import org.fusesource.ide.foundation.ui.util.Workbenches;
 import org.fusesource.ide.jmx.camel.CamelJMXPlugin;
 import org.fusesource.ide.jmx.camel.Messages;
-import org.fusesource.ide.jmx.camel.editor.CamelContextNodeEditorInput;
-import org.fusesource.ide.jmx.camel.internal.CamelContextMBean;
-import org.fusesource.ide.jmx.camel.internal.CamelFabricTracerMBean;
-import org.fusesource.ide.jmx.camel.internal.CamelFacade;
-import org.fusesource.ide.jmx.camel.internal.CamelProcessorMBean;
 import org.fusesource.ide.jmx.commons.messages.IExchange;
 import org.fusesource.ide.jmx.commons.messages.IMessage;
 import org.fusesource.ide.jmx.commons.messages.ITraceExchangeBrowser;
@@ -54,19 +57,21 @@ import org.fusesource.ide.jmx.commons.messages.NodeStatisticsContainer;
 import org.jboss.tools.jmx.ui.ImageProvider;
 
 
-public class CamelContextNode extends NodeSupport implements Refreshable, AbstractNodeFacade, ContextMenuProvider, ITraceExchangeBrowser,
-ImageProvider {
+public class CamelContextNode 	extends NodeSupport 
+							 	implements Refreshable, ContextMenuProvider, ITraceExchangeBrowser, ImageProvider {
 
 	public static final String CAMEL_EDITOR_ID = "org.fusesource.ide.camel.editor";
+	
 	private final CamelContextsNode camelContextsNode;
-	private final CamelFacade facade;
+	private final CamelJMXFacade facade;
 	private final CamelContextMBean camelContextMBean;
-	private XmlContainerMarshaller marshaller = new XmlContainerMarshaller();
+	private CamelContextElement camelContext;
 	private final RoutesNode routes;
 	private static Map<String, TraceExchangeList> traceMessageMap = new ConcurrentHashMap<String, TraceExchangeList>();
 	private NodeStatisticsContainer runtimeNodeStatisticsContainer;
-
-	public CamelContextNode(CamelContextsNode camelContextsNode, CamelFacade facade, CamelContextMBean camelContext) throws Exception {
+	private File tempContextFile = null;
+	
+	public CamelContextNode(CamelContextsNode camelContextsNode, CamelJMXFacade facade, CamelContextMBean camelContext) throws Exception {
 		super(camelContextsNode);
 		this.camelContextsNode = camelContextsNode;
 		this.facade = facade;
@@ -78,6 +83,24 @@ ImageProvider {
 		setPropertyBean(camelContext);
 	}
 
+	public CamelContextElement getCamelContext() {
+		IFile camelContextFile = createTempContextFile();
+		if (camelContextFile != null) {
+			CamelIOHandler handler = new CamelIOHandler();
+			try {
+				camelContextFile.getProject().refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+				CamelFile cf = handler.loadCamelModel(camelContextFile, new NullProgressMonitor());
+				this.camelContext = cf.getCamelContext();
+			} catch (Exception ex) {
+				CamelJMXPlugin.getLogger().error(ex);
+			}			
+		} else {
+			CamelJMXPlugin.getLogger().error("Unable to store the remote camel context " + getContextId() + " locally");
+		}
+		
+		return this.camelContext;
+	}
+	
 	@Override
 	public String toString() {
 		return getContextId();
@@ -108,7 +131,7 @@ ImageProvider {
 		}
 	}
 
-	public CamelFacade getFacade() {
+	public CamelJMXFacade getFacade() {
 		return facade;
 	}
 
@@ -122,11 +145,6 @@ ImageProvider {
 		} catch (Exception e) {
 			return "";
 		}
-	}
-
-	public RouteContainer getModelContainer() {
-		String xml = getXmlText();
-		return marshaller.loadRoutesFromText(xml);
 	}
 
 	public String getXmlText() {
@@ -147,19 +165,6 @@ ImageProvider {
 		refresh();
 	}
 
-	@Override
-	public AbstractNode getAbstractNode() {
-		return getRoutes().getAbstractNode();
-	}
-
-	public XmlContainerMarshaller getMarshaller() {
-		return marshaller;
-	}
-
-	public void setMarshaller(XmlContainerMarshaller marshaller) {
-		this.marshaller = marshaller;
-	}
-
 	public RoutesNode getRoutes() {
 		return routes;
 	}
@@ -168,8 +173,8 @@ ImageProvider {
 		Object tracer = getTracer();
 		if (tracer == null) return false;
 		
-		if (tracer instanceof ManagedBacklogTracerMBean) {
-			return ((ManagedBacklogTracerMBean)tracer).isEnabled();
+		if (tracer instanceof CamelBacklogTracerMBean) {
+			return ((CamelBacklogTracerMBean)tracer).isEnabled();
 		} else {
 			return ((CamelFabricTracerMBean)tracer).isEnabled();
 		}
@@ -191,8 +196,8 @@ ImageProvider {
 	public void startTracing() {
 		try {
 			Object tracer = getTracer();
-			if (tracer instanceof ManagedBacklogTracerMBean) {
-				((ManagedBacklogTracerMBean)tracer).setEnabled(true);
+			if (tracer instanceof CamelBacklogTracerMBean) {
+				((CamelBacklogTracerMBean)tracer).setEnabled(true);
 			} else {
 				((CamelFabricTracerMBean)tracer).setEnabled(true);
 			}
@@ -210,8 +215,8 @@ ImageProvider {
 
 	public void stopTracing() {
 		Object tracer = getTracer();
-		if (tracer instanceof ManagedBacklogTracerMBean) {
-			((ManagedBacklogTracerMBean)tracer).setEnabled(false);
+		if (tracer instanceof CamelBacklogTracerMBean) {
+			((CamelBacklogTracerMBean)tracer).setEnabled(false);
 		} else {
 			((CamelFabricTracerMBean)tracer).setEnabled(false);
 		}
@@ -223,44 +228,47 @@ ImageProvider {
 	public void editRoutes() {
 		IWorkbenchPage page = Workbenches.getActiveWorkbenchPage();
 		if (page == null) {
-			Activator.getLogger().warning("No active page!");
+			CamelJMXPlugin.getLogger().warning("No active page!");
 		} else {
-			IEditorInput input = new CamelContextNodeEditorInput(this);
-			try {
-				page.openEditor(input, CAMEL_EDITOR_ID, true);
-			} catch (PartInitException e) {
-				Activator.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
-			}
-			/*
-			IViewPart view = page.findView(CAMEL_EDITOR_ID);
-			if (view == null) {
+			IFile camelContextFile = createTempContextFile();
+			if (camelContextFile != null) {
+				IEditorInput input = new CamelContextNodeEditorInput(this, camelContextFile);
 				try {
-					view = page.showView(CAMEL_EDITOR_ID);
+					page.openEditor(input, CAMEL_EDITOR_ID, true);
 				} catch (PartInitException e) {
-					Activator.getLogger().warning("Could not find editor: " + CAMEL_EDITOR_ID);
+					CamelJMXPlugin.getLogger().warning("Could not open editor: " + CAMEL_EDITOR_ID + ". Reason: " + e, e);
 				}
+			} else {
+				CamelJMXPlugin.getLogger().error("Unable to store the remote camel context " + getContextId() + " locally");
 			}
-			if (view != null) {
-				if (view instanceof IEditorPart) {
-					IEditorPart editor = (IEditorPart) view;
-					IEditorInput input = new CamelContextNodeEditorInput(this);
-					IEditorSite site = null;
-					try {
-						editor.init(site , input);
-						editor.setFocus();
-					} catch (PartInitException e) {
-						Activator.getLogger().warning("Could not initialise editor: " + view);
-					}
-				} else {
-					Activator.getLogger().warning("View is not an IEditorPart: " + view);
-				}
-			}
-			 */
 		}
-
-
 	}
 
+	protected IFile createTempContextFile() {
+		try {
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(".FuseRemoteCamelContextData");
+			if (!project.exists()) {
+			    project.create(new NullProgressMonitor());
+			    project.open(new NullProgressMonitor());
+			}
+			if (tempContextFile == null) {
+				tempContextFile = File.createTempFile("camelContext--" + getContextId() + "--", ".xml", project.getLocation().toFile());
+				tempContextFile.deleteOnExit();
+			}
+
+			String xml = getXmlString();
+			IOUtils.writeText(tempContextFile, xml);
+
+			IFile camelContextFile = project.getFile(tempContextFile.getName());
+			
+			return camelContextFile;
+		} catch (Exception e) {
+			CamelJMXPlugin.getLogger().warning("Failed to create temporary file: " + e, e);
+		}
+
+		return null;
+	}
+	
 	@Override
 	public void provideContextMenu(IMenuManager menu) {
 		provideContextMenu(menu, null);
@@ -441,10 +449,10 @@ ImageProvider {
 			// TODO we should add trace messages for a specific route ID to the
 			// all routes
 			Object tracer = getTracer();
-			if (tracer instanceof ManagedBacklogTracerMBean) {
-				ManagedBacklogTracerMBean camelTracer = (ManagedBacklogTracerMBean)tracer;
+			if (tracer instanceof CamelBacklogTracerMBean) {
+				CamelBacklogTracerMBean camelTracer = (CamelBacklogTracerMBean)tracer;
 				if (camelTracer != null) {
-					List<BacklogTracerEventMessage> traceMessages = null;
+					List<BacklogTracerMessage> traceMessages = null;
 					if (id == null) {
 						traceMessages = camelTracer.dumpAllTracedMessages();
 					} else {
@@ -458,7 +466,7 @@ ImageProvider {
 				CamelFabricTracerMBean fabricTracer = (CamelFabricTracerMBean)tracer;
 				if (fabricTracer != null) {
 					String traceXml = fabricTracer.dumpAllTracedMessagesAsXml();
-					List<BacklogTracerEventMessage> traceMessages;
+					List<BacklogTracerMessage> traceMessages;
 					if (id == null) {
 						traceMessages = getTraceMessagesFromXml(traceXml);
 					} else {
@@ -476,8 +484,8 @@ ImageProvider {
 		return traceList;
 	}
 	
-	private List<BacklogTracerEventMessage> getTraceMessagesFromXml(String xmlDump) {
-		List<BacklogTracerEventMessage> events = new ArrayList<BacklogTracerEventMessage>();
+	private List<BacklogTracerMessage> getTraceMessagesFromXml(String xmlDump) {
+		List<BacklogTracerMessage> events = new ArrayList<BacklogTracerMessage>();
 		
 		// TODO: unmarshal events from the xml and put to the list of messages
 		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml()");
@@ -487,8 +495,8 @@ ImageProvider {
 		return events;
 	}
 
-	private List<BacklogTracerEventMessage> getTraceMessagesFromXml(String xmlDump, String id) {
-		List<BacklogTracerEventMessage> events = new ArrayList<BacklogTracerEventMessage>();
+	private List<BacklogTracerMessage> getTraceMessagesFromXml(String xmlDump, String id) {
+		List<BacklogTracerMessage> events = new ArrayList<BacklogTracerMessage>();
 		
 		// TODO: unmarshal events from the xml and put to the list of messages
 		System.err.println("TODO: CamelContextNode.getTraceMessagesFromXml(id)");
@@ -513,14 +521,14 @@ ImageProvider {
 
 	public Object getTracer() {
 		try {
-			ManagedBacklogTracerMBean mbean = getFacade().getCamelTracer(getManagementName());
+			CamelBacklogTracerMBean mbean = getFacade().getCamelTracer(getManagementName());
 			if (mbean != null) {
 				return mbean;
 			} else {
 				return getFacade().getFabricTracer(getManagementName());
 			}
 		} catch (Exception e) {
-			throw new RuntimeCamelException(e);
+			throw new RuntimeException(e);
 		}
 	}
 

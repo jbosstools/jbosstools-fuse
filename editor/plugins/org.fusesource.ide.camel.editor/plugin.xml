@@ -3,209 +3,51 @@
 <plugin>
    <extension-point id="org.fusesource.ide.editor.paletteContributor" name="Fuse Camel Editor Palette Contributor" schema="schema/org.fusesource.ide.editor.paletteContributor.exsd"/>
    <extension-point id="org.fusesource.ide.editor.dblClickHandler" name="Fuse Camel Editor Double Click Handler" schema="schema/org.fusesource.ide.editor.dblClickHandler.exsd"/>
+   <extension-point id="org.fusesource.ide.editor.globalConfigContributor" name="Fuse Camel Editor Global Config Contributor" schema="schema/org.fusesource.ide.editor.globalConfigContributor.exsd"/>
+
+   <!-- definition for the camel editor -->
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.fusesource.ide.camel.editor.editor.RiderEditor"
-            contributorClass="org.fusesource.ide.camel.editor.editor.RiderEditorActionBarContributor"
+            class="org.fusesource.ide.camel.editor.CamelEditor"
             default="false"
             extensions="xml"
             icon="icons/camel_context_icon.png"
             id="org.fusesource.ide.camel.editor"
-            name="%rider.editor.label">
+            matchingStrategy="org.fusesource.ide.camel.editor.utils.CamelEditorMatchingStrategy"
+            name="%integration.editor.label">
          <contentTypeBinding
                contentTypeId="org.fusesource.ide.camel.editor.camelContentType">
          </contentTypeBinding>
       </editor>
    </extension>
+   <!--
+   contributorClass="org.fusesource.ide.camel.editor.editor.RiderEditorActionBarContributor"
+   -->
    
-   <extension
-         point="org.eclipse.ui.views">
-      <category
-            id="org.fusesource.ide"
-            name="JBoss Fuse">
-      </category>
-      <view
-           category="org.fusesource.ide"
-           class="org.fusesource.ide.camel.editor.views.diagram.DiagramView"
-           icon="icons/diagram_view.gif"
-           id="org.fusesource.ide.jmx.views.DiagramView"
-           name="Diagram View">
-        <description>
-           This view shows a graphical diagram view of the current selection for example to show a Camel Route or set of ActiveMQ destinations
-        </description>
-      </view>
-   </extension>
-   
-   <extension
-         point="org.eclipse.ui.commands">
-      <category
-            id="org.fusesource.ide.camel.editor.commands.category"
-            name="Rider Category">
-      </category>
-      <command
-            categoryId="org.fusesource.ide.camel.editor.commands.category"
-            id="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
-            name="Auto Layout Diagram">
-      </command>
-      <command
-            categoryId="org.fusesource.ide.camel.editor.commands.category"
-            id="org.fusesource.ide.camel.editor.commands.addRouteCommand"
-            name="Add Route">
-      </command>
-      <command
-            categoryId="org.fusesource.ide.camel.editor.commands.category"
-            id="org.fusesource.ide.camel.editor.commands.deleteRouteCommand"
-            name="Delete Route">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="org.fusesource.ide.camel.editor.handlers.AutoLayoutHandler"
-            commandId="org.fusesource.ide.camel.editor.commands.autoLayoutCommand">
-      </handler>
-      <handler
-            class="org.fusesource.ide.camel.editor.handlers.AddNewRouteHandler"
-            commandId="org.fusesource.ide.camel.editor.commands.addRouteCommand">
-      </handler>
-      <handler
-            class="org.fusesource.ide.camel.editor.handlers.DeleteRouteHandler"
-            commandId="org.fusesource.ide.camel.editor.commands.deleteRouteCommand">
-      </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+L">
-      </key>
-   </extension>
-
-   <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
-         
-      <propertyContributor contributorId="org.fusesource.ide.camel.editor" typeMapper="org.fusesource.ide.camel.editor.propertysheet.RiderTypeMapper">
-         <propertyCategory category="sample"/>
-      </propertyContributor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
-      <propertyTabs contributorId="org.fusesource.ide.camel.editor">
-         <propertyTab
-               category="sample"
-               id="FileBindingTab"
-               label="File Binding">
-         </propertyTab>
-         <propertyTab
-               category="sample"
-               id="JMSBindingTab"
-               label="Destination">
-         </propertyTab>
-         <propertyTab
-               afterTab="DetailsTab"
-               category="sample"
-               id="AdvancedEndpointPropertiesSectionTab"
-               indented="false"
-               label="Advanced">
-         </propertyTab>
-         <propertyTab
-               afterTab="FileBindingTab"
-               category="sample"
-               id="DetailsTab"
-               indented="false"
-               label="Generic"/>
-         <propertyTab
-               afterTab="AdvancedEndpointPropertiesSectionTab"
-               category="sample"
-               id="DocumentationTab"
-               indented="false"
-               label="Documentation"/> 
-      </propertyTabs>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertySections">
-      <propertySections contributorId="org.fusesource.ide.camel.editor">
-         <propertySection
-               afterSection="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
-               class="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
-               filter="org.fusesource.ide.camel.editor.propertysheet.AdvancedPropertiesFilter"
-               id="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
-               tab="AdvancedEndpointPropertiesSectionTab">
-         </propertySection>
-         <propertySection
-               afterSection="org.fusesource.ide.camel.editor.propertysheet.FileBindingSection"
-               class="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
-               id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
-               tab="DetailsTab">
-            <input type="org.fusesource.ide.camel.model.AbstractNode"/>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
-            </input>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
-            </input>
-         </propertySection>
-
-         <propertySection
-               afterSection="org.fusesource.ide.camel.editor.propertysheet.AdvancedEndpointPropertiesSection"
-               class="org.fusesource.ide.camel.editor.propertysheet.DocumentationSection"
-               id="org.fusesource.ide.camel.editor.propertysheet.DocumentationSection"
-               tab="DocumentationTab">
-            <input type="org.fusesource.ide.camel.model.AbstractNode"/>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.AbstractNodeEditPart">
-            </input>
-            <input
-                  type="org.fusesource.ide.camel.editor.parts.tree.AbstractNodeTreeEditPart">
-            </input>
-         </propertySection>
-      </propertySections>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.fusesource.ide.branding.preferences.root"
-            class="org.fusesource.ide.camel.editor.preferences.RiderEditorPreferencePage"
-            id="org.fusesource.ide.camel.editor.preferences.FusePreferencePage"
-            name="%rider.preferences.editor">
-      </page>
-      <page
-            category="org.fusesource.ide.branding.preferences.root"
-            class="org.fusesource.ide.camel.editor.preferences.RiderColorPreferencePage"
-            id="org.fusesource.ide.camel.editor.preferences.FuseColorPreferencePage"
-            name="%rider.preferences.editor.colors">
-      </page>
-   </extension>
+   <!-- definition for the camel xml content type -->
    <extension point="org.eclipse.core.contenttype.contentTypes"> 
       <content-type
             base-type="org.eclipse.core.runtime.xml"
-            describer="org.fusesource.ide.commons.contenttype.CamelNamespaceXmlContentDescriber"
+            describer="org.fusesource.ide.foundation.core.xml.namespace.CamelNamespaceXmlContentDescriber"
             file-extensions="xml"
             id="org.fusesource.ide.camel.editor.camelContentType"
             name="Camel XML"
             priority="high">
       </content-type> 
    </extension>
-      <extension
-            point="org.eclipse.help.contexts">
-         <contexts
-               file="contexts.xml"
-               plugin="org.eclipse.ui.views">
-         </contexts>
-      </extension>
-      
-      <extension
+   
+   <!-- Graphiti related definitions -->
+   <extension
          point="org.eclipse.graphiti.ui.diagramTypes">
       <diagramType
-            description="%rider.editor.diagram.type.description"
+            description="%integration.editor.diagram.type.description"
             id="org.fusesource.ide.camel.editor.diagramtype.id"
-            name="%rider.editor.diagram.type.name"
+            name="%integration.editor.diagram.type.name"
             type="CamelContext">
       </diagramType>
    </extension>
+
    <extension
          point="org.eclipse.graphiti.ui.imageProviders">
       <imageProvider
@@ -213,13 +55,14 @@
             id="org.fusesource.ide.camel.editor.imageprovider.id">
       </imageProvider>
    </extension>
+
    <extension
          point="org.eclipse.graphiti.ui.diagramTypeProviders">
       <diagramTypeProvider
             class="org.fusesource.ide.camel.editor.provider.DiagramTypeProvider"
-            description="%rider.editor.dtp.description"
+            description="%integration.editor.dtp.description"
             id="org.fusesource.ide.camel.editor.dtp.id"
-            name="%rider.editor.dtp.name">
+            name="%integration.editor.dtp.name">
          <diagramType
                id="org.fusesource.ide.camel.editor.diagramtype.id">
          </diagramType>
@@ -228,73 +71,64 @@
          </imageProvider>
       </diagramTypeProvider>
    </extension>
+
+   <!-- definitions for the properties view -->   
    <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?before=window">
-         <menu
-               id="routesMenu"
-               label="Routes">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeEditorId">
-                  <equals
-                        value="org.fusesource.ide.camel.editor">
-                  </equals>
-               </with>
-            </visibleWhen>
-            <command
-                  commandId="org.fusesource.ide.camel.editor.commands.addRouteCommand"
-                  id="add.route"
-                  label="Add Route"
-                  style="push"
-                  tooltip="Adds a new route to the selected context...">
-            </command>
-            <command
-                  commandId="org.fusesource.ide.camel.editor.commands.deleteRouteCommand"
-                  id="route.delete.id"
-                  label="Delete Route"
-                  style="push"
-                  tooltip="Deletes the selected route...">
-            </command>
-            <separator
-                  name="org.fusesource.ide.camel.editor.separator1"
-                  visible="true">
-            </separator>
-            <menu
-                  id="route.add.eip.id"
-                  label="Add...">
-               <dynamic
-                     class="org.fusesource.ide.camel.editor.editor.AddMenuContributionItem"
-                     id="org.fusesource.ide.camel.editor.dynamicAdd">
-               </dynamic>
-            </menu>
-            <separator
-                  name="org.fusesource.ide.camel.editor.separator2"
-                  visible="true">
-            </separator>
-            <dynamic
-                  class="org.fusesource.ide.camel.editor.editor.RoutesMenuContributionItem"
-                  id="org.fusesource.ide.camel.editor.dynamicRoutes">
-            </dynamic>
-         </menu>
-      </menuContribution>
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+      <propertyContributor contributorId="org.fusesource.ide.camel.editor" typeMapper="org.fusesource.ide.camel.editor.properties.CamelTypeMapper">
+         <propertyCategory category="FuseTooling"/>
+      </propertyContributor>
    </extension>
    <extension
-         point="org.eclipse.ui.propertyPages">
-      <page
-            class="org.fusesource.ide.camel.editor.preferences.RiderEditorPreferencePage"
-            id="org.fusesource.ide.camel.editor.propertyPage"
-            name="Editor Properties">
-         <enabledWhen>
-            <instanceof
-                  value="org.eclipse.graphiti.ui.internal.parts.DiagramEditPart">
-            </instanceof>
-         </enabledWhen>
-      </page>
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs contributorId="org.fusesource.ide.camel.editor">
+	     <propertyTab
+               category="FuseTooling"
+               id="DefaultCamelPropertiesTab"
+               indented="false"
+               label="%integration.properties.tab.generic.title"/>
+         <propertyTab
+               afterTab="GenericPropertiesTab"
+               category="FuseTooling"
+               id="AdvancedEndpointPropertiesTab"
+               indented="false"
+               label="%integration.properties.tab.advanced.title">
+         </propertyTab>
+         <propertyTab
+               afterTab="DefaultCamelPropertiesTab"
+               category="FuseTooling"
+               id="DocumentationTab"
+               indented="false"
+               label="%integration.properties.tab.documentation.title"/> 
+      </propertyTabs>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections contributorId="org.fusesource.ide.camel.editor">
+         <propertySection
+               class="org.fusesource.ide.camel.editor.properties.DetailsSection"
+               id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
+               tab="DefaultCamelPropertiesTab">
+            <input type="org.fusesource.ide.camel.model.service.core.model.CamelModelElement"/>
+         </propertySection>
+         <propertySection
+               class="org.fusesource.ide.camel.editor.properties.AdvancedEndpointPropertiesSection"
+               filter="org.fusesource.ide.camel.editor.properties.AdvancedPropertiesFilter"
+               id="AdvancedEndpointPropertiesSection"
+               tab="AdvancedEndpointPropertiesTab">
+         </propertySection>
+         <propertySection
+               afterSection="DefaultEndpointPropertiesSection"
+               class="org.fusesource.ide.camel.editor.properties.DocumentationSection"
+               id="DocumentationSection"
+               tab="DocumentationTab">
+            <input type="org.fusesource.ide.camel.model.service.core.model.CamelModelElement"/>
+         </propertySection>
+      </propertySections>
+   </extension>   
+   
+   <!-- definitions for extra palette entries -->
    <extension
          point="org.fusesource.ide.editor.paletteContributor">
       <PaletteContribution
@@ -312,4 +146,125 @@
             paletteIcon="icons/endpointQueue16.png">
       </PaletteContribution>
    </extension>
+
+   <!-- definitions for editor commands -->
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.fusesource.ide.camel.editor.commands.category"
+            name="JBoss Fuse Camel Editor Commands">
+      </category>
+      <command
+            categoryId="org.fusesource.ide.camel.editor.commands.category"
+            id="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
+            name="Auto Layout Diagram">
+      </command>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.fusesource.ide.camel.editor.handler.AutoLayoutHandler"
+            commandId="org.fusesource.ide.camel.editor.commands.autoLayoutCommand">
+      </handler>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.fusesource.ide.camel.editor.commands.autoLayoutCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+L">
+      </key>
+   </extension>
+
+   <!-- definitions for editor specific preference pages -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.fusesource.ide.branding.preferences.root"
+            class="org.fusesource.ide.camel.editor.preferences.CamelEditorPreferencePage"
+            id="org.fusesource.ide.camel.editor.preferences.FusePreferencePage"
+            name="%integration.preferences.editor">
+      </page>
+<!--      
+      <page
+            category="org.fusesource.ide.branding.preferences.root"
+            class="org.fusesource.ide.camel.editor.preferences.CamelEditorColorPreferencePage"
+            id="org.fusesource.ide.camel.editor.preferences.FuseColorPreferencePage"
+            name="%integration.preferences.editor.colors">
+      </page>
+-->
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.fusesource.ide.camel.editor.preferences.CamelEditorPreferencePage"
+            id="org.fusesource.ide.camel.editor.propertyPage"
+            name="Editor Properties">
+         <enabledWhen>
+            <instanceof
+                  value="org.eclipse.graphiti.ui.internal.parts.DiagramEditPart">
+            </instanceof>
+         </enabledWhen>
+      </page>
+   </extension>
+
+   <!-- definition for showing routes in context as subnodes of the camel file -->   
+   <extension
+      point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+           activeByDefault="true"
+           contentProvider="org.fusesource.ide.camel.editor.navigator.CamelCtxNavContentProvider"
+           icon="icons/camel_context_icon.png"
+           id="org.fusesource.ide.camel.editor.navigator.CamelContextRouteContent"
+           labelProvider="org.fusesource.ide.camel.editor.navigator.CamelCtxNavLabelProvider"
+           name="Camel Context Model Content"
+           priority="normal">
+        <enablement>
+          <or>
+           <and>
+              <instanceof value="org.eclipse.core.resources.IFile"/>
+		   <test 
+				forcePluginActivation="true" 
+				property="org.eclipse.core.resources.contentTypeId" 
+				value="org.fusesource.ide.camel.editor.camelContentType"/> 
+           </and>
+           <instanceof
+                value="org.fusesource.ide.camel.editor.navigator.CamelCtxNavRouteNode"/>
+         </or>
+        </enablement>
+        <actionProvider
+	          class="org.fusesource.ide.camel.editor.navigator.CamelCtxNavActionProvider"
+    	      id="org.fusesource.ide.camel.editor.navigator.CamelContextActionProvider"
+        	  overrides="org.eclipse.ui.navigator.resources.OpenActions">
+       		<enablement>
+	          <instanceof
+	                value="org.fusesource.ide.camel.editor.navigator.CamelCtxNavRouteNode"/>
+	       </enablement>
+	     </actionProvider>
+       </navigatorContent>         
+	</extension>
+
+	<extension
+	      point="org.eclipse.ui.navigator.viewer">
+		<viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+			<includes>
+				<contentExtension isRoot="false"
+					pattern="org.fusesource.ide.camel.editor.navigator.CamelContextRouteContent" />
+			</includes>
+		</viewerContentBinding>
+	</extension>
+   
+   <!-- help definition ... TODO: check if that is really needed -->
+   <extension
+         point="org.eclipse.help.contexts">
+         <contexts
+               file="contexts.xml"
+               plugin="org.eclipse.ui.views">
+         </contexts>
+   </extension>    
+
 </plugin>

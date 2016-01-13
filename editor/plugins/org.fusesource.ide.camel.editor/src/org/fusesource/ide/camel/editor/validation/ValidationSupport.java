@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.fusesource.ide.camel.editor.validation;
 
-import org.fusesource.ide.camel.model.AbstractNode;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
  * @author lhein
@@ -23,5 +23,5 @@ public interface ValidationSupport {
      * @param node
      * @return
      */
-    ValidationResult validate(AbstractNode node);
+    ValidationResult validate(CamelModelElement node);
 }
