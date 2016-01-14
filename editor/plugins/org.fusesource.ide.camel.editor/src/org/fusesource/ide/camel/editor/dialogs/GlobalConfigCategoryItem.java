@@ -6,30 +6,24 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html 
  * 
  * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
+ * Red Hat, Inc. - initial API and implementation <
  ******************************************************************************/ 
+
 package org.fusesource.ide.camel.editor.dialogs;
 
+import java.util.ArrayList;
+
 import org.eclipse.swt.graphics.Image;
-import org.fusesource.ide.camel.editor.provider.ext.ICustomGlobalConfigElementContribution;
 
 /**
  * @author lhein
+ *
  */
-public class GlobalConfigElementItem implements GlobalConfigSupport {
-	
-	private ICustomGlobalConfigElementContribution contributor;
+public class GlobalConfigCategoryItem implements GlobalConfigSupport {
 	private Image icon;
 	private String id;
 	private String name;
-	private String categoryId;
-	
-	/**
-	 * @return the contributor
-	 */
-	public ICustomGlobalConfigElementContribution getContributor() {
-		return this.contributor;
-	}
+	private ArrayList<GlobalConfigElementItem> children = new ArrayList<GlobalConfigElementItem>();
 	
 	/**
 	 * @return the icon
@@ -50,20 +44,6 @@ public class GlobalConfigElementItem implements GlobalConfigSupport {
 	 */
 	public String getName() {
 		return this.name;
-	}
-	
-	/**
-	 * @return the categoryId
-	 */
-	public String getCategoryId() {
-		return this.categoryId;
-	}
-	
-	/**
-	 * @param contributor the contributor to set
-	 */
-	public void setContributor(ICustomGlobalConfigElementContribution contributor) {
-		this.contributor = contributor;
 	}
 	
 	/**
@@ -88,9 +68,9 @@ public class GlobalConfigElementItem implements GlobalConfigSupport {
 	}
 	
 	/**
-	 * @param categoryId the categoryId to set
+	 * @return the children
 	 */
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
+	public ArrayList<GlobalConfigElementItem> getChildren() {
+		return this.children;
 	}
 }

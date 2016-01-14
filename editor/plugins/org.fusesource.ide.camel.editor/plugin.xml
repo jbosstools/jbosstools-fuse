@@ -265,6 +265,19 @@
                file="contexts.xml"
                plugin="org.eclipse.ui.views">
          </contexts>
+   </extension>
+   <extension
+         point="org.fusesource.ide.editor.globalConfigContributor">
+      <GlobalConfigCategory
+            icon="icons/editor/fuse_icon_16c.png"
+            id="org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY"
+            name="JBoss Fuse">
+      </GlobalConfigCategory>
+      <GlobalConfigCategory
+            icon="icons/editor/add.png"
+            id="org.fusesource.ide.camel.editor.globalconfig.DEFAULT_CATEGORY"
+            name="Uncategorized">
+      </GlobalConfigCategory>
    </extension>    
 
 </plugin>

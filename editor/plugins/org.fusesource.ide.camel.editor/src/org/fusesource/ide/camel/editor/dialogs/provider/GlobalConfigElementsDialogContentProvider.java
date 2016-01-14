@@ -10,10 +10,11 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.dialogs.provider;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 
 /**
  * @author lhein
@@ -51,8 +52,10 @@ public class GlobalConfigElementsDialogContentProvider implements ITreeContentPr
 	 */
 	@Override
 	public Object[] getElements(Object parent) {
-		if (parent instanceof ArrayList) {
-			return ((ArrayList)parent).toArray();
+		if (parent instanceof List) {
+			return ((List)parent).toArray();
+		} else if (parent instanceof GlobalConfigCategoryItem) {
+			return ((GlobalConfigCategoryItem)parent).getChildren().toArray();
 		}
 		return new Object[0];
 	}
@@ -78,7 +81,7 @@ public class GlobalConfigElementsDialogContentProvider implements ITreeContentPr
 	 */
 	@Override
 	public boolean hasChildren(Object element) {
-		return false;
+		return element instanceof GlobalConfigCategoryItem && ((GlobalConfigCategoryItem)element).getChildren().isEmpty()==false;
 	}
 
 	/*

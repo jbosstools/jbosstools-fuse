@@ -10,66 +10,47 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.dialogs.provider;
 
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
+import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementItem;
 
 /**
  * @author lhein
  */
-public class GlobalConfigElementsDialogLabelProvider implements ILabelProvider {
+public class GlobalConfigElementsDialogLabelProvider extends StyledCellLabelProvider {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.viewers.ILabelProviderListener)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.StyledCellLabelProvider#update(org.eclipse
+	 * .jface.viewers.ViewerCell)
 	 */
 	@Override
-	public void addListener(ILabelProviderListener listener) {
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#dispose()
-	 */
-	@Override
-	public void dispose() {
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.Object, java.lang.String)
-	 */
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface.viewers.ILabelProviderListener)
-	 */
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ILabelProvider#getImage(java.lang.Object)
-	 */
-	@Override
-	public Image getImage(Object element) {
-		if (element instanceof GlobalConfigElementItem) {
-			GlobalConfigElementItem node = (GlobalConfigElementItem)element;			
-			return node.getIcon();
+	public void update(ViewerCell cell) {
+		Object element = cell.getElement();
+		StyledString text = new StyledString();
+		
+		if (element instanceof GlobalConfigCategoryItem) {
+			GlobalConfigCategoryItem cat = (GlobalConfigCategoryItem)element;
+			Image img = cat.getIcon();
+			text.append(cat.getName());
+			cell.setImage(img);
+			cell.setText(text.toString());
+			cell.setStyleRanges(text.getStyleRanges());
+		} else if (element instanceof GlobalConfigElementItem) {
+			GlobalConfigElementItem elem = (GlobalConfigElementItem)element;
+			Image img = elem.getIcon();
+			text.append(elem.getName());
+			cell.setImage(img);
+			cell.setText(text.toString());
+			cell.setStyleRanges(text.getStyleRanges());
+		} else {
+			// unhandled
 		}
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ILabelProvider#getText(java.lang.Object)
-	 */
-	@Override
-	public String getText(Object element) {
-		if (element instanceof GlobalConfigElementItem) {
-			GlobalConfigElementItem node = (GlobalConfigElementItem)element;			
-			return node.getName();
-		}
-		return null;
+		super.update(cell);
 	}
 }

@@ -13,15 +13,16 @@ package org.fusesource.ide.camel.editor.dialogs;
 import java.util.Arrays;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.SelectionDialog;
+import org.fusesource.ide.camel.editor.CamelGlobalConfigEditor;
 import org.fusesource.ide.foundation.ui.util.Selections;
 
 /**
@@ -32,13 +33,16 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
 	// the root element to populate the viewer with
     private Object inputElement;
 
+    // the parent editor
+    private CamelGlobalConfigEditor parentEditor;
+    
     // providers for populating this dialog
-    private ILabelProvider labelProvider;
+    private StyledCellLabelProvider labelProvider;
 
     private IStructuredContentProvider contentProvider;
 
     // the visual selection widget group
-    private TableViewer listViewer;
+    private TreeViewer listViewer;
 
     // sizing constants
     private final static int SIZING_SELECTION_WIDGET_HEIGHT = 250;
@@ -47,14 +51,16 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
 	
 	/**
 	 * @param parentShell
+	 * @param parentEditor
 	 * @param input
 	 * @param contentProvider
 	 * @param labelProvider
 	 * @param message
 	 */
-	public GlobalConfigElementsSelectionDialog(Shell parentShell, Object input,
-			IStructuredContentProvider contentProvider, ILabelProvider labelProvider, String title, String message) {
+	public GlobalConfigElementsSelectionDialog(Shell parentShell, CamelGlobalConfigEditor parentEditor, Object input,
+			IStructuredContentProvider contentProvider, StyledCellLabelProvider labelProvider, String title, String message) {
 		super(parentShell);
+		this.parentEditor = parentEditor;
         setTitle(title);
         setMessage(message);
         inputElement = input;
@@ -75,14 +81,14 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
 
         createMessageArea(composite);
 
-        listViewer = new TableViewer(composite, SWT.BORDER | SWT.SINGLE);
+        listViewer = new TreeViewer(composite, SWT.BORDER | SWT.SINGLE);
         GridData data = new GridData(GridData.FILL_BOTH);
         data.heightHint = SIZING_SELECTION_WIDGET_HEIGHT;
         data.widthHint = SIZING_SELECTION_WIDGET_WIDTH;
-        listViewer.getTable().setLayoutData(data);
-        
-        listViewer.getTable().setHeaderVisible(false);
-        listViewer.getTable().setLinesVisible(false);
+        listViewer.getTree().setLayoutData(data);
+
+        listViewer.getTree().setHeaderVisible(false);
+        listViewer.getTree().setLinesVisible(false);
 
         listViewer.setLabelProvider(labelProvider);
         listViewer.setContentProvider(contentProvider);
@@ -99,7 +105,7 @@ public class GlobalConfigElementsSelectionDialog extends SelectionDialog {
      *
      * @return the viewer, or <code>null</code> if not yet created
      */
-    protected TableViewer getViewer() {
+    protected TreeViewer getViewer() {
         return listViewer;
     }
 

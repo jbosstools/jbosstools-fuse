@@ -12,6 +12,9 @@ package org.fusesource.ide.camel.editor;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -43,6 +46,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.fusesource.ide.camel.editor.dialogs.GlobalConfigCategoryItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementItem;
 import org.fusesource.ide.camel.editor.dialogs.GlobalConfigElementsSelectionDialog;
 import org.fusesource.ide.camel.editor.dialogs.provider.GlobalConfigElementsDialogContentProvider;
@@ -55,8 +59,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
-import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.core.util.CamelUtils;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
@@ -68,9 +72,15 @@ import org.w3c.dom.Node;
 public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelListener {
 
 	public static final String GLOBAL_ELEMENTS_PROVIDER_EXT_POINT_ID = "org.fusesource.ide.editor.globalConfigContributor";
+	public static final String CATEGORY_ELEMENT = "GlobalConfigCategory";
+	public static final String TYPE_ELEMENT = "GlobalConfigElement";
+	public static final String FUSE_CAT_ID = "org.fusesource.ide.camel.editor.globalconfig.FUSE_CATEGORY";
+	public static final String DEFAULT_CAT_ID = "org.fusesource.ide.camel.editor.globalconfig.DEFAULT_CATEGORY";
+	
 	public static final String GLOBAL_ELEMENTS_ICON_ATTR = "icon";
 	public static final String GLOBAL_ELEMENTS_ID_ATTR = "id";
 	public static final String GLOBAL_ELEMENTS_NAME_ATTR = "name";
+	public static final String GLOBAL_ELEMENTS_CATEGORY_ATTR = "category";
 	
 	private CamelEditor parentEditor;
 
@@ -79,8 +89,11 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	private Button btnAdd;
 	private Button btnModify;
 	private Button btnDelete;
+	
 	private List<GlobalConfigElementItem> elementContributions = new ArrayList<GlobalConfigElementItem>();
-
+	private List<GlobalConfigCategoryItem> categoryContributions = new ArrayList<GlobalConfigCategoryItem>();
+	private HashMap<String, ArrayList> model;
+	
 	/**
 	 * 
 	 * @param parentEditor
@@ -239,8 +252,21 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			}
 		});
 
-		this.treeViewer.setInput(this.parentEditor.getDesignEditor().getModel());
+		this.categoryContributions.sort(new Comparator<GlobalConfigCategoryItem>() {
+			/* (non-Javadoc)
+			 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+			 */
+			@Override
+			public int compare(GlobalConfigCategoryItem o1, GlobalConfigCategoryItem o2) {
+				if (o1.getId().equals(DEFAULT_CAT_ID)) return 1;
+				if (o2.getId().equals(DEFAULT_CAT_ID)) return -1;
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		reload();
+		this.treeViewer.setInput(this.model);
 		parentEditor.getDesignEditor().getModel().addModelListener(this);
+		this.treeViewer.expandAll();
 	}
 
 	/* (non-Javadoc)
@@ -285,34 +311,79 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * collect them in a map
 	 */
 	private void determineExtensions() {
-		IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(GLOBAL_ELEMENTS_PROVIDER_EXT_POINT_ID);
-		for (IConfigurationElement e : extensions) {
-			try {
-				final Object o = e.createExecutableExtension("class");
-				
-				if (o instanceof ICustomGlobalConfigElementContribution) {
-					ICustomGlobalConfigElementContribution globalElementHandler = (ICustomGlobalConfigElementContribution) o;
-					String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
-					String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
-					String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
-					
-					GlobalConfigElementItem item = new GlobalConfigElementItem();
-					item.setContributor(globalElementHandler);
-					item.setId(id);
-					item.setName(name);
-					if (Strings.isBlank(icon) == false) {
-						String implementorBundle = e.getDeclaringExtension().getContributor().getName();
-						Bundle implBundle = Platform.getBundle(implementorBundle);
-						URL iconUrl = implBundle.getResource(icon);
-						item.setIcon(new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream()));
-					}					
-					elementContributions.add(item);
+		try {
+			IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(GLOBAL_ELEMENTS_PROVIDER_EXT_POINT_ID);
+			for (IConfigurationElement e : extensions) {
+				if (e.getName().equals(CATEGORY_ELEMENT)) {
+					try {
+						String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
+						String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
+						String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
+		
+						GlobalConfigCategoryItem item = new GlobalConfigCategoryItem();
+						item.setId(id);
+						item.setName(name);
+						if (Strings.isBlank(icon) == false) {
+							String implementorBundle = e.getDeclaringExtension().getContributor().getName();
+							Bundle implBundle = Platform.getBundle(implementorBundle);
+							URL iconUrl = implBundle.getResource(icon);
+							item.setIcon(new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream()));
+						}					
+						categoryContributions.add(item);
+					} catch (Exception ex) {
+						CamelEditorUIActivator.pluginLog().logError(ex);
+						continue;
+					}
+				} else if (e.getName().equals(TYPE_ELEMENT)) {
+					try {
+						final Object o = e.createExecutableExtension("class");
+						
+						if (o instanceof ICustomGlobalConfigElementContribution) {
+							ICustomGlobalConfigElementContribution globalElementHandler = (ICustomGlobalConfigElementContribution) o;
+							String icon = e.getAttribute(GLOBAL_ELEMENTS_ICON_ATTR);
+							String id = e.getAttribute(GLOBAL_ELEMENTS_ID_ATTR);
+							String name = e.getAttribute(GLOBAL_ELEMENTS_NAME_ATTR);
+							String catId = e.getAttribute(GLOBAL_ELEMENTS_CATEGORY_ATTR);
+							
+							GlobalConfigElementItem item = new GlobalConfigElementItem();
+							item.setContributor(globalElementHandler);
+							item.setId(id);
+							item.setName(name);
+							item.setCategoryId(catId);
+							if (Strings.isBlank(icon) == false) {
+								String implementorBundle = e.getDeclaringExtension().getContributor().getName();
+								Bundle implBundle = Platform.getBundle(implementorBundle);
+								URL iconUrl = implBundle.getResource(icon);
+								item.setIcon(new Image(Display.getCurrent(), iconUrl.openConnection().getInputStream()));
+							}					
+							elementContributions.add(item);
+						}
+					} catch (Exception ex) {
+						CamelEditorUIActivator.pluginLog().logError(ex);
+						continue;
+					}
+				} else {
+					// undefined
 				}
-			} catch (Exception ex) {
-				CamelEditorUIActivator.pluginLog().logError(ex);
-				continue;
+			} 
+		} finally {
+			// now shuffle children into categories
+			for (GlobalConfigCategoryItem cat : categoryContributions) {
+				for (GlobalConfigElementItem elem : elementContributions) {
+					if ( (elem.getCategoryId().trim().length()<1 && cat.getId().equals(FUSE_CAT_ID)) || 
+						 (elem.getCategoryId().equals(cat.getId()) && cat.getChildren().contains(elem) == false)) {
+						cat.getChildren().add(elem);
+					}
+				}
 			}
 		}
+	}
+	
+	private GlobalConfigCategoryItem getCategoryForId(String catId) {
+		for (GlobalConfigCategoryItem cat : categoryContributions) {
+			if (cat.getId().equals(catId)) return cat;
+		}
+		return null;
 	}
 	
 	/**
@@ -326,19 +397,21 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		
 		IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(GLOBAL_ELEMENTS_PROVIDER_EXT_POINT_ID);
 		for (IConfigurationElement e : extensions) {
-			try {
-				final Object o = e.createExecutableExtension("class");
-				
-				if (o instanceof ICustomGlobalConfigElementContribution) {
-					ICustomGlobalConfigElementContribution globalElementHandler = (ICustomGlobalConfigElementContribution) o;
-					if (globalElementHandler.canHandle(elem)) {
-						handler = globalElementHandler;
-						break;
+			if (e.getName().equals(TYPE_ELEMENT)) {
+				try {
+					final Object o = e.createExecutableExtension("class");
+					
+					if (o instanceof ICustomGlobalConfigElementContribution) {
+						ICustomGlobalConfigElementContribution globalElementHandler = (ICustomGlobalConfigElementContribution) o;
+						if (globalElementHandler.canHandle(elem)) {
+							handler = globalElementHandler;
+							break;
+						}
 					}
+				} catch (Exception ex) {
+					CamelEditorUIActivator.pluginLog().logError(ex);
+					continue;
 				}
-			} catch (Exception ex) {
-				CamelEditorUIActivator.pluginLog().logError(ex);
-				continue;
 			}
 		}
 		
@@ -349,15 +422,75 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 * reloads the list of global elements
 	 */
 	public void reload() {
+		buildModel();
+		treeViewer.setInput(this.model);
 		treeViewer.refresh(true);
+		treeViewer.expandAll();
 	}
 
+	private void buildModel() {
+		this.model = new HashMap<String, ArrayList>();
+		
+		for (GlobalConfigCategoryItem cat : categoryContributions) {
+			model.put(cat.getId(), new ArrayList());
+		}
+		
+		CamelFile cf = parentEditor.getDesignEditor().getModel();
+
+		// we add all global beans etc outside context
+		for (Node n : cf.getGlobalDefinitions().values()) {
+			boolean foundMatch = false;
+			for (GlobalConfigElementItem item : elementContributions) {
+				String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;	
+				if (item.getContributor().canHandle(n) && model.containsKey(catId)) {
+					model.get(catId).add(n);
+					foundMatch = true;
+					break;
+				}
+			}
+			if (!foundMatch) model.get(DEFAULT_CAT_ID).add(n);
+		}
+		
+		// we add all context wide endpoint elements
+		if (cf.getCamelContext() != null && cf.getCamelContext().getEndpointDefinitions() != null) {
+			for (CamelModelElement cme : cf.getCamelContext().getEndpointDefinitions().values()) {
+				boolean foundMatch = false;
+				for (GlobalConfigElementItem item : elementContributions) {
+					String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
+					if (item.getContributor().canHandle(cme.getXmlNode()) && model.containsKey(catId)) {
+						model.get(catId).add(cme);
+						foundMatch = true;
+						break;
+					}
+				}
+				if (!foundMatch) model.get(DEFAULT_CAT_ID).add(cme);
+			}
+		}
+		
+		// we add all context wide data formats
+		if (cf.getCamelContext() != null && cf.getCamelContext().getDataformats() != null) {
+			for (CamelModelElement cme : cf.getCamelContext().getDataformats().values()) {
+				boolean foundMatch = false;
+				for (GlobalConfigElementItem item : elementContributions) {
+					String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
+					if (item.getContributor().canHandle(cme.getXmlNode()) && model.containsKey(catId)) {
+						model.get(catId).add(cme);
+						foundMatch = true;
+						break;
+					}
+				}
+				if (!foundMatch) model.get(DEFAULT_CAT_ID).add(cme);
+			}
+		}
+	}
+	
 	/**
 	 * creates a new entry in the treeviewer
 	 */
 	private void createNewEntry() {
 		GlobalConfigElementsSelectionDialog dlg = new GlobalConfigElementsSelectionDialog(Display.getDefault().getActiveShell(),
-														  elementContributions,
+														  this,
+														  categoryContributions,
 														  new GlobalConfigElementsDialogContentProvider(),
 													  	  new GlobalConfigElementsDialogLabelProvider(),
 													  	  UIMessages.createGlobalElementDialogTitle,
@@ -523,34 +656,25 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		 */
 		@Override
 		public Object[] getElements(Object parent) {
-			ArrayList<Object> childElements = new ArrayList<Object>();
-			if (parent instanceof CamelFile) {
-				CamelFile cf = (CamelFile)parent;
-				
-				// we add all global beans etc outside context
-				childElements.addAll(cf.getGlobalDefinitions().values());
-				
-				// we add all context wide endpoint elements
-				if (cf.getCamelContext() != null && cf.getCamelContext().getEndpointDefinitions() != null) {
-					Iterator<String> epIdIt = cf.getCamelContext().getEndpointDefinitions().keySet().iterator();
-					while (epIdIt.hasNext()) {
-						String epId = epIdIt.next();
-						CamelModelElement ep = cf.getCamelContext().getEndpointDefinitions().get(epId);
-						childElements.add(ep);
+			if (parent instanceof HashMap) {
+				Object[] catIds = ((HashMap)parent).keySet().toArray();
+				Arrays.sort(catIds, new Comparator<Object>() {
+					/* (non-Javadoc)
+					 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+					 */
+					@Override
+					public int compare(Object o1, Object o2) {
+						if (o1.toString().equals(DEFAULT_CAT_ID)) return 1;
+						if (o2.toString().equals(DEFAULT_CAT_ID)) return -1;
+						return o1.toString().compareTo(o2.toString());
 					}
-				}
-				
-				// we add all context wide data formats
-				if (cf.getCamelContext() != null && cf.getCamelContext().getDataformats() != null) {
-					Iterator<String> dfIdIt = cf.getCamelContext().getDataformats().keySet().iterator();
-					while (dfIdIt.hasNext()) {
-						String dfId = dfIdIt.next();
-						CamelModelElement df = cf.getCamelContext().getDataformats().get(dfId);
-						childElements.add(df);
-					}
-				}
+				});
+				return catIds;
+			} else if (parent instanceof String) {
+				return model.get((String)parent).toArray();
 			}
-			return childElements.toArray();
+			
+			return new Object[0];
 		}
 
 		/*
@@ -574,7 +698,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		 */
 		@Override
 		public boolean hasChildren(Object element) {
-			return false;
+			return element instanceof String;
 		}
 
 		/*
@@ -601,11 +725,19 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		public void update(ViewerCell cell) {
 			Object element = cell.getElement();
 			StyledString text = new StyledString();
-
-			if (element instanceof Element) {
+			
+			if (element instanceof String) {
+				GlobalConfigCategoryItem cat = getCategoryForId((String)element);
+				Image img = cat.getIcon();
+				text.append(cat.getName());
+				cell.setImage(img);
+				cell.setText(text.toString());
+				cell.setStyleRanges(text.getStyleRanges());
+			} else if (element instanceof Element) {
 				Element node = (Element)element;
 				Image img = getIconForElement(node);
 				String type = Strings.capitalize(CamelUtils.getTranslatedNodeName(node));
+				String catId = FUSE_CAT_ID;
 				for (GlobalConfigElementItem item : elementContributions) {
 					if (item.getContributor().canHandle(node)) {
 						type = item.getName();

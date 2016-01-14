@@ -6,7 +6,7 @@
          <meta.schema plugin="org.fusesource.ide.camel.editor" id="org.fusesource.ide.editor.globalConfigContributor" name="Fuse Camel Editor Global Config Contributor"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point allows to inject a handler for global elements in the Camel XML file. (for instance beans, context wide endpoints or dataformats) It allows you to influence creation, modification and deletion of those elements.
       </documentation>
    </annotation>
 
@@ -18,7 +18,8 @@
       </annotation>
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
-            <element ref="GlobalConfigElementContribution"/>
+            <element ref="GlobalConfigElement" minOccurs="0" maxOccurs="1"/>
+            <element ref="GlobalConfigCategory"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +48,7 @@
       </complexType>
    </element>
 
-   <element name="GlobalConfigElementContribution">
+   <element name="GlobalConfigElement">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
@@ -86,6 +87,48 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="category" type="string" use="default" value="org.fusesource.ide.camel.editor.globalconfig.DEFAULT_CATEGORY">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.fusesource.ide.editor.globalConfigContributor/GlobalConfigCategory/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="GlobalConfigCategory">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The identifier of the category.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name of the category as displayed in the global configuration tab tree.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  The icon to be displayed next to the category name.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -94,7 +137,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         8.0.0
       </documentation>
    </annotation>
 
@@ -125,5 +168,16 @@
       </documentation>
    </annotation>
 
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         JBoss, Home of Professional Open Source
+Copyright (c) Red Hat, Inc., and individual contributors as indicated
+by the @authors tag, 2006-2014. See the copyright.txt in the distribution
+for a full listing of individual contributors.
+      </documentation>
+   </annotation>
 
 </schema>
