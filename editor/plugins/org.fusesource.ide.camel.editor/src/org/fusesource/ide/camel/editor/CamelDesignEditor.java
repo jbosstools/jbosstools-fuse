@@ -74,6 +74,7 @@ import org.fusesource.ide.camel.editor.provider.CamelEditorContextMenuProvider;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.INodeViewer;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
@@ -261,7 +262,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				if (firstElement instanceof CamelModelElement) {
 					CamelModelElement node = (CamelModelElement)firstElement;
 					if (node != null) {
-						setSelectedNode(node);
+						if (node instanceof CamelContextElement == false) setSelectedNode(node);
 					}
 				
 				/** this handles selections in the diagram -> selects node in outline view **/
