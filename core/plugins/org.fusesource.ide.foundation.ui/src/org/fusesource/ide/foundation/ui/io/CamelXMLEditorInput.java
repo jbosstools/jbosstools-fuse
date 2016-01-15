@@ -139,7 +139,10 @@ public class CamelXMLEditorInput implements IEditorInput, IPersistableElement {
 						   (getSelectedContainerId() != null && input2.getSelectedContainerId() == null)) {
 					return false;
 				}
-				return this.getCamelContextFile().getLocation().toOSString().equals(input2.getCamelContextFile().getLocation().toOSString());
+				if (this.getCamelContextFile() != null && this.getCamelContextFile().getLocation() != null &&
+					input2 != null && input2.getCamelContextFile() != null && input2.getCamelContextFile().getLocation() != null) {
+					return this.getCamelContextFile().getLocation().toOSString().equals(input2.getCamelContextFile().getLocation().toOSString());	
+				}				
 			}
 		}
 		return false;

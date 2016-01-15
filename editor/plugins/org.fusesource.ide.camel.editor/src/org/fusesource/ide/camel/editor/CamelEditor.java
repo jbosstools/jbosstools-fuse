@@ -135,6 +135,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 			// file has been deleted...
 			closeEditorsWithoutValidInput();
 			break;
+		case IResourceChangeEvent.PRE_DELETE:
+			// close the editor if opened
+			closeEditorsWithoutValidInput();
+			break;
 		case IResourceChangeEvent.PRE_CLOSE:
 			Display.getDefault().asyncExec(new Runnable() {
 				/*
@@ -178,7 +182,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 					IEditorPart editor = er.getEditor(false);
 					if (editor != null) {
 						IEditorInput editorInput = editor.getEditorInput();
-						if (editorInput instanceof FileEditorInput && !((FileEditorInput) editorInput).getFile().exists()) {
+						if (editorInput instanceof CamelXMLEditorInput && 
+							!((CamelXMLEditorInput) editorInput).getCamelContextFile().exists()) {
 							getSite().getPage().closeEditor(er.getEditor(false), false);
 							if (er != null && er.getEditor(false) != null) {
 								er.getEditor(false).dispose();
@@ -493,10 +498,10 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 					if (ignoreError) {
 						updateModelFromSource();
 						lastError = "";
-						this.lastActivePageIdx = newPageIndex;
-						super.pageChange(newPageIndex);
 						if (newPageIndex == GLOBAL_CONF_INDEX) globalConfigEditor.reload();
 						if (newPageIndex == DESIGN_PAGE_INDEX) designEditor.refreshOutlineView();
+						this.lastActivePageIdx = newPageIndex;
+						super.pageChange(newPageIndex);
 					} else {
 						rollBackActive = true;
 						newPageIndex = SOURCE_PAGE_INDEX;
