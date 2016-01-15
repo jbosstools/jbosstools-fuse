@@ -69,6 +69,8 @@ public class UIMessages extends NLS {
 	public static String globalElementsTabDeleteButtonLabel;
 	public static String globalElementsTabDeleteButtonTooltip;
 	
+	public static String newGlobalConfigurationTypeWizardDialogTitle;
+	
 	
     static {
         // initialize resource bundle

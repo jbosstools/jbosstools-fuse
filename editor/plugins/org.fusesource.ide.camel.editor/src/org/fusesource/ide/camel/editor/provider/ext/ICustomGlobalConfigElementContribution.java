@@ -25,15 +25,17 @@ public interface ICustomGlobalConfigElementContribution {
 	 * this method is invoked when a user tries to create an element
 	 * of this type in the global config tab. Implementors should come up with 
 	 * a wizard for creating the element and if that wizard is finished it 
-	 * should create the xml node ready to be injected into the xml document.
-	 * DO NOT MANIPULATE DOCUMENT OR INSERT THE NODE YOURSELF! THIS IS DONE BY
+	 * should create the xml node ready to be injected into the xml document. This
+	 * node will be gathered via the GlobalConfigurationTypeWizard.getResultNode()
+	 * method. Make sure you set your result element correctly.
+	 * DO NOT MANIPULATE THE DOCUMENT OR INSERT THE NODE YOURSELF! THIS IS DONE BY
 	 * THE EDITOR AUTOMATICALLY! 
 	 * 
 	 * @param document		a reference to the camel context xml document to be
 	 * 						used for creating dom nodes / elements
-	 * @return	the xml element or null if the user canceled
+	 * @return	a wizard for adding this kind of element
 	 */
-	Node createGlobalElement(Document document);
+	GlobalConfigurationTypeWizard createGlobalElement(Document document);
 	
 	/**
 	 * returns a list of dependencies to be injected into the maven pom file
@@ -51,10 +53,9 @@ public interface ICustomGlobalConfigElementContribution {
 	 * 
 	 * @param document	a reference to the camel context xml document to be
 	 * 					used for creating dom nodes / elements
-	 * @param node		the node which is to be modified
 	 * @return	true if changed by user or false if canceled modifying
 	 */
-	boolean modifyGlobalElement(Document document, Node node);
+	GlobalConfigurationTypeWizard modifyGlobalElement(Document document);
 	
 	/**
 	 * this method is invoked if the user deleted a global element from the
