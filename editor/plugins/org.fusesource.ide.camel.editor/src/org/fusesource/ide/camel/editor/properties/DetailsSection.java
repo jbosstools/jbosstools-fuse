@@ -152,7 +152,10 @@ public class DetailsSection extends AbstractPropertySection {
         if (n.getUnderlyingMetaModelObject() != null) {
             this.selectedEP = n;
             this.eip = PropertiesUtils.getEipFor(selectedEP);
-            form.setText("Details - " + DiagramUtils.filterFigureLabel(selectedEP.getDisplayText()));
+            String headerText = "Details - ";
+            if (eip != null) headerText += eip.getName();
+            headerText += String.format(" (%s)", DiagramUtils.filterFigureLabel(selectedEP.getDisplayText()));
+            form.setText(headerText);
         } else {
             this.selectedEP = null;
             form.setText("Details");
