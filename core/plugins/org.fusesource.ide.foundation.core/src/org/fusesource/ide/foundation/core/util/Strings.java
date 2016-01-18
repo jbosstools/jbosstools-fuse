@@ -152,5 +152,14 @@ public class Strings {
 	    
 	    return result;
 	}
+	
+	/**
+	 * Invokes toString() on the object if it is not null
+	 * @param input 
+	 * @return input.toString() or null otherwise
+	 */
+	public static String nullSafeToString(Object input){
+		return input!=null?input.toString():null;
+	}
     
 }

@@ -12,6 +12,7 @@
 package org.fusesource.ide.branding.wizards.project;
 
 import java.net.URL;
+import java.util.Map;
 
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -27,6 +28,7 @@ public class ArchetypeDetails implements Comparable<ArchetypeDetails> {
 	private String repository;
 	private URL resource;
 	private String fullName;
+	private Map<String,String> requiredProperties;
 
 	public ArchetypeDetails(Archetype archetype) {
 		this.archetype = archetype;
@@ -97,4 +99,11 @@ public class ArchetypeDetails implements Comparable<ArchetypeDetails> {
 		return fullName;
 	}
 
+	public Map<String, String> getRequiredProperties() {
+		return requiredProperties;
+	}
+
+	public void setRequiredProperties(Map<String, String> requiredProperties) {
+		this.requiredProperties = requiredProperties;
+	}
 }
