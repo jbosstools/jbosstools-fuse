@@ -27,11 +27,12 @@ import org.fusesource.ide.foundation.core.util.Strings;
 public class FusePropertySection extends AbstractPropertySection {
 
 	/**
+	 * /!\ public fo rtest purpose only 
 	 * @param toolkit 
 	 * @param page The page on which it will be created
 	 * @param p The property for which the label is generated
 	 */
-	protected void createPropertyLabel(FormToolkit toolkit, Composite page, Parameter p) {
+	public void createPropertyLabel(FormToolkit toolkit, Composite page, Parameter p) {
 	    String s = computePropertyDisplayName(p);
 	    Label l = toolkit.createLabel(page, s);         
 	    l.setLayoutData(new GridData());
