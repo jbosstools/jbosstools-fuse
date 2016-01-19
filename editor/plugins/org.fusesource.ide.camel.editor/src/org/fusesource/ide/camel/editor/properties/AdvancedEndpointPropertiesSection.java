@@ -266,6 +266,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
      * @param group
      */
     protected void generateTabContents(List<Parameter> props, final Composite page, boolean ignorePathProperties, String group) {
+    	props.sort(new ParameterPriorityComparator());
         for (Parameter p : props) {
         	final Parameter prop = p;
         	

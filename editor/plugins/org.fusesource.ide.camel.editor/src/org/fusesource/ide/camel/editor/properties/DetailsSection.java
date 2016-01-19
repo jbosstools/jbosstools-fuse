@@ -285,6 +285,7 @@ public class DetailsSection extends FusePropertySection {
      * @param group
      */
     protected void generateTabContents(List<Parameter> props, final Composite page, final String group) {
+    	props.sort(new ParameterPriorityComparator());
         for (Parameter p : props) {
         	final Parameter prop = p;
 
