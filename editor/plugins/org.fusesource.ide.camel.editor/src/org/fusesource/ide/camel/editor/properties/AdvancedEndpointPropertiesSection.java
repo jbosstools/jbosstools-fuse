@@ -67,7 +67,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -93,7 +92,7 @@ import org.fusesource.ide.foundation.ui.util.Selections;
 /**
  * @author lhein
  */
-public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
+public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 
 	public static final String GROUP_PATH 		= "Path";
 	public static final String GROUP_COMMON		= "Common";
@@ -289,17 +288,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
             IObservableValue modelObservable = null;
             IValidator validator = null;
             
-            String s = Strings.humanize(p.getName());
-            if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
-            
-            Label l = toolkit.createLabel(page, s);            
-            l.setLayoutData(new GridData());
-            if (p.getDescription() != null) {
-            	l.setToolTipText(p.getDescription());
-            }
-            if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
-            	l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
-            }
+            createPropertyLabel(toolkit, page, p);
             
             Control c = null;
             
@@ -341,7 +330,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), txtField.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true") || p.getName().equalsIgnoreCase("id")) {
+                if (isRequired(p) || p.getName().equalsIgnoreCase("id")) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -444,7 +433,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -487,7 +476,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 });
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -519,7 +508,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -551,7 +540,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -586,7 +575,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -712,7 +701,7 @@ public class AdvancedEndpointPropertiesSection extends AbstractPropertySection {
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 btn_browse.setEnabled(fClass != null);
                 c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
