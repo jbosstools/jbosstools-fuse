@@ -102,7 +102,7 @@ import org.w3c.dom.Node;
 /**
  * Shows the property details for the currently selected node
  */
-public class DetailsSection extends AbstractPropertySection {
+public class DetailsSection extends FusePropertySection {
 
 	public static final String DEFAULT_GROUP = "General";
 	
@@ -301,17 +301,7 @@ public class DetailsSection extends AbstractPropertySection {
             IObservableList modelListObservable = null;
             IValidator validator = null;
             
-            String s = Strings.humanize(p.getName());
-            if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
-            
-            Label l = getWidgetFactory().createLabel(page, s);            
-            l.setLayoutData(new GridData());
-            if (p.getDescription() != null) {
-            	l.setToolTipText(p.getDescription());
-            }
-            if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
-            	l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
-            }
+            createPropertyLabel(toolkit, page, p);
             
             Control c = null;
             
@@ -338,7 +328,7 @@ public class DetailsSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), txtField.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -391,7 +381,7 @@ public class DetailsSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), txtField.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true") || p.getName().equalsIgnoreCase("id")) {
+                if (isRequired(p) || p.getName().equalsIgnoreCase("id")) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -491,7 +481,7 @@ public class DetailsSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -536,7 +526,7 @@ public class DetailsSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -580,7 +570,7 @@ public class DetailsSection extends AbstractPropertySection {
                 });
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -614,7 +604,7 @@ public class DetailsSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), Arrays.asList(list.getItems()));
                 // create observables for the control
                 uiListObservable = WidgetProperties.items().observe(list);                
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -698,7 +688,7 @@ public class DetailsSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -779,7 +769,7 @@ public class DetailsSection extends AbstractPropertySection {
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -810,7 +800,7 @@ public class DetailsSection extends AbstractPropertySection {
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -937,7 +927,7 @@ public class DetailsSection extends AbstractPropertySection {
                 btn_browse.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 btn_browse.setEnabled(fClass != null);
                 c = txtField;
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
+                if (isRequired(p)) {
 					validator = new IValidator() {
 						/*
 						 * (non-Javadoc)
@@ -1135,18 +1125,7 @@ public class DetailsSection extends AbstractPropertySection {
             }); 
     		
     		for (Parameter p : props) {
-                // Label
-    			String s = Strings.humanize(p.getName());
-                if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
-                
-                Label l = getWidgetFactory().createLabel(parent, s);            
-                l.setLayoutData(new GridData());
-                if (p.getDescription() != null) {
-                	l.setToolTipText(p.getDescription());
-                }
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
-                	l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
-                }
+    			createPropertyLabel(toolkit, parent, p);
                 
                 // Field
                 Control field = getControlForParameter(p, parent, expressionElement, lang);
@@ -1304,18 +1283,7 @@ public class DetailsSection extends AbstractPropertySection {
             }); 
     		
     		for (Parameter p : props) {
-                // Label
-    			String s = Strings.humanize(p.getName());
-                if (p.getDeprecated() != null && p.getDeprecated().equalsIgnoreCase("true")) s += " (deprecated)"; 
-                
-                Label l = getWidgetFactory().createLabel(parent, s);            
-                l.setLayoutData(new GridData());
-                if (p.getDescription() != null) {
-                	l.setToolTipText(p.getDescription());
-                }
-                if (p.getRequired() != null && p.getRequired().equalsIgnoreCase("true")) {
-                	l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
-                }
+                createPropertyLabel(toolkit, parent, p);
                 
                 // Field
                 Control field = getControlForParameter(p, parent, dataFormatElement, df);
