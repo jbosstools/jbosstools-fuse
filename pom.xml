@@ -40,7 +40,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
 
     <!-- JBoss Tools Integration Stack version -->
-    <jbtis.version>4.3.1-SNAPSHOT</jbtis.version>
+    <jbtis.version>4.3.1.Beta1-SNAPSHOT</jbtis.version>
     
     <!-- Tycho versions -->
     <jboss-tycho-version>0.22.1-SNAPSHOT</jboss-tycho-version>
@@ -70,8 +70,8 @@
     
     <!-- data transformation versions -->
     <version.fasterxml>2.2.0</version.fasterxml>
-    <version.jaxb>2.2.6</version.jaxb>
-    <version.jsonschema2pojo>0.4.5</version.jsonschema2pojo>
+    <version.jaxb>2.2.7</version.jaxb>
+    <version.jsonschema2pojo>0.4.13</version.jsonschema2pojo>
     <version.xmlbeans>2.6.0</version.xmlbeans>
     <version.xmlunit>1.5</version.xmlunit>
     <version.commons>3.2.1</version.commons>

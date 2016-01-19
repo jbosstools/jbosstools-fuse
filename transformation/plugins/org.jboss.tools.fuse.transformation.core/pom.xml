@@ -37,21 +37,6 @@
 							<artifactId>gson</artifactId>
 							<version>2.2.4</version>
 						</artifactItem>
-						<artifactItem>
-							<groupId>org.jsonschema2pojo</groupId>
-      						<artifactId>jsonschema2pojo-core</artifactId>
-      						<version>${version.jsonschema2pojo}</version>
-						</artifactItem>
-						<artifactItem>
-							<groupId>com.sun.xml.bind</groupId>
-      						<artifactId>jaxb-impl</artifactId>
-							<version>${version.jaxb}</version>
-						</artifactItem>
-						<artifactItem>
-							<groupId>com.sun.xml.bind</groupId>
-      						<artifactId>jaxb-xjc</artifactId>
-							<version>${version.jaxb}</version>
-						</artifactItem>
 					</artifactItems>
 					<skip>false</skip>
 					<outputDirectory>${basedir}/libs/</outputDirectory>
