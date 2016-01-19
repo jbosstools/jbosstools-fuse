@@ -29,11 +29,6 @@ public class JsonGenerationConfig extends DefaultGenerationConfig {
     private SourceType sourceType = SourceType.JSONSCHEMA;
 
     @Override
-    public Iterator<File> getSource() {
-        return Arrays.asList(new File[] {source}).iterator();
-    }
-
-    @Override
     public boolean isIncludeHashcodeAndEquals() {
         return includeHashcodeAndEquals;
     }

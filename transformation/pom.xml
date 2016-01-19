@@ -25,16 +25,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <dependencies>
       <!-- External Dependencies -->
       <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-xjc</artifactId>
-        <version>${version.jaxb}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>${version.jaxb}</version>
-      </dependency>
-      <dependency>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-blueprint</artifactId>
         <version>${version.camel}</version>
@@ -78,11 +68,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>org.apache.xmlbeans</groupId>
         <artifactId>xmlbeans</artifactId>
         <version>${version.xmlbeans}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jsonschema2pojo</groupId>
-        <artifactId>jsonschema2pojo-core</artifactId>
-        <version>${version.jsonschema2pojo}</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -130,5 +115,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 -->
     </dependencies>
   </dependencyManagement>
+
+  <build>
+      <plugins>
+          <!-- Allow Access Restriction failures when compiling to be only discouraged (jaxb-xjc) -->
+          <plugin>
+              <groupId>org.eclipse.tycho</groupId>
+              <artifactId>tycho-compiler-plugin</artifactId>
+              <version>${tychoVersion}</version>
+              <configuration>
+                  <compilerArgument>-warn:forbidden</compilerArgument>
+              </configuration>
+          </plugin>
+      </plugins>
+  </build>
 
 </project>
