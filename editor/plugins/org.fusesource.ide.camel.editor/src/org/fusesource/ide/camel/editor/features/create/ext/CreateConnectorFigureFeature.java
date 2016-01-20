@@ -38,16 +38,16 @@ public class CreateConnectorFigureFeature extends CreateFigureFeature {
     public CreateConnectorFigureFeature(IFeatureProvider fp, Component component) {
     	super(fp, Strings.isBlank(component.getTitle()) ? Strings.humanize(component.getSchemeTitle()) : component.getTitle(), component.getDescription(), (Eip)null);
         this.component = component;        
-        setEip(getEipByName("from"));
+        setEip(getEipByName("to"));
     }
         
-    /* (non-Javadoc)
-     * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#canCreate(org.eclipse.graphiti.features.context.ICreateContext)
-     */
-    @Override
-    public boolean canCreate(ICreateContext context) {
-    	return true;
-    }
+//    /* (non-Javadoc)
+//     * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#canCreate(org.eclipse.graphiti.features.context.ICreateContext)
+//     */
+//    @Override
+//    public boolean canCreate(ICreateContext context) {
+//    	return true;
+//    }
     
     /* (non-Javadoc)
      * @see org.fusesource.ide.camel.editor.features.create.CreateFigureFeature#getIconName()

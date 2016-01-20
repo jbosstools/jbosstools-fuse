@@ -43,13 +43,13 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 		setEip(getEipByName("to"));
 	}
 
-	/* (non-Javadoc)
-	 * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#canCreate(org.eclipse.graphiti.features.context.ICreateContext)
-	 */
-	@Override
-	public boolean canCreate(ICreateContext context) {
-		return true;
-	}
+//	/* (non-Javadoc)
+//	 * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#canCreate(org.eclipse.graphiti.features.context.ICreateContext)
+//	 */
+//	@Override
+//	public boolean canCreate(ICreateContext context) {
+//		return true;
+//	}
 	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature#createNode(org.fusesource.ide.camel.model.service.core.model.CamelModelElement, boolean)

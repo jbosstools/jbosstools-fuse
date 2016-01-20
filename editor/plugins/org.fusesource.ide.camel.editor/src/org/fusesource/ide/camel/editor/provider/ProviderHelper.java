@@ -80,6 +80,7 @@ public class ProviderHelper {
 		categoryMap.put("removeProperties", CATEGORY_TRANSFORMATION);
 		categoryMap.put("resequence", CATEGORY_ROUTING);
 		categoryMap.put("restBinding",CATEGORY_REST);
+		categoryMap.put("restConfiguration",CATEGORY_REST);
 		categoryMap.put("restProperty",CATEGORY_REST);
 		categoryMap.put("rest",CATEGORY_REST);
 		categoryMap.put("rests",CATEGORY_REST);

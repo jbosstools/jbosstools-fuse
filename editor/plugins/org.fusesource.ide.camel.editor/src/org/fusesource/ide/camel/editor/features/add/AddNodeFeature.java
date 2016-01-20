@@ -45,7 +45,9 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 		if (newObject instanceof CamelModelElement) {
 			// check if user wants to add to a diagram
 			if (context.getTargetContainer() instanceof Diagram) {
-                return ((CamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("route");
+                return ((CamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("route") ||
+                		((CamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("rest") ||
+                		((CamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("restConfiguration");
             } else if (getBusinessObjectForPictogramElement(context.getTargetContainer()) instanceof CamelModelElement) {
             	CamelModelElement container =  (CamelModelElement)getBusinessObjectForPictogramElement(context.getTargetContainer());
             	CamelModelElement child = (CamelModelElement)newObject;

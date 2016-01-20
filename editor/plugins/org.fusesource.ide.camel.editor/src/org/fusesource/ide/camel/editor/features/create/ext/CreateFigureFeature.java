@@ -108,14 +108,15 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	@Override
 	public boolean canCreate(ICreateContext context) {
 		ContainerShape container = context.getTargetContainer();
-		Object bo = getBusinessObjectForPictogramElement(container);
+		Object containerBO = getBusinessObjectForPictogramElement(container);
 		if (container instanceof Diagram) {
 			// we want to create something on the diagram rather than inside a container element - thats only allowed on camelContexts
 			CamelFile cf = ((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel();
 			if (cf.getCamelContext() == null && cf.getChildElements().size()==0) {
 				cf.addChildElement(new CamelContextElement(cf, null));
 			}
-			if (eip != null) return eip.getName().equalsIgnoreCase("route");
+			if (eip != null) return eip.getName().equalsIgnoreCase("route") || 
+				eip.getName().equalsIgnoreCase("rest") || eip.getName().equalsIgnoreCase("restConfiguration");
 			if (clazz != null) { 
 				Object obj = newInstance(clazz);
 				if (obj != null && obj instanceof CamelModelElement) return ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("route");
@@ -123,9 +124,9 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			}
 		} 
 		// make sure we only have a single otherwise per choice
-		if (bo instanceof CamelModelElement && ((CamelModelElement)bo).getNodeTypeId().equals("choice")) {
+		if (containerBO instanceof CamelModelElement && ((CamelModelElement)containerBO).getNodeTypeId().equals("choice")) {
 			// only one otherwise per choice
-			CamelModelElement choice = (CamelModelElement)bo;
+			CamelModelElement choice = (CamelModelElement)containerBO;
 			if (this.eip != null) {
 				if (this.eip.getName().equals("otherwise") && choice.getParameter("otherwise") != null) return false;
 			} else if (clazz != null) {
@@ -133,7 +134,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 				if (obj instanceof CamelModelElement && ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
 			}
 		}
-		return (bo != null && bo instanceof CamelModelElement && ((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
+		return (containerBO != null && containerBO instanceof CamelModelElement && ((CamelModelElement)containerBO).getUnderlyingMetaModelObject().canHaveChildren() && ((CamelModelElement)containerBO).getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(eip.getName()));
 	}
 
 	/*
