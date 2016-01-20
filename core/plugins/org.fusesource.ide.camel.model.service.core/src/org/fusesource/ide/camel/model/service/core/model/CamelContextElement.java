@@ -71,10 +71,15 @@ public class CamelContextElement extends CamelModelElement {
 		this.endpointDefinitions.put(def.getId(), def);
 		boolean childExists = false;
 		for (int i=0; i<getXmlNode().getChildNodes().getLength(); i++) {
-			if(getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
+			if(def.getXmlNode() != null && getXmlNode().getChildNodes().item(i).isEqualNode(def.getXmlNode())) {
 				childExists = true;
 				break;
 			}
+		}
+		if (def.getXmlNode() == null) {
+			Node n = createElement("endpoint", getXmlNode() != null ? getXmlNode().getPrefix() : null);
+			def.setXmlNode(n);
+			def.updateXMLNode();
 		}
 		if (!childExists) {
 			getXmlNode().insertBefore(def.getXmlNode(), getFirstChild(getXmlNode()));
@@ -144,16 +149,21 @@ public class CamelContextElement extends CamelModelElement {
 		if (dataFormatsNode == null) {
 			// first create a dataFormats node
 			dataFormatsNode = createElement(DATA_FORMATS_NODE_NAME, this != null && this.getXmlNode() != null ? this.getXmlNode().getPrefix() : null);
-			getXmlNode().insertBefore(getXmlNode().getFirstChild(), dataFormatsNode);
+			getXmlNode().insertBefore(dataFormatsNode, getXmlNode().getFirstChild());
 		}
 		for (int i=0; i<dataFormatsNode.getChildNodes().getLength(); i++) {
-			if(dataFormatsNode.getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
+		    if(df.getXmlNode() != null && dataFormatsNode.getChildNodes().item(i).isEqualNode(df.getXmlNode())) {
 				childExists = true;
 				break;
 			}
 		}
+		if (df.getXmlNode() == null) {
+			Node n = createElement(df.getUnderlyingMetaModelObject().getName(), getXmlNode() != null ? getXmlNode().getPrefix() : null);
+			df.setXmlNode(n);
+			df.updateXMLNode();
+		}
 		if (!childExists) {
-			dataFormatsNode.insertBefore(df.getXmlNode(), getFirstChild(dataFormatsNode));
+			dataFormatsNode.appendChild(df.getXmlNode());
 		}
 	}
 	

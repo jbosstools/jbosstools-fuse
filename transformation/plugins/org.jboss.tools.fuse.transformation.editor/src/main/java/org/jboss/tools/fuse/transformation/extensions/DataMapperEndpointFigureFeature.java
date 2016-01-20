@@ -71,6 +71,7 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
         IPath respath = JavaUtil.getJavaPathForResource(res);
         String path = respath.makeRelative().toString();
         wizard.setCamelFilePath(path);
+        wizard.setSelectedProject(res.getProject());
 
         // eventually we want to do all our Camel file updates
         // within the Camel editor's context, but for now
@@ -83,13 +84,11 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
         if (ep != null && getEip() != null) {
         	CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
         	if (editor.getModel() != null) { 
-        		Node newNode = null;
-        		if (createDOMNode) {
-        			newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
-        		}
         		ep.setParent(parent);
         		ep.setUnderlyingMetaModelObject(getEip());
         		if (createDOMNode) {
+        			Node newNode = null;
+        			newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
         			ep.setXmlNode(newNode);
         			ep.updateXMLNode();
         		}

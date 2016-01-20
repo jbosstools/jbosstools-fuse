@@ -33,6 +33,11 @@ public final class CamelConfigurationHelper {
         return camelModel != null ? new CamelConfigurationHelper(camelModel, handler) : null;
     }
 
+    public static CamelConfigBuilder getConfigBuilder(File contextFile) {
+        CamelConfigBuilder builder = new CamelConfigBuilder(contextFile);
+        return builder;
+    }
+    
     public CamelConfigBuilder getConfigBuilder() {
         return configBuilder;
     }

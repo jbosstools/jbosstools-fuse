@@ -15,16 +15,14 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.jboss.tools.fuse.transformation.core.TransformType;
-import org.w3c.dom.Node;
 
 /**
  * CamelConfigBuilder provides read/write access to Camel configuration used in
@@ -44,8 +42,7 @@ public class CamelConfigBuilder {
 	 * 
 	 */
 	public CamelConfigBuilder(File file) {
-		CamelIOHandler handler = new CamelIOHandler();
-		this.model = handler.loadCamelModel(file, new NullProgressMonitor());
+		this.model = CamelUtils.getDiagramEditor().getModel();
 	}
 	
 	/**
@@ -168,14 +165,11 @@ public class CamelConfigBuilder {
 
     protected CamelModelElement addEndpoint(String id, String uri) {
     	CamelModelElement parent = model.getCamelContext();
-    	String ns = (parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
-    	Node newNode = model.createElement("from", ns);
 		CamelEndpoint ep = new CamelEndpoint(uri);
-    	ep.setId(id);
+		ep.setId(id);
 		ep.setParent(parent);
 		ep.setUnderlyingMetaModelObject(getEipByName("from"));
-		ep.setXmlNode(newNode);
-		ep.updateXMLNode();
+		model.getCamelContext().addEndpointDefinition(ep);
 		return ep;
     }
 
@@ -196,7 +190,6 @@ public class CamelConfigBuilder {
     		dataFormat.setUnderlyingMetaModelObject(json);
     		dataFormat.setParameter("library", "Jackson");
     		dataFormat.setParameter("unmarshalTypeName", className);
-    		dataFormat.updateXMLNode();
     		parent.getCamelContext().addDataFormat(dataFormat);
         }
         return dataFormat;
@@ -214,7 +207,6 @@ public class CamelConfigBuilder {
     		dataFormat.setId(id);
     		dataFormat.setUnderlyingMetaModelObject(jaxb);
     		dataFormat.setParameter("contextPath", contextPath);
-    		dataFormat.updateXMLNode();
     		parent.getCamelContext().addDataFormat(dataFormat);
         }
         return dataFormat;
