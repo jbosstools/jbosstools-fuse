@@ -108,10 +108,10 @@ public class CamelModelElement {
 						// move all when nodes before the otherwise
 						parent.getXmlNode().insertBefore(getXmlNode(), otherwiseNode);
 					} else if (getNodeTypeId().equals("otherwise")) {
-						getXmlNode().appendChild(underlyingNode);
+						parent.getXmlNode().appendChild(getXmlNode());
 					}
 				} else {
-					parent.getXmlNode().appendChild(underlyingNode);
+					parent.getXmlNode().appendChild(getXmlNode());
 				}
 
 			}
