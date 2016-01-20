@@ -61,6 +61,17 @@ public interface ICamelManagerService {
 	String createEndpointUri(String scheme, Map<String, String> properties) throws URISyntaxException;
 	
 	/**
+	 * creates an endpoint uri from the given scheme and properties
+	 * 
+	 * @param scheme
+	 * @param properties
+	 * @param encode
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	String createEndpointUri(String scheme, Map<String, String> properties, boolean encode) throws URISyntaxException;
+	
+	/**
 	 * creates the endpoint xml representation for the given scheme and properties
 	 * 
 	 * @param scheme
@@ -69,6 +80,17 @@ public interface ICamelManagerService {
 	 * @throws URISyntaxException
 	 */
 	String createEndpointXml(String scheme, Map<String, String> properties) throws URISyntaxException;
+	
+	/**
+	 * creates the endpoint xml representation for the given scheme and properties
+	 * 
+	 * @param scheme
+	 * @param properties
+	 * @param encode
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	String createEndpointXml(String scheme, Map<String, String> properties, boolean encode) throws URISyntaxException;
 	
 	/**
 	 * tests an expression in a default camel context ran locally

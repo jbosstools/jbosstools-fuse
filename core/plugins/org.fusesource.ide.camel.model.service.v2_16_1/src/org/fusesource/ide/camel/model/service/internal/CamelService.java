@@ -28,6 +28,8 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
  */
 public class CamelService implements ICamelManagerService {
 	
+	private static final boolean ENCODE_DEFAULT = false;
+	
 	private CamelModelLoader loader;
 	private CamelCatalog catalog;
 	
@@ -63,7 +65,7 @@ public class CamelService implements ICamelManagerService {
 	@Override
 	public String createEndpointUri(String scheme, Map<String, String> properties) throws URISyntaxException {
 		if (catalog == null) catalog = new DefaultCamelCatalog();
-		return catalog.asEndpointUri(scheme, properties);
+		return catalog.asEndpointUri(scheme, properties, ENCODE_DEFAULT);
 	}
 	
 	/* (non-Javadoc)
@@ -73,7 +75,7 @@ public class CamelService implements ICamelManagerService {
 	public String createEndpointUri(String scheme, Map<String, String> properties, boolean encode)
 			throws URISyntaxException {
 		if (catalog == null) catalog = new DefaultCamelCatalog();
-		return catalog.asEndpointUri(scheme, properties);
+		return catalog.asEndpointUri(scheme, properties, encode);
 	}
 	
 	/* (non-Javadoc)
@@ -90,27 +92,27 @@ public class CamelService implements ICamelManagerService {
 	 */
 	@Override
 	public String createEndpointXml(String scheme, Map<String, String> properties) throws URISyntaxException {
-		// not available in that camel version?
-		return null;
+		if (catalog == null) catalog = new DefaultCamelCatalog();
+		return catalog.asEndpointUriXml(scheme, properties, ENCODE_DEFAULT);
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map, boolean)
 	 */
 	@Override
 	public String createEndpointXml(String scheme, Map<String, String> properties, boolean encode)
 			throws URISyntaxException {
-		// not available in that camel version?
-		return null;
+		if (catalog == null) catalog = new DefaultCamelCatalog();
+		return catalog.asEndpointUriXml(scheme, properties, encode);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#getEndpointScheme(java.lang.String)
 	 */
 	@Override
 	public String getEndpointScheme(String uri) {
-		// not available in this camel version
-		return null;
+		if (catalog == null) catalog = new DefaultCamelCatalog();
+		return catalog.endpointComponentName(uri);
 	}
 	
 	/* (non-Javadoc)

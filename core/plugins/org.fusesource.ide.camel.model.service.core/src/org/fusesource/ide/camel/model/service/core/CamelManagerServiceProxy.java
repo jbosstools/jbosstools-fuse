@@ -105,4 +105,22 @@ public class CamelManagerServiceProxy extends ServiceTracker<ICamelManagerServic
     public String testExpression(String language, String expression) {
     	return checkedGetService().testExpression(language, expression);
     }
+
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointUri(java.lang.String, java.util.Map, boolean)
+	 */
+	@Override
+	public String createEndpointUri(String scheme, Map<String, String> properties, boolean encode)
+			throws URISyntaxException {
+		return checkedGetService().createEndpointUri(scheme, properties, encode);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.fusesource.ide.camel.model.service.core.ICamelManagerService#createEndpointXml(java.lang.String, java.util.Map, boolean)
+	 */
+	@Override
+	public String createEndpointXml(String scheme, Map<String, String> properties, boolean encode)
+			throws URISyntaxException {
+		return checkedGetService().createEndpointXml(scheme, properties, encode);
+	}
 }

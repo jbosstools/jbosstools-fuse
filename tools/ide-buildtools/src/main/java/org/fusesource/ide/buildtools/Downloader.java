@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.txw2.annotation.XmlElement;
 
 import io.fabric8.insight.maven.aether.Aether;
 import io.fabric8.insight.maven.aether.AetherResult;
@@ -263,7 +262,7 @@ public class Downloader {
     private void createComponentModel(File parentFolder, CamelCatalog cat, ObjectMapper mapper) throws IOException {
         File outputFile = new File(parentFolder, "components.xml");
         if (outputFile.exists() && outputFile.isFile()) outputFile.delete(); 
-        
+        System.err.println(">>>>>>>>>>>>>>>>" + outputFile.getPath());
         // build component model
         HashMap<String, ComponentModel> knownComponents = new HashMap<String, ComponentModel>();
         List<String> components = cat.findComponentNames();
@@ -304,6 +303,7 @@ public class Downloader {
             out.println("      <syntax>" + comp.getSyntax() + "</syntax>");
             out.println("      <class>" + comp.getJavaType() + "</class>");
             out.println("      <kind>" + comp.getKind() + "</kind>");
+            if (comp.getExtendsScheme() != null)out.println("      <extendsScheme>" + comp.getExtendsScheme() + "</extendsScheme>");
             if (comp.getConsumerOnly() != null) out.println("      <consumerOnly>" + comp.consumerOnly + "</consumerOnly>");
             if (comp.getProducerOnly() != null) out.println("      <producerOnly>" + comp.getProducerOnly() + "</producerOnly>");
             out.println("      <scheme>" + comp.getScheme() + "</scheme>");
@@ -335,6 +335,8 @@ public class Downloader {
                 		out.print("defaultValue=\"0\" ");  // default for numbers is 0
                 	}
                 }
+                if (p.getLabel() != null) out.print("label=\"" + p.getLabel() + "\" ");
+                if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
                 out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
             }           
             out.println("      </componentProperties>");   
@@ -361,6 +363,7 @@ public class Downloader {
                 }
                 if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
                 if (p.getLabel() != null) out.print("label=\"" + p.getLabel() + "\" ");
+                if (p.getGroup() != null) out.print("group=\"" + p.getGroup() + "\" ");
                 out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
             }           
             out.println("      </uriParameters>");            
@@ -599,6 +602,7 @@ public class Downloader {
                 		out.print("defaultValue=\"0\" ");  // default for numbers is 0
                 	}
                 }
+                if (p.getGroup() != null) out.print("group=\"" + p.getGroup() + "\" ");
                 if (p.getRequired() != null) out.print("required=\"" + p.getRequired() + "\" ");
                 if (p.getOriginalVariableName() != null) out.print("originalFieldName=\"" + p.getOriginalVariableName() + "\" ");
                 out.println("description=\"" + (p.getDescription() != null ? p.getDescription() : "") + "\"/>");
@@ -688,6 +692,21 @@ public class Downloader {
         	private String version;
         	private String producerOnly;
         	private String consumerOnly;
+        	private String extendsScheme;
+        	
+        	/**
+			 * @return the extendsScheme
+			 */
+			public String getExtendsScheme() {
+				return this.extendsScheme;
+			}
+			
+			/**
+			 * @param extendsScheme the extendsScheme to set
+			 */
+			public void setExtendsScheme(String extendsScheme) {
+				this.extendsScheme = extendsScheme;
+			}
         	
         	/**
 			 * @return the consumerOnly
@@ -879,6 +898,7 @@ public class Downloader {
     	
     	public static class ComponentParam {
     		private String name;
+    		private String label;
     		private String kind;
     		private String type;
     		private String javaType;
@@ -887,7 +907,36 @@ public class Downloader {
         	private String[] choice;
     		private String description;
     		private String defaultValue;
+    		private String required;
 
+    		/**
+			 * @return the label
+			 */
+			public String getLabel() {
+				return this.label;
+			}
+			
+			/**
+			 * @param label the label to set
+			 */
+			public void setLabel(String label) {
+				this.label = label;
+			}
+    		
+    		/**
+			 * @return the required
+			 */
+			public String getRequired() {
+				return this.required;
+			}
+			
+			/**
+			 * @param required the required to set
+			 */
+			public void setRequired(String required) {
+				this.required = required;
+			}
+    		
     		/**
 			 * @return the defaultValue
 			 */
@@ -1026,6 +1075,7 @@ public class Downloader {
         	private String required;
         	private String type;
         	private String javaType;
+        	private String group;
         	private String deprecated;
         	private String defaultValue;
             private String description;
@@ -1033,6 +1083,20 @@ public class Downloader {
         	@JsonProperty("enum")
         	private String[] choice;
 
+        	/**
+			 * @return the group
+			 */
+			public String getGroup() {
+				return this.group;
+			}
+			
+			/**
+			 * @param group the group to set
+			 */
+			public void setGroup(String group) {
+				this.group = group;
+			}
+        	
         	/**
 			 * @return the choice
 			 */
@@ -2179,6 +2243,7 @@ public class Downloader {
     	public static class EIPProperty {
     		private String kind;
     		private String required;
+    		private String group;
     		private String type;
     		private String javaType;
     		private String deprecated;
@@ -2204,6 +2269,20 @@ public class Downloader {
 				this.oneOf = oneOf;
 			}
     		
+			/**
+			 * @return the group
+			 */
+			public String getGroup() {
+				return this.group;
+			}
+			
+			/**
+			 * @param group the group to set
+			 */
+			public void setGroup(String group) {
+				this.group = group;
+			}
+			
     		/**
 			 * @return the choice
 			 */
