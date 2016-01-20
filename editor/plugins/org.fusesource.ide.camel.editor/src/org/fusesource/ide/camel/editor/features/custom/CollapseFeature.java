@@ -173,7 +173,7 @@ public class CollapseFeature extends AbstractCustomFeature {
 				Shape shape = iter.next();
 				if(shape instanceof ContainerShape) {
 					// we only want to hide 1 level nested elements
-//					makeChildrenInvisible((ContainerShape) shape, visible);
+					makeChildrenInvisible((ContainerShape) shape, visible); // comment out if collapse gets broken
 					shape.setVisible(visible);
 					Anchor anchr = shape.getAnchors().get(0);
 					boolean initVisible = false;
