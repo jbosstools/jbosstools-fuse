@@ -40,7 +40,7 @@ public class CreateEndpointFigureFeature extends CreateFigureFeature {
 		super(fp, name, description, (Class<? extends CamelModelElement>)null);
 		this.endpointUri = endpointUri;
 		this.deps = deps;
-		setEip(getEipByName("from"));
+		setEip(getEipByName("to"));
 	}
 
 	/* (non-Javadoc)

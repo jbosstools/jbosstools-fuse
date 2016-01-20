@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.model.service.core.model;
 
+import org.w3c.dom.Node;
+
 /**
  * @author lhein
  */
@@ -122,6 +124,12 @@ public class CamelElementConnection extends CamelModelElement {
 		if (!isConnected) {
 			source.setOutputElement(target);
 			target.setInputElement(source);
+			
+			// rearrange DOM elements
+			Node sourceNode = source.getXmlNode();
+			Node targetNode = target.getXmlNode();
+			source.getParent().getXmlNode().insertBefore(sourceNode, targetNode);
+			
 			isConnected = true;
 		}
 	}

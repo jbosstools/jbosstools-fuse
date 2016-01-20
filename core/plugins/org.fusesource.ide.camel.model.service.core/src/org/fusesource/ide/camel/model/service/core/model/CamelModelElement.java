@@ -466,8 +466,8 @@ public class CamelModelElement {
 	}
 
 	protected void checkEndpointType() {
-		if (isFromEndpoint() && getUnderlyingMetaModelObject() != null
-				&& getUnderlyingMetaModelObject().getName().equalsIgnoreCase("to")) {
+		if (isFromEndpoint() && getUnderlyingMetaModelObject() != null && 
+			getUnderlyingMetaModelObject().getName().equalsIgnoreCase("to")) {
 			// switch from a TO endpoint to a FROM endpoint
 			setUnderlyingMetaModelObject(getEipByName("from"));
 			if (getXmlNode() != null) {
