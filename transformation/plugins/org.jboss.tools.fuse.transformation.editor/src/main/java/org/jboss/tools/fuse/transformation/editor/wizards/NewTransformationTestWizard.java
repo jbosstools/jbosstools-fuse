@@ -116,7 +116,7 @@ public class NewTransformationTestWizard extends NewElementWizard {
                 _page.setCamelConfigFile(camelConfigFile);
                 File file = new File(camelConfigFile.getLocationURI());
                 try {
-                    builder = CamelConfigurationHelper.load(file).getConfigBuilder();
+                    builder = CamelConfigurationHelper.getConfigBuilder(file);
                     _page.setBuilder(builder);
                 } catch (Exception e) {
                     Activator.error(e);
