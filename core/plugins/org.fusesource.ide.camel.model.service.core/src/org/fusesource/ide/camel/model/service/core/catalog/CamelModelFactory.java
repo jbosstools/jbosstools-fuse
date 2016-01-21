@@ -11,13 +11,21 @@
 
 package org.fusesource.ide.camel.model.service.core.catalog;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
+import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 
 /**
  * @author lhein
@@ -102,7 +110,40 @@ public class CamelModelFactory {
 	 * @return
 	 */
 	public static String getCamelVersion(IProject p) {
-		// TODO stubbed out for now. We should check the facets if possible and fallback to the latest version
+		// TODO stubbed out for now. We should check the facets if possible and fallback to the version used in the pom.xml
+		String version = getCamelVersionFromMaven(p);
+		if (version != null && 
+			CamelModelFactory.getSupportedCamelVersions().contains(version)) {
+			return version;
+		}
 		return getLatestCamelVersion();
+	}
+	
+	/**
+	 * checks for the camel version in the dependencies of the pom.xml
+	 * 
+	 * @param project
+	 * @return
+	 */
+	public static String getCamelVersionFromMaven(IProject project) {
+		IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml"));
+        String pomPath = pomPathValue.toOSString();
+        final File pomFile = new File(pomPath);
+        try {
+        	final Model model = MavenPlugin.getMaven().readModel(pomFile);
+
+        	// get camel-core or another camel dep
+	        ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency>();
+	        List<Dependency> deps = model.getDependencies();
+	        for (Dependency pomDep : deps) {
+	            if (pomDep.getGroupId().equalsIgnoreCase("org.apache.camel") &&
+	                pomDep.getArtifactId().startsWith("camel-")) {
+	                return pomDep.getVersion();
+	            }
+	        }
+        } catch (Exception ex) {
+        	CamelModelServiceCoreActivator.pluginLog().logError("Unable to load camel version from " + pomPath, ex);
+        }
+        return null;
 	}
 }
