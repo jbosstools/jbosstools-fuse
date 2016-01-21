@@ -63,9 +63,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.ModelViewer;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
 /**
  * @author brianf
@@ -266,11 +268,16 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         idModelValue = null;
 
         WritableList dfList = new WritableList();
-        Collection<CamelModelElement> dataFormats = getModel().camelConfig.getConfigBuilder().getDataFormats();
-        for (Iterator<CamelModelElement> iterator = dataFormats.iterator(); iterator.hasNext();) {
-        	CamelModelElement df = iterator.next();
-            if (df.getId() != null) {
-                dfList.add(df.getId());
+        final IFile camelIFile = getModel().getCamelIFile();
+        CamelConfigBuilder configBuilder = CamelConfigurationHelper.getConfigBuilder(camelIFile.getRawLocation().toFile());
+
+        if (configBuilder != null) {
+            Collection<CamelModelElement> dataFormats = configBuilder.getDataFormats();
+            for (Iterator<CamelModelElement> iterator = dataFormats.iterator(); iterator.hasNext();) {
+            	CamelModelElement df = iterator.next();
+                if (df.getId() != null) {
+                    dfList.add(df.getId());
+                }
             }
         }
         if (dfList.isEmpty()) {
