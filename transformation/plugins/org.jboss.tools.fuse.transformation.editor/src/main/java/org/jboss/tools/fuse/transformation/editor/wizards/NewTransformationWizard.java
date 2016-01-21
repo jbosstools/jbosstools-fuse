@@ -557,7 +557,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         Dependency dep = null;
         String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
         if (dataFormat != null && dataFormat.getNodeTypeId() != null) {
-            if (dataFormat.getNodeTypeId().equalsIgnoreCase("json-jackson")) {
+            if (dataFormat.getNodeTypeId().equalsIgnoreCase("json-jackson") || dataFormat.getNodeTypeId().startsWith("json")) {
                 dep = createDependency("org.apache.camel", "camel-jackson", camelVersion);
             } else if (dataFormat.getNodeTypeId().equalsIgnoreCase("jaxb")) {
                 dep = createDependency("org.apache.camel", "camel-jaxb", camelVersion);
