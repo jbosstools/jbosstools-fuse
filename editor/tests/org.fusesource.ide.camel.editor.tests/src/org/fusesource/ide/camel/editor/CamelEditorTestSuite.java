@@ -11,6 +11,7 @@
 package org.fusesource.ide.camel.editor;
 
 import org.fusesource.ide.camel.editor.properties.FusePropertySectionTest;
+import org.fusesource.ide.camel.editor.properties.ParameterPriorityComparatorTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -18,7 +19,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 					XmlMarshalTest.class,
-					FusePropertySectionTest.class
+					FusePropertySectionTest.class,
+					ParameterPriorityComparatorTest.class
 			 })
 public class CamelEditorTestSuite {
 }
