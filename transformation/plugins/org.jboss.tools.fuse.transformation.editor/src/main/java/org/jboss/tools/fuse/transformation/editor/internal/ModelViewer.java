@@ -435,9 +435,16 @@ public class ModelViewer extends Composite {
 
         private Image getImage(final Object element) {
             final Model model = (Model)element;
+            if (manager != null) {
+                if (model.getChildren() != null && model.getChildren().size() > 0)
+                    return manager.mapped(model) ? Images.MAPPED_NODE : Images.NODE;
+                return manager.mapped(model) ? Images.MAPPED_PROPERTY : Images.PROPERTY;
+            }
+            // if we are hosting the viewer on a wizard page, we don't have the manager
+            // so just default to parent (node) or node (property) in the tree
             if (model.getChildren() != null && model.getChildren().size() > 0)
-                return manager.mapped(model) ? Images.MAPPED_NODE : Images.NODE;
-            return manager.mapped(model) ? Images.MAPPED_PROPERTY : Images.PROPERTY;
+                return Images.NODE;
+            return Images.PROPERTY;
         }
 
         private String getText(final Object element,
