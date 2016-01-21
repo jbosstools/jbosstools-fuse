@@ -58,6 +58,7 @@ import org.jboss.tools.fuse.transformation.core.dozer.DozerMapperConfiguration;
 import org.jboss.tools.fuse.transformation.core.model.json.JsonModelGenerator;
 import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.jboss.tools.fuse.transformation.editor.Activator;
+import org.jboss.tools.fuse.transformation.editor.internal.util.CamelConfigurationHelper;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.internal.util.Util;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.JSONPage;
@@ -127,8 +128,9 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
                                 uiModel.getTargetType(), false);
                         // Update Camel config
                         final IPath resourcesPath = uiModel.getProject().getFolder(Util.RESOURCES_PATH).getFullPath();
+                        final IFile camelIFile = uiModel.getCamelIFile();
 
-                        CamelConfigBuilder configBuilder = uiModel.camelConfig.getConfigBuilder();
+                        CamelConfigBuilder configBuilder = CamelConfigurationHelper.getConfigBuilder(camelIFile.getRawLocation().toFile());
                         if (ModelType.OTHER.equals(uiModel.getSourceType())) {
                             sourceFormat = configBuilder.getDataFormat(uiModel.getSourceDataFormatid());
                         } else {

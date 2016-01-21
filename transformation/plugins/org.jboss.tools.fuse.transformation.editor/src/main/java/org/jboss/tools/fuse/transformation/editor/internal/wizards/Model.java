@@ -183,9 +183,29 @@ public class Model implements PropertyChangeListener {
                 }
             } catch (final Exception e) {
                 // swallow
-                // e.printStackTrace();
+                e.printStackTrace();
             }
         }
+    }
+    
+    /**
+     * @return IFile reference to camel file
+     */
+    public IFile getCamelIFile() {
+        if (camelFilePath != null && !camelFilePath.trim().isEmpty()) {
+            try {
+                IFile test = project.getFile(camelFilePath);
+                if (!test.exists()) {
+                    test = project.getFile(Util.RESOURCES_PATH + camelFilePath);
+                }
+                if (test != null && test.exists()) {
+                    return test;
+                }
+            } catch (final Exception e) {
+                // swallow
+            }
+        }
+        return null;
     }
 
     /**
