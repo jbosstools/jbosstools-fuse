@@ -10,12 +10,13 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.editor.properties;
 
+import static org.junit.Assert.assertEquals;
+
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,7 @@ public class FusePropertySectionTest {
 	@Mock
 	private Label label;
 	
-	private FusePropertySection fusePropertySection = new FusePropertySection();
+	private FusePropertySection fusePropertySection = new DetailsSection();
 	ArgumentCaptor<String> labelCaptor;
 	
 	@Before

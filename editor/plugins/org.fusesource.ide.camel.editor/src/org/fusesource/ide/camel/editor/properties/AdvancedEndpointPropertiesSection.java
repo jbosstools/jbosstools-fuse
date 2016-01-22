@@ -13,16 +13,11 @@ package org.fusesource.ide.camel.editor.properties;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.core.databinding.Binding;
-import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.Observables;
-import org.eclipse.core.databinding.observable.map.IObservableMap;
-import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -46,7 +41,6 @@ import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -68,26 +62,18 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IFormColors;
-import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.forms.widgets.FormsResources;
-import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.editor.utils.DiagramUtils;
-import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.editor.utils.PropertiesUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
-import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
-import org.fusesource.ide.foundation.ui.util.Selections;
 
 /**
  * @author lhein
@@ -99,78 +85,11 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 	public static final String GROUP_CONSUMER 	= "Consumer";
 	public static final String GROUP_PRODUCER 	= "Producer";
 	
-    private FormToolkit toolkit;
-    private Form form;
-    private CTabFolder tabFolder;
-    private List<CTabItem> tabs = new ArrayList<CTabItem>();
-    private CamelModelElement selectedEP;
-    private DataBindingContext dbc;
-    private IObservableMap modelMap = new WritableMap();
-    private Component component;
-    
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#dispose()
-     */
-    @Override
-    public void dispose() {
-        if (toolkit != null) {
-            toolkit.dispose();
-            toolkit = null;
-        }
-        this.component = null;
-        super.dispose();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.eclipse.ui.views.properties.tabbed.AbstractPropertySection#setInput
-     * (org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
-     */
-    @Override
-    public void setInput(IWorkbenchPart part, ISelection selection) {
-        super.setInput(part, selection);
-        
-        this.dbc = new DataBindingContext();
-//        this.modelMap.clear();
-        
-        Object o = Selections.getFirstSelection(selection);
-        CamelModelElement n = NodeUtils.toCamelElement(o);
-        
-        if (n.getNodeTypeId().equalsIgnoreCase("from") || n.getNodeTypeId().equalsIgnoreCase("to")) {
-            this.selectedEP = n;
-            this.component = PropertiesUtils.getComponentFor(selectedEP);
-            form.setText("Advanced Properties - " + DiagramUtils.filterFigureLabel(selectedEP.getDisplayText()));
-        } else {
-            this.selectedEP = null;
-            form.setText("Advanced Properties");
-        }
-        
-        int idx = Math.max(tabFolder.getSelectionIndex(), 0);
-
-        if (this.tabs.isEmpty() == false) {
-        	for (CTabItem tab : this.tabs) {
-        		if (!tab.isDisposed()) tab.dispose();
-        	}
-        	tabs.clear();
-        }
-        
-        // now generate the tab contents
-        createContentTabs(tabFolder);
-        
-        tabFolder.setSingle(tabFolder.getItemCount()==1);
-        tabFolder.setSelection(idx >= tabFolder.getItemCount() ? 0 : idx);
-    }
-    
     /**
      * 
      * @param folder
      */
-    private void createContentTabs(CTabFolder folder) {
+    protected void createContentTabs(CTabFolder folder) {
         List<Parameter> props = PropertiesUtils.getComponentPropertiesFor(selectedEP);
 
         if (props.isEmpty()) return;
@@ -215,29 +134,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
         	}
         }
         
-        // display all the properties in alphabetic order - sorting needed
-        Collections.sort(props, new Comparator<Parameter>() {
-            /* (non-Javadoc)
-             * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-             */
-            @Override
-            public int compare(Parameter o1, Parameter o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        }); 
-        
-        if (tabsToCreate.size()>1) {
-        	// display all the properties in alphabetic order - sorting needed
-            Collections.sort(tabsToCreate, new Comparator<String>() {
-                /* (non-Javadoc)
-                 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-                 */
-                @Override
-                public int compare(String o1, String o2) {
-                    return o1.compareTo(o2);
-                }
-            }); 
-        }
+        props.sort(new ParameterPriorityComparator());
         
         for (String group : tabsToCreate) {
         	CTabItem contentTab = new CTabItem(this.tabFolder, SWT.NONE);
