@@ -80,10 +80,6 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 
-	public static final String GROUP_PATH 		= "Path";
-	public static final String GROUP_COMMON		= "Common";
-	public static final String GROUP_CONSUMER 	= "Consumer";
-	public static final String GROUP_PRODUCER 	= "Producer";
 	
     /**
      * 

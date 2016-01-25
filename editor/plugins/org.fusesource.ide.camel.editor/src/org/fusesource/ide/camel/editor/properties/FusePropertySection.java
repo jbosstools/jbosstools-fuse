@@ -64,7 +64,11 @@ import org.w3c.dom.Node;
  */
 public abstract class FusePropertySection extends AbstractPropertySection {
 
-	public static final String DEFAULT_GROUP = "General";
+	public static final String DEFAULT_GROUP 	= "General";
+	public static final String GROUP_PATH 		= "Path";
+	public static final String GROUP_COMMON		= "Common";
+	public static final String GROUP_CONSUMER 	= "Consumer";
+	public static final String GROUP_PRODUCER 	= "Producer";
 	
 	protected FormToolkit toolkit;
 	protected Form form;
@@ -73,10 +77,11 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected CamelModelElement selectedEP;
     protected DataBindingContext dbc;
     protected IObservableMap modelMap = new WritableMap();
-    protected Eip eip;
     protected Composite parent;
     protected TabbedPropertySheetPage aTabbedPropertySheetPage;
-    protected Component component;
+
+    protected Component component;	// used for connectors
+    protected Eip eip;	// used for eips
     
     /*
      * (non-Javadoc)
@@ -178,6 +183,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         parent.setLayoutData(new GridData(GridData.FILL_BOTH));
     }
     
+    /**
+     * creates the tab folder to hold all tabs
+     */
     private void createTabFolder() {
 
     	if (this.form != null) form.dispose();
@@ -207,6 +215,11 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         tabFolder.setSelection(0);
     }
     
+    /**
+     * creates the tabs needed to be displayed to users
+     * 
+     * @param tabFolder
+     */
     protected abstract void createContentTabs(CTabFolder tabFolder);
     
 	/**
@@ -385,6 +398,13 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		aTabbedPropertySheetPage.resizeScrolledComposite();
     }
     
+    /**
+     * prepares the ui for expression elements
+     * 
+     * @param language
+     * @param expressionElement
+     * @param parent
+     */
     protected void prepareExpressionUIForLanguage(String language, CamelModelElement expressionElement, Composite parent) {
     	CamelModel model = getCamelModel(expressionElement);
     	// now create the new fields
@@ -403,6 +423,15 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	}
     }
     
+    /**
+     * creates the control for the given parameter
+     * 
+     * @param p
+     * @param parent
+     * @param expressionElement
+     * @param lang
+     * @return
+     */
     protected Control getControlForParameter(final Parameter p, Composite parent, final CamelModelElement expressionElement, Language lang) {
     	Control c = null;
     	
@@ -531,6 +560,13 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 		aTabbedPropertySheetPage.resizeScrolledComposite();
     }
     
+    /**
+     * prepares the ui for the data format element
+     * 
+     * @param dataformat
+     * @param dataFormatElement
+     * @param parent
+     */
     protected void prepareDataFormatUIForDataFormat(String dataformat, CamelModelElement dataFormatElement, Composite parent) {
     	CamelModel model = getCamelModel(dataFormatElement);
     	
@@ -550,6 +586,15 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	}
     }
     
+    /**
+     * returns the control for the given parameter
+     * 
+     * @param p
+     * @param parent
+     * @param dataFormatElement
+     * @param df
+     * @return
+     */
     protected Control getControlForParameter(final Parameter p, Composite parent, final CamelModelElement dataFormatElement, DataFormat df) {
     	Control c = null;
     	
