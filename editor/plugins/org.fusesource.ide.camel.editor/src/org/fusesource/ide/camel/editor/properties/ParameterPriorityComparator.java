@@ -25,7 +25,7 @@ public class ParameterPriorityComparator implements Comparator<Parameter> {
 	 */
 	@Override
 	public int compare(Parameter o1, Parameter o2) {
-		if(isRequired(o1) && isRequired(o2) || !isRequired(o1) && !isRequired(o2)){
+		if(areBothRequired(o1, o2) || areNoneRequired(o1, o2)){
 			return o1.getName().compareTo(o2.getName());
 		}
 		if(isRequired(o1) && !isRequired(o2) ){
@@ -33,6 +33,14 @@ public class ParameterPriorityComparator implements Comparator<Parameter> {
 		} else {
 			return 1;
 		}
+	}
+
+	private boolean areNoneRequired(Parameter o1, Parameter o2) {
+		return !isRequired(o1) && !isRequired(o2);
+	}
+
+	private boolean areBothRequired(Parameter o1, Parameter o2) {
+		return isRequired(o1) && isRequired(o2);
 	}
 
 	protected boolean isRequired(Parameter parameter) {
