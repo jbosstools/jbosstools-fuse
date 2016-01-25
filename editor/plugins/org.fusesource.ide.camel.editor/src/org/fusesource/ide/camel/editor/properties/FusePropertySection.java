@@ -238,10 +238,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	    }
 	}
 
-	/**
-	 * @return
-	 */
-	private Display getDisplay() {
+	protected Display getDisplay() {
 		return Display.getDefault();
 	}
 

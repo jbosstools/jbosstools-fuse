@@ -10,7 +10,7 @@
     <relativePath>..</relativePath>
   </parent>
   
-  <artifactId>org.fusesource.ide.camel.editor.tests</artifactId>
-  <packaging>eclipse-plugin</packaging>
-  <name>JBoss Fuse Tooling :: Camel Editor :: Tests :: Camel Editor Tests</name>
+  <artifactId>org.fusesource.ide.camel.editor.tests.integration</artifactId>
+  <packaging>eclipse-test-plugin</packaging>
+  <name>JBoss Fuse Tooling :: Camel Editor :: Tests :: Camel Editor Integration Tests</name>
 </project>

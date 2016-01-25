@@ -17,6 +17,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</properties>
 	<modules>
 		<module>org.fusesource.ide.camel.editor.tests</module>
+		<module>org.fusesource.ide.camel.editor.tests.integration</module>
 	</modules>
 </project>
 	
