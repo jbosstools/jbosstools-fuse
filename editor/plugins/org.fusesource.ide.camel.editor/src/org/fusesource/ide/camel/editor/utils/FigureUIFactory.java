@@ -150,10 +150,10 @@ public class FigureUIFactory {
 		Style style = StyleUtil.getStyleForCamelText(diagram);
 		text.setParentGraphicsAlgorithm(baseFigure);
 		text.setStyle(style);
-		text.setHorizontalAlignment(Orientation.ALIGNMENT_RIGHT);
+		text.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
 		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
 		text.setFont(style.getFont());
-		gaService.setLocationAndSize(text, upperSection.x + image_width + SECTION_OFFSET_X + LABEL_SPACER_X, upperSection.y, upperSection.width - image_width - SECTION_OFFSET_X - LABEL_SPACER_X - LABEL_SPACER_X, upperSection.height);
+		gaService.setLocationAndSize(text, upperSection.x + image_width + SECTION_OFFSET_X + LABEL_SPACER_X + LABEL_SPACER_X, upperSection.y, upperSection.width - image_width - SECTION_OFFSET_X - LABEL_SPACER_X - LABEL_SPACER_X, upperSection.height);
 		markFigureTitleArea(text, image_width);
 		
 		// the lower section figure

@@ -131,7 +131,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
             this.selectedEP = n;
             this.eip = PropertiesUtils.getEipFor(selectedEP);
             String headerText = "";
-            if (eip != null) headerText += eip.getName();
+            if (eip != null) headerText += Strings.convertCamelCase(eip.getName());
             headerText += String.format(" (%s)", DiagramUtils.filterFigureLabel(selectedEP.getDisplayText()));
             form.setText(headerText);
             if (selectedEP.isEndpointElement()) {
