@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -23,7 +24,11 @@ import java.util.regex.Pattern;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -33,6 +38,8 @@ import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -53,6 +60,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -60,12 +68,16 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.fusesource.ide.branding.Activator;
 import org.fusesource.ide.branding.RiderHelpContextIds;
 import org.fusesource.ide.branding.wizards.WizardMessages;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.foundation.ui.archetypes.Archetype;
+import org.fusesource.ide.foundation.ui.archetypes.ArchetypeHelper;
 import org.fusesource.ide.foundation.ui.archetypes.Archetypes;
 import org.fusesource.ide.foundation.ui.util.Selections;
 import org.osgi.framework.Bundle;
@@ -316,6 +328,13 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 						String value = archetype.getArtifactId().replace("archetype-", "").replace("-archetype", "");
 						artifactIdCombo.setText(value);
 						userChangedArtifactId = false;
+					}			
+					if(propertiesViewer!=null){
+						propertiesViewer.setInput(archetype.getRequiredProperties().entrySet());
+						Composite parentControl = propertiesViewer.getTable().getParent();
+						if(parentControl instanceof ExpandableComposite){
+							parentControl.setVisible(archetype.getRequiredProperties().size()>0);							
+						}
 					}
 				} else {
 					descriptionText.setText(""); //$NON-NLS-1$
@@ -349,7 +368,7 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 		Composite composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout(3, false));
 		createArtifactGroup(composite);
-
+		createArchPropertiesGroup(composite);
 		Composite buttonComposite = new Composite(parent, SWT.NONE);
 		GridData gd_buttonComposite = new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 3, 1);
@@ -446,7 +465,80 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 			}
 		});
 	}
-
+	
+	private void createArchPropertiesGroup(final Composite parent){
+		new Label(parent,SWT.NONE);//Spacer (alternatives?)
+		ExpandableComposite expandableProperties = new ExpandableComposite(parent, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);	
+		expandableProperties.setVisible(false);
+		expandableProperties.setText(WizardMessages.FuseProjectWizardArchetypePage_dgPropertyTitle);
+		expandableProperties.setToolTipText(WizardMessages.FuseProjectWizardArchetypePage_dgPropertyMessage);
+		expandableProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+		expandableProperties.addExpansionListener(new ExpansionAdapter() {
+	        public void expansionStateChanged(ExpansionEvent e) {
+	          Shell wizardWindow = parent.getShell();
+	          wizardWindow.setMinimumSize(wizardWindow.getSize().x, wizardWindow.getMinimumSize().y);
+	          wizardWindow.pack();
+	          parent.layout();
+	          wizardWindow.setMinimumSize(wizardWindow.getMinimumSize());
+	        }
+	      });	    
+	    propertiesViewer = new TableViewer(expandableProperties, SWT.BORDER | SWT.FULL_SELECTION);
+	    propertiesViewer.setContentProvider(ArrayContentProvider.getInstance());
+	    propertiesTable = propertiesViewer.getTable();	
+	    final TextCellEditor propertyValueEditor = new TextCellEditor(propertiesTable);
+	    expandableProperties.setClient(propertiesTable);
+	    propertiesTable.setLinesVisible(true);
+	    propertiesTable.setHeaderVisible(true);
+	    TableColumn propertiesTableNameColumn = new TableColumn(propertiesTable, SWT.NONE);
+	    propertiesTableNameColumn.setWidth(150);
+	    propertiesTableNameColumn.setText(WizardMessages.FuseProjectWizardArchetypePage_tableColName);	
+	    new TableViewerColumn(propertiesViewer, propertiesTableNameColumn).setLabelProvider(new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element) {
+				if(element instanceof Map.Entry){
+					return Strings.nullSafeToString(((Map.Entry)element).getKey());
+				}
+				return super.getText(element);
+			}});
+	    TableColumn propertiesTableValueColumn = new TableColumn(propertiesTable, SWT.NONE);
+	    propertiesTableValueColumn.setWidth(250);
+	    propertiesTableValueColumn.setText(WizardMessages.FuseProjectWizardArchetypePage_tableColValue);
+	    TableViewerColumn propValueColumnViewer = new TableViewerColumn(propertiesViewer,propertiesTableValueColumn);
+	    propValueColumnViewer.setLabelProvider(new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element) {
+				if(element instanceof Map.Entry){
+					return Strings.nullSafeToString(((Map.Entry)element).getValue());
+				}
+				return super.getText(element);
+			}});
+	    propValueColumnViewer.setEditingSupport(new EditingSupport(propertiesViewer) {
+			@Override
+			protected void setValue(Object element, Object value) {
+				if(element instanceof Map.Entry){
+					((Map.Entry)element).setValue(value);
+					propertiesViewer.update(element, null);
+				}
+			}
+			@Override
+			protected Object getValue(Object element) {
+				if(element instanceof Map.Entry){
+					return Strings.nullSafeToString(((Map.Entry)element).getValue());
+				}
+				return null;
+			}
+			@Override
+			protected CellEditor getCellEditor(Object element) {
+				return propertyValueEditor;
+			}
+			@Override
+			protected boolean canEdit(Object element) {
+				return true;
+			}
+		});
+	}
+	
+	
 	@Override
 	protected IWizardContainer getContainer() {
 		return super.getContainer();
@@ -478,14 +570,18 @@ public class FuseProjectWizardArchetypePage extends AbstractFuseWizardPage {
 					for (Archetype archetype : list) {
 						ArchetypeDetails details = new ArchetypeDetails(archetype);
 						URL resource = bundle.getResource("/archetypes/" + details.getFullName());
-						details.setResource(resource);
-						answer.add(details);
+						if(resource!=null){
+							details.setResource(resource);
+							details.setRequiredProperties(ArchetypeHelper.getArchetypeRequiredProperties(resource));
+							answer.add(details);
+						}
 					}
 				}
 			}
 			return answer;
 
 		} catch (Exception ce) {
+			Activator.getLogger().error("Error reading archetype files: "+ce.getMessage(), ce);
 			setErrorMessage(WizardMessages.MavenProjectWizardArchetypePage_error_read);
 			return null;
 		}

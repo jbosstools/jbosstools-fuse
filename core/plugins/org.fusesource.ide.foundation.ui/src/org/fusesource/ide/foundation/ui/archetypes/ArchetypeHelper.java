@@ -19,14 +19,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,12 +38,13 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.apache.commons.io.IOUtils;
 
 /**
  * This class is a replacement for <code>mvn archetype:generate</code> without dependencies to
@@ -282,36 +287,8 @@ public class ArchetypeHelper {
     protected void parseReplaceProperties(ZipInputStream zip, Map<String, String> replaceProperties) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         copy(zip, bos);
-
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        DocumentBuilder db = dbf.newDocumentBuilder();
-
-        InputSource inputSource = new InputSource(new ByteArrayInputStream(bos.toByteArray()));
-        Document document = db.parse(inputSource);
-
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        SimpleNamespaceContext nsContext = new SimpleNamespaceContext();
-        nsContext.registerMapping("ad", archetypeDescriptorUri);
-        xpath.setNamespaceContext(nsContext);
-
-        NodeList properties = (NodeList) xpath.evaluate(requiredPropertyXPath, document, XPathConstants.NODESET);
-
-        for (int p = 0; p < properties.getLength(); p++) {
-            Element requiredProperty = (Element) properties.item(p);
-
-            String key = requiredProperty.getAttribute("key");
-            NodeList children = requiredProperty.getElementsByTagNameNS(archetypeDescriptorUri, "defaultValue");
-            String value = "";
-            if (children.getLength() == 1 && children.item(0).hasChildNodes()) {
-                value = children.item(0).getTextContent();
-            } else {
-                if ("name".equals(key) && value.isEmpty()) {
-                    value = "HelloWorld";
-                }
-            }
-            replaceProperties.put(key, value);
-        }
+        Map<String, String> requiredPropertiesFromOriginal = getArchetypeRequiredProperties(bos,false,false);
+        replaceProperties.putAll(requiredPropertiesFromOriginal);
     }
 
     protected String transformContents(String fileContents, Map<String, String> replaceProperties) {
@@ -388,6 +365,69 @@ public class ArchetypeHelper {
         }
 
         return bytesCopied;
+    }
+    
+	public static Map<String, String> getArchetypeRequiredProperties(URL jarURL)
+			throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
+    	ZipInputStream zis = new ZipInputStream(jarURL.openStream());
+    	try{
+        	ZipEntry entry = null;
+        	while ((entry=zis.getNextEntry())!=null) {
+        		try{
+                    if (!entry.isDirectory() && "META-INF/maven/archetype-metadata.xml".equals(entry.getName())) {
+                		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        copy(zis, bos);
+                        bos.flush();
+                        return getArchetypeRequiredProperties(bos,true,true);
+                    }
+        		}finally{
+                    zis.closeEntry();
+        		}
+            }
+    	}finally{
+    		zis.close();
+    	}
+    	return Collections.EMPTY_MAP;
+    }
+    
+	private static Map<String, String> getArchetypeRequiredProperties(ByteArrayOutputStream copyOfArchetypeJar,
+			boolean excludeDepVersionProperties,boolean defaultAllProperties) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    	Map<String,String> propertiesMap = new LinkedHashMap<String,String>();
+ 
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+
+        InputSource inputSource = new InputSource(new ByteArrayInputStream(copyOfArchetypeJar.toByteArray()));
+        Document document = db.parse(inputSource);
+
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        SimpleNamespaceContext nsContext = new SimpleNamespaceContext();
+        nsContext.registerMapping("ad", archetypeDescriptorUri);
+        xpath.setNamespaceContext(nsContext);
+
+        NodeList properties = (NodeList) xpath.evaluate(requiredPropertyXPath, document, XPathConstants.NODESET);
+
+        for (int p = 0; p < properties.getLength(); p++) {
+            Element requiredProperty = (Element) properties.item(p);
+
+            String key = requiredProperty.getAttribute("key");
+            //exclude version properties (externalize and specify the excluded properties?)
+            if(excludeDepVersionProperties && (key.startsWith("version")||key.endsWith("version"))){
+            	continue; 
+            }
+            NodeList children = requiredProperty.getElementsByTagNameNS(archetypeDescriptorUri, "defaultValue");
+            String value = "";
+            if (children.getLength() == 1 && children.item(0).hasChildNodes()) {
+                value = children.item(0).getTextContent();
+            } else {
+                if (("name".equals(key)||defaultAllProperties) && value.isEmpty()) {
+                    value = "HelloWorld";
+                }
+            }
+            propertiesMap.put(key, value);
+        }
+    	return propertiesMap;
     }
 
 }

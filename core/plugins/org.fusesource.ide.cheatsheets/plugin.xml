@@ -13,6 +13,16 @@
             Creates a new Fuse Camel project
          </description>
       </cheatsheet>
+      <cheatsheet
+            category="org.fusesource.ide"
+            composite="false"
+            contentFile="content/createCamelComponentProject.xml"
+            id="org.fusesource.ide.cheatsheets.createCamelComponentProject"
+            name="Create a Camel Component Project">
+         <description>
+            Create a new Camel component project
+         </description>
+      </cheatsheet>
       <category
             id="org.fusesource.ide"
             name="JBoss Fuse">
