@@ -266,6 +266,8 @@
                plugin="org.eclipse.ui.views">
          </contexts>
    </extension>
+   
+   <!-- defining global configuration categories -->
    <extension
          point="org.fusesource.ide.editor.globalConfigContributor">
       <GlobalConfigCategory
