@@ -479,7 +479,7 @@ public class DetailsSection extends FusePropertySection {
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
                         String language = choice.getText();
-                        languageChanged(language, eform, expressionElement, page, prop);
+                        languageChanged(language, eform, selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)selectedEP.getParameter(prop.getName()) : null, page, prop);
                     }
                 });
                 
@@ -527,7 +527,7 @@ public class DetailsSection extends FusePropertySection {
                 choiceCombo.setEditable(false);
                 choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
                 
-                CamelModelElement dataformatElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
+                final CamelModelElement dataformatElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
                 choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
 
                 final Composite eform = getWidgetFactory().createFlatFormComposite(page);
@@ -542,8 +542,7 @@ public class DetailsSection extends FusePropertySection {
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
                         String dataformat = choice.getText();
-                        CamelModelElement dataFormatElement = selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)selectedEP.getParameter(prop.getName()) : null;
-                        dataFormatChanged(dataformat, eform, dataFormatElement, page, prop);
+                        dataFormatChanged(dataformat, eform, selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)selectedEP.getParameter(prop.getName()) : null, page, prop);
                     }
                 });
                 

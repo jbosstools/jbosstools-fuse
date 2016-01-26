@@ -417,6 +417,21 @@ public abstract class FusePropertySection extends AbstractPropertySection {
                 Control field = getControlForParameter(p, parent, expressionElement, lang);
                 field.setToolTipText(p.getDescription());
     		}
+    	} else {
+    		// seems to be not in language catalog - use eip catalog
+    		Eip eip = model.getEipModel().getEIPByName(language);
+    		if (eip != null) {
+    			List<Parameter> props = eip.getParameters();
+        		props.sort(new ParameterPriorityComparator()); 
+        		
+        		for (Parameter p : props) {
+        			createPropertyLabel(toolkit, parent, p);
+                    
+                    // Field
+                    Control field = getControlForParameter(p, parent, expressionElement, lang);
+                    field.setToolTipText(p.getDescription());
+        		}
+    		}
     	}
     }
     
@@ -435,7 +450,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	// BOOLEAN PROPERTIES
     	if (CamelComponentUtils.isBooleanProperty(p)) {
     		final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
-    		Boolean b = Boolean.parseBoolean( (expressionElement != null && expressionElement.getParameter(p.getName()) != null ? (String)expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()));
+    		Boolean b = Boolean.parseBoolean( (expressionElement != null && expressionElement.getParameter(p.getName()) != null ? (String)expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()));
     		checkBox.setSelection(b);
     		checkBox.addSelectionListener(new SelectionAdapter() {
 	            /* (non-Javadoc)
@@ -452,7 +467,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         
     		// TEXT PROPERTIES
     	} else if (CamelComponentUtils.isTextProperty(p)) {
-	        Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+	        Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
@@ -465,7 +480,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         
 	    // NUMBER PROPERTIES
 	    } else if (CamelComponentUtils.isNumberProperty(p)) {
-	        Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+	        Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
@@ -487,7 +502,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
         // OTHER
 	    } else {
-	    	Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang.getParameter(p.getName()).getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+	    	Text txtField = getWidgetFactory().createText(parent, (String)(expressionElement != null && expressionElement.getParameter(p.getName()) != null ? expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
 	        txtField.addModifyListener(new ModifyListener() {
 	            @Override
 	            public void modifyText(ModifyEvent e) {
