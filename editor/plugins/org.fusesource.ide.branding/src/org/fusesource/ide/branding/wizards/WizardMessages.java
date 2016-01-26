@@ -205,6 +205,13 @@ public final class WizardMessages extends NLS {
 	public static String NewMessageWizardPage_statusInvalidFileName;
 	public static String NewMessageWizardPage_statusInvalidExtension;
 	
+	public static String FuseProjectWizardArchetypePage_btnProperty;
+	public static String FuseProjectWizardArchetypePage_tableColName;
+	public static String FuseProjectWizardArchetypePage_tableColValue;
+	public static String FuseProjectWizardArchetypePage_dgPropertyTitle;
+	public static String FuseProjectWizardArchetypePage_dgPropertyMessage;
+	public static String FuseProjectWizardArchetypePage_missingProp;
+	public static String FuseProjectWizardArchetypePage_missingPropTitle;
 	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, WizardMessages.class);

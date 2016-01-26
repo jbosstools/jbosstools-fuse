@@ -13,10 +13,10 @@ package org.fusesource.ide.branding.wizards.project;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
@@ -235,7 +235,19 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 		final String version = archetypePage.getVersion();
 
 		final ArchetypeDetails archetype = archetypePage.getArchetype();
-
+		if(archetype.getRequiredProperties()!=null){
+			List<String> invalidValues = new ArrayList<String>();
+			for(Map.Entry<String, String> paramEntry:archetype.getRequiredProperties().entrySet()){
+				if(paramEntry.getValue()==null||paramEntry.getValue().trim().length()==0){
+					invalidValues.add(paramEntry.getKey());
+				}
+			}
+			if(invalidValues.size()>0){
+				MessageDialog.openError(getShell(),WizardMessages.FuseProjectWizardArchetypePage_missingPropTitle,
+						NLS.bind(WizardMessages.FuseProjectWizardArchetypePage_missingProp, invalidValues.toString()));
+				return false;
+			}
+		}
 		final String javaPackage = archetypePage.getJavaPackage();
 		@SuppressWarnings("unused")
 		final Properties properties = archetypePage.getProperties();
@@ -252,16 +264,13 @@ public class FuseProjectWizard extends AbstractFuseProjectWizard implements
 					IProgressMonitor monitor) throws CoreException {
 
 				try {
-					URL resource = archetype.getResource();
-					InputStream in = resource.openStream();
 					File outputDir = rootPath.toFile();
 					/*
 					 * IFile projectDir = project.getFile("/"); File outputDir =
 					 * IFiles.toFile(projectDir);
 					 */
 
-					createProject(in, outputDir, groupId, artifactId, version,
-							javaPackage);
+					createProject(archetype, outputDir,javaPackage);
 
 					final IProject project = root.getProject(projectName);
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Create a Camel Component Project">
+
+   <intro>
+      <description>
+         This cheat sheet walks you through the steps to create a new <b>Camel component</b> project using the camel-archetype-component archetype.
+	</description>
+   </intro>
+
+<item title="Open the Fuse Integration Perspective">
+  <action pluginId="org.eclipse.ui.cheatsheets" 
+          class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
+          param1="org.fusesource.ide.branding.perspective"/>
+  <description>Select <b>Window &gt; Open Perspective &gt; Fuse Integration</b> in the menu bar at the top of the workbench. This step changes the perspective to set up the Eclipse workbench for development of your Apache Camel routes.</description> 
+</item>
+<item title="Open the New Fuse Project wizard">
+  <description>To create your new project you now need to open the <b>New Fuse Project</b> wizard. You can do that by selecting <b>File &gt; New &gt; Fuse Project</b> from the top menu bar.<br/><br/>
+   Once its open you can specify the location your project should live in and then on the <b>next</b> page you can select from a list of available archetypes.
+    Please select the archetype <b>camel-archetype-component</b> from the list. 
+    If you want you can change the values for the Maven coordinates, archetype properties and the default package name.<br/><br/>Click on <b>Finish</b> to finally create your new project.</description>
+  <command required="true"
+           serialization="org.eclipse.ui.newWizard(newWizardId=org.fusesource.ide.branding.wizards.FuseProjectWizard)"/>
+</item> 
+</cheatsheet>

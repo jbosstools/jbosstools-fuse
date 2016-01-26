@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -44,10 +45,19 @@ public abstract class AbstractFuseProjectWizard extends Wizard {
 	public void createProject(InputStream archetypeJarIn, File outputDir,
 			String groupId, String artifactId, String version,
 			String packageName) {
+		createProject(archetypeJarIn, outputDir, groupId, artifactId, version, packageName, null);
+	}
+	
+	private void createProject(InputStream archetypeJarIn, File outputDir,
+			String groupId, String artifactId, String version,
+			String packageName,Map<String,String> requiredProperties) {
 		ArchetypeHelper helper = new ArchetypeHelper(archetypeJarIn, outputDir,
 				groupId, artifactId, version);
 		if (packageName != null && packageName.length() > 0) {
 			helper.setPackageName(packageName);
+		}
+		if(requiredProperties!=null){
+			helper.setOverrideProperties(requiredProperties);
 		}
 		Activator.getLogger().debug(
 				"Creating archetype for outputDir: " + outputDir);
@@ -59,5 +69,11 @@ public abstract class AbstractFuseProjectWizard extends Wizard {
 		}
 
 		Activator.getLogger().debug("Done!");
+	}
+	
+	protected void createProject(final ArchetypeDetails archetype, File outputDir,String packageName) throws IOException {
+		createProject(archetype.getResource().openStream()/*this is closed in ArchetypeHelper - existing behavior*/,
+				outputDir, archetype.getGroupId(), archetype.getArtifactId(), archetype.getVersion(), packageName,
+				archetype.getRequiredProperties());
 	}
 }
