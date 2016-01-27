@@ -95,10 +95,17 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
 			// load the model
 			try {
 				CamelIOHandler ioHandler = new CamelIOHandler();
-				editor.setModel(ioHandler.loadCamelModel(camelContextFile, new NullProgressMonitor()));
-				camelFile = editor.getModel();
+				CamelFile camelModel = ioHandler.loadCamelModel(camelContextFile, new NullProgressMonitor());
+				if(camelModel != null){
+					editor.setModel(camelModel);
+					camelFile = editor.getModel();
+				} else {
+					CamelEditorUIActivator.pluginLog().logError("Unable to load Camel context file: " + camelContextFile.getRawLocation().toOSString());
+					return false;
+				}
 			} catch (Exception ex) {
 				CamelEditorUIActivator.pluginLog().logError("Unable to load Camel context file: " + camelContextFile.getRawLocation().toOSString(), ex);
+				return false;
 			}
 			return true;
 		}

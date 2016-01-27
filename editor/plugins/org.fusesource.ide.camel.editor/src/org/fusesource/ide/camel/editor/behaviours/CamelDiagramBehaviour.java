@@ -110,4 +110,28 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 		TransactionalEditingDomain eDomain = getEditingDomain();
 		eDomain.addResourceSetListener(camelModelListener);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramBehavior#getEditorInitializationError()
+	 */
+	@Override
+	public String getEditorInitializationError() {
+		return super.getEditorInitializationError();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.graphiti.ui.editor.DiagramBehavior#
+	 * setEditorInitializationError(java.lang.String)
+	 */
+	@Override
+	protected void setEditorInitializationError(String editorInitializationError) {
+		//@formatter:off
+		super.setEditorInitializationError(
+				"An error occured during loading of the diagram.\n" +
+				"Please check that there is no syntax error in Source tab.\n" +
+				"You can launch a validation from right-click menu on this Source tab.");
+		//@formatter:on
+	}
 }
