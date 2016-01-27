@@ -9,5 +9,12 @@
     <artifactId>org.jboss.tools.fuse.transformation.editor</artifactId>
     <packaging>eclipse-plugin</packaging>
     <name>JBoss Fuse Tooling :: Data Transformation :: Plugins :: Editor</name>
+    <dependencies>
+	    <dependency>
+	      <groupId>ca.uhn.hapi</groupId>
+	      <artifactId>hapi-structures-v23</artifactId>
+	      <version>2.2</version>
+	    </dependency>
+    </dependencies>
 
 </project>

@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -71,7 +70,6 @@ import org.jboss.tools.fuse.transformation.editor.internal.wizards.StartPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XMLPage;
 import org.jboss.tools.fuse.transformation.editor.internal.wizards.XformWizardPage;
 import org.jboss.tools.fuse.transformation.extensions.DozerConfigContentTypeDescriber;
-
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JPackage;
@@ -99,6 +97,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     public XMLPage xmlTarget;
     public JSONPage jsonSource;
     public JSONPage jsonTarget;
+//    public Hl7Page hl7Source;
+//    public Hl7Page hl7Target;
     public OtherPage otherSource;
     public OtherPage otherTarget;
     public URLClassLoader loader;
@@ -255,6 +255,14 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
             jsonTarget = new JSONPage("Targetjson", uiModel, false); //$NON-NLS-1$
         }
         addPage(jsonTarget);
+//        if (hl7Source == null) {
+//            hl7Source = new Hl7Page("SourceHl7", uiModel, true);
+//        }
+//        addPage(hl7Source);
+//        if (hl7Target == null) {
+//            hl7Target = new Hl7Page("TargetHl7", uiModel, false);
+//        }
+//        addPage(hl7Target);
         if (otherSource == null) {
             otherSource = new OtherPage("Sourceother", uiModel, true); //$NON-NLS-1$
         }
@@ -351,6 +359,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         resetPage(xmlTarget);
         resetPage(jsonSource);
         resetPage(jsonTarget);
+//        resetPage(hl7Source);
+//        resetPage(hl7Target);
         resetPage(otherSource);
         resetPage(otherTarget);
     }
@@ -521,7 +531,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private void addCamelContextEndpoint(CamelContextElement context, AbstractCamelModelElement endpoint) {
         Map<String, AbstractCamelModelElement> endpoints = context.getEndpointDefinitions();
         if (endpoints == null) {
-            endpoints = new HashMap<String, AbstractCamelModelElement>();
+            endpoints = new HashMap<>();
             context.setEndpointDefinitions(endpoints);
         }
         endpoints.put(endpoint.getId(), endpoint);
@@ -530,7 +540,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private void addDataFormat(CamelContextElement context, AbstractCamelModelElement dataFormat) {
     	Map<String, AbstractCamelModelElement> dataFormats = context.getDataformats();
         if (dataFormats == null) {
-        	dataFormats = new HashMap<String, AbstractCamelModelElement>();
+        	dataFormats = new HashMap<>();
             context.setDataformats(dataFormats);
         }
         dataFormats.put(dataFormat.getId(), dataFormat);
