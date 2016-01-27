@@ -268,7 +268,10 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		});
 		reload();
 		this.treeViewer.setInput(this.model);
-		parentEditor.getDesignEditor().getModel().addModelListener(this);
+		CamelFile designEditorModel = parentEditor.getDesignEditor().getModel();
+		if(designEditorModel != null){
+			designEditorModel.addModelListener(this);
+		}
 		this.treeViewer.expandAll();
 	}
 
@@ -442,50 +445,52 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		}
 		
 		CamelFile cf = parentEditor.getDesignEditor().getModel();
+		
+		if(cf != null){
+			// we add all global beans etc outside context
+			for (Node n : cf.getGlobalDefinitions().values()) {
+				boolean foundMatch = false;
+				for (GlobalConfigElementItem item : elementContributions) {
+					String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;	
+					if (item.getContributor().canHandle(n) && model.containsKey(catId)) {
+						model.get(catId).add(n);
+						foundMatch = true;
+						break;
+					}
+				}
+				if (!foundMatch) model.get(DEFAULT_CAT_ID).add(n);
+			}
 
-		// we add all global beans etc outside context
-		for (Node n : cf.getGlobalDefinitions().values()) {
-			boolean foundMatch = false;
-			for (GlobalConfigElementItem item : elementContributions) {
-				String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;	
-				if (item.getContributor().canHandle(n) && model.containsKey(catId)) {
-					model.get(catId).add(n);
-					foundMatch = true;
-					break;
+			// we add all context wide endpoint elements
+			if (cf.getCamelContext() != null && cf.getCamelContext().getEndpointDefinitions() != null) {
+				for (CamelModelElement cme : cf.getCamelContext().getEndpointDefinitions().values()) {
+					boolean foundMatch = false;
+					for (GlobalConfigElementItem item : elementContributions) {
+						String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
+						if (item.getContributor().canHandle(cme.getXmlNode()) && model.containsKey(catId)) {
+							model.get(catId).add(cme);
+							foundMatch = true;
+							break;
+						}
+					}
+					if (!foundMatch) model.get(DEFAULT_CAT_ID).add(cme);
 				}
 			}
-			if (!foundMatch) model.get(DEFAULT_CAT_ID).add(n);
-		}
-		
-		// we add all context wide endpoint elements
-		if (cf.getCamelContext() != null && cf.getCamelContext().getEndpointDefinitions() != null) {
-			for (CamelModelElement cme : cf.getCamelContext().getEndpointDefinitions().values()) {
-				boolean foundMatch = false;
-				for (GlobalConfigElementItem item : elementContributions) {
-					String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
-					if (item.getContributor().canHandle(cme.getXmlNode()) && model.containsKey(catId)) {
-						model.get(catId).add(cme);
-						foundMatch = true;
-						break;
+
+			// we add all context wide data formats
+			if (cf.getCamelContext() != null && cf.getCamelContext().getDataformats() != null) {
+				for (CamelModelElement cme : cf.getCamelContext().getDataformats().values()) {
+					boolean foundMatch = false;
+					for (GlobalConfigElementItem item : elementContributions) {
+						String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
+						if (item.getContributor().canHandle(cme.getXmlNode()) && model.containsKey(catId)) {
+							model.get(catId).add(cme);
+							foundMatch = true;
+							break;
+						}
 					}
+					if (!foundMatch) model.get(DEFAULT_CAT_ID).add(cme);
 				}
-				if (!foundMatch) model.get(DEFAULT_CAT_ID).add(cme);
-			}
-		}
-		
-		// we add all context wide data formats
-		if (cf.getCamelContext() != null && cf.getCamelContext().getDataformats() != null) {
-			for (CamelModelElement cme : cf.getCamelContext().getDataformats().values()) {
-				boolean foundMatch = false;
-				for (GlobalConfigElementItem item : elementContributions) {
-					String catId = item.getCategoryId() != null && item.getCategoryId().trim().length()>0 ? item.getCategoryId() : DEFAULT_CAT_ID;
-					if (item.getContributor().canHandle(cme.getXmlNode()) && model.containsKey(catId)) {
-						model.get(catId).add(cme);
-						foundMatch = true;
-						break;
-					}
-				}
-				if (!foundMatch) model.get(DEFAULT_CAT_ID).add(cme);
 			}
 		}
 	}

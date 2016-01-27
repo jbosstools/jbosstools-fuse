@@ -60,6 +60,7 @@ import org.fusesource.ide.camel.editor.commands.ImportCamelContextElementsComman
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
@@ -594,11 +595,15 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 					IDocument document = getDocument();
 					if (document != null) {
 						String text = document.get();
-						String newText = designEditor.getModel().getDocumentAsXML();
-						if (!text.equals(newText)) {
-							// only update the document if its actually different
-							// to avoid setting the dirty flag unnecessarily
-							document.set(newText);
+						CamelFile model = designEditor.getModel();
+						if (model != null) {
+							String newText = model.getDocumentAsXML();
+							if (!text.equals(newText)) {
+								// only update the document if its actually
+								// different
+								// to avoid setting the dirty flag unnecessarily
+								document.set(newText);
+							}
 						}
 					}
 				} finally {
@@ -632,12 +637,16 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 				stopDirtyListener();
 				// reload model
 				String text = getDocument().get();
-				designEditor.getModel().reloadModelFromXML(text);
-				// add the diagram contents
-		        ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(), (CamelModelElement)(getDesignEditor().getSelectedContainer() != null ? getDesignEditor().getSelectedContainer() : designEditor.getModel()), null);
-		        designEditor.getEditingDomain().getCommandStack().execute(importCommand);
-		        designEditor.initializeDiagram(importCommand.getDiagram());
-		        designEditor.refreshDiagramContents(null);
+				CamelFile designModel = designEditor.getModel();
+				if (designModel != null) {
+					designModel.reloadModelFromXML(text);
+					// add the diagram contents
+					ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(),
+							(CamelModelElement) (getDesignEditor().getSelectedContainer() != null ? getDesignEditor().getSelectedContainer() : designModel), null);
+					designEditor.getEditingDomain().getCommandStack().execute(importCommand);
+					designEditor.initializeDiagram(importCommand.getDiagram());
+					designEditor.refreshDiagramContents(null);
+				}
 			}
 		};
 		

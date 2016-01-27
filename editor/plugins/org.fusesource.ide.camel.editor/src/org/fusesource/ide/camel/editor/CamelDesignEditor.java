@@ -137,7 +137,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#getDiagramBehavior()
 	 */
 	@Override
-	public DiagramBehavior getDiagramBehavior() {
+	public CamelDiagramBehaviour getDiagramBehavior() {
 		return this.camelDiagramBehaviour;
 	}
 	
@@ -167,41 +167,44 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	@Override
 	protected void setInput(IEditorInput input) {
 		super.setInput(input);
-
-		/**
-         * the following is needed because we miss the first debug events and the first breakpoint wouldn't be highlighted otherwise
-         */
-        try {
-	        for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
-				IResource f = this.model.getResource();
-	        	if (f.getFullPath().toFile().getPath().equals(asFileEditorInput(input).getFile().getFullPath().toFile().getPath())) {
-	        		String endpointId = null;
-	        		
-	        		// first highlight the suspended node
-	        		if (entry != null && entry.getDebugTarget() != null && entry.getDebugTarget().getDebugger() != null) {
-		        		Set<String> ids = entry.getDebugTarget().getDebugger().getSuspendedBreakpointNodeIds();
-		        		if (ids != null && ids.size()>0) {
-		        			endpointId = ids.iterator().next();
+		
+		if(getDiagramBehavior().getEditorInitializationError() == null){
+			/**
+	         * the following is needed because we miss the first debug events and the first breakpoint wouldn't be highlighted otherwise
+	         */
+	        try {
+		        for (CamelDebugRegistryEntry entry : CamelDebugRegistry.getInstance().getEntries().values()) {
+					IResource f = this.model.getResource();
+		        	if (f.getFullPath().toFile().getPath().equals(asFileEditorInput(input).getFile().getFullPath().toFile().getPath())) {
+		        		String endpointId = null;
+		        		
+		        		// first highlight the suspended node
+		        		if (entry != null && entry.getDebugTarget() != null && entry.getDebugTarget().getDebugger() != null) {
+			        		Set<String> ids = entry.getDebugTarget().getDebugger().getSuspendedBreakpointNodeIds();
+			        		if (ids != null && ids.size()>0) {
+			        			endpointId = ids.iterator().next();
+			        		}
+			        		highlightBreakpointNodeWithID(endpointId);
 		        		}
-		        		highlightBreakpointNodeWithID(endpointId);
-	        		}
-	        	}
+		        	}
+		        }
+	        } catch (Exception ex) {
+	        	CamelEditorUIActivator.pluginLog().logError(ex);
 	        }
-        } catch (Exception ex) {
-        	CamelEditorUIActivator.pluginLog().logError(ex);
-        }
-        /**
-         * End of the highlighting code
-         */
-        
-        // setup grid visibility
-        setupGridVisibilityAsync();
-        
-        // update outline view
-        this.outlinePage = new CamelModelOutlinePage(this);
-        
-        setSelectedContainer(getModel().findNode(parent.getCamelXMLInput().getSelectedContainerId()));        
-//		getEditingDomain().getCommandStack().flush();
+	        /**
+	         * End of the highlighting code
+	         */
+	        
+	        // setup grid visibility
+	        setupGridVisibilityAsync();
+	        
+	        // update outline view
+	        this.outlinePage = new CamelModelOutlinePage(this);
+	        
+	        setSelectedContainer(getModel().findNode(parent.getCamelXMLInput().getSelectedContainerId()));        
+//			getEditingDomain().getCommandStack().flush();
+		}
+		
 	}
 	
 	/* (non-Javadoc)
@@ -210,9 +213,12 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		// whenever the design editor is focused we will check for unique id values
-		getModel().getCamelContext().ensureUniqueID(getModel().getCamelContext());
-		DiagramOperations.updateDiagram(this);
+		if (getModel() != null) {
+			// whenever the design editor is focused we will check for unique id
+			// values
+			getModel().getCamelContext().ensureUniqueID(getModel().getCamelContext());
+			DiagramOperations.updateDiagram(this);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -723,7 +729,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	 * refreshes the outline view
 	 */
 	public void refreshOutlineView() {
-		this.outlinePage.modelChanged();
+		if(outlinePage != null){
+			this.outlinePage.modelChanged();
+		}
 	}
 	
 	/**
@@ -745,6 +753,11 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	public void update() {
 		DiagramOperations.updateDiagram(CamelDesignEditor.this);
 		getDiagramBehavior().refresh();
-		if (getDiagramTypeProvider().getDiagram() != null) selectPictogramElements(new PictogramElement[] { getDiagramTypeProvider().getDiagram().getContainer() });
+		if(getModel() != null){
+			Diagram diagram = getDiagramTypeProvider().getDiagram();
+			if (diagram != null){
+				selectPictogramElements(new PictogramElement[] { diagram.getContainer() });
+			}
+		}
 	}
 }

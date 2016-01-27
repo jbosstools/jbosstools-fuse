@@ -16,11 +16,13 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
+import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.platform.IDiagramBehavior;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
@@ -44,11 +46,16 @@ public class DiagramOperations {
 	}
 
 	public static UpdateCommand updateDiagram(CamelDesignEditor designEditor) {
+		CamelFile designEditorModel = designEditor.getModel();
+		if(designEditorModel != null){
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
-		UpdateCommand operation = new UpdateCommand(designEditor, editingDomain, designEditor.getModel().getCamelContext());
+		UpdateCommand operation = new UpdateCommand(designEditor, editingDomain, designEditorModel.getCamelContext());
 		execute(editingDomain, operation, true);
 
 		return operation;
+		} else {
+			return null;
+		}
 	}
 
 	public static DeleteNodeCommand deleteNode(CamelDesignEditor designEditor, CamelModelElement selectedNode) {
@@ -69,12 +76,16 @@ public class DiagramOperations {
 
 	protected static synchronized TransactionalEditingDomain createEditingDomain(CamelDesignEditor designEditor) {
 		TransactionalEditingDomain editingDomain = designEditor.getEditingDomain();
-		Diagram diagram = designEditor.getDiagramTypeProvider().getDiagram();
+		IDiagramTypeProvider diagramTypeProvider = designEditor.getDiagramTypeProvider();
+		if(diagramTypeProvider == null){
+			return null;
+		}
+		Diagram diagram = diagramTypeProvider.getDiagram();
 		if (diagram == null) {
 			return null;
 		}
 		if (editingDomain == null) {
-			IDiagramBehavior diagramBehavior = designEditor.getDiagramTypeProvider().getDiagramBehavior();
+			IDiagramBehavior diagramBehavior = diagramTypeProvider.getDiagramBehavior();
 			if (diagramBehavior != null) {
 				editingDomain = diagramBehavior.getEditingDomain();
 			}

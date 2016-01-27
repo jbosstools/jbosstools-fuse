@@ -102,7 +102,8 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 				// Create the diagram and its file
 				String diagramName = "CamelContext";
 				diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", diagramName, true); //$NON-NLS-1$
-				URI uri = URI.createPlatformResourceURI(camelContextFile.getResource().getLocationURI() != null ? camelContextFile.getResource().getLocationURI().getPath() : camelContextFile.getResource().getFullPath().toOSString(), true);
+				java.net.URI camelContextlocationURI = camelContextFile.getResource().getLocationURI();
+				URI uri = URI.createPlatformResourceURI(camelContextlocationURI != null ? camelContextlocationURI.getPath() : camelContextFile.getResource().getFullPath().toOSString(), true);
 				createdResource = editingDomain.getResourceSet().createResource(uri);
 				createdResource.getContents().add(diagram);
 			}
