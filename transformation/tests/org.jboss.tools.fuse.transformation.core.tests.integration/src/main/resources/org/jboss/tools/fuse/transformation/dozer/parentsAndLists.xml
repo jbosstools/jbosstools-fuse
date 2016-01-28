@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping>
+        <class-a>example.ListsAndNestedTypes</class-a>
+        <class-b>example.ListsAndNestedTypes</class-b>
+        <field>
+            <a>nested1.field1</a>
+            <b>nested2.field1</b>
+        </field>
+        <field>
+            <a>nested1.field2</a>
+            <b>nested2.field2</b>
+        </field>
+        <field>
+            <a>nested1.classB.B1</a>
+            <b>nested2.classB.B3</b>
+        </field>
+        <field>
+            <a>nested1.classB.B2</a>
+            <b>nested2.classB.B1</b>
+        </field>
+        <field>
+            <a>listOfAs</a>
+            <b>listOfAs</b>
+        </field>
+    </mapping>
+    <mapping>
+        <class-a>example.AClass</class-a>
+        <class-b>example.AClass</class-b>
+        <field>
+            <a>A1</a>
+            <b>A2</b>
+        </field>
+        <field>
+            <a>A2</a>
+            <b>A3</b>
+        </field>
+        <field>
+            <a>A3</a>
+            <b>A1</b>
+        </field>
+    </mapping>
+	
+</mappings>

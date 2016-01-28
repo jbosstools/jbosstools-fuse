@@ -114,7 +114,8 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         IRunnableWithProgress op = new IRunnableWithProgress() {
             @Override
             public void run(IProgressMonitor monitor) {
-                final MapperConfiguration dozerConfigBuilder = DozerMapperConfiguration.newConfig();
+				// TODO: check if it is not the Project classloader that we need
+				final MapperConfiguration dozerConfigBuilder = DozerMapperConfiguration.newConfig(this.getClass().getClassLoader());
                 final File newFile = new File(file.getLocationURI());
                 if (!newFile.getParentFile().exists()) {
                     newFile.getParentFile().mkdirs();
