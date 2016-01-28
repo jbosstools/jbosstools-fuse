@@ -70,6 +70,7 @@ public class UIMessages extends NLS {
 	public static String globalElementsTabDeleteButtonTooltip;
 	
 	public static String newGlobalConfigurationTypeWizardDialogTitle;
+	public static String CamelDiagramBehaviour_messageOnErrorEditorInitialization;
 	
 	
     static {
