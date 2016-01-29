@@ -188,7 +188,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
             
             // BOOLEAN PROPERTIES
             if (CamelComponentUtils.isBooleanProperty(prop)) {
-                Button checkBox = toolkit.createButton(page, "", SWT.CHECK | SWT.BORDER);
+				Button checkBox = toolkit.createButton(page, "", SWT.CHECK);
                 Boolean b = (Boolean)PropertiesUtils.getTypedPropertyFromUri(selectedEP, prop, component);
                 checkBox.setSelection(b);
                 checkBox.addSelectionListener(new SelectionAdapter() {

@@ -449,7 +449,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	
     	// BOOLEAN PROPERTIES
     	if (CamelComponentUtils.isBooleanProperty(p)) {
-    		final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
+			final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK);
     		Boolean b = Boolean.parseBoolean( (expressionElement != null && expressionElement.getParameter(p.getName()) != null ? (String)expressionElement.getParameter(p.getName()) : lang != null ? lang.getParameter(p.getName()).getDefaultValue() : p.getDefaultValue()));
     		checkBox.setSelection(b);
     		checkBox.addSelectionListener(new SelectionAdapter() {
@@ -612,7 +612,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	
     	// BOOLEAN PROPERTIES
     	if (CamelComponentUtils.isBooleanProperty(p)) {
-    		final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK | SWT.BORDER);
+			final Button checkBox = getWidgetFactory().createButton(parent, "", SWT.CHECK);
     		String boolVal = dataFormatElement.getParameter(p.getName()) instanceof Boolean ? Boolean.toString((boolean)dataFormatElement.getParameter(p.getName())) : (String)dataFormatElement.getParameter(p.getName());
     		Boolean b = Boolean.parseBoolean( (dataFormatElement != null && dataFormatElement.getParameter(p.getName()) != null ? boolVal : df.getParameter(p.getName()).getDefaultValue()));
     		checkBox.setSelection(b);
