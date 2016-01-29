@@ -181,7 +181,7 @@ public class DetailsSection extends FusePropertySection {
             	
             // BOOLEAN PROPERTIES
             } else if (CamelComponentUtils.isBooleanProperty(prop)) {
-                Button checkBox = getWidgetFactory().createButton(page, "", SWT.CHECK | SWT.BORDER);
+				Button checkBox = getWidgetFactory().createButton(page, "", SWT.CHECK);
                 Boolean b = Boolean.parseBoolean( (this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()).toString() : this.eip.getParameter(p.getName()).getDefaultValue()));
                 checkBox.setSelection(b);
                 checkBox.addSelectionListener(new SelectionAdapter() {
