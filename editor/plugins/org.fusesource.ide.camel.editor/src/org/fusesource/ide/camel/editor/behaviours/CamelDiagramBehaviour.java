@@ -21,6 +21,7 @@ import org.eclipse.graphiti.ui.editor.IDiagramContainerUI;
 import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelModelChangeListener;
+import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.CamelDiagramEditorContextMenuProvider;
 
 /**
@@ -127,11 +128,6 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	 */
 	@Override
 	protected void setEditorInitializationError(String editorInitializationError) {
-		//@formatter:off
-		super.setEditorInitializationError(
-				"An error occured during loading of the diagram.\n" +
-				"Please check that there is no syntax error in Source tab.\n" +
-				"You can launch a validation from right-click menu on this Source tab.");
-		//@formatter:on
+		super.setEditorInitializationError(UIMessages.CamelDiagramBehaviour_messageOnErrorEditorInitialization);
 	}
 }
