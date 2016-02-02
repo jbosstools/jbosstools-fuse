@@ -20,6 +20,7 @@ import org.eclipse.graphiti.mm.algorithms.Image;
 import org.eclipse.graphiti.mm.algorithms.Text;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -29,6 +30,8 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
  */
 public class UpdateNodeFeature extends AbstractUpdateFeature {
 
+	private boolean changed = false;
+	
 	public UpdateNodeFeature(IFeatureProvider fp) {
 		super(fp);
 	}
@@ -59,6 +62,12 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 		Object bo = getBusinessObjectForPictogramElement(pictogramElement);
 		if (bo instanceof CamelModelElement) {
 			CamelModelElement eClass = (CamelModelElement) bo;
+			// do check if underlying xml node changed / document changed
+			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
+			CamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
+			if (bo2 != null && bo2.getXmlNode().isEqualNode(eClass.getXmlNode()) == false) {
+				return Reason.createTrueReason("The Model has been changed. Please update the figure."); //$NON-NLS-1$
+			}
 			businessName = DiagramUtils.filterFigureLabel(eClass.getDisplayText());
 		}
 
@@ -77,12 +86,23 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 	 * @see org.eclipse.graphiti.func.IUpdate#update(org.eclipse.graphiti.features.context.IUpdateContext)
 	 */
 	public boolean update(IUpdateContext context) {
+		this.changed = false;
+		
 		// retrieve name from business model
 		String businessName = null;
 		PictogramElement pictogramElement = context.getPictogramElement();
 		Object bo = getBusinessObjectForPictogramElement(pictogramElement);
 		if (bo instanceof CamelModelElement) {
 			CamelModelElement eClass = (CamelModelElement) bo;
+		
+			// do check if underlying xml node changed / document changed
+			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
+			CamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
+			if (bo2 != null && bo2.getXmlNode().isEqualNode(eClass.getXmlNode()) == false) {
+				link(pictogramElement, bo2);
+				this.changed = true;
+			}
+			
 			businessName = DiagramUtils.filterFigureLabel(eClass.getDisplayText());
 		}
 
@@ -90,8 +110,6 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 		if (pictogramElement instanceof ContainerShape) {
 			ContainerShape cs = (ContainerShape) pictogramElement;
  			
-			boolean finished_label = false;
-			boolean finished_icon = false;
 			// now also adapt the text label of the figure
 			for (GraphicsAlgorithm shape : cs.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
 				// special handling for the text shape as its the figures label
@@ -100,7 +118,7 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 					// set the new figure label
 					text.setValue(businessName);
 					
-					finished_label = true;
+					this.changed = true;
 				} else if (shape instanceof Image) {
 					// update the icon image
 					CamelModelElement addedClass = (CamelModelElement)bo;
@@ -109,16 +127,19 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 					String iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());
 					((Image)shape).setId(iconKey);
 					
-					finished_icon = true;
-				}
-				if (finished_icon && finished_label) {
-//					// and update the diagram layout afterwards
-//					DiagramOperations.layoutDiagram(Activator.getDiagramEditor());
-					return false;
+					this.changed = true;
 				}
 			}
 		}
 
-		return false;
+		return this.changed;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#hasDoneChanges()
+	 */
+	@Override
+	public boolean hasDoneChanges() {
+		return this.changed;
 	}
 }

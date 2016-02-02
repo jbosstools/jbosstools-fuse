@@ -105,7 +105,7 @@ public class CamelDiagramBehaviour extends DiagramBehavior {
 	 */
 	@Override
 	protected void registerBusinessObjectsListener() {
-		super.registerBusinessObjectsListener();
+//		super.registerBusinessObjectsListener();
 		this.camelModelListener = new CamelModelChangeListener(this.camelDesignEditor);
 		
 		TransactionalEditingDomain eDomain = getEditingDomain();

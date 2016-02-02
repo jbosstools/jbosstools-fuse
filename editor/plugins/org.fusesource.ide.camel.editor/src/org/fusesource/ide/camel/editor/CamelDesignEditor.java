@@ -313,6 +313,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	    if (diagramTypeProvider.getDiagram() != diagram) {
 	    	diagramTypeProvider.resourceReloaded(diagram);
 	    }
+	    
+	    diagramTypeProvider.init(diagram, getDiagramBehavior());
+		getDiagramBehavior().getRefreshBehavior().initRefresh();
 	}
     
 	/**
@@ -759,5 +762,13 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				selectPictogramElements(new PictogramElement[] { diagram.getContainer() });
 			}
 		}
+	}
+	
+	/**
+	 * clears the cache
+	 */
+	public void clearCache() {
+		getDiagramTypeProvider().getDiagram().eResource().eAdapters().clear();
+		getEditingDomain().getResourceSet().getResources().remove(getDiagramTypeProvider().getDiagram().eResource());
 	}
 }

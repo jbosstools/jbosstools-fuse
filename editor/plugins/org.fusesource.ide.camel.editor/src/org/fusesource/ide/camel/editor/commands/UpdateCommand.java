@@ -23,6 +23,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
  * @author lhein
  */
 public class UpdateCommand extends RecordingCommand {
+	
 	private final CamelDesignEditor designEditor;
 	private CamelModelElement node;
 
@@ -50,6 +51,13 @@ public class UpdateCommand extends RecordingCommand {
 //			CamelEditorUIActivator.pluginLog().logInfo("Warning could not find PictogramElement for selectedNode: " + node);
 			return;
 		}
+		
+		// do check if underlying xml node changed / document changed
+		CamelModelElement bo2 = designEditor.getModel().findNode(node.getId());
+		if (pe != null && bo2 != null && bo2.getXmlNode().isEqualNode(node.getXmlNode()) == false) {
+			designEditor.getFeatureProvider().link(pe, bo2);
+		}
+		
 		UpdateContext ctx = new UpdateContext(pe);
 		IUpdateFeature updateFeature = designEditor.getFeatureProvider().getUpdateFeature(ctx);
 		updateFeature.update(ctx);

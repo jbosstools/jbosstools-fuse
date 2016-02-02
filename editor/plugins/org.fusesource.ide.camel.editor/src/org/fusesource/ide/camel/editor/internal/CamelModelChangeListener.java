@@ -29,6 +29,7 @@ import org.eclipse.graphiti.platform.IDiagramBehavior;
 import org.eclipse.graphiti.platform.IDiagramContainer;
 import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
  * @author lhein
@@ -47,36 +48,18 @@ public class CamelModelChangeListener  implements ResourceSetListener {
 	 */
 	@Override
 	public void resourceSetChanged(ResourceSetChangeEvent event) {
-		//		// if there is no diagramLink, we have also no pictogramLinks -> no
-		//		// references to bo's -> don't handle change events
-		//		if (getDiagramTypeProvider() instanceof AbstractDiagramTypeProvider) {
-		//			DiagramLink cachedDiagramLink = ((AbstractDiagramTypeProvider) getDiagramTypeProvider()).getCachedDiagramLink();
-		//			if (cachedDiagramLink == null) {
-		//				return;
-		//			}
-		//		}
-		// if we have no pictogramLinks -> no
-		// references to bo's -> don't handle change events
-		Diagram diagram = getDiagramTypeProvider().getDiagram();
-		if (diagram != null) {
-			if (diagram.getPictogramLinks().size() == 0) {
-				return;
-			}
-		}
-
 		// Compute changed BOs.
-		final Set<EObject> changedBOs = new HashSet<EObject>();
+		final Set<PictogramElement> changedBOs = new HashSet<PictogramElement>();
 		List<Notification> notifications = event.getNotifications();
 		for (Notification notification : notifications) {
 			Object notifier = notification.getNotifier();
-			if (!(notifier instanceof EObject)) {
+			if (!(notifier instanceof PictogramElement)) {
 				continue;
 			}
-			changedBOs.add((EObject) notifier);
+			changedBOs.add((PictogramElement) notifier);
 		}
 
-		final PictogramElement[] dirtyPes = getDiagramTypeProvider().getNotificationService().calculateRelatedPictogramElements(
-				changedBOs.toArray());
+		final PictogramElement[] dirtyPes = getDiagramTypeProvider().getNotificationService().calculateRelatedPictogramElements(changedBOs.toArray());
 
 		// Do nothing if no BO linked to the diagram changed.
 		if (dirtyPes.length == 0) {
@@ -92,7 +75,7 @@ public class CamelModelChangeListener  implements ResourceSetListener {
 			@Override
 			public void run() {
 
-				if (getDiagramTypeProvider().isAutoUpdateAtRuntime() && getDiagramContainer().isDirty()) {
+				if (getDiagramTypeProvider().isAutoUpdateAtRuntime()) { //&& getDiagramContainer().isDirty()) {
 					// The notification service takes care of not only the
 					// linked BOs but also asks the diagram provider about
 					// related BOs.

@@ -98,15 +98,14 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 			designEditor.getParent().stopDirtyListener();
 			if (designEditor.getModel() != null) designEditor.getModel().unregisterDOMListener();
 			
-			if (this.diagram == null) {
-				// Create the diagram and its file
-				String diagramName = "CamelContext";
-				diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", diagramName, true); //$NON-NLS-1$
-				java.net.URI camelContextlocationURI = camelContextFile.getResource().getLocationURI();
-				URI uri = URI.createPlatformResourceURI(camelContextlocationURI != null ? camelContextlocationURI.getPath() : camelContextFile.getResource().getFullPath().toOSString(), true);
-				createdResource = editingDomain.getResourceSet().createResource(uri);
-				createdResource.getContents().add(diagram);
-			}
+			// Create the diagram and its file
+			String diagramName = "CamelContext";
+			diagram = Graphiti.getPeCreateService().createDiagram("CamelContext", diagramName, true); //$NON-NLS-1$
+			java.net.URI camelContextlocationURI = camelContextFile.getResource().getLocationURI();
+			URI uri = URI.createPlatformResourceURI(camelContextlocationURI != null ? camelContextlocationURI.getPath() : camelContextFile.getResource().getFullPath().toOSString(), true);
+			createdResource = editingDomain.getResourceSet().createResource(uri);
+			createdResource.getContents().add(diagram);
+
 			IDiagramTypeProvider dtp = GraphitiUi.getExtensionManager().createDiagramTypeProvider(diagram, "org.fusesource.ide.camel.editor.dtp.id"); //$NON-NLS-1$
 			IFeatureProvider featureProvider = dtp.getFeatureProvider();
 			CamelDiagramLoader diagramReader = new CamelDiagramLoader(diagram, featureProvider);
@@ -135,6 +134,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
+			if (designEditor.getDiagramTypeProvider() != null) designEditor.getDiagramTypeProvider().resourceReloaded(diagram);
 			designEditor.getParent().startDirtyListener();
 			designEditor.getModel().registerDOMListener();
 		}
