@@ -464,12 +464,13 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 				ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(CamelDesignEditor.this, getEditingDomain(), container, null);
 		        getEditingDomain().getCommandStack().execute(importCommand);
 		        initializeDiagram(importCommand.getDiagram());
-		        refreshDiagramContents(null);
+		        refreshDiagramContents(importCommand.getDiagram());
+		        update();
 		        parent.updateSelectedContainer(getSelectedContainer() != null ? getSelectedContainer().getId() : getModel().getCamelContext().getId());
 		        outlinePage.changeInput(container);
 			}
 		};
-		Display.getDefault().syncExec(r);
+		Display.getDefault().asyncExec(r);
 	}
 
 	/**
