@@ -62,10 +62,6 @@ public class CamelModelOutlineContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public Object getParent(Object element) {
-		if (element instanceof CamelModelElement) {
-			CamelModelElement e = (CamelModelElement)element;
-			return ((CamelModelElement) element).getParent();
-		}
 		return null;
 	}
 

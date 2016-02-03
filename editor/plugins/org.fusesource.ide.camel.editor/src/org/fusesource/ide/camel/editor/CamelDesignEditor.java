@@ -77,6 +77,7 @@ import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
@@ -689,9 +690,9 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	@Override
 	public void setSelectedNode(CamelModelElement newSelection) {
 		if (newSelection != null) {
-			EditPart selectEditPart = findEditPart(newSelection, getRootEditPart());
-			if (selectEditPart != null && selectEditPart.isSelectable()) {
-				getEditorSite().getSelectionProvider().setSelection(new StructuredSelection(selectEditPart));
+			Object editPart = getGraphicalViewer().getEditPartRegistry().get(getFeatureProvider().getPictogramElementForBusinessObject(newSelection));
+			if (editPart != null) {
+				getEditorSite().getSelectionProvider().setSelection(new StructuredSelection(editPart));
 			} else {
 				CamelEditorUIActivator.pluginLog().logError("Could not select editPart for selection: " + newSelection);
 			}

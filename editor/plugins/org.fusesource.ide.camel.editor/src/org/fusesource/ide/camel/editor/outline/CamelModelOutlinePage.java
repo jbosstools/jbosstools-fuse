@@ -16,6 +16,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
+import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
 
@@ -55,8 +57,9 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 		viewer.setContentProvider(new CamelModelOutlineContentProvider());
 		viewer.setLabelProvider(new CamelModelOutlineLabelProvider());
 		viewer.addSelectionChangedListener(this);
-		CamelModelElement[] container = new CamelModelElement[] { this.designEditor.getSelectedContainer() != null ? this.designEditor.getSelectedContainer() : this.designEditor.getModel().getCamelContext() };
-		viewer.setInput(container);
+		CamelModelElement selectedContainer = this.designEditor.getSelectedContainer();
+		if (selectedContainer == null) selectedContainer = this.designEditor.getModel().getCamelContext();
+		viewer.setInput(getModelRoots(selectedContainer));
 		viewer.expandAll();
 	}
 	
@@ -113,8 +116,20 @@ public class CamelModelOutlinePage extends ContentOutlinePage implements ICamelM
 	 */
 	public void changeInput(CamelModelElement container) {
 		if (getTreeViewer() != null && getTreeViewer().getTree().isDisposed() == false) {
-			getTreeViewer().setInput(new CamelModelElement[] { container });
+			getTreeViewer().setInput(getModelRoots(container));
 			modelChanged();
 		}
+	}
+	
+	private CamelModelElement[] getModelRoots(CamelModelElement selectedContainer) {
+		CamelModelElement[] container = null;
+		if (selectedContainer instanceof CamelFile) {
+			container = selectedContainer.getChildElements().get(0).getChildElements().toArray(new CamelModelElement[selectedContainer.getChildElements().size()]);
+		} else if (selectedContainer instanceof CamelContextElement) {
+			container = selectedContainer.getChildElements().toArray(new CamelModelElement[selectedContainer.getChildElements().size()]);
+		} else {
+			container = new CamelModelElement[] { selectedContainer };
+		}
+		return container;
 	}
 }
