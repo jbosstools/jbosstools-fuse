@@ -31,3 +31,4 @@ Export-Package: org.fusesource.ide.camel.model.service.core,
  org.fusesource.ide.camel.model.service.core.jmx.camel,
  org.fusesource.ide.camel.model.service.core.model,
  org.fusesource.ide.camel.model.service.core.util
+Bundle-ClassPath: .
