@@ -319,7 +319,7 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 		});
 
 		GridData data_btn_variables = new GridData(SWT.RIGHT, SWT.TOP, true, false);
-		btn_variables = new Button(grp_condition, SWT.BORDER | SWT.PUSH);
+		btn_variables = new Button(grp_condition, SWT.FLAT | SWT.PUSH);
 		btn_variables.setText("Variables");
 		btn_variables.setToolTipText("Select a predefined variable...");
 		btn_variables.setLayoutData(data_btn_variables);

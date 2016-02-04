@@ -194,7 +194,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			}
 		});
 		
-		this.btnAdd = new Button(parent, SWT.BORDER | SWT.PUSH);
+		this.btnAdd = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnAdd.setText(UIMessages.globalElementsTabAddButtonLabel);
 		this.btnAdd.setToolTipText(UIMessages.globalElementsTabAddButtonTooltip);
 		GridData gd = new GridData(GridData.FILL, GridData.BEGINNING, false,
@@ -217,7 +217,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 		});
 		this.btnAdd.setEnabled(elementContributions.isEmpty() == false);
 
-		this.btnModify = new Button(parent, SWT.BORDER | SWT.PUSH);
+		this.btnModify = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnModify.setText(UIMessages.globalElementsTabEditButtonLabel);
 		this.btnModify.setToolTipText(UIMessages.globalElementsTabEditButtonTooltip);
 		this.btnModify.setLayoutData(new GridData(GridData.FILL,
@@ -236,7 +236,7 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 			}
 		});
 
-		this.btnDelete = new Button(parent, SWT.BORDER | SWT.PUSH);
+		this.btnDelete = new Button(parent, SWT.FLAT | SWT.PUSH);
 		this.btnDelete.setText(UIMessages.globalElementsTabDeleteButtonLabel);
 		this.btnDelete.setToolTipText(UIMessages.globalElementsTabDeleteButtonTooltip);
 		this.btnDelete.setLayoutData(new GridData(GridData.FILL,
