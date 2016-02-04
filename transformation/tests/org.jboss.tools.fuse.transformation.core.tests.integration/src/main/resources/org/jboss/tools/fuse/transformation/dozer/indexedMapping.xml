@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping>
+        <class-a>example.DeepList</class-a>
+        <class-b>example.DeepList</class-b>
+        <field>
+            <a>fieldL1</a>
+            <b>listL1[0].fieldL2</b>
+        </field>
+        <field>
+            <a>listL1[0].listL2[0].fieldL3</a>
+            <b>fieldL1</b>
+        </field>
+    </mapping>
+</mappings>

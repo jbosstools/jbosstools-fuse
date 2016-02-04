@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
@@ -1101,14 +1102,17 @@ public class CamelModelElement {
 		String prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
 		if (getCamelFile() != null) {
 			// get the project from the camel file resource
-			IProject prj = getCamelFile().getResource().getProject();
-			// now try to determine the configured camel version from the
-			// project
-			prjCamelVersion = CamelModelFactory.getCamelVersion(prj);
-			// if project doesn't define a camel version we grab the latest
-			// supported
-			if (prjCamelVersion == null)
-				prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
+			IResource camelResource = getCamelFile().getResource();
+			if (camelResource != null) {
+				IProject prj = camelResource.getProject();
+				// now try to determine the configured camel version from the
+				// project
+				prjCamelVersion = CamelModelFactory.getCamelVersion(prj);
+				// if project doesn't define a camel version we grab the latest
+				// supported
+				if (prjCamelVersion == null)
+					prjCamelVersion = CamelModelFactory.getLatestCamelVersion();
+			}
 		}
 		// then get the meta model for the given camel version
 		CamelModel model = CamelModelFactory.getModelForVersion(prjCamelVersion);
