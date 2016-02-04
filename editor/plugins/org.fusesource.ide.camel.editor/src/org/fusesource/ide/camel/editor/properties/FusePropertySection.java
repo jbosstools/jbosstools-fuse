@@ -18,6 +18,9 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -679,4 +682,16 @@ public abstract class FusePropertySection extends AbstractPropertySection {
     	
     	return c;
     }
+
+	protected void createHelpDecoration(Parameter parameter, Control control) {
+		String description = parameter.getDescription();
+		if (description != null) {
+			ControlDecoration helpDecoration = new ControlDecoration(control, SWT.BOTTOM | SWT.LEFT);
+			helpDecoration.setShowOnlyOnFocus(true);
+			FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION);
+			helpDecoration.setImage(fieldDecoration.getImage());
+			helpDecoration.setDescriptionText(description);
+			control.setToolTipText(description);
+		}
+	}
 }
