@@ -786,7 +786,7 @@ public class DetailsSection extends FusePropertySection {
         	}
             ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT); 
             
-            if (p.getDescription() != null) c.setToolTipText(p.getDescription());
+			createHelpDecoration(p, c);
         }
         page.layout();
     }
