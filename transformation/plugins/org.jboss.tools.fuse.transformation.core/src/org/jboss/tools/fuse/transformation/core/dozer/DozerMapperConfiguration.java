@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -64,8 +65,9 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             throws Exception {
         return new DozerMapperConfiguration(stream, loader);
     }
-    public static DozerMapperConfiguration newConfig() {
-        DozerMapperConfiguration config = new DozerMapperConfiguration();
+
+	public static DozerMapperConfiguration newConfig(ClassLoader loader) {
+		DozerMapperConfiguration config = new DozerMapperConfiguration(loader);
         Configuration dozerConfig = config.getDozerConfig().getConfiguration();
         if (dozerConfig == null) {
             dozerConfig = new Configuration();
@@ -92,10 +94,6 @@ public class DozerMapperConfiguration implements MapperConfiguration {
             new Model("expressions", EXPRESSION_MAPPER_CLASS)
                     .addChild("expression", java.lang.String.class.getName());
 
-    private DozerMapperConfiguration() {
-        this(new Mappings());
-    }
-
     private DozerMapperConfiguration(final File file, final ClassLoader loader) throws Exception {
         mapConfig = (Mappings) getJAXBContext().createUnmarshaller().unmarshal(file);
         this.loader = loader;
@@ -106,11 +104,12 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         this.loader = loader;
     }
 
-    private DozerMapperConfiguration(final Mappings mapConfig) {
-        this.mapConfig = mapConfig;
-    }
+	private DozerMapperConfiguration(ClassLoader loader) {
+		this.mapConfig = new Mappings();
+		this.loader = loader;
+	}
 
-    // Adds a <class-a> and <class-b> mapping definition to the dozer config.
+	// Adds a <class-a> and <class-b> mapping definition to the dozer config.
     // If multiple fields within a class are being mapped, this should only
     // be called once.
     @Override
@@ -180,7 +179,10 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return new DozerVariable(dozerVar);
     }
 
-    Mapping getClassMapping(final Model source, final Model target) {
+	/**
+	 * /!\ Public for Test purpose
+	 */
+	public Mapping getClassMapping(final Model source, final Model target) {
         return getClassMapping(getRootType(source), getRootType(target));
     }
 
@@ -202,7 +204,10 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return null;
     }
 
-    Mappings getDozerConfig() {
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public Mappings getDozerConfig() {
         return mapConfig;
     }
 
@@ -346,7 +351,10 @@ public class DozerMapperConfiguration implements MapperConfiguration {
         return root;
     }
 
-    String getRootType(Model field) {
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public String getRootType(Model field) {
         return getRootType(field, DozerUtil.noIndex(field));
     }
 

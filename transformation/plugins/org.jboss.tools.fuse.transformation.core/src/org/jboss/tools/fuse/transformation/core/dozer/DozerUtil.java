@@ -99,7 +99,10 @@ public final class DozerUtil {
         return name.toString();
     }
     
-    static Integer getIndex(String fieldName) {
+	/**
+	 * /!\ Public for test purpose
+	 */
+	public static Integer getIndex(String fieldName) {
         Matcher matcher = INDEX_PATTERN.matcher(fieldName);
         if (matcher.find()) {
             String indexStr = matcher.group();

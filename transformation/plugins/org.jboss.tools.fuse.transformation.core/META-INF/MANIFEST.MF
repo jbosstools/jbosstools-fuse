@@ -37,5 +37,6 @@ Export-Package: com.google.gson;x-friends:="org.jboss.tools.fuse.transformation.
  org.jboss.tools.fuse.transformation.core.dozer.config,
  org.jboss.tools.fuse.transformation.core.model,
  org.jboss.tools.fuse.transformation.core.model.json,
- org.jboss.tools.fuse.transformation.core.model.xml
+ org.jboss.tools.fuse.transformation.core.model.xml,
+ org.jboss.tools.fuse.transformation.core.test
 
