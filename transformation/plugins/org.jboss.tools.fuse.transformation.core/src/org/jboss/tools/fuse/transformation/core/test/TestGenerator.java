@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class TestGenerator {
 
-    private static final String TEST_TEMPLATE = "templates/TestTemplate.java";
+	private static final String TEST_TEMPLATE = "TestTemplate.java.template";
     private static final String ENDPOINT_KEY = "\\$\\[transform-id\\]";
     private static final String PACKAGE_KEY = "\\$\\[package-name\\]";
     private static final String CLASSNAME_KEY = "\\$\\[test-name\\]";
@@ -63,14 +63,12 @@ public class TestGenerator {
 
     private static String readTemplate() throws Exception {
         StringBuilder templateStr = new StringBuilder();
-        try (InputStreamReader reader =
-                 new InputStreamReader(TestGenerator.class.getClassLoader().getResourceAsStream(TEST_TEMPLATE),
-                                                                                                StandardCharsets.UTF_8)) {
-            char[] buf = new char[1024];
-            int count = 0;
-            while ((count = reader.read(buf)) != -1) {
-                templateStr.append(buf, 0, count);
-            }
+		try (InputStreamReader reader = new InputStreamReader(TestGenerator.class.getResourceAsStream(TEST_TEMPLATE), StandardCharsets.UTF_8)) {
+			char[] buf = new char[1024];
+			int count = 0;
+			while ((count = reader.read(buf)) != -1) {
+				templateStr.append(buf, 0, count);
+			}
         }
         return templateStr.toString();
     }

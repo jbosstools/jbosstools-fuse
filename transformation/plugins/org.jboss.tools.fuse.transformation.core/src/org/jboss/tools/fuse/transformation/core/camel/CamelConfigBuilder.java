@@ -15,10 +15,13 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -39,10 +42,17 @@ public class CamelConfigBuilder {
 	private CamelFile model;
 	
 	/**
-	 * 
+	 * Load CamelFile from Diagram Editor.
+	 */
+	public CamelConfigBuilder() {
+		this.model = CamelUtils.getDiagramEditor().getModel();
+	}
+
+	/*
+	 * used for test only
 	 */
 	public CamelConfigBuilder(File file) {
-		this.model = CamelUtils.getDiagramEditor().getModel();
+		this.model = new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
 	}
 	
 	/**
@@ -219,7 +229,11 @@ public class CamelConfigBuilder {
 	 * @return	the eip or null if not found
 	 */
 	public Eip getEipByName(String name) {
-		String camelVersion = CamelModelFactory.getCamelVersion(model.getResource().getProject());
+		IResource resource = model.getResource();
+		String camelVersion = null;
+		if (resource != null) {
+			camelVersion = CamelModelFactory.getCamelVersion(resource.getProject());
+		}
 		if (camelVersion == null) {
 			camelVersion = CamelModelFactory.getLatestCamelVersion();
 		}
@@ -232,5 +246,12 @@ public class CamelConfigBuilder {
 		Eip eip = model.getEipModel().getEIPByName(name);
 		// and return it
 		return eip;
+	}
+
+	/**
+	 * @return the model
+	 */
+	public CamelFile getModel() {
+		return model;
 	}
 }
