@@ -8,7 +8,7 @@
 		<route>
 			<from uri="file:/tmp/inbox?fileName=abc-order.xml" />
 			<setHeader headerName="approval"><constant>AUTO</constant></setHeader>
-			<to ref="xml2json" />
+			<to uri="ref:xml2json" />
 			<to uri="file:/tmp/outbox?fileName=xyz-order.json" />
 		</route>
 	</camelContext>
