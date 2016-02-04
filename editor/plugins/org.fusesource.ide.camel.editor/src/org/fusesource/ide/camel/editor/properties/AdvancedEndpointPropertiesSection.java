@@ -354,7 +354,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                 });
                 txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
                 
-                Button btn_browse = toolkit.createButton(page, "...", SWT.BORDER | SWT.PUSH);
+                Button btn_browse = toolkit.createButton(page, "...", SWT.FLAT | SWT.PUSH);
                 btn_browse.addSelectionListener(new SelectionAdapter() {
                     /* (non-Javadoc)
                      * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -518,7 +518,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                 final IProject project = CamelUtils.getDiagramEditor().getModel().getResource().getProject();
                 final Class fClass = classToLoad;
                 
-                Button btn_create = toolkit.createButton(page, " + ", SWT.BORDER | SWT.PUSH);
+                Button btn_create = toolkit.createButton(page, " + ", SWT.FLAT | SWT.PUSH);
                 btn_create.addSelectionListener(new SelectionAdapter() {
                     /* (non-Javadoc)
                      * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -563,7 +563,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                 btn_create.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
                 btn_create.setEnabled(fClass != null);
                 
-                Button btn_browse = toolkit.createButton(page, "...", SWT.BORDER | SWT.PUSH);
+                Button btn_browse = toolkit.createButton(page, "...", SWT.FLAT | SWT.PUSH);
                 btn_browse.addSelectionListener(new SelectionAdapter() {
                     /* (non-Javadoc)
                      * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
