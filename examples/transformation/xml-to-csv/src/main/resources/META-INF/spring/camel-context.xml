@@ -13,7 +13,7 @@
     <from uri="file:/tmp/inbox?fileName=accounts.xml"/>
     <split strategyRef="aggregateAccounts">
       <tokenize token="org.xyz.Account" inheritNamespaceTagName="*" xml="true"/>
-      <to ref="xml2csv"/>
+      <to uri="ref:xml2csv"/>
     </split>
     <to uri="file:/tmp/outbox?fileName=acme-cust.csv"/>
   </route>

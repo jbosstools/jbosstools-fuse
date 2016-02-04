@@ -15,7 +15,7 @@
 			<setHeader headerName="approval">
 				<constant>AUTO</constant>
 			</setHeader>
-			<to ref="xml2xml" />
+			<to uri="ref:xml2xml" />
 			<to uri="file:/tmp/outbox?fileName=xyz-order.xml" />
 		</route>
 	</camelContext>

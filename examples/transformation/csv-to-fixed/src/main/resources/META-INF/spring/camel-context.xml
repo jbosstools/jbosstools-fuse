@@ -13,7 +13,7 @@
     <from uri="file:/tmp/inbox?fileName=acme-cust.csv"/>
     <split strategyRef="aggregateAccounts">
       <tokenize token="\n"></tokenize>
-      <to ref="csv2fixed"/>
+      <to uri="ref:csv2fixed"/>
     </split>
     <to uri="file:/tmp/outbox?fileName=accounts.fixed"/>
   </route>

@@ -13,7 +13,7 @@
     <setHeader headerName="approval">
       <constant>AUTO</constant>
     </setHeader>
-    <to ref="json2xml"/>
+    <to uri="ref:json2xml"/>
     <to uri="file:/tmp/outbox?fileName=xyz-order.xml"/>
   </route>
 </camelContext>
