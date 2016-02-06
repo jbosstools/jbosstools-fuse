@@ -92,14 +92,15 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	 * 
 	 * @param xmlString
 	 */
-	public void reloadModelFromXML(String xmlString) {
+	public CamelFile reloadModelFromXML(String xmlString) {
 		// load the model
 		try {
 			CamelIOHandler ioHandler = new CamelIOHandler();
-			ioHandler.loadCamelModel(xmlString, new NullProgressMonitor(), this);
+			return ioHandler.loadCamelModel(xmlString, new NullProgressMonitor(), this);
 		} catch (Exception ex) {
 			CamelModelServiceCoreActivator.pluginLog().logError("Unable to load Camel context file from String: \n" + xmlString, ex);
 		}
+		return null;
 	}
 	
 	/**

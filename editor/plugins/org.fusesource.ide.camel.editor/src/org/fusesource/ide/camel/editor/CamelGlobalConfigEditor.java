@@ -291,7 +291,16 @@ public class CamelGlobalConfigEditor extends EditorPart implements ICamelModelLi
 	 */
 	@Override
 	public void setFocus() {
-		modelChanged();
+		Display.getDefault().asyncExec(new Runnable() {
+			/*
+			 * (non-Javadoc)
+			 * @see java.lang.Runnable#run()
+			 */
+			@Override
+			public void run() {
+				reload();
+			}
+		});
 		this.treeViewer.getTree().setFocus();
 	}
 	

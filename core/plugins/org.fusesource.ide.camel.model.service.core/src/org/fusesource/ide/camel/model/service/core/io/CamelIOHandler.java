@@ -99,24 +99,6 @@ public class CamelIOHandler {
 	}
     
     /**
-     * 
-     * @param existingCamelFileToUse
-     * @param text
-     * @param monitor
-     * @return
-     */
-    public void loadCamelModel(CamelFile existingCamelFileToUse, String text, IProgressMonitor monitor) {
-    	try {
-			DocumentBuilder db = createDocumentBuilder();
-	        document = db.parse(text);
-			readDocumentToModel(document, null, existingCamelFileToUse);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML from string", ex);
-		}
-    }
-    
-    /**
      * loads the camel xml from a string
      * 
      * @param text
@@ -124,63 +106,18 @@ public class CamelIOHandler {
      * @return	the camel file object representation or null on errors
      */
     public CamelFile loadCamelModel(String text, IProgressMonitor monitor, CamelFile cf) {
+    	CamelFile reloadedModel = null;
     	try {
 			DocumentBuilder db = createDocumentBuilder();
 	        document = db.parse(new ByteArrayInputStream(text.getBytes()));
-			readDocumentToModel(document, cf.getResource(), cf);
+			reloadedModel = readDocumentToModel(document, cf.getResource());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			CamelModelServiceCoreActivator.pluginLog().logError("Error loading Camel XML from string", ex);
 		}
 
-		return cf;
+		return reloadedModel;
 	}
-
-    /**
-     * reads the document into internal model
-     * 
-     * @param document
-     * @param res
-     * @param existingCamelFileToUse
-     */
-    protected void readDocumentToModel(Document document, IResource res, CamelFile cf) {
-        cf.setDocument(document);
-        cf.resetContents();
-        NodeList childNodes = document.getDocumentElement().getChildNodes();
-        if (CamelUtils.getTranslatedNodeName(document.getDocumentElement()).equals(CAMEL_ROUTES)) {
-        	// found a routes element
-    		CamelContextElement cce = new CamelContextElement(cf, document.getDocumentElement());
-    		String contextId = document.getDocumentElement().getAttributes().getNamedItem("id") != null ? document.getDocumentElement().getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(document.getDocumentElement()) + "-" + UUID.randomUUID().toString();
-    		int startIdx 	= res.getFullPath().toOSString().indexOf("--");
-    		int endIdx 		= res.getFullPath().toOSString().indexOf("--", startIdx+1);
-    		if (startIdx != endIdx && startIdx != -1) {
-    			contextId = res.getFullPath().toOSString().substring(startIdx+2, endIdx);
-    		}
-    		cce.setId(contextId);
-    		cce.initialize();
-    		// then add the context to the file
-    		cf.addChildElement(cce);
-        } else {
-            for (int i = 0; i<childNodes.getLength(); i++) {
-            	Node child = childNodes.item(i);
-
-            	String name = CamelUtils.getTranslatedNodeName(child);
-            	if (child.getNodeType() != Node.ELEMENT_NODE) continue;
-            	String id = child.getAttributes().getNamedItem("id") != null ? child.getAttributes().getNamedItem("id").getNodeValue() : CamelUtils.getTranslatedNodeName(child) + "-" + UUID.randomUUID().toString();
-            	if (name.equals(CAMEL_CONTEXT)) {
-            		// found a camel context
-            		CamelContextElement cce = new CamelContextElement(cf, child);
-            		cce.setId(id);
-            		cce.initialize();
-            		// then add the context to the file
-            		cf.addChildElement(cce);
-            	} else {
-            		// found a global configuration element
-            		cf.addGlobalDefinition(id, child);
-            	}	        	
-            }
-        }
-    }
     
     /**
      * reads the document into internal model

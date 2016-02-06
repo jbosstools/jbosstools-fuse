@@ -637,13 +637,12 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 				stopDirtyListener();
 				// reload model
 				String text = getDocument().get();
-				CamelFile designModel = designEditor.getModel();
-				if (designModel != null) {
+				if (designEditor != null) {
 					designEditor.clearCache();
-					designModel.reloadModelFromXML(text);
+					designEditor.setModel(designEditor.getModel().reloadModelFromXML(text));
 					// add the diagram contents
 					ImportCamelContextElementsCommand importCommand = new ImportCamelContextElementsCommand(designEditor, designEditor.getEditingDomain(),
-							(CamelModelElement) (getDesignEditor().getSelectedContainer() != null ? getDesignEditor().getSelectedContainer() : designModel), null);
+							(CamelModelElement) (getDesignEditor().getSelectedContainer() != null ? getDesignEditor().getSelectedContainer() : designEditor.getModel()), null);
 					designEditor.getEditingDomain().getCommandStack().execute(importCommand);
 					designEditor.initializeDiagram(importCommand.getDiagram());
 					designEditor.refreshDiagramContents(null);
