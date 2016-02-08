@@ -43,6 +43,7 @@ import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -159,7 +160,7 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setDescription(txt.getText());
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 //initialize the map entry
                 modelMap.put(p.getName(), txtField.getText());
@@ -194,7 +195,7 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setParameter(prop.getName(), chkBox.getSelection());
                     }
                 });
-                checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				checkBox.setLayoutData(createPropertyFieldLayoutData());
                 c = checkBox;
                 
                 //initialize the map entry
@@ -212,7 +213,7 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setParameter(prop.getName(), txt.getText());
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 //initialize the map entry
                 modelMap.put(p.getName(), txtField.getText());
@@ -261,7 +262,7 @@ public class DetailsSection extends FusePropertySection {
                         }
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 //initialize the map entry
                 modelMap.put(p.getName(), txtField.getText());
@@ -312,7 +313,7 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setParameter(prop.getName(), choice.getText());
                     }
                 });
-                choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
                 c = choiceCombo;
                 //initialize the map entry
                 modelMap.put(p.getName(), choiceCombo.getText());
@@ -357,7 +358,7 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setParameter(prop.getName(), choice.getText());
                     }
                 });
-                choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
                 c = choiceCombo;
                 //initialize the map entry
                 modelMap.put(p.getName(), choiceCombo.getText());
@@ -389,7 +390,7 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setParameter(prop.getName(), txt.getText());
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+				txtField.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).indent(5, 0).create());
                 
                 Button btn_browse = getWidgetFactory().createButton(page, "...", SWT.BORDER | SWT.PUSH);
                 btn_browse.addSelectionListener(new SelectionAdapter() {
@@ -431,7 +432,7 @@ public class DetailsSection extends FusePropertySection {
             } else if (CamelComponentUtils.isListProperty(prop)) {
             	org.eclipse.swt.widgets.List list = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
                 getWidgetFactory().adapt(list, true, true);
-                list.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				list.setLayoutData(createPropertyFieldLayoutData());
                 
                 ArrayList<String> listElements = this.selectedEP.getParameter(prop.getName()) != null ? (ArrayList<String>)this.selectedEP.getParameter(prop.getName()) : new ArrayList<String>();
                 list.setItems(listElements.toArray(new String[listElements.size()]));
@@ -462,13 +463,13 @@ public class DetailsSection extends FusePropertySection {
             	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
                 getWidgetFactory().adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
-                choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
                 
                 final CamelModelElement expressionElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
                 choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
 
                 final Composite eform = getWidgetFactory().createFlatFormComposite(page);
-                eform.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
+				eform.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).span(4, 1).grab(true, false).create());
                 eform.setLayout(new GridLayout(1, true));
 
                 choiceCombo.addSelectionListener(new SelectionAdapter() {
@@ -525,13 +526,13 @@ public class DetailsSection extends FusePropertySection {
             	CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
                 getWidgetFactory().adapt(choiceCombo, true, true);
                 choiceCombo.setEditable(false);
-                choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
                 
                 final CamelModelElement dataformatElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
                 choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
 
                 final Composite eform = getWidgetFactory().createFlatFormComposite(page);
-                eform.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
+				eform.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).span(4, 1).grab(true, false).create());
                 eform.setLayout(new GridLayout(1, true));
 
                 choiceCombo.addSelectionListener(new SelectionAdapter() {
@@ -592,7 +593,7 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setParameter(prop.getName(), txt.getText());
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+				txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 if (isRequired(p)) {
 					validator = new IValidator() {
@@ -625,7 +626,7 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setParameter(prop.getName(), txt.getText());
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+				txtField.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).grab(true, false).create());
                 
                 URLClassLoader child = CamelComponentUtils.getProjectClassLoader();
                 Class classToLoad;

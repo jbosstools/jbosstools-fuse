@@ -21,6 +21,7 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -465,7 +466,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	                expressionElement.setParameter(p.getName(), checkBox.getSelection());
 	            }
 	        });
-    		checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+			checkBox.setLayoutData(createPropertyFieldLayoutData());
     		c = checkBox;
         
     		// TEXT PROPERTIES
@@ -478,7 +479,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	                expressionElement.setParameter(p.getName(), txt.getText());
 	            }
 	        });
-	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+			txtField.setLayoutData(createPropertyFieldLayoutData());
 	        c = txtField;
         
 	    // NUMBER PROPERTIES
@@ -500,7 +501,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	                }
 	            }
 	        });
-	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+			txtField.setLayoutData(createPropertyFieldLayoutData());
 	        c = txtField;
 
         // OTHER
@@ -513,7 +514,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	                expressionElement.setParameter(p.getName(), txt.getText());
 	            }
 	        });
-	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+			txtField.setLayoutData(createPropertyFieldLayoutData());
 	        c = txtField;
 	    }
     	
@@ -628,7 +629,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	            	dataFormatElement.setParameter(p.getName(), checkBox.getSelection());
 	            }
 	        });
-    		checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+			checkBox.setLayoutData(createPropertyFieldLayoutData());
     		c = checkBox;
         
     		// TEXT PROPERTIES
@@ -641,7 +642,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	                dataFormatElement.setParameter(p.getName(), txt.getText());
 	            }
 	        });
-	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+			txtField.setLayoutData(createPropertyFieldLayoutData());
 	        c = txtField;
         
 	    // NUMBER PROPERTIES
@@ -663,7 +664,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	                }
 	            }
 	        });
-	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+			txtField.setLayoutData(createPropertyFieldLayoutData());
 	        c = txtField;
 
         // OTHER
@@ -676,7 +677,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	                dataFormatElement.setParameter(p.getName(), txt.getText());
 	            }
 	        });
-	        txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+			txtField.setLayoutData(createPropertyFieldLayoutData());
 	        c = txtField;
 	    }
     	
@@ -693,5 +694,9 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 			helpDecoration.setDescriptionText(description);
 			control.setToolTipText(description);
 		}
+	}
+
+	protected GridData createPropertyFieldLayoutData() {
+		return GridDataFactory.fillDefaults().indent(5, 0).span(3, 1).grab(true, false).create();
 	}
 }
