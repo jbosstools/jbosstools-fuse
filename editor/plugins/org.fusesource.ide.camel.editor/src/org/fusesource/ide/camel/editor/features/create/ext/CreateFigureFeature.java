@@ -33,6 +33,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.foundation.core.util.Strings;
 import org.w3c.dom.Node;
 
 /**
@@ -193,6 +194,10 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 		if (selectedContainer != null && node != null) {
 			selectedContainer.addChildElement(node);
 			node.setParent(selectedContainer);
+			
+			if (Strings.isBlank(node.getId())) {
+				node.ensureUniqueID(node);
+			}
 
 			// do the add
 	        addGraphicalRepresentation(context, node);

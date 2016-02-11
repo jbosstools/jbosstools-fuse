@@ -85,7 +85,7 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
             			if (Strings.isBlank(_ep.getId())) {
             				String newNodeId = null;
             				while (!foundUniqueId) {
-            					newNodeId = ICamelDebugConstants.PREFIX_NODE_ID + _ep.getNewID();
+            					newNodeId = _ep.getNewID();
             					// we need to check if the id is really unique in our context
             					if (((CamelDesignEditor)getDiagramBehavior().getDiagramContainer()).getModel().findNode(newNodeId) == null) {
             						foundUniqueId = true;
@@ -97,9 +97,6 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
             					throw new CoreException(new Status(IStatus.ERROR, CamelEditorUIActivator.PLUGIN_ID, "Unable to determine a unique ID for node " + _ep));
             				}
             			}
-            			
-            			// then do a save
-            			saveEditor();
             		}
             	}
             	if (userWantsUpdate == null || userWantsUpdate == true) {
@@ -118,6 +115,7 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
                 return;
             }
         }
+        getDiagramBehavior().refresh();
         getDiagramBehavior().refreshRenderingDecorators(_pe);
 	}
 	

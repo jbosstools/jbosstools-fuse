@@ -483,7 +483,6 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 		if (getDiagramTypeProvider() != null) {
 			getDiagramTypeProvider().init(diagram != null ? diagram : getDiagramTypeProvider().getDiagram(), getDiagramBehavior());
 		}
-		getDiagramBehavior().getRefreshBehavior().initRefresh();
         setPictogramElementsForSelection(null);
         GraphicalViewer graphicalViewer = getGraphicalViewer();
 	        
@@ -492,6 +491,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	        
         // set Diagram as contents for the graphical viewer and refresh
         graphicalViewer.setContents(getDiagramTypeProvider().getDiagram());	        
+		getDiagramBehavior().getRefreshBehavior().initRefresh();
         getDiagramBehavior().refreshContent();
         
         refreshOutlineView();
