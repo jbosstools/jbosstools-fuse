@@ -4,7 +4,6 @@ target
 *.iws
 overlays
 .DS_Store
-.settings
 bin
 runtime-EclipseApplication-m2eclipse
 .metadata
