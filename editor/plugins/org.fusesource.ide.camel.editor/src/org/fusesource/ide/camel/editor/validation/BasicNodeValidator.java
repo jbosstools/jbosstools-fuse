@@ -12,10 +12,10 @@
 package org.fusesource.ide.camel.editor.validation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
@@ -31,28 +31,98 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * @see org.fusesource.ide.camel.editor.validation.ValidationSupport#validate(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
     @Override
-    public ValidationResult validate(CamelModelElement node) {
+    public ValidationResult validate(CamelModelElement selectedEP) {
 		ValidationResult result = new ValidationResult();
 		
-		if (node != null && node.getCamelContext() != null) { // TODO: check why camel context can be null?!?
+		if (selectedEP != null && selectedEP.getCamelContext() != null) { // TODO: check why camel context can be null?!?
 			// we check if all mandatory fields are filled
-			for (Parameter pd : node.getUnderlyingMetaModelObject().getParameters()) {
-				String property = pd.getName();
-				if ((pd.getKind().equalsIgnoreCase("element") && pd.getType().equalsIgnoreCase("array")) || pd.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
-				if (pd.getRequired().equalsIgnoreCase("true")) {
-					Object val = node.getParameter(property);
-					if (val == null || val.toString().trim().length()<1) {
-						result.addError("There are mandatory fields which are not filled. Please check the properties view for more details.");
-					}
-				}
-				// check if the ID is unique
-				if (property.equalsIgnoreCase("id")) {
-					CamelDesignEditor editor = CamelUtils.getDiagramEditor();
-					if (editor != null) {
-						if (!checkAllUniqueIDs(node, node.getCamelContext().getChildElements(), new ArrayList<String>())) {
-							result.addError("The id property is not unique!");
+			for (Parameter prop : selectedEP.getUnderlyingMetaModelObject().getParameters()) {
+				String property = prop.getName();
+				if ((prop.getKind().equalsIgnoreCase("element") && 
+					 prop.getType().equalsIgnoreCase("array")) || 
+					 prop.getJavaType().equals("org.apache.camel.model.OtherwiseDefinition")) continue;
+
+				Object value = selectedEP.getParameter(property);
+				
+				if (prop.getRequired().equalsIgnoreCase("true")) {
+				
+					if (prop.getName().equalsIgnoreCase("uri")) {
+						// only enforce URI if there is no REF set
+						if (selectedEP.getParameter("uri") == null || ((String)selectedEP.getParameter("uri")).trim().length()<1) {
+							// no URI set -> check for REF
+							if (selectedEP.getParameter("ref") == null || ((String)selectedEP.getParameter("ref")).trim().length()<1) {
+								// there is no ref 
+								result.addError("One of Ref and Uri values have to be filled! Please check the properties view for more details.");
+							} else {
+								// ref found - now check if REF has URI defined
+								CamelModelElement cme = selectedEP.getCamelContext().findNode((String)selectedEP.getParameter("ref"));
+								if (cme == null || cme.getParameter("uri") == null || ((String)cme.getParameter("uri")).trim().length()<1) {
+									// no uri defined on ref
+									result.addError("The referenced endpoint has no URI defined or does not exist. Please check the properties view for more details.");
+								}
+							}
+						}
+						
+						// check for broken refs							
+						if (selectedEP.getParameter("uri") != null && ((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
+							String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
+							List<String> refs = Arrays.asList(CamelComponentUtils.getRefs(selectedEP.getCamelFile()));
+							if (refId == null || refId.trim().length()<1 || refs.contains(refId) == false) {
+								result.addError("The entered reference does not exist in your context! Please check the properties view for more details.");
+							}
+						}
+						
+						// warn user if he set both ref and uri
+						if (selectedEP.getParameter("uri") != null && ((String)selectedEP.getParameter("uri")).trim().length()>0 &&
+							selectedEP.getParameter("ref") != null && ((String)selectedEP.getParameter("ref")).trim().length()>0 ) {
+							result.addError("Please choose either URI or Ref but do not enter both values. Please check the properties view for more details.");
+						}
+						
+					} else if (prop.getName().equalsIgnoreCase("ref")) {
+	
+						if (value != null && value instanceof String && value.toString().trim().length()>0) {
+							String refId = (String)value;
+							CamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
+							if (cme == null) {
+								// the ref doesn't exist
+								result.addError("The entered reference does not exist in your context! Please check the properties view for more details.");
+							} else {
+								// the ref exists
+								if (cme.getParameter("uri") == null || ((String)cme.getParameter("uri")).trim().length()<1) {
+									// but has no URI defined
+									result.addError("The referenced endpoint does not define a valid URI! Please check the properties view for more details.");
+								}
+							}
+						}
+						
+						// warn user if he set both ref and uri
+						if (selectedEP.getParameter("uri") != null && ((String)selectedEP.getParameter("uri")).trim().length()>0 &&
+							selectedEP.getParameter("ref") != null && ((String)selectedEP.getParameter("ref")).trim().length()>0 ) {
+							result.addWarning("Please choose only ONE of Uri and Ref. Please check the properties view for more details.");
+						}
+	
+						
+					} else if (prop.getName().equalsIgnoreCase("id")) {
+						// check if ID is unique
+						if (value == null || value instanceof String == false || value.toString().trim().length()<1) {
+							result.addError("Parameter " + prop.getName() + " is a mandatory field and cannot be empty. Please check the properties view for more details.");
+						} else {
+							if (selectedEP.getCamelContext().isIDUnique((String)value) == false) {
+								result.addError("Parameter " + prop.getName() + " does not contain a unique value. Please check the properties view for more details.");
+							}
+						}
+					
+					} else if (prop.getName().equalsIgnoreCase("expression")) {
+						
+						// ignore for now - TODO: provide better validation for expression properties
+					
+					} else {
+						// by default we only check for a value != null and length > 0
+						if (value == null || value instanceof String == false || value.toString().trim().length()<1) {
+							result.addError("Parameter " + prop.getName() + " is a mandatory field and cannot be empty. Please check the properties view for more details.");
 						}
 					}
+					
 				}
 			}
 		}

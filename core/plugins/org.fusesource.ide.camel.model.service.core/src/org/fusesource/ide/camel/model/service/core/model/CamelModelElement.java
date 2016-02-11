@@ -1428,7 +1428,7 @@ public class CamelModelElement {
 		String answer = null;
 		int i = 1;
 		answer = String.format("_%s%d", getNodeTypeId(), i++);
-		while (getCamelContext().isUniqueId(answer) == false) {
+		while (getCamelContext().doesNewIDExist(answer) == false) {
 			answer = String.format("_%s%d", getNodeTypeId(), i++);
 		}
 		return answer;
@@ -1440,7 +1440,22 @@ public class CamelModelElement {
 	 * @param newId
 	 * @return
 	 */
-	public boolean isUniqueId(String newId) {
+	public boolean isIDUnique(String id) {
+		if (id == null || id.trim().length() < 1)
+			return false;
+
+		if (getCamelContext().findAllNodesWithId(id).size()>1) return false;
+
+		return true;
+	}
+	
+	/**
+	 * tests if the given id is context wide unique
+	 * 
+	 * @param newId
+	 * @return
+	 */
+	public boolean doesNewIDExist(String newId) {
 		if (newId == null || newId.trim().length() < 1)
 			return false;
 
@@ -1461,6 +1476,20 @@ public class CamelModelElement {
 			return this;
 		}
 
+		if (this instanceof CamelContextElement) {
+			CamelContextElement ctx = (CamelContextElement)this;
+			if (ctx.getDataformats().isEmpty() == false) {
+				if (ctx.getDataformats().containsKey(nodeId)) {
+					return ctx.getDataformats().get(nodeId);
+				}
+			}
+			if (ctx.getEndpointDefinitions().isEmpty() == false) {
+				if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
+					return ctx.getEndpointDefinitions().get(nodeId);
+				}
+			}
+		}
+		
 		if (getChildElements() != null) {
 			for (CamelModelElement e : getChildElements()) {
 				CamelModelElement cme = e.findNode(nodeId);
@@ -1470,6 +1499,36 @@ public class CamelModelElement {
 		}
 
 		return null;
+	}
+	
+	public ArrayList<CamelModelElement> findAllNodesWithId(String nodeId) {
+		ArrayList<CamelModelElement> result = new ArrayList<CamelModelElement>();
+		
+		if (getId() != null && getId().equals(nodeId)) {
+			result.add(this);
+		}
+
+		if (this instanceof CamelContextElement) {
+			CamelContextElement ctx = (CamelContextElement)this;
+			if (ctx.getDataformats().isEmpty() == false) {
+				if (ctx.getDataformats().containsKey(nodeId)) {
+					result.add(ctx.getDataformats().get(nodeId));
+				}
+			}
+			if (ctx.getEndpointDefinitions().isEmpty() == false) {
+				if (ctx.getEndpointDefinitions().containsKey(nodeId)) {
+					result.add(ctx.getEndpointDefinitions().get(nodeId));
+				}
+			}
+		}
+		
+		if (getChildElements() != null) {
+			for (CamelModelElement e : getChildElements()) {
+				result.addAll(e.findAllNodesWithId(nodeId));
+			}
+		}
+
+		return result;
 	}
 
 	/**

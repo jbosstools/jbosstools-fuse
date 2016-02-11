@@ -226,18 +226,80 @@ public class DetailsSection extends FusePropertySection {
 						 */
 						@Override
 						public IStatus validate(Object value) {
-							if (selectedEP.getParameter("uri") != null && ((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
-								// check for broken refs
-								String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
-								if (refId == null || refId.trim().length()<1 || selectedEP.getCamelContext().getEndpointDefinitions().get(refId) == null) {
-									return ValidationStatus.error("The entered reference does not exist in your context!");
+							
+							if (prop.getName().equalsIgnoreCase("uri")) {
+								// only enforce URI if there is no REF set
+								if (selectedEP.getParameter("uri") == null || ((String)selectedEP.getParameter("uri")).trim().length()<1) {
+									// no URI set -> check for REF
+									if (selectedEP.getParameter("ref") == null || ((String)selectedEP.getParameter("ref")).trim().length()<1) {
+										// there is no ref 
+										return ValidationStatus.error("One of Ref and Uri values have to be filled!");
+									} else {
+										// ref found - now check if REF has URI defined
+										CamelModelElement cme = selectedEP.getCamelContext().findNode((String)selectedEP.getParameter("ref"));
+										if (cme == null || cme.getParameter("uri") == null || ((String)cme.getParameter("uri")).trim().length()<1) {
+											// no uri defined on ref
+											return ValidationStatus.error("The referenced endpoint has no URI defined or does not exist.");
+										}
+									}
+								}
+								
+								// check for broken refs							
+								if (selectedEP.getParameter("uri") != null && ((String)selectedEP.getParameter("uri")).startsWith("ref:")) {
+									String refId = ((String)selectedEP.getParameter("uri")).trim().length()>"ref:".length() ? ((String)selectedEP.getParameter("uri")).substring("ref:".length()) : null;
+									List<String> refs = Arrays.asList(CamelComponentUtils.getRefs(selectedEP.getCamelFile()));
+									if (refId == null || refId.trim().length()<1 || refs.contains(refId) == false) {
+										return ValidationStatus.error("The entered reference does not exist in your context!");
+									}
+								}
+								
+								// warn user if he set both ref and uri
+								if (selectedEP.getParameter("uri") != null && ((String)selectedEP.getParameter("uri")).trim().length()>0 &&
+									selectedEP.getParameter("ref") != null && ((String)selectedEP.getParameter("ref")).trim().length()>0 ) {
+									return ValidationStatus.warning("Please choose either URI or Ref but do not enter both values.");
+								}
+								
+							} else if (prop.getName().equalsIgnoreCase("ref")) {
+
+								if (value != null && value instanceof String && value.toString().trim().length()>0) {
+									String refId = (String)value;
+									CamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
+									if (cme == null) {
+										// the ref doesn't exist
+										return ValidationStatus.error("The entered reference does not exist in your context!");
+									} else {
+										// the ref exists
+										if (cme.getParameter("uri") == null || ((String)cme.getParameter("uri")).trim().length()<1) {
+											// but has no URI defined
+											return ValidationStatus.error("The referenced endpoint does not define a valid URI!");
+										}
+									}
+								}
+								
+								// warn user if he set both ref and uri
+								if (selectedEP.getParameter("uri") != null && ((String)selectedEP.getParameter("uri")).trim().length()>0 &&
+									selectedEP.getParameter("ref") != null && ((String)selectedEP.getParameter("ref")).trim().length()>0 ) {
+									return ValidationStatus.warning("Please choose only ONE of Uri and Ref.");
+								}
+
+								
+							} else if (prop.getName().equalsIgnoreCase("id")) {
+								// check if ID is unique
+								if (value == null || value instanceof String == false || value.toString().trim().length()<1) {
+									return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+								} else {
+									if (selectedEP.getCamelContext().isIDUnique((String)value) == false) {
+										return ValidationStatus.error("Parameter " + prop.getName() + " does not contain a unique value.");
+									}
+								}
+							} else {
+								// by default we only check for a value != null and length > 0
+								if (value == null || value instanceof String == false || value.toString().trim().length()<1) {
+									return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
 								}
 							}
-							
-							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								return ValidationStatus.ok();
-							}
-							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
+							// all checks passed
+							return ValidationStatus.ok();
 						}
 					};
                 }
@@ -338,14 +400,19 @@ public class DetailsSection extends FusePropertySection {
             } else if (CamelComponentUtils.isRefProperty(prop)) {
                 CCombo choiceCombo = new CCombo(page, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY | SWT.SINGLE);
                 getWidgetFactory().adapt(choiceCombo, true, true);
-                choiceCombo.setEditable(false);
+                choiceCombo.setEditable(true);
                 choiceCombo.setItems(CamelComponentUtils.getRefs(this.selectedEP.getCamelFile()));
                 String value = (String)(this.selectedEP.getParameter(p.getName()) != null ? this.selectedEP.getParameter(p.getName()) : this.eip.getParameter(p.getName()).getDefaultValue());
+                boolean selected = false;
                 for (int i=0; i < choiceCombo.getItems().length; i++) {
                     if (choiceCombo.getItem(i).equalsIgnoreCase(value)) {
                         choiceCombo.select(i);
+                        selected = true;
                         break;
                     }
+                }
+                if (!selected) {
+                	choiceCombo.setText(value);
                 }
                 choiceCombo.addSelectionListener(new SelectionAdapter() {
                     /* (non-Javadoc)
@@ -363,21 +430,31 @@ public class DetailsSection extends FusePropertySection {
                 modelMap.put(p.getName(), choiceCombo.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.selection().observe(choiceCombo);                
-                if (isRequired(p)) {
-					validator = new IValidator() {
-						/*
-						 * (non-Javadoc)
-						 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
-						 */
-						@Override
-						public IStatus validate(Object value) {
+				validator = new IValidator() {
+					/*
+					 * (non-Javadoc)
+					 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
+					 */
+					@Override
+					public IStatus validate(Object value) {
+						// check if value has content
+						if (isRequired(prop)) {
+							if (value == null || value instanceof String == false || value.toString().trim().length()<1) {
+								return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");	
+							}	
+						} else {
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								return ValidationStatus.ok();
+								if (selectedEP.getCamelContext().findNode((String)value) == null) {
+									// no ref found
+									return ValidationStatus.error("Parameter " + prop.getName() + " does not point to an existing reference.");
+								}
 							}
-							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
-						}
-					};
-                }
+						}							
+						// all tests passed
+						return ValidationStatus.ok();
+						
+					}
+				};
                 
             // FILE PROPERTIES
             } else if (CamelComponentUtils.isFileProperty(prop)) {
