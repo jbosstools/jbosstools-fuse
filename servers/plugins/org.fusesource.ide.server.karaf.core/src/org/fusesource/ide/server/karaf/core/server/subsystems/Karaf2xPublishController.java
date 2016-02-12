@@ -97,22 +97,36 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 				break;
 			// do a build
 			boolean built = KarafUtils.runBuild(GOALS, module[0], monitor);
-			status = this.publisher.publish(getServer(), module);
-			((Server)getServer()).setModuleState(module, status);
-			((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
-			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
-			status = IServer.PUBLISH_STATE_NONE;
+			if (built) {
+				status = this.publisher.publish(getServer(), module);
+				((Server)getServer()).setModuleState(module, status);
+				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
+				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
+				status = IServer.PUBLISH_STATE_NONE;
+			} else {
+				((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
+				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
+				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_UNKNOWN);			
+				status = IServer.PUBLISH_STATE_UNKNOWN;
+			}
 			break;
 		case KarafUtils.INCREMENTAL_PUBLISH:
 			if (!module[0].exists())
 				break;
 			// do a build
 			built = KarafUtils.runBuild(GOALS, module[0], monitor);
-			status = this.publisher.publish(getServer(), module);
-			((Server)getServer()).setModuleState(module, status);
-			((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
-			((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
-			status = IServer.PUBLISH_STATE_NONE;
+			if (built) {
+				status = this.publisher.publish(getServer(), module);
+				((Server)getServer()).setModuleState(module, status);
+				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
+				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
+				status = IServer.PUBLISH_STATE_NONE;
+			} else {
+				((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
+				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
+				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_UNKNOWN);			
+				status = IServer.PUBLISH_STATE_UNKNOWN;
+			}
 			break;
 		case KarafUtils.NO_PUBLISH:
 			// we can skip this
