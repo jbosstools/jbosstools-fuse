@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.tools.fuse.transformation.dozer;
+package org.jboss.tools.fuse.transformation.core.dozer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,8 +23,6 @@ import java.nio.file.StandardCopyOption;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.jboss.tools.fuse.transformation.core.Variable;
-import org.jboss.tools.fuse.transformation.core.dozer.DozerMapperConfiguration;
-import org.jboss.tools.fuse.transformation.core.dozer.DozerVariableMapping;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,7 +30,7 @@ import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-public class DozerVariableMappingIT {
+public class DozerVariableMappingTest {
     
     private final String unqualified = "myvar";
     private final String qualified = "${myvar}";

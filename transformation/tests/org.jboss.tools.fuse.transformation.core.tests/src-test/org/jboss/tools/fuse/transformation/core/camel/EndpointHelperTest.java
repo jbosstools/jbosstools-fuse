@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.tools.fuse.transformation.camel;
+package org.jboss.tools.fuse.transformation.core.camel;
 
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.jboss.tools.fuse.transformation.core.camel.EndpointHelper;
@@ -21,7 +21,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 
-public class EndpointHelperIT {
+public class EndpointHelperTest {
     
     private static final String URI_1 = 
             "transform:xml2json?sourceModel=xml.ABCOrder&amp;"

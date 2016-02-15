@@ -28,7 +28,7 @@ public class ParameterPriorityComparator implements Comparator<Parameter> {
 		if(areBothRequired(o1, o2) || areNoneRequired(o1, o2)){
 			return o1.getName().compareTo(o2.getName());
 		}
-		if(isRequired(o1) && !isRequired(o2) ){
+		if (isRequired(o1) && !isRequired(o2)) {
 			return -1;
 		} else {
 			return 1;

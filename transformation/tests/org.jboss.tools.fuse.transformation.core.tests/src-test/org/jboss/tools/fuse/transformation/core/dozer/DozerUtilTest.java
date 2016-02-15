@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.tools.fuse.transformation.dozer;
+package org.jboss.tools.fuse.transformation.core.dozer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.junit.Test;
 import example.DeepList;
 import example.ListsAndNestedTypes;
 
-public class DozerUtilIT {
+public class DozerUtilTest {
     
     @Test
     public void getIndex() throws Exception {

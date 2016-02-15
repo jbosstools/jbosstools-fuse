@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.tools.fuse.transformation.dozer;
+package org.jboss.tools.fuse.transformation.core.dozer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,9 +38,6 @@ import org.jboss.tools.fuse.transformation.core.MappingType;
 import org.jboss.tools.fuse.transformation.core.TransformationMapping;
 import org.jboss.tools.fuse.transformation.core.Variable;
 import org.jboss.tools.fuse.transformation.core.VariableMapping;
-import org.jboss.tools.fuse.transformation.core.dozer.DozerExpressionMapping;
-import org.jboss.tools.fuse.transformation.core.dozer.DozerMapperConfiguration;
-import org.jboss.tools.fuse.transformation.core.dozer.DozerVariableMapping;
 import org.jboss.tools.fuse.transformation.core.dozer.config.Configuration;
 import org.jboss.tools.fuse.transformation.core.dozer.config.Field;
 import org.jboss.tools.fuse.transformation.core.dozer.config.Mapping;
@@ -58,7 +55,7 @@ import abcorder.ABCOrder;
 import example.AClass;
 import example.BClass;
 
-public class DozerMapperConfigurationIT {
+public class DozerMapperConfigurationTest {
 
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
