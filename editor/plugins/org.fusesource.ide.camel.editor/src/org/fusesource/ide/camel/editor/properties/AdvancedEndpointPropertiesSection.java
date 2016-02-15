@@ -41,6 +41,7 @@ import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -200,7 +201,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         PropertiesUtils.updateURIParams(selectedEP, prop, ((Button)e.getSource()).getSelection(), component, modelMap);
                     }
                 });
-                checkBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                checkBox.setLayoutData(createPropertyFieldLayoutData());
                 c = checkBox;
                 
                 //initialize the map entry
@@ -218,7 +219,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 //initialize the map entry
                 modelMap.put(p.getName(), txtField.getText());
@@ -267,7 +268,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         }
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 //initialize the map entry
                 modelMap.put(p.getName(), txtField.getText());
@@ -321,7 +322,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         PropertiesUtils.updateURIParams(selectedEP, prop, choice.getText(), component, modelMap);
                     }
                 });
-                choiceCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                choiceCombo.setLayoutData(createPropertyFieldLayoutData());
                 c = choiceCombo;
                 //initialize the map entry
                 modelMap.put(p.getName(), choiceCombo.getText());
@@ -344,17 +345,19 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                 }
             // FILE PROPERTIES
             } else if (CamelComponentUtils.isFileProperty(prop)) {
-                final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
+				final Text txtField = toolkit.createText(page, PropertiesUtils.getPropertyFromUri(selectedEP, prop, component), SWT.SINGLE | SWT.BORDER | SWT.LEFT);
                 txtField.addModifyListener(new ModifyListener() {
                     @Override
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
                         PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
+						// txt.getParent().layout(true);
+						// txt.redraw();
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+				txtField.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).span(2, 1).grab(true, false).create());
                 
-                Button btn_browse = toolkit.createButton(page, "...", SWT.FLAT | SWT.PUSH);
+				Button btn_browse = toolkit.createButton(page, "...", SWT.FLAT | SWT.PUSH);
                 btn_browse.addSelectionListener(new SelectionAdapter() {
                     /* (non-Javadoc)
                      * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -400,7 +403,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 if (isRequired(p)) {
 					validator = new IValidator() {
@@ -432,7 +435,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 if (isRequired(p)) {
 					validator = new IValidator() {
@@ -467,7 +470,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+                txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
                 if (isRequired(p)) {
 					validator = new IValidator() {
@@ -500,7 +503,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         PropertiesUtils.updateURIParams(selectedEP, prop, txt.getText(), component, modelMap);
                     }
                 });
-                txtField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+				txtField.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).grab(true, false).create());
                 
                 URLClassLoader child = CamelComponentUtils.getProjectClassLoader();
                 Class classToLoad;
@@ -630,8 +633,8 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
             if (p.getDescription() != null) c.setToolTipText(p.getDescription());
         }
     }
-    
-    /*
+
+	/*
      * (non-Javadoc)
      * 
      * @see
