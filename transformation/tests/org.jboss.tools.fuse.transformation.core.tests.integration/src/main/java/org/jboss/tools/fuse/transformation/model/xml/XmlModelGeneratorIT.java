@@ -46,7 +46,6 @@ public class XmlModelGeneratorIT {
 	private static String XML_SCHEMA_GEN_PATH = "abc-order.xsd";
 
     @Test
-	@Ignore("test is failing with NoClassDefFoundError org.apache.xmlbeans.impl.xb.xsdschema.SchemaDocument")
     public void generateFromInstance() throws Exception {
 		File xmlInst = getFile(XML_INST_PATH);
 		File targetFolder = tmpFolder.newFolder("target");
@@ -62,13 +61,13 @@ public class XmlModelGeneratorIT {
     }
 
     @Test
-	@Ignore("test is failing with ExceptionInitializerrror")
+	@Ignore("test is failing due to accessExternalSchemaProperty")
     public void generateFromInstanceWithMultipleNamespaces() throws Exception {
-		File targetFolder = tmpFolder.newFolder("target");
 		File xmlInstance = getFile(XML_INST_PATH_3);
-		File generatedSchema = new File(targetFolder, XML_INST_PATH_3 + ".xsd");
-		File generatedSchemaA = new File(targetFolder, "bogus.com.a.xsd");
-		File generatedSchemaB = new File(targetFolder, "bogus.com.b.xsd");
+		File generatedSchema = new File(xmlInstance.getParentFile(), XML_INST_PATH_3 + ".xsd");
+		File generatedSchemaA = new File(xmlInstance.getParentFile(), "bogus.com.a.xsd");
+		File generatedSchemaB = new File(xmlInstance.getParentFile(), "bogus.com.b.xsd");
+		File targetFolder = tmpFolder.newFolder("target");
         generatedSchema.deleteOnExit();
         generatedSchemaA.deleteOnExit();
         generatedSchemaB.deleteOnExit();
