@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.tools.fuse.transformation.model.xml;
+package org.jboss.tools.fuse.transformation.core.model.xml;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,6 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.jboss.tools.fuse.transformation.core.model.xml.XmlModelGenerator;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
