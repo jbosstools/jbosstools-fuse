@@ -23,6 +23,7 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.maven.Maven;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.model.Model;
@@ -32,9 +33,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.ICallable;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.m2e.core.internal.embedder.MavenImpl;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
@@ -369,9 +372,9 @@ public class KarafUtils {
 	 * @throws CoreException
 	 */
 	public static boolean runBuild(List<String> goals, Properties serverProperties, IModule module, IProgressMonitor monitor)  throws CoreException {
-		IMaven maven = MavenPlugin.getMaven();
+		final IMaven maven = MavenPlugin.getMaven();
 		IMavenExecutionContext executionContext = maven.createExecutionContext();
-		MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
+		final MavenExecutionRequest executionRequest = executionContext.getExecutionRequest();
 		executionRequest.setPom(getModelFile(module));
 		if (serverProperties != null && serverProperties.isEmpty() == false) {
 			Server server = new Server();
@@ -382,7 +385,18 @@ public class KarafUtils {
 		}
 		executionRequest.setGoals(goals);
 		
-		MavenExecutionResult result = maven.execute(executionRequest, monitor);
+		MavenExecutionResult result = executionContext.execute(new ICallable<MavenExecutionResult>() {
+		    /*
+		     * (non-Javadoc)
+		     * @see org.eclipse.m2e.core.embedder.ICallable#call(org.eclipse.m2e.core.embedder.IMavenExecutionContext, org.eclipse.core.runtime.IProgressMonitor)
+		     */
+			@Override
+			public MavenExecutionResult call(IMavenExecutionContext context, IProgressMonitor innerMonitor) throws CoreException {
+				return ((MavenImpl)maven).lookupComponent(Maven.class).execute(executionRequest);
+		    }
+			
+		}, monitor);	
+		
 		for (Throwable t : result.getExceptions()) {
 			Activator.getLogger().error(t);
 		}

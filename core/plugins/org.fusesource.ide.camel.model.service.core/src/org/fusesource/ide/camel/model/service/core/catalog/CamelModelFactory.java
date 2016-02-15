@@ -126,9 +126,11 @@ public class CamelModelFactory {
 	 * @return
 	 */
 	public static String getCamelVersionFromMaven(IProject project) {
+		if (project == null) return null;
 		IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getFullPath().append("pom.xml"));
         String pomPath = pomPathValue.toOSString();
         final File pomFile = new File(pomPath);
+        if (pomFile.exists() == false || pomFile.isDirectory()) return null;
         try {
         	final Model model = MavenPlugin.getMaven().readModel(pomFile);
 

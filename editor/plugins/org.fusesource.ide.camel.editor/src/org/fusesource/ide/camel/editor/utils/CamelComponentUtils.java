@@ -77,6 +77,7 @@ public final class CamelComponentUtils {
     	ArrayList<String> refs = new ArrayList<String>();
     	
     	refs.add("");
+    	refs.addAll(Arrays.asList(cf.getCamelFile().getGlobalDefinitions().keySet().toArray(new String[cf.getCamelFile().getGlobalDefinitions().keySet().size()])));
     	refs.addAll(Arrays.asList(cf.getCamelContext().getEndpointDefinitions().keySet().toArray(new String[cf.getCamelContext().getEndpointDefinitions().size()])));
     	refs.addAll(Arrays.asList(cf.getCamelContext().getDataformats().keySet().toArray(new String[cf.getCamelContext().getDataformats().size()])));
     	
