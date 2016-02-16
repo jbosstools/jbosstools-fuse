@@ -49,7 +49,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 	 */
 	public CamelVirtualFolder(IProject prj) {
 		this.project = prj;
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(new CamelVirtualFolderListener(project), IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_REFRESH);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(new CamelVirtualFolderListener(project), IResourceChangeEvent.POST_CHANGE);
 	}
 
 	/**
@@ -100,13 +100,14 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 					findFiles(f);
 				} else {
 					IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(f.getPath()));
-					if (ifile != null
-							&& ifile.getContentDescription() != null
-							&& ifile.getContentDescription()
-									.getContentType()
-									.getId()
-									.equals("org.fusesource.ide.camel.editor.camelContentType")) {
-						addCamelFile(ifile);
+					if (ifile != null) {
+						if (ifile.getContentDescription() != null
+								&& ifile.getContentDescription()
+										.getContentType()
+										.getId()
+										.equals("org.fusesource.ide.camel.editor.camelContentType")) {
+							addCamelFile(ifile);
+						}
 					}
 				}
 			}
@@ -127,10 +128,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 
 		@Override
 		public void resourceChanged(IResourceChangeEvent event) {
-			if (event.getType() == IResourceChangeEvent.PRE_REFRESH) {
-				camelFiles.clear();
-				populateChildren();
-			} else if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
+			if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
 				try {
 					event.getDelta().accept(new DeltaPrinter(_project));
 				} catch (CoreException ex) {
