@@ -60,6 +60,8 @@ public class CamelPersistencyBehaviour  extends DefaultPersistencyBehavior {
         // name the editor tab correctly
         this.editor.getParent().onFileLoading(camelFile.getResource().getName());
         
+        if (this.camelFile != null) this.camelFile.getCamelContext().ensureUniqueID(this.camelFile.getCamelContext());
+        
         return importCommand.getDiagram();
 	}
 	

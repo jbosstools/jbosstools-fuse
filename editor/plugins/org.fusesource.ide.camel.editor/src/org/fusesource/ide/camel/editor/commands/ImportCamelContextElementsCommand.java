@@ -94,6 +94,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 	 */
 	@Override
 	protected void doExecute() {
+		CamelContextElement context = null;
 		try {
 			designEditor.getParent().stopDirtyListener();
 			if (designEditor.getModel() != null) designEditor.getModel().unregisterDOMListener();
@@ -110,8 +111,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 			IFeatureProvider featureProvider = dtp.getFeatureProvider();
 			CamelDiagramLoader diagramReader = new CamelDiagramLoader(diagram, featureProvider);
 			try {
-				CamelContextElement context = (CamelContextElement)camelContextFile.getChildElements().get(0);
-				context.ensureUniqueID(context);
+				context = (CamelContextElement)camelContextFile.getChildElements().get(0);
 				diagramReader.loadModel(this.container != null && this.container instanceof CamelFile == false ? this.container : context);
 			} catch (Exception e) {
 				CamelEditorUIActivator.pluginLog().logError("Failed to load model: " + e, e);
@@ -138,6 +138,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 			if (designEditor.getDiagramTypeProvider() != null) designEditor.getDiagramTypeProvider().resourceReloaded(diagram);
 			designEditor.getParent().startDirtyListener();
 			designEditor.getModel().registerDOMListener();
+			if (context != null) context.ensureUniqueID(context);
 		}
 	}
 	
