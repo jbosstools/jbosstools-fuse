@@ -412,7 +412,7 @@ public class DetailsSection extends FusePropertySection {
                         break;
                     }
                 }
-                if (!selected) {
+                if (!selected && value != null) {
                 	choiceCombo.setText(value);
                 }
                 choiceCombo.addSelectionListener(new SelectionAdapter() {
