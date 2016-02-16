@@ -66,11 +66,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.editor.utils.PropertiesUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
+import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.camel.validation.model.NumberValidator;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
@@ -340,15 +341,7 @@ public class DetailsSection extends FusePropertySection {
 						if (prop.getRequired() != null && prop.getRequired().equalsIgnoreCase("true") && (value == null || value.toString().trim().length()<1)) {
 							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
 						}
-						// only check non-empty fields
-						if (value != null && value.toString().trim().length()>0) {
-							try {
-								Double.parseDouble(value.toString());
-							} catch (NumberFormatException ex) {
-								return ValidationStatus.error("The parameter " + prop.getName() + " requires a numeric value.");
-							}
-						}
-						return ValidationStatus.ok();
+						return new NumberValidator(prop).validate(value);
 					}
 				};
 
@@ -705,8 +698,8 @@ public class DetailsSection extends FusePropertySection {
                 });
 				txtField.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).grab(true, false).create());
                 
-                URLClassLoader child = CamelComponentUtils.getProjectClassLoader();
-                Class classToLoad;
+				URLClassLoader child = CamelComponentUtils.getProjectClassLoader(selectedEP.getCamelFile().getResource().getProject());
+				Class<?> classToLoad;
                 try {
                     if (prop.getJavaType().indexOf("<")!=-1) {
                         classToLoad = child.loadClass(prop.getJavaType().substring(0,  prop.getJavaType().indexOf("<")));
@@ -719,7 +712,7 @@ public class DetailsSection extends FusePropertySection {
                 }
                 
                 final IProject project = CamelUtils.getDiagramEditor().getModel().getResource().getProject();
-                final Class fClass = classToLoad;
+				final Class<?> fClass = classToLoad;
                 
                 Button btn_create = getWidgetFactory().createButton(page, " + ", SWT.BORDER | SWT.PUSH);
                 btn_create.addSelectionListener(new SelectionAdapter() {

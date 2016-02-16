@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="JBossFuseToolingValidation"
+         name="JBoss Fuse Tooling Validation"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="true"
+            class="org.fusesource.ide.camel.validation.xml.XMLCamelRoutesValidator"
+            manual="true"
+            markerId="JBossFuseToolingValidationProblem">
+         <include>
+            <rules>
+               <fileext
+                     ext="xml">
+               </fileext>
+               <contentType
+                     exactMatch="false"
+                     id="org.fusesource.ide.camel.editor.camelContentType">
+               </contentType>
+            </rules>
+         </include>
+         <exclude>
+            <rules>
+               <pattern
+                     regex="/target/*">
+               </pattern>
+            </rules>
+         </exclude>
+      </validator>
+   </extension>
+   <extension
+         id="JBossFuseToolingValidationProblem"
+         name="JBoss Fuse Tooling Validation Problem"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.wst.validation.problemmarker2">
+      </super>
+      <attribute
+            name="kind">
+      </attribute>
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+   </extension>
+
+</plugin>

@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.utils;
+package org.fusesource.ide.camel.model.service.core.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +56,8 @@ public class PropertiesUtils {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
             int protocolSeparatorIdx = ((String)selectedEP.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
-                return CamelComponentUtils.getComponentModel(((String)selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx));
+				return CamelComponentUtils.getComponentModel(((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
+						selectedEP.getCamelFile().getResource().getProject());
             }
 		}
 		return null;
@@ -75,7 +76,8 @@ public class PropertiesUtils {
         if (selectedEP != null && selectedEP.getParameter("uri") != null) {
             int protocolSeparatorIdx = ((String)selectedEP.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
-                Component componentModel = CamelComponentUtils.getComponentModel(((String)selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx));
+				Component componentModel = CamelComponentUtils.getComponentModel(((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
+						selectedEP.getCamelFile().getResource().getProject());
                 if (componentModel != null) {
                     for (Parameter p : componentModel.getUriParameters()) {
                         if (p.getKind() != null && p.getKind().equalsIgnoreCase("path")) {
@@ -100,7 +102,8 @@ public class PropertiesUtils {
         if (selectedEP != null && selectedEP.getParameter("uri") != null) {
             int protocolSeparatorIdx = ((String)selectedEP.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
-                Component componentModel = CamelComponentUtils.getComponentModel(((String)selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx));
+				Component componentModel = CamelComponentUtils.getComponentModel(((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
+						selectedEP.getCamelFile().getResource().getProject());
                 if (componentModel != null) {
                     for (Parameter p : componentModel.getUriParameters()) {
                         if (kind == UriParameterKind.CONSUMER) {
@@ -133,7 +136,8 @@ public class PropertiesUtils {
         if (selectedEP != null && selectedEP.getParameter("uri") != null) {
             int protocolSeparatorIdx = ((String)selectedEP.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
-                Component componentModel = CamelComponentUtils.getComponentModel(((String)selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx));
+				Component componentModel = CamelComponentUtils.getComponentModel(((String) selectedEP.getParameter("uri")).substring(0, protocolSeparatorIdx),
+						selectedEP.getCamelFile().getResource().getProject());
                 if (componentModel != null) {
                     return componentModel.getUriParameters();
                 }
@@ -189,29 +193,33 @@ public class PropertiesUtils {
      */
     public static String getPropertyFromUri(CamelModelElement selectedEP, Parameter p, Component c) {
     	// we need to distinguish between parameters in the uri part after the ? char
-    	if (p.getKind() != null && p.getKind().equalsIgnoreCase("parameter")) {
-	    	int idx = ((String)selectedEP.getParameter("uri")).indexOf(p.getName() + "=");
-	        if (idx != -1) {
-	            return ((String)selectedEP.getParameter("uri")).substring(idx + (p.getName() + "=").length(),
-	            		((String)selectedEP.getParameter("uri")).indexOf('&', idx + 1) != -1 ? ((String)selectedEP.getParameter("uri")).indexOf('&', idx + 1) : ((String)selectedEP.getParameter("uri")).length());
-	        } else {
-	        	// no value defined....return the default
-	        	if (p.getDefaultValue() != null && p.getDefaultValue().trim().length()>0) return p.getDefaultValue();
-	        }
+    	final String kind = p.getKind();
+		final String uriParameterValue = (String)selectedEP.getParameter("uri");
+		if (kind != null && kind.equalsIgnoreCase("parameter")) {
+			int idx = uriParameterValue.indexOf(p.getName() + "=");
+			if (idx != -1) {
+				return uriParameterValue.substring(idx + (p.getName() + "=").length(),
+						uriParameterValue.indexOf('&', idx + 1) != -1 ? uriParameterValue.indexOf('&', idx + 1) : uriParameterValue.length());
+			} else {
+				// no value defined....return the default
+				if (p.getDefaultValue() != null && p.getDefaultValue().trim().length() > 0)
+					return p.getDefaultValue();
+			}
 	    // and those which are part of the part between the scheme: and the ? char
-        } else if (p.getKind() != null && p.getKind().equalsIgnoreCase("path")) {
-        	// first get the delimiters
-        	String delimiters = getDelimitersAsString(c.getSyntax(), c.getUriParameters());
-        	// now get the uri without scheme and options
-        	String uri = ((String)selectedEP.getParameter("uri")).substring(((String)selectedEP.getParameter("uri")).indexOf(":") + 1, ((String)selectedEP.getParameter("uri")).indexOf("?") != -1 ? ((String)selectedEP.getParameter("uri")).indexOf("?") : ((String)selectedEP.getParameter("uri")).length());
-        	
-        	// sometimes there is only one field, so there are no delimiters
-        	if (delimiters.length()<1) {
-        		// we just return the full uri
-        		return uri;
-        	} else {
-        		return getPathMap(selectedEP, c).get(p.getName());       
-        	}
+        } else if (kind != null && kind.equalsIgnoreCase("path")) {
+			// first get the delimiters
+			String delimiters = getDelimitersAsString(c.getSyntax(), c.getUriParameters());
+			// now get the uri without scheme and options
+			String uri = uriParameterValue.substring(uriParameterValue.indexOf(":") + 1,
+					uriParameterValue.indexOf("?") != -1 ? uriParameterValue.indexOf("?") : uriParameterValue.length());
+
+			// sometimes there is only one field, so there are no delimiters
+			if (delimiters.length() < 1) {
+				// we just return the full uri
+				return uri;
+			} else {
+				return getPathMap(selectedEP, c).get(p.getName());
+			}
         }
     	// all other cases are unsupported atm
         return null;
@@ -242,15 +250,18 @@ public class PropertiesUtils {
     	// first strip off the <scheme>:
     	delimiterString = syntaxWithoutScheme;
     	
-    	Collections.sort(params, new Comparator<Parameter>() {
-    		/* (non-Javadoc)
-    		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-    		 */
-    		@Override
-    		public int compare(Parameter o1, Parameter o2) {
-    			return o2.getName().length() - o1.getName().length();
-    		}
-    	});
+		Collections.sort(params, new Comparator<Parameter>() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see java.util.Comparator#compare(java.lang.Object,
+			 * java.lang.Object)
+			 */
+			@Override
+			public int compare(Parameter o1, Parameter o2) {
+				return o2.getName().length() - o1.getName().length();
+			}
+		});
     	
     	// then strip off the remaining variable names
     	for (Parameter p : params) {
@@ -497,4 +508,9 @@ public class PropertiesUtils {
         }
         return JavaConventionsUtil.validatePackageName(text, project);
     }
+
+	public static boolean isRequired(Parameter parameter) {
+		final String required = parameter.getRequired();
+		return required != null && required.equalsIgnoreCase("true");
+	}
 }

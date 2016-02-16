@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.validation;
+package org.fusesource.ide.camel.validation;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,8 +28,9 @@ public class BasicUriValidator implements ValidationSupport {
     public ValidationResult validate(CamelModelElement node) {
         ValidationResult res = new ValidationResult();
         
-        if (node.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("from") ||
-        	node.getUnderlyingMetaModelObject().getName().equalsIgnoreCase("to")) {
+        final String underlyingModelName = node.getUnderlyingMetaModelObject().getName();
+		if (underlyingModelName.equalsIgnoreCase("from") ||
+        	underlyingModelName.equalsIgnoreCase("to")) {
             try {
                 new URI(node.getParameter("uri").toString());
             } catch (URISyntaxException ex) {

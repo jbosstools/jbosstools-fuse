@@ -173,6 +173,7 @@ public class CamelConfigBuilderIT {
 	 * @throws TransformerException
 	 */
 	private void assertDocumentComparaison(CamelConfigBuilder config, String fileReferenceName) throws TransformerException {
-		Assertions.assertThat(toString(config.getModel().getDocument())).isXmlEqualToContentOf(getFile(fileReferenceName));
+		final String configAsString = toString(config.getModel().getDocument());
+		Assertions.assertThat(configAsString).isXmlEqualToContentOf(getFile(fileReferenceName));
 	}
 }

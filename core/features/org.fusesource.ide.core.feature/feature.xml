@@ -4,9 +4,9 @@
       label="%featureName"
       version="8.0.0.qualifier"
       provider-name="%providerName"
+      plugin="org.fusesource.ide.tooling"
       license-feature="org.jboss.tools.foundation.license.feature"
-      license-feature-version="0.0.0"
-      plugin="org.fusesource.ide.tooling">
+      license-feature-version="0.0.0">
 
    <description url="http://tools.jboss.org/features/apachecamel.html">
       %description
@@ -61,7 +61,7 @@
       <import plugin="org.eclipse.ui.views.properties.tabbed" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.navigator" version="3.5.400" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
-      <import plugin="org.jboss.tools.usage"/>      
+      <import plugin="org.jboss.tools.usage"/>
       <import feature="org.jboss.tools.jmx.feature" version="1.6.0" match="greaterOrEqual"/>
    </requires>
 
@@ -92,8 +92,6 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-
 
    <plugin
          id="org.fusesource.ide.cheatsheets"
@@ -139,6 +137,13 @@
 
    <plugin
          id="org.fusesource.ide.tooling"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.fusesource.ide.camel.validation"
          download-size="0"
          install-size="0"
          version="0.0.0"

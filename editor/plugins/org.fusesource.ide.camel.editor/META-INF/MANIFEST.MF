@@ -48,4 +48,5 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
  org.fusesource.ide.camel.model.service.core;bundle-version="8.0.0",
  org.fusesource.ide.launcher;bundle-version="8.0.0",
  org.fusesource.ide.graph;bundle-version="8.0.0",
- org.fusesource.ide.foundation.ui;bundle-version="8.0.0"
+ org.fusesource.ide.foundation.ui;bundle-version="8.0.0",
+ org.fusesource.ide.camel.validation
