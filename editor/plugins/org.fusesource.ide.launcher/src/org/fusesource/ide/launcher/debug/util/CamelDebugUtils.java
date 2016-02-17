@@ -11,6 +11,9 @@
 package org.fusesource.ide.launcher.debug.util;
 
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
@@ -236,8 +239,9 @@ public class CamelDebugUtils {
 			try {
 				String fileUnderDebug = launchConfig.getAttribute(CamelContextLaunchConfigConstants.ATTR_FILE, (String)null);
 				if (fileUnderDebug.startsWith("file:")) fileUnderDebug = fileUnderDebug.substring("file:".length());
+				fileUnderDebug = URLDecoder.decode(fileUnderDebug, StandardCharsets.UTF_8.name());
 				return fileUnderDebug;
-			} catch (CoreException ex) {
+			} catch (CoreException | UnsupportedEncodingException ex) {
 				Activator.getLogger().error(ex);
 			}
 		}
