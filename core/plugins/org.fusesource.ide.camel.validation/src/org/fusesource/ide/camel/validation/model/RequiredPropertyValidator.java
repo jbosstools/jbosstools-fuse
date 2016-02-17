@@ -13,8 +13,10 @@ package org.fusesource.ide.camel.validation.model;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.camel.validation.l10n.Messages;
 
 /**
  * @author Aurelien Pupier
@@ -35,7 +37,7 @@ public class RequiredPropertyValidator implements IValidator {
 	public IStatus validate(Object value) {
 		if (PropertiesUtils.isRequired(parameter)) {
 			if ((value == null || value.toString().trim().isEmpty()) && parameter.getDefaultValue() == null) {
-				return ValidationStatus.error("Parameter " + parameter.getName() + " is a mandatory field and cannot be empty.");
+				return ValidationStatus.error(NLS.bind(Messages.RequiredPropertyValidator_messageMissingParameter, parameter.getName()));
 			}
 		}
 		return ValidationStatus.ok();

@@ -13,8 +13,10 @@ package org.fusesource.ide.camel.validation.model;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.osgi.util.NLS;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
+import org.fusesource.ide.camel.validation.l10n.Messages;
 
 /**
  * @author Aurelien Pupier
@@ -39,7 +41,7 @@ public class NumberValidator implements IValidator {
 				try {
 					Double.parseDouble(value.toString());
 				} catch (NumberFormatException ex) {
-					return ValidationStatus.error("The parameter " + parameter.getName() + " requires a numeric value.");
+					return ValidationStatus.error(NLS.bind(Messages.NumberValidator_messageError, parameter.getName()));
 				}
 			}
 		}
