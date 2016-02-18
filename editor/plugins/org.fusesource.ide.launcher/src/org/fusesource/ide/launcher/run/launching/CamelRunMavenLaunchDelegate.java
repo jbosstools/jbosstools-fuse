@@ -47,25 +47,42 @@ public class CamelRunMavenLaunchDelegate extends FuseMavenLaunchDelegate {
 			isBluePrint = CamelUtils.isBlueprintFile(filePath);
 
 			if (filePath.trim().length()>0) {
-				newGoalsAdditionForFile = String.format(" -D%s=file:%s", CamelContextLaunchConfigConstants.ATTR_CONTEXT_FILE, filePath);
+				newGoalsAdditionForFile = String.format(" -D%s=\"file:%s\"", CamelContextLaunchConfigConstants.ATTR_CONTEXT_FILE, filePath);
 				if (isBluePrint) {
 					newGoalsAdditionForFile = String.format("%s -D%s", newGoalsAdditionForFile, CamelContextLaunchConfigConstants.BLUEPRINT_CONTEXT);
 				}
 			}
 			
-			IFile f = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(filePath));
+			IFile f = getFileInWorkspace(filePath);
 			if (f != null) {
 				IProject p = f.getProject();
 				pomFile = p.getFile("pom.xml");
 			}
 		}
 		
-		if (MavenLaunchUtils.isPackagingTypeWAR(pomFile)) {
+		if (isWarPackaging(pomFile)) {
 			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_WAR);
 		} else {
 			setGoals(CamelContextLaunchConfigConstants.DEFAULT_MAVEN_GOALS_JAR);
 		}
 		return super.getGoals(configuration) + newGoalsAdditionForFile;
+	}
+
+	/**
+	 * @param pomFile
+	 * @return
+	 * @throws CoreException
+	 */
+	protected boolean isWarPackaging(IFile pomFile) throws CoreException {
+		return MavenLaunchUtils.isPackagingTypeWAR(pomFile);
+	}
+
+	/**
+	 * @param filePath
+	 * @return
+	 */
+	protected IFile getFileInWorkspace(String filePath) {
+		return ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(filePath));
 	}
 	
 	/* (non-Javadoc)
