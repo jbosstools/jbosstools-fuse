@@ -123,19 +123,21 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 				if (obj != null && obj instanceof CamelModelElement) return ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("route");
 				return false;
 			}
-		} 
-		// make sure we only have a single otherwise per choice
-		if (containerBO instanceof CamelModelElement && ((CamelModelElement)containerBO).getNodeTypeId().equals("choice")) {
+		} else if (containerBO instanceof CamelModelElement && ((CamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice")) {
 			// only one otherwise per choice
 			CamelModelElement choice = (CamelModelElement)containerBO;
 			if (this.eip != null) {
-				if (this.eip.getName().equals("otherwise") && choice.getParameter("otherwise") != null) return false;
-				return this.eip.getName().equalsIgnoreCase("when") || this.eip.getName().equalsIgnoreCase("ptherwise");
+				if (this.eip.getName().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
+				return this.eip.getName().equalsIgnoreCase("when") || this.eip.getName().equalsIgnoreCase("otherwise");
 			} else if (clazz != null) {
 				Object obj = newInstance(clazz);
 				if (obj instanceof CamelModelElement && ((CamelModelElement)obj).getNodeTypeId().equalsIgnoreCase("otherwise") && choice.getParameter("otherwise") != null) return false;
 			}
 		}
+		
+		// we have to prevent some eips being dropped on the route even if camel catalog says its allowed
+		if (eip.getName().equalsIgnoreCase("when") || eip.getName().equalsIgnoreCase("otherwise") && containerBO != null && ((CamelModelElement)containerBO).getNodeTypeId().equalsIgnoreCase("choice") == false) return false;
+		
 		return (containerBO != null && containerBO instanceof CamelModelElement && ((CamelModelElement)containerBO).getUnderlyingMetaModelObject().canHaveChildren() && ((CamelModelElement)containerBO).getUnderlyingMetaModelObject().getAllowedChildrenNodeTypes().contains(eip.getName()));
 	}
 
@@ -157,7 +159,7 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	@Override
 	public String getCreateLargeImageId() {
 		String iconName = getIconName();
-		if (iconName != null) iconName = String.format("%s_large", iconName);
+		if (iconName != null) iconName = ImageProvider.getKeyForLargeIcon(iconName);
 		return iconName;
 	}
 
