@@ -128,18 +128,18 @@ public class CollapseFeature extends AbstractCustomFeature {
 		int changeWidth = 0;
 		int changeHeight = 0;
 
-		boolean visible = false;
+		boolean childFiguresVisible = false;
 		if (Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE) == null || 
 			Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE).equals("false")) {
 			Graphiti.getPeService().setPropertyValue(pe, PROP_EXPANDED_WIDTH, String.valueOf(width));
 			Graphiti.getPeService().setPropertyValue(pe, PROP_EXPANDED_HEIGHT, String.valueOf(height));
-			visible = false;
+			childFiguresVisible = false;
 		} else if (	Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE) != null && 
 					Graphiti.getPeService().getPropertyValue(pe, PROP_COLLAPSED_STATE).equals("true")) {
 			changeWidth = Integer.parseInt(Graphiti.getPeService().getPropertyValue(pe, PROP_EXPANDED_WIDTH));
 			changeHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(pe, PROP_EXPANDED_HEIGHT));
 			Graphiti.getPeService().setPropertyValue(pe, PROP_COLLAPSED_STATE, "false");
-			visible = true;
+			childFiguresVisible = true;
 		}
 		
 		ResizeShapeContext context1 = new ResizeShapeContext(cs);
@@ -150,12 +150,12 @@ public class CollapseFeature extends AbstractCustomFeature {
 			rsf.execute(context1);
 		}
 	 	 
-		if(!visible) {
+		if(!childFiguresVisible) {
 			Graphiti.getPeService().setPropertyValue(pe, PROP_COLLAPSED_STATE, "true");
 		}
 		
 		//visible/invisible all the children
-		makeChildrenInvisible(cs, visible);
+		makeChildrenInvisible(cs, childFiguresVisible);
 	}
 
 	/**
@@ -173,7 +173,11 @@ public class CollapseFeature extends AbstractCustomFeature {
 				Shape shape = iter.next();
 				if(shape instanceof ContainerShape) {
 					// we only want to hide 1 level nested elements
-					makeChildrenInvisible((ContainerShape) shape, visible); // comment out if collapse gets broken
+					ContainerShape tmpCS = (ContainerShape)shape;
+					if (Graphiti.getPeService().getPropertyValue(tmpCS, PROP_COLLAPSED_STATE) == null || 
+						Graphiti.getPeService().getPropertyValue(tmpCS, PROP_COLLAPSED_STATE).equals("false")) {
+						makeChildrenInvisible((ContainerShape) shape, visible); // comment out if collapse gets broken	
+					}					
 					shape.setVisible(visible);
 					Anchor anchr = shape.getAnchors().get(0);
 					boolean initVisible = false;
