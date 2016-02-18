@@ -337,6 +337,7 @@
 						<include>**/*IT.class</include>
 					</includes>
 					<argLine>${tycho.testArgLine} -XX:+HeapDumpOnOutOfMemoryError</argLine>
+					<osgiDataDirectory>${project.basedir}/target/work sp@cé</osgiDataDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
