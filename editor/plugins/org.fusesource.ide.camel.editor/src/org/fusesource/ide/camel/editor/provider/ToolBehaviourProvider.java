@@ -34,9 +34,11 @@ import org.eclipse.graphiti.features.context.impl.CreateConnectionContext;
 import org.eclipse.graphiti.features.context.impl.CustomContext;
 import org.eclipse.graphiti.features.custom.ICustomFeature;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
+import org.eclipse.graphiti.mm.algorithms.styles.LineStyle;
 import org.eclipse.graphiti.mm.pictograms.Anchor;
 import org.eclipse.graphiti.mm.pictograms.AnchorContainer;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.palette.IPaletteCompartmentEntry;
 import org.eclipse.graphiti.palette.IToolEntry;
 import org.eclipse.graphiti.palette.impl.ObjectCreationToolEntry;
@@ -50,7 +52,9 @@ import org.eclipse.graphiti.tb.IContextButtonEntry;
 import org.eclipse.graphiti.tb.IContextButtonPadData;
 import org.eclipse.graphiti.tb.IContextMenuEntry;
 import org.eclipse.graphiti.tb.IDecorator;
+import org.eclipse.graphiti.tb.IShapeSelectionInfo;
 import org.eclipse.graphiti.tb.ImageDecorator;
+import org.eclipse.graphiti.tb.ShapeSelectionInfoImpl;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateConnectorFigureFeature;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateFigureFeature;
@@ -64,6 +68,7 @@ import org.fusesource.ide.camel.editor.internal.UIMessages;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomPaletteEntry;
 import org.fusesource.ide.camel.editor.provider.ext.PaletteCategoryItemProvider;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
+import org.fusesource.ide.camel.editor.utils.StyleUtil;
 import org.fusesource.ide.camel.editor.validation.ValidationFactory;
 import org.fusesource.ide.camel.editor.validation.ValidationResult;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
@@ -564,6 +569,19 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 			return rectangle;
 		}
 		return super.getSelectionBorder(pe);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.tb.DefaultToolBehaviorProvider#getSelectionInfoForShape(org.eclipse.graphiti.mm.pictograms.Shape)
+	 */
+	@Override
+	public IShapeSelectionInfo getSelectionInfoForShape(Shape shape) {
+		IShapeSelectionInfo si = new ShapeSelectionInfoImpl();
+		si.setPrimarySelectionHandleBackgroundColor(StyleUtil.CONTAINER_FIGURE_BORDER_COLOR);
+		si.setPrimarySelectionHandleForegroundColor(StyleUtil.CONTAINER_FIGURE_BORDER_COLOR);
+		si.setColor(StyleUtil.CONTAINER_FIGURE_BORDER_COLOR);
+		si.setLineStyle(LineStyle.SOLID);
+		return si;
 	}
 
 	/*

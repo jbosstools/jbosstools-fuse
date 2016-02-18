@@ -13,16 +13,13 @@ package org.fusesource.ide.camel.editor.features.misc;
 
 import java.util.ArrayList;
 
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.graphiti.datatypes.IDimension;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ILayoutContext;
 import org.eclipse.graphiti.features.impl.AbstractLayoutFeature;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
-import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.swt.graphics.Rectangle;
@@ -34,7 +31,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 public class LayoutNodeFeature extends AbstractLayoutFeature {
 
 	private static final int MIN_HEIGHT = 60;
-	private static final int MIN_WIDTH = FigureUIFactory.DEFAULT_FIGURE_CONTENT_WIDTH;
+	private static final int MIN_WIDTH = FigureUIFactory.FIGURE_MAX_WIDTH;
 
 	public LayoutNodeFeature(IFeatureProvider fp) {
 		super(fp);

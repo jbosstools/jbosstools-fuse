@@ -62,7 +62,7 @@ public class AddFlowFeature extends AbstractAddFeature {
 
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
 		// CONNECTION WITH POLYLINE
-		Connection connection = peCreateService.createFreeFormConnection(getDiagram());
+		Connection connection = peCreateService.createManhattanConnection(getDiagram());
 		connection.setStart(addConContext.getSourceAnchor());
 		connection.setEnd(addConContext.getTargetAnchor());
 		

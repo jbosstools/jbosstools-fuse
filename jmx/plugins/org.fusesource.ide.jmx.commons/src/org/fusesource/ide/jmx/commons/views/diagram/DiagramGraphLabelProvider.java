@@ -156,7 +156,7 @@ ISelectionChangedListener {
 		try {
 			if (isRouteNode(element)) {
 				CamelModelElement node = (CamelModelElement) element;
-				String label = DiagramUtils.filterFigureLabel(node.getDisplayText(useNodeIdForLabel));
+				String label = node.getDisplayText(useNodeIdForLabel);
 				return label;
 			} else if (element instanceof HasName) {
 				HasName h = (HasName) element;

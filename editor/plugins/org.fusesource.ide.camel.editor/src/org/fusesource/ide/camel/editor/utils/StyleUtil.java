@@ -22,7 +22,6 @@ import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.graphiti.util.ColorConstant;
 import org.eclipse.graphiti.util.IColorConstant;
 import org.eclipse.graphiti.util.PredefinedColoredAreas;
-import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
 
@@ -37,10 +36,21 @@ public class StyleUtil {
 	public static final IColorConstant E_CLASS_BACKGROUND = getColorConstant(PreferenceManager.getInstance().loadPreferenceAsString(PreferencesConstants.EDITOR_FIGURE_BG_COLOR));
 	public static final IColorConstant E_CLASS_SHADOW_FOREGROUND = getColorConstant("128,128,128");
 	public static final IColorConstant E_CLASS_SHADOW_BACKGROUND = getColorConstant("128,128,128");
+
+	// constants for the new design start here
+	public static final IColorConstant CONTAINER_FIGURE_BACKGROUND_COLOR = getColorConstant("229,248,255");
+	public static final IColorConstant CONTAINER_FIGURE_TEXT_COLOR = getColorConstant("54,54,54");
+	public static final IColorConstant CONTAINER_FIGURE_BORDER_COLOR = getColorConstant("107,159,218");
+	public static final IColorConstant FROM_FIGURE_BACKGROUND_COLOR = getColorConstant("200,235,121"); //158,224,189
+	public static final IColorConstant TO_FIGURE_BACKGROUND_COLOR = getColorConstant("206,190,225"); 
+	public static final IColorConstant EIP_FIGURE_BACKGROUND_COLOR = getColorConstant("240,171,0"); 
+	// constants for the new design end here
+	
 	public static final AdaptedGradientColoredAreas E_CLASS_GRADIENT = PredefinedColoredAreas.getBlueWhiteGlossAdaptions();
 
-	public static final String DEFAULT_FONT = Display.getDefault().getSystemFont().getFontData()[0].getName();
-	public static final int DEFAULT_FONT_SIZE = 10;
+	public static final String DEFAULT_FONT = "Liberation Sans";
+//	public static final String DEFAULT_FONT = Display.getDefault().getSystemFont().getFontData()[0].getName();
+	public static final int DEFAULT_FONT_SIZE = 8;
 
 	// use this flag to enable gradients (true) or use the predefined solid background color set in E_CLASS_BACKGROUND (false)
 	// TODO - setting this to true breaks round tripping and switching between routes using the outline view!!!

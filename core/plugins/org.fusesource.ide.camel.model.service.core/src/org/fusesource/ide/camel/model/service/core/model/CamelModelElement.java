@@ -287,6 +287,8 @@ public class CamelModelElement {
 	 * @return
 	 */
 	public final String getDisplayText(boolean useID) {
+		String result = String.format("%s ", Strings.capitalize(getNodeTypeId()));
+		
 		// honor the PREFER_ID_AS_LABEL preference
 		// we initially set it to the value of the contains method
 		boolean preferID = false;
@@ -303,14 +305,16 @@ public class CamelModelElement {
 		// we only return the id if we are told so by the preference AND the
 		// value of the ID is set != null
 		if (preferID && getId() != null && getId().trim().length() > 0) {
-			return getId();
+			result += getId();
+			return result;
 		}
 
-		if (this.getNodeTypeId().equals("from") || this.getNodeTypeId().equals("to")) {
+		if (isEndpointElement()) {
 			String uri = (String)this.getParameter("uri");
 			if (uri != null && uri.trim().length() > 0) {
 				// uri specified, use it
-				return uri;
+				result += uri;
+				return result;
 			}
 		}
 
@@ -318,7 +322,7 @@ public class CamelModelElement {
 		// For some nodes, we just return their node name
 		String[] nodeNameOnly = new String[] { "choice", "try", "finally", "otherwise", "marshal", "unmarshal" };
 		if (Arrays.asList(nodeNameOnly).contains(eipType))
-			return eipType;
+			return result.trim();
 
 		// Some nodes just need the value of a param
 		HashMap<String, String> singlePropertyDisplay = new HashMap<String, String>();
@@ -344,9 +348,9 @@ public class CamelModelElement {
 				if( propVal instanceof CamelModelElement) {
 					// seems to be an expression
 					String expression = ((CamelModelElement)propVal).getParameter("expression") != null ? (String)((CamelModelElement)propVal).getParameter("expression") : null;
-					if (expression != null)	return expression;			
+					if (expression != null)	return result + expression;			
 				} else {
-					return propVal.toString();
+					return result + propVal.toString();
 				}
 			}
 		}
@@ -423,7 +427,7 @@ public class CamelModelElement {
 
 		String answer = null;
 		if (Strings.isBlank(answer)) {
-			answer = getId();
+			answer = result + getId();
 		}
 		if (Strings.isBlank(answer) && getUnderlyingMetaModelObject() != null) {
 			answer = getUnderlyingMetaModelObject().getName();
@@ -594,6 +598,10 @@ public class CamelModelElement {
 			}
 			if (childFound)
 				getXmlNode().removeChild(element.getXmlNode());
+		}
+		// special handling for the otherwise element
+		if (getNodeTypeId().equalsIgnoreCase("choice") && element.getNodeTypeId().equalsIgnoreCase("otherwise")) {
+			getParameters().remove("otherwise");
 		}
 	}
 

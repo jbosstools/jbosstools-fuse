@@ -22,7 +22,6 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
@@ -68,7 +67,7 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 			if (bo2 != null && bo2.getXmlNode().isEqualNode(eClass.getXmlNode()) == false) {
 				return Reason.createTrueReason("The Model has been changed. Please update the figure."); //$NON-NLS-1$
 			}
-			businessName = DiagramUtils.filterFigureLabel(eClass.getDisplayText());
+			businessName = eClass.getDisplayText();
 		}
 
 		// update needed, if names are different
@@ -103,7 +102,7 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 				this.changed = true;
 			}
 			
-			businessName = DiagramUtils.filterFigureLabel(eClass.getDisplayText());
+			businessName = eClass.getDisplayText();
 		}
 
 		// Set name in pictogram model
@@ -122,11 +121,16 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 				} else if (shape instanceof Image) {
 					// update the icon image
 					CamelModelElement addedClass = (CamelModelElement)bo;
-					
+					String iconKey = null;
 					// set the new icon id - refresh will to the rest
-					String iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());
+					if (((CamelModelElement)bo).isEndpointElement()) {
+						iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());
+					} else if (((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren()) {
+						iconKey = ImageProvider.getKeyForSmallIcon(addedClass.getIconName());
+					} else {
+						iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());
+					}
 					((Image)shape).setId(iconKey);
-					
 					this.changed = true;
 				}
 			}

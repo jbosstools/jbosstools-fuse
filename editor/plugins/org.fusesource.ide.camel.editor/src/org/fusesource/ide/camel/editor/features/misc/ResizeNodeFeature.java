@@ -15,11 +15,13 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IResizeShapeContext;
 import org.eclipse.graphiti.features.impl.DefaultResizeShapeFeature;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
+import org.eclipse.graphiti.mm.algorithms.Image;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
+import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
 /**
  * @author lhein
@@ -39,7 +41,12 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 	 */
 	@Override
 	public boolean canResizeShape(IResizeShapeContext context) {
-		return true;
+		Object bo = getBusinessObjectForPictogramElement(context.getPictogramElement());
+		if (bo != null && bo instanceof CamelModelElement) {
+			CamelModelElement cme = (CamelModelElement)bo;
+			if (cme.getUnderlyingMetaModelObject().canHaveChildren()) return true;
+		}
+		return false;
 	}
 	
 	/* (non-Javadoc)
@@ -64,31 +71,34 @@ public class ResizeNodeFeature extends DefaultResizeShapeFeature {
 						shape.getGraphicsAlgorithm().getHeight();
 		}
 		
-// we don't save user made resizing of collapsed shapes for now
-//		boolean collapsed = Graphiti.getPeService().getPropertyValue(shape, CollapseFeature.PROP_COLLAPSED_STATE) != null && 
-//							Graphiti.getPeService().getPropertyValue(shape, CollapseFeature.PROP_COLLAPSED_STATE).equalsIgnoreCase("true");
-//		if (collapsed) {
-//			FigureUIFactory.storeCollapsedSize((ContainerShape)shape);
-//		}
-		
 		for (GraphicsAlgorithm ga : shape.getGraphicsAlgorithm().getGraphicsAlgorithmChildren()) {
-			if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND) != null && Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_TITLE)) {
+			
+			if (ga instanceof Image) continue;
+			
+			if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND) != null && 
+				Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_TITLE)) {
+				
 				if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_IMG_WIDTH) != null) {
 					int imgWidth = Integer.parseInt(Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_IMG_WIDTH));
-					ga.setWidth(w - imgWidth - FigureUIFactory.LABEL_SPACER_X - FigureUIFactory.LABEL_SPACER_X - FigureUIFactory.SECTION_OFFSET_X);
-				}						
-			} else if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND) != null && Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_EXPANDABLE)) {
-				ga.setWidth(w);
+					ga.setWidth(w - imgWidth - FigureUIFactory.DEFAULT_LABEL_OFFSET_H - FigureUIFactory.BREAKPOINT_DECORATOR_SPACE);
+				}	
+				
+			} else if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND) != null && 
+					   Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_SHAPE_KIND).equalsIgnoreCase(DiagramUtils.PROP_SHAPE_KIND_EXPANDABLE)) {
+				
+				ga.setWidth(w-FigureUIFactory.BORDER_SIZE*3);
 				if (Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_ORIGINAL_SECTION_HEIGHT) != null) {
 					int origHeight = Integer.parseInt(Graphiti.getPeService().getPropertyValue(ga, DiagramUtils.PROP_ORIGINAL_SECTION_HEIGHT));
-					ga.setHeight(h - origHeight);
+					ga.setHeight(h - origHeight - FigureUIFactory.BORDER_SIZE);
 				}
+			
 			} else {
 				ga.setWidth(w);
 			}
 		}
+
 		if (shape.getGraphicsAlgorithm() != null) {
-			Graphiti.getGaService().setLocationAndSize(shape.getGraphicsAlgorithm(), x, y, w-1+FigureUIFactory.CONTAINER_BORDER_SIZE+FigureUIFactory.CONTAINER_BORDER_SIZE, h+FigureUIFactory.CONTAINER_BORDER_SIZE+FigureUIFactory.CONTAINER_BORDER_SIZE);
+			Graphiti.getGaService().setLocationAndSize(shape.getGraphicsAlgorithm(), x, y, w, h);
 		}
 		
 		layoutPictogramElement(shape);

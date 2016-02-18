@@ -17,7 +17,7 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IAddContext;
 import org.eclipse.graphiti.mm.algorithms.GraphicsAlgorithm;
 import org.eclipse.graphiti.mm.algorithms.Image;
-import org.eclipse.graphiti.mm.algorithms.Rectangle;
+import org.eclipse.graphiti.mm.algorithms.RoundedRectangle;
 import org.eclipse.graphiti.mm.algorithms.Text;
 import org.eclipse.graphiti.mm.algorithms.styles.Color;
 import org.eclipse.graphiti.mm.algorithms.styles.Font;
@@ -33,6 +33,7 @@ import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
  * this factory provides the draw functionality for diagram figures
@@ -41,16 +42,18 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
  */
 public class FigureUIFactory {
 	
-	// the additional size of the invisible rectangle at the right border
-	// (this also equals the half width of the anchor to paint there)
-	public static final int CONTAINER_BORDER_SIZE = 2;
-	public static final int SECTION_OFFSET_X = 5;
-	public static final int SECTION_OFFSET_Y = 5;
-	public static final int ICON_OFFSET_X = 10;
-	public static final int LABEL_SPACER_X = 5;
-	public static final int TEXT_LABEL_SIZE = 20;
-	public static final int DEFAULT_FIGURE_CONTENT_WIDTH = 140;
-
+	// new statics
+	public static final int DEFAULT_LABEL_OFFSET_H = 15;
+	public static final int DEFAULT_LABEL_OFFSET_V = 10;
+	public static final int IMAGE_DEFAULT_WIDTH = 100;
+	public static final int IMAGE_DEFAULT_HEIGHT = 70;
+	public static final int FIGURE_MAX_WIDTH = 140;
+	public static final int FIGURE_TITLEBAR_HEIGHT = 30;
+	public static final int BREAKPOINT_DECORATOR_SPACE = 25;
+	public static final int CORNER_WIDTH = 15;
+	public static final int CORNER_HEIGHT = 15;
+	public static final int BORDER_SIZE = 1;
+	
 	/**
 	 * 
 	 * @param context
@@ -61,110 +64,118 @@ public class FigureUIFactory {
 	 * @param defaultLabel
 	 */
 	public static void createFigureUI(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
-		if (false) {
-			// potential special figures handling goes in here
-			// FOR NOW WE ONLY USE THE DEFAULT PAINT LOGIC
+		if (element instanceof CamelRouteElement) {
+			// special handling for route figures
+			paintRouteFigure(context, fp, containerShape, element, diagram, defaultLabel);
+		} else if (element.getUnderlyingMetaModelObject().canHaveChildren() == false) {
+			// special handling for child figures
+			paintChildFigure(context, fp, containerShape, element, diagram, defaultLabel);
+		} else if (element.getUnderlyingMetaModelObject().canHaveChildren() == true) {
+			// special handling for container figures
+			paintContainerFigure(context, fp, containerShape, element, diagram, defaultLabel);
 		} else {
 			// fall back to default figure painting
 			paintDefaultFigure(context, fp, containerShape, element, diagram, defaultLabel);
 		}
 	}
 	
+	/**
+	 * paints a default figure
+	 * 
+	 * @param context
+	 * @param fp
+	 * @param containerShape
+	 * @param element
+	 * @param diagram
+	 * @param defaultLabel
+	 */
 	private static void paintDefaultFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
+		// as default we paint child figures for now
+		paintChildFigure(context, fp, containerShape, element, diagram, defaultLabel);
+	}
+	
+	/**
+	 * paints a container figure
+	 * 
+	 * @param context
+	 * @param fp
+	 * @param containerShape
+	 * @param element
+	 * @param diagram
+	 * @param defaultLabel
+	 */
+	private static void paintContainerFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
 
-		// check whether the context has a size (e.g. from a create feature)
-		// otherwise define a default size for the shape
-		// now try to use the image dimension as figure dimension plus some height spacing
-		// for the display label
+		// determine font dimensions
 		Font f = StyleUtil.getStyleForCamelText(diagram).getFont();
 		IDimension fontDimension = GraphitiUi.getUiLayoutService().calculateTextSize(defaultLabel, f);
-		int label_width = fontDimension.getWidth() + LABEL_SPACER_X + LABEL_SPACER_X;
-		int label_height = Math.max(fontDimension.getHeight(), TEXT_LABEL_SIZE);
+		int label_width = fontDimension.getWidth();
+		int label_height = fontDimension.getHeight();
 
 		Dimension imageDimension = ImageUtils.getImageSize(ImageProvider.getKeyForSmallIcon(element.getIconName()));
-		int image_width = imageDimension.width + ICON_OFFSET_X;
+		int image_width = imageDimension.width;
 		int image_height = imageDimension.height;
 
-		int contentWidth = Math.max(image_width + label_width + SECTION_OFFSET_X + SECTION_OFFSET_X + CONTAINER_BORDER_SIZE + CONTAINER_BORDER_SIZE, DEFAULT_FIGURE_CONTENT_WIDTH);
-		int upperSectionHeight = Math.max(image_height + SECTION_OFFSET_Y + SECTION_OFFSET_Y, label_height + SECTION_OFFSET_Y + SECTION_OFFSET_Y);
-		int lowerSectionHeight = upperSectionHeight;
-		
-		// we will draw a box with an upper section containing an icon and the label
-		// the lower section will be empty by default but on expand it will reveal
-		// all child elements of that node
+		// we will draw a rounded rectangle with a header bar containing icon 
+		// and label - the lower section will be empty by default
 
-		// baseRect is the invisible ground of the figure
+		// baseRect is the rounded rectangle
 		org.eclipse.swt.graphics.Rectangle baseRect = new org.eclipse.swt.graphics.Rectangle(context.getX(), 
 																							 context.getY(), 
-																							 contentWidth, 
-																							 upperSectionHeight + lowerSectionHeight);
-		
-		// the label and icon displayed as title bar of the figure	
-		org.eclipse.swt.graphics.Rectangle upperSection = new org.eclipse.swt.graphics.Rectangle(0, 
-																								 0, 
-																								 contentWidth, 
-																								 upperSectionHeight);
+																							 FIGURE_MAX_WIDTH, 
+																							 IMAGE_DEFAULT_HEIGHT + Math.max(image_height, label_height) + DEFAULT_LABEL_OFFSET_V);
+
+		// the container for the child elements	
+		org.eclipse.swt.graphics.Rectangle contentSection = new org.eclipse.swt.graphics.Rectangle(	BORDER_SIZE, 
+																									FIGURE_TITLEBAR_HEIGHT - BORDER_SIZE, 
+																								 	FIGURE_MAX_WIDTH - BORDER_SIZE, 
+																								 	baseRect.height - FIGURE_TITLEBAR_HEIGHT - BORDER_SIZE);
 				
-		// the figure children section	
-		org.eclipse.swt.graphics.Rectangle lowerSection = new org.eclipse.swt.graphics.Rectangle(0, 
-																								 0 + upperSectionHeight, 
-																								 contentWidth, 
-																								 lowerSectionHeight);
-		
 		IGaService gaService = Graphiti.getGaService();
 
-		Color upperSectionColor = gaService.manageColor(diagram, 190, 190, 190);
-		Color lowerSectionColor = gaService.manageColor(diagram, 253, 253, 243);
-		
+		Color titleSectionColor = gaService.manageColor(diagram, StyleUtil.CONTAINER_FIGURE_BORDER_COLOR);
+		Color contentSectionColor = gaService.manageColor(diagram, StyleUtil.CONTAINER_FIGURE_BACKGROUND_COLOR);
+				
 		// create invisible outer rectangle expanded by the width needed for the anchor
-		Rectangle baseFigure = gaService.createInvisibleRectangle(containerShape);
-		gaService.setLocationAndSize(baseFigure, baseRect.x + CONTAINER_BORDER_SIZE, baseRect.y + CONTAINER_BORDER_SIZE, baseRect.width, baseRect.height);
-		baseFigure.setFilled(false);
-		baseFigure.setLineVisible(false);
+		RoundedRectangle baseFigure = gaService.createRoundedRectangle(containerShape, CORNER_WIDTH, CORNER_HEIGHT);
+		gaService.setLocationAndSize(baseFigure, baseRect.x, baseRect.y, baseRect.width, baseRect.height);
+		baseFigure.setBackground(titleSectionColor);
+		baseFigure.setFilled(true);
+//		baseFigure.setTransparency(.6);
+		markFigureHeaderArea(baseFigure, FIGURE_TITLEBAR_HEIGHT);		
 		
 		// rearrange container
 		containerShape.getGraphicsAlgorithm().setLineVisible(true);
-		containerShape.getGraphicsAlgorithm().setLineWidth(CONTAINER_BORDER_SIZE);
-		containerShape.getGraphicsAlgorithm().setWidth(baseFigure.getWidth() + CONTAINER_BORDER_SIZE + CONTAINER_BORDER_SIZE);
-		containerShape.getGraphicsAlgorithm().setHeight(baseFigure.getHeight() + CONTAINER_BORDER_SIZE + CONTAINER_BORDER_SIZE);
+		containerShape.getGraphicsAlgorithm().setForeground(titleSectionColor);
+		containerShape.getGraphicsAlgorithm().setLineWidth(BORDER_SIZE);
 		
-		// the upper section figure
-		Rectangle upperRectangle = gaService.createRectangle(baseFigure);
-		upperRectangle.setParentGraphicsAlgorithm(baseFigure);
-		upperRectangle.setStyle(StyleUtil.getStyleForCamelClass(diagram));
-		gaService.setLocationAndSize(upperRectangle, upperSection.x + CONTAINER_BORDER_SIZE-1, upperSection.y + CONTAINER_BORDER_SIZE-1, upperSection.width+1, upperSection.height+1);
-		upperRectangle.setBackground(upperSectionColor);
-		upperRectangle.setLineVisible(false);
-		upperRectangle.setFilled(true);
-		markFigureHeaderArea(upperRectangle, upperSectionHeight);
-
 		// create and set image
-		Image image = gaService.createImage(upperRectangle, ImageProvider.getKeyForSmallIcon(element.getIconName()));
-		gaService.setLocationAndSize(image, upperSection.x + SECTION_OFFSET_X + ICON_OFFSET_X, upperSection.y + SECTION_OFFSET_Y, image_width, image_height);
-
+		Image image = gaService.createImage(baseFigure, ImageProvider.getKeyForSmallIcon(element.getIconName()));
+		gaService.setLocationAndSize(image, BREAKPOINT_DECORATOR_SPACE, (FIGURE_TITLEBAR_HEIGHT / 2) - (image_height / 2), image_width, image_height);
+		
 		// create and set text graphics algorithm
-//		Shape shape = peCreateService.createShape(containerShape, false);
-//		Text text = gaService.createDefaultText(diagram, shape, defaultLabel);
-		Text text = gaService.createDefaultText(diagram, upperRectangle, defaultLabel);
+		Text text = gaService.createDefaultText(diagram, baseFigure, defaultLabel);
 		Style style = StyleUtil.getStyleForCamelText(diagram);
 		text.setParentGraphicsAlgorithm(baseFigure);
 		text.setStyle(style);
 		text.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
 		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
 		text.setFont(style.getFont());
-		gaService.setLocationAndSize(text, upperSection.x + image_width + SECTION_OFFSET_X + LABEL_SPACER_X + LABEL_SPACER_X, upperSection.y, upperSection.width - image_width - SECTION_OFFSET_X - LABEL_SPACER_X - LABEL_SPACER_X, upperSection.height);
+		gaService.setLocationAndSize(text, BREAKPOINT_DECORATOR_SPACE + image_width + DEFAULT_LABEL_OFFSET_H, 0, label_width, FIGURE_TITLEBAR_HEIGHT);
 		markFigureTitleArea(text, image_width);
 		
-		// the lower section figure
-		Rectangle lowerRectangle = gaService.createRectangle(baseFigure);
-		lowerRectangle.setParentGraphicsAlgorithm(baseFigure);
-		lowerRectangle.setStyle(StyleUtil.getStyleForCamelClass(diagram));
-		gaService.setLocationAndSize(lowerRectangle, lowerSection.x + CONTAINER_BORDER_SIZE-1, lowerSection.y + CONTAINER_BORDER_SIZE-1, lowerSection.width+1, lowerSection.height+1);
-		lowerRectangle.setBackground(lowerSectionColor);
-		lowerRectangle.setLineVisible(false);
-		lowerRectangle.setFilled(true);
-		markExpandableFigureArea(lowerRectangle, upperSectionHeight);
+		// the content section figure
+		RoundedRectangle contentRectangle = gaService.createRoundedRectangle(baseFigure, CORNER_WIDTH, CORNER_HEIGHT);
+		contentRectangle.setParentGraphicsAlgorithm(baseFigure);
+		contentRectangle.setStyle(StyleUtil.getStyleForCamelClass(diagram));
+		contentRectangle.setBackground(contentSectionColor);
+		contentRectangle.setLineWidth(BORDER_SIZE);
+		contentRectangle.setLineVisible(false);
+		contentRectangle.setFilled(true);
+//		contentRectangle.setTransparency(.6);
+		gaService.setLocationAndSize(contentRectangle, contentSection.x, contentSection.y, contentSection.width, contentSection.height);
+		markExpandableFigureArea(contentRectangle, FIGURE_TITLEBAR_HEIGHT);
 		
 		// provide information to support direct-editing directly
 		// after object creation (must be activated additionally)
@@ -182,6 +193,163 @@ public class FigureUIFactory {
 		
 		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_WIDTH, "" + containerShape.getGraphicsAlgorithm().getWidth());
 		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, "" + containerShape.getGraphicsAlgorithm().getHeight());
+	}
+	
+	/**
+	 * paints a figure for Camel Route elements
+	 * 
+	 * @param context
+	 * @param fp
+	 * @param containerShape
+	 * @param element
+	 * @param diagram
+	 * @param defaultLabel
+	 */
+	private static void paintRouteFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
+		IPeCreateService peCreateService = Graphiti.getPeCreateService();
+
+		// calculate label width and height
+		Font f = StyleUtil.getStyleForCamelText(diagram).getFont();
+		IDimension fontDimension = GraphitiUi.getUiLayoutService().calculateTextSize(defaultLabel, f);
+		int label_width = fontDimension.getWidth();
+		int label_height = fontDimension.getHeight();
+
+		// we draw a filled rounded rectangle with a title label 
+		org.eclipse.swt.graphics.Rectangle baseRect = new org.eclipse.swt.graphics.Rectangle(context.getX(), 
+																							 context.getY(), 
+																							 FIGURE_MAX_WIDTH, 
+																							 IMAGE_DEFAULT_HEIGHT + label_height + DEFAULT_LABEL_OFFSET_V);
+	
+		IGaService gaService = Graphiti.getGaService();
+
+		Color figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.CONTAINER_FIGURE_BACKGROUND_COLOR);
+		Color figureBorderColor = gaService.manageColor(diagram, StyleUtil.CONTAINER_FIGURE_BORDER_COLOR);
+		
+		// create invisible outer rectangle expanded by the width needed for the anchor
+		RoundedRectangle baseFigure = gaService.createRoundedRectangle(containerShape, CORNER_WIDTH, CORNER_HEIGHT);
+		gaService.setLocationAndSize(baseFigure, baseRect.x, baseRect.y, baseRect.width, baseRect.height);
+		baseFigure.setBackground(figureBackgroundColor);
+		baseFigure.setFilled(true);
+//		baseFigure.setTransparency(.6);
+		
+		// rearrange container
+		containerShape.getGraphicsAlgorithm().setLineVisible(true);
+		containerShape.getGraphicsAlgorithm().setForeground(figureBorderColor);
+		containerShape.getGraphicsAlgorithm().setLineWidth(BORDER_SIZE);
+		
+		// create and set text graphics algorithm
+		Text text = gaService.createDefaultText(diagram, baseFigure, defaultLabel);
+		Style style = StyleUtil.getStyleForCamelText(diagram);
+		text.setParentGraphicsAlgorithm(baseFigure);
+		text.setStyle(style);
+		text.setHorizontalAlignment(Orientation.ALIGNMENT_LEFT);
+		text.setVerticalAlignment(Orientation.ALIGNMENT_TOP);
+		text.setFont(style.getFont());
+		text.setForeground(GraphitiUi.getGaService().manageColor(diagram, StyleUtil.CONTAINER_FIGURE_TEXT_COLOR));
+		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H, DEFAULT_LABEL_OFFSET_V, baseRect.width - DEFAULT_LABEL_OFFSET_H - DEFAULT_LABEL_OFFSET_H, label_height + DEFAULT_LABEL_OFFSET_V);
+		
+		// provide information to support direct-editing directly
+		// after object creation (must be activated additionally)
+		IDirectEditingInfo directEditingInfo = fp.getDirectEditingInfo();
+		// set container shape for direct editing after object creation
+		directEditingInfo.setMainPictogramElement(containerShape);
+		// set shape and graphics algorithm where the editor for
+		// direct editing shall be opened after object creation
+		directEditingInfo.setPictogramElement(containerShape);
+		directEditingInfo.setGraphicsAlgorithm(text);
+
+		// add a chopbox anchor to the shape
+		ChopboxAnchor ca = peCreateService.createChopboxAnchor(containerShape);
+		fp.link(ca, element); 
+		
+		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_WIDTH, "" + containerShape.getGraphicsAlgorithm().getWidth());
+		Graphiti.getPeService().setPropertyValue(containerShape, CollapseFeature.PROP_COLLAPSED_HEIGHT, "" + containerShape.getGraphicsAlgorithm().getHeight());
+	}
+	
+	
+	/**
+	 * paints the non-container figures
+	 * 
+	 * @param context
+	 * @param fp
+	 * @param containerShape
+	 * @param element
+	 * @param diagram
+	 * @param defaultLabel
+	 */
+	private static void paintChildFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
+		IPeCreateService peCreateService = Graphiti.getPeCreateService();
+
+		// calculate the label width and height
+		Font f = StyleUtil.getStyleForCamelText(diagram).getFont();
+		IDimension fontDimension = GraphitiUi.getUiLayoutService().calculateTextSize(defaultLabel, f);
+		int label_width = fontDimension.getWidth();
+		int label_height = fontDimension.getHeight();
+
+		// a child figure is drawn as a rounded rectangle containing a big 
+		// descriptive icon and below the icon there will be a label shown
+		// describing the element
+		org.eclipse.swt.graphics.Rectangle baseRect = new org.eclipse.swt.graphics.Rectangle(context.getX(), 
+																							 context.getY(), 
+																							 FIGURE_MAX_WIDTH, 
+																							 IMAGE_DEFAULT_HEIGHT + label_height + DEFAULT_LABEL_OFFSET_V + DEFAULT_LABEL_OFFSET_V);
+		
+		IGaService gaService = Graphiti.getGaService();
+
+		Color figureBackgroundColor = null;
+		if (element.isEndpointElement()) {
+			// endpoint
+			if (element.getNodeTypeId().equalsIgnoreCase("from")) {
+				// from endpoint
+				figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.FROM_FIGURE_BACKGROUND_COLOR);
+			} else {
+				// to endpoint
+				figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.TO_FIGURE_BACKGROUND_COLOR);
+			}
+		} else {
+			// not an endpoint
+			figureBackgroundColor = gaService.manageColor(diagram, StyleUtil.EIP_FIGURE_BACKGROUND_COLOR);
+		}
+				
+		
+		// create invisible outer rectangle expanded by the width needed for the anchor
+		RoundedRectangle baseFigure = gaService.createRoundedRectangle(containerShape, CORNER_WIDTH, CORNER_HEIGHT);
+		gaService.setLocationAndSize(baseFigure, baseRect.x, baseRect.y, baseRect.width, baseRect.height);
+		baseFigure.setBackground(figureBackgroundColor);
+		baseFigure.setFilled(true);
+				
+		// rearrange container
+		containerShape.getGraphicsAlgorithm().setLineVisible(false);
+		containerShape.getGraphicsAlgorithm().setLineWidth(BORDER_SIZE);
+		
+		// create and set image
+		Image image = gaService.createImage(baseFigure, ImageProvider.getKeyForLargeIcon(element.getIconName()));
+		gaService.setLocationAndSize(image, (FIGURE_MAX_WIDTH / 2) - (IMAGE_DEFAULT_WIDTH / 2), DEFAULT_LABEL_OFFSET_V, IMAGE_DEFAULT_WIDTH, IMAGE_DEFAULT_HEIGHT);
+
+		// create and set text graphics algorithm
+		Text text = gaService.createDefaultText(diagram, baseFigure, defaultLabel);
+		Style style = StyleUtil.getStyleForCamelText(diagram);
+		text.setParentGraphicsAlgorithm(baseFigure);
+		text.setStyle(style);
+		text.setHorizontalAlignment(Orientation.ALIGNMENT_CENTER);
+		text.setVerticalAlignment(Orientation.ALIGNMENT_CENTER);
+		text.setFont(style.getFont());
+		text.setForeground(GraphitiUi.getGaService().manageColor(diagram, StyleUtil.CONTAINER_FIGURE_TEXT_COLOR));
+		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H, IMAGE_DEFAULT_HEIGHT, baseRect.width - DEFAULT_LABEL_OFFSET_H - DEFAULT_LABEL_OFFSET_H, label_height + DEFAULT_LABEL_OFFSET_V);
+			
+		// provide information to support direct-editing directly
+		// after object creation (must be activated additionally)
+		IDirectEditingInfo directEditingInfo = fp.getDirectEditingInfo();
+		// set container shape for direct editing after object creation
+		directEditingInfo.setMainPictogramElement(containerShape);
+		// set shape and graphics algorithm where the editor for
+		// direct editing shall be opened after object creation
+		directEditingInfo.setPictogramElement(containerShape);
+		directEditingInfo.setGraphicsAlgorithm(text);
+
+		// add a chopbox anchor to the shape
+		ChopboxAnchor ca = peCreateService.createChopboxAnchor(containerShape);
+		fp.link(ca, element); 
 	}
 	
 	/**

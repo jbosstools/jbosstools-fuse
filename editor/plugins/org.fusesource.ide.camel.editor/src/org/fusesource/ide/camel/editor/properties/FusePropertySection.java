@@ -48,7 +48,6 @@ import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.editor.utils.PropertiesUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
@@ -134,9 +133,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
         if (n.getUnderlyingMetaModelObject() != null) {
             this.selectedEP = n;
             this.eip = PropertiesUtils.getEipFor(selectedEP);
-            String headerText = "";
-            if (eip != null) headerText += Strings.convertCamelCase(eip.getName());
-            headerText += String.format(" (%s)", DiagramUtils.filterFigureLabel(selectedEP.getDisplayText()));
+            String headerText = selectedEP.getDisplayText();
             form.setText(headerText);
             if (selectedEP.isEndpointElement()) {
             	this.component = PropertiesUtils.getComponentFor(selectedEP);        

@@ -17,7 +17,6 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
-import org.fusesource.ide.camel.editor.utils.DiagramUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -65,7 +64,7 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 		CamelModelElement addedClass = (CamelModelElement)context.getNewObject();
 		ContainerShape targetContainer = (ContainerShape) context.getTargetContainer();
 		Diagram diagram = Graphiti.getPeService().getDiagramForPictogramElement(targetContainer);
-		String label = DiagramUtils.filterFigureLabel(addedClass.getDisplayText());
+		String label = addedClass.getDisplayText();
 		
 		// CONTAINER SHAPE
 		ContainerShape containerShape = Graphiti.getPeCreateService().createContainerShape(targetContainer, true);
