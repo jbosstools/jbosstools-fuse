@@ -41,7 +41,9 @@ public class GoIntoContainerFeature extends AbstractCustomFeature {
 			Object bo = getBusinessObjectForPictogramElement(pes[0]);
 			if (bo instanceof CamelModelElement) {
 				CamelModelElement cme = (CamelModelElement)bo;
-				return cme.getNodeTypeId().equals("route") && cme.equals(CamelUtils.getDiagramEditor().getSelectedContainer()) == false;
+				return 	cme.getNodeTypeId().equals("route") && 
+						cme.equals(CamelUtils.getDiagramEditor().getSelectedContainer()) == false &&
+						cme.getCamelContext().getChildElements().size() > 1;
 			}
 		}
 		return ret;
