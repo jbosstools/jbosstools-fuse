@@ -1297,6 +1297,11 @@ public class CamelModelElement {
 	 * @return
 	 */
 	public String getIconName() {
+		
+		if (getNodeTypeId().equalsIgnoreCase("when") || 
+			getNodeTypeId().equalsIgnoreCase("otherwise")) 
+			return "generic.png";
+		
 		if (isEndpointElement()) {
 			String u = (String) getParameter("uri");
 			if (u != null && u.trim().length() > 0) {
