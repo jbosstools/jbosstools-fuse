@@ -205,7 +205,7 @@ public class ImageProvider extends AbstractImageProvider {
 
 	public static String getKeyForLargeIcon(String iconName) {
 	    if (isImageAvailable(iconName)) return String.format("%s%s%s", PREFIX, iconName, POSTFIX_LARGE);
-		return String.format("%s%s%s", PREFIX, "endpoint", POSTFIX_LARGE);
+		return String.format("%s%s%s", PREFIX, "endpoint.png", POSTFIX_LARGE);
 	}
 	
 	protected static boolean isImageAvailable(String iconName) {

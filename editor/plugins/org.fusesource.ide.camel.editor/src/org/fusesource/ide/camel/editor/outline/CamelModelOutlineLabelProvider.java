@@ -35,7 +35,11 @@ public class CamelModelOutlineLabelProvider extends LabelProvider implements ISt
 	public Image getImage(Object element) {
 		if (element instanceof CamelModelElement) {
 			CamelModelElement cme = (CamelModelElement)element;
-			return CamelEditorUIActivator.getDefault().getImage(cme.getIconName().replaceAll(".png", "16.png"));
+			Image icon = CamelEditorUIActivator.getDefault().getImage(cme.getIconName().replaceAll(".png", "16.png"));
+			if (icon == null) {
+				icon = CamelEditorUIActivator.getDefault().getImage("endpoint16.png");
+			}
+			return icon;
 		}
 		return null;
 	}
