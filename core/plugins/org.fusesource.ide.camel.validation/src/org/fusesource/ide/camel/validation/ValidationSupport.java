@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.validation;
+package org.fusesource.ide.camel.validation;
 
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 

@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JBoss Fuse Validation Tests
+Bundle-SymbolicName: org.fusesource.ide.camel.validation.tests
+Bundle-Version: 8.0.0.qualifier
+Fragment-Host: org.fusesource.ide.camel.validation;bundle-version="8.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit,
+ org.assertj.core

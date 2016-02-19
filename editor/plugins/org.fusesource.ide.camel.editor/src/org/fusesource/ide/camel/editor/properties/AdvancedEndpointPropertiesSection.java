@@ -69,11 +69,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.forms.widgets.FormsResources;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.editor.utils.PropertiesUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
+import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
+import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.camel.validation.model.NumberValidator;
 import org.fusesource.ide.foundation.core.util.Strings;
 
 /**
@@ -257,6 +258,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                     public void modifyText(ModifyEvent e) {
                         Text txt = (Text)e.getSource();
                         String val = txt.getText();
+						if (val != null && !val.isEmpty()) {
                         try {
                         	Double.parseDouble(val);
                         	txt.setBackground(ColorConstants.white);
@@ -265,8 +267,9 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                         	// invalid character found
                             txt.setBackground(ColorConstants.red);
                             return;
-                        }
-                    }
+							}
+						}
+					}
                 });
                 txtField.setLayoutData(createPropertyFieldLayoutData());
                 c = txtField;
@@ -274,7 +277,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                 modelMap.put(p.getName(), txtField.getText());
                 // create observables for the control
                 uiObservable = WidgetProperties.text(SWT.Modify).observe(txtField);                
-                validator = new IValidator() {
+				validator = new IValidator() {
 					/*
 					 * (non-Javadoc)
 					 * @see org.eclipse.core.databinding.validation.IValidator#validate(java.lang.Object)
@@ -284,15 +287,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
 						if (prop.getRequired() != null && prop.getRequired().equalsIgnoreCase("true") && (value == null || value.toString().trim().length()<1)) {
 							return ValidationStatus.error("Parameter " + prop.getName() + " is a mandatory field and cannot be empty.");
 						}
-						// only check non-empty fields
-						if (value != null && value.toString().trim().length()>0) {
-							try {
-								Double.parseDouble(value.toString());
-							} catch (NumberFormatException ex) {
-								return ValidationStatus.error("The parameter " + prop.getName() + " requires a numeric value.");
-							}
-						}
-						return ValidationStatus.ok();
+						return new NumberValidator(prop).validate(value);
 					}
 				};
 
@@ -504,9 +499,8 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                     }
                 });
 				txtField.setLayoutData(GridDataFactory.fillDefaults().indent(5, 0).grab(true, false).create());
-                
-                URLClassLoader child = CamelComponentUtils.getProjectClassLoader();
-                Class classToLoad;
+				URLClassLoader child = CamelComponentUtils.getProjectClassLoader(selectedEP.getCamelFile().getResource().getProject());
+				Class<?> classToLoad;
                 try {
                     if (prop.getJavaType().indexOf("<")!=-1) {
                         classToLoad = child.loadClass(prop.getJavaType().substring(0,  prop.getJavaType().indexOf("<")));
@@ -519,7 +513,7 @@ public class AdvancedEndpointPropertiesSection extends FusePropertySection {
                 }
                 
                 final IProject project = CamelUtils.getDiagramEditor().getModel().getResource().getProject();
-                final Class fClass = classToLoad;
+				final Class<?> fClass = classToLoad;
                 
                 Button btn_create = toolkit.createButton(page, " + ", SWT.FLAT | SWT.PUSH);
                 btn_create.addSelectionListener(new SelectionAdapter() {

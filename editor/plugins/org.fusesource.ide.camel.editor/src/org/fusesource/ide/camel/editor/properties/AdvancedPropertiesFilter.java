@@ -12,9 +12,9 @@ package org.fusesource.ide.camel.editor.properties;
 
 import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
 import org.eclipse.jface.viewers.IFilter;
-import org.fusesource.ide.camel.editor.utils.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 
 /**
  * @author lhein
@@ -31,7 +31,8 @@ public class AdvancedPropertiesFilter implements IFilter {
             if (ep.getParameter("uri") == null || ((String)ep.getParameter("uri")).trim().length()<1) return false;
         	int protocolSeparatorIdx = ((String)ep.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
-            	Component comp = CamelComponentUtils.getComponentModel(((String)ep.getParameter("uri")).substring(0, protocolSeparatorIdx));
+				Component comp = CamelComponentUtils.getComponentModel(((String) ep.getParameter("uri")).substring(0, protocolSeparatorIdx),
+						ep.getCamelFile().getResource().getProject());
                 return comp != null && comp.getUriParameters().isEmpty() == false;
             }            
         }

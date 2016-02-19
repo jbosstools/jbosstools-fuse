@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.fusesource.ide.camel.editor.utils;
+package org.fusesource.ide.camel.model.service.core.util;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -30,13 +31,12 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.components.ComponentProperty;
+import org.fusesource.ide.camel.model.service.core.internal.CamelModelServiceCoreActivator;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.JsonHelper;
@@ -52,22 +52,24 @@ public final class CamelComponentUtils {
     private static HashMap<String, Component> knownComponents = new HashMap<String, Component>();
     
     /**
-     * returns the properties model for a given protocol
-     * 
-     * @param protocol  the protocol to get the properties for
-     * @return  the properties model or null if not available
-     */
-    public static Component getComponentModel(String protocol) {
-        String componentClass = getComponentClass(protocol);
+	 * returns the properties model for a given protocol
+	 * 
+	 * @param protocol
+	 *            the protocol to get the properties for
+	 * @param project
+	 * @return the properties model or null if not available
+	 */
+	public static Component getComponentModel(String protocol, IProject project) {
+		String componentClass = getComponentClass(protocol, project);
         if (knownComponents.containsKey(componentClass)) {
             return knownComponents.get(componentClass);
         }
         
         // it seems we miss a model for the given protocol...lets try creating one on the fly
-        Component c = buildModelForComponent(protocol, componentClass);
+		Component c = buildModelForComponent(protocol, componentClass, project);
         if (c != null) {
             knownComponents.put(componentClass, c);
-            return getComponentModel(protocol);
+			return getComponentModel(protocol, project);
         }
 
         return null;
@@ -114,17 +116,18 @@ public final class CamelComponentUtils {
     }
     
     public static boolean isNumberProperty(Parameter p) {
-        return  p.getChoice() == null && (
-        		p.getJavaType().equalsIgnoreCase("int") || 
-                p.getJavaType().equalsIgnoreCase("Integer") ||
-                p.getJavaType().equalsIgnoreCase("java.lang.Integer") || 
-                p.getJavaType().equalsIgnoreCase("long") || 
-                p.getJavaType().equalsIgnoreCase("java.lang.Long") || 
-                p.getJavaType().equalsIgnoreCase("double") || 
-                p.getJavaType().equalsIgnoreCase("java.lang.Double") ||
-                p.getJavaType().equalsIgnoreCase("float") || 
-                p.getJavaType().equalsIgnoreCase("java.lang.Float") || 
-                p.getJavaType().equalsIgnoreCase("Number"));
+        final String javaType = p.getJavaType();
+		return  p.getChoice() == null && (
+        		javaType.equalsIgnoreCase("int") || 
+                javaType.equalsIgnoreCase("Integer") ||
+                javaType.equalsIgnoreCase("java.lang.Integer") || 
+                javaType.equalsIgnoreCase("long") || 
+                javaType.equalsIgnoreCase("java.lang.Long") || 
+                javaType.equalsIgnoreCase("double") || 
+                javaType.equalsIgnoreCase("java.lang.Double") ||
+                javaType.equalsIgnoreCase("float") || 
+                javaType.equalsIgnoreCase("java.lang.Float") || 
+                javaType.equalsIgnoreCase("Number"));
     }
     
     public static boolean isChoiceProperty(Parameter p) {
@@ -190,11 +193,10 @@ public final class CamelComponentUtils {
      * @param scheme
      * @return  the class or null if not found
      */
-    protected static String getComponentClass(String scheme) {
+	protected static String getComponentClass(String scheme, IProject project) {
         String compClass = null;
         
-        CamelDesignEditor editor = CamelUtils.getDiagramEditor();
-        String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
+		String camelVersion = CamelModelFactory.getCamelVersion(project);
         ArrayList<Component> components = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel().getSupportedComponents();
         for (Component c : components) {
             if (c.supportsScheme(scheme)) {
@@ -206,7 +208,7 @@ public final class CamelComponentUtils {
         if (compClass == null) {
         	// seems this scheme has no model entry -> check dependency
         	try {
-                IMavenProjectFacade m2facade = MavenPlugin.getMavenProjectRegistry().create(editor.getModel().getResource().getProject(), new NullProgressMonitor());
+				IMavenProjectFacade m2facade = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
                 Set<Artifact> deps = m2facade.getMavenProject(new NullProgressMonitor()).getArtifacts();
                 ZipFile zf = null;
                 ZipEntry ze = null;
@@ -227,7 +229,7 @@ public final class CamelComponentUtils {
                 	compClass = p.getProperty("class");
                 }
         	} catch (Exception ex) {
-        		CamelEditorUIActivator.pluginLog().logError(ex);
+				CamelModelServiceCoreActivator.pluginLog().logError(ex);
         		compClass = null;
         	}
         }
@@ -236,16 +238,17 @@ public final class CamelComponentUtils {
     }
     
     /**
-     * returns the component class for the given scheme
-     * 
-     * @param scheme
-     * @return  the class or null if not found
-     */
-    protected static String getComponentJSon(String scheme) {
+	 * returns the component class for the given scheme
+	 * 
+	 * @param scheme
+	 * @param project
+	 * @return the class or null if not found
+	 */
+	protected static String getComponentJSon(String scheme, IProject project) {
         String json = null;
 
         try {
-            IMavenProjectFacade m2facade = MavenPlugin.getMavenProjectRegistry().create(CamelUtils.getDiagramEditor().getModel().getResource().getProject(), new NullProgressMonitor());
+			IMavenProjectFacade m2facade = MavenPlugin.getMavenProjectRegistry().create(project, new NullProgressMonitor());
             Set<Artifact> deps = m2facade.getMavenProject(new NullProgressMonitor()).getArtifacts();
             ZipFile zf = null;
             ZipEntry ze = null;
@@ -272,23 +275,24 @@ public final class CamelComponentUtils {
                 }
             }
     	} catch (Exception ex) {
-    		CamelEditorUIActivator.pluginLog().logError(ex);
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
     		json = null;
     	}
         
         return json;
     }
     
-    protected static Component buildModelForComponent(String scheme, String clazz) {
+	protected static Component buildModelForComponent(String scheme, String clazz, IProject project) {
         Component resModel = null;
 
-        String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
+		String camelVersion = CamelModelFactory.getCamelVersion(project);
         
         // 1. take what we have in our model xml
         resModel = CamelModelFactory.getModelForVersion(camelVersion).getComponentModel().getComponentForScheme(scheme);
         
         // 2. try to generate the model from json blob
-        if (resModel == null) resModel = buildModelFromJSON(scheme, getComponentJSon(scheme), clazz);
+		if (resModel == null)
+			resModel = buildModelFromJSON(scheme, getComponentJSon(scheme, project), clazz);
         
         // 3. handling special cases
         if (resModel == null) {
@@ -318,7 +322,7 @@ public final class CamelComponentUtils {
             }
         } catch (Exception ex) {
         	ex.printStackTrace();
-            CamelEditorUIActivator.pluginLog().logError(ex);
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
         }
     
         return resModel;
@@ -332,23 +336,22 @@ public final class CamelComponentUtils {
 //		    Marshaller m = context.createMarshaller();
 //            m.marshal(component, new File("/var/tmp/model.xml"));
         } catch (Exception ex) {
-        	CamelEditorUIActivator.pluginLog().logError(ex);
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
         }
     }
     
-    public static URLClassLoader getProjectClassLoader() {
+	public static URLClassLoader getProjectClassLoader(IProject project) {
         try {
-            IProject project = CamelUtils.getDiagramEditor().getModel().getResource().getProject();
             IJavaProject javaProject = (IJavaProject)project.getNature(JavaCore.NATURE_ID);
             IPackageFragmentRoot[] pfroots = javaProject.getAllPackageFragmentRoots();
-            ArrayList<URL> urls = new ArrayList<URL>();
+			List<URL> urls = new ArrayList<URL>();
             for (IPackageFragmentRoot root : pfroots) {
                 URL rUrl = root.getPath().toFile().toURI().toURL();
                 urls.add(rUrl);
             }
             return new URLClassLoader(urls.toArray(new URL[urls.size()]), CamelComponentUtils.class.getClassLoader());
         } catch (Exception ex) {
-        	CamelEditorUIActivator.pluginLog().logError(ex);
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
         }
         return null;
     }
@@ -500,7 +503,7 @@ public final class CamelComponentUtils {
             
             resModel.setUriParameters(uriParams);
         } catch(Exception ex) {
-            CamelEditorUIActivator.pluginLog().logError(ex);
+			CamelModelServiceCoreActivator.pluginLog().logError(ex);
             resModel = null;
         }
         

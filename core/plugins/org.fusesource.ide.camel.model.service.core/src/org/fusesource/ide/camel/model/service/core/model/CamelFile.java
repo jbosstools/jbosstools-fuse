@@ -30,6 +30,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
+import org.xml.sax.Locator;
 
 /**
  * this object represents the camel xml file. It can be of a schema type
@@ -68,6 +69,8 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	 * list of listeners looking for changes in the internal model
 	 */
 	private List<ICamelModelListener> modelListeners = new ArrayList<ICamelModelListener>();
+
+	private Locator locator;
 	
 	
 	/**
@@ -336,8 +339,10 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	@Override
 	public CamelContextElement getCamelContext() {
 		for (CamelModelElement e : getChildElements()) {
-			if (e.getTranslatedNodeName().equalsIgnoreCase("camelContext") ||
-				e.getTranslatedNodeName().equalsIgnoreCase("routes")) return (CamelContextElement)e;
+			String translatedNodeName = e.getTranslatedNodeName();
+			if (translatedNodeName.equalsIgnoreCase("camelContext") || translatedNodeName.equalsIgnoreCase("routes")) {
+				return (CamelContextElement) e;
+			}
 		}
 		return null;
 	}
@@ -357,4 +362,5 @@ public class CamelFile extends CamelModelElement implements EventListener {
 	public void handleEvent(Event evt) {
 		fireModelChanged();
 	}
+
 }

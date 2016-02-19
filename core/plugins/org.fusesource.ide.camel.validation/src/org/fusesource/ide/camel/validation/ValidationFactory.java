@@ -9,13 +9,14 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.fusesource.ide.camel.editor.validation;
+package org.fusesource.ide.camel.validation;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 
 
 /**
@@ -29,7 +30,7 @@ public final class ValidationFactory {
 	static {
 		// register a general validator which should basically work for mandatory field checking
 		registeredValidators.put(CamelModelElement.class, new BasicNodeValidator());
-		// you may register special validators for specific model classes here but they all need to inherit from BasicNodeValidator
+		// you may register special validators for specific model classes here but they all need to implement IValidationSupport
 		// ...
         //registeredValidators.put(Endpoint.class, new BasicUriValidator());
 	}
@@ -58,7 +59,7 @@ public final class ValidationFactory {
     	
     	Iterator<Class<? extends CamelModelElement>> it = registeredValidators.keySet().iterator();
     	while (it.hasNext()) {
-    	    Class c = it.next();
+			Class<? extends CamelModelElement> c = it.next();
     	    
     	    if (c.isInstance(node)) {
                 ValidationSupport validator = registeredValidators.get(c);
