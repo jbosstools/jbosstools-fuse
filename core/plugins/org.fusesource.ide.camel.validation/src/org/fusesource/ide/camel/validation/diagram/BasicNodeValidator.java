@@ -53,10 +53,10 @@ public class BasicNodeValidator implements ValidationSupport {
 	 * (non-Javadoc)
 	 * @see org.fusesource.ide.camel.editor.validation.ValidationSupport#validate(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
-    @Override
-    public ValidationResult validate(CamelModelElement camelModelElement) {
+	@Override
+	public ValidationResult validate(CamelModelElement camelModelElement) {
 		ValidationResult result = new ValidationResult();
-		
+
 		if (camelModelElement != null && camelModelElement.getCamelContext() != null) { // TODO: check why camel context can be null?!?
 			// we check if all mandatory fields are filled
 			validateDetailProperties(camelModelElement, result);
@@ -83,16 +83,23 @@ public class BasicNodeValidator implements ValidationSupport {
 	 */
 	private void clearMarkers(CamelModelElement camelModelElement) {
 		try {
-			for (IMarker marker : camelModelElement.getCamelFile().getResource().findMarkers(MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
-				final CamelModelElement cmeWithMarker = markers.get(marker);
-				if (camelModelElement.equals(cmeWithMarker)
-						//we are lucky still the same model in memory
-						|| hasSameId(camelModelElement, cmeWithMarker)
-				// maybe just a reloaded model, so finger-crossed two elements
-				// have the same id
-				) {
-					markers.remove(marker);
-					marker.delete();
+			final CamelFile camelFile = camelModelElement.getCamelFile();
+			if (camelFile != null) {
+				final IResource resource = camelFile.getResource();
+				if (resource != null) {
+					for (IMarker marker : resource.findMarkers(MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
+						final CamelModelElement cmeWithMarker = markers.get(marker);
+						if (camelModelElement.equals(cmeWithMarker)
+								// we are lucky still the same model in memory
+								|| hasSameId(camelModelElement, cmeWithMarker)
+						// maybe just a reloaded model, so finger-crossed two
+						// elements
+						// have the same id
+						) {
+							markers.remove(marker);
+							marker.delete();
+						}
+					}
 				}
 			}
 		} catch (CoreException e) {
@@ -185,13 +192,13 @@ public class BasicNodeValidator implements ValidationSupport {
 							}
 						}
 					}
-					
+
 					// warn user if he set both ref and uri
 					if (selectedEP.getParameter("uri") != null && ((String) selectedEP.getParameter("uri")).trim().length() > 0 && selectedEP.getParameter("ref") != null
 							&& ((String) selectedEP.getParameter("ref")).trim().length() > 0) {
 						result.addWarning("Please choose only ONE of Uri and Ref. Please check the properties view for more details.");
 					}
-					
+
 				} else if (prop.getName().equalsIgnoreCase("id")) {
 					// check if ID is unique
 					if (value == null || value instanceof String == false || value.toString().trim().length() < 1) {
@@ -203,7 +210,7 @@ public class BasicNodeValidator implements ValidationSupport {
 					}
 
 				} else if (prop.getName().equalsIgnoreCase("expression")) {
-					
+
 					// ignore for now - TODO: provide better validation for
 					// expression properties
 
@@ -218,7 +225,7 @@ public class BasicNodeValidator implements ValidationSupport {
 			}
 		}
 	}
-	
+
 	/**
 	 * checks if the given node's id property is unique in the whole camel context
 	 * 
