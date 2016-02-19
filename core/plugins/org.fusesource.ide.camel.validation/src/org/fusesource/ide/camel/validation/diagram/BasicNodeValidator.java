@@ -283,7 +283,7 @@ public class BasicNodeValidator implements ValidationSupport {
 	private void managePosition(IResource resource, CamelModelElement cme, IMarker marker) throws CoreException {
 		Integer lineNumber = -1;
 		if (cme.getId() != null) {
-			List<Integer> foundIds = find("id=\"" + cme.getId() + "\"", resource.getRawLocation().toFile());
+			List<Integer> foundIds = findLineNumbers("id=\"" + cme.getId() + "\"", resource.getRawLocation().toFile());
 			if (foundIds.size() == 1) {
 				lineNumber = foundIds.get(0);
 				marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
@@ -298,7 +298,7 @@ public class BasicNodeValidator implements ValidationSupport {
 		}
 	}
 
-	public List<Integer> find(String word, File text) {
+	public List<Integer> findLineNumbers(String word, File text) {
 		List<Integer> results = new ArrayList<Integer>();
 		LineNumberReader rdr;
 		try {
