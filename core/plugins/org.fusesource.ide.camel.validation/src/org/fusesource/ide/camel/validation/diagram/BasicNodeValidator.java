@@ -11,17 +11,29 @@
 
 package org.fusesource.ide.camel.validation.diagram;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
+import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
+import org.fusesource.ide.camel.validation.CamelValidationActivator;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.camel.validation.ValidationSupport;
 import org.fusesource.ide.camel.validation.model.NumberValidator;
@@ -34,8 +46,8 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class BasicNodeValidator implements ValidationSupport {
 
-	public BasicNodeValidator() {
-	}
+	public static final String MARKER_TYPE = CamelValidationActivator.PLUGIN_ID + ".JBossFuseToolingValidationProblem";
+	private static Map<IMarker, CamelModelElement> markers = new HashMap<>();
 
 	/*
 	 * (non-Javadoc)
@@ -56,7 +68,45 @@ public class BasicNodeValidator implements ValidationSupport {
 			}
 		}
 
+		clearMarkers(camelModelElement);
+
+		for (String error : result.getErrors()) {
+			createMarker(camelModelElement.getCamelFile().getResource(), camelModelElement, error);
+		}
+
 		return result;
+	}
+
+	/**
+	 * @param camelModelElement
+	 * @return
+	 */
+	private void clearMarkers(CamelModelElement camelModelElement) {
+		try {
+			for (IMarker marker : camelModelElement.getCamelFile().getResource().findMarkers(MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
+				final CamelModelElement cmeWithMarker = markers.get(marker);
+				if (camelModelElement.equals(cmeWithMarker)
+						//we are lucky still the same model in memory
+						|| hasSameId(camelModelElement, cmeWithMarker)
+				// maybe just a reloaded model, so finger-crossed two elements
+				// have the same id
+				) {
+					markers.remove(marker);
+					marker.delete();
+				}
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @param camelModelElement
+	 * @param obj
+	 * @return
+	 */
+	private boolean hasSameId(CamelModelElement camelModelElement, final CamelModelElement obj) {
+		return camelModelElement.getId() != null && obj != null && camelModelElement.getId().equals(obj.getId());
 	}
 
 	/**
@@ -196,4 +246,89 @@ public class BasicNodeValidator implements ValidationSupport {
 		}
 		return noDoubledIDs;
 	}
+
+	/**
+	 * @param resource
+	 * @param xmlNode
+	 * @param message
+	 */
+	private void createMarker(IResource resource, CamelModelElement cme, final String message) {
+		try {
+			IMarker marker = resource.createMarker(MARKER_TYPE);
+			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+			marker.setAttribute(IMarker.MESSAGE, message);
+			marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+			managePosition(resource, cme, marker);
+			markers.put(marker, cme);
+			// marker.setAttribute(IMarker.CHAR_START, 0);
+			// marker.setAttribute(IMarker.CHAR_END, 10);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @param resource
+	 * @param cme
+	 * @param marker
+	 * @throws CoreException
+	 */
+	private void managePosition(IResource resource, CamelModelElement cme, IMarker marker) throws CoreException {
+		Integer lineNumber = -1;
+		if (cme.getId() != null) {
+			List<Integer> foundIds = find("id=\"" + cme.getId() + "\"", resource.getRawLocation().toFile());
+			if (foundIds.size() == 1) {
+				lineNumber = foundIds.get(0);
+				marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+			}
+		}
+		if (lineNumber == -1) {
+			marker.setAttribute(IMarker.LOCATION, "/" + getCamelPath(cme));
+		} else {
+			// register location to be able to redirect inside the diagram?
+			// marker.setAttribute(IMarker.FUSE_LOCATION, "/" +
+			// getCamelPath(cme));
+		}
+	}
+
+	public List<Integer> find(String word, File text) {
+		List<Integer> results = new ArrayList<Integer>();
+		LineNumberReader rdr;
+		try {
+			rdr = new LineNumberReader(new FileReader(text));
+			try {
+				String line;
+				while ((line = rdr.readLine()) != null) {
+					if (line.indexOf(word) >= 0) {
+						results.add(rdr.getLineNumber());
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					rdr.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return results;
+	}
+
+	/**
+	 * @param cme
+	 * @return
+	 */
+	private String getCamelPath(CamelModelElement cme) {
+		String res = cme.getDisplayText();
+		final CamelModelElement parent = cme.getParent();
+		if (parent != null && !(parent instanceof CamelFile)) {
+			res = getCamelPath(parent) + "/" + res;
+		}
+		return res;
+	}
+
 }

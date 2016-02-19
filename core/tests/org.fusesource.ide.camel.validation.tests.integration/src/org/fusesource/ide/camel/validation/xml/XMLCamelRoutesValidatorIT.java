@@ -53,12 +53,21 @@ public class XMLCamelRoutesValidatorIT {
 		route.addChildElement(endPoint);
 		endPoint.setParent(route);
 		endPoint.setXmlNode(xmlNode);
+		Mockito.doReturn("myNodeName").when(xmlNode).getNodeName();
 		Mockito.doReturn(camelFile).when(xmlCamelRoutesValidator).loadCamelFile(monitor, resource);
 		Mockito.doReturn(marker).when(resource).createMarker(Mockito.anyString());
+		Mockito.doReturn(new IMarker[] { marker }).when(resource).findMarkers(Mockito.anyString(), Mockito.eq(true), Mockito.anyInt());
 		ValidationEvent event = new ValidationEvent(resource, IResourceDelta.CHANGED, null);
 		ValidationState state = new ValidationState();
+		
 		Assertions.assertThat(xmlCamelRoutesValidator.validate(event, state, monitor).getSeverityError()).isEqualTo(1);
+		// Check marker created
 		Mockito.verify(resource).createMarker(Mockito.anyString());
+		
+		Assertions.assertThat(xmlCamelRoutesValidator.validate(event, state, monitor).getSeverityError()).isEqualTo(1);
+		// Check marker deleted and recreated
+		Mockito.verify(marker).delete();
+		Mockito.verify(resource, Mockito.times(2)).createMarker(Mockito.anyString());
 	}
 
 }
