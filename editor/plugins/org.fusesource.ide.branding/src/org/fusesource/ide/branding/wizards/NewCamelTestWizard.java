@@ -68,7 +68,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.fusesource.ide.branding.Activator;
-import org.fusesource.ide.foundation.core.contenttype.*;
+import org.fusesource.ide.foundation.core.contenttype.BlueprintXmlMatchingStrategy;
+import org.fusesource.ide.foundation.core.contenttype.XmlMatchingStrategySupport;
 
 /**
  * A wizard for creating test cases.
@@ -78,7 +79,8 @@ public class NewCamelTestWizard extends JUnitWizard {
 
 	private static final String CAMEL_GROUP_ID = "org.apache.camel";
 	private static final String CAMEL_ARTIFACT_ID_WILDCARD = "camel-";
-	private static final String CAMEL_TEST_ARTIFACT_ID = "camel-test";
+	private static final String CAMEL_SPRING_TEST_ARTIFACT_ID = "camel-test-spring";
+	private static final String CAMEL_BP_TEST_ARTIFACT_ID = "camel-test-blueprint";
 	private static final String CAMEL_TEST_SCOPE = "test";
 
 	private String camelVersion = null;
@@ -444,78 +446,92 @@ public class NewCamelTestWizard extends JUnitWizard {
 	}
 	
 	private IRunnableWithProgress addCamelTestToPomDeps(final IJavaProject project, final IRunnableWithProgress runnable) throws Exception {
-		// first load the pom file into some model
-		IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getPath().append("pom.xml"));
-		String pomPath = pomPathValue.toOSString();
-		final File pomFile = new File(pomPath);
-		final Model model = MavenPlugin.getMaven().readModel(pomFile);
-
-		// then check if camel-test is already a dep
-		boolean hasCamelTestDep = false;
-		List<Dependency> deps = model.getDependencies();
-		for (Dependency dep : deps) {
-			if (dep.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_WILDCARD) && 
-				dep.getGroupId().equalsIgnoreCase(CAMEL_GROUP_ID) &&
-				this.camelVersion == null) {
-				this.camelVersion = dep.getVersion();
-			}
-			if (dep.getArtifactId().equalsIgnoreCase(CAMEL_TEST_ARTIFACT_ID)) {
-				hasCamelTestDep = true;
-				break;
-			}
-
-		}
-
-		// if yes, do nothing and return null
-		if (hasCamelTestDep) {
-			return new IRunnableWithProgress() {
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException,
-				InterruptedException {
-					// nothing to do then
+		return new IRunnableWithProgress() {
+			@Override
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+				if (monitor == null) {
+					monitor = new NullProgressMonitor();
 				}
-			};
-		} else {
-			// if no, then add the dependency to the pom
-			return new IRunnableWithProgress() {
+				monitor.beginTask(WizardMessages.NewTestCaseCreationWizard_create_progress, 4);
 
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException,
-				InterruptedException {
-					if (monitor == null) {
-						monitor = new NullProgressMonitor();
-					}
-					monitor.beginTask(WizardMessages.NewTestCaseCreationWizard_create_progress, 4);
-
-					Dependency dep = new Dependency();
-					dep.setGroupId(CAMEL_GROUP_ID);
-					dep.setArtifactId(CAMEL_TEST_ARTIFACT_ID);
-					dep.setVersion(NewCamelTestWizard.this.camelVersion);
-					dep.setScope(CAMEL_TEST_SCOPE);
-					model.addDependency(dep);
-					OutputStream os = null;
-					try {
-						os = new BufferedOutputStream(new FileOutputStream(pomFile));
-						MavenPlugin.getMaven().writeModel(model, os);
-						IFile pomIFile = project.getProject().getFile("pom.xml");
-						if (pomIFile != null){
-							pomIFile.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+				// first load the pom file into some model
+				IPath pomPathValue = project.getProject().getRawLocation() != null ? project.getProject().getRawLocation().append("pom.xml") : ResourcesPlugin.getWorkspace().getRoot().getLocation().append(project.getPath().append("pom.xml"));
+				String pomPath = pomPathValue.toOSString();
+				final File pomFile = new File(pomPath);
+				try {
+					final Model model = MavenPlugin.getMaven().readModel(pomFile);
+	
+					// then check if camel-test is already a dep
+					boolean isBlueprint = isBlueprintFile(fPage1.getXmlFileUnderTest().getLocationURI().toString());
+					boolean hasCamelSpringTestDep = false;
+					boolean hasCamelBPTestDep = false;
+					List<Dependency> deps = model.getDependencies();
+					for (Dependency dep : deps) {
+						if (dep.getArtifactId().startsWith(CAMEL_ARTIFACT_ID_WILDCARD) && 
+							dep.getGroupId().equalsIgnoreCase(CAMEL_GROUP_ID) &&
+							camelVersion == null) {
+							camelVersion = dep.getVersion();
 						}
-						runnable.run(new SubProgressMonitor(monitor, 2));
-					} catch (Exception ex) {
-						Activator.getLogger().error(ex);
-					} finally {
+						if (!isBlueprint && dep.getArtifactId().equalsIgnoreCase(CAMEL_SPRING_TEST_ARTIFACT_ID)) {
+							hasCamelSpringTestDep = true;
+							break;
+						}
+						if (isBlueprint && dep.getArtifactId().equalsIgnoreCase(CAMEL_BP_TEST_ARTIFACT_ID)) {
+							hasCamelBPTestDep = true;
+							break;
+						}
+					}
+					
+					boolean changes = false;
+					
+					if (!isBlueprint && !hasCamelSpringTestDep) {
+						Dependency dep = new Dependency();
+						dep.setGroupId(CAMEL_GROUP_ID);
+						dep.setArtifactId(CAMEL_SPRING_TEST_ARTIFACT_ID);
+						dep.setVersion(camelVersion);
+						dep.setScope(CAMEL_TEST_SCOPE);
+						model.addDependency(dep);
+						changes = true;
+					}
+					
+					if (isBlueprint && !hasCamelBPTestDep) {
+						Dependency dep = new Dependency();
+						dep.setGroupId(CAMEL_GROUP_ID);
+						dep.setArtifactId(CAMEL_BP_TEST_ARTIFACT_ID);
+						dep.setVersion(camelVersion);
+						dep.setScope(CAMEL_TEST_SCOPE);
+						model.addDependency(dep);
+						changes = true;
+					}
+					
+					if (changes) {
+						OutputStream os = null;
 						try {
-							if (os != null) {
-								os.close();
+							os = new BufferedOutputStream(new FileOutputStream(pomFile));
+							MavenPlugin.getMaven().writeModel(model, os);
+							IFile pomIFile = project.getProject().getFile("pom.xml");
+							if (pomIFile != null){
+								pomIFile.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 							}
-						} catch (IOException e) {
-							Activator.getLogger().error(e);
+							runnable.run(new SubProgressMonitor(monitor, 2));
+						} catch (Exception ex) {
+							Activator.getLogger().error(ex);
+						} finally {
+							try {
+								if (os != null) {
+									os.close();
+								}
+							} catch (IOException e) {
+								Activator.getLogger().error(e);
+							}
 						}
-						monitor.done();
 					}
+				} catch (Exception ex) {
+					Activator.getLogger().error(ex);
+				} finally {
+					monitor.done();
 				}
-			};
-		}
+			}
+		};
 	}
 }
