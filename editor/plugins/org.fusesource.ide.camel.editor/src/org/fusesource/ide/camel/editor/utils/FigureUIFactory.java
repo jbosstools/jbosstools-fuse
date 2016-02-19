@@ -43,7 +43,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 public class FigureUIFactory {
 	
 	// new statics
-	public static final int DEFAULT_LABEL_OFFSET_H = 15;
+	public static final int DEFAULT_LABEL_OFFSET_H = 5;
 	public static final int DEFAULT_LABEL_OFFSET_V = 10;
 	public static final int IMAGE_DEFAULT_WIDTH = 100;
 	public static final int IMAGE_DEFAULT_HEIGHT = 70;
@@ -123,7 +123,7 @@ public class FigureUIFactory {
 		// baseRect is the rounded rectangle
 		org.eclipse.swt.graphics.Rectangle baseRect = new org.eclipse.swt.graphics.Rectangle(context.getX(), 
 																							 context.getY(), 
-																							 FIGURE_MAX_WIDTH, 
+																							 FIGURE_MAX_WIDTH + BORDER_SIZE + BORDER_SIZE, 
 																							 IMAGE_DEFAULT_HEIGHT + Math.max(image_height, label_height) + DEFAULT_LABEL_OFFSET_V);
 
 		// the container for the child elements	
@@ -246,7 +246,7 @@ public class FigureUIFactory {
 		text.setVerticalAlignment(Orientation.ALIGNMENT_TOP);
 		text.setFont(style.getFont());
 		text.setForeground(GraphitiUi.getGaService().manageColor(diagram, StyleUtil.CONTAINER_FIGURE_TEXT_COLOR));
-		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H, DEFAULT_LABEL_OFFSET_V, baseRect.width - DEFAULT_LABEL_OFFSET_H - DEFAULT_LABEL_OFFSET_H, label_height + DEFAULT_LABEL_OFFSET_V);
+		gaService.setLocationAndSize(text, DEFAULT_LABEL_OFFSET_H + DEFAULT_LABEL_OFFSET_H + DEFAULT_LABEL_OFFSET_H, DEFAULT_LABEL_OFFSET_V, baseRect.width - DEFAULT_LABEL_OFFSET_H - DEFAULT_LABEL_OFFSET_H, label_height + DEFAULT_LABEL_OFFSET_V);
 		
 		// provide information to support direct-editing directly
 		// after object creation (must be activated additionally)
