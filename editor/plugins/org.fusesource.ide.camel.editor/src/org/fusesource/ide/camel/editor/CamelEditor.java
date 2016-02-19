@@ -385,7 +385,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public String getTitle() {
-		return this.designEditor != null && this.designEditor.getModel() != null ? this.designEditor.getModel().getResource().getName() : "";
+		return this.editorInput != null ? this.editorInput.getName() : "";
 	}
 	
 	private void refreshProject(IProgressMonitor monitor) {
@@ -414,7 +414,7 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 
 	public void onFileLoading(String fileName) {
-		setPartName(fileName);
+		setPartName(this.editorInput != null ? this.editorInput.getName() : "");
 	}
 		
 	/*
