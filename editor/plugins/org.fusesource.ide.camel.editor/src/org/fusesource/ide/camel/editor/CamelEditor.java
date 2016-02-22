@@ -49,6 +49,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -706,6 +707,8 @@ public class CamelEditor extends MultiPageEditorPart implements IResourceChangeL
 					return answer;
 				}
 			}
+		} else if (adapter == IGotoMarker.class) {
+			return new GoToMarkerForCamelEditor(this);
 		}
 		return super.getAdapter(adapter);
 	}

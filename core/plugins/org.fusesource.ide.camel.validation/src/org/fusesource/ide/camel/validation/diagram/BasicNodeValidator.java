@@ -292,10 +292,9 @@ public class BasicNodeValidator implements ValidationSupport {
 		if (lineNumber == -1) {
 			marker.setAttribute(IMarker.LOCATION, "/" + getCamelPath(cme));
 		} else {
-			// register location to be able to redirect inside the diagram?
-			// marker.setAttribute(IMarker.FUSE_LOCATION, "/" +
-			// getCamelPath(cme));
+			marker.setAttribute(IFuseMarker.PATH, "/" + getCamelPath(cme));
 		}
+		marker.setAttribute(IFuseMarker.CAMEL_ID, cme.getId());
 	}
 
 	public List<Integer> findLineNumbers(String word, File text) {
