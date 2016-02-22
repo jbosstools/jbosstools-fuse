@@ -16,10 +16,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
+import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -36,20 +38,24 @@ import org.jboss.tools.fuse.transformation.core.TransformType;
 public class CamelConfigBuilder {
 
 	public enum MarshalType {MARSHALLER, UNMARSHALLER}
+	private CamelFile model;	
 	
 	/**
 	 * Load CamelFile from Diagram Editor.
 	 */
 	public CamelConfigBuilder() {
+		this.model = null;
 	}
 
 	/*
 	 * used for test only
 	 */
 	public CamelConfigBuilder(File file) {
+		this.model = new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
 	}
 	
 	public CamelFile getModel() {
+		if (this.model != null) return this.model;
 		return CamelUtils.getDiagramEditor().getModel();
 	}
 	

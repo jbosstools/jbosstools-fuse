@@ -34,7 +34,7 @@ public final class CamelConfigurationHelper {
     }
 
     public static CamelConfigBuilder getConfigBuilder(File contextFile) {
-        CamelConfigBuilder builder = new CamelConfigBuilder(contextFile);
+        CamelConfigBuilder builder = new CamelConfigBuilder();
         return builder;
     }
     
