@@ -16,12 +16,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -39,20 +37,20 @@ public class CamelConfigBuilder {
 
 	public enum MarshalType {MARSHALLER, UNMARSHALLER}
 	
-	private CamelFile model;
-	
 	/**
 	 * Load CamelFile from Diagram Editor.
 	 */
 	public CamelConfigBuilder() {
-		this.model = CamelUtils.getDiagramEditor().getModel();
 	}
 
 	/*
 	 * used for test only
 	 */
 	public CamelConfigBuilder(File file) {
-		this.model = new CamelIOHandler().loadCamelModel(file, new NullProgressMonitor());
+	}
+	
+	public CamelFile getModel() {
+		return CamelUtils.getDiagramEditor().getModel();
 	}
 	
 	/**
@@ -166,20 +164,20 @@ public class CamelConfigBuilder {
     }
 
     public Collection<CamelModelElement> getDataFormats() {
-    	return model.getCamelContext().getDataformats().values();
+    	return getModel().getCamelContext().getDataformats().values();
     }
 
     public Collection<CamelModelElement> getEndpoints() {
-    	return model.getCamelContext().getEndpointDefinitions().values();
+    	return getModel().getCamelContext().getEndpointDefinitions().values();
     }
 
     protected CamelModelElement addEndpoint(String id, String uri) {
-    	CamelModelElement parent = model.getCamelContext();
+    	CamelModelElement parent = getModel().getCamelContext();
 		CamelEndpoint ep = new CamelEndpoint(uri);
 		ep.setId(id);
 		ep.setParent(parent);
 		ep.setUnderlyingMetaModelObject(getEipByName("from"));
-		model.getCamelContext().addEndpointDefinition(ep);
+		getModel().getCamelContext().addEndpointDefinition(ep);
 		return ep;
     }
 
@@ -194,7 +192,7 @@ public class CamelConfigBuilder {
         CamelModelElement dataFormat = getDataFormat(id);
         if (dataFormat == null) {
             // Looks like we need to create a new one
-        	CamelModelElement parent = model.getCamelContext();
+        	CamelModelElement parent = getModel().getCamelContext();
     		dataFormat = new CamelModelElement(parent, null);
     		dataFormat.setId(id);
     		dataFormat.setUnderlyingMetaModelObject(json);
@@ -212,7 +210,7 @@ public class CamelConfigBuilder {
         CamelModelElement dataFormat = getDataFormat(id);
         if (dataFormat == null) {
             // Looks like we need to create a new one
-        	CamelModelElement parent = model.getCamelContext();
+        	CamelModelElement parent = getModel().getCamelContext();
     		dataFormat = new CamelModelElement(parent, null);
     		dataFormat.setId(id);
     		dataFormat.setUnderlyingMetaModelObject(jaxb);
@@ -229,7 +227,7 @@ public class CamelConfigBuilder {
 	 * @return	the eip or null if not found
 	 */
 	public Eip getEipByName(String name) {
-		IResource resource = model.getResource();
+		IResource resource = getModel().getResource();
 		String camelVersion = null;
 		if (resource != null) {
 			camelVersion = CamelModelFactory.getCamelVersion(resource.getProject());
@@ -246,12 +244,5 @@ public class CamelConfigBuilder {
 		Eip eip = model.getEipModel().getEIPByName(name);
 		// and return it
 		return eip;
-	}
-
-	/**
-	 * @return the model
-	 */
-	public CamelFile getModel() {
-		return model;
 	}
 }
