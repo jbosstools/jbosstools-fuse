@@ -290,12 +290,10 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 		return dir;
 	}
 
-	private ILaunchConfiguration createLaunchConfiguration(IContainer basedir,
-			String goal) {
+	private ILaunchConfiguration createLaunchConfiguration(IContainer basedir, String goal) {
 		ILaunchConfiguration config = null;
 		try {
-			ILaunchManager launchManager = DebugPlugin.getDefault()
-					.getLaunchManager();
+			ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 			/*
 			ILaunchConfigurationType launchConfigurationType = launchManager
 					.getLaunchConfigurationType(MavenLaunchConstants.LAUNCH_CONFIGURATION_TYPE_ID);
@@ -303,21 +301,12 @@ public class ExecutePomActionSupport implements ILaunchShortcut, IExecutableExte
 			ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType(launchConfigTypeId);
 
 			String launchSafeGoalName = goal.replace(':', '-');
-
-			ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType
-					.newInstance(
-							null, //
-							"Executing "
-							+ launchSafeGoalName
-							+ " in "
-							+ basedir.getLocation().toString()
-							.replace('/', '-'));
-			workingCopy.setAttribute(MavenLaunchConstants.ATTR_POM_DIR, basedir
-					.getLocation().toOSString());
+			String launchConfigName = launchManager.generateLaunchConfigurationName("Executing " + launchSafeGoalName + " in " + basedir.getLocation().toString());
+			ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance(null, launchConfigName);
+			workingCopy.setAttribute(MavenLaunchConstants.ATTR_POM_DIR, basedir.getLocation().toOSString());
 			workingCopy.setAttribute(MavenLaunchConstants.ATTR_GOALS, goal);
 			workingCopy.setAttribute(IDebugUIConstants.ATTR_PRIVATE, true);
-			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_SCOPE,
-					"${project}");
+			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_SCOPE, "${project}");
 			workingCopy.setAttribute(RefreshTab.ATTR_REFRESH_RECURSIVE, true);
 			workingCopy.setAttribute(
 					IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
