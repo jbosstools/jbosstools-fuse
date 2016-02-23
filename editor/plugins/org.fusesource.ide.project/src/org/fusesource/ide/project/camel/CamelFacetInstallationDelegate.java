@@ -132,7 +132,7 @@ public class CamelFacetInstallationDelegate implements IDelegate {
 		return new ComponentResource[]{};
 	}
 	
-	private IFolder findFolder(IContainer[] p, String name) {
+	private IFolder findFolder(IContainer[] p, final String name) {
 		final IFolder[] found = new IFolder[1]; 
 		
 		for( int i = 0; i < p.length && found[0] == null; i++ ) {

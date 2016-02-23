@@ -22,7 +22,6 @@ import org.eclipse.wst.common.project.facet.core.FacetedProjectFramework;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
-import org.fusesource.ide.commons.logging.RiderLogFacade;
 import org.fusesource.ide.project.providers.CamelVirtualFolder;
 
 /**

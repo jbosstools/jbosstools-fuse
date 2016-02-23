@@ -27,6 +27,7 @@ import org.fusesource.ide.server.karaf.core.publish.IPublishBehaviour;
 import org.fusesource.ide.server.karaf.core.publish.jmx.KarafJMXPublisher;
 import org.fusesource.ide.server.karaf.core.server.subsystems.publish.ModuleBundleVersionUtility;
 import org.fusesource.ide.server.karaf.core.server.subsystems.publish.ModuleBundleVersionUtility.BundleDetails;
+import org.fusesource.ide.server.karaf.core.util.KarafUtils;
 import org.jboss.ide.eclipse.as.core.server.IModulePathFilter;
 import org.jboss.ide.eclipse.as.core.server.IModulePathFilterProvider;
 import org.jboss.ide.eclipse.as.core.util.IJBossToolingConstants;
@@ -45,6 +46,8 @@ import org.jboss.ide.eclipse.as.wtp.core.util.ServerModelUtilities;
  */
 public class Karaf2xPublishController extends AbstractSubsystemController 
 	implements IPublishController, IPrimaryPublishController  {
+	
+	public static final List<String> GOALS = Arrays.asList(new String[] {"clean", "package"});
 	
 	protected IPublishBehaviour publisher2 = new KarafJMXPublisher();
 	
@@ -118,56 +121,56 @@ public class Karaf2xPublishController extends AbstractSubsystemController
 		int status = IServer.STATE_UNKNOWN;
 		int publishType = KarafUtils.getPublishType(getServer(), module, kind, deltaKind);
 		switch (publishType) {
-		case KarafUtils.FULL_PUBLISH:
-			if (!module[0].exists())
+			case KarafUtils.FULL_PUBLISH:
+				if (!module[0].exists())
+					break;
+				// do a build
+				boolean built = KarafUtils.runBuild(GOALS, module[0], monitor);
+				if (built) {
+					status = this.publisher2.publish(getServer(), module);
+					((Server)getServer()).setModuleState(module, status);
+					((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
+					((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
+					status = IServer.PUBLISH_STATE_NONE;
+				} else {
+					((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
+					((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
+					((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_UNKNOWN);			
+					status = IServer.PUBLISH_STATE_UNKNOWN;
+				}
 				break;
-			// do a build
-			boolean built = KarafUtils.runBuild(GOALS, module[0], monitor);
-			if (built) {
-				status = this.publisher.publish(getServer(), module);
-				((Server)getServer()).setModuleState(module, status);
-				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
-				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
-				status = IServer.PUBLISH_STATE_NONE;
-			} else {
-				((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
-				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
-				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_UNKNOWN);			
-				status = IServer.PUBLISH_STATE_UNKNOWN;
-			}
-			break;
-		case KarafUtils.INCREMENTAL_PUBLISH:
-			if (!module[0].exists())
+			case KarafUtils.INCREMENTAL_PUBLISH:
+				if (!module[0].exists()) break;
+				// do a build
+				built = KarafUtils.runBuild(GOALS, module[0], monitor);
+				if (built) {
+					status = this.publisher2.publish(getServer(), module);
+					((Server)getServer()).setModuleState(module, status);
+					((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
+					((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
+					status = IServer.PUBLISH_STATE_NONE;
+				} else {
+					((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
+					((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
+					((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_UNKNOWN);			
+					status = IServer.PUBLISH_STATE_UNKNOWN;
+				}
 				break;
-			// do a build
-			built = KarafUtils.runBuild(GOALS, module[0], monitor);
-			if (built) {
-				status = this.publisher.publish(getServer(), module);
-				((Server)getServer()).setModuleState(module, status);
-				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_NONE);
-				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);			
-				status = IServer.PUBLISH_STATE_NONE;
-			} else {
-				((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
-				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
-				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_UNKNOWN);			
-				status = IServer.PUBLISH_STATE_UNKNOWN;
+			case KarafUtils.NO_PUBLISH:
+				// we can skip this
+				break;
+			case KarafUtils.REMOVE_PUBLISH:
+				boolean done = this.publisher2.uninstall(getServer(), module);
+				if (done) {
+					((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
+					((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
+					((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
+					status = IServer.PUBLISH_STATE_NONE;
+				}
+				break;
+			default:
+				Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Unknown publish type " + publishType));
 			}
-			break;
-		case KarafUtils.NO_PUBLISH:
-			// we can skip this
-			break;
-		case KarafUtils.REMOVE_PUBLISH:
-			boolean done = this.publisher.uninstall(getServer(), module);
-			if (done) {
-				((Server)getServer()).setModuleState(module, IServer.STATE_UNKNOWN);
-				((Server)getServer()).setModulePublishState(module, IServer.PUBLISH_STATE_UNKNOWN);
-				((Server)getServer()).setServerPublishState(IServer.PUBLISH_STATE_NONE);
-				status = IServer.PUBLISH_STATE_NONE;
-			}
-			break;
-		default:
-			Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, "Unknown publish type " + publishType));
 		}
 		
 		int publishType = PublishControllerUtil.getPublishType(getServer(), module, kind, deltaKind);
