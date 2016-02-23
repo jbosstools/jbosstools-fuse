@@ -33,7 +33,6 @@ import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
-import org.fusesource.ide.camel.validation.CamelValidationActivator;
 import org.fusesource.ide.camel.validation.ValidationResult;
 import org.fusesource.ide.camel.validation.ValidationSupport;
 import org.fusesource.ide.camel.validation.model.NumberValidator;
@@ -46,7 +45,6 @@ import org.fusesource.ide.foundation.core.util.Strings;
  */
 public class BasicNodeValidator implements ValidationSupport {
 
-	public static final String MARKER_TYPE = CamelValidationActivator.PLUGIN_ID + ".JBossFuseToolingValidationProblem";
 	private static Map<IMarker, CamelModelElement> markers = new HashMap<>();
 
 	/*
@@ -104,7 +102,7 @@ public class BasicNodeValidator implements ValidationSupport {
 			if (camelFile != null) {
 				final IResource resource = camelFile.getResource();
 				if (resource != null) {
-					for (IMarker marker : resource.findMarkers(MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
+					for (IMarker marker : resource.findMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE)) {
 						final CamelModelElement cmeWithMarker = markers.get(marker);
 						if (camelModelElement.equals(cmeWithMarker)
 								// we are lucky still the same model in memory
@@ -273,7 +271,7 @@ public class BasicNodeValidator implements ValidationSupport {
 
 	private void createMarker(IResource resource, CamelModelElement cme, final String message, final int severity) {
 		try {
-			IMarker marker = resource.createMarker(MARKER_TYPE);
+			IMarker marker = resource.createMarker(IFuseMarker.MARKER_TYPE);
 			marker.setAttribute(IMarker.SEVERITY, severity);
 			marker.setAttribute(IMarker.MESSAGE, message);
 			marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);

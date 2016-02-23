@@ -42,9 +42,7 @@ public class CamelFilesContentProvider implements ITreeContentProvider {
 				cache.put(project, cvf);
 			}
 
-			CamelVirtualFolder[] resVal = new CamelVirtualFolder[1];
-			resVal[0] = cvf;
-			return resVal;
+			return new CamelVirtualFolder[] { cvf };
 		} else if (parentElement instanceof CamelVirtualFolder) {
 			CamelVirtualFolder cvf = (CamelVirtualFolder) parentElement;
 			return cvf.getCamelFiles().toArray(
@@ -55,6 +53,9 @@ public class CamelFilesContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object element) {
+		if (element instanceof CamelVirtualFolder) {
+			return ((CamelVirtualFolder) element).getProject();
+		}
 		return null;
 	}
 

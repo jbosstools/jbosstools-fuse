@@ -79,7 +79,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.ICamelModelListener;
-import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
+import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.ui.io.CamelXMLEditorInput;
 import org.fusesource.ide.foundation.ui.util.Selections;
@@ -206,7 +206,7 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 			// clear Old Validation Markers,
 			// they will be recalculated when opening the diagram
 			try {
-				asFileEditorInput(input).getFile().deleteMarkers(BasicNodeValidator.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+				asFileEditorInput(input).getFile().deleteMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
 			} catch (CoreException e) {
 				CamelEditorUIActivator.pluginLog().logError(e);
 			}

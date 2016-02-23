@@ -21,6 +21,7 @@ import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
+import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 
 public class XMLCamelRoutesValidator extends AbstractValidator {
 
@@ -36,7 +37,7 @@ public class XMLCamelRoutesValidator extends AbstractValidator {
 	public ValidationResult validate(ValidationEvent event, ValidationState state, IProgressMonitor monitor) {
 		IResource resource = event.getResource();
 		try {
-			resource.deleteMarkers(BasicNodeValidator.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+			resource.deleteMarkers(IFuseMarker.MARKER_TYPE, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
