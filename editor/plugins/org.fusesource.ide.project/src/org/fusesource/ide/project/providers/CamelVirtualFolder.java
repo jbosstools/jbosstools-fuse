@@ -24,8 +24,6 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -42,7 +40,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 	
 	private static final String NEW_CAMEL_XML_FILE_WIZARD_ID = "org.fusesource.ide.camel.editor.wizards.NewCamelXmlWizard";
 	private static final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
-
+	
 	private IProject project;
 	private ArrayList<IResource> camelFiles = new ArrayList<IResource>();
 
@@ -99,29 +97,18 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 						continue;
 					findFiles(f);
 				} else {
-					final String FUSE_CAMEL_CONTENT_TYPE = "org.fusesource.ide.camel.editor.camelContentType";
-					IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(f.getPath()));
-
-// MASTER
+					IFile ifile = (IFile)f;
 					if (ifile != null) {
-						if (ifile.getContentDescription() != null
-								&& ifile.getContentDescription()
-										.getContentType()
-										.getId()
-										.equals("org.fusesource.ide.camel.editor.camelContentType")) {
+						if (ifile.getContentDescription() != null && 
+							ifile.getContentDescription()
+							  	 .getContentType()
+								 .getId()
+								 .equals(FUSE_CAMEL_CONTENT_TYPE)) {
 							addCamelFile(ifile);
 						}
-// END MASTER
-					IFile ifile = (IFile)f;
-					if (ifile != null && ifile.getContentDescription() != null ) {
-						IContentType primary = ifile.getContentDescription().getContentType();
-						boolean primaryMatches = primary.getId().equals(FUSE_CAMEL_CONTENT_TYPE);
-						if( primaryMatches )
-							addCamelFile(ifile);
 					}
 				}
 			}
-
 		}
 	}
 
@@ -147,7 +134,7 @@ public class CamelVirtualFolder implements ContextMenuProvider {
 			}
 		}
 	}
-
+	
 	class DeltaPrinter implements IResourceDeltaVisitor {
 
 		private IProject _project;
