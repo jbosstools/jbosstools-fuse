@@ -11,7 +11,10 @@
 package org.fusesource.ide.launcher.debug.launching;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +33,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.fusesource.ide.launcher.Activator;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 
 /**
@@ -52,6 +56,11 @@ public class CamelSourcePathComputerDelegate implements
 			throws CoreException {
 		
 		String filePathUri = CamelDebugUtils.getRawCamelContextFilePathFromLaunchConfig(configuration);
+		try {
+			filePathUri = URLEncoder.encode(filePathUri, StandardCharsets.UTF_8.name());
+		} catch (UnsupportedEncodingException e) {
+			Activator.getLogger().error(e);
+		}
 		String filePath = URI.create(filePathUri).getPath();
 		
 		ISourceContainer sourceContainer = null;
