@@ -220,4 +220,28 @@
           id="org.fusesource.ide.project.image"
           typeIds="fuse.camel"/>
  </extension>
+ <extension
+       point="org.eclipse.ui.decorators">
+    <decorator
+          class="org.fusesource.ide.project.decorator.CamelRouteProblemDecorator"
+          id="org.fusesource.ide.project.decorator.problem.route"
+          label="Camel Route Problem Decorator"
+          lightweight="true"
+          location="BOTTOM_LEFT"
+          state="true">
+       <enablement>
+          <or>
+             <objectClass
+                   name="org.fusesource.ide.project.providers.CamelVirtualFolder">
+             </objectClass>
+             <objectClass
+                   name="org.fusesource.ide.camel.model.service.core.model.CamelRouteElement">
+             </objectClass>
+             <objectClass
+                   name="org.fusesource.ide.camel.editor.navigator.CamelCtxNavRouteNode">
+             </objectClass>
+          </or>
+       </enablement>
+    </decorator>
+ </extension>
 </plugin>

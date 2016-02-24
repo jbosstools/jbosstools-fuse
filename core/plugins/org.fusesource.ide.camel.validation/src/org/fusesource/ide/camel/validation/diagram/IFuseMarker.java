@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.fusesource.ide.camel.validation.diagram;
 
+import org.fusesource.ide.camel.validation.CamelValidationActivator;
+
 /**
  * @author Aurelien Pupier
  *
@@ -18,5 +20,6 @@ public interface IFuseMarker {
 
 	public static final String PATH = "IFuseMarker_PATH";
 	public static final String CAMEL_ID = "IFuseMarker_CAMEL_ID";
+	String MARKER_TYPE = CamelValidationActivator.PLUGIN_ID + ".JBossFuseToolingValidationProblem";
 
 }
