@@ -69,12 +69,29 @@ public class BasicNodeValidator implements ValidationSupport {
 		}
 
 		clearMarkers(camelModelElement);
-
-		for (String error : result.getErrors()) {
-			createMarker(camelModelElement.getCamelFile().getResource(), camelModelElement, error);
-		}
+		createMarkers(camelModelElement, result);
 
 		return result;
+	}
+
+	/**
+	 * @param camelModelElement
+	 * @param result
+	 */
+	private void createMarkers(CamelModelElement camelModelElement, ValidationResult result) {
+		final CamelFile camelFile = camelModelElement.getCamelFile();
+		if (camelFile != null) {
+			final IResource resource = camelFile.getResource();
+			for (String error : result.getErrors()) {
+				createMarker(resource, camelModelElement, error, IMarker.SEVERITY_ERROR);
+			}
+			for (String warning : result.getWarnings()) {
+				createMarker(resource, camelModelElement, warning, IMarker.SEVERITY_WARNING);
+			}
+			for (String info : result.getInformations()) {
+				createMarker(resource, camelModelElement, info, IMarker.SEVERITY_INFO);
+			}
+		}
 	}
 
 	/**
@@ -254,15 +271,10 @@ public class BasicNodeValidator implements ValidationSupport {
 		return noDoubledIDs;
 	}
 
-	/**
-	 * @param resource
-	 * @param xmlNode
-	 * @param message
-	 */
-	private void createMarker(IResource resource, CamelModelElement cme, final String message) {
+	private void createMarker(IResource resource, CamelModelElement cme, final String message, final int severity) {
 		try {
 			IMarker marker = resource.createMarker(MARKER_TYPE);
-			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+			marker.setAttribute(IMarker.SEVERITY, severity);
 			marker.setAttribute(IMarker.MESSAGE, message);
 			marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 			managePosition(resource, cme, marker);
