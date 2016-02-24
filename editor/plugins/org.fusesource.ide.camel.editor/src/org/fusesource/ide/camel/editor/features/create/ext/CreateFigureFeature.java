@@ -148,7 +148,9 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 	@Override
 	public String getCreateImageId() {
 		String iconName = getIconName();
-		if (iconName != null) iconName = ImageProvider.getKeyForSmallIcon(iconName);
+		if (iconName != null) {
+			iconName = ImageProvider.getKeyForSmallIcon(iconName);
+		}
 		return iconName;
 	}
 
@@ -226,7 +228,9 @@ public class CreateFigureFeature extends AbstractCreateFeature implements Palett
 			if (editor.getModel() != null) { 
 				Node newNode = null;
 				if (createDOMNode) {
-					newNode = editor.getModel().createElement(getEip().getName(), parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null);
+					final String nodeTypeId = getEip().getName();
+					final String namespace = parent != null && parent.getXmlNode() != null ? parent.getXmlNode().getPrefix() : null;
+					newNode = editor.getModel().createElement(nodeTypeId, namespace);
 				}
 				return new CamelModelElement(parent, newNode);
 			}
