@@ -378,6 +378,7 @@ public class PropertiesUtils {
     		
     		// first build the path part
     		String syntax = c.getSyntax();
+    		String withoutScheme = syntax.substring(syntax.indexOf(":")+1);
     		List<Parameter> pathParams = getPathProperties(selectedEP);
     		for (Parameter pparam : pathParams) {
     			String val = "";
@@ -388,9 +389,10 @@ public class PropertiesUtils {
     			}
     			if (val.trim().length()<1) val = pparam.getDefaultValue();
     			if (val != null && val.startsWith("/") && !CamelComponentUtils.isFileProperty(pparam)) val = val.substring(1);
-    			if (val != null) syntax = syntax.replace(pparam.getName(), val);
+    			 
+    			if (val != null) withoutScheme = withoutScheme.replace(pparam.getName(), val);
     		}
-    		newUri += syntax + "?";
+    		newUri += String.format("%s:%s?", syntax.substring(0, syntax.indexOf(":")), withoutScheme);
     		
     		// now build the options
     		for (Parameter uriParam : c.getUriParameters()) {
