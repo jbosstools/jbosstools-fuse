@@ -17,11 +17,8 @@ import java.util.Enumeration;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.graphiti.ui.platform.AbstractImageProvider;
-import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
@@ -209,10 +206,6 @@ public class ImageProvider extends AbstractImageProvider {
 	}
 	
 	protected static boolean isImageAvailable(String iconName) {
-		if (CamelUtils.getDiagramEditor() != null) {
-			Image img = GraphitiUi.getImageService().getImageForId(CamelUtils.getDiagramEditor().getDiagramTypeProvider().getProviderId(), iconName);
-			return img != null;
-		}
 	    return CamelEditorUIActivator.getDefault().getBundle().getEntry(String.format("%s%s", ROOT_FOLDER_FOR_IMG, iconName)) != null;
 	}
 }
