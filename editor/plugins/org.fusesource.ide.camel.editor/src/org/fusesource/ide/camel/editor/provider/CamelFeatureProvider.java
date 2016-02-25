@@ -20,12 +20,14 @@ import org.eclipse.graphiti.features.ICreateConnectionFeature;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IDeleteFeature;
 import org.eclipse.graphiti.features.IFeature;
+import org.eclipse.graphiti.features.IMoveShapeFeature;
 import org.eclipse.graphiti.features.IRemoveFeature;
 import org.eclipse.graphiti.features.IResizeShapeFeature;
 import org.eclipse.graphiti.features.IUpdateFeature;
 import org.eclipse.graphiti.features.context.IAddContext;
 import org.eclipse.graphiti.features.context.ICustomContext;
 import org.eclipse.graphiti.features.context.IDeleteContext;
+import org.eclipse.graphiti.features.context.IMoveShapeContext;
 import org.eclipse.graphiti.features.context.IPictogramElementContext;
 import org.eclipse.graphiti.features.context.IRemoveContext;
 import org.eclipse.graphiti.features.context.IResizeShapeContext;
@@ -188,6 +190,14 @@ public class CamelFeatureProvider extends DefaultFeatureProvider {
 				};
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.features.DefaultFeatureProvider#getMoveShapeFeature(org.eclipse.graphiti.features.context.IMoveShapeContext)
+	 */
+	@Override
+	public IMoveShapeFeature getMoveShapeFeature(IMoveShapeContext context) {
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.graphiti.features.impl.AbstractFeatureProvider#getCreateConnectionFeatures()

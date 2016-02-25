@@ -8,7 +8,6 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.fusesource.ide.camel.editor.provider;
 
 import java.util.ArrayList;
@@ -583,14 +582,14 @@ public class ToolBehaviourProvider extends DefaultToolBehaviorProvider {
 		si.setLineStyle(LineStyle.SOLID);
 		return si;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.graphiti.tb.DefaultToolBehaviorProvider#isMultiSelectionEnabled()
 	 */
 	@Override
 	public boolean isMultiSelectionEnabled() {
-		return true;
+		return false;
 	}
 
 	/*

@@ -14,7 +14,9 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IRemoveContext;
 import org.eclipse.graphiti.features.impl.DefaultRemoveFeature;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -51,6 +53,15 @@ public class RemoveFigureFeature extends DefaultRemoveFeature {
 				CamelEditorUIActivator.pluginLog().logWarning("Cannot figure out Node or Flow from BO: " + bo);
 			}
 		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.DefaultRemoveFeature#postRemove(org.eclipse.graphiti.features.context.IRemoveContext)
+	 */
+	@Override
+	public void postRemove(IRemoveContext context) {
+		super.postRemove(context);
+		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
 	}
 
 	private void deleteBOFromModel(CamelModelElement nodeToRemove) {

@@ -31,6 +31,7 @@ import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 public class DiagramOperations {
 
 	public static LayoutCommand layoutDiagram(CamelDesignEditor designEditor) {
+		if (designEditor == null) return null;
 		TransactionalEditingDomain editingDomain = createEditingDomain(designEditor);
 		LayoutCommand operation = new LayoutCommand(designEditor, editingDomain);
 		execute(editingDomain, operation, false);

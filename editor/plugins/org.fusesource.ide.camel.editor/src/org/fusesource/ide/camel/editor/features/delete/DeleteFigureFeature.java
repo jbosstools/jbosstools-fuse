@@ -12,7 +12,9 @@ package org.fusesource.ide.camel.editor.features.delete;
 
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.ui.features.DefaultDeleteFeature;
+import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 
@@ -44,6 +46,8 @@ public class DeleteFigureFeature extends DefaultDeleteFeature {
 				CamelEditorUIActivator.pluginLog().logWarning("Cannot figure out Node or Flow from BO: " + bo);
 			}
 		}
+		
+		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
 	}
 
 	private void deleteBOFromModel(CamelModelElement nodeToRemove) {

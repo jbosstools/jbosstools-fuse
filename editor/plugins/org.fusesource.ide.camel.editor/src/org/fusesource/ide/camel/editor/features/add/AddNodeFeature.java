@@ -17,6 +17,8 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
+import org.fusesource.ide.camel.editor.commands.DiagramOperations;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
@@ -77,6 +79,8 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 		
 		// call the layout feature
 		layoutPictogramElement(containerShape);
+		
+		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
 
 		return containerShape;
 	}

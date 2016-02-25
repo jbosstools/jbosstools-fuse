@@ -26,6 +26,7 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
+import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -141,9 +142,9 @@ public class CamelDiagramLoader {
 				}
 			}
 			if (this.orientation == PositionConstants.EAST) {
-				retVal += 200;
+				retVal += FigureUIFactory.FIGURE_MAX_WIDTH + 20;
 			} else {
-				retVal += 150;
+				retVal += FigureUIFactory.IMAGE_DEFAULT_HEIGHT + FigureUIFactory.FIGURE_TITLEBAR_HEIGHT + 20;
 			}
 		} else {
 			CamelEditorUIActivator.pluginLog().logWarning("Cannot add node: " + node);

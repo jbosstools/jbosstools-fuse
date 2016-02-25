@@ -224,9 +224,6 @@ public class CamelDesignEditor extends DiagramEditor implements ISelectionListen
 	public void setFocus() {
 		super.setFocus();
 		if (getModel() != null) {
-			// whenever the design editor is focused we will check for unique id
-			// values
-//			getModel().getCamelContext().ensureUniqueID(getModel().getCamelContext());
 			DiagramOperations.updateDiagram(this);
 		}
 	}

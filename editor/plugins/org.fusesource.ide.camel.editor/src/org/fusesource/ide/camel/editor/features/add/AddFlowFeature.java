@@ -25,6 +25,8 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.graphiti.services.IPeCreateService;
+import org.fusesource.ide.camel.editor.commands.DiagramOperations;
+import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.StyleUtil;
 import org.fusesource.ide.camel.model.service.core.model.CamelElementConnection;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -89,8 +91,12 @@ public class AddFlowFeature extends AbstractAddFeature {
 		cd = peCreateService.createConnectionDecorator(connection, false, 1.0, true);
 		createArrow(cd);
 		
+		DiagramOperations.layoutDiagram(CamelUtils.getDiagramEditor());
+		
 		return connection;
 	}
+	
+	
 	
 	private Polyline createArrow(GraphicsAlgorithmContainer gaContainer) {
 		int xy[] = new int[] { -10, -5, 0, 0, -10, 5, -8, 0 };

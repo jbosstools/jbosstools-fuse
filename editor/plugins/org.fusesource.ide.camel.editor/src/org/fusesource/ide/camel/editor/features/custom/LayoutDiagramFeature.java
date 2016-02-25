@@ -56,82 +56,94 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 	/**
 	 * Minimal distance between nodes.
 	 */
-	private static final int PADDING = 20;
+	private static final int PADDING_H = 10;
+	private static final int PADDING_V = 10;
+	private static final int SPACING_H = 10;
+	private static final int SPACING_V = 30;
 
 	public LayoutDiagramFeature(IFeatureProvider fp) {
 		super(fp);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#getDescription()
+	 */
 	@Override
 	public String getDescription() {
 		return "Layout diagram with GEF Layouter"; //$NON-NLS-1$
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.impl.AbstractFeature#getName()
+	 */
 	@Override
 	public String getName() {
 		return "&Layout Diagram"; //$NON-NLS-1$
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#canExecute(org.eclipse.graphiti.features.context.ICustomContext)
+	 */
 	@Override
 	public boolean canExecute(ICustomContext context) {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#isAvailable(org.eclipse.graphiti.features.context.IContext)
+	 */
+	@Override
+	public boolean isAvailable(IContext context) {
+		ICustomContext cc = (ICustomContext)context;
+		PictogramElement _pe = cc.getPictogramElements()[0] instanceof Connection ? 
+				((Connection) cc.getPictogramElements()[0]).getStart().getParent() : 
+				cc.getPictogramElements()[0];
+        final Object bo = getBusinessObjectForPictogramElement(_pe);
+        return (bo != null && bo instanceof CamelModelElement && ((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.features.custom.ICustomFeature#execute(org.eclipse.graphiti.features.context.ICustomContext)
+	 */
 	@Override
 	public void execute(ICustomContext context) {
 		PictogramElement selectedContainer =  context.getPictogramElements()[0];
+		
+		// put all connection and shape info into the directed graph
 		final CompoundDirectedGraph graph = mapDiagramToGraph(selectedContainer);
-		graph.setDefaultPadding(new Insets(PADDING));
+		graph.setDefaultPadding(new Insets(PADDING_V, PADDING_H, PADDING_V, PADDING_H));
+		
+		// create a directed graph layout and recalc the layout data
 		CompoundDirectedGraphLayout layout = new CompoundDirectedGraphLayout();
 		int direction = PreferenceManager.getInstance().loadPreferenceAsInt(PreferencesConstants.EDITOR_LAYOUT_ORIENTATION);
 		graph.setDirection(direction);
 		layout.visit(graph);
+		
+		// map the new layout coordinates back to the diagram
 		mapGraphCoordinatesToDiagram(graph);
 		resizeContainer(selectedContainer);
 	}
 
-	private void resizeContainer(PictogramElement containerPE) {
-		Rectangle maxContentArea = new Rectangle(containerPE.getGraphicsAlgorithm().getX(), containerPE.getGraphicsAlgorithm().getY(), containerPE.getGraphicsAlgorithm().getWidth(), containerPE.getGraphicsAlgorithm().getHeight());
-		EList<Shape> children = ((ContainerShape)containerPE).getChildren();
-		for (Shape shape : children) {
-			GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
-			int w = ga.getX() + ga.getWidth() + PADDING;
-			int h = ga.getY() + ga.getHeight() + PADDING;
-			if (maxContentArea.width<w) maxContentArea.width = w;
-			if (maxContentArea.height<h) maxContentArea.height = h;
-		}
-		// do a resize feature call TODO
-		ResizeShapeContext cc = new ResizeShapeContext((ContainerShape)containerPE);
-		cc.setX(maxContentArea.x);
-		cc.setY(maxContentArea.y);
-		cc.setWidth(maxContentArea.width);
-		cc.setHeight(maxContentArea.height);
-		getFeatureProvider().getResizeShapeFeature(cc).execute(cc);
-//		Graphiti.getGaService().setLocationAndSize(containerPE.getGraphicsAlgorithm(), maxContentArea.x, maxContentArea.y, maxContentArea.width, maxContentArea.height, true);
-	}
-
-	private Diagram mapGraphCoordinatesToDiagram(CompoundDirectedGraph graph) {
-		NodeList myNodes = new NodeList();
-		myNodes.addAll(graph.nodes);
-		myNodes.addAll(graph.subgraphs);
-		for (Object object : myNodes) {
-			Node node = (Node) object;
-			Shape shape = (Shape) node.data;
-			shape.getGraphicsAlgorithm().setX(node.x);
-			shape.getGraphicsAlgorithm().setY(node.y + 20);
-			shape.getGraphicsAlgorithm().setWidth(node.width);
-			shape.getGraphicsAlgorithm().setHeight(node.height);
-		}
-		return null;
-	}
-
-
+	/**
+	 * determines all nodes and connections and hand them over to the directed 
+	 * graph to be layed out
+	 * 
+	 * @param container
+	 * @return
+	 */
 	private CompoundDirectedGraph mapDiagramToGraph(PictogramElement container) {
 		Map<AnchorContainer, Node> shapeToNode = new HashMap<AnchorContainer, Node>();
-		CompoundDirectedGraph dg = new CompoundDirectedGraph();
-		if (container == null) return dg;
 		EdgeList edgeList = new EdgeList();
 		NodeList nodeList = new NodeList();
+		CompoundDirectedGraph dg = new CompoundDirectedGraph();
+
+		if (container == null) return dg;
+		
 		EList<Shape> children = ((ContainerShape)container).getChildren();
 		for (Shape shape : children) {
 			Node node = new Node();
@@ -144,6 +156,7 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 			shapeToNode.put(shape, node);
 			nodeList.add(node);
 		}
+		
 		EList<Connection> connections = getDiagram().getConnections();
 		for (Connection connection : connections) {
 			AnchorContainer source = connection.getStart().getParent();
@@ -153,20 +166,68 @@ public class LayoutDiagramFeature extends AbstractCustomFeature {
 			edge.data = connection;
 			edgeList.add(edge);
 		}
+		
 		dg.nodes = nodeList;
 		dg.edges = edgeList;
+		
 		return dg;
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.graphiti.features.custom.AbstractCustomFeature#isAvailable(org.eclipse.graphiti.features.context.IContext)
+	/**
+	 * resizes the container element to fit all children 
+	 * 
+	 * @param containerPE
 	 */
-	@Override
-	public boolean isAvailable(IContext context) {
-		ICustomContext cc = (ICustomContext)context;
-		PictogramElement _pe = cc.getPictogramElements()[0] instanceof Connection ? ((Connection) cc.getPictogramElements()[0])
-                .getStart().getParent() : cc.getPictogramElements()[0];
-        final Object bo = getBusinessObjectForPictogramElement(_pe);
-        return (bo != null && bo instanceof CamelModelElement && ((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren());
+	private void resizeContainer(PictogramElement containerPE) {
+		if (containerPE == null || containerPE.getGraphicsAlgorithm() == null) return;
+		Rectangle maxContentArea = new Rectangle(containerPE.getGraphicsAlgorithm().getX(), containerPE.getGraphicsAlgorithm().getY(), containerPE.getGraphicsAlgorithm().getWidth(), containerPE.getGraphicsAlgorithm().getHeight());
+		EList<Shape> children = ((ContainerShape)containerPE).getChildren();
+		int newWidth = 0;
+		int newHeight = 0;
+		for (Shape shape : children) {
+			GraphicsAlgorithm ga = shape.getGraphicsAlgorithm();
+			int w = ga.getX() + ga.getWidth() + PADDING_H + PADDING_H;
+			int h = ga.getY() + ga.getHeight() + PADDING_V + PADDING_V;
+			if (w > newWidth) newWidth = w;
+			if (h > newHeight) newHeight = h;
+		}
+		maxContentArea.width = newWidth;
+		maxContentArea.height = newHeight;
+
+		// do a resize feature call 
+		ResizeShapeContext cc = new ResizeShapeContext((ContainerShape)containerPE);
+		cc.setX(maxContentArea.x);
+		cc.setY(maxContentArea.y);
+		cc.setWidth(maxContentArea.width);
+		cc.setHeight(maxContentArea.height);
+		getFeatureProvider().getResizeShapeFeature(cc).execute(cc);
+//		Graphiti.getGaService().setLocationAndSize(containerPE.getGraphicsAlgorithm(), maxContentArea.x, maxContentArea.y, maxContentArea.width, maxContentArea.height, true);
+		
+		for (Shape shape : children) {
+			resizeContainer(shape);
+		}
+	}
+
+	/**
+	 * maps the calculated layout data back to the diagram figures
+	 * 
+	 * @param graph
+	 * @return
+	 */
+	private Diagram mapGraphCoordinatesToDiagram(CompoundDirectedGraph graph) {
+		NodeList myNodes = new NodeList();
+		myNodes.addAll(graph.nodes);
+		myNodes.addAll(graph.subgraphs);
+		
+		for (Object object : myNodes) {
+			Node node = (Node) object;
+			Shape shape = (Shape) node.data;
+			shape.getGraphicsAlgorithm().setX(node.x+SPACING_H);
+			shape.getGraphicsAlgorithm().setY(node.y+SPACING_V);
+			shape.getGraphicsAlgorithm().setWidth(node.width);
+			shape.getGraphicsAlgorithm().setHeight(node.height);
+		}
+		
+		return null;
 	}
 }
