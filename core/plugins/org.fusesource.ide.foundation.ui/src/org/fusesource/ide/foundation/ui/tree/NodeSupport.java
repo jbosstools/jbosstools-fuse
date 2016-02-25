@@ -24,9 +24,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.fusesource.ide.foundation.ui.internal.FoundationUIActivator;
 import org.fusesource.ide.foundation.ui.propsrc.BeanPropertySource;
 import org.fusesource.ide.foundation.ui.util.Nodes;
-import org.fusesource.ide.foundation.ui.util.UIHelper;
 import org.jboss.tools.jmx.core.tree.Node;
-import org.jboss.tools.jmx.ui.internal.actions.RefreshAction;
 
 
 public abstract class NodeSupport extends Node implements IAdaptable, RefreshableUI, HasRefreshableUI, IPropertySourceProvider, ITabbedPropertySheetPageContributor {
@@ -156,13 +154,7 @@ public abstract class NodeSupport extends Node implements IAdaptable, Refreshabl
 	 */
 	@Override
 	public void fireRefresh() {
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				RefreshAction ra = new RefreshAction(UIHelper.ID_JMX_EXPORER);
-				ra.run();
-			}
-		});
+		Display.getDefault().syncExec(new RefreshNodeRunnable(this));
 	}
 	
 	/* (non-Javadoc)
