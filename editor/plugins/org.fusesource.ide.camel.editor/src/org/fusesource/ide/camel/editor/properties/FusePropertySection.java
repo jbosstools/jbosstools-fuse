@@ -234,9 +234,6 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	    Label l = toolkit.createLabel(page, s);         
 	    l.setLayoutData(new GridData());
 	    addDescriptionAsTooltip(p, l);
-		if (isRequired(p)) {
-	    	l.setForeground(getDisplay().getSystemColor(SWT.COLOR_RED));
-	    }
 	}
 
 	protected Display getDisplay() {
