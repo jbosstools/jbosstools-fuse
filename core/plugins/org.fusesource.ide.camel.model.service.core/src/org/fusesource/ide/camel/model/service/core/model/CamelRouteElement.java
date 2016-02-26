@@ -18,7 +18,7 @@ import org.w3c.dom.Node;
 /**
  * @author lhein
  */
-public class CamelRouteElement extends CamelModelElement implements IFuseDetailsPropertyContributor {
+public class CamelRouteElement extends CamelModelElement {
 	
 	/**
 	 * contains all inputs of the route

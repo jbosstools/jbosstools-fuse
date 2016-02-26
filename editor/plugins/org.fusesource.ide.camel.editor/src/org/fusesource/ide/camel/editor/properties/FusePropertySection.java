@@ -130,7 +130,7 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 
         createTabFolder();        
         
-		if (n.getUnderlyingMetaModelObject() != null) {
+        if (n.getUnderlyingMetaModelObject() != null) {
             this.selectedEP = n;
             this.eip = PropertiesUtils.getEipFor(selectedEP);
             String headerText = selectedEP.getDisplayText();
@@ -693,5 +693,4 @@ public abstract class FusePropertySection extends AbstractPropertySection {
 	protected GridData createPropertyFieldLayoutData() {
 		return GridDataFactory.fillDefaults().indent(5, 0).span(3, 1).grab(true, false).create();
 	}
-
 }

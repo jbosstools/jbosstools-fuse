@@ -15,7 +15,7 @@ import org.fusesource.ide.foundation.core.xml.XmlEscapeUtility;
 /**
  * @author lhein
  */
-public class CamelEndpoint extends CamelModelElement implements IFuseDetailsPropertyContributor {
+public class CamelEndpoint extends CamelModelElement {
 
 	/**
 	 * @param parent
