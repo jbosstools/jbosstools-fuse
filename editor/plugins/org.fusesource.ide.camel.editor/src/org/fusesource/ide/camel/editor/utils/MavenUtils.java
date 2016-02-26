@@ -38,6 +38,11 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
  */
 public class MavenUtils {
 
+	private static final String CAMEL_GROUP_ID = "org.apache.camel";
+	private static final String CAMEL_CORE_ARTIFACT_ID = "camel-core";
+	private static final String SCOPE_PROVIDED = "provided";
+	
+	
 	/**
      * checks if we need to add a maven dependency for the chosen component
      * and inserts it into the pom.xml if needed
@@ -63,9 +68,17 @@ public class MavenUtils {
         // then check if component dependency is already a dep
         ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency> missingDeps = new ArrayList<org.fusesource.ide.camel.model.service.core.catalog.Dependency>();
         List<Dependency> deps = model.getDependencies();
+        String scope = null;
         for (org.fusesource.ide.camel.model.service.core.catalog.Dependency conDep : compDeps) {
             boolean found = false;
             for (Dependency pomDep : deps) {
+            	if (scope == null && 
+            		pomDep.getGroupId().equalsIgnoreCase(CAMEL_GROUP_ID) && 
+            		pomDep.getArtifactId().equalsIgnoreCase(CAMEL_CORE_ARTIFACT_ID)) {
+            		if (pomDep.getScope() != null && pomDep.getScope().equalsIgnoreCase(SCOPE_PROVIDED)) {
+            			scope = pomDep.getScope();
+            		}
+            	}
                 if (pomDep.getGroupId().equalsIgnoreCase(conDep.getGroupId()) &&
                     pomDep.getArtifactId().equalsIgnoreCase(conDep.getArtifactId())) {
                     // check for correct version
@@ -87,6 +100,9 @@ public class MavenUtils {
             dep.setGroupId(missDep.getGroupId());
             dep.setArtifactId(missDep.getArtifactId());
             dep.setVersion(missDep.getVersion());
+            if (scope != null) {
+            	dep.setScope(scope);
+            }
             model.addDependency(dep);
         }
         
