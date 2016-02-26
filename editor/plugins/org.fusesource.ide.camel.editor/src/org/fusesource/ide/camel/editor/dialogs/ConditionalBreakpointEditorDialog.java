@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.fusesource.ide.camel.model.service.core.CamelServiceManagerUtil;
 import org.fusesource.ide.camel.model.service.core.ICamelManagerService;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.LanguageUtils;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.preferences.PreferenceManager;
@@ -132,7 +132,7 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 	
 	private String language;
 	private String condition;
-	private CamelModelElement node;
+	private AbstractCamelModelElement node;
 	private Group grp_language;
 	private Group grp_condition;
 	private Combo combo_language;
@@ -147,7 +147,7 @@ public class ConditionalBreakpointEditorDialog extends TitleAreaDialog {
 	 * @param parentShell
 	 * @param node
 	 */
-	public ConditionalBreakpointEditorDialog(Shell parentShell, CamelModelElement node) {
+	public ConditionalBreakpointEditorDialog(Shell parentShell, AbstractCamelModelElement node) {
 	    super(parentShell);
 	    this.node = node;
 	}

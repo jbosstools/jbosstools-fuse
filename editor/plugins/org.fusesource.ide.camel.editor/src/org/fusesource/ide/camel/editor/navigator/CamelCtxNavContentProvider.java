@@ -29,7 +29,7 @@ import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonContentProvider;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
@@ -72,7 +72,7 @@ public class CamelCtxNavContentProvider implements ICommonContentProvider {
 		final CamelFile rc = ioHandler.loadCamelModel(camelFile, new NullProgressMonitor());
 		if (rc != null && rc.getCamelContext() != null) {
 			List<CamelCtxNavRouteNode> routes = new ArrayList<CamelCtxNavRouteNode>();
-			for(CamelModelElement node : rc.getCamelContext().getChildElements()) {
+			for(AbstractCamelModelElement node : rc.getCamelContext().getChildElements()) {
 				if(node instanceof CamelRouteElement) {
 					routes.add(new CamelCtxNavRouteNode((CamelRouteElement)node, camelFile));
 				}

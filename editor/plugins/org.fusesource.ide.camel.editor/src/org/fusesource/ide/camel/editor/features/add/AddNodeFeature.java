@@ -21,7 +21,7 @@ import org.fusesource.ide.camel.editor.commands.DiagramOperations;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -43,15 +43,15 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 	public boolean canAdd(IAddContext context) {
 		// check if user wants to add a EClass
 		final Object newObject = context.getNewObject();
-		if (newObject instanceof CamelModelElement) {
+		if (newObject instanceof AbstractCamelModelElement) {
 			// check if user wants to add to a diagram
 			if (context.getTargetContainer() instanceof Diagram) {
-                return ((CamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("route") ||
-                		((CamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("rest") ||
-                		((CamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("restConfiguration");
-            } else if (getBusinessObjectForPictogramElement(context.getTargetContainer()) instanceof CamelModelElement) {
-            	CamelModelElement container =  (CamelModelElement)getBusinessObjectForPictogramElement(context.getTargetContainer());
-            	CamelModelElement child = (CamelModelElement)newObject;
+                return ((AbstractCamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("route") ||
+                		((AbstractCamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("rest") ||
+                		((AbstractCamelModelElement) newObject).getNodeTypeId().equalsIgnoreCase("restConfiguration");
+            } else if (getBusinessObjectForPictogramElement(context.getTargetContainer()) instanceof AbstractCamelModelElement) {
+            	AbstractCamelModelElement container =  (AbstractCamelModelElement)getBusinessObjectForPictogramElement(context.getTargetContainer());
+            	AbstractCamelModelElement child = (AbstractCamelModelElement)newObject;
             	return NodeUtils.isValidChild(container, child);
             }
 		}
@@ -63,7 +63,7 @@ public class AddNodeFeature extends AbstractAddShapeFeature {
 	 */
 	@Override
 	public PictogramElement add(IAddContext context) {
-		CamelModelElement addedClass = (CamelModelElement)context.getNewObject();
+		AbstractCamelModelElement addedClass = (AbstractCamelModelElement)context.getNewObject();
 		ContainerShape targetContainer = (ContainerShape) context.getTargetContainer();
 		Diagram diagram = Graphiti.getPeService().getDiagramForPictogramElement(targetContainer);
 		String label = addedClass.getDisplayText();

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.fuse.transformation.core.camel;
 
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * Utility methods that help with constructing or modifying a transformation
@@ -49,15 +49,15 @@ public final class EndpointHelper {
         return uriBuf.toString();
     }
 
-    public static void setSourceModel(CamelModelElement endpoint, String sourceModel) {
+    public static void setSourceModel(AbstractCamelModelElement endpoint, String sourceModel) {
         replaceEndpointParameter(endpoint, SOURCE_MODEL, sourceModel);
     }
 
-    public static void setTargetModel(CamelModelElement endpoint, String targetModel) {
+    public static void setTargetModel(AbstractCamelModelElement endpoint, String targetModel) {
         replaceEndpointParameter(endpoint, TARGET_MODEL, targetModel);
     }
 
-    public static void replaceEndpointParameter(CamelModelElement endpoint, String key, String val) {
+    public static void replaceEndpointParameter(AbstractCamelModelElement endpoint, String key, String val) {
 
         StringBuilder uriStr = new StringBuilder((String)endpoint.getParameter("uri"));
         if (uriStr.indexOf(key + "=") < 0) {

@@ -15,7 +15,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -33,8 +33,8 @@ public class CamelModelOutlineLabelProvider extends LabelProvider implements ISt
 	 */
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof CamelModelElement) {
-			CamelModelElement cme = (CamelModelElement)element;
+		if (element instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement cme = (AbstractCamelModelElement)element;
 			Image icon = CamelEditorUIActivator.getDefault().getImage(cme.getIconName().replaceAll(".png", "16.png"));
 			if (icon == null) {
 				icon = CamelEditorUIActivator.getDefault().getImage("endpoint16.png");
@@ -49,8 +49,8 @@ public class CamelModelOutlineLabelProvider extends LabelProvider implements ISt
 	 */
 	@Override
 	public String getText(Object element) {
-		if (element instanceof CamelModelElement) {
-			CamelModelElement cme = (CamelModelElement)element;
+		if (element instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement cme = (AbstractCamelModelElement)element;
 			return cme.getDisplayText();
 		}
 		return null;

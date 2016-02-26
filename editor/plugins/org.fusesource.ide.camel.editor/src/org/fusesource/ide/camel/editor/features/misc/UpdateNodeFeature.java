@@ -22,7 +22,7 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -38,7 +38,7 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 	public boolean canUpdate(IUpdateContext context) {
 		// return true, if linked business object is an EClass
 		Object bo = getBusinessObjectForPictogramElement(context.getPictogramElement());
-		return (bo instanceof CamelModelElement);
+		return (bo instanceof AbstractCamelModelElement);
 	}
 
 	public IReason updateNeeded(IUpdateContext context) {
@@ -59,11 +59,11 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 		// retrieve name from business model
 		String businessName = null;
 		Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-		if (bo instanceof CamelModelElement) {
-			CamelModelElement eClass = (CamelModelElement) bo;
+		if (bo instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement eClass = (AbstractCamelModelElement) bo;
 			// do check if underlying xml node changed / document changed
 			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
-			CamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
+			AbstractCamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
 			if (bo2 != null && bo2.getXmlNode().isEqualNode(eClass.getXmlNode()) == false) {
 				return Reason.createTrueReason("The Model has been changed. Please update the figure."); //$NON-NLS-1$
 			}
@@ -91,12 +91,12 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 		String businessName = null;
 		PictogramElement pictogramElement = context.getPictogramElement();
 		Object bo = getBusinessObjectForPictogramElement(pictogramElement);
-		if (bo instanceof CamelModelElement) {
-			CamelModelElement eClass = (CamelModelElement) bo;
+		if (bo instanceof AbstractCamelModelElement) {
+			AbstractCamelModelElement eClass = (AbstractCamelModelElement) bo;
 		
 			// do check if underlying xml node changed / document changed
 			CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
-			CamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
+			AbstractCamelModelElement bo2 = editor.getModel().findNode(eClass.getId());
 			if (bo2 != null && bo2.getXmlNode().isEqualNode(eClass.getXmlNode()) == false) {
 				link(pictogramElement, bo2);
 				this.changed = true;
@@ -120,12 +120,12 @@ public class UpdateNodeFeature extends AbstractUpdateFeature {
 					this.changed = true;
 				} else if (shape instanceof Image) {
 					// update the icon image
-					CamelModelElement addedClass = (CamelModelElement)bo;
+					AbstractCamelModelElement addedClass = (AbstractCamelModelElement)bo;
 					String iconKey = null;
 					// set the new icon id - refresh will to the rest
-					if (((CamelModelElement)bo).isEndpointElement()) {
+					if (((AbstractCamelModelElement)bo).isEndpointElement()) {
 						iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());
-					} else if (((CamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren()) {
+					} else if (((AbstractCamelModelElement)bo).getUnderlyingMetaModelObject().canHaveChildren()) {
 						iconKey = ImageProvider.getKeyForSmallIcon(addedClass.getIconName());
 					} else {
 						iconKey = ImageProvider.getKeyForLargeIcon(addedClass.getIconName());

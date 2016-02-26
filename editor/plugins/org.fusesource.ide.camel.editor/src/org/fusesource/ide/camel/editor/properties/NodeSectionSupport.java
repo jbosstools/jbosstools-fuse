@@ -20,18 +20,18 @@ import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.NodeSelectionSupport;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
  */
 public abstract class NodeSectionSupport extends AbstractPropertySection {
-	protected CamelModelElement node;
+	protected AbstractCamelModelElement node;
 	private WorkbenchPart lastPart;
 
 	private NodeSelectionSupport nodeListener = new NodeSelectionSupport() {
 		@Override
-		protected void onNodeChanged(CamelModelElement node) {
+		protected void onNodeChanged(AbstractCamelModelElement node) {
 			super.onNodeChanged(node);
 			setSelectedNode(node);
 		}
@@ -75,14 +75,14 @@ public abstract class NodeSectionSupport extends AbstractPropertySection {
 		// + selection.getClass());
 		super.setInput(part, selection);
 
-		CamelModelElement newNode = getSelectedNode(selection);
+		AbstractCamelModelElement newNode = getSelectedNode(selection);
 
 		// Activator.getLogger().debug("Selection first element is " + input +
 		// " of type: " + (input == null ? null : input.getClass()));
 		setSelectedNode(newNode);
 	}
 
-	protected CamelModelElement getSelectedNode(ISelection selection) {
+	protected AbstractCamelModelElement getSelectedNode(ISelection selection) {
 		return NodeUtils.getSelectedNode(selection);
 	}
 
@@ -92,7 +92,7 @@ public abstract class NodeSectionSupport extends AbstractPropertySection {
 
 		// lets update the node to the current selection
 		ISelection selection = null;
-		CamelModelElement newNode = null;
+		AbstractCamelModelElement newNode = null;
 		if (lastPart != null) {
 			 selection = lastPart.getSite().getSelectionProvider().getSelection();
 			
@@ -104,9 +104,9 @@ public abstract class NodeSectionSupport extends AbstractPropertySection {
 		CamelEditorUIActivator.pluginLog().logInfo("After " + this + " about to be shown selection " + selection + " node: " + newNode + " last part: " + lastPart);
 	}
 
-	protected void setSelectedNode(CamelModelElement newNode) {
+	protected void setSelectedNode(AbstractCamelModelElement newNode) {
 		if (newNode != null) {
-			CamelModelElement lastNode = node;
+			AbstractCamelModelElement lastNode = node;
 			// lets avoid this check just in case we sometimes lose an event
 			// if (lastNode == newNode || newNode == null) {
 			node = newNode;
@@ -114,16 +114,16 @@ public abstract class NodeSectionSupport extends AbstractPropertySection {
 		}
 	}
 
-	protected abstract void onNodeChanged(CamelModelElement node);
+	protected abstract void onNodeChanged(AbstractCamelModelElement node);
 
-	public CamelModelElement getNode() {
+	public AbstractCamelModelElement getNode() {
 		return node;
 	}
 
 	/**
 	 * Returns the node container
 	 */
-	public CamelModelElement getNodeContainer() {
+	public AbstractCamelModelElement getNodeContainer() {
 		if (node != null) {
 			return node.getParent();
 		}

@@ -68,7 +68,7 @@ import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.util.CamelComponentUtils;
 import org.fusesource.ide.camel.model.service.core.util.PropertiesUtils;
 import org.fusesource.ide.camel.validation.model.NumberValidator;
@@ -238,7 +238,7 @@ public class DetailsSection extends FusePropertySection {
 										return ValidationStatus.error("One of Ref and Uri values have to be filled!");
 									} else {
 										// ref found - now check if REF has URI defined
-										CamelModelElement cme = selectedEP.getCamelContext().findNode((String)selectedEP.getParameter("ref"));
+										AbstractCamelModelElement cme = selectedEP.getCamelContext().findNode((String)selectedEP.getParameter("ref"));
 										if (cme == null || cme.getParameter("uri") == null || ((String)cme.getParameter("uri")).trim().length()<1) {
 											// no uri defined on ref
 											return ValidationStatus.error("The referenced endpoint has no URI defined or does not exist.");
@@ -265,7 +265,7 @@ public class DetailsSection extends FusePropertySection {
 
 								if (value != null && value instanceof String && value.toString().trim().length()>0) {
 									String refId = (String)value;
-									CamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
+									AbstractCamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
 									if (cme == null) {
 										// check for global beans
 										if (selectedEP.getCamelFile().getGlobalDefinitions().containsKey(refId) == false) {
@@ -547,7 +547,7 @@ public class DetailsSection extends FusePropertySection {
                 choiceCombo.setEditable(false);
 				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
                 
-                final CamelModelElement expressionElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
+                final AbstractCamelModelElement expressionElement = this.selectedEP.getParameter(prop.getName()) != null ? (AbstractCamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
                 choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
 
                 final Composite eform = getWidgetFactory().createFlatFormComposite(page);
@@ -562,14 +562,14 @@ public class DetailsSection extends FusePropertySection {
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
                         String language = choice.getText();
-                        languageChanged(language, eform, selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)selectedEP.getParameter(prop.getName()) : null, page, prop);
+                        languageChanged(language, eform, selectedEP.getParameter(prop.getName()) != null ? (AbstractCamelModelElement)selectedEP.getParameter(prop.getName()) : null, page, prop);
                     }
                 });
                 
 				if (expressionElement != null) {
 					String value = expressionElement.getNodeTypeId();
-					if (expressionElement.getParameter("expression") != null && expressionElement.getParameter("expression") instanceof CamelModelElement ) {
-						CamelModelElement ex = (CamelModelElement)expressionElement.getParameter("expression");
+					if (expressionElement.getParameter("expression") != null && expressionElement.getParameter("expression") instanceof AbstractCamelModelElement ) {
+						AbstractCamelModelElement ex = (AbstractCamelModelElement)expressionElement.getParameter("expression");
 	                    value = ex.getTranslatedNodeName();
 					}
                     choiceCombo.deselectAll();
@@ -610,7 +610,7 @@ public class DetailsSection extends FusePropertySection {
                 choiceCombo.setEditable(false);
 				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
                 
-                final CamelModelElement dataformatElement = this.selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
+                final AbstractCamelModelElement dataformatElement = this.selectedEP.getParameter(prop.getName()) != null ? (AbstractCamelModelElement)this.selectedEP.getParameter(prop.getName()) : null;
                 choiceCombo.setItems(CamelComponentUtils.getOneOfList(prop));
 
                 final Composite eform = getWidgetFactory().createFlatFormComposite(page);
@@ -625,7 +625,7 @@ public class DetailsSection extends FusePropertySection {
                     public void widgetSelected(SelectionEvent e) {
                         CCombo choice = (CCombo)e.getSource();
                         String dataformat = choice.getText();
-                        dataFormatChanged(dataformat, eform, selectedEP.getParameter(prop.getName()) != null ? (CamelModelElement)selectedEP.getParameter(prop.getName()) : null, page, prop);
+                        dataFormatChanged(dataformat, eform, selectedEP.getParameter(prop.getName()) != null ? (AbstractCamelModelElement)selectedEP.getParameter(prop.getName()) : null, page, prop);
                     }
                 });
                 

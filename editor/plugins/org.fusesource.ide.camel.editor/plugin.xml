@@ -110,7 +110,7 @@
                class="org.fusesource.ide.camel.editor.properties.DetailsSection"
                id="org.fusesource.ide.camel.editor.propertysheet.DetailsSection"
                tab="DefaultCamelPropertiesTab">
-            <input type="org.fusesource.ide.camel.model.service.core.model.CamelModelElement"/>
+            <input type="org.fusesource.ide.camel.model.service.core.model.IFuseDetailsPropertyContributor"/>
          </propertySection>
          <propertySection
                class="org.fusesource.ide.camel.editor.properties.AdvancedEndpointPropertiesSection"
@@ -123,7 +123,7 @@
                class="org.fusesource.ide.camel.editor.properties.DocumentationSection"
                id="DocumentationSection"
                tab="DocumentationTab">
-            <input type="org.fusesource.ide.camel.model.service.core.model.CamelModelElement"/>
+            <input type="org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement"/>
          </propertySection>
       </propertySections>
    </extension>   

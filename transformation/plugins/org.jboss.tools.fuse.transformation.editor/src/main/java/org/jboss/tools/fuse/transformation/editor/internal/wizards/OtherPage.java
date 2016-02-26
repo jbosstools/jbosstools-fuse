@@ -62,7 +62,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.progress.UIJob;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.core.model.ModelBuilder;
 import org.jboss.tools.fuse.transformation.editor.Activator;
@@ -272,9 +272,9 @@ public class OtherPage extends XformWizardPage implements TransformationTypePage
         CamelConfigBuilder configBuilder = CamelConfigurationHelper.getConfigBuilder(camelIFile.getRawLocation().toFile());
 
         if (configBuilder != null) {
-            Collection<CamelModelElement> dataFormats = configBuilder.getDataFormats();
-            for (Iterator<CamelModelElement> iterator = dataFormats.iterator(); iterator.hasNext();) {
-            	CamelModelElement df = iterator.next();
+            Collection<AbstractCamelModelElement> dataFormats = configBuilder.getDataFormats();
+            for (Iterator<AbstractCamelModelElement> iterator = dataFormats.iterator(); iterator.hasNext();) {
+            	AbstractCamelModelElement df = iterator.next();
                 if (df.getId() != null) {
                     dfList.add(df.getId());
                 }

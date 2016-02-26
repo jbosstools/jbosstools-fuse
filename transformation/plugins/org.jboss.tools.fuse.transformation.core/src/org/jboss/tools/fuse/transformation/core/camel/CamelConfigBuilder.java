@@ -22,9 +22,10 @@ import org.fusesource.ide.camel.model.service.core.catalog.CamelModel;
 import org.fusesource.ide.camel.model.service.core.catalog.CamelModelFactory;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.CamelBasicModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelEndpoint;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
 import org.jboss.tools.fuse.transformation.core.TransformType;
 
 /**
@@ -68,9 +69,9 @@ public class CamelConfigBuilder {
 	 * @return
 	 * @throws Exception
 	 */
-    public CamelModelElement createDataFormat(TransformType type, String className, MarshalType marshalType) throws Exception {
+    public AbstractCamelModelElement createDataFormat(TransformType type, String className, MarshalType marshalType) throws Exception {
         
-    	CamelModelElement dataFormat = null;
+    	AbstractCamelModelElement dataFormat = null;
 
         switch (type) {
             case JSON:
@@ -101,7 +102,7 @@ public class CamelConfigBuilder {
      * @param marshaller
      * @return
      */
-    public CamelModelElement createEndpoint(String transformId, String dozerConfigPath, String sourceClass, String targetClass, CamelModelElement unmarshaller, CamelModelElement marshaller) {
+    public AbstractCamelModelElement createEndpoint(String transformId, String dozerConfigPath, String sourceClass, String targetClass, AbstractCamelModelElement unmarshaller, AbstractCamelModelElement marshaller) {
         String unmarshallerId = unmarshaller != null ? unmarshaller.getId() : null;
         String marshallerId = marshaller != null ? marshaller.getId() : null;
         String endpointUri = EndpointHelper.createEndpointUri(dozerConfigPath,
@@ -127,8 +128,8 @@ public class CamelConfigBuilder {
             TransformType target, String targetClass) throws Exception {
 
         // Add data formats
-    	CamelModelElement unmarshaller = createDataFormat(source, sourceClass, MarshalType.UNMARSHALLER);
-    	CamelModelElement marshaller = createDataFormat(target, targetClass, MarshalType.MARSHALLER);
+    	AbstractCamelModelElement unmarshaller = createDataFormat(source, sourceClass, MarshalType.UNMARSHALLER);
+    	AbstractCamelModelElement marshaller = createDataFormat(target, targetClass, MarshalType.MARSHALLER);
 
         // Create a transformation endpoint
         String unmarshallerId = unmarshaller != null ? unmarshaller.getId() : null;
@@ -137,9 +138,9 @@ public class CamelConfigBuilder {
         addEndpoint(transformId, endpointUri);
     }
 
-    public CamelModelElement getEndpoint(String endpointId) {
-    	CamelModelElement endpoint = null;
-        for (CamelModelElement ep : getEndpoints()) {
+    public AbstractCamelModelElement getEndpoint(String endpointId) {
+    	AbstractCamelModelElement endpoint = null;
+        for (AbstractCamelModelElement ep : getEndpoints()) {
             if (endpointId.equals(ep.getId())) {
                 endpoint = ep;
                 break;
@@ -150,7 +151,7 @@ public class CamelConfigBuilder {
 
     public List<String> getTransformEndpointIds() {
         List<String> endpointIds = new LinkedList<String>();
-        for (CamelModelElement ep : getEndpoints()) {
+        for (AbstractCamelModelElement ep : getEndpoints()) {
             if (((String)ep.getParameter("uri")).startsWith(EndpointHelper.DOZER_SCHEME)) {
                 endpointIds.add(ep.getId());
             }
@@ -158,9 +159,9 @@ public class CamelConfigBuilder {
         return endpointIds;
     }
 
-    public CamelModelElement getDataFormat(String id) {
-    	CamelModelElement dataFormat = null;
-        for (CamelModelElement df : getDataFormats()) {
+    public AbstractCamelModelElement getDataFormat(String id) {
+    	AbstractCamelModelElement dataFormat = null;
+        for (AbstractCamelModelElement df : getDataFormats()) {
             if (id.equals(df.getId())) {
                 dataFormat = df;
                 break;
@@ -169,16 +170,16 @@ public class CamelConfigBuilder {
         return dataFormat;
     }
 
-    public Collection<CamelModelElement> getDataFormats() {
+    public Collection<AbstractCamelModelElement> getDataFormats() {
     	return getModel().getCamelContext().getDataformats().values();
     }
 
-    public Collection<CamelModelElement> getEndpoints() {
+    public Collection<AbstractCamelModelElement> getEndpoints() {
     	return getModel().getCamelContext().getEndpointDefinitions().values();
     }
 
-    protected CamelModelElement addEndpoint(String id, String uri) {
-    	CamelModelElement parent = getModel().getCamelContext();
+    protected AbstractCamelModelElement addEndpoint(String id, String uri) {
+    	AbstractCamelModelElement parent = getModel().getCamelContext();
 		CamelEndpoint ep = new CamelEndpoint(uri);
 		ep.setId(id);
 		ep.setParent(parent);
@@ -192,14 +193,14 @@ public class CamelConfigBuilder {
         return idx > 0 ? type.substring(0, idx) : type;
     }
 
-    protected CamelModelElement createJsonDataFormat(String className) throws Exception {
+    protected AbstractCamelModelElement createJsonDataFormat(String className) throws Exception {
         final String id = className != null ? className.replaceAll("\\.", "") : "transform-json";
         Eip json = getEipByName("json");
-        CamelModelElement dataFormat = getDataFormat(id);
+        AbstractCamelModelElement dataFormat = getDataFormat(id);
         if (dataFormat == null) {
             // Looks like we need to create a new one
-        	CamelModelElement parent = getModel().getCamelContext();
-    		dataFormat = new CamelModelElement(parent, null);
+        	AbstractCamelModelElement parent = getModel().getCamelContext();
+			dataFormat = new CamelBasicModelElement(parent, null);
     		dataFormat.setId(id);
     		dataFormat.setUnderlyingMetaModelObject(json);
     		dataFormat.setParameter("library", "Jackson");
@@ -210,14 +211,14 @@ public class CamelConfigBuilder {
     }
 
 
-    protected CamelModelElement createJaxbDataFormat(String contextPath) throws Exception {
+    protected AbstractCamelModelElement createJaxbDataFormat(String contextPath) throws Exception {
         final String id = contextPath.replaceAll("\\.", "");
         Eip jaxb = getEipByName("jaxb");
-        CamelModelElement dataFormat = getDataFormat(id);
+        AbstractCamelModelElement dataFormat = getDataFormat(id);
         if (dataFormat == null) {
             // Looks like we need to create a new one
-        	CamelModelElement parent = getModel().getCamelContext();
-    		dataFormat = new CamelModelElement(parent, null);
+        	AbstractCamelModelElement parent = getModel().getCamelContext();
+			dataFormat = new CamelBasicModelElement(parent, null);
     		dataFormat.setId(id);
     		dataFormat.setUnderlyingMetaModelObject(jaxb);
     		dataFormat.setParameter("contextPath", contextPath);

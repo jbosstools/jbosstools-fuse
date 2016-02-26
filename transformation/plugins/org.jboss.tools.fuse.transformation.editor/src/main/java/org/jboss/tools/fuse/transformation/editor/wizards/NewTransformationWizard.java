@@ -50,7 +50,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.core.MapperConfiguration;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder;
 import org.jboss.tools.fuse.transformation.core.camel.CamelConfigBuilder.MarshalType;
@@ -85,11 +85,11 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
     private static final String OBJECT_FACTORY_NAME = "ObjectFactory";
 
     private Model uiModel = new Model();
-    private CamelModelElement sourceFormat;
-    private CamelModelElement targetFormat;
-    private CamelModelElement endpoint;
+    private AbstractCamelModelElement sourceFormat;
+    private AbstractCamelModelElement targetFormat;
+    private AbstractCamelModelElement endpoint;
     private boolean saveCamelConfig = true;
-    private CamelModelElement routeEndpoint;
+    private AbstractCamelModelElement routeEndpoint;
 
     public StartPage start;
     public JavaPage javaSource;
@@ -216,7 +216,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return false;
     }
 
-    public CamelModelElement getRouteEndpoint() {
+    public AbstractCamelModelElement getRouteEndpoint() {
         return routeEndpoint;
     }
 
@@ -501,15 +501,15 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         this.saveCamelConfig = saveCamelConfig;
     }
 
-    public CamelModelElement getSourceFormat() {
+    public AbstractCamelModelElement getSourceFormat() {
         return sourceFormat;
     }
 
-    public CamelModelElement getTargetFormat() {
+    public AbstractCamelModelElement getTargetFormat() {
         return targetFormat;
     }
 
-    public CamelModelElement getEndpoint() {
+    public AbstractCamelModelElement getEndpoint() {
         return endpoint;
     }
 
@@ -517,19 +517,19 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         return uiModel;
     }
 
-    private void addCamelContextEndpoint(CamelContextElement context, CamelModelElement endpoint) {
-        Map<String, CamelModelElement> endpoints = context.getEndpointDefinitions();
+    private void addCamelContextEndpoint(CamelContextElement context, AbstractCamelModelElement endpoint) {
+        Map<String, AbstractCamelModelElement> endpoints = context.getEndpointDefinitions();
         if (endpoints == null) {
-            endpoints = new HashMap<String, CamelModelElement>();
+            endpoints = new HashMap<String, AbstractCamelModelElement>();
             context.setEndpointDefinitions(endpoints);
         }
         endpoints.put(endpoint.getId(), endpoint);
     }
 
-    private void addDataFormat(CamelContextElement context, CamelModelElement dataFormat) {
-    	Map<String, CamelModelElement> dataFormats = context.getDataformats();
+    private void addDataFormat(CamelContextElement context, AbstractCamelModelElement dataFormat) {
+    	Map<String, AbstractCamelModelElement> dataFormats = context.getDataformats();
         if (dataFormats == null) {
-        	dataFormats = new HashMap<String, CamelModelElement>();
+        	dataFormats = new HashMap<String, AbstractCamelModelElement>();
             context.setDataformats(dataFormats);
         }
         dataFormats.put(dataFormat.getId(), dataFormat);
@@ -554,7 +554,7 @@ public class NewTransformationWizard extends Wizard implements INewWizard {
         }
     }
 
-    private void addDataFormatDefinitionDependency(CamelModelElement dataFormat) {
+    private void addDataFormatDefinitionDependency(AbstractCamelModelElement dataFormat) {
         Dependency dep = null;
         String camelVersion = CamelUtils.getCurrentProjectCamelVersion();
         if (dataFormat != null && dataFormat.getNodeTypeId() != null) {

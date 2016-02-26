@@ -32,7 +32,7 @@ import org.fusesource.ide.camel.model.service.core.catalog.Parameter;
 import org.fusesource.ide.camel.model.service.core.catalog.UriParameterKind;
 import org.fusesource.ide.camel.model.service.core.catalog.components.Component;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -52,7 +52,7 @@ public class PropertiesUtils {
 		return null;
 	}
 	
-	public static Component getComponentFor(CamelModelElement selectedEP) {
+	public static Component getComponentFor(AbstractCamelModelElement selectedEP) {
 		if (selectedEP != null && selectedEP.getParameter("uri") != null) {
             int protocolSeparatorIdx = ((String)selectedEP.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
@@ -63,14 +63,14 @@ public class PropertiesUtils {
 		return null;
 	}
 	
-	public static Eip getEipFor(CamelModelElement selectedEP) {
+	public static Eip getEipFor(AbstractCamelModelElement selectedEP) {
 		if (selectedEP != null && selectedEP.getUnderlyingMetaModelObject() != null) {
             return selectedEP.getUnderlyingMetaModelObject();
 		}
 		return null;
 	}
 		
-	public static List<Parameter> getPathProperties(CamelModelElement selectedEP) {
+	public static List<Parameter> getPathProperties(AbstractCamelModelElement selectedEP) {
 		ArrayList<Parameter> result = new ArrayList<Parameter>();
 
         if (selectedEP != null && selectedEP.getParameter("uri") != null) {
@@ -96,7 +96,7 @@ public class PropertiesUtils {
      * @param kind
      * @return
      */
-    public static List<Parameter> getPropertiesFor(CamelModelElement selectedEP, UriParameterKind kind) {
+    public static List<Parameter> getPropertiesFor(AbstractCamelModelElement selectedEP, UriParameterKind kind) {
         ArrayList<Parameter> result = new ArrayList<Parameter>();
 
         if (selectedEP != null && selectedEP.getParameter("uri") != null) {
@@ -132,7 +132,7 @@ public class PropertiesUtils {
      * @param selectedEP
      * @return
      */
-    public static List<Parameter> getComponentPropertiesFor(CamelModelElement selectedEP) {
+    public static List<Parameter> getComponentPropertiesFor(AbstractCamelModelElement selectedEP) {
         if (selectedEP != null && selectedEP.getParameter("uri") != null) {
             int protocolSeparatorIdx = ((String)selectedEP.getParameter("uri")).indexOf(":");
             if (protocolSeparatorIdx != -1) {
@@ -174,7 +174,7 @@ public class PropertiesUtils {
      * @param kind
      * @return
      */
-    public static List<Parameter> getPropertiesFor(CamelModelElement selectedEP) {
+    public static List<Parameter> getPropertiesFor(AbstractCamelModelElement selectedEP) {
         ArrayList<Parameter> result = new ArrayList<Parameter>();
 
         if (selectedEP != null && selectedEP.getUnderlyingMetaModelObject() != null) {
@@ -191,7 +191,7 @@ public class PropertiesUtils {
      * @param p
      * @return
      */
-    public static String getPropertyFromUri(CamelModelElement selectedEP, Parameter p, Component c) {
+    public static String getPropertyFromUri(AbstractCamelModelElement selectedEP, Parameter p, Component c) {
     	// we need to distinguish between parameters in the uri part after the ? char
     	final String kind = p.getKind();
 		final String uriParameterValue = (String)selectedEP.getParameter("uri");
@@ -279,7 +279,7 @@ public class PropertiesUtils {
      * @param c
      * @return
      */
-    private static Map<String, String> getPathMap(CamelModelElement selectedEP, Component c) {
+    private static Map<String, String> getPathMap(AbstractCamelModelElement selectedEP, Component c) {
     	HashMap<String, String> retVal = new HashMap<String, String>();
 
     	// get all path params
@@ -347,7 +347,7 @@ public class PropertiesUtils {
      * @param p
      * @return
      */
-    public static Object getTypedPropertyFromUri(CamelModelElement selectedEP, Parameter p, Component c) {
+    public static Object getTypedPropertyFromUri(AbstractCamelModelElement selectedEP, Parameter p, Component c) {
         String val = getPropertyFromUri(selectedEP, p, c);
 
         if (CamelComponentUtils.isBooleanProperty(p)) {
@@ -371,7 +371,7 @@ public class PropertiesUtils {
      * @param p
      * @param value
      */
-    public static void updateURIParams(CamelModelElement selectedEP, Parameter p, Object value, Component c, IObservableMap modelMap) {
+    public static void updateURIParams(AbstractCamelModelElement selectedEP, Parameter p, Object value, Component c, IObservableMap modelMap) {
     	if (p.getKind().equalsIgnoreCase("path")) {
     		// simply rebuild the uri
     		String newUri = "";
@@ -447,7 +447,7 @@ public class PropertiesUtils {
     	}
     }
     
-    public static String getUsedProtocol(CamelModelElement selectedEP) {
+    public static String getUsedProtocol(AbstractCamelModelElement selectedEP) {
         return ((String)selectedEP.getParameter("uri")).substring(0, ((String)selectedEP.getParameter("uri")).indexOf(':'));
     }
     

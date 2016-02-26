@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
@@ -55,9 +55,9 @@ public class CamelCtxNavRouteNode  {
 		return this.mRouteSupport.toString();
 	}
 	
-	private static List<String> getChildNodesDisplayText(CamelModelElement routeSupport) {
+	private static List<String> getChildNodesDisplayText(AbstractCamelModelElement routeSupport) {
 		List<String> nodeKeys = new ArrayList<String>();
-		for (CamelModelElement childNode : routeSupport.getChildElements()) {
+		for (AbstractCamelModelElement childNode : routeSupport.getChildElements()) {
 			nodeKeys.add(childNode.getDisplayText());
 		}
 		return nodeKeys;
@@ -76,9 +76,9 @@ public class CamelCtxNavRouteNode  {
 			List<String> nodeKeys = getChildNodesDisplayText(this.mRouteSupport);
 			String nodeDisplayText = this.mRouteSupport.getDisplayText();
 			if(nodeDisplayText!=null){
-				for(CamelModelElement node : model.getChildElements()) {
+				for(AbstractCamelModelElement node : model.getChildElements()) {
 					if(node instanceof CamelRouteElement && nodeDisplayText.equals(node.getDisplayText())) {
-						List<CamelModelElement> editorNodeChildren = node.getChildElements();
+						List<AbstractCamelModelElement> editorNodeChildren = node.getChildElements();
 						if(nodeKeys.size() == editorNodeChildren.size()) {	
 							List<String> editorNodeKeys = getChildNodesDisplayText(node);
 							if(editorNodeKeys.containsAll(nodeKeys)) {

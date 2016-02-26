@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Display;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature;
 import org.fusesource.ide.camel.model.service.core.catalog.Dependency;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.jboss.tools.fuse.transformation.editor.Activator;
 import org.jboss.tools.fuse.transformation.editor.internal.util.JavaUtil;
 import org.jboss.tools.fuse.transformation.editor.wizards.NewTransformationWizard;
@@ -61,7 +61,7 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
      * @see org.fusesource.ide.camel.editor.features.create.ext.CreateEndpointFigureFeature#createNode(org.fusesource.ide.camel.model.service.core.model.CamelModelElement, boolean)
      */
     @Override
-    protected CamelModelElement createNode(CamelModelElement parent, boolean createDOMNode) {
+    protected AbstractCamelModelElement createNode(AbstractCamelModelElement parent, boolean createDOMNode) {
         // Launch the New Transformation wizard
         NewTransformationWizard wizard = new NewTransformationWizard();
         wizard.setNeedsProgressMonitor(true);
@@ -80,7 +80,7 @@ public class DataMapperEndpointFigureFeature extends CreateEndpointFigureFeature
 
         WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
         int status = dialog.open();
-        CamelModelElement ep = (status == IStatus.OK) ? wizard.getRouteEndpoint() : null;
+        AbstractCamelModelElement ep = (status == IStatus.OK) ? wizard.getRouteEndpoint() : null;
         if (ep != null && getEip() != null) {
         	CamelDesignEditor editor = (CamelDesignEditor)getDiagramBehavior().getDiagramContainer();
         	if (editor.getModel() != null) { 

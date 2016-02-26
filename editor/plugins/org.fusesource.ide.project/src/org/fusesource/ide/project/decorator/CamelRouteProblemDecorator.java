@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.fusesource.ide.camel.editor.navigator.CamelCtxNavRouteNode;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 import org.fusesource.ide.project.Activator;
@@ -103,7 +103,7 @@ public class CamelRouteProblemDecorator implements ILightweightLabelDecorator {
 	 * @return if the Camel Element with 'id' is inside the 'camelRoute'
 	 */
 	private boolean isInsideRoute(CamelRouteElement camelRoute, String id) {
-		CamelModelElement current = ((CamelRouteElement) camelRoute).getCamelFile().findNode(id);
+		AbstractCamelModelElement current = ((CamelRouteElement) camelRoute).getCamelFile().findNode(id);
 		while (current != null) {
 			if (camelRoute.equals(current)) {
 				return true;

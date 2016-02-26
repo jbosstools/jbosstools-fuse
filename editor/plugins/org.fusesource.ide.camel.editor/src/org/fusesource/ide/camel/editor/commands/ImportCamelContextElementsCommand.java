@@ -31,7 +31,7 @@ import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -40,7 +40,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 
 	private TransactionalEditingDomain editingDomain;
 	private CamelDesignEditor designEditor;
-	private CamelModelElement container;
+	private AbstractCamelModelElement container;
 	private Resource createdResource;
 	private Diagram diagram;
 	private IFeatureProvider featureProvider;
@@ -79,7 +79,7 @@ public class ImportCamelContextElementsCommand extends RecordingCommand {
 	 * @param diagramName
 	 * @param camelContextFile
 	 */
-	public ImportCamelContextElementsCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, CamelModelElement container, Diagram diagram) {
+	public ImportCamelContextElementsCommand(CamelDesignEditor designEditor, TransactionalEditingDomain editingDomain, AbstractCamelModelElement container, Diagram diagram) {
 		super(editingDomain);
 		this.designEditor = designEditor;
 		this.editingDomain = editingDomain;

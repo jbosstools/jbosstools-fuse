@@ -17,7 +17,7 @@ import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.features.context.impl.UpdateContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.CamelDesignEditor;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -52,9 +52,9 @@ public class CamelModelNotificationService extends DefaultNotificationService {
 			if (picElem != null) {
 				Object obo = getDiagramTypeProvider().getFeatureProvider().getBusinessObjectForPictogramElement(picElem);
 				if (obo != null) {
-					CamelModelElement bo1 = (CamelModelElement)obo;
+					AbstractCamelModelElement bo1 = (AbstractCamelModelElement)obo;
 					CamelDesignEditor editor = (CamelDesignEditor)getDiagramTypeProvider().getDiagramBehavior().getDiagramContainer();
-					CamelModelElement bo2 = editor.getModel().findNode(bo1.getId());
+					AbstractCamelModelElement bo2 = editor.getModel().findNode(bo1.getId());
 					if (bo2 != null && bo2.getXmlNode().isEqualNode(bo1.getXmlNode()) == false) {
 						relatedBOs.add(picElem);
 					}					

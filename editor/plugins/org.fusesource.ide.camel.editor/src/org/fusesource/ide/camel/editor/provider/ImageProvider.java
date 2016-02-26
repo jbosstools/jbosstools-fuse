@@ -20,7 +20,7 @@ import org.eclipse.graphiti.ui.platform.AbstractImageProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.model.service.core.catalog.eips.Eip;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.osgi.framework.Bundle;
 
@@ -155,7 +155,7 @@ public class ImageProvider extends AbstractImageProvider {
 	 * @param fileNameSmall	the file name of the small icon
 	 * @param fileNameLarge	the file name of the large icon
 	 */
-	public void addIconsForClass(CamelModelElement node, String fileNameSmall, String fileNameLarge) {
+	public void addIconsForClass(AbstractCamelModelElement node, String fileNameSmall, String fileNameLarge) {
 		addIconsForIconName(node.getIconName(), fileNameSmall, fileNameLarge);
 	}
 
@@ -182,7 +182,7 @@ public class ImageProvider extends AbstractImageProvider {
 		CamelEditorUIActivator.getDefault().getImageRegistry().put(key, CamelEditorUIActivator.imageDescriptorFromPlugin(CamelEditorUIActivator.PLUGIN_ID, path));
 	}
 
-	public void addIconsForClass(CamelModelElement node) {
+	public void addIconsForClass(AbstractCamelModelElement node) {
 		addIconsForClass(node, node.getIconName().replaceAll(".png", "16.png"), node.getIconName());
 	}
 	

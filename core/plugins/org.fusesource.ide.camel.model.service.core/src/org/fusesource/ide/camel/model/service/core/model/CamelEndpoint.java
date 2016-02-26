@@ -15,7 +15,7 @@ import org.fusesource.ide.foundation.core.xml.XmlEscapeUtility;
 /**
  * @author lhein
  */
-public class CamelEndpoint extends CamelModelElement {
+public class CamelEndpoint extends AbstractCamelModelElement implements IFuseDetailsPropertyContributor {
 
 	/**
 	 * @param parent
@@ -48,7 +48,7 @@ public class CamelEndpoint extends CamelModelElement {
 	 * @see org.fusesource.ide.camel.model.service.core.model.CamelModelElement#setParent(org.fusesource.ide.camel.model.service.core.model.CamelModelElement)
 	 */
 	@Override
-	public void setParent(CamelModelElement parent) {
+	public void setParent(AbstractCamelModelElement parent) {
 		super.setParent(parent);
 		if (parent != null && parent.getXmlNode() != null && getXmlNode() != null) {
 			boolean alreadyChild = false;

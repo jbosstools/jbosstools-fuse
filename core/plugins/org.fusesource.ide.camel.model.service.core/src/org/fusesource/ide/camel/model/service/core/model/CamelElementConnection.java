@@ -15,7 +15,7 @@ import org.w3c.dom.Node;
 /**
  * @author lhein
  */
-public class CamelElementConnection extends CamelModelElement {
+public class CamelElementConnection extends AbstractCamelModelElement {
 	/**
 	 * True, if the connection is attached to its endpoints.
 	 */
@@ -24,12 +24,12 @@ public class CamelElementConnection extends CamelModelElement {
 	/**
 	 * Connection's source endpoint.
 	 */
-	private CamelModelElement source;
+	private AbstractCamelModelElement source;
 
 	/**
 	 * Connection's target endpoint.
 	 */
-	private CamelModelElement target;
+	private AbstractCamelModelElement target;
 
 	/**
 	 * Create a (solid) connection between two distinct shapes.
@@ -42,7 +42,7 @@ public class CamelElementConnection extends CamelModelElement {
 	 *             if any of the parameters are null or source == target
 	 * @see #setLineStyle(int)
 	 */
-	public CamelElementConnection(CamelModelElement source, CamelModelElement target) {
+	public CamelElementConnection(AbstractCamelModelElement source, AbstractCamelModelElement target) {
 		super(null, null);
 		if (source == null) {
 			throw new IllegalArgumentException("No source for Flow");
@@ -103,7 +103,7 @@ public class CamelElementConnection extends CamelModelElement {
 	 * 
 	 * @return a non-null GenericObject instance
 	 */
-	public CamelModelElement getSource() {
+	public AbstractCamelModelElement getSource() {
 		return source;
 	}
 
@@ -112,7 +112,7 @@ public class CamelElementConnection extends CamelModelElement {
 	 * 
 	 * @return a non-null GenericObject instance
 	 */
-	public CamelModelElement getTarget() {
+	public AbstractCamelModelElement getTarget() {
 		return target;
 	}
 
@@ -146,7 +146,7 @@ public class CamelElementConnection extends CamelModelElement {
 	 * @throws IllegalArgumentException
 	 *             if any of the paramers are null or newSource == newTarget
 	 */
-	public void reconnect(CamelModelElement newSource, CamelModelElement newTarget) {
+	public void reconnect(AbstractCamelModelElement newSource, AbstractCamelModelElement newTarget) {
 		if (newSource == null || newTarget == null || newSource == newTarget) {
 			throw new IllegalArgumentException();
 		}

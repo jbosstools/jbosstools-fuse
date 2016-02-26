@@ -18,17 +18,17 @@ import org.w3c.dom.Node;
 /**
  * @author lhein
  */
-public class CamelRouteElement extends CamelModelElement {
+public class CamelRouteElement extends AbstractCamelModelElement implements IFuseDetailsPropertyContributor {
 	
 	/**
 	 * contains all inputs of the route
 	 */
-	private List<CamelModelElement> inputs = new ArrayList<CamelModelElement>();
+	private List<AbstractCamelModelElement> inputs = new ArrayList<AbstractCamelModelElement>();
 	
 	/**
 	 * contains all outputs of the route
 	 */
-	private List<CamelModelElement> outputs = new ArrayList<CamelModelElement>();
+	private List<AbstractCamelModelElement> outputs = new ArrayList<AbstractCamelModelElement>();
 	
 	/**
 	 * 
@@ -44,7 +44,7 @@ public class CamelRouteElement extends CamelModelElement {
 		super.parseChildren();
 		inputs.clear();
 		outputs.clear();
-		for (CamelModelElement c : getChildElements()) {
+		for (AbstractCamelModelElement c : getChildElements()) {
 			if (c.getNodeTypeId().equalsIgnoreCase("from")) {
 				inputs.add(c);
 			} else {
@@ -56,14 +56,14 @@ public class CamelRouteElement extends CamelModelElement {
 	/**
 	 * @return the inputs
 	 */
-	public List<CamelModelElement> getInputs() {
+	public List<AbstractCamelModelElement> getInputs() {
 		return this.inputs;
 	}
 	
 	/**
 	 * @return the outputs
 	 */
-	public List<CamelModelElement> getOutputs() {
+	public List<AbstractCamelModelElement> getOutputs() {
 		return this.outputs;
 	}
 	

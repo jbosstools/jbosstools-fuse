@@ -12,7 +12,7 @@ package org.fusesource.ide.camel.editor.properties;
 
 import org.eclipse.ui.views.properties.tabbed.ITypeMapper;
 import org.fusesource.ide.camel.editor.utils.NodeUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -23,11 +23,19 @@ public class CamelTypeMapper implements ITypeMapper {
 	 * @see org.eclipse.ui.views.properties.tabbed.ITypeMapper#mapType(java.lang.Object)
 	 */
 	@Override
-	public Class mapType(Object object) {
-		CamelModelElement node = NodeUtils.toCamelElement(object);
+	public Class<?> mapType(Object object) {
+		AbstractCamelModelElement node = resolveCamelModelElement(object);
 		if (node != null) {
-			return CamelModelElement.class;
+			return node.getClass();
 		}
 		return object.getClass();
+	}
+
+	/**
+	 * @param object
+	 * @return
+	 */
+	protected AbstractCamelModelElement resolveCamelModelElement(Object object) {
+		return NodeUtils.toCamelElement(object);
 	}
 }

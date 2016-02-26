@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 
 
@@ -24,12 +24,12 @@ import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
  */
 public final class ValidationFactory {
 	
-	private static Map<Class<? extends CamelModelElement>, ValidationSupport> registeredValidators = new HashMap<Class<? extends CamelModelElement>, ValidationSupport>();
+	private static Map<Class<? extends AbstractCamelModelElement>, ValidationSupport> registeredValidators = new HashMap<Class<? extends AbstractCamelModelElement>, ValidationSupport>();
 	private static ValidationFactory instance;
 	
 	static {
 		// register a general validator which should basically work for mandatory field checking
-		registeredValidators.put(CamelModelElement.class, new BasicNodeValidator());
+		registeredValidators.put(AbstractCamelModelElement.class, new BasicNodeValidator());
 		// you may register special validators for specific model classes here but they all need to implement IValidationSupport
 		// ...
         //registeredValidators.put(Endpoint.class, new BasicUriValidator());
@@ -54,17 +54,17 @@ public final class ValidationFactory {
      * @param node
      * @return
      */
-    public ValidationResult validate(CamelModelElement node) {
+    public ValidationResult validate(AbstractCamelModelElement node) {
     	ValidationResult result = null;
     	
-    	Iterator<Class<? extends CamelModelElement>> it = registeredValidators.keySet().iterator();
+    	Iterator<Class<? extends AbstractCamelModelElement>> it = registeredValidators.keySet().iterator();
     	while (it.hasNext()) {
-			Class<? extends CamelModelElement> c = it.next();
+			Class<? extends AbstractCamelModelElement> c = it.next();
     	    
     	    if (c.isInstance(node)) {
                 ValidationSupport validator = registeredValidators.get(c);
                 if (validator == null) {
-                    validator = registeredValidators.get(CamelModelElement.class);
+                    validator = registeredValidators.get(AbstractCamelModelElement.class);
                 } 
                 result = validator.validate(node);
     	    }

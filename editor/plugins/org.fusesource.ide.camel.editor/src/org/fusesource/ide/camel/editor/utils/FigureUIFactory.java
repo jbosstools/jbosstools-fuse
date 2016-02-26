@@ -32,7 +32,7 @@ import org.eclipse.graphiti.services.IPeCreateService;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.fusesource.ide.camel.editor.features.custom.CollapseFeature;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 
 /**
@@ -63,7 +63,7 @@ public class FigureUIFactory {
 	 * @param diagram
 	 * @param defaultLabel
 	 */
-	public static void createFigureUI(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
+	public static void createFigureUI(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, AbstractCamelModelElement element, Diagram diagram, String defaultLabel) {
 		if (element instanceof CamelRouteElement) {
 			// special handling for route figures
 			paintRouteFigure(context, fp, containerShape, element, diagram, defaultLabel);
@@ -89,7 +89,7 @@ public class FigureUIFactory {
 	 * @param diagram
 	 * @param defaultLabel
 	 */
-	private static void paintDefaultFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
+	private static void paintDefaultFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, AbstractCamelModelElement element, Diagram diagram, String defaultLabel) {
 		// as default we paint child figures for now
 		paintChildFigure(context, fp, containerShape, element, diagram, defaultLabel);
 	}
@@ -104,7 +104,7 @@ public class FigureUIFactory {
 	 * @param diagram
 	 * @param defaultLabel
 	 */
-	private static void paintContainerFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
+	private static void paintContainerFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, AbstractCamelModelElement element, Diagram diagram, String defaultLabel) {
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
 
 		// determine font dimensions
@@ -205,7 +205,7 @@ public class FigureUIFactory {
 	 * @param diagram
 	 * @param defaultLabel
 	 */
-	private static void paintRouteFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
+	private static void paintRouteFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, AbstractCamelModelElement element, Diagram diagram, String defaultLabel) {
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
 
 		// calculate label width and height
@@ -277,7 +277,7 @@ public class FigureUIFactory {
 	 * @param diagram
 	 * @param defaultLabel
 	 */
-	private static void paintChildFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, CamelModelElement element, Diagram diagram, String defaultLabel) {
+	private static void paintChildFigure(IAddContext context, IFeatureProvider fp, ContainerShape containerShape, AbstractCamelModelElement element, Diagram diagram, String defaultLabel) {
 		IPeCreateService peCreateService = Graphiti.getPeCreateService();
 
 		// calculate the label width and height

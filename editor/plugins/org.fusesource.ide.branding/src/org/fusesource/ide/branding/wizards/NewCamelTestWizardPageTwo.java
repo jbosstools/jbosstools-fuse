@@ -46,7 +46,7 @@ import org.fusesource.ide.branding.RiderHelpContextIds;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelContextElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.foundation.core.util.URIs;
 
@@ -373,10 +373,10 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		return root;
 	}
 
-	private List<CamelModelElement> getInputs(CamelContextElement context) {
-		ArrayList<CamelModelElement> eps = new ArrayList<CamelModelElement>();
+	private List<AbstractCamelModelElement> getInputs(CamelContextElement context) {
+		ArrayList<AbstractCamelModelElement> eps = new ArrayList<AbstractCamelModelElement>();
 		
-		for (CamelModelElement route : context.getChildElements()) {
+		for (AbstractCamelModelElement route : context.getChildElements()) {
 			if (route instanceof CamelRouteElement) {
 				CamelRouteElement r = (CamelRouteElement)route;
 				eps.addAll(r.getInputs());				
@@ -386,10 +386,10 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		return eps;
 	}
 	
-	private List<CamelModelElement> getOutputs(CamelContextElement context) {
-		ArrayList<CamelModelElement> eps = new ArrayList<CamelModelElement>();
+	private List<AbstractCamelModelElement> getOutputs(CamelContextElement context) {
+		ArrayList<AbstractCamelModelElement> eps = new ArrayList<AbstractCamelModelElement>();
 		
-		for (CamelModelElement route : context.getChildElements()) {
+		for (AbstractCamelModelElement route : context.getChildElements()) {
 			if (route instanceof CamelRouteElement) {
 				CamelRouteElement r = (CamelRouteElement)route;
 				collectEndpoints(r.getOutputs(), eps);				
@@ -399,8 +399,8 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		return eps;
 	}
 	
-	private void collectEndpoints(List<CamelModelElement> searchList, List<CamelModelElement> resultList) {
-		for (CamelModelElement cme : searchList) {
+	private void collectEndpoints(List<AbstractCamelModelElement> searchList, List<AbstractCamelModelElement> resultList) {
+		for (AbstractCamelModelElement cme : searchList) {
 			if (cme.isEndpointElement()) resultList.add(cme);
 			if (cme.getChildElements().isEmpty() == false) collectEndpoints(cme.getChildElements(), resultList);
 		}
@@ -443,9 +443,9 @@ public class NewCamelTestWizardPageTwo extends WizardPage {
 		fInputEndpointsTree.setCheckedElements((Object[]) fInputEndpointsTree.getInput());
 	}
 
-	private void setChildren(TreeNode node, List<CamelModelElement> endpointList, boolean input) {
+	private void setChildren(TreeNode node, List<AbstractCamelModelElement> endpointList, boolean input) {
 		List<TreeNode> children = new ArrayList<TreeNode>();
-		for (CamelModelElement e : endpointList) {
+		for (AbstractCamelModelElement e : endpointList) {
 			if (e.isEndpointElement() == false) continue; 
 			TreeNode child = new EndpointTreeNode(e.getParameter("uri"), input);
 			child.setParent(node);

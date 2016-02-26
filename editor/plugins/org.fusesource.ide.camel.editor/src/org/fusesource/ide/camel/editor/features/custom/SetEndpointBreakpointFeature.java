@@ -32,7 +32,7 @@ import org.fusesource.ide.camel.editor.CamelDesignEditor;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ImageProvider;
 import org.fusesource.ide.camel.editor.utils.CamelUtils;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.foundation.core.util.Strings;
 import org.fusesource.ide.launcher.debug.util.CamelDebugUtils;
 import org.fusesource.ide.launcher.debug.util.ICamelDebugConstants;
@@ -61,8 +61,8 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
         final Object bo = getBusinessObjectForPictogramElement(_pe);
         final IResource resource = getResource();
        
-        if (bo instanceof CamelModelElement) {
-        	CamelModelElement _ep = (CamelModelElement) bo;
+        if (bo instanceof AbstractCamelModelElement) {
+        	AbstractCamelModelElement _ep = (AbstractCamelModelElement) bo;
             try {
             	Boolean userWantsUpdate = null;
             	IFile contextFile = getContextFile();
@@ -153,8 +153,8 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
                 .getStart().getParent() : cc.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        if (bo instanceof CamelModelElement) {
-        	CamelModelElement _ep = (CamelModelElement) bo;
+        if (bo instanceof AbstractCamelModelElement) {
+        	AbstractCamelModelElement _ep = (AbstractCamelModelElement) bo;
         	IFile contextFile = getContextFile();
         	String fileName = contextFile.getName();
         	String projectName = contextFile.getProject().getName();
@@ -194,7 +194,7 @@ public class SetEndpointBreakpointFeature extends AbstractCustomFeature {
 	 * @param node
 	 * @return
 	 */
-	protected boolean askForIDUpdate(CamelModelElement node) {
+	protected boolean askForIDUpdate(AbstractCamelModelElement node) {
 		final IDiagramContainer container = getDiagramBehavior().getDiagramContainer();
         final Shell shell;
         if (container instanceof CamelDesignEditor) {

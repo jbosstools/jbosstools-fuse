@@ -22,7 +22,7 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
 import org.fusesource.ide.camel.editor.provider.ext.ICustomDblClickHandler;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author lhein
@@ -71,8 +71,8 @@ public class DoubleClickFeature extends AbstractCustomFeature {
                 .getStart().getParent() : context.getPictogramElements()[0];
         final Object bo = getBusinessObjectForPictogramElement(_pe);
        
-        if (bo instanceof CamelModelElement) {
-        	CamelModelElement _ep = (CamelModelElement) bo;
+        if (bo instanceof AbstractCamelModelElement) {
+        	AbstractCamelModelElement _ep = (AbstractCamelModelElement) bo;
         	
         	// inject palette entries delivered via extension points
             IConfigurationElement[] extensions = Platform.getExtensionRegistry().getConfigurationElementsFor(DBL_CLICK_HANDLER_EXT_POINT_ID);

@@ -19,7 +19,7 @@ import org.eclipse.wst.validation.ValidationResult;
 import org.eclipse.wst.validation.ValidationState;
 import org.fusesource.ide.camel.model.service.core.io.CamelIOHandler;
 import org.fusesource.ide.camel.model.service.core.model.CamelFile;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.validation.diagram.BasicNodeValidator;
 import org.fusesource.ide.camel.validation.diagram.IFuseMarker;
 
@@ -70,7 +70,7 @@ public class XMLCamelRoutesValidator extends AbstractValidator {
 	 * @param resource
 	 */
 	private void checkCamelFile(CamelFile camelFile, ValidationResult validationResult, IResource resource) {
-		for (CamelModelElement cme : camelFile.getChildElements()) {
+		for (AbstractCamelModelElement cme : camelFile.getChildElements()) {
 			checkCamelModelElement(cme, validationResult, resource);
 		}
 	}
@@ -81,10 +81,10 @@ public class XMLCamelRoutesValidator extends AbstractValidator {
 	 * @param resource
 	 * @param locator
 	 */
-	private void checkCamelModelElement(CamelModelElement cme, ValidationResult validationResult, IResource resource) {
+	private void checkCamelModelElement(AbstractCamelModelElement cme, ValidationResult validationResult, IResource resource) {
 		org.fusesource.ide.camel.validation.ValidationResult result = new BasicNodeValidator().validate(cme);
 		validationResult.incrementError(result.getErrors().size());
-		for (CamelModelElement cmeChild : cme.getChildElements()) {
+		for (AbstractCamelModelElement cmeChild : cme.getChildElements()) {
 			checkCamelModelElement(cmeChild, validationResult, resource);
 		}
 	}

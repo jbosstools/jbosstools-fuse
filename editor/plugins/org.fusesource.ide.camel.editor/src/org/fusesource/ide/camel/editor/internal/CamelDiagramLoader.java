@@ -27,7 +27,7 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.fusesource.ide.camel.editor.features.create.CreateFlowFeature;
 import org.fusesource.ide.camel.editor.utils.FigureUIFactory;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 import org.fusesource.ide.camel.model.service.core.model.CamelRouteElement;
 import org.fusesource.ide.preferences.PreferenceManager;
 import org.fusesource.ide.preferences.PreferencesConstants;
@@ -60,16 +60,16 @@ public class CamelDiagramLoader {
 	 * 
 	 * @param container
 	 */
-	public void loadModel(CamelModelElement container) {
+	public void loadModel(AbstractCamelModelElement container) {
 		if (container == null) {
 			return;
 		}
-		List<CamelModelElement> processedNodes = new ArrayList<CamelModelElement>();
-		List<CamelModelElement> children = container instanceof CamelRouteElement ? Arrays.asList(container) : container.getChildElements();
+		List<AbstractCamelModelElement> processedNodes = new ArrayList<AbstractCamelModelElement>();
+		List<AbstractCamelModelElement> children = container instanceof CamelRouteElement ? Arrays.asList(container) : container.getChildElements();
 		int x = 40;
 		int y = 40;
-		CamelModelElement lastElem = container;
-		for (CamelModelElement node : children) {
+		AbstractCamelModelElement lastElem = container;
+		for (AbstractCamelModelElement node : children) {
 			int res = addProcessor(lastElem, node, x, y, processedNodes, diagram);
 			if (this.orientation == PositionConstants.EAST) {
 				x = res;	
@@ -80,7 +80,7 @@ public class CamelDiagramLoader {
 		}
 	}
 
-	private int addProcessor(CamelModelElement lastElement, CamelModelElement node, int x, int y, List<CamelModelElement> processedNodes, ContainerShape container) {
+	private int addProcessor(AbstractCamelModelElement lastElement, AbstractCamelModelElement node, int x, int y, List<AbstractCamelModelElement> processedNodes, ContainerShape container) {
 		// Create the context information
 		AddContext addContext = new AddContext();
 		addContext.setNewObject(node);
@@ -130,8 +130,8 @@ public class CamelDiagramLoader {
 
 			if (node.getChildElements().size() > 0) {
 				int subX = 40, subY = 40;
-				CamelModelElement lastSub = null;
-				for (CamelModelElement subNode : node.getChildElements()) {
+				AbstractCamelModelElement lastSub = null;
+				for (AbstractCamelModelElement subNode : node.getChildElements()) {
 					int res = addProcessor(lastSub, subNode, subX, subY, processedNodes, getContainerShape(destState));
 					if (this.orientation == PositionConstants.EAST) {
 						subX = res;	

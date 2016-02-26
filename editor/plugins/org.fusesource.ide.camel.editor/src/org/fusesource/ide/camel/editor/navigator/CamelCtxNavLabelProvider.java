@@ -13,7 +13,7 @@ package org.fusesource.ide.camel.editor.navigator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.fusesource.ide.camel.editor.internal.CamelEditorUIActivator;
-import org.fusesource.ide.camel.model.service.core.model.CamelModelElement;
+import org.fusesource.ide.camel.model.service.core.model.AbstractCamelModelElement;
 
 /**
  * @author Renjith M. 
@@ -26,8 +26,8 @@ public class CamelCtxNavLabelProvider extends LabelProvider {
 	 */
 	@Override
 	public Image getImage(Object element) {
-		if( element instanceof CamelModelElement) {
-			return CamelEditorUIActivator.getDefault().getImage(((CamelModelElement)element).getIconName().replaceAll(".png", "16.png"));
+		if( element instanceof AbstractCamelModelElement) {
+			return CamelEditorUIActivator.getDefault().getImage(((AbstractCamelModelElement)element).getIconName().replaceAll(".png", "16.png"));
 		} else if (element instanceof CamelCtxNavRouteNode) {
 			return CamelEditorUIActivator.getDefault().getImage(((CamelCtxNavRouteNode) element).getCamelRoute().getIconName().replaceAll(".png", "16.png"));
 		}
