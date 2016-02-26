@@ -86,7 +86,7 @@ public class FusePropertySectionIT {
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name *", labelCaptor.getValue());
-		Mockito.verify(label).setForeground(Mockito.any(Color.class));
+//		Mockito.verify(label).setForeground(Mockito.any(Color.class));
 	}
 	
 	@Test
@@ -99,7 +99,7 @@ public class FusePropertySectionIT {
 		fusePropertySection.createPropertyLabel(toolkit, page, parameter);
 		
 		assertEquals("My Name * (deprecated)", labelCaptor.getValue());
-		Mockito.verify(label).setForeground(Mockito.any(Color.class));
+//		Mockito.verify(label).setForeground(Mockito.any(Color.class));
 	}
 	
 }
