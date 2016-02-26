@@ -41,7 +41,7 @@ import org.xml.sax.Locator;
  * 
  * @author lhein
  */
-public class CamelFile extends CamelModelElement implements EventListener {
+public class CamelFile extends CamelModelElement implements EventListener, IFuseDetailsPropertyContributor {
 	
 	public static final int XML_INDENT_VALUE = 3;
 	
