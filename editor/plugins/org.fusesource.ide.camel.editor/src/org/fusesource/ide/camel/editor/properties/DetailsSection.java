@@ -267,8 +267,11 @@ public class DetailsSection extends FusePropertySection {
 									String refId = (String)value;
 									CamelModelElement cme = selectedEP.getCamelContext().findNode(refId);
 									if (cme == null) {
-										// the ref doesn't exist
-										return ValidationStatus.error("The entered reference does not exist in your context!");
+										// check for global beans
+										if (selectedEP.getCamelFile().getGlobalDefinitions().containsKey(refId) == false) {
+											// the ref doesn't exist
+											return ValidationStatus.error("The entered reference does not exist in your context!");
+										}
 									} else {
 										// the ref exists
 										if (cme.getParameter("uri") == null || ((String)cme.getParameter("uri")).trim().length()<1) {
@@ -418,6 +421,14 @@ public class DetailsSection extends FusePropertySection {
                         selectedEP.setParameter(prop.getName(), choice.getText());
                     }
                 });
+                choiceCombo.addModifyListener(new ModifyListener() {
+					
+					@Override
+					public void modifyText(ModifyEvent e) {
+						CCombo choice = (CCombo)e.getSource();
+                        selectedEP.setParameter(prop.getName(), choice.getText());						
+					}
+				});
 				choiceCombo.setLayoutData(createPropertyFieldLayoutData());
                 c = choiceCombo;
                 //initialize the map entry
@@ -438,9 +449,10 @@ public class DetailsSection extends FusePropertySection {
 							}	
 						} else {
 							if (value != null && value instanceof String && value.toString().trim().length()>0) {
-								if (selectedEP.getCamelContext().findNode((String)value) == null) {
-									// no ref found
-									return ValidationStatus.error("Parameter " + prop.getName() + " does not point to an existing reference.");
+								if (selectedEP.getCamelContext().findNode((String)value) == null &&
+									selectedEP.getCamelFile().getGlobalDefinitions().containsKey((String)value) == false) {
+									// no ref found - could be something the server provides
+									return ValidationStatus.warning("Parameter " + prop.getName() + " does not point to an existing reference inside the context.");
 								}
 							}
 						}							
