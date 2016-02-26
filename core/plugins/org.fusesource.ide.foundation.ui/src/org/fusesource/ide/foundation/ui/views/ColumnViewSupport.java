@@ -56,6 +56,8 @@ import org.fusesource.ide.foundation.ui.util.IConfigurableColumns;
 import org.fusesource.ide.foundation.ui.util.Menus;
 import org.fusesource.ide.foundation.ui.util.Viewers;
 import org.fusesource.ide.foundation.ui.util.Widgets;
+import org.jboss.tools.jmx.jvmmonitor.ui.Activator;
+import org.jboss.tools.jmx.jvmmonitor.ui.ISharedImages;
 
 
 public abstract class ColumnViewSupport extends ViewPart implements IConfigurableColumns, IViewPage, ISection, Refreshable {
@@ -316,8 +318,8 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 	}
 
 	protected void removeLocalMenus(IMenuManager manager) {
-		//Menus.removeAction(manager, refreshAction);
-		//Menus.removeAction(manager, configureColumnsAction);
+		Menus.removeAction(manager, refreshAction);
+		Menus.removeAction(manager, configureColumnsAction);
 		Menus.removeAction(manager, chartAction);
 		Menus.removeAction(manager, localMenuActions);
 	}
@@ -440,7 +442,7 @@ public abstract class ColumnViewSupport extends ViewPart implements IConfigurabl
 		refreshAction.setId(getClass().getName() + ".refresh");
 		refreshAction.setText("Refresh");
 		refreshAction.setToolTipText("Refreshes the view");
-		refreshAction.setImageDescriptor(FoundationUIActivator.getDefault().getSharedImages().descriptor(FoundationUIActivator.IMAGE_REFRESH_ICON));
+		refreshAction.setImageDescriptor(Activator.getImageDescriptor(ISharedImages.REFRESH_IMG_PATH));
 
 		configureColumnsAction = new ConfigureColumnsAction(this);
 
