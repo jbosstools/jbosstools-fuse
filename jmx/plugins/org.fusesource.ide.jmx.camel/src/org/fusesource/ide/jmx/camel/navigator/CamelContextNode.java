@@ -26,6 +26,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -43,6 +44,7 @@ import org.fusesource.ide.foundation.core.util.IOUtils;
 import org.fusesource.ide.foundation.core.util.Objects;
 import org.fusesource.ide.foundation.ui.io.CamelContextNodeEditorInput;
 import org.fusesource.ide.foundation.ui.tree.NodeSupport;
+import org.fusesource.ide.foundation.ui.tree.RefreshNodeRunnable;
 import org.fusesource.ide.foundation.ui.tree.Refreshable;
 import org.fusesource.ide.foundation.ui.util.ContextMenuProvider;
 import org.fusesource.ide.foundation.ui.util.Nodes;
@@ -109,6 +111,7 @@ public class CamelContextNode 	extends NodeSupport
 	@Override
 	public void refresh() {
 		Nodes.refreshParent(this);
+		Display.getDefault().syncExec(new RefreshNodeRunnable(this));
 	}
 
 	public CamelContextsNode getCamelContextsNode() {
